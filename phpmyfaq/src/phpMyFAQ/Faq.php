@@ -844,11 +844,14 @@ class Faq
     /**
      * Creates a new FAQ.
      */
-    public function create(FaqEntity $faqEntity): int
+    public function create(FaqEntity $faqEntity): FaqEntity
     {
         if (is_null($faqEntity->getId())) {
             $faqEntity->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'));
         }
+
+        $faqEntity->setSolutionId($this->getNextSolutionId());
+        $faqEntity->setRevisionId(0);
 
         $query = sprintf(
             "INSERT INTO %sfaqdata 
@@ -859,8 +862,8 @@ class Faq
             Database::getTablePrefix(),
             $faqEntity->getId(),
             $this->configuration->getDb()->escape($faqEntity->getLanguage()),
-            $this->getNextSolutionId(),
-            0,
+            $faqEntity->getSolutionId(),
+            $faqEntity->getRevisionId(),
             $faqEntity->isActive() ? 'yes' : 'no',
             $faqEntity->isSticky() ? 1 : 0,
             $this->configuration->getDb()->escape($faqEntity->getKeywords()),
@@ -878,7 +881,7 @@ class Faq
 
         $this->configuration->getDb()->query($query);
 
-        return $faqEntity->getId();
+        return $faqEntity;
     }
 
     /**
@@ -903,7 +906,7 @@ class Faq
         return $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
     }
 
-    public function update(FaqEntity $faqEntity): bool
+    public function update(FaqEntity $faqEntity): FaqEntity
     {
         $query = sprintf(
             "UPDATE
@@ -944,7 +947,9 @@ class Faq
             $this->configuration->getDb()->escape($faqEntity->getLanguage())
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
+
+        return $faqEntity;
     }
 
     /**

@@ -43,7 +43,11 @@ import {
   handleDeleteGlossary,
   handleAddGlossary,
   onOpenUpdateGlossaryModal,
-  handleUpdateGlossary, handleAddNews, handleNews, handleEditNews,
+  handleUpdateGlossary,
+  handleAddNews,
+  handleNews,
+  handleEditNews,
+  handleSaveFaqData,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -82,6 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleMarkdownForm();
   handleAttachmentUploads();
   handleFileFilter();
+  handleSaveFaqData();
   await handleFaqOverview();
 
   // Content -> Comments

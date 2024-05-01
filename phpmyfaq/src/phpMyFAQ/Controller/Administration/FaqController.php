@@ -16,32 +16,377 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use DateTime;
 use Exception;
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Changelog;
+use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Permission as CategoryPermission;
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\Permission;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Faq\Import;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
+use phpMyFAQ\Link;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FaqController extends AbstractController
 {
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[Route('admin/api/faq/create')]
+    public function create(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($this->configuration);
+        $faqPermission = new FaqPermission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
+        $tagging = new Tags($this->configuration);
+        $notification = new Notification($this->configuration);
+        $logging = new AdminLog($this->configuration);
+        $changelog = new Changelog($this->configuration);
+        $visits = new Visits($this->configuration);
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+
+        $data = json_decode($request->getContent())->data;
+
+        if (!Token::getInstance()->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Collect FAQ data
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (is_array($data->{'categories[]'})) {
+            $categories = Filter::filterArray($data->{'categories[]'});
+        } else {
+            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
+        }
+
+        $recordLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
+        $sticky = Filter::filterVar($data->sticky ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
+        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
+        $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
+        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        // Permissions
+        $permissions = $faqPermission->createPermissionArray();
+
+        $logging->log($user, 'admin-save-new-faq');
+
+        if (empty($question) && empty($answer)) {
+            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
+        }
+
+        $faqData = new FaqEntity();
+        $faqData
+            ->setLanguage($recordLang)
+            ->setActive($active === 'yes')
+            ->setSticky(!is_null($sticky))
+            ->setQuestion(
+                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setAnswer(
+                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setComment(!is_null($comment))
+            ->setCreatedDate(new DateTime())
+            ->setNotes(Filter::removeAttributes($notes));
+
+        // Add new record and get that ID
+        $faqData = $faq->create($faqData);
+
+        if ($faqData->getId()) {
+            // Create ChangeLog entry
+            $changelog->add($faqData->getId(), $user->getUserId(), nl2br((string) $changed), $faqData->getLanguage());
+
+            // Create the visit entry
+            $visits->logViews($faqData->getId());
+
+            $categoryRelation = new Relation($this->configuration, $category);
+            $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
+
+            // Insert the tags
+            if ($tags !== '') {
+                $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
+            }
+
+            // Add user permissions
+            $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
+            $categoryPermission->add(CategoryPermission::USER, $categories, $permissions['restricted_user']);
+            // Add group permission
+            if ($this->configuration->get('security.permLevel') !== 'basic') {
+                $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+                $categoryPermission->add(
+                    CategoryPermission::GROUP,
+                    $categories,
+                    $permissions['restricted_groups']
+                );
+            }
+
+            // Open question answered
+            $questionObject = new Question($this->configuration);
+            $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
+            if (0 !== $openQuestionId) {
+                if ($this->configuration->get('records.enableDeleteQuestion')) { // deletes question
+                    $questionObject->delete($openQuestionId);
+                } else { // adds this faq record id to the related open question
+                    $questionObject->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
+                }
+
+                $url = sprintf(
+                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
+                    $this->configuration->getDefaultUrl(),
+                    $categories[0],
+                    $faqData->getId(),
+                    $recordLang
+                );
+                $oLink = new Link($url, $this->configuration);
+
+                // notify the user who added the question
+                try {
+                    $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
+                    $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
+                    $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
+                } catch (Exception | TransportExceptionInterface $e) {
+                    return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+                }
+            }
+
+            // Let the admin and the category owners to be informed by email of this new entry
+            try {
+                $categoryHelper = new CategoryHelper();
+                $categoryHelper
+                    ->setCategory($category)
+                    ->setConfiguration($this->configuration);
+                $moderators = $categoryHelper->getModerators($categories);
+                $notification->sendNewFaqAdded($moderators, $faqData->getId(), $recordLang);
+            } catch (Exception | TransportExceptionInterface $e) {
+                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
+
+            // If Elasticsearch is enabled, index new FAQ document
+            if ($this->configuration->get('search.enableElasticsearch')) {
+                $esInstance = new Elasticsearch($this->configuration);
+                $esInstance->index(
+                    [
+                        'id' => $faqData->getId(),
+                        'lang' => $faqData->getLanguage(),
+                        'solution_id' => $faqData->getSolutionId(),
+                        'question' => $faqData->getQuestion(),
+                        'answer' => $faqData->getAnswer(),
+                        'keywords' => $faqData->getKeywords(),
+                        'category_id' => $categories[0]
+                    ]
+                );
+            }
+
+            return $this->json(
+                [
+                    'success' => Translation::get('ad_entry_savedsuc'),
+                    'data' => $faqData->getJson(),
+                ],
+                Response::HTTP_OK
+            );
+        } else {
+            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[Route('admin/api/faq/update')]
+    public function update(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
+
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faq = new Faq($this->configuration);
+        $faqPermission = new FaqPermission($this->configuration);
+        $tagging = new Tags($this->configuration);
+        $logging = new AdminLog($this->configuration);
+        $changelog = new Changelog($this->configuration);
+        $visits = new Visits($this->configuration);
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+
+        $data = json_decode($request->getContent())->data;
+
+        if (!Token::getInstance()->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Collect FAQ data
+        $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
+        $solutionId = Filter::filterVar($data->solutionId, FILTER_VALIDATE_INT);
+        $revisionId = Filter::filterVar($data->revisionId, FILTER_VALIDATE_INT);
+        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (is_array($data->{'categories[]'})) {
+            $categories = Filter::filterArray($data->{'categories[]'});
+        } else {
+            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
+        }
+        $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
+        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
+        $sticky = Filter::filterVar($data->sticky ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
+        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
+        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
+        $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
+        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
+        $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (empty($question) && empty($answer)) {
+            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
+        }
+
+        // Permissions
+        $permissions = $faqPermission->createPermissionArray();
+
+        $logging->log($user, 'admin-save-existing-faq ' . $faqId);
+        if ($active === 'yes') {
+            $logging->log($user, 'admin-publish-existing-faq ' . $faqId);
+        }
+
+        if ('yes' === $revision || $this->configuration->get('records.enableAutoRevisions')) {
+            $faqRevision = new Revision($this->configuration);
+            $faqRevision->create($faqId, $faqLang);
+            ++$revisionId;
+        }
+
+        $faqData = new FaqEntity();
+        $faqData
+            ->setId($faqId)
+            ->setLanguage($faqLang)
+            ->setRevisionId($revisionId)
+            ->setSolutionId($solutionId)
+            ->setActive($active === 'yes')
+            ->setSticky(!is_null($sticky))
+            ->setQuestion(
+                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setAnswer(
+                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            )
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setComment(!is_null($comment))
+            ->setCreatedDate(new DateTime())
+            ->setNotes(Filter::removeAttributes($notes));
+
+        // Create ChangeLog entry
+        $changelog->add($faqData->getId(), $user->getUserId(), (string) $changed, $faqData->getLanguage(), $revisionId);
+
+        // Create the visit entry
+        $visits->logViews($faqData->getId());
+
+        // save or update the FAQ record
+        if ($faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
+            $faqData = $faq->update($faqData);
+        } else {
+            $faqData = $faq->create($faqData);
+        }
+
+        if (!isset($categories)) {
+            $categories = [];
+        }
+
+        $categoryRelation = new Relation($this->configuration, $category);
+        $categoryRelation->deleteByFaq($faqData->getId(), $faqData->getLanguage());
+        $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
+
+        // Insert the tags
+        if ($tags !== '') {
+            $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
+        } else {
+            $tagging->deleteByRecordId($faqData->getId());
+        }
+
+        // Add user permissions
+        $faqPermission->delete(FaqPermission::USER, $faqData->getId());
+        $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
+        // Add group permission
+        if ($this->configuration->get('security.permLevel') !== 'basic') {
+            $faqPermission->delete(FaqPermission::GROUP, $faqData->getId());
+            $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+        }
+
+        // If Elasticsearch is enabled, update an active or delete inactive FAQ document
+        if ($this->configuration->get('search.enableElasticsearch')) {
+            $esInstance = new Elasticsearch($this->configuration);
+            if ('yes' === $active) {
+                $esInstance->update(
+                    [
+                        'id' => $faqData->getId(),
+                        'lang' => $faqData->getLanguage(),
+                        'solution_id' => $faqData->getSolutionId(),
+                        'question' => $faqData->getQuestion(),
+                        'answer' => $faqData->getAnswer(),
+                        'keywords' => $faqData->getKeywords(),
+                        'category_id' => $categories[0]
+                    ]
+                );
+            }
+        }
+
+        return $this->json(
+            [
+                'success' => Translation::get('ad_entry_savedsuc'),
+                'data' => $faqData->getJson(),
+            ],
+            Response::HTTP_OK
+        );
+    }
+
     /**
      * @throws Exception
      */
@@ -52,12 +397,12 @@ class FaqController extends AbstractController
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faqPermission = new Permission(Configuration::getConfigurationInstance());
+        $faqPermission = new FaqPermission(Configuration::getConfigurationInstance());
 
         return $this->json(
             [
-                'user' => $faqPermission->get(Permission::USER, $faqId),
-                'group' => $faqPermission->get(Permission::GROUP, $faqId),
+                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
             ],
             Response::HTTP_OK
         );
@@ -212,7 +557,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faqPermission = new Permission($configuration);
+        $faqPermission = new FaqPermission($configuration);
         $faqSearch = new Search($configuration);
         $faqSearch->setCategory(new Category($configuration));
 

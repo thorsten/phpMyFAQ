@@ -94,3 +94,41 @@ export const deleteFaq = async (faqId, faqLanguage, token) => {
     throw error;
   }
 };
+
+export const create = async (formData) => {
+  try {
+    const response = await fetch('./api/faq/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: formData,
+      }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const update = async (formData) => {
+  try {
+    const response = await fetch('./api/faq/update', {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: formData,
+      }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};

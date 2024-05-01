@@ -265,12 +265,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'editpreview':
                 require 'record.edit.php';
                 break;
-            case 'insertentry':
-                require 'record.add.php';
-                break;
-            case 'saveentry':
-                require 'record.save.php';
-                break;
             case 'delatt':
                 require 'record.delatt.php';
                 break;
@@ -278,7 +272,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'open-questions.php';
                 break;
             case 'comments':
-                require 'record.comments.php';
+                require 'comments.php';
                 break;
             case 'stickyfaqs':
                 require 'stickyfaqs.php';

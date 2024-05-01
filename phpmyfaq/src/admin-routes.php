@@ -312,8 +312,18 @@ $routes->add(
 );
 
 $routes->add(
+    'admin.api.faq.create',
+    new Route('/faq/create', ['_controller' => [FaqController::class, 'create'], '_methods' => 'POST'])
+);
+
+$routes->add(
     'admin.api.faq.delete',
     new Route('/faq/delete', ['_controller' => [FaqController::class, 'delete'], '_methods' => 'DELETE'])
+);
+
+$routes->add(
+    'admin.api.faq.update',
+    new Route('/faq/update', ['_controller' => [FaqController::class, 'update'], '_methods' => 'PUT'])
 );
 
 $routes->add(

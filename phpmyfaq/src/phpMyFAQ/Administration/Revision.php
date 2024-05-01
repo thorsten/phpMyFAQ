@@ -46,7 +46,7 @@ readonly class Revision
                 %sfaqdata_revisions 
             SELECT 
                 id, lang, solution_id, revision_id + 1, active, sticky, keywords, thema, content, author, email, 
-                comment, updated, date_start, date_end, created, notes 
+                comment, updated, date_start, date_end, created, notes, sticky_order 
             FROM 
                 %sfaqdata 
             WHERE 

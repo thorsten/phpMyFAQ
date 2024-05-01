@@ -1443,4 +1443,7 @@ $PMF_LANG['msgExportUsersAsCSV'] = 'Export users as csv';
 $PMF_LANG['msgWarning'] = 'Warning';
 $PMF_LANG['msgUserList'] = 'List of users';
 
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
+
 return $PMF_LANG;

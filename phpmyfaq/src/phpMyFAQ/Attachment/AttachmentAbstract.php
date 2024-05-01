@@ -32,7 +32,7 @@ abstract class AttachmentAbstract
      *
      * @var int
      */
-    protected int $id;
+    protected int $id = 0;
 
     /**
      * The key to encrypt with.
