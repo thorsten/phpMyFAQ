@@ -18,8 +18,9 @@
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -28,60 +29,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-?>
-
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-tasks"></i>
-        <?php printf('%s #%d', Translation::get('ad_sess_session'), $sessionId); ?>
-    </h1>
-  </div>
-
-<?php
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
     $session = new Session($faqConfig);
     $time = $session->getTimeFromSessionId($sessionId);
     $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
-    ?>
-  <table class="table table-striped align-middle">
-    <tfoot>
-    <tr>
-      <td colspan="2"><a href="?action=viewsessions"><?= Translation::get('ad_sess_back') ?></a></td>
-    </tr>
-    </tfoot>
-    <tbody>
-    <?php
-    $num = 0;
-    foreach ($trackingData as $line) {
-        $data = explode(';', $line);
-        if ($data[0] == $sessionId) {
-            ++$num;
-            ?>
-          <tr>
-            <td><?= date('Y-m-d H:i:s', (int)$data[7]) ?></td>
-            <td><?= $data[1] ?> (<?= $data[2] ?>)</td>
-          </tr>
-            <?php if ($num == 1) { ?>
-              <tr>
-                <td><?= Translation::get('ad_sess_referer') ?>:</td>
-                <td><?= Strings::htmlentities(str_replace('?', '? ', $data[5])) ?>
-                </td>
-              </tr>
-              <tr>
-                <td><?= Translation::get('ad_sess_browser') ?>:</td>
-                <td><?= Strings::htmlentities($data[6]) ?></td>
-              </tr>
-              <tr>
-                <td><?= Translation::get('ad_sess_ip') ?>:</td>
-                <td><?= Strings::htmlentities($data[3]) ?></td>
-              </tr>
-            <?php }
-        }
-    }
-    ?>
-    </tbody>
-  </table>
-    <?php
+
+    $templateVars = [
+        'ad_sess_session' => Translation::get('ad_sess_session'),
+        'sessionId' => $sessionId,
+        'ad_sess_back' => Translation::get('ad_sess_back'),
+        'ad_sess_referer' => Translation::get('ad_sess_referer'),
+        'ad_sess_browser' => Translation::get('ad_sess_browser'),
+        'ad_sess_ip' => Translation::get('ad_sess_ip'),
+        'trackingData' => $trackingData
+    ];
+
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
+    $template = $twig->loadTemplate('./admin/statistics/statistics.show.twig');
+
+    echo $template->render($templateVars);
 } else {
     require __DIR__ . '/no-permission.php';
 }
