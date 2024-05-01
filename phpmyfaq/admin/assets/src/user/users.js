@@ -16,7 +16,7 @@
  */
 
 import { Modal } from 'bootstrap';
-import { fetchAllUsers, fetchUserData, fetchUserRights, postDeleteUser, postUserData } from '../api';
+import { fetchAllUsers, fetchUserData, fetchUserRights, deleteUser, postUserData } from '../api';
 import { addElement, capitalize } from '../../../../assets/src/utils';
 import { pushErrorNotification, pushNotification } from '../utils';
 
@@ -305,7 +305,7 @@ export const handleUsers = async () => {
       if (source.value === 'users') {
         const userId = document.getElementById('pmf-user-id-delete').value;
         const csrfToken = document.getElementById('csrf-token-delete-user').value;
-        const response = await postDeleteUser(userId, csrfToken);
+        const response = await deleteUser(userId, csrfToken);
         const json = await response.json();
         if (json.success) {
           pushNotification(json.success);

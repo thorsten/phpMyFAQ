@@ -17,7 +17,7 @@
 
 import { addElement } from '../../../../assets/src/utils';
 import { pushErrorNotification, pushNotification } from '../utils';
-import { postDeleteUser } from '../api';
+import { deleteUser } from '../api';
 import { Modal } from 'bootstrap';
 
 const activateUser = async (userId, csrfToken) => {
@@ -83,14 +83,14 @@ export const handleUserList = () => {
       });
     });
 
-    const deleteUser_yes = document.getElementById('pmf-delete-user-yes');
-    deleteUser_yes.addEventListener('click', async (event) => {
+    const deleteUserConfirm = document.getElementById('pmf-delete-user-yes');
+    deleteUserConfirm.addEventListener('click', async (event) => {
       event.preventDefault();
       const source = document.getElementById('source_page');
       if (source.value === 'user-list') {
         const userId = document.getElementById('pmf-user-id-delete').value;
         const csrfToken = document.getElementById('csrf-token-delete-user').value;
-        const response = await postDeleteUser(userId, csrfToken);
+        const response = await deleteUser(userId, csrfToken);
         const json = await response.json();
         if (json.success) {
           pushNotification(json.success);

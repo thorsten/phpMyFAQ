@@ -127,7 +127,7 @@ export const postUserData = async (url = '', data = {}) => {
   }
 };
 
-export const postDeleteUser = async (userId, csrfToken) => {
+export const deleteUser = async (userId, csrfToken) => {
   try {
     return await fetch('./api/user/delete', {
       method: 'DELETE',
