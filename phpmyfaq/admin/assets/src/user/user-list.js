@@ -84,23 +84,25 @@ export const handleUserList = () => {
     });
 
     const deleteUserConfirm = document.getElementById('pmf-delete-user-yes');
-    deleteUserConfirm.addEventListener('click', async (event) => {
-      event.preventDefault();
-      const source = document.getElementById('source_page');
-      if (source.value === 'user-list') {
-        const userId = document.getElementById('pmf-user-id-delete').value;
-        const csrfToken = document.getElementById('csrf-token-delete-user').value;
-        const response = await deleteUser(userId, csrfToken);
-        const json = await response.json();
-        if (json.success) {
-          pushNotification(json.success);
-          const row = document.getElementById('row_user_id_' + userId);
-          row.remove();
+    if (deleteUserConfirm) {
+      deleteUserConfirm.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const source = document.getElementById('source_page');
+        if (source.value === 'user-list') {
+          const userId = document.getElementById('pmf-user-id-delete').value;
+          const csrfToken = document.getElementById('csrf-token-delete-user').value;
+          const response = await deleteUser(userId, csrfToken);
+          const json = await response.json();
+          if (json.success) {
+            pushNotification(json.success);
+            const row = document.getElementById('row_user_id_' + userId);
+            row.remove();
+          }
+          if (json.error) {
+            pushErrorNotification(json.error);
+          }
         }
-        if (json.error) {
-          pushErrorNotification(json.error);
-        }
-      }
-    });
+      });
+    }
   }
 };
