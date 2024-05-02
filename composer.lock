@@ -6169,16 +6169,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v7.0.0",
+            "version": "v7.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "6e5688d69f7cfc4ed4a511e96007e06c2d34ce56"
+                "reference": "4d58f0f4fe95a30d7b538d71197135483560b97c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/6e5688d69f7cfc4ed4a511e96007e06c2d34ce56",
-                "reference": "6e5688d69f7cfc4ed4a511e96007e06c2d34ce56",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/4d58f0f4fe95a30d7b538d71197135483560b97c",
+                "reference": "4d58f0f4fe95a30d7b538d71197135483560b97c",
                 "shasum": ""
             },
             "require": {
@@ -6213,7 +6213,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v7.0.0"
+                "source": "https://github.com/symfony/finder/tree/v7.0.7"
             },
             "funding": [
                 {
@@ -6229,7 +6229,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-31T17:59:56+00:00"
+            "time": "2024-04-28T11:44:19+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -6412,16 +6412,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "4.9.0",
+            "version": "4.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "b46a36d006f4db4d761995a5add1e7ab0386ed1d"
+                "reference": "520ffb7c4fb19d8b150a82d992a00aa72ab9dc3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/b46a36d006f4db4d761995a5add1e7ab0386ed1d",
-                "reference": "b46a36d006f4db4d761995a5add1e7ab0386ed1d",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/520ffb7c4fb19d8b150a82d992a00aa72ab9dc3d",
+                "reference": "520ffb7c4fb19d8b150a82d992a00aa72ab9dc3d",
                 "shasum": ""
             },
             "require": {
@@ -6487,9 +6487,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/4.9.0"
+                "source": "https://github.com/zircote/swagger-php/tree/4.9.1"
             },
-            "time": "2024-04-18T22:32:11+00:00"
+            "time": "2024-04-30T22:01:17+00:00"
         }
     ],
     "aliases": [],
