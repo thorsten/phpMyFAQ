@@ -27,9 +27,13 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExportController extends AbstractController
@@ -66,6 +70,109 @@ class ExportController extends AbstractController
             }
         } catch (Exception | \JsonException $e) {
             echo $e->getMessage();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('admin/api/export/report')]
+    public function exportReport(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::REPORTS);
+
+        $data = json_decode($request->getContent())->data;
+
+        if (!Token::getInstance()->verifyToken('create-report', $data->{'pmf-csrf-token'})) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $text = [];
+        $text[0] = [];
+        ($data->category) ? $text[0][] = Translation::get('ad_stat_report_category') : '';
+        ($data->sub_category) ? $text[0][] = Translation::get('ad_stat_report_sub_category') : '';
+        ($data->translations) ? $text[0][] = Translation::get('ad_stat_report_translations') : '';
+        ($data->language) ? $text[0][] = Translation::get('ad_stat_report_language') : '';
+        ($data->id) ? $text[0][] = Translation::get('ad_stat_report_id') : '';
+        ($data->sticky) ? $text[0][] = Translation::get('ad_stat_report_sticky') : '';
+        ($data->title) ? $text[0][] = Translation::get('ad_stat_report_title') : '';
+        ($data->creation_date) ? $text[0][] = Translation::get('ad_stat_report_creation_date') : '';
+        ($data->owner) ? $text[0][] = Translation::get('ad_stat_report_owner') : '';
+        ($data->last_modified_person) ? $text[0][] = Translation::get('ad_stat_report_last_modified_person') : '';
+        ($data->url) ? $text[0][] = Translation::get('ad_stat_report_url') : '';
+        ($data->visits) ? $text[0][] = Translation::get('ad_stat_report_visits') : '';
+
+        $report = new Report($this->configuration);
+        foreach ($report->getReportingData() as $reportData) {
+            $i = $reportData['faq_id'];
+            if ($data->category && isset($reportData['category_name'])) {
+                if (0 !== $reportData['category_parent']) {
+                    $text[$i][] = $reportData['category_parent'];
+                } else {
+                    $text[$i][] = $report->convertEncoding($reportData['category_name']);
+                }
+            }
+            if ($data->sub_category) {
+                if (0 != $reportData['category_parent']) {
+                    $text[$i][] = $report->convertEncoding($reportData['category_name']);
+                } else {
+                    $text[$i][] = 'n/a';
+                }
+            }
+            if ($data->translations) {
+                $text[$i][] = $reportData['faq_translations'];
+            }
+            if ($data->language && LanguageCodes::get($reportData['faq_language'])) {
+                $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']));
+            }
+            if ($data->id) {
+                $text[$i][] = $reportData['faq_id'];
+            }
+            if ($data->sticky) {
+                $text[$i][] = $reportData['faq_sticky'];
+            }
+            if ($data->title) {
+                $text[$i][] = $report->convertEncoding($reportData['faq_question']);
+            }
+            if ($data->creation_date) {
+                $text[$i][] = $reportData['faq_updated'];
+            }
+            if ($data->owner) {
+                $text[$i][] = $report->convertEncoding($reportData['faq_org_author']);
+            }
+            if ($data->last_modified_person && isset($reportData['faq_last_author'])) {
+                $text[$i][] = $report->convertEncoding($reportData['faq_last_author']);
+            } else {
+                $text[$i][] = '';
+            }
+            if ($data->url) {
+                $text[$i][] = $report->convertEncoding(
+                    sprintf(
+                        '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        $this->configuration->getDefaultUrl(),
+                        $reportData['category_id'],
+                        $reportData['faq_id'],
+                        $reportData['faq_language']
+                    )
+                );
+            }
+            if ($data->visits) {
+                $text[$i][] = $reportData['faq_visits'];
+            }
+        }
+
+        $content = '';
+        foreach ($text as $row) {
+            $csvRow = array_map(['phpMyFAQ\Administration\Report', 'sanitize'], $row);
+            $content .= implode(';', $csvRow);
+            $content .= "\r\n";
+        }
+
+        $httpStreamer = new HttpStreamer('csv', $content);
+        try {
+            $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
+        } catch (Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

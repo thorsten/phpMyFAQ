@@ -304,6 +304,14 @@ $routes->add(
 );
 
 //
+// Export API
+//
+$routes->add(
+    'admin.api.export.report',
+    new Route('/export/report', ['_controller' => [ExportController::class, 'exportReport'], '_methods' => 'POST'])
+);
+
+//
 // FAQ API
 //
 $routes->add(

@@ -14,7 +14,7 @@
  */
 
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
-import { handleDeleteAdminLog, handleSessions, handleStatistics } from './statistics';
+import { handleCreateReport, handleDeleteAdminLog, handleSessions, handleStatistics } from './statistics';
 import {
   handleConfiguration,
   handleInstances,
@@ -69,18 +69,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   await renderTopTenCharts();
   await getLatestVersion();
 
-  // User -> User Management
+  // User → User Management
   await handleUsers();
   handleUserList();
 
-  // Group -> Group Management
+  // Group → Group Management
   await handleGroups();
 
-  // Content -> Categories
+  // Content → Categories
   handleCategories();
   await handleCategoryDelete();
 
-  // Content -> add/edit FAQs
+  // Content → add/edit FAQs
   renderEditor();
   handleFaqForm();
   handleMarkdownForm();
@@ -89,51 +89,52 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleSaveFaqData();
   await handleFaqOverview();
 
-  // Content -> Comments
+  // Content → Comments
   handleDeleteComments();
 
-  // Content -> Open questions
+  // Content → Open questions
   handleOpenQuestions();
 
-  // Content -> Attachments
+  // Content → Attachments
   handleDeleteAttachments();
 
-  // Content -> Glossary
+  // Content → Glossary
   handleDeleteGlossary();
   handleAddGlossary();
   onOpenUpdateGlossaryModal();
   handleUpdateGlossary();
 
-  // Content -> Tags
+  // Content → Tags
   handleTags();
 
-  // Content -> Sticky FAQs
+  // Content → Sticky FAQs
   handleStickyFaqs();
 
   // Statistics
   handleDeleteAdminLog();
   handleStatistics();
+  handleCreateReport();
 
-  // Configuration -> FAQ configuration
+  // Configuration → FAQ configuration
   await handleConfiguration();
   await handleSaveConfiguration();
 
-  // Configuration -> Instance
+  // Configuration → Instance
   handleInstances();
 
-  // Configuration -> Stop Words
+  // Configuration → Stop Words
   handleStopWords();
 
-  // Configuration -> Online Update
+  // Configuration → Online Update
   handleCheckForUpdates();
 
-  // Configuration -> Elasticsearch configuration
+  // Configuration → Elasticsearch configuration
   await handleElasticsearch();
 
-  // Import & Export -> Import Records
+  // Import & Export → Import Records
   await handleUploadCSVForm();
 
-  // Statistics -> User-tracking
+  // Statistics → User-tracking
   await handleSessions();
 
   await handleFormEdit();
