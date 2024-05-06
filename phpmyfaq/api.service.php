@@ -857,6 +857,7 @@ switch ($action) {
         $user = CurrentUser::getFromSession($faqConfig);
 
         $isAzureAdUser = $user->getUserAuthSource() === 'azure';
+        $isLdapUser = $user->getUserAuthSource() === 'ldap';
 
         if ($deleteSecret === 'on') {
             $secret = '';
@@ -870,7 +871,7 @@ switch ($action) {
             break;
         }
 
-        if (!$isAzureAdUser) {
+        if (!$isAzureAdUser && !$isLdapUser) {
             if ($password !== $confirm) {
                 $response->setStatusCode(Response::HTTP_CONFLICT);
                 $response->setData(['error' => Translation::get('ad_user_error_passwordsDontMatch')]);
