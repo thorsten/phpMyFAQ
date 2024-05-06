@@ -144,12 +144,12 @@ if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)
 }
 
 //
-// Validating token from 2FA if given; else: returns error message
+// Logging user in if 2FA is enabled and token is given and validated, if not: returns error message
 //
-if ($token !== '' && !is_null($userid)) {
+if (!is_null($token) && !is_null($userid)) {
+    $user = new CurrentUser($faqConfig);
+    $user->getUserById($userid);
     if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
-        $user = new CurrentUser($faqConfig);
-        $user->getUserById($userid);
         $tfa = new TwoFactor($faqConfig);
         $res = $tfa->validateToken($token, $userid);
         if (!$res) {

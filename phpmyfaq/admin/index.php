@@ -138,12 +138,11 @@ $error = '';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_SPECIAL_CHARS);
-
 $token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
 $userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
 //
-// Logging user in if twofactor is enabled and token is given and validated, if not: returns error message
+// Logging user in if 2FA is enabled and token is given and validated, if not: returns error message
 //
 if (!is_null($token) && !is_null($userid)) {
     $user = new CurrentUser($faqConfig);
