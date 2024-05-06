@@ -165,7 +165,7 @@ if (!isset($user)) {
 }
 
 // Login via local DB or LDAP or SSO
-if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.ssoSupport'))) {
+if (!is_null($faqusername) && (!is_null($faqpassword) || $faqConfig->get('security.ssoSupport'))) {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($rememberMe ?? false);
     try {
