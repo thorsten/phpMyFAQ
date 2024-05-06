@@ -167,7 +167,7 @@ $PMF_LANG["ad_menu_startpage"] = "Startpage";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Please identify yourself.";
-$PMF_LANG["ad_msg_passmatch"] = "Both passwords must <strong>match</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Both passwords must match!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "The profile of";
 $PMF_LANG["ad_msg_savedsuc_2"] = "хадгалагдсан байна.";
 $PMF_LANG["ad_msg_mysqlerr"] = "Due to a <strong>database error</strong>, the profile could not be saved.";
@@ -310,7 +310,7 @@ $PMF_LANG["ad_passwd_con"] = "Нууц үгийг дахин оруул:";
 $PMF_LANG["ad_passwd_change"] = "Нууц үг өөрчлөх";
 $PMF_LANG["ad_passwd_suc"] = "Нууц үг өөрчлөгдлөө.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
-$PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
+$PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Шинэ хэрэглэгч үүсгэх";
