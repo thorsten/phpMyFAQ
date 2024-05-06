@@ -138,7 +138,6 @@ $faqpassword = Filter::filterInput(
                 FILTER_FLAG_NO_ENCODE_QUOTES
 );
 $faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_SPECIAL_CHARS);
-
 $token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
 $userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
 
