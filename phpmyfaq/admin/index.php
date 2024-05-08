@@ -135,11 +135,11 @@ if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) 
 // Authenticate current user
 //
 $error = '';
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_SPECIAL_CHARS);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
-$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_SPECIAL_CHARS);
-$token = Filter::filterInput(INPUT_POST, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
-$userid = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+$faqusername = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+$faqpassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+$token = Filter::filterVar($request->request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
+$userid = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_INT);
 
 //
 // Logging user in if 2FA is enabled and token is given and validated, if not: returns error message
@@ -180,7 +180,7 @@ if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER
 //
 // Login via local DB or LDAP or SSO
 //
-if (!is_null($faqusername) && !is_null($faqpassword)) {
+if ($faqusername !== '' && $faqpassword !== '') {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($faqremember ?? false);
     try {
