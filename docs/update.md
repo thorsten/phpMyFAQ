@@ -40,7 +40,7 @@ updated.
 ## Upgrading from phpMyFAQ 3.1.x
 
 Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode.
+First, log in as admin into the admin section and enable the maintenance mode. (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
