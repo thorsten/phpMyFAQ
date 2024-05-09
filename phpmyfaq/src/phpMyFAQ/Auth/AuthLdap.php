@@ -186,6 +186,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         );
 
         if ($this->ldapCore->error) {
+            $this->configuration->getLogger()->error($this->ldapCore->error);
             $this->errors[] = $this->ldapCore->error;
         }
     }
