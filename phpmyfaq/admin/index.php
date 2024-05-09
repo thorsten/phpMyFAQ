@@ -326,11 +326,11 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'clear-statistics':
             case 'statistics':
-                require 'stat.ratings.php';
+                require 'statistics.ratings.php';
                 break;
             case 'truncatesearchterms':
             case 'searchstats':
-                require 'stat.search.php';
+                require 'statistics.search.php';
                 break;
             // Reports
             case 'reports':

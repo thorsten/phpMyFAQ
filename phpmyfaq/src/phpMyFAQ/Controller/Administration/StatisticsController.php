@@ -21,6 +21,8 @@ use JsonException;
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,12 +35,10 @@ class StatisticsController extends AbstractController
     /**
      * @throws Exception|JsonException
      */
-    #[Route('./admin/api/statistics/admin-log')]
+    #[Route('./admin/api/statistics/admin-log', methods: ['DELETE'])]
     public function deleteAdminLog(Request $request): JsonResponse
     {
-        $this->userIsAuthenticated();
-
-        $logging = new AdminLog($this->configuration);
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -46,13 +46,33 @@ class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
+        $logging = new AdminLog($this->configuration);
         if ($logging->delete()) {
-            return $this->json(
-                ['success' => Translation::get('ad_adminlog_delete_success')],
-                Response::HTTP_OK
-            );
+            return $this->json(['success' => Translation::get('ad_adminlog_delete_success')], Response::HTTP_OK);
         }
 
         return $this->json(['error' => Translation::get('ad_adminlog_delete_failure')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @throws Exception|JsonException
+     */
+    #[Route('./admin/api/statistics/search-terms', methods: ['DELETE'])]
+    public function truncateSearchTerms(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        if (!Token::getInstance()->verifyToken('truncate-search-terms', $data->csrfToken)) {
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $search = new Search($this->configuration);
+        if ($search->deleteAllSearchTerms()) {
+            return $this->json(['success' => Translation::get('ad_searchterm_del_suc')], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => Translation::get('ad_searchterm_del_err')], Response::HTTP_BAD_REQUEST);
     }
 }

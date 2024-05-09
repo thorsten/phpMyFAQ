@@ -53,6 +53,7 @@ import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { sidebarToggle } from './utils';
+import { handleTruncateSearchTerms } from './statistics/search';
 
 document.addEventListener('DOMContentLoaded', async () => {
   'use strict';
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleDeleteAdminLog();
   handleStatistics();
   handleCreateReport();
+  handleTruncateSearchTerms();
 
   // Configuration → FAQ configuration
   await handleConfiguration();

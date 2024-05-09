@@ -608,6 +608,14 @@ $routes->add(
     )
 );
 
+$routes->add(
+    'admin.api.statistics.search-terms.truncate',
+    new Route(
+        '/statistics/search-terms',
+        ['_controller' => [StatisticsController::class, 'truncateSearchTerms'], '_methods' => 'DELETE']
+    )
+);
+
 //
 // Forms API
 //
