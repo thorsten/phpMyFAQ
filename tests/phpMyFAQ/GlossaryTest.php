@@ -73,4 +73,56 @@ class GlossaryTest extends TestCase
         $this->assertNotEmpty($result);
         $this->assertIsArray($result);
     }
+
+    public function testInsertItemsIntoContent()
+    {
+        // Create a mock of the class containing the method you want to test
+        $glossary = $this->getMockBuilder(Glossary::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['fetchAll'])
+            ->getMock();
+
+        // Define the return value for fetchAll() to simulate glossary items
+        $glossaryItems = [
+            ['item' => 'word', 'definition' => 'definition'],
+            ['item' => 'phrase', 'definition' => 'definition'],
+        ];
+        $glossary->method('fetchAll')->willReturn($glossaryItems);
+
+        // Define test cases with different input content
+        $testCases = [
+            // Case 1: No content
+            [
+                'input' => '',
+                'expected' => ''
+            ],
+
+            // Case 2: Glossary item 'word' in the input content
+            [
+                'input' => 'This is a word.',
+                'expected' => 'This is a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.'
+            ],
+
+            // Case 3: Glossary item 'phrase' in the input content
+            [
+                'input' => 'A phrase example.',
+                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example.'
+            ],
+
+            // Case 4: Multiple glossary items in the input content
+            [
+                'input' => 'A phrase example with a word.',
+                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example with a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.'
+            ],
+        ];
+
+        // Iterate through each test case
+        foreach ($testCases as $case) {
+            // Call the method with the provided input content
+            $output = $glossary->insertItemsIntoContent($case['input']);
+
+            // Assert that the output matches the expected result
+            $this->assertEquals($case['expected'], $output);
+        }
+    }
 }
