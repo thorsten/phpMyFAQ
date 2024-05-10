@@ -7,6 +7,8 @@ use Twig\TwigFilter;
 
 class FaqTwigExtensionTest extends TestCase
 {
+    private FaqTwigExtension $extension;
+
     protected function setUp(): void
     {
         $this->extension = new FaqTwigExtension();

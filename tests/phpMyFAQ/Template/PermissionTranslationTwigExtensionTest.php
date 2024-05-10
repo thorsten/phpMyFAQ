@@ -7,6 +7,8 @@ use Twig\TwigFilter;
 
 class PermissionTranslationTwigExtensionTest extends TestCase
 {
+    private PermissionTranslationTwigExtension $extension;
+
     protected function setUp(): void
     {
         $this->extension = new PermissionTranslationTwigExtension();

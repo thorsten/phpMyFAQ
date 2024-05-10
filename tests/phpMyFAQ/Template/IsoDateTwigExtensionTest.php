@@ -7,6 +7,8 @@ use Twig\TwigFilter;
 
 class IsoDateTwigExtensionTest extends TestCase
 {
+    private IsoDateTwigExtension $extension;
+
     protected function setUp(): void
     {
         $this->extension = new IsoDateTwigExtension();

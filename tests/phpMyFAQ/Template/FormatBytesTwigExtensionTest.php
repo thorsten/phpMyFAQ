@@ -7,6 +7,8 @@ use Twig\TwigFilter;
 
 class FormatBytesTwigExtensionTest extends TestCase
 {
+    private FormatBytesTwigExtension $extension;
+
     protected function setUp(): void
     {
         $this->extension = new FormatBytesTwigExtension();
