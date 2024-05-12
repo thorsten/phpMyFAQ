@@ -257,7 +257,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'editentry':
             case 'copyentry':
             case 'editpreview':
-                require 'record.edit.php';
+                require 'faqs.editor.php';
                 break;
             case 'question':
                 require 'open-questions.php';

@@ -25,10 +25,20 @@ use Twig\TwigFilter;
 
 class UserNameTwigExtension extends AbstractExtension
 {
+    private User $user;
+
+    /**
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->user = new User(Configuration::getConfigurationInstance());
+    }
     public function getFilters(): array
     {
         return [
             new TwigFilter('userName', $this->getUserName(...)),
+            new TwigFilter('realName', $this->getRealName(...))
         ];
     }
 
@@ -37,8 +47,16 @@ class UserNameTwigExtension extends AbstractExtension
      */
     private function getUserName(int $userId): string
     {
-        $user = new User(Configuration::getConfigurationInstance());
-        $user->getUserById($userId);
-        return $user->getLogin();
+        $this->user->getUserById($userId);
+        return $this->user->getLogin();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getRealName(int $userId): string
+    {
+        $this->user->getUserById($userId);
+        return $this->user->getUserData('display_name');
     }
 }
