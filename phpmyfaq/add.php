@@ -18,6 +18,7 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
@@ -46,7 +47,7 @@ if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests
 }
 
 // Check permission to add new faqs
-if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), 'addfaq')) {
+if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD)) {
     $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
     $response->send();
 }

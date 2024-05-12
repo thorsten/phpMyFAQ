@@ -20,6 +20,7 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
 use phpMyFAQ\System;
@@ -66,7 +67,7 @@ $templateVars = [
     'hasUserTracking' => $faqConfig->get('main.enableUserTracking'),
     'adminDashboardHeaderInactiveFaqs' => Translation::get('ad_record_inactive'),
     'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
-    'hasPermissionEditConfig' => $user->perm->hasPermission($user->getUserId(), 'editconfig'),
+    'hasPermissionEditConfig' => $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT),
     'showVersion' => $faqConfig->get('main.enableAutoUpdateHint'),
 ];
 
@@ -92,7 +93,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     ];
 }
 
-if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT)) {
     $api = new Api($faqConfig);
 
     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);

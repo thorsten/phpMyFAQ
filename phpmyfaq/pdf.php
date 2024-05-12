@@ -20,6 +20,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export\Pdf;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
@@ -110,7 +111,7 @@ $tags = new Tags($faqConfig);
 
 $response->setExpires(new DateTime());
 
-if (true === $getAll && $user->perm->hasPermission($user->getUserId(), 'export')) {
+if (true === $getAll && $user->perm->hasPermission($user->getUserId(), PermissionType::EXPORT)) {
     $filename = 'FAQs.pdf';
     $pdfFile = $pdf->generate(0, true, $lang);
 } else {

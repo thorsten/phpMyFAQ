@@ -44,7 +44,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
 
 $templateVars = [
     'adminHeaderStopWords' => Translation::get('ad_menu_stopwordsconfig'),
-    'hasPermission' => $user->perm->hasPermission($user->getUserId(), 'editconfig'),
+    'hasPermission' => $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT),
     'msgDescription' => Translation::get('ad_stopwords_desc'),
     'csrfToken' => Token::getInstance()->getTokenInput('stopwords'),
     'msgStopWordsLabel' => Translation::get('ad_stopwords_desc'),

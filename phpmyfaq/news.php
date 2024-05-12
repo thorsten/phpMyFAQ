@@ -23,6 +23,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CommentHelper;
@@ -82,7 +83,7 @@ if (strlen((string) $news['link']) > 0) {
 
 // Show a link to edit the news?
 $editThisEntry = '';
-if ($user->perm->hasPermission($user->getUserId(), 'editnews')) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT)) {
     $editThisEntry = sprintf(
         '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
         $newsId,

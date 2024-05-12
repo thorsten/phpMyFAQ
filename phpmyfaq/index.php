@@ -25,6 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
@@ -655,7 +656,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
-    if ($user->perm->hasPermission($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
+    if ($user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK) || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',
             Translation::get('adminSection')

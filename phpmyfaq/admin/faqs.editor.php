@@ -310,7 +310,7 @@ if (
     //
     // Revisions
     //
-    if ($user->perm->hasPermission($currentUserId, 'changebtrevs') && $action === 'editentry') {
+    if ($user->perm->hasPermission($currentUserId, PermissionType::REVISION_UPDATE) && $action === 'editentry') {
         $faqRevision = new Revision($faqConfig);
         $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
 
@@ -374,7 +374,10 @@ if (
         'ad_entry_locale' => Translation::get('ad_entry_locale'),
         'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
         'hasPermissionForAddAttachments' => $user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_ADD),
-        'hasPermissionForDeleteAttachments' => $user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_DELETE),
+        'hasPermissionForDeleteAttachments' => $user->perm->hasPermission(
+            $currentUserId,
+            PermissionType::ATTACHMENT_DELETE
+        ),
         'ad_menu_attachments' => Translation::get('ad_menu_attachments'),
         'csrfTokenDeleteAttachment' => Token::getInstance()->getTokenString('delete-attachment'),
         'attachments' => $attList,

@@ -20,6 +20,7 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\NewsMessage;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\News;
@@ -43,9 +44,9 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 
 $templateVars = [
     'action' => $action,
-    'permissionAddNews' => $user->perm->hasPermission($user->getUserId(), 'addnews'),
-    'permissionEditNews' => $user->perm->hasPermission($user->getUserId(), 'editnews'),
-    'permissionDeleteNews' => $user->perm->hasPermission($user->getUserId(), 'delnews'),
+    'permissionAddNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_ADD),
+    'permissionEditNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT),
+    'permissionDeleteNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_DELETE),
     'defaultUrl' => $faqConfig->getDefaultUrl(),
     'enableWysiwyg' => $faqConfig->get('main.enableWysiwygEditor'),
     'ad_news_add' => Translation::get('ad_news_add'),
@@ -92,20 +93,20 @@ $templateVars = [
     'csrfToken_activateNews' => Token::getInstance()->getTokenString('activate-news')
 ];
 
-if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), 'addnews')) {
+if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_ADD)) {
     $templateVars = [
         ...$templateVars,
         'userEmail' => $user->getUserData('email'),
         'userName' => $user->getUserData('display_name')
     ];
-} elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
+} elseif ('news' == $action && $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT)) {
     $newsHeaders = $news->getHeader();
 
     $templateVars = [
         ...$templateVars,
         'news' => $newsHeaders,
     ];
-} elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), 'editnews')) {
+} elseif ('edit-news' == $action && $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT)) {
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->get($id, true);
 

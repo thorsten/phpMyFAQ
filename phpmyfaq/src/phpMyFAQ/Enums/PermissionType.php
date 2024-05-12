@@ -80,6 +80,8 @@ enum PermissionType: string
 
     case RESTORE = 'restore';
 
+    case REVISION_UPDATE = 'changebtrevs';
+
     case STATISTICS_ADMINLOG = 'adminlog';
 
     case STATISTICS_VIEWLOGS = 'viewlog';
@@ -91,4 +93,6 @@ enum PermissionType: string
     case USER_DELETE = 'delete_user';
 
     case FORMS_EDIT = 'forms_edit';
+
+    case VIEW_ADMIN_LINK = 'viewadminlink';
 }

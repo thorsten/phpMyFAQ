@@ -111,8 +111,8 @@ class BasicPermission extends Permission implements PermissionInterface
     /**
      * Returns true if the user given by user_id has the right,
      * otherwise false. Unlike checkUserRight(), right may be a
-     * right-ID or a right-name. Another difference is, that also
-     * group-rights are taken into account.
+     * right-ID or a right-name. Another difference is that also
+     * group rights are taken into account.
      *
      * @param int   $userId User ID
      * @param mixed $right  Right ID or right name

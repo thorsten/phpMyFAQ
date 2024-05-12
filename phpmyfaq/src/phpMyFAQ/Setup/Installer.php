@@ -130,7 +130,7 @@ class Installer extends Setup
         ],
         //18 => "viewadminlink",
         [
-            'name' => 'viewadminlink',
+            'name' => PermissionType::VIEW_ADMIN_LINK->value,
             'description' => 'Right to see the link to the admin section'
         ],
         //20 => "backup",
@@ -145,42 +145,42 @@ class Installer extends Setup
         ],
         //22 => "delquestion",
         [
-            'name' => 'delquestion',
+            'name' => PermissionType::QUESTION_DELETE->value,
             'description' => 'Right to delete questions',
         ],
         //23 => 'addglossary',
         [
-            'name' => 'addglossary',
+            'name' => PermissionType::GLOSSARY_ADD->value,
             'description' => 'Right to add glossary entries',
         ],
         //24 => 'editglossary',
         [
-            'name' => 'editglossary',
+            'name' => PermissionType::GLOSSARY_EDIT->value,
             'description' => 'Right to edit glossary entries',
         ],
         //25 => 'delglossary'
         [
-            'name' => 'delglossary',
+            'name' => PermissionType::GLOSSARY_DELETE->value,
             'description' => 'Right to delete glossary entries',
         ],
         //26 => 'changebtrevs'
         [
-            'name' => 'changebtrevs',
+            'name' => PermissionType::REVISION_UPDATE->value,
             'description' => 'Right to edit revisions',
         ],
         //27 => "addgroup",
         [
-            'name' => 'addgroup',
+            'name' => PermissionType::GROUP_ADD->value,
             'description' => 'Right to add group accounts',
         ],
         //28 => "editgroup",
         [
-            'name' => 'editgroup',
+            'name' => PermissionType::GROUP_EDIT->value,
             'description' => 'Right to edit group accounts',
         ],
         //29 => "delgroup",
         [
-            'name' => 'delgroup',
+            'name' => PermissionType::GROUP_DELETE->value,
             'description' => 'Right to delete group accounts',
         ],
         //30 => "addtranslation",

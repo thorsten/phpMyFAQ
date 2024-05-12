@@ -22,6 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
@@ -118,16 +119,22 @@ class FormController extends AbstractController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/forms/translation-add')]
-    public function addTranslation(Request $request)
+    public function addTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
+
         $data = json_decode($request->getContent());
+
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
         $forms = new Forms(Configuration::getConfigurationInstance());
+
         if (!Token::getInstance()->verifyToken('add-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
