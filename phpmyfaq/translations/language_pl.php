@@ -1207,7 +1207,7 @@ $PMF_LANG['ad_media_name_search'] = 'Szukaj nazwy nośnika';
 
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Notatki Prywatne';
-$PMF_LANG['ad_admin_notes_hint'] = '%s (widoczne tylko dla redaktorów)';
+$PMF_LANG['ad_admin_notes_hint'] = ' (widoczne tylko dla redaktorów)';
 
 // added v2.9.10 - 2018-02-17 by Thorsten
 $PMF_LANG['ad_quick_entry'] = 'Dodaj nowe FAQ w tej kategorii';

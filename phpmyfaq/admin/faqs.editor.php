@@ -213,7 +213,7 @@ if (
     }
 
     // Revisions
-    $selectedRevisionId = Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
+    $selectedRevisionId = Filter::filterInput(INPUT_POST, 'selectedRevisionId', FILTER_VALIDATE_INT);
     if (is_null($selectedRevisionId)) {
         $selectedRevisionId = $faqData['revision_id'];
     }
@@ -347,7 +347,6 @@ if (
         $isActive = ' checked';
         $isInActive = null;
     }
-
 
     $attList = AttachmentFactory::fetchByRecordId(
         $faqConfig,

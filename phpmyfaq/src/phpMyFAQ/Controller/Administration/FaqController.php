@@ -88,6 +88,7 @@ class FaqController extends AbstractController
 
         // Collect FAQ data
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
+
         if (is_array($data->{'categories[]'})) {
             $categories = Filter::filterArray($data->{'categories[]'});
         } else {

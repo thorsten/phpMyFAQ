@@ -1166,7 +1166,7 @@ $PMF_LANG['ad_media_name_search'] = "Görsel adıyla ara";
 
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = "Özel Not";
-$PMF_LANG['ad_admin_notes_hint'] = "%s (yalnızca editörler tarafından görülebilir)";
+$PMF_LANG['ad_admin_notes_hint'] = " (yalnızca editörler tarafından görülebilir)";
 
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
 $LANG_CONF['ldap.ldap_mapping.name'] = array('input', 'LDAP mapping for name, "cn" when using an ADS');

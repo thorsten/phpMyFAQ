@@ -56,13 +56,13 @@
               <div class="form-group mb-2">
                 <form id="selectRevision" name="selectRevision" method="post"
                       action="?action=editentry&id={{ faqData['id'] }}&lang={{ faqLang }}">
-                  <select class="form-select" name="revisionid_selected" onchange="this.form.submit();">
-                    <option value="{{ faqRevisionId }}">{{ ad_changerev }}</option>
-                    {% for revision in revisions %}
-                      {% set selected = selectedRevisionId == revision['revision_id'] %}
-                    <option value="{{ revision['revision_id'] }}" {{ selected == 1 ? ' selected' }}>
-                      {{ ad_entry_revision }} 1.{{ revision['revision_id'] }}:
-                      {{ revision['updated'] | createIsoDate }} - {{ revision['author'] }}
+                  <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
+                    <option value="0">{{ ad_changerev }}</option>
+                    {% for currentRevision in revisions %}
+                      {% set selected = selectedRevisionId == faqData['revision_id'] %}
+                    <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
+                      {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
+                      {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
                     </option>
                     {% endfor %}
                   </select>
@@ -396,7 +396,7 @@
             </label>
           </div>
           <div class="form-check">
-            <input type="radio" id="inactive" name="active" value="no" class="form-check-input" {{ isinActive }}>
+            <input type="radio" id="inactive" name="active" value="no" class="form-check-input" {{ isInActive }}>
             <label class="form-check-label" for="inactive">
               {{ ad_entry_not_visibility }}
             </label>

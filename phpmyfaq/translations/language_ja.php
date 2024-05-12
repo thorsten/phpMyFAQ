@@ -937,7 +937,7 @@ $PMF_LANG['ad_media_name_search'] = 'メディア名で検索';
 
 // added v2.9.0-RC
 $PMF_LANG['ad_admin_notes'] = 'プライベートメモ';
-$PMF_LANG['ad_admin_notes_hint'] = '%s (編集者のみ閲覧可)';
+$PMF_LANG['ad_admin_notes_hint'] = ' (編集者のみ閲覧可)';
 
 // added v2.9.10
 $PMF_LANG['ad_quick_entry'] = 'このカテゴリーにFAQを追加';

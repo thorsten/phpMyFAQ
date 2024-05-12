@@ -1193,7 +1193,7 @@ $PMF_LANG['ad_media_name_search'] = 'Suche nach Mediennamen';
 
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Private Notizen';
-$PMF_LANG['ad_admin_notes_hint'] = '%s (nur für Editoren sichtbar)';
+$PMF_LANG['ad_admin_notes_hint'] = ' (nur für Editoren sichtbar)';
 
 // added v2.9.10 - 2018-02-17 by Thorsten
 $PMF_LANG['ad_quick_entry'] = 'Neue FAQ in dieser Kategorie anlegen';

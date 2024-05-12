@@ -1195,7 +1195,7 @@ $PMF_LANG["ad_media_name_search"] = "Recherche d'un nom de média";
 
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG["ad_admin_notes"] = "Notes privées";
-$PMF_LANG["ad_admin_notes_hint"] = "%s (visible seulement pour les éditeurs)";
+$PMF_LANG["ad_admin_notes_hint"] = " (visible seulement pour les éditeurs)";
 
 // added v2.9.10 - 2018-02-17 by Thorsten
 $PMF_LANG["ad_quick_entry"] = "Ajouter une nouvelle FAQ dans cette catégorie";
