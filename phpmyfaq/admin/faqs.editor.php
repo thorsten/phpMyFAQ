@@ -41,7 +41,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Template\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Utils;
 use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -136,11 +135,13 @@ if (
                 ],
             ]
         );
+
         if (is_array($selectedCategory)) {
             foreach ($selectedCategory as $cats) {
                 $categories[] = ['category_id' => $cats, 'category_lang' => $faqData['lang']];
             }
         }
+
         $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
         $faqData['keywords'] = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_SPECIAL_CHARS);
         $faqData['title'] = Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_SPECIAL_CHARS);

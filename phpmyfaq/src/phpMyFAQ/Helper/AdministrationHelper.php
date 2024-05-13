@@ -53,7 +53,7 @@ class AdministrationHelper
         bool $checkPerm = true
     ): string {
 
-        if ($action != '') {
+        if ($action !== '') {
             $action = 'action=' . $action;
         }
 
