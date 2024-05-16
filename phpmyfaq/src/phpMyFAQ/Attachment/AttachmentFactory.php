@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Attachment;
 
-use phpMyFAQ\Attachment;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\AttachmentStorageType;
@@ -86,14 +85,7 @@ class AttachmentFactory
         $files = [];
 
         $sql = sprintf(
-            "SELECT
-                id
-            FROM
-                %sfaqattachment
-            WHERE
-                record_id = %d
-            AND
-                record_lang = '%s'",
+            "SELECT id FROM %sfaqattachment WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
             Language::$language
@@ -130,9 +122,10 @@ class AttachmentFactory
     /**
      * Re-arranges the $_FILES array for multiple file uploads.
      *
-     * @param $filePost
+     * @param array $filePost
+     * @return array
      */
-    public static function rearrangeUploadedFiles(&$filePost): array
+    public static function rearrangeUploadedFiles(array $filePost): array
     {
         $filesArray = [];
         $filesCount = is_countable($filePost['name']) ? count($filePost['name']) : 0;
