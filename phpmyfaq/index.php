@@ -656,7 +656,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
-    if ($user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK) || $user->isSuperAdmin()) {
+    if ($user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value) || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="./admin/index.php">%s</a>',
             Translation::get('adminSection')

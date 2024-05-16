@@ -67,7 +67,7 @@ $templateVars = [
     'hasUserTracking' => $faqConfig->get('main.enableUserTracking'),
     'adminDashboardHeaderInactiveFaqs' => Translation::get('ad_record_inactive'),
     'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
-    'hasPermissionEditConfig' => $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT),
+    'hasPermissionEditConfig' => $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value),
     'showVersion' => $faqConfig->get('main.enableAutoUpdateHint'),
 ];
 
@@ -93,7 +93,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     ];
 }
 
-if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT)) {
+if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $api = new Api($faqConfig);
 
     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);

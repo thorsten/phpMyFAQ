@@ -16,6 +16,7 @@
   </div>
 {% endif %}
 
+{% if orderingStickyFaqsActivated != false %}
 <div class="card shadow mt-5 ml-5" id="mainCardStickyFAQs">
   <div class="card-body">
     <ul class="list-group list-group-numbered {{ sortableDisabled }}" id="stickyFAQs" data-csrf="{{ csrfToken }}">
@@ -27,4 +28,4 @@
     </ul>
   </div>
 </div>
-
+{% endif %}
