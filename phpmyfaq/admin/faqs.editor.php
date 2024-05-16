@@ -311,7 +311,7 @@ if (
     //
     // Revisions
     //
-    if ($user->perm->hasPermission($currentUserId, PermissionType::REVISION_UPDATE) && $action === 'editentry') {
+    if ($user->perm->hasPermission($currentUserId, PermissionType::REVISION_UPDATE->value) && $action === 'editentry') {
         $faqRevision = new Revision($faqConfig);
         $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
 
@@ -374,10 +374,10 @@ if (
         'categoryOptions' => $categoryHelper->renderOptions($categories),
         'ad_entry_locale' => Translation::get('ad_entry_locale'),
         'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
-        'hasPermissionForAddAttachments' => $user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_ADD),
+        'hasPermissionForAddAttachments' => $user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_ADD->value),
         'hasPermissionForDeleteAttachments' => $user->perm->hasPermission(
             $currentUserId,
-            PermissionType::ATTACHMENT_DELETE
+            PermissionType::ATTACHMENT_DELETE->value
         ),
         'ad_menu_attachments' => Translation::get('ad_menu_attachments'),
         'csrfTokenDeleteAttachment' => Token::getInstance()->getTokenString('delete-attachment'),
@@ -392,7 +392,8 @@ if (
         'allGroups' => $allGroups,
         'restrictedGroups' => $restrictedGroups,
         'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
-        'groupPermissionOptions' => $user->perm->getAllGroupsOptions($groupPermission, $user),
+        'groupPermissionOptions' => ($faqConfig->get('security.permLevel') === 'medium') ?
+            $user->perm->getAllGroupsOptions($groupPermission, $user) : '',
         'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
         'allUsers' => $allUsers,
         'ad_entry_all_users' => Translation::get('ad_entry_all_users'),
@@ -413,7 +414,7 @@ if (
         'msgKeepFaqDate' => Translation::get('msgKeepFaqDate'),
         'msgEditFaqDat' => Translation::get('msgEditFaqDat'),
         'ad_entry_status' => Translation::get('ad_entry_status'),
-        'hasPermissionForApprove' => $user->perm->hasPermission($currentUserId, PermissionType::FAQ_APPROVE),
+        'hasPermissionForApprove' => $user->perm->hasPermission($currentUserId, PermissionType::FAQ_APPROVE->value),
         'isActive' => $isActive,
         'isInActive' => $isInActive,
         'ad_entry_visibility' => Translation::get('ad_entry_visibility'),

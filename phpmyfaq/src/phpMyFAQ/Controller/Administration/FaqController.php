@@ -98,7 +98,7 @@ class FaqController extends AbstractController
         $recordLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
+        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -120,7 +120,7 @@ class FaqController extends AbstractController
         $faqData
             ->setLanguage($recordLang)
             ->setActive($active === 'yes')
-            ->setSticky(!is_null($sticky))
+            ->setSticky(($sticky !== 'no') ? $sticky : false)
             ->setQuestion(
                 Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
             )
@@ -275,7 +275,7 @@ class FaqController extends AbstractController
         $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? false, FILTER_SANITIZE_SPECIAL_CHARS);
+        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -310,7 +310,7 @@ class FaqController extends AbstractController
             ->setRevisionId($revisionId)
             ->setSolutionId($solutionId)
             ->setActive($active === 'yes')
-            ->setSticky(!is_null($sticky))
+            ->setSticky(($sticky !== 'no') ? $sticky : false)
             ->setQuestion(
                 Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
             )
