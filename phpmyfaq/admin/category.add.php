@@ -69,7 +69,8 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
         'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
         'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
-        'restricted_groups' => $currentUser->perm->getAllGroupsOptions([], $user)
+        'restricted_groups' => ($faqConfig->get('security.permLevel') === 'medium') ?
+            $currentUser->perm->getAllGroupsOptions([], $user) : '',
     ];
 
     if ($parentId > 0) {
