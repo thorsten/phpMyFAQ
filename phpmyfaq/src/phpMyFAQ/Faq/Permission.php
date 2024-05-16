@@ -152,9 +152,11 @@ class Permission
                 'restricted_groups' => [-1],
             ];
         } else {
-            $permissions += Filter::filterArray(
-                $data->restricted_groups
-            );
+            $permissions += [
+                'restricted_groups' => [
+                    Filter::filterArray($data->{'restricted_groups'}, FILTER_VALIDATE_INT),
+                ]
+            ];
         }
 
         return $permissions;
