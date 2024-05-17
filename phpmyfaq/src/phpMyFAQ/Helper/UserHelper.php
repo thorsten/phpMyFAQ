@@ -25,12 +25,12 @@ use phpMyFAQ\User;
  *
  * @package phpMyFAQ\Helper
  */
-class UserHelper
+readonly class UserHelper
 {
     /**
      * UserHelper constructor.
      */
-    public function __construct(private readonly User $user)
+    public function __construct(private User $user)
     {
     }
 
