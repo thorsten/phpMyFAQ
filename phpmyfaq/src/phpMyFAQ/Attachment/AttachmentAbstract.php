@@ -27,12 +27,8 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 abstract class AttachmentAbstract
 {
-    /**
-     * Attachment id.
-     *
-     * @var int
-     */
-    protected int $id;
+    /** @var int|null Attachment id. */
+    protected ?int $id = null;
 
     /**
      * The key to encrypt with.
@@ -320,8 +316,6 @@ abstract class AttachmentAbstract
 
     /**
      * Generate hash based on current conditions.
-     *
-     * @return string
      *
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
