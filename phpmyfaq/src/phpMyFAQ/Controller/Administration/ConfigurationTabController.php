@@ -155,9 +155,6 @@ class ConfigurationTabController extends AbstractController
                 );
             }
 
-            var_dump($oldConfigurationData['main.referenceURL']);
-            var_dump($newConfigValues['main.referenceURL']);
-
             $this->configuration->update($newConfigValues);
 
             return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
