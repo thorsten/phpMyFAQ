@@ -47,7 +47,7 @@ if (-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests
 }
 
 // Check permission to add new faqs
-if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD)) {
+if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)) {
     $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
     $response->send();
 }

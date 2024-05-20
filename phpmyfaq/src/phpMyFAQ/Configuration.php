@@ -444,4 +444,43 @@ class Configuration
 
         return true;
     }
+
+    /**
+     * Updates main.referenceUrl in media objects in faqs.
+     *
+     * @param string[] $oldUrl Old main.referenceUrl
+     * @paran string[] $newUrl New main.referenceUrl
+     * @return bool true|false
+     */
+    public function replaceMainReferenceUrl(string $oldUrl, string $newUrl)
+    {
+        $query = sprintf(
+            "SELECT content FROM %sfaqdata",
+            Database::getTablePrefix()
+        );
+        $response = $this->getDb()->query($query);
+        $contentItems = $this->getDb()->fetchAll($response);
+        $newContentItems = [];
+
+        foreach ($contentItems as $item) {
+            if (strpos($item->content, $oldUrl) !== false) {
+                $newContentItems[] = str_replace($oldUrl, $newUrl, $item->content);
+            } else {
+                $newContentItems[] = $item->content;
+            }
+        }
+
+        $count = 0;
+        foreach ($newContentItems as $newItem) {
+            $query = sprintf(
+                "UPDATE %sfaqdata SET content='%s' WHERE content='%s'",
+                Database::getTablePrefix(),
+                $this->getDb()->escape($newItem),
+                $this->getDb()->escape($contentItems[$count]->content)
+            );
+            $count++;
+            $this->getDb()->query($query);
+        }
+        return true;
+    }
 }

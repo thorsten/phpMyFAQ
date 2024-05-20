@@ -147,6 +147,17 @@ class ConfigurationTabController extends AbstractController
                 }
             }
 
+            // Replace main.referenceUrl in faqs
+            if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
+                $this->configuration->replaceMainReferenceUrl(
+                    $oldConfigurationData['main.referenceURL'],
+                    $newConfigValues['main.referenceURL']
+                );
+            }
+
+            var_dump($oldConfigurationData['main.referenceURL']);
+            var_dump($newConfigValues['main.referenceURL']);
+
             $this->configuration->update($newConfigValues);
 
             return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
