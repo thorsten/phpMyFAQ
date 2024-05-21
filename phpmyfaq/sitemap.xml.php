@@ -27,8 +27,10 @@
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -54,6 +56,30 @@ Strings::init();
 
 if (false === $faqConfig->get('seo.enableXMLSitemap')) {
     exit();
+}
+
+//
+// Get language (default: english)
+//
+$Language = new Language($faqConfig);
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqConfig->setLanguage($Language);
+
+if (!Language::isASupportedLanguage($faqLangCode)) {
+    $faqLangCode = 'en';
+}
+
+//
+// Set translation class
+//
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage($faqLangCode)
+        ->setMultiByteLanguage();
+} catch (Exception $e) {
+    echo '<strong>Error:</strong> ' . $e->getMessage();
 }
 
 /**
