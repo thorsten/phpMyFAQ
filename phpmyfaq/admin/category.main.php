@@ -54,7 +54,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
       <form method="post">
         <?= Token::getInstance()->getTokenInput('category') ?>
         <?php
-        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
+            $csrfToken = Filter::filterInput(INPUT_POST, 'pmf-csrf-token', FILTER_SANITIZE_SPECIAL_CHARS);
 
         //
         // Image upload
