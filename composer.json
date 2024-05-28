@@ -33,7 +33,7 @@
     "monolog/monolog": "^3.3",
     "myclabs/deep-copy": "~1.0",
     "phpseclib/phpseclib": "~3.0",
-    "robthree/twofactorauth": "^2.0.0",
+    "robthree/twofactorauth": "^3.0.0",
     "symfony/html-sanitizer": "^7.0",
     "symfony/http-client": "^7.0",
     "symfony/http-foundation": "^7.0",
