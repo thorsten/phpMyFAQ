@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class TagsHelperTest extends TestCase
 {
-    private $tagsHelper;
+    private TagsHelper $tagsHelper;
 
     protected function setUp(): void
     {
