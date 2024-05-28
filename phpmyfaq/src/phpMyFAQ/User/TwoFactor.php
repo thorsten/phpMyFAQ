@@ -43,11 +43,11 @@ readonly class TwoFactor
     {
         $this->qrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
+            $this->qrCodeProvider,
             $this->configuration->get('main.metaPublisher'),
             6,
             30,
-            Algorithm::Sha1,
-            $this->qrCodeProvider
+            Algorithm::Sha1
         );
     }
 
