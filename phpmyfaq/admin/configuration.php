@@ -52,8 +52,11 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
             'main.metaKeywords'
         ];
 
+        $message = '';
+
         // Special checks
         if (isset($editData['edit']['main.enableMarkdownEditor'])) {
+            $message = 'Markdown editor enabled, WYSIWYG editor disabled.';
             $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
         }
         if (isset($editData['edit']['main.currentVersion'])) {
@@ -132,6 +135,12 @@ if ($user->perm->hasPermission($user->getUserId(), 'editconfig')) {
 
     <div class="row">
       <div class="col-lg-12">
+
+        <?php if (!empty($message)) { ?>
+        <div class="alert alert-info" role="alert">
+            <?= $message ?>
+        </div>
+        <?php } ?>
 
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="nav-item">
