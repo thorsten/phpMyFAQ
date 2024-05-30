@@ -27,11 +27,7 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 abstract class AttachmentAbstract
 {
-    /**
-     * Attachment id.
-     *
-     * @var int
-     */
+    /** @var int Attachment id. */
     protected int $id = 0;
 
     /**
