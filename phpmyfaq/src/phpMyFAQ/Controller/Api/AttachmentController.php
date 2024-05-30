@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
