@@ -38,11 +38,23 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install dependencies
+      - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Lint with PHPCS
-        run: phpmyfaq/src/libs/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
+        run: phpmyfaq/src/libs/bin/phpcs --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
 
       - name: Test with PHPUnit
         run: phpmyfaq/src/libs/bin/phpunit --coverage-text
+
+      - name: Setup Node.js with pnpm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Node.js dependencies
+        run: pnpm install
+
+      - name: Run Jest tests
+        run: pnpm test
