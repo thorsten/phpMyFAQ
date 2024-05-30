@@ -13,7 +13,9 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-11
  */
+
 import { addElement } from '../../../../assets/src/utils';
+import { fetchHealthCheck } from '../api';
 
 export const handleCheckForUpdates = () => {
   const checkHealthButton = document.getElementById('pmf-button-check-health');
@@ -24,37 +26,29 @@ export const handleCheckForUpdates = () => {
 
   // Health Check
   if (checkHealthButton) {
-    checkHealthButton.addEventListener('click', (event) => {
+    checkHealthButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/health-check', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          const result = document.getElementById('result-check-health');
-          const card = document.getElementById('pmf-update-step-health-check');
-          if (result) {
-            card.classList.add('text-bg-success');
-            if (response.success === 'ok') {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            } else {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            }
-          }
-        })
-        .catch(async (error) => {
+      try {
+        const responseData = await fetchHealthCheck();
+        const result = document.getElementById('result-check-health');
+        const card = document.getElementById('pmf-update-step-health-check');
+
+        if (responseData.success) {
+          card.classList.add('text-bg-success');
+          result.replaceWith(addElement('p', { innerText: responseData.success }));
+        }
+        if (responseData.error) {
+          card.classList.add('text-bg-danger');
+          result.replaceWith(addElement('p', { innerText: responseData.error }));
+        }
+      } catch (error) {
+        if (error.cause && error.cause.response) {
           const errorMessage = await error.cause.response.json();
           console.error(errorMessage);
-        });
+        } else {
+          console.error(error.message);
+        }
+      }
     });
   }
 

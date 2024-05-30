@@ -46,6 +46,8 @@ class Upgrade extends Setup
 
     private bool $isNightly;
 
+    private bool $isMaintenanceEnabled = false;
+
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -403,5 +405,18 @@ class Upgrade extends Setup
     public function setIsNightly(bool $isNightly): void
     {
         $this->isNightly = $isNightly;
+    }
+
+    public function isMaintenanceEnabled(): bool
+    {
+        return $this->isMaintenanceEnabled = $this->configuration->get('main.maintenanceMode');
+    }
+
+    public function setIsMaintenanceEnabled(bool $isMaintenanceEnabled): Upgrade
+    {
+        $this->isMaintenanceEnabled = $isMaintenanceEnabled;
+        $this->configuration->set('main.maintenanceMode', $isMaintenanceEnabled);
+
+        return $this;
     }
 }

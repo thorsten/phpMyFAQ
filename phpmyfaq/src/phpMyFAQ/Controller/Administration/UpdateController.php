@@ -56,11 +56,21 @@ class UpdateController extends AbstractController
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
         $upgrade = new Upgrade(new System(), $configuration);
 
+        if (!$upgrade->isMaintenanceEnabled()) {
+            return $this->json(
+                [
+                    'error' => Translation::get('msgNotInMaintenanceMode'),
+                    'dateLastChecked' => $dateLastChecked,
+                ],
+                Response::HTTP_CONFLICT
+            );
+        }
+
         try {
             $upgrade->checkFilesystem();
             return $this->json(
                 [
-                    'message' => Translation::get('healthCheckOkay'),
+                    'success' => Translation::get('healthCheckOkay'),
                     'dateLastChecked' => $dateLastChecked,
                 ],
                 Response::HTTP_OK
@@ -68,7 +78,7 @@ class UpdateController extends AbstractController
         } catch (Exception $exception) {
             return $this->json(
                 [
-                    'message' => $exception->getMessage(),
+                    'error' => $exception->getMessage(),
                     'dateLastChecked' => $dateLastChecked,
                 ],
                 Response::HTTP_BAD_REQUEST
