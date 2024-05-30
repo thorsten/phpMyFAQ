@@ -2,7 +2,7 @@
 
 ## 6.1 Customizing phpMyFAQ
 
-phpMyFAQ users have even more customization opportunities. The key feature is the user selectable template sets, there
+phpMyFAQ users have even more customization opportunities. The key feature is the user-selectable template sets, there
 is a templates/default directory where the default layouts get shipped.
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
@@ -29,6 +29,8 @@ set the following code in src/Bootstrap.php:
 
 ## 6.2 Templating
 
+### 6.2.1 Frontend
+
 The default layout of phpMyFAQ is saved in the **assets/themes/default/templates/index.html** file. This is a normal
 HTML5 file including some variables in double curly brackets like Twig or Handlebars, serving as placeholders for
 content.
@@ -42,13 +44,17 @@ online.
 
 You can change the template as you wish, but you may want to keep the original template in case something goes wrong.
 
+### 6.2.2 Admin backend templates
+
+The admin backend templates are located in the **assets/templates/admin** directory. We use Twig as the template engine.
+
 ## 6.3 REST APIs
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
 phpMyFAQ installation.
 
-The API documentation can be found in our [GitHub repository](https://github.com/thorsten/phpMyFAQ/blob/main/API.md).
+The API documentation can be found at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
 ## 6.4 phpMyFAQ development
 

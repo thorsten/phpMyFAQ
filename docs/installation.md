@@ -97,7 +97,7 @@ even after the successful installation:
 
 All other directories shouldn't be world-writable for your own security.
 
-**Note**: If you're running SELinux, you may need further configuration or you should disable it at all.
+**Note**: If you're running SELinux, you may need further configuration, or you should completely disable it.
 
 The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all tables
 in the database.
@@ -171,8 +171,8 @@ To configure phpMyFAQ point your browser to
 
 Please use your chosen username and your password for your first login into the admin section.
 
-Some variables that does not change regularly, they can be edited in the file _config/constants.php_. You can change
-the
+Some variables that do not change regularly, they can be edited in the file _config/constants.php_.
+You can change
 
 - the time zone of your server (default: "Europe/Berlin")
 - the timeout in the admin section (default: 300 minutes)
@@ -181,7 +181,7 @@ the
 - the incremental value of the solution id (default: 1)
 - the number of records in the Top10 (default: 10)
 - the number of the latest records (default: 5)
-- flag with which Google site map will be forced to use the current phpMyFAQ SEO URL schema (default: true)
+- flag with which a Google site map will be forced to use the current phpMyFAQ SEO URL schema (default: true)
 - the number with which the Tags Cloud list is limited to (default: 50)
 - the number with which the autocomplete list is limited to (default: 20)
 - the default encryption type for passwords
@@ -192,12 +192,12 @@ the
   The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be
   excluded from search. This is not a bug, but rather a feature of MySQL.
 - The search on other databases is using the LIKE operator currently.
-- To improve the search functionality you should consider using Elasticsearch.
+- To improve the search functionality, you should consider using Elasticsearch.
 
 ## 2.6 Automatic user language detection
 
-To set the default language in your browser you have to set a variable that gets passed to the web server. How this is
-done depends on the browser you are using.
+To set the default language in your browser, you have to set a variable that gets passed to the web server.
+How this is done depends on the browser you are using.
 
 - Mozilla Firefox: Tools -> Options -> Content -> Languages
 - Google Chrome / Microsoft Edge / Opera: Settings -> Details -> Language settings
@@ -216,14 +216,14 @@ done depends on the browser you are using.
 
 ## 2.8 Enabling LDAP or Microsoft Active Directory support
 
-If you're entered the correct LDAP or Microsoft Active Directory information during the installation you have to enable
+If you're entered the correct LDAP or Microsoft Active Directory information during the installation, you have to enable
 the LDAP or Microsoft Active Directory support in the configuration in the admin backend. Now your user can authenticate
 themselves in phpMyFAQ against your LDAP server or a Microsoft Active Directory server.
 
-If you need special options for your LDAP or ADS configuration you can change the LDAP configuration in the admin
+If you need special options for your LDAP or ADS configuration, you can change the LDAP configuration in the admin
 configuration panel.
 
-If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template and if you rename
+If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template, and if you rename
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
 
 ## 2.9 Using Microsoft Entra ID
@@ -295,7 +295,7 @@ Main features of the PDF export:
 ## 2.11 Static solution ID
 
 phpMyFAQ features a static solution ID which never changes. This ID is visible next to the question on a FAQ record
-page. You may think why do you need such an ID? If you have a record ID _1042_ it is now possible to enter only the ID
+page. You may think why you need such an ID? If you have a record ID _1042_ it is now possible to enter only the ID
 _1042_ in the input field of the full-text search box, and you'll be automatically redirected to the FAQ record with the
 ID _1042_. By default, the numbers start at ID **1000**, but you can change this value in the file _inc/constants.php_.
 You can also change the value of the incrementation of the static IDs.
@@ -332,7 +332,7 @@ Please be aware:
   If you need to change the default key, you will have to re-upload all files.
 - Always memorize your encryption keys. There is no way to decrypt files without a correct key.
 - Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id
-  etc), so there is no way to asses a file directly using the name it was uploaded under.
+  etc), so there is no way to assess a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
 
 ## 2.14 Server side recommendations
@@ -354,7 +354,7 @@ you, you can specify the language in the class attribute:
 The list of supported language classes is available in the class reference. Classes can also be prefixed with either
 language- or lang-.
 
-To disable highlighting altogether use the "nohighlight" class:
+To disable highlighting altogether, use the "nohighlight" class:
 
     <pre><code class="nohighlight">...</code></pre>
 

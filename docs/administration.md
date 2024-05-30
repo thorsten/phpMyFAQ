@@ -42,6 +42,9 @@ with setting this option.
 A user without any permission in the admin section can still get read access to categories and records. You can set
 the permissions on categories and records in the category and record administration frontend.
 
+If you enable LDAP or Microsoft Entra ID authentication, you can't edit the user's profile in the admin area.
+The users will be created automatically when they log in the first time.
+
 ### 5.1.2 Group Administration
 
 phpMyFAQ also offers flexible management of privileges (or rights) for different groups in the admin area. You can set
@@ -182,46 +185,47 @@ edit and delete glossary items here. The items will be automatically displayed i
 
 ### 5.2.7 News Administration
 
-phpMyFAQ offers the ability to post news on the starting page of your FAQ. In the administration area you can create
-new news, edit existing news or delete them.
+phpMyFAQ offers the ability to post news on the starting page of your FAQ.
+In the administration area, you can create new news, edit existing news or delete them.
 
 ### 5.2.8 Attachment Administration
 
-In the attachment administration, you can see an overview of all all attachments with their filename, file size,
+In the attachment administration, you can see an overview of all attachments with their filename, file size,
 language and MIME type. You can delete them, too.
 
 ### 5.2.9 Tags Administration
 
-You can edit existing tags, of if you need to, you can delete the tag.
+You can edit existing tags, and if you need to, you can delete the tag.
 
 ## 5.3 Statistics
 
 ### 5.3.1 Ratings
 
-Below every FAQ, a visitor has the chance to rate the overall quality of a FAQ by giving ratings from 1 to 5 (whereas
-1 is the worst, 5 the best rating). In the statistics, the average rating and number of votes becomes visible for every
-rated FAQ. To give you a quick overview, FAQs with an average rating of 2 or worse are displayed in red, an average
+Below every FAQ, a visitor has the chance to rate the overall quality of a FAQ by giving ratings from one to five
+(whereas 1 is the worst, 5 the best rating).
+In the statistics, the average rating and number of votes becomes visible for every rated FAQ.
+To give you a quick overview, FAQs with an average rating of two or worse are displayed in red, an average
 above 4 results in a green number.
 
 ### 5.3.2 View sessions
 
 This function lets you keep track of your visitors. Every visitor is assigned an ID when coming to your starting page,
 that identifies a user during his whole visit. Using the information gathered here, you could reconstruct the way
-visitors use your FAQ and make necessary adjustments to your categories, content or keywords.
+visitors use your FAQ and make the necessary adjustments to your categories, content or keywords.
 
 ### 5.3.3 View Admin log
 
 The admin log allows you to track any actions taken by users in the admin area of phpMyFAQ. If you feel you have an
-intruder in the system you can find out for sure by checking the admin log.
+intruder in the system, you can find out for sure by checking the admin log.
 
 ### 5.3.4 Search statistics
 
-On the search statistics page you'll get a report about which keywords and how often your users are searching. This
+On the search statistics page, you'll get a report about which keywords and how often your users are searching. This
 information is split into keywords, the number of searches for this term, the language and the overall percentage.
 
 ### 5.3.5 Reports
 
-On the report page you can select various data columns to generate a report about content and usage of your FAQ
+On the report page, you can select various data columns to generate a report about content and usage of your FAQ
 installation. You can export the report then as a CSV file.
 
 ## 5.4 Imports & Exports
@@ -265,7 +269,7 @@ During the backup process, phpMyFAQ generates a hash on the whole backup file an
 of backups will be verified during the process of restoring. If a backup can't be verified, the admin can't use the
 backup file for restore.
 
-To back up the whole data located on your web server you can run our simple backup script located in the folder /scripts.
+To back up the whole data located on your web server, you can run our simple backup script located in the folder /scripts.
 
 ## 5.6 Configuration
 
@@ -324,5 +328,5 @@ Elasticsearch is enabled.
 
 ### 5.6.2 System information
 
-On this page phpMyFAQ displays some relevant system information like PHP version, database version or session path.
-Please use this information when report bugs.
+On this page, phpMyFAQ displays some relevant system information like PHP version, database version or session path.
+Please use this information when reporting bugs.

@@ -40,7 +40,8 @@ updated.
 ## Upgrading from phpMyFAQ 3.1.x
 
 Please make a full backup before you run the upgrade!
-First, log in as admin into the admin section and enable the maintenance mode. (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
+First, log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
@@ -60,6 +61,7 @@ updated.
 
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
@@ -82,6 +84,7 @@ updated.
 
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Second, you have to delete all files **except**:
 
 - all files in the directory **content/**
@@ -98,6 +101,7 @@ updated.
 
 If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature.
 Log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Then go to the "phpMyFAQ Update" page in the configuration section click through the update wizard:
 
 1. Check for System Health: this checks if your system is ready for the upgrade
