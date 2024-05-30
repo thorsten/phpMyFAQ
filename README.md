@@ -151,11 +151,11 @@ To run our end-to-end tests via Playwright, you can use several commands:
 
     $ pnpm exec playwright test
 
-Runs the end-to-end tests.
+Run the end-to-end tests.
 
     $ pnpm exec playwright test --ui
 
-Starts the interactive UI mode.
+Start the interactive UI mode.
 
     $ pnpm exec playwright test --project=chromium
 
@@ -163,11 +163,11 @@ Runs the tests only on Desktop Chrome.
 
     $ pnpm exec playwright test example
 
-Runs the tests in a specific file.
+Run the tests in a specific file.
 
     $ pnpm exec playwright test --debug
 
-Runs the tests in debug mode.
+Run the tests in debug mode.
 
     $ pnpm exec playwright codegen
 
