@@ -621,7 +621,7 @@ class Installer extends Setup
 
         if (!$this->system->checkInstallation()) {
             throw new Exception(
-                'phpMyFAQ is already installed! Please use the <a href="./update.php">update</a>.'
+                'phpMyFAQ is already installed! Please use the <a href="./update">update</a>.'
             );
         }
     }
@@ -706,43 +706,47 @@ class Installer extends Setup
     /**
      * Checks some non-critical settings and print some hints.
      *
-     * @todo We should return an array of messages
+     * @return string[]
      */
-    public function checkNoncriticalSettings(): void
+    public function checkNoncriticalSettings(): array
     {
+        $hints = [];
         if (!$this->system->getHttpsStatus()) {
-            echo '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons we ' .
-                'recommend activating HTTPS.</p>';
+            $hints[] = '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons ' .
+                'we recommend activating HTTPS.</p>';
         }
 
         if (!extension_loaded('gd')) {
-            echo '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. Please ' .
-                "enable GD support in your php.ini file otherwise you can't use Captchas for spam protection.</p>";
+            $hints[] = '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. ' .
+                "Please enable GD support in your php.ini file otherwise you can't use Captchas for spam protection." .
+                "</p>";
         }
 
         if (!function_exists('imagettftext')) {
-            echo '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension of ' .
-                'your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
+            $hints[] = '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension ' .
+                ' ofyour PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
                 'for spam protection will be quite easy to break.</p>';
         }
 
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-            echo '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
-                "installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can't " .
-                'use Elasticsearch.</p>';
+            $hints[] = '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your ' .
+                "PHP installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you " .
+                " can't use Elasticsearch.</p>";
         }
 
         if (!extension_loaded('fileinfo')) {
-            echo '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP installation. ' .
-                "Please enable Fileinfo support in your php.ini file otherwise you can't use our backup/restore " .
-                'functionality.</p>';
+            $hints[] = '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP ' .
+                "installation. Please enable Fileinfo support in your php.ini file otherwise you can't use our " .
+                'backup/restore functionality.</p>';
         }
 
         if (!extension_loaded('sodium')) {
-            echo '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP installation. ' .
-                "Please enable Sodium support in your php.ini file otherwise you can't use our backup/restore " .
-                'functionality.</p>';
+            $hints[] = '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP ' .
+                "installation. Please enable Sodium support in your php.ini file otherwise you can't use our " .
+                'backup/restore functionality.</p>';
         }
+
+        return $hints;
     }
 
     /**
@@ -753,6 +757,7 @@ class Installer extends Setup
      */
     public function startInstall(array|null $setup = null): void
     {
+        $feedbacks = [];
         $ldapSetup = [];
         $query = [];
         $uninstall = [];
@@ -1232,5 +1237,15 @@ class Installer extends Setup
         }
 
         return file_put_contents($htaccessPath, implode('', $newLines)) !== false;
+    }
+
+    public function hasLdapSupport(): bool
+    {
+        return extension_loaded('ldap');
+    }
+
+    public function hasElasticsearchSupport(): bool
+    {
+        return extension_loaded('curl') && extension_loaded('openssl');
     }
 }

@@ -55,23 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function showTab(n) {
     const currentStep = document.getElementsByClassName('step');
 
-    if (currentStep) {
+    if (currentStep.length > 0) {
       currentStep[n].style.display = 'block';
     }
 
     const prevButton = document.getElementById('prevBtn');
     const nextButton = document.getElementById('nextBtn');
-    if (n === 0) {
-      prevButton.style.display = 'none';
-    } else {
-      prevButton.style.display = 'inline';
+
+    if (prevButton && nextButton) {
+      if (n === 0) {
+        prevButton.style.display = 'none';
+      } else {
+        prevButton.style.display = 'inline';
+      }
+      if (n === currentStep.length - 1) {
+        nextButton.innerHTML = 'Submit';
+      } else {
+        nextButton.innerHTML = 'Next';
+      }
+      stepIndicator(n);
     }
-    if (n === currentStep.length - 1) {
-      nextButton.innerHTML = 'Submit';
-    } else {
-      nextButton.innerHTML = 'Next';
-    }
-    stepIndicator(n);
   }
 
   const nextPrev = (n) => {

@@ -244,9 +244,9 @@ class System
      *
      * @return array<string, string>
      */
-    public function getSupportedSafeDatabases(bool $returnAsHtml = false): array
+    public function getSupportedSafeDatabases(): array
     {
-        $retVal = [];
+        $databases = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
             if (!extension_loaded($extension)) {
                 continue;
@@ -254,14 +254,10 @@ class System
             if (version_compare(PHP_VERSION, $database[0]) < 0) {
                 continue;
             }
-            if ($returnAsHtml) {
-                $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
-            } else {
-                $retVal[$extension] = $database;
-            }
+            $databases[$extension] = $database[1];
         }
 
-        return $retVal;
+        return $databases;
     }
 
     /**

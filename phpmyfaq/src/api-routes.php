@@ -29,6 +29,7 @@ use phpMyFAQ\Controller\Api\PdfController;
 use phpMyFAQ\Controller\Api\QuestionController;
 use phpMyFAQ\Controller\Api\RegistrationController;
 use phpMyFAQ\Controller\Api\SearchController;
+use phpMyFAQ\Controller\Api\SetupController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
 use phpMyFAQ\Controller\Api\VersionController;
@@ -43,7 +44,6 @@ use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendC
 use phpMyFAQ\Controller\Frontend\ShareController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
-use phpMyFAQ\Controller\Setup\SetupController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;

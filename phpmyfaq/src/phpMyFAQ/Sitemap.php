@@ -213,13 +213,9 @@ class Sitemap
             $permPart
         );
 
-        var_dump($query);
-
         $result = $this->configuration->getDb()->query($query);
         $oldId = 0;
         $parseDownExtra = new ParsedownExtra();
-
-        var_dump($this->configuration->getDb()->fetchObject($result));
 
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {

@@ -30,6 +30,7 @@ use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImageController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\MarkdownController;
+use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\QuestionController;
 use phpMyFAQ\Controller\Administration\SearchController;
 use phpMyFAQ\Controller\Administration\SessionController;
@@ -40,7 +41,6 @@ use phpMyFAQ\Controller\Administration\UpdateController;
 use phpMyFAQ\Controller\Administration\UserController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use phpMyFAQ\Controller\Administration\NewsController;
 
 $routes = new RouteCollection();
 

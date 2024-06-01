@@ -20,13 +20,13 @@ export const handleUpdateNextStepButton = () => {
   if (nextStepButton && nextStep) {
     nextStepButton.addEventListener('click', (event) => {
       event.preventDefault();
-      window.location.replace(`./update.php?step=${nextStep.value}`);
+      window.location.replace(`./update?step=${nextStep.value}`);
     });
   }
 };
 
 export const handleUpdateInformation = async () => {
-  if (window.location.href.endsWith('update.php')) {
+  if (window.location.href.endsWith('/update')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
@@ -67,7 +67,7 @@ export const handleUpdateInformation = async () => {
 };
 
 export const handleConfigBackup = async () => {
-  if (window.location.href.endsWith('update.php?step=2')) {
+  if (window.location.href.endsWith('/update?step=2')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
@@ -96,7 +96,7 @@ export const handleConfigBackup = async () => {
 };
 
 export const handleDatabaseUpdate = async () => {
-  if (window.location.href.endsWith('update.php?step=3')) {
+  if (window.location.href.endsWith('/update?step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {

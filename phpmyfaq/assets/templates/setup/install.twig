@@ -1,0 +1,50 @@
+{% extends 'setup/base.twig' %}
+
+{% block content %}
+<main role="main">
+  <section id="content">
+
+    <div class="container shadow-lg p-5 mt-5 bg-light-subtle">
+
+        <div class="px-4 pt-2 my-2 text-center border-bottom">
+          <h1 class="display-4 fw-bold">phpMyFAQ {{ newVersion }}</h1>
+          <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">
+              Did you already read our
+              <a target="_blank" href="{{ documentationUrl }}">documentation</a>
+              carefully before starting the phpMyFAQ setup?
+            </p>
+          </div>
+        </div>
+
+        {% if checkBasicError %}
+        <div class="alert alert-danger" role="alert">
+          {{ checkBasicError | raw }}
+        </div>
+        {% elseif installationError %}
+        <div class="alert alert-danger" role="alert">
+          {{ installationError | raw }}
+        </div>
+        {% else %}
+          <div class="row" id="done">
+            <div class="col-12">
+              <h3 class="mb-3">Installation</h3>
+
+              {{ feedbackIndicator }}
+
+              <p class="alert alert-success">
+                Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
+              </p>
+
+              <p>
+                You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+                <a href="../admin/index.php">admin section</a>.
+              </p>
+            </div>
+          </div>
+        {% endif %}
+
+    </div>
+  </section>
+</main>
+{% endblock %}
