@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>phpMyFAQ {{ newVersion }} {{ setupType }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="phpMyFAQ {{ newVersion }}">
+  <meta name="copyright" content="(c) 2001-{{ currentYear }} phpMyFAQ Team">
+  <link rel="stylesheet" href="../assets/dist/styles.css">
+  <script src="../assets/dist/setup.js"></script>
+  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
+</head>
+<body>
+
+<nav class="p-3 text-bg-dark border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li class="pmf-nav-link">
+          <a href="{{ documentationUrl }}" class="pmf-nav-link" target="_blank">
+            Documentation
+          </a>
+        </li>
+        <li class="pmf-nav-link">
+          <a href="https://www.phpmyfaq.de/support" class="pmf-nav-link" target="_blank">
+            Support
+          </a>
+        </li>
+        <li class="pmf-nav-link">
+          <a href="https://forum.phpmyfaq.de/" class="pmf-nav-link" target="_blank">
+            Forums
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer class="setup-footer container mt-1">
+  <p class="text-end">
+    &copy; 2001-{{ currentYear }} <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>
+  </p>
+</footer>
+
+<script src="../assets/dist/update.js"></script>
+</body>
+</html>

@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Twig\Extension\DebugExtension;
 
 #[OA\Info(
     version: '3.0',
@@ -67,6 +68,7 @@ abstract class AbstractController
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper->addExtension(new DebugExtension());
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));

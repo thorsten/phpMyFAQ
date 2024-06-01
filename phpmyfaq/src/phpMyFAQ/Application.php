@@ -32,7 +32,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 readonly class Application
 {
-    public function __construct(private Configuration $configuration)
+    public function __construct(private ?Configuration $configuration = null)
     {
     }
 
@@ -49,18 +49,22 @@ readonly class Application
 
     private function setLanguage(): string
     {
-        $language = new Language($this->configuration);
-        $currentLanguage = $language->setLanguageByAcceptLanguage();
+        if ($this->configuration) {
+            $language = new Language($this->configuration);
+            $currentLanguage = $language->setLanguageByAcceptLanguage();
 
-        if (Language::isASupportedLanguage($currentLanguage)) {
-            require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, $currentLanguage);
+            if (Language::isASupportedLanguage($currentLanguage)) {
+                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, $currentLanguage);
+            } else {
+                require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
+            }
+
+            $this->configuration->setLanguage($language);
+
+            return $currentLanguage;
         } else {
-            require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
+            return 'en';
         }
-
-        $this->configuration->setLanguage($language);
-
-        return $currentLanguage;
     }
 
     /**

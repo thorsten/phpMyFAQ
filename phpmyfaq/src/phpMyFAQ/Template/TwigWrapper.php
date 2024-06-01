@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Template;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -44,14 +45,14 @@ readonly class TwigWrapper
     }
 
     /**
-     * @throws TemplateException
+     * @throws Exception
      */
     public function loadTemplate(string $templateFile): TemplateWrapper
     {
         try {
             return $this->twigEnvironment->load($templateFile);
         } catch (LoaderError | RuntimeError | SyntaxError $exception) {
-            throw new TemplateException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 

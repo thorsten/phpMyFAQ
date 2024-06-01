@@ -166,6 +166,24 @@ class Language
     }
 
     /**
+     * True if the language is supported by the current phpMyFAQ installation.
+     *
+     * @param string|null $langCode Language code
+     */
+    public static function isASupportedLanguage(?string $langCode): bool
+    {
+        return $langCode !== null && LanguageCodes::getSupported($langCode) !== null;
+    }
+
+    /**
+     * Returns the current language.
+     */
+    public function getLanguage(): string
+    {
+        return self::$language;
+    }
+
+    /**
      * Gets the accepted language from the user agent.
      *
      * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
@@ -192,23 +210,5 @@ class Language
                 }
             }
         }
-    }
-
-    /**
-     * True if the language is supported by the current phpMyFAQ installation.
-     *
-     * @param string|null $langCode Language code
-     */
-    public static function isASupportedLanguage(?string $langCode): bool
-    {
-        return $langCode !== null && LanguageCodes::getSupported($langCode) !== null;
-    }
-
-    /**
-     * Returns the current language.
-     */
-    public function getLanguage(): string
-    {
-        return self::$language;
     }
 }

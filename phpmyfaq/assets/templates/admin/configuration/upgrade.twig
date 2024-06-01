@@ -1,145 +1,151 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-        <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
-        {{ adminHeaderUpgrade }}
-    </h1>
+  <h1 class="h2">
+    <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+    {{ adminHeaderUpgrade }}
+  </h1>
 </div>
 
 <div class="row">
-    <div class="col-6">
+  <div class="col-6">
 
-        <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ headerCheckHealth }}
-                </h5>
-                <p class="card-text">
-                    {{ msgHealthCheck }}
-                </p>
-                <!-- Step 1: Check for system health -->
-                <div class="d-grid gap-2 d-md-flex justify-content-between">
-                    <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-health">
-                        {{ buttonCheckHealth }}
-                    </button>
-                    <output id="result-check-health"></output>
-                </div>
-            </div>
+    <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ headerCheckHealth }}
+        </h5>
+        <p class="card-text">
+          {{ msgHealthCheck }}
+        </p>
+        <!-- Step 1: Check for system health -->
+        <div class="d-grid gap-2 d-md-flex justify-content-between">
+          <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-health">
+            {{ buttonCheckHealth }}
+          </button>
+          <output id="result-check-health"></output>
         </div>
-
-        <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ headerCheckUpdates }}
-                </h5>
-                <p class="card-text">
-                    {{ msgUpdateCheck    }}
-                </p>
-                <!-- Step 2: Check for a new version -->
-                <div class="d-grid gap-2 d-md-flex justify-content-between">
-                    <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-updates">
-                        {{ buttonCheckUpdates }}
-                    </button>
-                    <output id="result-check-versions"></output>
-                </div>
-            </div>
-        </div>
-
-        <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ headerDownloadPackage }}
-                </h5>
-                <p class="card-text">
-                    {{ msgDownloadPackage }}
-                </p>
-                <!-- Nightlies can be downloaded always if activated -->
-                {% if isOnNightlies %}
-                    <p class="alert alert-warning">
-                      {{ alertNightlyBuild }}
-                    </p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-between">
-                        <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
-                          {{ buttonDownloadPackage }}
-                        </button>
-                        <output id="result-download-nightly"></output>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
-            <div class="card-body">
-                <h5 class="card-title">
-                  {{ headerExtractPackage }}
-                </h5>
-                <p class="card-text">
-                    {{ msgExtractPackage }}
-                </p>
-                <!-- Step 4: Extract downloaded package -->
-                <div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-between">
-                        <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
-                          {{ buttonExtractPackage }}
-                        </button>
-                        <output id="result-extract-package"></output>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
-            <div class="card-body">
-                <h5 class="card-title">
-                    5. Install downloaded package
-                </h5>
-                <p class="card-text">
-                    This extracts the downloaded package into your filesystem.
-                </p>
-                <!-- Step 5: Install downloaded package -->
-                <div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-between">
-                        <div>
-                            <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
-                                Install downloaded package
-                            </button>
-                        </div>
-                        <div>
-                            <ol>
-                                <li>Backup of current installation <span id="pmf-backup-done"></span></li>
-                                <li>Installation of new files <span id="pmf-installation-done"></span></li>
-                            </ol>
-                        </div>
-                        <div class="w-25">
-                            <div class="progress w-100 mt-1 mb-2" role="progressbar">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                     id="result-backup-package" style="width: 0">
-                                    0%
-                                </div>
-                            </div>
-                            <div class="progress w-100" role="progressbar">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                     id="result-install-package" style="width: 0">
-                                    0%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
-    <div class="col-6">
-        <div>
-            {{ msgLastCheckDate }}
-            <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
+
+    <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ headerCheckUpdates }}
+        </h5>
+        <p class="card-text">
+          {{ msgUpdateCheck }}
+        </p>
+        <!-- Step 2: Check for a new version -->
+        <div class="d-grid gap-2 d-md-flex justify-content-between">
+          <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-updates">
+            {{ buttonCheckUpdates }}
+          </button>
+          <output id="result-check-versions"></output>
         </div>
-        <div>
-          {{ msgLastVersionAvailable }}
-            <output id="versionLastChecked">n/a</output>
-        </div>
-        <div>
-          {{ msgReleaseEnvironment }} <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
-        </div>
+      </div>
     </div>
+
+    <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ headerDownloadPackage }}
+        </h5>
+        <p class="card-text">
+          {{ msgDownloadPackage }}
+        </p>
+        <!-- Nightlies can be downloaded always if activated -->
+        {% if isOnNightlies %}
+          <p class="alert alert-warning">
+            {{ alertNightlyBuild }}
+          </p>
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+              {{ buttonDownloadPackage }}
+            </button>
+            <output id="result-download-nightly"></output>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ headerExtractPackage }}
+        </h5>
+        <p class="card-text">
+          {{ msgExtractPackage }}
+        </p>
+        <!-- Step 4: Extract downloaded package -->
+        <div>
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
+              {{ buttonExtractPackage }}
+            </button>
+            <output id="result-extract-package"></output>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
+      <div class="card-body">
+        <h5 class="card-title">
+          5. Install downloaded package
+        </h5>
+        <p class="card-text">
+          This extracts the downloaded package into your filesystem.
+        </p>
+        <!-- Step 5: Install downloaded package -->
+        <div>
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <div>
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
+                Install downloaded package
+              </button>
+            </div>
+            <div>
+              <ol>
+                <li>Backup of current installation <span id="pmf-backup-done"></span></li>
+                <li>Installation of new files <span id="pmf-installation-done"></span></li>
+              </ol>
+            </div>
+            <div class="w-25">
+              <div class="progress w-100 mt-1 mb-2" role="progressbar">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                     id="result-backup-package" style="width: 0">
+                  0%
+                </div>
+              </div>
+              <div class="progress w-100" role="progressbar">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                     id="result-install-package" style="width: 0">
+                  0%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-6">
+    <div>
+      <p class="alert alert-info">
+        You can still use the manual <a href="../update">update process</a> if you prefer.
+      </p>
+    </div>
+    <div>
+      {{ msgLastCheckDate }}
+      <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
+    </div>
+    <div>
+      {{ msgLastVersionAvailable }}
+      <output id="versionLastChecked">n/a</output>
+    </div>
+    <div>
+      {{ msgReleaseEnvironment }}
+      <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
+    </div>
+  </div>
 </div>
