@@ -124,7 +124,25 @@ Then, install it, using referenced manifests on this project: https://github.com
 
 Read the definitions and configure according to your needs. If you have any doubt, do not hesitate to consult us.
 
-## 2.3 Setup
+## 2.3 PHP settings
+
+- We recommend using a PHP accelerator or OpCode cache
+- Allocate at least 128 MB of memory to each PHP process
+- Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo
+- Recommended configuration:
+
+        memory_limit = 128M
+        file_upload = on
+
+## 2.5 Server side recommendations
+
+**_MySQL / Percona Server / MariaDB_**
+
+    interactive_timeout = 120
+    wait_timeout = 120
+    max_allowed_packet = 64M
+
+## 2.6 Setup
 
 Open your browser and type in the following URL:
 
@@ -157,7 +175,7 @@ In addition, you can enter your language, default here is English. Furthermore, 
 email address and - very importantly - your password. You must enter the password twice, and it has to be at least eight
 characters long. Then click the button **"install"** to initialize the tables in your database.
 
-## 2.4 First Steps
+## 2.7 First Steps
 
 You can enter the public area of your FAQ by entering
 
@@ -186,7 +204,7 @@ You can change
 - the number with which the autocomplete list is limited to (default: 20)
 - the default encryption type for passwords
 
-## 2.5 Notes regarding the search functionality
+## 2.8 Notes regarding the search functionality
 
 - The boolean full-text search will only work with MySQL and if there are some entries in the database (5 or more).
   The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be
@@ -194,7 +212,7 @@ You can change
 - The search on other databases is using the LIKE operator currently.
 - To improve the search functionality, you should consider using Elasticsearch.
 
-## 2.6 Automatic user language detection
+## 2.9 Automatic user language detection
 
 To set the default language in your browser, you have to set a variable that gets passed to the web server.
 How this is done depends on the browser you are using.
@@ -204,17 +222,7 @@ How this is done depends on the browser you are using.
 - Safari uses the macOS system preferences to determine your preferred language: System preferences -> International
   -> Language
 
-## 2.7 PHP settings
-
-- We recommend using a PHP accelerator or OpCode cache
-- Allocate at least 128 MB of memory to each PHP process
-- Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo
-- Recommended configuration:
-
-        memory_limit = 128M
-        file_upload = on
-
-## 2.8 Enabling LDAP or Microsoft Active Directory support
+## 2.10 Enabling LDAP or Microsoft Active Directory support
 
 If you're entered the correct LDAP or Microsoft Active Directory information during the installation, you have to enable
 the LDAP or Microsoft Active Directory support in the configuration in the admin backend. Now your user can authenticate
@@ -226,57 +234,7 @@ configuration panel.
 If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template, and if you rename
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
 
-## 2.9 Using Microsoft Entra ID
-
-You can use our experimental Microsoft Entra ID support for user authentication as well.
-App Registrations in Azure are used to integrate applications with Microsoft Azure services,
-allowing them to authenticate and access resources securely.
-Follow these steps to create an App Registration in Microsoft Azure:
-
-**Prerequisites:**
-
-- Azure account with appropriate permissions.
-
-**Step 1: Sign in to Azure Portal**
-
-1. Open your web browser and navigate to the [Azure Portal](https://portal.azure.com/).
-2. Sign in with your Azure account credentials.
-
-**Step 2: Create a New App Registration**
-
-1. In the Azure Portal, click on "Entra ID" in the left-hand navigation pane.
-2. Under "Entra ID," click on "App registrations."
-
-**Step 3: Register a New App**
-
-1. Click the "+ New registration" button.
-
-**Step 4: Configure the App Registration**
-
-1. In the "Name" field, provide a name for your App Registration, e.g. "phpMyFAQ".
-2. Choose the supported account types that your application will authenticate: "Accounts in this organizational directory only"
-3. In the "Redirect URI" section, specify the redirect URI where Entra ID will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
-4. Click the "Register" button to create the App Registration.
-
-**Step 5: Configure Authentication**
-
-1. After the registration is created, go to the "Authentication" tab in the App Registration settings.
-2. Under "Platform configurations," select the appropriate redirect URI type: Web
-3. Configure the Redirect URIs as needed for your application.
-4. Save the changes.
-
-**Step 6: Note Application Details**
-
-1. Make note of the "Application (client) ID." This is your application's unique identifier.
-2. If your application requires client secrets, go to the "Certificates & secrets" tab to create and manage client secrets.
-
-**Step 7: Create Azure config file**
-
-1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
-2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
-3. Then, activate Microsoft Entra ID support in the administration under "Security"
-
-## 2.10 PDF export
+## 2.11 PDF export
 
 Main features of the PDF export:
 
@@ -292,7 +250,7 @@ Main features of the PDF export:
 - supports automatic line break and text justification;
 - supports JPEG and PNG images natively, all images supported by GD (GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM)
 
-## 2.11 Static solution ID
+## 2.12 Static solution ID
 
 phpMyFAQ features a static solution ID which never changes. This ID is visible next to the question on a FAQ record
 page. You may think why you need such an ID? If you have a record ID _1042_ it is now possible to enter only the ID
@@ -300,7 +258,7 @@ _1042_ in the input field of the full-text search box, and you'll be automatical
 ID _1042_. By default, the numbers start at ID **1000**, but you can change this value in the file _inc/constants.php_.
 You can also change the value of the incrementation of the static IDs.
 
-## 2.12 Spam protection
+## 2.13 Spam protection
 
 phpMyFAQ performs these three checks on public forms:
 
@@ -316,7 +274,7 @@ By default, phpMyFAQ uses the builtin captcha functionality. If you want to use 
 support for Google Recaptcha by adding your site and secret key. You can get the keys from
 [Google](https://developers.google.com/recaptcha).
 
-## 2.13 Attachments
+## 2.14 Attachments
 
 phpMyFAQ supports encrypted attachments. The encryption uses the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
 algorithm implemented in mcrypt extension (if available) or with native PHP Rijndael implementation. The key size vary
@@ -334,14 +292,6 @@ Please be aware:
 - Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id
   etc), so there is no way to assess a file directly using the name it was uploaded under.
 - Download continuation isn't supported.
-
-## 2.14 Server side recommendations
-
-**_MySQL / Percona Server / MariaDB_**
-
-    interactive_timeout = 120
-    wait_timeout = 120
-    max_allowed_packet = 64M
 
 ## 2.15 Syntax Highlighting
 
