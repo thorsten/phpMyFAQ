@@ -17,11 +17,12 @@
 
 namespace phpMyFAQ\Auth\Azure;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session;
 use stdClass;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * Class OAuth
@@ -30,6 +31,8 @@ use stdClass;
  */
 class OAuth
 {
+    private HttpClientInterface $client;
+
     /** @var stdClass|null JWT */
     private ?stdClass $token = null;
 
@@ -42,6 +45,7 @@ class OAuth
      */
     public function __construct(private readonly Configuration $configuration, private readonly Session $session)
     {
+        $this->client = HttpClient::create();
     }
 
     /**
@@ -55,14 +59,12 @@ class OAuth
     /**
      * Returns the Authorization Code from Entra ID.
      *
-     * @throws GuzzleException
      * @throws \JsonException
+     * @throws TransportExceptionInterface
      */
     public function getOAuthToken(string $code): stdClass
     {
-        $client = new Client([
-            'base_uri' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/',
-        ]);
+        $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
         if ($this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER) !== '') {
             $codeVerifier = $this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
@@ -70,8 +72,8 @@ class OAuth
             $codeVerifier = $this->session->getCookie(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
         }
 
-        $response = $client->request('POST', 'token', [
-            'form_params' => [
+        $response = $this->client->request('POST', $url, [
+            'body' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => AAD_OAUTH_CLIENTID,
                 'redirect_uri' => $this->configuration->getDefaultUrl() . 'services/azure/callback.php',
@@ -81,20 +83,19 @@ class OAuth
             ]
         ]);
 
-        return json_decode($response->getBody(), null, 512, JSON_THROW_ON_ERROR);
+        return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
-     * @throws GuzzleException|\JsonException
+     * @throws \JsonException
+     * @throws TransportExceptionInterface
      */
     public function refreshToken()
     {
-        $client = new Client([
-            'base_uri' => 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/',
-        ]);
+        $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        $response = $client->request('POST', 'token', [
-            'form_params' => [
+        $response = $this->client->request('POST', $url, [
+            'body' => [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $this->getRefreshToken(),
                 'client_id' => AAD_OAUTH_CLIENTID,
@@ -102,7 +103,7 @@ class OAuth
             ]
         ]);
 
-        return json_decode($response->getBody(), null, 512, JSON_THROW_ON_ERROR);
+        return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);
     }
 
     public function getToken(): stdClass

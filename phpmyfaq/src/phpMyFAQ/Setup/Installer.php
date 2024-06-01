@@ -947,7 +947,6 @@ class Installer extends Setup
 
             $classLoader = new ClassLoader();
             $classLoader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
-            $classLoader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
             $classLoader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
             $classLoader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
             $classLoader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');

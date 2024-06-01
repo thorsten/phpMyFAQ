@@ -15,7 +15,6 @@
  * @since     2022-09-09
  */
 
-use GuzzleHttp\Exception\GuzzleException;
 use phpMyFAQ\Auth\AuthAzureActiveDirectory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
@@ -24,6 +23,7 @@ use phpMyFAQ\Session;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -88,7 +88,7 @@ if ($session->getCurrentSessionKey()) {
 
         // @todo -> redirect to where the user came from
         $redirect->send();
-    } catch (GuzzleException $exception) {
+    } catch (TransportExceptionInterface $exception) {
         echo sprintf(
             'Entra ID Login failed: %s at line %d at %s',
             $exception->getMessage(),
