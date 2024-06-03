@@ -108,7 +108,7 @@ $PMF_LANG['msgSearchContent'] = "Antwort: ";
 
 // new Content
 $PMF_LANG['msgNewContentHeader'] = "Vorschlag für neuen FAQ-Eintrag";
-$PMF_LANG['msgNewContentAddon'] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind Name, E-Mail-Adresse, Kategorie, Frage und Antwort. Die Suchbegriffe bitte nur Kommas trennen.";
+$PMF_LANG['msgNewContentAddon'] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind mit <span style=\"color: red\">*</span> gekennzeichnete Felder.";
 $PMF_LANG['msgNewContentName'] = "Name";
 $PMF_LANG['msgNewContentMail'] = "E-Mail";
 $PMF_LANG['msgNewContentCategory'] = "Kategorie";
@@ -1426,5 +1426,8 @@ $PMF_LANG['msgUserList'] = 'Benutzerliste';
 // added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
 $PMF_LANG['msgNoQuestionAndAnswer'] = 'Keine Frage und Antwort gefunden.';
 $PMF_LANG['msgNotInMaintenanceMode'] = 'Die FAQ ist nicht im Wartungs-Modus.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';
 
 return $PMF_LANG;

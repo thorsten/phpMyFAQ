@@ -109,7 +109,7 @@ $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate any keywords with commas only.";
+$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are marked with <span style=\"color: red\">*</span>.";
 $PMF_LANG["msgNewContentName"] = "Your name";
 $PMF_LANG["msgNewContentMail"] = "Your email address";
 $PMF_LANG["msgNewContentCategory"] = "Category";
@@ -1446,5 +1446,8 @@ $PMF_LANG['msgUserList'] = 'List of users';
 // added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
 $PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
 $PMF_LANG['msgNotInMaintenanceMode'] = 'The FAQ is not in maintenance mode.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Multiple keywords have to seperated with commas.';
 
 return $PMF_LANG;

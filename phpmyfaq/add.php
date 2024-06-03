@@ -24,10 +24,14 @@ use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use phpMyFAQ\Forms;
+use phpMyFAQ\Enums\Forms\FormIds;
+use phpMyFAQ\Enums\Forms\AddNewFaqInputIds;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -117,3 +121,54 @@ $template->parse(
         'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     ]
 );
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template1 = $twig->loadTemplate('./add.twig');
+
+$forms = new Forms($faqConfig);
+$formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
+
+// Twig template variables
+$templateVars = [
+    'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
+    'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
+    'lang' => $Language->getLanguage(),
+    'openQuestionID' => $selectedQuestion,
+    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+    'defaultContentName' =>
+        ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+    'msgNewContentName' => Translation::get('msgNewContentName'),
+    'msgNewContentMail' => Translation::get('msgNewContentMail'),
+    'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
+    'renderCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
+    'msgNewContentTheme' => Translation::get('msgNewContentTheme'),
+    'readonly' => $readonly,
+    'printQuestion' => $question,
+    'msgNewContentArticle' => Translation::get('msgNewContentArticle'),
+    'msgNewContentKeywords' => Translation::get('msgNewContentKeywords'),
+    'msgNewContentLink' => Translation::get('msgNewContentLink'),
+    'captchaFieldset' =>
+        $captchaHelper->renderCaptcha($captcha, 'add', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+    'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+    'enableWysiwygEditor' => $faqConfig->get('main.enableWysiwygEditorFrontend'),
+    'currentTimestamp' => $request->server->get('REQUEST_TIME'),
+    'msgSeperateKeywordsWithCommas' => Translation::get('msgSeperateKeywordsWithCommas')
+];
+
+// Collect data for displaying form
+foreach ($formData as $input) {
+    if ((int)$input->input_active !== 0) {
+        $label = sprintf('id%d_label', (int)$input->input_id);
+        $required = sprintf('id%d_required', (int)$input->input_id);
+        $templateVars = [
+            ...$templateVars,
+            $label => $input->input_label,
+            $required => ((int)$input->input_required !== 0) ? 'required' : ''
+        ];
+    }
+}
+
+var_dump($formData);
+
+echo $template1->render($templateVars);

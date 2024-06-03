@@ -1,0 +1,118 @@
+<section class="col-12">
+  {% if id1_label is defined %}
+  <h1>{{ id1_label }}</h1>
+  {% endif %}
+  {% if id2_label is defined %}
+  <p>{{ id2_label|raw }}</p>
+  {% endif %}
+
+  <div class="row mb-2">
+    <div class="col">
+      <div class="spinner-border text-primary d-none" id="loader" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="pmf-add-faq-response"></div>
+    </div>
+  </div>
+
+  <form id="pmf-add-faq-form" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
+    <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+    <input type="hidden" value="{{ openQuestionID }}" id="openQuestionID" name="openQuestionID">
+
+    {% if id3_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="name">{{ id3_label }}:
+        {% if id3_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" {{ id3_required }}>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id4_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="email">{{ id4_label }}:
+        {% if id4_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" {{ id4_required }}>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id5_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="rubrik">{{ id5_label }}:
+        {% if id5_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <select name="rubrik[]" class="form-control" id="rubrik" multiple="multiple" size="5" {{ id5_required }}>
+          {{ renderCategoryOptions|raw }}
+        </select>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id6_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="question">{{ id6_label }}:
+        {% if id6_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <textarea class="form-control" cols="37" rows="3" name="question" id="question" {{ id6_required }} {{ readonly }}>
+{{ printQuestion }}</textarea
+        >
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id7_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="answer">{{ id7_label }}:
+        {% if id7_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <textarea class="form-control" cols="37" rows="10" name="answer" id="answer" {{ id7_required }}></textarea>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id8_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="keywords">{{ id8_label }}:
+        {% if id8_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" name="keywords" id="keywords" {{ id8_required }}>
+        <small class="text-muted">{{ msgSeperateKeywordsWithCommas }}</small>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if id9_label is defined %}
+    <div class="row mb-2">
+      <label class="col-sm-3 form-control-label" for="contentlink">{{ id9_label }}:
+        {% if id9_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+      </label>
+      <div class="col-sm-9">
+        <input type="url" class="form-control" name="contentlink" id="contentlink" placeholder="https://" {{ id9_required }}>
+      </div>
+    </div>
+    {% endif %}
+
+    {{ captchaFieldset|raw }}
+
+    <div class="row mb-2">
+      <div class="col-sm-12 text-end">
+        <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-faq" data-pmf-form="add-faq">
+          {{ msgNewContentSubmit }}
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+
+{% if enableWysiwygEditor == true %}
+<script src="{{ baseHref }}admin/assets/js/editor/tinymce.min.js?{{ currentTimestamp }}"></script>
+{% endif %}
