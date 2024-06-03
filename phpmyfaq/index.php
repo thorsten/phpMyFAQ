@@ -157,6 +157,8 @@ if (!is_null($token) && !is_null($userid)) {
             $action = 'twofactor';
         } else {
             $user->twoFactorSuccess();
+            $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
+            $redirect->send();
         }
     } else {
         $error = Translation::get('msgTwofactorErrorToken');
