@@ -113,7 +113,7 @@ export const fetchEditTranslation = async (csrf, formId, inputId, label, lang) =
   }
 }
 
-export const fetchDeleteTranslation = async (csrf, formId, inputId, lang) => {
+export const fetchDeleteTranslation = async (csrf, formId, inputId, lang, element) => {
   try {
     const response = await fetch('api/forms/translation-delete', {
       method: 'POST',
@@ -134,13 +134,16 @@ export const fetchDeleteTranslation = async (csrf, formId, inputId, lang) => {
       if (result.success) {
         pushNotification(result.success);
         document.getElementById('item_' + element.getAttribute('data-pmf-lang')).remove();
+        const option = document.createElement('option');
+        option.innerHTML = element.getAttribute('data-pmf-langname');
+        document.getElementById('languageSelect').appendChild(option);
       } else {
         console.error(result.error);
       }
     } else {
       throw new Error('Network response was not ok: ', response.text());
     }
-  } catch {
+  } catch (error) {
     console.error('Error deleting translation:', error);
     throw error;
   }

@@ -105,7 +105,8 @@ export const handleFormTranslations = () => {
         const inputId = element.getAttribute('data-pmf-inputId');
         const formId = element.getAttribute('data-pmf-formId');
         const lang = element.getAttribute('data-pmf-lang');
-        await fetchDeleteTranslation(csrf, formId, inputId, lang);
+        await fetchDeleteTranslation(csrf, formId, inputId, lang, element);
+
       });
     });
     // Add Translation

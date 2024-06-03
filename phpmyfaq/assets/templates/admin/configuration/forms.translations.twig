@@ -31,11 +31,12 @@
             {% if translation.input_lang != 'default' %}
               <span class="badge bg-primary" id="editTranslation" data-pmf-lang="{{ translation.input_lang }}"
                     data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                    data-pmf-csrf="{{ csrfTokenEditTranslation }}">
+                    data-pmf-csrf="{{ csrfTokenEditTranslation }}" style="cursor: pointer">
                     <i aria-hidden="true" class="bi bi-pencil bi-white"></i></span>
               <span class="badge bg-danger" id="deleteTranslation" data-pmf-lang="{{ translation.input_lang }}"
                     data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                    data-pmf-csrf="{{ csrfTokenDeleteTranslation }}">
+                    data-pmf-csrf="{{ csrfTokenDeleteTranslation }}" data-pmf-langname="{{ translation.input_lang|languageCode }}"
+                    style="cursor: pointer">
               <i aria-hidden="true" class="bi bi-trash3 bi-white"></i></span>
             {% endif %}
           </td>
