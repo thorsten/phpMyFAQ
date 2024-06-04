@@ -99,7 +99,7 @@ $PMF_LANG["msgSearchContent"] = "Edukia: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "FAQ proposamena";
-$PMF_LANG["msgNewContentAddon"] = "Zure FAQ proposamena ez da berehala argitaratuko, bitartekari batek aztertu behar du. Beharrezko eremuak ondorengoak dira: <strong>zure izena</strong>, <strong>posta elektronikoaren helbidea</strong>, <strong>atala</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa</strong>. Mesedez, banatu hitz gakoak tabulazio tarte batez.";
+$PMF_LANG["msgNewContentAddon"] = "Zure iradokizuna ez da berehala agertuko, baina guk egiaztatuko dugu argitaratu aurretik. Derrigorrezko eremuak <span style=\"color: red\">*</span>-rekin markatutako eremuak dira.";
 $PMF_LANG["msgNewContentUBB"] = "UBB kodeak erabil ditzakezu zure erregistrorako. <a href=\"help/ubbcode.php\" target=\"_blank\">UBB kodeei buruzko laguntza.</a>";
 $PMF_LANG["msgNewContentName"] = "Zure izena";
 $PMF_LANG["msgNewContentMail"] = "Zure posta helbidea";

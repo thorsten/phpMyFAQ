@@ -90,7 +90,7 @@ $PMF_LANG["msgSearchContent"] = "Зміст: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Публікація нової відповіді";
-$PMF_LANG["msgNewContentAddon"] = "Опублікована вами відповідь не з'явиться в системі відразу ж після публікації, а тільки після прочитання його адміністратором. Обов'язкові поля для заповнення <strong>Ваше ім'я</strong>, <strong>адреса e-mail</strong>, <strong>категорія</strong>, <strong>заголовок</strong>, і <strong>текст відповіді</strong>. Будь ласка розділяйте ключові слова тільки пропусками.";
+$PMF_LANG['msgNewContentAddon'] = "Ваша пропозиція не з'явиться відразу, але буде перевірена нами перед публікацією. Обов’язкові поля – це поля, позначені <span style=\"color: red\">*</span>.";
 $PMF_LANG["msgNewContentUBB"] = "Ви можете оформити текст повідомлення за допомогою BB кодів. <a href=\"help/ubbcode.php\" target=\"_blank\">Інструкція по використанню UBB кодів</a>";
 $PMF_LANG["msgNewContentName"] = "Ваше ім'я";
 $PMF_LANG["msgNewContentMail"] = "Адреса eMail";

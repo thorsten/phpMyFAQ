@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' 検索結果';
 $PMF_LANG['msgSearchCategory'] = 'カテゴリー: ';
 $PMF_LANG['msgSearchContent'] = '回答: ';
 $PMF_LANG['msgNewContentHeader'] = '新しい FAQ を提案する';
-$PMF_LANG['msgNewContentAddon'] = '提案された内容は、管理者の承認後に追加されます。<strong>名前・メールアドレス・カテゴリー・件名・FAQ の内容</strong>は必須項目です。キーワードは半角空白で分割して入力してください。';
+$PMF_LANG['msgNewContentAddon'] = "あなたの提案はすぐには表示されませんが、公開前に当社によってチェックされます。必須フィールドは、<span style=\"color: red\">*</span> でマークされたフィールドです。";
 $PMF_LANG['msgNewContentName'] = '名前:';
 $PMF_LANG['msgNewContentMail'] = '電子メールアドレス:';
 $PMF_LANG['msgNewContentCategory'] = 'カテゴリー:';

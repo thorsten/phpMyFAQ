@@ -92,7 +92,7 @@ $PMF_LANG["msgSearchContent"] = "প্রশ্ন: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "প্রশ্ন উত্তর সম্পর্কে মতামত";
-$PMF_LANG["msgNewContentAddon"] = "আপনার মতামত প্রশাসকের অনুমোদনের পর প্রকাশিত হবে। বাধ্যতামূলকঃ <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরোনাম</strong> এবং <strong>আপনার প্রশ্ন</strong>। চাবি-শব্দগুলি space দিয়ে আলাদা করুন।";
+$PMF_LANG["msgNewContentAddon"] = "আপনার পরামর্শ অবিলম্বে প্রদর্শিত হবে না, কিন্তু প্রকাশের আগে আমাদের দ্বারা চেক করা হবে. বাধ্যতামূলক ক্ষেত্র হল <span style=\"color: red\">*</span> দিয়ে চিহ্নিত ক্ষেত্র।";
 $PMF_LANG["msgNewContentName"] = "আপনার নাম";
 $PMF_LANG["msgNewContentMail"] = "আপনার ই-মেইল ঠিকানা";
 $PMF_LANG["msgNewContentCategory"] = "বিভাগ";

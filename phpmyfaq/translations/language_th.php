@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' หัวข้อ จากการค้น
 $PMF_LANG['msgSearchCategory'] = 'หัวข้อ: ';
 $PMF_LANG['msgSearchContent'] = 'เนื้อหา: ';
 $PMF_LANG['msgNewContentHeader'] = 'เสนอข้อมูลใหม่ใน FAQ';
-$PMF_LANG['msgNewContentAddon'] = 'ข้อมูลที่คุณนำเสนอจะสามารถเปิดใช้งาน หลังจากที่ได้รับการตรวจสอบแล้ว รายการที่จำเป็นต้องกรอก <strong>ชื่อคุณ</strong>, <strong>อีเมล์</strong>, <strong>หัวข้อ</strong>, <strong>ชื่อเรื่อง</strong> และ <strong>ข้อมูล</strong> โปรดใช้ช่องว่างระหว่างคำค้น';
+$PMF_LANG['msgNewContentAddon'] = "ข้อเสนอแนะของคุณจะไม่ปรากฏทันที แต่จะถูกตรวจสอบโดยเราก่อนเผยแพร่ ช่องที่ต้องกรอกคือช่องที่มีเครื่องหมาย <span style=\"color: red\">"*</span>";
 $PMF_LANG['msgNewContentName'] = 'ชื่อ:';
 $PMF_LANG['msgNewContentMail'] = 'อีเมล์:';
 $PMF_LANG['msgNewContentCategory'] = 'เลือกหัวข้อที่ต้องการ';

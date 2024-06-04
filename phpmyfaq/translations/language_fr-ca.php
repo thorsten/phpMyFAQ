@@ -83,7 +83,7 @@ $PMF_LANG['msgSearchAmounts'] = ' résultats de recherche';
 $PMF_LANG['msgSearchCategory'] = 'Catégorie : ';
 $PMF_LANG['msgSearchContent'] = 'Contenu : ';
 $PMF_LANG['msgNewContentHeader'] = 'Proposer une nouvelle entrée';
-$PMF_LANG['msgNewContentAddon'] = 'Votre proposition ne va pas va être publiée immédiatement, elle devra être validé par un administrateur. Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse e-mail</strong>, <strong>la catégorie</strong>, <strong>le théme</strong> et <strong>votre article</strong>. Veuillez séparer chaque mots-clef par un espace.';
+$PMF_LANG['msgNewContentAddon'] = 'Votre proposition ne va pas va être publiée immédiatement, elle devra être validé par un administrateur. Les champs requis sont marqué avec <span style=\"color: red\" >*</span>.';
 $PMF_LANG['msgNewContentName'] = 'Votre nom :';
 $PMF_LANG['msgNewContentMail'] = 'Votre adresse e-mail :';
 $PMF_LANG['msgNewContentCategory'] = 'Dans quelle catégorie entre votre article?';

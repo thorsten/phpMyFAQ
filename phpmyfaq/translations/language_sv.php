@@ -86,7 +86,7 @@ $PMF_LANG['msgSearchAmounts'] = ' sökresultat';
 $PMF_LANG['msgSearchCategory'] = 'Kategori: ';
 $PMF_LANG['msgSearchContent'] = 'Fråga: ';
 $PMF_LANG['msgNewContentHeader'] = 'Lägg till fråga';
-$PMF_LANG['msgNewContentAddon'] = 'Ditt förslag kommer att behandlas av den som är ansvarig för webbplatsen, och kommer att publiceras efter godkännande. Nödvändig information är <strong>ditt namn</strong>, <strong>din epostadress</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>ditt förslag</strong>. Separera nyckelorden med (endast) mellanslag.';
+$PMF_LANG['msgNewContentAddon'] = "Ditt förslag kommer inte att dyka upp omedelbart, utan kommer att kontrolleras av oss innan publicering. Obligatoriska fält är fält markerade med <span style=\"color: red\">*</span>.";
 $PMF_LANG['msgNewContentName'] = 'Ditt namn:';
 $PMF_LANG['msgNewContentMail'] = 'Din epostadress:';
 $PMF_LANG['msgNewContentCategory'] = 'Kategori:';

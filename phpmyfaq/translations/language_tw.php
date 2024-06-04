@@ -92,7 +92,7 @@ $PMF_LANG["msgSearchContent"] = "答案: ";
 
 // new Content 新內容
 $PMF_LANG["msgNewContentHeader"] = "提出一筆新的 FAQ";
-$PMF_LANG["msgNewContentAddon"] = "您的新增問題不會被馬上發表，需要管理員審核後才能發佈。必填欄位包括 <strong>您的姓名</strong>，<strong>您的 e-mail</strong>，<strong>類別</strong>，<strong>問題</strong> 和 <strong>答案</strong>。請使用逗號（,）隔開多個關鍵字。";
+$PMF_LANG['msgNewContentAddon'] = "您的建議不會立即出現，但會在發布前經過我們的檢查。必填欄位是標示 <span style=\"color: red\">*</span> 的欄位。";
 $PMF_LANG["msgNewContentName"] = "您的姓名";
 $PMF_LANG["msgNewContentMail"] = "Email";
 $PMF_LANG["msgNewContentCategory"] = "類別";

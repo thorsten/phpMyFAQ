@@ -91,7 +91,7 @@ $PMF_LANG["msgSearchContent"] = "Jawaban: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Usulan materi/artikel baru";
-$PMF_LANG["msgNewContentAddon"] = "Usulan anda tidak langsung akan ditampilkan, tetapi perlu ditinjau dulu oleh pengelola. Bagian yang harus diisi adalah: <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Kategori</strong>, <strong>Pengantar</strong> dan <strong>Isi Materi</strong>. Mohon pisahkan kata kunci dengan spasi.";
+$PMF_LANG["msgNewContentAddon"] = "Saran Anda tidak akan langsung muncul, tetapi akan kami periksa sebelum dipublikasikan. Bidang wajib adalah bidang yang ditandai dengan <span style=\"color: red\">*</span>.";
 $PMF_LANG["msgNewContentName"] = "Nama Anda";
 $PMF_LANG["msgNewContentMail"] = "Alamat Email";
 $PMF_LANG["msgNewContentCategory"] = "Kategori";

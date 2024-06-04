@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' результаты поиска';
 $PMF_LANG['msgSearchCategory'] = 'Категория: ';
 $PMF_LANG['msgSearchContent'] = 'Content: ';
 $PMF_LANG['msgNewContentHeader'] = 'Публикация нового ответа';
-$PMF_LANG['msgNewContentAddon'] = 'Опубликованный вами ответ не появится в системе сразу же после публикации, а только после прочтения его администратором. Обязательные поля для заполнения <strong>Ваше имя</strong>, <strong>адрес e-mail</strong>, <strong>категория</strong>, <strong>заголовок</strong>, и <strong>текст ответа</strong>. Пожлуйста разделяйте ключевые слова только пробелами.';
+$PMF_LANG['msgNewContentAddon'] = "Ваше предложение появится не сразу, но будет проверено нами перед публикацией. Обязательные поля — это поля, отмеченные <span style=\"color: red\">*</span>.";
 $PMF_LANG['msgNewContentName'] = 'Ваше имя:';
 $PMF_LANG['msgNewContentMail'] = 'Адрес eMail:';
 $PMF_LANG['msgNewContentCategory'] = 'Выбор раздела:';

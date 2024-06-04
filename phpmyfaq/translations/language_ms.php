@@ -83,7 +83,7 @@ $PMF_LANG['msgSearchAmounts'] = ' keputusan carian';
 $PMF_LANG['msgSearchCategory'] = 'Kategori: ';
 $PMF_LANG['msgSearchContent'] = 'Jawapan: ';
 $PMF_LANG['msgNewContentHeader'] = 'Cadangan untuk FAQ baru';
-$PMF_LANG['msgNewContentAddon'] = 'Cadangan anda tidak akan terus disiarkan tetapi akan disiarkan oleh pentadbir apabila telah diterima. Butiran ini adalah diperlukan iaitu <strong>Nama anda</strong>, <strong>alamat e-mel anda</strong>, <strong>kategori</strong>, <strong>tajuk</strong> dan <strong>nota anda</strong>. Sila pisahkan katakunci dengan ruangan kosong sahaja..';
+$PMF_LANG['msgNewContentAddon'] = "Cadangan anda tidak akan muncul serta-merta, tetapi akan disemak oleh kami sebelum diterbitkan. Medan mandatori ialah medan yang ditandakan dengan <span style=\"color: red\">*</span>.";
 $PMF_LANG['msgNewContentName'] = 'Nama anda:';
 $PMF_LANG['msgNewContentMail'] = 'Alamat e-mel anda:';
 $PMF_LANG['msgNewContentCategory'] = 'Kategori:';

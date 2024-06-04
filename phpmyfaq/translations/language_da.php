@@ -85,7 +85,7 @@ $PMF_LANG['msgSearchAmounts'] = ' søgeresultater';
 $PMF_LANG['msgSearchCategory'] = 'Kategori: ';
 $PMF_LANG['msgSearchContent'] = 'indhold: ';
 $PMF_LANG['msgNewContentHeader'] = 'Forslag til FAQ';
-$PMF_LANG['msgNewContentAddon'] = 'Dit indlæg bliver ikke offenliggjort med det samme, da det først skal gennemlæses af en administrator. <br>Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit forslag</strong>.<br>Separer venligst søgeord med mellemrum (benyt ikke komma).';
+$PMF_LANG['msgNewContentAddon'] = 'Dit forslag vises ikke med det samme, men vil blive kontrolleret af os inden offentliggørelse. Obligatoriske felter er felter markeret med <span style=\"color: red\">*</span>.';
 $PMF_LANG['msgNewContentName'] = 'Dit navn:';
 $PMF_LANG['msgNewContentMail'] = 'Din e-mail-adresse:';
 $PMF_LANG['msgNewContentCategory'] = 'Vælg kategori:';

@@ -85,7 +85,7 @@ $PMF_LANG['msgSearchAmounts'] = ' 搜索结果';
 $PMF_LANG['msgSearchCategory'] = '类别：';
 $PMF_LANG['msgSearchContent'] = '内容：';
 $PMF_LANG['msgNewContentHeader'] = '新增问答';
-$PMF_LANG['msgNewContentAddon'] = '您的问答不会马上显示，需要管理员审核后才能正式发表。必须输入<strong>您的姓名</strong';
+$PMF_LANG['msgNewContentAddon'] = '您的建议不会立即出现，但会在发布前经过我们的检查。必填字段是标有 <span style=\"color: red\">*</span> 的字段。';
 $PMF_LANG['msgNewContentName'] = '您的姓名：';
 $PMF_LANG['msgNewContentMail'] = '您的Email：';
 $PMF_LANG['msgNewContentCategory'] = '问答类别：';

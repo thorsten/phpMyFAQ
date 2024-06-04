@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' rezultat cautare';
 $PMF_LANG['msgSearchCategory'] = 'Categoria: ';
 $PMF_LANG['msgSearchContent'] = 'Continut:';
 $PMF_LANG['msgNewContentHeader'] = 'Propunere pentru intrebare';
-$PMF_LANG['msgNewContentAddon'] = 'Propunerea ta nu va fi publicat automat, va fi revazut cat mai curand de administrator. Campuri obligatorii <strong>Numele tau</strong>, <strong>adresa ta de mail</strong>, <strong>categoria</strong>, <strong>titlu</strong> si <strong>inrtebarea ta</strong>. Te rog sa utilizezi cuvintele-cheie numai cu spatii libere.';
+$PMF_LANG['msgNewContentAddon'] = "Sugestia dvs. nu va apărea imediat, dar va fi verificată de noi înainte de publicare. Câmpurile obligatorii sunt câmpuri marcate cu <span style=\"color: red\">*</span>.";
 $PMF_LANG['msgNewContentName'] = 'Numele tau:';
 $PMF_LANG['msgNewContentMail'] = 'Adresa ta de mail:';
 $PMF_LANG['msgNewContentCategory'] = 'In ce categorie vrei sa introduci?';
