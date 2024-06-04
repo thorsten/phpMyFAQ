@@ -69,7 +69,6 @@ class FaqController extends AbstractController
             $answer = trim(nl2br($answer));
         }
 
-        $contentLink = Filter::filterVar($data->contentlink, FILTER_VALIDATE_URL);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         if (isset($data->{'rubrik[]'})) {
             if (is_string($data->{'rubrik[]'})) {
@@ -88,20 +87,14 @@ class FaqController extends AbstractController
         }
         if (
             !empty($author) && !empty($email) && ($questionText !== '' && $questionText !== '0') &&
-            $stopWords->checkBannedWord(strip_tags($questionText)) &&
-            ($answer !== '' && $answer !== '0') && $stopWords->checkBannedWord(strip_tags($answer))
+            $stopWords->checkBannedWord(strip_tags($questionText))
         ) {
-            $session->userTracking('save_new_entry', 0);
-
-            if (!empty($contentLink) && Strings::substr($contentLink, 7) !== '') {
-                $answer = sprintf(
-                    '%s<br><div id="newFAQContentLink">%s<a href="https://%s" target="_blank">%s</a></div>',
-                    $answer,
-                    Translation::get('msgInfo'),
-                    Strings::substr($contentLink, 7),
-                    $contentLink
-                );
+            if (!empty($answer)) {
+                $stopWords->checkBannedWord(strip_tags($answer));
+            } else {
+                $answer = '';
             }
+            $session->userTracking('save_new_entry', 0);
 
             $autoActivate = $this->configuration->get('records.defaultActivation');
 

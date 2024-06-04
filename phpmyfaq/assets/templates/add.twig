@@ -90,17 +90,6 @@
     </div>
     {% endif %}
 
-    {% if id9_label is defined %}
-    <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="contentlink">{{ id9_label }}:
-        {% if id9_required == 'required' %}<span style="color: red"> *</span>{% endif %}
-      </label>
-      <div class="col-sm-9">
-        <input type="url" class="form-control" name="contentlink" id="contentlink" placeholder="https://" {{ id9_required }}>
-      </div>
-    </div>
-    {% endif %}
-
     {{ captchaFieldset|raw }}
 
     <div class="row mb-2">

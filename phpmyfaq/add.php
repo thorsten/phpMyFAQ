@@ -122,9 +122,6 @@ $template->parse(
     ]
 );
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template1 = $twig->loadTemplate('./add.twig');
-
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
@@ -168,7 +165,3 @@ foreach ($formData as $input) {
         ];
     }
 }
-
-var_dump($formData);
-
-echo $template1->render($templateVars);
