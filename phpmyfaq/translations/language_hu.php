@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' találatok';
 $PMF_LANG['msgSearchCategory'] = 'Kategória: ';
 $PMF_LANG['msgSearchContent'] = 'Tartalom: ';
 $PMF_LANG['msgNewContentHeader'] = 'Javaslat a GYIK-hoz';
-$PMF_LANG['msgNewContentAddon'] = 'Javaslata nem jelenik meg azonnal, hanem a közzététel előtt ellenőrizzük. A kötelező mezők a <span style=\"color: red\">*</span> jelölésű mezők.';
+$PMF_LANG['msgNewContentAddon'] = 'Javaslata nem jelenik meg azonnal, hanem a közzététel előtt ellenőrizzük. A kötelező mezők a * jelölésű mezők.';
 $PMF_LANG['msgNewContentUBB'] = 'Használhatsz UBB kódokat a kérdésedben. <a href=\"help/ubbcode.php\" target=\"_blank\">Segítség a UBB kódokhoz</a>';
 $PMF_LANG['msgNewContentName'] = 'Neved:';
 $PMF_LANG['msgNewContentMail'] = 'Email címed:';

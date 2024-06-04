@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = 'תוצאות חיפוש';
 $PMF_LANG['msgSearchCategory'] = 'קטגוריה: ';
 $PMF_LANG['msgSearchContent'] = 'תוכן: ';
 $PMF_LANG['msgNewContentHeader'] = 'הצע לנו שאלה: ';
-$PMF_LANG['msgNewContentAddon'] = 'הצעתך לא תופיע מיד, אך תיבדק על ידינו לפני הפרסום. שדות חובה הם שדות המסומנים ב-<span style=\"color: red\">*</span>.';
+$PMF_LANG['msgNewContentAddon'] = 'הצעתך לא תופיע מיד, אך תיבדק על ידינו לפני הפרסום. שדות חובה הם שדות המסומנים ב-*.';
 $PMF_LANG['msgNewContentName'] = 'שמך:';
 $PMF_LANG['msgNewContentMail'] = 'כתובת הדואל שלך:';
 $PMF_LANG['msgNewContentCategory'] = 'קטגוריה:';

@@ -87,7 +87,7 @@ $PMF_LANG['msgSearchAmounts'] = ' hakutulokset';
 $PMF_LANG['msgSearchCategory'] = 'Kategoria: ';
 $PMF_LANG['msgSearchContent'] = 'Vastaus:';
 $PMF_LANG['msgNewContentHeader'] = 'Kysymysehdotus';
-$PMF_LANG['msgNewContentAddon'] = 'Ehdotuksesi ei tule heti näkyviin, vaan tarkistamme sen ennen julkaisua. Pakolliset kentät ovat kentät, jotka on merkitty merkillä <span style=\"color: red\">*</span>.';
+$PMF_LANG['msgNewContentAddon'] = 'Ehdotuksesi ei tule heti näkyviin, vaan tarkistamme sen ennen julkaisua. Pakolliset kentät ovat kentät, jotka on merkitty merkillä *.';
 $PMF_LANG['msgNewContentName'] = 'Nimesi:';
 $PMF_LANG['msgNewContentMail'] = 'Sähköpostiosoitteesi:';
 $PMF_LANG['msgNewContentCategory'] = 'Kategoria:';

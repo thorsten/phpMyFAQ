@@ -109,7 +109,7 @@ $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are marked with <span style=\"color: red\">*</span>.";
+$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are marked with *.";
 $PMF_LANG["msgNewContentName"] = "Your name";
 $PMF_LANG["msgNewContentMail"] = "Your email address";
 $PMF_LANG["msgNewContentCategory"] = "Category";

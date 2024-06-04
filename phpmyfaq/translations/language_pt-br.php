@@ -83,7 +83,7 @@ $PMF_LANG['msgSearchAmounts'] = ' resultados da pesquisa';
 $PMF_LANG['msgSearchCategory'] = 'Categoria: ';
 $PMF_LANG['msgSearchContent'] = 'Conteúdo: ';
 $PMF_LANG['msgNewContentHeader'] = 'Proposta para FAQ';
-$PMF_LANG['msgNewContentAddon'] = "Sua sugestão não aparecerá imediatamente, mas será verificada por nós antes da publicação. Campos obrigatórios são campos marcados com <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Sua sugestão não aparecerá imediatamente, mas será verificada por nós antes da publicação. Campos obrigatórios são campos marcados com *.";
 $PMF_LANG['msgNewContentName'] = 'Nome:';
 $PMF_LANG['msgNewContentMail'] = 'E-mail:';
 $PMF_LANG['msgNewContentCategory'] = 'Categoria:';

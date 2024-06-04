@@ -83,7 +83,7 @@ $PMF_LANG['msgSearchAmounts'] = ' keputusan carian';
 $PMF_LANG['msgSearchCategory'] = 'Kategori: ';
 $PMF_LANG['msgSearchContent'] = 'Jawapan: ';
 $PMF_LANG['msgNewContentHeader'] = 'Cadangan untuk FAQ baru';
-$PMF_LANG['msgNewContentAddon'] = "Cadangan anda tidak akan muncul serta-merta, tetapi akan disemak oleh kami sebelum diterbitkan. Medan mandatori ialah medan yang ditandakan dengan <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Cadangan anda tidak akan muncul serta-merta, tetapi akan disemak oleh kami sebelum diterbitkan. Medan mandatori ialah medan yang ditandakan dengan *.";
 $PMF_LANG['msgNewContentName'] = 'Nama anda:';
 $PMF_LANG['msgNewContentMail'] = 'Alamat e-mel anda:';
 $PMF_LANG['msgNewContentCategory'] = 'Kategori:';

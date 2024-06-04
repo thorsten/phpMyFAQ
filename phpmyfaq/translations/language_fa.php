@@ -86,7 +86,7 @@ $PMF_LANG['msgSearchAmounts'] = ' نتایج جستجو';
 $PMF_LANG['msgSearchCategory'] = 'موضوع  ';
 $PMF_LANG['msgSearchContent'] = 'محتوا:  ';
 $PMF_LANG['msgNewContentHeader'] = 'پیشنهاد پرسش‌های متداول';
-$PMF_LANG['msgNewContentAddon'] = 'پیشنهاد شما بلافاصله ظاهر نمی شود، اما قبل از انتشار توسط ما بررسی می شود. فیلدهای اجباری فیلدهایی هستند که با <span style=\"color: red\">*</span> علامت گذاری شده اند.';
+$PMF_LANG['msgNewContentAddon'] = 'پیشنهاد شما بلافاصله ظاهر نمی شود، اما قبل از انتشار توسط ما بررسی می شود. فیلدهای اجباری فیلدهایی هستند که با * علامت گذاری شده اند.';
 $PMF_LANG['msgNewContentName'] = 'نام شما:';
 $PMF_LANG['msgNewContentMail'] = 'آدرس ایمیل شما:';
 $PMF_LANG['msgNewContentCategory'] = 'کدام موضوع را انتخاب میکنید?';

@@ -92,7 +92,7 @@ $PMF_LANG["msgSearchContent"] = "Vsebina: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Predlog za vprašanje";
-$PMF_LANG['msgNewContentAddon'] = "Vaš predlog ne bo prikazan takoj, ampak ga bomo pred objavo preverili. Obvezna polja so polja, označena z <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Vaš predlog ne bo prikazan takoj, ampak ga bomo pred objavo preverili. Obvezna polja so polja, označena z *.";
 $PMF_LANG["msgNewContentUBB"] = "Lahko uporabiš UBB kode za vprašanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a>";
 $PMF_LANG["msgNewContentName"] = "Tvoje ime";
 $PMF_LANG["msgNewContentMail"] = "Tvoj email naslov";

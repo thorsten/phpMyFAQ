@@ -83,7 +83,7 @@ $PMF_LANG['msgSearchAmounts'] = ' søkeresultater';
 $PMF_LANG['msgSearchCategory'] = 'Kategori: ';
 $PMF_LANG['msgSearchContent'] = 'innhold: ';
 $PMF_LANG['msgNewContentHeader'] = 'Forslag til OSS';
-$PMF_LANG['msgNewContentAddon'] = "Forslaget ditt vil ikke vises umiddelbart, men vil bli sjekket av oss før publisering. Obligatoriske felt er felt merket med <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Forslaget ditt vil ikke vises umiddelbart, men vil bli sjekket av oss før publisering. Obligatoriske felt er felt merket med *.";
 $PMF_LANG['msgNewContentName'] = 'Ditt navn:';
 $PMF_LANG['msgNewContentMail'] = 'Din e-postadresse';
 $PMF_LANG['msgNewContentCategory'] = 'Velg kategori:';

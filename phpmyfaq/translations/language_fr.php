@@ -110,7 +110,7 @@ $PMF_LANG["msgSearchContent"] = "Contenu : ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposer une nouvelle entrée";
-$PMF_LANG["msgNewContentAddon"] = "Votre proposition ne va pas être publiée immédiatement, elle devra être validée par un administrateur. Les champs requis sont marqué avec <span style=\"color: red\">*</span>.";
+$PMF_LANG["msgNewContentAddon"] = "Votre proposition ne va pas être publiée immédiatement, elle devra être validée par un administrateur. Les champs requis sont marqué avec *.";
 $PMF_LANG["msgNewContentName"] = "Votre nom";
 $PMF_LANG["msgNewContentMail"] = "Votre adresse e-mail";
 $PMF_LANG["msgNewContentCategory"] = "Catégorie";

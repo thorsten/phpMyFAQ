@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' rezultat cautare';
 $PMF_LANG['msgSearchCategory'] = 'Categoria: ';
 $PMF_LANG['msgSearchContent'] = 'Continut:';
 $PMF_LANG['msgNewContentHeader'] = 'Propunere pentru intrebare';
-$PMF_LANG['msgNewContentAddon'] = "Sugestia dvs. nu va apărea imediat, dar va fi verificată de noi înainte de publicare. Câmpurile obligatorii sunt câmpuri marcate cu <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Sugestia dvs. nu va apărea imediat, dar va fi verificată de noi înainte de publicare. Câmpurile obligatorii sunt câmpuri marcate cu *.";
 $PMF_LANG['msgNewContentName'] = 'Numele tau:';
 $PMF_LANG['msgNewContentMail'] = 'Adresa ta de mail:';
 $PMF_LANG['msgNewContentCategory'] = 'In ce categorie vrei sa introduci?';

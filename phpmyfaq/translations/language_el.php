@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' αποτελέσματα αναζήτησης'
 $PMF_LANG['msgSearchCategory'] = 'Κατηγορία: ';
 $PMF_LANG['msgSearchContent'] = 'Απάντηση: ';
 $PMF_LANG['msgNewContentHeader'] = 'Πρόταση για καταχώρηση';
-$PMF_LANG['msgNewContentAddon'] = 'Η πρότασή σας δεν θα εμφανιστεί αμέσως, αλλά θα ελεγχθεί από εμάς πριν από τη δημοσίευση. Τα υποχρεωτικά πεδία είναι πεδία που επισημαίνονται με <span style=\"color: red\">*</span>.';
+$PMF_LANG['msgNewContentAddon'] = 'Η πρότασή σας δεν θα εμφανιστεί αμέσως, αλλά θα ελεγχθεί από εμάς πριν από τη δημοσίευση. Τα υποχρεωτικά πεδία είναι πεδία που επισημαίνονται με *.';
 $PMF_LANG['msgNewContentName'] = 'Το όνομά σας:';
 $PMF_LANG['msgNewContentMail'] = 'Το email σας:';
 $PMF_LANG['msgNewContentCategory'] = 'Κατηγορία που αναφέρεστε';

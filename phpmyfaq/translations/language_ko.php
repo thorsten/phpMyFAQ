@@ -92,7 +92,7 @@ $PMF_LANG["msgSearchContent"] = "내용: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "FAQ 추가(제안)";
-$PMF_LANG['msgNewContentAddon'] = "귀하의 제안은 즉시 나타나지는 않지만 게시 전에 당사에서 확인하게 됩니다. 필수 입력란은 <span style=\"color: red\">*</span>로 표시된 입력란입니다.";
+$PMF_LANG['msgNewContentAddon'] = "귀하의 제안은 즉시 나타나지는 않지만 게시 전에 당사에서 확인하게 됩니다. 필수 입력란은 *로 표시된 입력란입니다.";
 $PMF_LANG["msgNewContentName"] = "이름";
 $PMF_LANG["msgNewContentMail"] = "메일주소";
 $PMF_LANG["msgNewContentCategory"] = "카테고리 선택";

@@ -92,7 +92,7 @@ $PMF_LANG["msgSearchContent"] = "Nội dung: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Đề nghị một nội dung mới";
-$PMF_LANG['msgNewContentAddon'] = "Đề xuất của bạn sẽ không xuất hiện ngay lập tức mà sẽ được chúng tôi kiểm tra trước khi xuất bản. Các trường bắt buộc là các trường được đánh dấu bằng <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Đề xuất của bạn sẽ không xuất hiện ngay lập tức mà sẽ được chúng tôi kiểm tra trước khi xuất bản. Các trường bắt buộc là các trường được đánh dấu bằng *.";
 $PMF_LANG["msgNewContentName"] = "Tên của bạn";
 $PMF_LANG["msgNewContentMail"] = "Địa chỉ email của bạn";
 $PMF_LANG["msgNewContentCategory"] = "Yêu cầu của bạn liên quan đến";

@@ -84,7 +84,7 @@ $PMF_LANG['msgSearchAmounts'] = ' 検索結果';
 $PMF_LANG['msgSearchCategory'] = 'カテゴリー: ';
 $PMF_LANG['msgSearchContent'] = '回答: ';
 $PMF_LANG['msgNewContentHeader'] = '新しい FAQ を提案する';
-$PMF_LANG['msgNewContentAddon'] = "あなたの提案はすぐには表示されませんが、公開前に当社によってチェックされます。必須フィールドは、<span style=\"color: red\">*</span> でマークされたフィールドです。";
+$PMF_LANG['msgNewContentAddon'] = "あなたの提案はすぐには表示されませんが、公開前に当社によってチェックされます。必須フィールドは、* でマークされたフィールドです。";
 $PMF_LANG['msgNewContentName'] = '名前:';
 $PMF_LANG['msgNewContentMail'] = '電子メールアドレス:';
 $PMF_LANG['msgNewContentCategory'] = 'カテゴリー:';

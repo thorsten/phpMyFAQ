@@ -107,7 +107,7 @@ $PMF_LANG['msgSearchContent'] = 'Respuesta: ';
 
 // nuevo Contenido
 $PMF_LANG['msgNewContentHeader'] = 'Propuesta para una nueva entrada en la FAQ';
-$PMF_LANG['msgNewContentAddon'] = 'Su sugerencia no aparecerá inmediatamente, pero la revisaremos antes de su publicación. Los campos obligatorios son campos marcados con <span style=\"color: red\">*</span>.';
+$PMF_LANG['msgNewContentAddon'] = 'Su sugerencia no aparecerá inmediatamente, pero la revisaremos antes de su publicación. Los campos obligatorios son campos marcados con *.';
 $PMF_LANG['msgNewContentName'] = 'Nombre:';
 $PMF_LANG['msgNewContentMail'] = 'E-mail:';
 $PMF_LANG['msgNewContentCategory'] = 'Categoría:';

@@ -85,7 +85,7 @@ $PMF_LANG['msgSearchAmounts'] = ' zoekresultaten';
 $PMF_LANG['msgSearchCategory'] = 'Categorie:';
 $PMF_LANG['msgSearchContent'] = 'Inhoud:';
 $PMF_LANG['msgNewContentHeader'] = 'Voorstel voor een nieuwe vraag';
-$PMF_LANG['msgNewContentAddon'] = "Uw suggestie verschijnt niet direct, maar wordt vóór publicatie door ons gecontroleerd. Verplichte velden zijn velden gemarkeerd met <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Uw suggestie verschijnt niet direct, maar wordt vóór publicatie door ons gecontroleerd. Verplichte velden zijn velden gemarkeerd met *.";
 $PMF_LANG['msgNewContentName'] = 'Uw naam:';
 $PMF_LANG['msgNewContentMail'] = 'Uw e-mailadres:';
 $PMF_LANG['msgNewContentCategory'] = 'Categorie:';

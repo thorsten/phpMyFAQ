@@ -97,7 +97,7 @@ $PMF_LANG["msgSearchContent"] = "Atsakymas: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Naujo DUK pasiūlymas";
-$PMF_LANG['msgNewContentAddon'] = "Jūsų pasiūlymas pasirodys ne iš karto, bet mes jį patikrinsime prieš paskelbdami. Privalomi laukai yra laukai, pažymėti <span style=\"color: red\">*</span>.";
+$PMF_LANG['msgNewContentAddon'] = "Jūsų pasiūlymas pasirodys ne iš karto, bet mes jį patikrinsime prieš paskelbdami. Privalomi laukai yra laukai, pažymėti *.";
 $PMF_LANG["msgNewContentName"] = "Jūsų vardas";
 $PMF_LANG["msgNewContentMail"] = "Jūsų el. pašto adresas";
 $PMF_LANG["msgNewContentCategory"] = "Grupė";

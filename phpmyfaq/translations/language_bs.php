@@ -97,7 +97,7 @@ $PMF_LANG["msgSearchContent"] = "Sadr&#382;aj: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Predlog za FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Vaš prijedlog se neće pojaviti odmah, ali ćemo ga provjeriti prije objave. Obavezna polja su polja označena sa <span style=\"color: red\">*</span>.";
+$PMF_LANG["msgNewContentAddon"] = "Vaš prijedlog se neće pojaviti odmah, ali ćemo ga provjeriti prije objave. Obavezna polja su polja označena sa *.";
 $PMF_LANG["msgNewContentName"] = "Va&#353;e Ime";
 $PMF_LANG["msgNewContentMail"] = "Va&#353;a e-mail adresa";
 $PMF_LANG["msgNewContentCategory"] = "Izbor kategorije?";
