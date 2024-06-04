@@ -1,4 +1,7 @@
 <section class="col-12">
+{% if noCategories == true %}
+<div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
+{% else %}
   {% if id1_label is defined %}
   <h1>{{ id1_label }}</h1>
   {% endif %}
@@ -47,7 +50,7 @@
         {% if id5_required == 'required' %}<span style="color: red"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
-        <select name="rubrik[]" class="form-control" id="rubrik" multiple="multiple" size="5" {{ id5_required }}>
+        <select name="rubrik" class="form-control" id="rubrik" multiple="multiple" size="5" {{ id5_required }}>
           {{ renderCategoryOptions|raw }}
         </select>
       </div>
@@ -104,4 +107,5 @@
 
 {% if enableWysiwygEditor == true %}
 <script src="{{ baseHref }}admin/assets/js/editor/tinymce.min.js?{{ currentTimestamp }}"></script>
+{% endif %}
 {% endif %}

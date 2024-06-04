@@ -81,7 +81,7 @@ class MetaData
 
         $userPermissions = $categoryPermission->get(Permission::USER, $this->categories);
 
-        $faqPermission->add(Permission::USER, $this->faqId, $userPermissions);
+        $faqPermission->add(Permission::USER, $this->categories, $userPermissions);
         $categoryPermission->add(Permission::USER, $this->categories, $userPermissions);
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {

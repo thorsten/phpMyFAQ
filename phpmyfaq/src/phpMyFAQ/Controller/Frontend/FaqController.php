@@ -79,7 +79,7 @@ class FaqController extends AbstractController
                 $data->{'rubrik[]'}
             );
         } else {
-            $categories = [];
+            $categories = [$category->getAllCategoryIds()[0]];
         }
 
         if (!$this->captchaCodeIsValid($request)) {
@@ -111,7 +111,8 @@ class FaqController extends AbstractController
                 ->setComment(true)
                 ->setNotes('');
 
-            $recordId = $faq->create($faqEntity);
+            $faq->create($faqEntity);
+            $recordId = $faqEntity->getId();
 
             $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
             if ($openQuestionId) {

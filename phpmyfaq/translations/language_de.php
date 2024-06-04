@@ -1429,5 +1429,6 @@ $PMF_LANG['msgNotInMaintenanceMode'] = 'Die FAQ ist nicht im Wartungs-Modus.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
 $PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kannst nichts einreichen, weil keine Kategorien eingerichtet sind. Wende dich bitte an den <a class="alert-link" href="contact.html">Administrator</a>.';
 
 return $PMF_LANG;

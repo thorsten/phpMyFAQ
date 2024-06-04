@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -125,6 +126,12 @@ $template->parse(
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
+$category = new Category($faqConfig);
+$categories = $category->getAllCategoryIds();
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$template1 = $twig->loadTemplate('./add.twig');
+
 // Twig template variables
 $templateVars = [
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -150,7 +157,9 @@ $templateVars = [
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     'enableWysiwygEditor' => $faqConfig->get('main.enableWysiwygEditorFrontend'),
     'currentTimestamp' => $request->server->get('REQUEST_TIME'),
-    'msgSeperateKeywordsWithCommas' => Translation::get('msgSeperateKeywordsWithCommas')
+    'msgSeperateKeywordsWithCommas' => Translation::get('msgSeperateKeywordsWithCommas'),
+    'noCategories' => empty($categories),
+    'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories')
 ];
 
 // Collect data for displaying form
@@ -165,3 +174,5 @@ foreach ($formData as $input) {
         ];
     }
 }
+
+//echo $template1->render($templateVars);
