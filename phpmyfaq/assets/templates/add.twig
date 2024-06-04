@@ -1,3 +1,7 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+
 <section class="col-12">
 {% if noCategories == true %}
 <div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
@@ -109,3 +113,5 @@
 <script src="{{ baseHref }}admin/assets/js/editor/tinymce.min.js?{{ currentTimestamp }}"></script>
 {% endif %}
 {% endif %}
+
+{% endblock %}
