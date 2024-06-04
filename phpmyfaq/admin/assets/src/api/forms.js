@@ -135,7 +135,7 @@ export const fetchDeleteTranslation = async (csrf, formId, inputId, lang, elemen
         pushNotification(result.success);
         document.getElementById('item_' + element.getAttribute('data-pmf-lang')).remove();
         const option = document.createElement('option');
-        option.innerHTML = element.getAttribute('data-pmf-langname');
+        option.innerText = element.getAttribute('data-pmf-langname');
         document.getElementById('languageSelect').appendChild(option);
       } else {
         console.error(result.error);
