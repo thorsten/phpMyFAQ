@@ -198,6 +198,7 @@ if (isset($userAuth)) {
 //
 // Logout
 //
+var_dump($csrfChecked);
 if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     $user->deleteFromSession(true);
     $action = 'main';

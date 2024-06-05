@@ -572,8 +572,8 @@ if (
                     <td><?= Strings::htmlentities($user->getUserData('display_name')) ?></td>
                     <td><?= Strings::htmlentities($user->getLogin()) ?></td>
                     <td>
-                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email')) ?>">
-                            <?= Strings::htmlentities($user->getUserData('email')) ?>
+                        <a href="mailto:<?= Strings::htmlentities($user->getUserData('email') ?? '') ?>">
+                            <?= Strings::htmlentities($user->getUserData('email') ?? '') ?>
                         </a>
                     </td>
                     <td>
