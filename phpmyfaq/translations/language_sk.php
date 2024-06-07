@@ -91,7 +91,7 @@ $PMF_LANG["msgSearchContent"] = "Odpoveď: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Návrh novej FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Váš návrh nebude publikovaný ihneď, po obdržaní bude schválený administrátorom. Povinné políčka sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>Titulok</strong> a <strong>Váš záznam</strong>. Prosím oddeľte kľúčové slová iba medzerou.";
+$PMF_LANG['msgNewContentAddon'] = "Váš návrh sa nezobrazí okamžite, ale pred zverejnením ho skontrolujeme. Povinné polia sú polia označené *.";
 $PMF_LANG["msgNewContentName"] = "Vaše meno";
 $PMF_LANG["msgNewContentMail"] = "Váš e-mail";
 $PMF_LANG["msgNewContentCategory"] = "Kategória";

@@ -97,7 +97,6 @@ $PMF_LANG["msgSearchContent"] = "विषय: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "सहायता केंद्र के लिए प्रस्ताव";
-$PMF_LANG["msgNewContentAddon"] = "आपका प्रस्ताव तुंरत छापा नहीं जाएगा, प्रशासनिक अधिकारी द्वारा जांच के बाद छापा जाएगा. आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>वर्ग</strong>, <strong>मुख्य वाक्य</strong> and <strong>आपका रिकॉर्ड</strong>. कृपया कुंजी शब्दों के मध्य में खाली जगह छोडें.";
 $PMF_LANG["msgNewContentName"] = "आपका नाम";
 $PMF_LANG["msgNewContentMail"] = "आपका ईमेल पता";
 $PMF_LANG["msgNewContentCategory"] = "कौन सा वर्ग चुनना है?";

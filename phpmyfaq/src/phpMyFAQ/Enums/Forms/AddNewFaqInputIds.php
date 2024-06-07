@@ -35,6 +35,4 @@ enum AddNewFaqInputIds: int
     case ANSWER = 7;
 
     case KEYWORDS = 8;
-
-    case URI = 9;
 }

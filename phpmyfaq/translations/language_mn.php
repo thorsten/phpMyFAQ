@@ -91,7 +91,7 @@ $PMF_LANG["msgSearchContent"] = "хариулт: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Шинэ FAQ -д оруулах санал";
-$PMF_LANG["msgNewContentAddon"] = "Таны саналыг яг одоо нийтлэх боломжгүй ч хүсэлтийг хүлээж авмагц нийтэлнэ. Бөглөх шаардлагатай талбарууд <strong>Таны нэр</strong>, <strong>email хаяг</strong>, <strong>ангилал</strong>, <strong>асуулт</strong> болон <strong>хариулт</strong>. Түлхүүр үгнүүдээ таслалаар тусгаарлан бичнэ үү.";
+$PMF_LANG['msgNewContentAddon'] = "Таны санал тэр даруй гарч ирэхгүй, харин нийтлэхээс өмнө бид шалгана. Заавал оруулах талбарууд нь *-ээр тэмдэглэгдсэн талбарууд юм.";
 $PMF_LANG["msgNewContentName"] = "Таны нэр:";
 $PMF_LANG["msgNewContentMail"] = "Email";
 $PMF_LANG["msgNewContentCategory"] = "Ангилал:";

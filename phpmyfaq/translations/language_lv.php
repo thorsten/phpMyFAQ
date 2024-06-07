@@ -98,7 +98,7 @@ $PMF_LANG["msgSearchContent"] = "Saturs: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Tavs jaut&acirc;jums";
-$PMF_LANG["msgNewContentAddon"] = "Jaut&acirc;jumi netiks uzreiz public&ccedil;ti, bet p&ccedil;c sa&ograve;em&eth;ana tos p&acirc;rskat&icirc;s administr&acirc;cija. Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>konkr&ccedil;tu sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>. Atsl&ccedil;gv&acirc;rdi j&acirc;atdala ar atstarpi.";
+$PMF_LANG['msgNewContentAddon'] = "Jūsu ieteikums neparādīsies uzreiz, bet mēs to pārbaudīsim pirms publicēšanas. Obligātie lauki ir lauki, kas atzīmēti ar *.";
 $PMF_LANG["msgNewContentUBB"] = "Vari izmantot t&acirc; saucamos UBB kodus. <a href=\"help/ubbcode.php\" target=\"_blank\">K&acirc; tos izmantot?</a>";
 $PMF_LANG["msgNewContentName"] = "Tavs v&acirc;rds";
 $PMF_LANG["msgNewContentMail"] = "Tava e-pasta adrese";

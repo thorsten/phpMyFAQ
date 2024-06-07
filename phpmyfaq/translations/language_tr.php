@@ -93,7 +93,7 @@ $PMF_LANG["msgSearchContent"] = "Cevap: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Yeni SSS önerisi";
-$PMF_LANG["msgNewContentAddon"] = "Soru öneriniz yönetici onayından sonra yayınlanacaktır. Gerekli alanlar <strong>isim</strong>, <strong>email adresi</strong>, <strong>kategori</strong>, <strong>soru</strong> ve <strong>cevap</strong>. Lütfen anahtar sözcükleri virgül ile ayırın.";
+$PMF_LANG['msgNewContentAddon'] = "Öneriniz hemen görünmeyecek ancak yayınlanmadan önce tarafımızdan kontrol edilecektir. Zorunlu alanlar, * ile işaretlenmiş alanlardır.";
 $PMF_LANG["msgNewContentName"] = "Adınız";
 $PMF_LANG["msgNewContentMail"] = "E-mail adresiniz";
 $PMF_LANG["msgNewContentCategory"] = "Kategori";

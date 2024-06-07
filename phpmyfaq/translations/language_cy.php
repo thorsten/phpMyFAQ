@@ -98,7 +98,7 @@ $PMF_LANG["msgSearchContent"] = "Cynnwys: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Cynigion ar gyfer Cwestiynau Cyffredin";
-$PMF_LANG["msgNewContentAddon"] = "Ni chaiff eich cynnig ei gyhoeddi ar unwaith, ond caiff ei ryddhau gan y gweinyddwr ar ôl ei dderbyn. Y meysydd gofynnol yw <strong> eich Enw </strong>, eich cyfeiriad e-bost </strong>,<strong>categori</strong>, <strong>pennawd</strong> ac <strong>eich cofnod</strong>. Rhowch ofod tab rhwng y geiriau allweddol yn unig.";
+$PMF_LANG["msgNewContentAddon"] = "Ni fydd eich awgrym yn ymddangos ar unwaith, ond bydd yn cael ei wirio gennym ni cyn ei gyhoeddi. Mae meysydd gorfodol yn feysydd sydd wedi'u marcio â *.";
 $PMF_LANG["msgNewContentName"] = "Eich Enw";
 $PMF_LANG["msgNewContentMail"] = "Eich cyfeiriad e-bost";
 $PMF_LANG["msgNewContentCategory"] = "Pa gategori i'w ddewis?";
