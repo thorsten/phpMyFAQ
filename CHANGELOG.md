@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v3.2.7 - unreleased
+### phpMyFAQ v3.2.7 - 2024-06-07
 
 - updated and improved cookie consent (Jan Harms, Thorsten, Zięba Bogusław Chaffinch)
 - updated bundled dependencies (Thorsten)
