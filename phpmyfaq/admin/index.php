@@ -175,7 +175,7 @@ if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER
 //
 // Login via local DB or LDAP or SSO
 //
-if ($faqusername !== '' && $faqpassword !== '') {
+if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.ssoSupport'))) {
     $userAuth = new UserAuthentication($faqConfig, $user);
     $userAuth->setRememberMe($faqremember ?? false);
     try {
@@ -195,13 +195,21 @@ if ($faqusername !== '' && $faqpassword !== '') {
     $user = CurrentUser::getCurrentUser($faqConfig);
 }
 
+if (isset($userAuth)) {
+    if ($userAuth instanceof UserAuthentication) {
+        if ($userAuth->hasTwoFactorAuthentication()) {
+            $action = 'twofactor';
+        }
+    }
+}
+
 //
 // Logout
 //
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 if (
     $csrfToken &&
-    Token::getInstance()->verifyToken('logout', $csrfToken) &&
+    Token::getInstance()->verifyToken('admin-logout', $csrfToken) &&
     $action === 'logout' &&
     $user->isLoggedIn()
 ) {
@@ -213,6 +221,7 @@ if (
         exit();
     }
 }
+
 //
 // Get current admin user and group id - default: -1
 //

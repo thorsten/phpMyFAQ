@@ -77,7 +77,7 @@ class Ldap
         }
 
         $this->base = $ldapBase;
-        $this->ds = ldap_connect($ldapServer, $ldapPort);
+        $this->ds = ldap_connect($ldapServer . ':' . $ldapPort);
 
         if (!$this->ds) {
             $this->error = sprintf(

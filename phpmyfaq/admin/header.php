@@ -327,7 +327,7 @@ switch ($action) {
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                     <a class="dropdown-item"
-                       href="index.php?action=logout&csrf=<?= Token::getInstance()->getTokenString('logout') ?>">
+                       href="index.php?action=logout&csrf=<?= Token::getInstance()->getTokenString('admin-logout') ?>">
                         <?= Translation::get('admin_mainmenu_logout'); ?>
                     </a>
                 </li>
