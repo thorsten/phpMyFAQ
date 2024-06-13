@@ -122,6 +122,7 @@ class Update extends Setup
         // 4.0 updates
         $this->applyUpdates400Alpha();
         $this->applyUpdates400Alpha2();
+        $this->applyUpdates400Alpha3();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -699,6 +700,21 @@ class Update extends Setup
             foreach ($installer->formInputs as $input) {
                 $this->queries[] = $forms->getInsertQueries($input);
             }
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    private function applyUpdates400Alpha3(): void
+    {
+        if (version_compare($this->version, '4.0.0-alpha3', '<')) {
+            // Add Facebook crawlers to botIgoreList
+            $this->configuration->update(['main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
+            bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,
+            facebookcatalog/1.0,facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),
+            facebookexternalhit/1.1']);
         }
     }
 
