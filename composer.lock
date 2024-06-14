@@ -311,16 +311,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v8.13.0",
+            "version": "v8.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "221723e9497515ec82833995a97c8546d9b6499a"
+                "reference": "bff3c3e2402f6a20449404637f91a5ae214eff46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/221723e9497515ec82833995a97c8546d9b6499a",
-                "reference": "221723e9497515ec82833995a97c8546d9b6499a",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/bff3c3e2402f6a20449404637f91a5ae214eff46",
+                "reference": "bff3c3e2402f6a20449404637f91a5ae214eff46",
                 "shasum": ""
             },
             "require": {
@@ -363,9 +363,9 @@
             ],
             "support": {
                 "issues": "https://github.com/elastic/elasticsearch-php/issues",
-                "source": "https://github.com/elastic/elasticsearch-php/tree/v8.13.0"
+                "source": "https://github.com/elastic/elasticsearch-php/tree/v8.14.0"
             },
-            "time": "2024-03-27T15:09:06+00:00"
+            "time": "2024-06-12T19:58:31+00:00"
         },
         {
             "name": "endroid/qr-code",
