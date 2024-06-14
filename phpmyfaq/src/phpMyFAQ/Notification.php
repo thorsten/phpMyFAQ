@@ -45,7 +45,7 @@ readonly class Notification
         $this->faq = new Faq($this->configuration);
         $this->category = new Category($this->configuration);
         $this->mail->setReplyTo(
-            $this->configuration->getAdminEmail(),
+            $this->configuration->getNoReplyEmail(),
             $this->configuration->getTitle()
         );
     }

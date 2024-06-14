@@ -170,6 +170,18 @@ class Configuration
     }
 
     /**
+     * Returns the email address of the no-reply sender
+     */
+    public function getNoReplyEmail(): string
+    {
+        if (empty($this->config['mail.noReplySenderAddress'])) {
+            return $this->getAdminEmail();
+        }
+
+        return $this->config['mail.noReplySenderAddress'];
+    }
+
+    /**
      * Returns the default URL of the phpMyFAQ installation.
      */
     public function getDefaultUrl(): string

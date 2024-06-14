@@ -72,6 +72,7 @@ class ContactController extends AbstractController
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());
+                $mailer->setReplyTo($this->configuration->getNoReplyEmail());
                 $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $this->configuration);
                 $mailer->message = $question;
                 $mailer->send();

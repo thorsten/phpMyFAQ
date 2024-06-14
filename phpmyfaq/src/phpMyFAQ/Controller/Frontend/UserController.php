@@ -237,6 +237,7 @@ class UserController extends AbstractController
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());
+                $mailer->setReplyTo($this->configuration->getNoReplyEmail());
                 $mailer->subject = $this->configuration->getTitle() . ': Remove User Request';
                 $mailer->message = $question;
                 $mailer->send();

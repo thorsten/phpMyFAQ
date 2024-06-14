@@ -50,8 +50,8 @@ class ConfigurationController extends AbstractController
 
         try {
             $mail = new Mail($configuration);
-            $mail->setReplyTo($configuration->getAdminEmail());
             $mail->addTo($configuration->getAdminEmail());
+            $mail->setReplyTo($configuration->getNoReplyEmail());
             $mail->subject = $configuration->getTitle() . ': Mail test successful.';
             $mail->message = 'It works on my machine. 🚀';
             $result = $mail->send();

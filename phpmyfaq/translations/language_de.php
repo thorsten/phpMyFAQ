@@ -1432,6 +1432,6 @@ $PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit K
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kannst nichts einreichen, weil keine Kategorien eingerichtet sind. Wende dich bitte an den <a class="alert-link" href="contact.html">Administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
-$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Absende-Adresse für E-Mails'];
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No-Reply-Adresse für E-Mails'];
 
 return $PMF_LANG;
