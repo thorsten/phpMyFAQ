@@ -321,7 +321,6 @@ class Installer extends Setup
         'main.enableSendToFriend' => 'true',
         'main.privacyURL' => '',
         'main.enableAutoUpdateHint' => 'true',
-        'security.loginWithEmailAddress' => 'false',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
         'main.contactInformationHTML' => 'false',
@@ -379,6 +378,7 @@ class Installer extends Setup
         'security.enableGoogleReCaptchaV2' => 'false',
         'security.googleReCaptchaV2SiteKey' => '',
         'security.googleReCaptchaV2SecretKey' => '',
+        'security.loginWithEmailAddress' => 'false',
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,
@@ -393,6 +393,7 @@ class Installer extends Setup
         'seo.metaTagsAdmin' => 'noindex, nofollow',
         'seo.enableXMLSitemap' => 'true',
 
+        'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',
         'mail.remoteSMTPServer' => '',
         'mail.remoteSMTPUsername' => '',

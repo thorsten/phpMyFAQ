@@ -710,11 +710,13 @@ class Update extends Setup
     private function applyUpdates400Alpha3(): void
     {
         if (version_compare($this->version, '4.0.0-alpha3', '<')) {
-            // Add Facebook crawlers to botIgoreList
+            // Add Facebook crawlers to botIgnoreList
             $this->configuration->update(['main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
             bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,
             facebookcatalog/1.0,facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),
             facebookexternalhit/1.1']);
+            // Add sender address for mail
+            $this->configuration->add('mail.noReplySenderAddress', '');
         }
     }
 

@@ -1451,5 +1451,7 @@ $PMF_LANG['msgNotInMaintenanceMode'] = 'The FAQ is not in maintenance mode.';
 $PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Multiple keywords have to seperated with commas.';
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You cant use this form due to missing configured categories. Please inform the <a class="alert-link" href="contact.html">administrator</a>.';
 
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Sending address for emails'];
 
 return $PMF_LANG;
