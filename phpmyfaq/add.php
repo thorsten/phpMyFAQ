@@ -69,12 +69,15 @@ $selectedQuestion = Filter::filterVar($request->query->get('question'), FILTER_V
 $selectedCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT, -1);
 $question = '';
 $readonly = '';
+$displayFullForm = false;
 if (!is_null($selectedQuestion)) {
     $questionData = $questionObject->get($selectedQuestion);
     $question = Strings::htmlentities($questionData['question']);
     if (Strings::strlen($question) !== 0) {
         $readonly = ' readonly';
     }
+    // Display full form even if user switched off single fields because of use together with answering open questions
+    $displayFullForm = true;
 }
 
 $category->buildCategoryTree();
@@ -156,20 +159,19 @@ $templateVars = [
     'currentTimestamp' => $request->server->get('REQUEST_TIME'),
     'msgSeperateKeywordsWithCommas' => Translation::get('msgSeperateKeywordsWithCommas'),
     'noCategories' => empty($categories),
-    'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories')
+    'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories'),
+    'displayFullForm' => $displayFullForm,
 ];
 
 // Collect data for displaying form
 foreach ($formData as $input) {
-    if ((int)$input->input_active !== 0) {
-        $label = sprintf('id%d_label', (int)$input->input_id);
-        $required = sprintf('id%d_required', (int)$input->input_id);
-        $templateVars = [
-            ...$templateVars,
-            $label => $input->input_label,
-            $required => ((int)$input->input_required !== 0) ? 'required' : ''
-        ];
-    }
+    $active = sprintf('id%d_active', (int)$input->input_id);
+    $label = sprintf('id%d_label', (int)$input->input_id);
+    $required = sprintf('id%d_required', (int)$input->input_id);
+    $templateVars = [
+        ...$templateVars,
+        $active => (bool)$input->input_active,
+        $label => $input->input_label,
+        $required => ((int)$input->input_required !== 0) ? 'required' : ''
+    ];
 }
-
-//echo $template1->render($templateVars);

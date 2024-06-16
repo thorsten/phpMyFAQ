@@ -6,10 +6,10 @@
 {% if noCategories == true %}
 <div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
 {% else %}
-  {% if id1_label is defined %}
+  {% if (id1_active == true) or (displayFullForm == true) %}
   <h1>{{ id1_label }}</h1>
   {% endif %}
-  {% if id2_label is defined %}
+  {% if (id2_active == true) or (displayFullForm == true) %}
   <p>{{ id2_label|raw }}</p>
   {% endif %}
 
@@ -48,7 +48,7 @@
     </div>
     {% endif %}
 
-    {% if id5_label is defined %}
+    {% if (id5_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="rubrik">{{ id5_label }}:
         {% if id5_required == 'required' %}<span style="color: red"> *</span>{% endif %}
@@ -74,7 +74,7 @@
     </div>
     {% endif %}
 
-    {% if id7_label is defined %}
+    {% if (id7_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="answer">{{ id7_label }}:
         {% if id7_required == 'required' %}<span style="color: red"> *</span>{% endif %}
@@ -85,7 +85,7 @@
     </div>
     {% endif %}
 
-    {% if id8_label is defined %}
+    {% if (id8_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="keywords">{{ id8_label }}:
         {% if id8_required == 'required' %}<span style="color: red"> *</span>{% endif %}

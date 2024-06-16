@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Enums\Forms\FormIds;
-use phpMyFAQ\Template\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -57,9 +56,6 @@ $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 
 $categories = $category->getAllCategoryIds();
-
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template1 = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
