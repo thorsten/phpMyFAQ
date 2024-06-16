@@ -7,10 +7,11 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 
 | Version | Supported | Active support / development |
 | ------- | --------- | ---------------------------- |
+| 4.0.x   | ✓         | 2024 -                       |
 | 3.2.x   | ✓         | 2023 -                       |
 | 3.1.x   | ✗         | 2022 - 2023                  |
 | 3.0.x   | ✗         | 2020 - 2022                  |
-| < 3.0   | ✗         | 2001 - 2019                  |
+| < 3.0   | ✗         | 2001 - 2020                  |
 
 ## Reporting a vulnerability
 
@@ -20,7 +21,7 @@ and that we fully address your concern. We consider correspondence sent to secur
 and work to address any issues that arise as quickly as possible.
 
 Please act in good faith towards our users’ privacy and data during your disclosure. We won’t take legal action against
-you or administrative action against your account if you act accordingly: White hat researchers are always appreciated.
+you or administrative action against your account if you act accordingly: White-hat researchers are always appreciated.
 
 Thank you for improving the security of phpMyFAQ.
 
