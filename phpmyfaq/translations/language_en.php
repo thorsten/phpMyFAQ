@@ -122,7 +122,7 @@ $PMF_LANG["msgInfo"] = "More information: ";
 $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Ask your question below";
+$PMF_LANG["msgNewQuestion"] = "Ask your question below. Fields that are marked with * are required.";
 $PMF_LANG["msgAskCategory"] = "Category";
 $PMF_LANG["msgAskYourQuestion"] = "Your question";
 $PMF_LANG["msgAskThx4Mail"] = "Thank you for your question!";
