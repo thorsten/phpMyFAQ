@@ -24,8 +24,8 @@
  * @since     2006-06-26
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -41,6 +41,7 @@ const PMF_SITEMAP_GOOGLE_FILENAME = 'sitemap.xml';
 const PMF_SITEMAP_GOOGLE_FILENAME_GZ = 'sitemap.xml.gz';
 
 const PMF_ROOT_DIR = __DIR__;
+
 const IS_VALID_PHPMYFAQ = null;
 
 //
@@ -54,6 +55,8 @@ $request = Request::createFromGlobals();
 // Initializing static string wrapper
 //
 Strings::init();
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 if (false === $faqConfig->get('seo.enableXMLSitemap')) {
     exit();
