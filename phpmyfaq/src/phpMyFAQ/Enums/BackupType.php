@@ -21,4 +21,5 @@ enum BackupType: string
 {
     case BACKUP_TYPE_DATA = 'data';
     case BACKUP_TYPE_LOGS = 'logs';
+    case BACKUP_TYPE_CONTENT = 'content';
 }

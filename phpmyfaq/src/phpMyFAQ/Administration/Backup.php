@@ -18,10 +18,14 @@
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use SodiumException;
+use ZipArchive;
 
 /**
  * Class Backup
@@ -152,5 +156,39 @@ readonly class Backup
             '-- DO NOT REMOVE THE LINES ABOVE!',
             '-- Otherwise this backup will be broken.'
         ];
+    }
+
+    /**
+     * Creates a ZipArchive of the content-folder
+     *
+     * @throws \Exception
+     */
+    public function createContentFolderBackup(): string
+    {
+        $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
+
+        $zipArchive = new ZipArchive();
+        if ($zipArchive->open($zipFile, ZipArchive::CREATE) !== true) {
+            throw new Exception('Error while creating ZipArchive');
+        }
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(PMF_CONTENT_DIR)
+        );
+
+        foreach ($files as $file) {
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen(PMF_CONTENT_DIR) + 1);
+
+            if ($file->isDir()) {
+                $zipArchive->addEmptyDir($relativePath);
+            } else {
+                $zipArchive->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zipArchive->close();
+
+        return $zipFile;
     }
 }
