@@ -51,11 +51,14 @@
 
   <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
   <div class="input-group">
-    <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]" value="{{ value|e('html_attr') }}" step="1" min="0">
+    <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]"
+           value="{{ value|e('html_attr') }}" step="1" min="0">
 
     {% if key == 'api.apiClientToken' %}
       <div class="input-group-append">
-        <button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">Generate API Client Token</button>
+        <button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">
+          {{ 'msgGenerateApiClientToken' | translate }}
+        </button>
       </div>
     {% endif %}
   </div>
@@ -66,7 +69,10 @@
 {# button #}
 {% macro sendTestMailButton(label, key) %}
   <label for="edit[{{ key }}]" class="form-label small mb-1">{{ label | raw }}</label>
-  <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}" onclick="handleSendTestMail()">{{ key }}</button>
+  <button type="button" class="btn btn-primary" id="btn-phpmyfaq-{{ key|replace({'.': '-'}) }}"
+          onclick="handleSendTestMail()">
+    {{ key | translate }}
+  </button>
 {% endmacro %}
 
 

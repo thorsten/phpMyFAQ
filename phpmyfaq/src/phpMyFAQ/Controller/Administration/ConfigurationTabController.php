@@ -60,7 +60,8 @@ class ConfigurationTabController extends AbstractController
                     'ldapSupport' => extension_loaded('ldap'),
                     'useSslForLogins' => Request::createFromGlobals()->isSecure(),
                     'useSslOnly' => Request::createFromGlobals()->isSecure(),
-                    'ssoSupport' => Request::createFromGlobals()->server->get('REMOTE_USER')
+                    'ssoSupport' => Request::createFromGlobals()->server->get('REMOTE_USER'),
+                    'buttonTes'
                 ]
             ]
         );

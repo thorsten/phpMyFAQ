@@ -2,7 +2,7 @@
 
 {% for key, configItem in configurationList %}
   <div class="row mb-2 p-1">
-    <div class="col-9 border-start border-5">
+    <div class="col-9 border-start border-bottom border-2 pb-2">
       {% if configItem.element == 'area' %}
         {{ macros.generateTextarea(configItem.label, key, configurationData[key]) }}
       {% elseif configItem.element == 'checkbox' %}

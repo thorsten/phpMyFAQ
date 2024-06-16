@@ -38,7 +38,7 @@ class Statistics
     private array $groups;
 
     /** Flag for Group support. */
-    private bool $groupSupport;
+    private bool $groupSupport = false;
 
     /** Plural form support. */
     private readonly Plurals $plurals;

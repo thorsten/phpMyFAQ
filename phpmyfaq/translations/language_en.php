@@ -1457,5 +1457,6 @@ $PMF_LANG['msgSessionExpiringSoon'] = 'Session expiring soon';
 $PMF_LANG['msgNoLogMeOut'] = 'No, log me out';
 $PMF_LANG['msgYesKeepMeLoggedIn'] = 'Yes, keep me logged in';
 $PMF_LANG['msgTrendingFAQs'] = 'Trending FAQs';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
 
 return $PMF_LANG;
