@@ -186,3 +186,80 @@ Before submitting your patch, please update your local branch:
 ### 6.4.8 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
+
+## 6.5 Twig Extensions
+
+phpMyFAQ uses the Twig template engine for the frontend and the backend. We have added some custom extensions to Twig to
+make it easier to work with phpMyFAQ.
+
+### 6.5.1 Category Name
+
+The category name extension is used to get the name of a category by its ID.
+
+Example:
+
+    {{ categoryId | categoryName }}
+
+### 6.5.2 FAQ question
+
+The FAQ question extension is used to get the question of a FAQ entry by its ID.
+
+Example:
+
+    {{ faqId | faqQuestion }}
+
+### 6.5.3 Formatting bytes
+
+The format bytes extension is used to format a number of bytes to a human-readable format.
+
+Example:
+
+    {{ bytes | formatBytes }}
+
+### 6.5.4 Format date
+
+The format date extension is used to format a date to a human-readable format.
+
+Example:
+
+    {{ date | formatDate }}
+
+### 6.5.5 ISO date format
+
+The ISO date format extension is used to format a date to an ISO date format.
+
+Example:
+
+    {{ date | createIsoDate }}
+
+### 6.5.6 Language code
+
+The language code extension is used to get the language name by its language code.
+
+Example:
+
+    {{ languageCode | getFromLanguageCode }}
+
+### 6.5.7 Permission translation
+
+The permission translation extension is used to get the permission name by its permission string.
+
+Example:
+
+    {{ permissionString | permission }}
+
+### 6.5.8 Translation
+
+The translation extension is used to get the translation of a string.
+
+Example:
+
+        {{ 'string' | translate }}
+
+### 6.5.9 User name
+
+The username extension is used to get the name of a user by its ID.
+
+Example:
+
+    {{ userId | userName }}
