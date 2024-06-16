@@ -107,7 +107,7 @@ $template->parse(
         'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
         'lang' => $Language->getLanguage(),
         'openQuestionID' => $selectedQuestion,
-        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('email')) : '',
         'defaultContentName' =>
             ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgNewContentName' => Translation::get('msgNewContentName'),

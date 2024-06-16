@@ -98,7 +98,7 @@ $template->parse(
         'lang' => $Language->getLanguage(),
         'msgNewContentName' => Translation::get('msgNewContentName'),
         'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+        'defaultContentMail' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('email')) : '',
         'defaultContentName' =>
             ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
         'msgAskCategory' => Translation::get('msgAskCategory'),
