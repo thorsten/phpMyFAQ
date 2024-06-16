@@ -20,13 +20,13 @@ export const handleUpdateNextStepButton = () => {
   if (nextStepButton && nextStep) {
     nextStepButton.addEventListener('click', (event) => {
       event.preventDefault();
-      window.location.replace(`./update?step=${nextStep.value}`);
+      window.location.replace(`?step=${nextStep.value}`);
     });
   }
 };
 
 export const handleUpdateInformation = async () => {
-  if (window.location.href.endsWith('/update')) {
+  if (window.location.href.endsWith('/update/')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
@@ -67,7 +67,7 @@ export const handleUpdateInformation = async () => {
 };
 
 export const handleConfigBackup = async () => {
-  if (window.location.href.endsWith('/update?step=2')) {
+  if (window.location.href.endsWith('/update/?step=2')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
@@ -96,7 +96,7 @@ export const handleConfigBackup = async () => {
 };
 
 export const handleDatabaseUpdate = async () => {
-  if (window.location.href.endsWith('/update?step=3')) {
+  if (window.location.href.endsWith('/update/?step=3')) {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
@@ -115,7 +115,6 @@ export const handleDatabaseUpdate = async () => {
       async function pump() {
         const { done, value } = await reader.read();
         const decodedValue = new TextDecoder().decode(value);
-
         if (done) {
           progressBarInstallation.style.width = '100%';
           progressBarInstallation.innerText = '100%';
@@ -124,13 +123,25 @@ export const handleDatabaseUpdate = async () => {
           alert.classList.remove('d-none');
           return;
         } else {
-          progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
-          progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
+          const value = JSON.parse(decodedValue);
+          if (value.progress) {
+            progressBarInstallation.style.width = value.progress;
+            progressBarInstallation.innerText = value.progress;
+          }
+          if (value.error) {
+            progressBarInstallation.style.width = '100%';
+            progressBarInstallation.innerText = '100%';
+            progressBarInstallation.classList.remove('progress-bar-animated');
+            const alert = document.getElementById('phpmyfaq-update-database-error');
+            const errorMessage = document.getElementById('error-messages');
+            alert.classList.remove('d-none');
+            errorMessage.innerHTML = value.error;
+            return;
+          }
         }
 
         await pump();
       }
-
       await pump();
     } catch (error) {
       const errorMessage =

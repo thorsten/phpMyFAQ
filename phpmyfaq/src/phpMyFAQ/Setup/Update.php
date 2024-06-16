@@ -640,7 +640,7 @@ class Update extends Setup
      */
     private function applyUpdates400Alpha2(): void
     {
-        if (version_compare($this->version, '4.0.0-alpha2', '<')) {
+        if (version_compare($this->version, '4.0.0-alpha.2', '<')) {
             $this->configuration->delete('main.optionalMailAddress');
 
             // Add new permission for editing forms
@@ -704,12 +704,11 @@ class Update extends Setup
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     private function applyUpdates400Alpha3(): void
     {
-        if (version_compare($this->version, '4.0.0-alpha3', '<')) {
+        if (version_compare($this->version, '4.0.0-alpha.3', '<')) {
             // Add Facebook crawlers to botIgnoreList
             $this->configuration->update(['main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,
             bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,

@@ -28,7 +28,7 @@ require '../src/Bootstrap.php';
 $faqConfig = Configuration::getConfigurationInstance();
 
 $routes = new RouteCollection();
-$routes->add('public.update.index', new Route('/', [SetupController::class, 'update']));
+$routes->add('public.update.index', new Route('/', ['_controller' => [SetupController::class, 'update']]));
 
 $app = new Application($faqConfig);
 try {

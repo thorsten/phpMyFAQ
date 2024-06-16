@@ -24,6 +24,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
 - added experimental support for PHP 8.4 (Thorsten)
+- improved installation and update (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - removed REST API v2 (Thorsten)
