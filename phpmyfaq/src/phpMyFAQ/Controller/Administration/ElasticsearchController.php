@@ -40,7 +40,7 @@ class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
+        $elasticsearch = new Elasticsearch($this->configuration);
 
         try {
             $elasticsearch->createIndex();
@@ -58,7 +58,7 @@ class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch(Configuration::getConfigurationInstance());
+        $elasticsearch = new Elasticsearch($this->configuration);
 
         try {
             $elasticsearch->dropIndex();
@@ -76,10 +76,8 @@ class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-
-        $elasticsearch = new Elasticsearch($configuration);
-        $faq = new Faq($configuration);
+        $elasticsearch = new Elasticsearch($this->configuration);
+        $faq = new Faq($this->configuration);
         $faq->getAllRecords();
 
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
@@ -98,16 +96,18 @@ class ElasticsearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-
-        $elasticsearchConfiguration = $configuration->getElasticsearchConfig();
+        $elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
 
         $indexName = $elasticsearchConfiguration->getIndex();
         try {
             return $this->json(
                 [
                     'index' => $indexName,
-                    'stats' => $configuration->getElasticsearch()->indices()->stats(['index' => $indexName])->asArray()
+                    'stats' => $this->configuration
+                        ->getElasticsearch()
+                        ->indices()
+                        ->stats(['index' => $indexName])
+                        ->asArray()
                 ],
                 Response::HTTP_OK
             );

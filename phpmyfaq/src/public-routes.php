@@ -15,15 +15,31 @@
  * @since     2024-05-31
  */
 
+use phpMyFAQ\Controller\Frontend\FrontController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
 
-$routeDefinitions = [];
+$routesConfig = [
+    'public.index' => [
+        'path' => '/',
+        'controller' => [FrontController::class, 'handle'],
+        'methods' => 'GET'
+    ],
+];
 
-foreach ($routeDefinitions as $name => [$path, $controller, $action]) {
-    $routes->add($name, new Route($path, ['_controller' => [$controller, $action]]));
+foreach ($routesConfig as $name => $config) {
+    $routes->add(
+        $name,
+        new Route(
+            $config['path'],
+            [
+                '_controller' => $config['controller'],
+                '_methods' => $config['methods']
+            ]
+        )
+    );
 }
 
 return $routes;

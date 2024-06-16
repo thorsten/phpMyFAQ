@@ -52,205 +52,244 @@ $apiVersion = System::getApiVersion();
 
 $routes = new RouteCollection();
 
-// Public REST API
-$routes->add(
-    'api.attachments',
-    new Route("v{$apiVersion}/attachments/{recordId}", ['_controller' => [AttachmentController::class, 'list']])
-);
-$routes->add(
-    'api.backup',
-    new Route("v{$apiVersion}/backup/{type}", ['_controller' => [BackupController::class, 'download']])
-);
-$routes->add(
-    'api.categories',
-    new Route("v{$apiVersion}/categories", ['_controller' => [CategoryController::class, 'list']])
-);
-$routes->add(
-    'api.category',
-    new Route("v{$apiVersion}/category", ['_controller' => [CategoryController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.faq.create',
-    new Route("v{$apiVersion}/faq/create", ['_controller' => [FaqController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.faq.update',
-    new Route("v{$apiVersion}/faq/update", ['_controller' => [FaqController::class, 'update'], '_methods' => 'PUT'])
-);
-$routes->add(
-    'api.faq-by-id',
-    new Route("v{$apiVersion}/faq/{categoryId}/{faqId}", ['_controller' => [FaqController::class, 'getById']])
-);
-$routes->add(
-    'api.comments',
-    new Route("v{$apiVersion}/comments/{recordId}", ['_controller' => [CommentController::class, 'list']])
-);
-$routes->add(
-    'api.faqs.by-tag-id',
-    new Route("v{$apiVersion}/faqs/tags/{tagId}", ['_controller' => [FaqController::class, 'getByTagId']])
-);
-$routes->add(
-    'api.faqs.latest',
-    new Route("v{$apiVersion}/faqs/latest", ['_controller' => [FaqController::class, 'getLatest']])
-);
-$routes->add(
-    'api.faqs.popular',
-    new Route("v{$apiVersion}/faqs/popular", ['_controller' => [FaqController::class, 'getPopular']])
-);
-$routes->add(
-    'api.faqs.trending',
-    new Route("v{$apiVersion}/faqs/trending", ['_controller' => [FaqController::class, 'getTrending']])
-);
-$routes->add(
-    'api.faqs.sticky',
-    new Route("v{$apiVersion}/faqs/sticky", ['_controller' => [FaqController::class, 'getSticky']])
-);
-$routes->add(
-    'api.faqs.by-category-id',
-    new Route("v{$apiVersion}/faqs/{categoryId}", ['_controller' => [FaqController::class, 'getByCategoryId']])
-);
-$routes->add(
-    'api.faqs',
-    new Route("v{$apiVersion}/faqs", ['_controller' => [FaqController::class, 'list']])
-);
-$routes->add(
-    'api.groups',
-    new Route("v{$apiVersion}/groups", ['_controller' => [GroupController::class, 'list']])
-);
-$routes->add(
-    'api.language',
-    new Route("v{$apiVersion}/language", ['_controller' => [LanguageController::class, 'index']])
-);
-$routes->add(
-    'api.login',
-    new Route("v{$apiVersion}/login", ['_controller' => [LoginController::class, 'login'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.news',
-    new Route("v{$apiVersion}/news", ['_controller' => [NewsController::class, 'list']])
-);
-$routes->add(
-    'api.open-questions',
-    new Route("v{$apiVersion}/open-questions", ['_controller' => [OpenQuestionController::class, 'list']])
-);
-$routes->add(
-    'api.pdf-by-id',
-    new Route("v{$apiVersion}/pdf/{categoryId}/{faqId}", ['_controller' => [PdfController::class, 'getById']])
-);
-$routes->add(
-    'api.question',
-    new Route("v{$apiVersion}/question", ['_controller' => [QuestionController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.register',
-    new Route(
-        "v{$apiVersion}/register",
-        [
-            '_controller' => [RegistrationController::class, 'create'],
-            '_methods' => 'POST'
-        ]
-    )
-);
-$routes->add(
-    'api.search',
-    new Route("v{$apiVersion}/search", ['_controller' => [SearchController::class, 'search']])
-);
-$routes->add(
-    'api.search.popular',
-    new Route("v{$apiVersion}/searches/popular", ['_controller' => [SearchController::class, 'popular']])
-);
-$routes->add(
-    'api.tags',
-    new Route("v{$apiVersion}/tags", ['_controller' => [TagController::class, 'list']])
-);
-$routes->add(
-    'api.title',
-    new Route("v{$apiVersion}/title", ['_controller' => [TitleController::class, 'index']])
-);
-$routes->add(
-    'api.version',
-    new Route("v$apiVersion/version", ['_controller' => [VersionController::class, 'index']])
-);
 
-//
-// Private REST API
-//
-$routes->add(
-    'api.private.autocomplete',
-    new Route('autocomplete', ['_controller' => [AutoCompleteController::class, 'search']])
-);
-$routes->add(
-    'api.private.bookmark',
-    new Route('bookmark/{bookmarkId}', ['_controller' => [BookmarkController::class, 'delete'], '_methods' => 'DELETE'])
-);
-$routes->add(
-    'api.private.captcha',
-    new Route('captcha', ['_controller' => [CaptchaController::class, 'renderImage']])
-);
-$routes->add(
-    'api.private.contact',
-    new Route('contact', ['_controller' => [ContactController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.comment',
-    new Route('comment/create', ['_controller' => [CommentFrontendController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.faq.create',
-    new Route('faq/create', ['_controller' => [FaqFrontendController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.question.create',
-    new Route('question/create', ['_controller' => [QuestionFrontendController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.register',
-    new Route('register', ['_controller' => [RegistrationFrontendController::class, 'create']])
-);
-$routes->add(
-    'api.private.share',
-    new Route('share', ['_controller' => [ShareController::class, 'create'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.user.password',
-    new Route('user/password/update', ['_controller' => [UserController::class, 'updatePassword'], '_methods' => 'PUT'])
-);
-$routes->add(
-    'api.private.user.request-removal',
-    new Route(
-        'user/request-removal',
-        ['_controller' => [UserController::class, 'requestUserRemoval'], '_methods' => 'POST']
-    )
-);
-$routes->add(
-    'api.private.user.update',
-    new Route('user/data/update', ['_controller' => [UserController::class, 'updateData'], '_methods' => 'PUT'])
-);
-$routes->add(
-    'api.private.voting',
-    new Route('voting', ['_controller' => [VotingController::class, 'create'], '_methods' => 'POST'])
-);
+$routesConfig = [
+    // Public REST API
+    'api.attachments' => [
+        'path' => "v{$apiVersion}/attachments/{recordId}",
+        'controller' => [AttachmentController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.backup' => [
+        'path' => "v{$apiVersion}/backup/{type}",
+        'controller' => [BackupController::class, 'download'],
+        'methods' => 'GET'
+    ],
+    'api.categories' => [
+        'path' => "v{$apiVersion}/categories",
+        'controller' => [CategoryController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.category' => [
+        'path' => "v{$apiVersion}/category",
+        'controller' => [CategoryController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.faq.create' => [
+        'path' => "v{$apiVersion}/faq/create",
+        'controller' => [FaqController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.faq.update' => [
+        'path' => "v{$apiVersion}/faq/update",
+        'controller' => [FaqController::class, 'update'],
+        'methods' => 'PUT'
+    ],
+    'api.faq-by-id' => [
+        'path' => "v{$apiVersion}/faq/{categoryId}/{faqId}",
+        'controller' => [FaqController::class, 'getById'],
+        'methods' => 'GET'
+    ],
+    'api.comments' => [
+        'path' => "v{$apiVersion}/comments/{recordId}",
+        'controller' => [CommentController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.by-tag-id' => [
+        'path' => "v{$apiVersion}/faqs/tags/{tagId}",
+        'controller' => [FaqController::class, 'getByTagId'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.latest' => [
+        'path' => "v{$apiVersion}/faqs/latest",
+        'controller' => [FaqController::class, 'getLatest'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.popular' => [
+        'path' => "v{$apiVersion}/faqs/popular",
+        'controller' => [FaqController::class, 'getPopular'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.trending' => [
+        'path' => "v{$apiVersion}/faqs/trending",
+        'controller' => [FaqController::class, 'getTrending'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.sticky' => [
+        'path' => "v{$apiVersion}/faqs/sticky",
+        'controller' => [FaqController::class, 'getSticky'],
+        'methods' => 'GET'
+    ],
+    'api.faqs.by-category-id' => [
+        'path' => "v{$apiVersion}/faqs/{categoryId}",
+        'controller' => [FaqController::class, 'getByCategoryId'],
+        'methods' => 'GET'
+    ],
+    'api.faqs' => [
+        'path' => "v{$apiVersion}/faqs",
+        'controller' => [FaqController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.groups' => [
+        'path' => "v{$apiVersion}/groups",
+        'controller' => [GroupController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.language' => [
+        'path' => "v{$apiVersion}/language",
+        'controller' => [LanguageController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'api.login' => [
+        'path' => "v{$apiVersion}/login",
+        'controller' => [LoginController::class, 'login'],
+        'methods' => 'POST'
+    ],
+    'api.news' => [
+        'path' => "v{$apiVersion}/news",
+        'controller' => [NewsController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.open-questions' => [
+        'path' => "v{$apiVersion}/open-questions",
+        'controller' => [OpenQuestionController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.pdf-by-id' => [
+        'path' => "v{$apiVersion}/pdf/{categoryId}/{faqId}",
+        'controller' => [PdfController::class, 'getById'],
+        'methods' => 'GET'
+    ],
+    'api.question' => [
+        'path' => "v{$apiVersion}/question",
+        'controller' => [QuestionController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.register' => [
+        'path' => "v{$apiVersion}/register",
+        'controller' => [RegistrationController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.search' => [
+        'path' => "v{$apiVersion}/search",
+        'controller' => [SearchController::class, 'search'],
+        'methods' => 'GET'
+    ],
+    'api.search.popular' => [
+        'path' => "v{$apiVersion}/searches/popular",
+        'controller' => [SearchController::class, 'popular'],
+        'methods' => 'GET'
+    ],
+    'api.tags' => [
+        'path' => "v{$apiVersion}/tags",
+        'controller' => [TagController::class, 'list'],
+        'methods' => 'GET'
+    ],
+    'api.title' => [
+        'path' => "v{$apiVersion}/title",
+        'controller' => [TitleController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'api.version' => [
+        'path' => "v{$apiVersion}/version",
+        'controller' => [VersionController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    // Private REST API
+    'api.private.autocomplete' => [
+        'path' => 'autocomplete',
+        'controller' => [AutoCompleteController::class, 'search'],
+        'methods' => 'GET'
+    ],
+    'api.private.bookmark' => [
+        'path' => 'bookmark/{bookmarkId}',
+        'controller' => [BookmarkController::class, 'delete'],
+        'methods' => 'DELETE'
+    ],
+    'api.private.captcha' => [
+        'path' => 'captcha',
+        'controller' => [CaptchaController::class, 'renderImage'],
+        'methods' => 'GET'
+    ],
+    'api.private.contact' => [
+        'path' => 'contact',
+        'controller' => [ContactController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.comment' => [
+        'path' => 'comment/create',
+        'controller' => [CommentFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.faq.create' => [
+        'path' => 'faq/create',
+        'controller' => [FaqFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.question.create' => [
+        'path' => 'question/create',
+        'controller' => [QuestionFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.register' => [
+        'path' => 'register',
+        'controller' => [RegistrationFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.share' => [
+        'path' => 'share',
+        'controller' => [ShareController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.user.password' => [
+        'path' => 'user/password/update',
+        'controller' => [UserController::class, 'updatePassword'],
+        'methods' => 'PUT'
+    ],
+    'api.private.user.request-removal' => [
+        'path' => 'user/request-removal',
+        'controller' => [UserController::class, 'requestUserRemoval'],
+        'methods' => 'POST'
+    ],
+    'api.private.user.update' => [
+        'path' => 'user/data/update',
+        'controller' => [UserController::class, 'updateData'],
+        'methods' => 'PUT'
+    ],
+    'api.private.voting' => [
+        'path' => 'voting',
+        'controller' => [VotingController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    // Setup REST API
+    'api.private.setup.check' => [
+        'path' => 'setup/check',
+        'controller' => [SetupController::class, 'check'],
+        'methods' => 'POST'
+    ],
+    'api.private.setup.backup' => [
+        'path' => 'setup/backup',
+        'controller' => [SetupController::class, 'backup'],
+        'methods' => 'POST'
+    ],
+    'api.private.setup.update-database' => [
+        'path' => 'setup/update-database',
+        'controller' => [SetupController::class, 'updateDatabase'],
+        'methods' => 'POST'
+    ],
+];
 
-//
-// Setup REST API
-//
-$routes->add(
-    'api.private.setup.check',
-    new Route('setup/check', ['_controller' => [SetupController::class, 'check'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.setup.backup',
-    new Route('setup/backup', ['_controller' => [SetupController::class, 'backup'], '_methods' => 'POST'])
-);
-$routes->add(
-    'api.private.setup.update-database',
-    new Route(
-        'setup/update-database',
-        [
-            '_controller' => [ SetupController::class, 'updateDatabase' ],
-            '_methods' => 'POST'
-        ]
-    )
-);
+foreach ($routesConfig as $name => $config) {
+    $routes->add(
+        $name,
+        new Route(
+            $config['path'],
+            [
+                '_controller' => $config['controller'],
+                '_methods' => $config['methods']
+            ]
+        )
+    );
+}
 
 return $routes;

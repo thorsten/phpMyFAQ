@@ -20,21 +20,27 @@ namespace phpMyFAQ\Controller\Administration;
 use DateTime;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class NewsController extends AbstractController
 {
-    #[Route('admin/api/news/add')]
-    public function addNews(Request $request)
+    /**
+     * @throws Exception
+     */
+    #[Route('admin/api/news/create')]
+    public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
+
         $data = json_decode($request->getContent());
 
         $news = new News($this->configuration);
@@ -79,10 +85,14 @@ class NewsController extends AbstractController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/news/delete')]
-    public function deleteNews(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
+
         $data = json_decode($request->getContent());
 
         $news = new News($this->configuration);
@@ -100,10 +110,14 @@ class NewsController extends AbstractController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/news/update')]
-    public function updateNews(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
+
         $data = json_decode($request->getContent());
 
         $news = new News($this->configuration);
@@ -151,7 +165,7 @@ class NewsController extends AbstractController
     }
 
     #[Route('admin/api/news/activate')]
-    public function activateNews(Request $request)
+    public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_EDIT);
         $data = json_decode($request->getContent());
