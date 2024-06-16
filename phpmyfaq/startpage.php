@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category\Startpage;
+use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
@@ -32,6 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new News($faqConfig);
 $categoryHelper = new CategoryHelper();
 $plr = new Plurals();
+$faqStatistics = new Statistics($faqConfig);
 
 $request = Request::createFromGlobals();
 $archived = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
@@ -79,7 +81,7 @@ if (!isset($stickyRecordsParams['error'])) {
 // generate top ten list
 $param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
-$toptenParams = $faq->getTopTen($param);
+$toptenParams = $faqStatistics->getTopTen($param);
 if (!isset($toptenParams['error'])) {
     $template->parseBlock(
         'mainPageContent',
@@ -101,7 +103,7 @@ if (!isset($toptenParams['error'])) {
     );
 }
 
-$latestEntriesParams = $faq->getLatest();
+$latestEntriesParams = $faqStatistics->getLatest();
 if (!isset($latestEntriesParams['error'])) {
     $template->parseBlock(
         'mainPageContent',
@@ -123,6 +125,29 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
+$trendingFaqs = $faqStatistics->getTrending();
+if (!isset($trendingFaqs['error'])) {
+    $template->parseBlock(
+        'mainPageContent',
+        'trendingFaqsList',
+        [
+            'trendingFaqsUrl' => $trendingFaqs['url'],
+            'trendingFaqsTitle' => $trendingFaqs['title'],
+            'trendingFaqsPreview' => $trendingFaqs['preview'],
+            'trendingFaqsDate' => $trendingFaqs['date'],
+            'trendingFaqsVisits' => $trendingFaqs['visits']
+        ]
+    );
+} else {
+    $template->parseBlock(
+        'mainPageContent',
+        'trendingFaqsListError',
+        [
+            'errorMsgTrendingFaqs' => $trendingFaqs['error']
+        ]
+    );
+}
+
 $template->parseBlock(
     'mainPageContent',
     'tagListSection',
@@ -140,10 +165,11 @@ $template->parse(
         'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
         'writeTopTenHeader' => Translation::get('msgTopTen'),
         'writeNewestHeader' => Translation::get('msgLatestArticles'),
+        'msgTrendingFAQs' => Translation::get('msgTrendingFAQs'),
         'writeNewsHeader' => $writeNewsHeader,
         'writeNews' => $news->getAll($archived),
         'showAllNews' => $showAllNews,
-        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfFaqs($faqLangCode)),
+        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faqStatistics->totalFaqs($faqLangCode)),
         'formActionUrl' => '?' . $sids . 'action=search',
         'searchBox' => Translation::get('msgSearch'),
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,

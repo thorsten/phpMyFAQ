@@ -80,11 +80,9 @@ class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-
-        if ($configuration->get('main.enableUserTracking')) {
-            $faq = new Faq($configuration);
-            return $this->json($faq->getTopTenData());
+        if ($this->configuration->get('main.enableUserTracking')) {
+            $faqStatistics = new Faq\Statistics($this->configuration);
+            return $this->json($faqStatistics->getTopTenData());
         }
 
         return $this->json(['error' => 'User tracking is disabled.'], 400);

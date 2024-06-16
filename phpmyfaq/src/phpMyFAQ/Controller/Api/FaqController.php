@@ -25,6 +25,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
+use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -283,11 +284,11 @@ class FaqController extends AbstractController
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($this->configuration);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics->setUser($currentUser);
+        $faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($faq->getTopTenData());
+        $result = array_values($faqStatistics->getTopTenData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);
@@ -334,14 +335,65 @@ class FaqController extends AbstractController
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($this->configuration);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
+        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics->setUser($currentUser);
+        $faqStatistics->setGroups($currentGroups);
 
-        $result = array_values($faq->getLatestData());
+        $result = array_values($faqStatistics->getLatestData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($result, Response::HTTP_OK);
+    }
+
+    /**
+     * @throws \phpMyFAQ\Core\Exception
+     */
+    #[OA\Get(
+        path: '/api/v3.0/faqs/trending',
+        operationId: 'getTrending',
+        description: 'This endpoint returns the trending FAQs for the given language provided by "Accept-Language".',
+        tags: ['Public Endpoints']
+    )]
+    #[OA\Header(
+        header: 'Accept-Language',
+        description: 'The language code for the FAQ.',
+        schema: new OA\Schema(type: 'string')
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'If there\'s at least one trending FAQ.',
+        content: new OA\JsonContent(example: '[
+            {
+                "date": "2019-07-13T11:28:00+0200",
+                "question": "How can I survive without phpMyFAQ?",
+                "answer": "A good question!",
+                "visits": 10,
+                "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
+            }
+        ]')
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'If there\'s not a single trending FAQ.',
+        content: new OA\JsonContent(example: []),
+    )]
+    public function getTrending(): JsonResponse
+    {
+        $user = CurrentUser::getCurrentUser($this->configuration);
+
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+
+        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics->setUser($currentUser);
+        $faqStatistics->setGroups($currentGroups);
+
+        $result = array_values($faqStatistics->getTrendingData());
+
+        if ((is_countable($result) ? count($result) : 0) === 0) {
+            $this->json($result, Response::HTTP_NOT_FOUND);
         }
 
         return $this->json($result, Response::HTTP_OK);

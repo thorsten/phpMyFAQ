@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Language;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;

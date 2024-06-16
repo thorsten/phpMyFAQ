@@ -26,6 +26,7 @@
 
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
@@ -117,11 +118,13 @@ function buildSiteMapNode(string $location, string $lastModified = null): string
 // including Sitemap URLs always produced by this same PHP code (see PMF_SITEMAP_GOOGLE_GET_INDEX)
 //
 
-$oFaq = new Faq($faqConfig);
+$faqStatistics = new Statistics($faqConfig);
+
 // Load the faq
-$items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
+$items = $faqStatistics->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
 $visitMin = 0;
+
 if ((is_countable($items) ? count($items) : 0) > 0) {
     $visitsMax = $items[0]['visits'];
     $visitMin = $items[(is_countable($items) ? count($items) : 0) - 1]['visits'];

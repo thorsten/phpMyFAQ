@@ -657,6 +657,49 @@
         }
       }
     },
+    "/api/v3.0/faqs/trending": {
+      "get": {
+        "tags": ["Public Endpoints"],
+        "description": "This endpoint returns the trending FAQs for the given language provided by \"Accept-Language\".",
+        "operationId": "getTrending",
+        "responses": {
+          "200": {
+            "description": "If there's at least one trending FAQ.",
+            "headers": {
+              "Accept-Language": {
+                "description": "The language code for the FAQ.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": "[\n            {\n                \"date\": \"2019-07-13T11:28:00+0200\",\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"answer\": \"A good question!\",\n                \"visits\": 10,\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\"\n            }\n        ]"
+              }
+            }
+          },
+          "404": {
+            "description": "If there's not a single trending FAQ.",
+            "headers": {
+              "Accept-Language": {
+                "description": "The language code for the FAQ.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": []
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3.0/faqs/sticky": {
       "get": {
         "tags": ["Public Endpoints"],

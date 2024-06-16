@@ -91,6 +91,33 @@
     </div>
   </div>
 
+  <!-- Trending FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ msgTrendingFAQs }}</h5>
+        <ol class="list-unstyled">
+          [trendingFaqsList]
+          <li class="mb-1">
+            <a
+              class="latest-entries"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="{{ trendingFaqsPreview }}"
+              href="{{ trendingFaqsUrl }}"
+            >{{ trendingFaqsTitle }}</a
+            >
+            <small>({{ trendingFaqsVisits }}, {{ trendingFaqsDate }})</small>
+          </li>
+          [/trendingFaqsList]
+          [trendingFaqsListError]
+          <li>{{ errorMsgTrendingFaqs }}</li>
+          [/trendingFaqsListError]
+        </ol>
+      </div>
+    </div>
+  </div>
+
   <!-- News -->
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">

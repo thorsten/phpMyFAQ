@@ -73,18 +73,25 @@ const PMF_SOLUTION_ID_START_VALUE = 1000;
 const PMF_SOLUTION_ID_INCREMENT_VALUE = 1;
 
 /**
- * Number of records for the Top 10
+ * Number of records for the Top 10 FAQs
  *
  * @var int
  */
 const PMF_NUMBER_RECORDS_TOPTEN = 10;
 
 /**
- * Number of records for the latest entries
+ * Number of records for the latest FAQs
  *
  * @var int
  */
 const PMF_NUMBER_RECORDS_LATEST = 5;
+
+/**
+ * Number of records for the trending FAQs
+ *
+ * @var int
+ */
+const PMF_NUMBER_RECORDS_TRENDING = 5;
 
 /**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema

@@ -1436,5 +1436,6 @@ $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No-Reply-Adresse für E-Mai
 $PMF_LANG['msgSessionExpiringSoon'] = 'Bald ablaufende Session';
 $PMF_LANG['msgNoLogMeOut'] = 'Nein, logge mich aus';
 $PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, ich will eingeloggt bleiben';
+$PMF_LANG['msgTrendingFAQs'] = 'FAQ Trends';
 
 return $PMF_LANG;

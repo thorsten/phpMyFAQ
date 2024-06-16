@@ -98,6 +98,10 @@ $routes->add(
     new Route("v{$apiVersion}/faqs/popular", ['_controller' => [FaqController::class, 'getPopular']])
 );
 $routes->add(
+    'api.faqs.trending',
+    new Route("v{$apiVersion}/faqs/trending", ['_controller' => [FaqController::class, 'getTrending']])
+);
+$routes->add(
     'api.faqs.sticky',
     new Route("v{$apiVersion}/faqs/sticky", ['_controller' => [FaqController::class, 'getSticky']])
 );
