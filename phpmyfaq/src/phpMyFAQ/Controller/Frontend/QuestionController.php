@@ -64,7 +64,7 @@ class QuestionController extends AbstractController
 
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
-        $selectedCategory = Filter::filterVar($data->category, FILTER_VALIDATE_INT);
+        $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
 
@@ -80,9 +80,13 @@ class QuestionController extends AbstractController
 
         // Check if all necessary fields are provided and not empty
         if (
-            $author !== '' && $email !== '' && $selectedCategory !== false && $userQuestion !== '' &&
+            $author !== '' && $email !== '' && $userQuestion !== '' &&
             $stopWords->checkBannedWord($userQuestion)
         ) {
+            if ($selectedCategory === false) {
+                $selectedCategory = $category->getAllCategoryIds()[0];
+            }
+
             $visibility = $this->configuration->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
 
             $questionEntity = new QuestionEntity();
