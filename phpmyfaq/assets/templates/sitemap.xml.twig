@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="https://www.w3.org/1999/xhtml"
+  xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://www.sitemaps.org/schemas/sitemap/0.9
+        https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  {% for url in urls %}
+    <url>
+      <loc>{{ url.loc }}</loc>
+      {% if url.lastmod is defined %}
+        <lastmod>{{ url.lastmod }}</lastmod>
+      {% endif %}
+      {% if url.changefreq is defined %}
+        <changefreq>{{ url.changefreq }}</changefreq>
+      {% endif %}
+      {% if url.priority is defined %}
+        <priority>{{ url.priority }}</priority>
+      {% endif %}
+    </url>
+  {% endfor %}
+</urlset>

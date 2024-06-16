@@ -63,7 +63,7 @@ abstract class AbstractController
      *
      * @param string[] $templateVars
      * @param Response|null $response
-     * @throws TemplateException
+     * @throws TemplateException|Exception
      */
     public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
