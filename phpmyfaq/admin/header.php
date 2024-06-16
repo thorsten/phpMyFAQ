@@ -24,7 +24,9 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -232,235 +234,59 @@ switch ($action) {
     case 'instances':
     case 'system':
     case 'elasticsearch':
+    case 'forms':
         $configurationPage = true;
         break;
     default:
         $dashboardPage = true;
         break;
 }
-?>
-<!DOCTYPE html>
-<html lang="<?= Translation::get('metaLanguage'); ?>" data-bs-theme="light">
-<head>
-  <meta charset="utf-8">
 
-  <title>
-    <?= Strings::htmlentities($faqConfig->getTitle()) ?> - <?= System::getPoweredByString() ?>
-  </title>
-  <base href="<?= Strings::htmlentities($faqConfig->getDefaultUrl()) ?>admin/">
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$template = $twig->loadTemplate('./admin/header.twig');
 
-  <meta name="description" content="Only Chuck Norris can divide by zero.">
-  <meta name="author" content="phpMyFAQ Team">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
-  <meta name="copyright" content="© 2001-<?= date('Y') ?> phpMyFAQ Team">
-  <meta name="publisher" content="phpMyFAQ Team">
-  <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
+if ($faqConfig->get('main.enableGravatarSupport')) {
+    $avatar = new Gravatar();
+    $gravatarImage = $avatar->getImage(
+        $user->getUserData('email'),
+        ['size' => 24, 'class' => 'img-profile rounded-circle']
+    );
+}
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="../assets/dist/admin.css">
+$templateVars = [
+    'metaLanguage' => Translation::get('metaLanguage'),
+    'layoutMode' => 'light',
+    'pageTitle' => $faqConfig->getTitle() . ' - ' . System::getPoweredByString(),
+    'baseHref' => $faqConfig->getDefaultUrl() . 'admin/',
+    'version' => System::getVersion(),
+    'currentYear' => date('Y'),
+    'metaRobots' => $faqConfig->get('seo.metaTagsAdmin'),
+    'templateSetName' => Template::getTplSetName(),
+    'pageDirection' => Translation::get('dir'),
+    'userHasAccessPermission' => $adminHelper->canAccessContent($user),
+    'msgSessionExpiration' => Translation::get('ad_session_expiration'),
+    'pageAction' => isset($action) ? '?action=' . $action : '',
+    'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage($faqLangCode),
+    'userName' => $user->getUserData('display_name'),
+    'hasGravatarSupport' => $faqConfig->get('main.enableGravatarSupport'),
+    'gravatarImage' => $gravatarImage ?? '',
+    'msgChangePassword' => Translation::get('ad_menu_passwd'),
+    'csrfTokenLogout' => Token::getInstance()->getTokenString('admin-logout'),
+    'msgLogout' => Translation::get('admin_mainmenu_logout'),
+    'secondLevelEntries' => $secLevelEntries,
+    'menuUsers' => Translation::get('admin_mainmenu_users'),
+    'menuContent' => Translation::get('admin_mainmenu_content'),
+    'menuStatistics' => Translation::get('admin_mainmenu_statistics'),
+    'menuImportsExports' => Translation::get('admin_mainmenu_imports_exports'),
+    'menuBackup' => Translation::get('admin_mainmenu_backup'),
+    'menuConfiguration' => Translation::get('admin_mainmenu_configuration'),
+    'userPage' => $userPage,
+    'contentpage' => $contentPage,
+    'statisticsPage' => $statisticsPage,
+    'exportsPage' => $exportsPage,
+    'backupPage' => $backupPage,
+    'configurationPage' => $configurationPage,
+];
 
-  <script src="assets/js/configuration.js"></script>
-  <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">
-</head>
-<body dir="<?= Translation::get('dir'); ?>" id="page-top">
-
-<!-- phpMyFAQ Admin Top Bar -->
-<nav class="pmf-admin-topnav navbar navbar-expand bg-dark">
-    <a class="navbar-brand text-white text-center ps-3" href="../" title="phpMyFAQ <?= System::getVersion() ?>">
-        <img height="50" src="../assets/img/logo-transparent.svg" alt="phpMyFAQ Logo">
-    </a>
-
-    <?php if ($adminHelper->canAccessContent($user)) : ?>
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
-            name="sidebar-toggle" href="#">
-        <i class="bi bi-list h6"></i>
-    </button>
-
-    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li>
-            <div class="text-white small">
-                <i class="bi bi-clock-o bi-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
-                <span id="pmf-session-counter" class="pl-2">
-                    <div class="spinner-border spinner-border-sm" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </span>
-                <div id="pmf-show-session-warning" data-value="hide"></div>
-            </div>
-        </li>
-    </ul>
-    <?php endif; ?>
-
-    <!-- Language Switcher -->
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0 navbar-search"
-          action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-        <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
-    </form>
-
-    <?php if ($adminHelper->canAccessContent($user)) : ?>
-    <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline small">
-                      <?= $user->getUserData('display_name'); ?>
-                </span>
-                <?php
-                if ($faqConfig->get('main.enableGravatarSupport')) {
-                    $avatar = new Gravatar();
-                    echo $avatar->getImage(
-                        $user->getUserData('email'),
-                        ['size' => 24, 'class' => 'img-profile rounded-circle']
-                    );
-                } else {
-                    echo '<i aria-hidden="true" class="bi bi-user"></i>';
-                }
-                ?>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li>
-                    <a class="dropdown-item" href="index.php?action=passwd">
-                        <?= Translation::get('ad_menu_passwd') ?>
-                    </a>
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                    <a class="dropdown-item"
-                       href="index.php?action=logout&csrf=<?= Token::getInstance()->getTokenString('admin-logout') ?>">
-                        <?= Translation::get('admin_mainmenu_logout'); ?>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <?php endif; ?>
-</nav>
-<!-- /phpMyFAQ Admin Top Bar -->
-
-<div id="pmf-admin-layout-sidenav">
-
-    <?php if ($adminHelper->canAccessContent($user)) : ?>
-    <!-- phpMyFAQ Admin Side Navigation -->
-    <div id="pmf-admin-layout-sidenav_nav">
-        <nav class="pmf-admin-sidenav accordion pmf-admin-sidenav-dark" id="sidenavAccordion">
-            <div class="pmf-admin-sidenav-menu">
-                <div class="nav">
-                    <!-- Dashboard -->
-                    <a class="nav-link" href="index.php">
-                        <div class="pmf-admin-nav-link-icon"><i class="bi bi-speedometer h6"></i></div>
-                        Dashboard
-                    </a>
-
-                    <!-- User -->
-                    <?php if ($secLevelEntries['user'] !== '') : ?>
-                    <a class="nav-link <?= ($userPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
-                        <?= Translation::get('admin_mainmenu_users'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($userPage) ? '' : 'collapse' ?>" id="collapseUsers" aria-labelledby="headingOne"
-                         data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['user']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-                    <!-- Content -->
-                    <?php if ($secLevelEntries['content'] !== '') : ?>
-                    <a class="nav-link <?= ($contentPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-pencil-square h6"></i></div>
-                        <?= Translation::get('admin_mainmenu_content'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($contentPage) ? '' : 'collapse' ?>" id="collapseContent"
-                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['content']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-                    <!-- Statistics -->
-                    <?php if ($secLevelEntries['statistics'] !== '') : ?>
-                    <a class="nav-link <?= ($statisticsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-graph-up-arrow h6"></i></div>
-                        <?= Translation::get('admin_mainmenu_statistics'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($statisticsPage) ? '' : 'collapse' ?>" id="collapseStatistics"
-                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['statistics']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-                    <!-- Exports -->
-                    <?php if ($secLevelEntries['imports_exports'] !== '') : ?>
-                    <a class="nav-link <?= ($exportsPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
-                        <div class="pmf-admin-nav-link-icon">
-                            <i aria-hidden="true" class="bi bi-archive h6"></i>
-                        </div>
-                        <?= Translation::get('admin_mainmenu_imports_exports'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($exportsPage) ? '' : 'collapse' ?>" id="collapseExports"
-                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['imports_exports']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-                    <!-- Backup -->
-                    <?php if ($secLevelEntries['backup'] !== '') : ?>
-                    <a class="nav-link <?= ($backupPage) ? '' : 'collapsed' ?>" href="#" data-bs-toggle="collapse"
-                       data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
-                        <div class="pmf-admin-nav-link-icon">
-                            <i aria-hidden="true" class="bi bi-cloud-download"></i>
-                        </div>
-                        <?= Translation::get('admin_mainmenu_backup'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($backupPage) ? '' : 'collapse' ?>" id="collapseBackupAdmin"
-                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['backup']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-                    <!-- Config -->
-                    <?php if ($secLevelEntries['config'] !== '') : ?>
-                    <a class="nav-link <?= ($configurationPage) ? '' : 'collapsed' ?>" href="#"
-                       data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
-                       aria-controls="collapseConfigAdmin">
-                        <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
-                        <?= Translation::get('admin_mainmenu_configuration'); ?>
-                        <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
-                    </a>
-                    <div class="<?= ($configurationPage) ? '' : 'collapse' ?>" id="collapseConfigAdmin"
-                         aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="pmf-admin-sidenav-menu-nested nav">
-                            <?= $secLevelEntries['config']; ?>
-                        </nav>
-                    </div>
-                    <?php endif; ?>
-
-                </div>
-            </div>
-            <div class="pmf-admin-sidenav-footer">
-                <div class="small">Logged in as:</div>
-                <?= Strings::htmlentities($user->getUserData('display_name')) ?>
-            </div>
-        </nav>
-    </div>
-    <?php endif; ?>
-    <!-- /phpMyFAQ Admin Side Navigation -->
-
-    <!-- phpMyFAQ Admin Main Content -->
-    <div id="pmf-admin-layout-sidenav_content">
-        <main>
-            <div class="container-fluid px-4">
+echo $template->render($templateVars);
