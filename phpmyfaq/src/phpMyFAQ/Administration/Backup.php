@@ -163,7 +163,7 @@ readonly class Backup
      *
      * @throws \Exception
      */
-    public function createContentFolderBackup(): string|bool
+    public function createContentFolderBackup(): string
     {
         $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
 
@@ -189,6 +189,6 @@ readonly class Backup
 
         $zipArchive->close();
 
-        return file_exists($zipFile) ? $zipFile : false;
+        return $zipFile;
     }
 }
