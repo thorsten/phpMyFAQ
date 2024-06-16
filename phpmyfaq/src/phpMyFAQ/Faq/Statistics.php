@@ -51,8 +51,6 @@ class Statistics
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
-        } else {
-            $this->groupSupport = false;
         }
     }
 

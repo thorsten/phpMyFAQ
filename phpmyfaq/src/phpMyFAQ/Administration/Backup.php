@@ -158,13 +158,18 @@ readonly class Backup
         ];
     }
 
+    /**
+     * Creates a ZipArchive of the content-folder
+     *
+     * @throws \Exception
+     */
     public function createContentFolderBackup(): string|bool
     {
         $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
 
         $zipArchive = new ZipArchive();
         if ($zipArchive->open($zipFile, ZipArchive::CREATE) !== true) {
-            return false;
+            throw new Exception('Error while creating ZipArchive');
         }
 
         $files = new RecursiveIteratorIterator(
