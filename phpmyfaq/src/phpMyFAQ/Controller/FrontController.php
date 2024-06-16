@@ -15,9 +15,8 @@
  * @since     2024-03-09
  */
 
-namespace phpMyFAQ\Controller\Frontend;
+namespace phpMyFAQ\Controller;
 
-use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

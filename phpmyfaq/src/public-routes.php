@@ -15,7 +15,7 @@
  * @since     2024-05-31
  */
 
-use phpMyFAQ\Controller\Frontend\FrontController;
+use phpMyFAQ\Controller\FrontController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
