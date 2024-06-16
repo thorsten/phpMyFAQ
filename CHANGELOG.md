@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-alpha.2 - 2024-06-01
+### phpMyFAQ v4.0.0-alpha.3 - unreleased
 
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
@@ -25,6 +25,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added CSV export of user sessions (Jan Harms)
 - added experimental support for PHP 8.4 (Thorsten)
 - improved installation and update (Thorsten)
+- improved session timout warning for admins (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - removed REST API v2 (Thorsten)

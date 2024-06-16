@@ -1453,5 +1453,8 @@ $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You cant use this form due
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No reply address for emails'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Session expiring soon';
+$PMF_LANG['msgNoLogMeOut'] = 'No, log me out';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Yes, keep me logged in';
 
 return $PMF_LANG;

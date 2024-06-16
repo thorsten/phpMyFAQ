@@ -22,6 +22,7 @@
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
@@ -80,6 +81,7 @@ $templateVars = [
     'phpMyFAQVersion' => System::getVersion(),
     'currentYear' => date('Y'),
     'isUserLoggedIn' => $user->isLoggedIn() && ($refreshTime > 0),
+    'csrfToken' => Token::getInstance()->getTokenString('admin-logout'),
     'msgConfirm' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
     'sessionTimeout' => PMF_AUTH_TIMEOUT,
     'refreshTime' => $refreshTime,

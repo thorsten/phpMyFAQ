@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -48,6 +49,32 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                             aria-label="Close">
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Warning Modal -->
+        <div class="modal fade" id="sessionWarningModal" tabindex="-1" aria-labelledby="sessionWarningModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="sessionWarningModalLabel">
+                            <?= Translation::get('msgSessionExpiringSoon') ?>
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <?= sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING) ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <?= Translation::get('msgNoLogMeOut') ?>
+                        </button>
+                        <button type="button" class="btn btn-primary" id="pmf-button-reload-page">
+                            <?= Translation::get('msgYesKeepMeLoggedIn') ?>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,13 +119,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-if ($user->isLoggedIn()) {
-    ?>
+if ($user->isLoggedIn()) { ?>
   <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;" name="keep-phpmyfaq-session-alive"></iframe>
-    <?php
-}
-?>
+<?php } ?>
 <script src="../assets/dist/backend.js?<?= time(); ?>"></script>
 </body>
 </html>

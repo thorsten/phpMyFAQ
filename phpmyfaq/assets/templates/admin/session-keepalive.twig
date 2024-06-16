@@ -14,17 +14,16 @@
   {% if isUserLoggedIn %}
   <script>
     const sessionTimeoutWarning = () => {
-      if (window.confirm('{{msgConfirm}}')) {
-        location.href = location.href;
-      }
+      const showWarning = top.document.getElementById('pmf-show-session-warning');
+      showWarning.dataset.value = 'show';
     };
 
     const sessionTimeoutClock = (topRef, sessionStart, expire) => {
       expire.setSeconds(expire.getSeconds() - 1);
       const duration = expire - sessionStart;
 
-      if (expire.getFullYear() < 2022) {
-        parent.location.search = '?action=logout';
+      if (duration <= 0) {
+        parent.location.href = './index.php?action=logout&csrf={{ csrfToken }}';
         return;
       }
 
@@ -38,7 +37,7 @@
       const sessionStart = new Date();
       expire.setSeconds({{ sessionTimeout }} * 60);
 
-      const topRef = top.document.getElementById('sessioncounter');
+      const topRef = top.document.getElementById('pmf-session-counter');
 
       window.setTimeout(sessionTimeoutWarning, {{ refreshTime }} * 1000);
       window.setInterval(
@@ -52,6 +51,5 @@
   {% endif %}
 </head>
 <body>
-
 </body>
 </html>

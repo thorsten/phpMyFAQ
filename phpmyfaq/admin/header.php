@@ -281,11 +281,12 @@ switch ($action) {
         <li>
             <div class="text-white small">
                 <i class="bi bi-clock-o bi-fw"></i> <?= Translation::get('ad_session_expiration'); ?>:
-                <span id="sessioncounter" class="pl-2">
+                <span id="pmf-session-counter" class="pl-2">
                     <div class="spinner-border spinner-border-sm" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </span>
+                <div id="pmf-show-session-warning" data-value="hide"></div>
             </div>
         </li>
     </ul>

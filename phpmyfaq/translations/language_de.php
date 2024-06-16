@@ -1433,5 +1433,8 @@ $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kannst nichts einreiche
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No-Reply-Adresse für E-Mails'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Bald ablaufende Session';
+$PMF_LANG['msgNoLogMeOut'] = 'Nein, logge mich aus';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, ich will eingeloggt bleiben';
 
 return $PMF_LANG;
