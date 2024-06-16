@@ -57,13 +57,13 @@ paths:
       parameters:
         - name: type
           in: path
-          description: 'The backup type. Can be "data" or "logs".'
+          description: 'The backup type. Can be "data", "logs" or "content".'
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: 'The current backup as a file.'
+          description: 'The current backup as a file or ZipArchive in case of "content"-type.'
           headers:
             Accept-Language:
               description: 'The language code for the login.'
@@ -75,6 +75,9 @@ paths:
                 type: string
           content:
             application/octet-stream:
+              schema:
+                type: string
+            application/zip:
               schema:
                 type: string
         '400':
