@@ -162,7 +162,6 @@ class Link
         'thankyou' => 1,
         'twofactor' => 1,
         'ucp' => 1,
-        'writecomment' => 1,
         '404' => 1,
         'bookmarks' => 1
     ];
