@@ -15,13 +15,17 @@
  * @since     2012-02-12
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $loginMessage = '';
 
@@ -31,40 +35,31 @@ if (!is_null($error)) {
 
 $faqSession->userTracking('login', 0);
 
-if ($faqConfig->get('security.enableRegistration')) {
-    $template->parseBlock(
-        'mainPageContent',
-        'enableRegistration',
-        [
-            'registerUser' => Translation::get('msgRegistration'),
-        ]
-    );
-}
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twigTemplate = $twig->loadTemplate('./login.twig');
 
-if ($faqConfig->isSignInWithMicrosoftActive()) {
-    $template->parseBlock(
-        'mainPageContent', 'useSignInWithMicrosoft', [
-            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
-        ]
-    );
-}
+$templateVars = [
+    'loginHeader' => Translation::get('msgLoginUser'),
+    'sendPassword' => Translation::get('lostPassword'),
+    'loginMessage' => $loginMessage,
+    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
+    'faqloginaction' => $action,
+    'login' => Translation::get('ad_auth_ok'),
+    'username' => Translation::get('ad_auth_user'),
+    'password' => Translation::get('ad_auth_passwd'),
+    'rememberMe' => Translation::get('rememberMe'),
+    'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
+    'msgTwofactorTokenModelTitle' => Translation::get('msgTwofactorTokenModelTitle'),
+    'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
+    'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
+    'userid' => $userid,
+    'enableRegistration' => $faqConfig->get('security.enableRegistration'),
+    'registerUser' => Translation::get('msgRegistration'),
+    'useSignInWithMicrosoft' => $faqConfig->isSignInWithMicrosoftActive(),
+    'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+];
 
-$template->parse(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'loginHeader' => Translation::get('msgLoginUser'),
-        'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
-        'loginMessage' => $loginMessage,
-        'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
-        'faqloginaction' => $action,
-        'login' => Translation::get('ad_auth_ok'),
-        'username' => Translation::get('ad_auth_user'),
-        'password' => Translation::get('ad_auth_passwd'),
-        'rememberMe' => Translation::get('rememberMe'),
-        'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
-        'msgTwofactorTokenModelTitle' => Translation::get('msgTwofactorTokenModelTitle'),
-        'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
-        'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
-        'userid' => $userid,
-    ]
+    $twigTemplate->render($templateVars)
 );

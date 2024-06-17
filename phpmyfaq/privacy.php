@@ -15,12 +15,15 @@
  * @since     2023-01-22
  */
 
+use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $privacyUrl = $faqConfig->get('main.privacyURL');
 
