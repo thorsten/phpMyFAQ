@@ -15,6 +15,8 @@
  * @since     2012-03-26
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -22,33 +24,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+
 $faqSession->userTracking('forgot_password', 0);
 
-if ($faqConfig->get('security.enableRegistration')) {
-    $template->parseBlock(
-        'mainPageContent',
-        'enableRegistration',
-        [
-            'registerUser' => Translation::get('msgRegistration'),
-        ]
-    );
-}
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twigTemplate = $twig->loadTemplate('./password.twig');
 
-if ($faqConfig->isSignInWithMicrosoftActive()) {
-    $template->parseBlock(
-        'mainPageContent', 'useSignInWithMicrosoft', [
-            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
-        ]
-    );
-}
+$templateVars = [
+    'pageHeader' => Translation::get('lostPassword'),
+    'lang' => $faqConfig->getLanguage()->getLanguage(),
+    'msgUsername' => Translation::get('ad_auth_user'),
+    'msgEmail' => Translation::get('ad_entry_email'),
+    'msgSubmit' => Translation::get('msgNewContentSubmit'),
+];
 
-$template->parse(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => Translation::get('lostPassword'),
-        'lang' => $Language->getLanguage(),
-        'msgUsername' => Translation::get('ad_auth_user'),
-        'msgEmail' => Translation::get('ad_entry_email'),
-        'msgSubmit' => Translation::get('msgNewContentSubmit'),
-    ]
+    $twigTemplate->render($templateVars)
 );

@@ -219,6 +219,21 @@ class Template
     }
 
     /**
+     * This function adds rendered Twig output.
+     *
+     * @param string $templateName Name of the template
+     * @param string $renderedTwigOutput Rendered Twig output
+     */
+    public function addRenderedTwigOutput(string $templateName, string $renderedTwigOutput): void
+    {
+        if (isset($this->outputs[$templateName])) {
+            $this->outputs[$templateName] .= $renderedTwigOutput;
+        } else {
+            $this->outputs[$templateName] = $renderedTwigOutput;
+        }
+    }
+
+    /**
      * @return string[]
      */
     public function getErrors(): array
