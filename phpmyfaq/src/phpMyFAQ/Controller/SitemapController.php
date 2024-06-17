@@ -1,11 +1,25 @@
 <?php
 
+/**
+ * The XML Sitemap Controller
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-06-16
+ */
+
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Template\TemplateException;
-use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Response;
 
 class SitemapController extends AbstractController
@@ -31,12 +45,11 @@ class SitemapController extends AbstractController
             ];
         }
 
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-        $template = $twigWrapper->loadTemplate('sitemap.xml.twig');
+        $xml = $this->renderView('sitemap.xml.twig', ['urls' => $urls]);
 
         $response->headers->set('Content-Type', 'text/xml');
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setContent($template->render(['urls' => $urls]));
+        $response->setContent($xml);
 
         return $response;
     }

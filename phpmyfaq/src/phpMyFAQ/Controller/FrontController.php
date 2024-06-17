@@ -12,7 +12,7 @@
  * @copyright 2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2024-03-09
+ * @since     2024-06-16
  */
 
 namespace phpMyFAQ\Controller;

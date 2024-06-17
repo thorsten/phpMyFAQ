@@ -61,9 +61,11 @@ abstract class AbstractController
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string[] $templateVars
+     * @param string        $pathToTwigFile
+     * @param array         $templateVars
      * @param Response|null $response
-     * @throws TemplateException|Exception
+     * @return Response
+     * @throws Exception
      */
     public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
@@ -76,6 +78,24 @@ abstract class AbstractController
         $response->setContent($template->render($templateVars));
 
         return $response;
+    }
+
+    /**
+     * Returns a Twig rendered template as string.
+     *
+     * @param string $pathToTwigFile
+     * @param array  $templateVars
+     * @return string
+     * @throws Exception
+     */
+    public function renderView(string $pathToTwigFile, array $templateVars = []): string
+    {
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper->addExtension(new DebugExtension());
+        $twigWrapper->addExtension(new TranslateTwigExtension());
+        $template = $twigWrapper->loadTemplate($pathToTwigFile);
+
+        return $template->render($templateVars);
     }
 
     /**
