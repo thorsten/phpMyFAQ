@@ -40,9 +40,15 @@ $allCrumbs = $attachmentCollection->getBreadcrumbs();
 
 $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
+$baseUrl = sprintf(
+    '%sadmin/?action=attachments&amp;page=%d',
+    $faqConfig->getDefaultUrl(),
+    $page
+);
+
 $pagination = new Pagination(
     [
-        'baseUrl' => $faqConfig->getDefaultUrl() . $request->getRequestUri(),
+        'baseUrl' => $baseUrl,
         'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
         'perPage' => $itemsPerPage,
     ]
