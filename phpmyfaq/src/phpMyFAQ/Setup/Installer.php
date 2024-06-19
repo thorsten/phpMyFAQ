@@ -355,6 +355,7 @@ class Installer extends Setup
         'records.numberMaxStoredRevisions' => '10',
         'records.enableAutoRevisions' => 'false',
         'records.orderStickyFaqsCustom' => 'false',
+        'records.allowedMediaHosts' => 'www.youtube.com',
 
         'search.numberSearchTerms' => '10',
         'search.relevance' => 'thema,content,keywords',

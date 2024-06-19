@@ -1459,4 +1459,7 @@ $PMF_LANG['msgYesKeepMeLoggedIn'] = 'Yes, keep me logged in';
 $PMF_LANG['msgTrendingFAQs'] = 'Trending FAQs';
 $PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
 
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (seperate with commas)'];
+
 return $PMF_LANG;
