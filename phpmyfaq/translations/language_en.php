@@ -1305,7 +1305,7 @@ $PMF_LANG['msgTwofactorEnabled'] = "Two Factor Authentication enabled";
 $PMF_LANG['msgTwofactorConfig'] = "Config Two Factor Authentication";
 $PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration Two Factor Authentication";
 $PMF_LANG['qr_code_secret_alt'] = "QR-Code Secret-Key";
-$PMF_LANG['msgTwofactorNewSecret'] = "Delete current secret?";
+$PMF_LANG['msgTwofactorNewSecret'] = "Remove current Two Factor-Configuration";
 $PMF_LANG['msgTwofactorTokenModelTitle'] = "Two Factor Authentication - Enter token:";
 $PMF_LANG['msgEnterTwofactorToken'] = "Enter 6-digits code from your authenticator app.";
 $PMF_LANG['msgTwofactorCheck'] = "Check";
@@ -1461,5 +1461,7 @@ $PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (seperate with commas)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove your current Two Factor Authentication-configuration?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 
 return $PMF_LANG;

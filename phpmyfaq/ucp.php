@@ -19,6 +19,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -103,6 +104,50 @@ if ($user->isLoggedIn()) {
         [
             'breadcrumbHeadline' => Translation::get('headerUserControlPanel')
         ]
+    );
+
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twigTemplate = $twig->loadTemplate('./ucp.twig');
+
+    // Twig template variables
+    $templateVars = [
+        'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
+        'msgGravatar' => Translation::get('msgGravatar'),
+        'ucpGravatarImage' => $gravatarImg,
+        'msgHeaderUserData' => Translation::get('headerUserControlPanel'),
+        'userid' => $user->getUserId(),
+        'csrf' => Token::getInstance()->getTokenInput('ucp'),
+        'lang' => $Language->getLanguage(),
+        'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
+        'msgRealName' => Translation::get('ad_user_name'),
+        'realname' => Strings::htmlentities($user->getUserData('display_name')),
+        'msgEmail' => Translation::get('msgNewContentMail'),
+        'email' => Strings::htmlentities($user->getUserData('email')),
+        'msgIsVisible' => Translation::get('ad_user_data_is_visible'),
+        'checked' => (int)$user->getUserData('is_visible') === 1 ? 'checked' : '',
+        'msgPassword' => Translation::get('ad_auth_passwd'),
+        'msgConfirm' => Translation::get('ad_user_confirm'),
+        'msgSave' => Translation::get('msgSave'),
+        'msgCancel' => Translation::get('msgCancel'),
+        'twofactor_enabled' => (bool)$user->getUserData('twofactor_enabled'),
+        'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
+        'msgTwofactorConfig' => Translation::get('msgTwofactorConfig'),
+        'msgTwofactorConfigModelTitle' => Translation::get('msgTwofactorConfigModelTitle'),
+        'twofactor_secret' => $secret,
+        'qr_code_secret' => $qrCode,
+        'qr_code_secret_alt' => Translation::get('qr_code_secret_alt'),
+        'msgTwofactorNewSecret' => Translation::get('msgTwofactorNewSecret'),
+        'msgWarning' => Translation::get('msgWarning'),
+        'ad_gen_yes' => Translation::get('ad_gen_yes'),
+        'ad_gen_no' => Translation::get('ad_gen_no'),
+        'msgConfirmTwofactorConfig' => Translation::get('msgConfirmTwofactorConfig'),
+        'csrfTokenRemoveTwofactor' => Token::getInstance()->getTokenString('remove-twofactor'),
+        'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected')
+    ];
+
+    $template->addRenderedTwigOutput(
+        'mainPageContent',
+        $twigTemplate->render($templateVars)
     );
 } else {
     // Redirect to log in
