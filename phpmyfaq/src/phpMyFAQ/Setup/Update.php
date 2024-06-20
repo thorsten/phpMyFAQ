@@ -714,8 +714,12 @@ class Update extends Setup
             bravobrian,archiver,w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,
             facebookcatalog/1.0,facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),
             facebookexternalhit/1.1']);
+
             // Add sender address for mail
-            $this->configuration->add('mail.noReplySenderAddress', '');
+            $this->configuration->add('mail.noReplySenderAddress', 'www.youtube.com');
+
+            // Add allowed external media hosts
+            $this->configuration->add('records.allowedMediaHosts', )
         }
     }
 

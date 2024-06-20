@@ -495,4 +495,14 @@ class Configuration
         }
         return true;
     }
+
+    /**
+     * Returns an array with allowed media hosts for records
+     *
+     * @return array
+     */
+    public function getAllowedMediaHosts(): array
+    {
+        return explode(',', $this->get('records.allowedMediaHosts'));
+    }
 }

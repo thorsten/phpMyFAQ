@@ -1460,7 +1460,7 @@ $PMF_LANG['msgTrendingFAQs'] = 'Trending FAQs';
 $PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
-$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (seperate with commas)'];
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (separate with commas)'];
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove your current Two Factor Authentication-configuration?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 

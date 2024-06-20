@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Export\Json;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
@@ -266,15 +265,20 @@ class UserController extends AbstractController
         }
 
         $user = CurrentUser::getCurrentUser($this->configuration);
-        $newSecret = $twofactor->generateSecret();
 
-        if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
-            return $this->json(
-                ['success' => 'Successful.'],
-                Response::HTTP_OK
-            );
+        if ($user->isLoggedIn()) {
+            $newSecret = $twofactor->generateSecret();
+
+            if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
+                return $this->json(
+                    ['success' => Translation::get('msgRemoveTwofactorConfigSuccessfull')],
+                    Response::HTTP_OK
+                );
+            } else {
+                return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+            }
         } else {
-            return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+            throw new Exception('The user is not logged in.');
         }
     }
 }
