@@ -716,10 +716,10 @@ class Update extends Setup
             facebookexternalhit/1.1']);
 
             // Add sender address for mail
-            $this->configuration->add('mail.noReplySenderAddress', 'www.youtube.com');
+            $this->configuration->add('mail.noReplySenderAddress', '');
 
             // Add allowed external media hosts
-            $this->configuration->add('records.allowedMediaHosts', )
+            $this->configuration->add('records.allowedMediaHosts', 'www.youtube.com');
         }
     }
 
