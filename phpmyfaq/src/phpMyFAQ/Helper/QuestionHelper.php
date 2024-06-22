@@ -45,12 +45,12 @@ class QuestionHelper
      */
     public function sendSuccessMail(array $questionData, array $categories): void
     {
-        $questionMail = Translation::get('msgNewQuestionAdded') . "\n\n User: " .
+        $questionMail = Translation::get('msgNewQuestionAdded') . "<br><br> User: " .
             $questionData['username'] .
-            ', ' . $questionData['email'] . "\n" . Translation::get('msgCategory') .
-            ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
+            ', ' . $questionData['email'] . "<br>" . Translation::get('msgCategory') .
+            ': ' . $categories[$questionData['category_id']]['name'] . "<br><br>" .
             Translation::get('msgAskYourQuestion') . ': ' .
-            wordwrap((string) $questionData['question'], 72) . "\n\n" .
+            wordwrap((string) $questionData['question'], 72) . "<br><br>" .
             $this->config->getDefaultUrl() . 'admin/';
 
         $userId = $this->category->getOwner($questionData['category_id']);
