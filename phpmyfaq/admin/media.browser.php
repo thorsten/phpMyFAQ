@@ -67,7 +67,7 @@ $images = [];
 if (is_dir(PMF_CONTENT_DIR . '/user/images')) {
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
     foreach ($files as $file) {
-        if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
+        if ($file->isDir() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
             continue;
         }
         $path = str_replace(dirname(__DIR__) . '/', '', (string)$file->getPath());
