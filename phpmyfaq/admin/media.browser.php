@@ -87,7 +87,7 @@ if (!$user->isLoggedIn() && $error) {
     } else {
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
         foreach ($files as $file) {
-            if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
+            if ($file->isDir() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
                 continue;
             }
             $path = str_replace(dirname(__DIR__) . '/', '', (string) $file->getPath());

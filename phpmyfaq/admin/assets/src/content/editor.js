@@ -234,7 +234,7 @@ export const renderEditor = () => {
       ],
       image_dimensions: true,
       images_upload_url: 'index.php?action=ajax&ajax=image&ajaxaction=upload',
-      automatic_uploads: false,
+      automatic_uploads: true,
     });
   }
 };
