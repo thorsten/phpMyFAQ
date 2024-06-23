@@ -155,6 +155,24 @@
           </div>
         </div>
       {% endif %}
+
+      <!-- SERP Title -->
+      <div class="row mb-2">
+        <label class="col-lg-2 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
+        <div class="col-lg-4">
+          <input type="text" name="serpTitle" id="serpTitle" value="" class="form-control">
+        </div>
+      </div>
+
+      <!-- SERP Description -->
+      <div class="row mb-2">
+        <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+        <div class="col-lg-4">
+                <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
+                ></textarea>
+        </div>
+      </div>
+
       <div class="row mb-2">
         <div class="offset-lg-2 col-lg-4 text-end">
           <button class="btn btn-primary" type="submit" name="submit">

@@ -22,8 +22,11 @@ use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -47,6 +50,7 @@ $categoryImage = new Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
 $categoryPermission = new Permission($faqConfig);
+$seo = new Seo($faqConfig);
 
 if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $templateVars = [
@@ -144,6 +148,16 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
 
             // All the other translations
             $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_SPECIAL_CHARS);
+
+            // SEO data
+            $seoEntity = new SeoEntity();
+            $seoEntity
+                ->setType(SeoType::CATEGORY)
+                ->setReferenceId($categoryId)
+                ->setReferenceLanguage($categoryLang)
+                ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+            $seo->create($seoEntity);
 
             $templateVars = [
                 ...$templateVars,
@@ -271,6 +285,17 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
                         ];
                     }
                 }
+
+                // SEO data
+                $seoEntity = new SeoEntity();
+                $seoEntity
+                    ->setType(SeoType::CATEGORY)
+                    ->setReferenceId($categoryId)
+                    ->setReferenceLanguage($categoryLang)
+                    ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+                $seo->update($seoEntity);
+
                 $templateVars = [
                     ...$templateVars,
                     'isSuccess' => true,

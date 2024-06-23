@@ -248,8 +248,10 @@ if (
 
     // SEO
     $seoEntity = new SeoEntity();
-    $seoEntity->setType(SeoType::FAQ);
-    $seoEntity->setReferenceId($faqData['id']);
+    $seoEntity
+        ->setType(SeoType::FAQ)
+        ->setReferenceId($faqData['id'])
+        ->setReferenceLanguage($faqData['lang']);
     $seoData = $seo->get($seoEntity);
     $faqData['serp-title'] = $seoData->getTitle();
     $faqData['serp-description'] = $seoData->getDescription();

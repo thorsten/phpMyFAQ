@@ -293,6 +293,7 @@ class Sqlsrv extends Database implements Driver
             id INT NOT NULL,
             type VARCHAR(32) NOT NULL,
             reference_id INT NOT NULL,
+            reference_language VARCHAR(5) NOT NULL,
             title TEXT NULL,
             description TEXT NULL,
             created DATE NOT NULL DEFAULT GETDATE(),

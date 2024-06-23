@@ -716,7 +716,7 @@ class Update extends Setup
             facebookexternalhit/1.1']);
             // Add sender address for mail
             $this->configuration->add('mail.noReplySenderAddress', '');
-            // New SEO table
+            // New SEO feature
             switch (Database::getType()) {
                 case 'mysqli':
                     $this->queries[] = sprintf(
@@ -724,6 +724,7 @@ class Update extends Setup
                             id INT(11) NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INT(11) NOT NULL,
+                            reference_language VARCHAR(5) NOT NULL,
                             title TEXT DEFAULT NULL,
                             description TEXT DEFAULT NULL,
                             created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -737,6 +738,7 @@ class Update extends Setup
                             id INT NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INT NOT NULL,
+                            reference_language VARCHAR(5) NOT NULL,
                             title TEXT NULL,
                             description TEXT NULL,
                             created DATE NOT NULL DEFAULT GETDATE(),
@@ -750,6 +752,7 @@ class Update extends Setup
                             id INT NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INT NOT NULL,
+                            reference_language VARCHAR(5) NOT NULL,
                             title TEXT NULL,
                             description TEXT NULL,
                             created DATE NOT NULL DEFAULT (date(\'now\')),
@@ -760,13 +763,14 @@ class Update extends Setup
                 case 'pgsql':
                     $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqseo (
-                                id INTEGER NOT NULL,
-                                type VARCHAR(32) NOT NULL,
-                                reference_id INTEGER NOT NULL,
-                                title TEXT,
-                                description TEXT,
-                                created DATE NOT NULL DEFAULT CURRENT_DATE,
-                                PRIMARY KEY (id))',
+                            id INTEGER NOT NULL,
+                            type VARCHAR(32) NOT NULL,
+                            reference_id INTEGER NOT NULL,
+                            reference_language VARCHAR(5) NOT NULL,
+                            title TEXT,
+                            description TEXT,
+                            created DATE NOT NULL DEFAULT CURRENT_DATE,
+                            PRIMARY KEY (id))',
                         Database::getTablePrefix()
                     );
                     break;

@@ -298,6 +298,7 @@ class Mysqli extends Database implements Driver
             id INT(11) NOT NULL,
             type VARCHAR(32) NOT NULL,
             reference_id INT(11) NOT NULL,
+            reference_language VARCHAR(5) NOT NULL,
             title TEXT DEFAULT NULL,
             description TEXT DEFAULT NULL,
             created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,

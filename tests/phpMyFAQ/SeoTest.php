@@ -32,6 +32,7 @@ class SeoTest extends TestCase
         $seo = new SeoEntity();
         $seo->setType(SeoType::FAQ)
             ->setReferenceId(1)
+            ->setReferenceLanguage('en')
             ->setTitle('Test Title')
             ->setDescription('Test Description');
 
@@ -45,6 +46,7 @@ class SeoTest extends TestCase
         $seo = new SeoEntity();
         $seo->setType(SeoType::FAQ)
             ->setReferenceId(1)
+            ->setReferenceLanguage('en')
             ->setTitle('Test Title')
             ->setDescription('Test Description');
         $this->seo->create($seo);
@@ -60,12 +62,14 @@ class SeoTest extends TestCase
         $seo = new SeoEntity();
         $seo->setType(SeoType::FAQ)
             ->setReferenceId(1)
+            ->setReferenceLanguage('en')
             ->setTitle('Test Title')
             ->setDescription('Test Description');
         $this->seo->create($seo);
 
         $seo->setType(SeoType::FAQ)
             ->setReferenceId(1)
+            ->setReferenceLanguage('en')
             ->setTitle('Updated Title')
             ->setDescription('Updated Description');
 
@@ -80,6 +84,7 @@ class SeoTest extends TestCase
         $seo = new SeoEntity();
         $seo->setType(SeoType::FAQ)
             ->setReferenceId(1)
+            ->setReferenceLanguage('en')
             ->setTitle('Test Title')
             ->setDescription('Test Description');
         $this->seo->create($seo);

@@ -39,11 +39,13 @@ readonly class Seo
     public function create(SeoEntity $seo): bool
     {
         $query = sprintf(
-            "INSERT INTO %sfaqseo (id, type, reference_id, title, description) VALUES (%d, '%s', %d, '%s', '%s')",
+            "INSERT INTO %sfaqseo (id, type, reference_id, reference_language, title, description) 
+                VALUES (%d, '%s', %d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
             $seo->getType()->value,
             $seo->getReferenceId(),
+            $seo->getReferenceLanguage(),
             $seo->getTitle(),
             $seo->getDescription(),
         );
@@ -57,10 +59,11 @@ readonly class Seo
     public function get(SeoEntity $seo): SeoEntity
     {
         $query = sprintf(
-            "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d",
+            "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
             $seo->getType()->value,
             $seo->getReferenceId(),
+            $seo->getReferenceLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -80,12 +83,14 @@ readonly class Seo
     public function update(SeoEntity $seo): bool
     {
         $query = sprintf(
-            "UPDATE %sfaqseo SET title = '%s', description = '%s' WHERE type = '%s' AND reference_id = %d",
+            "UPDATE %sfaqseo SET title = '%s', description = '%s' 
+                WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
             $seo->getTitle(),
             $seo->getDescription(),
             $seo->getType()->value,
             $seo->getReferenceId(),
+            $seo->getReferenceLanguage(),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -94,10 +99,11 @@ readonly class Seo
     public function delete(SeoEntity $seo): bool
     {
         $query = sprintf(
-            "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d",
+            "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
             $seo->getType()->value,
             $seo->getReferenceId(),
+            $seo->getReferenceLanguage(),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

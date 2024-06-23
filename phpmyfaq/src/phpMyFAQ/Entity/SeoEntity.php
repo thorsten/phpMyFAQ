@@ -25,6 +25,7 @@ class SeoEntity
     private int $id;
     private SeoType $type;
     private int $referenceId;
+    private string $referenceLanguage;
     private string $title;
     private string $description;
     private DateTime $created;
@@ -59,6 +60,17 @@ class SeoEntity
     public function setReferenceId(int $referenceId): SeoEntity
     {
         $this->referenceId = $referenceId;
+        return $this;
+    }
+
+    public function getReferenceLanguage(): string
+    {
+        return $this->referenceLanguage;
+    }
+
+    public function setReferenceLanguage(string $referenceLanguage): SeoEntity
+    {
+        $this->referenceLanguage = $referenceLanguage;
         return $this;
     }
 

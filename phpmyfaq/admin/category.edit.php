@@ -18,9 +18,12 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
@@ -45,12 +48,18 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $category->setGroups($currentAdminGroups);
 
     $categoryPermission = new Permission($faqConfig);
-
     $userHelper = new UserHelper($currentUser);
 
     $categoryData = $category->getCategoryData($categoryId);
-    $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
 
+    $seo = new Seo($faqConfig);
+    $seoEntity = new SeoEntity();
+    $seoEntity->setType(SeoType::CATEGORY);
+    $seoEntity->setReferenceId($categoryId);
+    $seoEntity->setReferenceLanguage($categoryData->getLang());
+    $seoData = $seo->get($seoEntity);
+
+    $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
     if ($userPermission[0] == -1) {
         $allUsers = true;
         $restrictedUsers = false;
@@ -105,6 +114,10 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'restrictedUsers' => $restrictedUsers ? 'checked' : '',
         'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
         'allUsersOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
+        'msgSerpTitle' => Translation::get('msgSerpTitle'),
+        'serpTitle' => $seoData->getTitle(),
+        'msgSerpDescription' => Translation::get('msgSerpDescription'),
+        'serpDescription' => $seoData->getDescription(),
         'buttonUpdate' => Translation::get('ad_categ_update'),
     ];
 

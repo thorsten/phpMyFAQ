@@ -177,6 +177,7 @@ class FaqController extends AbstractController
             $seoEntity
                 ->setType(SeoType::FAQ)
                 ->setReferenceId($faqData->getId())
+                ->setReferenceLanguage($faqData->getLanguage())
                 ->setTitle($serpTitle)
                 ->setDescription($serpDescription);
             $seo->create($seoEntity);
@@ -378,6 +379,7 @@ class FaqController extends AbstractController
         $seoEntity
             ->setType(SeoType::FAQ)
             ->setReferenceId($faqData->getId())
+            ->setReferenceLanguage($faqData->getLanguage())
             ->setTitle($serpTitle)
             ->setDescription($serpDescription);
         $seo->update($seoEntity);
