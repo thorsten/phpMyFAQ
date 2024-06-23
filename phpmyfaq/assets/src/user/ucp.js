@@ -13,8 +13,9 @@
  * @since     2024-03-03
  */
 
-import { updateUserControlPanelData } from '../api';
+import { removeTwofactorConfig, updateUserControlPanelData } from '../api';
 import { addElement } from '../utils';
+import { pushErrorNotification, pushNotification } from "../../../admin/assets/src/utils";
 
 export const handleUserControlPanel = () => {
   const userControlPanelSubmit = document.getElementById('pmf-submit-user-control-panel');
@@ -47,5 +48,22 @@ export const handleUserControlPanel = () => {
         );
       }
     });
+
+    const confirmRemoveTwofactor = document.getElementById('pmf-remove-twofactor-confirm');
+    if (confirmRemoveTwofactor) {
+      confirmRemoveTwofactor.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const csrfToken = document.getElementById('pmf-csrf-token-remove-twofactor');
+        const response = await removeTwofactorConfig(csrfToken.value);
+        if (response.success) {
+          pushNotification(response.success);
+          document.getElementById('twofactor_enabled').checked = false;
+          document.getElementById('removeCurrentConfig').style.display = 'none';
+        }
+        if (response.error) {
+          pushErrorNotification(response.error);
+        }
+      });
+    }
   }
 };

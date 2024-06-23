@@ -71,3 +71,24 @@ export const requestUserRemoval = async (data) => {
     console.error(error);
   }
 };
+
+export const removeTwofactorConfig = async (csrfToken) => {
+  try {
+    const response = await fetch('api/user/remove-twofactor', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};

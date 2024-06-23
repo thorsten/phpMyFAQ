@@ -220,6 +220,8 @@ class FaqHelper extends Helper
     public function cleanUpContent(string $content): string
     {
         $contentLength = strlen($content);
+        $allowedMediaHosts = $this->configuration->getAllowedMediaHosts();
+        $allowedMediaHosts[] = Request::createFromGlobals()->getHost();
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())
                 ->withMaxInputLength($contentLength + 1)
@@ -230,12 +232,7 @@ class FaqHelper extends Helper
                 ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-                ->allowMediaHosts(
-                    [
-                        Request::createFromGlobals()->getHost(),
-                        'www.youtube.com'
-                    ]
-                )
+                ->allowMediaHosts($allowedMediaHosts)
         );
 
         return $htmlSanitizer->sanitize($content);

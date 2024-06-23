@@ -251,6 +251,11 @@ $routesConfig = [
         'controller' => [UserController::class, 'requestUserRemoval'],
         'methods' => 'POST'
     ],
+    'api.private.user.remove-twofactor' => [
+        'path' => 'user/remove-twofactor',
+        'controller' => [UserController::class, 'removeTwofactorConfig'],
+        'methods' => 'POST'
+    ],
     'api.private.user.update' => [
         'path' => 'user/data/update',
         'controller' => [UserController::class, 'updateData'],

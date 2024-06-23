@@ -25,6 +25,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,11 +60,9 @@ class UserController extends AbstractController
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
-        $deleteSecret = Filter::filterVar($data->newsecret ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $isAzureAdUser = $user->getUserAuthSource() === 'azure';
 
-        $secret = $deleteSecret === 'on' ? '' : $user->getUserData('secret');
 
         if ($userId !== $user->getUserId()) {
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
@@ -84,8 +83,7 @@ class UserController extends AbstractController
                     'display_name' => $userName,
                     'email' => $email,
                     'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
-                    'secret' => $secret
+                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
                 ];
 
                 $success = $user->setUserData($userData);
@@ -249,6 +247,38 @@ class UserController extends AbstractController
             }
         } else {
             return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('api/user/remove-twofactor', methods: ['POST'])]
+    public function removeTwofactorConfig(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent());
+        $twofactor = new TwoFactor($this->configuration);
+
+        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance()->verifyToken('remove-twofactor', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $user = CurrentUser::getCurrentUser($this->configuration);
+
+        if ($user->isLoggedIn()) {
+            $newSecret = $twofactor->generateSecret();
+
+            if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
+                return $this->json(
+                    ['success' => Translation::get('msgRemoveTwofactorConfigSuccessfull')],
+                    Response::HTTP_OK
+                );
+            } else {
+                return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+            }
+        } else {
+            throw new Exception('The user is not logged in.');
         }
     }
 }
