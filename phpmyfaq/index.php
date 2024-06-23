@@ -116,7 +116,11 @@ $error = null;
 $loginVisibility = 'hidden';
 
 $faqusername = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
-$faqpassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+$faqpassword = Filter::filterVar(
+    $request->request->get('faqpassword'),
+    FILTER_SANITIZE_SPECIAL_CHARS,
+    FILTER_FLAG_NO_ENCODE_QUOTES
+);
 $faqaction = Filter::filterVar($request->request->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 $rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 $token = Filter::filterVar($request->request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -357,7 +361,7 @@ if ($id !== 0) {
     $faqLink->itemTitle = $faq->faqRecord['title'];
     $currentPageUrl = $faqLink->toString(true);
 } else {
-    $title = ' - ' . System::getPoweredByString();
+    $title = '';
     $keywords = '';
     $metaDescription = str_replace('"', '', (string)$faqConfig->get('main.metaDescription'));
 }
@@ -367,7 +371,6 @@ if ($id !== 0) {
 //
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 if ($solutionId) {
-    $title = ' - ' . System::getPoweredByString();
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
     $id = $faqData['id'];
@@ -425,7 +428,7 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 
-if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
+if (isset($cat) && ($cat != 0) && isset($category->categoryName[$cat]['name'])) {
     $title = ' - ' . $category->categoryName[$cat]['name'];
     $metaDescription = $category->categoryName[$cat]['description'];
 }

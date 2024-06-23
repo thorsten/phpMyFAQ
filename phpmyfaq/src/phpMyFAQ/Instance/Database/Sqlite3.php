@@ -289,6 +289,15 @@ class Sqlite3 extends Database implements Driver
             searchdate DATETIME,
             PRIMARY KEY (id, lang))',
 
+        'faqseo' => 'CREATE TABLE %sfaqseo (
+            id INT NOT NULL,
+            type VARCHAR(32) NOT NULL,
+            reference_id INT NOT NULL,
+            title TEXT NULL,
+            description TEXT NULL,
+            created DATE NOT NULL DEFAULT (date(\'now\')),
+            PRIMARY KEY (id))',
+
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
