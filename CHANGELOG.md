@@ -29,6 +29,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - improved session timout warning for admins (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
+- removed HTML5 export (Thorsten)
 - removed REST API v2 (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
 - migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)

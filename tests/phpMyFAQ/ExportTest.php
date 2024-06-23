@@ -4,7 +4,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
 use PHPUnit\Framework\TestCase;
@@ -48,15 +47,6 @@ class ExportTest extends TestCase
     {
         $pdf = Export::create($this->faq, $this->category, $this->configuration);
         $this->assertInstanceOf(Pdf::class, $pdf);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testCreateHtml5(): void
-    {
-        $html5 = Export::create($this->faq, $this->category, $this->configuration, 'html5');
-        $this->assertInstanceOf(Html5::class, $html5);
     }
 
     /**
