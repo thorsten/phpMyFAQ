@@ -382,7 +382,18 @@ class FaqController extends AbstractController
             ->setReferenceLanguage($faqData->getLanguage())
             ->setTitle($serpTitle)
             ->setDescription($serpDescription);
-        $seo->update($seoEntity);
+
+        if ($seo->get($seoEntity)->getId() === null) {
+            $seoEntity
+                ->setTitle($serpTitle)
+                ->setDescription($serpDescription);
+            $seo->create($seoEntity);
+        } else {
+            $seoEntity
+                ->setTitle($serpTitle)
+                ->setDescription($serpDescription);
+            $seo->update($seoEntity);
+        }
 
         // Add user permissions
         $faqPermission->delete(FaqPermission::USER, $faqData->getId());

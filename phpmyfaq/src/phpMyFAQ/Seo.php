@@ -29,13 +29,14 @@ use phpMyFAQ\Entity\SeoEntity;
  */
 readonly class Seo
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private Configuration $configuration)
     {
     }
 
+    /**
+     * @param SeoEntity $seo
+     * @return bool True if the SEO entity was created
+     */
     public function create(SeoEntity $seo): bool
     {
         $query = sprintf(
@@ -45,15 +46,17 @@ readonly class Seo
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
             $seo->getType()->value,
             $seo->getReferenceId(),
-            $seo->getReferenceLanguage(),
-            $seo->getTitle(),
-            $seo->getDescription(),
+            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
+            $this->configuration->getDb()->escape($seo->getTitle()),
+            $this->configuration->getDb()->escape($seo->getDescription()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
+     * @param SeoEntity $seo
+     * @return SeoEntity
      * @throws Exception
      */
     public function get(SeoEntity $seo): SeoEntity
@@ -63,7 +66,7 @@ readonly class Seo
             Database::getTablePrefix(),
             $seo->getType()->value,
             $seo->getReferenceId(),
-            $seo->getReferenceLanguage(),
+            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -80,22 +83,30 @@ readonly class Seo
         return $seo;
     }
 
+    /**
+     * @param SeoEntity $seo
+     * @return bool True if the SEO entity was updated
+     */
     public function update(SeoEntity $seo): bool
     {
         $query = sprintf(
             "UPDATE %sfaqseo SET title = '%s', description = '%s' 
                 WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seo->getTitle(),
-            $seo->getDescription(),
+            $this->configuration->getDb()->escape($seo->getTitle()),
+            $this->configuration->getDb()->escape($seo->getDescription()),
             $seo->getType()->value,
             $seo->getReferenceId(),
-            $seo->getReferenceLanguage(),
+            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
     }
 
+    /**
+     * @param SeoEntity $seo
+     * @return bool True if the SEO entity was deleted
+     */
     public function delete(SeoEntity $seo): bool
     {
         $query = sprintf(
@@ -103,7 +114,7 @@ readonly class Seo
             Database::getTablePrefix(),
             $seo->getType()->value,
             $seo->getReferenceId(),
-            $seo->getReferenceLanguage(),
+            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

@@ -294,7 +294,12 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
                     ->setReferenceLanguage($categoryLang)
                     ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
                     ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
-                $seo->update($seoEntity);
+
+                if ($seo->get($seoEntity)->getId() === null) {
+                    $seo->create($seoEntity);
+                } else {
+                    $seo->update($seoEntity);
+                }
 
                 $templateVars = [
                     ...$templateVars,

@@ -25,7 +25,9 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
@@ -244,23 +246,11 @@ if ($request->headers->get('user-agent') !== null) {
 if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
-        try {
-            $faqSession->userTracking('new_session', 0);
-        } catch (Exception $e) {
-            $pmfExceptions[] = $e->getMessage();
-        }
+        $faqSession->userTracking('new_session', 0);
     } elseif (!is_null($sidCookie)) {
-        try {
-            $faqSession->checkSessionId($sidCookie, $request->getClientIp());
-        } catch (Exception $e) {
-            $pmfExceptions[] = $e->getMessage();
-        }
+        $faqSession->checkSessionId($sidCookie, $request->getClientIp());
     } else {
-        try {
-            $faqSession->checkSessionId($sidGet, $request->getClientIp());
-        } catch (Exception $e) {
-            $pmfExceptions[] = $e->getMessage();
-        }
+        $faqSession->checkSessionId($sidGet, $request->getClientIp());
     }
 }
 
@@ -334,6 +324,13 @@ $category
 $oTag = new Tags($faqConfig);
 
 //
+// Create new SEO objects
+//
+$seo = new Seo($faqConfig);
+$seoEntity = new SeoEntity();
+$seoEntity->setReferenceLanguage($lang);
+
+//
 // Create URL
 //
 $faqSystem = new System();
@@ -346,9 +343,15 @@ $currentPageUrl = Strings::htmlentities($faqLink->getCurrentUrl());
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 if ($id !== 0) {
     $faq->getRecord($id);
-    $title = ' - ' . $faq->faqRecord['title'];
+
+    $seoEntity
+        ->setType(SeoType::FAQ)
+        ->setReferenceId($id);
+    $seoData = $seo->get($seoEntity);
+
+    $title = ' - ' . $seoData->getTitle();
     $keywords = ',' . $faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', strip_tags($faq->getAnswerPreview($id)));
+    $metaDescription = str_replace('"', '', $seoData->getDescription() ?? '');
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -363,7 +366,7 @@ if ($id !== 0) {
 } else {
     $title = '';
     $keywords = '';
-    $metaDescription = str_replace('"', '', (string)$faqConfig->get('main.metaDescription'));
+    $metaDescription = str_replace('"', '', $faqConfig->get('seo.description'));
 }
 
 //
@@ -375,9 +378,16 @@ if ($solutionId) {
     $faqData = $faq->getIdFromSolutionId($solutionId);
     $id = $faqData['id'];
     $lang = $faqData['lang'];
-    $title = ' - ' . $faq->getQuestion($id);
+
+    $seoEntity
+        ->setType(SeoType::FAQ)
+        ->setReferenceId($id)
+        ->setReferenceLanguage($lang);
+    $seoData = $seo->get($seoEntity);
+
+    $title = ' - ' . $seoData->getTitle();
     $keywords = ',' . $faq->getKeywords($id);
-    $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags((string)$faqData['content']), 12));
+    $metaDescription = str_replace('"', '', $seoData->getDescription());
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         Strings::htmlentities($faqConfig->getDefaultUrl()),
@@ -428,9 +438,13 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 
-if (isset($cat) && ($cat != 0) && isset($category->categoryName[$cat]['name'])) {
-    $title = ' - ' . $category->categoryName[$cat]['name'];
-    $metaDescription = $category->categoryName[$cat]['description'];
+if (isset($cat) && ($cat !== 0) && ($id === 0) && isset($category->categoryName[$cat]['name'])) {
+    $seoEntity
+        ->setType(SeoType::CATEGORY)
+        ->setReferenceId($cat);
+    $seoData = $seo->get($seoEntity);
+    $title = ' - ' . $seoData->getTitle() ?? $category->categoryName[$cat]['name'];
+    $metaDescription = $seoData->getDescription() ?? $category->categoryName[$cat]['description'];
 }
 
 //
@@ -519,7 +533,6 @@ $keywords = implode(',', $keywordsArray);
 
 $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
 
-$faqSeo = new Seo($faqConfig);
 
 if ($faqConfig->get('security.enableRegistration')) {
     $template->parseBlock(
@@ -543,16 +556,16 @@ if ($faqConfig->isSignInWithMicrosoftActive()) {
 
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
-    'title' => Strings::htmlspecialchars($faqConfig->getTitle() . $title),
+    'title' => Strings::htmlspecialchars($faqConfig->get('seo.title') . $title),
     'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
     'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
     'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
-    'metaDescription' => Strings::htmlentities($metaDescription ?? ''),
+    'metaDescription' => Strings::htmlentities($metaDescription ?? $faqConfig->get('seo.description')),
     'metaKeywords' => Strings::htmlentities($keywords),
     'metaPublisher' => Strings::htmlentities($faqConfig->get('main.metaPublisher')),
     'metaLanguage' => Translation::get('metaLanguage'),
-    'metaRobots' => $faqSeo->getMetaRobots($action),
+    'metaRobots' => $seo->getMetaRobots($action),
     'phpmyfaqVersion' => $faqConfig->getVersion(),
     'stylesheet' => Translation::get('dir') == 'rtl' ? 'style.rtl' : 'style',
     'currentPageUrl' => $currentPageUrl,

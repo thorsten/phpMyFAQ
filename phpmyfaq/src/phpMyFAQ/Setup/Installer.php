@@ -386,6 +386,8 @@ class Installer extends Setup
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
 
+        'seo.title' => 'phpMyFAQ Codename Pallas',
+        'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
         'seo.metaTagsCategories' => 'index, follow',

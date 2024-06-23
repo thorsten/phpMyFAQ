@@ -717,6 +717,8 @@ class Update extends Setup
             // Add sender address for mail
             $this->configuration->add('mail.noReplySenderAddress', '');
             // New SEO feature
+            $this->configuration->add('seo.title', $this->configuration->get('main.titleFAQ'));
+            $this->configuration->add('seo.description', $this->configuration->get('main.metaDescription'));
             switch (Database::getType()) {
                 case 'mysqli':
                     $this->queries[] = sprintf(

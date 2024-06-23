@@ -1461,5 +1461,7 @@ $PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
 $PMF_LANG['msgSerp'] = 'SERP is the abbreviation for Search Engine Result Page. Here you can define the title and description for the SERP.';
 $PMF_LANG['msgSerpTitle'] = 'SERP title';
 $PMF_LANG['msgSerpDescription'] = 'SERP description';
+$LANG_CONF['seo.title'] = ['input', 'SERP title'];
+$LANG_CONF['seo.description'] = ['area', 'SERP description'];
 
 return $PMF_LANG;
