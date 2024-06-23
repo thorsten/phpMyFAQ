@@ -292,7 +292,7 @@ class Pgsql extends Database implements Driver
             searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang))',
 
-        'faqseo' => 'CREATE TABLE faqseo (
+        'faqseo' => 'CREATE TABLE %sfaqseo (
             id INTEGER NOT NULL,
             type VARCHAR(32) NOT NULL,
             reference_id INTEGER NOT NULL,

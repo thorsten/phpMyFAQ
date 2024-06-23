@@ -716,6 +716,61 @@ class Update extends Setup
             facebookexternalhit/1.1']);
             // Add sender address for mail
             $this->configuration->add('mail.noReplySenderAddress', '');
+            // New SEO table
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqseo (
+                            id INT(11) NOT NULL,
+                            type VARCHAR(32) NOT NULL,
+                            reference_id INT(11) NOT NULL,
+                            title TEXT DEFAULT NULL,
+                            description TEXT DEFAULT NULL,
+                            created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqseo (
+                            id INT NOT NULL,
+                            type VARCHAR(32) NOT NULL,
+                            reference_id INT NOT NULL,
+                            title TEXT NULL,
+                            description TEXT NULL,
+                            created DATE NOT NULL DEFAULT GETDATE(),
+                            PRIMARY KEY (id))',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqseo (
+                            id INT NOT NULL,
+                            type VARCHAR(32) NOT NULL,
+                            reference_id INT NOT NULL,
+                            title TEXT NULL,
+                            description TEXT NULL,
+                            created DATE NOT NULL DEFAULT (date(\'now\')),
+                            PRIMARY KEY (id))',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqseo (
+                                id INTEGER NOT NULL,
+                                type VARCHAR(32) NOT NULL,
+                                reference_id INTEGER NOT NULL,
+                                title TEXT,
+                                description TEXT,
+                                created DATE NOT NULL DEFAULT CURRENT_DATE,
+                                PRIMARY KEY (id))',
+                        Database::getTablePrefix()
+                    );
+                    break;
+            }
         }
     }
 

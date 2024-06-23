@@ -26,6 +26,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added CSV export of user sessions (Jan Harms)
 - added experimental support for PHP 8.4 (Thorsten)
 - improved installation and update (Thorsten)
+- improved SEO support (Thorsten)
 - improved session timout warning for admins (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
