@@ -44,6 +44,7 @@ $templateVars = [
     'isUserLoggedIn' => $user->isLoggedIn(),
     'currentLanguage' => $faqLangCode,
     'currentTimeStamp' => time(),
+    'currentYear' => date('Y'),
 ];
 
 echo $template->render($templateVars);

@@ -1438,5 +1438,8 @@ $PMF_LANG['msgNoLogMeOut'] = 'Nein, logge mich aus';
 $PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, ich will eingeloggt bleiben';
 $PMF_LANG['msgTrendingFAQs'] = 'FAQ Trends';
 $PMF_LANG['msgGenerateApiClientToken'] = 'Erstelle einen API Client Token';
+$PMF_LANG['msgSerp'] = 'SERP ist die Abkürzung von Search Engine Result Page. Hier kannst du den Titel und die Beschreibung für die SERP festlegen.';
+$PMF_LANG['msgSerpTitle'] = 'SERP Titel';
+$PMF_LANG['msgSerpDescription'] = 'SERP Beschreibung';
 
 return $PMF_LANG;
