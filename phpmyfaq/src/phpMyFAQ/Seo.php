@@ -18,6 +18,10 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
+use Exception;
+use phpMyFAQ\Entity\SeoEntity;
+
 /**
  * Class Seo
  *
@@ -30,6 +34,73 @@ readonly class Seo
      */
     public function __construct(private Configuration $configuration)
     {
+    }
+
+    public function create(SeoEntity $seo): bool
+    {
+        $query = sprintf(
+            "INSERT INTO %sfaqseo (id, type, reference_id, title, description) VALUES (%d, '%s', %d, '%s', '%s')",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
+            $seo->getType()->value,
+            $seo->getReferenceId(),
+            $seo->getTitle(),
+            $seo->getDescription(),
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function get(SeoEntity $seo): SeoEntity
+    {
+        $query = sprintf(
+            "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d",
+            Database::getTablePrefix(),
+            $seo->getType()->value,
+            $seo->getReferenceId(),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($this->configuration->getDb()->numRows($result) > 0) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+                $seo->setId($row->id)
+                    ->setTitle($row->title)
+                    ->setDescription($row->description)
+                    ->setCreated(new DateTime($row->created));
+            }
+        }
+
+        return $seo;
+    }
+
+    public function update(SeoEntity $seo): bool
+    {
+        $query = sprintf(
+            "UPDATE %sfaqseo SET title = '%s', description = '%s' WHERE type = '%s' AND reference_id = %d",
+            Database::getTablePrefix(),
+            $seo->getTitle(),
+            $seo->getDescription(),
+            $seo->getType()->value,
+            $seo->getReferenceId(),
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    public function delete(SeoEntity $seo): bool
+    {
+        $query = sprintf(
+            "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d",
+            Database::getTablePrefix(),
+            $seo->getType()->value,
+            $seo->getReferenceId(),
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     public function getMetaRobots(string $action): string

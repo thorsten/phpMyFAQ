@@ -23,7 +23,9 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -32,6 +34,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Question;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -80,6 +83,8 @@ if (
     $changelog = new Changelog($faqConfig);
     $userHelper = new UserHelper($user);
     $tagging = new Tags($faqConfig);
+    $seo = new Seo($faqConfig);
+
     $date = new Date($faqConfig);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
@@ -240,6 +245,14 @@ if (
         $allGroups = false;
         $restrictedGroups = true;
     }
+
+    // SEO
+    $seoEntity = new SeoEntity();
+    $seoEntity->setType(SeoType::FAQ);
+    $seoEntity->setReferenceId($faqData['id']);
+    $seoData = $seo->get($seoEntity);
+    $faqData['serp-title'] = $seoData->getTitle();
+    $faqData['serp-description'] = $seoData->getDescription();
 
     // Set data for forms
     $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities(

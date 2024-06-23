@@ -3,11 +3,14 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Enums\SeoType;
 use PHPUnit\Framework\TestCase;
 
 class SeoTest extends TestCase
 {
     private Seo $seo;
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +26,70 @@ class SeoTest extends TestCase
 
         $this->seo = new Seo($configuration);
     }
-    public function testGetMetaRobots()
+
+    public function testCreate(): void
+    {
+        $seo = new SeoEntity();
+        $seo->setType(SeoType::FAQ)
+            ->setReferenceId(1)
+            ->setTitle('Test Title')
+            ->setDescription('Test Description');
+
+        $result = $this->seo->create($seo);
+
+        $this->assertTrue($result);
+    }
+
+    public function testGet(): void
+    {
+        $seo = new SeoEntity();
+        $seo->setType(SeoType::FAQ)
+            ->setReferenceId(1)
+            ->setTitle('Test Title')
+            ->setDescription('Test Description');
+        $this->seo->create($seo);
+
+        $result = $this->seo->get($seo);
+
+        $this->assertInstanceOf(SeoEntity::class, $result);
+        $this->assertEquals('Test Title', $result->getTitle());
+    }
+
+    public function testUpdate(): void
+    {
+        $seo = new SeoEntity();
+        $seo->setType(SeoType::FAQ)
+            ->setReferenceId(1)
+            ->setTitle('Test Title')
+            ->setDescription('Test Description');
+        $this->seo->create($seo);
+
+        $seo->setType(SeoType::FAQ)
+            ->setReferenceId(1)
+            ->setTitle('Updated Title')
+            ->setDescription('Updated Description');
+
+        $result = $this->seo->update($seo);
+
+        $this->assertTrue($result);
+        $this->assertEquals('Updated Title', $seo->getTitle());
+    }
+
+    public function testDelete(): void
+    {
+        $seo = new SeoEntity();
+        $seo->setType(SeoType::FAQ)
+            ->setReferenceId(1)
+            ->setTitle('Test Title')
+            ->setDescription('Test Description');
+        $this->seo->create($seo);
+
+        $result = $this->seo->delete($seo);
+
+        $this->assertTrue($result);
+    }
+
+    public function testGetMetaRobots(): void
     {
         $this->assertSame('index,follow', $this->seo->getMetaRobots('main'));
         $this->assertSame('noindex,nofollow', $this->seo->getMetaRobots('faq'));
