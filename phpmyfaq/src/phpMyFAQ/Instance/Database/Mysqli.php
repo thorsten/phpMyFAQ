@@ -294,6 +294,16 @@ class Mysqli extends Database implements Driver
             searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 
+        'faqseo' => 'CREATE TABLE %sfaqseo (
+            id INT(11) NOT NULL,
+            type VARCHAR(32) NOT NULL,
+            reference_id INT(11) NOT NULL,
+            reference_language VARCHAR(5) NOT NULL,
+            title TEXT DEFAULT NULL,
+            description TEXT DEFAULT NULL,
+            created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid INT(11) NOT NULL,
             user_id INT(11) NOT NULL,

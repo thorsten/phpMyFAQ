@@ -114,7 +114,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         [
             'categoryHeader' => Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName()),
             'categoryFaqsHeader' => $categoryData->getName(),
-            'categoryDescription' => Strings::htmlentities($categoryData->getDescription() ?? ''),
+            'categoryDescription' => Strings::htmlspecialchars($categoryData->getDescription() ?? ''),
             'categorySubsHeader' => Translation::get('msgSubCategories'),
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,

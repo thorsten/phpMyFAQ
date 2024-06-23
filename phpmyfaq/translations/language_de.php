@@ -1438,6 +1438,11 @@ $PMF_LANG['msgNoLogMeOut'] = 'Nein, logge mich aus';
 $PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, ich will eingeloggt bleiben';
 $PMF_LANG['msgTrendingFAQs'] = 'FAQ Trends';
 $PMF_LANG['msgGenerateApiClientToken'] = 'Erstelle einen API Client Token';
+$PMF_LANG['msgSerp'] = 'SERP ist die Abkürzung von Search Engine Result Page. Hier kannst du den Titel und die Beschreibung für die SERP festlegen.';
+$PMF_LANG['msgSerpTitle'] = 'SERP Titel';
+$PMF_LANG['msgSerpDescription'] = 'SERP Beschreibung';
+$LANG_CONF['seo.title'] = ['input', 'SERP Titel'];
+$LANG_CONF['seo.description'] = ['area', 'SERP Beschreibung'];
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Erlaubte externe Hosts für Medieninhalte (Mit Kommas trennen)'];

@@ -35,7 +35,7 @@ use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
-use phpMyFAQ\Instance\Master;
+use phpMyFAQ\Instance\Main;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Ldap;
 use phpMyFAQ\Link;
@@ -387,6 +387,8 @@ class Installer extends Setup
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
 
+        'seo.title' => 'phpMyFAQ Codename Pallas',
+        'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
         'seo.metaTagsCategories' => 'index, follow',
@@ -1179,8 +1181,8 @@ class Installer extends Setup
         $faqInstance = new Instance($configuration);
         $faqInstance->create($instanceEntity);
 
-        $faqInstanceMaster = new Master($configuration);
-        $faqInstanceMaster->createMaster($faqInstance);
+        $faqMainInstance = new Main($configuration);
+        $faqMainInstance->createMain($faqInstance);
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {

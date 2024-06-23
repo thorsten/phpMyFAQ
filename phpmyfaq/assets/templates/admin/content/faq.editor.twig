@@ -35,6 +35,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#tab-seo" role="tab">
+              <i class="bi bi-graph-up"></i> {{ msgSeoCenter }}
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
               <i class="bi bi-unlock"></i> {{ ad_record_permissions }}
             </a>
@@ -218,6 +223,30 @@
               </div>
             </div>
             
+          </div>
+
+          <div class="tab-pane" id="tab-seo">
+
+            <div class="row mb-2">
+              <p>{{ msgSerp }}</p>
+            </div>
+
+            <!-- SERP Title -->
+            <div class="row mb-2">
+              <label class="col-lg-3 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
+              <div class="col-lg-9">
+                <input type="text" name="serpTitle" id="serpTitle" value="{{ faqData['serp-title'] }}" class="form-control">
+              </div>
+            </div>
+
+            <!-- SERP Description -->
+            <div class="row mb-2">
+              <label class="col-lg-3 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+              <div class="col-lg-9">
+                <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
+                >{{ faqData['serp-description'] }}</textarea>
+              </div>
+            </div>
           </div>
 
           <div class="tab-pane" id="tab-permissions">

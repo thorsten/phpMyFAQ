@@ -24,9 +24,9 @@ use phpMyFAQ\Instance;
  *
  * @package phpMyFAQ\Instance
  */
-class Master extends Instance
+class Main extends Instance
 {
-    public function createMaster(Instance $instance)
+    public function createMain(Instance $instance): void
     {
         $this->setId($instance->getId());
         $this->addConfig('isMaster', 'true');

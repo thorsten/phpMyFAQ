@@ -23,7 +23,9 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -32,6 +34,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Question;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -80,6 +83,8 @@ if (
     $changelog = new Changelog($faqConfig);
     $userHelper = new UserHelper($user);
     $tagging = new Tags($faqConfig);
+    $seo = new Seo($faqConfig);
+
     $date = new Date($faqConfig);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
@@ -241,6 +246,16 @@ if (
         $restrictedGroups = true;
     }
 
+    // SEO
+    $seoEntity = new SeoEntity();
+    $seoEntity
+        ->setType(SeoType::FAQ)
+        ->setReferenceId($faqData['id'])
+        ->setReferenceLanguage($faqData['lang']);
+    $seoData = $seo->get($seoEntity);
+    $faqData['serp-title'] = $seoData->getTitle();
+    $faqData['serp-description'] = $seoData->getDescription();
+
     // Set data for forms
     $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities(
         $faqData['title'],
@@ -387,6 +402,10 @@ if (
         'ad_entry_keywords' => Translation::get('ad_entry_keywords'),
         'ad_entry_author' => Translation::get('ad_entry_author'),
         'ad_entry_email' => Translation::get('ad_entry_email'),
+        'msgSeoCenter' => Translation::get('seoCenter'),
+        'msgSerp' => Translation::get('msgSerp'),
+        'msgSerpTitle' => Translation::get('msgSerpTitle'),
+        'msgSerpDescription' => Translation::get('msgSerpDescription'),
         'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
         'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
         'allGroups' => $allGroups,

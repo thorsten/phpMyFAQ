@@ -16,7 +16,6 @@
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
@@ -42,7 +41,7 @@ $templateVars = [
     'loginHeader' => Translation::get('msgLoginUser'),
     'sendPassword' => Translation::get('lostPassword'),
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
+    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
     'faqloginaction' => $action,
     'login' => Translation::get('ad_auth_ok'),
     'username' => Translation::get('ad_auth_user'),

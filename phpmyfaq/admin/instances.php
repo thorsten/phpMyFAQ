@@ -77,9 +77,9 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         }
     }
 
-    $masterConfig = [];
+    $mainConfig = [];
     foreach ($instance->getAll() as $site) {
-        $masterConfig[$site->id] = $instance->getInstanceConfig($site->id)['isMaster'];
+        $mainConfig[$site->id] = $instance->getInstanceConfig($site->id)['isMaster'];
     }
 
     $templateVars = [
@@ -89,7 +89,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         'allInstances' => $instance->getAll(),
         'csrfTokenDeleteInstance' => Token::getInstance()->getTokenString('delete-instance'),
         'csrfTokenAddInstance' => Token::getInstance()->getTokenString('add_instance'),
-        'masterConfig' => $masterConfig,
+        'mainConfig' => $mainConfig,
         'requestHost' => Request::createFromGlobals()->getHost(),
         'ad_instance_button' => Translation::get('ad_instance_button'),
         'ad_instance_hint' => Translation::get('ad_instance_hint'),

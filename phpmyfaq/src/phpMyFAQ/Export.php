@@ -1,7 +1,7 @@
 <?php
 
 /**
- * JSON, XML, HTML5 and PDF export
+ * JSON, and PDF export
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -19,7 +19,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
 
@@ -45,11 +44,10 @@ class Export
         Category $category,
         Configuration $configuration,
         string $mode = 'pdf'
-    ): Pdf|Html5|Json {
+    ): Pdf|Json {
         return match ($mode) {
             'json' => new Json($faq, $category, $configuration),
             'pdf' => new Pdf($faq, $category, $configuration),
-            'html5' => new Html5($faq, $category, $configuration),
             default => throw new Exception('Export not implemented!'),
         };
     }

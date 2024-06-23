@@ -47,7 +47,7 @@
             </a>
           </td>
           <td>
-            {% for key, config in masterConfig %}
+            {% for key, config in mainConfig %}
               {% if key == site.id %}
                 {% if config == false %}
                   <button data-delete-instance-id="{{ site.id }}" type="button"

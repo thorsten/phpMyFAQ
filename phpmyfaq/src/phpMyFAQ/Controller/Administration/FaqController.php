@@ -29,7 +29,9 @@ use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Faq\Import;
@@ -43,6 +45,7 @@ use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
@@ -75,6 +78,7 @@ class FaqController extends AbstractController
         $logging = new AdminLog($this->configuration);
         $changelog = new Changelog($this->configuration);
         $visits = new Visits($this->configuration);
+        $seo = new Seo($this->configuration);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentUser);
@@ -106,6 +110,9 @@ class FaqController extends AbstractController
         $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
+        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
@@ -164,6 +171,17 @@ class FaqController extends AbstractController
                     $permissions['restricted_groups']
                 );
             }
+
+            // Add the SEO data
+            $seoEntity = new SeoEntity();
+            $seoEntity
+                ->setType(SeoType::FAQ)
+                ->setReferenceId($faqData->getId())
+                ->setReferenceLanguage($faqData->getLanguage())
+                ->setTitle($serpTitle)
+                ->setDescription($serpDescription);
+            $seo->create($seoEntity);
+
 
             // Open question answered
             $questionObject = new Question($this->configuration);
@@ -251,6 +269,7 @@ class FaqController extends AbstractController
         $logging = new AdminLog($this->configuration);
         $changelog = new Changelog($this->configuration);
         $visits = new Visits($this->configuration);
+        $seo = new Seo($this->configuration);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentUser);
@@ -284,6 +303,9 @@ class FaqController extends AbstractController
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
         $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
+        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($question) && empty($answer)) {
             return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
@@ -350,6 +372,27 @@ class FaqController extends AbstractController
             $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
         } else {
             $tagging->deleteByRecordId($faqData->getId());
+        }
+
+        // Update the SEO data
+        $seoEntity = new SeoEntity();
+        $seoEntity
+            ->setType(SeoType::FAQ)
+            ->setReferenceId($faqData->getId())
+            ->setReferenceLanguage($faqData->getLanguage())
+            ->setTitle($serpTitle)
+            ->setDescription($serpDescription);
+
+        if ($seo->get($seoEntity)->getId() === null) {
+            $seoEntity
+                ->setTitle($serpTitle)
+                ->setDescription($serpDescription);
+            $seo->create($seoEntity);
+        } else {
+            $seoEntity
+                ->setTitle($serpTitle)
+                ->setDescription($serpDescription);
+            $seo->update($seoEntity);
         }
 
         // Add user permissions

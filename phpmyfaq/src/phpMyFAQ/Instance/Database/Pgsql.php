@@ -292,6 +292,16 @@ class Pgsql extends Database implements Driver
             searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang))',
 
+        'faqseo' => 'CREATE TABLE %sfaqseo (
+            id INTEGER NOT NULL,
+            type VARCHAR(32) NOT NULL,
+            reference_id INTEGER NOT NULL,
+            reference_language VARCHAR(5) NOT NULL,
+            title TEXT,
+            description TEXT,
+            created DATE NOT NULL DEFAULT CURRENT_DATE,
+            PRIMARY KEY (id))',
+
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid SERIAL NOT NULL,
             user_id INTEGER NOT NULL,

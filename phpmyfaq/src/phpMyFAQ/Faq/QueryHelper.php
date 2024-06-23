@@ -29,7 +29,6 @@ readonly class QueryHelper
     public const FAQ_QUERY_TYPE_APPROVAL = 'faq_approval';
     public const FAQ_QUERY_TYPE_EXPORT_PDF = 'faq_export_pdf';
     public const FAQ_QUERY_TYPE_EXPORT_JSON = 'faq_export_json';
-    public const FAQ_QUERY_TYPE_EXPORT_HTML5 = 'faq_export_html';
 
     private Configuration $configuration;
 
@@ -147,7 +146,6 @@ readonly class QueryHelper
                 $query .= " fd.active = '" . self::FAQ_SQL_ACTIVE_NO . "'";
                 break;
             case self::FAQ_QUERY_TYPE_EXPORT_PDF:
-            case self::FAQ_QUERY_TYPE_EXPORT_HTML5:
             case self::FAQ_QUERY_TYPE_EXPORT_JSON:
             default:
                 $query .= ' AND';
@@ -157,7 +155,6 @@ readonly class QueryHelper
 
         match ($queryType) {
             self::FAQ_QUERY_TYPE_EXPORT_PDF,
-            self::FAQ_QUERY_TYPE_EXPORT_HTML5,
             self::FAQ_QUERY_TYPE_EXPORT_JSON => $query .= "\nORDER BY fcr.category_id, fd.id",
             default => $query .= "\nORDER BY fcr.category_id, fd.id",
         };

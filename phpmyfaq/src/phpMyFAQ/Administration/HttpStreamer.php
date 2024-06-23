@@ -5,9 +5,8 @@
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
- * Currently, it supports only 4 content (mime) types:
+ * Currently, it supports only 3 content (mime) types:
  * - PDF: application/pdf
- * - HTML5: text/html
  * - CSV: text/csv
  * - JSON: application/json
  * - Generic file: application/octet-stream
@@ -94,11 +93,6 @@ class HttpStreamer
                 $filename = 'phpmyfaq.pdf';
                 $description = 'phpMyFAQ PDF export file';
                 $mimeType = 'application/pdf';
-                break;
-            case 'html5':
-                $filename = 'phpmyfaq.html';
-                $description = 'phpMyFAQ HTML5 export file';
-                $mimeType = 'text/html';
                 break;
             case 'csv':
                 $filename = 'phpmyfaq.csv';
