@@ -419,7 +419,8 @@ $category->collapseAll();
 if ($cat != 0) {
     $category->expandTo($cat);
 }
-if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
+
+if (isset($cat) && ($cat != 0) && isset($category->categoryName[$cat]['name'])) {
     $title = ' - ' . $category->categoryName[$cat]['name'];
     $metaDescription = $category->categoryName[$cat]['description'];
 }
