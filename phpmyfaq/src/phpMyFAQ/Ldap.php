@@ -21,6 +21,7 @@
 namespace phpMyFAQ;
 
 use LDAP\Connection;
+use SensitiveParameter;
 
 /**
  * Class Ldap
@@ -134,7 +135,7 @@ class Ldap
     /**
      * Binds to the LDAP directory with specified RDN and password.
      */
-    public function bind(string $rdn = '', string $password = ''): bool
+    public function bind(string $rdn = '', #[SensitiveParameter] string $password = ''): bool
     {
         if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';

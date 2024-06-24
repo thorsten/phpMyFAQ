@@ -18,6 +18,8 @@
 
 namespace phpMyFAQ;
 
+use SensitiveParameter;
+
 /**
  * Class Encryption
  *
@@ -81,7 +83,7 @@ class Encryption
      *
      * @param string $password String
      */
-    public function encrypt(string $password): string
+    public function encrypt(#[SensitiveParameter] string $password): string
     {
         return $password;
     }

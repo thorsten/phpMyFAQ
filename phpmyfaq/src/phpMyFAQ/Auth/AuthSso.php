@@ -22,6 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
+use SensitiveParameter;
 
 /**
  * Class Sso
@@ -34,7 +35,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $password, string $domain = ''): bool
+    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
         if ($this->configuration->isLdapActive()) {
             // LDAP/AD + SSO
@@ -54,7 +55,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $password): bool
+    public function update(string $login, #[SensitiveParameter] string $password): bool
     {
         return true;
     }
@@ -71,8 +72,11 @@ class AuthSso extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function checkCredentials(string $login, string $password, array $optionalData = null): bool
-    {
+    public function checkCredentials(
+        string $login,
+        #[SensitiveParameter] string $password,
+        array $optionalData = null
+    ): bool {
         if (!isset($_SERVER['REMOTE_USER'])) {
             throw new Exception('Remote User not set!');
         }

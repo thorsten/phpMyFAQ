@@ -23,6 +23,7 @@ use phpMyFAQ\Mail;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\Utils;
+use SensitiveParameter;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
@@ -46,7 +47,7 @@ class MailHelper
      * @throws Exception
      * @throws TransportExceptionInterface
      */
-    public function sendMailToNewUser(User $user, string $password): bool
+    public function sendMailToNewUser(User $user, #[SensitiveParameter] string $password): bool
     {
         $text = sprintf(
             '<p>You have been registered as a new user:</p><p>Name: %s<br>Login name: %s<br>Password: %s</p>' .

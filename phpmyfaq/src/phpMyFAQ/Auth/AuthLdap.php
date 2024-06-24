@@ -25,6 +25,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\User;
+use SensitiveParameter;
 
 /**
  * Class AuthLdap
@@ -68,7 +69,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $password, string $domain = ''): bool
+    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
         $user = new User($this->configuration);
         $result = $user->createUser($login, '', $domain);
@@ -92,7 +93,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update($login, $password): bool
+    public function update(string $login, #[SensitiveParameter] string $password): bool
     {
         return true;
     }
@@ -100,7 +101,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function delete($login): bool
+    public function delete(string $login): bool
     {
         return true;
     }
@@ -109,8 +110,11 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function checkCredentials($login, $password, array $optionalData = null): bool
-    {
+    public function checkCredentials(
+        string $login,
+        #[SensitiveParameter] string $password,
+        array $optionalData = null
+    ): bool {
         if ('' === trim((string) $password)) {
             throw new Exception(User::ERROR_USER_INCORRECT_PASSWORD);
         }
@@ -158,7 +162,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin($login, array $optionalData = null): int
+    public function isValidLogin(string $login, array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

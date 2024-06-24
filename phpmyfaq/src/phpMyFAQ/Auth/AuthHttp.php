@@ -23,6 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
+use SensitiveParameter;
 
 /**
  * Class AuthHttp
@@ -43,7 +44,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $password, string $domain = ''): bool
+    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
         $user = new User($this->configuration);
         $user->createUser($login);
@@ -58,7 +59,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $password): bool
+    public function update(string $login, #[SensitiveParameter] string $password): bool
     {
         return true;
     }
@@ -74,7 +75,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function checkCredentials($login, $password, array $optionalData = null): bool
+    public function checkCredentials(string $login, #[SensitiveParameter] $password, array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;

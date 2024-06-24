@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
+use SensitiveParameter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -60,7 +61,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $password, string $domain = ''): mixed
+    public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): mixed
     {
         $user = new User($this->configuration);
         $result = $user->createUser($login, '', $domain);
@@ -81,7 +82,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function update(string $login, string $password): bool
+    public function update(string $login, #[SensitiveParameter] string $password): bool
     {
         return true;
     }
@@ -98,8 +99,11 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function checkCredentials(string $login, string $password, array $optionalData = []): bool
-    {
+    public function checkCredentials(
+        string $login,
+        #[SensitiveParameter] string $password,
+        array $optionalData = []
+    ): bool {
         $this->create($login, '');
         return true;
     }

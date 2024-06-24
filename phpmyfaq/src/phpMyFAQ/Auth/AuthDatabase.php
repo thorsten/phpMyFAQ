@@ -48,7 +48,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function create(string $login, string $password, string $domain = ''): bool
+    public function create(string $login, #[\SensitiveParameter] string $password, string $domain = ''): bool
     {
         if ($this->isValidLogin($login) > 0) {
             throw new Exception(User::ERROR_USER_ADD . ': ' . User::ERROR_USER_LOGIN_NOT_UNIQUE);
@@ -82,7 +82,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function update(string $login, string $password): bool
+    public function update(string $login, #[\SensitiveParameter] string $password): bool
     {
         if ($this->isValidLogin($login) < 1) {
             throw new Exception(User::ERROR_USER_CHANGE . ': ' . User::ERROR_USER_NOT_FOUND);
@@ -145,8 +145,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws Exception
      */
-    public function checkCredentials(string $login, string $password, array|null $optionalData = null): bool
-    {
+    public function checkCredentials(
+        string $login,
+        #[\SensitiveParameter] string $password,
+        array|null $optionalData = null
+    ): bool {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),

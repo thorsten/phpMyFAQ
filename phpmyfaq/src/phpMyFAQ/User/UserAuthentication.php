@@ -27,6 +27,7 @@ use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Translation;
+use SensitiveParameter;
 
 class UserAuthentication
 {
@@ -66,7 +67,7 @@ class UserAuthentication
      *
      * @throws Exception
      */
-    public function authenticate(string $username, string $password): CurrentUser
+    public function authenticate(string $username, #[SensitiveParameter] string $password): CurrentUser
     {
         if ($this->isRememberMe()) {
             $this->currentUser->enableRememberMe();

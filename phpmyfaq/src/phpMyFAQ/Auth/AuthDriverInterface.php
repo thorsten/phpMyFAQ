@@ -30,7 +30,7 @@ interface AuthDriverInterface
      * is only used in LDAP/AD environments. Returns true on success,
      * otherwise false.
      */
-    public function create(string $login, string $password, string $domain = ''): mixed;
+    public function create(string $login, #[\SensitiveParameter]  string $password, string $domain = ''): mixed;
 
     /**
      * Changes the password for the account specified by login.
@@ -40,7 +40,7 @@ interface AuthDriverInterface
      * @param string $login Login name
      * @param string $password Password
      */
-    public function update(string $login, string $password): bool;
+    public function update(string $login, #[\SensitiveParameter] string $password): bool;
 
     /**
      * Deletes the user account specified by login.
@@ -63,7 +63,11 @@ interface AuthDriverInterface
      * @param string $password Password
      * @param array<string>  $optionalData Optional data
      */
-    public function checkCredentials(string $login, string $password, array $optionalData = []): bool;
+    public function checkCredentials(
+        string $login,
+        #[\SensitiveParameter] string $password,
+        array $optionalData = []
+    ): bool;
 
     /**
      * Does nothing. A function required to be a valid auth.
