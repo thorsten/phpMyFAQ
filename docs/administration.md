@@ -272,7 +272,17 @@ Open phpMyAdmin. First check whether the correct database is displayed. You can 
 * faqcategoryrelations
 * faqdata_user.csv
 
-As soon as you have selected one of the 4 tables, the contents will be displayed on the right. Now click on the **Export** menu item at the top. Select **CSV** as the format. Make sure that **Export ALL records** is selected. Then click **Export** at the bottom. Save all 4 CSV-Files in a separate folder on your computer. Then you can close phpMyAdmin for the moment.
+![Screenshot of choosing DB and tables in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-1.png)
+
+As soon as you have selected one of the 4 tables, the contents will be displayed on the right. Now click on the **Export** menu item at the top.
+
+![Screenshot of nav bar in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-2.png)
+
+Select **CSV** as the format. Make sure that **Dump all rows** is selected. Then click **Export** at the bottom.
+
+![Screenshot of export dialog in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-3.png)
+
+Save all 4 CSV-Files in a separate folder on your computer. Then you can close phpMyAdmin for the moment.
 
 ### Edit the tables
 
@@ -294,7 +304,11 @@ The fourth file called *faqdata_user.csv* is easy. Just put in the *unique id* o
 
 ### Upload the finished tables
 
-Now we have all the data ready to import. So we open phpMyAdmin again. Select the correct table on the left. Click on Import at the top. Select the correct one of our 4 CSV tables out of your folder. For Skip number of queries, select 1 so that our column headings are not created as a post. The format must be CSV. Check also to update on duplicate key. Otherwise changes to existing entries won't be saved. Else everything should be fine. Now click on Import. We'll do that three more times with our other files.
+Now we have all the data ready to import. So we open phpMyAdmin again. Select the correct table on the left. Click on Import at the top. Select the correct one of our 4 CSV tables out of your folder. For Skip number of queries, select 1 so that our column headings are not created as a post. The format must be CSV. Check also **update data when duplicate keys found on import**. Otherwise changes to existing entries won't be saved. Else everything should be fine. Now click on Import.
+
+![Screenshot of import dialog in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-4.png)
+
+We'll do that three more times with our other files.
 
 Now go to your phpMyFAQ and check your new entries.
 
