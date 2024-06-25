@@ -266,23 +266,24 @@ You can export your contents of your whole FAQ or just some selected categories 
 
 ### Export the necessary tables
 
-Open phpMyAdmin. First check whether the correct database is displayed. You can switch to a different database at the top left. At the top left you can see the name of your database and below that the names of the individual tables. From this list, select the following 4 tables (one after the other) and click on them once to select them:
+Open phpMyAdmin. First check whether the correct database is displayed. You can switch to a different database at the top left. At the top left you can see the name of your database and below that the names of the individual tables. From this list, select the following 5 tables (one after the other) and click on them once to select them:
 * faqdata
 * faqdata_tags
 * faqcategoryrelations
-* faqdata_user.csv
+* faqdata_user
+* faqdata_groups
 
-![Screenshot of choosing DB and tables in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-1.png)
+![Screenshot of choosing DB and tables in phpmyadmin.](https://github.com/c1972/phpMyFAQ/assets/112912128/71807422-f84e-4259-b6d4-bb3555f7d5c5)
 
-As soon as you have selected one of the 4 tables, the contents will be displayed on the right. Now click on the **Export** menu item at the top.
+As soon as you have selected one of the 5 tables, the contents will be displayed on the right. Now click on the **Export** menu item at the top.
 
-![Screenshot of nav bar in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-2.png)
+![Screenshot of nav bar in phpmyadmin](https://github.com/c1972/phpMyFAQ/assets/112912128/beaa724a-f083-44c7-a5c1-514ba29e30db)
 
 Select **CSV** as the format. Make sure that **Dump all rows** is selected. Then click **Export** at the bottom.
 
-![Screenshot of export dialog in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-3.png)
+![Screenshot of export dialog in phpmyadmin](https://github.com/c1972/phpMyFAQ/assets/112912128/0f8fa9f1-dd66-4f6d-b73a-065f54320a50)
 
-Save all 4 CSV-Files in a separate folder on your computer. Then you can close phpMyAdmin for the moment.
+Save all 5 CSV-Files in a separate folder on your computer. Then you can close phpMyAdmin for the moment.
 
 ### Edit the tables
 
@@ -301,14 +302,15 @@ Within the Tags section of phpMyFAQ you can hover your mose over the red trash c
 We continue with the third table, called *faqcategoryrelations*, and this is now about the categories. The number in the first column category_id identifies the category in which the new post should be sorted. You can assign the number to the category in exactly the same way as you did with the tags. So make a quick note in your text file! You can now enter the numbers so that the posts end up in the right category. On the right at record_id we have the unique ID that identifies the post. Once you have entered everything, save and close.
 
 The fourth file called *faqdata_user.csv* is easy. Just put in the *unique id* of your new entries at the left and *-1* at the right. Save and close.
+Same for the 5th file *faqdata_groups*. Just add the unique id and -1.
 
 ### Upload the finished tables
 
 Now we have all the data ready to import. So we open phpMyAdmin again. Select the correct table on the left. Click on Import at the top. Select the correct one of our 4 CSV tables out of your folder. For Skip number of queries, select 1 so that our column headings are not created as a post. The format must be CSV. Check also **update data when duplicate keys found on import**. Otherwise changes to existing entries won't be saved. Else everything should be fine. Now click on Import.
 
-![Screenshot of import dialog in phpmyadmin.](https://pokerfit.de/forum/phpmyadmin-sc-4.png)
+![Screenshot of import dialog in phpmyadmin](https://github.com/c1972/phpMyFAQ/assets/112912128/323be9c2-36d1-4129-b536-90656c2a2aa2)
 
-We'll do that three more times with our other files.
+We'll do that four more times with our other files.
 
 Now go to your phpMyFAQ and check your new entries.
 
