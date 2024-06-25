@@ -56,8 +56,6 @@ address.
 If the spam protection is enabled they have to enter the correct captcha code, too.
 New FAQ entries won't be displayed by default and have to be activated by an administrator.
 
-If a user is logged in, the name and e-mail address are filled automatically.
-
 ## 4.5.1 Batch upload FAQs to Database with CSV files
 
 **Three things in advance:**
