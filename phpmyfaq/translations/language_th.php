@@ -462,7 +462,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "จำนวน
 $LANG_CONF['security.bannedIPs'] = array("area", "ห้ามการใช้งานจากหมายเลขที่อยู่ไอพี");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "เปิดใช้งาน LDAP (ค่าเริ่มต้น: ปิด)");
 $LANG_CONF['main.referenceURL'] = array("input", "URL หลักสำหรับการตรวจสอบลิงค์ (ตัวอย่าง: https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "ช่วงเวลาสำหรับการตรวจลิงค์ของ AJAX  (หน่วยเป็นวินาที)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "ปิดการแสดงผลของคำถามใหม่");
 $LANG_CONF['security.permLevel'] = array("select", "ระดับการอนุญาต");
 $PMF_LANG['ad_categ_new_main_cat'] = 'เป็นหัวข้อใหม่';

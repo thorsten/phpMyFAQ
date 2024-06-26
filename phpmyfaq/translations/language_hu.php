@@ -858,7 +858,6 @@ $PMF_LANG['msgNewTranslationSubmit'] = 'Küldd el a javaslatod';
 $PMF_LANG['msgTranslate'] = 'Bejegyzés fordítása';
 $PMF_LANG['msgTranslateSubmit'] = 'Fordítás elkezdése...';
 $LANG_CONF['main.referenceURL'] = array('input', 'URL for link verification (e.g.: https://www.example.org/faq/)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'Interval between AJAX link verification (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Új kérdések láthatóságának kikapcsolása');
 $LANG_CONF['security.permLevel'] = array('select', 'Hozzáférési szint');
 $PMF_LANG['ad_entry_commentdelsuc'] = 'A komment <strong>sikeresen</strong> törölve.';

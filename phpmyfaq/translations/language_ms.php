@@ -461,7 +461,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Bilangan artike
 $LANG_CONF['security.bannedIPs'] = array("area", "Senarai hitamkan IP ini");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Anda mahu membenarkan sokongan terhadap LDAP? (lalai: dilumpuhkan)");
 $LANG_CONF['main.referenceURL'] = array("input", "UL asas untuk pengesahan link (cth.: https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Selang diantara pengesahan link AJX (dalam saat)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Soalan baru tidak diperlihatkan?");
 $LANG_CONF['security.permLevel'] = array("select", "Tahap keizinan");
 $PMF_LANG['ad_categ_new_main_cat'] = 'sebagai kategori utama yang baru';

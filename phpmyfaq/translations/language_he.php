@@ -459,7 +459,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "מספר קטע
 $LANG_CONF['security.bannedIPs'] = array("area", "חסום את IP זה");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "הפעל LDAP? (ברירת מחדל: לא פעיל)");
 $LANG_CONF['main.referenceURL'] = array("input", "URL בסיסי לאימות קישורים (דוגמה: https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "מרווח בין אימות קישורים (בשניות)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "לא להציג באתר שאלות חדשות ?");
 $LANG_CONF['security.permLevel'] = array("select", "רמת הרשאות");
 $PMF_LANG['ad_categ_new_main_cat'] = 'כקטגוריה ראשית חדשה';

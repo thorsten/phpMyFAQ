@@ -155,7 +155,11 @@ class Translation
 
         foreach (self::fetchTranslationFile() as $key => $value) {
             if (str_starts_with($key, $section)) {
-                $configuration[$key] = ['element' => $value[0] ?? '', 'label' => $value[1] ?? ''];
+                $configuration[$key] = [
+                    'element' => $value[0] ?? '',
+                    'label' => $value[1] ?? '',
+                    'description' => $value[2] ?? '',
+                ];
 
                 switch ($key) {
                     case 'records.maxAttachmentSize':

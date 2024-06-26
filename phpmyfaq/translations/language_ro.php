@@ -492,7 +492,6 @@ $PMF_LANG['ad_changerev'] = 'Selecteaza revizie';
 $PMF_LANG['msgCaptcha'] = 'Te rugam introdu carecterele din imagine';
 $PMF_LANG['msgSelectCategories'] = 'Cauta in...';
 $LANG_CONF['main.referenceURL'] = array("input", "URL-ul de baza pentru verificatorul de linkuri (e.x.: https://www.pc-helps.info/faq)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Intervalul pentru AJAX verificatorul de linkuri (in secunde)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Dezactivezi vizibilitatea pentru intrebarile noi?");
 $LANG_CONF['security.permLevel'] = array("select", "Nivelul de permisiunel");
 $PMF_LANG['msgAllCategories'] = '... Toate categoriile';

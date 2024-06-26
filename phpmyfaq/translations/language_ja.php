@@ -462,7 +462,6 @@ $LANG_CONF['main.numberOfShownNewsEntries'] = array("input", "お知らせの表
 $LANG_CONF['security.bannedIPs'] = array('area', '拒否する IP アドレス');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'LDAP のサポートを有効にしますか? (初期値: 無効)');
 $LANG_CONF['main.referenceURL'] = array('input', 'リンク確認の基準 URL (例: https://www.example.org/faq/)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'AJAX リンクの確認間隔 (秒単位)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', '新しい質問の表示を無効にする');
 $LANG_CONF['security.permLevel'] = array('select', 'パーミッションレベル');
 $PMF_LANG['ad_categ_new_main_cat'] = 'ROOT の下位カテゴリーへ';

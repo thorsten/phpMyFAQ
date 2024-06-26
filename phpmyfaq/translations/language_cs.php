@@ -463,7 +463,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Počet záznam�
 $LANG_CONF['security.bannedIPs'] = array('area', 'Zakázat IP adresy');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Chcete aktivovat podporu LDAP? (výchozí: vypnuto)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Base URL pro verifikaci odkazu (např.: https://www.domena.cz/faq)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'Interval mezi AJAX ověřením odkazu (v sekundách)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Vypnout viditelnost nových dotazů?');
 $LANG_CONF['security.permLevel'] = array('select', 'Stupeň zabezpečení');
 $PMF_LANG['ad_categ_new_main_cat'] = 'jako nová hlavní kategorie';

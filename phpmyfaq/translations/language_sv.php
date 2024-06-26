@@ -780,7 +780,6 @@ $LANG_CONF['records.sortby'] = array('select', 'Sortera inlägg (nyaste eller ä
 $LANG_CONF['records.defaultActivation'] = array("checkbox", "Aktivera nya inlägg (standardval: ej aktiverat)");
 $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Tillåt kommentarer till nya inlägg (standardval: ej aktiverat)");
 $LANG_CONF['main.referenceURL'] = array("input", "Grundadress för länkkontroll (t ex: https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Intervall mellan länkkontroll via AJAX (i sekunder)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Låt nya frågor vara dolda?");
 $LANG_CONF['security.permLevel'] = array("select", "Åtkomstnivå");
 

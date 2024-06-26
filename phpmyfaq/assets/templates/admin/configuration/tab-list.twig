@@ -2,23 +2,21 @@
 
 {% for key, configItem in configurationList %}
   <div class="row mb-2 p-1">
-    <div class="col-9 border-start border-bottom border-2 pb-2">
-      {% if configItem.element == 'area' %}
-        {{ macros.generateTextarea(configItem.label, key, configurationData[key]) }}
-      {% elseif configItem.element == 'checkbox' %}
-        {{ macros.generateCheckbox(configItem.label, key, configurationData, specialCases) }}
-      {% elseif configItem.element == 'password' %}
-        {{ macros.generatePasswordInput(configItem.label, key, configurationData[key]) }}
-      {% elseif configItem.element == 'input' %}
-        {{ macros.generateInputGroup(configItem.label, key, configurationData) }}
-      {% elseif configItem.element == 'button' %}
-        {{ macros.sendTestMailButton(configItem.label, key) }}
-      {% elseif configItem.element == 'print' %}
-        {{ macros.readOnlyTextInput(configItem.label, key, configurationData) }}
-      {% elseif configItem.element == 'select' %}
-        {{ macros.generateSelectBox(configItem.label, key, configurationData) }}
-      {% endif %}
-    </div>
+    {% if configItem.element == 'area' %}
+      {{ macros.generateTextarea(configItem.label, key, configurationData[key], configItem.description) }}
+    {% elseif configItem.element == 'checkbox' %}
+      {{ macros.generateCheckbox(configItem.label, key, configurationData, specialCases) }}
+    {% elseif configItem.element == 'password' %}
+      {{ macros.generatePasswordInput(configItem.label, key, configurationData[key]) }}
+    {% elseif configItem.element == 'input' %}
+      {{ macros.generateInputGroup(configItem.label, key, configurationData, configItem.description) }}
+    {% elseif configItem.element == 'button' %}
+      {{ macros.sendTestMailButton(configItem.label, key, configItem.description) }}
+    {% elseif configItem.element == 'print' %}
+      {{ macros.readOnlyTextInput(configItem.label, key, configurationData) }}
+    {% elseif configItem.element == 'select' %}
+      {{ macros.generateSelectBox(configItem.label, key, configurationData, configItem.description) }}
+    {% endif %}
   </div>
 {% endfor %}
 

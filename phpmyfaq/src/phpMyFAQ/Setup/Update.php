@@ -782,6 +782,8 @@ class Update extends Setup
                     );
                     break;
             }
+            // Cleanup of old configuration items
+            $this->configuration->delete('main.urlValidateInterval');
         }
     }
 

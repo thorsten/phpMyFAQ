@@ -539,12 +539,12 @@ $PMF_LANG['err_SaveQuestion'] = "Pflichtfelder sind Name, E-Mail-Adresse und Fra
 // added v1.4.0 - 2003-12-04 by Thorsten
 $LANG_CONF['main.language'] = ["select", "Sprache"];
 $LANG_CONF['main.languageDetection'] = ["checkbox", "Automatische Spracherkennung"];
-$LANG_CONF['main.titleFAQ'] = ["input", "Titel der FAQ"];
-$LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];
+$LANG_CONF['main.titleFAQ'] = ['input', 'Titel der FAQ', 'Pflichtfeld'];
+$LANG_CONF['main.currentVersion'] = ['print', 'phpMyFAQ Version'];
 $LANG_CONF['main.metaDescription'] = ["input", "Beschreibung der Seite"];
 $LANG_CONF['main.metaKeywords'] = ["input", "Keywords für Suchmaschinen"];
-$LANG_CONF['main.metaPublisher'] = ["input", "Name des Veröffentlichers"];
-$LANG_CONF['main.administrationMail'] = ["input", "E-Mailadresse des Administrators"];
+$LANG_CONF['main.metaPublisher'] = ["input", "Name des Veröffentlichers", 'Pflichtfeld'];
+$LANG_CONF['main.administrationMail'] = ['input', 'E-Mailadresse des Administrators', 'Pflichtfeld'];
 $LANG_CONF['main.contactInformation'] = ["area", "Kontaktdaten / Impressum"];
 $LANG_CONF['main.send2friendText'] = ["area", "Text für die Empfehlungs-Seite"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maximalgröße von Anhängen in Bytes (max. %sByte)"];
@@ -555,10 +555,9 @@ $LANG_CONF["main.enableCategoryRestrictions"] = ["checkbox", "Kategoriebeschrän
 $LANG_CONF['security.ipCheck'] = ["checkbox", "IP zur Überprüfung im Admin-Bereich nutzen"];
 $LANG_CONF['records.numberOfRecordsPerPage'] = ["input", "Anzahl der FAQs pro Seite"];
 $LANG_CONF['records.numberOfShownNewsEntries'] = ["input", "Anzahl der angezeigten News"];
-$LANG_CONF['security.bannedIPs'] = ["area", "Gesperrte IPs (Bitte mit Leerzeichen trennen)"];
+$LANG_CONF['security.bannedIPs'] = ["area", "Gesperrte IP-Adressen", 'Bitte mit Leerzeichen trennen'];
 $LANG_CONF['ldap.ldapSupport'] = ["checkbox", "LDAP-Unterstützung aktivieren"];
-$LANG_CONF['main.referenceURL'] = ["input", "URL der FAQ (zB https://www.example.org/faq/)"];
-$LANG_CONF['main.urlValidateInterval'] = ["input", "Zeit zwischen den Ajax-Linküberprüfungen (in Sekunden)"];
+$LANG_CONF['main.referenceURL'] = ['input', 'URL der FAQ', 'zB https://www.example.org/faq/'];
 $LANG_CONF['records.enableVisibilityQuestions'] = ["checkbox", "Sichtbarkeit von neuen Fragen"];
 $LANG_CONF['security.permLevel'] = ["select", "Berechtigungsebene"];
 
@@ -1032,7 +1031,7 @@ $PMF_LANG['ad_entry_changelog_history'] = "Änderungshistorie";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
 $LANG_CONF['security.ssoSupport'] = ["checkbox", "Aktiviere Single Sign On Unterstützung "];
-$LANG_CONF['security.ssoLogoutRedirect'] = ["input", "Single Sign On Weiterleitungs-Service URL beim Ausloggen"];
+$LANG_CONF['security.ssoLogoutRedirect'] = ["input", "SSO Weiterleitungs-URL beim Ausloggen"];
 $LANG_CONF['main.dateFormat'] = ["input", "Datumsformat (Standard: Y-m-d H:i)"];
 $LANG_CONF['security.enableLoginOnly'] = ["checkbox", "Komplett geschützte FAQ"];
 
@@ -1273,7 +1272,7 @@ $PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
 $LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft (Entra ID)'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiviere Benachrichtigungen'];
-$LANG_CONF['mail.sendTestEmail'] = ['button', 'Sende eine E-Mail an den Administrator über SMTP'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Test-E-Mail an den Administrator über SMTP'];
 $PMF_LANG['mail.sendTestEmail'] = 'Sende eine E-Mail an den Administrator';
 $PMF_LANG['msgGoToCategory'] = 'Zur Kategorie';
 $LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Aktiviere unsichtbares Google ReCAPTCHA v2'];

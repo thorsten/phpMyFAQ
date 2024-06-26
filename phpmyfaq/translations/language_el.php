@@ -491,7 +491,6 @@ $PMF_LANG['ad_changerev'] = 'Επιλογή έκδοσης';
 $PMF_LANG['msgCaptcha'] = 'Παρακαλώ εισάγετε τους χαρακτήρες που διαβάζετε στην εικόνα';
 $PMF_LANG['msgSelectCategories'] = 'Αναζήτηση σε ...';
 $LANG_CONF['main.referenceURL'] = array("input", "Base URL για αναγώριση (e.g.: https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Διάστημα ανάμεσα σε AJAX αναγνωρίσεις (σε δευτερόλεπτα)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Απενεργοποίηση εμφάνισης νέων καταχωρήσεων;");
 $LANG_CONF['security.permLevel'] = array("select", "Επίπεδο δικαιωμάτων");
 $PMF_LANG['msgAllCategories'] = '... όλες οι κατηγορίες';

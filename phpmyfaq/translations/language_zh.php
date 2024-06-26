@@ -716,7 +716,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "新内容数据
 $LANG_CONF['security.bannedIPs'] = array("area", "禁止这些IP地址访问");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "启用LDAP支持吗? (默认:禁止)");
 $LANG_CONF['main.referenceURL'] = array("input", "链接验启用的基本 URL 网址 (设置为首页 URL 网址)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "AJAX 连接验证间隔时间 (单位：秒)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "显示新问题?(默认:禁止)");
 $LANG_CONF['security.permLevel'] = array("select", "权限级别");
 $LANG_CONF['spam.enableSafeEmail'] = array('checkbox', '安全方式显示用户 Email (默认: 激活).');

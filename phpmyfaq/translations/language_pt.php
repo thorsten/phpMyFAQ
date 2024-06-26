@@ -449,7 +449,6 @@ $LANG_CONF['main.numberOfShownNewsEntries'] = array('input', 'Número de notíci
 $LANG_CONF['security.bannedIPs'] = array('area', 'Barrar estes IPs');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
 $LANG_CONF['main.referenceURL'] = array('input', 'URL-base para verificação de <em>links</em> <small>( ex.: https://www.example.org/faq/ )</small>');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'Intervalo entre verificações de <em>links</em> pelo AJAX <small>(segundos)</small>');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Desativar a visibilidade de novos artigos?');
 $LANG_CONF['security.permLevel'] = array('select', 'Nível de Permissão');
 $PMF_LANG['ad_categ_new_main_cat'] = ' como uma nova categoria principal <small>(i.e., de topo)</small>';

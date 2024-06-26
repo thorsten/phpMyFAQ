@@ -465,7 +465,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Numero di eleme
 $LANG_CONF['security.bannedIPs'] = array("area", "Vieta l'accesso a questi indirizzi IP");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Attivare il supporto LDAP? (predefinito: disabilitato)");
 $LANG_CONF['main.referenceURL'] = array("input", "<em>Base URL</em> dell'installazione di phpMyFAQ, es: https://www.example.org/faq/ (&egrave; necessaria per la verifica dei links)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Intervallo della verifica asincrona dei links (in secondi)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Disabilitare la visibilit&agrave; delle domande appena inserite?");
 $LANG_CONF['security.permLevel'] = array("select", "Configurazione della Permessistica");
 $PMF_LANG['ad_categ_new_main_cat'] = 'come nuova categoria principale';

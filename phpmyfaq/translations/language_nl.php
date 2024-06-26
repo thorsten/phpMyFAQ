@@ -714,7 +714,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Aantal nieuws a
 $LANG_CONF['security.bannedIPs'] = array('area', 'Blokkeer deze IP adressen');
 $LANG_CONF['security.ldapSupport'] = array('checkbox', 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Basis URL voor link verificatie (bijv.: https://www.voorbeeld.nl/faq)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'Interval tussen AJAX link verificaties (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Uitschakelen zichtbaarheid van nieuwe vragen?');
 $LANG_CONF['security.permLevel'] = array('select', 'Rechten nivo');
 $LANG_CONF['spam.enableSafeEmail'] = array('checkbox', 'Geef de gebruikers e-mail op een veilige manier weer (standaard: ingesteld).');

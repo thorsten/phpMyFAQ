@@ -807,7 +807,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "Количес�
 $LANG_CONF['security.bannedIPs'] = array("area", "Заблокировать эти IP-Адреса");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "Активировать LDAP? (по умолчанию отключено)");
 $LANG_CONF['main.referenceURL'] = array("input", "Базовый URL для проверки ссылок (например https://www.example.org/faq/)");
-$LANG_CONF['main.urlValidateInterval'] = array("input", "Интервал между AJAX-проверками ссылок (в секундах)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array("checkbox", "Запретить отображение неактивных вопросов?");
 $LANG_CONF['security.permLevel'] = array("select", "Уровень доступа");
 $LANG_CONF['spam.enableSafeEmail'] = array("checkbox", "Показывать адреса электронной почты безопасным способом (включено по умолчанию).");

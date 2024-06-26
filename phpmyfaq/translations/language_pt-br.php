@@ -727,7 +727,6 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'Número de arti
 $LANG_CONF['security.bannedIPs'] = array('area', 'Banir estes IPs');
 $LANG_CONF['ldap.ldapSupport'] = array('checkbox', 'Habilita suporte para LDAP? (padrão: desativado)');
 $LANG_CONF['main.referenceURL'] = array('input', 'Suporte URL para verificação de link (e.g.: https://www.example.org/faq/)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'Intervalo entre verificações de links Ajax (em segundos)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Desabilitar visibilidade de novas perguntas?');
 $LANG_CONF['security.permLevel'] = array('select', 'Nível de permissão');
 $LANG_CONF['spam.enableSafeEmail'] = array('checkbox', 'Imprimir e-mail do usuário de forma segura (padrão: ativado).');

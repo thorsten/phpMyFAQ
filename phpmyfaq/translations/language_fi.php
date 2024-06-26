@@ -859,7 +859,6 @@ $PMF_LANG['permission::restore'] = 'palauta turvakopio';
 $PMF_LANG['permission::delquestion'] = 'poista avoimia kysymyksiä';
 $PMF_LANG['permission::changebtrevs'] = 'muokkaa versioita';
 $LANG_CONF['main.referenceURL'] = array('input', 'Linkkivarmennnuksen URL (esim.: https://www.example.org/faq/)');
-$LANG_CONF['main.urlValidateInterval'] = array('input', 'AJAX -linkkivarmennuksen aikaväli (sekuntia)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array('checkbox', 'Estä uusien kysymysten näkyvyys?');
 $LANG_CONF['security.permLevel'] = array('select', 'Käyttöoikeustasot');
 $PMF_LANG['msgExportAllFaqs'] = 'Tulosta PDF:nä';
