@@ -247,7 +247,7 @@ You can import faqs from a csv file. Further, you find an example of such a csv 
 
 ### 5.4.2 Exports
 
-You can export your contents of your whole FAQ or just some selected categories into four formats:
+You can export your contents of your whole FAQ or just some selected categories into two formats:
 
 - a JSON file
 - a PDF file with a table of contents
