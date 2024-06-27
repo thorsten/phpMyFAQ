@@ -1,0 +1,17 @@
+<div class="row g-5">
+  <div class="col-md-12">
+    <h2 class="pb-4 mb-4 border-bottom">{{ msgMyBookmarks }}</h2>
+
+    <div class="list-group mb-4">
+      {% for bookmark in bookmarksList %}
+        <a href="{{ bookmark['url'] }}" class="list-group-item list-group-item-action" id="delete-bookmark-{{ bookmark['id'] }}">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ bookmark['title'] }}</h5>
+            <i class="bi bi-trash-fill text-danger m-1 pmf-delete-bookmark" data-pmf-bookmark-id="{{ bookmark['id'] }}"></i>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>

@@ -102,28 +102,12 @@ readonly class Bookmark
         return (bool) $this->configuration->getDb()->query($query);
     }
 
-    /**
-     * Renders the bookmark tree for the personal bookmark list.
-     */
-    public function renderBookmarkTree(): string
-    {
-        return sprintf(
-            '<div class="list-group mb-4">%s</div>',
-            $this->renderBookmarkList()
-        );
-    }
-
-    /**
-     * Builds the list of bookmarks for the bookmark tree.
-     *
-     * @todo move this method to a new helper class
-     */
-    public function renderBookmarkList(): string
+    public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();
         $faq = new Faq($this->configuration);
         $category = new Category($this->configuration);
-        $html = '';
+        $list = [];
 
         foreach ($bookmarks as $bookmark) {
             $faq->getRecord((int) $bookmark->faqid);
@@ -142,20 +126,13 @@ readonly class Bookmark
             $link->itemTitle = $link->text;
             $link->tooltip = $link->text;
 
-            $html .= sprintf(
-                '<a href="%s" class="list-group-item list-group-item-action" id="delete-bookmark-%d">' .
-                '<div class="d-flex w-100 justify-content-between">' .
-                '<h5 class="mb-1">%s</h5>' .
-                '<i class="bi bi-trash-fill text-danger m-1 pmf-delete-bookmark" data-pmf-bookmark-id="%d"></i>' .
-                '</div>' .
-                '</a>',
-                $link->toString(),
-                $faqData['id'],
-                htmlspecialchars_decode((string) $faqData['title']),
-                $faqData['id'],
-            );
+            $list[] = [
+                'url' => $link->toString(),
+                'title' => htmlspecialchars_decode((string) $faqData['title']),
+                'id' => $faqData['id'],
+            ];
         }
 
-        return $html;
+        return $list;
     }
 }

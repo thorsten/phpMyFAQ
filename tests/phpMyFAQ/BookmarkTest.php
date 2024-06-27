@@ -72,9 +72,9 @@ class BookmarkTest extends TestCase
     public function testRenderBookmarkTree(): void
     {
         $this->bookmark->saveFaqAsBookmarkById(1);
-        $result = $this->bookmark->renderBookmarkTree();
-        $this->assertIsString($result);
-        $this->assertStringContainsString('<div class="list-group mb-4">', $result);
+        $result = $this->bookmark->getBookmarkList();
+        $this->assertIsArray($result);
+        $this->assertEquals(1, count($result));
 
         // Clean up
         $this->bookmark->remove(1);

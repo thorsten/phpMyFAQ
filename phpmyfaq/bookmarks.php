@@ -17,9 +17,11 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\User\CurrentUser;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -31,10 +33,17 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 $bookmark = new Bookmark($faqConfig, $user);
 
-$template->parse(
-        'mainPageContent',
-        [
-            'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
-            'bookmarkContent' => $bookmark->renderBookmarkTree(),
-        ]
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./bookmarks.twig');
+
+// Twig template variables
+$templateVars = [
+    'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
+    'bookmarksList' => $bookmark->getBookmarkList(),
+];
+
+$template->addRenderedTwigOutput(
+    'mainPageContent',
+    $twigTemplate->render($templateVars)
 );
