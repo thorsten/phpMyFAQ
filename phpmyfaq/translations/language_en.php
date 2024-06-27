@@ -538,7 +538,7 @@ $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = ["select", "Language"];
+$LANG_CONF['main.language'] = ["select", "Standard language"];
 $LANG_CONF["main.languageDetection"] = ["checkbox", "Enable automatic language detection"];
 $LANG_CONF['main.titleFAQ'] = ["input", "Title of your FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];
@@ -1146,11 +1146,11 @@ $LANG_CONF["main.enableGzipCompression"] = ["checkbox", "Enable GZIP compression
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
 $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occurred.";
 $PMF_LANG["seoCenter"] = "SEO";
-$LANG_CONF["seo.metaTagsHome"] = ["select", "Meta Tags start page"];
-$LANG_CONF["seo.metaTagsFaqs"] = ["select", "Meta Tags FAQs"];
-$LANG_CONF["seo.metaTagsCategories"] = ["select", "Meta Tags category pages"];
-$LANG_CONF["seo.metaTagsPages"] = ["select", "Meta Tags static pages"];
-$LANG_CONF["seo.metaTagsAdmin"] = ["select", "Meta Tags Admin"];
+$LANG_CONF["seo.metaTagsHome"] = ["select", "Robots Meta Tags start page"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "Robots Meta Tags FAQs"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "vMeta Tags category pages"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "Robots Meta Tags static pages"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "Robots Meta Tags Admin"];
 $PMF_LANG["msgMatchingQuestions"] = "The following results closely matched your question";
 $PMF_LANG["msgFinishSubmission"] = "If none of the suggestions above match your question, click the button below to finish submitting your question.";
 $LANG_CONF['spam.manualActivation'] = ['checkbox', 'Manually activate new users (default: activated)'];
