@@ -538,7 +538,7 @@ $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = ["select", "Language"];
+$LANG_CONF['main.language'] = ["select", "Standard language"];
 $LANG_CONF["main.languageDetection"] = ["checkbox", "Enable automatic language detection"];
 $LANG_CONF['main.titleFAQ'] = ["input", "Title of your FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];

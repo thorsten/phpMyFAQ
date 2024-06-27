@@ -537,7 +537,7 @@ $PMF_LANG['err_bannedIP'] = "Diese IP ist gesperrt.";
 $PMF_LANG['err_SaveQuestion'] = "Pflichtfelder sind Name, E-Mail-Adresse und Frage!";
 
 // added v1.4.0 - 2003-12-04 by Thorsten
-$LANG_CONF['main.language'] = ["select", "Sprache"];
+$LANG_CONF['main.language'] = ["select", "Standard-Sprache"];
 $LANG_CONF['main.languageDetection'] = ["checkbox", "Automatische Spracherkennung"];
 $LANG_CONF['main.titleFAQ'] = ["input", "Titel der FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];
