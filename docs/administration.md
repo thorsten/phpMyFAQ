@@ -60,12 +60,20 @@ permissions, please set the permission level from _basic_ to _medium_ in the mai
 phpMyFAQ lets you create different categories and nested subcategories for your FAQs.
 You can re-arrange your categories in a different order and create nested ones with drag'n'drop.
 It is possible to use various languages per category, too; there's also a frontend to view all translated categories.
-For accessibility reasons, you should add a small description for every category.
+For accessibility and SEO reasons, you should add a small description for every category.
 You can add an image for every category, which will be shown even on the start page if you flag this category with this
 configuration.
 If you add a new category, you can set the permissions for users and groups, and you can bind an administrator to new
 category.
 This is quite nice if you want to share the work in your FAQ between various admin users.
+
+If you display category images, they are saved as separate files in /images/ as follows:
+- category-1-de.ext
+- category-2-de.ext
+- category-3-de.ext
+- etc.
+
+For SEO reasons (reduced file size), you may want to **display the exact same file** as a background image **multiple times**. To do this, simply enter the same file name for each entry in your **database, faqcategories table, image field**.
 
 ### 5.2.2 FAQ Administration
 
