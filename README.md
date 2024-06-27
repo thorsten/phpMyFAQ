@@ -212,6 +212,11 @@ The REST API documentation is available as OpenAPI 3.0 specification:
 
 The Swagger UI is available at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
+## Discord server
+
+If you like to chat with the phpMyFAQ team, please join our [Discord server](https://discord.gg/wszhTceuNM).
+We're happy to help you with your questions!
+
 ## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
