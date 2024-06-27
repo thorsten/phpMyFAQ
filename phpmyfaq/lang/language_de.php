@@ -1158,16 +1158,16 @@ $LANG_CONF['main.enableGzipCompression'] = ["checkbox", "Aktiviere GZIP Kompress
 $PMF_LANG['ad_tag_delete_success'] = "Der Tag wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_tag_delete_error'] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
 $PMF_LANG['seoCenter'] = "SEO";
-$LANG_CONF['seo.metaTagsHome'] = ["select", "HTML Meta Tags auf Startseite"];
-$LANG_CONF['seo.metaTagsFaqs'] = ["select", "HTML Meta Tags auf FAQ-Seiten"];
-$LANG_CONF['seo.metaTagsCategories'] = ["select", "HTML Meta Tags für Kategorien"];
-$LANG_CONF['seo.metaTagsPages'] = ["select", "HTML Meta Tags für statische Seiten"];
-$LANG_CONF['seo.metaTagsAdmin'] = ["select", "HTML Meta Tags für Admin-Seiten"];
+$LANG_CONF['seo.metaTagsHome'] = ["select", "Robots Meta Tags auf Startseite"];
+$LANG_CONF['seo.metaTagsFaqs'] = ["select", "Robots Meta Tags auf FAQ-Seiten"];
+$LANG_CONF['seo.metaTagsCategories'] = ["select", "Robots Meta Tags für Kategorien"];
+$LANG_CONF['seo.metaTagsPages'] = ["select", "Robots Meta Tags für statische Seiten"];
+$LANG_CONF['seo.metaTagsAdmin'] = ["select", "Robots Meta Tags für Admin-Seiten"];
 $PMF_LANG['msgMatchingQuestions'] = "Die folgenden Ergebnisse könnten Ihre Frage beantworten";
 $PMF_LANG['msgFinishSubmission'] = "Wenn keine der Vorschläge übereinstimmt, können Sie nun die Frage absenden.";
 $LANG_CONF['spam.manualActivation'] = ['checkbox', 'Aktiviere Nutzer manuell'];
 
-// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews (Chris--A)
 $PMF_LANG['mailControlCenter'] = 'E-Mail';
 $LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Verwendung eines externen SMTP Server'];
 $LANG_CONF['mail.remoteSMTPServer'] = ['input', 'SMTP Server'];
