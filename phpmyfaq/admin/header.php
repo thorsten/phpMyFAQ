@@ -21,7 +21,6 @@ use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Template\TwigWrapper;
@@ -267,7 +266,7 @@ $templateVars = [
     'userHasAccessPermission' => $adminHelper->canAccessContent($user),
     'msgSessionExpiration' => Translation::get('ad_session_expiration'),
     'pageAction' => isset($action) ? '?action=' . $action : '',
-    'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage($faqLangCode),
+    'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'userName' => $user->getUserData('display_name'),
     'hasGravatarSupport' => $faqConfig->get('main.enableGravatarSupport'),
     'gravatarImage' => $gravatarImage ?? '',
