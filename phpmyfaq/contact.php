@@ -18,10 +18,10 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -41,28 +41,34 @@ $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 if ($faqConfig->get('main.contactInformationHTML')) {
     $contactText = html_entity_decode((string) $faqConfig->get('main.contactInformation'));
 } else {
-    $contactText = nl2br(Strings::htmlspecialchars($faqConfig->get('main.contactInformation')));
+    $contactText = nl2br($faqConfig->get('main.contactInformation'));
 }
 
-$template->parse(
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./contact.twig');
+
+// Twig template variables
+$templateVars = [
+    'pageHeader' => Translation::get('msgContact'),
+    'msgContactOwnText' => $contactText,
+    'msgContactEMail' => Translation::get('msgContactEMail'),
+    'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
+    'privacyURL' => $faqConfig->get('main.privacyURL'),
+    'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
+    'msgNewContentName' => Translation::get('msgNewContentName'),
+    'msgNewContentMail' => Translation::get('msgNewContentMail'),
+    'lang' => $Language->getLanguage(),
+    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+    'msgMessage' => Translation::get('msgMessage'),
+    'msgS2FButton' => Translation::get('msgS2FButton'),
+    'version' => $faqConfig->getVersion(),
+    'captchaFieldset' =>
+        $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+];
+
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => Translation::get('msgContact'),
-        'msgContactOwnText' => $contactText,
-        'msgContactEMail' => Translation::get('msgContactEMail'),
-        'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
-        'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
-        'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
-        'msgNewContentName' => Translation::get('msgNewContentName'),
-        'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'lang' => $Language->getLanguage(),
-        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-        'defaultContentName' =>
-            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'msgMessage' => Translation::get('msgMessage'),
-        'msgS2FButton' => Translation::get('msgS2FButton'),
-        'version' => $faqConfig->getVersion(),
-        'captchaFieldset' =>
-            $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
-    ]
+    $twigTemplate->render($templateVars)
 );

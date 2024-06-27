@@ -145,7 +145,7 @@ $PMF_LANG['msgLatestArticles'] = "Neueste FAQ-Beiträge";
 // E-Mailbenachrichtigung
 $PMF_LANG['msgMailThanks'] = "Vielen Dank für den Vorschlag";
 $PMF_LANG['msgMailCheck'] = "Es ist ein neuer FAQ-Beitrag vorhanden. Sie können diesen hier oder im Adminbereich überprüfen.";
-$PMF_LANG['msgMailContact'] = "Die Anfrage wurde an den Administrator versendet!";
+$PMF_LANG['msgMailContact'] = "Die Anfrage wurde erfolgreich versendet!";
 
 // Fehlermeldungen
 $PMF_LANG['err_noDatabase'] = "Keine Datenbankverbindung möglich!";
