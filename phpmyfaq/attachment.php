@@ -20,9 +20,11 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -100,14 +102,25 @@ if (
 ) {
     try {
         $attachment->rawOut();
-    } catch (AttachmentException $e) {
+    } catch (AttachmentException|ErrorException $e) {
         $attachmentErrors[] = $e->getMessage();
     }
-    exit(0);
 } else {
     $attachmentErrors[] = Translation::get('msgAttachmentInvalid');
 }
 
 // If we're here, there was an error with file download
-$template->parseBlock('mainPageContent', 'attachmentErrors', ['item' => implode('<br>', $attachmentErrors)]);
-$template->parse('mainPageContent', []);
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./attachment.twig');
+
+// Twig template variables
+$templateVars = [
+    'attachmentErrors' => $attachmentErrors,
+];
+
+$template->addRenderedTwigOutput(
+    'mainPageContent',
+    $twigTemplate->render($templateVars)
+);
