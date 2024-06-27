@@ -1,0 +1,17 @@
+<section class="col-12">
+  <h1>{{ pageHeader }}</h1>
+  <article>
+    {% for glossary in glossaryItems %}
+    <dl>
+      <dd><strong>{{ glossary['item'] }}</strong></dd>
+      <dd>{{ glossary['definition'] }}</dd>
+    </dl>
+    {% endfor %}
+  </article>
+
+  <div class="pagination justify-content-center">
+    <div>
+      <div>{{ pagination | raw }}</div>
+    </div>
+  </div>
+</section>

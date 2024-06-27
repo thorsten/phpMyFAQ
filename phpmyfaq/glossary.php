@@ -18,8 +18,10 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -51,29 +53,18 @@ $options = [
 ];
 $pagination = new Pagination($options);
 
-if (0 < $numItems) {
-    $output = [];
-    $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./glossary.twig');
 
-    foreach ($visibleItems as $visibleItem) {
-        $output['item'][] = $visibleItem['item'];
-        $output['definition'][] = $visibleItem['definition'];
-    }
+// Twig template variables
+$templateVars = [
+    'pageHeader' => Translation::get('ad_menu_glossary'),
+    'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
+    'pagination' => $pagination->render(),
+];
 
-    $template->parseBlock(
-        'mainPageContent',
-        'glossaryItems',
-        [
-            'item' => $output['item'],
-            'desc' => $output['definition'],
-        ]
-    );
-}
-
-$template->parse(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => Translation::get('ad_menu_glossary'),
-        'pagination' => $pagination->render(),
-    ]
+    $twigTemplate->render($templateVars)
 );
