@@ -16,37 +16,49 @@
  * @since     2005-08-21
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+
 $faqSession->userTracking('sitemap', 0);
 
 $request = Request::createFromGlobals();
 $letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
-    $currentLetter = strtoupper(Strings::substr($letter, 0, 1));
+    $currLetter = strtoupper(Strings::substr($letter, 0, 1));
 } else {
-    $currentLetter = '';
+    $currLetter = '';
 }
 
 $siteMap = new Sitemap($faqConfig);
 $siteMap->setUser($currentUser);
 $siteMap->setGroups($currentGroups);
 
-$template->parse(
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./sitemap.twig');
+
+// Twig template variables
+$templateVars = [
+    'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
+    'letters' => $siteMap->getAllFirstLetters(),
+    'faqs' => $siteMap->getFaqsFromLetter($currLetter),
+    'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
+];
+
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => $currentLetter === '' || $currentLetter === '0' ? Translation::get('msgSitemap') : $currentLetter,
-        'renderLetters' => $siteMap->getAllFirstLetters(),
-        'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => $currentLetter === '' || $currentLetter === '0' ? Translation::get('msgSitemap') : $currentLetter,
-    ]
+    $twigTemplate->render($templateVars)
 );

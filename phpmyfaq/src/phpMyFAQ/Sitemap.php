@@ -17,8 +17,10 @@
 
 namespace phpMyFAQ;
 
+use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Database\Sqlite3;
+use stdClass;
 
 /**
  * Class Sitemap
@@ -69,11 +71,10 @@ class Sitemap
 
     /**
      * Returns all available first letters.
+     * @return stdClass[]
      */
-    public function getAllFirstLetters(): string
+    public function getAllFirstLetters(): array
     {
-        global $sids;
-
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
@@ -90,7 +91,7 @@ class Sitemap
             );
         }
 
-        $renderLetters = '<ul class="nav">';
+        $letters = [];
 
         $query = sprintf(
             "
@@ -118,42 +119,41 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
             $permPart
         );
 
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $letters = Strings::strtoupper($row->letters);
+            $letter = new stdClass();
+            $letter->letter = Strings::strtoupper($row->letters);
 
-            if (Strings::preg_match("/^\w+/iu", $letters) !== 0) {
+            if (Strings::preg_match("/^\w+/iu", $letter->letter) !== 0) {
                 $url = sprintf(
-                    '%sindex.php?%saction=sitemap&amp;letter=%s&amp;lang=%s',
+                    '%sindex.php?action=sitemap&letter=%s&lang=%s',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
-                    $letters,
+                    $letter->letter,
                     $this->configuration->getLanguage()->getLanguage()
                 );
-                $oLink = new Link($url, $this->configuration);
-                $oLink->text = $letters;
-                $oLink->class = 'nav-link';
-                $renderLetters .= '<li class="nav-item">' . $oLink->toHtmlAnchor() . '</li>';
+                $link = new Link($url, $this->configuration);
+                $letter->url = $link->toString();
             }
+
+            $letters[] = $letter;
         }
 
-        return $renderLetters . '</ul>';
+        return $letters;
     }
 
     /**
      * Returns all records from the current first letter.
      *
      * @param string $letter Letter
-     * @throws \Exception
+     * @return stdClass[]
+     * @throws Exception
      */
-    public function getRecordsFromLetter(string $letter = 'A'): string
+    public function getFaqsFromLetter(string $letter = 'A'): array
     {
-        global $sids;
-
         if ($this->groupSupport) {
             $permPart = sprintf(
                 '( fdg.group_id IN (%s)
@@ -172,7 +172,7 @@ class Sitemap
 
         $letter = Strings::strtoupper($this->configuration->getDb()->escape(Strings::substr($letter, 0, 1)));
 
-        $renderSiteMap = '';
+        $faqs = [];
 
         $query = sprintf(
             "
@@ -218,12 +218,12 @@ class Sitemap
         $parseDownExtra = new ParsedownExtra();
 
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($oldId != $row->id) {
-                $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES);
+            if ($oldId !== $row->id) {
+                $faq = new stdClass();
+                $faq->question = $row->thema;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
@@ -231,23 +231,19 @@ class Sitemap
 
                 $link = new Link($url, $this->configuration);
                 $link->itemTitle = $row->thema;
-                $link->text = $title;
-                $link->tooltip = $title;
-
-                $renderSiteMap .= sprintf('<li>%s<br>', $link->toHtmlAnchor());
+                $faq->url = $link->toString();
 
                 if ($this->configuration->get('main.enableMarkdownEditor')) {
-                    $renderSiteMap .= Utils::chopString(strip_tags((string) $parseDownExtra->text($row->snap)), 25) .
-                        " ...</li>\n";
+                    $faq->answer = Utils::chopString(strip_tags((string) $parseDownExtra->text($row->snap)), 25);
                 } else {
-                    $renderSiteMap .= Utils::chopString(strip_tags((string) $row->snap), 25) .
-                        " ...</li>\n";
+                    $faq->answer = Utils::chopString(strip_tags((string) $row->snap), 25);
                 }
+                $faqs[] = $faq;
             }
 
             $oldId = $row->id;
         }
 
-        return $renderSiteMap === '' || $renderSiteMap === '0' ? '' : '<ul>' . $renderSiteMap . '</ul>';
+        return $faqs;
     }
 }

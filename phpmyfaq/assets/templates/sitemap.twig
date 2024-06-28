@@ -1,0 +1,20 @@
+<section class="col-12">
+  <h1>{{ pageHeader }}</h1>
+
+  <div class="navbar navbar-expand-lg">
+    <ul class="nav">
+      {% for letter in letters %}
+      <a class="nav-link" href="{{ letter.url }}">{{ letter.letter }}</a>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <ul>
+    {% for faq in faqs %}
+    <li>
+      <a title="{{ faq.question }}" href="{{ faq.url }}">{{ faq.question }}</a>
+      <br>{{ faq.answer }}
+    </li>
+    {% endfor %}
+  </ul>
+</section>

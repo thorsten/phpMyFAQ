@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class SitemapTest extends TestCase
 {
@@ -56,10 +57,10 @@ class SitemapTest extends TestCase
     public function testGetAllFirstLetters(): void
     {
         $letters = $this->sitemap->getAllFirstLetters();
-        $this->assertIsString($letters);
-        $this->assertEquals(
-            '<ul class="nav"><li class="nav-item"><a class="nav-link" href="https://faq.example.org/sitemap/S/en.html">S</a></li></ul>',
-            $letters
-        );
+        $expected = new stdClass();
+        $expected->letter = 'S';
+        $expected->url = 'https://faq.example.org/sitemap/S/en.html';
+        $this->assertIsArray($letters);
+        $this->assertEquals([$expected], $letters);
     }
 }
