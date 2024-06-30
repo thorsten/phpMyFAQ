@@ -271,7 +271,7 @@ class UserController extends AbstractController
 
             if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
                 return $this->json(
-                    ['success' => Translation::get('msgRemoveTwofactorConfigSuccessfull')],
+                    ['success' => Translation::get('msgRemoveTwofactorConfigSuccessful')],
                     Response::HTTP_OK
                 );
             } else {

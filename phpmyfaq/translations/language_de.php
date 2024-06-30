@@ -1447,6 +1447,9 @@ $LANG_CONF['seo.description'] = ['area', 'SERP Beschreibung'];
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Erlaubte externe Hosts für Medieninhalte (Mit Kommas trennen)'];
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Bist du sicher, dass du deine aktuelle Konfiguration der 2-Faktor-Authentifizierung löschen möchtest?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ist aktuell nicht aktiviert.';
-$PMF_LANG['msgRemoveTwofactorConfigSuccessfull'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];
 
 return $PMF_LANG;

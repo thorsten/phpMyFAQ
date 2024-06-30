@@ -45,7 +45,6 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
-use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -625,6 +624,15 @@ if ('main' == $action || 'show' == $action) {
     );
 }
 
+if ($faqConfig->get('main.enablePrivacyLink')) {
+    $privacyLink = sprintf(
+        '<a class="pmf-nav-link-footer" target="_blank" href="%s">%s</a>',
+        Strings::htmlentities($faqConfig->get('main.privacyURL')),
+        Translation::get('msgPrivacyNote')
+    );
+} else {
+    $privacyLink = '';
+}
 
 $tplNavigation = [
     'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
@@ -648,11 +656,7 @@ $tplNavigation = [
         '</a>',
     'msgGlossary' => '<a class="pmf-nav-link-footer" href="./glossary.html">' .
         Translation::get('ad_menu_glossary') . '</a>',
-    'privacyLink' => sprintf(
-        '<a class="pmf-nav-link-footer" target="_blank" href="%s">%s</a>',
-        Strings::htmlentities($faqConfig->get('main.privacyURL')),
-        Translation::get('msgPrivacyNote')
-    ),
+    'privacyLink' => $privacyLink,
     'cookiePreferences' => '<a id="showCookieConsent" class="pmf-nav-link-footer">'
         . Translation::get('cookiePreferences') . '</a>',
     'faqOverview' => '<a class="pmf-nav-link-footer" href="./overview.html">' .
