@@ -27,9 +27,7 @@
           </div>
 
           {% for hint in nonCriticalSettings %}
-            <div class="alert alert-info" role="alert">
               {{ hint | raw }}
-            </div>
           {% endfor %}
 
           {% if checkBasicError %}
