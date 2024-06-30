@@ -137,7 +137,8 @@
     </div>
     <div>
       {{ msgLastCheckDate }}
-      <output id="dateLastChecked">{{ dateLastChecked | date('Y-m-d H:i:s') }}</output>
+      {% set lastCheck = dateLastChecked == 'Invalid Date' ? 'n/a' : dateLastChecked | date('Y-m-d H:i:s') %}
+      <output id="dateLastChecked">{{ lastCheck }}</output>
     </div>
     <div>
       {{ msgLastVersionAvailable }}
