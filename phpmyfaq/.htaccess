@@ -172,7 +172,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
 
     # Private APIs
-    RewriteRule ^api/(autocomplete|bookmark/([0-9]+)|user/data/update|user/password/update|user/request-removal|contact|voting|register|captcha|share|comment/create|faq/create|question/create) api/index.php [L,QSA]
+    RewriteRule ^api/(autocomplete|bookmark/([0-9]+)|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create) api/index.php [L,QSA]
 
     # Setup APIs
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
