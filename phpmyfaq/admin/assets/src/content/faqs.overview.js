@@ -274,6 +274,13 @@ const populateCategoryTable = async (catgoryId, faqs) => {
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
+        addElement('a', { classList: 'btn btn-primary', href: `?action=editentry&id=${faq.id}&lang=${faq.language}` }, [
+          addElement('i', { classList: 'bi bi-pencil', 'aria-hidden': 'true' }),
+        ]),
+      ])
+    );
+    row.append(
+      addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
           addElement('i', { classList: 'bi bi-copy', 'aria-hidden': 'true' }),
         ]),
@@ -285,7 +292,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
           addElement(
             'a',
             {
-              classList: 'btn btn-primary dropdown-toggle',
+              classList: 'btn btn-secondary dropdown-toggle',
               href: '#',
               role: 'button',
               id: 'dropdownAddNewTranslation',
