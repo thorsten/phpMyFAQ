@@ -80,6 +80,13 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $header = Translation::get('ad_categ_edit_1') . ' "' . Strings::htmlentities($categoryData->getName()) . '" ' .
         Translation::get('ad_categ_edit_2');
 
+    $allGroupsOptions = '';
+    $restrictedGroupsOptions = '';
+    if ($faqConfig->get('security.permLevel') !== 'basic') {
+        $allGroupsOptions = $currentUser->perm->getAllGroupsOptions([$categoryData->getGroupId()], $currentUser);
+        $restrictedGroupsOptions = $currentUser->perm->getAllGroupsOptions($groupPermission, $currentUser);
+    }
+
     $templateVars = [
         'header' => $header,
         'categoryId' => $categoryId,
@@ -101,13 +108,13 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
         'isMediumPermission' => $faqConfig->get('security.permLevel') !== 'basic',
         'categoryModeratorLabel' => Translation::get('ad_categ_moderator'),
-        'allGroupsOptions' => $currentUser->perm->getAllGroupsOptions([$categoryData->getGroupId()], $currentUser),
+        'allGroupsOptions' => $allGroupsOptions,
         'categoryGroupPermissionLabel' => Translation::get('ad_entry_grouppermission'),
         'allGroups' => $allGroups ? 'checked' : '',
         'categoryGroupPermissionAllLabel' => Translation::get('ad_entry_all_groups'),
         'restrictedGroups' => $restrictedGroups ? 'checked' : '',
         'restrictedGroupsLabel' => Translation::get('ad_entry_restricted_groups'),
-        'restrictedGroupsOptions' => $currentUser->perm->getAllGroupsOptions($groupPermission, $currentUser),
+        'restrictedGroupsOptions' => $restrictedGroupsOptions,
         'userPermissionLabel' => Translation::get('ad_entry_userpermission'),
         'allUsers' => $allUsers ? 'checked' : '',
         'allUsersLabel' => Translation::get('ad_entry_all_users'),
