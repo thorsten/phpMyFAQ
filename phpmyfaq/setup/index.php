@@ -63,8 +63,7 @@ require PMF_ROOT_DIR . '/src/constants.php';
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 require PMF_ROOT_DIR . '/content/core/config/constants_elasticsearch.php';
 
-/** @var ClassLoader $loader */
-$loader = require PMF_SRC_DIR . '/libs/autoload.php';
+$loader = new ClassLoader();
 $loader->addPsr4('phpMyFAQ\\', PMF_SRC_DIR . '/phpMyFAQ');
 $loader->register();
 
