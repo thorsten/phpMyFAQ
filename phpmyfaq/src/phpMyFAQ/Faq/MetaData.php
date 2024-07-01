@@ -86,7 +86,7 @@ class MetaData
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $groupPermissions = $categoryPermission->get(Permission::GROUP, $this->categories);
-            $faqPermission->add(Permission::GROUP, $this->faqId, $groupPermissions);
+            $faqPermission->add(Permission::GROUP, $this->categories, $groupPermissions);
             $categoryPermission->add(Permission::GROUP, $this->categories, $groupPermissions);
         }
     }
