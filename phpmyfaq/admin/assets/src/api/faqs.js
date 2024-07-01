@@ -13,10 +13,10 @@
  * @since     2023-12-27
  */
 
-export const fetchAllFaqsByCategory = async (categoryId, onlyInactive, onlyNew) => {
+export const fetchAllFaqsByCategory = async (categoryId, language, onlyInactive, onlyNew) => {
   try {
     const currentUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const url = new URL(`${currentUrl}api/faqs/${categoryId}`);
+    const url = new URL(`${currentUrl}api/faqs/${categoryId}/${language}`);
     if (onlyInactive) {
       url.searchParams.set('only-inactive', onlyInactive);
     }
@@ -39,7 +39,7 @@ export const fetchAllFaqsByCategory = async (categoryId, onlyInactive, onlyNew) 
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching groups:', error);
+    console.error('Error fetching FAQs from category:', error);
     throw error;
   }
 };
@@ -64,7 +64,7 @@ export const fetchFaqsByAutocomplete = async (searchTerm, csrfToken) => {
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching FAQs: ', error);
+    console.error('Error fetching FAQs by autocomplete: ', error);
     throw error;
   }
 };

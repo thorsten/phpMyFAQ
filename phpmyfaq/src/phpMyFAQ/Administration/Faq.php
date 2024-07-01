@@ -20,9 +20,11 @@ namespace phpMyFAQ\Administration;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
-readonly class Faq
+class Faq
 {
-    public function __construct(private Configuration $configuration)
+    private ?string $language = null;
+
+    public function __construct(private readonly Configuration $configuration)
     {
     }
 
@@ -87,7 +89,7 @@ readonly class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $categoryId,
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($this->getLanguage()),
             $onlyInactive ? "AND fd.active = 'no'" : '',
             $onlyNew ? sprintf("AND fd.created > '%s'", date('Y-m-d H:i:s', strtotime('-1 month'))) : ''
         );
@@ -158,5 +160,16 @@ readonly class Faq
         }
 
         return false;
+    }
+
+    public function setLanguage(string $language): Faq
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
     }
 }

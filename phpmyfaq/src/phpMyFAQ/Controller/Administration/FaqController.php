@@ -455,17 +455,19 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faqs')]
+    #[Route('admin/api/faqs/:categoryId/:language')]
     public function listByCategory(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $language = Filter::filterVar($request->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
         $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
 
         $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
+        $faq->setLanguage($language);
 
         return $this->json(
             [

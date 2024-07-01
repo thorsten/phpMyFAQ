@@ -273,7 +273,7 @@ $routesConfig = [
         'methods' => 'POST'
     ],
     'admin.api.faqs' => [
-        'path' => '/faqs/{categoryId}',
+        'path' => '/faqs/{categoryId}/{language}',
         'controller' => [FaqController::class, 'listByCategory'],
         'methods' => 'GET'
     ],

@@ -35,7 +35,7 @@ export const handleFaqOverview = async () => {
         const onlyInactive = filterForInactive.checked;
         const onlyNew = filterForNew.checked;
 
-        const faqs = await fetchAllFaqsByCategory(categoryId, onlyInactive, onlyNew);
+        const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs);
         const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
         const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
