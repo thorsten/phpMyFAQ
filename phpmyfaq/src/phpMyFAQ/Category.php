@@ -379,24 +379,26 @@ class Category
 
         $result = $this->config->getDb()->query($query);
 
-        while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
-            $link = new Link($url, $this->config);
-            $link->itemTitle = $row['name'];
-            if ('' === $row['image']) {
-                $image = '';
-            } else {
-                $image = 'images/' . $row['image'];
+        if ($result) {
+            while ($row = $this->config->getDb()->fetchArray($result)) {
+                $url = sprintf('%sindex.php?action=show&cat=%d', $this->config->getDefaultUrl(), $row['id']);
+                $link = new Link($url, $this->config);
+                $link->itemTitle = $row['name'];
+                if ('' === $row['image']) {
+                    $image = '';
+                } else {
+                    $image = 'images/' . $row['image'];
+                }
+
+                $category = [
+                    'url' => Strings::htmlentities($link->toString()),
+                    'name' => $row['name'],
+                    'description' => $row['description'],
+                    'image' => $image
+                ];
+
+                $categories[] = $category;
             }
-
-            $category = [
-                'url' => Strings::htmlentities($link->toString()),
-                'name' => $row['name'],
-                'description' => $row['description'],
-                'image' => $image
-            ];
-
-            $categories[] = $category;
         }
 
         return $categories;
