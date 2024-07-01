@@ -334,7 +334,7 @@ $seoEntity->setReferenceLanguage($lang);
 //
 $faqSystem = new System();
 $faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
-$currentPageUrl = Strings::htmlentities($faqLink->getCurrentUrl());
+$currentPageUrl = Strings::htmlspecialchars($faqLink->getCurrentUrl());
 
 //
 // Found a record ID?
@@ -556,7 +556,7 @@ if ($faqConfig->isSignInWithMicrosoftActive()) {
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'title' => Strings::htmlspecialchars($faqConfig->get('seo.title') . $title),
-    'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
+    'baseHref' => Strings::htmlspecialchars($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
     'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
     'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
@@ -666,7 +666,7 @@ $tplNavigation = [
     'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
 ];
 
-$tplNavigation['faqHome'] = Strings::htmlentities($faqConfig->getDefaultUrl());
+$tplNavigation['faqHome'] = Strings::htmlspecialchars($faqConfig->getDefaultUrl());
 $tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
 $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';

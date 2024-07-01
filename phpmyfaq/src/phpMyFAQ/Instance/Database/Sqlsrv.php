@@ -32,7 +32,7 @@ class Sqlsrv extends Database implements Driver
             id INTEGER NOT NULL,
             time INTEGER NOT NULL,
             usr INTEGER NOT NULL,
-            text NVARCHAR(8000) NOT NULL,
+            text NVARCHAR(4000) NOT NULL,
             ip NVARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
 

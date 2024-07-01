@@ -373,7 +373,7 @@ class Configuration
     /**
      * Adds a configuration item for the database.
      */
-    public function add(string $name, mixed $value): object|bool
+    public function add(string $name, mixed $value): bool
     {
         $insert = sprintf(
             "INSERT INTO %s%s VALUES ('%s', '%s')",
@@ -383,7 +383,7 @@ class Configuration
             $this->getDb()->escape(trim((string) $value))
         );
 
-        return $this->getDb()->query($insert);
+        return (bool) $this->getDb()->query($insert);
     }
 
     /**
@@ -398,7 +398,7 @@ class Configuration
             $this->getDb()->escape(trim($name))
         );
 
-        return (bool)$this->getDb()->query($delete);
+        return (bool) $this->getDb()->query($delete);
     }
 
     /**
