@@ -211,7 +211,7 @@ abstract class AbstractController
         $captcha = Captcha::getInstance($this->configuration);
         $captcha->setUserIsLoggedIn($currentUser->isLoggedIn());
 
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         if ($this->configuration->get('security.enableGoogleReCaptchaV2')) {
             $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
