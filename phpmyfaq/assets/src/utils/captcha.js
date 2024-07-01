@@ -25,7 +25,7 @@ export const handleReloadCaptcha = (reloadButton) => {
       await fetchCaptchaImage(action, timestamp);
       const captcha = document.getElementById('captcha');
       const captchaImage = document.getElementById('captchaImage');
-      captchaImage.setAttribute('src', './api/captcha');
+      captchaImage.setAttribute('src', './api/captcha?' + timestamp);
       captcha.value = '';
       captcha.focus();
     } catch (error) {
