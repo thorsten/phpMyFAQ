@@ -100,6 +100,7 @@ if ('' !== $inputTag) {
     $tagSearch = true;
     $tags = [];
     $tagIds = explode(',', (string) $inputTag);
+    $relTags = '';
 
     $tagHelper->setTaggingIds($tagIds);
 
@@ -138,7 +139,6 @@ if ('' !== $inputTag) {
 
         uasort($relatedTags, static fn($a, $b) => $b - $a);
         $numTags = 0;
-        $relTags = '';
 
         foreach ($relatedTags as $tagId => $relevance) {
             $relTags .= $tagHelper->renderRelatedTag($tagId, $tagging->getTagNameById($tagId), $relevance);
@@ -151,6 +151,7 @@ if ('' !== $inputTag) {
     }
 } else {
     $searchResult = '';
+    $relTags = '';
 }
 
 //
