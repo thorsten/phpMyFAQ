@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * The main phpMyFAQ Setup.
+ * This script checks the complete environment, writes the database connection
+ * parameters into the file config/database.php and the configuration into the database.
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Uwe Pries <uwe.pries@digartis.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
+ * @copyright 2002-2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-20
+ */
 
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Application;

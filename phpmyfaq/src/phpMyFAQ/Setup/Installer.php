@@ -624,7 +624,7 @@ class Installer extends Setup
 
         if (!$this->system->checkInstallation()) {
             throw new Exception(
-                'phpMyFAQ is already installed! Please use the <a href="./update">update</a>.'
+                'phpMyFAQ is already installed! Please use the <a href="../update">update</a>.'
             );
         }
     }
