@@ -23,6 +23,7 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\DebugExtension;
+use phpMyFAQ\Template\TranslateTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,6 +48,7 @@ if (empty($categoryTree)) {
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
+$twig->addExtension(new TranslateTwigExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 
 $templateVars = [
@@ -56,10 +58,6 @@ $templateVars = [
     'csrfTokenInput' => Token::getInstance()->getTokenInput('category'),
     'categoryTree' => $categoryTree,
     'categoryInfo' => $categoryInfo,
-    'msgAddFaqAction' => Translation::get('ad_quick_entry'),
-    'msgAddCategoryAction' => Translation::get('ad_quick_category'),
-    'msgEditCategoryAction' => Translation::get('ad_kateg_rename'),
-    'msgTranslateCategoryAction' => Translation::get('ad_categ_translate'),
     'msgCategoryRemark' => Translation::get('ad_categ_remark'),
 ];
 

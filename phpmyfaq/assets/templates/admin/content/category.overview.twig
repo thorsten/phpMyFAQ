@@ -49,34 +49,40 @@
         <div class="pmf-category-actions">
           <!-- Add FAQ to category (always) -->
           <a class="btn btn-info mb-1 mt-1"
-             href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
-            <i aria-hidden="true" class="bi bi-indent" title="{{ msgAddFaqAction }}"></i>
+             href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}"
+             title="{{ 'ad_quick_entry'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+            <i aria-hidden="true" class="bi bi-indent"></i>
           </a>
 
           <!-- Add subcategory (if current language) -->
           <a class="btn btn-info"
-             href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}">
-            <i aria-hidden="true" class="bi bi-plus-square" title="{{ msgAddCategoryAction }}"></i>
+             href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}"
+             title="{{ 'ad_quick_category'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+            <i aria-hidden="true" class="bi bi-plus-square"></i>
           </a>
 
           <!-- Edit category (if current language) -->
           <a class="btn btn-info"
-             href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}">
-            <i aria-hidden="true" class="bi bi-pencil" title="{{ msgEditCategoryAction }}"></i>
+             href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}"
+             title="{{ 'ad_kateg_rename'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+            <i aria-hidden="true" class="bi bi-pencil"></i>
           </a>
 
           <!-- Translate category -->
           <a class="btn btn-info"
-             href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}">
-            <i aria-hidden="true" class="bi bi-globe" title="{{ msgTranslateCategoryAction }}"></i>
+             href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}"
+             title="{{ 'ad_categ_translate'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+            <i aria-hidden="true" class="bi bi-globe"></i>
           </a>
 
           <!-- Delete category (if no subcategories) -->
           {% if children is empty %}
             <button type="button" class="btn btn-danger" name="pmf-category-delete-button"
                     data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
-                    data-pmf-language="{{ categoryInfo[key]['lang'] }}">
-              <i aria-hidden="true" class="bi bi-trash" title="%s"
+                    data-pmf-language="{{ categoryInfo[key]['lang'] }}"
+                    title="{{ 'msgDelete'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top"
+            >
+              <i aria-hidden="true" class="bi bi-trash"
                  data-pmf-category-id="{{ categoryInfo[key]['id'] }}"
                  data-pmf-language="{{ categoryInfo[key]['lang'] }}"></i>
             </button>
