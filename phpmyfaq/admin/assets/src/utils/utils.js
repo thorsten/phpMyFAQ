@@ -13,6 +13,8 @@
  * @since     2023-01-04
  */
 
+import { Tooltip } from 'bootstrap';
+
 export const selectAll = (selectId) => {
   for (const options of [...document.querySelector(`#${selectId}`).options]) {
     options.selected = true;
@@ -38,3 +40,10 @@ export const formatBytes = (bytes, decimals = 2) => {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
+
+export const initializeTooltips = () => {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl);
+  });
+}
