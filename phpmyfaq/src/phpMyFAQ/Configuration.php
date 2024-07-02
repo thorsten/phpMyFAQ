@@ -435,10 +435,7 @@ class Configuration
         ];
 
         foreach ($newConfigs as $name => $value) {
-            if (
-                $name != 'main.phpMyFAQToken'
-                && !in_array($name, $runtimeConfigs)
-            ) {
+            if ($name != 'main.phpMyFAQToken' && !in_array($name, $runtimeConfigs)) {
                 $update = sprintf(
                     "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
                     Database::getTablePrefix(),
@@ -460,22 +457,19 @@ class Configuration
     /**
      * Updates main.referenceUrl in media objects in faqs.
      *
-     * @param string[] $oldUrl Old main.referenceUrl
-     * @paran string[] $newUrl New main.referenceUrl
+     * @param string $oldUrl Old main.referenceUrl
+     * @param string $newUrl New main.referenceUrl
      * @return bool true|false
      */
-    public function replaceMainReferenceUrl(string $oldUrl, string $newUrl)
+    public function replaceMainReferenceUrl(string $oldUrl, string $newUrl): bool
     {
-        $query = sprintf(
-            "SELECT content FROM %sfaqdata",
-            Database::getTablePrefix()
-        );
+        $query = sprintf("SELECT content FROM %sfaqdata", Database::getTablePrefix());
         $response = $this->getDb()->query($query);
         $contentItems = $this->getDb()->fetchAll($response);
         $newContentItems = [];
 
         foreach ($contentItems as $item) {
-            if (strpos($item->content, $oldUrl) !== false) {
+            if (str_contains($item->content, $oldUrl)) {
                 $newContentItems[] = str_replace($oldUrl, $newUrl, $item->content);
             } else {
                 $newContentItems[] = $item->content;
@@ -493,13 +487,14 @@ class Configuration
             $count++;
             $this->getDb()->query($query);
         }
+
         return true;
     }
 
     /**
      * Returns an array with allowed media hosts for records
      *
-     * @return array
+     * @return string[]
      */
     public function getAllowedMediaHosts(): array
     {
