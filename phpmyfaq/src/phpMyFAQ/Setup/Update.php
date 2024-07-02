@@ -719,6 +719,7 @@ class Update extends Setup
                             reference_language VARCHAR(5) NOT NULL,
                             title TEXT DEFAULT NULL,
                             description TEXT DEFAULT NULL,
+                            slug TEXT DEFAULT NULL,
                             created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                         Database::getTablePrefix()
@@ -733,6 +734,7 @@ class Update extends Setup
                             reference_language VARCHAR(5) NOT NULL,
                             title TEXT NULL,
                             description TEXT NULL,
+                            slug TEXT NULL,
                             created DATE NOT NULL DEFAULT GETDATE(),
                             PRIMARY KEY (id))',
                         Database::getTablePrefix()
@@ -747,6 +749,7 @@ class Update extends Setup
                             reference_language VARCHAR(5) NOT NULL,
                             title TEXT NULL,
                             description TEXT NULL,
+                            slug TEXT NULL,
                             created DATE NOT NULL DEFAULT (date(\'now\')),
                             PRIMARY KEY (id))',
                         Database::getTablePrefix()
@@ -761,6 +764,7 @@ class Update extends Setup
                             reference_language VARCHAR(5) NOT NULL,
                             title TEXT,
                             description TEXT,
+                            slug TEXT NULL,
                             created DATE NOT NULL DEFAULT CURRENT_DATE,
                             PRIMARY KEY (id))',
                         Database::getTablePrefix()

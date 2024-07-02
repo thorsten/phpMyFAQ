@@ -301,6 +301,7 @@ class Mysqli extends Database implements Driver
             reference_language VARCHAR(5) NOT NULL,
             title TEXT DEFAULT NULL,
             description TEXT DEFAULT NULL,
+            slug TEXT DEFAULT NULL,
             created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
 

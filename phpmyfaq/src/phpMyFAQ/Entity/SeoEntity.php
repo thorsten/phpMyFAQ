@@ -28,6 +28,7 @@ class SeoEntity
     private string $referenceLanguage;
     private ?string $title;
     private ?string $description;
+    private ?string $slug;
     private DateTime $created;
 
     public function getId(): ?int
@@ -93,6 +94,17 @@ class SeoEntity
     public function setDescription(string $description): SeoEntity
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug ?? null;
+    }
+
+    public function setSlug(string $slug): SeoEntity
+    {
+        $this->slug = $slug;
         return $this;
     }
 

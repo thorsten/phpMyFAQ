@@ -330,7 +330,7 @@ class Link
         }
 
         $htmlAnchor .= '>';
-        if (('0' == $this->text) || ($this->text !== '' && $this->text !== '0')) {
+        if ($this->text !== '') {
             $htmlAnchor .= $this->text;
         } elseif ($this->name !== '' && $this->name !== '0') {
             $htmlAnchor .= $this->name;

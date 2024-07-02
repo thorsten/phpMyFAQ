@@ -299,6 +299,7 @@ class Pgsql extends Database implements Driver
             reference_language VARCHAR(5) NOT NULL,
             title TEXT,
             description TEXT,
+            slug TEXT,
             created DATE NOT NULL DEFAULT CURRENT_DATE,
             PRIMARY KEY (id))',
 

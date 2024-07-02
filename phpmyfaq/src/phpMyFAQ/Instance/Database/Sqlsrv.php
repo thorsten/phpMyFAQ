@@ -296,6 +296,7 @@ class Sqlsrv extends Database implements Driver
             reference_language VARCHAR(5) NOT NULL,
             title TEXT NULL,
             description TEXT NULL,
+            slug TEXT NULL,
             created DATE NOT NULL DEFAULT GETDATE(),
             PRIMARY KEY (id))',
 
