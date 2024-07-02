@@ -29,27 +29,33 @@ export const handleSaveComment = () => {
       if (!form.checkValidity()) {
         form.classList.add('was-validated');
       } else {
-        const comments = new FormData(form);
-        const response = await createComment(comments);
+        try {
+          const comments = new FormData(form);
+          const response = await createComment(comments);
 
-        if (response.success) {
-          const message = document.getElementById('pmf-comment-add-success');
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
+          if (response.success) {
+            const message = document.getElementById('pmf-comment-add-success');
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-success', innerText: response.success })
+            );
+          }
+
+          if (response.error) {
+            console.log('Error: ', response.error);
+            const message = document.getElementById('pmf-comment-add-error');
+            message.insertAdjacentElement(
+              'afterend',
+              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+            );
+          }
+
           modal.style.display = 'none';
           modal.classList.remove('show');
           modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
           form.reset();
-        }
-
-        if (response.error) {
-          const message = document.getElementById('pmf-comment-add-error');
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
-          );
+        } catch (error) {
+          console.error('Error: ', error);
         }
       }
     });

@@ -83,7 +83,7 @@ class CommentController extends AbstractController
         $faqId = Filter::filterVar($data->id ?? null, FILTER_VALIDATE_INT, 0);
         $newsId = Filter::filterVar($data->newsId ?? null, FILTER_VALIDATE_INT);
         $username = Filter::filterVar($data->user, FILTER_SANITIZE_SPECIAL_CHARS);
-        $mailer = Filter::filterVar($data->mail, FILTER_VALIDATE_EMAIL);
+        $email = Filter::filterVar($data->mail, FILTER_VALIDATE_EMAIL);
         $commentText = Filter::filterVar($data->comment_text, FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
@@ -102,14 +102,14 @@ class CommentController extends AbstractController
         // Check display name and e-mail address for not logged-in users
         if (!$user->isLoggedIn()) {
             $user = new User($this->configuration);
-            if ($user->checkDisplayName($username) && $user->checkMailAddress($mailer)) {
+            if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
                 $this->configuration->getLogger()->error('Name and email already used by registered user.');
                 return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_CONFLICT);
             }
         }
 
         if (
-            !empty($username) && !empty($mailer) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
+            !empty($username) && !empty($email) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
             $comment->isCommentAllowed($id, $languageCode, $type) && $faq->isActive($id, $languageCode, $type)
         ) {
             $session->userTracking('save_comment', $id);
@@ -118,7 +118,7 @@ class CommentController extends AbstractController
                 ->setRecordId($id)
                 ->setType($type)
                 ->setUsername($username)
-                ->setEmail($mailer)
+                ->setEmail($email)
                 ->setComment(nl2br(strip_tags((string) $commentText)))
                 ->setDate($request->server->get('REQUEST_TIME'));
 
