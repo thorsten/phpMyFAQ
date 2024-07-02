@@ -27,8 +27,8 @@
           {{ categoryDescriptionLabel }}
         </label>
         <div class="col-lg-4">
-                <textarea id="description" name="description" rows="3"
-                          class="form-control">{{ categoryDescription }}</textarea>
+          <textarea id="description" name="description" rows="3" class="form-control"
+          >{{ categoryDescription }}</textarea>
         </div>
       </div>
 
@@ -119,6 +119,7 @@
         </div>
 
       {% else %}
+        <input type="hidden" name="group_id" value="-1">
         <input type="hidden" name="grouppermission" value="all">
       {% endif %}
       <div class="row mb-2">
