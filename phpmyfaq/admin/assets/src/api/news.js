@@ -17,7 +17,7 @@ import { pushErrorNotification, pushNotification } from '../utils';
 
 export const addNews = async (data = {}) => {
   try {
-    const response = await fetch('api/news/add', {
+    const response = await fetch('api/news/create', {
       method: 'POST',
       cache: 'no-cache',
       headers: {
@@ -33,7 +33,7 @@ export const addNews = async (data = {}) => {
       pushNotification(result.success);
       setTimeout(function () {
         window.location.href = '?action=news';
-        }, 3000);
+      }, 3000);
     } else {
       pushErrorNotification(result.error);
     }
@@ -55,7 +55,7 @@ export const deleteNews = async (csrfToken, id) => {
       referrerPolicy: 'no-referrer',
       body: JSON.stringify({
         csrfToken: csrfToken,
-        id: id
+        id: id,
       }),
     });
 
@@ -115,7 +115,7 @@ export const activateNews = async (id, status, csrfToken) => {
       body: JSON.stringify({
         id: id,
         status: status,
-        csrfToken: csrfToken
+        csrfToken: csrfToken,
       }),
     });
 
