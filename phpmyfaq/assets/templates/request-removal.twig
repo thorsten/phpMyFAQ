@@ -20,7 +20,7 @@
   <form id="pmf-request-removal-form" action="#" method="post" class="needs-validation" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" name="userId" id="userId" value="{{ userId }}">
-    {{ csrf }}
+    {{ csrf | raw }}
 
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ ad_user_loginname }}</label>
