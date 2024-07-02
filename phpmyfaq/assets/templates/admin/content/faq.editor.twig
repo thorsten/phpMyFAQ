@@ -338,17 +338,15 @@
             </h6>
             <div class="row mb-2">
               <div class="col-lg-10 offset-lg-2">
-                  <textarea id="notes" name="notes" class="form-control" rows="3">{{ faqData['notes'] ?? '' }}</textarea>
+                <textarea id="notes" name="notes" class="form-control" rows="3">{{ faqData['notes'] ?? '' }}</textarea>
               </div>
             </div>
 
+            <h6 class="card-title">
+              {{ ad_entry_changelog_history }}
+            </h6>
             <div class="row mb-2">
-              <div class="col-lg-2">
-                <h6 class="card-title">
-                  {{ ad_entry_changelog_history }}
-                </h6>
-              </div>
-              <div class="col-lg-10">
+              <div class="offset-2 col-lg-10">
                 <ul>
                   {% for changelog in changelogs %}
                   <li class="small pt-0">
