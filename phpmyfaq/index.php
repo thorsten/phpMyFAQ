@@ -447,6 +447,14 @@ if (isset($cat) && ($cat !== 0) && ($id === 0) && isset($category->categoryName[
 }
 
 //
+// Glossary
+//
+if ('glossary' === $action) {
+    $title = $faqConfig->get('seo.glossary.title');
+    $metaDescription = $faqConfig->get('seo.glossary.description');
+}
+
+//
 // Found an action request?
 //
 if (!isset(Link::$allowedActionParameters[$action])) {
@@ -559,8 +567,7 @@ $tplMainPage = [
     'baseHref' => Strings::htmlspecialchars($faqSystem->getSystemUri($faqConfig)),
     'version' => $faqConfig->getVersion(),
     'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
-    'metaTitle' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle() . $title)),
-    'metaDescription' => Strings::htmlentities($metaDescription ?? $faqConfig->get('seo.description')),
+    'metaDescription' => Strings::htmlspecialchars($metaDescription ?? $faqConfig->get('seo.description')),
     'metaKeywords' => Strings::htmlentities($keywords),
     'metaPublisher' => Strings::htmlentities($faqConfig->get('main.metaPublisher')),
     'metaLanguage' => Translation::get('metaLanguage'),

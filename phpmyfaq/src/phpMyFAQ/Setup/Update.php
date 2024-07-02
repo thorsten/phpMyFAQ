@@ -782,6 +782,8 @@ class Update extends Setup
             $this->configuration->add('seo.title', $this->configuration->get('main.titleFAQ'));
             $this->configuration->add('seo.description', $this->configuration->get('main.metaDescription'));
             $this->configuration->add('main.enablePrivacyLink', 'true');
+            $this->configuration->add('seo.glossary.title', '');
+            $this->configuration->add('seo.glossary.description', '');
             $this->configuration->delete('main.urlValidateInterval');
         }
     }

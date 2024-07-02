@@ -1451,5 +1451,7 @@ $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];
+$LANG_CONF['seo.glossary.title'] = ['input', 'SERP Titel für Glossar'];
+$LANG_CONF['seo.glossary.description'] = ['area', 'SERP Beschreibung für Glossar'];
 
 return $PMF_LANG;

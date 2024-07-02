@@ -395,6 +395,8 @@ class Installer extends Setup
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
         'seo.enableXMLSitemap' => 'true',
+        'seo.glossary.title' => '',
+        'seo.glossary.description' => '',
 
         'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',
