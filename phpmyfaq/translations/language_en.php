@@ -223,7 +223,7 @@ $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
 // Contribution management
-$PMF_LANG["ad_entry_aor"] = "FAQ administration";
+$PMF_LANG["ad_entry_aor"] = "FAQ Administration";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
@@ -1175,7 +1175,7 @@ $PMF_LANG['ad_reset_visits_success'] = 'The reset of visits was successfully.';
 $LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Enable bundled Markdown editor'];
 
 // added v2.9.0-beta - 2015-09-27 by Thorsten
-$PMF_LANG['faqOverview'] = 'FAQ Overview';
+$PMF_LANG['faqOverview'] = 'FAQ Administration';
 $PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
 $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Enable smart answering for user questions'];
 

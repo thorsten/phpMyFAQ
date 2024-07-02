@@ -222,7 +222,7 @@ $PMF_LANG['ad_user_deleted'] = "Der Benutzer wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_user_checkall'] = "Alle auswählen";
 
 // Beitragsverwaltung
-$PMF_LANG['ad_entry_aor'] = "FAQ Übersicht";
+$PMF_LANG['ad_entry_aor'] = "FAQ-Verwaltung";
 $PMF_LANG['ad_entry_id'] = "ID";
 $PMF_LANG['ad_entry_topic'] = "Frage";
 $PMF_LANG['ad_entry_action'] = "Aktion";
@@ -1174,7 +1174,7 @@ $PMF_LANG['ad_reset_visits_success'] = 'Die Besuche wurden erfolgreich zurückge
 $LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Aktivierung des Markdown Editors'];
 
 // added v2.9.0-beta - 2015-09-27 by Thorsten
-$PMF_LANG['faqOverview'] = 'FAQ Übersicht';
+$PMF_LANG['faqOverview'] = 'FAQ-Verwaltung';
 $PMF_LANG['ad_dir_missing'] = 'Der Ordner %s fehlt.';
 $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Aktivierung von Smart Answering bei Benutzerfragen'];
 
@@ -1370,7 +1370,7 @@ $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
 // added v4.0.0-alpha - 2023-12-27 by Jan
 $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="./?action=config">Konfiguration</a> -> FAQs.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
-$PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./?action=faqs-overview" class="alert-link">FAQ Übersicht</a>, um FAQs als wichtig zu markieren.';
+$PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./?action=faqs-overview" class="alert-link">FAQ-Verwaltung</a>, um FAQs als wichtig zu markieren.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];

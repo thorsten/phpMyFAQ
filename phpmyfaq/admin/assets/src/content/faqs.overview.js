@@ -14,7 +14,7 @@
  */
 
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
-import { pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
@@ -197,7 +197,7 @@ const saveStatus = async (categoryId, faqIds, token, checked, type) => {
       if (result.success) {
         pushNotification(result.success);
       } else {
-        console.error(result.error);
+        pushErrorNotification(result.error);
       }
     } else {
       throw new Error('Network response was not ok: ', response.text());
@@ -337,8 +337,8 @@ const populateCategoryTable = async (catgoryId, faqs) => {
   });
 };
 
-const clearCategoryTable = (catgoryId) => {
-  const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
+const clearCategoryTable = (categoryId) => {
+  const tableBody = document.getElementById(`tbody-category-id-${categoryId}`);
   tableBody.innerHTML = '';
 };
 

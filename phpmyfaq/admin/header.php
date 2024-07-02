@@ -74,30 +74,17 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'faqs-overview',
-    'ad_menu_entry_edit',
+    'faqOverview',
     $action
 );
-
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'stickyfaqs',
     'stickyRecordsHeader',
     $action
 );
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-    'addglossary+editglossary+delglossary',
-    'glossary',
-    'ad_menu_glossary',
-    $action
-);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-    'addnews+editnews+delnews',
-    'news',
-    'ad_menu_news_edit',
-    $action
-);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addattachment+editattachment+delattachment',
     'attachments',
@@ -108,6 +95,18 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'tags',
     'ad_entry_tags',
+    $action
+);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'addglossary+editglossary+delglossary',
+    'glossary',
+    'ad_menu_glossary',
+    $action
+);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'addnews+editnews+delnews',
+    'news',
+    'ad_menu_news_edit',
     $action
 );
 

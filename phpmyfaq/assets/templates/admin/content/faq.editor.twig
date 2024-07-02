@@ -20,7 +20,7 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col-9">
     <div class="card shadow mb-4">
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
@@ -138,8 +138,8 @@
           <div class="tab-pane" id="tab-meta-data">
             <!-- Categories -->
             <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">{{ ad_entry_category }}</label>
-              <div class="col-lg-10">
+              <label class="col-2 col-form-label" for="phpmyfaq-categories">{{ ad_entry_category }}</label>
+              <div class="col-6">
                 <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple>
                   {{ categoryOptions | raw }}
                 </select>
@@ -254,8 +254,8 @@
             {% if not isBasicPermission %}
               <div class="form-group">
                 <div class="row">
-                  <div class="col-lg-2 col-form-label pt-0">{{ ad_entry_group_permission }}</div>
-                  <div class="col-lg-10">
+                  <div class="col-2 col-form-label pt-0">{{ ad_entry_group_permission }}</div>
+                  <div class="col-6">
                     <div class="form-check">
                       <input type="radio" id="allgroups" name="grouppermission" value="all" class="form-check-input"
                         {{ allGroups ? 'checked' : '' }}>
@@ -282,8 +282,8 @@
 
             <div class="form-group">
               <div class="row">
-                <div class="col-lg-2 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
-                <div class="col-lg-10">
+                <div class="col-2 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
+                <div class="col-6">
                   <div class="form-check">
                     <input type="radio" id="allusers" name="userpermission" value="all" class="form-check-input"
                       {{ allUsers ? 'checked' : '' }}>
@@ -367,7 +367,7 @@
   </div>
 
   <!-- Sidebar -->
-  <div class="col-4">
+  <div class="col-3">
     <div class="card shadow mb-4">
       <div class="card-header text-end" role="tab" id="pmf-heading-date">
         {% if selectedRevisionId == faqData['revision_id'] %}
