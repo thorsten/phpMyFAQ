@@ -1359,8 +1359,6 @@ $PMF_LANG['upgradeControlCenter'] = 'Aktualizacja Online';
 // added v4.0.0-alpha - 2023-07-19 by Jan
 $PMF_LANG['msgAddBookmark'] = 'Dodaj zakładkę';
 $PMF_LANG['removeBookmark'] = 'Usuń zakładkę';
-$PMF_LANG['msgBookmarkAdded'] = 'Zakładka została pomyślnie dodana!';
-$PMF_LANG['msgBookmarkRemoved'] = 'Zakładka została pomyślnie usunięta!';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['headerCheckHealth'] = '1. Sprawdź stan systemu';

@@ -66,9 +66,9 @@ class FaqHelper extends Helper
     }
 
     /**
-     * Renders a "Send to friend" HTML snippet.
+     * Renders a "Send to friend via Email" HTML snippet.
      */
-    public function renderSendToFriend(string $url): string
+    public function renderSendToFriendViaEmail(string $url): string
     {
         if ($url === '' || $url === '0' || !$this->configuration->get('main.enableSendToFriend')) {
             return '';
@@ -79,6 +79,25 @@ class FaqHelper extends Helper
             '<a rel="nofollow" href="%s" class="text-decoration-none"> %s</a>',
             $url,
             Translation::get('msgSend2Friend')
+        );
+    }
+
+    /**
+     * Renders a "Send to friend via WhatsApp" HTML snippet.
+     */
+    public function renderSendToFriendViaWhatsapp(string $url): string
+    {
+        if ($url === '' || $url === '0' || !$this->configuration->get('main.enableSendToFriend')) {
+            return '';
+        }
+
+        return sprintf(
+            '<i aria-hidden="true" class="bi bi-whatsapp"></i>' .
+                    '<a rel="nofollow" class="text-decoration-none"' .
+                    'href="https://wa.me/?text=%s+%s"> %s</a>',
+            urlencode(Translation::get('msgShareViaWhatsappText')),
+            urlencode($url),
+            Translation::get('msgShareViaWhatsapp')
         );
     }
 

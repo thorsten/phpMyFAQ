@@ -1339,12 +1339,6 @@ $LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release Environment'];
 $LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Last check for updates'];
 $PMF_LANG['upgradeControlCenter'] = 'Online Update';
 
-// added v4.0.0-alpha - 2023-07-19 by Jan
-$PMF_LANG['msgAddBookmark'] = 'Add bookmark';
-$PMF_LANG['removeBookmark'] = 'Remove bookmark';
-$PMF_LANG['msgBookmarkAdded'] = 'Bookmark successfully added!';
-$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
-
 // added v4.0.0-alpha - 2023-07-11 by Jan
 $PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
 $PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
@@ -1374,8 +1368,6 @@ $PMF_LANG['msgReleaseEnvironment'] = 'Release-Environment: ';
 // added v4.0.0-alpha - 2023-07-19 by Jan
 $PMF_LANG['msgAddBookmark'] = 'Add bookmark';
 $PMF_LANG['removeBookmark'] = 'Remove bookmark';
-$PMF_LANG['msgBookmarkAdded'] = 'Bookmark added successfully!';
-$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark removed successfully!';
 $PMF_LANG['msgBookmarks'] = 'Bookmarks';
 $PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
 
@@ -1469,6 +1461,8 @@ $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for m
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove your current Two Factor Authentication-configuration?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'The deletion of the current 2-factor configuration was successful.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Send to a friend via WhatsApp';
+$PMF_LANG['msgShareViaWhatsappText'] = 'I discovered a cool faq-article for you:';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];

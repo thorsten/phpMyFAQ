@@ -1,0 +1,192 @@
+<div class="row g-5">
+  <div class="col-md-8">
+    <h2 class="pb-4 mb-4 border-bottom">{{ question }}</h2>
+
+    <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer|raw }}</article>
+
+    <p class="d-print-none">{{ writeCommentMsg|raw }}</p>
+    <div id="pmf-comment-add-success"></div>
+    <div class="d-print-none" id="comments">{{ renderComments|raw }}</div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem">
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <ul class="list-group list-group-flush bg-transparent">
+          <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+            <div>
+              <i aria-hidden="true" class="bi bi-clock"></i>
+              <span class="data" id="pmf-reading-time-minutes">~ 0 min</span>
+            </div>
+            <a class="badge bg-secondary rounded-pill text-decoration-none" href="{{ solutionIdLink }}">
+              ID #{{ solutionId }}
+            </a>
+          </li>
+          <li class="list-group-item bg-transparent">
+            <i aria-hidden="true" class="bi bi-person"></i>
+            <span class="data" rel="author">{{ faqAuthor }}</span>
+          </li>
+          <li class="list-group-item bg-transparent">
+            <i aria-hidden="true" class="bi bi-calendar"></i>
+            <span class="data">{{ faqDate }}</span>
+          </li>
+          {% if numberOfComments is defined %}
+          <li class="list-group-item bg-transparent">
+            <i aria-hidden="true" class="bi bi-comments"></i>
+            {{ numberOfComments }}
+          </li>
+          {% endif %}
+          {% if userId != -1 %}
+          <li class="list-group-item bg-transparent">
+            <i aria-hidden="true" class="{{ bookmarkIcon }}"></i>
+            <a target="_self" id="bookmark-link" href="{{ bookmarkLink }}" rel="noopener" title="{{ msgAddBookmark }}" class="text-decoration-none">
+              {{ msgAddBookmark }}
+            </a>
+          </li>
+          {% endif %}
+          <li class="list-group-item bg-transparent">
+            <i aria-hidden="true" class="bi bi-file-pdf"></i>
+            <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}" class="text-decoration-none">
+              {{ msgPdf }}
+            </a>
+          </li>
+          {% if sendToFriendViaEmail != '' %}
+          <li class="list-group-item bg-transparent">{{ sendToFriendViaEmail|raw }}</li>
+          {% endif %}
+          {% if sendToFriendViaWhatsapp != '' %}
+          <li class="list-group-item bg-transparent">{{ sendToFriendViaWhatsapp|raw }}</li>
+          {% endif %}
+          {% if msgChangeLanguage is defined %}
+          <li class="list-group-item bg-transparent">{{ switchLanguage|raw }}</li>
+          {% endif %}
+          <li class="list-group-item bg-transparent">{{ editThisEntry|raw }}</li>
+        </ul>
+      </div>
+
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ msgVoteUsability }}</h4>
+        <form action="#" method="post" class="form-inline pmf-voting-form">
+          <input type="hidden" name="voting-id" id="voting-id" value="{{ saveVotingID }}">
+          <input type="hidden" name="voting-language" id="voting-language" value="{{ lang }}">
+          <div class="pmf-stars text-center">
+            <button type="submit" class="pmf-voting-star" data-star="1">
+              &#9733;
+              <span class="pmf-stars-screen-reader">1 Star</span>
+            </button>
+            <button type="submit" class="pmf-voting-star" data-star="2">
+              &#9733;
+              <span class="pmf-stars-screen-reader">2 Stars</span>
+            </button>
+            <button type="submit" class="pmf-voting-star" data-star="3">
+              &#9733;
+              <span class="pmf-stars-screen-reader">3 Stars</span>
+            </button>
+            <button type="submit" class="pmf-voting-star" data-star="4">
+              &#9733;
+              <span class="pmf-stars-screen-reader">4 Stars</span>
+            </button>
+            <button type="submit" class="pmf-voting-star" data-star="5">
+              &#9733;
+              <span class="pmf-stars-screen-reader">5 Stars</span>
+            </button>
+          </div>
+          <div class="text-end bold">&empty; <span id="rating">{{ renderVotingResult|raw }}</span></div>
+        </form>
+        <div id="pmf-voting-result"></div>
+      </div>
+
+      {% if renderTags is defined %}
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderTagsHeader }}</h4>
+        <div>{{ renderTags|raw }}</div>
+      </div>
+      {% endif %}
+      {% if renderRelatedArticles is defined %}
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderRelatedArticlesHeader }}</h4>
+        {{ renderRelatedArticles|raw }}
+      </div>
+      {% endif %}
+      {% if renderRelatedCategories is defined %}
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4 class="fst-italic">{{ renderRelatedCategoriesHeader }}</h4>
+        {{ renderRelatedCategories|raw }}
+      </div>
+      {% endif %}
+      {% if notes is defined %}
+      <div class="p-4 mb-3 bg-light-subtle border rounded">
+        <h4>{{ notesHeader }}</h4>
+        <p>{{ notes|raw }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="pmf-modal-add-comment" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="commentModalLabel">{{ msgCommentHeader }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ msgCancel }}"></button>
+      </div>
+      <div class="modal-body">
+        <div id="pmf-add-comment-error"></div>
+
+        <form id="pmf-add-comment-form" action="#" method="post" class="needs-validation" novalidate>
+          <input type="hidden" name="id" id="id" value="{{ id }}" />
+          <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+          <input type="hidden" name="type" id="type" value="faq" />
+          {{ csrfInput|raw }}
+
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+              <input
+                type="text"
+                name="user"
+                id="user"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentName }}"
+                value="{{ defaultContentName }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+              <input
+                type="email"
+                name="mail"
+                id="mail"
+                class="form-control"
+                required
+                placeholder="{{ msgNewContentMail }}"
+                value="{{ defaultContentMail }}"
+              />
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col">
+              <textarea
+                rows="10"
+                name="comment_text"
+                id="comment_text"
+                class="form-control"
+                required
+                placeholder="{{ msgYourComment }}"
+              ></textarea>
+            </div>
+          </div>
+
+          {{ captchaFieldset|raw }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ msgCancel }}</button>
+        <button type="button" class="btn btn-primary" id="pmf-button-save-comment">{{ msgNewContentSubmit }}</button>
+      </div>
+    </div>
+  </div>
+</div>
