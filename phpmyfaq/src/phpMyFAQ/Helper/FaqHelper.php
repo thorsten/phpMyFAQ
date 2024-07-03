@@ -17,17 +17,14 @@
 
 namespace phpMyFAQ\Helper;
 
-use Exception;
 use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Date;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
@@ -130,74 +127,20 @@ class FaqHelper extends Helper
     /**
      * Creates an overview with all categories with their FAQs.
      *
-     * @throws Exception
+     * @param Category $category
+     * @param Faq      $faq
+     * @param string   $language
+     * @return array
      */
-    public function createOverview(Category $category, Faq $faq, string $language = ''): string
+    public function createOverview(Category $category, Faq $faq, string $language = ''): array
     {
-        $output = '';
-
         // Initialize categories
         $category->transform(0);
 
         // Get all FAQs
-        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
-        $date = new Date($this->configuration);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language, 'active' => 'yes']);
 
-        if ((is_countable($faq->faqRecords) ? count($faq->faqRecords) : 0) !== 0) {
-            $lastCategory = 0;
-            foreach ($faq->faqRecords as $data) {
-                if (!is_null($data['category_id']) && $data['category_id'] !== $lastCategory) {
-                    $output .= sprintf(
-                        '<h3>%s</h3>',
-                        $this->cleanUpContent($category->getPath($data['category_id'], ' &raquo; '))
-                    );
-                }
-
-                $output .= sprintf('<h4>%s</h4>', Strings::htmlentities($data['title']));
-                if (!empty($data['content'])) {
-                    $output .= sprintf('<article>%s</article>', $this->cleanUpContent($data['content']));
-                }
-
-                $output .= sprintf(
-                    '<p>%s: %s<br>%s',
-                    Translation::get('msgAuthor'),
-                    Strings::htmlentities($data['author']),
-                    Translation::get('msgLastUpdateArticle') . $date->format($data['updated'])
-                );
-                $output .= '<hr>';
-
-                $lastCategory = $data['category_id'];
-            }
-        }
-
-        return $output;
-    }
-
-    /**
-     * Creates a list of links with available languages to edit a FAQ
-     * in the admin backend.
-     */
-    public function createFaqTranslationLinkList(int $faqId, int $categoryId, string $faqLang): string
-    {
-        $output = '';
-
-        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
-        foreach ($availableLanguages as $availableLanguage) {
-            if ($availableLanguage !== $faqLang) {
-                $output .= sprintf(
-                    '<a class="dropdown-item" href="?action=editentry&id=%d&cat=%d&translateTo=%s">%s %s</a>',
-                    $faqId,
-                    $categoryId,
-                    $availableLanguage,
-                    'Translate to',
-                    LanguageCodes::get($availableLanguage)
-                );
-            } else {
-                $output .= '<a class="dropdown-item">n/a</a>';
-            }
-        }
-
-        return $output;
+        return $faq->faqRecords;
     }
 
     /**

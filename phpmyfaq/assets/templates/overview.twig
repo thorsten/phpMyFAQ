@@ -1,0 +1,29 @@
+<section class="col-12">
+  <h1>{{ pageHeader }}</h1>
+
+  {% set lastCategory = 0 %}
+  {% for faq in faqOverview %}
+
+    {% if (faq['category_id'] != null and faq['category_id'] != lastCategory) %}
+      <h3>
+        {{ faq['category_id'] | categoryName }}
+      </h3>
+    {% endif %}
+
+    <h4>
+      {{ faq['title'] }}
+    </h4>
+    <article>
+      {{ faq['content'] | raw }}
+    </article>
+
+    <p>
+      {{ msgAuthor }}: {{ faq['author'] }}
+      <br>
+      {{ msgLastUpdateArticle }} {{ faq['updated'] | date('Y-m-d H:i') }}
+    </p>
+
+    <hr>
+    {% set lastCategory = faq['category_id'] %}
+  {% endfor %}
+</section>

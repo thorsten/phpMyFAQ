@@ -16,7 +16,10 @@
  */
 
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Template\CategoryNameTwigExtension;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,10 +33,19 @@ $faqHelper = new FaqHelper($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$template->parse(
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twig->addExtension(new CategoryNameTwigExtension());
+$twigTemplate = $twig->loadTemplate('./overview.twig');
+
+$templateVars = [
+    'pageHeader' => Translation::get('faqOverview'),
+    'faqOverview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
+    'msgAuthor' => Translation::get('msgAuthor'),
+    'msgLastUpdateArticle' => Translation::get('msgLastUpdateArticle')
+];
+
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => Translation::get('faqOverview'),
-        'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
-    ]
+    $twigTemplate->render($templateVars)
 );
