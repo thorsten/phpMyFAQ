@@ -76,7 +76,7 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'faqs-overview',
-    'faqOverview',
+    'ad_entry_aor',
     $action
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(

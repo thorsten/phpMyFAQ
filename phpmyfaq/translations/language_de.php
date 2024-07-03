@@ -1174,7 +1174,7 @@ $PMF_LANG['ad_reset_visits_success'] = 'Die Besuche wurden erfolgreich zurückge
 $LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Aktivierung des Markdown Editors'];
 
 // added v2.9.0-beta - 2015-09-27 by Thorsten
-$PMF_LANG['faqOverview'] = 'FAQ-Verwaltung';
+$PMF_LANG['faqOverview'] = 'FAQ Übersicht';
 $PMF_LANG['ad_dir_missing'] = 'Der Ordner %s fehlt.';
 $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Aktivierung von Smart Answering bei Benutzerfragen'];
 
