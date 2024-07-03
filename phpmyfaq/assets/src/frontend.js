@@ -16,13 +16,19 @@
 import 'bootstrap';
 import Masonry from 'masonry-layout';
 
-import { handleBookmarks } from './api';
 import { handleContactForm } from './contact';
-import { handleAddFaq, handleComments, handleSaveComment, handleShare, handleUserVoting } from './faq';
+import { handleAddFaq, handleComments, handleSaveComment, handleShare, handleShowFaq, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
-import { handleRegister, handleRequestRemoval, handleUserControlPanel, handleUserPassword } from './user';
+import {
+  handleBookmarks,
+  handleRegister,
+  handleRequestRemoval,
+  handleUserControlPanel,
+  handleUserPassword,
+} from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
+import { initializeTooltips } from '../../admin/assets/src/utils';
 
 //
 // Reload Captchas
@@ -66,6 +72,11 @@ handleShare();
 // Handle Add a FAQ
 //
 handleAddFaq();
+
+//
+// Handle show FAQ
+//
+handleShowFaq();
 
 //
 // Handle Add a Question

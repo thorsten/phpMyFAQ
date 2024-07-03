@@ -60,7 +60,7 @@ readonly class Bookmark
      *
      * @param int $faqId ID of the Faq
      */
-    public function saveFaqAsBookmarkById(int $faqId): bool
+    public function add(int $faqId): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)",
@@ -130,6 +130,7 @@ readonly class Bookmark
                 'url' => $link->toString(),
                 'title' => htmlspecialchars_decode((string) $faqData['title']),
                 'id' => $faqData['id'],
+                'answer' => $faqData['content']
             ];
         }
 

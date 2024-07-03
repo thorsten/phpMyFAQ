@@ -1,15 +1,59 @@
+<!-- @todo Toasts -> have to be moved to header and footer.twig --->
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
+  <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+              aria-label="Close">
+      </button>
+    </div>
+  </div>
+
+  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-error-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+              aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="row g-5">
   <div class="col-md-12">
     <h2 class="pb-4 mb-4 border-bottom">{{ msgMyBookmarks }}</h2>
 
-    <div class="list-group mb-4">
+    <div class="accordion" id="bookmarkAccordion">
+      {% set count = 1 %}
       {% for bookmark in bookmarksList %}
-        <a href="{{ bookmark['url'] }}" class="list-group-item list-group-item-action" id="delete-bookmark-{{ bookmark['id'] }}">
+        <!--<a href="{{ bookmark['url'] }}" class="list-group-item list-group-item-action" id="delete-bookmark-{{ bookmark['id'] }}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ bookmark['title'] }}</h5>
-            <i class="bi bi-trash-fill text-danger m-1 pmf-delete-bookmark" data-pmf-bookmark-id="{{ bookmark['id'] }}"></i>
+              <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ removeBookmark }}"
+                 data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}"></i>
           </div>
-        </a>
+        </a>-->
+        <div class="accordion-item shadow-sm rounded mb-3 border-1" id="delete-bookmark-{{ bookmark['id'] }}">
+          <h2 class="accordion-header" id="heading{{ count }}">
+            <button class="accordion-button d-flex collapsed justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ count }}" aria-expanded="true" aria-controls="collapse{{ count }}">
+              <span class="flex-grow-1 text-start">{{ count }}. {{ bookmark['title'] }}</span>
+              <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ removeBookmark }}"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}">
+              </i>&nbsp;
+            </button>
+          </h2>
+          <div id="collapse{{ count }}" class="accordion-collapse collapse" aria-labelledby="heading{{ count }}" data-bs-parent="#bookmarkAccordion">
+            <div class="accordion-body">
+              {{ bookmark['answer']|raw }}
+              <a href="{{ bookmark['url'] }}">{{ msgLinkToFAQ }}</a>
+            </div>
+          </div>
+        </div>
+        {% set count = count + 1 %}
       {% endfor %}
     </div>
 

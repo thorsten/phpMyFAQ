@@ -1349,6 +1349,8 @@ $PMF_LANG['msgAddBookmark'] = 'Lesezeichen hinzufügen';
 $PMF_LANG['removeBookmark'] = 'Lesezeichen entfernen';
 $PMF_LANG['msgBookmarks'] = 'Lesezeichen';
 $PMF_LANG['msgMyBookmarks'] = 'Meine Lesezeichen';
+$PMF_LANG['msgBookmarkAdded'] = 'Lesezeichen erfolgreich hinzugefügt!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 
 // added v4.0.0-alpha - 2023-09-20 by Jan
 $PMF_LANG['msgNoHashAllowed'] = "Die Frage darf '#' nicht enthalten.";
@@ -1442,6 +1444,8 @@ $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ist aktuell nicht aktiviert.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';
 $PMF_LANG['msgShareViaWhatsapp'] = 'Per WhatsApp empfehlen';
 $PMF_LANG['msgShareViaWhatsappText'] = 'Ich habe einen spannenden FAQ-Beitrag für dich entdeckt:';
+$PMF_LANG['msgError'] = 'Es ist ein Fehler aufgetreten.';
+$PMF_LANG['msgLinkToFAQ'] = 'Link zum FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];

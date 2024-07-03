@@ -41,6 +41,8 @@ $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 $templateVars = [
     'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
     'bookmarksList' => $bookmark->getBookmarkList(),
+    'removeBookmark' => Translation::get('removeBookmark'),
+    'msgLinkToFAQ' => Translation::get('msgLinkToFAQ')
 ];
 
 $template->addRenderedTwigOutput(
