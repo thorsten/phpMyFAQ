@@ -254,7 +254,7 @@
             {% if not isBasicPermission %}
               <div class="form-group">
                 <div class="row">
-                  <div class="col-2 col-form-label pt-0">{{ ad_entry_group_permission }}</div>
+                  <div class="col-3 col-form-label pt-0">{{ ad_entry_grouppermission }}</div>
                   <div class="col-6">
                     <div class="form-check">
                       <input type="radio" id="allgroups" name="grouppermission" value="all" class="form-check-input"
@@ -266,7 +266,7 @@
                     <div class="form-check">
                       <input type="radio" id="restrictedgroups" name="grouppermission" class="form-check-input"
                              value="restricted" {{ restrictedGroups ? 'checked' : '' }}>
-                      <label class="form-check-label" for="restrictedgroups">
+                      <label class="form-check-label mb-1" for="restrictedgroups">
                         {{ ad_entry_restricted_groups }}
                       </label>
                       <select id="restrictedgroups" name="restricted_groups" size="3" class="form-control" multiple>
@@ -282,7 +282,7 @@
 
             <div class="form-group">
               <div class="row">
-                <div class="col-2 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
+                <div class="col-3 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
                 <div class="col-6">
                   <div class="form-check">
                     <input type="radio" id="allusers" name="userpermission" value="all" class="form-check-input"
@@ -294,7 +294,7 @@
                   <div class="form-check">
                     <input type="radio" id="restrictedusers" name="userpermission" class="form-check-input"
                            value="restricted" {{ restrictedUsers ? 'checked' : '' }}>
-                    <label class="form-check-label" for="restrictedusers">
+                    <label class="form-check-label mb-1" for="restrictedusers">
                       {{ ad_entry_restricted_users }}
                     </label>
                     <select name="restricted_users" id="selected-user" class="form-select">

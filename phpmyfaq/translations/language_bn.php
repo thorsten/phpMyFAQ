@@ -740,8 +740,8 @@ $PMF_LANG["ad_categ_show"] = "Overview";
 $PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
-$PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
-$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions:';
+$PMF_LANG['ad_entry_userpermission'] = 'User permissions';
+$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions';
 $PMF_LANG['ad_entry_all_users'] = 'Access for all users';
 $PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
 $PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';

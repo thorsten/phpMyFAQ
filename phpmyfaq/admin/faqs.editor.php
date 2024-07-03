@@ -389,7 +389,10 @@ if (
         'categoryOptions' => $categoryHelper->renderOptions($categories),
         'ad_entry_locale' => Translation::get('ad_entry_locale'),
         'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
-        'hasPermissionForAddAttachments' => $user->perm->hasPermission($currentUserId, PermissionType::ATTACHMENT_ADD->value),
+        'hasPermissionForAddAttachments' => $user->perm->hasPermission(
+            $currentUserId,
+            PermissionType::ATTACHMENT_ADD->value
+        ),
         'hasPermissionForDeleteAttachments' => $user->perm->hasPermission(
             $currentUserId,
             PermissionType::ATTACHMENT_DELETE->value
