@@ -188,18 +188,6 @@ try {
 $searchHelper = new SearchHelper($faqConfig);
 $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 
-// Show link to edit the faq?
-$editThisEntry = '';
-if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)) {
-    $editThisEntry = sprintf(
-        '<i aria-hidden="true" class="bi bi-pencil"></i> ' .
-        '<a class="text-decoration-none" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
-        $faqId,
-        $lang,
-        Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2')
-    );
-}
-
 // Is the faq expired?
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
@@ -223,7 +211,8 @@ if (
         Translation::get('msgWriteComment')
     );
     $templateVars = [
-        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments'))
+        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments')),
+        'writeCommentMsg' => $commentMessage
     ];
 }
 
@@ -315,13 +304,14 @@ $templateVars = [
     'answer' => $answer,
     'faqDate' => $date->format($faq->faqRecord['date']),
     'faqAuthor' => Strings::htmlentities($author),
-    'editThisEntry' => $editThisEntry,
     'msgPdf' => Translation::get('msgPDF'),
     'msgPrintFaq' => Translation::get('msgPrintArticle'),
-    'sendToFriendViaEmail' => $faqHelper->renderSendToFriendViaEmail($faqServices->getSuggestLink()),
-    'sendToFriendViaWhatsapp' => $faqHelper->renderSendToFriendViaWhatsapp($faqServices->getSuggestLink()),
+    'suggestLink' => $faqServices->getSuggestLink(),
+    'enableSendToFriend' => $this->configuration->get('main.enableSendToFriend'),
+    'msgShareViaWhatsappText' => Translation::get('msgShareViaWhatsappText'),
+    'msgShareViaWhatsapp' => Translation::get('msgShareViaWhatsapp'),
+    'msgSend2Friend' => Translation::get('msgSend2Friend'),
     'linkToPdf' => $faqServices->getPdfLink(),
-    'saveVotingID' => $faqId,
     'msgAverageVote' => Translation::get('msgAverageVote'),
     'renderVotingResult' => $rating->get($faqId),
     'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
@@ -329,7 +319,6 @@ $templateVars = [
     'msgVoteBad' => Translation::get('msgVoteBad'),
     'msgVoteGood' => Translation::get('msgVoteGood'),
     'msgVoteSubmit' => Translation::get('msgVoteSubmit'),
-    'writeCommentMsg' => $commentMessage,
     'msgWriteComment' => Translation::get('msgWriteComment'),
     'id' => $faqId,
     'lang' => $lang,
@@ -342,7 +331,7 @@ $templateVars = [
     'msgYourComment' => Translation::get('msgYourComment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
+    'csrfTokenAddComment' => Token::getInstance()->getTokenString('add-comment'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
@@ -352,6 +341,9 @@ $templateVars = [
     'renderComments' => $commentHelper->getComments($comments),
     'msg_about_faq' => Translation::get('msg_about_faq'),
     'userId' => $user->getUserId(),
+    'permissionEditFaq' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value),
+    'ad_entry_edit_1' => Translation::get('ad_entry_edit_1'),
+    'ad_entry_edit_2' => Translation::get('ad_entry_edit_2'),
 ];
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
