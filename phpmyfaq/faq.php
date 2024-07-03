@@ -87,7 +87,7 @@ $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FIL
 // Handle bookmarks
 $bookmark = new Bookmark($faqConfig, $user);
 if ($bookmarkAction === 'add' && isset($faqId)) {
-    $bookmark->saveFaqAsBookmarkById($faqId);
+    $bookmark->add($faqId);
 }
 
 if ($bookmarkAction === 'remove' && isset($faqId)) {
@@ -221,14 +221,9 @@ if (-1 !== $user->getUserId()) {
     $templateVars = [
         ...$templateVars,
         'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark',
-        'bookmarkLink' =>
-            $bookmark->isFaqBookmark($faqId)
-                ?
-                sprintf('index.php?action=faq&bookmark_action=remove&id=%d', $faqId)
-                :
-                sprintf('index.php?action=faq&bookmark_action=add&id=%d', $faqId),
         'msgAddBookmark' =>
-            $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark')
+            $bookmark->isFaqBookmark($faqId) ? Translation::get('removeBookmark') : Translation::get('msgAddBookmark'),
+        'isFaqBookmark' => $bookmark->isFaqBookmark($faqId)
     ];
 }
 
@@ -307,7 +302,7 @@ $templateVars = [
     'msgPdf' => Translation::get('msgPDF'),
     'msgPrintFaq' => Translation::get('msgPrintArticle'),
     'suggestLink' => $faqServices->getSuggestLink(),
-    'enableSendToFriend' => $this->configuration->get('main.enableSendToFriend'),
+    'enableSendToFriend' => $faqConfig->get('main.enableSendToFriend'),
     'msgShareViaWhatsappText' => Translation::get('msgShareViaWhatsappText'),
     'msgShareViaWhatsapp' => Translation::get('msgShareViaWhatsapp'),
     'msgSend2Friend' => Translation::get('msgSend2Friend'),
@@ -344,6 +339,9 @@ $templateVars = [
     'permissionEditFaq' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value),
     'ad_entry_edit_1' => Translation::get('ad_entry_edit_1'),
     'ad_entry_edit_2' => Translation::get('ad_entry_edit_2'),
+    'bookmarkAction' => $bookmarkAction ?? '',
+    'msgBookmarkAdded' => Translation::get('msgBookmarkAdded'),
+    'msgBookmarkRemoved' => Translation::get('msgBookmarkRemoved')
 ];
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');

@@ -1370,6 +1370,8 @@ $PMF_LANG['msgAddBookmark'] = 'Add bookmark';
 $PMF_LANG['removeBookmark'] = 'Remove bookmark';
 $PMF_LANG['msgBookmarks'] = 'Bookmarks';
 $PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
+$PMF_LANG['msgBookmarkAdded'] = 'Bookmark successfully added!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 
 // added v4.0.0-alpha - 2023-09-20 by Jan
 $PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
@@ -1463,6 +1465,8 @@ $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'The deletion of the current 2-factor configuration was successful.';
 $PMF_LANG['msgShareViaWhatsapp'] = 'Send to a friend via WhatsApp';
 $PMF_LANG['msgShareViaWhatsappText'] = 'I discovered a cool faq-article for you:';
+$PMF_LANG['msgError'] = 'An error occurred.';
+$PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];

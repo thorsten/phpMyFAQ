@@ -13,38 +13,36 @@
  * @since     2023-09-19
  */
 
-export const handleBookmarks = () => {
-  const bookmarkTrashIcons = document.querySelectorAll('.pmf-delete-bookmark');
-
-  if (bookmarkTrashIcons) {
-    bookmarkTrashIcons.forEach((element) => {
-      element.addEventListener('click', async (event) => {
-        event.preventDefault();
-        const bookmarkId = event.target.getAttribute('data-pmf-bookmark-id');
-
-        try {
-          const response = await fetch(`api/bookmark/${bookmarkId}`, {
-            method: 'DELETE',
-            cache: 'no-cache',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-          });
-
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
-          const responseData = await response.json();
-          const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
-          bookmarkToDelete.remove();
-        } catch (error) {
-          // Handle error here
-          console.error('Error deleting bookmark:', error);
-        }
-      });
+export const addBookmark = async (faqId) => {
+  try {
+    const response = await fetch(`api/bookmark/add/${faqId}`, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+    return await response.json();
+  } catch (error) {
+    console.error('Error adding bookmark:', error);
   }
-};
+}
+
+export const removeBookmark = async (faqId) => {
+  try {
+    const response = await fetch(`api/bookmark/remove/${faqId}`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error removing bookmark:', error);
+  }
+}

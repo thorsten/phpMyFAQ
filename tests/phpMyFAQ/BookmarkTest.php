@@ -35,7 +35,7 @@ class BookmarkTest extends TestCase
 
     public function testSaveFaqAsBookmarkById(): void
     {
-        $result = $this->bookmark->saveFaqAsBookmarkById(1);
+        $result = $this->bookmark->add(1);
         $this->assertTrue($result);
 
         // Clean up
@@ -44,7 +44,7 @@ class BookmarkTest extends TestCase
 
     public function testIsFaqBookmark(): void
     {
-        $this->bookmark->saveFaqAsBookmarkById(1);
+        $this->bookmark->add(1);
         $result = $this->bookmark->isFaqBookmark(1);
         $this->assertTrue($result);
 
@@ -54,7 +54,7 @@ class BookmarkTest extends TestCase
 
     public function testGetAll(): void
     {
-        $this->bookmark->saveFaqAsBookmarkById(1);
+        $this->bookmark->add(1);
         $result = $this->bookmark->getAll();
         $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
@@ -65,13 +65,13 @@ class BookmarkTest extends TestCase
 
     public function testRemove(): void
     {
-        $this->bookmark->saveFaqAsBookmarkById(1);
+        $this->bookmark->add(1);
         $this->assertTrue($this->bookmark->remove(1));
     }
 
     public function testRenderBookmarkTree(): void
     {
-        $this->bookmark->saveFaqAsBookmarkById(1);
+        $this->bookmark->add(1);
         $result = $this->bookmark->getBookmarkList();
         $this->assertIsArray($result);
         $this->assertEquals(1, count($result));

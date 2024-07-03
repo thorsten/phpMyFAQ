@@ -1,3 +1,28 @@
+<!-- @todo Toasts -> have to be moved to header and footer.twig --->
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
+  <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+              aria-label="Close">
+      </button>
+    </div>
+  </div>
+
+  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-error-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+              aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="row g-5">
   <div class="col-md-8">
     <h2 class="pb-4 mb-4 border-bottom">{{ question }}</h2>
@@ -38,15 +63,16 @@
           {% endif %}
           {% if userId != -1 %}
           <li class="list-group-item bg-transparent">
-            <i aria-hidden="true" class="{{ bookmarkIcon }}"></i>
-            <a target="_self" id="bookmark-link" href="{{ bookmarkLink }}" rel="noopener" title="{{ msgAddBookmark }}" class="text-decoration-none">
+            <i aria-hidden="true" id="pmf-bookmark-icon" class="{{ bookmarkIcon }}"></i>
+            <a id="pmf-bookmark-toggle" href="#" rel="noopener" class="text-decoration-none"
+            data-pmf-action="{% if isFaqBookmark == true %}remove{% else %}add{% endif %}" data-pmf-id="{{ id }}">
               {{ msgAddBookmark }}
             </a>
           </li>
           {% endif %}
           <li class="list-group-item bg-transparent">
             <i aria-hidden="true" class="bi bi-file-pdf"></i>
-            <a target="_blank" href="{{ linkToPdf }}" rel="noopener" title="{{ msgPdf }}" class="text-decoration-none">
+            <a target="_blank" href="{{ linkToPdf }}" rel="noopener" class="text-decoration-none">
               {{ msgPdf }}
             </a>
           </li>
