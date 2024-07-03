@@ -155,7 +155,7 @@ class FaqController extends AbstractController
 
             try {
                 $notification = new Notification($this->configuration);
-                $notification->sendNewFaqAdded($moderators, $recordId, $languageCode);
+                $notification->sendNewFaqAdded($moderators, $faqEntity);
             } catch (Exception | TransportExceptionInterface $e) {
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [ $e->getMessage() ]);
             }

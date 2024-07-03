@@ -18,6 +18,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\QuestionEntity;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -77,7 +78,7 @@ readonly class Notification
      * @param array<string> $emails
      * @throws Core\Exception|TransportExceptionInterface
      */
-    public function sendNewFaqAdded(array $emails, int $faqId, string $faqLanguage): void
+    public function sendNewFaqAdded(array $emails, FaqEntity $faq): void
     {
         if ($this->configuration->get('main.enableNotifications')) {
             $this->mail->addTo($this->configuration->getAdminEmail());
@@ -88,20 +89,20 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getRecord($faqId, null, true);
+            $this->faq->getRecord($faq->getId(), null, true);
 
             $url = sprintf(
                 '%sadmin/?action=editentry&id=%d&lang=%s',
                 $this->configuration->getDefaultUrl(),
-                $faqId,
-                $faqLanguage
+                $faq->getId(),
+                $faq->getLanguage()
             );
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $this->faq->getQuestion($faqId);
+            $link->itemTitle = $this->faq->getQuestion($faq->getId());
 
             $this->mail->message = html_entity_decode((string) Translation::get('msgMailCheck')) .
                 "<p><strong>" . Translation::get('msgAskYourQuestion') . ":</strong> " .
-                $this->faq->getQuestion($faqId) . "</p>" .
+                $this->faq->getQuestion($faq->getId()) . "</p>" .
                 "<p><strong>" . Translation::get('msgNewContentArticle') . ":</strong> " .
                 $this->faq->faqRecord['content'] . "</p>" .
                 "<hr>" .

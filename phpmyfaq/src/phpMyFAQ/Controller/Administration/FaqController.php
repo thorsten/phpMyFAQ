@@ -99,7 +99,7 @@ class FaqController extends AbstractController
             $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
         }
 
-        $recordLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
+        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
         $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -125,7 +125,7 @@ class FaqController extends AbstractController
 
         $faqData = new FaqEntity();
         $faqData
-            ->setLanguage($recordLang)
+            ->setLanguage($language)
             ->setActive($active === 'yes')
             ->setSticky(($sticky !== 'no') ? $sticky : false)
             ->setQuestion(
@@ -182,7 +182,6 @@ class FaqController extends AbstractController
                 ->setDescription($serpDescription);
             $seo->create($seoEntity);
 
-
             // Open question answered
             $questionObject = new Question($this->configuration);
             $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
@@ -198,7 +197,7 @@ class FaqController extends AbstractController
                     $this->configuration->getDefaultUrl(),
                     $categories[0],
                     $faqData->getId(),
-                    $recordLang
+                    $faqData->getLanguage()
                 );
                 $oLink = new Link($url, $this->configuration);
 
@@ -219,7 +218,7 @@ class FaqController extends AbstractController
                     ->setCategory($category)
                     ->setConfiguration($this->configuration);
                 $moderators = $categoryHelper->getModerators($categories);
-                $notification->sendNewFaqAdded($moderators, $faqData->getId(), $recordLang);
+                $notification->sendNewFaqAdded($moderators, $faqData);
             } catch (Exception | TransportExceptionInterface $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
