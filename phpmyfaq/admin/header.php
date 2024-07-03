@@ -25,6 +25,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Template;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -41,6 +42,7 @@ $backupPage = false;
 $configurationPage = false;
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);

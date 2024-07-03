@@ -100,7 +100,7 @@
 
           <!-- User -->
           {% if secondLevelEntries['user'] != '' %}
-          <a class="nav-link {{ userPage ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse"
+          <a class="nav-link {{ userPage ? '' : 'collapsed' }}" href="?action=user" data-bs-toggle="collapse"
              data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
             <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
             {{ menuUsers }}
@@ -116,7 +116,7 @@
 
           <!-- Content -->
           {% if secondLevelEntries['content'] != '' %}
-          <a class="nav-link {{ contentPage ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse"
+          <a class="nav-link {{ contentPage ? '' : 'collapsed' }}" href="?action=faqs-overview" data-bs-toggle="collapse"
              data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
             <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-pencil-square h6"></i></div>
             {{ menuContent }}
@@ -132,7 +132,7 @@
 
           <!-- Statistics -->
           {% if secondLevelEntries['statistics'] != '' %}
-          <a class="nav-link {{ statisticsPage ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse"
+          <a class="nav-link {{ statisticsPage ? '' : 'collapsed' }}" href="?action=statistics" data-bs-toggle="collapse"
              data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
             <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-graph-up-arrow h6"></i></div>
             {{ menuStatistics }}
@@ -148,7 +148,7 @@
 
           <!-- Exports -->
           {% if secondLevelEntries['imports_exports'] != '' %}
-          <a class="nav-link {{ exportsPage ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse"
+          <a class="nav-link {{ exportsPage ? '' : 'collapsed' }}" href="?action=export" data-bs-toggle="collapse"
              data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
             <div class="pmf-admin-nav-link-icon">
               <i aria-hidden="true" class="bi bi-archive h6"></i>
@@ -166,7 +166,7 @@
 
           <!-- Backup -->
           {% if secondLevelEntries['backup'] != '' %}
-          <a class="nav-link {{ backupPage ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse"
+          <a class="nav-link {{ backupPage ? '' : 'collapsed' }}" href="?action=backup" data-bs-toggle="collapse"
              data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
             <div class="pmf-admin-nav-link-icon">
               <i aria-hidden="true" class="bi bi-cloud-download"></i>
@@ -184,7 +184,7 @@
 
           <!-- Config -->
           {% if secondLevelEntries['config'] != '' %}
-          <a class="nav-link {{ configurationPage ? '' : 'collapsed' }}" href="#"
+          <a class="nav-link {{ configurationPage ? '' : 'collapsed' }}" href="?action=config"
              data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
              aria-controls="collapseConfigAdmin">
             <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
