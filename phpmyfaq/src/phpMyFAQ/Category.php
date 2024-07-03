@@ -812,7 +812,7 @@ class Category
      */
     public function getModeratorGroupId(int $categoryId): int
     {
-        return $this->moderators[$categoryId];
+        return $this->moderators[$categoryId] ?? -1;
     }
 
     /**

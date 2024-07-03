@@ -220,7 +220,10 @@ class FaqController extends AbstractController
                 $moderators = $categoryHelper->getModerators($categories);
                 $notification->sendNewFaqAdded($moderators, $faqData);
             } catch (Exception | TransportExceptionInterface $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+                return $this->json(
+                    ['error' => 'Send moderator notification failed: ' . $e->getMessage()],
+                    Response::HTTP_BAD_REQUEST
+                );
             }
 
             // If Elasticsearch is enabled, index new FAQ document
