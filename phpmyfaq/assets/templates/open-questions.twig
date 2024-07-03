@@ -1,0 +1,50 @@
+<section class="col-12">
+  <h1>{{ pageHeader }}</h1>
+  <p>{{ msgQuestionText }}</p>
+
+  <table class="table table-striped align-middle mb-5">
+    <tr>
+      <th>{{ msgDate_User }}</th>
+      <th colspan="2">{{ msgQuestion2 }}</th>
+    </tr>
+    {% if openQuestions.numberQuestions > 0 %}
+      {% for question in openQuestions.questions %}
+        <tr>
+          <td>
+            <small>{{ question.date }}</small><br><a href="mailto:{{ question.email }}">{{ question.userName }}</a>
+          </td>
+          <td>
+            <strong>{{ question.categoryName }}:</strong><br>{{ question.question }}
+          </td>
+          {% if isCloseQuestionEnabled %}
+            <td>
+              <a href="?action=faq&cat={{ question.categoryId }}&id={{ question.answerId }}">
+                {{ msg2answerFAQ }}
+              </a>
+            </td>
+          {% else %}
+            <td class="text-end">
+              <a class="btn btn-primary" href="?action=add&question={{ question.id }}&cat={{ question.categoryId }}">
+                {{ msg2answer }}
+              </a>
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      <tr class="pmf-open-questions">
+
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="3">{{ msgNoQuestionsAvailable }}</td>
+      </tr>
+    {% endif %}
+    {% if openQuestions.numberInvisibleQuestions > 0 %}
+      <tr>
+        <td colspan="3">
+          {{ openQuestions.numberInvisibleQuestions }} {{ msgQuestionsWaiting }}
+        </td>
+      </tr>
+    {% endif %}
+  </table>
+</section>

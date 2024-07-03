@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,16 +32,23 @@ $faqConfig = Configuration::getConfigurationInstance();
 $questionHelper = new QuestionHelper($faqConfig);
 $questionHelper->setCategory($category);
 
-try {
-    $template->parse(
-        'mainPageContent',
-        [
-            'pageHeader' => Translation::get('msgOpenQuestions'),
-            'msgQuestionText' => Translation::get('msgQuestionText'),
-            'msgDate_User' => Translation::get('msgDate_User'),
-            'msgQuestion2' => Translation::get('msgQuestion2'),
-            'renderOpenQuestionTable' => $questionHelper->renderOpenQuestions()
-        ]
-    );
-} catch (Exception) {
-}
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twigTemplate = $twig->loadTemplate('./open-questions.twig');
+
+$templateVars = [
+    'pageHeader' => Translation::get('msgOpenQuestions'),
+    'msgQuestionText' => Translation::get('msgQuestionText'),
+    'msgDate_User' => Translation::get('msgDate_User'),
+    'msgQuestion2' => Translation::get('msgQuestion2'),
+    'openQuestions' => $questionHelper->getOpenQuestions(),
+    'isCloseQuestionEnabled' => $faqConfig->get('records.enableCloseQuestion'),
+    'msgQuestionsWaiting' => Translation::get('msgQuestionsWaiting'),
+    'msgNoQuestionsAvailable' => Translation::get('msgNoQuestionsAvailable'),
+    'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
+    'msg2answer' => Translation::get('msg2answer')
+];
+
+$template->addRenderedTwigOutput(
+    'mainPageContent',
+    $twigTemplate->render($templateVars)
+);
