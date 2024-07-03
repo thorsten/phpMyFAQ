@@ -219,8 +219,8 @@ const createTemporaryBackup = async () => {
             progressBarBackup.classList.remove('progress-bar-animated');
             return;
           } else {
-            progressBarBackup.style.width = JSON.parse(decodedValue).progress;
-            progressBarBackup.innerText = JSON.parse(decodedValue).progress;
+            progressBarBackup.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+            progressBarBackup.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
           }
 
           return pump();
@@ -260,8 +260,8 @@ const installPackage = async () => {
             card.classList.add('text-bg-success');
             return;
           } else {
-            progressBarInstallation.style.width = JSON.parse(decodedValue).progress;
-            progressBarInstallation.innerText = JSON.parse(decodedValue).progress;
+            progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+            progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
           }
 
           return pump();
