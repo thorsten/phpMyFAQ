@@ -21,10 +21,12 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BookmarkController extends AbstractController
@@ -39,6 +41,11 @@ class BookmarkController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('delete-bookmark', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
@@ -47,7 +54,8 @@ class BookmarkController extends AbstractController
         if ($bookmark->remove($id)) {
             return $this->json([
                 'success' => Translation::get('msgBookmarkRemoved'),
-                'linkText' => Translation::get('msgAddBookmark')
+                'linkText' => Translation::get('msgAddBookmark'),
+                'csrfToken' => Token::getInstance()->getTokenString('add-bookmark')
             ], JsonResponse::HTTP_OK);
         } else {
             return $this->json(['error' => Translation::get('msgError')], JsonResponse::HTTP_BAD_REQUEST);
@@ -64,6 +72,11 @@ class BookmarkController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('add-bookmark', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
@@ -72,7 +85,8 @@ class BookmarkController extends AbstractController
         if ($bookmark->add($id)) {
             return $this->json([
                 'success' => Translation::get('msgBookmarkAdded'),
-                'linkText' => Translation::get('removeBookmark')
+                'linkText' => Translation::get('removeBookmark'),
+                'csrfToken' => Token::getInstance()->getTokenString('delete-bookmark')
             ], JsonResponse::HTTP_OK);
         } else {
             return $this->json(['error' => Translation::get('msgError')], JsonResponse::HTTP_BAD_REQUEST);

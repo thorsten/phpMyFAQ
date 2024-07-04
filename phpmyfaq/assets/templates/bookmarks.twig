@@ -42,7 +42,7 @@
             <button class="accordion-button d-flex collapsed justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ count }}" aria-expanded="true" aria-controls="collapse{{ count }}">
               <span class="flex-grow-1 text-start">{{ count }}. {{ bookmark['title'] }}</span>
               <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ removeBookmark }}"
-                data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}">
+                data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}" data-pmf-csrf="{{ csrfTokenDeleteBookmark }}">
               </i>&nbsp;
             </button>
           </h2>

@@ -24,9 +24,10 @@ export const handleDeleteBookmarks = () => {
       element.addEventListener('click', async (event) => {
         event.preventDefault();
         const bookmarkId = event.target.getAttribute('data-pmf-bookmark-id');
+        const csrfToken = event.target.getAttribute('data-pmf-csrf');
         const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
         bookmarkToDelete.remove();
-        const response = await deleteBookmark(bookmarkId);
+        const response = await deleteBookmark(bookmarkId, csrfToken);
         if (response.success) {
           pushNotification(response.success);
         } else {

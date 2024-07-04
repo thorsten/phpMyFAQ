@@ -48,25 +48,28 @@ export const handleShowFaq = async () => {
     bookmarkToggle.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      const csrfToken = bookmarkToggle.getAttribute('data-pmf-csrf');
       if (bookmarkToggle.getAttribute('data-pmf-action') === 'remove') {
-        const response = await deleteBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
+        const response = await deleteBookmark(bookmarkToggle.getAttribute('data-pmf-id'), csrfToken);
         if (response.success) {
           pushNotification(response.success);
           document.getElementById('pmf-bookmark-icon').classList.remove('bi-bookmark-fill');
           document.getElementById('pmf-bookmark-icon').classList.add('bi-bookmark');
           bookmarkToggle.innerText = response.linkText;
           bookmarkToggle.setAttribute('data-pmf-action', 'add');
+          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken);
         } else {
           pushErrorNotification(response.error);
         }
       } else {
-        const response = await createBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
+        const response = await createBookmark(bookmarkToggle.getAttribute('data-pmf-id'), csrfToken);
         if (response.success) {
           pushNotification(response.success);
           document.getElementById('pmf-bookmark-icon').classList.remove('bi-bookmark');
           document.getElementById('pmf-bookmark-icon').classList.add('bi-bookmark-fill');
           bookmarkToggle.innerText = response.linkText;
           bookmarkToggle.setAttribute('data-pmf-action', 'remove');
+          bookmarkToggle.setAttribute('data-pmf-csrf', response.csrfToken);
         } else {
           pushErrorNotification(response.error);
         }
