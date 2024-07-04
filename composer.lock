@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4130b93ca9cec8fd977fbcc5878c06fa",
+    "content-hash": "fb2727acff15070a1901435f46af03ff",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2852,24 +2852,27 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v7.0.7",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
-                "reference": "dd12042707110995e2e7d80103f8d9928bea8621"
+                "reference": "66c1ecda092b1130ada2cf5f59dacfd5b6e9c99c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/intl/zipball/dd12042707110995e2e7d80103f8d9928bea8621",
-                "reference": "dd12042707110995e2e7d80103f8d9928bea8621",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/66c1ecda092b1130ada2cf5f59dacfd5b6e9c99c",
+                "reference": "66c1ecda092b1130ada2cf5f59dacfd5b6e9c99c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2"
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "conflict": {
+                "symfony/string": "<7.1"
             },
             "require-dev": {
                 "symfony/filesystem": "^6.4|^7.0",
-                "symfony/finder": "^6.4|^7.0",
                 "symfony/var-exporter": "^6.4|^7.0"
             },
             "type": "library",
@@ -2915,7 +2918,7 @@
                 "localization"
             ],
             "support": {
-                "source": "https://github.com/symfony/intl/tree/v7.0.7"
+                "source": "https://github.com/symfony/intl/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -2931,7 +2934,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-18T09:29:19+00:00"
+            "time": "2024-05-31T14:57:53+00:00"
         },
         {
             "name": "symfony/mailer",
@@ -4584,16 +4587,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.29.0",
+            "version": "1.29.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "536889f2b340489d328f5ffb7b02bb6b183ddedc"
+                "reference": "fcaefacf2d5c417e928405b71b400d4ce10daaf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/536889f2b340489d328f5ffb7b02bb6b183ddedc",
-                "reference": "536889f2b340489d328f5ffb7b02bb6b183ddedc",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fcaefacf2d5c417e928405b71b400d4ce10daaf4",
+                "reference": "fcaefacf2d5c417e928405b71b400d4ce10daaf4",
                 "shasum": ""
             },
             "require": {
@@ -4625,9 +4628,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.29.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.29.1"
             },
-            "time": "2024-05-06T12:04:23+00:00"
+            "time": "2024-05-31T08:52:43+00:00"
         },
         {
             "name": "phpstan/phpstan",

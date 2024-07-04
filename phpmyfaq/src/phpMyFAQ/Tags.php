@@ -454,6 +454,11 @@ class Tags
         return $records;
     }
 
+    /**
+     * @param int $limit
+     * @return string
+     * @deprecated
+     */
     public function renderPopularTags(int $limit = 0): string
     {
         $html = '';

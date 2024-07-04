@@ -56,10 +56,7 @@ class CategoryHelper extends Helper
 
         $i = 0;
         foreach ($this->Category->getCategoryTree() as $cat) {
-            $indent = '';
-            for ($j = 0; $j < $cat['indent']; ++$j) {
-                $indent .= '....';
-            }
+            $indent = str_repeat('....', $cat['indent']);
 
             $categories .= sprintf('<option value="%s"', $cat['id']);
 

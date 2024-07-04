@@ -160,43 +160,28 @@ class SearchHelper extends Helper
     }
 
     /**
-     * Renders the result page for the main search page.
+     * Returns the result page for the main search page
      *
-     *
+     * @return stdClass[]
      * @throws Exception
      */
-    public function renderSearchResult(SearchResultSet $searchResultSet, int $currentPage): string
+    public function getSearchResult(SearchResultSet $searchResultSet, int $currentPage): array
     {
-        $html = '';
+        $results = [];
         $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
-        $totalPages = (int)ceil($numOfResults / $confPerPage);
         $lastPage = $currentPage * $confPerPage;
         $firstPage = $lastPage - $confPerPage;
 
         if (0 < $numOfResults) {
-            $html .= sprintf(
-                '<h4 class="mt-3">%s</h4>',
-                $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults)
-            );
-
-            if (1 < $totalPages) {
-                $html .= sprintf(
-                    "<p><strong>%s%d %s %s</strong></p>\n",
-                    Translation::get('msgPage'),
-                    $currentPage,
-                    Translation::get('msgVoteFrom'),
-                    $this->plurals->GetMsg('plmsgPagesTotal', $totalPages)
-                );
-            }
-
-            $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
             $counter = 0;
             $displayedCounter = 0;
             $faqHelper = new FaqHelper($this->configuration);
-            foreach ($searchResultSet->getResultSet() as $result) {
-                if ($displayedCounter >= $confPerPage) {
+            foreach ($searchResultSet->getResultSet() as $resultSet) {
+                $result = new stdClass();
+
+                if ($displayedCounter >= (int) $confPerPage) {
                     break;
                 }
 
@@ -208,12 +193,12 @@ class SearchHelper extends Helper
                 ++$displayedCounter;
 
                 // Set language for current category to fetch the correct category name
-                $this->Category->setLanguage($result->lang);
+                $this->Category->setLanguage($resultSet->lang);
 
-                $categoryInfo = $this->Category->getCategoriesFromFaq($result->id);
+                $categoryInfo = $this->Category->getCategoriesFromFaq($resultSet->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
-                $question = Utils::chopString(Strings::htmlentities($result->question), 15);
-                $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 20);
+                $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
+                $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);
 
                 $searchTerm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
@@ -234,52 +219,31 @@ class SearchHelper extends Helper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
                     $this->configuration->getDefaultUrl(),
-                    $this->sessionId,
-                    $result->category_id,
-                    $result->id,
-                    $result->lang,
+                    $resultSet->category_id,
+                    $resultSet->id,
+                    $resultSet->lang,
                     urlencode($searchTerm)
                 );
 
                 $oLink = new Link($currentUrl, $this->configuration);
-                $oLink->text = $question;
-                $oLink->itemTitle = $result->question;
-                $oLink->tooltip = $result->question;
+                $oLink->itemTitle = $resultSet->question;
 
-                $path = isset($categoryInfo[0]['id'])
-                    ?
-                    Strings::htmlentities($this->Category->getPath($categoryInfo[0]['id']))
-                    :
-                    '';
+                $path = isset($categoryInfo[0]['id']) ? $this->Category->getPath($categoryInfo[0]['id']) : '';
 
-                $html .= '<li class="mb-2">';
-                $html .= $this->renderScore($result->score * 33);
-                $html .= sprintf(
-                    '<strong>%s</strong><br><i class="bi bi-question-circle-o"></i> %s<br>',
-                    $path,
-                    $oLink->toHtmlAnchor()
-                );
-                $html .= sprintf(
-                    "<small class=\"small\"><strong>%s</strong> %s...</small>\n",
-                    Translation::get('msgSearchContent'),
-                    $answerPreview
-                );
-                $html .= '</li>';
+                $result->renderedScore = $this->renderScore($resultSet->score * 33);
+                $result->question = $question;
+                $result->path = $path;
+                $result->url = $oLink->toString();
+                $result->answerPreview = $answerPreview;
+
+                $results[] = $result;
             }
-
-            $html .= "</ul>\n";
-            if (1 < $totalPages) {
-                $html .= $this->pagination->render();
-            }
-        } else {
-            $html = Translation::get('err_noArticles');
         }
 
-        return $html;
+        return $results;
     }
-
     /**
      * Renders the scoring stars
      */

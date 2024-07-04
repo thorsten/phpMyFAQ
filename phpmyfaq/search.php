@@ -29,10 +29,13 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Template\TagNameTwigExtension;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -46,6 +49,8 @@ $faqConfig = Configuration::getConfigurationInstance();
 $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
+
+$plurals = new Plurals();
 
 // Get possible user input
 $request = Request::createFromGlobals();
@@ -152,6 +157,7 @@ if ('' !== $inputTag) {
 } else {
     $searchResult = '';
     $relTags = '';
+    $tags = [];
 }
 
 //
@@ -200,11 +206,14 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 $faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
+// Number of results
+$numOfResults = $faqSearchResult->getNumberOfResults();
+
 if (
-    is_numeric(
-        $inputSearchTerm
-    ) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 0 < $faqSearchResult->getNumberOfResults(
-    ) && $faqConfig->get('search.searchForSolutionId')
+    is_numeric($inputSearchTerm) &&
+    PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm &&
+    0 < $numOfResults &&
+    $faqConfig->get('search.searchForSolutionId')
 ) {
     $response = new Response();
     $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
@@ -229,7 +238,7 @@ $baseUrl = sprintf(
 // Pagination options
 $options = [
     'baseUrl' => $baseUrl,
-    'total' => $faqSearchResult->getNumberOfResults(),
+    'total' => $numOfResults,
     'perPage' => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName' => 'seite',
     'layoutTpl' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
@@ -246,84 +255,59 @@ $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
+$searchResults = [];
+
 if ('' == $searchResult && !is_null($inputSearchTerm)) {
     try {
-        $searchResult = $searchHelper->renderSearchResult($faqSearchResult, $page);
+        $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception) {
         // @todo handle exception
     }
 }
 
-if ($tagSearch) {
-    $template->parseBlock(
-        'mainPageContent',
-        'searchTagsSection',
-        [
-            'msgCurrentTags' => Translation::get('msg_tags'),
-            'searchTags' => $tagHelper->renderTagList($tags),
-        ]
-    );
-    $template->parseBlock(
-        'mainPageContent',
-        'relatedTags',
-        [
-            'relatedTagsHeader' => Translation::get('msgRelatedTags'),
-            'relatedTags' => $relTags,
-        ]
-    );
-} else {
-    if ('' === $searchTerm) {
-        $template->parseBlock(
-            'mainPageContent',
-            'tagListSection',
-            [
-                'msgTags' => Translation::get('msgPopularTags'),
-                'tagList' => $tagging->renderPopularTags(0),
-            ]
-        );
-    }
+$confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
+$totalPages = (int)ceil($numOfResults / $confPerPage);
 
-    $template->parseBlock(
-        'mainPageContent',
-        'searchBoxSection',
-        [
-            'formActionUrl' => '?' . $sids . 'action=search',
-            'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
-            'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
-            'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-            'selectCategories' => Translation::get('msgSelectCategories'),
-            'allCategories' => Translation::get('msgAllCategories'),
-            'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
-            'msgSearch' => Translation::get('msgSearch')
-        ]
-    );
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twig->addExtension(new TagNameTwigExtension());
+$twigTemplate = $twig->loadTemplate('./search.twig');
 
-    $template->parseBlock(
-        'mainPageContent',
-        'popularSearchesSection',
-        [
-            'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
-            'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
-        ]
-    );
-}
+$templateVars = [
+    'pageHeader' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
+    'isTagSearch' => $tagSearch,
+    'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
+    'msgSearch' => Translation::get('msgSearch'),
+    'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
+    'msgCurrentTags' => Translation::get('msg_tags'),
+    'numberOfSearchResults' => $numOfResults,
+    'totalPages' => $totalPages,
+    'msgPage' => Translation::get('msgPage'),
+    'currentPage' => $page,
+    'from' => Translation::get('msgVoteFrom'),
+    'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults),
+    'msgSearchContent' => Translation::get('msgSearchContent'),
+    'searchTerm' => $searchTerm,
+    'searchTags' =>  ($tagSearch ? $tagHelper->renderTagList($tags) : ''),
+    'msgSearchWord' => Translation::get('msgSearchWord'),
+    'searchResults' => $searchResults,
+    'formActionUrl' => '?action=search',
+    'searchString' => $inputSearchTerm,
+    'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
+    'checkedAllLanguages' => $allLanguages ? ' checked' : '',
+    'selectCategories' => Translation::get('msgSelectCategories'),
+    'allCategories' => Translation::get('msgAllCategories'),
+    'noSearchResults' => Translation::get('err_noArticles'),
+    'pagination' => $faqPagination->render(),
+    'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
+    'mostPopularSearches' => $mostPopularSearchData,
+    'relatedTagsHeader' => Translation::get('msgRelatedTags'),
+    'relatedTags' => $relTags,
+    'msgTags' => Translation::get('msgPopularTags'),
+    'tagList' => $tagging->getPopularTags(),
+];
 
-$template->parse(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'pageHeader' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
-        'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
-        'msgSearchWord' => Translation::get('msgSearchWord'),
-        'renderSearchResults' => $searchResult,
-        'formActionUrl' => '?' . $sids . 'action=search',
-        'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES),
-        'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
-        'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-        'selectCategories' => Translation::get('msgSelectCategories'),
-        'allCategories' => Translation::get('msgAllCategories'),
-        'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
-        'msgSearch' => Translation::get('msgSearch'),
-        'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
-        'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
-    ]
+    $twigTemplate->render($templateVars)
 );
