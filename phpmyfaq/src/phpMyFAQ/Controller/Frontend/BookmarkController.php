@@ -32,12 +32,13 @@ class BookmarkController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('api/bookmark/remove')]
-    public function remove(Request $request): JsonResponse
+    #[Route('api/bookmark/delete')]
+    public function delete(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
@@ -56,12 +57,13 @@ class BookmarkController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('api/bookmark/add')]
-    public function add(Request $request): JsonResponse
+    #[Route('api/bookmark/create')]
+    public function create(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $id = Filter::filterVar($request->get('bookmarkId'), FILTER_VALIDATE_INT);
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 

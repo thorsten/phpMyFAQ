@@ -20,7 +20,7 @@ import { handleContactForm } from './contact';
 import { handleAddFaq, handleComments, handleSaveComment, handleShare, handleShowFaq, handleUserVoting } from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import {
-  handleBookmarks,
+  handleDeleteBookmarks,
   handleRegister,
   handleRequestRemoval,
   handleUserControlPanel,
@@ -86,7 +86,7 @@ handleQuestion();
 //
 // Handle Bookmarks
 //
-handleBookmarks();
+handleDeleteBookmarks();
 
 //
 // Handle user control panel

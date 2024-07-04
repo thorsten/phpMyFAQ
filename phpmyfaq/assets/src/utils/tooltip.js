@@ -15,7 +15,7 @@
 
 import { Tooltip } from 'bootstrap';
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map((tooltipTriggerElement) => {
     return new Tooltip(tooltipTriggerElement);

@@ -1,5 +1,5 @@
 import { addElement } from '../utils';
-import { addBookmark, createFaq, handleBookmarks, removeBookmark } from '../api';
+import { createBookmark, createFaq, handleBookmarks, deleteBookmark } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../admin/assets/src/utils';
 
 export const handleAddFaq = () => {
@@ -49,7 +49,7 @@ export const handleShowFaq = async () => {
       event.preventDefault();
       event.stopPropagation();
       if (bookmarkToggle.getAttribute('data-pmf-action') === 'remove') {
-        const response = await removeBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
+        const response = await deleteBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
         if (response.success) {
           pushNotification(response.success);
           document.getElementById('pmf-bookmark-icon').classList.remove('bi-bookmark-fill');
@@ -60,7 +60,7 @@ export const handleShowFaq = async () => {
           pushErrorNotification(response.error);
         }
       } else {
-        const response = await addBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
+        const response = await createBookmark(bookmarkToggle.getAttribute('data-pmf-id'));
         if (response.success) {
           pushNotification(response.success);
           document.getElementById('pmf-bookmark-icon').classList.remove('bi-bookmark');
