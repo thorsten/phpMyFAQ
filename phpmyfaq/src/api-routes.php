@@ -201,14 +201,14 @@ $routesConfig = [
         'controller' => [AutoCompleteController::class, 'search'],
         'methods' => 'GET'
     ],
-    'api.private.bookmark.remove' => [
-        'path' => 'bookmark/remove/{bookmarkId}',
-        'controller' => [BookmarkController::class, 'remove'],
+    'api.private.bookmark.delete' => [
+        'path' => 'bookmark/delete',
+        'controller' => [BookmarkController::class, 'delete'],
         'methods' => 'DELETE'
     ],
-    'api.private.bookmark.add' => [
-        'path' => 'bookmark/add/{bookmarkId}',
-        'controller' => [BookmarkController::class, 'add'],
+    'api.private.bookmark.create' => [
+        'path' => 'bookmark/create',
+        'controller' => [BookmarkController::class, 'create'],
         'methods' => 'POST'
     ],
     'api.private.captcha' => [

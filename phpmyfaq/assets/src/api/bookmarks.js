@@ -13,11 +13,14 @@
  * @since     2023-09-19
  */
 
-export const addBookmark = async (faqId) => {
+export const createBookmark = async (faqId) => {
   try {
-    const response = await fetch(`api/bookmark/add/${faqId}`, {
+    const response = await fetch(`api/bookmark/create`, {
       method: 'POST',
       cache: 'no-cache',
+      body: JSON.stringify({
+        'id': faqId
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -30,11 +33,14 @@ export const addBookmark = async (faqId) => {
   }
 }
 
-export const removeBookmark = async (faqId) => {
+export const deleteBookmark = async (faqId) => {
   try {
-    const response = await fetch(`api/bookmark/remove/${faqId}`, {
+    const response = await fetch(`api/bookmark/delete`, {
       method: 'DELETE',
       cache: 'no-cache',
+      body: JSON.stringify({
+        'id': faqId
+      }),
       headers: {
         'Content-Type': 'application/json',
       },

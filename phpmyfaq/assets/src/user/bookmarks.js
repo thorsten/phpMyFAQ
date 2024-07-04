@@ -14,10 +14,10 @@
  * @since     2024-07-03
  */
 
-import { removeBookmark } from '../api';
+import { deleteBookmark } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../admin/assets/src/utils';
 
-export const handleBookmarks = () => {
+export const handleDeleteBookmarks = () => {
   const bookmarkTrashIcons = document.querySelectorAll('.pmf-delete-bookmark');
   if (bookmarkTrashIcons) {
     bookmarkTrashIcons.forEach((element) => {
@@ -26,7 +26,7 @@ export const handleBookmarks = () => {
         const bookmarkId = event.target.getAttribute('data-pmf-bookmark-id');
         const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
         bookmarkToDelete.remove();
-        const response = await removeBookmark(bookmarkId);
+        const response = await deleteBookmark(bookmarkId);
         if (response.success) {
           pushNotification(response.success);
         } else {
