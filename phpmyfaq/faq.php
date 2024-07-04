@@ -341,7 +341,9 @@ $templateVars = [
     'ad_entry_edit_2' => Translation::get('ad_entry_edit_2'),
     'bookmarkAction' => $bookmarkAction ?? '',
     'msgBookmarkAdded' => Translation::get('msgBookmarkAdded'),
-    'msgBookmarkRemoved' => Translation::get('msgBookmarkRemoved')
+    'msgBookmarkRemoved' => Translation::get('msgBookmarkRemoved'),
+    'csrfTokenRemoveBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
+    'csrfTokenAddBookmark' => Token::getInstance()->getTokenString('add-bookmark')
 ];
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');

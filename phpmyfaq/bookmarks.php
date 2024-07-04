@@ -22,6 +22,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\User\CurrentUser;
 use Twig\Extension\DebugExtension;
+use phpMyFAQ\Session\Token;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -42,7 +43,8 @@ $templateVars = [
     'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
     'bookmarksList' => $bookmark->getBookmarkList(),
     'removeBookmark' => Translation::get('removeBookmark'),
-    'msgLinkToFAQ' => Translation::get('msgLinkToFAQ')
+    'msgLinkToFAQ' => Translation::get('msgLinkToFAQ'),
+    'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark')
 ];
 
 $template->addRenderedTwigOutput(

@@ -65,7 +65,8 @@
           <li class="list-group-item bg-transparent">
             <i aria-hidden="true" id="pmf-bookmark-icon" class="{{ bookmarkIcon }}"></i>
             <a id="pmf-bookmark-toggle" href="#" rel="noopener" class="text-decoration-none"
-            data-pmf-action="{% if isFaqBookmark == true %}remove{% else %}add{% endif %}" data-pmf-id="{{ id }}">
+            data-pmf-action="{% if isFaqBookmark == true %}remove{% else %}add{% endif %}" data-pmf-id="{{ id }}"
+            data-pmf-csrf="{% if isFaqBookmark == true %}{{ csrfTokenRemoveBookmark }}{% else %}{{ csrfTokenAddBookmark }}{% endif %}">
               {{ msgAddBookmark }}
             </a>
           </li>
