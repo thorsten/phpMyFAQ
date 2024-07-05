@@ -91,13 +91,10 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT)) {
     );
 }
 
-// Is the news item expired?
-$expired = (date('YmdHis') > $news['dateEnd']);
-
 // Does the user have the right to add a comment?
 if (
     (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    (!$news['active']) || (!$news['allowComments']) || $expired
+    (!$news['active']) || (!$news['allowComments'])
 ) {
     $commentMessage = Translation::get('msgWriteNoComment');
 } else {
@@ -108,7 +105,7 @@ if (
 }
 
 // date of news entry
-if ($news['active'] && (!$expired)) {
+if ($news['active']) {
     $date = new Date($faqConfig);
     $newsDate = sprintf(
         '%s<span id="newsLastUpd">%s</span>',
@@ -135,7 +132,7 @@ $template->parse(
         'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
-        'writeAuthor' => ($news['active'] && (!$expired)) ? Translation::get('msgAuthor') . ': ' .
+        'writeAuthor' => ($news['active']) ? Translation::get('msgAuthor') . ': ' .
             Strings::htmlentities($news['authorName']) : '',
         'editThisEntry' => $editThisEntry,
         'writeCommentMsg' => $commentMessage,

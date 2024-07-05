@@ -110,9 +110,6 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), Perm
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->get($id, true);
 
-    $dateStart = ($newsData['dateStart'] != '00000000000000' ? Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
-    $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
-
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $oComment = new Comments($faqConfig);
     $comments = $oComment->getCommentsData($newsId, CommentType::NEWS);
@@ -124,8 +121,6 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), Perm
             (string)$newsData['content'],
             ENT_QUOTES
         ) : ''),
-        'dateStart' => $dateStart,
-        'dateEnd' => $dateEnd,
         'comments' => $comments,
         'newsId' => $newsId,
         'commentTypeNews' => CommentType::NEWS

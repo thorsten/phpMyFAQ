@@ -117,21 +117,6 @@
           </div>
         </div>
 
-        <h6>{{ ad_news_expiration_window }}</h6>
-        <div class="row mb-2">
-          <label class="col-3 col-form-label" for="dateStart">{{ ad_news_from }}</label>
-          <div class="col-3">
-            <input type="date" name="dateStart" id="dateStart" class="form-control">
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-3 col-form-label" for="dateEnd">{{ ad_news_to }}</label>
-          <div class="col-3">
-            <input type="date" name="dateEnd" id="dateEnd" class="form-control">
-          </div>
-        </div>
-
         <div class="row mb-2">
           <div class="col-12 text-end">
             <a class="btn btn-secondary" href="?action=news">
@@ -367,19 +352,6 @@
       <label class="col-3 col-form-label" for="langTo">{{ ad_entry_locale }}:</label>
       <div class="col-9">
         {{ selectLanguage|raw }}
-      </div>
-    </div>
-    <div class="row mb-2">
-      <label class="col-3 col-form-label" for="dateStart">{{ ad_news_from }}</label>
-      <div class="col-9">
-        <input type="date" name="dateStart" id="dateStart" class="form-control" value="{{ dateStart }}">
-      </div>
-    </div>
-
-    <div class="row mb-2">
-      <label class="col-3 col-form-label" for="dateEnd">{{ ad_news_to }}</label>
-      <div class="col-9">
-        <input type="date" name="dateEnd" id="dateEnd" class="form-control" value="{{ dateEnd }}">
       </div>
     </div>
 

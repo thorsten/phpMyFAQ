@@ -95,33 +95,18 @@ readonly class News
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
      * @param bool $forceConfLimit Force to limit in configuration
-     * @return array<int, array<mixed>>
+     * @return array<int, array>
      */
     public function getLatestData(bool $showArchive = false, bool $active = true, bool $forceConfLimit = false): array
     {
         $news = [];
         $counter = 0;
-        $now = date('YmdHis');
 
         $query = sprintf(
-            "SELECT
-                *
-            FROM
-                %sfaqnews
-            WHERE
-                date_start <= '%s'
-            AND 
-                date_end   >= '%s'
-            %s
-            AND
-                lang = '%s'
-            ORDER BY
-                datum DESC",
+            "SELECT * FROM %sfaqnews WHERE lang = '%s' %s ORDER BY datum DESC",
             Database::getTablePrefix(),
-            $now,
-            $now,
+            $this->configuration->getLanguage()->getLanguage(),
             $active ? "AND active = 'y'" : '',
-            $this->configuration->getLanguage()->getLanguage()
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -146,13 +131,11 @@ readonly class News
                     $item = [
                         'id' => (int)$row->id,
                         'lang' => $row->lang,
-                        'date' => Date::createIsoDate($row->datum, DATE_ISO8601, true),
+                        'date' => Date::createIsoDate($row->datum, DATE_ATOM),
                         'header' => $row->header,
                         'content' => $row->artikel,
                         'authorName' => $row->author_name,
                         'authorEmail' => $row->author_email,
-                        'dateStart' => $row->date_start,
-                        'dateEnd' => $row->date_end,
                         'active' => ('y' == $row->active),
                         'allowComments' => ('y' == $row->comment),
                         'link' => $row->link,
@@ -234,14 +217,9 @@ readonly class News
             $content = $row->artikel;
             $active = ('y' == $row->active);
             $allowComments = ('y' == $row->comment);
-            $expired = (date('YmdHis') > $row->date_end);
             if (!$admin) {
                 if (!$active) {
                     $content = Translation::get('err_inactiveNews');
-                }
-
-                if ($expired) {
-                    $content = Translation::get('err_expiredNews');
                 }
             }
             $news = [
@@ -252,8 +230,6 @@ readonly class News
                 'content' => $content,
                 'authorName' => $row->author_name,
                 'authorEmail' => $row->author_email,
-                'dateStart' => $row->date_start,
-                'dateEnd' => $row->date_end,
                 'active' => $active,
                 'allowComments' => $allowComments,
                 'link' => $row->link,
@@ -276,10 +252,9 @@ readonly class News
             "
             INSERT INTO
                 %sfaqnews
-            (id, datum, lang, header, artikel, author_name, author_email, date_start, date_end, active, comment,
-            link, linktitel, target)
+            (id, datum, lang, header, artikel, author_name, author_email, active, comment, link, linktitel, target)
                 VALUES
-            (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+            (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
             $data->getCreated()->format('YmdHis'),
@@ -288,8 +263,6 @@ readonly class News
             $this->configuration->getDb()->escape($data->getMessage()),
             $this->configuration->getDb()->escape($data->getAuthor()),
             $this->configuration->getDb()->escape($data->getEmail()),
-            $data->getDateStart() ? $data->getDateStart()->format('YmdHis') : '',
-            $data->getDateEnd() ? $data->getDateEnd()->format('YmdHis') : '',
             $data->isActive() ? 'y' : 'n',
             $data->isComment() ? 'y' : 'n',
             $this->configuration->getDb()->escape($data->getLink() ?? ''),
@@ -318,8 +291,6 @@ readonly class News
                 artikel = '%s',
                 author_name = '%s',
                 author_email = '%s',
-                date_start = '%s',
-                date_end = '%s',
                 active = '%s',
                 comment = '%s',
                 link = '%s',
@@ -334,8 +305,6 @@ readonly class News
             $this->configuration->getDb()->escape($data->getMessage()),
             $this->configuration->getDb()->escape($data->getAuthor()),
             $this->configuration->getDb()->escape($data->getEmail()),
-            $data->getDateStart() ? $data->getDateStart()->format('YmdHis') : '',
-            $data->getDateEnd() ? $data->getDateEnd()->format('YmdHis') : '',
             $data->isActive() ? 'y' : 'n',
             $data->isComment() ? 'y' : 'n',
             $this->configuration->getDb()->escape($data->getLink() ?? ''),
