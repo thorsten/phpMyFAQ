@@ -44,8 +44,10 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
     $category = new Category($faqConfig, [], false);
-    $category->setUser($currentAdminUser);
-    $category->setGroups($currentAdminGroups);
+    $category
+        ->setUser($currentAdminUser)
+        ->setGroups($currentAdminGroups)
+        ->setLanguage($faqLangCode);
 
     $categoryPermission = new Permission($faqConfig);
     $userHelper = new UserHelper($currentUser);
