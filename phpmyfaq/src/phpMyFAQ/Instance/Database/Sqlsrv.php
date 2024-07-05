@@ -254,8 +254,6 @@ class Sqlsrv extends Database implements Driver
             author_email NVARCHAR(255) NULL,
             active char(1) default \'y\',
             comment char(1) default \'n\',
-            date_start NVARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
-            date_end NVARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             link NVARCHAR(255) DEFAULT NULL,
             linktitel NVARCHAR(255) DEFAULT NULL,
             target NVARCHAR(255) NOT NULL,

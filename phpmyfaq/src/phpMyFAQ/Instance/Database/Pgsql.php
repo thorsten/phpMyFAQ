@@ -257,8 +257,6 @@ class Pgsql extends Database implements Driver
             author_email VARCHAR(255) NULL,
             active char(1) default \'y\',
             comment char(1) default \'n\',
-            date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
-            date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             link VARCHAR(255) DEFAULT NULL,
             linktitel VARCHAR(255) DEFAULT NULL,
             target VARCHAR(255) NOT NULL,
