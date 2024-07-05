@@ -50,11 +50,15 @@ class TwoFactor
     /**
      * Saves a given secret to the current user from the session.
      *
-     * @return true
+     * @param string $secret
+     * @return bool
      */
     public function saveSecret(string $secret): bool
     {
-        $user = CurrentUser::getFromSession($this->config);
+        if (strlen($secret) === 0) {
+            return false;
+        }
+        $user = CurrentUser::getCurrentUser($this->config);
         $user->setUserData(['secret' => $secret]);
         return true;
     }
@@ -70,10 +74,13 @@ class TwoFactor
     /**
      * Validates a given token. Returns true if the token is correct.
      */
-    public function validateToken(string $token, int $userid): bool
+    public function validateToken(string $token, int $userId): bool
     {
+        if (strlen($token) !== 6) {
+            return false;
+        }
         $user = new CurrentUser($this->config);
-        $user->getUserById($userid);
+        $user->getUserById($userId);
         $secret = $user->getUserData('secret');
 
         return $this->twoFactorAuth->verifyCode($secret, $token);

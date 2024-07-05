@@ -826,6 +826,12 @@ if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404'
 }
 
 $response->setContent($template->render());
+
+if ('logout' === $action) {
+    $response->headers->set('Cache-Control', 'no-cache, no-store, private');
+    $response->headers->set('Vary', 'Accept-Language, Accept-Encoding, Cookie');
+}
+
 $response->setCache([
     'must_revalidate'  => false,
     'no_cache'         => false,
