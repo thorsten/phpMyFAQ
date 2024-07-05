@@ -74,7 +74,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             ->setDescription(Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUserId(Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT))
             ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT))
-            ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT))
+            ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT) ?? false)
             ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
             ->setParentId($parentId)
             ->setShowHome(Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT));
