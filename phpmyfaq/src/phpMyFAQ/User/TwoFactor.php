@@ -63,10 +63,14 @@ readonly class TwoFactor
     /**
      * Saves a given secret to the current user from the session.
      *
-     * @return true
+     * @param string $secret
+     * @return bool
      */
     public function saveSecret(string $secret): bool
     {
+        if (strlen($secret) === 0) {
+            return false;
+        }
         $user = CurrentUser::getFromSession($this->configuration);
         $user->setUserData(['secret' => $secret]);
         return true;
@@ -84,9 +88,12 @@ readonly class TwoFactor
      * Validates a given token. Returns true if the token is correct.
      *
      * @throws Exception
-*/
-    public function validateToken(string $token, int $userid): bool
+     */
+    public function validateToken(string $token, int $userId): bool
     {
+        if (strlen($token) !== 6) {
+            return false;
+        }
         $currentUser = new CurrentUser($this->configuration);
         $currentUser->getUserById($userid);
 
