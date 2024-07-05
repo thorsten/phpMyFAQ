@@ -48,6 +48,7 @@ import {
   handleNews,
   handleEditNews,
   handleSaveFaqData,
+  handleUpdateQuestion,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -91,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleAttachmentUploads();
   handleFileFilter();
   handleSaveFaqData();
+  handleUpdateQuestion();
   await handleFaqOverview();
 
   // Content → Comments

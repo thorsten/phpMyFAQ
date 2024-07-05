@@ -21,3 +21,12 @@ label.mce-label {
   max-height: 32px;
   max-width: 32px;
 }
+
+.truncate-question {
+  display: inline-block;
+  width: 750px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}

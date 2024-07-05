@@ -35,3 +35,12 @@ export const handleSaveFaqData = () => {
     });
   }
 };
+
+export const handleUpdateQuestion = () => {
+  const input = document.getElementById('question');
+  if (input) {
+    input.addEventListener('input', () => {
+      document.getElementById('pmf-admin-question-output').innerText = `: ${input.value}`;
+    });
+  }
+};
