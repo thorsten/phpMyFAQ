@@ -257,19 +257,12 @@ if (
     $faqData['serp-description'] = $seoData->getDescription();
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlentities(
-        $faqData['title'],
-        ENT_HTML5 | ENT_COMPAT
-    ) : '');
-    $faqData['content'] = (isset($faqData['content']) ? trim(
-        Strings::htmlentities($faqData['content'], ENT_COMPAT, 'utf-8', true)
-    ) : '');
-    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlentities($faqData['tags']) : '');
-    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlentities($faqData['keywords']) : '');
-    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlentities(
-        $faqData['author']
-    ) : $user->getUserData('display_name'));
-    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlentities($faqData['email']) : $user->getUserData(
+    $faqData['title'] = ($faqData['title'] ?? '');
+    $faqData['content'] = (isset($faqData['content']) ? trim($faqData['content']) : '');
+    $faqData['tags'] = $faqData['tags'] ?? '';
+    $faqData['keywords'] = ($faqData['keywords'] ?? '');
+    $faqData['author'] = ($faqData['author'] ?? $user->getUserData('display_name'));
+    $faqData['email'] = ($faqData['email'] ?? $user->getUserData(
         'email'
     ));
     $faqData['isoDate'] = ($faqData['date'] ?? date('Y-m-d H:i'));
