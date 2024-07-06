@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Export;
 
-use ParsedownExtra;
+use League\CommonMark\CommonMarkConverter;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
@@ -43,7 +43,7 @@ class Pdf extends Export
 
     private ?Tags $tags = null;
 
-    private readonly ?ParsedownExtra $parsedownExtra;
+    private readonly ?CommonMarkConverter $converter;
 
     /**
      * Constructor.
@@ -68,7 +68,10 @@ class Pdf extends Export
         $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-        $this->parsedownExtra = new ParsedownExtra();
+        $this->converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
     }
 
     /**
@@ -103,7 +106,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->categoryName[$faq['category_id']]['name'],
+                        $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -135,7 +138,7 @@ class Pdf extends Export
             $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
 
             if ($this->config->get('main.enableMarkdownEditor')) {
-                $this->pdf->WriteHTML(trim((string) $this->parsedownExtra->text($faq['content'])));
+                $this->pdf->WriteHTML(trim((string) $this->converter->convert($faq['content'])->getContent()));
             } else {
                 $this->pdf->WriteHTML(trim((string) $faq['content']));
             }
@@ -199,7 +202,9 @@ class Pdf extends Export
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $this->pdf->WriteHTML(str_replace('../', '', (string) $this->parsedownExtra->text($faqData['content'])));
+            $this->pdf->WriteHTML(
+                str_replace('../', '', (string) $this->converter->convert($faqData['content'])->getContent())
+            );
         } else {
             $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']));
         }

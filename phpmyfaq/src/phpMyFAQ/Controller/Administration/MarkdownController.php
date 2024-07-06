@@ -17,7 +17,8 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use ParsedownExtra;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +28,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MarkdownController extends AbstractController
 {
+    /**
+     * @throws CommonMarkException
+     */
     #[Route('admin/api/content/markdown')]
     public function renderMarkdown(Request $request): JsonResponse
     {
@@ -34,8 +38,11 @@ class MarkdownController extends AbstractController
 
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $parsedownExtra = new ParsedownExtra();
+        $converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
 
-        return $this->json(['success' => $parsedownExtra->text($answer)], Response::HTTP_OK);
+        return $this->json(['success' => $converter->convert($answer)->getContent()], Response::HTTP_OK);
     }
 }

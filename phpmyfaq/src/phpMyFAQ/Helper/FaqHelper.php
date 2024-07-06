@@ -17,7 +17,8 @@
 
 namespace phpMyFAQ\Helper;
 
-use ParsedownExtra;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
@@ -25,7 +26,6 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
-use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
@@ -96,12 +96,17 @@ class FaqHelper extends Helper
 
     /**
      * Renders a preview of the answer
-     */
+     *
+     * @throws CommonMarkException
+*/
     public function renderAnswerPreview(string $answer, int $numWords): string
     {
         if ($this->configuration->get('main.enableMarkdownEditor')) {
-            $parseDown = new ParsedownExtra();
-            return Utils::chopString(strip_tags((string) $parseDown->text($answer)), $numWords);
+            $converter = new CommonMarkConverter([
+                'html_input' => 'strip',
+                'allow_unsafe_links' => false,
+            ]);
+            return Utils::chopString(strip_tags($converter->convert($answer)->getContent()), $numWords);
         }
         return Utils::chopString(strip_tags($answer), $numWords);
     }

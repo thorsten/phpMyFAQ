@@ -16,7 +16,7 @@
  * @since     2002-08-27
  */
 
-use phpMyFAQ\Component\Alert;
+use League\CommonMark\CommonMarkConverter;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Bookmark;
@@ -60,10 +60,13 @@ $tagging = new Tags($faqConfig);
 $relation = new Relation($faqConfig);
 $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
-$markDown = new ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new Permission($faqConfig);
 $attachmentHelper = new AttachmentHelper();
+$converter = new CommonMarkConverter([
+    'html_input' => 'strip',
+    'allow_unsafe_links' => false,
+]);
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
@@ -113,7 +116,7 @@ $faqVisits->logViews((int) $faqId);
 $question = $faq->getQuestion($faqId);
 $question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
-    $answer = $markDown->text($faq->faqRecord['content']);
+    $answer = $converter->convert($faq->faqRecord['content']);
 } else {
     $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }

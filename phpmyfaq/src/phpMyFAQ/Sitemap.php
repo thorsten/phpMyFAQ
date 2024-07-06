@@ -18,7 +18,8 @@
 namespace phpMyFAQ;
 
 use Exception;
-use ParsedownExtra;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database\Sqlite3;
 use stdClass;
 
@@ -151,6 +152,7 @@ class Sitemap
      * @param string $letter Letter
      * @return stdClass[]
      * @throws Exception
+     * @throws CommonMarkException
      */
     public function getFaqsFromLetter(string $letter = 'A'): array
     {
@@ -215,7 +217,10 @@ class Sitemap
 
         $result = $this->configuration->getDb()->query($query);
         $oldId = 0;
-        $parseDownExtra = new ParsedownExtra();
+        $converter = new CommonMarkConverter([
+            'html_input' => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
 
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($oldId !== $row->id) {
@@ -234,7 +239,7 @@ class Sitemap
                 $faq->url = $link->toString();
 
                 if ($this->configuration->get('main.enableMarkdownEditor')) {
-                    $faq->answer = Utils::chopString(strip_tags((string) $parseDownExtra->text($row->snap)), 25);
+                    $faq->answer = Utils::chopString(strip_tags($converter->convert($row->snap)->getContent()), 25);
                 } else {
                     $faq->answer = Utils::chopString(strip_tags((string) $row->snap), 25);
                 }
