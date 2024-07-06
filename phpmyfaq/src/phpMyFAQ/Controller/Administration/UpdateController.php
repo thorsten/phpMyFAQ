@@ -59,7 +59,7 @@ class UpdateController extends AbstractController
         if (!$upgrade->isMaintenanceEnabled()) {
             return $this->json(
                 [
-                    'error' => Translation::get('msgNotInMaintenanceMode'),
+                    'warning' => Translation::get('msgNotInMaintenanceMode'),
                     'dateLastChecked' => $dateLastChecked,
                 ],
                 Response::HTTP_CONFLICT

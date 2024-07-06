@@ -1424,7 +1424,7 @@ $PMF_LANG['msgUserList'] = 'Benutzerliste';
 
 // added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
 $PMF_LANG['msgNoQuestionAndAnswer'] = 'Keine Frage und Antwort gefunden.';
-$PMF_LANG['msgNotInMaintenanceMode'] = 'Die FAQ ist nicht im Wartungs-Modus.';
+$PMF_LANG['msgNotInMaintenanceMode'] = '⚠️Die FAQ ist nicht im Wartungs-Modus.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
 $PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';

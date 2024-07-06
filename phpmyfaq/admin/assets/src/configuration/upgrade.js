@@ -37,9 +37,9 @@ export const handleCheckForUpdates = () => {
           card.classList.add('text-bg-success');
           result.replaceWith(addElement('p', { innerText: responseData.success }));
         }
-        if (responseData.error) {
-          card.classList.add('text-bg-danger');
-          result.replaceWith(addElement('p', { innerText: responseData.error }));
+        if (responseData.warning) {
+          card.classList.add('text-bg-warning');
+          result.replaceWith(addElement('p', { innerText: responseData.warning }));
         }
       } catch (error) {
         if (error.cause && error.cause.response) {
