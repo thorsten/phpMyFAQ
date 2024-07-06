@@ -1,0 +1,138 @@
+<!-- Header -->
+<div class="row">
+  <div class="col-12">
+    <h1>{{ pageHeader }}</h1>
+  </div>
+</div>
+
+<!-- Start page -->
+{% if startPageCategories %}
+<div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
+  {% for decks in startPageCategoryDecks %}
+    <div class="col">
+      <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-3 shadow-lg p-1"
+      {% if decks['image'] != '' %}
+        style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
+      {% endif %}
+      >
+        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{ decks['name'] }}</h3>
+        <a class="btn btn-primary" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Start page content -->
+<div class="row masonry-grid">
+  <!-- Sticky FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ stickyRecordsHeader }}</h5>
+        <ul class="list-unstyled">
+          {% for stickyRecord in stickyRecordsList %}
+          <li class="mb-1">
+            <a class="sticky-faqs" title="{{ stickyRecord['question'] }}" href="{{ stickyRecord['url'] }}"
+               data-bs-toggle="tooltip" data-bs-placement="top">
+              {{ stickyRecord['question'] }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ writeTopTenHeader }}</h5>
+        <ol class="list-unstyled">
+          {% if topRecordsList is not empty %}
+            {% for topten in topRecordsList %}
+              <li class="mb-1">
+                <a class="topten" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ topten.preview }}"
+                   href="{{ topten.url }}">
+                  {{ topten.title }}
+                </a>
+                <small>({{ topten.visits }}{{ topten.voted }})</small>
+              </li>
+            {% endfor %}
+          {% else %}
+          <li>{{ errorMsgTopTen }}</li>
+          {% endif %}
+        </ol>
+        <p class="card-text">
+          <small class="text-muted">{{ writeNumberOfArticles }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ writeNewestHeader }}</h5>
+        <ol class="list-unstyled">
+          {% if latestRecordsList is not empty %}
+            {% for latest in latestRecordsList %}
+            <li class="mb-1">
+              <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ latest.preview }}"
+                href="{{ latest.url }}">{{ latest.title }}</a>
+              <small>({{ latest.date }})</small>
+            </li>
+            {% endfor %}
+          {% else %}
+          <li>{{ errorMsgLatest }}</li>
+          {% endif %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trending FAQs -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ msgTrendingFAQs }}</h5>
+        <ol class="list-unstyled">
+          {% if trendingRecordsList is not empty %}
+            {% for trending in trendingRecordsList %}
+            <li class="mb-1">
+              <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ trending.preview }}"
+                 href="{{ trending.url }}">{{ trending.title }}</a>
+              <br>
+              <small>({{ trending.visits }}, {{ trending.date }})</small>
+            </li>
+            {% endfor %}
+          {% else %}
+          <li>{{ errorMsgTrendingFaqs }}</li>
+          {% endif %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- News | @todo needs refactoring -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ writeNewsHeader }}</h5>
+        <p class="card-text">{{ writeNews | raw }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tag Cloud | @todo needs refactoring -->
+  <div class="col-sm-6 col-lg-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ msgTags }}</h5>
+        <p class="card-text pmf-tag-cloud">{{ tagList | raw }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -22,8 +22,11 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TranslateTwigExtension;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -36,17 +39,8 @@ $plr = new Plurals();
 $faqStatistics = new Statistics($faqConfig);
 
 $request = Request::createFromGlobals();
-$archived = Filter::filterVar($request->query->get('newsid'), FILTER_VALIDATE_INT);
 
-if (!is_null($archived)) {
-    $writeNewsHeader = Translation::get('newsArchive');
-    $showAllNews = sprintf('<a href="?%s">%s</a>', $sids, Translation::get('newsShowCurrent'));
-    $archived = true;
-} else {
-    $writeNewsHeader = ' ' . Translation::get('msgNews');
-    $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, Translation::get('newsShowArchive'));
-    $archived = false;
-}
+$writeNewsHeader = Translation::get('newsArchive');
 
 $startPageCategory = new Startpage($faqConfig);
 $startPageCategory
@@ -55,128 +49,48 @@ $startPageCategory
     ->setGroups($currentGroups);
 
 $startPageCategories = $startPageCategory->getCategories();
-if ((is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0) {
-    $template->parseBlock(
-        'mainPageContent',
-        'startPageCategories',
-        [
-            'startPageCategoryDecks' => $categoryHelper->renderStartPageCategories($startPageCategories)
-        ]
-    );
-}
 
-$stickyRecordsParams = $faq->getStickyRecords();
-if (!isset($stickyRecordsParams['error'])) {
-    $template->parseBlock(
-        'mainPageContent',
-        'stickyRecordsList',
-        [
-            'stickyTitle' => $stickyRecordsParams['title'],
-            'stickyUrl' => $stickyRecordsParams['url'],
-            'stickyPreview' => $stickyRecordsParams['preview']
-        ]
-    );
-}
-
-// generate top ten list
+// generates a top ten list
 $param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
-$toptenParams = $faqStatistics->getTopTen($param);
-if (!isset($toptenParams['error'])) {
-    $template->parseBlock(
-        'mainPageContent',
-        'toptenList',
-        [
-            'toptenUrl' => $toptenParams['url'],
-            'toptenTitle' => $toptenParams['title'],
-            'toptenPreview' => $toptenParams['preview'],
-            'toptenVisits' => $toptenParams[$param],
-        ]
-    );
-} else {
-    $template->parseBlock(
-        'mainPageContent',
-        'toptenListError',
-        [
-            'errorMsgTopTen' => $toptenParams['error'],
-        ]
-    );
-}
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twig->addExtension(new TranslateTwigExtension());
+$twigTemplate = $twig->loadTemplate('./startpage.twig');
 
-$latestEntriesParams = $faqStatistics->getLatest();
-if (!isset($latestEntriesParams['error'])) {
-    $template->parseBlock(
-        'mainPageContent',
-        'latestEntriesList',
-        [
-            'latestEntriesUrl' => $latestEntriesParams['url'],
-            'latestEntriesTitle' => $latestEntriesParams['title'],
-            'latestEntriesPreview' => $latestEntriesParams['preview'],
-            'latestEntriesDate' => $latestEntriesParams['date'],
-        ]
-    );
-} else {
-    $template->parseBlock(
-        'mainPageContent',
-        'latestEntriesListError',
-        [
-            'errorMsgLatest' => $latestEntriesParams['error']
-        ]
-    );
-}
+// Twig template variables
+$templateVars = [
+    'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'pageHeader' => $faqConfig->getTitle(),
+    'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
+    'startPageCategoryDecks' => $startPageCategories,
+    'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
+    'stickyRecordsList' => $faq->getStickyRecordsData(),
+    'writeTopTenHeader' => Translation::get('msgTopTen'),
+    'topRecordsList' => $faqStatistics->getTopTen($param),
+    'errorMsgTopTen' => Translation::get('err_noTopTen'),
+    'writeNewestHeader' => Translation::get('msgLatestArticles'),
+    'latestRecordsList' => $faqStatistics->getLatest(),
+    'errorMsgLatest' => Translation::get('err_noArticles'),
+    'msgTrendingFAQs' => Translation::get('msgTrendingFAQs'),
+    'trendingRecordsList' => $faqStatistics->getTrending(),
+    'errorMsgTrendingFaqs' => Translation::get('err_noArticles'),
+    'writeNewsHeader' => $writeNewsHeader,
+    'writeNews' => $news->getAll(),
+    'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faqStatistics->totalFaqs($faqLangCode)),
+    'msgTags' => Translation::get('msgPopularTags'),
+    'tagList' => $oTag->renderPopularTags(12),
+    'formActionUrl' => '?' . $sids . 'action=search',
+    'searchBox' => Translation::get('msgSearch'),
+    'categoryId' => ($cat === 0) ? '%' : (int)$cat,
+    'msgSearch' => sprintf(
+        '<a class="help" href="%sindex.php?action=search">%s</a>',
+        Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
+        Translation::get('msgAdvancedSearch')
+    )
+];
 
-$trendingFaqs = $faqStatistics->getTrending();
-if (!isset($trendingFaqs['error'])) {
-    $template->parseBlock(
-        'mainPageContent',
-        'trendingFaqsList',
-        [
-            'trendingFaqsUrl' => $trendingFaqs['url'],
-            'trendingFaqsTitle' => $trendingFaqs['title'],
-            'trendingFaqsPreview' => $trendingFaqs['preview'],
-            'trendingFaqsDate' => $trendingFaqs['date'],
-            'trendingFaqsVisits' => $trendingFaqs['visits']
-        ]
-    );
-} else {
-    $template->parseBlock(
-        'mainPageContent',
-        'trendingFaqsListError',
-        [
-            'errorMsgTrendingFaqs' => $trendingFaqs['error']
-        ]
-    );
-}
-
-$template->parseBlock(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    'tagListSection',
-    [
-        'msgTags' => Translation::get('msgPopularTags'),
-        'tagList' => $oTag->renderPopularTags(12)
-    ]
-);
-
-$template->parse(
-    'mainPageContent',
-    [
-        'pageHeader' => Strings::htmlspecialchars($faqConfig->getTitle()),
-        'baseHref' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
-        'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
-        'writeTopTenHeader' => Translation::get('msgTopTen'),
-        'writeNewestHeader' => Translation::get('msgLatestArticles'),
-        'msgTrendingFAQs' => Translation::get('msgTrendingFAQs'),
-        'writeNewsHeader' => $writeNewsHeader,
-        'writeNews' => $news->getAll($archived),
-        'showAllNews' => $showAllNews,
-        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faqStatistics->totalFaqs($faqLangCode)),
-        'formActionUrl' => '?' . $sids . 'action=search',
-        'searchBox' => Translation::get('msgSearch'),
-        'categoryId' => ($cat === 0) ? '%' : (int)$cat,
-        'msgSearch' => sprintf(
-            '<a class="help" href="%sindex.php?action=search">%s</a>',
-            Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
-            Translation::get('msgAdvancedSearch')
-        )
-    ]
+    $twigTemplate->render($templateVars)
 );

@@ -47,7 +47,7 @@ readonly class Startpage
         $categories = [];
         $where = '';
 
-        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+        if (preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $where = "AND fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
         }
 
@@ -114,7 +114,7 @@ readonly class Startpage
             $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
 
             $category = [
-                'url' => Strings::htmlentities($link->toString()),
+                'url' => $link->toString(),
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'image' => $image

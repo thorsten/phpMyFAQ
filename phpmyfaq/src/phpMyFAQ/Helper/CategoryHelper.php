@@ -26,6 +26,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use stdClass;
 
 /**
  * Class CategoryHelper
@@ -75,41 +76,6 @@ class CategoryHelper extends Helper
         }
 
         return $categories;
-    }
-
-    /**
-     * Renders the start page category card decks
-     */
-    public function renderStartPageCategories(array $categories): string
-    {
-        if ($categories === []) {
-            return '';
-        }
-
-        $decks = '';
-        foreach ($categories as $category) {
-            $decks .= '<div class="col">';
-            $decks .= '  <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-3 shadow-lg p-1" ';
-            if ('' !== $category['image']) {
-                $decks .= sprintf(
-                    'style="%s background-image: url(\'%s\')"',
-                    'background-size: cover; background-repeat: no-repeat; background-position: center center;',
-                    $category['image']
-                );
-            }
-
-            $decks .= '>';
-            $decks .= sprintf(
-                '<h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">%s</h3>',
-                Strings::htmlentities($category['name'])
-            );
-            $decks .= '   <a class="btn btn-primary" href="' .
-                Strings::htmlentities($category['url']) . '">' . Translation::get('msgGoToCategory') . '</a>';
-            $decks .= '  </div>';
-            $decks .= '</div>';
-        }
-
-        return $decks;
     }
 
     /**

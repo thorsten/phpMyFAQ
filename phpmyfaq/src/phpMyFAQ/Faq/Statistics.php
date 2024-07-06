@@ -28,6 +28,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
+use stdClass;
 
 class Statistics
 {
@@ -91,13 +92,13 @@ class Statistics
 
         if ($result !== []) {
             foreach ($result as $row) {
-                $output['url'][] = Strings::htmlentities($row['url']);
-                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
-                $output['preview'][] = Strings::htmlentities($row['question']);
-                $output['date'][] = $date->format($row['date']);
+                $entry = new stdClass();
+                $entry->url = $row['url'];
+                $entry->title = Utils::makeShorterText($row['question'], 8);
+                $entry->preview = $row['question'];
+                $entry->date = $date->format($row['date']);
+                $output[] = $entry;
             }
-        } else {
-            $output['error'] = Translation::get('err_noArticles');
         }
 
         return $output;
@@ -127,22 +128,23 @@ class Statistics
 
         if ($result !== []) {
             foreach ($result as $row) {
-                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
-                $output['preview'][] = Strings::htmlentities($row['question']);
-                $output['url'][] = Strings::htmlentities($row['url']);
+                $entry = new stdClass();
+                $entry->title = Utils::makeShorterText($row['question'], 8);
+                $entry->preview = $row['question'];
+                $entry->url = $row['url'];
                 if ('visits' == $type) {
-                    $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+                    $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['voted'][] = sprintf(
+                    $entry->voted = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
                         Translation::get('msgVoteFrom'),
                         $this->plurals->GetMsg('plmsgVotes', $row['user'])
                     );
                 }
+
+                $output[] = $entry;
             }
-        } else {
-            $output['error'] = Translation::get('err_noTopTen');
         }
 
         return $output;
@@ -162,11 +164,13 @@ class Statistics
 
         if ($result !== []) {
             foreach ($result as $row) {
-                $output['url'][] = Strings::htmlentities($row['url']);
-                $output['title'][] = Strings::htmlentities(Utils::makeShorterText($row['question'], 8));
-                $output['preview'][] = Strings::htmlentities($row['question']);
-                $output['visits'][] = $this->plurals->GetMsg('plmsgViews', $row['visits']);
-                $output['date'][] = $date->format($row['date']);
+                $entry = new stdClass();
+                $entry->url = $row['url'];
+                $entry->title = Utils::makeShorterText($row['question'], 8);
+                $entry->preview = $row['question'];
+                $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+                $entry->date = $date->format($row['date']);
+                $output[] = $entry;
             }
         } else {
             $output['error'] = Translation::get('err_noArticles');

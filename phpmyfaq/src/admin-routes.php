@@ -272,6 +272,11 @@ $routesConfig = [
         'controller' => [FaqController::class, 'sticky'],
         'methods' => 'POST'
     ],
+    'admin.api.faqs.sticky.order' => [
+        'path' => '/faqs/sticky/order',
+        'controller' => [FaqController::class, 'saveOrderOfStickyFaqs'],
+        'methods' => 'POST'
+    ],
     'admin.api.faqs' => [
         'path' => '/faqs/{categoryId}/{language}',
         'controller' => [FaqController::class, 'listByCategory'],
@@ -280,11 +285,6 @@ $routesConfig = [
     'admin.api.faq.import' => [
         'path' => '/faq/import',
         'controller' => [FaqController::class, 'import'],
-        'methods' => 'POST'
-    ],
-    'admin.api.faqs.sticky.order' => [
-        'path' => '/faqs/sticky/order',
-        'controller' => [FaqController::class, 'saveOrderOfStickyFaqs'],
         'methods' => 'POST'
     ],
     // Group API
