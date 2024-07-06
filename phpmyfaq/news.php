@@ -31,6 +31,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -124,37 +125,40 @@ $commentHelper->setConfiguration($faqConfig);
 $comment = new Comments($faqConfig);
 $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
-$template->parse(
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twigTemplate = $twig->loadTemplate('./news.twig');
+
+$templateVars = [
+    'writeNewsHeader' => $newsMainHeader,
+    'newsHeader' => $newsHeader,
+    'mainPageContent' => $newsContent,
+    'writeDateMsg' => $newsDate,
+    'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
+    'writeAuthor' => ($news['active']) ? Translation::get('msgAuthor') . ': ' . $news['authorName'] : '',
+    'editThisEntry' => $editThisEntry,
+    'writeCommentMsg' => $commentMessage,
+    'msgWriteComment' => Translation::get('newsWriteComment'),
+    'newsId' => $newsId,
+    'newsLang' => $news['lang'],
+    'msgCommentHeader' => Translation::get('msgCommentHeader'),
+    'msgNewContentName' => Translation::get('msgNewContentName'),
+    'msgNewContentMail' => Translation::get('msgNewContentMail'),
+    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+    'msgYourComment' => Translation::get('msgYourComment'),
+    'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
+    'msgCancel' => Translation::get('ad_gen_cancel'),
+    'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+    'captchaFieldset' => $captchaHelper->renderCaptcha(
+        $captcha,
+        'writecomment',
+        Translation::get('msgCaptcha'),
+        $user->isLoggedIn()
+    ),
+    'renderComments' => $commentHelper->getComments($comments),
+];
+
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'writeNewsHeader' => $newsMainHeader,
-        'newsHeader' => Strings::htmlentities($newsHeader),
-        'mainPageContent' => $newsContent,
-        'writeDateMsg' => $newsDate,
-        'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
-        'writeAuthor' => ($news['active']) ? Translation::get('msgAuthor') . ': ' .
-            Strings::htmlentities($news['authorName']) : '',
-        'editThisEntry' => $editThisEntry,
-        'writeCommentMsg' => $commentMessage,
-        'msgWriteComment' => Translation::get('newsWriteComment'),
-        'newsId' => $newsId,
-        'newsLang' => $news['lang'],
-        'msgCommentHeader' => Translation::get('msgCommentHeader'),
-        'msgNewContentName' => Translation::get('msgNewContentName'),
-        'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-        'defaultContentName' =>
-            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'msgYourComment' => Translation::get('msgYourComment'),
-        'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
-        'msgCancel' => Translation::get('ad_gen_cancel'),
-        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha(
-            $captcha,
-            'writecomment',
-            Translation::get('msgCaptcha'),
-            $user->isLoggedIn()
-        ),
-        'renderComments' => $commentHelper->getComments($comments),
-    ]
+    $twigTemplate->render($templateVars)
 );

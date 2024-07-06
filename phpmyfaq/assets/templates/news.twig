@@ -2,21 +2,21 @@
   <div class="col-md-8">
     <h2 class="pb-4 mb-4 border-bottom">{{ newsHeader }}</h2>
 
-    <article class="pmf-news-body pb-4 mb-4 border-bottom">{{ mainPageContent }}</article>
+    <article class="pmf-news-body pb-4 mb-4 border-bottom">{{ mainPageContent | raw }}</article>
 
-    <p class="d-print-none">{{ writeCommentMsg }}</p>
+    <p class="d-print-none">{{ writeCommentMsg | raw }}</p>
     <div id="pmf-comment-add-success"></div>
     <div id="pmf-comment-add-error"></div>
-    <div class="d-print-none" id="comments">{{ renderComments }}</div>
+    <div class="d-print-none" id="comments">{{ renderComments | raw }}</div>
   </div>
 
   <div class="col-md-4">
     <div class="position-sticky" style="top: 2rem">
       <div class="p-4 mb-3 bg-light-subtle border rounded">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{ writeDateMsg }}</li>
+          <li class="list-group-item">{{ writeDateMsg | raw }}</li>
           <li class="list-group-item">{{ writeAuthor }}</li>
-          <li class="list-group-item">{{ editThisEntry }}</li>
+          <li class="list-group-item">{{ editThisEntry | raw }}</li>
         </ul>
       </div>
     </div>
@@ -34,49 +34,29 @@
         <div id="pmf-add-comment-error"></div>
 
         <form id="pmf-add-comment-form" action="#" method="post" class="needs-validation" novalidate>
-          <input type="hidden" name="newsId" id="newsId" value="{{ newsId }}" />
-          <input type="hidden" name="lang" id="lang" value="{{ newsLang }}" />
-          <input type="hidden" name="type" id="type" value="news" />
-          {{ csrfInput }}
+          <input type="hidden" name="newsId" id="newsId" value="{{ newsId }}">
+          <input type="hidden" name="lang" id="lang" value="{{ newsLang }}">
+          <input type="hidden" name="type" id="type" value="news">
+          {{ csrfInput | raw }}
 
           <div class="row mb-2">
             <div class="col">
               <label class="sr-only" for="user">{{ msgNewContentName }}</label>
-              <input
-                type="text"
-                name="user"
-                id="user"
-                class="form-control"
-                required
-                placeholder="{{ msgNewContentName }}"
-                value="{{ defaultContentName }}"
-              />
+              <input type="text" name="user" id="user" class="form-control" placeholder="{{ msgNewContentName }}"
+                     value="{{ defaultContentName }}" required>
             </div>
           </div>
           <div class="row mb-2">
             <div class="col">
               <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
-              <input
-                type="email"
-                name="mail"
-                id="mail"
-                class="form-control"
-                required
-                placeholder="{{ msgNewContentMail }}"
-                value="{{ defaultContentMail }}"
-              />
+              <input type="email" name="mail" id="mail" class="form-control" placeholder="{{ msgNewContentMail }}"
+                     value="{{ defaultContentMail }}" required>
             </div>
           </div>
           <div class="row mb-2">
             <div class="col">
-              <textarea
-                rows="10"
-                name="comment_text"
-                id="comment_text"
-                class="form-control"
-                required
-                placeholder="{{ msgYourComment }}"
-              ></textarea>
+              <textarea rows="10" name="comment_text" id="comment_text" class="form-control"
+                        placeholder="{{ msgYourComment }}" required></textarea>
             </div>
           </div>
 
