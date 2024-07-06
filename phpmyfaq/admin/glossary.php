@@ -22,6 +22,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -37,8 +38,10 @@ if (
     $user->perm->hasPermission($user->getUserId(), PermissionType::GLOSSARY_DELETE->value)
 ) {
     $glossary = new Glossary($faqConfig);
+    $glossary->setLanguage($faqLangCode);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/content/glossary.twig');
 
     $templateVars = [
@@ -49,6 +52,7 @@ if (
         'glossaryItems' => $glossary->fetchAll(),
         'buttonDelete' => Translation::get('ad_entry_delete'),
         'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-glossary'),
+        'currentLanguage' => $faqLangCode,
         'addGlossaryTitle' => Translation::get('ad_glossary_add'),
         'addGlossaryCsrfTokenInput' => Token::getInstance()->getTokenInput('add-glossary'),
         'closeModal' => Translation::get('ad_att_close'),

@@ -43,8 +43,10 @@ class GlossaryController extends AbstractController
         $configuration = Configuration::getConfigurationInstance();
 
         $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar($request->get('glossaryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $glossary = new Glossary($configuration);
+        $glossary->setLanguage($glossaryLanguage);
 
         return $this->json($glossary->fetch($glossaryId), Response::HTTP_OK);
     }
@@ -62,12 +64,14 @@ class GlossaryController extends AbstractController
         $data = json_decode($request->getContent());
 
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('delete-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $glossary = new Glossary($configuration);
+        $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->delete($glossaryId)) {
             return $this->json(['success' => Translation::get('ad_glossary_delete_success')], Response::HTTP_OK);
@@ -79,7 +83,7 @@ class GlossaryController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/glossary/add')]
+    #[Route('admin/api/glossary/create')]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);
@@ -88,6 +92,7 @@ class GlossaryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
+        $glossaryLanguage = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -96,6 +101,7 @@ class GlossaryController extends AbstractController
         }
 
         $glossary = new Glossary($configuration);
+        $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
             return $this->json(['success' => Translation::get('ad_glossary_save_success')], Response::HTTP_OK);
@@ -117,6 +123,7 @@ class GlossaryController extends AbstractController
         $data = json_decode($request->getContent());
 
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -125,6 +132,7 @@ class GlossaryController extends AbstractController
         }
 
         $glossary = new Glossary($configuration);
+        $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {
             return $this->json(['success' => Translation::get('ad_glossary_update_success')], Response::HTTP_OK);

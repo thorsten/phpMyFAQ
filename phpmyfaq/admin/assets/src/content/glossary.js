@@ -27,8 +27,9 @@ export const handleDeleteGlossary = () => {
 
         const glossaryId = button.getAttribute('data-pmf-glossary-id');
         const csrfToken = button.getAttribute('data-pmf-csrf-token');
+        const glossaryLang = button.getAttribute('data-pmf-glossary-language');
 
-        const response = await deleteGlossary(glossaryId, csrfToken);
+        const response = await deleteGlossary(glossaryId, glossaryLang, csrfToken);
 
         if (response) {
           button.closest('tr').remove();
@@ -48,11 +49,12 @@ export const handleAddGlossary = () => {
     saveGlossaryButton.addEventListener('click', async (event) => {
       event.preventDefault();
 
+      const glossaryLanguage = document.getElementById('language').value;
       const glossaryItem = document.getElementById('item').value;
       const glossaryDefinition = document.getElementById('definition').value;
       const csrfToken = document.getElementById('pmf-csrf-token').value;
 
-      const response = await createGlossary(glossaryItem, glossaryDefinition, csrfToken);
+      const response = await createGlossary(glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
 
       if (response) {
         modal.style.display = 'none';
@@ -90,9 +92,13 @@ export const onOpenUpdateGlossaryModal = () => {
   if (updateGlossaryModal) {
     updateGlossaryModal.addEventListener('show.bs.modal', async (event) => {
       const glossaryId = event.relatedTarget.getAttribute('data-pmf-glossary-id');
-      const response = await getGlossary(glossaryId);
+      const glossaryLang = event.relatedTarget.getAttribute('data-pmf-glossary-language');
+      const response = await getGlossary(glossaryId, glossaryLang);
+
+      console.log(response.language);
 
       document.getElementById('update-id').value = response.id;
+      document.getElementById('update-language').value = response.language;
       document.getElementById('update-item').value = response.item;
       document.getElementById('update-definition').value = response.definition;
     });
@@ -109,11 +115,12 @@ export const handleUpdateGlossary = () => {
       event.preventDefault();
 
       const glossaryId = document.getElementById('update-id').value;
+      const glossaryLanguage = document.getElementById('update-language').value;
       const glossaryItem = document.getElementById('update-item').value;
       const glossaryDefinition = document.getElementById('update-definition').value;
       const csrfToken = document.getElementById('update-csrf-token').value;
 
-      const response = await updateGlossary(glossaryId, glossaryItem, glossaryDefinition, csrfToken);
+      const response = await updateGlossary(glossaryId, glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
 
       if (response) {
         modal.style.display = 'none';

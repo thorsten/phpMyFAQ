@@ -26,14 +26,14 @@
         <tr id="pmf-glossary-id-{{ glossary.id }}">
           <td>
             <a href="#" data-bs-toggle="modal" data-bs-target="#updateGlossaryModal"
-               data-pmf-glossary-id="{{ glossary.id }}">
+               data-pmf-glossary-id="{{ glossary.id }}" data-pmf-glossary-language="{{ glossary.language }}">
               {{ glossary.item }}
             </a>
           </td>
           <td>{{ glossary.definition }}</td>
           <td class="text-end">
             <button class="btn btn-danger pmf-admin-delete-glossary" data-pmf-glossary-id="{{ glossary.id }}"
-                    data-pmf-csrf-token="{{ csrfTokenDelete }}">
+                    data-pmf-csrf-token="{{ csrfTokenDelete }}" data-pmf-glossary-language="{{ glossary.language }}">
               <i aria-hidden="true" class="bi bi-trash"></i>
               {{ buttonDelete }}
             </button>
@@ -59,6 +59,7 @@
       </div>
       <div class="modal-body">
         <form action="#" method="post" accept-charset="utf-8">
+          <input type="hidden" name="language" id="language" value="{{ currentLanguage }}">
           {{ addGlossaryCsrfTokenInput | raw }}
 
           <div class="row mb-2">
@@ -102,6 +103,7 @@
         <form action="#" method="post" accept-charset="utf-8">
           <input type="hidden" name="update-id" id="update-id" value="">
           <input type="hidden" name="update-csrf-token" id="update-csrf-token" value="{{ updateGlossaryCsrfToken }}">
+          <input type="hidden" name="update-language" id="update-language" value="">
 
           <div class="row mb-2">
             <label class="col-3 col-form-label" for="update-item">{{ msgGlossaryItem }}</label>

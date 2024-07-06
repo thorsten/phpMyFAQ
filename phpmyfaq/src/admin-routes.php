@@ -145,8 +145,8 @@ $routesConfig = [
         'methods' => 'GET'
     ],
     // Glossary API
-    'admin.api.glossary.add' => [
-        'path' => '/glossary/add',
+    'admin.api.glossary.create' => [
+        'path' => '/glossary/create',
         'controller' => [GlossaryController::class, 'create'],
         'methods' => 'POST'
     ],
@@ -161,7 +161,7 @@ $routesConfig = [
         'methods' => 'PUT'
     ],
     'admin.api.glossary' => [
-        'path' => '/glossary/{glossaryId}',
+        'path' => '/glossary/{glossaryId}/{glossaryLanguage}',
         'controller' => [GlossaryController::class, 'fetch'],
         'methods' => 'GET'
     ],

@@ -13,9 +13,9 @@
  * @since     2024-01-27
  */
 
-export const createGlossary = async (item, definition, csrfToken) => {
+export const createGlossary = async (language, item, definition, csrfToken) => {
   try {
-    const response = await fetch('./api/glossary/add', {
+    const response = await fetch('./api/glossary/create', {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -23,6 +23,7 @@ export const createGlossary = async (item, definition, csrfToken) => {
       },
       body: JSON.stringify({
         csrf: csrfToken,
+        language: language,
         item: item,
         definition: definition,
       }),
@@ -39,7 +40,7 @@ export const createGlossary = async (item, definition, csrfToken) => {
   }
 };
 
-export const deleteGlossary = async (glossaryId, csrfToken) => {
+export const deleteGlossary = async (glossaryId, glossaryLang, csrfToken) => {
   try {
     const response = await fetch('./api/glossary/delete', {
       method: 'DELETE',
@@ -50,6 +51,7 @@ export const deleteGlossary = async (glossaryId, csrfToken) => {
       body: JSON.stringify({
         csrf: csrfToken,
         id: glossaryId,
+        lang: glossaryLang,
       }),
     });
 
@@ -64,9 +66,9 @@ export const deleteGlossary = async (glossaryId, csrfToken) => {
   }
 };
 
-export const getGlossary = async (glossaryId) => {
+export const getGlossary = async (glossaryId, glossaryLanguage) => {
   try {
-    const response = await fetch(`./api/glossary/${glossaryId}`, {
+    const response = await fetch(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -85,7 +87,7 @@ export const getGlossary = async (glossaryId) => {
   }
 };
 
-export const updateGlossary = async (glossaryId, item, definition, csrfToken) => {
+export const updateGlossary = async (glossaryId, glossaryLanguage, item, definition, csrfToken) => {
   try {
     const response = await fetch('./api/glossary/update', {
       method: 'PUT',
@@ -96,6 +98,7 @@ export const updateGlossary = async (glossaryId, item, definition, csrfToken) =>
       body: JSON.stringify({
         csrf: csrfToken,
         id: glossaryId,
+        lang: glossaryLanguage,
         item: item,
         definition: definition,
       }),

@@ -25,6 +25,12 @@ class GlossaryTest extends TestCase
         $this->config->setLanguage($language);
 
         $this->glossary = new Glossary($this->config);
+        $this->glossary->setLanguage('en');
+    }
+
+    protected function tearDown(): void
+    {
+        $this->glossary->delete(1);
     }
 
     public function testCreate(): void
@@ -94,25 +100,25 @@ class GlossaryTest extends TestCase
             // Case 1: No content
             [
                 'input' => '',
-                'expected' => ''
+                'expected' => '',
             ],
 
             // Case 2: Glossary item 'word' in the input content
             [
                 'input' => 'This is a word.',
-                'expected' => 'This is a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.'
+                'expected' => 'This is a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.',
             ],
 
             // Case 3: Glossary item 'phrase' in the input content
             [
                 'input' => 'A phrase example.',
-                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example.'
+                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example.',
             ],
 
             // Case 4: Multiple glossary items in the input content
             [
                 'input' => 'A phrase example with a word.',
-                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example with a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.'
+                'expected' => 'A <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">phrase</abbr> example with a <abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="definition" class="initialism">word</abbr>.',
             ],
         ];
 

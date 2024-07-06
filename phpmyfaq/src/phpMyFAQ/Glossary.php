@@ -26,6 +26,8 @@ class Glossary
 {
     private string $definition = '';
 
+    private string $language;
+
     private array $cachedItems = [];
 
     /**
@@ -171,7 +173,7 @@ class Glossary
         }
 
         $query = sprintf(
-            "SELECT id, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
+            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage()
         );
@@ -181,6 +183,7 @@ class Glossary
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $items[] = [
                 'id' => $row->id,
+                'language' => $row->lang,
                 'item' => stripslashes((string) $row->item),
                 'definition' => stripslashes((string) $row->definition),
             ];
@@ -237,10 +240,10 @@ class Glossary
         $item = [];
 
         $query = sprintf(
-            "SELECT id, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
+            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->getLanguage()
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -248,6 +251,7 @@ class Glossary
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $item = [
                 'id' => $row->id,
+                'language' => $row->lang,
                 'item' => stripslashes((string) $row->item),
                 'definition' => stripslashes((string) $row->definition),
             ];
@@ -270,7 +274,7 @@ class Glossary
             "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->getLanguage(),
             Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($this->definition)
         );
@@ -292,10 +296,10 @@ class Glossary
         $query = sprintf(
             "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            Strings::htmlspecialchars(substr((string) $item, 0, 254)),
+            Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($definition),
             $id,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->getLanguage()
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -311,8 +315,19 @@ class Glossary
             "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->getLanguage()
         );
         return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): Glossary
+    {
+        $this->language = $language;
+        return $this;
     }
 }
