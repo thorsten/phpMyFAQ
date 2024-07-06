@@ -1344,10 +1344,15 @@ $PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
 $PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
 $PMF_LANG['headerDownloadPackage'] = '3. Download of phpMyFAQ';
 $PMF_LANG['headerExtractPackage'] = '4. Extract downloaded package';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Install downloaded package';
 $PMF_LANG['msgHealthCheck'] = 'This checks the correct file permissions and folder structure of your phpMyFAQ installation.';
 $PMF_LANG['msgUpdateCheck'] = 'You can check for new versions of phpMyFAQ, re-install or update your installation.';
 $PMF_LANG['msgDownloadPackage'] = 'Download of new phpMyFAQ versions depending on the set release environment.';
 $PMF_LANG['msgExtractPackage'] = 'This extracts the downloaded package into your filesystem, this may take a while.';
+$PMF_LANG['msgExtractToFileSystem'] = 'This extracts the downloaded package into your filesystem.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Install downloaded package';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Backup of current installation';
+$PMF_LANG['msgInstallationNewFiles'] = 'Installation of new files';
 $PMF_LANG['alertNightlyBuild'] = 'You are using a development version of phpMyFAQ. You can update to the latest nightly build.';
 $PMF_LANG['buttonCheckHealth'] = 'Check System health now';
 $PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
@@ -1364,6 +1369,7 @@ $PMF_LANG['currentVersion'] = 'Current Version: ';
 $PMF_LANG['msgLastCheckDate'] = 'Last check for updates: ';
 $PMF_LANG['msgLastVersionAvailable'] = 'Latest version available: ';
 $PMF_LANG['msgReleaseEnvironment'] = 'Release-Environment: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'You can still use the manual <a href="../update">update process</a> if you prefer.';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan
 $PMF_LANG['msgAddBookmark'] = 'Add bookmark';

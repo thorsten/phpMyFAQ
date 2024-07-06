@@ -90,23 +90,23 @@
     <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
       <div class="card-body">
         <h5 class="card-title">
-          5. Install downloaded package
+          {{ headerInstallDownloadedPackage }}
         </h5>
         <p class="card-text">
-          This extracts the downloaded package into your filesystem.
+          {{ msgExtractToFileSystem }}
         </p>
         <!-- Step 5: Install downloaded package -->
         <div>
           <div class="d-grid gap-2 d-md-flex justify-content-between">
             <div>
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
-                Install downloaded package
+                {{ msgInstallDownloadedPackage }}
               </button>
             </div>
             <div>
               <ol>
-                <li>Backup of current installation <span id="pmf-backup-done"></span></li>
-                <li>Installation of new files <span id="pmf-installation-done"></span></li>
+                <li>{{ msgBackupCurrentInstallation }} <span id="pmf-backup-done"></span></li>
+                <li>{{ msgInstallationNewFiles }} <span id="pmf-installation-done"></span></li>
               </ol>
             </div>
             <div class="w-25">
@@ -132,7 +132,7 @@
   <div class="col-6">
     <div>
       <p class="alert alert-info">
-        You can still use the manual <a href="../update">update process</a> if you prefer.
+        {{ msgNoteManualUpdate | raw }}
       </p>
     </div>
     <div>

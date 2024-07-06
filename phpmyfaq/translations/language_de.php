@@ -1323,10 +1323,15 @@ $PMF_LANG['headerCheckHealth'] = '1. Systemzustand prüfen';
 $PMF_LANG['headerCheckUpdates'] = '2. Suche nach Updates';
 $PMF_LANG['headerDownloadPackage'] = '3. Download von phpMyFAQ';
 $PMF_LANG['headerExtractPackage'] = '4. Heruntergeladenes Paket entpacken';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Heruntergeladenes Paket installieren';
 $PMF_LANG['msgHealthCheck'] = 'Dies überprüft die korrekten Dateiberechtigungen und die Ordnerstruktur Ihrer phpMyFAQ-Installation.';
 $PMF_LANG['msgUpdateCheck'] = 'Sie können nach neuen Versionen von phpMyFAQ suchen, neu installieren oder Ihre Installation aktualisieren.';
 $PMF_LANG['msgDownloadPackage'] = 'Download neuer phpMyFAQ-Versionen je nach eingestellter Release-Umgebung.';
 $PMF_LANG['msgExtractPackage'] = 'Dadurch wird das heruntergeladene Paket in Ihr Dateisystem entpackt, was eine Weile dauern kann.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Dadurch wird das heruntergeladene Paket in Ihr Dateisystem entpackt.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Heruntergeladenes Paket installieren';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Sicherung der aktuellen Installation';
+$PMF_LANG['msgInstallationNewFiles'] = 'Installation der neuen Dateien';
 $PMF_LANG['alertNightlyBuild'] = 'Sie verwenden eine Entwicklungsversion von phpMyFAQ. Sie können auf den neuesten Nightly-Build aktualisieren.';
 $PMF_LANG['buttonCheckHealth'] = 'Systemzustand jetzt prüfen';
 $PMF_LANG['buttonCheckUpdates'] = 'Suche jetzt nach Updates';
@@ -1343,6 +1348,7 @@ $PMF_LANG['currentVersion'] = 'Aktuelle Version: ';
 $PMF_LANG['msgLastCheckDate'] = 'Letzte Überprüfung auf Aktualisierungen: ';
 $PMF_LANG['msgLastVersionAvailable'] = 'Aktuellste verfügbare Version: ';
 $PMF_LANG['msgReleaseEnvironment'] = 'Release-Umgebung: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Sie können auch den manuellen <a href="../update">Aktualisierungsprozess</a> verwenden, wenn Sie dies bevorzugen.';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan
 $PMF_LANG['msgAddBookmark'] = 'Lesezeichen hinzufügen';
