@@ -1411,7 +1411,7 @@ class Faq
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $question = Strings::htmlentities($row->question);
+                $question = $row->question;
             }
         } else {
             $question = Translation::get('no_cats');

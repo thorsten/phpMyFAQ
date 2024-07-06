@@ -23,6 +23,7 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
@@ -54,6 +55,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $glossary = new Glossary($faqConfig);
 $tagging = new Tags($faqConfig);
@@ -114,9 +117,8 @@ $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews((int) $faqId);
 
 $question = $faq->getQuestion($faqId);
-$question = Strings::htmlentities($question);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
-    $answer = $converter->convert($faq->faqRecord['content']);
+    $answer = $converter->convert($faq->faqRecord['content'])->getContent();
 } else {
     $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }
@@ -125,7 +127,7 @@ if ($faqConfig->get('main.enableMarkdownEditor')) {
 $answer = $faqHelper->cleanUpContent($answer);
 
 // Rewrite URL fragments
-$currentUrl = htmlspecialchars(sprintf('//%s%s', $request->getHost(), $request->getRequestUri()), ENT_QUOTES, 'UTF-8');
+$currentUrl = sprintf('//%s%s', $request->getHost(), $request->getRequestUri());
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 
 // Add Glossary entries for answers only
@@ -168,10 +170,9 @@ $multiCategories = $category->getCategoriesFromFaq($faqId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCategory) {
         $path = $category->getPath($multiCategory['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
-        if ('' === trim((string) $path)) {
+        if ('' === trim($path)) {
             continue;
         }
-
         $renderedCategoryPath .= $path;
     }
 }
@@ -179,10 +180,7 @@ if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
 // Related FAQs
 try {
     $faqSearchResult->reviewResultSet(
-        $relation->getAllRelatedByQuestion(
-            Strings::htmlentities($faq->faqRecord['title']),
-            Strings::htmlentities($faq->faqRecord['keywords'])
-        )
+        $relation->getAllRelatedByQuestion($faq->faqRecord['title'], $faq->faqRecord['keywords'])
     );
 } catch (Exception) {
     // handle exception
@@ -324,8 +322,7 @@ $templateVars = [
     'msgNewContentName' => Translation::get('msgNewContentName'),
     'msgNewContentMail' => Translation::get('msgNewContentMail'),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' =>
-        ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'msgYourComment' => Translation::get('msgYourComment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
