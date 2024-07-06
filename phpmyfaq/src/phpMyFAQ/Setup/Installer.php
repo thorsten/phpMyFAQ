@@ -20,12 +20,12 @@ namespace phpMyFAQ\Setup;
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
@@ -592,6 +592,24 @@ class Installer extends Setup
     }
 
     /**
+     * Removes the database.php and the ldap.php if an installation failed.
+     *
+     * @todo have to be moved to the Installer class
+     */
+    public static function cleanFailedInstallationFiles(): void
+    {
+        // Remove './config/database.php' file: no need of prompt anything to the user
+        if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
+            unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
+        }
+
+        // Remove './config/ldap.php' file: no need of prompt anything to the user
+        if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
+            unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
+        }
+    }
+
+    /**
      * Check absolutely necessary stuff and die.
      * @throws Exception
      */
@@ -634,23 +652,20 @@ class Installer extends Setup
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
      *
+     * @throws Exception
      * @todo this method should be in the the Update class
      */
     public function checkPreUpgrade(string $databaseType): void
     {
         $database = null;
         if (!$this->checkMinimumPhpVersion()) {
-            Alert::danger(
-                'ad_entryins_fail',
-                sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
-            );
-            System::renderFooter();
+            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
         }
 
         if (!is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')) {
-            echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
-                'Please use the <a href="index.php">install script</a>.</p>';
-            System::renderFooter();
+            throw new Exception(
+                'It seems you never run a version of phpMyFAQ. Please use the <a href="/setup">installation script</a>'
+            );
         }
 
         if ('' !== $databaseType) {
@@ -663,10 +678,12 @@ class Installer extends Setup
             }
 
             if (!$databaseFound) {
-                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.' .
-                    '<br>We found ' . ucfirst((string) $database) .
-                    '<br>' . 'Please use the change the database type in <code>config/database.php</code>.</p>';
-                System::renderFooter();
+                throw new Exception(
+                    sprintf(
+                        'It seems you are using an unsupported database version. We found %s',
+                        ucfirst((string) $database)
+                    )
+                );
             }
         }
     }
@@ -704,7 +721,6 @@ class Installer extends Setup
                 'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
-            System::renderFooter();
         }
     }
 
@@ -762,7 +778,6 @@ class Installer extends Setup
      */
     public function startInstall(array|null $setup = null): void
     {
-        $feedbacks = [];
         $ldapSetup = [];
         $query = [];
         $uninstall = [];
@@ -784,21 +799,15 @@ class Installer extends Setup
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
             if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
-                printf(
-                    '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
-                    $dbSetup['dbType']
-                );
-                System::renderFooter(true);
+                throw new Exception(sprintf('Installation Error: Invalid server type: %s', $dbSetup['dbType']));
             }
         } else {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please select a database type.</p>\n";
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please select a database type.');
         }
 
         $dbSetup['dbServer'] = Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbServer']) && !System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database server.</p>\n";
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a database server.');
         }
 
         // Check database port
@@ -809,19 +818,17 @@ class Installer extends Setup
         }
 
         if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a valid database port.');
         }
 
         $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbUser']) && !System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a database username.');
         }
 
         $dbSetup['dbPassword'] = Filter::filterInput(INPUT_POST, 'sql_password', FILTER_SANITIZE_SPECIAL_CHARS, '');
         if (is_null($dbSetup['dbPassword']) && !System::isSqlite($dbSetup['dbType'])) {
-            // Password can be empty...
+            // A password can be empty...
             $dbSetup['dbPassword'] = '';
         }
 
@@ -833,8 +840,7 @@ class Installer extends Setup
         }
 
         if (is_null($dbSetup['dbDatabaseName']) && !System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database name.</p>\n";
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a database name.');
         }
 
         if (System::isSqlite($dbSetup['dbType'])) {
@@ -845,27 +851,20 @@ class Installer extends Setup
                 $setup['dbServer']
             );
             if (is_null($dbSetup['dbServer'])) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a SQLite database filename.</p>
-';
-                System::renderFooter(true);
+                throw new Exception('Installation Error: Please add a SQLite database filename.');
             }
         }
 
         // check database connection
         Database::setTablePrefix($dbSetup['dbPrefix']);
         $db = Database::factory($dbSetup['dbType']);
-        try {
-            $db->connect(
-                $dbSetup['dbServer'],
-                $dbSetup['dbUser'],
-                $dbSetup['dbPassword'],
-                $dbSetup['dbDatabaseName'],
-                $dbSetup['dbPort']
-            );
-        } catch (Exception $exception) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            System::renderFooter(true);
-        }
+        $db->connect(
+            $dbSetup['dbServer'],
+            $dbSetup['dbUser'],
+            $dbSetup['dbPassword'],
+            $dbSetup['dbDatabaseName'],
+            $dbSetup['dbPort']
+        );
 
         $configuration = new Configuration($db);
 
@@ -879,20 +878,17 @@ class Installer extends Setup
             // check LDAP entries
             $ldapSetup['ldapServer'] = Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($ldapSetup['ldapServer'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
-                System::renderFooter(true);
+                throw new Exception('LDAP Installation Error: Please add a LDAP server.');
             }
 
             $ldapSetup['ldapPort'] = Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
             if (is_null($ldapSetup['ldapPort'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
-                System::renderFooter(true);
+                throw new Exception('LDAP Installation Error: Please add a LDAP port.');
             }
 
             $ldapSetup['ldapBase'] = Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($ldapSetup['ldapBase'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
-                System::renderFooter(true);
+                throw new Exception('LDAP Installation Error: Please add a LDAP base search DN.');
             }
 
             // LDAP User and LDAP password are optional
@@ -912,7 +908,7 @@ class Installer extends Setup
 
             // check LDAP connection
             $ldap = new Ldap($configuration);
-            $ldap->connect(
+            $ldapConnection = $ldap->connect(
                 $ldapSetup['ldapServer'],
                 $ldapSetup['ldapPort'],
                 $ldapSetup['ldapBase'],
@@ -920,9 +916,8 @@ class Installer extends Setup
                 $ldapSetup['ldapPassword']
             );
 
-            if (!$ldap) {
-                echo '<p class="alert alert-danger"><strong>LDAP Error:</strong> ' . $ldap->error() . "</p>\n";
-                System::renderFooter(true);
+            if (!$ldapConnection) {
+                throw new Exception(sprintf('LDAP Installation Error: %s.', $ldap->error()));
             }
         }
 
@@ -942,9 +937,7 @@ class Installer extends Setup
             // ES hosts
             $esHosts = Filter::filterInputArray(INPUT_POST, $esHostFilter);
             if (is_null($esHosts)) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add at least one Elasticsearch ' .
-                    "host.</p>\n";
-                System::renderFooter(true);
+                throw new Exception('Elasticsearch Installation Error: Please add at least one Elasticsearch host.');
             }
 
             $esSetup['hosts'] = $esHosts['elasticsearch_server'];
@@ -952,9 +945,7 @@ class Installer extends Setup
             // ES Index name
             $esSetup['index'] = Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($esSetup['index'])) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please add an Elasticsearch index name.</p>
-';
-                System::renderFooter(true);
+                throw new Exception('Elasticsearch Installation Error: Please add an Elasticsearch index name.');
             }
 
             $classLoader = new ClassLoader();
@@ -969,8 +960,7 @@ class Installer extends Setup
             $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
 
             if (!$esClient) {
-                echo '<p class="alert alert-danger"><strong>Elasticsearch Error:</strong> No connection.</p>';
-                System::renderFooter(true);
+                throw new Exception('Elasticsearch Installation Error: No connection to Elasticsearch.');
             }
         } else {
             $esSetup = [];
@@ -984,8 +974,7 @@ class Installer extends Setup
         }
 
         if (is_null($loginName)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a login name for your account.</p>';
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a login name for your account.');
         }
 
         // check user entries
@@ -996,8 +985,7 @@ class Installer extends Setup
         }
 
         if (is_null($password)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for your account.</p>';
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a password for your account.');
         }
 
         if (!isset($setup['password_retyped'])) {
@@ -1007,20 +995,21 @@ class Installer extends Setup
         }
 
         if (is_null($passwordRetyped)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a retyped password.</p>';
-            System::renderFooter(true);
+            throw new Exception('Installation Error: Please add a retyped password.');
         }
 
         if (strlen((string) $password) <= 7 || strlen((string) $passwordRetyped) <= 7) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
-                'short. Please set your password and your retyped password with a minimum of 8 characters.</p>';
-            System::renderFooter(true);
+            throw new Exception(
+                'Installation Error: Your password and retyped password are too short. Please set your password ' .
+                'and your retyped password with a minimum of 8 characters.'
+            );
         }
 
-        if ($password != $passwordRetyped) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not ' .
-                'equal. Please check your password and your retyped password.</p>';
-            System::renderFooter(true);
+        if ($password !== $passwordRetyped) {
+            throw new Exception(
+                'Installation Error: Your password and retyped password are not equal. Please check your password ' .
+                'and your retyped password.'
+            );
         }
 
         $language = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
@@ -1035,10 +1024,8 @@ class Installer extends Setup
 
         // Write the DB variables in database.php
         if (!$instanceSetup->createDatabaseFile($dbSetup)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/database.php.' .
-                '</p>';
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+            self::cleanFailedInstallationFiles();
+            throw new Exception('Installation Error: Setup cannot write to ./content/core/config/database.php.');
         }
 
         // check LDAP is enabled
@@ -1048,17 +1035,16 @@ class Installer extends Setup
             count($ldapSetup) &&
             !$instanceSetup->createLdapFile($ldapSetup, '')
         ) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+            self::cleanFailedInstallationFiles();
+            throw new Exception('LDAP Installation Error: Setup cannot write to ./content/core/config/ldap.php.');
         }
 
         // check if Elasticsearch is enabled
         if (!is_null($esEnabled) && count($esSetup) && !$instanceSetup->createElasticsearchFile($esSetup, '')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ' .
-                './config/elasticsearch.php.</p>';
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+            self::cleanFailedInstallationFiles();
+            throw new Exception(
+                'Elasticsearch Installation Error: Setup cannot write to ./content/core/config/elasticsearch.php.'
+            );
         }
 
         // connect to the database using config/database.php
@@ -1066,9 +1052,8 @@ class Installer extends Setup
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+            self::cleanFailedInstallationFiles();
+            throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
         }
 
         $db->connect(
@@ -1079,19 +1064,17 @@ class Installer extends Setup
             $databaseConfiguration->getPort()
         );
 
-        if (!$db instanceof \phpMyFAQ\Database\DatabaseDriver) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+        if (!$db instanceof DatabaseDriver) {
+            self::cleanFailedInstallationFiles();
+            throw new Exception(sprintf('Database Installation Error: %s', $db->error()));
         }
 
         try {
             $databaseInstaller = InstanceDatabase::factory($configuration, $dbSetup['dbType']);
             $databaseInstaller->createTables($dbSetup['dbPrefix']);
         } catch (Exception $exception) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
+            self::cleanFailedInstallationFiles();
+            throw new Exception(sprintf('Database Installation Error: %s', $exception->getMessage()));
         }
 
         $stopWords = new Stopwords($configuration);
@@ -1109,13 +1092,15 @@ class Installer extends Setup
         foreach ($query as $executeQuery) {
             $result = @$db->query($executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ 
-                    once again or send us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
-                printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
-                printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->system->dropTables($uninstall);
-                $this->system->cleanFailedInstallationFiles();
-                System::renderFooter(true);
+                self::cleanFailedInstallationFiles();
+                throw new Exception(
+                    sprintf(
+                        'Installation Error: Please install your version of phpMyFAQ once again: %s (%s)',
+                        $db->error(),
+                        htmlentities($executeQuery)
+                    )
+                );
             }
 
             usleep(1000);
@@ -1127,7 +1112,7 @@ class Installer extends Setup
 
         $link = new Link('', $configuration);
 
-        // add main configuration, add personal settings
+        // add the main configuration, add personal settings
         $this->mainConfig['main.metaPublisher'] = $realname;
         $this->mainConfig['main.administrationMail'] = $email;
         $this->mainConfig['main.language'] = $language;
@@ -1143,13 +1128,10 @@ class Installer extends Setup
         // add an admin account and rights
         $user = new User($configuration);
         if (!$user->createUser($loginName, $password, '', 1)) {
-            printf(
-                '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>' .
-                "Couldn't create the admin user: %s</p>\n",
-                $user->error()
+            self::cleanFailedInstallationFiles();
+            throw new Exception(
+                sprintf('Fatal Installation Error: Could not create the admin user: %s', $user->error())
             );
-            $this->system->cleanFailedInstallationFiles();
-            System::renderFooter(true);
         }
 
         $user->setStatus('protected');
@@ -1165,7 +1147,7 @@ class Installer extends Setup
             $user->perm->grantUserRight(1, $user->perm->addRight($mainRight));
         }
 
-        // add inputs in table faqforms
+        // add inputs in table "faqforms"
         $forms = new Forms($configuration);
         foreach ($this->formInputs as $input) {
             $forms->insertInputIntoDatabase($input);

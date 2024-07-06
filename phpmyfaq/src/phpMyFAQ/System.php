@@ -185,26 +185,6 @@ class System
         return strlen(self::VERSION_PRE_RELEASE) > 0;
     }
 
-    /**
-     * Print out the HTML5 Footer.
-     */
-    public static function renderFooter(bool $onePageBack = false): never
-    {
-        if ($onePageBack) {
-            printf(
-                '<p><a href="./index.php">%s</a></p>',
-                'Back to the Setup page'
-            );
-        }
-
-        printf(
-            '</div></section></main><footer class="setup-footer container"><p class="text-end">%s</p></footer>' .
-            '</body></html>',
-            '&copy; 2001-2023 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>'
-        );
-        exit();
-    }
-
     public function getDatabase(): ?DatabaseDriver
     {
         return $this->database;
@@ -403,24 +383,6 @@ class System
             foreach ($queries as $query) {
                 $this->database->query($query);
             }
-        }
-    }
-
-    /**
-     * Removes the database.php and the ldap.php if an installation failed.
-     *
-     * @todo have to be moved to the Installer class
-     */
-    public function cleanFailedInstallationFiles(): void
-    {
-        // Remove './config/database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
-        }
-
-        // Remove './config/ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
-            unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
         }
     }
 }
