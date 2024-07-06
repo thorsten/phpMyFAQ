@@ -29,9 +29,12 @@ use Twig\TemplateWrapper;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-readonly class TwigWrapper
+class TwigWrapper
 {
     private Environment $twigEnvironment;
+
+    /** @var string Name of an active template set. */
+    private static string $templateSetName = '';
 
     public function __construct(string $templatePath)
     {
@@ -74,5 +77,21 @@ readonly class TwigWrapper
     public function addFilter(TwigFilter $filter): void
     {
         $this->twigEnvironment->addFilter($filter);
+    }
+
+    /**
+     * Returns the name of the actual template set.
+     */
+    public static function getTemplateSetName(): string
+    {
+        return self::$templateSetName;
+    }
+
+    /**
+     * Set the template set name to use.
+     */
+    public static function setTemplateSetName(string $tplSetName): void
+    {
+        self::$templateSetName = $tplSetName;
     }
 }
