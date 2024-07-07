@@ -21,9 +21,11 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -45,6 +47,12 @@ if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCat
 
 $categoryHelper = new CategoryHelper();
 $categoryHelper->setPlurals(new Plurals());
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./show.twig');
+
+$templateVars = [];
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     $faqSession->userTracking('show_category', $selectedCategoryId);
@@ -71,13 +79,9 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         if ((is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) !== 0) {
             $categoryFaqsHeader = Translation::get('msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
-            $template->parseBlock(
-                'mainPageContent',
-                'subCategories',
-                [
-                    'categorySubsHeader' => $categoryFaqsHeader
-                ]
-            );
+            $templateVars = [
+                'categorySubsHeader' => $categoryFaqsHeader
+            ];
         }
     }
 
@@ -100,27 +104,21 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     if (!is_null($categoryData->getImage()) && strlen((string) $categoryData->getImage()) > 0) {
-        $template->parseBlock(
-            'mainPageContent',
-            'categoryImage',
-            [
-                'categoryImage' => $faqConfig->getDefaultUrl() . '/images/' . $categoryData->getImage(),
-            ]
-        );
+        $categoryImage = $faqConfig->getDefaultUrl() . 'content/user/images/' . $categoryData->getImage();
     }
 
-    $template->parse(
-        'mainPageContent',
-        [
-            'categoryHeader' => Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName()),
-            'categoryFaqsHeader' => $categoryData->getName(),
-            'categoryDescription' => Strings::htmlspecialchars($categoryData->getDescription() ?? ''),
-            'categorySubsHeader' => Translation::get('msgSubCategories'),
-            'categoryContent' => $records,
-            'subCategoryContent' => $subCategoryContent,
-            'categoryLevelUp' => $up
-        ]
-    );
+    // Twig template variables
+    $templateVars = [
+        ... $templateVars,
+        'categoryHeader' => Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName()),
+        'categoryFaqsHeader' => $categoryData->getName(),
+        'categoryDescription' => Strings::htmlspecialchars($categoryData->getDescription() ?? ''),
+        'categorySubsHeader' => Translation::get('msgSubCategories'),
+        'categoryImage' => $categoryImage ?? null,
+        'categoryContent' => $records,
+        'subCategoryContent' => $subCategoryContent,
+        'categoryLevelUp' => $up,
+    ];
 } else {
     $selectedCategoryId = 0;
     $faqSession->userTracking('show_all_categories', 0);
@@ -129,16 +127,20 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ->setConfiguration($faqConfig)
         ->setCategory($category);
 
-    $template->parse(
-        'mainPageContent',
-        [
-            'categoryHeader' => Translation::get('msgFullCategories'),
-            'categoryFaqsHeader' => Translation::get('msgShowAllCategories'),
-            'categoryDescription' => Translation::get('msgCategoryDescription'),
-            'categorySubsHeader' => Translation::get('msgSubCategories'),
-            'categoryContent' => $categoryHelper->renderCategoryTree($selectedCategoryId),
-            'subCategoryContent' => Translation::get('msgSubCategoryContent'),
-            'categoryLevelUp' => '',
-        ]
-    );
+    // Twig template variables
+    $templateVars = [
+        ... $templateVars,
+        'categoryHeader' => Translation::get('msgFullCategories'),
+        'categoryFaqsHeader' => Translation::get('msgShowAllCategories'),
+        'categoryDescription' => Translation::get('msgCategoryDescription'),
+        'categorySubsHeader' => Translation::get('msgSubCategories'),
+        'categoryContent' => $categoryHelper->renderCategoryTree($selectedCategoryId),
+        'subCategoryContent' => Translation::get('msgSubCategoryContent'),
+        'categoryLevelUp' => '',
+    ];
 }
+
+$template->addRenderedTwigOutput(
+    'mainPageContent',
+    $twigTemplate->render($templateVars)
+);
