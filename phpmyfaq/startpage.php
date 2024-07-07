@@ -91,11 +91,4 @@ $templateVars = [
     )
 ];
 
-/*
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
-*/
-
-echo $twigTemplate->render($templateVars);
+return $templateVars;

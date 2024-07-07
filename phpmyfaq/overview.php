@@ -39,13 +39,11 @@ $twig->addExtension(new CategoryNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('faqOverview'),
     'faqOverview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
     'msgAuthor' => Translation::get('msgAuthor'),
     'msgLastUpdateArticle' => Translation::get('msgLastUpdateArticle')
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

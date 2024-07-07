@@ -32,6 +32,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twigTemplate = $twig->loadTemplate('./password.twig');
 
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('lostPassword'),
     'lang' => $faqConfig->getLanguage()->getLanguage(),
     'msgUsername' => Translation::get('ad_auth_user'),
@@ -39,7 +40,4 @@ $templateVars = [
     'msgSubmit' => Translation::get('msgNewContentSubmit'),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

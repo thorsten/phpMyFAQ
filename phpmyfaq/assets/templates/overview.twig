@@ -1,3 +1,6 @@
+{% extends 'index.twig' %}
+
+{% block content %}
 <section class="col-12">
   <h1>{{ pageHeader }}</h1>
 
@@ -27,3 +30,5 @@
     {% set lastCategory = faq['category_id'] %}
   {% endfor %}
 </section>
+
+{% endblock %}

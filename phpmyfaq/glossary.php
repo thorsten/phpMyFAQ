@@ -59,12 +59,10 @@ $twigTemplate = $twig->loadTemplate('./glossary.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('ad_menu_glossary'),
     'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
     'pagination' => $pagination->render(),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

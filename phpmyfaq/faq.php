@@ -75,7 +75,9 @@ if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
 }
 
-$templateVars = [];
+$templateVars = [
+    ... $templateVars
+];
 
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
@@ -212,6 +214,7 @@ if (
         Translation::get('msgWriteComment')
     );
     $templateVars = [
+        ... $templateVars,
         'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments')),
         'writeCommentMsg' => $commentMessage
     ];
@@ -350,7 +353,4 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./faq.twig');
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

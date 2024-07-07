@@ -50,6 +50,7 @@ $twigTemplate = $twig->loadTemplate('./contact.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('msgContact'),
     'msgContactOwnText' => $contactText,
     'msgContactEMail' => Translation::get('msgContactEMail'),
@@ -68,7 +69,4 @@ $templateVars = [
         $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

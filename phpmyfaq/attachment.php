@@ -119,7 +119,4 @@ $templateVars = [
     'attachmentErrors' => $attachmentErrors,
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

@@ -99,6 +99,7 @@ $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
     'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
@@ -140,7 +141,4 @@ foreach ($formData as $input) {
     ];
 }
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

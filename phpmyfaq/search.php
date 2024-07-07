@@ -274,6 +274,7 @@ $twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
     'isTagSearch' => $tagSearch,
     'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
@@ -307,7 +308,4 @@ $templateVars = [
     'tagList' => $tagging->getPopularTags(),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

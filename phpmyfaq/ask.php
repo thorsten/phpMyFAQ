@@ -63,6 +63,7 @@ $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
+    ... $templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'msgMatchingQuestions' => Translation::get('msgMatchingQuestions'),
     'msgFinishSubmission' => Translation::get('msgFinishSubmission'),
@@ -90,7 +91,4 @@ foreach ($formData as $input) {
     }
 }
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

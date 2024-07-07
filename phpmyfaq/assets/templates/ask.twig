@@ -1,3 +1,6 @@
+{% extends 'index.twig' %}
+
+{% block content %}
 <section class="col-12">
   {% if noCategories == true %}
   <div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
@@ -76,3 +79,4 @@
   </form>
   {% endif %}
 </section>
+{% endblock %}

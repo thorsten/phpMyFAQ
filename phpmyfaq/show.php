@@ -52,8 +52,6 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./show.twig');
 
-$templateVars = [];
-
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     $faqSession->userTracking('show_category', $selectedCategoryId);
 
@@ -80,6 +78,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             $categoryFaqsHeader = Translation::get('msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
             $templateVars = [
+                ... $templateVars,
                 'categorySubsHeader' => $categoryFaqsHeader
             ];
         }
@@ -140,7 +139,4 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     ];
 }
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

@@ -1,3 +1,6 @@
+{% extends 'index.twig' %}
+
+{% block content %}
 {% if attachmentErrors %}
 <section>
   {% for item in attachmentErrors %}
@@ -5,3 +8,4 @@
   {% endfor %}
 </section>
 {% endif %}
+{% endblock %}

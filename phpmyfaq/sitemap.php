@@ -52,13 +52,11 @@ $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
     'letters' => $siteMap->getAllFirstLetters(),
     'faqs' => $siteMap->getFaqsFromLetter($currLetter),
     'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

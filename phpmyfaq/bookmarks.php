@@ -40,6 +40,7 @@ $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
     'bookmarksList' => $bookmark->getBookmarkList(),
     'removeBookmark' => Translation::get('removeBookmark'),
@@ -47,7 +48,4 @@ $templateVars = [
     'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark')
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

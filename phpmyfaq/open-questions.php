@@ -36,6 +36,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('msgOpenQuestions'),
     'msgQuestionText' => Translation::get('msgQuestionText'),
     'msgDate_User' => Translation::get('msgDate_User'),
@@ -48,7 +49,4 @@ $templateVars = [
     'msg2answer' => Translation::get('msg2answer')
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

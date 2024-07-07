@@ -53,6 +53,7 @@ $twigTemplate = $twig->loadTemplate('./register.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('msgRegistration'),
     'msgRegistration' => Translation::get('msgRegistration'),
     'msgRegistrationCredentials' => Translation::get('msgRegistrationCredentials'),
@@ -67,7 +68,4 @@ $templateVars = [
         $captchaHelper->renderCaptcha($captcha, 'register', Translation::get('msgCaptcha'), $user->isLoggedIn()),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

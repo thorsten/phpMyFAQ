@@ -129,6 +129,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twigTemplate = $twig->loadTemplate('./news.twig');
 
 $templateVars = [
+    ... $templateVars,
     'writeNewsHeader' => $newsMainHeader,
     'newsHeader' => $newsHeader,
     'mainPageContent' => $newsContent,
@@ -158,7 +159,4 @@ $templateVars = [
     'renderComments' => $commentHelper->getComments($comments),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

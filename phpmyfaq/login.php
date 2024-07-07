@@ -38,6 +38,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twigTemplate = $twig->loadTemplate('./login.twig');
 
 $templateVars = [
+    ... $templateVars,
     'loginHeader' => Translation::get('msgLoginUser'),
     'sendPassword' => Translation::get('lostPassword'),
     'loginMessage' => $loginMessage,
@@ -58,7 +59,4 @@ $templateVars = [
     'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

@@ -695,7 +695,7 @@ if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404'
     // @todo handle 404 :-)
 }
 
-$response->setContent($template->render());
+$response->setContent($twigTemplate->render($templateVars));
 
 if ('logout' === $action) {
     $response->headers->set('Cache-Control', 'no-cache, no-store, private');

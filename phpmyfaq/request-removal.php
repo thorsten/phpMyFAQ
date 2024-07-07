@@ -39,6 +39,7 @@ $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'pageHeader' => Translation::get('msgUserRemoval'),
     'msgContact' => Translation::get('msgContact'),
     'msgUserRemovalText' => Translation::get('msgUserRemovalText'),
@@ -60,7 +61,4 @@ $templateVars = [
     'msgS2FButton' => Translation::get('msgS2FButton')
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;

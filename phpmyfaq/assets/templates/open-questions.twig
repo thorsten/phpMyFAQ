@@ -1,3 +1,6 @@
+{% extends 'index.twig' %}
+
+{% block content %}
 <section class="col-12">
   <h1>{{ pageHeader }}</h1>
   <p>{{ msgQuestionText }}</p>
@@ -48,3 +51,5 @@
     {% endif %}
   </table>
 </section>
+
+{% endblock %}

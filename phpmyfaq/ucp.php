@@ -71,6 +71,7 @@ if ($user->isLoggedIn()) {
 
     // Twig template variables
     $templateVars = [
+        ... $templateVars,
         'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
         'msgGravatar' => Translation::get('msgGravatar'),
         'ucpGravatarImage' => $gravatarImg,
@@ -105,10 +106,7 @@ if ($user->isLoggedIn()) {
         'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected')
     ];
 
-    $template->addRenderedTwigOutput(
-        'mainPageContent',
-        $twigTemplate->render($templateVars)
-    );
+    return $templateVars;
 } else {
     // Redirect to log in
     $response = new RedirectResponse($faqConfig->getDefaultUrl());

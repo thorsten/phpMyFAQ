@@ -68,6 +68,7 @@ $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./share-by-email.twig');
 
 $templateVars = [
+    ... $templateVars,
     'breadcrumbHeadline' => Translation::get('msgSend2Friend'),
     'lang' => Strings::htmlentities($faqLanguage),
     'faqId' => $faqId,
@@ -94,7 +95,4 @@ $templateVars = [
     'msgS2FButton' => Translation::get('msgS2FButton'),
 ];
 
-$template->addRenderedTwigOutput(
-    'mainPageContent',
-    $twigTemplate->render($templateVars)
-);
+return $templateVars;
