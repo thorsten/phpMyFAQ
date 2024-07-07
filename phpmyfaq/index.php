@@ -482,15 +482,6 @@ if ($action !== 'main') {
 }
 
 //
-// Set sidebar column
-//
-if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
-    $sidebarTemplate = 'sidebar-tagcloud.html';
-} else {
-    $sidebarTemplate = 'sidebar-empty.html';
-}
-
-//
 // Check if the FAQ should be secured
 //
 if ($faqConfig->get('security.enableLoginOnly')) {
@@ -520,7 +511,6 @@ if ($faqConfig->get('main.maintenanceMode')) {
 $template = new Template(
     [
         'index' => $indexSet,
-        'sidebar' => $sidebarTemplate,
         'mainPageContent' => $includeTemplate,
     ],
     $faqConfig->get('main.templateSet')
@@ -752,13 +742,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
     );
 }
 
-$template->parse(
-    'sidebar',
-    [
-        'msgAllCatArticles' => Translation::get('msgAllCatArticles'),
-        'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
-    ]
-);
 
 if (DEBUG) {
     $template->parseBlock('index', 'debugMode');
@@ -781,7 +764,6 @@ require $includePhp;
 // Get the main template, set main variables
 //
 $template->parse('index', [...$tplMainPage, ...$tplNavigation]);
-$template->merge('sidebar', 'index');
 $template->merge('mainPageContent', 'index');
 
 //
