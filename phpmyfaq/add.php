@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Enums\Forms\FormIds;
-use phpMyFAQ\Enums\Forms\AddNewFaqInputIds;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -87,50 +87,15 @@ $categoryHelper->setCategory($category);
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
-// Enable/Disable WYSIWYG editor
-if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
-    $template->parseBlock(
-        'mainPageContent',
-        'enableWysiwygEditor',
-        [
-            'currentTimestamp' => $request->server->get('REQUEST_TIME'),
-        ]
-    );
-}
-
-$template->parse(
-    'mainPageContent',
-    [
-        'pageHeader' => Translation::get('msgNewContentHeader'),
-        'baseHref' => $faqSystem->getSystemUri($faqConfig),
-        'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
-        'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
-        'lang' => $Language->getLanguage(),
-        'openQuestionID' => $selectedQuestion,
-        'defaultContentMail' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('email')) : '',
-        'defaultContentName' =>
-            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'msgNewContentName' => Translation::get('msgNewContentName'),
-        'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
-        'renderCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
-        'msgNewContentTheme' => Translation::get('msgNewContentTheme'),
-        'readonly' => $readonly,
-        'printQuestion' => $question,
-        'msgNewContentArticle' => Translation::get('msgNewContentArticle'),
-        'msgNewContentKeywords' => Translation::get('msgNewContentKeywords'),
-        'msgNewContentLink' => Translation::get('msgNewContentLink'),
-        'captchaFieldset' =>
-            $captchaHelper->renderCaptcha($captcha, 'add', Translation::get('msgCaptcha'), $user->isLoggedIn()),
-        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    ]
-);
-
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
 $category = new Category($faqConfig);
 $categories = $category->getAllCategoryIds();
+
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables
 $templateVars = [
@@ -140,8 +105,7 @@ $templateVars = [
     'lang' => $Language->getLanguage(),
     'openQuestionID' => $selectedQuestion,
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' =>
-        ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'msgNewContentName' => Translation::get('msgNewContentName'),
     'msgNewContentMail' => Translation::get('msgNewContentMail'),
     'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
@@ -175,3 +139,8 @@ foreach ($formData as $input) {
         $required => ((int)$input->input_required !== 0) ? 'required' : ''
     ];
 }
+
+$template->addRenderedTwigOutput(
+    'mainPageContent',
+    $twigTemplate->render($templateVars)
+);

@@ -19,12 +19,13 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Enums\Forms\FormIds;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -57,14 +58,17 @@ $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 
 $categories = $category->getAllCategoryIds();
 
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./ask.twig');
+
 $templateVars = [
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'msgMatchingQuestions' => Translation::get('msgMatchingQuestions'),
     'msgFinishSubmission' => Translation::get('msgFinishSubmission'),
     'lang' => $Language->getLanguage(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' =>
-        ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $user->isLoggedIn()),
@@ -86,26 +90,7 @@ foreach ($formData as $input) {
     }
 }
 
-$template->parse(
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'baseHref' => $faqSystem->getSystemUri($faqConfig),
-        'pageHeader' => Translation::get('msgQuestion'),
-        'msgQuestion' => Translation::get('msgQuestion'),
-        'msgNewQuestion' => Translation::get('msgNewQuestion'),
-        'msgMatchingQuestions' => Translation::get('msgMatchingQuestions'),
-        'msgFinishSubmission' => Translation::get('msgFinishSubmission'),
-        'lang' => $Language->getLanguage(),
-        'msgNewContentName' => Translation::get('msgNewContentName'),
-        'msgNewContentMail' => Translation::get('msgNewContentMail'),
-        'defaultContentMail' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('email')) : '',
-        'defaultContentName' =>
-            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'msgAskCategory' => Translation::get('msgAskCategory'),
-        'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
-        'msgAskYourQuestion' => Translation::get('msgAskYourQuestion'),
-        'captchaFieldset' =>
-            $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $user->isLoggedIn()),
-        'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    ]
+    $twigTemplate->render($templateVars)
 );
