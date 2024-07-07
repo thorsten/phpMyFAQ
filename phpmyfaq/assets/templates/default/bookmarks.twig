@@ -1,31 +1,6 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<!-- @todo Toasts -> have to be moved to header and footer.twig --->
-<div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
-  <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
-       aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="pmf-notification-message">
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-              aria-label="Close">
-      </button>
-    </div>
-  </div>
-
-  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
-       role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="pmf-notification-error-message">
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-              aria-label="Close">
-      </button>
-    </div>
-  </div>
-</div>
-
 <div class="row g-5">
   <div class="col-md-12">
     <h2 class="pb-4 mb-4 border-bottom">{{ msgMyBookmarks }}</h2>

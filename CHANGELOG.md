@@ -11,7 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
-- [WIP] added Twig as new template engine (Thorsten)
+- added Twig as new template engine (Thorsten, Jan Harms)
 - added Symfony Routing (Thorsten)
 - added trending FAQs (Thorsten)
 - added new admin configuration frontend (Thorsten)

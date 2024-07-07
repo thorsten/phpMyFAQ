@@ -67,28 +67,6 @@
   </div>
 </nav>
 
-<div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
-  <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
-       aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="pmf-notification-message">
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
-      </button>
-    </div>
-  </div>
-
-  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
-       role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="pmf-notification-error-message">
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
-      </button>
-    </div>
-  </div>
-</div>
-
 <!-- SEARCH -->
 <div class="container my-5">
   <div class="row height d-flex justify-content-center align-items-center">
@@ -162,14 +140,39 @@
             <a class="pmf-nav-link-footer" target="_blank" href="{{ urlPrivacyLink }}">{{ msgPrivacyNote }}</a>
           </li>
           {% endif %}
+          {% if isCookieConsentEnabled %}
           <li class="nav-item">
             <a id="showCookieConsent" class="pmf-nav-link-footer" href="#">{{ cookiePreferences }}</a>
           </li>
+          {% endif %}
         </ul>
       </div>
     </div>
   </div>
 </footer>
+
+<!-- Frontend toasts -->
+<div class="toast-container position-fixed bottom-0 start-0 mt-5 p-3">
+  <div id="pmf-notification" class="toast align-items-center text-bg-success shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+      </button>
+    </div>
+  </div>
+
+  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-error-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
 
 {% if isCookieConsentEnabled %}
 <script src="./assets/dist/cookieConsent.js"></script>

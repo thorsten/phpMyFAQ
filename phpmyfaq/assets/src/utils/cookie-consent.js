@@ -76,7 +76,7 @@ cc.run({
 
 const cookiePreferences = document.getElementById('showCookieConsent');
 if (cookiePreferences) {
-  cookiePreferences.addEventListener('click', function (event) {
+  cookiePreferences.addEventListener('click', (event) => {
     event.preventDefault();
     cc.showPreferences();
   });

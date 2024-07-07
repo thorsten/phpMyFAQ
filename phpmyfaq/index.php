@@ -635,6 +635,8 @@ $templateVars = [
     'isPrivacyLinkEnabled' => $faqConfig->get('main.enablePrivacyLink'),
     'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
     'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
+    'isCookieConsentEnabled' => $faqConfig->get('main.enableCookieConsent'),
+    'cookiePreferences' => Translation::get('cookiePreferences')
 ];
 
 //
