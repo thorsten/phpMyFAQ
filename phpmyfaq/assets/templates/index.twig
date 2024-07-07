@@ -20,8 +20,7 @@
 
   <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet">
 
-  <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" rel="shortcut icon">
-  <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="{{ baseHref }}assets/images/favicon.ico" rel="shortcut icon">
   <link href="{{ currentPageUrl }}" rel="canonical">
 </head>
 <body class="pmf-page-wrapper" dir="{{ dir }}">
@@ -30,39 +29,37 @@
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <a href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}"
          class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-        <img height="40" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo-transparent.svg"
-             alt="phpMyFAQ">
+        <img height="40" src="{{ baseHref }}assets/images/logo-transparent.svg" alt="phpMyFAQ">
       </a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li class="pmf-nav-link {{ activeAllCategories }}">{{ allCategories }}</li>
-        <li class="pmf-nav-link {{ activeAddContent }}">{{ msgAddContent }}</li>
-        <li class="pmf-nav-link {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-        <li class="pmf-nav-link {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
+        {% for item in topNavigation %}
+          <li class="pmf-nav-link ">
+            <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+          </li>
+        {% endfor %}
       </ul>
 
       <div class="dropdown text-end">
-        <a
-          href="#"
-          class="d-block text-decoration-none dropdown-toggle text-white"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
+        <a href="#" class="d-block text-decoration-none dropdown-toggle text-white" data-bs-toggle="dropdown"
+           aria-expanded="false">
           {{ msgLoginUser }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark text-small">
-          {% if userIsNotLoggedIn %}
-          <li>{{ msgRegisterUser }}</li>
-          <li>{{ msgLoginUser }}</li>
+          {% if not isUserLoggedIn %}
+            {% if isUserRegistrationEnabled %}
+            <li><a class="dropdown-item" href="./user/register">{{ msgRegisterUser }}</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="./login">{{ msgLoginUser }}</a></li>
           {% else %}
-          <li>{{ msgUserControlDropDown }}</li>
-          <li>{{ msgBookmarks }}</li>
-          <li>{{ msgAdmin }}</li>
-          <li>{{ msgUserRemoval }}</li>
+            <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
+            <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
+            <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
+            <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li>{{ msgLogoutUser }}</li>
+            <li><a class="dropdown-item" href="./user/logout?csrf={{ csrfLogout }}">{{ msgLogoutUser }}</a></li>
           {% endif %}
         </ul>
       </div>
@@ -76,8 +73,7 @@
     <div class="d-flex">
       <div class="toast-body" id="pmf-notification-message">
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-              aria-label="Close">
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
       </button>
     </div>
   </div>
@@ -87,8 +83,7 @@
     <div class="d-flex">
       <div class="toast-body" id="pmf-notification-error-message">
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-              aria-label="Close">
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
       </button>
     </div>
   </div>
@@ -99,24 +94,16 @@
   <div class="row height d-flex justify-content-center align-items-center">
     <div class="col-md-8">
       <div class="search">
-        <form action="{{ formActionUrl }}" id="search" method="post" role="search">
+        <form action="./search.html" id="search" method="post" role="search">
           <i class="bi bi-search"></i>
-          <input
-            autocomplete="off"
-            type="text"
-            class="form-control form-control-lg"
-            id="pmf-search-autocomplete"
-            name="search"
-            placeholder="{{ searchBox }} ..."
-            maxlength="255"
-            value="{{ searchTerm }}"
-          />
+          <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
+                 name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
           <button type="submit" class="btn btn-info btn-lg">{{ searchBox }}</button>
         </form>
       </div>
       <div>
         <small class="form-text text-muted">
-          <a class="help" href="?action=search">{{ msgAdvancedSearch }}</a>
+          <a class="help" href="./search.html">{{ msgAdvancedSearch }}</a>
         </small>
       </div>
     </div>
@@ -141,7 +128,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 mb-md-0 mb-4">
-        <h5 class="footer-heading">{{ writeTagCloudHeader }}</h5>
+        <h5 class="footer-heading">{{ msgTagCloudHeader }}</h5>
         <p class="card-text pmf-tag-cloud">{{ renderedTags | raw }}</p>
       </div>
       <div class="col-md-4 mb-md-0 mb-4">
@@ -158,15 +145,29 @@
   <div class="w-100">
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p class="col-md-6 mb-0 text-white">{{ copyright }}</p>
+        <p class="col-md-6 mb-0 text-white">
+          powered with ❤️ and ☕️ by
+          <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a>
+          {{ version }}
+        </p>
 
         <ul class="nav col-md-6 justify-content-end w-100">
-          <li class="nav-item">{{ faqOverview }}</li>
-          <li class="nav-item">{{ showSitemap }}</li>
-          <li class="nav-item">{{ msgGlossary }}</li>
+          {% for item in footerNavigation %}
+            <li class="nav-item">
+              <a class="pmf-nav-link-footer {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+            </li>
           <li class="nav-item">{{ msgContact }}</li>
           <li class="nav-item">{{ privacyLink }}</li>
           <li class="nav-item">{{ cookiePreferences }}</li>
+          {% endfor %}
+          {% if isPrivacyLinkEnabled %}
+          <li class="nav-item">
+            <a class="pmf-nav-link-footer" target="_blank" href="{{ urlPrivacyLink }}">{{ msgPrivacyNote }}</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a id="showCookieConsent" class="pmf-nav-link-footer" href="#">{{ cookiePreferences }}</a>
+          </li>
         </ul>
       </div>
     </div>

@@ -60,6 +60,7 @@ $twigTemplate = $twig->loadTemplate('./startpage.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'pageHeader' => $faqConfig->getTitle(),
     'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
@@ -90,7 +91,11 @@ $templateVars = [
     )
 ];
 
+/*
 $template->addRenderedTwigOutput(
     'mainPageContent',
     $twigTemplate->render($templateVars)
 );
+*/
+
+echo $twigTemplate->render($templateVars);

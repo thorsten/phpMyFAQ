@@ -523,43 +523,29 @@ $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
-$keywordsArray = array_merge(explode(',', (string)$keywords), explode(',', (string)$faqConfig->get('main.metaKeywords')));
+$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
 
-
-if ($faqConfig->get('security.enableRegistration')) {
-    $template->parseBlock(
-        'index',
-        'enableRegistration',
-        [
-            'registerUser' => Translation::get('msgRegistration'),
-        ]
-    );
-}
-
-if ($faqConfig->isSignInWithMicrosoftActive()) {
-    $template->parseBlock(
-        'index',
-        'useSignInWithMicrosoft',
-        [
-            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
-        ]
-    );
-}
-
-$tplMainPage = [
+//
+// Twig Template variables
+//
+$templateVars = [
+    'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
+    'isDebugEnabled' => DEBUG,
+    'tplSetName' => 'default', // @todo change this value
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
+    'isUserLoggedIn' => $user->isLoggedIn(),
     'title' => $title,
-    'baseHref' => Strings::htmlspecialchars($faqSystem->getSystemUri($faqConfig)),
+    'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'version' => $faqConfig->getVersion(),
-    'header' => Strings::htmlentities(str_replace('"', '', $faqConfig->getTitle())),
-    'metaDescription' => Strings::htmlspecialchars($metaDescription ?? $faqConfig->get('seo.description')),
-    'metaKeywords' => Strings::htmlentities($keywords),
-    'metaPublisher' => Strings::htmlentities($faqConfig->get('main.metaPublisher')),
+    'header' => str_replace('"', '', $faqConfig->getTitle()),
+    'metaDescription' => $metaDescription ?? $faqConfig->get('seo.description'),
+    'metaKeywords' => $keywords,
+    'metaPublisher' => $faqConfig->get('main.metaPublisher'),
     'metaLanguage' => Translation::get('metaLanguage'),
     'metaRobots' => $seo->getMetaRobots($action),
     'phpmyfaqVersion' => $faqConfig->getVersion(),
@@ -578,15 +564,14 @@ $tplMainPage = [
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(true),
-    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="user/register">' .
-        Translation::get('msgRegistration') . '</a>' : '',
+    'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
+    'msgRegisterUser' => Translation::get('msgRegisterUser'),
     'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
     'msgFullName' => Translation::get('ad_user_loggedin') . $user->getLogin(),
-    'msgLoginName' => Strings::htmlentities($user->getUserData('display_name')),
+    'msgLoginName' => $user->getUserData('display_name'),
     'loginHeader' => Translation::get('msgLoginUser'),
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => Strings::htmlentities($faqSystem->getSystemUri($faqConfig)) . '?' .
-        Filter::getFilteredQueryString(),
+    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig) . '?' . Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
     'login' => Translation::get('ad_auth_ok'),
     'username' => Translation::get('ad_auth_user'),
@@ -600,155 +585,98 @@ $tplMainPage = [
     'msgSubmit' => Translation::get('msgNewContentSubmit'),
     'loginPageMessage' => Translation::get('loginPageMessage'),
     'msgAdvancedSearch' => Translation::get('msgAdvancedSearch'),
-    'writeTagCloudHeader' => Translation::get('msg_tags'),
-    'writeTags' => $oTag->renderTagCloud(),
-    'currentYear' => date('Y', time())
+    'msgTagCloudHeader' => Translation::get('msg_tags'),
+    'renderedTags' => $oTag->renderTagCloud(),
+    'currentYear' => date('Y', time()),
+    'cookieConsentEnabled' =>  $faqConfig->get('main.enableCookieConsent'),
 ];
 
-if ('main' == $action || 'show' == $action) {
-    $template->parseBlock(
-        'index',
-        'globalSearchBox',
-        [
-            'formActionUrl' => '?' . $sids . 'action=search',
-            'searchBox' => Translation::get('msgSearch'),
-            'categoryId' => ($cat === 0) ? '%' : (int)$cat,
-            'msgSearch' => sprintf(
-                '<a class="help" href="?action=search">%s</a>',
-                Translation::get('msgAdvancedSearch')
-            ),
-        ]
-    );
-}
-
-if ($faqConfig->get('main.enablePrivacyLink')) {
-    $privacyLink = sprintf(
-        '<a class="pmf-nav-link-footer" target="_blank" href="%s">%s</a>',
-        Strings::htmlentities($faqConfig->get('main.privacyURL')),
-        Translation::get('msgPrivacyNote')
-    );
-} else {
-    $privacyLink = '';
-}
-
-$tplNavigation = [
-    'backToHome' => '<a class="nav-link" href="./index.html">' . Translation::get('msgHome') . '</a>',
-    'allCategories' => '<a class="pmf-nav-link" href="./show-categories.html">' .
-        Translation::get('msgShowAllCategories') . '</a>',
-    'msgAddContent' => '<a class="pmf-nav-link" href="./add-faq.html">' .
-        Translation::get('msgAddContent') . '</a>',
-    'msgQuestion' => $faqConfig->get('main.enableAskQuestions')
-        ?
-        '<a class="pmf-nav-link" href="./add-question.html">' . Translation::get('msgQuestion') . '</a>'
-        :
-        '',
-    'msgOpenQuestions' => $faqConfig->get('main.enableAskQuestions')
-        ?
-        '<a class="pmf-nav-link" href="./open-questions.html">' .
-        Translation::get('msgOpenQuestions') . '</a>'
-        :
-        '',
-    'msgSearch' => '<a class="nav-link" href="./search.html">' . Translation::get('msgAdvancedSearch') . '</a>',
-    'msgContact' => '<a class="pmf-nav-link-footer" href="./contact.html">' . Translation::get('msgContact') .
-        '</a>',
-    'msgGlossary' => '<a class="pmf-nav-link-footer" href="./glossary.html">' .
-        Translation::get('ad_menu_glossary') . '</a>',
-    'privacyLink' => $privacyLink,
-    'cookiePreferences' => '<a id="showCookieConsent" class="pmf-nav-link-footer">'
-        . Translation::get('cookiePreferences') . '</a>',
-    'faqOverview' => '<a class="pmf-nav-link-footer" href="./overview.html">' .
-        Translation::get('faqOverview') . '</a>',
-    'showSitemap' => '<a class="pmf-nav-link-footer" href="./sitemap/A/' . $faqLangCode . '.html">' .
-        Translation::get('msgSitemap') . '</a>',
-    'breadcrumbHome' => '<a href="./index.html">' . Translation::get('msgHome') . '</a>',
+$topNavigation = [
+    [
+        'name' => Translation::get('msgShowAllCategories'),
+        'link' => './show-categories.html',
+        'active' => ('show' === $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('msgAddContent'),
+        'link' => './add-faq.html',
+        'active' => ('add' === $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('msgQuestion'),
+        'link' => './add-question.html',
+        'active' => ('ask' == $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('msgOpenQuestions'),
+        'link' => './open-questions.html',
+        'active' => ('open-questions' == $action) ? 'active' : '',
+    ],
 ];
 
-$tplNavigation['faqHome'] = Strings::htmlspecialchars($faqConfig->getDefaultUrl());
-$tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
-$tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
-$tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
-$tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';
-$tplNavigation['activeOpenQuestions'] = ('open-questions' == $action) ? 'active' : '';
-$tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
+$footerNavigation = [
+    [
+        'name' => Translation::get('faqOverview'),
+        'link' => './overview.html',
+        'active' => ('faq-overview' == $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('msgSitemap'),
+        'link' => './sitemap/A/' . $faqLangCode . '.html',
+        'active' => ('sitemap' == $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('ad_menu_glossary'),
+        'link' => './glossary.html',
+        'active' => ('glossary' == $action) ? 'active' : '',
+    ],
+    [
+        'name' => Translation::get('msgContact'),
+        'link' => './contact.html',
+        'active' => ('contact' == $action) ? 'active' : '',
+    ],
+];
+
+$templateVars = [
+    ... $templateVars,
+    'faqHome' => $faqConfig->getDefaultUrl(),
+    'topNavigation' => $topNavigation,
+    'isAskQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
+    'isOpenQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
+    'footerNavigation' => $footerNavigation,
+    'isPrivacyLinkEnabled' => $faqConfig->get('main.enablePrivacyLink'),
+    'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
+    'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
+];
 
 //
 // Show login box or logged-in user information
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
-    if ($user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value) || $user->isSuperAdmin()) {
-        $adminSection = sprintf(
-            '<a class="dropdown-item" href="./admin/index.php">%s</a>',
-            Translation::get('adminSection')
-        );
-    } else {
-        $adminSection = '';
+    if (
+        $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value) ||
+        $user->isSuperAdmin()
+    ) {
+        $templateVars = [
+            ... $templateVars,
+            'msgAdmin' => Translation::get('adminSection'),
+        ];
     }
 
-    if ($faqConfig->get('ldap.ldapSupport')) {
-        $userControlDropdown = '';
-    } else {
-        $userControlDropdown = sprintf(
-            '<a class="dropdown-item" href="?action=ucp">%s</a>',
-            Translation::get('headerUserControlPanel')
-        );
+    if (!$faqConfig->isLdapActive()) {
+        $templateVars = [
+            ... $templateVars,
+            'msgUserControlDropDown' => Translation::get('headerUserControlPanel'),
+        ];
     }
 
-    $template->parseBlock(
-        'index',
-        'userloggedIn',
-        [
-            'msgAdmin' => $adminSection,
-            'activeUserControl' => ('ucp' == $action) ? 'active' : '',
-            'msgUserControlDropDown' => sprintf(
-                '<a class="dropdown-item" href="user/ucp">%s</a>',
-                Translation::get('headerUserControlPanel')
-            ),
-            'msgBookmarks' => sprintf(
-                '<a class="dropdown-item" href="user/bookmarks">%s</a>',
-                Translation::get('msgBookmarks')
-            ),
-            'msgUserRemoval' => sprintf(
-                '<a class="dropdown-item" href="user/request-removal">%s</a>',
-                Translation::get('ad_menu_RequestRemove')
-            ),
-            'msgLogoutUser' => sprintf(
-                '<a class="dropdown-item" href="user/logout?csrf=%s">%s</a>',
-                Token::getInstance()->getTokenString('logout'),
-                Translation::get('ad_menu_logout'),
-            )
-        ]
-    );
-} else {
-    if ($faqConfig->get('main.maintenanceMode')) {
-        $msgLoginUser = '<a class="dropdown-item" href="./admin/">%s</a>';
-    } else {
-        $msgLoginUser = '<a class="dropdown-item" href="./login">%s</a>';
-    }
-
-    $template->parseBlock(
-        'index',
-        'notLoggedIn',
-        [
-            'msgRegisterUser' => $faqConfig->get('security.enableRegistration')
-                ?
-                '<a class="dropdown-item" href="user/register">' .
-                Translation::get('msgRegisterUser') . '</a>'
-                :
-                '',
-            'msgLoginUser' => sprintf($msgLoginUser, Translation::get('msgLoginUser')),
-            'activeRegister' => ('register' == $action) ? 'active' : '',
-            'activeLogin' => ('login' == $action) ? 'active' : '',
-        ]
-    );
-}
-
-
-if (DEBUG) {
-    $template->parseBlock('index', 'debugMode');
-}
-
-if ($faqConfig->get('main.enableCookieConsent')) {
-    $template->parseBlock('index', 'cookieConsentEnabled');
+    $templateVars = [
+        ... $templateVars,
+        'msgBookmarks' => Translation::get('msgBookmarks'),
+        'msgUserRemoval' => Translation::get('ad_menu_RequestRemove'),
+        'msgLogoutUser' => Translation::get('ad_menu_logout'),
+        'csrfLogout' => Token::getInstance()->getTokenString('logout'),
+    ];
 }
 
 if ('twofactor' === $action) {
@@ -761,23 +689,10 @@ if ('twofactor' === $action) {
 require $includePhp;
 
 //
-// Get the main template, set main variables
-//
-$template->parse('index', [...$tplMainPage, ...$tplNavigation]);
-$template->merge('mainPageContent', 'index');
-
-//
 // Check for 404 HTTP status code
 //
 if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404') {
-    $template = new Template(
-        [
-            'index' => '404.html',
-            'mainPageContent' => '',
-        ],
-        $faqConfig->get('main.templateSet')
-    );
-    $template->parse('index', [...$tplMainPage, ...$tplNavigation]);
+    // @todo handle 404 :-)
 }
 
 $response->setContent($template->render());
