@@ -172,7 +172,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Utilisateurs";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approuver une FAQ";
 $PMF_LANG["ad_menu_entry_edit"] = "Editer une FAQ";
 $PMF_LANG["ad_menu_categ_add"] = "Ajouter une catégorie";
-$PMF_LANG["ad_menu_categ_edit"] = "Catégories";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Catégories";
 $PMF_LANG["ad_menu_news_add"] = "Ajouter une actualité";
 $PMF_LANG["ad_menu_news_edit"] = "Actualités";
 $PMF_LANG["ad_menu_open"] = "Questions ouvertes";
@@ -297,7 +297,7 @@ $PMF_LANG["ad_categ_update"] = "Éditer";
 $PMF_LANG["ad_categ_delete"] = "Supprimer";
 $PMF_LANG["ad_categ_updatecateg"] = "Éditer catégorie";
 $PMF_LANG["ad_categ_nodata"] = "Pas trouvé dans la base";
-$PMF_LANG["ad_categ_remark"] = "Veuillez noter que les articles existants ne vont plus apparaître si vous supprimez la catégorie. Vous devez soit assigner une nouvelle catégorie pour ces articles ou bien les supprimer.";
+$PMF_LANG["msgCategoryRemark"] = "Veuillez noter que les articles existants ne vont plus apparaître si vous supprimez la catégorie. Vous devez soit assigner une nouvelle catégorie pour ces articles ou bien les supprimer.";
 $PMF_LANG["ad_categ_edit_1"] = "Éditer";
 $PMF_LANG["ad_categ_edit_2"] = "Catégorie";
 $PMF_LANG["ad_categ_added"] = "La catégorie a été ajoutée.";
@@ -436,7 +436,7 @@ $PMF_LANG["ad_sess_head"] = "Voir les sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_stat"] = "Statistiques des votes";
-$PMF_LANG["ad_kateg_add"] = "Ajouter une catégorie";
+$PMF_LANG["msgAddCategory"] = "Ajouter une catégorie";
 $PMF_LANG["ad_kateg_rename"] = "Éditer";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "Utilisateur";
@@ -732,7 +732,7 @@ $PMF_LANG["ad_categ_deletethislang"] = "Supprimer seulement dans cette langue?";
 $PMF_LANG["ad_categ_translated"] = "La catégorie a été traduite.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Vue d'ensemble";
+$PMF_LANG["msgCategoryMatrix"] = "Vue d'ensemble";
 $PMF_LANG["ad_menu_categ_structure"] = "Vue d'ensemble des catégories incluant leurs langues";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -752,8 +752,8 @@ $PMF_LANG["ad_entry_intlink"] = "Sélectionnez une FAQ à insérer comme un lien
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Coller après";
-$PMF_LANG["ad_categ_remark_move"] = "L'échange de 2 catégories est seulement possible au même niveau.";
-$PMF_LANG["ad_categ_remark_overview"] = "Le bon ordre des catégories sera affiché si toutes les catégories sont définies pour la même langue (première colonne).";
+$PMF_LANG["msgCategoryRemark_move"] = "L'échange de 2 catégories est seulement possible au même niveau.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Le bon ordre des catégories sera affiché si toutes les catégories sont définies pour la même langue (première colonne).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG["msgUsersOnline"] = "%d Invités et %d Inscrits";

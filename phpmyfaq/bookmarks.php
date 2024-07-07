@@ -18,7 +18,6 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Session\Token;
@@ -39,10 +38,7 @@ $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'msgMyBookmarks' => Translation::get('msgMyBookmarks'),
     'bookmarksList' => $bookmark->getBookmarkList(),
-    'removeBookmark' => Translation::get('removeBookmark'),
-    'msgLinkToFAQ' => Translation::get('msgLinkToFAQ'),
     'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark')
 ];
 

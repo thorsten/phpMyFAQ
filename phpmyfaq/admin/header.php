@@ -62,7 +62,7 @@ if ($faqConfig->get('security.permLevel') !== 'basic') {
 $secLevelEntries['content'] = $adminHelper->addMenuEntry(
     'addcateg+editcateg+delcateg',
     'category-overview',
-    'ad_menu_categ_edit',
+    'msgHeaderCategoryOverview',
     $action
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(

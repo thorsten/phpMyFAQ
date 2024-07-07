@@ -157,7 +157,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Užívatelia";
 $PMF_LANG["ad_menu_entry_aprove"] = "Schválené FAQ";
 $PMF_LANG["ad_menu_entry_edit"] = "Upraviť FAQ";
 $PMF_LANG["ad_menu_categ_add"] = "Pridať kategóriu";
-$PMF_LANG["ad_menu_categ_edit"] = "Upraviť kategóriu";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Upraviť kategóriu";
 $PMF_LANG["ad_menu_news_add"] = "Pridať novinky";
 $PMF_LANG["ad_menu_news_edit"] = "Upraviť novinky";
 $PMF_LANG["ad_menu_open"] = "Otvoriť otázky";
@@ -284,7 +284,7 @@ $PMF_LANG["ad_categ_update"] = "aktualizovať";
 $PMF_LANG["ad_categ_delete"] = "vymazať";
 $PMF_LANG["ad_categ_updatecateg"] = "Aktualizovať kategóriu";
 $PMF_LANG["ad_categ_nodata"] = "V databáze neboli nájdené žiadne údaje";
-$PMF_LANG["ad_categ_remark"] = "Majte prosím na pamäti, že keď vymažete kategóriu, dané položky už viac nebudú viditeľné. Článku musíte prideliť novú kategóriu alebo vymažte článok.";
+$PMF_LANG["msgCategoryRemark"] = "Majte prosím na pamäti, že keď vymažete kategóriu, dané položky už viac nebudú viditeľné. Článku musíte prideliť novú kategóriu alebo vymažte článok.";
 $PMF_LANG["ad_categ_edit_1"] = "Uprav";
 $PMF_LANG["ad_categ_edit_2"] = "Kategória";
 $PMF_LANG["ad_categ_add"] = "pridať kategóriu";
@@ -423,9 +423,9 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Zobraziť sekcie";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Kategórie";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Kategórie";
 $PMF_LANG["ad_menu_stat"] = "Hodnotiace štatistiky";
-$PMF_LANG["ad_kateg_add"] = "pridať hlavnú kategóriu";
+$PMF_LANG["msgAddCategory"] = "pridať hlavnú kategóriu";
 $PMF_LANG["ad_kateg_rename"] = "Premenovať";
 $PMF_LANG["ad_adminlog_date"] = "Dátum";
 $PMF_LANG["ad_adminlog_user"] = "Užívateľ";
@@ -736,7 +736,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Vymazať iba v tomto jazyku?';
 $PMF_LANG["ad_categ_translated"] = "Kategória bola preložená.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Prehľad";
+$PMF_LANG["msgCategoryMatrix"] = "Prehľad";
 $PMF_LANG['ad_menu_categ_structure'] = "Prehľad kategórií a jazykov";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -756,8 +756,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Zvoľte FAQ záznam pre jeho vloženie ako odka
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Vložiť po";
-$PMF_LANG["ad_categ_remark_move"] = "Výmena 2 kategórií je možná iba v rámci rovnakej úrovne.";
-$PMF_LANG["ad_categ_remark_overview"] = "Správne poradie kategórií bude zobrazené vtedy, keď budú všetky kategórie definované pre aktuálny jazyk (prvý stĺpec).";
+$PMF_LANG["msgCategoryRemark_move"] = "Výmena 2 kategórií je možná iba v rámci rovnakej úrovne.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Správne poradie kategórií bude zobrazené vtedy, keď budú všetky kategórie definované pre aktuálny jazyk (prvý stĺpec).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d Hostia a %d Registrovaní';

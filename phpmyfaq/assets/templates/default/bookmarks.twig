@@ -3,31 +3,27 @@
 {% block content %}
 <div class="row g-5">
   <div class="col-md-12">
-    <h2 class="pb-4 mb-4 border-bottom">{{ msgMyBookmarks }}</h2>
+    <h2 class="pb-4 mb-4 border-bottom">{{ 'msgMyBookmarks' | translate }}</h2>
 
     <div class="accordion" id="bookmarkAccordion">
       {% set count = 1 %}
       {% for bookmark in bookmarksList %}
-        <!--<a href="{{ bookmark['url'] }}" class="list-group-item list-group-item-action" id="delete-bookmark-{{ bookmark['id'] }}">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">{{ bookmark['title'] }}</h5>
-              <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ removeBookmark }}"
-                 data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}"></i>
-          </div>
-        </a>-->
         <div class="accordion-item shadow-sm rounded mb-3 border-1" id="delete-bookmark-{{ bookmark['id'] }}">
           <h2 class="accordion-header" id="heading{{ count }}">
-            <button class="accordion-button d-flex collapsed justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ count }}" aria-expanded="true" aria-controls="collapse{{ count }}">
+            <button class="accordion-button d-flex collapsed justify-content-between" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapse{{ count }}" aria-expanded="true"
+                    aria-controls="collapse{{ count }}">
               <span class="flex-grow-1 text-start">{{ count }}. {{ bookmark['title'] }}</span>
-              <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ removeBookmark }}"
-                data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}" data-pmf-csrf="{{ csrfTokenDeleteBookmark }}">
+              <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ 'removeBookmark' | translate }}"
+                 data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}"
+                 data-pmf-csrf="{{ csrfTokenDeleteBookmark }}">
               </i>&nbsp;
             </button>
           </h2>
           <div id="collapse{{ count }}" class="accordion-collapse collapse" aria-labelledby="heading{{ count }}" data-bs-parent="#bookmarkAccordion">
             <div class="accordion-body">
               {{ bookmark['answer']|raw }}
-              <a href="{{ bookmark['url'] }}">{{ msgLinkToFAQ }}</a>
+              <a href="{{ bookmark['url'] }}">{{ 'msgLinkToFAQ' | translate }}</a>
             </div>
           </div>
         </div>

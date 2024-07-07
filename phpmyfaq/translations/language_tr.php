@@ -155,7 +155,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Kullanıcılar";
 $PMF_LANG["ad_menu_entry_aprove"] = "Soru onayla";
 $PMF_LANG["ad_menu_entry_edit"] = "Soru düzenle";
 $PMF_LANG["ad_menu_categ_add"] = "Kategori ekle";
-$PMF_LANG["ad_menu_categ_edit"] = "Kategori düzenle";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Kategori düzenle";
 $PMF_LANG["ad_menu_news_add"] = "Duyuru ekle";
 $PMF_LANG["ad_menu_news_edit"] = "Duyurular";
 $PMF_LANG["ad_menu_open"] = "Yanıtsız sorular";
@@ -282,7 +282,7 @@ $PMF_LANG["ad_categ_update"] = "güncelle";
 $PMF_LANG["ad_categ_delete"] = "sil";
 $PMF_LANG["ad_categ_updatecateg"] = "Kategori Güncelle";
 $PMF_LANG["ad_categ_nodata"] = "Veritabanında kayıt bulunamadı";
-$PMF_LANG["ad_categ_remark"] = "Lütfen dikkat, bir kategoriyi sildiğinizde, kategoriye ait içerikler başka bir kategoriyle eşleştirilinceye kadar görüntülenemezler.";
+$PMF_LANG["msgCategoryRemark"] = "Lütfen dikkat, bir kategoriyi sildiğinizde, kategoriye ait içerikler başka bir kategoriyle eşleştirilinceye kadar görüntülenemezler.";
 $PMF_LANG["ad_categ_edit_1"] = "düzenle";
 $PMF_LANG["ad_categ_edit_2"] = "Kategori";
 $PMF_LANG["ad_categ_added"] = "Kategori eklendi.";
@@ -420,9 +420,9 @@ $PMF_LANG["ad_cookie"] = "Çerezler";
 $PMF_LANG["ad_sess_head"] = "Oturumları görüntüle";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Soru Kategorileri";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Soru Kategorileri";
 $PMF_LANG["ad_menu_stat"] = "Oylama İstatistikleri";
-$PMF_LANG["ad_kateg_add"] = "Üst seviye kategori ekle";
+$PMF_LANG["msgAddCategory"] = "Üst seviye kategori ekle";
 $PMF_LANG["ad_kateg_rename"] = "Düzenle";
 $PMF_LANG["ad_adminlog_date"] = "Tarih";
 $PMF_LANG["ad_adminlog_user"] = "Kullanıcı";
@@ -719,7 +719,7 @@ $PMF_LANG["ad_categ_deletethislang"] = "Yalnızca bu dilden sil?";
 $PMF_LANG["ad_categ_translated"] = "Kategori tercüme edildi.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Kategori özeti";
+$PMF_LANG["msgCategoryMatrix"] = "Kategori özeti";
 $PMF_LANG['ad_menu_categ_structure'] = "Kategori özeti ilgili dilleri de kapsar";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -739,8 +739,8 @@ $PMF_LANG['ad_entry_intlink'] = "Bağlantı olarak eklemek istediğiniz içeriğ
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Kendisinden sonra yapıştır";
-$PMF_LANG["ad_categ_remark_move"] = "Yalnızca aynı seviyedeki iki kategori birbiriyle değiştirilebilir.";
-$PMF_LANG["ad_categ_remark_overview"] = "Eğer dil ayarları doğru yapılandırıldıysa (ilk sütunda), kategori sıralaması doğru olarak gösterilir.";
+$PMF_LANG["msgCategoryRemark_move"] = "Yalnızca aynı seviyedeki iki kategori birbiriyle değiştirilebilir.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Eğer dil ayarları doğru yapılandırıldıysa (ilk sütunda), kategori sıralaması doğru olarak gösterilir.";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = "%d Ziyaretçi ve %d Kayıtlı";

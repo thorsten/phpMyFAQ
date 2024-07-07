@@ -33,7 +33,7 @@ class AdministrationHelperTest extends TestCase
     public function testAddMenuEntry(): void
     {
         $expected = '<a class="nav-link" href="?action=edit">Categories</a>' . "\n";
-        $actual = $this->instance->addMenuEntry('', 'edit', 'ad_menu_categ_edit', '', false);
+        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', '', false);
 
         $this->assertEquals($expected, $actual);
     }

@@ -154,7 +154,7 @@ $PMF_LANG["ad_menu_user_administration"] = "使用者";
 $PMF_LANG["ad_menu_entry_aprove"] = "核准發佈 FAQs (Approve FAQs)";
 $PMF_LANG["ad_menu_entry_edit"] = "編輯現有 FAQs";
 $PMF_LANG["ad_menu_categ_add"] = "新增類別";
-$PMF_LANG["ad_menu_categ_edit"] = "編輯類別";
+$PMF_LANG["msgHeaderCategoryOverview"] = "編輯類別";
 $PMF_LANG["ad_menu_news_add"] = "新增新聞";
 $PMF_LANG["ad_menu_news_edit"] = "FAQ 新聞";
 $PMF_LANG["ad_menu_open"] = "待回答問題 (Open questions)";
@@ -281,7 +281,7 @@ $PMF_LANG["ad_categ_update"] = "更新";
 $PMF_LANG["ad_categ_delete"] = "刪除";
 $PMF_LANG["ad_categ_updatecateg"] = "更新類別";
 $PMF_LANG["ad_categ_nodata"] = "資料庫內沒有資料";
-$PMF_LANG["ad_categ_remark"] = "請注意如果您刪除了一個類別，資料庫中儲存屬於該類別的所有問題記錄都不能被訪問。您必須重新給相關問題記錄分發新類別，或者刪除相關記錄。(Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.)";
+$PMF_LANG["msgCategoryRemark"] = "請注意如果您刪除了一個類別，資料庫中儲存屬於該類別的所有問題記錄都不能被訪問。您必須重新給相關問題記錄分發新類別，或者刪除相關記錄。(Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.)";
 $PMF_LANG["ad_categ_edit_1"] = "編輯";
 $PMF_LANG["ad_categ_edit_2"] = "類別";
 $PMF_LANG["ad_categ_added"] = "該類別已加入。";
@@ -419,9 +419,9 @@ $PMF_LANG["ad_cookie"] = "網頁 Cookies";
 $PMF_LANG["ad_sess_head"] = "檢視連線 (View sessions)";
 
 // Added v1.1 - 06.01.2002 - Bastian - 管理
-$PMF_LANG["ad_menu_categ_edit"] = "FAQ 類別 (FAQ Categories)";
+$PMF_LANG["msgHeaderCategoryOverview"] = "FAQ 類別 (FAQ Categories)";
 $PMF_LANG["ad_menu_stat"] = "評價統計 (Rating Statistics)";
-$PMF_LANG["ad_kateg_add"] = "新增主類別 (Add top-level category)";
+$PMF_LANG["msgAddCategory"] = "新增主類別 (Add top-level category)";
 $PMF_LANG["ad_kateg_rename"] = "編輯 (Edit)";
 $PMF_LANG["ad_adminlog_date"] = "日期 (Date)";
 $PMF_LANG["ad_adminlog_user"] = "使用者 (User)";
@@ -718,7 +718,7 @@ $PMF_LANG["ad_categ_deletethislang"] = "只刪除在此語言下? Delete in this
 $PMF_LANG["ad_categ_translated"] = "此類別已被翻譯。 The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi 開發者
-$PMF_LANG["ad_categ_show"] = "類別概況 CategoryHelper overview";
+$PMF_LANG["msgCategoryMatrix"] = "類別概況 CategoryHelper overview";
 $PMF_LANG['ad_menu_categ_structure'] = "類別概況包含它的語言 Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten 開發者
@@ -738,8 +738,8 @@ $PMF_LANG['ad_entry_intlink'] = "選取一個 FAQ 記錄，以連結的方式來
 
 //added 2.0.0 - 2006-10-10 by Rudi 開發者
 $PMF_LANG["ad_categ_paste2"] = "下一頁 Paste after";
-$PMF_LANG["ad_categ_remark_move"] = "要更換兩個類別，只能在同一層才能變更。The exchange of 2 categories is only possible at the same level.";
-$PMF_LANG["ad_categ_remark_overview"] = "如果全部類別都在語言的第一欄定義，類別的正確排序會顯示出來。The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+$PMF_LANG["msgCategoryRemark_move"] = "要更換兩個類別，只能在同一層才能變更。The exchange of 2 categories is only possible at the same level.";
+$PMF_LANG["msgCategoryRemark_overview"] = "如果全部類別都在語言的第一欄定義，類別的正確排序會顯示出來。The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo 開發者
 $PMF_LANG['msgUsersOnline'] = "%d 位訪客 與 %d 已註冊<br>%d Guests and %d Registered";

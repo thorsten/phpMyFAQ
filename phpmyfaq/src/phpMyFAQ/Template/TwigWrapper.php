@@ -46,6 +46,11 @@ class TwigWrapper
                 'debug' => System::isDevelopmentVersion()
             ]
         );
+
+        // Always add the translation extension
+        $this->twigEnvironment->addExtension(new TranslateTwigExtension());
+
+        // If we're on a development version or debug is enabled, add the debug extension
         if (System::isDevelopmentVersion() || DEBUG) {
             $this->twigEnvironment->addExtension(new DebugExtension());
         }

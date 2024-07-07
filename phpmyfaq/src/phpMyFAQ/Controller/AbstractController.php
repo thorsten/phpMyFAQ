@@ -24,7 +24,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TemplateException;
-use phpMyFAQ\Template\TranslateTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -71,8 +70,6 @@ abstract class AbstractController
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-        $twigWrapper->addExtension(new DebugExtension());
-        $twigWrapper->addExtension(new TranslateTwigExtension());
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));

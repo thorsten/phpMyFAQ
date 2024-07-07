@@ -20,9 +20,7 @@ use phpMyFAQ\Category\Order;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use phpMyFAQ\Template\TranslateTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -46,17 +44,12 @@ if (empty($categoryTree)) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new TranslateTwigExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 
 $templateVars = [
-    'msgHeaderCategoryOverview' => Translation::get('ad_menu_categ_edit'),
-    'msgAddCategory' => Translation::get('ad_kateg_add'),
-    'msgCategoryMatrix' => Translation::get('ad_categ_show'),
     'csrfTokenInput' => Token::getInstance()->getTokenInput('category'),
     'categoryTree' => $categoryTree,
     'categoryInfo' => $categoryInfo,
-    'msgCategoryRemark' => Translation::get('ad_categ_remark'),
 ];
 
 echo $template->render($templateVars);

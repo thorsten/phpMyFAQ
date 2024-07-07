@@ -54,7 +54,7 @@ $seo = new Seo($faqConfig);
 
 if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CATEGORY_EDIT->value)) {
     $templateVars = [
-        'msgHeaderCategoryMain' => Translation::get('ad_menu_categ_edit'),
+        'msgHeaderCategoryMain' => Translation::get('msgHeaderCategoryOverview'),
     ];
 
     // Save a new category

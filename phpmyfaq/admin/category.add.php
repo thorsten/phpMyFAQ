@@ -52,7 +52,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'faqLangCode' => $faqLangCode,
         'parentId' => $parentId,
         'ad_categ_new' => Translation::get('ad_categ_new'),
-        'ad_categ_show' => Translation::get('ad_categ_show'),
+        'msgCategoryMatrix' => Translation::get('msgCategoryMatrix'),
         'userOptions' => $userHelper->getAllUserOptions(),
         'ad_categ_title' => Translation::get('ad_categ_titel'),
         'ad_categ_owner' => Translation::get('ad_categ_owner'),

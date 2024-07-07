@@ -170,7 +170,7 @@ $PMF_LANG['ad_menu_user_administration'] = "Benutzerverwaltung";
 $PMF_LANG['ad_menu_entry_aprove'] = "FAQs freischalten";
 $PMF_LANG['ad_menu_entry_edit'] = "FAQs bearbeiten";
 $PMF_LANG["ad_menu_categ_add"] = "Kategorie hinzufügen";
-$PMF_LANG['ad_menu_categ_edit'] = "Kategorieverwaltung";
+$PMF_LANG['msgHeaderCategoryOverview'] = "Kategorieverwaltung";
 $PMF_LANG['ad_menu_news_add'] = "News hinzufügen";
 $PMF_LANG['ad_menu_news_edit'] = "News";
 $PMF_LANG['ad_menu_open'] = "Offene Fragen";
@@ -296,7 +296,7 @@ $PMF_LANG['ad_categ_update'] = "Bearbeiten";
 $PMF_LANG['ad_categ_delete'] = "Löschen";
 $PMF_LANG['ad_categ_updatecateg'] = "Kategorie aktualisieren";
 $PMF_LANG['ad_categ_nodata'] = "Keine Daten in der Datenbank gefunden.";
-$PMF_LANG['ad_categ_remark'] = "Es gilt zu beachten, wenn eine Kategorie gelöscht wird, dass die FAQs der gelöschten Kategorie nicht mehr angezeigt werden. Das FAQ muss dann einer neuen Kategorie zugewiesen oder gelöscht werden.";
+$PMF_LANG['msgCategoryRemark'] = "Es gilt zu beachten, wenn eine Kategorie gelöscht wird, dass die FAQs der gelöschten Kategorie nicht mehr angezeigt werden. Das FAQ muss dann einer neuen Kategorie zugewiesen oder gelöscht werden.";
 $PMF_LANG['ad_categ_edit_1'] = "Editiere Kategorie";
 $PMF_LANG['ad_categ_edit_2'] = " ";
 $PMF_LANG['ad_categ_added'] = "Die Kategorie wurde hinzugefügt.";
@@ -435,7 +435,7 @@ $PMF_LANG["ad_sess_head"] = "Sitzungen anzeigen";
 
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG['ad_menu_stat'] = "Bewertungen";
-$PMF_LANG['ad_kateg_add'] = "Hauptkategorie hinzufügen";
+$PMF_LANG['msgAddCategory'] = "Hauptkategorie hinzufügen";
 $PMF_LANG['ad_kateg_rename'] = "Bearbeiten";
 $PMF_LANG['ad_adminlog_date'] = "Datum";
 $PMF_LANG['ad_adminlog_user'] = "Benutzer";
@@ -730,7 +730,7 @@ $PMF_LANG['ad_categ_deletethislang'] = "Nur in diese Sprache löschen?";
 $PMF_LANG['ad_categ_translated'] = "Die Kategorie ist übersetzt.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG['ad_categ_show'] = "Übersicht";
+$PMF_LANG['msgCategoryMatrix'] = "Übersicht";
 $PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien und der Übersetzungen";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -750,8 +750,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Wählen Sie einen FAQ-Datensatz aus, um ihn als
 
 // added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG['ad_categ_paste2'] = "Einfügen hinter";
-$PMF_LANG['ad_categ_remark_move'] = "Das Verschieben zweier Kategorien ist nur innerhalb der gleichen Ebene möglich.";
-$PMF_LANG['ad_categ_remark_overview'] = "Die richtige Reihenfolge der Kategorien zeigt sich wenn alle Kategorien in der aktuelle Sprache (erste Spalte) definiert sind.";
+$PMF_LANG['msgCategoryRemark_move'] = "Das Verschieben zweier Kategorien ist nur innerhalb der gleichen Ebene möglich.";
+$PMF_LANG['msgCategoryRemark_overview'] = "Die richtige Reihenfolge der Kategorien zeigt sich wenn alle Kategorien in der aktuelle Sprache (erste Spalte) definiert sind.";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = "%d Gäste und %d Angemeldete";

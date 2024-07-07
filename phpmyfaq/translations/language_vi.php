@@ -159,7 +159,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Quản trị thành viên";
 $PMF_LANG["ad_menu_entry_aprove"] = "Thông qua nội dung";
 $PMF_LANG["ad_menu_entry_edit"] = "Chỉnh sửa nội dung";
 $PMF_LANG["ad_menu_categ_add"] = "Thêm một mục mới";
-$PMF_LANG["ad_menu_categ_edit"] = "Chỉnh sửa mục";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Chỉnh sửa mục";
 $PMF_LANG["ad_menu_news_add"] = "Thêm một nội dung mới";
 $PMF_LANG["ad_menu_news_edit"] = "Chỉnh sửa nội dung mới";
 $PMF_LANG["ad_menu_open"] = "Chỉnh sửa những câu hỏi mở";
@@ -286,7 +286,7 @@ $PMF_LANG["ad_categ_update"] = "chỉnh sửa";
 $PMF_LANG["ad_categ_delete"] = "xóa";
 $PMF_LANG["ad_categ_updatecateg"] = "Chỉnh sửa mục";
 $PMF_LANG["ad_categ_nodata"] = "Không tìm thấy";
-$PMF_LANG["ad_categ_remark"] = "Chú ý, nếu bạn xóa mục này, các bài hiện có sẽ không xuất hiện nữa. Bạn cần tạo một mục mới cho các bài này, hoặc xóa chúng.";
+$PMF_LANG["msgCategoryRemark"] = "Chú ý, nếu bạn xóa mục này, các bài hiện có sẽ không xuất hiện nữa. Bạn cần tạo một mục mới cho các bài này, hoặc xóa chúng.";
 $PMF_LANG["ad_categ_edit_1"] = "Chỉnh sửa";
 $PMF_LANG["ad_categ_edit_2"] = "Mục";
 $PMF_LANG["ad_categ_add"] = "Thêm một mục";
@@ -425,9 +425,9 @@ $PMF_LANG["ad_cookie"] = "Cookie";
 $PMF_LANG["ad_sess_head"] = "Xem các session";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Quản trị mục";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Quản trị mục";
 $PMF_LANG["ad_menu_stat"] = "Thống kê";
-$PMF_LANG["ad_kateg_add"] = "Thêm mục";
+$PMF_LANG["msgAddCategory"] = "Thêm mục";
 $PMF_LANG["ad_kateg_rename"] = "Đổi tên";
 $PMF_LANG["ad_adminlog_date"] = "Ngày";
 $PMF_LANG["ad_adminlog_user"] = "Thành viên";
@@ -733,7 +733,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Chỉ xóa trong ngôn ngữ này?';
 $PMF_LANG["ad_categ_translated"] = "Mục đã được dịch.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Tổng quan";
+$PMF_LANG["msgCategoryMatrix"] = "Tổng quan";
 $PMF_LANG['ad_menu_categ_structure'] = "Xem tổng quan các Mục, kể cả các ngôn ngữ hiện có";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -758,8 +758,8 @@ $PMF_LANG["ad_entry_intlink"] = 'Chọn một nội dung trong Câu hỏi thư�
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Dán sau";
-$PMF_LANG["ad_categ_remark_move"] = "Việc hoán đổi giữa 2 mục chỉ được cho phép nếu chúng ở cùng cấp độ.";
-$PMF_LANG["ad_categ_remark_overview"] = "Thứ tự đúng của các mục sẽ hiện ra, nếu tất cả các mục đều hiện có trong ngôn ngữ này (cột đầu).";
+$PMF_LANG["msgCategoryRemark_move"] = "Việc hoán đổi giữa 2 mục chỉ được cho phép nếu chúng ở cùng cấp độ.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Thứ tự đúng của các mục sẽ hiện ra, nếu tất cả các mục đều hiện có trong ngôn ngữ này (cột đầu).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d Khách và %d Thành viên';

@@ -171,7 +171,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
 $PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
 $PMF_LANG["ad_menu_categ_add"] = "Add new category";
-$PMF_LANG["ad_menu_categ_edit"] = "Categories";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Categories";
 $PMF_LANG["ad_menu_news_add"] = "Add news";
 $PMF_LANG["ad_menu_news_edit"] = "FAQ News";
 $PMF_LANG["ad_menu_open"] = "Open questions";
@@ -297,7 +297,7 @@ $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
 $PMF_LANG["ad_categ_updatecateg"] = "Update Category";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
-$PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore if you delete the category. You must either assign a new category for the article or delete the article.";
+$PMF_LANG["msgCategoryRemark"] = "Please note that existing entries will not be visible anymore if you delete the category. You must either assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
 $PMF_LANG["ad_categ_edit_2"] = "Category";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
@@ -436,7 +436,7 @@ $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
-$PMF_LANG["ad_kateg_add"] = "Add new top-level category";
+$PMF_LANG["msgAddCategory"] = "Add new top-level category";
 $PMF_LANG["ad_kateg_rename"] = "Edit";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
@@ -732,7 +732,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
 $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Category overview";
+$PMF_LANG["msgCategoryMatrix"] = "Category overview";
 $PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -752,8 +752,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Paste after";
-$PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possible at the same level.";
-$PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+$PMF_LANG["msgCategoryRemark_move"] = "The exchange of 2 categories is only possible at the same level.";
+$PMF_LANG["msgCategoryRemark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d Guests and %d Registered';

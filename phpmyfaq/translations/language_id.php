@@ -157,7 +157,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Pengguna";
 $PMF_LANG["ad_menu_entry_aprove"] = "Setujui Materi";
 $PMF_LANG["ad_menu_entry_edit"] = "Edit materi";
 $PMF_LANG["ad_menu_categ_add"] = "Tambah Kategori";
-$PMF_LANG["ad_menu_categ_edit"] = "Edit Kategori";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Edit Kategori";
 $PMF_LANG["ad_menu_news_add"] = "Tambah Berita";
 $PMF_LANG["ad_menu_news_edit"] = "Edit Berita";
 $PMF_LANG["ad_menu_open"] = "Pertanyaan Terbuka";
@@ -284,7 +284,7 @@ $PMF_LANG["ad_categ_update"] = "perbarui";
 $PMF_LANG["ad_categ_delete"] = "hapus";
 $PMF_LANG["ad_categ_updatecateg"] = "Perbarui Kategori";
 $PMF_LANG["ad_categ_nodata"] = "Data tidak ditemukan dalam database";
-$PMF_LANG["ad_categ_remark"] = "Mohon perhatikan bahwa jika anda menghapus kategori entri yang sudah ada akan tidak bisa ditampilkan untuk publik. Anda perlu memasukkan entri yang sudah ada tersebut ke kategori lain atau menghapus artikelnya.";
+$PMF_LANG["msgCategoryRemark"] = "Mohon perhatikan bahwa jika anda menghapus kategori entri yang sudah ada akan tidak bisa ditampilkan untuk publik. Anda perlu memasukkan entri yang sudah ada tersebut ke kategori lain atau menghapus artikelnya.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
 $PMF_LANG["ad_categ_edit_2"] = "Kategori";
 $PMF_LANG["ad_categ_add"] = "tambah Kategori";
@@ -423,9 +423,9 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Lihat sesi";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Kategori";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Kategori";
 $PMF_LANG["ad_menu_stat"] = "Statistik Penilaian";
-$PMF_LANG["ad_kateg_add"] = "tambah Kategori utama";
+$PMF_LANG["msgAddCategory"] = "tambah Kategori utama";
 $PMF_LANG["ad_kateg_rename"] = "Ganti nama";
 $PMF_LANG["ad_adminlog_date"] = "Tanggal";
 $PMF_LANG["ad_adminlog_user"] = "Pengguna";
@@ -736,7 +736,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Hapus dalam bahasa ini saja?';
 $PMF_LANG["ad_categ_translated"] = "Kategori sudah diterjemahkan.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Ikhtisar";
+$PMF_LANG["msgCategoryMatrix"] = "Ikhtisar";
 $PMF_LANG['ad_menu_categ_structure'] = "Ikhtisar Kategori termasuk bahasanya";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -756,8 +756,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Pilih data materi yang ingin disisipkan sebagai
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Paste after";
-$PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possible at the same level.";
-$PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+$PMF_LANG["msgCategoryRemark_move"] = "The exchange of 2 categories is only possible at the same level.";
+$PMF_LANG["msgCategoryRemark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d tamu dan %d anggota';

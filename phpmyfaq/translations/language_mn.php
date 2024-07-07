@@ -153,7 +153,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Хэрэглэгчид";
 $PMF_LANG["ad_menu_entry_aprove"] = "FAQs зөвшөөрөх";
 $PMF_LANG["ad_menu_entry_edit"] = "Бэлэн байгаа FAQs засах";
 $PMF_LANG["ad_menu_categ_add"] = "Ангилал нэмэх";
-$PMF_LANG["ad_menu_categ_edit"] = "Ангилал засах";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Ангилал засах";
 $PMF_LANG["ad_menu_news_add"] = "Мэдээ нэмэх";
 $PMF_LANG["ad_menu_news_edit"] = "FAQ News";
 $PMF_LANG["ad_menu_open"] = "Нээлттэй асуултууд";
@@ -280,7 +280,7 @@ $PMF_LANG["ad_categ_update"] = "шинэчлэх";
 $PMF_LANG["ad_categ_delete"] = "устгах";
 $PMF_LANG["ad_categ_updatecateg"] = "Ангилал шинэчлэх";
 $PMF_LANG["ad_categ_nodata"] = "Мэдээллийн санд өгөгдөл алга";
-$PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
+$PMF_LANG["msgCategoryRemark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Засах";
 $PMF_LANG["ad_categ_edit_2"] = "ангилал";
 $PMF_LANG["ad_categ_added"] = "Ангилал нэмэгдлээ.";
@@ -418,9 +418,9 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Хандалтыг харах";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "FAQ-н ангиллууд";
+$PMF_LANG["msgHeaderCategoryOverview"] = "FAQ-н ангиллууд";
 $PMF_LANG["ad_menu_stat"] = "Статистизийн үнэлгээ";
-$PMF_LANG["ad_kateg_add"] = "Add top-level category";
+$PMF_LANG["msgAddCategory"] = "Add top-level category";
 $PMF_LANG["ad_kateg_rename"] = "Засах";
 $PMF_LANG["ad_adminlog_date"] = "Огноо";
 $PMF_LANG["ad_adminlog_user"] = "хэрэглэгч";
@@ -723,7 +723,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Зөвхөн энэ хэлийг уст�
 $PMF_LANG["ad_categ_translated"] = "Ангилал орчуулагдсан байна.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Ангиллын тойм";
+$PMF_LANG["msgCategoryMatrix"] = "Ангиллын тойм";
 $PMF_LANG['ad_menu_categ_structure'] = "Ангиллын тойм нь хэл багтаасан";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -743,8 +743,8 @@ $PMF_LANG['ad_entry_intlink'] = 'FAQ  бичлэг сонгоод энэ хол�
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Буулгасны (Paste) дараа";
-$PMF_LANG["ad_categ_remark_move"] = "The exchange of 2 categories is only possible at the same level.";
-$PMF_LANG["ad_categ_remark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
+$PMF_LANG["msgCategoryRemark_move"] = "The exchange of 2 categories is only possible at the same level.";
+$PMF_LANG["msgCategoryRemark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d зочид болон %d бүртгэлтэй';

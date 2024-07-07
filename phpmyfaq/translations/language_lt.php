@@ -163,7 +163,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Naudotojai";
 $PMF_LANG["ad_menu_entry_aprove"] = "Patvirtinti DUK";
 $PMF_LANG["ad_menu_entry_edit"] = "Redaguoti DUK";
 $PMF_LANG["ad_menu_categ_add"] = "Pridėti grupę";
-$PMF_LANG["ad_menu_categ_edit"] = "Redaguoti grupę";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Redaguoti grupę";
 $PMF_LANG["ad_menu_news_add"] = "Pridėti naujieną";
 $PMF_LANG["ad_menu_news_edit"] = "Redaguoti naujienas";
 $PMF_LANG["ad_menu_open"] = "Atviri klausimai";
@@ -290,7 +290,7 @@ $PMF_LANG["ad_categ_update"] = "atnaujinti";
 $PMF_LANG["ad_categ_delete"] = "šalinti";
 $PMF_LANG["ad_categ_updatecateg"] = "Atnaujinti grupę";
 $PMF_LANG["ad_categ_nodata"] = "Duomenų bazėje nerasta duomenų";
-$PMF_LANG["ad_categ_remark"] = "Pastebėkite, kad egzistuojantys įrašai bus daugiau nebematomi, jei pašalinsite grupę. Jūs privalote priskirti naują grupę straipsniui arba pašalinti straipsnį.";
+$PMF_LANG["msgCategoryRemark"] = "Pastebėkite, kad egzistuojantys įrašai bus daugiau nebematomi, jei pašalinsite grupę. Jūs privalote priskirti naują grupę straipsniui arba pašalinti straipsnį.";
 $PMF_LANG["ad_categ_edit_1"] = "Redaguoti";
 $PMF_LANG["ad_categ_edit_2"] = "Grupė";
 $PMF_LANG["ad_categ_add"] = "pridėti grupę";
@@ -429,9 +429,9 @@ $PMF_LANG["ad_cookie"] = "Slapukai";
 $PMF_LANG["ad_sess_head"] = "Peržiūrėti seansus";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Grupės";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Grupės";
 $PMF_LANG["ad_menu_stat"] = "Įverčių statistika";
-$PMF_LANG["ad_kateg_add"] = "pridėti pagrindinę grupę";
+$PMF_LANG["msgAddCategory"] = "pridėti pagrindinę grupę";
 $PMF_LANG["ad_kateg_rename"] = "Pervadinti";
 $PMF_LANG["ad_adminlog_date"] = "Data";
 $PMF_LANG["ad_adminlog_user"] = "Naudotojas";
@@ -748,7 +748,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Šalinti tik šia kalba?';
 $PMF_LANG["ad_categ_translated"] = "Grupė buvo išversta.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Apžvalga";
+$PMF_LANG["msgCategoryMatrix"] = "Apžvalga";
 $PMF_LANG['ad_menu_categ_structure'] = "Grupių ir jų vertimų apžvalga";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -768,8 +768,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Pasirinkite DUK įrašą, norėdami jį įterpt
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Įdėti po";
-$PMF_LANG["ad_categ_remark_move"] = "Dviejų grupių sukeitimas įmanomas tik tame pačiame lygyje.";
-$PMF_LANG["ad_categ_remark_overview"] = "Grupės bus rodomos teisinga tvarka, jei visos grupės yra apibrėžtos dabartinėje kalboje (pirmas stulpelis).";
+$PMF_LANG["msgCategoryRemark_move"] = "Dviejų grupių sukeitimas įmanomas tik tame pačiame lygyje.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Grupės bus rodomos teisinga tvarka, jei visos grupės yra apibrėžtos dabartinėje kalboje (pirmas stulpelis).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d svečių ir %d registruotų';

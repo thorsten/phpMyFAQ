@@ -161,7 +161,7 @@ $PMF_LANG["ad_menu_user_administration"] = "Administracija Korisnika";
 $PMF_LANG["ad_menu_entry_aprove"] = "Potvrdi Unose";
 $PMF_LANG["ad_menu_entry_edit"] = "Izmeni Unose";
 $PMF_LANG["ad_menu_categ_add"] = "Dodaj Kategoriju";
-$PMF_LANG["ad_menu_categ_edit"] = "Izmeni Kategoriju";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Izmeni Kategoriju";
 $PMF_LANG["ad_menu_news_add"] = "Dodaj Novosti";
 $PMF_LANG["ad_menu_news_edit"] = "Izmena Novosti";
 $PMF_LANG["ad_menu_open"] = "Izmeni otvorena pitanja";
@@ -287,7 +287,7 @@ $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "Obri&#353;i";
 $PMF_LANG["ad_categ_updatecateg"] = "Izmeni Kategoriju";
 $PMF_LANG["ad_categ_nodata"] = "Podaci nisu prona&#273;eni u bazi";
-$PMF_LANG["ad_categ_remark"] = "Ako obri&#353;ete kategoriju, &#269;lanci u njoj vi&#353;e ne&#263;e biti dostupni. Mora&#263;ete dodeliti novu kategoriju, ili obrisati unose.";
+$PMF_LANG["msgCategoryRemark"] = "Ako obri&#353;ete kategoriju, &#269;lanci u njoj vi&#353;e ne&#263;e biti dostupni. Mora&#263;ete dodeliti novu kategoriju, ili obrisati unose.";
 $PMF_LANG["ad_categ_edit_1"] = "Izmeni";
 $PMF_LANG["ad_categ_edit_2"] = "Kategorija";
 $PMF_LANG["ad_categ_add"] = "Dodaj Kategoriju";
@@ -426,9 +426,9 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Pregled sesija";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "Administracija Kategorija";
+$PMF_LANG["msgHeaderCategoryOverview"] = "Administracija Kategorija";
 $PMF_LANG["ad_menu_stat"] = "Statistike (rejting)";
-$PMF_LANG["ad_kateg_add"] = "Dodaj Kategoriju";
+$PMF_LANG["msgAddCategory"] = "Dodaj Kategoriju";
 $PMF_LANG["ad_kateg_rename"] = "Promeni Ime";
 $PMF_LANG["ad_adminlog_date"] = "Datum";
 $PMF_LANG["ad_adminlog_user"] = "Korisnik";
@@ -734,7 +734,7 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Obri&scaron;i samo za ovaj jezik?';
 $PMF_LANG["ad_categ_translated"] = "Kategorija je prevedena.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Pregled";
+$PMF_LANG["msgCategoryMatrix"] = "Pregled";
 $PMF_LANG['ad_menu_categ_structure'] = "Pregled kategorije uklju&#269;uju&#263;i svoje jezike";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
@@ -754,8 +754,8 @@ $PMF_LANG['ad_entry_intlink'] = 'Izaberite FAQ unos da bi ste ga ubacili kao lin
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Nalepi iza";
-$PMF_LANG["ad_categ_remark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na istom nivou.";
-$PMF_LANG["ad_categ_remark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
+$PMF_LANG["msgCategoryRemark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na istom nivou.";
+$PMF_LANG["msgCategoryRemark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = '%d Gostiju i %d Registrovanih';
