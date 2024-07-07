@@ -80,12 +80,12 @@
           {% if enableSendToFriend == true %}
           <li class="list-group-item bg-transparent">
             <i aria-hidden="true" class="bi bi-envelope"></i>
-            <a rel="nofollow" href="{{ suggestLink|url_encode }}" class="text-decoration-none"> {{ msgSend2Friend }}</a>
+            <a rel="nofollow" href="{{ suggestLink }}" class="text-decoration-none"> {{ msgSend2Friend }}</a>
           </li>
           <li class="list-group-item bg-transparent">
             <i aria-hidden="true" class="bi bi-whatsapp"></i>
             <a rel="nofollow" class="text-decoration-none" href="https://wa.me/?text=
-              {{ msgShareViaWhatsappText|url_encode }}+{{ suggestLink|url_encode }}">{{ msgShareViaWhatsapp }}</a>
+              {{ msgShareViaWhatsappText | url_encode }}+{{ suggestLink | url_encode }}">{{ msgShareViaWhatsapp }}</a>
           </li>
           {% endif %}
           {% if msgChangeLanguage is defined %}

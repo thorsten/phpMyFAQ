@@ -17,17 +17,23 @@
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);
@@ -50,48 +56,45 @@ $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 $faqLanguage = Filter::filterVar($request->query->get('artlang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 $send2friendLink = sprintf(
-    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
     $faqConfig->getDefaultUrl(),
     $faqCategory,
     $faqId,
     urlencode((string) $faqLanguage)
 );
 
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig->addExtension(new DebugExtension());
+$twigTemplate = $twig->loadTemplate('./share-by-email.twig');
 
-$template->parse(
+$templateVars = [
+    'breadcrumbHeadline' => Translation::get('msgSend2Friend'),
+    'lang' => Strings::htmlentities($faqLanguage),
+    'faqId' => $faqId,
+    'categoryId' => $faqCategory,
+    'msgSend2Friend' => Translation::get('msgSend2Friend'),
+    'msgS2FReferrer' => 'link',
+    'msgS2FName' => Translation::get('msgS2FName'),
+    'msgS2FEMail' => Translation::get('msgS2FEMail'),
+    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+    'msgS2FFriends' => Translation::get('msgS2FFriends'),
+    'msgS2FEMails' => Translation::get('msgS2FEMails'),
+    'msgS2FText' => Translation::get('msgS2FText'),
+    'send2friend_text' => $faqConfig->get('main.send2friendText'),
+    'msgS2FText2' => Translation::get('msgS2FText2'),
+    'send2friendLink' => $send2friendLink,
+    'msgS2FMessage' => Translation::get('msgS2FMessage'),
+    'captchaFieldset' => $captchaHelper->renderCaptcha(
+        $captcha,
+        'send2friend',
+        Translation::get('msgCaptcha'),
+        $user->isLoggedIn()
+    ),
+    'msgS2FButton' => Translation::get('msgS2FButton'),
+];
+
+$template->addRenderedTwigOutput(
     'mainPageContent',
-    [
-        'lang' => Strings::htmlentities($faqLanguage),
-        'faqId' => $faqId,
-        'categoryId' => $faqCategory,
-        'msgSend2Friend' => Translation::get('msgSend2Friend'),
-        'msgS2FReferrer' => 'link',
-        'msgS2FName' => Translation::get('msgS2FName'),
-        'msgS2FEMail' => Translation::get('msgS2FEMail'),
-        'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-        'defaultContentName' =>
-            ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-        'msgS2FFriends' => Translation::get('msgS2FFriends'),
-        'msgS2FEMails' => Translation::get('msgS2FEMails'),
-        'msgS2FText' => Translation::get('msgS2FText'),
-        'send2friend_text' => Strings::htmlentities($faqConfig->get('main.send2friendText')),
-        'msgS2FText2' => Translation::get('msgS2FText2'),
-        'send2friendLink' => $send2friendLink,
-        'msgS2FMessage' => Translation::get('msgS2FMessage'),
-        'captchaFieldset' => $captchaHelper->renderCaptcha(
-            $captcha,
-            'send2friend',
-            Translation::get('msgCaptcha'),
-            $user->isLoggedIn()
-        ),
-        'msgS2FButton' => Translation::get('msgS2FButton'),
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => Translation::get('msgSend2Friend')
-    ]
+    $twigTemplate->render($templateVars)
 );

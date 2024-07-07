@@ -31,34 +31,34 @@
     <div class="row mb-2">{{ msgS2FFriends }}</div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="mailto[]">1{{ msgS2FEMails }}</label>
+      <label class="col-sm-3 form-control-label" for="mailto1">1{{ msgS2FEMails }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="mailto[]" id="mailto1" required />
       </div>
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="mailto[]">2{{ msgS2FEMails }}</label>
+      <label class="col-sm-3 form-control-label" for="mailto2">2{{ msgS2FEMails }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="mailto[]" id="mailto2" />
       </div>
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="mailto[]">3{{ msgS2FEMails }}</label>
+      <label class="col-sm-3 form-control-label" for="mailto3">3{{ msgS2FEMails }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="mailto[]" id="mailto3" />
       </div>
     </div>
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="mailto[]">4{{ msgS2FEMails }}</label>
+      <label class="col-sm-3 form-control-label" for="mailto4">4{{ msgS2FEMails }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="mailto[]" id="mailto4" />
       </div>
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="mailto[]">5{{ msgS2FEMails }}</label>
+      <label class="col-sm-3 form-control-label" for="mailto5">5{{ msgS2FEMails }}</label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="mailto[]" id="mailto5" />
       </div>
@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    {{ captchaFieldset }}
+    {{ captchaFieldset | raw }}
 
     <div class="form-actions text-end">
       <button class="btn btn-primary btn-lg" type="submit" id="pmf-submit-share" data-pmf-form="share">
