@@ -1245,7 +1245,6 @@ $PMF_LANG['permission::administrate_sections'] = 'Administrate sections';
 $PMF_LANG['permission::administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 
-
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Sections";
 $PMF_LANG['ad_section_add'] = "Add Section";

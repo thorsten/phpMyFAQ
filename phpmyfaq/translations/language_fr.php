@@ -1289,4 +1289,195 @@ $LANG_CONF["api.apiClientToken"] = ["input", "API Client Token"];
 $LANG_CONF["security.domainWhiteListForRegistrations"] = ["area", "Hôtes autorisées pour l'inscription"];
 $LANG_CONF["security.loginWithEmailAddress"] = ["checkbox", "Se logger uniquement avec l'adresse email"];
 
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Se connecter avec Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Activer la connexion avec Microsoft (Entra ID)'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Activer "Poser une question"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Activer les notifications'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Envoyer un email de test à l’administrateur via SMTP'];
+$PMF_LANG['mail.sendTestEmail'] = 'Envoyer un email de test à l’administrateur';
+$PMF_LANG['msgGoToCategory'] = 'Aller à la catégorie';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Activer Invisible Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Clé du site Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Clé secrète Google ReCAPTCHA v2'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Authentification à deux facteurs activée";
+$PMF_LANG['msgTwofactorConfig'] = "Configurer l'authentification à deux facteurs";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuration de l'authentification à deux facteurs";
+$PMF_LANG['qr_code_secret_alt'] = "Clé secrète du QR-Code";
+$PMF_LANG['msgTwofactorNewSecret'] = "Supprimer la configuration actuelle à deux facteurs";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Authentification à deux facteurs - Entrez le jeton:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Entrez le code à 6 chiffres de votre application d'authentification.";
+$PMF_LANG['msgTwofactorCheck'] = "Vérifier";
+$PMF_LANG['msgTwofactorErrorToken'] = "Vous avez entré un mauvais code!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Réinitialiser l'authentification à deux facteurs";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'Vous serez automatiquement redirigé dans 5 secondes.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Aucune catégorie n’a été trouvée dans la langue sélectionnée, mais vous pouvez choisir parmi les langues suivantes :';
+$PMF_LANG['msgCategoryDescription'] = 'Voici un aperçu de toutes les catégories avec le nombre de FAQs.';
+$PMF_LANG['msgSubCategoryContent'] = 'Sélectionnez une catégorie principale.';
+$PMF_LANG['ad_open_question_deleted'] = 'La question a été supprimée avec succès.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Désactiver la vérification des pairs SMTP TLS (non recommandé)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Informations de contact en HTML ?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Service d’authentification';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Afficher l’adresse email dans les exportations'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Une nouvelle question a été ajoutée. Vous pouvez les vérifier ici ou dans la section admin :';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Préférences des cookies';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Mise à jour en ligne activée'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Environnement de publication'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Dernière vérification des mises à jour'];
+$PMF_LANG['upgradeControlCenter'] = 'Mise à jour en ligne';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Vérifier l’état du système';
+$PMF_LANG['headerCheckUpdates'] = '2. Vérifier les mises à jour';
+$PMF_LANG['headerDownloadPackage'] = '3. Télécharger phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Extraire le package téléchargé';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Installer le package téléchargé';
+$PMF_LANG['msgHealthCheck'] = 'Cela vérifie les permissions de fichiers correctes et la structure des dossiers de votre installation phpMyFAQ.';
+$PMF_LANG['msgUpdateCheck'] = 'Vous pouvez vérifier les nouvelles versions de phpMyFAQ, réinstaller ou mettre à jour votre installation.';
+$PMF_LANG['msgDownloadPackage'] = 'Téléchargement des nouvelles versions de phpMyFAQ en fonction de l’environnement de publication défini.';
+$PMF_LANG['msgExtractPackage'] = 'Cela extrait le package téléchargé dans votre système de fichiers, cela peut prendre un certain temps.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Cela extrait le package téléchargé dans votre système de fichiers.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Installer le package téléchargé';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Sauvegarde de l’installation actuelle';
+$PMF_LANG['msgInstallationNewFiles'] = 'Installation des nouveaux fichiers';
+$PMF_LANG['alertNightlyBuild'] = 'Vous utilisez une version de développement de phpMyFAQ. Vous pouvez mettre à jour vers la dernière version nightly.';
+$PMF_LANG['buttonCheckHealth'] = 'Vérifier l’état du système maintenant';
+$PMF_LANG['buttonCheckUpdates'] = 'Vérifier les mises à jour maintenant';
+$PMF_LANG['buttonDownloadPackage'] = 'Télécharger maintenant';
+$PMF_LANG['buttonExtractPackage'] = 'Extraire le package téléchargé maintenant';
+$PMF_LANG['versionIsUpToDate'] = '✅ Votre version installée est à jour !';
+$PMF_LANG['healthCheckOkay'] = '✅ Votre version installée est en bonne santé !';
+$PMF_LANG['downloadSuccessful'] = '✅ Package téléchargé avec succès !';
+$PMF_LANG['extractSuccessful'] = '✅ Package extrait avec succès !';
+$PMF_LANG['downloadFailure'] = '❌ Impossible de télécharger le package.';
+$PMF_LANG['verificationFailure'] = '❌ Impossible de vérifier le package téléchargé.';
+$PMF_LANG['extractFailure'] = '❌ Impossible d’extraire le package téléchargé.';
+$PMF_LANG['currentVersion'] = 'Version actuelle : ';
+$PMF_LANG['msgLastCheckDate'] = 'Dernière vérification des mises à jour : ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Dernière version disponible : ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Environnement de publication : ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Vous pouvez toujours utiliser le <a href="../update">processus de mise à jour manuel</a> si vous le préférez.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Ajouter un signet';
+$PMF_LANG['removeBookmark'] = 'Supprimer le signet';
+$PMF_LANG['msgBookmarks'] = 'Signets';
+$PMF_LANG['msgMyBookmarks'] = 'Mes signets';
+$PMF_LANG['msgBookmarkAdded'] = 'Signet ajouté avec succès !';
+$PMF_LANG['msgBookmarkRemoved'] = 'Signet supprimé avec succès !';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Il n'est pas permis d'utiliser '#'.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Liste d’ignorance des bots (séparée par des virgules)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Image Gravatar';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Le tri personnalisé des enregistrements épinglés est désactivé dans la configuration principale. Si vous souhaitez l’utiliser, veuillez l’activer dans la <a href="./?action=config">configuration principale</a> -> enregistrements.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Tri personnalisé des enregistrements épinglés'];
+$PMF_LANG['msgNoStickyFaqs'] = 'Vous n’avez pas encore d’enregistrements épinglés. Vous pouvez marquer les enregistrements comme épinglés dans la <a href="./?action=faqs-overview" class="alert-link">vue d’ensemble des FAQs</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activer le consentement aux cookies'];
+$PMF_LANG['msgSessionExpired'] = 'Votre session a expiré. Veuillez vous reconnecter.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Code de langue (par exemple en, de ...)';
+$PMF_LANG['msgSeperateWithCommas'] = '(séparer par des virgules)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'Le fichier CSV à importer doit contenir les colonnes suivantes dans cet ordre, sans en-têtes de colonne. Chaque ligne est destinée à définir une entrée de FAQ. Toutes les cellules des colonnes marquées d’un astérisque * doivent contenir une valeur.';
+$PMF_LANG['msgImportRecords'] = 'Importation de FAQ';
+$PMF_LANG['msgImportCSVFile'] = 'Importer un fichier CSV';
+$PMF_LANG['msgImportCSVFileBody'] = 'Vous pouvez importer un fichier CSV avec les données de vos enregistrements et la structure donnée (voir ci-dessus) ici.';
+$PMF_LANG['msgImport'] = 'Importer';
+$PMF_LANG['msgColumnStructure'] = 'Structure des colonnes';
+$PMF_LANG['msgImportSuccessful'] = 'Importation réussie !';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(vrai ou faux)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Importation & Exportation';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Il semble que le fichier n’ait pas la bonne structure. Veuillez vérifier la structure en fonction des exigences données à nouveau.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Exporter les sessions en tant que fichier CSV';
+$PMF_LANG['msgExportSessions'] = 'Exporter les sessions';
+$PMF_LANG['msgExportSessionsFrom'] = 'De';
+$PMF_LANG['msgExportSessionsTo'] = 'À';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Modifier les formulaires';
+$PMF_LANG['msgEditFormsSuccessful'] = 'La modification a été effectuée avec succès.';
+$PMF_LANG['msgInputType'] = 'Type';
+$PMF_LANG['msgRequiredInputField'] = 'Champ obligatoire';
+$PMF_LANG['permission::forms_edit'] = 'Modifier les formulaires';
+$PMF_LANG['msgInputLabel'] = 'Étiquette';
+$PMF_LANG['msgFormsEditTranslations'] = 'Modifier les traductions';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'La traduction a été enregistrée avec succès.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'La traduction a été supprimée avec succès.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'La nouvelle traduction a été enregistrée avec succès.';
+$PMF_LANG['msgSelectLanguage'] = 'Sélectionner la langue';
+$PMF_LANG['msgTranslationText'] = 'Texte de la traduction';
+$PMF_LANG['msgAddTranslation'] = 'Ajouter une traduction';
+$PMF_LANG['msgHintDeactivateForms'] = 'Les formulaires peuvent être complètement désactivés dans l’<a class="alert-link" href="?action=config">administration</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Seulement les FAQs inactives';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Seulement les nouvelles FAQs';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Supprimer les actualités';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Exporter les utilisateurs en tant que fichier CSV';
+$PMF_LANG['msgWarning'] = 'Avertissement';
+$PMF_LANG['msgUserList'] = 'Liste des utilisateurs';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Aucune question et réponse trouvée.';
+$PMF_LANG['msgNotInMaintenanceMode'] = '⚠️La FAQ n’est pas en mode maintenance.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Les mots-clés multiples doivent être séparés par des virgules.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Vous ne pouvez pas utiliser ce formulaire en raison de l’absence de catégories configurées. Veuillez informer l’<a class="alert-link" href="contact.html">administrateur</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Adresse de réponse interdite pour les emails'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Session expirant bientôt';
+$PMF_LANG['msgNoLogMeOut'] = 'Non, déconnectez-moi';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Oui, gardez-moi connecté';
+$PMF_LANG['msgTrendingFAQs'] = 'FAQs en tendance';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Générer un jeton client API';
+$PMF_LANG['msgSerp'] = 'SERP est l’abréviation de Search Engine Result Page. Ici, vous pouvez définir le titre et la description pour le SERP.';
+$PMF_LANG['msgSerpTitle'] = 'Titre SERP';
+$PMF_LANG['msgSerpDescription'] = 'Description SERP';
+$LANG_CONF['seo.title'] = ['input', 'Titre SERP'];
+$LANG_CONF['seo.description'] = ['area', 'Description SERP'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Hôtes externes autorisés pour le contenu multimédia (séparés par des virgules)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Êtes-vous sûr de vouloir supprimer votre configuration actuelle de l’authentification à deux facteurs ?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar n’est actuellement pas activé.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'La suppression de la configuration actuelle à deux facteurs a été réussie.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Envoyer à un ami via WhatsApp';
+$PMF_LANG['msgShareViaWhatsappText'] = 'J’ai découvert un article FAQ sympa pour vous :';
+$PMF_LANG['msgError'] = 'Une erreur est survenue.';
+$PMF_LANG['msgLinkToFAQ'] = 'Lien vers la FAQ';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activer le lien vers la politique de confidentialité'];
+$LANG_CONF['seo.glossary.title'] = ['input', 'Titre SERP pour le glossaire'];
+$LANG_CONF['seo.glossary.description'] = ['area', 'Description SERP pour le glossaire'];
+
 return $PMF_LANG;

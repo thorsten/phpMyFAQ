@@ -38,6 +38,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated Markdown class (Thorsten)
 - updated to PHPUnit v11 (Thorsten)
 - updated Polish translation (Zięba Bogusław Chaffinch)
+- updated French translation
 
 ### phpMyFAQ v3.2.8 - unreleased
 
