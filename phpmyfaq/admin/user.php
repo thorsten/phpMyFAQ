@@ -18,20 +18,15 @@
  * @since     2005-12-15
  */
 
-use phpMyFAQ\Category;
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
-use phpMyFAQ\Permission;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\PermissionTranslationTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -191,7 +186,6 @@ $templateVars = [
 ];
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new PermissionTranslationTwigExtension());
 $template = $twig->loadTemplate('./admin/user/users.twig');
 

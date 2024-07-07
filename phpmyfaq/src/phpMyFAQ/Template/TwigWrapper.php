@@ -23,6 +23,7 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\TemplateWrapper;
@@ -45,6 +46,9 @@ class TwigWrapper
                 'debug' => System::isDevelopmentVersion()
             ]
         );
+        if (System::isDevelopmentVersion() || DEBUG) {
+            $this->twigEnvironment->addExtension(new DebugExtension());
+        }
     }
 
     /**

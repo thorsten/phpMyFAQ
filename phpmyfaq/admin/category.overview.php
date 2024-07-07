@@ -22,7 +22,6 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Template\TranslateTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -47,7 +46,6 @@ if (empty($categoryTree)) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new TranslateTwigExtension());
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 

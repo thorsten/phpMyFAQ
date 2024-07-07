@@ -23,12 +23,10 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -104,7 +102,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/configuration/instances.twig');
 
     echo $template->render($templateVars);

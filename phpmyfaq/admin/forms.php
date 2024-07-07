@@ -18,7 +18,6 @@
 
 use phpMyFAQ\Forms;
 use phpMyFAQ\Template\TwigWrapper;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Enums\Forms\FormIds;
@@ -54,7 +53,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/configuration/forms.twig');
 
     echo $template->render($templateVars);

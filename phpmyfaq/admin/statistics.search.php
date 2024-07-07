@@ -27,7 +27,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,7 +46,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $search = new Search($faqConfig);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $twig->addExtension(new LanguageCodeTwigExtension());
     $template = $twig->loadTemplate('./admin/statistics/search.twig');
 

@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Category\Startpage;
 use phpMyFAQ\Faq\Statistics;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
@@ -26,7 +25,6 @@ use phpMyFAQ\Template\TranslateTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -54,7 +52,6 @@ $startPageCategories = $startPageCategory->getCategories();
 $param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new TranslateTwigExtension());
 $twigTemplate = $twig->loadTemplate('./startpage.twig');
 

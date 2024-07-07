@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Enums\Forms\FormIds;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -94,7 +93,6 @@ $category = new Category($faqConfig);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables

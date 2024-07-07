@@ -21,7 +21,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Session\Token;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -35,7 +34,6 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $bookmark = new Bookmark($faqConfig, $user);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 
 // Twig template variables

@@ -23,7 +23,6 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,7 +46,6 @@ $siteMap->setUser($currentUser);
 $siteMap->setGroups($currentGroups);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 
 // Twig template variables

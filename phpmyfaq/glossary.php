@@ -15,18 +15,20 @@
  * @since     2012-09-03
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $faqSession->userTracking('glossary', 0);
 
@@ -54,12 +56,13 @@ $options = [
 $pagination = new Pagination($options);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./glossary.twig');
 
 // Twig template variables
 $templateVars = [
     ... $templateVars,
+    'title' => $faqConfig->get('seo.glossary.title'),
+    'metaDescription' => $faqConfig->get('seo.glossary.description'),
     'pageHeader' => Translation::get('ad_menu_glossary'),
     'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
     'pagination' => $pagination->render(),

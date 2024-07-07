@@ -22,12 +22,10 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,7 +40,6 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new IntlExtension());
 $twig->addExtension(new FaqTwigExtension());
-$twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/comments.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELETE->value)) {

@@ -24,7 +24,6 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -48,7 +47,6 @@ $captcha->setSessionId($sids);
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./register.twig');
 
 // Twig template variables

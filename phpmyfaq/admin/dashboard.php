@@ -29,7 +29,6 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -43,7 +42,6 @@ $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/dashboard.twig');
 
 $templateVars = [

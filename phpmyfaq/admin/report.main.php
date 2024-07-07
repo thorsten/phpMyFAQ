@@ -21,7 +21,6 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -52,7 +51,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->valu
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/statistics/report.main.twig');
 
     echo $template->render($templateVars);

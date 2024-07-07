@@ -18,10 +18,8 @@
 
 use phpMyFAQ\Forms;
 use phpMyFAQ\Template\TwigWrapper;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Enums\FormIds;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -77,7 +75,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $twig->addFilter($filter);
     $template = $twig->loadTemplate('./admin/configuration/forms.translations.twig');
 

@@ -17,17 +17,15 @@
  */
 
 use phpMyFAQ\Translation;
-use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Configuration;
+use Symfony\Component\HttpFoundation\Request;
 
 $request = Request::createFromGlobals();
 
 $faqConfig = Configuration::getConfigurationInstance();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/user/twofactor.twig');
 
 $templateVars = [

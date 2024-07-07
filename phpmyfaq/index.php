@@ -446,14 +446,6 @@ if (isset($cat) && ($cat !== 0) && ($id === 0) && isset($category->categoryName[
 }
 
 //
-// Glossary
-//
-if ('glossary' === $action) {
-    $title = $faqConfig->get('seo.glossary.title');
-    $metaDescription = $faqConfig->get('seo.glossary.description');
-}
-
-//
 // Found an action request?
 //
 if (!isset(Link::$allowedActionParameters[$action])) {

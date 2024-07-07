@@ -25,7 +25,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -49,7 +48,6 @@ $categoryHelper = new CategoryHelper();
 $categoryHelper->setPlurals(new Plurals());
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./show.twig');
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {

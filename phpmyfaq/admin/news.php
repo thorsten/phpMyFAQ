@@ -17,9 +17,7 @@
  */
 
 use phpMyFAQ\Comments;
-use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
-use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -29,9 +27,6 @@ use phpMyFAQ\Template\FormatDateTwigExtension;
 use phpMyFAQ\Template\IsoDateTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use Twig\Extension\DebugExtension;
-use Twig\TwigFilter;
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -131,7 +126,6 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), Perm
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new IsoDateTwigExtension());
 $twig->addExtension(new FormatDateTwigExtension());
 $template = $twig->loadTemplate('./admin/content/news.twig');

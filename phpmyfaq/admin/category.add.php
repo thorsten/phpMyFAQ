@@ -27,7 +27,6 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -97,7 +96,6 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     }
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/content/category.add.twig');
 
     echo $template->render($templateVars);

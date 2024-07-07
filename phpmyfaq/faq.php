@@ -49,7 +49,6 @@ use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -294,6 +293,9 @@ if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
 // Check if the author name should be visible, according to the GDPR option
 $author = $user->getUserVisibilityByEmail($faq->faqRecord['email']) ? $faq->faqRecord['author'] : 'n/a';
 
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twigTemplate = $twig->loadTemplate('./faq.twig');
+
 $templateVars = [
     ...$templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -348,9 +350,5 @@ $templateVars = [
     'csrfTokenRemoveBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
     'csrfTokenAddBookmark' => Token::getInstance()->getTokenString('add-bookmark')
 ];
-
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
-$twigTemplate = $twig->loadTemplate('./faq.twig');
 
 return $templateVars;

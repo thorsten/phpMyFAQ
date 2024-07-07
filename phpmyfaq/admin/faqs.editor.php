@@ -36,7 +36,6 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template\FormatBytesTwigExtension;
 use phpMyFAQ\Template\IsoDateTwigExtension;
@@ -44,7 +43,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Template\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -88,7 +86,6 @@ if (
     $date = new Date($faqConfig);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $twig->addExtension(new FormatBytesTwigExtension());
     $twig->addExtension(new IsoDateTwigExtension());
     $twig->addExtension(new UserNameTwigExtension());

@@ -27,7 +27,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 use phpMyFAQ\Template\PermissionTranslationTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -323,7 +322,6 @@ if ('list' === $groupAction) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new PermissionTranslationTwigExtension());
 $template = $twig->loadTemplate('./admin/user/group.twig');
 

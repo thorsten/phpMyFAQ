@@ -15,10 +15,9 @@
  * @since     2023-12-27
  */
 
-use Twig\Extension\DebugExtension;
-use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Session\Token;
 
@@ -30,7 +29,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$twig->addExtension(new DebugExtension());
 $template = $twig->loadTemplate('./admin/content/stickyfaqs.twig');
 
 $faq = new Faq($faqConfig);

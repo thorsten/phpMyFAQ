@@ -26,7 +26,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Template\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -43,7 +42,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new IntlExtension());
     $twig->addExtension(new UserNameTwigExtension());
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/statistics/admin-log.twig');
 
     $date = new Date($faqConfig);

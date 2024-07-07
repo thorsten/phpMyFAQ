@@ -19,7 +19,6 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Template\CategoryNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -34,7 +33,6 @@ $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new CategoryNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 

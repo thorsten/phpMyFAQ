@@ -26,7 +26,6 @@ use phpMyFAQ\Template\CategoryNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -61,7 +60,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new IntlExtension());
-    $twig->addExtension(new DebugExtension());
     $twig->addExtension(new CategoryNameTwigExtension());
     $template = $twig->loadTemplate('./admin/content/open-questions.twig');
 

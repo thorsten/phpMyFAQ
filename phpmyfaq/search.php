@@ -35,7 +35,6 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -269,7 +268,6 @@ $confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
 $totalPages = (int)ceil($numOfResults / $confPerPage);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twig->addExtension(new DebugExtension());
 $twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./search.twig');
 

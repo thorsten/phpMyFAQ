@@ -18,16 +18,13 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
-use Twig\Extension\DebugExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -128,7 +125,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $twig->addExtension(new DebugExtension());
     $template = $twig->loadTemplate('./admin/content/category.showstructure.twig');
 
     echo $template->render($templateVars);
