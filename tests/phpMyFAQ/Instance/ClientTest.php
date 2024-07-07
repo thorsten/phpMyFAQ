@@ -6,9 +6,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Filesystem;
-use phpMyFAQ\Instance;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use RecursiveIteratorIterator;
 
 /**
  * Class ClientTest
@@ -42,10 +42,10 @@ class ClientTest extends TestCase
     {
         @unlink(PMF_TEST_DIR . '/constants.test.php');
 
-        if (is_dir(PMF_TEST_DIR . '/assets/themes/default/')) {
-            $files = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/themes/default/'),
-                \RecursiveIteratorIterator::SELF_FIRST
+        if (is_dir(PMF_TEST_DIR . '/assets/templates/default/')) {
+            $files = new RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/templates/default/'),
+                RecursiveIteratorIterator::SELF_FIRST
             );
             foreach ($files as $file) {
                 @unlink($file->getPathname());

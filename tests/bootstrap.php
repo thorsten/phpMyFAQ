@@ -39,6 +39,7 @@ const IS_VALID_PHPMYFAQ = true;
 const DEBUG = true;
 
 $_SERVER['HTTP_HOST'] = 'https://localhost/';
+$_SERVER['SERVER_NAME'] = 'https://localhost/';
 
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 

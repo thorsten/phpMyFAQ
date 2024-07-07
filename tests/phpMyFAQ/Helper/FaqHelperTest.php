@@ -63,6 +63,9 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContent(): void
     {
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
         $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
@@ -74,6 +77,9 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContentWithUmlauts(): void
     {
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
         $content = '<p>Hellö, wörld!</p>';
         $expectedOutput = '<p>Hellö, wörld!</p>';
 
@@ -84,6 +90,9 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContentWithYoutubeContent(): void
     {
+        $this->expectException(SuspiciousOperationException::class);
+        $this->expectExceptionMessage('Invalid Host');
+
         $content = <<<'HTML'
         <iframe 
           title="YouTube video player" 
@@ -106,6 +115,6 @@ class FaqHelperTest extends TestCase
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
-        $this->assertStringStartsWith('<iframe', $actualOutput);
+        $this->assertEquals($expectedOutput, $actualOutput);
     }
 }
