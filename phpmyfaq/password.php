@@ -28,7 +28,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 
 $faqSession->userTracking('forgot_password', 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./password.twig');
 
 $templateVars = [

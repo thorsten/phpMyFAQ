@@ -18,6 +18,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2002-09-16
  */
+
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Configuration;
@@ -27,7 +28,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
-use phpMyFAQ\Template;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -87,14 +88,14 @@ Strings::init($faqLangCode);
 //
 // Set actual template set name
 //
-Template::setTplSetName($faqConfig->get('main.templateSet'));
+TwigWrapper::setTemplateSetName($faqConfig->get('main.templateSet'));
 
 //
 // Initialize attachment factory
 //
 AttachmentFactory::init(
-        $faqConfig->get('records.defaultAttachmentEncKey'),
-        $faqConfig->get('records.enableAttachmentEncryption')
+    $faqConfig->get('records.defaultAttachmentEncKey'),
+    $faqConfig->get('records.enableAttachmentEncryption')
 );
 
 //

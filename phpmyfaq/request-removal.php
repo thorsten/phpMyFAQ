@@ -33,7 +33,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 $faqSession->userTracking('request_removal', 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 

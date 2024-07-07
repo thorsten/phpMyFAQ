@@ -22,7 +22,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
-use phpMyFAQ\Template;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -262,7 +261,7 @@ $templateVars = [
     'version' => System::getVersion(),
     'currentYear' => date('Y'),
     'metaRobots' => $faqConfig->get('seo.metaTagsAdmin'),
-    'templateSetName' => Template::getTplSetName(),
+    'templateSetName' => TwigWrapper::getTemplateSetName(),
     'pageDirection' => Translation::get('dir'),
     'userHasAccessPermission' => $adminHelper->canAccessContent($user),
     'msgSessionExpiration' => Translation::get('ad_session_expiration'),

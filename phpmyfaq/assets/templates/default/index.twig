@@ -54,7 +54,7 @@
           {% else %}
             <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
             <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
-            <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
+            <li><a class="dropdown-item" href="../admin">{{ msgAdmin }}</a></li>
             <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
           <li>
             <hr class="dropdown-divider">
@@ -156,9 +156,6 @@
             <li class="nav-item">
               <a class="pmf-nav-link-footer {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
             </li>
-          <li class="nav-item">{{ msgContact }}</li>
-          <li class="nav-item">{{ privacyLink }}</li>
-          <li class="nav-item">{{ cookiePreferences }}</li>
           {% endfor %}
           {% if isPrivacyLinkEnabled %}
           <li class="nav-item">

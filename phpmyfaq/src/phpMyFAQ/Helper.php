@@ -40,11 +40,6 @@ abstract class Helper
     protected ?Tags $Tags = null;
 
     /**
-     * Template class.
-     */
-    protected ?Template $Template = null;
-
-    /**
      * Plurals class.
      */
     protected ?Plurals $plurals = null;
@@ -81,17 +76,6 @@ abstract class Helper
     public function setTags(Tags $Tags): Helper
     {
         $this->Tags = $Tags;
-        return $this;
-    }
-
-    /**
-     * Template Setter.
-     *
-     * @param Template $Template Template object
-     */
-    public function setTemplate(Template $Template): Helper
-    {
-        $this->Template = $Template;
         return $this;
     }
 

@@ -142,8 +142,8 @@ class Client extends Instance
     }
 
     /**
-     * Copies a defined template folder to a new client instance, by default
-     * the default template located at ./assets/themes/default/ will be copied.
+     * Copies a defined template folder to a new client instance, by default,
+     * the default template located at ./assets/templates/default/ will be copied.
      *
      * @param string $destination Destination folder
      * @param string $templateDir Template folder
@@ -151,8 +151,8 @@ class Client extends Instance
      */
     public function copyTemplateFolder(string $destination, string $templateDir = 'default'): void
     {
-        $sourceTpl = $this->filesystem->getRootPath() . '/assets/themes/' . $templateDir;
-        $destTpl = $destination . '/assets/themes/';
+        $sourceTpl = $this->filesystem->getRootPath() . '/assets/templates/' . $templateDir;
+        $destTpl = $destination . '/assets/templates/';
 
         $this->filesystem->recursiveCopy($sourceTpl, $destTpl);
     }

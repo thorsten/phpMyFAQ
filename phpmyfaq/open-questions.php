@@ -32,7 +32,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $questionHelper = new QuestionHelper($faqConfig);
 $questionHelper->setCategory($category);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
 $templateVars = [

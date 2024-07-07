@@ -33,7 +33,7 @@ $faqHelper = new FaqHelper($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twig->addExtension(new CategoryNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./overview.twig');

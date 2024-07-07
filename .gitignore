@@ -63,9 +63,9 @@ phpmyfaq/admin/assets/js/editor/*
 phpmyfaq/assets/dist
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/svg/*.svg
-phpmyfaq/assets/themes/default/css/*.css
-phpmyfaq/assets/themes/default/css/*.map
-phpmyfaq/assets/themes/default/js/*
+!phpmyfaq/assets/templates/admin
+!phpmyfaq/assets/templates/default
+!phpmyfaq/assets/templates/setup
 
 # Twig caches
 phpmyfaq/admin/assets/cache/
@@ -73,7 +73,6 @@ phpmyfaq/admin/assets/cache/
 # Node.js modules for development
 node_modules/*
 .pnpm-store
-
 
 # Backup folder
 backup/*

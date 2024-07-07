@@ -53,7 +53,7 @@ $startPageCategories = $startPageCategory->getCategories();
 // generates a top ten list
 $param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twig->addExtension(new TranslateTwigExtension());
 $twigTemplate = $twig->loadTemplate('./startpage.twig');

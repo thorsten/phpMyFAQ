@@ -73,7 +73,7 @@ class ClientTest extends TestCase
     {
         $this->Client->copyTemplateFolder(PMF_TEST_DIR);
 
-        $this->assertFileExists(PMF_TEST_DIR . '/assets/themes/default/templates/index.html');
+        $this->assertFileExists(PMF_TEST_DIR . '/assets/templates/default/index.twig');
     }
 
 }

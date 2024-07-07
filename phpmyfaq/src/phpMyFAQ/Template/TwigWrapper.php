@@ -34,7 +34,7 @@ class TwigWrapper
     private Environment $twigEnvironment;
 
     /** @var string Name of an active template set. */
-    private static string $templateSetName = '';
+    private static string $templateSetName = 'default';
 
     public function __construct(string $templatePath)
     {

@@ -26,6 +26,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./404.twig');

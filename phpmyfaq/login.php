@@ -34,7 +34,7 @@ if (!is_null($error)) {
 
 $faqSession->userTracking('login', 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./login.twig');
 
 $templateVars = [

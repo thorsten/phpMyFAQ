@@ -13,7 +13,7 @@ class TwigWrapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->twigWrapper = new TwigWrapper(PMF_TEST_DIR . '/assets/templates');
+        $this->twigWrapper = new TwigWrapper(PMF_TEST_DIR . '/assets/templates/default');
     }
 
     /**
@@ -21,7 +21,7 @@ class TwigWrapperTest extends TestCase
      */
     public function testLoadTemplate(): void
     {
-        $templateFile = 'template.twig';
+        $templateFile = 'index.twig';
 
         $result = $this->twigWrapper->loadTemplate($templateFile);
 

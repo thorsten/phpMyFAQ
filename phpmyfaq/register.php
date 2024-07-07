@@ -47,7 +47,7 @@ $captcha->setSessionId($sids);
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./register.twig');
 

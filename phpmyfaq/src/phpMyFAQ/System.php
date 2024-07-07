@@ -21,6 +21,7 @@ use DateTime;
 use DirectoryIterator;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Template\TwigWrapper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\Request;
@@ -204,8 +205,9 @@ class System
     public function getAvailableTemplates(): array
     {
         $templates = [];
+        $systemFolder = ['admin', 'setup'];
 
-        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/themes/') as $item) {
+        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/templates/') as $item) {
             $basename = $item->getBasename();
             if ($item->isDot()) {
                 continue;
@@ -213,7 +215,10 @@ class System
             if (!$item->isDir()) {
                 continue;
             }
-            $templates[$basename] = Template::getTplSetName() === $basename;
+            if (in_array($basename, $systemFolder)) {
+                continue;
+            }
+            $templates[$basename] = TwigWrapper::getTemplateSetName() === $basename;
         }
 
         return $templates;

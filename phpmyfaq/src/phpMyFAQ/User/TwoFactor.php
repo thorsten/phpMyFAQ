@@ -24,7 +24,6 @@ namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Template;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
@@ -112,10 +111,9 @@ readonly class TwoFactor
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         $label = $this->configuration->getTitle() . ':' . $currentUser->getUserData('email');
         $qrCodeText = sprintf(
-            '%s&image=%sassets/themes/%s/img/logo.png',
+            '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),
-            $this->configuration->getDefaultUrl(),
-            Template::getTplSetName()
+            $this->configuration->getDefaultUrl()
         );
 
         return sprintf(

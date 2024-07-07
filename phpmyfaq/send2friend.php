@@ -63,7 +63,7 @@ $send2friendLink = sprintf(
     urlencode((string) $faqLanguage)
 );
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new DebugExtension());
 $twigTemplate = $twig->loadTemplate('./share-by-email.twig');
 

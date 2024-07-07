@@ -40,7 +40,6 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Template;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -504,17 +503,6 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 if ($faqConfig->get('main.maintenanceMode')) {
     $indexSet = 'maintenance.page.html';
 }
-
-//
-// Load template files and set template variables
-//
-$template = new Template(
-    [
-        'index' => $indexSet,
-        'mainPageContent' => $includeTemplate,
-    ],
-    $faqConfig->get('main.templateSet')
-);
 
 $categoryRelation = new Relation($faqConfig, $category);
 
