@@ -36,7 +36,7 @@ $templateVars = [
     'pageHeader' => Translation::get('lostPassword'),
     'lang' => $faqConfig->getLanguage()->getLanguage(),
     'msgUsername' => Translation::get('ad_auth_user'),
-    'msgEmail' => Translation::get('ad_entry_email'),
+    'msgEmail' => Translation::get('msgEmail'),
     'msgSubmit' => Translation::get('msgNewContentSubmit'),
 ];
 

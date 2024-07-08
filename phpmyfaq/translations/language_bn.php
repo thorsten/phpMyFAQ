@@ -527,10 +527,10 @@ $PMF_LANG["msgAttachedFiles"] = "ফাইল যোগ করুন";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "action";
-$PMF_LANG["ad_entry_email"] = "Email address";
+$PMF_LANG["msgEmail"] = "Email address";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments";
 $PMF_LANG["msgWriteNoComment"] = "আপনি এখানে মতামত দিতে পারবেন না";
-$PMF_LANG["ad_user_realname"] = "real name";
+$PMF_LANG["msgRealname"] = "real name";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "আপনার IP নিষিদ্ধ করা হয়েছে।";

@@ -539,10 +539,10 @@ $PMF_LANG["msgAttachedFiles"] = "pridėti failai";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "veiksmas";
-$PMF_LANG["ad_entry_email"] = "El. pašto adresas";
+$PMF_LANG["msgEmail"] = "El. pašto adresas";
 $PMF_LANG["ad_entry_allowComments"] = "Leisti komentarus";
 $PMF_LANG["msgWriteNoComment"] = "Jūs negalite komentuoti šio įrašo";
-$PMF_LANG["ad_user_realname"] = "tikras vardas";
+$PMF_LANG["msgRealname"] = "tikras vardas";
 $PMF_LANG["ad_export_generate_pdf"] = "generuoti PDF failą";
 $PMF_LANG["ad_export_full_faq"] = "Jūsų DUK kaip PDF failas: ";
 $PMF_LANG["err_bannedIP"] = "Jūsų IP adresas buvo uždraustas.";
@@ -837,7 +837,7 @@ $PMF_LANG['ad_system_info'] = 'Sistemos informacija';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Ar norite registruotis?';
-$PMF_LANG["ad_user_loginname"] = 'Prisijungimo vardas:';
+$PMF_LANG["msgUsername"] = 'Prisijungimo vardas:';
 $PMF_LANG['errorRegistration'] = 'Šis laukas yra būtinas!';
 $PMF_LANG['submitRegister'] = 'Registruotis';
 $PMF_LANG['msgUserData'] = 'Naudotojo informacija reikalinga registracijai';

@@ -523,10 +523,10 @@ $PMF_LANG["msgAttachedFiles"] = "tài liệu đính kèm";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "hành động";
-$PMF_LANG["ad_entry_email"] = "địa chỉ email";
+$PMF_LANG["msgEmail"] = "địa chỉ email";
 $PMF_LANG["ad_entry_allowComments"] = "cho phép các bình luận";
 $PMF_LANG["msgWriteNoComment"] = "Bạn không thể bình luận nội dung này";
-$PMF_LANG["ad_user_realname"] = "Tên thực";
+$PMF_LANG["msgRealname"] = "Tên thực";
 $PMF_LANG["ad_export_generate_pdf"] = "tạo một tập tin PDF";
 $PMF_LANG["ad_export_full_faq"] = "Nội dung Câu hỏi thường gặp dưới dạng PDF: ";
 $PMF_LANG["err_bannedIP"] = "Địa chỉ IP của bạn không hợp lệ.";

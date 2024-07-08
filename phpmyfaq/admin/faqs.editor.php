@@ -394,7 +394,7 @@ if (
         'ad_entry_tags' => Translation::get('ad_entry_tags'),
         'ad_entry_keywords' => Translation::get('ad_entry_keywords'),
         'ad_entry_author' => Translation::get('ad_entry_author'),
-        'ad_entry_email' => Translation::get('ad_entry_email'),
+        'msgEmail' => Translation::get('msgEmail'),
         'msgSeoCenter' => Translation::get('seoCenter'),
         'msgSerp' => Translation::get('msgSerp'),
         'msgSerpTitle' => Translation::get('msgSerpTitle'),

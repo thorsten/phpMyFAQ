@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
@@ -32,6 +33,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $request = Request::createFromGlobals();
+
+$faqConfig = Configuration::getConfigurationInstance();
+
 $selectedCategoryId = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
@@ -104,10 +108,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $categoryImage = $faqConfig->getDefaultUrl() . 'content/user/images/' . $categoryData->getImage();
     }
 
+    $categoryHeader = Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName());
+
     // Twig template variables
     $templateVars = [
         ... $templateVars,
-        'categoryHeader' => Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName()),
         'categoryFaqsHeader' => $categoryData->getName(),
         'categoryDescription' => Strings::htmlspecialchars($categoryData->getDescription() ?? ''),
         'categorySubsHeader' => Translation::get('msgSubCategories'),
@@ -124,10 +129,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ->setConfiguration($faqConfig)
         ->setCategory($category);
 
+    $categoryHeader = Translation::get('msgFullCategories');
+
     // Twig template variables
     $templateVars = [
         ... $templateVars,
-        'categoryHeader' => Translation::get('msgFullCategories'),
         'categoryFaqsHeader' => Translation::get('msgShowAllCategories'),
         'categoryDescription' => Translation::get('msgCategoryDescription'),
         'categorySubsHeader' => Translation::get('msgSubCategories'),
@@ -136,5 +142,12 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'categoryLevelUp' => '',
     ];
 }
+
+$templateVars = [
+    ... $templateVars,
+    'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get('msgCategoryMetaDesc'), $faqConfig->getTitle()),
+    'categoryHeader' => $categoryHeader,
+];
 
 return $templateVars;

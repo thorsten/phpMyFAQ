@@ -522,10 +522,10 @@ $PMF_LANG["msgAttachedFiles"] = "pievienotie faili";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "darb&icirc;ba";
-$PMF_LANG["ad_entry_email"] = "E-pasta adrese";
+$PMF_LANG["msgEmail"] = "E-pasta adrese";
 $PMF_LANG["ad_entry_allowComments"] = "at&iuml;aut koment&ccedil;t";
 $PMF_LANG["msgWriteNoComment"] = "Koment&ccedil;&eth;ana nav at&iuml;auta";
-$PMF_LANG["ad_user_realname"] = "Pilnais v&acirc;rds (piem., Osvalds Zemesgrauzis)";
+$PMF_LANG["msgRealname"] = "Pilnais v&acirc;rds (piem., Osvalds Zemesgrauzis)";
 $PMF_LANG["ad_export_generate_pdf"] = "&igrave;ener&ccedil;t k&acirc; PDF failu";
 $PMF_LANG["ad_export_full_faq"] = "BUJ k&acirc; PDF fails: ";
 $PMF_LANG["err_bannedIP"] = "Tava IP adrese &eth;eit nav at&iuml;auta.";

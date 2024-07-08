@@ -46,7 +46,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
         'answer' => Translation::get('ad_entry_content'),
         'keywords' => Translation::get('ad_entry_keywords'),
         'author' => Translation::get('ad_entry_author'),
-        'email' => Translation::get('ad_entry_email'),
+        'email' => Translation::get('msgEmail'),
         'languageCode' => Translation::get('msgLanguageCode'),
         'seperateWithCommas' => Translation::get('msgSeperateWithCommas'),
         'tags' => Translation::get('ad_entry_tags'),

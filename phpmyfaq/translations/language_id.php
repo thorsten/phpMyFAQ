@@ -527,10 +527,10 @@ $PMF_LANG["msgAttachedFiles"] = "attached files";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "perintah";
-$PMF_LANG["ad_entry_email"] = "Alamat email";
+$PMF_LANG["msgEmail"] = "Alamat email";
 $PMF_LANG["ad_entry_allowComments"] = "Bolehkan komentar";
 $PMF_LANG["msgWriteNoComment"] = "Anda tidak bisa mengirim komentar pada artikel ini";
-$PMF_LANG["ad_user_realname"] = "Nama Lengkap";
+$PMF_LANG["msgRealname"] = "Nama Lengkap";
 $PMF_LANG["ad_export_generate_pdf"] = "buat berkas PDF";
 $PMF_LANG["ad_export_full_faq"] = "Materi anda dalam format PDF: ";
 $PMF_LANG["err_bannedIP"] = "Alamat IP anda sudah diblokir.";
@@ -825,7 +825,7 @@ $PMF_LANG['ad_system_info'] = 'Informasi Sistem';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Registrasi?';
-$PMF_LANG["ad_user_loginname"] = 'Nama login:';
+$PMF_LANG["msgUsername"] = 'Nama login:';
 $PMF_LANG['errorRegistration'] = 'Bagian ini harus diisi!';
 $PMF_LANG['submitRegister'] = 'Daftar';
 $PMF_LANG['msgUserData'] = 'Informasi pengguna yang dibutuhkan dalam pendaftaran';

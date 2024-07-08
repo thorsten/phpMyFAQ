@@ -62,7 +62,8 @@ $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgNewContentHeader'), $faqConfig->getTitle()),
+    'title' => sprintf('%s - %s', Translation::get('msgQuestion'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get('msgQuestionMetaDesc'), $faqConfig->getTitle()),
     'msgMatchingQuestions' => Translation::get('msgMatchingQuestions'),
     'msgFinishSubmission' => Translation::get('msgFinishSubmission'),
     'lang' => $Language->getLanguage(),

@@ -222,7 +222,7 @@ class UserController extends AbstractController
         ) {
             $question = sprintf(
                 "%s %s<br>%s %s<br>%s %s<br><br>%s",
-                Translation::get('ad_user_loginname'),
+                Translation::get('msgUsername'),
                 $loginName,
                 Translation::get('msgNewContentName'),
                 $author,

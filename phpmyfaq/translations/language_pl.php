@@ -529,10 +529,10 @@ $PMF_LANG["msgAttachedFiles"] = "Załączone pliki";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Akcja";
-$PMF_LANG["ad_entry_email"] = "E-mail";
+$PMF_LANG["msgEmail"] = "E-mail";
 $PMF_LANG["ad_entry_allowComments"] = "Zezwalaj na komentarze";
 $PMF_LANG["msgWriteNoComment"] = "Nie możesz komentować tego wpisu";
-$PMF_LANG["ad_user_realname"] = "Prawdziwe imię";
+$PMF_LANG["msgRealname"] = "Prawdziwe imię";
 $PMF_LANG["ad_export_generate_pdf"] = "Utwórz plik PDF";
 $PMF_LANG["ad_export_full_faq"] = "Twoje FAQ w formacie PDF: ";
 $PMF_LANG["err_bannedIP"] = "Twój adres IP został zablokowany.";
@@ -825,7 +825,7 @@ $PMF_LANG['ad_system_info'] = 'Informacje Systemowe';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Zapisz się';
-$PMF_LANG["ad_user_loginname"] = 'Nazwa użytkownika:';
+$PMF_LANG["msgUsername"] = 'Nazwa użytkownika:';
 $PMF_LANG['errorRegistration'] = 'To pole jest wymagane!';
 $PMF_LANG['submitRegister'] = 'Utwórz';
 $PMF_LANG['msgUserData'] = 'Dane użytkownika wymagane do rejestracji';
@@ -1297,7 +1297,7 @@ $PMF_LANG['ad_menu_faq_meta'] = 'FAQ metadata';
 $LANG_CONF['main.privacyURL'] = ['input', 'URL Polityki Prywatności'];
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
-$PMF_LANG['ad_user_data_is_visible'] = 'Nazwa użytkownika powinna być widoczna';
+$PMF_LANG['msgUserDataVisible'] = 'Nazwa użytkownika powinna być widoczna';
 $PMF_LANG['ad_user_is_visible'] = 'Widoczne';
 $PMF_LANG['ad_categ_save_order'] = 'Nowe sortowanie zostało pomyślnie zapisane.';
 $PMF_LANG['ad_add_user_change_password'] = 'Użytkownik musi zmienić hasło po pierwszym logowaniu';

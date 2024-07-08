@@ -84,7 +84,7 @@ if ($user->isLoggedIn()) {
         'realname' => Strings::htmlentities($user->getUserData('display_name')),
         'msgEmail' => Translation::get('msgNewContentMail'),
         'email' => Strings::htmlentities($user->getUserData('email')),
-        'msgIsVisible' => Translation::get('ad_user_data_is_visible'),
+        'msgIsVisible' => Translation::get('msgUserDataVisible'),
         'checked' => (int)$user->getUserData('is_visible') === 1 ? 'checked' : '',
         'msgPassword' => Translation::get('ad_auth_passwd'),
         'msgConfirm' => Translation::get('ad_user_confirm'),

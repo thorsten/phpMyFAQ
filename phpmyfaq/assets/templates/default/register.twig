@@ -2,8 +2,8 @@
 
 {% block content %}
 <section class="col-12">
-  <h1>{{ pageHeader }}</h1>
-  <p>{{ msgRegistrationCredentials }} {{ msgRegistrationNote }}</p>
+  <h1>{{ 'msgRegistration' | translate }}</h1>
+  <p>{{ 'msgRegistrationCredentials' | translate }} {{ 'msgRegistrationNote' | translate }}</p>
 
   <div class="row mb-2">
     <div class="col">
@@ -18,21 +18,21 @@
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
 
     <div class="row mb-2">
-      <label class="col-3 form-control-label" for="realname">{{ realname }}</label>
+      <label class="col-3 form-control-label" for="realname">{{ 'msgRealname' | translate }}</label>
       <div class="col-9">
         <input type="text" name="realname" id="realname" required class="form-control">
       </div>
     </div>
 
     <div class="row mb-2">
-      <label class="col-3 form-control-label" for="name">{{ loginname }}</label>
+      <label class="col-3 form-control-label" for="name">{{ 'msgUsername' | translate }}</label>
       <div class="col-9">
         <input type="text" name="name" id="name" required class="form-control">
       </div>
     </div>
 
     <div class="row mb-2">
-      <label class="col-3 form-control-label" for="email">{{ email }}</label>
+      <label class="col-3 form-control-label" for="email">{{ 'msgEmail' | translate }}</label>
       <div class="col-9">
         <input type="email" name="email" id="email" required class="form-control">
       </div>
@@ -42,7 +42,7 @@
       <div class="offset-3 col-sm-9">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="isVisible" name="isVisible">
-          <label class="form-check-label" for="isVisible"> {{ is_visible }} </label>
+          <label class="form-check-label" for="isVisible"> {{ 'msgUserDataVisible' | translate }} </label>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
     <div class="row mb-2">
       <div class="col-12 text-end">
         <button class="btn btn-primary" type="submit" id="pmf-submit-register" data-pmf-form="save-registration">
-          {{ submitRegister }}
+          {{ 'submitRegister' | translate }}
         </button>
       </div>
     </div>

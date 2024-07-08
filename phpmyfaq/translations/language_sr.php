@@ -529,10 +529,10 @@ $PMF_LANG["msgAttachedFiles"] = "zaka&#269;eni fajlovi";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "akcija";
-$PMF_LANG["ad_entry_email"] = "e-mail adresa";
+$PMF_LANG["msgEmail"] = "e-mail adresa";
 $PMF_LANG["ad_entry_allowComments"] = "dopusti komentarisanje";
 $PMF_LANG["msgWriteNoComment"] = "Ne mo&#382;ete staviti komentar za ovaj unos";
-$PMF_LANG["ad_user_realname"] = "Pravo ime";
+$PMF_LANG["msgRealname"] = "Pravo ime";
 $PMF_LANG["ad_export_generate_pdf"] = "kreiraj PDF fajl";
 $PMF_LANG["ad_export_full_faq"] = "Va&#353; FAQ kao PDF fajl: ";
 $PMF_LANG["err_bannedIP"] = "Va&#353;a IP adresa je blokirana.";

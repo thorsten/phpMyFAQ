@@ -53,18 +53,13 @@ $twigTemplate = $twig->loadTemplate('./register.twig');
 $templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get('msgRegistration'),
-    'msgRegistration' => Translation::get('msgRegistration'),
-    'msgRegistrationCredentials' => Translation::get('msgRegistrationCredentials'),
-    'msgRegistrationNote' => Translation::get('msgRegistrationNote'),
     'lang' => $faqLangCode,
-    'loginname' => Translation::get('ad_user_loginname'),
-    'realname' => Translation::get('ad_user_realname'),
-    'email' => Translation::get('ad_entry_email'),
-    'is_visible' => Translation::get('ad_user_data_is_visible'),
-    'submitRegister' => Translation::get('submitRegister'),
-    'captchaFieldset' =>
-        $captchaHelper->renderCaptcha($captcha, 'register', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+    'captchaFieldset' => $captchaHelper->renderCaptcha(
+        $captcha,
+        'register',
+        Translation::get('msgCaptcha'),
+        $user->isLoggedIn()
+    ),
 ];
 
 return $templateVars;

@@ -527,10 +527,10 @@ $PMF_LANG["msgAttachedFiles"] = "pripete datoteke";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "akcija";
-$PMF_LANG["ad_entry_email"] = "email naslov";
+$PMF_LANG["msgEmail"] = "email naslov";
 $PMF_LANG["ad_entry_allowComments"] = "dovoli komentarje";
 $PMF_LANG["msgWriteNoComment"] = "Ne moreš dodati komentarja za ta vnos";
-$PMF_LANG["ad_user_realname"] = "pravo ime";
+$PMF_LANG["msgRealname"] = "pravo ime";
 $PMF_LANG["ad_export_generate_pdf"] = "generiranje PDF datoteke";
 $PMF_LANG["ad_export_full_faq"] = "Tvoje vprašanje kot PDF datoteka: ";
 $PMF_LANG["err_bannedIP"] = "Tvoj IP naslov je prepovedan.";

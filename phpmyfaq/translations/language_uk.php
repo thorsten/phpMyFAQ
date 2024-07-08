@@ -526,10 +526,10 @@ $PMF_LANG["msgAttachedFiles"] = "Прикріплені файли";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Дія";
-$PMF_LANG["ad_entry_email"] = "email адреса";
+$PMF_LANG["msgEmail"] = "email адреса";
 $PMF_LANG["ad_entry_allowComments"] = "Дозвіл коментувати";
 $PMF_LANG["msgWriteNoComment"] = "Коментарі заборонені";
-$PMF_LANG["ad_user_realname"] = "Справжнє ім'я";
+$PMF_LANG["msgRealname"] = "Справжнє ім'я";
 $PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл";
 $PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: ";
 $PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";

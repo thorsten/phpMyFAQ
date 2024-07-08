@@ -531,10 +531,10 @@ $PMF_LANG["msgAttachedFiles"] = "ffeiliau atodedig";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "gweithred";
-$PMF_LANG["ad_entry_email"] = "cyfeiriad e-bost";
+$PMF_LANG["msgEmail"] = "cyfeiriad e-bost";
 $PMF_LANG["ad_entry_allowComments"] = "caniatáu sylwadau";
 $PMF_LANG["msgWriteNoComment"] = "Ni allwch gyflwyno sylw ar y cofnod hwn";
-$PMF_LANG["ad_user_realname"] = "enw cywir";
+$PMF_LANG["msgRealname"] = "enw cywir";
 $PMF_LANG["ad_export_generate_pdf"] = "cynhyrchu ffeil PDf";
 $PMF_LANG["ad_export_full_faq"] = "Eich Cwestiynau Cyffredin fel ffeil PDF: ";
 $PMF_LANG["err_bannedIP"] = "Mae eich cyfeiriad IP wedi'i wahardd.";

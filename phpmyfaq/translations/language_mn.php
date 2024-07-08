@@ -513,10 +513,10 @@ $PMF_LANG["msgAttachedFiles"] = "Хавсаргасан файлууд:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Үйлдэл";
-$PMF_LANG["ad_entry_email"] = "Email:";
+$PMF_LANG["msgEmail"] = "Email:";
 $PMF_LANG["ad_entry_allowComments"] = "Сэтгэгдэл зөвшөөрөх:";
 $PMF_LANG["msgWriteNoComment"] = "Та энд сэтгэгдэл оруулах боломжгүй байна";
-$PMF_LANG["ad_user_realname"] = "Жинхэнэ нэр:";
+$PMF_LANG["msgRealname"] = "Жинхэнэ нэр:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF файл үүсгэх";
 $PMF_LANG["ad_export_full_faq"] = "Таны FAQ PDF файлаар: ";
 $PMF_LANG["err_bannedIP"] = "Таны IP хаяг блоклогдсон байна.";
@@ -821,7 +821,7 @@ $PMF_LANG['ad_system_info'] = 'Системийн мэдээлэл';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Бүртгүүлэх';
-$PMF_LANG["ad_user_loginname"] = 'Нэвтрэх нэр:';
+$PMF_LANG["msgUsername"] = 'Нэвтрэх нэр:';
 $PMF_LANG['errorRegistration'] = 'Энэ талбар шаардлагатай!';
 $PMF_LANG['submitRegister'] = 'Үүсгэх';
 $PMF_LANG['msgUserData'] = 'Бүртгүүлхэд хэрэглэгчийн мэдээлэл шаардлагатай';

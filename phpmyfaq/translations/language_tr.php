@@ -515,10 +515,10 @@ $PMF_LANG["msgAttachedFiles"] = "Ekli dosyalar";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Eylem";
-$PMF_LANG["ad_entry_email"] = "Email";
+$PMF_LANG["msgEmail"] = "Email";
 $PMF_LANG["ad_entry_allowComments"] = "Yorumlara izin ver";
 $PMF_LANG["msgWriteNoComment"] = "Bu içerik için yorum yapamazsınız";
-$PMF_LANG["ad_user_realname"] = "Gerçek adınız";
+$PMF_LANG["msgRealname"] = "Gerçek adınız";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF oluştur";
 $PMF_LANG["ad_export_full_faq"] = "soruların PDf çıktısı: ";
 $PMF_LANG["err_bannedIP"] = "IP adresiniz yasaklandı.";
@@ -809,7 +809,7 @@ $PMF_LANG['ad_system_info'] = "System Bilgisi";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = "Kayıt ol";
-$PMF_LANG["ad_user_loginname"] = "Kullanıcı adı";
+$PMF_LANG["msgUsername"] = "Kullanıcı adı";
 $PMF_LANG['errorRegistration'] = "Bu alan zorunludur!";
 $PMF_LANG['submitRegister'] = "Kaydı tamamla";
 $PMF_LANG['msgUserData'] = "Kullanıcı hesabı için gereken bilgiler";

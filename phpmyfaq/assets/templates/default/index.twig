@@ -13,15 +13,12 @@
   <meta content="{{ metaRobots }}" name="robots">
   <meta content="7 days" name="revisit-after">
 
-  {% if isDebugEnabled %}
-  <link href="{{ baseHref }}assets/dist/debugMode.css" rel="stylesheet">
-  {% endif %}
+  {% if isDebugEnabled %}<link href="{{ baseHref }}assets/dist/debugMode.css" rel="stylesheet">{% endif %}
 
   <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet">
   <style>
     {{ customCss }}
   </style>
-
   <link href="{{ baseHref }}assets/images/favicon.ico" rel="shortcut icon">
   <link href="{{ currentPageUrl }}" rel="canonical">
 </head>

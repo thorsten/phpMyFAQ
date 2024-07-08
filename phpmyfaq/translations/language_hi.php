@@ -533,10 +533,10 @@ $PMF_LANG["msgAttachedFiles"] = "जुडी हुई फाइलें";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "क्रिया";
-$PMF_LANG["ad_entry_email"] = "ईमेल पता";
+$PMF_LANG["msgEmail"] = "ईमेल पता";
 $PMF_LANG["ad_entry_allowComments"] = "टिप्पणी करने दें";
 $PMF_LANG["msgWriteNoComment"] = "आप इस विषय पर टिप्पणी नहीं कर सकते";
-$PMF_LANG["ad_user_realname"] = "वास्तविक नाम";
+$PMF_LANG["msgRealname"] = "वास्तविक नाम";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF फाइल बनाएं";
 $PMF_LANG["ad_export_full_faq"] = "आपका FAQ PDF फाइल में: ";
 $PMF_LANG["err_bannedIP"] = "आपके IP पते को प्रतिबंधित कर दिया गया है.";

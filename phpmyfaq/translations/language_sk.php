@@ -527,10 +527,10 @@ $PMF_LANG["msgAttachedFiles"] = "priložené súbory";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "akcia";
-$PMF_LANG["ad_entry_email"] = "E-mailová adresa";
+$PMF_LANG["msgEmail"] = "E-mailová adresa";
 $PMF_LANG["ad_entry_allowComments"] = "Povoliť komentáre";
 $PMF_LANG["msgWriteNoComment"] = "Nemôžete komentovať túto položku";
-$PMF_LANG["ad_user_realname"] = "skutočné meno";
+$PMF_LANG["msgRealname"] = "skutočné meno";
 $PMF_LANG["ad_export_generate_pdf"] = "generovať PDF súbor";
 $PMF_LANG["ad_export_full_faq"] = "Vaša FAQ ako PDF súbor: ";
 $PMF_LANG["err_bannedIP"] = "Vaša IP adresa bola odmietnutá.";
@@ -825,7 +825,7 @@ $PMF_LANG['ad_system_info'] = 'Systémové Informácie';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Chcete sa zaregistrovať?';
-$PMF_LANG["ad_user_loginname"] = 'Prihlasovacie meno:';
+$PMF_LANG["msgUsername"] = 'Prihlasovacie meno:';
 $PMF_LANG['errorRegistration'] = 'Toto pole je povinné!';
 $PMF_LANG['submitRegister'] = 'Zaregistrovať';
 $PMF_LANG['msgUserData'] = 'Užívateľské informácie potrebné pre registráciu';

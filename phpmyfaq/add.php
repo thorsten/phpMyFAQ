@@ -98,7 +98,8 @@ $twigTemplate = $twig->loadTemplate('./add.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgNewContentHeader'), $faqConfig->getTitle()),
+    'title' => sprintf('%s - %s', Translation::get('msgAddContent'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf('%s | %s', Translation::get('msgNewContentHeader'), $faqConfig->getTitle()),
     'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
     'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
     'lang' => $Language->getLanguage(),
@@ -120,7 +121,7 @@ $templateVars = [
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     'enableWysiwygEditor' => $faqConfig->get('main.enableWysiwygEditorFrontend'),
     'currentTimestamp' => $request->server->get('REQUEST_TIME'),
-    'msgSeperateKeywordsWithCommas' => Translation::get('msgSeperateKeywordsWithCommas'),
+    'msgSeparateKeywordsWithCommas' => Translation::get('msgSeparateKeywordsWithCommas'),
     'noCategories' => empty($categories),
     'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories'),
     'displayFullForm' => $displayFullForm,

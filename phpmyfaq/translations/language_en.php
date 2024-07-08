@@ -528,10 +528,10 @@ $PMF_LANG["msgAttachedFiles"] = "Attached files";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Action";
-$PMF_LANG["ad_entry_email"] = "Email";
+$PMF_LANG["msgEmail"] = "Email";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
-$PMF_LANG["ad_user_realname"] = "Real name";
+$PMF_LANG["msgRealname"] = "Real name";
 $PMF_LANG["ad_export_generate_pdf"] = "Create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
@@ -822,7 +822,7 @@ $PMF_LANG['ad_system_info'] = 'System Information';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Sign up';
-$PMF_LANG["ad_user_loginname"] = 'Username:';
+$PMF_LANG["msgUsername"] = 'Username:';
 $PMF_LANG['errorRegistration'] = 'This field is required!';
 $PMF_LANG['submitRegister'] = 'Create';
 $PMF_LANG['msgUserData'] = 'User information required for registration';
@@ -1276,7 +1276,7 @@ $PMF_LANG['ad_menu_faq_meta'] = 'FAQ metadata';
 $LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
-$PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
+$PMF_LANG['msgUserDataVisible'] = 'Username should be visible';
 $PMF_LANG['ad_user_is_visible'] = 'Visible';
 $PMF_LANG['ad_categ_save_order'] = 'The new sorting was successfully saved.';
 $PMF_LANG['ad_add_user_change_password'] = 'User must change password after first login';
@@ -1445,7 +1445,7 @@ $PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
 $PMF_LANG['msgNotInMaintenanceMode'] = '⚠️The FAQ is not in maintenance mode.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
-$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Multiple keywords have to seperated with commas.';
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Multiple keywords have to separated with commas.';
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You can not use this form due to missing configured categories. Please inform the <a class="alert-link" href="./contact.html">administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
@@ -1481,5 +1481,8 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['msgSitemapMetaDesc'] = 'Find the FAQs you are looking for in the overview of all entries | Sitemap - %s';
 $PMF_LANG['msgGlossaryMetaDesc'] = 'In the glossary of %s you will find explanations of all important technical terms on the topic';
 $PMF_LANG['msgOverviewMetaDesc'] = 'See an overview of all important topics | FAQ overview of %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Overview of all categories and topics | Category overview of %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Add a new question | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Open questions still waiting for answers | %s';
 
 return $PMF_LANG;

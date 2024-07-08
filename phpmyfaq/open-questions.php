@@ -38,6 +38,7 @@ $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 $templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgOpenQuestions'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get('msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
     'pageHeader' => Translation::get('msgOpenQuestions'),
     'msgQuestionText' => Translation::get('msgQuestionText'),
     'msgDate_User' => Translation::get('msgDate_User'),

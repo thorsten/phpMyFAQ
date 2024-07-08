@@ -525,10 +525,10 @@ $PMF_LANG['msgAttachedFiles'] = 'Archivos adjuntos:';
 
 // Añadido v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG['ad_user_action'] = 'Acción';
-$PMF_LANG['ad_entry_email'] = 'e-mail:';
+$PMF_LANG['msgEmail'] = 'e-mail:';
 $PMF_LANG['ad_entry_allowComments'] = 'Permitir comentarios';
 $PMF_LANG['msgWriteNoComment'] = 'No se pueden hacer comentarios';
-$PMF_LANG['ad_user_realname'] = 'Nombre real:';
+$PMF_LANG['msgRealname'] = 'Nombre real:';
 $PMF_LANG['ad_export_generate_pdf'] = 'Exportar como PDF';
 $PMF_LANG['ad_export_full_faq'] = 'Tu FAQ como archivo PDF: ';
 $PMF_LANG['err_bannedIP'] = 'Tu IP ha sido bloqueada.';
@@ -818,7 +818,7 @@ $PMF_LANG['ad_system_info'] = 'Información del sistema';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = 'Registrar';
-$PMF_LANG['ad_user_loginname'] = 'Usuario:';
+$PMF_LANG['msgUsername'] = 'Usuario:';
 $PMF_LANG['errorRegistration'] = '¡Este campo debe ser rellenado!';
 $PMF_LANG['submitRegister'] = 'Registrar usuario';
 $PMF_LANG['msgUserData'] = 'Información de usuario requerida para el registro';
@@ -1267,6 +1267,6 @@ $PMF_LANG['ad_record_permissions'] = 'Permisos';
 $PMF_LANG['loginPageMessage'] = 'Login para ';
 
 // añadido v3.1.0-alpha - 2020-03-27 por Thorsten
-$PMF_LANG['ad_user_data_is_visible'] = 'El nombre de usuario debe ser visible';
+$PMF_LANG['msgUserDataVisible'] = 'El nombre de usuario debe ser visible';
 
 return $PMF_LANG;

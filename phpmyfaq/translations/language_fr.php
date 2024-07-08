@@ -528,10 +528,10 @@ $PMF_LANG["msgAttachedFiles"] = "Pièces-jointes :";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Action";
-$PMF_LANG["ad_entry_email"] = "E-mail";
+$PMF_LANG["msgEmail"] = "E-mail";
 $PMF_LANG["ad_entry_allowComments"] = "Autoriser les commentaires";
 $PMF_LANG["msgWriteNoComment"] = "Vous ne pouvez pas commenter cet enregistrement";
-$PMF_LANG["ad_user_realname"] = "Nom réel";
+$PMF_LANG["msgRealname"] = "Nom réel";
 $PMF_LANG["ad_export_generate_pdf"] = "Créer un fichier PDF";
 $PMF_LANG["ad_export_full_faq"] = "Votre FAQ en PDF : ";
 $PMF_LANG["err_bannedIP"] = "Votre adresse IP a été bannie.";
@@ -822,7 +822,7 @@ $PMF_LANG["ad_system_info"] = "Information système";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG["msgRegisterUser"] = "Inscription";
-$PMF_LANG["ad_user_loginname"] = "Nom d'utilisateur :";
+$PMF_LANG["msgUsername"] = "Nom d'utilisateur :";
 $PMF_LANG["errorRegistration"] = "Ce champ est obligatoire !";
 $PMF_LANG["submitRegister"] = "Inscrire";
 $PMF_LANG["msgUserData"] = "Information requise pour l'inscription";
@@ -1278,7 +1278,7 @@ $PMF_LANG["ad_menu_faq_meta"] = "Métadonnées";
 $LANG_CONF["main.privacyURL"] = ["input", "URL pour la note de confidentialité"];
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
-$PMF_LANG["ad_user_data_is_visible"] = "Le nom d'utilisateur est visible";
+$PMF_LANG["msgUserDataVisible"] = "Le nom d'utilisateur est visible";
 $PMF_LANG["ad_user_is_visible"] = "Visible";
 $PMF_LANG["ad_categ_save_order"] = "Enregistrer l'ordre";
 $PMF_LANG["ad_add_user_change_password"] = "L'utilisateur doit changer son mot de passe à la première connexion";
@@ -1447,7 +1447,7 @@ $PMF_LANG['msgNoQuestionAndAnswer'] = 'Aucune question et réponse trouvée.';
 $PMF_LANG['msgNotInMaintenanceMode'] = '⚠️La FAQ n’est pas en mode maintenance.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
-$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Les mots-clés multiples doivent être séparés par des virgules.';
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Les mots-clés multiples doivent être séparés par des virgules.';
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Vous ne pouvez pas utiliser ce formulaire en raison de l’absence de catégories configurées. Veuillez informer l’<a class="alert-link" href="contact.html">administrateur</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten

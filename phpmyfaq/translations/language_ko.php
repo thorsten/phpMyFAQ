@@ -527,10 +527,10 @@ $PMF_LANG["msgAttachedFiles"] = "첨부 파일";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "동작";
-$PMF_LANG["ad_entry_email"] = "메일주소";
+$PMF_LANG["msgEmail"] = "메일주소";
 $PMF_LANG["ad_entry_allowComments"] = "코멘트 가능";
 $PMF_LANG["msgWriteNoComment"] = "이 항목에는 코멘트 할 수 없습니다.";
-$PMF_LANG["ad_user_realname"] = "성명";
+$PMF_LANG["msgRealname"] = "성명";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF 파일 생성";
 $PMF_LANG["ad_export_full_faq"] = "PDF 파일로 FAQ 내보내기: ";
 $PMF_LANG["err_bannedIP"] = "당신의 IP는 접근 금지되었습니다.";

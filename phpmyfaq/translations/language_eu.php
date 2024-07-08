@@ -536,10 +536,10 @@ $PMF_LANG["msgAttachedFiles"] = "Fitxategi erantsiak";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Ekintza";
-$PMF_LANG["ad_entry_email"] = "Posta elektronikoa";
+$PMF_LANG["msgEmail"] = "Posta elektronikoa";
 $PMF_LANG["ad_entry_allowComments"] = "Iruzkinak baimendu";
 $PMF_LANG["msgWriteNoComment"] = "Ezin duzu erregistro hau iruzkindu";
-$PMF_LANG["ad_user_realname"] = "Benetako izena";
+$PMF_LANG["msgRealname"] = "Benetako izena";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF fitxategia sortu";
 $PMF_LANG["ad_export_full_faq"] = "Zure FAQa PDF fitxategi gisa: ";
 $PMF_LANG["err_bannedIP"] = "Zure IPa blokeatu egin da.";

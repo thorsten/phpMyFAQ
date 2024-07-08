@@ -514,10 +514,10 @@ $PMF_LANG["msgAttachedFiles"] = "附加檔案";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten 開發者
 $PMF_LANG["ad_user_action"] = "動作";
-$PMF_LANG["ad_entry_email"] = "Email";
+$PMF_LANG["msgEmail"] = "Email";
 $PMF_LANG["ad_entry_allowComments"] = "允許評論";
 $PMF_LANG["msgWriteNoComment"] = "您不能在此留下評論";
-$PMF_LANG["ad_user_realname"] = "真實姓名";
+$PMF_LANG["msgRealname"] = "真實姓名";
 $PMF_LANG["ad_export_generate_pdf"] = "建立 PDF 檔案";
 $PMF_LANG["ad_export_full_faq"] = "您的 FAQ 以輸出為一個 PDF 檔案: ";
 $PMF_LANG["err_bannedIP"] = "您的 IP 來源位置已被禁止訪視。";
@@ -808,7 +808,7 @@ $PMF_LANG['ad_system_info'] = "系統資訊 System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger 開發者
 $PMF_LANG['msgRegisterUser'] = "註冊 Sign up";
-$PMF_LANG["ad_user_loginname"] = "登入名稱 Login name";
+$PMF_LANG["msgUsername"] = "登入名稱 Login name";
 $PMF_LANG['errorRegistration'] = "此欄位是必需的! This field is required!";
 $PMF_LANG['submitRegister'] = "建立 Create";
 $PMF_LANG['msgUserData'] = "註冊需要提供使用者資訊 User information required for registration";

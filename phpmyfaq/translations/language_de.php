@@ -527,10 +527,10 @@ $PMF_LANG['msgAttachedFiles'] = "Angehängte Dateien";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG['ad_user_action'] = "Aktion";
-$PMF_LANG['ad_entry_email'] = "E-Mail";
+$PMF_LANG['msgEmail'] = "E-Mail";
 $PMF_LANG['ad_entry_allowComments'] = "Kommentare zulassen";
 $PMF_LANG['msgWriteNoComment'] = "Kommentieren nicht möglich";
-$PMF_LANG['ad_user_realname'] = "Echter Name";
+$PMF_LANG['msgRealname'] = "Echter Name";
 $PMF_LANG['ad_export_generate_pdf'] = "Als PDF-Datei exportieren";
 $PMF_LANG['ad_export_full_faq'] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG['err_bannedIP'] = "Diese IP ist gesperrt.";
@@ -820,7 +820,7 @@ $PMF_LANG['ad_system_info'] = "System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
 $PMF_LANG['msgRegisterUser'] = "Registrieren";
-$PMF_LANG['ad_user_loginname'] = "Loginname";
+$PMF_LANG['msgUsername'] = "Loginname";
 $PMF_LANG['errorRegistration'] = "Dieses Feld muss ausgefüllt sein!";
 $PMF_LANG['submitRegister'] = "Benutzer registrieren";
 $PMF_LANG['msgUserData'] = "Notwendige Benutzerinformationen für die Anmeldung";
@@ -1256,7 +1256,7 @@ $PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
 $LANG_CONF['main.privacyURL'] = ['input', 'URL zum Datenschutzhinweis'];
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
-$PMF_LANG['ad_user_data_is_visible'] = 'Benutzerdaten sollen öffentlich sichtbar sein';
+$PMF_LANG['msgUserDataVisible'] = 'Benutzerdaten sollen öffentlich sichtbar sein';
 $PMF_LANG['ad_user_is_visible'] = 'Sichtbar';
 $PMF_LANG['ad_categ_save_order'] = 'Die neue Sortierung wurde erfolgreich gespeichert.';
 $PMF_LANG['ad_add_user_change_password'] = 'Der Nutzer muss nach dem ersten Login sein Passwort ändern.';
@@ -1425,7 +1425,7 @@ $PMF_LANG['msgNoQuestionAndAnswer'] = 'Keine Frage und Antwort gefunden.';
 $PMF_LANG['msgNotInMaintenanceMode'] = '⚠️Die FAQ ist nicht im Wartungs-Modus.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
-$PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kannst nichts einreichen, weil keine Kategorien eingerichtet sind. Wende dich bitte an den <a class="alert-link" href="contact.html">Administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
@@ -1461,5 +1461,8 @@ $PMF_LANG['msgSitemap'] = 'Sitemap';
 $PMF_LANG['msgSitemapMetaDesc'] = 'Finde die gesuchten FAQs in der Übersicht aller Einträge | Sitemap - %s';
 $PMF_LANG['msgGlossaryMetaDesc'] = 'Im Glossar von %s findest Du Erklärungen aller wichtigen Fachbegriffe zum Thema';
 $PMF_LANG['msgOverviewMetaDesc'] = 'Die detaillierte Übersicht aller wichtigen Themen | FAQ-Übersicht von %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Die Übersicht aller Kategorien und Themen | Kategorie-Übersicht von %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Eine neue Frage hinzufügen | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Offene Fragen, die noch auf Antwort warten | %s';
 
 return $PMF_LANG;
