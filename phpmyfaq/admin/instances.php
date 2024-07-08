@@ -15,7 +15,7 @@
  * @since     2012-03-16
  */
 
-use phpMyFAQ\Component\Alert;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem;
@@ -26,6 +26,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,6 +34,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT->value)) {
     $fileSystem = new Filesystem(PMF_ROOT_DIR);
@@ -40,6 +43,8 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     $currentClient = new Client($faqConfig);
     $currentClient->setFileSystem($fileSystem);
     $instanceId = Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
+
+    $templateVars = [];
 
     // Update client instance
     if ('update-instance' === $action && is_integer($instanceId)) {
@@ -61,16 +66,25 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         }
 
         if (is_null($updatedData->getUrl())) {
-            echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
+            $templateVars = [
+                ... $templateVars,
+                'updateError' => $faqConfig->getDb()->error(),
+            ];
         } else {
             if ($updatedClient->update($instanceId, $updatedData)) {
                 if ($moveInstance) {
                     $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
                     $updatedClient->deleteClientFolder($originalData->url);
                 }
-                echo Alert::success('ad_config_saved');
+                $templateVars = [
+                    ... $templateVars,
+                    'updateSuccess' => Translation::get('ad_config_saved'),
+                ];
             } else {
-                echo Alert::danger('ad_entryins_fail', $faqConfig->getDb()->error());
+                $templateVars = [
+                    ... $templateVars,
+                    'updateError' => $faqConfig->getDb()->error(),
+                ];
             }
         }
     }
@@ -81,6 +95,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     }
 
     $templateVars = [
+        ... $templateVars,
         'userPermInstanceAdd' => $user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_ADD->value),
         'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
         'ad_instance_add' => Translation::get('ad_instance_add'),

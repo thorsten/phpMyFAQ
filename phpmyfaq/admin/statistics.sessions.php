@@ -15,7 +15,6 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
@@ -112,5 +111,5 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     echo $template->render($templateVars);
 } else {
-    echo Alert::danger('err_NotAuth');
+    require __DIR__ . '/no-permission.php';
 }
