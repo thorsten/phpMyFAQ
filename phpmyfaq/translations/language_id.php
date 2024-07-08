@@ -458,7 +458,7 @@ $PMF_LANG["ad_log_usde"] = "Pengguna berikut sudah dihapus: ";
 $PMF_LANG["ad_log_beed"] = "Form Edit untuk pengguna berikut: ";
 $PMF_LANG["ad_log_bede"] = "Entri berikut sudah dihapus: ";
 
-$PMF_LANG["ad_start_visits"] = "Kunjungan";
+$PMF_LANG["msgVisits"] = "Kunjungan";
 $PMF_LANG["ad_start_articles"] = "Artikel";
 $PMF_LANG["ad_start_comments"] = "Komentar";
 
@@ -579,7 +579,7 @@ $PMF_LANG["lostpwd_text_1"] = "Terima kasih atas permintaan informasi akun anda.
 $PMF_LANG["lostpwd_text_2"] = "Silakan buat kata sandi baru pada bagian admin.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail sudah dikirim.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Lihat nomor versi phpMyFAQ terbaru lewat layanan web";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Lihat nomor versi phpMyFAQ terbaru lewat layanan web";
 $PMF_LANG["ad_xmlrpc_latest"] = "Versi terbaru sudah tersedia di";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -703,7 +703,7 @@ $PMF_LANG['newsCommentDate'] = 'Pada: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Masa berlaku (tidak wajib)';
-$PMF_LANG['admin_mainmenu_home'] = 'Panel';
+$PMF_LANG['adminHeaderDashboard'] = 'Panel';
 $PMF_LANG['admin_mainmenu_users'] = 'Pengguna';
 $PMF_LANG['admin_mainmenu_content'] = 'Konten';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistik';
@@ -821,7 +821,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Bolehkan komenta
 $PMF_LANG['msgAllCatArticles'] = 'Data dalam kategori ini';
 $PMF_LANG['msgTagSearch'] = 'Entri dengan tag';
 $PMF_LANG['ad_pmf_info'] = 'Informasi phpMyFAQ';
-$PMF_LANG['ad_online_info'] = 'Periksa versi secara online';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Periksa versi secara online';
 $PMF_LANG['ad_system_info'] = 'Informasi Sistem';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger

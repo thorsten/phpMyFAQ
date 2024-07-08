@@ -454,7 +454,7 @@ $PMF_LANG["ad_log_usde"] = "刪除下列的使用者 (Deleted the following user
 $PMF_LANG["ad_log_beed"] = "編輯下列使用者 (Edit form for the following user): ";
 $PMF_LANG["ad_log_bede"] = "刪除下列記錄: ";
 
-$PMF_LANG["ad_start_visits"] = "訪客次數 (Visits)";
+$PMF_LANG["msgVisits"] = "訪客次數 (Visits)";
 $PMF_LANG["ad_start_articles"] = "文章";
 $PMF_LANG["ad_start_comments"] = "評論";
 
@@ -562,7 +562,7 @@ $PMF_LANG["lostpwd_text_1"] = "謝謝您提出您的帳號資訊需求。 (Thank
 $PMF_LANG["lostpwd_text_2"] = "請重設您個個人密碼於管理員區。(Please set a new personal password in the admin section of your FAQ.)";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail已寄出。( E-Mail was sent.)";
 
-$PMF_LANG["ad_xmlrpc_button"] = "點選這裡來檢查您的 phpMyFAQ 安裝的版本 (Click to check version of your phpMyFAQ installation)";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "點選這裡來檢查您的 phpMyFAQ 安裝的版本 (Click to check version of your phpMyFAQ installation)";
 $PMF_LANG["ad_xmlrpc_latest"] = "最新版本於 (Latest version available)";
 
 // added v1.5.0 - 2005-07-31 by Thorsten 開發者
@@ -685,7 +685,7 @@ $PMF_LANG['newsCommentDate'] = "新增於 Added at: ";
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten 開發者
 $PMF_LANG['ad_record_expiration_window'] = "記錄 - 時間即將過期視窗 (非必要) Record expiration time window (optional)";
-$PMF_LANG['admin_mainmenu_home'] = "控制台 Dashboard";
+$PMF_LANG['adminHeaderDashboard'] = "控制台 Dashboard";
 $PMF_LANG['admin_mainmenu_users'] = "使用者們 Users";
 $PMF_LANG['admin_mainmenu_content'] = "內容 Content";
 $PMF_LANG['admin_mainmenu_statistics'] = "統計 Statistics";
@@ -804,7 +804,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "允許新記錄�
 $PMF_LANG['msgAllCatArticles'] = "此類別下的紀錄 Records in this category";
 $PMF_LANG['msgTagSearch'] = "已註記的項目 Tagged entries";
 $PMF_LANG['ad_pmf_info'] = "phpMyFAQ 資訊 Information";
-$PMF_LANG['ad_online_info'] = "官方網站線上最新版本檢查 Online version check";
+$PMF_LANG['msgOnlineVersionCheck'] = "官方網站線上最新版本檢查 Online version check";
 $PMF_LANG['ad_system_info'] = "系統資訊 System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger 開發者
@@ -1035,8 +1035,8 @@ $PMF_LANG['msgTableOfContent'] = "目錄 (Table of Content)";
 
 // added 2.7.5 - 2012-03-02 by Thorsten 開發者
 $PMF_LANG["msgExportAllFaqs"] = "列印全部為 PDF 檔案 (Print all as PDF)";
-$PMF_LANG["ad_online_verification"] = "您安裝的線上 phpMyFAQ 確認檢查，位於您安裝的主機上。 (Online verification check)";
-$PMF_LANG["ad_verification_button"] = "點選來檢查您的 phpMyFAQ 安裝是否沒有問題 (Click to verify your phpMyFAQ installation)";
+$PMF_LANG["msgOnlineVerificationCheck"] = "您安裝的線上 phpMyFAQ 確認檢查，位於您安裝的主機上。 (Online verification check)";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "點選來檢查您的 phpMyFAQ 安裝是否沒有問題 (Click to verify your phpMyFAQ installation)";
 $PMF_LANG["ad_verification_notokay"] = "您的 phpMyFAQ 版本有語系檔異動: (Your version of phpMyFAQ has local changes:)";
 $PMF_LANG["ad_verification_okay"] = "您的 phpMyFAQ 版本已驗證完成。 (Your version of phpMyFAQ was successfully verified.)";
 

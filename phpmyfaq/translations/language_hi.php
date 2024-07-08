@@ -463,7 +463,7 @@ $PMF_LANG["ad_log_usde"] = "निम्न प्रयोगकर्ता �
 $PMF_LANG["ad_log_beed"] = "निम्न प्रयोगकर्ता के लिए सम्पादन फॉर्म: ";
 $PMF_LANG["ad_log_bede"] = "निम्न को मिटा दें: ";
 
-$PMF_LANG["ad_start_visits"] = "दर्शन";
+$PMF_LANG["msgVisits"] = "दर्शन";
 $PMF_LANG["ad_start_articles"] = "लेख";
 $PMF_LANG["ad_start_comments"] = "टिका-टिप्पणी";
 
@@ -585,7 +585,7 @@ $PMF_LANG["lostpwd_text_1"] = "अपनी खाते की जानका�
 $PMF_LANG["lostpwd_text_2"] = "अपनी FAQ के प्रबंधक केंद्र मैं नया संकेतक शब्द दाल लें.";
 $PMF_LANG["lostpwd_mail_okay"] = "ईमेल भेज दिया गया है.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "phpMyFaq का नया संस्करण पाएं";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "phpMyFaq का नया संस्करण पाएं";
 $PMF_LANG["ad_xmlrpc_latest"] = "नया संस्करण उपलब्ध है";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -709,7 +709,7 @@ $PMF_LANG['newsCommentDate'] = 'जोड़ा गया: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'रिकॉर्ड समाप्त हनी की अवधि की विण्डो (वैकल्पिक)';
-$PMF_LANG['admin_mainmenu_home'] = 'घर';
+$PMF_LANG['adminHeaderDashboard'] = 'घर';
 $PMF_LANG['admin_mainmenu_users'] = 'प्रयोगकर्ता';
 $PMF_LANG['admin_mainmenu_content'] = 'विषय';
 $PMF_LANG['admin_mainmenu_statistics'] = 'लेखा जोखा';
@@ -827,7 +827,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "नए लेख
 $PMF_LANG['msgAllCatArticles'] = 'इस वर्ग के लेख';
 $PMF_LANG['msgTagSearch'] = 'टैग किये गए लेख';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ जानकारी';
-$PMF_LANG['ad_online_info'] = 'संस्करण जांचें';
+$PMF_LANG['msgOnlineVersionCheck'] = 'संस्करण जांचें';
 $PMF_LANG['ad_system_info'] = 'निकाय की जानकारी';
 
 return $PMF_LANG;

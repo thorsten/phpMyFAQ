@@ -461,7 +461,7 @@ $PMF_LANG["ad_log_usde"] = "Obrisan korisnik: ";
 $PMF_LANG["ad_log_beed"] = "Edit forma za korisnika: ";
 $PMF_LANG["ad_log_bede"] = "Obrisan unos: ";
 
-$PMF_LANG["ad_start_visits"] = "Poseta";
+$PMF_LANG["msgVisits"] = "Poseta";
 $PMF_LANG["ad_start_articles"] = "&#268;lanaka";
 $PMF_LANG["ad_start_comments"] = "Komentara";
 
@@ -577,7 +577,7 @@ $PMF_LANG["lostpwd_text_1"] = "Zahtev za detaljima Va&scaron;eg naloga je primlj
 $PMF_LANG["lostpwd_text_2"] = "Podesite novu lozinku u admin delu Va&scaron;eg FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail je poslat.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Pogledaj najnoviju phpMyFAQ verziju na internetu";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Pogledaj najnoviju phpMyFAQ verziju na internetu";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnovija dostupna verzija je";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -701,7 +701,7 @@ $PMF_LANG['newsCommentDate'] = 'Dodato dana: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Pode&scaron;avanje trajanja unosa (opciono)';
-$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['adminHeaderDashboard'] = 'Home';
 $PMF_LANG['admin_mainmenu_users'] = 'Korisnici';
 $PMF_LANG['admin_mainmenu_content'] = 'Sadr&#382;aj';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistika';
@@ -819,7 +819,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Dozvolite koment
 $PMF_LANG['msgAllCatArticles'] = 'Unosi u ovoj kategoriji';
 $PMF_LANG['msgTagSearch'] = 'Oznaceni unosi';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informacije';
-$PMF_LANG['ad_online_info'] = 'Provera Verzije';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Provera Verzije';
 $PMF_LANG['ad_system_info'] = 'Informacije Sistema';
 
 return $PMF_LANG;

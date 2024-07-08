@@ -458,7 +458,7 @@ $PMF_LANG["ad_log_usde"] = "Deleted the following user: ";
 $PMF_LANG["ad_log_beed"] = "Edit form for the following user: ";
 $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 
-$PMF_LANG["ad_start_visits"] = "Visits";
+$PMF_LANG["msgVisits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Comments";
 
@@ -579,7 +579,7 @@ $PMF_LANG["lostpwd_text_1"] = "তথ্য জানতে চাওয়ার �
 $PMF_LANG["lostpwd_text_2"] = "অনুগ্রহ করে প্রশাসকের বিভাগে একটি নতুন গোপন সংকেত প্রদান করুন।";
 $PMF_LANG["lostpwd_mail_okay"] = "ই-মেইল পাঠানো হয়েছে";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -703,7 +703,7 @@ $PMF_LANG['newsCommentDate'] = 'যোগ হয়েছে -> ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Home';
+$PMF_LANG['adminHeaderDashboard'] = 'Home';
 $PMF_LANG['admin_mainmenu_users'] = 'Users';
 $PMF_LANG['admin_mainmenu_content'] = 'Content';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
@@ -821,7 +821,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments f
 $PMF_LANG['msgAllCatArticles'] = 'এই বিভাগের প্রশ্ন';
 $PMF_LANG['msgTagSearch'] = 'ট্যাগ';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
-$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
 return $PMF_LANG;

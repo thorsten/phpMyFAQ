@@ -1,15 +1,15 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="bi bi-speedometer"></i>
-    {{ adminHeaderDashboard }}
+    {{ 'adminHeaderDashboard' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a href="?action=config">
         {% if isMaintenanceMode %}
-          <button class="btn btn-outline-danger">{{ adminDashboardMaintenance }}</button>
+          <button class="btn btn-outline-danger">{{ 'msgMaintenanceMode' | translate }}</button>
         {% else %}
-          <button class="btn btn-outline-success">{{ adminDashboardOnline }}</button>
+          <button class="btn btn-outline-success">{{ 'msgOnlineMode' | translate }}</button>
         {% endif %}
       </a>
     </div>
@@ -51,11 +51,7 @@
   <section class="row">
     <div class="col">
       <div class="alert alert-danger" role="alert">
-        phpMyFAQ is currently in development ({{ currentVersionApp }}).
-        And therefore not yet ready for production.
-        Please <a target="_blank" href="https://github.com/thorsten/phpMyFAQ/issues" class="alert-link">report all
-          issues on GitHub</a>.
-        Thank you very much!
+        {{ msgAdminWarningDevelopmentVersion | raw }}
       </div>
     </div>
   </section>
@@ -68,7 +64,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold mb-1">{{ adminDashboardInfoVisits }}</div>
+            <div class="text-xs font-weight-bold mb-1">{{ 'msgVisits' | translate }}</div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
           </div>
           <div class="col-auto">
@@ -146,7 +142,7 @@
     <div class="col-4 mb-4">
       <div class="card shadow h-100 mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderTopTen }}
+          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ 'msgTopTen' | translate }}
         </h5>
         <div class="card-body">
           <div class="pmf-charts">
@@ -186,7 +182,7 @@
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-check"></i> {{ adminDashboardHeaderOnlineInfo }}
+          <i aria-hidden="true" class="bi bi-check"></i> {{ 'msgOnlineVersionCheck' | translate }}
         </h5>
         <div class="card-body">
           {% if showVersion %}
@@ -200,7 +196,7 @@
                   method="post" accept-charset="utf-8">
               <input type="hidden" name="param" value="version" />
               <button class="btn btn-info" type="submit">
-                {{ adminDashboardButtonGetLatestVersion }}
+                {{ 'msgButtonFetchLatestVersion' | translate }}
               </button>
             </form>
             {% if adminDashboardShouldUpdateMessage %}
@@ -225,7 +221,7 @@
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ adminDashboardHeaderVerification }}
+          <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ 'msgOnlineVerificationCheck' | translate }}
         </h5>
         <div class="card-body">
           {% if showVerificationResult %}
@@ -263,7 +259,7 @@
             <form action="./index.php" method="post" accept-charset="utf-8">
               <input type="hidden" name="getJson" value="verify">
               <button class="btn btn-info" type="submit">
-                {{ adminDashboardButtonVerification }}
+                {{ 'msgOnlineVerificationCheckButton' | translate }}
               </button>
             </form>
           {% endif %}

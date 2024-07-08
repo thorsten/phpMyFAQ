@@ -382,7 +382,7 @@ $PMF_LANG['ad_log_ussa'] = 'به روز کردن اطلاعات برای کار�
 $PMF_LANG['ad_log_usde'] = 'کاربرهای زیر پاک شدند: ';
 $PMF_LANG['ad_log_beed'] = 'فرم اصلاح برای کاربران زیر: ';
 $PMF_LANG['ad_log_bede'] = 'مطالب زیر پاک شدند: ';
-$PMF_LANG['ad_start_visits'] = 'مشاهدات';
+$PMF_LANG['msgVisits'] = 'مشاهدات';
 $PMF_LANG['ad_start_articles'] = 'مطالب';
 $PMF_LANG['ad_start_comments'] = 'نظرات';
 $PMF_LANG['ad_categ_paste'] = 'الصاق';
@@ -475,7 +475,7 @@ $PMF_LANG['lostpwd_err_2'] = 'خطا: مطالب اشتباه!';
 $PMF_LANG['lostpwd_text_1'] = 'از بابت درخواست مشخصات خودتان ممنون.';
 $PMF_LANG['lostpwd_text_2'] = 'لطفا برای پرسش‌های متداول یک رمز عبور جدید در بخش مدیریت تعیین کنید.';
 $PMF_LANG['lostpwd_mail_okay'] = 'ایمیل ارسال شد.';
-$PMF_LANG['ad_xmlrpc_button'] = 'آخرین ورژن را دریافت كنید';
+$PMF_LANG['msgButtonFetchLatestVersion'] = 'آخرین ورژن را دریافت كنید';
 $PMF_LANG['ad_xmlrpc_latest'] = 'آخرین ورژن موجود است';
 $PMF_LANG['ad_categ_select'] = 'انتخاب زبان موضوع';
 $PMF_LANG['msgSitemap'] = 'نقشه سایت';
@@ -578,8 +578,8 @@ $PMF_LANG['ad_search_delfail'] = 'واژه جستجو حذف نمی شد.';
 $PMF_LANG['msg_about_FAQ'] = 'در مورد این آموزش';
 $PMF_LANG['msgTableOfContent'] = 'جدول محتوا';
 $PMF_LANG['msgExportAllFAQs'] = 'چاپ همه به صورت PDF';
-$PMF_LANG['ad_online_verification'] = 'اعتبار سنجی بر خط';
-$PMF_LANG['ad_verification_button'] = 'بررسی نگارش جدید';
+$PMF_LANG['msgOnlineVerificationCheck'] = 'اعتبار سنجی بر خط';
+$PMF_LANG['msgOnlineVerificationCheckButton'] = 'بررسی نگارش جدید';
 $PMF_LANG['ad_verification_notokay'] = 'نسخه phpMyFAQ شما تغییرات محلی دارد';
 $PMF_LANG['ad_verification_okay'] = 'نسخه phpMyFAQ شما با موفقیت شناسایی گردید.';
 $PMF_LANG['cacheControlCenter'] = 'پیکربندی حافظه نهان';

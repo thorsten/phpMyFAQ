@@ -468,7 +468,7 @@ $PMF_LANG['ad_log_usde'] = "Der folgende Benutzer ist gelöscht worden: ";
 $PMF_LANG['ad_log_beed'] = "Das Editierformular für den folgenden Beitrag ist aufgerufen worden: ";
 $PMF_LANG['ad_log_bede'] = "Der folgende Beitrag wurde gelöscht: ";
 
-$PMF_LANG['ad_start_visits'] = "Besuche";
+$PMF_LANG['msgVisits'] = "Besuche";
 $PMF_LANG['ad_start_articles'] = "FAQs";
 $PMF_LANG['ad_start_comments'] = "Kommentare";
 
@@ -575,7 +575,7 @@ $PMF_LANG['lostpwd_text_1'] = "Vielen Dank für die Abfrage deiner Account Infor
 $PMF_LANG['lostpwd_text_2'] = "Bitte ein neues Passwort im Adminbereich der FAQ setzen.";
 $PMF_LANG['lostpwd_mail_okay'] = "E-Mail wurde gesendet.";
 
-$PMF_LANG['ad_xmlrpc_button'] = "Aktuelle phpMyFAQ Version online abfragen";
+$PMF_LANG['msgButtonFetchLatestVersion'] = "Aktuelle phpMyFAQ Version online abfragen";
 $PMF_LANG['ad_xmlrpc_latest'] = "Aktuelle Version";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -697,7 +697,7 @@ $PMF_LANG['newsCommentDate'] = "Geschrieben am: ";
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = "Abblaufdatum des Eintrags (optional)";
-$PMF_LANG['admin_mainmenu_home'] = "Dashboard";
+$PMF_LANG['adminHeaderDashboard'] = "Dashboard";
 $PMF_LANG['admin_mainmenu_users'] = "Benutzer";
 $PMF_LANG['admin_mainmenu_content'] = "Inhalte";
 $PMF_LANG['admin_mainmenu_statistics'] = "Statistiken";
@@ -816,7 +816,7 @@ $LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Kommentare bei FAQs e
 $PMF_LANG['msgAllCatArticles'] = "FAQs in dieser Kategorie";
 $PMF_LANG['msgTagSearch'] = "FAQs mit gleichen Tags";
 $PMF_LANG['ad_pmf_info'] = "phpMyFAQ Information";
-$PMF_LANG['ad_online_info'] = "Online Versionsüberprüfung";
+$PMF_LANG['msgOnlineVersionCheck'] = "Online Versionsüberprüfung";
 $PMF_LANG['ad_system_info'] = "System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1047,8 +1047,8 @@ $PMF_LANG['msgTableOfContent'] = 'Inhaltsverzeichnis';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG['msgExportAllFaqs'] = "FAQ als PDF speichern";
-$PMF_LANG['ad_online_verification'] = "Online-Verifikation";
-$PMF_LANG['ad_verification_button'] = "phpMyFAQ-Installation online überprüfen";
+$PMF_LANG['msgOnlineVerificationCheck'] = "Online-Verifikation";
+$PMF_LANG['msgOnlineVerificationCheckButton'] = "phpMyFAQ-Installation online überprüfen";
 $PMF_LANG['ad_verification_notokay'] = "Diese phpMyFAQ-Installation hat lokale Änderungen";
 $PMF_LANG['ad_verification_okay'] = "Diese phpMyFAQ-Installation wurde erfolgreich überprüft.";
 
@@ -1457,8 +1457,7 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link zum FAQ';
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];
 $LANG_CONF['seo.glossary.title'] = ['input', 'SERP Titel für Glossar'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'SERP Beschreibung für Glossar'];
-$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ läuft derzeit im Debug-Modus. Der Debug-Modus kann sensible Informationen preisgeben und ist nur für Entwicklungszwecke gedacht. Wir empfehlen dringend, den Debug-Modus aus Sicherheitsgründen zu deaktivieren. Sie können den Debug-Modus in der Datei <code>src/Bootstrap.php</code> deaktivieren.
-';
-
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ läuft derzeit im Debug-Modus. Der Debug-Modus kann sensible Informationen preisgeben und ist nur für Entwicklungszwecke gedacht. Wir empfehlen dringend, den Debug-Modus aus Sicherheitsgründen zu deaktivieren. Sie können den Debug-Modus in der Datei <code>src/Bootstrap.php</code> deaktivieren.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ befindet sich derzeit in der Entwicklung (%s) und ist daher noch nicht für den Produktionseinsatz bereit. Bitte <a target="_blank" href="%s" class="alert-link">melden Sie alle Probleme auf GitHub</a>. Vielen Dank!';
 
 return $PMF_LANG;

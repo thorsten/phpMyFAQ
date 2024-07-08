@@ -464,7 +464,7 @@ $PMF_LANG["ad_log_usde"] = "Pašalinti šie naudotojai: ";
 $PMF_LANG["ad_log_beed"] = "Redagavimo forma šiems naudotojams: ";
 $PMF_LANG["ad_log_bede"] = "Pašalintas šis įrašas: ";
 
-$PMF_LANG["ad_start_visits"] = "Apsilankymai";
+$PMF_LANG["msgVisits"] = "Apsilankymai";
 $PMF_LANG["ad_start_articles"] = "Straipsniai";
 $PMF_LANG["ad_start_comments"] = "Komentarai";
 
@@ -591,7 +591,7 @@ $PMF_LANG["lostpwd_text_1"] = "Ačiū, kad paprašėte savo paskyros informacijo
 $PMF_LANG["lostpwd_text_2"] = "Prašome nustatyti naują asmeninį slaptažodį DUK administravimo sekcijoje.";
 $PMF_LANG["lostpwd_mail_okay"] = "El. laiškas išsiųstas.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Gauti naujausios phpMyFAQ versijos numerį per žiniatinklio tarnybą";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Gauti naujausios phpMyFAQ versijos numerį per žiniatinklio tarnybą";
 $PMF_LANG["ad_xmlrpc_latest"] = "Naujausia versija prieinama";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -715,7 +715,7 @@ $PMF_LANG['newsCommentDate'] = 'Pridėta: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Įrašo galiojimo laiko rėžis (nebūtinas)';
-$PMF_LANG['admin_mainmenu_home'] = 'Panelė';
+$PMF_LANG['adminHeaderDashboard'] = 'Panelė';
 $PMF_LANG['admin_mainmenu_users'] = 'Naudotojai';
 $PMF_LANG['admin_mainmenu_content'] = 'Turinys';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistika';
@@ -833,7 +833,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Leisti komentaru
 $PMF_LANG['msgAllCatArticles'] = 'Įrašai šioje grupėje';
 $PMF_LANG['msgTagSearch'] = 'Įrašai su gairėmis';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ informacija';
-$PMF_LANG['ad_online_info'] = 'Tiesioginis versijos tikrinimas';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Tiesioginis versijos tikrinimas';
 $PMF_LANG['ad_system_info'] = 'Sistemos informacija';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger

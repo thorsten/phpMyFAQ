@@ -38,6 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $faqTableInfo = $faqConfig->getDb()->getTableStatus(Database::getTablePrefix());
 $user = CurrentUser::getCurrentUser($faqConfig);
+$userId = $user->getUserId();
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 
@@ -45,14 +46,15 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/dashboard.twig');
 
 $templateVars = [
-    'adminHeaderDashboard' => Translation::get('admin_mainmenu_home'),
     'isDebugMode' => DEBUG,
     'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
-    'adminDashboardMaintenance' => Translation::get('msgMaintenanceMode'),
-    'adminDashboardOnline' => Translation::get('msgOnlineMode'),
+    'isDevelopmentVersion' => System::isDevelopmentVersion(),
     'currentVersionApp' => System::getVersion(),
-    'adminDashboardInfoVisits' => Translation::get('ad_start_visits'),
-    'adminDashboardHeaderTopTen' => Translation::get('msgTopTen'),
+    'msgAdminWarningDevelopmentVersion' => sprintf(
+        Translation::get('msgAdminWarningDevelopmentVersion'),
+        System::getVersion(),
+        System::getGitHubIssuesUrl()
+    ),
     'adminDashboardInfoNumVisits' => $faqSession->getNumberOfSessions(),
     'adminDashboardInfoFaqs' => Translation::get('ad_start_articles'),
     'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
@@ -62,10 +64,11 @@ $templateVars = [
     'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
     'adminDashboardInfoUser' => Translation::get('msgNews'),
     'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
+    'adminDashboardHeaderVisits' => Translation::get('ad_stat_report_visits'),
     'hasUserTracking' => $faqConfig->get('main.enableUserTracking'),
     'adminDashboardHeaderInactiveFaqs' => Translation::get('ad_record_inactive'),
     'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
-    'hasPermissionEditConfig' => $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value),
+    'hasPermissionEditConfig' => $user->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value),
     'showVersion' => $faqConfig->get('main.enableAutoUpdateHint'),
 ];
 
@@ -77,21 +80,7 @@ if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) {
     ];
 }
 
-if (System::isDevelopmentVersion()) {
-    $templateVars = [
-        ...$templateVars,
-        'isDevelopmentVersion' => true
-    ];
-}
-
-if ($faqConfig->get('main.enableUserTracking')) {
-    $templateVars = [
-        ...$templateVars,
-        'adminDashboardHeaderVisits' => Translation::get('ad_stat_report_visits')
-    ];
-}
-
-if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
+if ($user->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
     $api = new Api($faqConfig);
 
     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -174,10 +163,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
     $templateVars = [
         ...$templateVars,
         'showVersion' => $faqConfig->get('main.enableAutoUpdateHint') || ($version === 'version'),
-        'adminDashboardHeaderOnlineInfo' => Translation::get('ad_online_info'),
-        'adminDashboardButtonGetLatestVersion' => Translation::get('ad_xmlrpc_button'),
-        'adminDashboardHeaderVerification' => Translation::get('ad_online_verification'),
-        'adminDashboardButtonVerification' => Translation::get('ad_verification_button')
     ];
 }
 

@@ -462,7 +462,7 @@ $PMF_LANG["ad_log_usde"] = "Dilëwyd y defnyddiwr canlynol: ";
 $PMF_LANG["ad_log_beed"] = "Golygu ffurflen ar gyfer y defnyddiwr canlynol: ";
 $PMF_LANG["ad_log_bede"] = "Dilëwyd y cofnod canlynol: ";
 
-$PMF_LANG["ad_start_visits"] = "Ymweliadau";
+$PMF_LANG["msgVisits"] = "Ymweliadau";
 $PMF_LANG["ad_start_articles"] = "Erthyglau";
 $PMF_LANG["ad_start_comments"] = "Sylwadau";
 
@@ -579,7 +579,7 @@ $PMF_LANG["lostpwd_text_1"] = "Diolch am ofyn am wybodaeth eich cyfrif.";
 $PMF_LANG["lostpwd_text_2"] = "Gosodwch gyfrinair personol newydd yn adran weinyddol eich Cwestiynau Cyffredin.";
 $PMF_LANG["lostpwd_mail_okay"] = "Anfonwyd yr e-bost.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Cael rhif fersiwn phpMyFAQ diweddaraf drwy wasanaeth gwe";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Cael rhif fersiwn phpMyFAQ diweddaraf drwy wasanaeth gwe";
 $PMF_LANG["ad_xmlrpc_latest"] = "Y fersiwn ddiweddaraf ar gael ar";
 
 // added v1.5.0 - 2005-07-31 by Thorsten

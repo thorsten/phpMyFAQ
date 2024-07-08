@@ -460,7 +460,7 @@ $PMF_LANG["ad_log_ussa"] = "Main&icirc;ta dal&icirc;bnieka inform&acirc;cija: ";
 $PMF_LANG["ad_log_usde"] = "Dal&icirc;bnieks dz&ccedil;sts: ";
 $PMF_LANG["ad_log_beed"] = "Ieraksta modific&ccedil;&eth;ana: ";
 $PMF_LANG["ad_log_bede"] = "Ieraksts dz&ccedil;sts: ";
-$PMF_LANG["ad_start_visits"] = "Apmekl&ccedil;jumi";
+$PMF_LANG["msgVisits"] = "Apmekl&ccedil;jumi";
 $PMF_LANG["ad_start_articles"] = "Ieraksti";
 $PMF_LANG["ad_start_comments"] = "Koment&acirc;ri";
 
@@ -570,7 +570,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten

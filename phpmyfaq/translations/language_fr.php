@@ -469,7 +469,7 @@ $PMF_LANG["ad_log_usde"] = "L'utilisateur suivant a été supprimé : ";
 $PMF_LANG["ad_log_beed"] = "Formulaire d'édition pour l'utilisateur suivant a été appelé : ";
 $PMF_LANG["ad_log_bede"] = "La FAQ suivante a été supprimée : ";
 
-$PMF_LANG["ad_start_visits"] = "Visites";
+$PMF_LANG["msgVisits"] = "Visites";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Commentaires";
 
@@ -577,7 +577,7 @@ $PMF_LANG["lostpwd_text_1"] = "Merci d'avoir demandé des informations sur votre
 $PMF_LANG["lostpwd_text_2"] = "Merci de changer votre mot de passe personnel dans la section d'administration de votre FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "L'e-mail a été envoyé.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Cliquez pour vérifier la version de votre installation phpMyFAQ";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Cliquez pour vérifier la version de votre installation phpMyFAQ";
 $PMF_LANG["ad_xmlrpc_latest"] = "Dernière version disponible sur";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -699,7 +699,7 @@ $PMF_LANG["newsCommentDate"] = "Ajoutée à : ";
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG["ad_record_expiration_window"] = "Définir un intervalle de temps pour cet enregistrement (optionnel)";
-$PMF_LANG["admin_mainmenu_home"] = "Tableau de bord";
+$PMF_LANG["adminHeaderDashboard"] = "Tableau de bord";
 $PMF_LANG["admin_mainmenu_users"] = "Utilisateurs";
 $PMF_LANG["admin_mainmenu_content"] = "Contenu";
 $PMF_LANG["admin_mainmenu_statistics"] = "Statistiques";
@@ -818,7 +818,7 @@ $LANG_CONF["records.defaultAllowComments"] = ["checkbox", "Autoriser les comment
 $PMF_LANG["msgAllCatArticles"] = "Enregistrements dans cette catégorie";
 $PMF_LANG["msgTagSearch"] = "Entrées taggées";
 $PMF_LANG["ad_pmf_info"] = "Informations phpMyFAQ";
-$PMF_LANG["ad_online_info"] = "Vérification en ligne de la version";
+$PMF_LANG["msgOnlineVersionCheck"] = "Vérification en ligne de la version";
 $PMF_LANG["ad_system_info"] = "Information système";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1048,8 +1048,8 @@ $PMF_LANG["msgTableOfContent"] = "Table des matières";
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Tout imprimer en PDF";
-$PMF_LANG["ad_online_verification"] = "Vérification en ligne";
-$PMF_LANG["ad_verification_button"] = "Cliquez pour vérifier votre installation phpMyFAQ";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Vérification en ligne";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "Cliquez pour vérifier votre installation phpMyFAQ";
 $PMF_LANG["ad_verification_notokay"] = "Votre version de phpMyFAQ a été changée localement :";
 $PMF_LANG["ad_verification_okay"] = "Votre version phpMyFAQ a été vérifiée avec succés";
 

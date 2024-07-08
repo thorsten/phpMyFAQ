@@ -377,7 +377,7 @@ $PMF_LANG['ad_log_ussa'] = 'تحديث بيانات المستخدم التال�
 $PMF_LANG['ad_log_usde'] = 'تم حذف المستخدم التالي: ';
 $PMF_LANG['ad_log_beed'] = 'تحرير نموذج المستخدم التالي: ';
 $PMF_LANG['ad_log_bede'] = 'تم حذف السؤال التالية: ';
-$PMF_LANG['ad_start_visits'] = 'زيارات';
+$PMF_LANG['msgVisits'] = 'زيارات';
 $PMF_LANG['ad_start_articles'] = 'مواضيع';
 $PMF_LANG['ad_start_comments'] = 'تعليقات';
 $PMF_LANG['ad_categ_paste'] = 'لصق';
@@ -467,7 +467,7 @@ $PMF_LANG['lostpwd_err_2'] = '!خطأ : مدخلات خاطئة ';
 $PMF_LANG['lostpwd_text_1'] = 'شكراً لطلبك معلومات حسابك';
 $PMF_LANG['lostpwd_text_2'] = 'من فضلك ضع كلمة سر جديدة في قسم الإشراف بالبرنامج';
 $PMF_LANG['lostpwd_mail_okay'] = 'تم إرسال البريد ';
-$PMF_LANG['ad_xmlrpc_button'] = 'احصل على رقم أحدث إصدار من البرنامج عن طريق الويب ';
+$PMF_LANG['msgButtonFetchLatestVersion'] = 'احصل على رقم أحدث إصدار من البرنامج عن طريق الويب ';
 $PMF_LANG['ad_xmlrpc_latest'] = 'أحدث إصدار متوفر على';
 $PMF_LANG['ad_categ_select'] = 'اختار لغة التصنيف';
 $PMF_LANG['msgSitemap'] = 'خريطة الموقع';
@@ -567,7 +567,7 @@ $PMF_LANG['newsArchive'] = ' أرشيف الأخبار';
 $PMF_LANG['newsWriteComment'] = 'التعليق على هذة المداخلة';
 $PMF_LANG['newsCommentDate'] = 'أضيفت إلي :';
 $PMF_LANG['ad_record_expiration_window'] = ' نافذة تسجيل وقت الإنتهاء (اختياري)';
-$PMF_LANG['admin_mainmenu_home'] = 'الرئيسية';
+$PMF_LANG['adminHeaderDashboard'] = 'الرئيسية';
 $PMF_LANG['admin_mainmenu_users'] = 'المستخدمين';
 $PMF_LANG['admin_mainmenu_content'] = 'المحتوى';
 $PMF_LANG['admin_mainmenu_statistics'] = 'إحصائيات';
@@ -807,7 +807,7 @@ $PMF_LANG['recordsControlCenter'] = 'اعداد المدخلات';
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
-$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 $PMF_LANG['msgRegisterUser'] = 'سجل هنا';
 $LANG_CONF['records.orderby'] = array('select', 'Record sorting (according to property)');

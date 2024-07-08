@@ -469,7 +469,7 @@ $PMF_LANG["ad_log_usde"] = "Deleted the following user: ";
 $PMF_LANG["ad_log_beed"] = "Edit form for the following user: ";
 $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 
-$PMF_LANG["ad_start_visits"] = "Visits";
+$PMF_LANG["msgVisits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Comments";
 
@@ -577,7 +577,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email has been sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Click to check version of your phpMyFAQ installation";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Click to check version of your phpMyFAQ installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -699,7 +699,7 @@ $PMF_LANG['newsCommentDate'] = 'Added at: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
+$PMF_LANG['adminHeaderDashboard'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Users';
 $PMF_LANG['admin_mainmenu_content'] = 'Content';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statistics';
@@ -818,7 +818,7 @@ $LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Allow comments for ne
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
-$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1048,8 +1048,8 @@ $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
-$PMF_LANG["ad_online_verification"] = "Online verification check";
-$PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installation";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Online verification check";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "Click to verify your phpMyFAQ installation";
 $PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes";
 $PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";
 
@@ -1478,5 +1478,6 @@ $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy po
 $LANG_CONF['seo.glossary.title'] = ['input', 'SERP title for glossary'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'SERP description for glossary'];
 $PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>src/Bootstrap.php</code> file.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is currently in development (%s). And therefore not yet ready for production. Please <a target="_blank" href="%s" class="alert-link">report all issues on GitHub</a>. Thank you very much!';
 
 return $PMF_LANG;

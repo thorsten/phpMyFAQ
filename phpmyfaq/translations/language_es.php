@@ -467,7 +467,7 @@ $PMF_LANG['ad_log_usde'] = 'Usuario eliminado: ';
 $PMF_LANG['ad_log_beed'] = 'Formulario Edición del artículo: ';
 $PMF_LANG['ad_log_bede'] = 'Eliminada la entrada: ';
 
-$PMF_LANG['ad_start_visits'] = 'Visitas';
+$PMF_LANG['msgVisits'] = 'Visitas';
 $PMF_LANG['ad_start_articles'] = 'FAQs';
 $PMF_LANG['ad_start_comments'] = 'Comentarios';
 
@@ -573,7 +573,7 @@ $PMF_LANG['lostpwd_text_1'] = 'Gracias por solicitar la información de su cuent
 $PMF_LANG['lostpwd_text_2'] = 'Por favor, elija una nueva contraseña en el área de administración de la FAQ.';
 $PMF_LANG['lostpwd_mail_okay'] = 'E-mail enviado.';
 
-$PMF_LANG['ad_xmlrpc_button'] = 'Obtener la versión actual de phpMyFAQ en línea';
+$PMF_LANG['msgButtonFetchLatestVersion'] = 'Obtener la versión actual de phpMyFAQ en línea';
 $PMF_LANG['ad_xmlrpc_latest'] = 'Versión actual en';
 
 // añadido v1.5.0 - 2005-07-31 por Thorsten
@@ -695,7 +695,7 @@ $PMF_LANG['newsCommentDate'] = 'Escrito en: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Fecha de caducidad de la entrada (opcional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Tablero de mandos';
+$PMF_LANG['adminHeaderDashboard'] = 'Tablero de mandos';
 $PMF_LANG['admin_mainmenu_users'] = 'Usuarios';
 $PMF_LANG['admin_mainmenu_content'] = 'Contenido';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Estadísticas';
@@ -814,7 +814,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "¿Se permiten co
 $PMF_LANG['msgAllCatArticles'] = 'FAQs en esta categoría';
 $PMF_LANG['msgTagSearch'] = 'FAQs con las mismas etiquetas';
 $PMF_LANG['ad_pmf_info'] = 'Información de phpMyFAQ';
-$PMF_LANG['ad_online_info'] = 'Comprobación de la versión online';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Comprobación de la versión online';
 $PMF_LANG['ad_system_info'] = 'Información del sistema';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1045,8 +1045,8 @@ $PMF_LANG['msgTableOfContent'] = 'Tabla de Contenidos';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG['msgExportAllFaqs'] = 'Guardar FAQ como PDF';
-$PMF_LANG['ad_online_verification'] = 'Verificación en línea.';
-$PMF_LANG['ad_verification_button'] = 'Verificar la instalación de phpMyFAQ en línea';
+$PMF_LANG['msgOnlineVerificationCheck'] = 'Verificación en línea.';
+$PMF_LANG['msgOnlineVerificationCheckButton'] = 'Verificar la instalación de phpMyFAQ en línea';
 $PMF_LANG['ad_verification_notokay'] = 'Esta instalación de phpMyFAQ tiene cambios locales';
 $PMF_LANG['ad_verification_okay'] = 'Esta instalación de phpMyFAQ ha sido verificada con éxito.';
 

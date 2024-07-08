@@ -458,7 +458,7 @@ $PMF_LANG["ad_log_usde"] = "Vymazať nasledovného užívateľa: ";
 $PMF_LANG["ad_log_beed"] = "Upraviť formulár pre nasledovného užívateľa: ";
 $PMF_LANG["ad_log_bede"] = "Vymazať nasledovnú položku: ";
 
-$PMF_LANG["ad_start_visits"] = "Návštevy";
+$PMF_LANG["msgVisits"] = "Návštevy";
 $PMF_LANG["ad_start_articles"] = "Články";
 $PMF_LANG["ad_start_comments"] = "Komentáre";
 
@@ -579,7 +579,7 @@ $PMF_LANG["lostpwd_text_1"] = "Ďakujeme za žiadosť o informáciu o Vašom ú�
 $PMF_LANG["lostpwd_text_2"] = "Prosím nastavte nové heslo pre Vašu FAQ v sekcii admin.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-mail bol odoslaný.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Obdržať najnovšiu phpMyFAQ verziu webovým servisom";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Obdržať najnovšiu phpMyFAQ verziu webovým servisom";
 $PMF_LANG["ad_xmlrpc_latest"] = "Najnovšia verzia dostupná na";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -703,7 +703,7 @@ $PMF_LANG['newsCommentDate'] = 'Pridané: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Okno pre zobrazenie doby vypršania záznamu (voliteľné)';
-$PMF_LANG['admin_mainmenu_home'] = 'Dashboard';
+$PMF_LANG['adminHeaderDashboard'] = 'Dashboard';
 $PMF_LANG['admin_mainmenu_users'] = 'Užívatelia';
 $PMF_LANG['admin_mainmenu_content'] = 'Obsah';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Štatistiky';
@@ -821,7 +821,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Povoliť koment�
 $PMF_LANG['msgAllCatArticles'] = 'Záznamy v tejto kategórii';
 $PMF_LANG['msgTagSearch'] = 'Označené položky';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informácie';
-$PMF_LANG['ad_online_info'] = 'Kontrola online verzie';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Kontrola online verzie';
 $PMF_LANG['ad_system_info'] = 'Systémové Informácie';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger

@@ -455,7 +455,7 @@ $PMF_LANG["ad_log_usde"] = "Şu kullanıcı silindi: ";
 $PMF_LANG["ad_log_beed"] = "Şu kullanıcı için düzenle: ";
 $PMF_LANG["ad_log_bede"] = "Şu kayıt silindi: ";
 
-$PMF_LANG["ad_start_visits"] = "Ziyaret";
+$PMF_LANG["msgVisits"] = "Ziyaret";
 $PMF_LANG["ad_start_articles"] = "İçerikler";
 $PMF_LANG["ad_start_comments"] = "Yorumlar";
 
@@ -564,7 +564,7 @@ $PMF_LANG["lostpwd_text_1"] = "Talebiniz alındı.";
 $PMF_LANG["lostpwd_text_2"] = "Lütfen yönetici panelinden yeni bir kişisel şifre belirleyiniz.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email gönderildi.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Sistem sürümünü kontrol etmek için tıklayın";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Sistem sürümünü kontrol etmek için tıklayın";
 $PMF_LANG["ad_xmlrpc_latest"] = "Yeni sürüm kullanılabilir durumda";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -686,7 +686,7 @@ $PMF_LANG['newsCommentDate'] = "Eklenme: ";
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = "Kayıt geçerlilik zamanı (isteğe bağlı)";
-$PMF_LANG['admin_mainmenu_home'] = "Anasayfa";
+$PMF_LANG['adminHeaderDashboard'] = "Anasayfa";
 $PMF_LANG['admin_mainmenu_users'] = "Kullanıcılar";
 $PMF_LANG['admin_mainmenu_content'] = "İçerik";
 $PMF_LANG['admin_mainmenu_statistics'] = "İstatistikler";
@@ -805,7 +805,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments f
 $PMF_LANG['msgAllCatArticles'] = "Bu kategorideki sorular";
 $PMF_LANG['msgTagSearch'] = "Etiketli gönderiler";
 $PMF_LANG['ad_pmf_info'] = "phpMyFAQ Bilgisi";
-$PMF_LANG['ad_online_info'] = "Online versiyon kontrolü";
+$PMF_LANG['msgOnlineVersionCheck'] = "Online versiyon kontrolü";
 $PMF_LANG['ad_system_info'] = "System Bilgisi";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1036,8 +1036,8 @@ $PMF_LANG['msgTableOfContent'] = "İçindekiler";
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Tümünü PDF olarak yazdır";
-$PMF_LANG["ad_online_verification"] = "Online doğrulama kontrolü";
-$PMF_LANG["ad_verification_button"] = "phpMyFAQ kurulumunuzu doğrulamak için tıklayın";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Online doğrulama kontrolü";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "phpMyFAQ kurulumunuzu doğrulamak için tıklayın";
 $PMF_LANG["ad_verification_notokay"] = "Sisteminizde değiştirilmiş dosyalar tespit edildi";
 $PMF_LANG["ad_verification_okay"] = "phpMyFAQ kurulumunuz başarıyla doğrulandı.";
 

@@ -70,6 +70,11 @@ class System
     final public const PHPMYFAQ_URL = 'https://www.phpmyfaq.de/';
 
     /**
+     * GitHub Issues URL
+     */
+    final public const GITHUB_ISSUES_URL = 'https://github.com/thorsten/phpMyFAQ/issues';
+
+    /**
      * Array of required PHP extensions.
      *
      * @var array<string>
@@ -100,20 +105,20 @@ class System
     private array $supportedDatabases = [
         'mysqli' => [
             self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 for MySQL'
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 for MySQL',
         ],
         'pgsql' => [
             self::VERSION_MINIMUM_PHP,
-            'PostgreSQL v10 or later'
+            'PostgreSQL v10 or later',
         ],
         'sqlite3' => [
             self::VERSION_MINIMUM_PHP,
-            'SQLite 3'
+            'SQLite 3',
         ],
         'sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
-            'MS SQL Server 2016 or later'
-        ]
+            'MS SQL Server 2016 or later',
+        ],
     ];
 
     /**
@@ -169,6 +174,11 @@ class System
     public static function getDocumentationUrl(): string
     {
         return sprintf('%sdocs/%s', self::PHPMYFAQ_URL, self::getMajorVersion());
+    }
+
+    public static function getGitHubIssuesUrl(): string
+    {
+        return self::GITHUB_ISSUES_URL;
     }
 
     /**

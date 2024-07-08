@@ -459,7 +459,7 @@ $PMF_LANG["ad_log_usde"] = "Odstrani naslednjega uporabnika: ";
 $PMF_LANG["ad_log_beed"] = "Obrazec za urejanje naslednjega uporabnika: ";
 $PMF_LANG["ad_log_bede"] = "Odstrani naslednji vnos: ";
 
-$PMF_LANG["ad_start_visits"] = "Obiskov";
+$PMF_LANG["msgVisits"] = "Obiskov";
 $PMF_LANG["ad_start_articles"] = "&Egrave;lankov";
 $PMF_LANG["ad_start_comments"] = "Komentarjev";
 
@@ -575,7 +575,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyFAQ version number by web service";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Get latest phpMyFAQ version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available";
 
 // added v1.5.0 - 2005-07-31 by Thorsten

@@ -459,7 +459,7 @@ $PMF_LANG["ad_log_usde"] = "다음 사용자가 삭제됨: ";
 $PMF_LANG["ad_log_beed"] = "다음 사용자의 폼을 변경: ";
 $PMF_LANG["ad_log_bede"] = "다음 글이 삭제됨: ";
 
-$PMF_LANG["ad_start_visits"] = "방문";
+$PMF_LANG["msgVisits"] = "방문";
 $PMF_LANG["ad_start_articles"] = "글(FAQ)";
 $PMF_LANG["ad_start_comments"] = "코멘트";
 
@@ -575,7 +575,7 @@ $PMF_LANG["lostpwd_text_1"] = "사용자 정보를 요청하셨습니다.";
 $PMF_LANG["lostpwd_text_2"] = "관리자 페이지에서 새로운 비밀번호를 설정하시기 바랍니다.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail을 보냈습니다.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "최신의 phpMyFAQ 버전을 확인하세요. ";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "최신의 phpMyFAQ 버전을 확인하세요. ";
 $PMF_LANG["ad_xmlrpc_latest"] = "최신버전을 다음 사이트에서 이용하실 수 있습니다.";
 
 // added v1.5.0 - 2005-07-31 by Thorsten

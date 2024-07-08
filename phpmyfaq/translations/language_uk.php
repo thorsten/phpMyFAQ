@@ -458,7 +458,7 @@ $PMF_LANG["ad_log_usde"] = "Видалений користувач: ";
 $PMF_LANG["ad_log_beed"] = "Форма - Зміна профайла користувача: ";
 $PMF_LANG["ad_log_bede"] = "Видалений запис: ";
 
-$PMF_LANG["ad_start_visits"] = "Відвідин";
+$PMF_LANG["msgVisits"] = "Відвідин";
 $PMF_LANG["ad_start_articles"] = "Записів";
 $PMF_LANG["ad_start_comments"] = "Коментарів";
 
@@ -574,7 +574,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your Mac F.A.Q..";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Get latest phpMyMac F.A.Q. version number by web service";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Get latest phpMyMac F.A.Q. version number by web service";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available";
 
 
@@ -679,7 +679,7 @@ $PMF_LANG["msg_tags"] = "Теги";
 $PMF_LANG["msgAllCatArticles"] = "Записів в цій категорії";
 $PMF_LANG['msgTagSearch'] = 'Записей по тэгам';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
-$PMF_LANG['ad_online_info'] = 'Online version check';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Online version check';
 $PMF_LANG["ad_system_info"] = "Системна інформація";
 
 // added v2.0.0 - 2006-09-02 by Thomas

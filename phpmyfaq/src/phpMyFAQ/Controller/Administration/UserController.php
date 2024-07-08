@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;

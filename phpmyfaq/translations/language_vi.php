@@ -456,7 +456,7 @@ $PMF_LANG["ad_log_ussa"] = "Những thông tin của thành viên sau đã đư�
 $PMF_LANG["ad_log_usde"] = "Thành viên sau đã bị xóa: ";
 $PMF_LANG["ad_log_beed"] = "Bảng chỉnh sửa đã được thay đổi: ";
 $PMF_LANG["ad_log_bede"] = "Bài sau đã bị xóa: ";
-$PMF_LANG["ad_start_visits"] = "Lượt thăm";
+$PMF_LANG["msgVisits"] = "Lượt thăm";
 $PMF_LANG["ad_start_articles"] = "Bài";
 $PMF_LANG["ad_start_comments"] = "Bình luận";
 
@@ -573,7 +573,7 @@ $PMF_LANG["lostpwd_err_2"] = "Lỗi: Giá trị không hợp lệ!";
 $PMF_LANG["lostpwd_text_1"] = "Cảm ơn bạn đã yêu cầu thông tin tài khoản.";
 $PMF_LANG["lostpwd_text_2"] = "Vui lòng thay đổi mật khẩu trong phần quản trị tài khoản của bạn.";
 $PMF_LANG["lostpwd_mail_okay"] = "Email đã được gửi.";
-$PMF_LANG["ad_xmlrpc_button"] = "Truy cập phiên bản mới nhất của phpMyFAQ";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Truy cập phiên bản mới nhất của phpMyFAQ";
 $PMF_LANG['ad_xmlrpc_latest'] = 'Phiên bản mới nhất có tại';
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -695,7 +695,7 @@ $PMF_LANG['newsCommentDate'] = 'Tạo vào ngày: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Thời gian mở một cửa sổ nội dung (tùy chọn)';
-$PMF_LANG['admin_mainmenu_home'] = 'Trang chủ';
+$PMF_LANG['adminHeaderDashboard'] = 'Trang chủ';
 $PMF_LANG['admin_mainmenu_users'] = 'Thành viên';
 $PMF_LANG['admin_mainmenu_content'] = 'Nội dung';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Thống kê';
@@ -823,7 +823,7 @@ $LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Cho phép bình 
 $PMF_LANG['msgAllCatArticles'] = 'Nội dung trong mục này';
 $PMF_LANG['msgTagSearch'] = 'Những nội dung được tag';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
-$PMF_LANG['ad_online_info'] = 'Kiểm tra phiên bản trực tuyến';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Kiểm tra phiên bản trực tuyến';
 $PMF_LANG['ad_system_info'] = 'Thông tin Hệ thống';
 
 return $PMF_LANG;

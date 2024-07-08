@@ -467,7 +467,7 @@ $PMF_LANG["ad_log_usde"] = "Hurrengo erabiltzaile ezabatua: ";
 $PMF_LANG["ad_log_beed"] = "Hurrengo erabiltzailearen edizioa";
 $PMF_LANG["ad_log_bede"] = "Hurrengo sarrera ezabatua: ";
 
-$PMF_LANG["ad_start_visits"] = "Bisitak";
+$PMF_LANG["msgVisits"] = "Bisitak";
 $PMF_LANG["ad_start_articles"] = "Artikuluak";
 $PMF_LANG["ad_start_comments"] = "iruzkin";
 
@@ -584,7 +584,7 @@ $PMF_LANG["lostpwd_text_1"] = "Eskerrik asko zure sarrera informazioa eskatzeaga
 $PMF_LANG["lostpwd_text_2"] = "Mesedez, zure FAQaren administrazio sailean pasahitz berri bat ezarri.";
 $PMF_LANG["lostpwd_mail_okay"] = "Posta bidali da.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "phpMyFAQ-en azken bertsioaren zenbakia lortu web-sevices erabiliz.";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "phpMyFAQ-en azken bertsioaren zenbakia lortu web-sevices erabiliz.";
 $PMF_LANG["ad_xmlrpc_latest"] = "Azken bertsioa ";
 
 // added v1.5.0 - 2005-07-31 by Thorsten

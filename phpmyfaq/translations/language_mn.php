@@ -453,7 +453,7 @@ $PMF_LANG["ad_log_usde"] = "Дараах хэрэглэгч устгагдсан
 $PMF_LANG["ad_log_beed"] = "Дараах хэрэглэгчийг засах форм: ";
 $PMF_LANG["ad_log_bede"] = "Дараа хөгөгдөл устгагдсан: ";
 
-$PMF_LANG["ad_start_visits"] = "Зочлолт";
+$PMF_LANG["msgVisits"] = "Зочлолт";
 $PMF_LANG["ad_start_articles"] = "Нийтлэлүүд";
 $PMF_LANG["ad_start_comments"] = "Сэтгэгдлүүд";
 
@@ -561,7 +561,7 @@ $PMF_LANG["lostpwd_text_1"] = "Бүртгэлийн мэдээллийн хүс�
 $PMF_LANG["lostpwd_text_2"] = "FAQ -н удирдлагын хэсэгт шинэ нууц үг тохируулна уу.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail илгээгдсэн.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Энд дарж PhpMyFAQ суулгацын хувилбарыг шалгана уу.";
+$PMF_LANG["msgButtonFetchLatestVersion"] = "Энд дарж PhpMyFAQ суулгацын хувилбарыг шалгана уу.";
 $PMF_LANG["ad_xmlrpc_latest"] = "Сүүлийн хувилбар";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -690,7 +690,7 @@ $PMF_LANG['newsCommentDate'] = 'Нэмэгдсэн: ';
 
 // added v2.0.0 - 2006-07-29 by Matteo & Thorsten
 $PMF_LANG['ad_record_expiration_window'] = 'Record expiration time window (optional)';
-$PMF_LANG['admin_mainmenu_home'] = 'Хянах самбар';
+$PMF_LANG['adminHeaderDashboard'] = 'Хянах самбар';
 $PMF_LANG['admin_mainmenu_users'] = 'Хэрэглэгчид';
 $PMF_LANG['admin_mainmenu_content'] = 'Агуулга';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Статистик';
@@ -817,7 +817,7 @@ $PMF_LANG['msgAllCatArticles'] = 'Энэ ангилал дахь бичлэгү�
 $PMF_LANG['msgDescriptionInstantResponse'] = 'Хариултыг бичээд хайх ...';
 $PMF_LANG['msgTagSearch'] = 'Таагласан өгөгдлүүд';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Мэдээлэл';
-$PMF_LANG['ad_online_info'] = 'Онлайн хувилбар шалгах';
+$PMF_LANG['msgOnlineVersionCheck'] = 'Онлайн хувилбар шалгах';
 $PMF_LANG['ad_system_info'] = 'Системийн мэдээлэл';
 
 // added 2.5.0-alpha - 2008-01-25 by Elger
@@ -1061,8 +1061,8 @@ $PMF_LANG['msgTableOfContent'] = 'Агуулга';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Бүх PDf хэвлэх";
-$PMF_LANG["ad_online_verification"] = "Онлайн баталгаажуулалт сонгох";
-$PMF_LANG["ad_verification_button"] = "Даралт хийж phpMyFAQ суулгацыг баталгаажуулах";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Онлайн баталгаажуулалт сонгох";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "Даралт хийж phpMyFAQ суулгацыг баталгаажуулах";
 $PMF_LANG["ad_verification_notokay"] = "Таны phpMyFAQ хувилбарын дотоод өөрчлөлт:";
 $PMF_LANG["ad_verification_okay"] = "Таны phpMyFAQ хувилбар баталгаажлаа.";
 
