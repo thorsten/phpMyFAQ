@@ -42,6 +42,7 @@ use phpMyFAQ\Controller\Frontend\FaqController as FaqFrontendController;
 use phpMyFAQ\Controller\Frontend\QuestionController as QuestionFrontendController;
 use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
 use phpMyFAQ\Controller\Frontend\ShareController;
+use phpMyFAQ\Controller\Frontend\UnauthorizedUserController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
 use phpMyFAQ\System;
@@ -248,7 +249,7 @@ $routesConfig = [
     ],
     'api.private.user.password' => [
         'path' => 'user/password/update',
-        'controller' => [UserController::class, 'updatePassword'],
+        'controller' => [UnauthorizedUserController::class, 'updatePassword'],
         'methods' => 'PUT'
     ],
     'api.private.user.request-removal' => [

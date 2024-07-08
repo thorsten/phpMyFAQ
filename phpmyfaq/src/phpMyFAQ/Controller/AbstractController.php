@@ -23,14 +23,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Twig\Extension\DebugExtension;
 
 #[OA\Info(
     version: '3.0',
@@ -88,8 +86,6 @@ abstract class AbstractController
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
     {
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-        $twigWrapper->addExtension(new DebugExtension());
-        $twigWrapper->addExtension(new TranslateTwigExtension());
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         return $template->render($templateVars);

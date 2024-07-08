@@ -459,17 +459,10 @@ if ($action !== 'main') {
 // Check if the FAQ should be secured
 //
 if ($faqConfig->get('security.enableLoginOnly')) {
-    if ($user->isLoggedIn()) {
-        $indexSet = 'index.html';
-    } else {
-        $indexSet = match ($action) {
-            'register', 'thankyou' => 'new-user.page.html',
-            'password' => 'password.page.html',
-            default => 'login.page.html',
-        };
+    if (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')) {
+        $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
+        $redirect->send();
     }
-} else {
-    $indexSet = 'index.html';
 }
 
 $categoryRelation = new Relation($faqConfig, $category);
@@ -486,6 +479,7 @@ $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error
 //
 $templateVars = [
     'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
+    'isCompletelySecured' => $faqConfig->get('security.enableLoginOnly'),
     'isDebugEnabled' => DEBUG,
     'tplSetName' => 'default', // @todo change this value
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),

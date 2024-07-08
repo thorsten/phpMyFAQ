@@ -27,6 +27,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\Utils;
+use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -117,69 +118,6 @@ class UserController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('api/user/password/update', methods: ['PUT'])]
-    public function updatePassword(Request $request): JsonResponse
-    {
-        $this->userIsAuthenticated();
-
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        $data = json_decode($request->getContent());
-
-        $username = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
-        if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
-            $loginExist = $user->getUserByLogin($username);
-
-            if ($loginExist && ($email == $user->getUserData('email'))) {
-                try {
-                    $newPassword = $user->createPassword();
-                } catch (\Exception $exception) {
-                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-                }
-
-                try {
-                    $user->changePassword($newPassword);
-                } catch (\Exception $exception) {
-                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-                }
-
-                $text = Translation::get('lostpwd_text_1') .
-                    sprintf('<br><br>Username: %s', $username) .
-                    sprintf('<br>New Password: %s<br><br>', $newPassword) .
-                    Translation::get('lostpwd_text_2');
-
-                $mailer = new Mail($this->configuration);
-                try {
-                    $mailer->addTo($email);
-                } catch (Exception $exception) {
-                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-                }
-
-                $mailer->subject = Utils::resolveMarkers(
-                    '[%sitename%] Username / password request',
-                    $this->configuration
-                );
-                $mailer->message = $text;
-                try {
-                    $mailer->send();
-                } catch (Exception | TransportExceptionInterface $exception) {
-                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
-                }
-
-                unset($mailer);
-                // Trust that the email has been sent
-                return $this->json(['success' => Translation::get('lostpwd_mail_okay')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('lostpwd_err_1')], Response::HTTP_CONFLICT);
-            }
-        } else {
-            return $this->json(['error' => Translation::get('lostpwd_err_2')], Response::HTTP_CONFLICT);
-        }
-    }
 
     /**
      * @throws Exception
@@ -251,7 +189,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|TwoFactorAuthException
      */
     #[Route('api/user/remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
