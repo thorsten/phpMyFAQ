@@ -449,7 +449,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "فعال سازی مذ
 $LANG_CONF['main.titleFAQ'] = array("input", "عنوان پرسش‌های متداول");
 $LANG_CONF['main.currentVersion'] = array("print", "نسخه پرسش‌های متداول");
 $LANG_CONF['main.metaDescription'] = array("input", "شرح صفحه");
-$LANG_CONF['main.metaKeywords'] = array("input", "لغات کلیدی برای موتورهای جستجو");
 $LANG_CONF['main.metaPublisher'] = array("input", "نام ناشر");
 $LANG_CONF['main.administrationMail'] = array("input", "آدرس ایمیل مدیر");
 $LANG_CONF['main.contactInformation'] = array("area", "اطلاعات تماس");

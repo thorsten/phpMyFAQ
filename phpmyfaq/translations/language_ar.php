@@ -441,7 +441,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "تفعيل خاصية 
 $LANG_CONF['main.titleFAQ'] = array("input", "عنوان البرنامج ");
 $LANG_CONF['main.currentVersion'] = array("print", "نسخة البرنامج");
 $LANG_CONF['main.metaDescription'] = array("input", "وصف الصفحة");
-$LANG_CONF['main.metaKeywords'] = array("input", "كلمات البحث لمحركات البحث");
 $LANG_CONF['main.metaPublisher'] = array("input", "إسم الناشر");
 $LANG_CONF['main.administrationMail'] = array("input", "البريد الإلكتروني للمشرف");
 $LANG_CONF['main.contactInformation'] = array("area", "معلومات الإتصال");

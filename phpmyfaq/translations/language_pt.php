@@ -434,7 +434,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Ativar a negociação 
 $LANG_CONF['main.titleFAQ'] = array('input', 'Título das FAQ');
 $LANG_CONF['main.currentVersion'] = array('print', 'Versão do servidor de FAQ');
 $LANG_CONF['main.metaDescription'] = array('input', 'Descrição da página');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Palavras-Chave para Robôs de Indexação <small>(<em>Spiders </em>)</small>');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Nome do Editor');
 $LANG_CONF['main.administrationMail'] = array('input', '<em>E-mail</em> do Administrador');
 $LANG_CONF['main.contactInformation'] = array('area', 'Informação de contacto');

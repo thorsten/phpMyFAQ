@@ -450,7 +450,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Abilita la <em>automat
 $LANG_CONF['main.titleFAQ'] = array("input", "Titolo del sistema");
 $LANG_CONF['main.currentVersion'] = array("print", "Versione di phpMyFAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "Descrizione della pagina");
-$LANG_CONF['main.metaKeywords'] = array("input", "Keywords per gli Spiders");
 $LANG_CONF['main.metaPublisher'] = array("input", "Nome dell'Editore");
 $LANG_CONF['main.administrationMail'] = array("input", "Indirizzo email dell'Amministratore");
 $LANG_CONF['main.contactInformation'] = array("area", "Testo per la pagina dei <em>Contatti</em>");

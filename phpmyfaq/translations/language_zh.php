@@ -701,7 +701,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "自动选择系统语�
 $LANG_CONF['main.titleFAQ'] = array("input", "系统名称");
 $LANG_CONF['main.currentVersion'] = array("print", "程序版本");
 $LANG_CONF['main.metaDescription'] = array("input", "页面描述");
-$LANG_CONF['main.metaKeywords'] = array("input", "用户Meta（网页自动搜索程序）的关键词");
 $LANG_CONF['main.metaPublisher'] = array("input", "管理员姓名");
 $LANG_CONF['main.administrationMail'] = array("input", "管理员Email");
 $LANG_CONF['main.contactInformation'] = array("area", "联系我们");

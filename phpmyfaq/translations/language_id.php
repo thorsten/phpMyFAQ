@@ -546,7 +546,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Aktifkan negosiasi kon
 $LANG_CONF['main.titleFAQ'] = array("input", "Judul Materi");
 $LANG_CONF['main.currentVersion'] = array("print", "Revisi Materi");
 $LANG_CONF["main.metaDescription"] = array("input", "Keterangan Halaman");
-$LANG_CONF["main.metaKeywords"] = array("input", "Kata Kunci untuk Mesin Pencari");
 $LANG_CONF["main.metaPublisher"] = array("input", "Nama Penerbit");
 $LANG_CONF['main.administrationMail'] = array("input", "Alamat Email Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "Informasi Kontak");

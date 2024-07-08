@@ -448,7 +448,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Aktiver automatic cont
 $LANG_CONF['main.titleFAQ'] = array("input", "FAQ-titel");
 $LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ-version");
 $LANG_CONF['main.metaDescription'] = array("input", "Beskrivelse af siden");
-$LANG_CONF['main.metaKeywords'] = array("input", "Nøgleord til Spiders");
 $LANG_CONF['main.metaPublisher'] = array("input", "Navn på udgiver");
 $LANG_CONF['main.administrationMail'] = array("input", "E-mail-adresse til administrator");
 $LANG_CONF['main.contactInformation'] = array("area", "Kontaktinformation");

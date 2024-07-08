@@ -446,7 +446,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Aktifkan perundingan k
 $LANG_CONF['main.titleFAQ'] = array("input", "Tajuk Laman FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "Versi FAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "Keterangan bagi laman");
-$LANG_CONF['main.metaKeywords'] = array("input", "Katakunci untuk 'Spiders'");
 $LANG_CONF['main.metaPublisher'] = array("input", "Nama Penerbit");
 $LANG_CONF['main.administrationMail'] = array("input", "Alamat e-mel Pentadbir");
 $LANG_CONF['main.contactInformation'] = array("area", "Maklumat 'contact'");

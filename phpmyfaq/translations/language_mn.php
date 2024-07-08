@@ -528,7 +528,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Хэл таних ав
 $LANG_CONF['main.titleFAQ'] = array("input", "Таны FAQ-ы нэр");
 $LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ Хувилбар");
 $LANG_CONF["main.metaDescription"] = array("input", "Тодорхойлолт");
-$LANG_CONF["main.metaKeywords"] = array("input", "Спайдерт зориулсан түхлүүр үгс");
 $LANG_CONF["main.metaPublisher"] = array("input", "Хэвлэн нийтлэгчийн нэр");
 $LANG_CONF['main.administrationMail'] = array("input", "Админы e-mail хаяг");
 $LANG_CONF["main.contactInformation"] = array("area", "Холбоо барих мэдээлэл");

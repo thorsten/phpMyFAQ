@@ -51,6 +51,8 @@ $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
+    'title' => sprintf('%s - %s', Translation::get('msgSitemap'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get('msgSitemapMetaDesc'), $faqConfig->getTitle()),
     'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
     'letters' => $siteMap->getAllFirstLetters(),
     'faqs' => $siteMap->getFaqsFromLetter($currLetter),

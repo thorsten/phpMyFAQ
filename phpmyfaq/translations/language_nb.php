@@ -702,7 +702,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Aktiver automatisk det
 $LANG_CONF['main.titleFAQ'] = array('input', 'Tittel for OSS/FAQ');
 $LANG_CONF['main.currentVersion'] = array('print', 'FAQ versjon');
 $LANG_CONF['main.metaDescription'] = array('input', 'Beskrivelse');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Nøkler for søkemaskiner');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Utgivernavn');
 $LANG_CONF['main.administrationMail'] = array('input', 'Administrators e-postadresse');
 $LANG_CONF['main.contactInformation'] = array('area', 'Kontaktinformasjon');

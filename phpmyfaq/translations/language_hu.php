@@ -446,7 +446,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Enable automatic conte
 $LANG_CONF['main.titleFAQ'] = array('input', 'Az oldal címe');
 $LANG_CONF['main.currentVersion'] = array('print', 'FAQ Version');
 $LANG_CONF['main.metaDescription'] = array('input', 'Oldal leírása');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Kulcsszavak a botoknak');
 $LANG_CONF['main.metaPublisher'] = array('input', 'A közzétevő neve');
 $LANG_CONF['main.administrationMail'] = array('input', 'Admin e-mail címe');
 $LANG_CONF['main.contactInformation'] = array('area', 'Kapcsolat');

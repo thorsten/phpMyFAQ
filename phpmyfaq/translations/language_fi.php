@@ -449,7 +449,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Salli automaattinen si
 $LANG_CONF['main.titleFAQ'] = array('input', 'Kysymyksen otsikko');
 $LANG_CONF['main.currentVersion'] = array('print', 'Kysymyksen versio');
 $LANG_CONF['main.metaDescription'] = array('input', 'Kuvaus');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Avainsanat hakukoneille');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Julkaisijan nimi');
 $LANG_CONF['main.administrationMail'] = array('input', 'Ylläpitäjän sähköpostiosoite');
 $LANG_CONF['main.contactInformation'] = array('area', 'Yhteystiedot');

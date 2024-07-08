@@ -546,7 +546,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Povoliť automatický 
 $LANG_CONF['main.titleFAQ'] = array("input", "Názov FAQ");
 $LANG_CONF['main.currentVersion'] = array("tlačiť", "Verzia FAQ");
 $LANG_CONF["main.metaDescription"] = array("input", "Popis stránky");
-$LANG_CONF["main.metaKeywords"] = array("input", "Kľúčové slová pre Spiders");
 $LANG_CONF["main.metaPublisher"] = array("input", "Meno vydavateľa");
 $LANG_CONF['main.administrationMail'] = array("input", "E-mailová adresa administrátora");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontaktné informácie");

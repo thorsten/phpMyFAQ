@@ -102,7 +102,6 @@ class ConfigurationTabController extends AbstractController
                 'main.customPdfHeader',
                 'main.customPdfFooter',
                 'main.titleFAQ',
-                'main.metaKeywords'
             ];
 
             // Special checks

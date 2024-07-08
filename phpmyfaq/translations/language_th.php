@@ -447,7 +447,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "เปิดระบ�
 $LANG_CONF['main.titleFAQ'] = array("input", "ชื่อของเว็บ FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "เวอร์ชั่น FAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "รายละเอียดของเว็บ FAQ");
-$LANG_CONF['main.metaKeywords'] = array("input", "คำค้น สำหรับ เว็บเครื่องมือค้นหา");
 $LANG_CONF['main.metaPublisher'] = array("input", "ขื่อผู้เขียน");
 $LANG_CONF['main.administrationMail'] = array("input", "อีเมล์ของผู้ดูแลระบบ");
 $LANG_CONF['main.contactInformation'] = array("area", "รายละเอียดติดต่อ");

@@ -446,7 +446,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Detectare automata set
 $LANG_CONF['main.titleFAQ'] = array("input", "Titlul paginii FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "Versiunea FAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "Descrierea paginii");
-$LANG_CONF['main.metaKeywords'] = array("input", "Cuvinte cheie pentru motoare de cautare");
 $LANG_CONF['main.metaPublisher'] = array("input", "Numele autorului");
 $LANG_CONF['main.administrationMail'] = array("input", "Adresa de email a administratorului");
 $LANG_CONF['main.contactInformation'] = array("area", "Informatii de contact");

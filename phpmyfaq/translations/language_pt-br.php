@@ -712,7 +712,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Habilitar detecção a
 $LANG_CONF['main.titleFAQ'] = array("input", "Título da FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "Versão da FAQ");
 $LANG_CONF['main.metaDescription'] = array('input', 'Descrição da página');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Palavras-chave para Spiders');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Nome do Editor');
 $LANG_CONF['main.administrationMail'] = array('input', 'E-mail do Administrador');
 $LANG_CONF['main.contactInformation'] = array('area', 'Contato');

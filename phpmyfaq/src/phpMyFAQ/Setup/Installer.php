@@ -301,7 +301,6 @@ class Installer extends Setup
         'main.enableAdminLog' => 'true',
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
-        'main.metaKeywords' => '',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText' => '',
         'main.titleFAQ' => 'phpMyFAQ Codename Pallas',
@@ -384,14 +383,12 @@ class Installer extends Setup
 
         'seo.title' => 'phpMyFAQ Codename Pallas',
         'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
+        'seo.enableXMLSitemap' => 'true',
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
         'seo.metaTagsCategories' => 'index, follow',
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
-        'seo.enableXMLSitemap' => 'true',
-        'seo.glossary.title' => '',
-        'seo.glossary.description' => '',
 
         'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',

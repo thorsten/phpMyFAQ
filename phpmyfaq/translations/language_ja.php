@@ -447,7 +447,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "言語の自動認識�
 $LANG_CONF['main.titleFAQ'] = array("input", "FAQ の題名");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ バージョン");
 $LANG_CONF['main.metaDescription'] = array('input', 'ページの説明');
-$LANG_CONF['main.metaKeywords'] = array('input', '検索ロボット用キーワード');
 $LANG_CONF['main.metaPublisher'] = array('input', '管理者名');
 $LANG_CONF['main.administrationMail'] = array('input', '管理者の電子メールアドレス');
 $LANG_CONF['main.contactInformation'] = array('area', '問い合わせ情報');

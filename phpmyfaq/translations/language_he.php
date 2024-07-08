@@ -444,7 +444,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "אפשר העברת נ
 $LANG_CONF['main.titleFAQ'] = array("input", "כותרת הערך");
 $LANG_CONF['main.currentVersion'] = array("print", "גירסת הערך");
 $LANG_CONF['main.metaDescription'] = array("input", "תיאור האתר");
-$LANG_CONF['main.metaKeywords'] = array("input", "מילות מפתח למנועי חיפוש");
 $LANG_CONF['main.metaPublisher'] = array("input", "שם היוצר");
 $LANG_CONF['main.administrationMail'] = array("input", "כתובת הדואל של עורך האתר");
 $LANG_CONF['main.contactInformation'] = array("area", "מידע ליצירת קשר");

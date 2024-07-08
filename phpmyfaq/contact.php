@@ -49,7 +49,7 @@ $twigTemplate = $twig->loadTemplate('./contact.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => Translation::get('msgContact'),
+    'title' => sprintf('%s - %s', Translation::get('msgContact'), $faqConfig->getTitle()),
     'pageHeader' => Translation::get('msgContact'),
     'msgContactOwnText' => $contactText,
     'msgContactEMail' => Translation::get('msgContactEMail'),

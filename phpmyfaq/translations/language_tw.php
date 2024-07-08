@@ -529,7 +529,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "啟用自動語言選�
 $LANG_CONF['main.titleFAQ'] = array("input", "您的 FAQ 標題抬頭 Title of your FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ 版本 phpMyFAQ Version");
 $LANG_CONF["main.metaDescription"] = array("input", "描述 Description");
-$LANG_CONF["main.metaKeywords"] = array("input", "給搜尋引擎蜘蛛機器人的關鍵字 Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array("input", "發佈者姓名 Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "管理員的 Email 地址 <br>Email address of the Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "聯絡資訊 Contact information");

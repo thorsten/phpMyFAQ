@@ -98,7 +98,7 @@ $twigTemplate = $twig->loadTemplate('./add.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'title' => sprintf('%s - %s', Translation::get('msgNewContentHeader'), $faqConfig->getTitle()),
     'msgNewContentHeader' => Translation::get('msgNewContentHeader'),
     'msgNewContentAddon' => Translation::get('msgNewContentAddon'),
     'lang' => $Language->getLanguage(),

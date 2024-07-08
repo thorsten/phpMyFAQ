@@ -542,7 +542,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Kích hoạt tự đ�
 $LANG_CONF['main.titleFAQ'] = array("input", "Tiêu đề của phần Câu hỏi thường gặp");
 $LANG_CONF['main.currentVersion'] = array("print", "Câu hỏi thường gặp Phiên bản ");
 $LANG_CONF["main.metaDescription"] = array("input", "Mô tả trang");
-$LANG_CONF["main.metaKeywords"] = array("input", "Từ khóa cho công cụ tìm kiếm");
 $LANG_CONF["main.metaPublisher"] = array("input", "Tên của Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "Địa chỉ email của Quản trị viên");
 $LANG_CONF["main.contactInformation"] = array("area", "Thông tin liên lạc");

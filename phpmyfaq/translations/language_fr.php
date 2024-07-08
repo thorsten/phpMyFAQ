@@ -543,7 +543,6 @@ $LANG_CONF["main.languageDetection"] = ["checkbox", "Activer la détection autom
 $LANG_CONF["main.titleFAQ"] = ["input", "Titre de la FAQ"];
 $LANG_CONF["main.currentVersion"] = ["print", "Version de phpMyFAQ"];
 $LANG_CONF["main.metaDescription"] = ["input", "Description"];
-$LANG_CONF["main.metaKeywords"] = ["input", "Mots-clés pour les moteurs de recherche"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Nom du publicateur"];
 $LANG_CONF["main.administrationMail"] = ["input", "Adresse Email de l'administrateur"];
 $LANG_CONF["main.contactInformation"] = ["area", "Informations de contact"];

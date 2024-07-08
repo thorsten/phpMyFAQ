@@ -552,7 +552,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "विषय का �
 $LANG_CONF['main.titleFAQ'] = array("input", "FAQ का नाम");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ का संस्करण");
 $LANG_CONF["main.metaDescription"] = array("input", "पृष्ठ का वर्णन");
-$LANG_CONF["main.metaKeywords"] = array("input", "वेब क्रॉलर के लिए कुंजी शब्द");
 $LANG_CONF["main.metaPublisher"] = array("input", "प्रकाशक का नाम");
 $LANG_CONF['main.administrationMail'] = array("input", "प्रबंधक का ईमेल पता");
 $LANG_CONF["main.contactInformation"] = array("area", "संपर्क करने की जानकारी");

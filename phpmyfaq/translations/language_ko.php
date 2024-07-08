@@ -546,7 +546,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "언어 자동 인식")
 $LANG_CONF['main.titleFAQ'] = array("input", "홈페이지 타이틀");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ 버전");
 $LANG_CONF["main.metaDescription"] = array("input", "페이지 설명");
-$LANG_CONF["main.metaKeywords"] = array("input", "검색 로봇을 위한 키워드 설정");
 $LANG_CONF["main.metaPublisher"] = array("input", "관리자 이름");
 $LANG_CONF['main.administrationMail'] = array("input", "관리자 메일주소");
 $LANG_CONF["main.contactInformation"] = array("area", "문의 정보");

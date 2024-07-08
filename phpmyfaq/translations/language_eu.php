@@ -555,7 +555,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Edukien kudeaketa auto
 $LANG_CONF['main.titleFAQ'] = array("input", "FAQaren izenburua");
 $LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ bertsioa");
 $LANG_CONF["main.metaDescription"] = array("input", "Orriaren deskribapena");
-$LANG_CONF["main.metaKeywords"] = array("input", "Bilatzaileentzat (Goolge, Yahoo...) hitz klabeak");
 $LANG_CONF["main.metaPublisher"] = array("input", "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array("input", "Administratzailearen posta elektronikoa");
 $LANG_CONF["main.contactInformation"] = array("area", "Harremanetarako informazioa");

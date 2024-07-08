@@ -699,7 +699,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Activeer automatische 
 $LANG_CONF['main.titleFAQ'] = array('input', 'Titel van FAQ');
 $LANG_CONF['main.currentVersion'] = array('print', 'FAQ Versie');
 $LANG_CONF['main.metaDescription'] = array('input', 'Beschrijving van de pagina');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Sleutelwoorden voor Zoekmachines');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Naam van de uitgever');
 $LANG_CONF['main.administrationMail'] = array('input', 'Emailadres van de beheerder');
 $LANG_CONF['main.contactInformation'] = array('area', 'Contact informatie');

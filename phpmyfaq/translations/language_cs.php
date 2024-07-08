@@ -448,7 +448,6 @@ $LANG_CONF['main.languageDetection'] = array('checkbox', 'Povolit automatický p
 $LANG_CONF['main.titleFAQ'] = array('input', 'Nadpis aplikace');
 $LANG_CONF['main.currentVersion'] = array('print', 'Verze aplikace');
 $LANG_CONF['main.metaDescription'] = array('input', 'Popis stránky');
-$LANG_CONF['main.metaKeywords'] = array('input', 'Klíčová slova');
 $LANG_CONF['main.metaPublisher'] = array('input', 'Jméno autora');
 $LANG_CONF['main.administrationMail'] = array('input', 'E-mail administrátora');
 $LANG_CONF['main.contactInformation'] = array('area', 'Kontaktní informace');

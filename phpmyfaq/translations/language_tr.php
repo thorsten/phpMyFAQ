@@ -530,7 +530,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Enable automatic langu
 $LANG_CONF['main.titleFAQ'] = array("input", "Title of your FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "phpMyFAQ Version");
 $LANG_CONF["main.metaDescription"] = array("input", "Description");
-$LANG_CONF["main.metaKeywords"] = array("input", "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array("input", "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "Email address of the Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "Contact information");

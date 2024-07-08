@@ -558,7 +558,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Įjungti automatinį t
 $LANG_CONF['main.titleFAQ'] = array("input", "DUK antraštė");
 $LANG_CONF['main.currentVersion'] = array("print", "DUK versija");
 $LANG_CONF["main.metaDescription"] = array("input", "Tinklalapio aprašas");
-$LANG_CONF["main.metaKeywords"] = array("input", "Raktažodžiai paieškos serveriams");
 $LANG_CONF["main.metaPublisher"] = array("input", "Leidėjo pavadinimas");
 $LANG_CONF['main.administrationMail'] = array("input", "Administratoriaus el. pašto adresas");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontaktinė informacija");

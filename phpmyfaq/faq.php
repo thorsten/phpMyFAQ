@@ -26,7 +26,9 @@ use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
@@ -38,6 +40,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
@@ -64,6 +67,7 @@ $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
 $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new Permission($faqConfig);
+$seo = new Seo($faqConfig);
 $attachmentHelper = new AttachmentHelper();
 $converter = new CommonMarkConverter([
     'html_input' => 'strip',
@@ -293,12 +297,21 @@ if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
 // Check if the author name should be visible, according to the GDPR option
 $author = $user->getUserVisibilityByEmail($faq->faqRecord['email']) ? $faq->faqRecord['author'] : 'n/a';
 
+// SEO
+$seoEntity = new SeoEntity();
+$seoEntity
+    ->setType(SeoType::FAQ)
+    ->setReferenceId($faq->faqRecord['id'])
+    ->setReferenceLanguage($faq->faqRecord['lang']);
+$seoData = $seo->get($seoEntity);
+
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./faq.twig');
 
 $templateVars = [
     ...$templateVars,
-    'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'title' => sprintf('%s - %s', $seoData->getTitle() ?? $question, $faqConfig->getTitle()),
+    'metaDescription' => $seoData->getDescription(),
     'solutionId' => $faq->faqRecord['solution_id'],
     'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
     'question' => $question,

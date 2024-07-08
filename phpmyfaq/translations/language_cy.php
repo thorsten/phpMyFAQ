@@ -550,7 +550,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", " Galluogi trafod cynnw
 $LANG_CONF['main.titleFAQ'] = array("input", " Teitl y CC");
 $LANG_CONF['main.currentVersion'] = array("print", " Fersiwn y CC");
 $LANG_CONF["main.metaDescription"] = array("input", " Disgrifiad or Dudalen");
-$LANG_CONF["main.metaKeywords"] = array("input", " Geiriau allweddol ar gyfer Corynod");
 $LANG_CONF["main.metaPublisher"] = array("input", " Enwr Cyhoeddwr");
 $LANG_CONF['main.administrationMail'] = array("input", " Cyfeiriad e-bost Gweinyddol");
 $LANG_CONF["main.contactInformation"] = array("area", " Gwybodaeth gyswllt");

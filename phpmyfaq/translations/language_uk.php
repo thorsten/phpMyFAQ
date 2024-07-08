@@ -545,7 +545,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Enable automatic conte
 $LANG_CONF['main.titleMac F.A.Q.'] = array("input", "Title of the Mac F.A.Q.");
 $LANG_CONF['main.currentVersion'] = array("print", "Mac F.A.Q. Version");
 $LANG_CONF["main.metaDescription"] = array("input", "Describtion of the Page");
-$LANG_CONF["main.metaKeywords"] = array("input", "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array("input", "Name of the Publisher");
 $LANG_CONF['main.administrationMail'] = array("input", "Emailadress of the Admin");
 $LANG_CONF["main.contactInformation"] = array("area", "Contact information");

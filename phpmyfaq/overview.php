@@ -38,6 +38,8 @@ $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [
     ... $templateVars,
+    'title' => sprintf('%s - %s', Translation::get('faqOverview'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get('msgOverviewMetaDesc'), $faqConfig->getTitle()),
     'pageHeader' => Translation::get('faqOverview'),
     'faqOverview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
     'msgAuthor' => Translation::get('msgAuthor'),

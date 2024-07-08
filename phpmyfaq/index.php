@@ -333,7 +333,6 @@ $seoEntity->setReferenceLanguage($lang);
 //
 $faqSystem = new System();
 $faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
-$currentPageUrl = Strings::htmlspecialchars($faqLink->getCurrentUrl());
 
 //
 // Found a record ID?
@@ -348,7 +347,6 @@ if ($id !== 0) {
     $seoData = $seo->get($seoEntity);
 
     $title = $seoData->getTitle();
-    $keywords = ',' . $faq->faqRecord['keywords'];
     $metaDescription = str_replace('"', '', $seoData->getDescription() ?? '');
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
@@ -360,10 +358,8 @@ if ($id !== 0) {
     );
     $faqLink = new Link($url, $faqConfig);
     $faqLink->itemTitle = $faq->faqRecord['title'];
-    $currentPageUrl = $faqLink->toString(true);
 } else {
     $title = '';
-    $keywords = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('seo.description'));
 }
 
@@ -372,7 +368,6 @@ if ($id !== 0) {
 //
 $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
 if ($solutionId) {
-    $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
     $id = $faqData['id'];
     $lang = $faqData['lang'];
@@ -384,7 +379,6 @@ if ($solutionId) {
     $seoData = $seo->get($seoEntity);
 
     $title = $seoData->getTitle();
-    $keywords = ',' . $faq->getKeywords($id);
     $metaDescription = str_replace('"', '', $seoData->getDescription());
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
@@ -396,7 +390,6 @@ if ($solutionId) {
     );
     $faqLink = new Link($url, $faqConfig);
     $faqLink->itemTitle = Strings::htmlentities($faqData['question']);
-    $currentPageUrl = $faqLink->toString(true);
 }
 
 //
@@ -405,16 +398,6 @@ if ($solutionId) {
 $taggingId = Filter::filterVar($request->query->get('tagging_id'), FILTER_VALIDATE_INT);
 if (!is_null($taggingId)) {
     $title = ' - ' . $oTag->getTagNameById($taggingId);
-    $keywords = '';
-}
-
-//
-// Handle the SiteMap
-//
-$letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
-if (!is_null($letter) && (1 == Strings::strlen($letter))) {
-    $title = ' - ' . $letter . '...';
-    $keywords = $letter;
 }
 
 //
@@ -503,11 +486,6 @@ $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
-$keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
-$keywordsArray = array_filter($keywordsArray, 'strlen');
-shuffle($keywordsArray);
-$keywords = implode(',', $keywordsArray);
-
 $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
 
 //
@@ -525,13 +503,12 @@ $templateVars = [
     'version' => $faqConfig->getVersion(),
     'header' => str_replace('"', '', $faqConfig->getTitle()),
     'metaDescription' => $metaDescription ?? $faqConfig->get('seo.description'),
-    'metaKeywords' => $keywords,
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
     'metaLanguage' => Translation::get('metaLanguage'),
     'metaRobots' => $seo->getMetaRobots($action),
     'phpmyfaqVersion' => $faqConfig->getVersion(),
     'stylesheet' => Translation::get('dir') == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl' => $currentPageUrl,
+    'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
     'action' => $action,
     'dir' => Translation::get('dir'),
     'formActionUrl' => '?' . $sids . 'action=search',

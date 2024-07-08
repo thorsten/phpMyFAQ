@@ -448,7 +448,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Automatisk språkigenk
 $LANG_CONF['main.titleFAQ'] = array("input", "Titel på FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ-version");
 $LANG_CONF['main.metaDescription'] = array("input", "Beskrivning av sidan");
-$LANG_CONF['main.metaKeywords'] = array("input", "Nyckelord för sökmotorer");
 $LANG_CONF['main.metaPublisher'] = array("input", "Namn på ansvarig");
 $LANG_CONF['adminmail'] = array("input", "Emailadress till admin");
 $LANG_CONF['main.contactInformation'] = array("area", "Kontaktinformation");

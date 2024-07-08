@@ -540,7 +540,6 @@ $LANG_CONF['main.languageDetection'] = ["checkbox", "Habilitar reconocimiento au
 $LANG_CONF['main.titleFAQ'] = ["input", "Título del FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "Versión phpMyFAQ"];
 $LANG_CONF['main.metaDescription'] = ["input", "Descripción de la página"];
-$LANG_CONF['main.metaKeywords'] = ["input", "Palabras clave para motores de búsqueda"];
 $LANG_CONF['main.metaPublisher'] = ["input", "Nombre del editor"];
 $LANG_CONF['main.administrationMail'] = ["input", "e-mail del administrador"];
 $LANG_CONF['main.contactInformation'] = ["area", "Informaciones de contacto"];

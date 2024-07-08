@@ -792,7 +792,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Включить ав�
 $LANG_CONF['main.titleFAQ'] = array("input", "Заголовок сайта");
 $LANG_CONF['main.currentVersion'] = array("print", "Версия движка");
 $LANG_CONF['main.metaDescription'] = array("input", "Описание сайта");
-$LANG_CONF['main.metaKeywords'] = array("input", "Ключевые слова для поисковых машин");
 $LANG_CONF['main.metaPublisher'] = array("input", "Имя публикатора");
 $LANG_CONF['main.administrationMail'] = array("input", "Адрес электронной почты администратора");
 $LANG_CONF['main.contactInformation'] = array("area", "Контактная информация");

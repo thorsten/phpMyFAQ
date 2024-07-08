@@ -52,6 +52,7 @@ $twigTemplate = $twig->loadTemplate('./register.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
+    'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
     'pageHeader' => Translation::get('msgRegistration'),
     'msgRegistration' => Translation::get('msgRegistration'),
     'msgRegistrationCredentials' => Translation::get('msgRegistrationCredentials'),

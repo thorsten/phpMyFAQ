@@ -39,6 +39,7 @@ $twigTemplate = $twig->loadTemplate('./login.twig');
 
 $templateVars = [
     ... $templateVars,
+    'title' => sprintf('%s - %s', Translation::get('msgLoginUser'), $faqConfig->getTitle()),
     'loginHeader' => Translation::get('msgLoginUser'),
     'sendPassword' => Translation::get('lostPassword'),
     'loginMessage' => $loginMessage,

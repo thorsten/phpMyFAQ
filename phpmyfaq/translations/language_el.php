@@ -446,7 +446,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Ενεργοποίησ
 $LANG_CONF['main.titleFAQ'] = array("input", "Τίτλος του FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "Έκδοση FAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "Περιγραφή ιστοσελίδας");
-$LANG_CONF['main.metaKeywords'] = array("input", "Λέξεις κλειδιά για μηχανές αναζήτησης");
 $LANG_CONF['main.metaPublisher'] = array("input", "Όνομα εκδότη");
 $LANG_CONF['main.administrationMail'] = array("input", "Ηλεκτρονική διεύθυνση του διαχειριστή");
 $LANG_CONF['main.contactInformation'] = array("area", "Πληροφορίες επικοινωνίας");

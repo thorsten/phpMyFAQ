@@ -271,9 +271,12 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTe
 $twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
+$pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));
+
 $templateVars = [
     ... $templateVars,
-    'pageHeader' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
+    'title' => sprintf('%s - %s', $pageHeader, $faqConfig->getTitle()),
+    'pageHeader' => $pageHeader,
     'isTagSearch' => $tagSearch,
     'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
     'msgSearch' => Translation::get('msgSearch'),

@@ -542,7 +542,6 @@ $LANG_CONF['main.languageDetection'] = ["checkbox", "Automatische Spracherkennun
 $LANG_CONF['main.titleFAQ'] = ['input', 'Titel der FAQ', 'Pflichtfeld'];
 $LANG_CONF['main.currentVersion'] = ['print', 'phpMyFAQ Version'];
 $LANG_CONF['main.metaDescription'] = ["input", "Beschreibung der Seite"];
-$LANG_CONF['main.metaKeywords'] = ["input", "Keywords für Suchmaschinen"];
 $LANG_CONF['main.metaPublisher'] = ["input", "Name des Veröffentlichers", 'Pflichtfeld'];
 $LANG_CONF['main.administrationMail'] = ['input', 'E-Mailadresse des Administrators', 'Pflichtfeld'];
 $LANG_CONF['main.contactInformation'] = ["area", "Kontaktdaten / Impressum"];
@@ -1454,11 +1453,13 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link zum FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];
-$LANG_CONF['seo.glossary.title'] = ['input', 'SERP Titel für Glossar'];
-$LANG_CONF['seo.glossary.description'] = ['area', 'SERP Beschreibung für Glossar'];
 $PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ läuft derzeit im Debug-Modus. Der Debug-Modus kann sensible Informationen preisgeben und ist nur für Entwicklungszwecke gedacht. Wir empfehlen dringend, den Debug-Modus aus Sicherheitsgründen zu deaktivieren. Sie können den Debug-Modus in der Datei <code>src/Bootstrap.php</code> deaktivieren.';
 $PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ befindet sich derzeit in der Entwicklung (%s) und ist daher noch nicht für den Produktionseinsatz bereit. Bitte <a target="_blank" href="%s" class="alert-link">melden Sie alle Probleme auf GitHub</a>. Vielen Dank!';
 $PMF_LANG['layoutControlCenter'] = 'Layout';
 $LANG_CONF['layout.customCss'] = ['area', 'Benutzerdefiniertes CSS', 'Bitte nur CSS verwenden.'];
+$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Finde die gesuchten FAQs in der Übersicht aller Einträge | Sitemap - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'Im Glossar von %s findest Du Erklärungen aller wichtigen Fachbegriffe zum Thema';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Die detaillierte Übersicht aller wichtigen Themen | FAQ-Übersicht von %s';
 
 return $PMF_LANG;

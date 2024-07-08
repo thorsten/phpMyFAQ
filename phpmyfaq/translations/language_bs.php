@@ -550,7 +550,6 @@ $LANG_CONF["main.languageDetection"] = array("checkbox", "Automatsko tra&#382;en
 $LANG_CONF['main.titleFAQ'] = array("input", "Naslov FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "FAQ Verzija");
 $LANG_CONF["main.metaDescription"] = array("input", "Opis Stranice");
-$LANG_CONF["main.metaKeywords"] = array("input", "Klju&#269;ne re&#269;i za netpauke");
 $LANG_CONF["main.metaPublisher"] = array("input", "Ime izdava&#269;a");
 $LANG_CONF['main.administrationMail'] = array("input", "Admin email adresa");
 $LANG_CONF["main.contactInformation"] = array("area", "Kontakt info");

@@ -543,7 +543,6 @@ $LANG_CONF["main.languageDetection"] = ["checkbox", "Enable automatic language d
 $LANG_CONF['main.titleFAQ'] = ["input", "Title of your FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];
 $LANG_CONF["main.metaDescription"] = ["input", "Description"];
-$LANG_CONF["main.metaKeywords"] = ["input", "Keywords for Spiders"];
 $LANG_CONF["main.metaPublisher"] = ["input", "Name of the Publisher"];
 $LANG_CONF['main.administrationMail'] = ["input", "Email address of the Admin", 'Mandatory field'];
 $LANG_CONF["main.contactInformation"] = ["area", "Contact information"];
@@ -1474,11 +1473,13 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
-$LANG_CONF['seo.glossary.title'] = ['input', 'SERP title for glossary'];
-$LANG_CONF['seo.glossary.description'] = ['area', 'SERP description for glossary'];
 $PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>src/Bootstrap.php</code> file.';
 $PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is currently in development (%s). And therefore not yet ready for production. Please <a target="_blank" href="%s" class="alert-link">report all issues on GitHub</a>. Thank you very much!';
 $PMF_LANG['layoutControlCenter'] = 'Layout';
 $LANG_CONF['layout.customCss'] = ['area', 'Custom CSS', 'Please use CSS only.'];
+$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Find the FAQs you are looking for in the overview of all entries | Sitemap - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'In the glossary of %s you will find explanations of all important technical terms on the topic';
+$PMF_LANG['msgOverviewMetaDesc'] = 'See an overview of all important topics | FAQ overview of %s';
 
 return $PMF_LANG;

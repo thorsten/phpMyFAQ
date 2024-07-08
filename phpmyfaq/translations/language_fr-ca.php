@@ -518,7 +518,6 @@ $LANG_CONF['main.languageDetection'] = array("checkbox", "Active la négociation
 $LANG_CONF['main.titleFAQ'] = array("input", "Titre de la FAQ");
 $LANG_CONF['main.currentVersion'] = array("print", "Version de la FAQ");
 $LANG_CONF['main.metaDescription'] = array("input", "Description de la page");
-$LANG_CONF['main.metaKeywords'] = array("input", "Mots-clef pour les moteurs de recherche");
 $LANG_CONF['main.metaPublisher'] = array("input", "Nom de l\'éditeur");
 $LANG_CONF['main.administrationMail'] = array("input", "Adresse courriel de l'administrateur");
 $LANG_CONF['main.contactInformation'] = array('area', "Informations de contact");
