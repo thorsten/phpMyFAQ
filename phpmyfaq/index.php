@@ -331,7 +331,6 @@ $oTag = new Tags($faqConfig);
 //
 $faqSystem = new System();
 $faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
-$currentPageUrl = Strings::htmlspecialchars($faqLink->getCurrentUrl());
 
 //
 // Found a record ID?
@@ -552,7 +551,7 @@ $tplMainPage = [
     'metaRobots' => $faqSeo->getMetaRobots($action),
     'phpmyfaqVersion' => $faqConfig->getVersion(),
     'stylesheet' => Translation::get('dir') == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl' => $currentPageUrl,
+    'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
     'action' => $action,
     'dir' => Translation::get('dir'),
     'formActionUrl' => '?' . $sids . 'action=search',
