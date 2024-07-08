@@ -909,7 +909,7 @@ $PMF_LANG["msgAttachmentNotFound"] = "Le fichier que vous essayez de télécharg
 $PMF_LANG["plmsgUserOnline"]["0"] = "%d utilisateur en ligne";
 $PMF_LANG["plmsgUserOnline"]["1"] = "%d utilisateurs en ligne";
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF["main.templateSet"] = ["select", "Template à utiliser"];
+$LANG_CONF["layout.templateSet"] = ["select", "Template à utiliser"];
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG["msgTransToolRemove"] = "Supprimer";
@@ -1142,7 +1142,6 @@ $PMF_LANG["ad_searchterm_del_err"] = "Impossible de supprimer tous les termes de
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Cacher les catégories vides"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Cherche un ID de solution"];
 $LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "Désactiver tous les réseaux sociaux"];
-$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "Activer la compression GZIP"];
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Le tag a été supprimé avec succès.";
@@ -1322,7 +1321,7 @@ $PMF_LANG['ad_open_question_deleted'] = 'La question a été supprimée avec suc
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Désactiver la vérification des pairs SMTP TLS (non recommandé)'];
 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
-$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Informations de contact en HTML ?'];
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Informations de contact en HTML ?'];
 
 // added v3.2.0-RC - 2023-05-18 by Thorsten
 $PMF_LANG['msgAuthenticationSource'] = 'Service d’authentification';
@@ -1395,7 +1394,7 @@ $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Tri personnalisé de
 $PMF_LANG['msgNoStickyFaqs'] = 'Vous n’avez pas encore d’enregistrements épinglés. Vous pouvez marquer les enregistrements comme épinglés dans la <a href="./?action=faqs-overview" class="alert-link">vue d’ensemble des FAQs</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
-$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activer le consentement aux cookies'];
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activer le consentement aux cookies'];
 $PMF_LANG['msgSessionExpired'] = 'Votre session a expiré. Veuillez vous reconnecter.';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan
@@ -1476,7 +1475,7 @@ $PMF_LANG['msgError'] = 'Une erreur est survenue.';
 $PMF_LANG['msgLinkToFAQ'] = 'Lien vers la FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
-$LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activer le lien vers la politique de confidentialité'];
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activer le lien vers la politique de confidentialité'];
 $LANG_CONF['seo.glossary.title'] = ['input', 'Titre SERP pour le glossaire'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'Description SERP pour le glossaire'];
 

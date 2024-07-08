@@ -811,7 +811,7 @@ $PMF_LANG['permission::approverec'] = 'approva records';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Aggiorna';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Hai l\'ultima versione di phpMyFAQ. Non hai bisogno di aggiornare.';
 $PMF_LANG['msgSecureSwitch'] = 'Passa al login in modo sicuro!';
-$LANG_CONF['main.templateSet'] = array('select', 'Template impostato per essere usato');
+$LANG_CONF['layout.templateSet'] = array('select', 'Template impostato per essere usato');
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Enable attachment encryption <br><small>Ignored when attachments is disabled</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Only allow logins over SSL connection? (default: disabled)');

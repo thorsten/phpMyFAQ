@@ -99,7 +99,7 @@
     <span class="form-text">{{ description }}</span>
   </label>
   <div class="col-6">
-    <textarea id="edit[{{ key }}]" name="edit[{{ key }}]" rows="4" class="form-control">{{ value|e }}</textarea>
+    <textarea id="edit[{{ key }}]" name="edit[{{ key }}]" rows="4" class="form-control" spellcheck="false">{{ value|e }}</textarea>
   </div>
 {% endmacro %}
 

@@ -897,7 +897,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d kullanıcı çevrimiçi";
 $PMF_LANG["plmsgUserOnline"][1] = "%d kullanıcı çevrimiçi";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array("select", "Template set to be used");
+$LANG_CONF['layout.templateSet'] = array("select", "Template set to be used");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = "Sil";
@@ -1114,7 +1114,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = "Tüm arama terimleri başarıyla silindi."
 $PMF_LANG["ad_searchterm_del_err"] = "Arama terimleri silinemedi.";
 $LANG_CONF["records.hideEmptyCategories"] = array("checkbox", "Hide empty categories");
 $LANG_CONF["search.searchForSolutionId"] = array("checkbox", "Search for solution ID");
-$LANG_CONF["main.enableGzipCompression"] = array("checkbox", "Enable GZIP compression");
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Etiket başarıyla silindi.";

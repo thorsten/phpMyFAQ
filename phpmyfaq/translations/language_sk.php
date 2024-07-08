@@ -914,7 +914,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d užívateľ online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d užívatelia online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array("select", "Šablóna nastavená na použitie");
+$LANG_CONF['layout.templateSet'] = array("select", "Šablóna nastavená na použitie");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Odstrániť';

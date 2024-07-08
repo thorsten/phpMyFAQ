@@ -781,7 +781,7 @@ $PMF_LANG['permission::approverec'] = 'aprovar os registros';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Atualizar';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Você possui a versão mais recente do phpMyFAQ.';
 $PMF_LANG['msgSecureSwitch'] = 'Alterar para o modo seguro para efetuar o login!';
-$LANG_CONF['main.templateSet'] = array('select', 'Template definida para uso');
+$LANG_CONF['layout.templateSet'] = array('select', 'Template definida para uso');
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Habilitar criptografia dos anexos <br><small>Ignorado quando os anexos estão desabilitados</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Chave padrão para criptografia de anexos<br><small>Ignorado quando os anexos estão desabilitados</small><br><small><font color="red">AVISO: Não altere esta chave depois de habilitar a opção de criptografia de anexos!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Permitir logins apenas com conexão segura? (padrão: desabilitado)');
@@ -888,7 +888,6 @@ $PMF_LANG["ad_searchterm_del_err"] = 'Não foi possível remover todos os termos
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Ocultar categorias vazias"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Pesquisar por ID da solução"];
 $LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "Desabilitar todas as redes sociais"];
-$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "Habilitar compressão GZIP"];
 $PMF_LANG["ad_tag_delete_success"] = 'A tag foi removida com sucesso';
 $PMF_LANG["ad_tag_delete_error"] = 'A tag não foi removida devido a um erro';
 $PMF_LANG["seoCenter"] = 'SEO';

@@ -669,7 +669,7 @@ $PMF_LANG['permission::approverec'] = 'godkänn inlägg';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Uppgradera';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Du har den senaste versionen av phpMyFAQ. Ingen uppgradering behöver göras.';
 $PMF_LANG['msgSecureSwitch'] = 'Byt till SSL-läge för att logga in!';
-$LANG_CONF['main.templateSet'] = array("select", "Mall som ska användas");
+$LANG_CONF['layout.templateSet'] = array("select", "Mall som ska användas");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Aktivera kryptering av bilagor <br><small>Ignoreras om bilagor ej är aktiverade</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Standardkrypteringsnyckel  <br><small>Ignoreras om kryptyering ej är aktiverat</small><br><small><font color="red">VARNING: Ändra inte denna när väl kryptering är aktiverad!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Tillåt bara inloggning via SSL? (standard: ej aktiverad)");

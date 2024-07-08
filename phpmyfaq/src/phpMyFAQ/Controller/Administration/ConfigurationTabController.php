@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -25,11 +24,13 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,13 +42,25 @@ class ConfigurationTabController extends AbstractController
      * @throws TemplateException
      * @throws Exception
      */
-    #[Route('admin/api/configuration/list')]
+    #[Route('admin/api/configuration/list/{mode}')]
     public function list(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $mode = $request->get('mode');
+        $language = new Language($this->configuration);
+        $currentLanguage = $language->setLanguageByAcceptLanguage();
 
+        try {
+            Translation::create()
+                ->setLanguagesDir(PMF_LANGUAGE_DIR)
+                ->setDefaultLanguage('en')
+                ->setCurrentLanguage($currentLanguage)
+                ->setMultiByteLanguage();
+        } catch (Exception $exception) {
+            throw new BadRequestException($exception->getMessage());
+        }
+
+        $mode = $request->get('mode');
         $configurationList = Translation::getConfigurationItems($mode);
 
         return $this->render(
@@ -83,7 +96,6 @@ class ConfigurationTabController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         } else {
             // Set the new values
-            $forbiddenValues = ['{', '}'];
             $newConfigValues = [];
             $escapeValues = [
                 'main.contactInformation',
@@ -124,8 +136,7 @@ class ConfigurationTabController extends AbstractController
             $newConfigClass = [];
 
             foreach ($configurationData as $key => $value) {
-                // Remove forbidden characters
-                $newConfigValues[$key] = str_replace($forbiddenValues, '', (string) $value);
+                $newConfigValues[$key] = (string) $value;
                 // Escape some values
                 if (isset($escapeValues[$key])) {
                     $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);

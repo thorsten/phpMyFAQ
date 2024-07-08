@@ -925,7 +925,7 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d prisijungę naudotojai";
 $PMF_LANG["plmsgUserOnline"][2] = "%d prisijungusių naudotojų";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array("select", "Naudojamas šablonų rinkinys");
+$LANG_CONF['layout.templateSet'] = array("select", "Naudojamas šablonų rinkinys");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Šalinti';

@@ -913,7 +913,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d użytkownik on-line";
 $PMF_LANG["plmsgUserOnline"][1] = "%d użytkowników on-line";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = ["select", "Zestaw szablonów do użycia"];
+$LANG_CONF['layout.templateSet'] = ["select", "Zestaw szablonów do użycia"];
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas FiĹˇeras
 $PMF_LANG['msgTransToolRemove'] = 'Usuń';
@@ -1154,7 +1154,6 @@ $PMF_LANG["ad_searchterm_del_err"] = 'Nie można usunąć wszystkich wyszukiwany
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Ukryj puste kategorie"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Wyszukaj ID rozwiązania"];
 $LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "Wyłącz wszystkie sieci społecznościowe"];
-$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "Włącz kompresję GZIP"];
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Etykieta została pomyślnie usunięta.";
@@ -1341,7 +1340,7 @@ $PMF_LANG['ad_open_question_deleted'] = 'Pytanie zostało pomyślnie usunięte.'
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Wyłącz weryfikację równorzędną SMTP TLS (niezalecane)'];
 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
-$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Informacje kontaktowe jako HTML?'];
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Informacje kontaktowe jako HTML?'];
 
 // added v3.2.0-RC - 2023-05-18 by Thorsten
 $PMF_LANG['msgAuthenticationSource'] = 'Usługa uwierzytelniania';
@@ -1412,7 +1411,7 @@ $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Niestandardowa kolej
 $PMF_LANG['msgNoStickyFaqs'] = 'Nie masz jeszcze żadnych przyklejonych wpisów. Możesz oznaczyć rekordy jako przyklejone w pliku <a href="./?action=faqs-overview" class="alert-link">FAQ Przegląd</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
-$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Aktywuj zgodę na pliki cookie'];
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktywuj zgodę na pliki cookie'];
 $PMF_LANG['msgSessionExpired'] = 'Twoja sesja wygasła. Proszę, zaloguj się ponownie.';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan

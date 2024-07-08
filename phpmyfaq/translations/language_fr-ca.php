@@ -684,7 +684,7 @@ $PMF_LANG['permission::approverec'] = 'Approuver l\'enregistrement';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Mise à jour';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Vous avez la dernière version de phpMyFAQ. Inutile de faire une mise à jour.';
 $PMF_LANG['msgSecureSwitch'] = 'Passez en mode sécurisé pour la connexion !';
-$LANG_CONF['main.templateSet'] = array("select", "Modèle à utiliser");
+$LANG_CONF['layout.templateSet'] = array("select", "Modèle à utiliser");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Activer le cryptage des pièces jointes<br><small>Ignoré si les fichiers joints sont désactivés</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", "Clé de cryptage par défaut<br><small>Ignoré si le cryptage des pièces jointes est désactivé</small><br><small><font color=\"red\">ATTENTION : Ne pas modifier une fois que le cryptage des fichiers a été activé !!!</font></small>");
 $LANG_CONF['security.useSslForLogins'] = array("checkbox", "Autorisé uniquement les connections sécurisées ? (défaut : désactivé)");

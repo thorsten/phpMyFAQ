@@ -768,7 +768,7 @@ $PMF_LANG['permission::approverec'] = 'bijdragen goedkeuren';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'De laatste versie van phpMyFAQ is reeds geinstalleerd.';
 $PMF_LANG['msgSecureSwitch'] = 'Schakel over naar veilige modus om aan te melden!';
-$LANG_CONF['main.templateSet'] = array('select', 'thema kiezen voor gebruik');
+$LANG_CONF['layout.templateSet'] = array('select', 'thema kiezen voor gebruik');
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'JavaScript bevestiging encryptie <br><small>genegeerd als bijlagen is uitgeschakeld</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Standaard bijlage encryptiesleutel<br><small>Genegeerd indien attachment encryptie gedeactiveerd is</small><br><small><font color="red">OPGELET: Niet meer wijzigen een keer dit geactiveerd is en bestandsencryptie aanstaat!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Alleen aanmelden via beveilgde verbindingen toelaten? (standaard: gedeactiveerd)');
@@ -877,7 +877,6 @@ $LANG_CONF['records.allowNewFaqsForGuests'] = array('checkbox', 'Laat toevoegen 
 $LANG_CONF['records.hideEmptyCategories'] = array('checkbox', 'Verberg lege categorieën (standaard: gedeactiveerd)');
 $LANG_CONF['search.searchForSolutionId'] = array('checkbox', 'Zoek oplossing ID (standaard: geactiveerd)');
 $LANG_CONF['socialnetworks.disableAll'] = array('checkbox', 'Schakel alle sociale netwerken uit (standaard: gedeactiveerd)');
-$LANG_CONF['main.enableGzipCompression'] = array('checkbox', 'Schakel GZIP compressie in (standaard: geactiveerd)');
 $LANG_CONF['seo.metaTagsHome'] = array('select', 'Meta Tags start page');
 $LANG_CONF['seo.metaTagsFaqs'] = array('select', 'Meta Tags FAQs');
 $PMF_LANG['msgMatchingQuestions'] = 'Volgende resultaten benaderden uw vraag:';

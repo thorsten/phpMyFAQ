@@ -574,7 +574,7 @@ $PMF_LANG['permission::approverec'] = 'aproba inregistrarile';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgradeaza';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Tu ai ultima versiune de phpMyFAQ. Nu este nevoie sa upgradezi scriptul.';
 $PMF_LANG['msgSecureSwitch'] = 'Schimba pe modul securizat pentru logare!';
-$LANG_CONF['main.templateSet'] = array("select", "Templateul care va fi folosit");
+$LANG_CONF['layout.templateSet'] = array("select", "Templateul care va fi folosit");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Activeaza criptarea atasamentelor <br><small>Ignorati aceasta setare daca atasamentele sunt dezactivate</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Cheia normala a criptarii atasamentelor <br><small>Ignorati aceasta setare daca atasamentele sunt dezactivate</small><br><small><font color="red">ATENTIE: Nu schimbati acest set,criptarea fisierelor activata!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Accepta numai logarile dintr-o conectare securizata? (normal:dezactivat)");

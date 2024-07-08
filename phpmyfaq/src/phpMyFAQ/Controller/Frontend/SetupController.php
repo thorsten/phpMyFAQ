@@ -136,7 +136,6 @@ class SetupController
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-        $twigWrapper->addExtension(new DebugExtension());
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));

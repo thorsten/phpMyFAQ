@@ -521,6 +521,7 @@ $templateVars = [
     'isUserLoggedIn' => $user->isLoggedIn(),
     'title' => $title,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'customCss' => $faqConfig->getCustomCss(),
     'version' => $faqConfig->getVersion(),
     'header' => str_replace('"', '', $faqConfig->getTitle()),
     'metaDescription' => $metaDescription ?? $faqConfig->get('seo.description'),
@@ -568,7 +569,7 @@ $templateVars = [
     'msgTagCloudHeader' => Translation::get('msg_tags'),
     'renderedTags' => $oTag->renderTagCloud(),
     'currentYear' => date('Y', time()),
-    'cookieConsentEnabled' =>  $faqConfig->get('main.enableCookieConsent'),
+    'cookieConsentEnabled' =>  $faqConfig->get('layout.enableCookieConsent'),
 ];
 
 $topNavigation = [
@@ -624,10 +625,10 @@ $templateVars = [
     'isAskQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
     'isOpenQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
     'footerNavigation' => $footerNavigation,
-    'isPrivacyLinkEnabled' => $faqConfig->get('main.enablePrivacyLink'),
+    'isPrivacyLinkEnabled' => $faqConfig->get('layout.enablePrivacyLink'),
     'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
     'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
-    'isCookieConsentEnabled' => $faqConfig->get('main.enableCookieConsent'),
+    'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
     'cookiePreferences' => Translation::get('cookiePreferences')
 ];
 

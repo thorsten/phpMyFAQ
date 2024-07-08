@@ -906,7 +906,7 @@ $PMF_LANG['plmsgUserOnline']['0'] = '%d visitante en línea';
 $PMF_LANG['plmsgUserOnline']['1'] = '%d visitante en línea';
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array("select", "Plantilla seleccionada");
+$LANG_CONF['layout.templateSet'] = array("select", "Plantilla seleccionada");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Eliminar';
@@ -1138,7 +1138,6 @@ $PMF_LANG["ad_searchterm_del_err"] = 'No se pudieron eliminar todos los término
 $LANG_CONF['records.hideEmptyCategories'] = ["checkbox", "Ocultar categorías vacías "];
 $LANG_CONF['search.searchForSolutionId'] = ["checkbox", "Buscar ID de la solución "];
 $LANG_CONF['socialnetworks.disableAll'] = ["checkbox", "Desactivar soporte para redes sociales "];
-$LANG_CONF['main.enableGzipCompression'] = ["checkbox", "Activar compresión GZIP"];
 
 // añadido v2.9.0-alpha2 - 2014-08-16 por Thorsten
 $PMF_LANG['ad_tag_delete_success'] = "La etiqueta fue eliminada con éxito";

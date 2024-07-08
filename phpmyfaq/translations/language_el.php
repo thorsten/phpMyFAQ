@@ -759,7 +759,7 @@ $PMF_LANG['permission::approverec'] = 'επικύρωση καταχωρήσεω
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Αναβάθμιση';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Χρησιμοποιείτε την εγκυρότερη έκδοση του phpMyFAQ. Δεν υπάρχει λόγος για αναβάθμιση';
 $PMF_LANG['msgSecureSwitch'] = 'Αλλαγή σε σίγουρη σύνδεση για πρόσβαση!';
-$LANG_CONF['main.templateSet'] = array("select", "Επιλογή πρωτύπου για χρήση");
+$LANG_CONF['layout.templateSet'] = array("select", "Επιλογή πρωτύπου για χρήση");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Ενεργοποίηση κρυπτόγράφησης συννημένων");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Προεπιλεγμένη κρυπτογράφηση <br><small><font color="red">ΠΡΟΣΟΧΗ: Μην μεταβάλεται αυτή τη λειτουργία άν έχετε ενεργοποιήση την κρυπτογράφηση αρχείων!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Να επιτρέπονται συνδέσεις μόνο μέσω σίγουρης σύνδεσης; (προεπιλογή: απενεργοποιημένο)");

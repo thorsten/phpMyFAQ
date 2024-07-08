@@ -748,7 +748,7 @@ $PMF_LANG['permission::approverec'] = '批准记录';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ 升级';
 $PMF_LANG['ad_you_shouldnt_update'] = '你有最新的 phpMyFAQ 版本。 你无需升级。';
 $PMF_LANG['msgSecureSwitch'] = '切换到安全模式下登录!';
-$LANG_CONF['main.templateSet'] = array('选择', '选择使用的模板');
+$LANG_CONF['layout.templateSet'] = array('选择', '选择使用的模板');
 $LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', '启用附件加密 <br><small>附件禁用时忽略</small>');
 $LANG_CONF['records.defaultAttachmentEncKey'] = array('input', '默认附件加密密钥 <br><small>附件加密禁用时忽略</small><br><small><font color="red">警告: 一旦设置开启加密后不要更改!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', '仅允许安全连接的登录? (默认: 禁用)');

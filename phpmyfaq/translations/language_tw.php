@@ -896,7 +896,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d 位使用者在線上 (user online)";
 $PMF_LANG["plmsgUserOnline"][1] = "%d 位使用者們在線上 (users online)";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy 開發者
-$LANG_CONF['main.templateSet'] = array("select", "設定要使用的佈景 (Template set to be used)");
+$LANG_CONF['layout.templateSet'] = array("select", "設定要使用的佈景 (Template set to be used)");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fi禳eras 開發者
 $PMF_LANG['msgTransToolRemove'] = "移除";

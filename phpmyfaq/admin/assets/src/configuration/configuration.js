@@ -14,12 +14,12 @@
  */
 
 import { Tab } from 'bootstrap';
-import { addElement } from '../../../../assets/src/utils';
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleConfiguration = async () => {
   const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
   const result = document.getElementById('pmf-configuration-result');
+  const language = document.getElementById('pmf-language');
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
@@ -32,6 +32,8 @@ export const handleConfiguration = async () => {
         switch (target) {
           case '#main':
             await handleTranslation();
+            break;
+          case '#layout':
             await handleTemplates();
             break;
           case '#records':
@@ -65,7 +67,6 @@ export const handleConfiguration = async () => {
     if (!tabLoaded) {
       await fetchConfiguration('#main');
       await handleTranslation();
-      await handleTemplates();
     }
   }
 };
@@ -132,7 +133,7 @@ const handleTranslation = async () => {
 };
 
 const handleTemplates = async () => {
-  const templateSelectBox = document.getElementsByName('edit[main.templateSet]');
+  const templateSelectBox = document.getElementsByName('edit[layout.templateSet]');
   if (templateSelectBox !== null) {
     const options = await fetchTemplates();
     templateSelectBox[0].insertAdjacentHTML('beforeend', options);
@@ -207,7 +208,11 @@ const handleSeoMetaTags = async () => {
 
 const fetchConfiguration = async (target) => {
   try {
-    const response = await fetch(`./api/configuration/list/${target.substring(1)}`);
+    const response = await fetch(`./api/configuration/list/${target.substring(1)}`, {
+      headers: {
+        'Accept-Language': language.value,
+      },
+    });
 
     if (!response.ok) {
       console.error('Request failed!');

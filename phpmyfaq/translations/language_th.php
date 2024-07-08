@@ -747,7 +747,7 @@ $PMF_LANG['permission::approverec'] = 'อนุมัติข้อมูล';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ ปรับปรุง';
 $PMF_LANG['ad_you_shouldnt_update'] = 'คุณใช้เวอร์ชั่นล่าสุดของ phpMyFAQ ไม่จำเป็นต้องปรับปรุงระบบ';
 $PMF_LANG['msgSecureSwitch'] = 'เปลี่ยนใช้ระบบความปลอดภัยสูงในการเข้าใช้งาน';
-$LANG_CONF['main.templateSet'] = array("select", "เลือกเทมเพลตที่ต้องการ");
+$LANG_CONF['layout.templateSet'] = array("select", "เลือกเทมเพลตที่ต้องการ");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "เปิดการใช้งานเข้ารหัสของเอกสารแนบ <br><small>ยกเลิก ถ้าไม่ได้เปิดใช้เอกสารแนบ</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'ค่ารหัสเิริ่มต้นสำหรับเอกสารแนบ <br><small>ยกเลิก ถ้าไม่ได้เปิดใช้เอกสารแนบ</small><br><small><font color="red">คำเตือน: ไม่สามารถแก้ไขได้เมื่อเปิดใช้งานเข้ารหัสเอกสารแนบแล้ว!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "เปิดให้เข้าใช้งานสำหรับการเชื่อมต่อแบบปลอดภัยเท่านั้น? (ค่าเริ่มต้น: ปิด)");

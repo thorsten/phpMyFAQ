@@ -729,7 +729,7 @@ $PMF_LANG['msgAttachmentNotFound'] = 'ダウンロードを試みたファイル
 $PMF_LANG['ad_sess_noentry'] = 'エントリーがありません';
 $PMF_LANG['plmsgUserOnline']['0'] = '%d 人がオンライン';
 $PMF_LANG['plmsgUserOnline']['1'] = '%d 人がオンライン';
-$LANG_CONF['main.templateSet'] = array("select", "使用するテンプレート");
+$LANG_CONF['layout.templateSet'] = array("select", "使用するテンプレート");
 $PMF_LANG['msgTransToolRemove'] = '削除';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
@@ -883,7 +883,6 @@ $PMF_LANG["ad_searchterm_del_err"] = '検索語句を削除できませんでし
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "空のカテゴリーを非表示"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "ソリューションIDで検索"];
 $LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "SNS連携を無効にする"];
-$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "GZIP圧縮の有効化"];
 
 // added v2.9.0-alpha2
 $PMF_LANG["ad_tag_delete_success"] = "タグは削除されました。";

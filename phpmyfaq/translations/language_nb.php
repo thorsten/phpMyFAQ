@@ -769,7 +769,7 @@ $PMF_LANG['permission::approverec'] = 'godkjenne poster';
 $PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Oppgrader';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Du har den siste versjonen av phpMyFAQ. Oppdatering er ikke nødvendig.';
 $PMF_LANG['msgSecureSwitch'] = 'Bytt til sikker modus for å logge inn!';
-$LANG_CONF['main.templateSet'] = array("select", "Mal i bruk");
+$LANG_CONF['layout.templateSet'] = array("select", "Mal i bruk");
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Aktiver vedleggsbeskyttelse <br><small>Ignoreres ved deaktivert vedleggsfunksjon</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Standard krypteringsnøkkel for vedlegg <br><small>Ignoreres ved deaktivert vedleggskryptering</small><br><small><font color="red">ADVARSEL: IKKE endre denne etter at du har aktivert vedleggskryptering!!!</font></small>');
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Bare tillat pålogginger over sikker tilkobling? (Standard: deaktivert)");

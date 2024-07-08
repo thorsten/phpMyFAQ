@@ -912,7 +912,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d хэрэглэгч онлайн";
 $PMF_LANG["plmsgUserOnline"][1] = "%d хэрэглэгч онлайн";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array("сонгох", "Загвар хэрэглэгдэж байна");
+$LANG_CONF['layout.templateSet'] = array("сонгох", "Загвар хэрэглэгдэж байна");
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Устгах';

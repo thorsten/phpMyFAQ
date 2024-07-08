@@ -781,10 +781,15 @@ class Update extends Setup
             $this->configuration->add('records.allowedMediaHosts', 'www.youtube.com');
             $this->configuration->add('seo.title', $this->configuration->get('main.titleFAQ'));
             $this->configuration->add('seo.description', $this->configuration->get('main.metaDescription'));
-            $this->configuration->add('main.enablePrivacyLink', 'true');
+            $this->configuration->add('layout.enablePrivacyLink', 'true');
             $this->configuration->add('seo.glossary.title', '');
             $this->configuration->add('seo.glossary.description', '');
+            $this->configuration->add('layout.customCss', '');
             $this->configuration->delete('main.urlValidateInterval');
+            $this->configuration->delete('main.enableGzipCompression');
+            $this->configuration->rename('main.templateSet', 'layout.templateSet');
+            $this->configuration->rename('main.enableCookieConsent', 'layout.enableCookieConsent');
+            $this->configuration->rename('main.contactInformationHTML', 'layout.contactInformationHTML');
         }
     }
 

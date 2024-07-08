@@ -37,16 +37,9 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
     $templateVars = [
         'adminHeaderConfiguration' => Translation::get('ad_config_edit'),
         'csrfToken' => Token::getInstance()->getTokenString('configuration'),
+        'language' => $faqLangCode,
         'adminConfigurationButtonReset' => Translation::get('ad_config_reset'),
         'adminConfigurationButtonSave' => Translation::get('ad_config_save'),
-        'adminConfigurationMainTab' => Translation::get('mainControlCenter'),
-        'adminConfigurationFaqsTab' => Translation::get('recordsControlCenter'),
-        'adminConfigurationSearchTab' => Translation::get('searchControlCenter'),
-        'adminConfigurationSecurityTab' => Translation::get('securityControlCenter'),
-        'adminConfigurationSpamTab' => Translation::get('spamControlCenter'),
-        'adminConfigurationSeoTab' => Translation::get('seoCenter'),
-        'adminConfigurationMailTab' => Translation::get('mailControlCenter'),
-        'adminConfigurationUpgradeTab' => Translation::get('upgradeControlCenter'),
     ];
 
     echo $template->render($templateVars);

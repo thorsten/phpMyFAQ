@@ -37,7 +37,7 @@ $captcha->setSessionId($sids);
 
 $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 
-if ($faqConfig->get('main.contactInformationHTML')) {
+if ($faqConfig->get('layout.contactInformationHTML')) {
     $contactText = html_entity_decode((string) $faqConfig->get('main.contactInformation'));
 } else {
     $contactText = nl2br($faqConfig->get('main.contactInformation'));

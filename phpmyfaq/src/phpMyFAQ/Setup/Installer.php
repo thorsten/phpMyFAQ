@@ -308,11 +308,9 @@ class Installer extends Setup
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
         'main.enableMarkdownEditor' => 'false',
-        'main.templateSet' => 'default',
         'main.dateFormat' => 'Y-m-d H:i',
         'main.maintenanceMode' => 'false',
         'main.enableGravatarSupport' => 'false',
-        'main.enableGzipCompression' => 'true',
         'main.customPdfHeader' => '',
         'main.customPdfFooter' => '',
         'main.enableSmartAnswering' => 'true',
@@ -322,12 +320,9 @@ class Installer extends Setup
         'main.enableAutoUpdateHint' => 'true',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
-        'main.contactInformationHTML' => 'false',
         'main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,' .
         'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,' .
         'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
-        'main.enableCookieConsent' => 'true',
-        'main.enablePrivacyLink' => 'true',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
@@ -428,6 +423,12 @@ class Installer extends Setup
         'upgrade.lastDownloadedPackage' => '',
         'upgrade.onlineUpdateEnabled' => 'false',
         'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
+
+        'layout.templateSet' => 'default',
+        'layout.enablePrivacyLink' => 'true',
+        'layout.enableCookieConsent' => 'true',
+        'layout.contactInformationHTML' => 'false',
+        'layout.customCss' => '',
     ];
 
     public array $formInputs = [

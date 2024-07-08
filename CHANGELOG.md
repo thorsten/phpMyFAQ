@@ -24,6 +24,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
+- added possibility to add custom CSS via admin frontend (Thorsten)
 - added experimental support for PHP 8.4 (Thorsten)
 - improved installation and update (Thorsten)
 - improved SEO support (Thorsten)

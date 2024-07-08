@@ -909,7 +909,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d user online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d users online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = ["select", "Template set to be used"];
+$LANG_CONF['layout.templateSet'] = ["select", "Template set to be used"];
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Remove';
@@ -1140,7 +1140,6 @@ $PMF_LANG["ad_searchterm_del_suc"] = 'Successfully deleted all search terms.';
 $PMF_LANG["ad_searchterm_del_err"] = 'Could not delete all search terms.';
 $LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Hide empty categories"];
 $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Search for solution ID"];
-$LANG_CONF["main.enableGzipCompression"] = ["checkbox", "Enable GZIP compression"];
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
@@ -1320,7 +1319,7 @@ $PMF_LANG['ad_open_question_deleted'] = 'The question was successfully deleted.'
 $LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Disable SMTP TLS peer verification (not recommended)'];
 
 // added v3.2.0-beta.2 - 2023-05-03 by Jan
-$LANG_CONF['main.contactInformationHTML'] = ['checkbox', 'Contact information as HTML?'];
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Contact information as HTML?'];
 
 // added v3.2.0-RC - 2023-05-18 by Thorsten
 $PMF_LANG['msgAuthenticationSource'] = 'Authentication service';
@@ -1393,7 +1392,7 @@ $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of s
 $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can mark records as stick in the <a href="./?action=faqs-overview" class="alert-link">FAQ Overview</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
-$LANG_CONF['main.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
 $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan
@@ -1474,10 +1473,12 @@ $PMF_LANG['msgError'] = 'An error occurred.';
 $PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
-$LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
 $LANG_CONF['seo.glossary.title'] = ['input', 'SERP title for glossary'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'SERP description for glossary'];
 $PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>src/Bootstrap.php</code> file.';
 $PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is currently in development (%s). And therefore not yet ready for production. Please <a target="_blank" href="%s" class="alert-link">report all issues on GitHub</a>. Thank you very much!';
+$PMF_LANG['layoutControlCenter'] = 'Layout';
+$LANG_CONF['layout.customCss'] = ['area', 'Custom CSS', 'Please use CSS only.'];
 
 return $PMF_LANG;

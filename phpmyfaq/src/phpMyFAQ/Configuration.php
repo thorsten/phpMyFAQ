@@ -286,7 +286,7 @@ class Configuration
             'name' => $this->get('ldap.ldap_mapping.name'),
             'username' => $this->get('ldap.ldap_mapping.username'),
             'mail' => $this->get('ldap.ldap_mapping.mail'),
-            'memberOf' => $this->get('ldap.ldap_mapping.memberOf')
+            'memberOf' => $this->get('ldap.ldap_mapping.memberOf'),
         ];
     }
 
@@ -299,7 +299,7 @@ class Configuration
     {
         return [
             'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
-            'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS')
+            'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS'),
         ];
     }
 
@@ -431,7 +431,7 @@ class Configuration
             'core.ldapServer', // Ldap
             'core.ldapConfig', // $LDAP
             'core.elasticsearch', // Elasticsearch\Client
-            'core.elasticsearchConfig' // $ES
+            'core.elasticsearchConfig', // $ES
         ];
 
         foreach ($newConfigs as $name => $value) {
@@ -499,5 +499,10 @@ class Configuration
     public function getAllowedMediaHosts(): array
     {
         return explode(',', $this->get('records.allowedMediaHosts'));
+    }
+
+    public function getCustomCss(): string
+    {
+        return $this->get('layout.customCss');
     }
 }
