@@ -472,13 +472,6 @@ if ($faqConfig->get('security.enableLoginOnly')) {
     $indexSet = 'index.html';
 }
 
-//
-// phpMyFAQ installation is in maintenance mode
-//
-if ($faqConfig->get('main.maintenanceMode')) {
-    $indexSet = 'maintenance.page.html';
-}
-
 $categoryRelation = new Relation($faqConfig, $category);
 
 $categoryHelper = new HelperCategory();

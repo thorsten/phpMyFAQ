@@ -23,6 +23,7 @@
   <link href="{{ currentPageUrl }}" rel="canonical">
 </head>
 <body class="pmf-page-wrapper" dir="{{ dir }}">
+
 <nav class="p-3 text-bg-dark border-bottom">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -32,11 +33,13 @@
       </a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        {% for item in topNavigation %}
-          <li class="pmf-nav-link ">
-            <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
-          </li>
-        {% endfor %}
+        {% if not isMaintenanceMode %}
+          {% for item in topNavigation %}
+            <li class="pmf-nav-link ">
+              <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
       </ul>
 
       <div class="dropdown text-end">
@@ -67,6 +70,7 @@
 </nav>
 
 <!-- SEARCH -->
+{% if not isMaintenanceMode %}
 <div class="container my-5">
   <div class="row height d-flex justify-content-center align-items-center">
     <div class="col-md-8">
@@ -86,6 +90,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 <!-- BREADCRUMB -->
 {% if showBreadcrumb %}
@@ -97,12 +102,17 @@
 <!-- MAIN CONTENT -->
 <section class="my-3" id="wrapper">
   <div class="container">
+  {% if not isMaintenanceMode %}
     {% block content %}{% endblock %}
+  {% else %}
+    We're currently in maintenance mode. Please come back later.
+  {% endif %}
   </div>
 </section>
 
 <footer class="pt-4 text-bg-dark">
   <div class="container">
+    {% if not isMaintenanceMode %}
     <div class="row">
       <div class="col-md-8 mb-md-0 mb-4">
         <h5 class="footer-heading">{{ msgTagCloudHeader }}</h5>
@@ -119,6 +129,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
   <div class="w-100">
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -129,20 +140,22 @@
         </p>
 
         <ul class="nav col-md-6 justify-content-end w-100">
-          {% for item in footerNavigation %}
+          {% if not isMaintenanceMode %}
+            {% for item in footerNavigation %}
+              <li class="nav-item">
+                <a class="pmf-nav-link-footer {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+              </li>
+            {% endfor %}
+            {% if isPrivacyLinkEnabled %}
             <li class="nav-item">
-              <a class="pmf-nav-link-footer {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+              <a class="pmf-nav-link-footer" target="_blank" href="{{ urlPrivacyLink }}">{{ msgPrivacyNote }}</a>
             </li>
-          {% endfor %}
-          {% if isPrivacyLinkEnabled %}
-          <li class="nav-item">
-            <a class="pmf-nav-link-footer" target="_blank" href="{{ urlPrivacyLink }}">{{ msgPrivacyNote }}</a>
-          </li>
-          {% endif %}
-          {% if isCookieConsentEnabled %}
-          <li class="nav-item">
-            <a id="showCookieConsent" class="pmf-nav-link-footer" href="#">{{ cookiePreferences }}</a>
-          </li>
+            {% endif %}
+            {% if isCookieConsentEnabled %}
+            <li class="nav-item">
+              <a id="showCookieConsent" class="pmf-nav-link-footer" href="#">{{ cookiePreferences }}</a>
+            </li>
+            {% endif %}
           {% endif %}
         </ul>
       </div>
