@@ -1457,5 +1457,8 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link zum FAQ';
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Aktiviere Link zur Datenschutzerklärung'];
 $LANG_CONF['seo.glossary.title'] = ['input', 'SERP Titel für Glossar'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'SERP Beschreibung für Glossar'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ läuft derzeit im Debug-Modus. Der Debug-Modus kann sensible Informationen preisgeben und ist nur für Entwicklungszwecke gedacht. Wir empfehlen dringend, den Debug-Modus aus Sicherheitsgründen zu deaktivieren. Sie können den Debug-Modus in der Datei <code>src/Bootstrap.php</code> deaktivieren.
+';
+
 
 return $PMF_LANG;

@@ -1448,7 +1448,7 @@ $PMF_LANG['msgNotInMaintenanceMode'] = '⚠️The FAQ is not in maintenance mode
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
 $PMF_LANG['msgSeperateKeywordsWithCommas'] = 'Multiple keywords have to seperated with commas.';
-$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You cant use this form due to missing configured categories. Please inform the <a class="alert-link" href="contact.html">administrator</a>.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You can not use this form due to missing configured categories. Please inform the <a class="alert-link" href="./contact.html">administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No reply address for emails'];
@@ -1477,5 +1477,6 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 $LANG_CONF['main.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
 $LANG_CONF['seo.glossary.title'] = ['input', 'SERP title for glossary'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'SERP description for glossary'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>src/Bootstrap.php</code> file.';
 
 return $PMF_LANG;
