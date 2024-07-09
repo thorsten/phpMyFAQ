@@ -13,7 +13,7 @@
  * @since     2019-12-20
  */
 
-import { getLatestVersion, renderVisitorCharts, renderTopTenCharts } from './dashboard';
+import { getLatestVersion, renderVisitorCharts, renderTopTenCharts, handleVerificationModal } from './dashboard';
 import { handleCreateReport, handleDeleteAdminLog, handleSessions, handleStatistics } from './statistics';
 import {
   handleConfiguration,
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await renderVisitorCharts();
   await renderTopTenCharts();
   await getLatestVersion();
+  await handleVerificationModal();
 
   // User → User Management
   await handleUsers();

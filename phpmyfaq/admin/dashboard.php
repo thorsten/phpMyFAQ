@@ -117,49 +117,6 @@ if ($user->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->valu
         }
     }
 
-    $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_SPECIAL_CHARS);
-    if ('verify' === $getJson) {
-        $issues = [];
-        $errorMessageVerification = '';
-        try {
-            $versionMismatch = false;
-            if (!$api->isVerified()) {
-                $versionMismatch = true;
-            } else {
-                $issues = $api->getVerificationIssues();
-                if (1 < count($issues)) {
-                    echo Alert::danger('ad_verification_notokay');
-                    echo '<ul>';
-                    foreach ($issues as $file => $hash) {
-                        if ('created' === $file) {
-                            continue;
-                        }
-                        printf(
-                            '<li><span class="pmf-popover" data-bs-toggle="popover" data-bs-container="body" title="SHA-1" data-bs-content="%s">%s</span></li>',
-                            $hash,
-                            $file
-                        );
-                    }
-                    echo '</ul>';
-                } else {
-                    echo Alert::success('ad_verification_okay');
-                }
-            }
-        } catch (Exception $e) {
-            $errorMessageVerification = $e->getMessage();
-        } catch (TransportExceptionInterface $e) {
-            $errorMessageVerification = $e->getMessage();
-        }
-        $templateVars = [
-            ...$templateVars,
-            'showVerificationResult' => true,
-            'adminDashboardVersionMismatch' => $versionMismatch,
-            'adminDashboardErrorMessageVerification' => $errorMessageVerification,
-            'adminDashboardVerificationIssues' => $issues,
-            'adminDashboardVerificationNotOkay' => Translation::get('ad_verification_notokay'),
-        ];
-    }
-
     $templateVars = [
         ...$templateVars,
         'showVersion' => $faqConfig->get('main.enableAutoUpdateHint') || ($version === 'version'),

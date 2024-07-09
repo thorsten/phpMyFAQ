@@ -14,6 +14,7 @@
  */
 
 import { Chart, registerables } from 'chart.js';
+import { getRemoteHashes, verifyHashes } from './api';
 import { addElement } from '../../../assets/src/utils';
 
 export const renderVisitorCharts = async () => {
@@ -248,5 +249,35 @@ export const getLatestVersion = async () => {
         })
       );
     }
+  }
+};
+
+export const handleVerificationModal = async () => {
+  const verificationModal = document.getElementById('verificationModal');
+  if (verificationModal) {
+    verificationModal.addEventListener('show.bs.modal', async (event) => {
+      const spinner = document.getElementById('pmf-verification-spinner');
+      const version = verificationModal.getAttribute('data-pmf-current-version');
+      const updates = document.getElementById('pmf-verification-updates');
+      spinner.classList.remove('d-none');
+      updates.innerText = 'Fetching verification hashes from api.phpmyfaq.de...';
+      const remoteHashes = await getRemoteHashes(version);
+      updates.innerText = 'Checking hashes with installation files...';
+      const issues = await verifyHashes(remoteHashes);
+
+      if (typeof issues !== 'object') {
+        console.error('Invalid JSON data provided.');
+      }
+
+      const ul = document.createElement('ul');
+      for (const [filename, hashValue] of Object.entries(issues)) {
+        const li = document.createElement('li');
+        li.textContent = `Filename: ${filename}, Hash Value: ${hashValue}`;
+        ul.appendChild(li);
+      }
+
+      updates.appendChild(ul);
+      spinner.classList.add('d-none');
+    });
   }
 };

@@ -18,13 +18,13 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Administration\Api;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -33,13 +33,28 @@ class DashboardController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \JsonException
+     */
+    #[Route('admin/api/dashboard/verify')]
+    public function verify(Request $request): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $data = $request->getContent();
+        $api = new Api($this->configuration);
+
+        return $this->json($api->setRemoteHashes($data)->getVerificationIssues());
+    }
+
+    /**
+     * @throws Exception
      */
     #[Route('admin/api/dashboard/versions')]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $api = new Api(Configuration::getConfigurationInstance());
+        $api = new Api($this->configuration);
         try {
             $versions = $api->getVersions();
             if (version_compare($versions['installed'], $versions['stable']) < 0) {
@@ -49,7 +64,7 @@ class DashboardController extends AbstractController
             }
 
             return $this->json($info);
-        } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+        } catch (DecodingExceptionInterface | TransportExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         }
     }
@@ -62,10 +77,8 @@ class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-
-        if ($configuration->get('main.enableUserTracking')) {
-            $session = new Session($configuration);
+        if ($this->configuration->get('main.enableUserTracking')) {
+            $session = new Session($this->configuration);
             return $this->json($session->getLast30DaysVisits());
         }
 

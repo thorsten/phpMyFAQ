@@ -194,6 +194,11 @@ $routesConfig = [
         'controller' => [DashboardController::class, 'topTen'],
         'methods' => 'GET'
     ],
+    'admin.api.dashboard.verify' => [
+        'path' => '/dashboard/verify',
+        'controller' => [DashboardController::class, 'verify'],
+        'methods' => 'POST'
+    ],
     'admin.api.dashboard.versions' => [
         'path' => '/dashboard/versions',
         'controller' => [DashboardController::class, 'versions'],

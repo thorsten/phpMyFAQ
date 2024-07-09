@@ -224,47 +224,41 @@
           <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ 'msgOnlineVerificationCheck' | translate }}
         </h5>
         <div class="card-body">
-          {% if showVerificationResult %}
-
-            {% if adminDashboardVersionMismatch %}
-              <div class="alert alert-danger">
-                phpMyFAQ version mismatch — no verification possible.
-              </div>
-            {% endif %}
-
-            {% if adminDashboardVerificationIssues %}
-              <div class="alert alert-danger">
-                {{ adminDashboardVerificationNotOkay }}
-              </div>
-              <ul>
-                {% for key, issue in adminDashboardVerificationIssues %}
-                  <li>
-                    <span class="pmf-popover" data-bs-toggle="popover" data-bs-container="body"
-                          title="SHA-1"
-                          data-bs-content="{{ key }}">
-                        {{ issue }}
-                    </span>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            {% if adminDashboardErrorMessageVerification %}
-              <div class="alert alert-danger">
-                {{ adminDashboardErrorMessageVerification }}
-              </div>
-            {% endif %}
-
-          {% else %}
-            <form action="./index.php" method="post" accept-charset="utf-8">
-              <input type="hidden" name="getJson" value="verify">
-              <button class="btn btn-info" type="submit">
-                {{ 'msgOnlineVerificationCheckButton' | translate }}
-              </button>
-            </form>
-          {% endif %}
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verificationModal">
+            {{ 'msgOnlineVerificationCheckButton' | translate }}
+          </button>
         </div>
       </div>
     </div>
   {% endif %}
 </section>
+
+<!-- Verification Modal -->
+<div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
+     data-pmf-current-version="{{ currentVersionApp }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="verificationModalLabel">{{ 'msgOnlineVerificationCheck' | translate }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <div class="spinner-border d-none" role="status" id="pmf-verification-spinner">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <div class="col-10">
+              <span id="pmf-verification-updates"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'ad_att_close' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

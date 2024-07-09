@@ -140,4 +140,10 @@ class Api
     {
         $this->httpClient = $httpClient;
     }
+
+    public function setRemoteHashes(?string $remoteHashes): Api
+    {
+        $this->remoteHashes = $remoteHashes;
+        return $this;
+    }
 }

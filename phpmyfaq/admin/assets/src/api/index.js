@@ -7,3 +7,4 @@ export * from './statistics';
 export * from './tags';
 export * from './upgrade';
 export * from './user';
+export * from './verification';
