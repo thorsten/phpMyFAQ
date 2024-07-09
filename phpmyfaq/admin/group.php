@@ -17,7 +17,6 @@
  * @since     2005-12-15
  */
 
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -90,12 +89,12 @@ if (
     $groupMembers = $_POST['group_members'] ?? [];
 
     if ($groupId == 0) {
-        $message .= Alert::danger('ad_user_error_noId');
+        $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
-            $message .= Alert::danger('ad_msg_mysqlerr');
+            $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
         }
         foreach ($groupMembers as $memberId) {
             $perm->addToGroup((int)$memberId, $groupId);
@@ -118,13 +117,13 @@ if (
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
-        $message .= Alert::danger('ad_user_error_noId');
+        $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
         $user = new User($faqConfig);
         $perm = $user->perm;
         $groupRights = $_POST['group_rights'] ?? [];
         if (!$perm->refuseAllGroupRights($groupId)) {
-            $message .= Alert::danger('ad_msg_mysqlerr');
+            $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
         }
         foreach ($groupRights as $rightId) {
             $perm->grantGroupRight($groupId, (int)$rightId);
@@ -147,7 +146,7 @@ if (
     $groupAction = $defaultGroupAction;
     $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
-        $message .= Alert::danger('ad_user_error_noId');
+        $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
@@ -157,7 +156,11 @@ if (
         $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
-            $message .= Alert::danger('ad_msg_mysqlerr', $faqConfig->getDb()->error());
+            $message .= sprintf(
+                '<div class="alert alert-danger">%s %s</div>',
+                Translation::get('ad_msg_mysqlerr'),
+                $faqConfig->getDb()->error()
+            );
         } else {
             $message .= sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
@@ -179,7 +182,7 @@ if (
     $perm = $user->perm;
     $groupId = Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message .= Alert::danger('ad_user_error_noId');
+        $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
         $groupAction = $defaultGroupAction;
     } else {
         $groupData = $perm->getGroupData($groupId);
@@ -209,12 +212,12 @@ if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), P
     }
     $groupAction = $defaultGroupAction;
     if ($groupId <= 0) {
-        $message .= Alert::danger('ad_user_error_noId');
+        $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
         if (!$user->perm->deleteGroup($groupId) && !$csrfOkay) {
-            $message .= Alert::danger('ad_group_error_delete');
+            $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_group_error_delete'));
         } else {
-            $message .= Alert::success('ad_group_deleted');
+            $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_group_deleted'));
         }
         $userError = $user->error();
         if ($userError != '') {
@@ -257,7 +260,7 @@ if ($groupAction == 'addsave' && $user->perm->hasPermission($user->getUserId(), 
     // no errors, show list
     if (count($messages) === 0) {
         $groupAction = $defaultGroupAction;
-        $message = Alert::success('ad_group_suc');
+        $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get('ad_group_suc'));
         // display error messages and show form again
     } else {
         $groupAction = 'add';

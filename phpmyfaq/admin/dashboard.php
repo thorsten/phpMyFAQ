@@ -17,7 +17,6 @@
  */
 
 use phpMyFAQ\Administration\Api;
-use phpMyFAQ\Component\Alert;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
