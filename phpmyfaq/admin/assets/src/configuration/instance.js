@@ -25,7 +25,7 @@ export const handleInstances = () => {
     const modal = new Modal(container);
     addInstance.addEventListener('click', (event) => {
       event.preventDefault();
-      const csrf = document.querySelector('#csrf').value;
+      const csrf = document.querySelector('#pmf-csrf-token').value;
       const url = document.querySelector('#url').value;
       const instance = document.querySelector('#instance').value;
       const comment = document.querySelector('#comment').value;
