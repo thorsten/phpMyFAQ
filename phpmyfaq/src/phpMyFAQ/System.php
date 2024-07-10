@@ -60,6 +60,11 @@ class System
     private const VERSION_API = '3.0';
 
     /**
+     * Plugin version.
+     */
+    private const PLUGIN_VERSION = '0.0.1';
+
+    /**
      * Minimum required PHP version.
      */
     final public const VERSION_MINIMUM_PHP = '8.2.0';
@@ -153,6 +158,14 @@ class System
     public static function getApiVersion(): string
     {
         return self::VERSION_API;
+    }
+
+    /**
+     * Returns the current plugin version of phpMyFAQ
+     */
+    public static function getPluginVersion(): string
+    {
+        return self::PLUGIN_VERSION;
     }
 
     public static function getPoweredByString(bool $withLink = false): string

@@ -6,17 +6,30 @@ The plugin system is based on the Symfony Dependency Injection component.
 
 ## 7.1 Plugin installation
 
+Plugins are installed in the `content/plugins` directory of your phpMyFAQ installation.
+The plugin directory should contain a subdirectory for each plugin, e.g. `content/plugins/HelloWorld`.
+The plugin directory should contain a `HelloWorldPlugin.php` file that implements the `PluginInterface` interface.
+
 ## 7.2 Plugin configuration
+
+Plugins can have configuration options.
 
 ## 7.3 Plugin development
 
-## 7.4 Plugin management
+To develop a plugin, you need to create a new directory in the `content/plugins` directory.
+The main plugin class should implement the `PluginInterface` interface.
+The plugin class should have a constructor that accepts the plugin manager as an argument.
+The plugin manager is an instance of the `PluginManager` class.
 
-## 7.5 Plugin uninstallation
+## 7.4 Plugin uninstallation
 
-## 7.6 Plugin examples
+To uninstall a plugin, you can delete the plugin directory from the `content/plugins` directory.
 
-### 7.6.1 PHP code
+## 7.5 Plugin examples
+
+phpMyFAQ comes with a example plugin that demonstrate how to use the plugin system called `HelloWorldPlugin`.
+
+### 7.5.1 PHP code
 
 ```php
 <?php
@@ -79,7 +92,7 @@ class MyPlugin implements PluginInterface
 }
 ```
 
-### 7.6.2 Twig template
+### 7.5.2 Twig template
 
 ´´´ html
 

@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Plugin;
 
+use phpMyFAQ\System;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -64,6 +65,7 @@ class PluginManager
     }
 
     /**
+     * Loads and registers all plugins
      * @throws PluginException
      */
     public function loadPlugins(): void
@@ -92,16 +94,6 @@ class PluginManager
         }
     }
 
-    private function getNamespaceFromFile(string $file): ?string
-    {
-        $src = file_get_contents($file);
-        if (preg_match('/^namespace\s+(.+?);/m', $src, $matches)) {
-            return $matches[1];
-        }
-        return null;
-    }
-
-
     /**
      * Handles the triggered event
      * @param string     $eventName
@@ -117,8 +109,9 @@ class PluginManager
     }
 
     /**
-     * @param string $pluginName
-     * @param array  $config
+     * Loads the configuration for a plugin
+     * @param string   $pluginName
+     * @param string[] $config
      */
     public function loadPluginConfig(string $pluginName, array $config): void
     {
@@ -126,6 +119,7 @@ class PluginManager
     }
 
     /**
+     * Returns the configuration for a plugin
      * @param string $pluginName
      * @return array
      */
@@ -134,12 +128,40 @@ class PluginManager
         return $this->config[$pluginName] ?? [];
     }
 
-    private function isCompatible(PluginInterface $plugin): bool
+    public function getPlugins(): array
     {
-        $requiredVersion = '0.0.1';
-        return version_compare($plugin->getVersion(), $requiredVersion, '>=');
+        return $this->plugins;
     }
 
+    /**
+     * Returns the namespace from a file
+     * @param string $file
+     * @return string|null
+     */
+    private function getNamespaceFromFile(string $file): ?string
+    {
+        $src = file_get_contents($file);
+        if (preg_match('/^namespace\s+(.+?);/m', $src, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Checks if a plugin is compatible with the current version
+     * @param PluginInterface $plugin
+     * @return bool
+     */
+    private function isCompatible(PluginInterface $plugin): bool
+    {
+        return version_compare($plugin->getVersion(), System::getPluginVersion(), '>=');
+    }
+
+    /**
+     * Checks if a plugin's dependencies are met
+     * @param PluginInterface $plugin
+     * @return bool
+     */
     private function areDependenciesMet(PluginInterface $plugin): bool
     {
         if (empty($plugin->getDependencies())) {
