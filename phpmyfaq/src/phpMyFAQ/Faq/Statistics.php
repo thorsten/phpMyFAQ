@@ -172,8 +172,6 @@ class Statistics
                 $entry->date = $date->format($row['date']);
                 $output[] = $entry;
             }
-        } else {
-            $output['error'] = Translation::get('err_noArticles');
         }
 
         return $output;
