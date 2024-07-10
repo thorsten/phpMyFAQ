@@ -2,7 +2,6 @@
 
 namespace phpMyFAQ\Plugin;
 
-use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 
 require 'MockPlugin.php';
@@ -30,7 +29,7 @@ class PluginManagerTest extends TestCase
     {
         // Simulate loading plugins from directory
         $mockPluginPath = __DIR__ . '/MockPlugin.php';
-        file_put_contents($mockPluginPath, '<?php ' . file_get_contents(__DIR__ . '/MockPlugin.php'));
+        file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
 
         // Use reflection to call private method getNamespaceFromFile
         $reflection = new \ReflectionClass($this->pluginManager);
