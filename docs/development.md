@@ -254,7 +254,7 @@ The translation extension is used to get the translation of a string.
 
 Example:
 
-        {{ 'string' | translate }}
+    {{ 'string' | translate }}
 
 ### 6.5.9 User name
 

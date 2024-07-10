@@ -26,6 +26,8 @@ use Monolog\Logger;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Plugin\PluginException;
+use phpMyFAQ\Plugin\PluginManager;
 
 /**
  * Class Configuration
@@ -42,13 +44,17 @@ class Configuration
 
     protected string $tableName = 'faqconfig';
 
+
     /**
      * Constructor.
-     */
+     *
+     * @throws PluginException
+*/
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
         $this->setLogger();
+        $this->setPluginManager();
 
         if (is_null(self::$configuration)) {
             self::$configuration = $this;
@@ -432,6 +438,7 @@ class Configuration
             'core.ldapConfig', // $LDAP
             'core.elasticsearch', // Elasticsearch\Client
             'core.elasticsearchConfig', // $ES
+            'core.pluginManager', // PluginManager
         ];
 
         foreach ($newConfigs as $name => $value) {
@@ -504,5 +511,32 @@ class Configuration
     public function getCustomCss(): string
     {
         return $this->get('layout.customCss');
+    }
+
+    /**
+     * @throws PluginException
+     */
+    public function setPluginManager(): Configuration
+    {
+        $pluginManager = new PluginManager();
+        $pluginManager->loadPlugins();
+
+        $this->config['core.pluginManager'] = $pluginManager;
+        return $this;
+    }
+
+    public function getPluginManager(): PluginManager
+    {
+        return $this->config['core.pluginManager'];
+    }
+
+    public function triggerEvent(string $eventName, $data = null)
+    {
+        $this->pluginManager->triggerEvent($eventName, $data);
+    }
+
+    public function getPluginConfig(string $pluginName)
+    {
+        return $this->pluginManager->getPluginConfig($pluginName);
     }
 }

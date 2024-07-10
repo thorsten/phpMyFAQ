@@ -33,6 +33,8 @@
     "myclabs/deep-copy": "~1.0",
     "phpseclib/phpseclib": "~3.0",
     "robthree/twofactorauth": "^3.0.0",
+    "symfony/dependency-injection": "^7.1",
+    "symfony/event-dispatcher": "^7.1",
     "symfony/html-sanitizer": "^7.0",
     "symfony/http-client": "^7.0",
     "symfony/http-foundation": "^7.0",

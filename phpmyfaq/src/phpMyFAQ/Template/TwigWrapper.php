@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Template;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Plugin\PluginManager;
 use phpMyFAQ\System;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -49,6 +50,9 @@ class TwigWrapper
 
         // Always add the translation extension
         $this->twigEnvironment->addExtension(new TranslateTwigExtension());
+
+        // Always add the plugin extension
+        $this->twigEnvironment->addExtension(new PluginTwigExtension());
 
         // If we're on a development version or debug is enabled, add the debug extension
         if (System::isDevelopmentVersion() || DEBUG) {
