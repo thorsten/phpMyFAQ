@@ -303,8 +303,10 @@ class FaqController extends AbstractController
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
         $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
+        $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
         $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
+        $recordDateHandling = Filter::filterVar($data->recordDateHandling, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
         $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -345,8 +347,18 @@ class FaqController extends AbstractController
             ->setAuthor($author)
             ->setEmail($email)
             ->setComment(!is_null($comment))
-            ->setCreatedDate(new DateTime())
             ->setNotes(Filter::removeAttributes($notes));
+
+        switch ($recordDateHandling) {
+            case 'updateDate':
+                $faqData->setUpdatedDate(new DateTime());
+                break;
+            case 'manualDate':
+                $faqData->setUpdatedDate(new DateTime($date));
+                break;
+            case 'keepDate':
+                break;
+        }
 
         // Create ChangeLog entry
         $changelog->add($faqData->getId(), $user->getUserId(), (string) $changed, $faqData->getLanguage(), $revisionId);

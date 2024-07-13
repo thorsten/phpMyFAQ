@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Core\Exception;
@@ -94,11 +95,15 @@ class FaqTest extends TestCase
     public function testUpdate(): void
     {
         $faqEntity = $this->getFaqEntity();
-        $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
-        $faqEntity->setRevisionId(0);
+        $faqEntity = $this->faq->create($faqEntity);
+
+        $faqEntity->setId($faqEntity->getId());
+
+        $faqEntity->setRevisionId(1);
         $faqEntity->setQuestion('Updated question');
         $faqEntity->setAnswer('Updated answer');
+
 
         $result = $this->faq->update($faqEntity);
 
@@ -160,6 +165,7 @@ class FaqTest extends TestCase
     {
         $faqEntity = new FaqEntity();
         $faqEntity
+            ->setRevisionId(0)
             ->setLanguage('en')
             ->setActive(true)
             ->setSticky(true)
@@ -169,7 +175,8 @@ class FaqTest extends TestCase
             ->setAuthor('Author')
             ->setEmail('foo@bar.baz')
             ->setComment(true)
-            ->setNotes('');
+            ->setNotes('')
+            ->setUpdatedDate(new DateTime());
 
         return $faqEntity;
     }

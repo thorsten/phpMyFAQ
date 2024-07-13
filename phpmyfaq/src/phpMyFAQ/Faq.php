@@ -906,50 +906,51 @@ class Faq
         return $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
     }
 
-    public function update(FaqEntity $faqEntity): FaqEntity
+    public function update(FaqEntity $faq): FaqEntity
     {
         $query = sprintf(
-            "UPDATE
-                %sfaqdata
-            SET
-                revision_id = %d,
-                active = '%s',
-                sticky = %d,
-                keywords = '%s',
-                thema = '%s',
-                content = '%s',
-                author = '%s',
-                email = '%s',
-                comment = '%s',
-                updated = '%s',
-                date_start = '%s',
-                date_end = '%s',
-                notes = '%s'
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
+            "UPDATE %sfaqdata SET
+            revision_id = %d,
+            active = '%s',
+            sticky = %d,
+            keywords = '%s',
+            thema = '%s',
+            content = '%s',
+            author = '%s',
+            email = '%s',
+            comment = '%s',
+            date_start = '%s',
+            date_end = '%s',
+            notes = '%s'",
             Database::getTablePrefix(),
-            $faqEntity->getRevisionId(),
-            $faqEntity->isActive() ? 'yes' : 'no',
-            $faqEntity->isSticky() ? 1 : 0,
-            $this->configuration->getDb()->escape($faqEntity->getKeywords()),
-            $this->configuration->getDb()->escape($faqEntity->getQuestion()),
-            $this->configuration->getDb()->escape($faqEntity->getAnswer()),
-            $this->configuration->getDb()->escape($faqEntity->getAuthor()),
-            $this->configuration->getDb()->escape($faqEntity->getEmail()),
-            $faqEntity->isComment() ? 'y' : 'n',
-            $faqEntity->getUpdatedDate()->format('YmdHis'),
-            $faqEntity->getValidFrom()->format('YmdHis'),
-            $faqEntity->getValidTo()->format('YmdHis'),
-            $this->configuration->getDb()->escape($faqEntity->getNotes()),
-            $faqEntity->getId(),
-            $this->configuration->getDb()->escape($faqEntity->getLanguage())
+            $faq->getRevisionId(),
+            $faq->isActive() ? 'yes' : 'no',
+            $faq->isSticky() ? 1 : 0,
+            $this->configuration->getDb()->escape($faq->getKeywords()),
+            $this->configuration->getDb()->escape($faq->getQuestion()),
+            $this->configuration->getDb()->escape($faq->getAnswer()),
+            $this->configuration->getDb()->escape($faq->getAuthor()),
+            $this->configuration->getDb()->escape($faq->getEmail()),
+            $faq->isComment() ? 'y' : 'n',
+            $faq->getValidFrom()->format('YmdHis'),
+            $faq->getValidTo()->format('YmdHis'),
+            $this->configuration->getDb()->escape($faq->getNotes())
+        );
+
+        // Conditionally add the updated field
+        if ($faq->getUpdatedDate() !== null) {
+            $query .= sprintf(", updated = '%s'", $faq->getUpdatedDate()->format('YmdHis'));
+        }
+
+        $query .= sprintf(
+            " WHERE id = %d AND lang = '%s'",
+            $faq->getId(),
+            $this->configuration->getDb()->escape($faq->getLanguage())
         );
 
         $this->configuration->getDb()->query($query);
 
-        return $faqEntity;
+        return $faq;
     }
 
     /**
