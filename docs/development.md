@@ -263,3 +263,13 @@ The username extension is used to get the name of a user by its ID.
 Example:
 
     {{ userId | userName }}
+
+## Docker container
+
+### Create a new SSL certificate
+
+To create a new SSL certificate, you can use the following command:
+
+    $ mkcert -install -cert-file .docker/cert.pem -key-file .docker/cert-key.pem localhost
+
+For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
