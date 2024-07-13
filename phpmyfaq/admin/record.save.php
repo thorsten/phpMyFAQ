@@ -88,6 +88,7 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
     $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_SPECIAL_CHARS);
     $date = Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
     $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
+    $recordDateHandling = Filter::filterInput(INPUT_POST, 'recordDateHandling', FILTER_SANITIZE_SPECIAL_CHARS);
 
     // Permissions
     $faqPermission = new FaqPermission($faqConfig);
@@ -137,8 +138,18 @@ if ($user->perm->hasPermission($user->getUserId(), 'edit_faq')) {
             ->setAuthor($author)
             ->setEmail($email)
             ->setComment(!is_null($comment))
-            ->setCreatedDate(new DateTime())
             ->setNotes(Filter::removeAttributes($notes));
+
+        switch ($recordDateHandling) {
+            case 'updateDate':
+                $faqData->setUpdatedDate(new DateTime());
+                break;
+            case 'manualDate':
+                $faqData->setUpdatedDate(new DateTime($date));
+                break;
+            case 'keepDate':
+                break;
+        }
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);

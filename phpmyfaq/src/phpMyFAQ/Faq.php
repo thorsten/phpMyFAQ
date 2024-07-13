@@ -966,26 +966,19 @@ class Faq
     public function update(FaqEntity $faq): bool
     {
         $query = sprintf(
-            "UPDATE
-                %sfaqdata
-            SET
-                revision_id = %d,
-                active = '%s',
-                sticky = %d,
-                keywords = '%s',
-                thema = '%s',
-                content = '%s',
-                author = '%s',
-                email = '%s',
-                comment = '%s',
-                updated = '%s',
-                date_start = '%s',
-                date_end = '%s',
-                notes = '%s'
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
+            "UPDATE %sfaqdata SET
+            revision_id = %d,
+            active = '%s',
+            sticky = %d,
+            keywords = '%s',
+            thema = '%s',
+            content = '%s',
+            author = '%s',
+            email = '%s',
+            comment = '%s',
+            date_start = '%s',
+            date_end = '%s',
+            notes = '%s'",
             Database::getTablePrefix(),
             $faq->getRevisionId(),
             $faq->isActive() ? 'yes' : 'no',
@@ -996,12 +989,20 @@ class Faq
             $this->config->getDb()->escape($faq->getAuthor()),
             $this->config->getDb()->escape($faq->getEmail()),
             $faq->isComment() ? 'y' : 'n',
-            $faq->getUpdatedDate()->format('YmdHis'),
             $faq->getValidFrom()->format('YmdHis'),
             $faq->getValidTo()->format('YmdHis'),
-            $this->config->getDb()->escape($faq->getNotes()),
+            $this->config->getDb()->escape($faq->getNotes())
+        );
+
+        // Conditionally add the updated field
+        if ($faq->getUpdatedDate() !== null) {
+            $query .= sprintf(", updated = '%s'", $faq->getUpdatedDate()->format('YmdHis'));
+        }
+
+        $query .= sprintf(
+            " WHERE id = %d AND lang = '%s'",
             $faq->getId(),
-            $faq->getLanguage()
+            $this->config->getDb()->escape($faq->getLanguage())
         );
 
         return (bool) $this->config->getDb()->query($query);

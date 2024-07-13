@@ -247,13 +247,9 @@ class FaqEntity
         return $this;
     }
 
-    public function getUpdatedDate(): DateTime
+    public function getUpdatedDate(): ?DateTime
     {
-        if ($this->updatedDate instanceof DateTime) {
-            return $this->updatedDate;
-        } else {
-            return $this->updatedDate = new DateTime();
-        }
+        return $this->updatedDate ?? null;
     }
 
     public function setUpdatedDate(DateTime $updatedDate): FaqEntity

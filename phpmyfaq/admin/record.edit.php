@@ -720,7 +720,7 @@ if (
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="radio" id="updateDate" checked name="recordDateHandling"
-                                           class="form-check-input"
+                                           class="form-check-input" value="updateDate"
                                            onchange="setRecordDate(this.id);">
                                     <label class="form-check-label" for="updateDate">
                                         <?= Translation::get('msgUpdateFaqDate') ?>
@@ -728,14 +728,14 @@ if (
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input"
-                                           onchange="setRecordDate(this.id);">
+                                           onchange="setRecordDate(this.id);" value="keepDate">
                                     <label class="form-check-label" for="keepDate">
                                         <?= Translation::get('msgKeepFaqDate') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input type="radio" id="manualDate" name="recordDateHandling"
-                                           class="form-check-input"
+                                           class="form-check-input" value="manualDate"
                                            onchange="setRecordDate(this.id);">
                                     <label class="form-check-label" for="manualDate">
                                         <?= Translation::get('msgEditFaqDat') ?>
