@@ -46,7 +46,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
         'buttonCheckUpdates' => Translation::get('buttonCheckUpdates'),
         'headerDownloadPackage' => Translation::get('headerDownloadPackage'),
         'msgDownloadPackage' => Translation::get('msgDownloadPackage'),
-        'alertNightlyBuild' => Translation::get('alertNightlyBuild'),
         'buttonDownloadPackage' => Translation::get('buttonDownloadPackage'),
         'headerExtractPackage' => Translation::get('headerExtractPackage'),
         'msgExtractPackage' => Translation::get('msgExtractPackage'),

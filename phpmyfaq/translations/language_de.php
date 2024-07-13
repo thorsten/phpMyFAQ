@@ -1331,6 +1331,7 @@ $PMF_LANG['msgInstallDownloadedPackage'] = 'Heruntergeladenes Paket installieren
 $PMF_LANG['msgBackupCurrentInstallation'] = 'Sicherung der aktuellen Installation';
 $PMF_LANG['msgInstallationNewFiles'] = 'Installation der neuen Dateien';
 $PMF_LANG['alertNightlyBuild'] = 'Sie verwenden eine Entwicklungsversion von phpMyFAQ. Sie können auf den neuesten Nightly-Build aktualisieren.';
+$PMF_LANG['noteNightlyBuild'] = 'Bitte beachten Sie, dass der Build des Vortages heruntergeladen wird (gespeichert in /content/upgrades). Denn jeder neue Build wird erst um 2 Uhr (UTC) von GitHub erstellt.';
 $PMF_LANG['buttonCheckHealth'] = 'Systemzustand jetzt prüfen';
 $PMF_LANG['buttonCheckUpdates'] = 'Suche jetzt nach Updates';
 $PMF_LANG['buttonDownloadPackage'] = 'Jetzt herunterladen';
