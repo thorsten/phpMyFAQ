@@ -70,16 +70,7 @@ $PMF_LANG["msgYourComment"] = "Komentar anda";
 $PMF_LANG["msgCommentThanks"] = "Terima kasih atas komentar anda!";
 $PMF_LANG["msgSeeXMLFile"] = "buka Berkas XML";
 $PMF_LANG["msgSend2Friend"] = "Kirim materi ke e-mail";
-$PMF_LANG["msgS2FName"] = "Nama anda";
-$PMF_LANG["msgS2FEMail"] = "Alamat e-mail anda";
-$PMF_LANG["msgS2FFriends"] = "Nama Tujuan";
-$PMF_LANG["msgS2FEMails"] = ". alamat e-mail ";
-$PMF_LANG["msgS2FText"] = "Teks berikut bisa dikirim";
-$PMF_LANG["msgS2FText2"] = "Anda bisa membaca materi pada alamat berikut";
-$PMF_LANG["msgS2FMessage"] = "Pesan tambahan dari pengirim";
 $PMF_LANG["msgS2FButton"] = "kirim e-mail";
-$PMF_LANG["msgS2FThx"] = "Terima kasih atas rekomendasi anda!";
-$PMF_LANG["msgS2FMailSubject"] = "Rekomendasi dari";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Kata kunci";
@@ -466,7 +457,7 @@ $PMF_LANG["ad_start_comments"] = "Komentar";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Memproses kategori...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

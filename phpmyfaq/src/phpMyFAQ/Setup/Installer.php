@@ -302,7 +302,6 @@ class Installer extends Setup
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
-        'main.send2friendText' => '',
         'main.titleFAQ' => 'phpMyFAQ Codename Pallas',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',

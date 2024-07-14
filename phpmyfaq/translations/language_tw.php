@@ -71,16 +71,7 @@ $PMF_LANG["msgYourComment"] = "您的評論";
 $PMF_LANG["msgCommentThanks"] = "非常感謝您的評論!";
 $PMF_LANG["msgSeeXMLFile"] = "開啟 XML 檔案";
 $PMF_LANG["msgSend2Friend"] = "寄送 FAQ 給一個朋友";
-$PMF_LANG["msgS2FName"] = "您的姓名";
-$PMF_LANG["msgS2FEMail"] = "您的 e-mail";
-$PMF_LANG["msgS2FFriends"] = "您的朋友";
-$PMF_LANG["msgS2FEMails"] = ". e-mail";
-$PMF_LANG["msgS2FText"] = "以下文字將會被傳送";
-$PMF_LANG["msgS2FText2"] = "您會在下列的位置找到此 FAQ";
-$PMF_LANG["msgS2FMessage"] = "給您朋友的附加訊息";
 $PMF_LANG["msgS2FButton"] = "寄送 e-mail";
-$PMF_LANG["msgS2FThx"] = "感謝您的推薦!";
-$PMF_LANG["msgS2FMailSubject"] = "推薦來自 ";
 
 // Search 搜尋
 $PMF_LANG["msgSearchWord"] = "關鍵字";
@@ -462,7 +453,7 @@ $PMF_LANG["ad_start_comments"] = "評論";
 // Added v1.1 - 30.01.2002 - Bastian - admin - 管理
 $PMF_LANG["ad_categ_paste"] = "貼上";
 $PMF_LANG["ad_categ_cut"] = "剪下";
-$PMF_LANG["ad_categ_copy"] = "複製";
+$PMF_LANG["msgCopy"] = "複製";
 $PMF_LANG["ad_categ_process"] = "處理類別中...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten 開發者

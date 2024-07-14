@@ -69,18 +69,8 @@ $PMF_LANG["msgCommentBy"] = "Komentar za ";
 $PMF_LANG["msgCommentHeader"] = "Komentar na ta vnos";
 $PMF_LANG["msgYourComment"] = "Tvoji komentarji";
 $PMF_LANG["msgCommentThanks"] = "Hvala za tvoje komentarje!";
-$PMF_LANG["msgSeeXMLFile"] = "odpri XML-datoteko";
 $PMF_LANG["msgSend2Friend"] = "Povej prijatelju";
-$PMF_LANG["msgS2FName"] = "Tvoje ime";
-$PMF_LANG["msgS2FEMail"] = "Tvoj e-mail naslov";
-$PMF_LANG["msgS2FFriends"] = "Tvoj prijatelj";
-$PMF_LANG["msgS2FEMails"] = ". e-mail naslov";
-$PMF_LANG["msgS2FText"] = "Naslednji tekst bo poslan";
-$PMF_LANG["msgS2FText2"] = "Našel boš zapis na tem naslovu";
-$PMF_LANG["msgS2FMessage"] = "Obvestilo za tvojega prijatelja";
 $PMF_LANG["msgS2FButton"] = "pošlji e-mail";
-$PMF_LANG["msgS2FThx"] = "Hvala za priporo&egrave;ilo!";
-$PMF_LANG["msgS2FMailSubject"] = "Priporo&egrave;ilo od ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Beseda";
@@ -467,7 +457,7 @@ $PMF_LANG["ad_start_comments"] = "Komentarjev";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "prilepi";
 $PMF_LANG["ad_categ_cut"] = "izreži";
-$PMF_LANG["ad_categ_copy"] = "kopiraj";
+$PMF_LANG["msgCopy"] = "kopiraj";
 $PMF_LANG["ad_categ_process"] = "Proces za kategorije...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

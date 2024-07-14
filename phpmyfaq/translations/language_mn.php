@@ -70,16 +70,7 @@ $PMF_LANG["msgYourComment"] = "Таны сэтгэгдэл:";
 $PMF_LANG["msgCommentThanks"] = "Сэтгэгдэл үлдээсэнд баярлалаа!";
 $PMF_LANG["msgSeeXMLFile"] = " XML-File нээх";
 $PMF_LANG["msgSend2Friend"] = "Найздаа FAQ илгээх";
-$PMF_LANG["msgS2FName"] = "Таны нэр:";
-$PMF_LANG["msgS2FEMail"] = "e-mail хаяг";
-$PMF_LANG["msgS2FFriends"] = "Таны найзууд:";
-$PMF_LANG["msgS2FEMails"] = ". e-mail хаяг:";
-$PMF_LANG["msgS2FText"] = "Текст илгээгдлээ:";
-$PMF_LANG["msgS2FText2"] = "Дараах хаягаас энэ FAQ хайгаарай:";
-$PMF_LANG["msgS2FMessage"] = "Найздаа илгээх нэмэлт зурвас:";
 $PMF_LANG["msgS2FButton"] = " e-mail илгээх";
-$PMF_LANG["msgS2FThx"] = "Таны зөвлөмжид баярлалаа!";
-$PMF_LANG["msgS2FMailSubject"] = "Зөвлөмж өгсөн ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Түлхүүр үг";
@@ -461,7 +452,7 @@ $PMF_LANG["ad_start_comments"] = "Сэтгэгдлүүд";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Ангилал боловсруулж байна...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

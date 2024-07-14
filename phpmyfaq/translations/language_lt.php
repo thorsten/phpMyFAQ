@@ -74,18 +74,8 @@ $PMF_LANG["msgCommentBy"] = "Komentavo ";
 $PMF_LANG["msgCommentHeader"] = "Komentuoti šį DUK";
 $PMF_LANG["msgYourComment"] = "Jūsų komentaras";
 $PMF_LANG["msgCommentThanks"] = "Labai ačiū už jūsų komentarą!";
-$PMF_LANG["msgSeeXMLFile"] = "atverti XML failą";
 $PMF_LANG["msgSend2Friend"] = "Siųsti DUK draugui";
-$PMF_LANG["msgS2FName"] = "Jūsų vardas";
-$PMF_LANG["msgS2FEMail"] = "Jūsų el. pašto adresas";
-$PMF_LANG["msgS2FFriends"] = "Jūsų draugai";
-$PMF_LANG["msgS2FEMails"] = ". el. pašto adresas";
-$PMF_LANG["msgS2FText"] = "Bus išsiųstas šis tekstas";
-$PMF_LANG["msgS2FText2"] = "Jūs rasite DUK šiuo adresu";
-$PMF_LANG["msgS2FMessage"] = "Papildomas pranešimas jūsų draugui";
 $PMF_LANG["msgS2FButton"] = "siųsti el. laišką";
-$PMF_LANG["msgS2FThx"] = "Ačiū už jūsų rekomendaciją!";
-$PMF_LANG["msgS2FMailSubject"] = "Rekomendacija nuo ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Raktažodis";
@@ -472,7 +462,7 @@ $PMF_LANG["ad_start_comments"] = "Komentarai";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "įdėti";
 $PMF_LANG["ad_categ_cut"] = "iškirpti";
-$PMF_LANG["ad_categ_copy"] = "kopijuoti";
+$PMF_LANG["msgCopy"] = "kopijuoti";
 $PMF_LANG["ad_categ_process"] = "Apdorojamos grupės...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

@@ -71,16 +71,7 @@ $PMF_LANG["msgYourComment"] = "Bình luận của bạn";
 $PMF_LANG["msgCommentThanks"] = "Cảm ơn bạn đã bình luận!";
 $PMF_LANG["msgSeeXMLFile"] = "mở tập tin XML ";
 $PMF_LANG["msgSend2Friend"] = "Gửi cho một người bạn ";
-$PMF_LANG["msgS2FName"] = "Tên của bạn";
-$PMF_LANG["msgS2FEMail"] = "Địa chỉ email của bạn";
-$PMF_LANG["msgS2FFriends"] = "Bạn của bạn";
-$PMF_LANG["msgS2FEMails"] = ". địa chỉ email";
-$PMF_LANG["msgS2FText"] = "Nội dung sau sẽ được gửi đi";
-$PMF_LANG["msgS2FText2"] = "Bạn có thể nghe nội dung tại địa chỉ sau;";
-$PMF_LANG["msgS2FMessage"] = "Lời nhắn gửi kèm cho bạn của bạn";
 $PMF_LANG["msgS2FButton"] = "Gửi";
-$PMF_LANG["msgS2FThx"] = "Cảm ơn bạn đã giới thiệu!";
-$PMF_LANG["msgS2FMailSubject"] = "Giới thiệu của ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Tìm kiếm";
@@ -463,7 +454,7 @@ $PMF_LANG["ad_start_comments"] = "Bình luận";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "dán";
 $PMF_LANG["ad_categ_cut"] = "cắt";
-$PMF_LANG["ad_categ_copy"] = "chép";
+$PMF_LANG["msgCopy"] = "chép";
 $PMF_LANG["ad_categ_process"] = "Đang tiến hành với mục...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

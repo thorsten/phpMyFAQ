@@ -89,16 +89,7 @@ $PMF_LANG["msgYourComment"] = "Twój komentarz";
 $PMF_LANG["msgCommentThanks"] = "Dziękujemy za komentarz!";
 $PMF_LANG["msgSeeXMLFile"] = "otwórz plik XML";
 $PMF_LANG["msgSend2Friend"] = "Wyślij FAQ do znajomego";
-$PMF_LANG["msgS2FName"] = "Imię i nazwisko";
-$PMF_LANG["msgS2FEMail"] = "Adres e-mail";
-$PMF_LANG["msgS2FFriends"] = "Twoi przyjaciele";
-$PMF_LANG["msgS2FEMails"] = ". adres e-mail";
-$PMF_LANG["msgS2FText"] = "Poniższy tekst zostanie wysłany";
-$PMF_LANG["msgS2FText2"] = "FAQ znajdziesz pod następującym adresem";
-$PMF_LANG["msgS2FMessage"] = "Dodatkowa informacja dla znajomych";
 $PMF_LANG["msgS2FButton"] = "Wyślij wiadomość";
-$PMF_LANG["msgS2FThx"] = "Dziękujemy za polecenie !";
-$PMF_LANG["msgS2FMailSubject"] = "Rekommendacja od ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Słowo kluczowe";
@@ -477,7 +468,7 @@ $PMF_LANG["ad_start_comments"] = "Komentarze";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "wklej";
 $PMF_LANG["ad_categ_cut"] = "wytnij";
-$PMF_LANG["ad_categ_copy"] = "kopiuj";
+$PMF_LANG["msgCopy"] = "kopiuj";
 $PMF_LANG["ad_categ_process"] = "Przetwarzanie kategorii...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

@@ -68,18 +68,8 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Váš komentár";
 $PMF_LANG["msgCommentThanks"] = "Ďakujeme veľmi pekne za váš komentár!";
-$PMF_LANG["msgSeeXMLFile"] = "otvoriť XML-Súbor";
 $PMF_LANG["msgSend2Friend"] = "Poslať FAQ známemu";
-$PMF_LANG["msgS2FName"] = "Vaše meno";
-$PMF_LANG["msgS2FEMail"] = "Vaša e-mailová adresa";
-$PMF_LANG["msgS2FFriends"] = "Vaši priatelia";
-$PMF_LANG["msgS2FEMails"] = ". e-mailová adresa";
-$PMF_LANG["msgS2FText"] = "Nasledovný text bude odoslaný";
-$PMF_LANG["msgS2FText2"] = "FAQ nájdete na nasledovnej adrese";
-$PMF_LANG["msgS2FMessage"] = "Ďalšia správa pre Vašich priateľov";
 $PMF_LANG["msgS2FButton"] = "odoslať e-mail";
-$PMF_LANG["msgS2FThx"] = "Ďakujeme za radu!";
-$PMF_LANG["msgS2FMailSubject"] = "Odporúčanie od ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Kľúčové slovo";
@@ -466,7 +456,7 @@ $PMF_LANG["ad_start_comments"] = "Komentáre";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "vložiť";
 $PMF_LANG["ad_categ_cut"] = "vystrihnúť";
-$PMF_LANG["ad_categ_copy"] = "kopírovať";
+$PMF_LANG["msgCopy"] = "kopírovať";
 $PMF_LANG["ad_categ_process"] = "Spracovanie kategórií...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

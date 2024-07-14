@@ -69,18 +69,8 @@ $PMF_LANG["msgCommentBy"] = "মতামত প্রদানকারি ";
 $PMF_LANG["msgCommentHeader"] = "মতামত দিন";
 $PMF_LANG["msgYourComment"] = "আপনার মতামত";
 $PMF_LANG["msgCommentThanks"] = "মতামত দেয়ার জন্য ধন্যবাদ!";
-$PMF_LANG["msgSeeXMLFile"] = "এক্স এম এল ফাইল দেখুন";
 $PMF_LANG["msgSend2Friend"] = "বন্ধুকে পাঠান";
-$PMF_LANG["msgS2FName"] = "আপনার নাম";
-$PMF_LANG["msgS2FEMail"] = "আপনার ই-মেইল ঠিকানা";
-$PMF_LANG["msgS2FFriends"] = "আপনার বন্ধুরা";
-$PMF_LANG["msgS2FEMails"] = ". ই-মেইল ঠিকানা";
-$PMF_LANG["msgS2FText"] = "এই লেখাটি পাঠানো হবে";
-$PMF_LANG["msgS2FText2"] = "লেখাটি যে ঠিকানায় পাওয়া যাবে";
-$PMF_LANG["msgS2FMessage"] = "আপনার বন্ধুর জন্য বাড়তি তথ্য";
 $PMF_LANG["msgS2FButton"] = "ই-মেইল পাঠান";
-$PMF_LANG["msgS2FThx"] = "পরার্মশের জন্য ধন্যবাদ!";
-$PMF_LANG["msgS2FMailSubject"] = "পরার্মশদাতা ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "শব্দ";
@@ -466,7 +456,7 @@ $PMF_LANG["ad_start_comments"] = "Comments";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

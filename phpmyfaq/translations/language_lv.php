@@ -77,16 +77,7 @@ $PMF_LANG["msgCommentHeader"] = "Ieraksta koment&acirc;rs";
 $PMF_LANG["msgYourComment"] = "Tavs koment&acirc;rs";
 $PMF_LANG["msgCommentThanks"] = "Paldies par koment&acirc;ru!";
 $PMF_LANG["msgSend2Friend"] = "Nos&ucirc;t&icirc;t draugam";
-$PMF_LANG["msgS2FName"] = "Tavs v&acirc;rds";
-$PMF_LANG["msgS2FEMail"] = "Tava e-pasta adrese";
-$PMF_LANG["msgS2FFriends"] = "Tava drauga";
-$PMF_LANG["msgS2FEMails"] = ". e-pasta adrese";
-$PMF_LANG["msgS2FText"] = "Tiks nos&ucirc;t&icirc;ts sekojo&eth;s teksts";
-$PMF_LANG["msgS2FText2"] = "You'll find the record on the following adress";
-$PMF_LANG["msgS2FMessage"] = "Papildin&acirc;t draugam nos&ucirc;t&acirc;mo tekstu";
 $PMF_LANG["msgS2FButton"] = "Nos&ucirc;t&icirc;t";
-$PMF_LANG["msgS2FThx"] = "Paldies! Zi&ograve;a nos&ucirc;t&icirc;ta.";
-$PMF_LANG["msgS2FMailSubject"] = "Ieteikums no ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Atsl&ccedil;gv&acirc;rds";
@@ -467,7 +458,7 @@ $PMF_LANG["ad_start_comments"] = "Koment&acirc;ri";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Sada&iuml;u apstr&acirc;de...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

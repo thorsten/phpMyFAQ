@@ -7,7 +7,7 @@ On the left side you only see the main categories.
 You can also change the current language at the bottom of the FAQ,
 use the global search in the center of the FAQ or use the login box in the upper right if you have a valid user account.
 On the right side you see a list of the most popular FAQ records, the latest records, and the sticky FAQ records.
-On the pages with the FAQ records you'll see the other records of the current category and the tag cloud
+On the pages with the FAQ records, you'll see the other records of the current category and the tag cloud
 if you're using
 tagging.
 
@@ -31,7 +31,7 @@ admin/editor directory under your phpMyFAQ's installation directory on your web 
 
 ## 4.2 Find As You Type
 
-The Find As You Type feature is directly built into the main search bar in the top of the FAQ with direct access to the
+The Find As You Type feature is directly built into the main search bar at the top of the FAQ with direct access to the
 whole FAQ database.
 The page will return results while you're typing into the input form.
 For performance reasons, only the first 10 results will be suggested.

@@ -69,16 +69,7 @@ $PMF_LANG["msgCommentHeader"] = "можете залишити коментар"
 $PMF_LANG["msgYourComment"] = "Ваші коментарі";
 $PMF_LANG["msgCommentThanks"] = "Спасибі за коментар!";
 $PMF_LANG["msgSend2Friend"] = "Відправити другу";
-$PMF_LANG["msgS2FName"] = "Ваше ім'я";
-$PMF_LANG["msgS2FEMail"] = "Адрес e-mail";
-$PMF_LANG["msgS2FFriends"] = "Список друзів";
-$PMF_LANG["msgS2FEMails"] = ". e-mail адрес";
-$PMF_LANG["msgS2FText"] = "Текст повідомлення для одержувачів листа";
-$PMF_LANG["msgS2FText2"] = "Я знайшов ось таку інформацію за цією адресою";
-$PMF_LANG["msgS2FMessage"] = "Короткий опис";
 $PMF_LANG["msgS2FButton"] = "Відправити лист";
-$PMF_LANG["msgS2FThx"] = "Дякуємо за за рекомендацію наший бази Mac F.A.Q. вашим друзям!";
-$PMF_LANG["msgS2FMailSubject"] = "Рекомендую почитати! ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Ключове слово";
@@ -467,7 +458,7 @@ $PMF_LANG["ad_start_comments"] = "Коментарів";
 
 $PMF_LANG["ad_categ_paste"] = "вставити";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

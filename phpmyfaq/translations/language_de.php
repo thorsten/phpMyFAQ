@@ -85,18 +85,7 @@ $PMF_LANG['msgCommentBy'] = "Kommentar von ";
 $PMF_LANG['msgCommentHeader'] = "Kommentar zur FAQ";
 $PMF_LANG['msgYourComment'] = "Kommentar";
 $PMF_LANG['msgCommentThanks'] = "Vielen Dank für den Kommentar!";
-$PMF_LANG['msgSeeXMLFile'] = "XML-Datei öffnen";
-$PMF_LANG['msgSend2Friend'] = "FAQ weiterempfehlen";
-$PMF_LANG['msgS2FName'] = "Absender Name";
-$PMF_LANG['msgS2FEMail'] = "Absender E-Mail";
-$PMF_LANG['msgS2FFriends'] = "Freundinnen und Freunde";
-$PMF_LANG['msgS2FEMails'] = ". E-Mailadresse";
-$PMF_LANG['msgS2FText'] = "Folgender Text wird gesendet";
-$PMF_LANG['msgS2FText2'] = "Unter folgender Adresse ist der Beitrag zu finden";
-$PMF_LANG['msgS2FMessage'] = "Eine zusätzliche Nachricht an den/die Empfänger";
-$PMF_LANG['msgS2FButton'] = "E-Mails versenden";
-$PMF_LANG['msgS2FThx'] = "Vielen Dank für die Empfehlung!";
-$PMF_LANG['msgS2FMailSubject'] = "Empfehlung von ";
+$PMF_LANG['msgSend2Friend'] = "FAQ teilen";
 
 // Search
 $PMF_LANG['msgSearchWord'] = "Suchbegriff";
@@ -475,7 +464,7 @@ $PMF_LANG['ad_start_comments'] = "Kommentare";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG['ad_categ_paste'] = "einfügen";
 $PMF_LANG['ad_categ_cut'] = "ausschneiden";
-$PMF_LANG['ad_categ_copy'] = "kopieren";
+$PMF_LANG['msgCopy'] = "Kopieren";
 $PMF_LANG['ad_categ_process'] = "Bearbeite Kategorien...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
@@ -1448,7 +1437,7 @@ $PMF_LANG['msgConfirmTwofactorConfig'] = 'Bist du sicher, dass du deine aktuelle
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ist aktuell nicht aktiviert.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';
 $PMF_LANG['msgShareViaWhatsapp'] = 'Per WhatsApp empfehlen';
-$PMF_LANG['msgShareViaWhatsappText'] = 'Ich habe einen spannenden FAQ-Beitrag für dich entdeckt:';
+$PMF_LANG['msgShareText'] = 'Ich habe einen spannenden FAQ-Beitrag für dich entdeckt:';
 $PMF_LANG['msgError'] = 'Es ist ein Fehler aufgetreten.';
 $PMF_LANG['msgLinkToFAQ'] = 'Link zum FAQ';
 
@@ -1465,5 +1454,7 @@ $PMF_LANG['msgOverviewMetaDesc'] = 'Die detaillierte Übersicht aller wichtigen 
 $PMF_LANG['msgCategoryMetaDesc'] = 'Die Übersicht aller Kategorien und Themen | Kategorie-Übersicht von %s';
 $PMF_LANG['msgQuestionMetaDesc'] = 'Eine neue Frage hinzufügen | %s';
 $PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Offene Fragen, die noch auf Antwort warten | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Teilen mit';
+$PMF_LANG['msgCopyLink'] = 'oder kopiere den Link';
 
 return $PMF_LANG;

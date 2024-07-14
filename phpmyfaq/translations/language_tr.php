@@ -70,18 +70,8 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Yorumunuz";
 $PMF_LANG["msgCommentThanks"] = "Yorumunuz için teşekkürler!";
-$PMF_LANG["msgSeeXMLFile"] = "XML dosyasını aç";
 $PMF_LANG["msgSend2Friend"] = "Arkadaşınıza önerin";
-$PMF_LANG["msgS2FName"] = "Adınız";
-$PMF_LANG["msgS2FEMail"] = "E-mail adresiniz";
-$PMF_LANG["msgS2FFriends"] = "Arkadaşınız";
-$PMF_LANG["msgS2FEMails"] = ". e-mail adresi";
-$PMF_LANG["msgS2FText"] = "Gönderilecek metin";
-$PMF_LANG["msgS2FText2"] = "İçeriği şu bağlantıda bulabilirsiniz";
-$PMF_LANG["msgS2FMessage"] = "Eklemek istedikleriniz";
 $PMF_LANG["msgS2FButton"] = "e-mail gönder";
-$PMF_LANG["msgS2FThx"] = "Paylaştığınız için teşekkürler!";
-$PMF_LANG["msgS2FMailSubject"] = "Öneren ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Anahtar kelime";
@@ -463,7 +453,7 @@ $PMF_LANG["ad_start_comments"] = "Yorumlar";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "yapıştır";
 $PMF_LANG["ad_categ_cut"] = "kes";
-$PMF_LANG["ad_categ_copy"] = "kopyala";
+$PMF_LANG["msgCopy"] = "kopyala";
 $PMF_LANG["ad_categ_process"] = "Kategoriler işleniyor...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

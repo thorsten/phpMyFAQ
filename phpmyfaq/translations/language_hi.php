@@ -74,18 +74,8 @@ $PMF_LANG["msgCommentBy"] = "टीका-टिप्पणी ";
 $PMF_LANG["msgCommentHeader"] = "इस पर टीका-टिप्पणी";
 $PMF_LANG["msgYourComment"] = "आपकी टीका-टिप्पणी";
 $PMF_LANG["msgCommentThanks"] = "आपके मत के लिए बहुत ही शुक्रिया!";
-$PMF_LANG["msgSeeXMLFile"] = "XML-File खोलें";
 $PMF_LANG["msgSend2Friend"] = "अपनी मित्र को भेजें";
-$PMF_LANG["msgS2FName"] = "आपका नाम";
-$PMF_LANG["msgS2FEMail"] = "आपका ईमेल पता";
-$PMF_LANG["msgS2FFriends"] = "आपके मित्र";
-$PMF_LANG["msgS2FEMails"] = ". आपके मित्र";
-$PMF_LANG["msgS2FText"] = "निम्न सन्देश भेजा जाएगा";
-$PMF_LANG["msgS2FText2"] = "आप यह रिकॉर्ड इस पते पर पाएंगे";
-$PMF_LANG["msgS2FMessage"] = "आपके मित्र के लिए अतिरिक्त सन्देश";
 $PMF_LANG["msgS2FButton"] = "ईमेल भेजें";
-$PMF_LANG["msgS2FThx"] = "प्रशंसा करने के लिए आपका धन्यवाद!";
-$PMF_LANG["msgS2FMailSubject"] = "Recommendation from ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "कुंजी शब्द";
@@ -472,7 +462,7 @@ $PMF_LANG["ad_user_chpw"] = "आप केवल मौजूदा प्रय
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "चिपकाएँ (paste)";
 $PMF_LANG["ad_categ_cut"] = "काटें (cut)";
-$PMF_LANG["ad_categ_copy"] = "नक़ल करें (copy)";
+$PMF_LANG["msgCopy"] = "नक़ल करें (copy)";
 $PMF_LANG["ad_categ_process"] = "वर्ग संसाधित हो रहा है...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

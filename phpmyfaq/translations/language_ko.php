@@ -69,18 +69,8 @@ $PMF_LANG["msgCommentBy"] = "작성자 -  ";
 $PMF_LANG["msgCommentHeader"] = "이 내용에 대해 코멘트 달기";
 $PMF_LANG["msgYourComment "] = "당신의 코멘트";
 $PMF_LANG["msgCommentThanks"] = "코멘트를 해 주셔서 감사합니다.";
-$PMF_LANG["msgSeeXMLFile"] = "XML파일 열기";
 $PMF_LANG["msgSend2Friend"] = "친구에게 보내기";
-$PMF_LANG["msgS2FName"] = "이름";
-$PMF_LANG["msgS2FEMail"] = "메일주소";
-$PMF_LANG["msgS2FFriends"] = "친구 주소";
-$PMF_LANG["msgS2FEMails"] = ". 메일주소";
-$PMF_LANG["msgS2FText"] = "아래에 추가해서 보낼 내용을 입력해 주세요";
-$PMF_LANG["msgS2FText2"] = "다음 주소에서 아래 내용을 보실 수 있습니다";
-$PMF_LANG["msgS2FMessage"] = "추가 메시지";
 $PMF_LANG["msgS2FButton"] = "메일 보내기";
-$PMF_LANG["msgS2FThx"] = "추천해 주셔서 감사합니다.";
-$PMF_LANG["msgS2FMailSubject"] = "Recommendation from ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "검색어";
@@ -467,7 +457,7 @@ $PMF_LANG["ad_start_comments"] = "코멘트";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "붙여넣기";
 $PMF_LANG["ad_categ_cut"] = "잘라내기";
-$PMF_LANG["ad_categ_copy"] = "복사";
+$PMF_LANG["msgCopy"] = "복사";
 $PMF_LANG["ad_categ_process"] = "카테고리 처리중......";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

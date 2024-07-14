@@ -75,18 +75,8 @@ $PMF_LANG["msgCommentBy"] = "Sylw ";
 $PMF_LANG["msgCommentHeader"] = "Cyflwyno sylw ar y cofnod hwn";
 $PMF_LANG["msgYourComment"] = "Eich sylwadau";
 $PMF_LANG["msgCommentThanks"] = "Diolch yn fawr am eich sylwadau!";
-$PMF_LANG["msgSeeXMLFile"] = "agor ffeil-XML";
 $PMF_LANG["msgSend2Friend"] = "Anfon at ffrind";
-$PMF_LANG["msgS2FName"] = "Eich enw";
-$PMF_LANG["msgS2FEMail"] = "Eich cyfeiriad e-bost";
-$PMF_LANG["msgS2FFriends"] = "Eich ffrindiau";
-$PMF_LANG["msgS2FEMails"] = ". cyfeiriad e-bost";
-$PMF_LANG["msgS2FText"] = "Caiff y testun canlynol ei anfon";
-$PMF_LANG["msgS2FText2"] = "Cewch y cofnod ar y cyfeiriad canlynol";
-$PMF_LANG["msgS2FMessage"] = "Neges ychwanegol i'ch ffrindiau";
 $PMF_LANG["msgS2FButton"] = "anfon e-bost";
-$PMF_LANG["msgS2FThx"] = "Diolch am eich argymhelliad!";
-$PMF_LANG["msgS2FMailSubject"] = "Argymhelliad gan ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Gair allweddol";
@@ -470,7 +460,7 @@ $PMF_LANG["ad_start_comments"] = "Sylwadau";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "pastio";
 $PMF_LANG["ad_categ_cut"] = "torri";
-$PMF_LANG["ad_categ_copy"] = "copïo";
+$PMF_LANG["msgCopy"] = "copïo";
 $PMF_LANG["ad_categ_process"] = "Prosesu categorïau...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

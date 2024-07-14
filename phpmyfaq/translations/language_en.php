@@ -86,18 +86,8 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment on this FAQ";
 $PMF_LANG["msgYourComment"] = "Your comment";
 $PMF_LANG["msgCommentThanks"] = "Thank you for commenting!";
-$PMF_LANG["msgSeeXMLFile"] = "open XML file";
-$PMF_LANG["msgSend2Friend"] = "Send FAQ to a friend";
-$PMF_LANG["msgS2FName"] = "Your name";
-$PMF_LANG["msgS2FEMail"] = "Your email address";
-$PMF_LANG["msgS2FFriends"] = "Your friends";
-$PMF_LANG["msgS2FEMails"] = ". email address";
-$PMF_LANG["msgS2FText"] = "The following text will be sent";
-$PMF_LANG["msgS2FText2"] = "You'll find the FAQ at the following address";
-$PMF_LANG["msgS2FMessage"] = "Additional message for your friends";
+$PMF_LANG["msgSend2Friend"] = "Share this FAQ";
 $PMF_LANG["msgS2FButton"] = "send email";
-$PMF_LANG["msgS2FThx"] = "Thank you for your recommendation!";
-$PMF_LANG["msgS2FMailSubject"] = "Recommendation from ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Keyword";
@@ -476,7 +466,7 @@ $PMF_LANG["ad_start_comments"] = "Comments";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
-$PMF_LANG["ad_categ_copy"] = "copy";
+$PMF_LANG["msgCopy"] = "Copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
@@ -1468,7 +1458,7 @@ $PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove y
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'The deletion of the current 2-factor configuration was successful.';
 $PMF_LANG['msgShareViaWhatsapp'] = 'Send to a friend via WhatsApp';
-$PMF_LANG['msgShareViaWhatsappText'] = 'I discovered a cool faq-article for you:';
+$PMF_LANG['msgShareText'] = 'I discovered a cool faq-article for you:';
 $PMF_LANG['msgError'] = 'An error occurred.';
 $PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 
@@ -1485,5 +1475,7 @@ $PMF_LANG['msgOverviewMetaDesc'] = 'See an overview of all important topics | FA
 $PMF_LANG['msgCategoryMetaDesc'] = 'Overview of all categories and topics | Category overview of %s';
 $PMF_LANG['msgQuestionMetaDesc'] = 'Add a new question | %s';
 $PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Open questions still waiting for answers | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Share with';
+$PMF_LANG['msgCopyLink'] = 'or copy link';
 
 return $PMF_LANG;

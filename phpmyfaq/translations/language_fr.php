@@ -87,18 +87,8 @@ $PMF_LANG["msgCommentBy"] = "Commenté par ";
 $PMF_LANG["msgCommentHeader"] = "Commenter cet article ";
 $PMF_LANG["msgYourComment"] = "Votre commentaire :";
 $PMF_LANG["msgCommentThanks"] = "Merci pour votre commentaire !";
-$PMF_LANG["msgSeeXMLFile"] = "ouvrir fichier XML ";
 $PMF_LANG["msgSend2Friend"] = "Envoyer à un ami ";
-$PMF_LANG["msgS2FName"] = "Votre nom :";
-$PMF_LANG["msgS2FEMail"] = "Votre adresse e-mail :";
-$PMF_LANG["msgS2FFriends"] = "Votre ami :";
-$PMF_LANG["msgS2FEMails"] = ". adresse e-mail :";
-$PMF_LANG["msgS2FText"] = "Le texte suivant va être envoyé :";
-$PMF_LANG["msgS2FText2"] = "Vous trouverez cette FAQ à l'adresse suivante :";
-$PMF_LANG["msgS2FMessage"] = "Message supplémentaire pour votre ami :";
 $PMF_LANG["msgS2FButton"] = "Envoyer";
-$PMF_LANG["msgS2FThx"] = "Merci pour votre recommandation !";
-$PMF_LANG["msgS2FMailSubject"] = "Recommandation de ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Mots-clés";
@@ -476,7 +466,7 @@ $PMF_LANG["ad_start_comments"] = "Commentaires";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "Coller";
 $PMF_LANG["ad_categ_cut"] = "Couper";
-$PMF_LANG["ad_categ_copy"] = "Copier";
+$PMF_LANG["msgCopy"] = "Copier";
 $PMF_LANG["ad_categ_process"] = "Traitement des catégories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
@@ -1468,8 +1458,6 @@ $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Hôtes externes autorisés p
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Êtes-vous sûr de vouloir supprimer votre configuration actuelle de l’authentification à deux facteurs ?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar n’est actuellement pas activé.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'La suppression de la configuration actuelle à deux facteurs a été réussie.';
-$PMF_LANG['msgShareViaWhatsapp'] = 'Envoyer à un ami via WhatsApp';
-$PMF_LANG['msgShareViaWhatsappText'] = 'J’ai découvert un article FAQ sympa pour vous :';
 $PMF_LANG['msgError'] = 'Une erreur est survenue.';
 $PMF_LANG['msgLinkToFAQ'] = 'Lien vers la FAQ';
 

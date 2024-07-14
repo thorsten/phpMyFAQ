@@ -92,20 +92,6 @@ class Services
     }
 
     /**
-     * Returns the "Send 2 Friends" URL.
-     */
-    public function getSuggestLink(): string
-    {
-        return sprintf(
-            '%sindex.php?action=send2friend&cat=%d&id=%d&artlang=%s',
-            $this->configuration->getDefaultUrl(),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage()
-        );
-    }
-
-    /**
      * Returns the "Show FAQ as PDF" URL.
      */
     public function getPdfLink(): string

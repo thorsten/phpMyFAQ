@@ -17,7 +17,14 @@ import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { handleContactForm } from './contact';
-import { handleAddFaq, handleComments, handleSaveComment, handleShare, handleShowFaq, handleUserVoting } from './faq';
+import {
+  handleAddFaq,
+  handleComments,
+  handleSaveComment,
+  handleShareLinkButton,
+  handleShowFaq,
+  handleUserVoting,
+} from './faq';
 import { handleAutoComplete, handleQuestion } from './search';
 import {
   handleDeleteBookmarks,
@@ -28,7 +35,6 @@ import {
 } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
-import { initializeTooltips } from '../../admin/assets/src/utils';
 
 //
 // Reload Captchas
@@ -64,11 +70,6 @@ handleSaveComment();
 handleComments();
 
 //
-// Handle sharing
-//
-handleShare();
-
-//
 // Handle Add a FAQ
 //
 handleAddFaq();
@@ -76,7 +77,8 @@ handleAddFaq();
 //
 // Handle show FAQ
 //
-handleShowFaq();
+await handleShowFaq();
+handleShareLinkButton();
 
 //
 // Handle Add a Question

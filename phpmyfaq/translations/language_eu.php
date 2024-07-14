@@ -78,16 +78,7 @@ $PMF_LANG["msgYourComment"] = "Zure iruzkina";
 $PMF_LANG["msgCommentThanks"] = "Eskerrik asko zure iruzkinarengatik!";
 $PMF_LANG["msgSeeXMLFile"] = "XML-Fitxategia ireki";
 $PMF_LANG["msgSend2Friend"] = "Lagun bati bidali";
-$PMF_LANG["msgS2FName"] = "Zure izena";
-$PMF_LANG["msgS2FEMail"] = "Zure posta helbidea";
-$PMF_LANG["msgS2FFriends"] = "Zure lagunak";
-$PMF_LANG["msgS2FEMails"] = ". posta helbidea";
-$PMF_LANG["msgS2FText"] = "Ondorengo testua bidaliko da";
-$PMF_LANG["msgS2FText2"] = "Fitxategia ondorengo helbidean aurkituko duzu";
-$PMF_LANG["msgS2FMessage"] = "Zure lagunentzako mezu gehigarria";
 $PMF_LANG["msgS2FButton"] = "posta bidali";
-$PMF_LANG["msgS2FThx"] = "Eskerrik asko gu gomendatzeagatik!";
-$PMF_LANG["msgS2FMailSubject"] = "Gomendioaren autorea ";
 
 // Search
 $PMF_LANG["msgSearchWord"] = "Bilatu beharreko hitza";
@@ -475,7 +466,7 @@ $PMF_LANG["ad_start_comments"] = "iruzkin";
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "itsatsi";
 $PMF_LANG["ad_categ_cut"] = "moztu";
-$PMF_LANG["ad_categ_copy"] = "kopiatu";
+$PMF_LANG["msgCopy"] = "kopiatu";
 $PMF_LANG["ad_categ_process"] = "Kategoriak prozesatzen...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten

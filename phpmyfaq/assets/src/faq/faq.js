@@ -1,5 +1,5 @@
 import { addElement } from '../utils';
-import { createBookmark, createFaq, handleBookmarks, deleteBookmark } from '../api';
+import { createBookmark, createFaq, deleteBookmark } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../admin/assets/src/utils';
 
 export const handleAddFaq = () => {
@@ -74,6 +74,20 @@ export const handleShowFaq = async () => {
           pushErrorNotification(response.error);
         }
       }
+    });
+  }
+};
+
+export const handleShareLinkButton = () => {
+  const copyButton = document.getElementById('pmf-share-link-copy-button');
+
+  if (copyButton) {
+    copyButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const shareLink = document.getElementById('pmf-share-link');
+      navigator.clipboard.writeText(shareLink.value);
+      pushNotification('Link copied to clipboard');
     });
   }
 };

@@ -785,6 +785,7 @@ class Update extends Setup
             $this->configuration->delete('main.urlValidateInterval');
             $this->configuration->delete('main.enableGzipCompression');
             $this->configuration->delete('main.metaKeywords');
+            $this->configuration->delete('main.send2friendText');
             $this->configuration->rename('main.templateSet', 'layout.templateSet');
             $this->configuration->rename('main.enableCookieConsent', 'layout.enableCookieConsent');
             $this->configuration->rename('main.contactInformationHTML', 'layout.contactInformationHTML');
