@@ -481,6 +481,7 @@ $templateVars = [
     'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
     'isCompletelySecured' => $faqConfig->get('security.enableLoginOnly'),
     'isDebugEnabled' => DEBUG,
+    'richSnippetsEnabled' => $faqConfig->get('seo.enableRichSnippets'),
     'tplSetName' => 'default', // @todo change this value
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'isUserLoggedIn' => $user->isLoggedIn(),

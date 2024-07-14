@@ -1456,5 +1456,6 @@ $PMF_LANG['msgQuestionMetaDesc'] = 'Eine neue Frage hinzufügen | %s';
 $PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Offene Fragen, die noch auf Antwort warten | %s';
 $PMF_LANG['msgShareLinkVia'] = 'Teilen mit';
 $PMF_LANG['msgCopyLink'] = 'oder kopiere den Link';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Aktiviere Rich Snippets'];
 
 return $PMF_LANG;

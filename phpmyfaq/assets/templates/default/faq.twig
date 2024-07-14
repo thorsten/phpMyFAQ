@@ -1,5 +1,24 @@
 {% extends 'index.twig' %}
 
+{% block richSnippets %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "{{ question }}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "{{ answer | striptags }}"
+        }
+      }
+    ]
+  }
+</script>
+{% endblock %}
+
 {% block content %}
   <div class="row g-5">
     <div class="col-md-8">

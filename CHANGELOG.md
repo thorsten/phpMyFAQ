@@ -28,6 +28,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental plugin manager (Thorsten)
 - added experimental support for PHP 8.4 (Thorsten)
 - added "share with" feature (Jan Harms, Thorsten)
+- added basic support for Rich Snippets (Thorsten)
 - improved installation and update (Thorsten)
 - improved SEO support (Thorsten)
 - improved session timout warning for admins (Thorsten)

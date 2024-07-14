@@ -21,6 +21,11 @@
   </style>
   <link href="{{ baseHref }}assets/images/favicon.ico" rel="shortcut icon">
   <link href="{{ currentPageUrl }}" rel="canonical">
+
+  {% if richSnippetsEnabled %}
+  {% block richSnippets %}{% endblock %}
+  {% endif %}
+
 </head>
 <body class="pmf-page-wrapper" dir="{{ dir }}">
 

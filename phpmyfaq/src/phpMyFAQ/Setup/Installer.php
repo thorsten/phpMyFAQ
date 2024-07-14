@@ -383,6 +383,7 @@ class Installer extends Setup
         'seo.title' => 'phpMyFAQ Codename Pallas',
         'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
         'seo.enableXMLSitemap' => 'true',
+        'seo.enableRichSnippets' => 'false',
         'seo.metaTagsHome' => 'index, follow',
         'seo.metaTagsFaqs' => 'index, follow',
         'seo.metaTagsCategories' => 'index, follow',

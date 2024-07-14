@@ -782,6 +782,7 @@ class Update extends Setup
             $this->configuration->add('seo.description', $this->configuration->get('main.metaDescription'));
             $this->configuration->add('layout.enablePrivacyLink', 'true');
             $this->configuration->add('layout.customCss', '');
+            $this->configuration->add('seo.enableRichSnippets', 'false');
             $this->configuration->delete('main.urlValidateInterval');
             $this->configuration->delete('main.enableGzipCompression');
             $this->configuration->delete('main.metaKeywords');
