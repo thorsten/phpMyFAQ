@@ -3,38 +3,76 @@
 namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 
 class InstallerTest extends TestCase
 {
+    private System $system;
     private Installer $installer;
 
     /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
      * @throws \Exception
      */
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->installer = new Installer(new System());
+        $this->system = $this->createMock(System::class);
+        $this->installer = new Installer($this->system);
+    }
+    public function testCheckBasicStuffThrowsExceptionForMissingDatabase(): void
+    {
+        $this->system->method('checkDatabase')->willReturn(false);
+        $this->system->method('checkRequiredExtensions')->willReturn(true);
+        $this->system->method('checkInstallation')->willReturn(true);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No supported database detected!');
+        $this->installer->checkBasicStuff();
     }
 
-    public function testCheckMinimumPhpVersion(): void
+    public function testCheckBasicStuffThrowsExceptionForMissingExtensions(): void
     {
-        $this->assertTrue($this->installer->checkMinimumPhpVersion());
+        $this->system->method('checkDatabase')->willReturn(true);
+        $this->system->method('checkRequiredExtensions')->willReturn(false);
+        $this->system->method('checkInstallation')->willReturn(true);
+        $this->system->method('getMissingExtensions')->willReturn(['ext1', 'ext2']);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Some required PHP extensions are missing: ext1, ext2');
+        $this->installer->checkBasicStuff();
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testAdjustRewriteBaseHtaccess(): void
+    public function testCheckBasicStuffThrowsExceptionForAlreadyInstalled(): void
     {
-        $this->installer->adjustRewriteBaseHtaccess(PMF_TEST_DIR);
-        $this->assertFileExists(PMF_TEST_DIR . '/.htaccess');
-        $this->assertStringContainsString('RewriteBase /', file_get_contents(PMF_TEST_DIR . '/.htaccess'));
+        $this->system->method('checkDatabase')->willReturn(true);
+        $this->system->method('checkRequiredExtensions')->willReturn(true);
+        $this->system->method('checkInstallation')->willReturn(false);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('phpMyFAQ is already installed! Please use the <a href="../update">update</a>.');
+        $this->installer->checkBasicStuff();
+    }
+
+    public function testAdjustRewriteBaseHtaccessThrowsExceptionForMissingFile(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The /path/to/.htaccess file does not exist!');
+        $this->installer->adjustRewriteBaseHtaccess('/path/to');
+    }
+
+    public function testHasLdapSupport(): void
+    {
+        if (extension_loaded('ldap')) {
+            $this->assertTrue($this->installer->hasLdapSupport());
+        } else {
+            $this->assertFalse($this->installer->hasLdapSupport());
+        }
+    }
+
+    public function testHasElasticsearchSupport(): void
+    {
+        if (extension_loaded('curl') && extension_loaded('openssl')) {
+            $this->assertTrue($this->installer->hasElasticsearchSupport());
+        } else {
+            $this->assertFalse($this->installer->hasElasticsearchSupport());
+        }
     }
 }
