@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Template;
 
+use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 use Twig\TemplateWrapper;
 
@@ -17,7 +18,7 @@ class TwigWrapperTest extends TestCase
     }
 
     /**
-     * @throws TemplateException
+     * @throws TemplateException|Exception
      */
     public function testLoadTemplate(): void
     {
