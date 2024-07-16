@@ -37,8 +37,10 @@
             <td>{{ searchItem.searchterm }}</td>
             <td>{{ searchItem.number }}</td>
             <td>{{ searchItem.lang | getFromLanguageCode }}</td>
-            <td><meter max="100" value="{{ num }}"></meter></td>
-            <td>{{ num }}%</td>
+            <td>
+              <meter max="100" value="{{ num | number_format(1) }}" title="{{ num | number_format(1) }}%"></meter>
+            </td>
+            <td>{{ num | number_format(1) }}%</td>
             <td>
               <button class="btn btn-danger pmf-delete-search-term" title="{{ ad_news_delete }}"
                       data-delete-search-term-id="{{ searchItem.id }}" data-csrf-token="{{ csrfTokenDelete }}">
