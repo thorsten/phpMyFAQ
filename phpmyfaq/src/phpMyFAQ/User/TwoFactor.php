@@ -94,11 +94,9 @@ readonly class TwoFactor
             return false;
         }
         $currentUser = new CurrentUser($this->configuration);
-        $currentUser->getUserById($userid);
+        $currentUser->getUserById($userId);
 
-        $secret = $currentUser->getUserData('secret');
-
-        return $this->twoFactorAuth->verifyCode($secret, $token);
+        return $this->twoFactorAuth->verifyCode($currentUser->getUserData('secret'), $token);
     }
 
     /**

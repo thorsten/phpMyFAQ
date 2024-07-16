@@ -70,7 +70,7 @@ class AuthSso extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
+     * @throws AuthException
      */
     public function checkCredentials(
         string $login,
@@ -78,7 +78,7 @@ class AuthSso extends Auth implements AuthDriverInterface
         array $optionalData = null
     ): bool {
         if (!isset($_SERVER['REMOTE_USER'])) {
-            throw new Exception('Remote User not set!');
+            throw new AuthException('Remote User not set!');
         }
 
         // Check if "DOMAIN\user", "user@DOMAIN" or only "user"

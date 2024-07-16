@@ -65,7 +65,7 @@ class UserAuthentication
      * Authenticates a user with a given username and password against
      * LDAP, SSO or local database.
      *
-     * @throws Exception
+     * @throws UserException|Exception
      */
     public function authenticate(string $username, #[SensitiveParameter] string $password): CurrentUser
     {
@@ -79,7 +79,7 @@ class UserAuthentication
                 $authLdap = new AuthLdap($this->configuration);
                 $this->currentUser->addAuth($authLdap, 'ldap');
             } catch (Exception $exception) {
-                throw new Exception($exception->getMessage());
+                throw new UserException($exception->getMessage());
             }
         }
 
@@ -98,10 +98,10 @@ class UserAuthentication
                 $this->currentUser->setLoggedIn(true);
             } else {
                 $this->currentUser->setLoggedIn(false);
-                throw new Exception(Translation::get('ad_auth_fail') . ' (' . $username . ')');
+                throw new UserException(Translation::get('ad_auth_fail') . ' (' . $username . ')');
             }
         } else {
-            throw new Exception(Translation::get('ad_auth_fail'));
+            throw new UserException(Translation::get('ad_auth_fail'));
         }
 
         return $this->currentUser;

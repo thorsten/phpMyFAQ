@@ -58,7 +58,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         parent::__construct($this->configuration);
 
         if (0 === (is_countable($this->ldapServer) ? count($this->ldapServer) : 0)) {
-            throw new Exception('An error occurred while contacting LDAP: No configuration found.');
+            throw new AuthException('An error occurred while contacting LDAP: No configuration found.');
         }
 
         $this->ldapCore = new LdapCore($this->configuration);
@@ -108,15 +108,15 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
-     * @throws Exception
+     * @throws AuthException|Exception
      */
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
         array $optionalData = null
     ): bool {
-        if ('' === trim((string) $password)) {
-            throw new Exception(User::ERROR_USER_INCORRECT_PASSWORD);
+        if ('' === trim($password)) {
+            throw new AuthException(User::ERROR_USER_INCORRECT_PASSWORD);
         }
 
         // Get active LDAP server for current user
@@ -151,7 +151,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         );
 
         if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
-            throw new Exception($this->ldapCore->error);
+            throw new AuthException($this->ldapCore->error);
         }
 
         $this->create($login, htmlspecialchars_decode((string) $password));

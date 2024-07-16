@@ -509,22 +509,13 @@ class User
     public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
         $select = sprintf(
-            "
-            SELECT
-                user_id,
-                login,
-                account_status,
-                is_superadmin
-            FROM
-                %sfaquser
-            WHERE
-                login = '%s'",
+            "SELECT user_id, login, account_status, is_superadmin, auth_source FROM %sfaquser WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($login)
         );
 
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) !== 1) {
+        $result = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($result) !== 1) {
             if ($raiseError) {
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
@@ -532,12 +523,7 @@ class User
             return false;
         }
 
-        $user = $this->configuration->getDb()->fetchArray($res);
-
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
-        $this->isSuperAdmin = (bool) $user['is_superadmin'];
+        $this->extractUserFromResult($result);
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
@@ -710,29 +696,19 @@ class User
     public function getAllUsers(bool $withoutAnonymous = true, bool $allowBlockedUsers = true): array
     {
         $select = sprintf(
-            '
-            SELECT
-                user_id
-            FROM
-                %sfaquser
-            WHERE
-                1 = 1
-            %s
-            %s
-            ORDER BY
-                user_id ASC',
+            'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s ORDER BY user_id ASC',
             Database::getTablePrefix(),
             ($withoutAnonymous ? 'AND user_id <> -1' : ''),
             ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
         );
 
-        $res = $this->configuration->getDb()->query($select);
-        if (!$res) {
+        $result = $this->configuration->getDb()->query($select);
+        if (!$result) {
             return [];
         }
 
         $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
+        while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $result[] = (int) $row['user_id'];
         }
 
@@ -764,32 +740,20 @@ class User
             $userId
         );
 
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
+        $result = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($result) != 1) {
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->configuration->getDb()->error();
 
             return false;
         }
 
-        $user = $this->configuration->getDb()->fetchArray($res);
-
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
-        $this->isSuperAdmin = (bool) $user['is_superadmin'];
-        $this->authSource = (string) $user['auth_source'];
+        $this->extractUserFromResult($result);
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
         if ('db' === $this->getAuthSource('name')) {
             $select = sprintf(
-                "
-                SELECT
-                    pass
-                FROM
-                    %sfaquserlogin
-                WHERE
-                    login = '%s'",
+                "SELECT pass FROM %sfaquserlogin WHERE login = '%s'",
                 Database::getTablePrefix(),
                 $this->login
             );
@@ -942,16 +906,9 @@ class User
             return false;
         }
 
-        // update status
         $this->status = $status;
         $update = sprintf(
-            "
-            UPDATE
-                %sfaquser
-            SET
-                account_status = '%s'
-            WHERE
-                user_id = %d",
+            "UPDATE %sfaquser SET account_status = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($status),
             $this->userId
@@ -1044,13 +1001,7 @@ class User
     {
         $this->isSuperAdmin = $isSuperAdmin;
         $update = sprintf(
-            "
-            UPDATE
-                %sfaquser
-            SET
-                is_superadmin = %d
-            WHERE
-                user_id = %d",
+            "UPDATE %sfaquser SET is_superadmin = %d WHERE user_id = %d",
             Database::getTablePrefix(),
             (int)$this->isSuperAdmin,
             $this->userId
@@ -1072,5 +1023,20 @@ class User
         );
 
         return (bool) $this->configuration->getDb()->query($update);
+    }
+
+    /**
+     * @param mixed $result
+     * @return void
+     */
+    public function extractUserFromResult(mixed $result): void
+    {
+        $user = $this->configuration->getDb()->fetchArray($result);
+
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
+        $this->isSuperAdmin = (bool)$user['is_superadmin'];
+        $this->authSource = (string) $user['auth_source'];
     }
 }
