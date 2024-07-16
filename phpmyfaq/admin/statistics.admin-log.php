@@ -45,16 +45,13 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
     $template = $twig->loadTemplate('./admin/statistics/admin-log.twig');
 
     $date = new Date($faqConfig);
-    $perPage = 15;
+    $itemsPerPage = 15;
     $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
     if (is_null($pages)) {
-        $pages = round(($logging->getNumberOfEntries() + ($perPage / 3)) / $perPage, 0);
+        $pages = round(($logging->getNumberOfEntries() + ($itemsPerPage / 3)) / $itemsPerPage, 0);
     }
-
-    $start = ($page - 1) * $perPage;
-    $lastPage = $start + $perPage;
 
     $baseUrl = sprintf('%sadmin/?action=adminlog&amp;page=%d', $faqConfig->getDefaultUrl(), $page);
 
@@ -62,12 +59,18 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
     $options = [
         'baseUrl' => $baseUrl,
         'total' => $logging->getNumberOfEntries(),
-        'perPage' => $perPage,
+        'perPage' => $itemsPerPage,
         'pageParamName' => 'page',
     ];
     $pagination = new Pagination($options);
 
     $loggingData = $logging->getAll();
+
+    $totalItems = count($loggingData);
+    $totalPages = ceil($totalItems / $itemsPerPage);
+
+    $offset = ($page - 1) * $itemsPerPage;
+    $currentItems = array_slice($loggingData, $offset, $itemsPerPage);
 
     $templateVars = [
         'headerAdminLog' => Translation::get('ad_menu_adminlog'),
@@ -79,7 +82,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
         'msgDate' => Translation::get('ad_adminlog_date'),
         'msgUser' => Translation::get('ad_adminlog_user'),
         'msgIp' => Translation::get('ad_adminlog_ip'),
-        'loggingData' => $loggingData,
+        'loggingData' => $currentItems,
     ];
 
     echo $template->render($templateVars);
