@@ -49,7 +49,7 @@ $PMF_LANG['msgOpenQuestions'] = "Offene Fragen";
 $PMF_LANG['msgHelp'] = "Hilfe";
 $PMF_LANG['msgContact'] = "Kontakt";
 $PMF_LANG['msgHome'] = "Startseite";
-$PMF_LANG['msgNews'] = "News";
+$PMF_LANG['msgNews'] = "Neuigkeiten";
 $PMF_LANG['msgUserOnline'] = " Besucher online";
 $PMF_LANG['msgBack2Home'] = "Zurück zur Startseite";
 
@@ -128,7 +128,7 @@ $PMF_LANG['msgMessage'] = "Anfrage";
 $PMF_LANG['msgTopTen'] = "Beliebte FAQ-Beiträge";
 $PMF_LANG['msgHomeThereAre'] = "Es sind ";
 $PMF_LANG['msgHomeArticlesOnline'] = " FAQ-Beiträge verfügbar.";
-$PMF_LANG['msgNoNews'] = "Es gibt derzeit keine News.";
+$PMF_LANG['msgNoNews'] = "Es gibt derzeit keine Neuigkeiten.";
 $PMF_LANG['msgLatestArticles'] = "Neueste FAQ-Beiträge";
 
 // E-Mailbenachrichtigung
@@ -160,8 +160,8 @@ $PMF_LANG['ad_menu_entry_aprove'] = "FAQs freischalten";
 $PMF_LANG['ad_menu_entry_edit'] = "FAQs bearbeiten";
 $PMF_LANG["ad_menu_categ_add"] = "Kategorie hinzufügen";
 $PMF_LANG['msgHeaderCategoryOverview'] = "Kategorieverwaltung";
-$PMF_LANG['ad_menu_news_add'] = "News hinzufügen";
-$PMF_LANG['ad_menu_news_edit'] = "News";
+$PMF_LANG['ad_menu_news_add'] = "Neuigkeit hinzufügen";
+$PMF_LANG['ad_menu_news_edit'] = "Neuigkeit bearbeiten";
 $PMF_LANG['ad_menu_open'] = "Offene Fragen";
 $PMF_LANG['ad_menu_stat'] = "Bewertungen";
 $PMF_LANG['ad_menu_cookie'] = "Cookies";
@@ -253,7 +253,7 @@ $PMF_LANG['ad_news_link_title'] = "Titel des Links";
 $PMF_LANG['ad_news_link_target'] = "Ziel des Links";
 $PMF_LANG['ad_news_link_window'] = "Neues Fenster";
 $PMF_LANG['ad_news_link_faq'] = "Innerhalb der FAQ";
-$PMF_LANG['ad_news_add'] = "News hinzufügen";
+$PMF_LANG['ad_news_add'] = "Neuigkeiten hinzufügen";
 $PMF_LANG['ad_news_id'] = "#";
 $PMF_LANG['ad_news_headline'] = "Überschrift";
 $PMF_LANG['ad_news_date'] = "Datum";
@@ -266,7 +266,7 @@ $PMF_LANG['ad_news_del'] = "Sicher, dass der Eintrag gelöscht werden sollen?";
 $PMF_LANG['ad_news_yesdelete'] = "Ja, löschen!";
 $PMF_LANG['ad_news_nodelete'] = "Nein!";
 $PMF_LANG['ad_news_delsuc'] = "Der Eintrag wurde erfolgreich gelöscht.";
-$PMF_LANG['ad_news_updatenews'] = "News-Eintrag bearbeiten";
+$PMF_LANG['ad_news_updatenews'] = "Neuigkeiten-Eintrag bearbeiten";
 
 // Kategorieverwaltung
 $PMF_LANG['ad_categ_new'] = "Neue Kategorie hinzufügen";
@@ -417,8 +417,8 @@ $PMF_LANG['ad_csv_rest'] = "Wiederherstellung";
 // Added v0.8 - 25.05.2001 - Bastian - Admin
 $PMF_LANG["ad_menu_backup"] = "Sicherung";
 $PMF_LANG["ad_logout"] = "Sitzung erfolgreich beendet.";
-$PMF_LANG["ad_news_add"] = "News hinzufügen";
-$PMF_LANG["ad_news_edit"] = "News bearbeiten";
+$PMF_LANG["ad_news_add"] = "Neuigkeit hinzufügen";
+$PMF_LANG["ad_news_edit"] = "Neuigkeit bearbeiten";
 $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "Sitzungen anzeigen";
 
@@ -497,9 +497,9 @@ $PMF_LANG['permission::delete_faq'] = "FAQ löschen";
 $PMF_LANG['permission::viewlog'] = "Protokoll ansehen";
 $PMF_LANG['permission::adminlog'] = "Admin-Protokoll einsehen";
 $PMF_LANG['permission::delcomment'] = "Kommentar löschen";
-$PMF_LANG['permission::addnews'] = "News hinzufügen";
-$PMF_LANG['permission::editnews'] = "News bearbeiten";
-$PMF_LANG['permission::delnews'] = "News löschen";
+$PMF_LANG['permission::addnews'] = "Neuigkeiten hinzufügen";
+$PMF_LANG['permission::editnews'] = "Neuigkeiten bearbeiten";
+$PMF_LANG['permission::delnews'] = "Neuigkeiten löschen";
 $PMF_LANG['permission::addcateg'] = "Kategorie hinzufügen";
 $PMF_LANG['permission::editcateg'] = "Kategorie editeren";
 $PMF_LANG['permission::delcateg'] = "Kategorie löschen";
@@ -542,7 +542,7 @@ $LANG_CONF['main.enableAdminLog'] = ["checkbox", "Admin-Logging aktiviert?"];
 $LANG_CONF["main.enableCategoryRestrictions"] = ["checkbox", "Kategoriebeschränkungen aktivieren"];
 $LANG_CONF['security.ipCheck'] = ["checkbox", "IP zur Überprüfung im Admin-Bereich nutzen"];
 $LANG_CONF['records.numberOfRecordsPerPage'] = ["input", "Anzahl der FAQs pro Seite"];
-$LANG_CONF['records.numberOfShownNewsEntries'] = ["input", "Anzahl der angezeigten News"];
+$LANG_CONF['records.numberOfShownNewsEntries'] = ["input", "Anzahl der angezeigten Neuigkeiten auf der Startseite"];
 $LANG_CONF['security.bannedIPs'] = ["area", "Gesperrte IP-Adressen", 'Bitte mit Leerzeichen trennen'];
 $LANG_CONF['ldap.ldapSupport'] = ["checkbox", "LDAP-Unterstützung aktivieren"];
 $LANG_CONF['main.referenceURL'] = ['input', 'URL der FAQ', 'zB https://www.example.org/faq/'];
@@ -677,9 +677,9 @@ $PMF_LANG['ad_news_from'] = "von";
 $PMF_LANG['ad_news_to'] = "bis";
 $PMF_LANG['ad_news_insertfail'] = "Ein Fehler ist beim Speichern in die Datenbank aufgetreten.";
 $PMF_LANG['ad_news_updatefail'] = "Ein Fehler ist beim Aktualisieren des Eintrags in die Datenbank aufgetreten.";
-$PMF_LANG['newsShowCurrent'] = "Zeige aktuelle News.";
-$PMF_LANG['newsShowArchive'] = "Zeige archivierte News.";
-$PMF_LANG['newsArchive'] = " News Archiv";
+$PMF_LANG['newsShowCurrent'] = "Zeige aktuelle Neuigkeiten.";
+$PMF_LANG['newsShowArchive'] = "Zeige archivierte Neuigkeiten.";
+$PMF_LANG['newsArchive'] = " Neuigkeiten-Archiv";
 $PMF_LANG['newsWriteComment'] = "Diesen Eintrag kommentieren";
 $PMF_LANG['newsCommentDate'] = "Geschrieben am: ";
 
@@ -779,7 +779,7 @@ $PMF_LANG['ad_news_link_parent'] = "Link öffnet im gleichen Fenster";
 $PMF_LANG['ad_menu_comments'] = "Kommentare";
 $PMF_LANG['ad_comment_administration'] = "Kommentarverwaltung";
 $PMF_LANG['ad_comment_faqs'] = "Kommentare in FAQs";
-$PMF_LANG['ad_comment_news'] = "Kommentare in News";
+$PMF_LANG['ad_comment_news'] = "Kommentare in Neuigkeiten";
 $PMF_LANG['msgPDF'] = 'PDF-Version';
 $PMF_LANG['ad_groups'] = "Gruppen";
 
@@ -1405,7 +1405,7 @@ $PMF_LANG['msgOnlyInactiveFAQs'] = 'Nur inaktive FAQs';
 $PMF_LANG['msgOnlyNewFAQs'] = 'Nur neue FAQs';
 
 // added v4.0.0-alpha.2 - 2024-04-21 by Jan
-$PMF_LANG['msgDeleteNews'] = 'News löschen';
+$PMF_LANG['msgDeleteNews'] = 'Neuigkeiten löschen';
 $PMF_LANG['msgExportUsersAsCSV'] = 'Benutzer als CSV exportieren';
 $PMF_LANG['msgWarning'] = 'Warnung';
 $PMF_LANG['msgUserList'] = 'Benutzerliste';
