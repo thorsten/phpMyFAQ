@@ -96,13 +96,14 @@ class MyPlugin implements PluginInterface
 
 ´´´
 
-<div>
-    <h2>Content Loaded Event</h2>
-    {{ phpMyFAQPlugin('content.loaded', 'Hello, World!') | raw }}
-</div>
+    <div>
+        <h2>Content Loaded Event</h2>
+        {{ phpMyFAQPlugin('content.loaded', 'Hello, World!') | raw }}
+    </div>
 
-<div>
-    <h2>User Login Event</h2>
-    {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
-</div>
+    <div>
+        <h2>User Login Event</h2>
+        {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
+    </div>
+
 ´´´
