@@ -695,19 +695,23 @@ class User
      */
     public function getAllUsers(bool $withoutAnonymous = true, bool $allowBlockedUsers = true): array
     {
-        $select = sprintf(
+        $query = sprintf(
             'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s ORDER BY user_id ASC',
             Database::getTablePrefix(),
             ($withoutAnonymous ? 'AND user_id <> -1' : ''),
             ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
         );
 
-        $result = $this->configuration->getDb()->query($select);
+        $result = $this->configuration->getDb()->query($query);
         if (!$result) {
             return [];
         }
 
         $result = [];
+        if ($this->configuration->getDb()->numRows($result) === 0) {
+            return $result;
+        }
+
         while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $result[] = (int) $row['user_id'];
         }
