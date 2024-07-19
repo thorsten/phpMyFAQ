@@ -31,7 +31,7 @@ phpMyFAQ comes with a example plugin that demonstrate how to use the plugin syst
 
 ### 7.5.1 PHP code
 
-```php
+```
 <?php
 
 namespace App\Plugins\Plugin1;
@@ -94,7 +94,7 @@ class MyPlugin implements PluginInterface
 
 ### 7.5.2 Twig template
 
-´´´ html
+´´´
 
 <div>
     <h2>Content Loaded Event</h2>
