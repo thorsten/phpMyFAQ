@@ -215,7 +215,7 @@ $PMF_LANG["ad_entry_changelog"] = "Өөрчлөлт:";
 $PMF_LANG["ad_entry_commentby"] = "Сэтгэгдэл бичсэн";
 $PMF_LANG["ad_entry_comment"] = "Сэтгэгдлүүд:";
 $PMF_LANG["ad_entry_save"] = "хадгалах";
-$PMF_LANG["ad_entry_delete"] = "устгах";
+$PMF_LANG["msgDelete"] = "устгах";
 $PMF_LANG["ad_entry_delcom_1"] = "Хэрэглэгчийн сэтгэгдлийг";
 $PMF_LANG["ad_entry_delcom_2"] = "устгах уу?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Сэтгэгдэл <strong>устгагдлаа</strong>.";
@@ -772,9 +772,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Холбоосыг үндсэн цонхон
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Сэтгэгдлүүд';
-$PMF_LANG['ad_comment_administration'] = 'Сэтгэгдлийн удирдлага';
-$PMF_LANG['ad_comment_faqs'] = 'FAQ бичлэгийн сэтгэглүүд:';
-$PMF_LANG['ad_comment_news'] = 'Мэдээний бичлэгийн сэтгэгдлүүд:';
+$PMF_LANG['adminHeaderComments'] = 'Сэтгэгдлийн удирдлага';
+$PMF_LANG['msgAdminCommentFaqs'] = 'FAQ бичлэгийн сэтгэглүүд:';
+$PMF_LANG['msgAdminCommentNews'] = 'Мэдээний бичлэгийн сэтгэгдлүүд:';
 $PMF_LANG['msgPDF'] = 'PDF хувилбар';
 $PMF_LANG['ad_groups'] = 'Бүлэг';
 

@@ -234,7 +234,7 @@ $PMF_LANG["ad_entry_changelog"] = "Dziennik zmian";
 $PMF_LANG["ad_entry_commentby"] = "Komentowany ";
 $PMF_LANG["ad_entry_comment"] = "Komentarze";
 $PMF_LANG["ad_entry_save"] = "Zapisz";
-$PMF_LANG["ad_entry_delete"] = "usuń";
+$PMF_LANG["msgDelete"] = "usuń";
 $PMF_LANG["ad_entry_delcom_1"] = "Jesteś pewny ";
 $PMF_LANG["ad_entry_delcom_2"] = "komentarz powinien zostać usunięty?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Komentarz został <strong>pomyślnie</strong> usunięty.";
@@ -784,9 +784,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Link otwiera się w oknie nadrzędnym';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Uwagi';
-$PMF_LANG['ad_comment_administration'] = 'Zarządzanie komentarzami';
-$PMF_LANG['ad_comment_faqs'] = 'Komentarze w wpisach FAQ:';
-$PMF_LANG['ad_comment_news'] = 'Komentarze w wpisach News:';
+$PMF_LANG['adminHeaderComments'] = 'Zarządzanie komentarzami';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Komentarze w wpisach FAQ:';
+$PMF_LANG['msgAdminCommentNews'] = 'Komentarze w wpisach News:';
 $PMF_LANG['msgPDF'] = 'Wersja PDF';
 $PMF_LANG['ad_groups'] = 'Grupy';
 

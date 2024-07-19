@@ -61,7 +61,7 @@ $templateVars = [
     'noTags' => Translation::get('ad_news_nodata'),
     'buttonEdit' => Translation::get('ad_user_edit'),
     'msgConfirm' => Translation::get('ad_user_del_3'),
-    'buttonDelete' => Translation::get('ad_entry_delete'),
+    'buttonDelete' => Translation::get('msgDelete'),
 ];
 
 echo $template->render($templateVars);

@@ -221,7 +221,7 @@ $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Bình luận bởi";
 $PMF_LANG["ad_entry_comment"] = "Bình luận";
 $PMF_LANG["ad_entry_save"] = "Lưu";
-$PMF_LANG["ad_entry_delete"] = "Xóa";
+$PMF_LANG["msgDelete"] = "Xóa";
 $PMF_LANG["ad_entry_delcom_1"] = "Bạn có chắc là bình luận này";
 $PMF_LANG["ad_entry_delcom_2"] = "cần xóa?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Bình luận <strong>đã được</strong> xóa.";
@@ -787,9 +787,9 @@ $PMF_LANG["ad_news_link_parent"] = 'Đường dẫn mở ra ngay trên trang hi�
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Bình luận';
-$PMF_LANG['ad_comment_administration'] = 'Quản trị bình luận ';
-$PMF_LANG['ad_comment_faqs'] = 'Bình luận trong nội dung Câu hỏi thường gặp:';
-$PMF_LANG['ad_comment_news'] = 'Bình luận trong các nội dung mới:';
+$PMF_LANG['adminHeaderComments'] = 'Quản trị bình luận ';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Bình luận trong nội dung Câu hỏi thường gặp:';
+$PMF_LANG['msgAdminCommentNews'] = 'Bình luận trong các nội dung mới:';
 $PMF_LANG['ad_groups'] = 'Nhóm';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

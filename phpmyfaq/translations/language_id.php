@@ -219,7 +219,7 @@ $PMF_LANG["ad_entry_changelog"] = "Catatan perubahan";
 $PMF_LANG["ad_entry_commentby"] = "Komentar oleh";
 $PMF_LANG["ad_entry_comment"] = "Komentar";
 $PMF_LANG["ad_entry_save"] = "Simpan";
-$PMF_LANG["ad_entry_delete"] = "hapus";
+$PMF_LANG["msgDelete"] = "hapus";
 $PMF_LANG["ad_entry_delcom_1"] = "Anda yakin bahwa komentar pengguna";
 $PMF_LANG["ad_entry_delcom_2"] = "akan dihapus?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Komentar <strong>berhasil</strong> dihapus.";
@@ -785,9 +785,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Link membuka di jendela yang sama';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Komentar';
-$PMF_LANG['ad_comment_administration'] = 'Pengelolaan komentar';
-$PMF_LANG['ad_comment_faqs'] = 'Komentar pada materi:';
-$PMF_LANG['ad_comment_news'] = 'Komentar pada berita:';
+$PMF_LANG['adminHeaderComments'] = 'Pengelolaan komentar';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Komentar pada materi:';
+$PMF_LANG['msgAdminCommentNews'] = 'Komentar pada berita:';
 $PMF_LANG['ad_groups'] = 'Grup';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

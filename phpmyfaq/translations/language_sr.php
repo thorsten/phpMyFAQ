@@ -221,7 +221,7 @@ $PMF_LANG["ad_entry_changelog"] = "Log izmena";
 $PMF_LANG["ad_entry_commentby"] = "Komentar korisnika";
 $PMF_LANG["ad_entry_comment"] = "Komentari";
 $PMF_LANG["ad_entry_save"] = "Snimi";
-$PMF_LANG["ad_entry_delete"] = "Obri&#353;i";
+$PMF_LANG["msgDelete"] = "Obri&#353;i";
 $PMF_LANG["ad_entry_delcom_1"] = "Da li ste sigurni da komentar od korisnika";
 $PMF_LANG["ad_entry_delcom_2"] = "treba obrisati?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Komentar je uspe&#353;no obrisan.";
@@ -782,9 +782,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Link se otvara u parent prozoru';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Komentari';
-$PMF_LANG['ad_comment_administration'] = 'Administracija komentara';
-$PMF_LANG['ad_comment_faqs'] = 'Komentari u FAQ unosima:';
-$PMF_LANG['ad_comment_news'] = 'Komentari u Vestima:';
+$PMF_LANG['adminHeaderComments'] = 'Administracija komentara';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Komentari u FAQ unosima:';
+$PMF_LANG['msgAdminCommentNews'] = 'Komentari u Vestima:';
 $PMF_LANG['ad_groups'] = 'Grupe';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

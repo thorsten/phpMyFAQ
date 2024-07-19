@@ -231,7 +231,7 @@ $PMF_LANG['ad_entry_changelog'] = 'Cambios';
 $PMF_LANG['ad_entry_commentby'] = 'Comentario de';
 $PMF_LANG['ad_entry_comment'] = 'Comentarios';
 $PMF_LANG['ad_entry_save'] = 'Guardar';
-$PMF_LANG['ad_entry_delete'] = 'Eliminar';
+$PMF_LANG['msgDelete'] = 'Eliminar';
 $PMF_LANG['ad_entry_delcom_1'] = '¿Estás seguro que el comentario del usuario ';
 $PMF_LANG['ad_entry_delcom_2'] = 'debería ser eliminado?';
 $PMF_LANG['ad_entry_commentdelsuc'] = 'El comentario fue <strong>correctamente</strong> eliminado.';
@@ -777,9 +777,9 @@ $PMF_LANG['ad_news_link_parent'] = 'El enlace se abre en la misma ventana';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Comentarios';
-$PMF_LANG['ad_comment_administration'] = 'Administración de comentarios';
-$PMF_LANG['ad_comment_faqs'] = 'Comentarios en registros de FAQ';
-$PMF_LANG['ad_comment_news'] = 'Comentarios en registros de noticias:';
+$PMF_LANG['adminHeaderComments'] = 'Administración de comentarios';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Comentarios en registros de FAQ';
+$PMF_LANG['msgAdminCommentNews'] = 'Comentarios en registros de noticias:';
 $PMF_LANG['msgPDF'] = 'Versión PDF';
 $PMF_LANG['ad_groups'] = 'Grupos';
 

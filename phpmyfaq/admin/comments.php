@@ -24,7 +24,6 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Twig\Extra\Intl\IntlExtension;
 
@@ -51,14 +50,10 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELET
     $newsComments = $comment->getAllComments(CommentType::NEWS);
 
     $templateVars = [
-        'adminHeaderComments' => Translation::get('ad_comment_administration'),
-        'msgTabFaqComments' => Translation::get('ad_comment_faqs'),
-        'msgTabNewsComments' => Translation::get('ad_comment_news'),
         'currentLocale' => $faqConfig->getLanguage()->getLanguage(),
         'faqComments' => $faqComments,
         'newsComments' => $newsComments,
         'csrfToken' => Token::getInstance()->getTokenString('delete-comment'),
-        'buttonDelete' => Translation::get('ad_entry_delete'),
     ];
 
     echo $template->render($templateVars);

@@ -218,7 +218,7 @@ $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Comment by";
 $PMF_LANG["ad_entry_comment"] = "Comments";
 $PMF_LANG["ad_entry_save"] = "Save";
-$PMF_LANG["ad_entry_delete"] = "delete";
+$PMF_LANG["msgDelete"] = "delete";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure that the comment of the user";
 $PMF_LANG["ad_entry_delcom_2"] = "should be deleted?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
@@ -784,9 +784,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Comments';
-$PMF_LANG['ad_comment_administration'] = 'Comments administration';
-$PMF_LANG['ad_comment_faqs'] = 'Comments in FAQ records:';
-$PMF_LANG['ad_comment_news'] = 'Comments in News records:';
+$PMF_LANG['adminHeaderComments'] = 'Comments administration';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Comments in FAQ records:';
+$PMF_LANG['msgAdminCommentNews'] = 'Comments in News records:';
 $PMF_LANG['ad_groups'] = 'Groups';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

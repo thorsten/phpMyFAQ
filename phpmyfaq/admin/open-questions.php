@@ -79,7 +79,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
         'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
         'msgTakeQuestion' => Translation::get('ad_ques_take'),
         'csrfTokenToggleVisibility' => Token::getInstance()->getTokenString('toggle-question-visibility'),
-        'msgDeleteAllOpenQuestions' => Translation::get('ad_entry_delete'),
+        'msgDeleteAllOpenQuestions' => Translation::get('msgDelete'),
     ];
 
     echo $template->render($templateVars);

@@ -48,7 +48,7 @@ if (
         'msgGlossaryItem' => Translation::get('ad_glossary_item'),
         'msgGlossaryDefinition' => Translation::get('ad_glossary_definition'),
         'glossaryItems' => $glossary->fetchAll(),
-        'buttonDelete' => Translation::get('ad_entry_delete'),
+        'buttonDelete' => Translation::get('msgDelete'),
         'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-glossary'),
         'currentLanguage' => $faqLangCode,
         'addGlossaryTitle' => Translation::get('ad_glossary_add'),

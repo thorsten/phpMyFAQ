@@ -216,7 +216,7 @@ $PMF_LANG["ad_entry_changelog"] = "Değişiklik günlüğü";
 $PMF_LANG["ad_entry_commentby"] = "Yorumlayan";
 $PMF_LANG["ad_entry_comment"] = "Yorum";
 $PMF_LANG["ad_entry_save"] = "kaydet";
-$PMF_LANG["ad_entry_delete"] = "Sil";
+$PMF_LANG["msgDelete"] = "Sil";
 $PMF_LANG["ad_entry_delcom_1"] = "Şu kullanıcıya ait yorum silinecek";
 $PMF_LANG["ad_entry_delcom_2"] = "onaylıyor musunuz??";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Yorum <strong>başarıyla</strong> silindi.";
@@ -767,9 +767,9 @@ $PMF_LANG['ad_news_link_parent'] = "Bağlantı yeni sekmede açılır";
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = "yorumlar";
-$PMF_LANG['ad_comment_administration'] = "Yorum moderasyonu";
-$PMF_LANG['ad_comment_faqs'] = "Soru yorumları";
-$PMF_LANG['ad_comment_news'] = "Duyuru yorumları";
+$PMF_LANG['adminHeaderComments'] = "Yorum moderasyonu";
+$PMF_LANG['msgAdminCommentFaqs'] = "Soru yorumları";
+$PMF_LANG['msgAdminCommentNews'] = "Duyuru yorumları";
 $PMF_LANG['msgPDF'] = "PDF versiyonu";
 $PMF_LANG['ad_groups'] = "Gruplar";
 

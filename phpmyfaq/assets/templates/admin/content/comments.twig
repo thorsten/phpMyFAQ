@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="bi bi-chat-right-dots"></i>
-    {{ adminHeaderComments }}
+    {{ 'adminHeaderComments' | translate }}
   </h1>
 </div>
 
@@ -11,13 +11,13 @@
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#faqs-tab-pane" type="button"
             role="tab" aria-controls="home-tab-pane" aria-selected="true">
-      {{ msgTabFaqComments }}
+      {{ 'msgAdminCommentFaqs' | translate }}
     </button>
   </li>
   <li class="nav-item" role="presentation">
     <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#news-tab-pane" type="button"
             role="tab" aria-controls="news-tab-pane" aria-selected="false">
-      {{ msgTabNewsComments }}
+      {{ 'msgAdminCommentNews' | translate }}
     </button>
   </li>
 </ul>
@@ -51,7 +51,7 @@
     </form>
     <div class="text-end">
       <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
-        {{ buttonDelete }}
+        {{ 'msgDelete' | translate }}
       </button>
     </div>
   </div>
@@ -84,7 +84,7 @@
     </form>
     <div class="text-end">
       <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
-        {{ buttonDelete }}
+        {{ 'msgDelete' | translate }}
       </button>
     </div>
   </div>

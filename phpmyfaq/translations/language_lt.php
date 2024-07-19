@@ -224,7 +224,7 @@ $PMF_LANG["ad_entry_changelog"] = "Keitimų žurnalas";
 $PMF_LANG["ad_entry_commentby"] = "Komentavo";
 $PMF_LANG["ad_entry_comment"] = "Komentarai";
 $PMF_LANG["ad_entry_save"] = "Išsaugoti";
-$PMF_LANG["ad_entry_delete"] = "šalinti";
+$PMF_LANG["msgDelete"] = "šalinti";
 $PMF_LANG["ad_entry_delcom_1"] = "Ar tikrai norite pašalinti naudotojo";
 $PMF_LANG["ad_entry_delcom_2"] = "komentarą?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Komentaras buvo <strong>sėkmingai</strong> pašalintas.";
@@ -796,9 +796,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Saitas atveriamas pagrindiniame lange';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Komentarai';
-$PMF_LANG['ad_comment_administration'] = 'Komentarų administravimas';
-$PMF_LANG['ad_comment_faqs'] = 'Komentarai DUK įrašuose:';
-$PMF_LANG['ad_comment_news'] = 'Komentarai naujienų įrašuose:';
+$PMF_LANG['adminHeaderComments'] = 'Komentarų administravimas';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Komentarai DUK įrašuose:';
+$PMF_LANG['msgAdminCommentNews'] = 'Komentarai naujienų įrašuose:';
 $PMF_LANG['ad_groups'] = 'Grupės';
 
 // added v2.0.0 - 2007-03-10 by Thorsten

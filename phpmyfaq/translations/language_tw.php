@@ -216,7 +216,7 @@ $PMF_LANG["ad_entry_changelog"] = "異動日誌 Changelog";
 $PMF_LANG["ad_entry_commentby"] = "評論來自 ";
 $PMF_LANG["ad_entry_comment"] = "評論";
 $PMF_LANG["ad_entry_save"] = "儲存";
-$PMF_LANG["ad_entry_delete"] = "刪除";
+$PMF_LANG["msgDelete"] = "刪除";
 $PMF_LANG["ad_entry_delcom_1"] = "您確定這條評論來自該使用者 (Are you sure that the comment of the user)";
 $PMF_LANG["ad_entry_delcom_2"] = "要被刪除嘛? (should be deleted?)";
 $PMF_LANG["ad_entry_commentdelsuc"] = "此評論<strong>成功地</strong>被刪除了。";
@@ -767,9 +767,9 @@ $PMF_LANG['ad_news_link_parent'] = "連結以現有視窗開啟 Link opens in pa
 
 // added v2.0.0 - 2007-03-04 by Thorsten 開發者
 $PMF_LANG['ad_menu_comments'] = "評論 Comments";
-$PMF_LANG['ad_comment_administration'] = "評論管理 Comments administration";
-$PMF_LANG['ad_comment_faqs'] = "FAQ 記錄下的評論 Comments in FAQ records";
-$PMF_LANG['ad_comment_news'] = "新聞記錄下的評論 Comments in News records";
+$PMF_LANG['adminHeaderComments'] = "評論管理 Comments administration";
+$PMF_LANG['msgAdminCommentFaqs'] = "FAQ 記錄下的評論 Comments in FAQ records";
+$PMF_LANG['msgAdminCommentNews'] = "新聞記錄下的評論 Comments in News records";
 $PMF_LANG['msgPDF'] = "PDF 版本 version";
 $PMF_LANG['ad_groups'] = "群組 Groups";
 

@@ -230,7 +230,7 @@ $PMF_LANG['ad_entry_changelog'] = "Änderungen";
 $PMF_LANG['ad_entry_commentby'] = "Kommentar von";
 $PMF_LANG['ad_entry_comment'] = "Kommentare";
 $PMF_LANG['ad_entry_save'] = "Speichern";
-$PMF_LANG['ad_entry_delete'] = "Löschen";
+$PMF_LANG['msgDelete'] = "Löschen";
 $PMF_LANG['ad_entry_delcom_1'] = "Sicher, dass der Kommentar des Benutzers";
 $PMF_LANG['ad_entry_delcom_2'] = "gelöscht werden soll?";
 $PMF_LANG['ad_entry_commentdelsuc'] = "Der Kommentar wurde erfolgreich gelöscht.";
@@ -777,9 +777,9 @@ $PMF_LANG['ad_news_link_parent'] = "Link öffnet im gleichen Fenster";
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = "Kommentare";
-$PMF_LANG['ad_comment_administration'] = "Kommentarverwaltung";
-$PMF_LANG['ad_comment_faqs'] = "Kommentare in FAQs";
-$PMF_LANG['ad_comment_news'] = "Kommentare in Neuigkeiten";
+$PMF_LANG['adminHeaderComments'] = "Kommentarverwaltung";
+$PMF_LANG['msgAdminCommentFaqs'] = "Kommentare in FAQs";
+$PMF_LANG['msgAdminCommentNews'] = "Kommentare in Neuigkeiten";
 $PMF_LANG['msgPDF'] = 'PDF-Version';
 $PMF_LANG['ad_groups'] = "Gruppen";
 

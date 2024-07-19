@@ -218,7 +218,7 @@ $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Komentoval";
 $PMF_LANG["ad_entry_comment"] = "Komentáre";
 $PMF_LANG["ad_entry_save"] = "Ulož";
-$PMF_LANG["ad_entry_delete"] = "vymaž";
+$PMF_LANG["msgDelete"] = "vymaž";
 $PMF_LANG["ad_entry_delcom_1"] = "Ste si istý, že komentár užívateľa";
 $PMF_LANG["ad_entry_delcom_2"] = "môže byť vymazaný?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "Komentár bol <strong>úspešne</strong> vymazaný.";
@@ -784,9 +784,9 @@ $PMF_LANG['ad_news_link_parent'] = 'Odkazy otvoriť v nadradenom okne';
 
 // added v2.0.0 - 2007-03-04 by Thorsten
 $PMF_LANG['ad_menu_comments'] = 'Komentáre';
-$PMF_LANG['ad_comment_administration'] = 'Komentáre správy';
-$PMF_LANG['ad_comment_faqs'] = 'Komentáre v záznamoch FAQ:';
-$PMF_LANG['ad_comment_news'] = 'Komentáre v záznamoch noviniek:';
+$PMF_LANG['adminHeaderComments'] = 'Komentáre správy';
+$PMF_LANG['msgAdminCommentFaqs'] = 'Komentáre v záznamoch FAQ:';
+$PMF_LANG['msgAdminCommentNews'] = 'Komentáre v záznamoch noviniek:';
 $PMF_LANG['ad_groups'] = 'Skupiny';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
