@@ -127,7 +127,7 @@ $PMF_LANG["msgMailContact"] = "Vaša správa bola poslaná administrátorovi.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Žiadne spojenie s databázou.";
 $PMF_LANG["err_noHeaders"] = "Kategória sa nenašla.";
-$PMF_LANG["err_noArticles"] = "FAQ nedostupná.";
+$PMF_LANG["msgErrorNoRecords"] = "FAQ nedostupná.";
 $PMF_LANG["err_badID"] = "Chybné ID.";
 $PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
 $PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
@@ -199,7 +199,7 @@ $PMF_LANG["ad_user_deleted"] = "Užívateľ bol úspešne vymazaný.";
 $PMF_LANG["ad_user_checkall"] = "Vyberte všetkých";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Správa nahrávok";
+$PMF_LANG["msgHeaderFAQOverview"] = "Správa nahrávok";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Téma";
 $PMF_LANG["ad_entry_action"] = "Akcia";

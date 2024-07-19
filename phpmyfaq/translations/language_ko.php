@@ -128,7 +128,7 @@ $PMF_LANG["msgMailContact"] = "관리자에게 메시지가 전달되었습니�
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "데이터베이스에 접속할 수 없습니다.";
 $PMF_LANG["err_noHeaders"] = "등록된 카테고리가 없습니다.";
-$PMF_LANG["err_noArticles"] = "등록된 데이터가 없습니다.";
+$PMF_LANG["msgErrorNoRecords"] = "등록된 데이터가 없습니다.";
 $PMF_LANG["err_badID"] = "잘못된 ID";
 $PMF_LANG["err_noTopTen"] = "TOP 10을 이용하실 수 없습니다.";
 $PMF_LANG["err_nothingFound"] = "검색 결과가 없습니다.";
@@ -200,7 +200,7 @@ $PMF_LANG["ad_user_deleted"] = "사용자를 성공적으로 삭제하였습니�
 $PMF_LANG["ad_user_checkall"] = "전체 선택";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "FAQ 관리";
+$PMF_LANG["msgHeaderFAQOverview"] = "FAQ 관리";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "동작";

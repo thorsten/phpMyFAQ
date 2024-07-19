@@ -125,7 +125,7 @@ $PMF_LANG["msgMailContact"] = "您的訊息已經傳遞給管理員。";
 // Fehlermeldungen / Error Message / 錯誤訊息
 $PMF_LANG["err_noDatabase"] = "沒有可用資料庫連接。";
 $PMF_LANG["err_noHeaders"] = "沒有發現類別。";
-$PMF_LANG["err_noArticles"] = "沒有 FAQs 存在。";
+$PMF_LANG["msgErrorNoRecords"] = "沒有 FAQs 存在。";
 $PMF_LANG["err_badID"] = "錯誤 ID。";
 $PMF_LANG["err_noTopTen"] = "尚無熱門 FAQs。";
 $PMF_LANG["err_nothingFound"] = "尚未有記錄.";
@@ -197,7 +197,7 @@ $PMF_LANG["ad_user_deleted"] = "該名使用者已刪除成功。";
 $PMF_LANG["ad_user_checkall"] = "選擇全部。";
 
 // Beitragsverwaltung  Administration / 管理者
-$PMF_LANG["ad_entry_aor"] = "FAQ 管理";
+$PMF_LANG["msgHeaderFAQOverview"] = "FAQ 管理";
 $PMF_LANG["ad_entry_id"] = "使用者帳號 ID";
 $PMF_LANG["ad_entry_topic"] = "主題";
 $PMF_LANG["ad_entry_action"] = "動作";

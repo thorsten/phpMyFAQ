@@ -142,7 +142,7 @@ $PMF_LANG["msgMailContact"] = "Votre message a été envoyé à l'administrateur
 // Error messages
 $PMF_LANG["err_noDatabase"] = "Pas de connexion à la base de données.";
 $PMF_LANG["err_noHeaders"] = "Aucune catégorie trouvée.";
-$PMF_LANG["err_noArticles"] = "Aucun résultat.";
+$PMF_LANG["msgErrorNoRecords"] = "Aucun résultat.";
 $PMF_LANG["err_badID"] = "Mauvais identifiant.";
 $PMF_LANG["err_noTopTen"] = "Pas de FAQ populaire actuellement.";
 $PMF_LANG["err_nothingFound"] = "Pas d'entrée trouvée.";
@@ -214,7 +214,7 @@ $PMF_LANG["ad_user_deleted"] = "L'utilisateur a été correctement supprimé.";
 $PMF_LANG["ad_user_checkall"] = "Tout sélectionner";
 
 // Contribution management
-$PMF_LANG["ad_entry_aor"] = "Administration des FAQ";
+$PMF_LANG["msgHeaderFAQOverview"] = "Administration des FAQ";
 $PMF_LANG["ad_entry_id"] = "Identifiant";
 $PMF_LANG["ad_entry_topic"] = "Titre";
 $PMF_LANG["ad_entry_action"] = "Action";

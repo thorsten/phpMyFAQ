@@ -128,7 +128,7 @@ $PMF_LANG["msgMailContact"] = "Повідомлення відправлене �
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "No database connection available.";
 $PMF_LANG["err_noHeaders"] = "No category found.";
-$PMF_LANG["err_noArticles"] = "Нічого не знайдено";
+$PMF_LANG["msgErrorNoRecords"] = "Нічого не знайдено";
 $PMF_LANG["err_badID"] = "Wrong ID.";
 $PMF_LANG["err_noTopTen"] = "Нічого поки не немає.";
 $PMF_LANG["err_nothingFound"] = "No entry found.";
@@ -199,7 +199,7 @@ $PMF_LANG["ad_user_del_3"] = "Продовжити?";
 $PMF_LANG["ad_user_deleted"] = "Користувач видалений.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Відповіді / питання";
+$PMF_LANG["msgHeaderFAQOverview"] = "Відповіді / питання";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Тема";
 $PMF_LANG["ad_entry_action"] = "Дія";

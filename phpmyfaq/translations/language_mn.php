@@ -124,7 +124,7 @@ $PMF_LANG["msgMailContact"] = "Таны зурвас админд илгээгд
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ямар нэг мэдээллийн сантай холбогдоогүй байна..";
 $PMF_LANG["err_noHeaders"] = "Ангилал алга.";
-$PMF_LANG["err_noArticles"] = "<p>Ямар нэг FAQs алга.</p>";
+$PMF_LANG["msgErrorNoRecords"] = "<p>Ямар нэг FAQs алга.</p>";
 $PMF_LANG["err_badID"] = "<p>Буруу ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Онцлох FAQs алга.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Өгөгдөл алга.</p>";
@@ -196,7 +196,7 @@ $PMF_LANG["ad_user_deleted"] = "Хэрэглэгч устгагдлаа.";
 $PMF_LANG["ad_user_checkall"] = "Бүгдийг сонгох";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "FAQ -н удирдлага";
+$PMF_LANG["msgHeaderFAQOverview"] = "FAQ -н удирдлага";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Сэдэв";
 $PMF_LANG["ad_entry_action"] = "Үйлдэл";

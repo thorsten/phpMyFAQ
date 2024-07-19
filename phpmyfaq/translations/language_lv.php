@@ -136,7 +136,7 @@ $PMF_LANG["msgMailContact"] = "Zi&ograve;a nos&ucirc;t&icirc;ta administratoram.
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Datu b&acirc;ze nav pieejama.";
 $PMF_LANG["err_noHeaders"] = "Nav sada&iuml;u.";
-$PMF_LANG["err_noArticles"] = "Nekas nav atrasts.<br/><br/><a href=\"javascript:history.back();\">Atgriezties</a>";
+$PMF_LANG["msgErrorNoRecords"] = "Nekas nav atrasts.<br/><br/><a href=\"javascript:history.back();\">Atgriezties</a>";
 $PMF_LANG["err_badID"] = "Nepareizs ID.";
 $PMF_LANG["err_noTopTen"] = "Pa&eth;laik TOP 10 nav pieejams.";
 $PMF_LANG["err_nothingFound"] = "Ieraksts netika atrasts.";
@@ -207,7 +207,7 @@ $PMF_LANG["ad_user_del_3"] = "Vai esi p&acirc;rliecin&acirc;ts?";
 $PMF_LANG["ad_user_deleted"] = "Dal&icirc;bnieks izdz&ccedil;sts.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Ierakstu administr&ccedil;&eth;ana";
+$PMF_LANG["msgHeaderFAQOverview"] = "Ierakstu administr&ccedil;&eth;ana";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topiks";
 $PMF_LANG["ad_entry_action"] = "Darb&icirc;ba";

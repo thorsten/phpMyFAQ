@@ -1,24 +1,8 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="bi bi-list-alt"></i>
-    {{ msgHeaderFAQOverview }}
+    {{ 'msgHeaderFAQOverview' | translate }}
   </h1>
-  <div class="col-2">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
-      <label class="form-check-label" for="pmf-checkbox-filter-inactive">
-        {{ msgOnlyInactiveFAQs }}
-      </label>
-    </div>
-  </div>
-  <div class="col-2">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-new">
-      <label class="form-check-label" for="pmf-checkbox-filter-new">
-        {{ msgOnlyNewFAQs }}
-      </label>
-    </div>
-  </div>
   <div class="pmf-faq-overview-search col-4">
     <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="?action=faq-overview"
           method="post" role="form">
@@ -36,11 +20,29 @@
 
 {% if categories is empty %}
   <div class="alert alert-danger" role="alert">
-    {{ errorNoRecords }}
+    {{ 'msgErrorNoRecords' | translate }}
   </div>
 {% endif %}
 
 <div class="accordion shadow" id="pm-admin-faq-overview">
+  <div class="accordion-item d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center p-3 bg-secondary-subtle">
+    <div class="col-2">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
+        <label class="form-check-label" for="pmf-checkbox-filter-inactive">
+          {{ 'msgOnlyInactiveFAQs' | translate }}
+        </label>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-new">
+        <label class="form-check-label" for="pmf-checkbox-filter-new">
+          {{ 'msgOnlyNewFAQs' | translate }}
+        </label>
+      </div>
+    </div>
+  </div>
   {% for category in categories %}
   <div class="accordion-item">
     <div class="accordion-header category-header-indent-{{ category.indent }}">
@@ -48,7 +50,7 @@
               data-bs-target="#category-id-{{ category.id }}">
 
         <span class="lead">{{ category.name }}</span>
-        <span class="badge bg-secondary mx-1">{{ numberOfRecords[category.id] ?? 0 }} {{ msgRecords }}</span>
+        <span class="badge bg-secondary mx-1">{{ numberOfRecords[category.id] ?? 0 }} {{ 'msgEntries' | translate }}</span>
         <span class="badge bg-info mx-1">{{ numberOfComments[category.id] ?? 0 }} {{ msgComments }}</span>
 
       </button>

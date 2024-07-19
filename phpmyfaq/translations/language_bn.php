@@ -128,7 +128,7 @@ $PMF_LANG["msgMailContact"] = "আপনার প্রশ্ন প্রশ�
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "ডাটাবেজ সংযোগ নেই।";
 $PMF_LANG["err_noHeaders"] = "কোনো বিভাগ পাওয়া যায় নি";
-$PMF_LANG["err_noArticles"] = "কোনো লেখা পাওয়া যায়নি।";
+$PMF_LANG["msgErrorNoRecords"] = "কোনো লেখা পাওয়া যায়নি।";
 $PMF_LANG["err_badID"] = "ভুল পরিচয়।";
 $PMF_LANG["err_noTopTen"] = "সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।";
 $PMF_LANG["err_nothingFound"] = "কোনো প্রশ্ন পাওয়া যায়নি।";
@@ -199,7 +199,7 @@ $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Administration of Records";
+$PMF_LANG["msgHeaderFAQOverview"] = "Administration of Records";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";

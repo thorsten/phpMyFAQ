@@ -128,7 +128,7 @@ $PMF_LANG["msgMailContact"] = "Pesan anda sudah dikirim ke pengelola.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Koneksi database sedang bermasalah.";
 $PMF_LANG["err_noHeaders"] = "Tidak ditemukan kategori.";
-$PMF_LANG["err_noArticles"] = "Tidak ada materi yang tersedia.";
+$PMF_LANG["msgErrorNoRecords"] = "Tidak ada materi yang tersedia.";
 $PMF_LANG["err_badID"] = "ID Salah.";
 $PMF_LANG["err_noTopTen"] = "Belum ada materi yang populer.";
 $PMF_LANG["err_nothingFound"] = "Tidak ada materi yang ditemukan.";
@@ -200,7 +200,7 @@ $PMF_LANG["ad_user_deleted"] = "Pengguna barhasil dihapus.";
 $PMF_LANG["ad_user_checkall"] = "Pilih semua";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Pengelolaan Materi";
+$PMF_LANG["msgHeaderFAQOverview"] = "Pengelolaan Materi";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topik";
 $PMF_LANG["ad_entry_action"] = "Perintah";

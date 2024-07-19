@@ -49,7 +49,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::EXPORT->value
     $templateVars = [
         'adminHeaderExport' => Translation::get('ad_menu_export'),
         'hasNoFaqs' => Database::checkOnEmptyTable('faqdata'),
-        'errorMessageNoFaqs' => Translation::get('err_noArticles'),
+        'errorMessageNoFaqs' => Translation::get('msgErrorNoRecords'),
         'hasCategories' => !Database::checkOnEmptyTable('faqcategories'),
         'headerCategories' => Translation::get('ad_export_which_cat'),
         'msgCategory' => Translation::get('ad_entry_category'),

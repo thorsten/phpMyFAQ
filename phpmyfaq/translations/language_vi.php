@@ -130,7 +130,7 @@ $PMF_LANG["msgMailContactBack"] = "Trở về trang chủ";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Không thiết lập được kết nối với cơ sở dữ liệu!";
 $PMF_LANG["err_noHeaders"] = "Không tìm thấy mục này!";
-$PMF_LANG["err_noArticles"] = "Không có kết quả nào.";
+$PMF_LANG["msgErrorNoRecords"] = "Không có kết quả nào.";
 $PMF_LANG["err_badID"] = "Tên đăng nhập sai!";
 $PMF_LANG["err_noTopTen"] = "Hiện không có TOP 10.";
 $PMF_LANG["err_nothingFound"] = "Nội dung không tìm thấy.";
@@ -202,7 +202,7 @@ $PMF_LANG["ad_user_deleted"] = "Thành viên đã được xóa.";
 $PMF_LANG["ad_user_checkall"] = "Chọn tất cả";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Quản trị nội dung";
+$PMF_LANG["msgHeaderFAQOverview"] = "Quản trị nội dung";
 $PMF_LANG["ad_entry_id"] = "Tên đăng nhập";
 $PMF_LANG["ad_entry_topic"] = "Tiêu đề";
 $PMF_LANG["ad_entry_action"] = "Hành động";

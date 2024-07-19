@@ -143,7 +143,7 @@ $PMF_LANG["msgMailContact"] = "Twoja wiadomość została wysłana do administra
 // Error messages
 $PMF_LANG["err_noDatabase"] = "Brak połączenia z bazą danych.";
 $PMF_LANG["err_noHeaders"] = "Nie znaleziono kategorii.";
-$PMF_LANG["err_noArticles"] = "Brak dostępnych pytań i odpowiedzi.";
+$PMF_LANG["msgErrorNoRecords"] = "Brak dostępnych pytań i odpowiedzi.";
 $PMF_LANG["err_badID"] = "Zły ID.";
 $PMF_LANG["err_noTopTen"] = "Brak dostępnych FAQs.";
 $PMF_LANG["err_nothingFound"] = "Nie znaleziono wpisu.";
@@ -215,7 +215,7 @@ $PMF_LANG["ad_user_deleted"] = "Użytkownik został pomyślnie usunięty.";
 $PMF_LANG["ad_user_checkall"] = "Zaznacz wszystko";
 
 // Contribution management
-$PMF_LANG["ad_entry_aor"] = "FAQ administracja";
+$PMF_LANG["msgHeaderFAQOverview"] = "FAQ administracja";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Temat";
 $PMF_LANG["ad_entry_action"] = "Działanie";

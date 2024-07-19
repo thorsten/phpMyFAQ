@@ -141,7 +141,7 @@ $PMF_LANG["msgMailContact"] = "Your message has been sent to the administrator."
 // Error messages
 $PMF_LANG["err_noDatabase"] = "No database connection available.";
 $PMF_LANG["err_noHeaders"] = "No category found.";
-$PMF_LANG["err_noArticles"] = "No FAQs available.";
+$PMF_LANG["msgErrorNoRecords"] = "No FAQs available.";
 $PMF_LANG["err_badID"] = "Wrong ID.";
 $PMF_LANG["err_noTopTen"] = "No popular FAQs available yet.";
 $PMF_LANG["err_nothingFound"] = "No entry found.";
@@ -213,7 +213,7 @@ $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
 // Contribution management
-$PMF_LANG["ad_entry_aor"] = "FAQ Administration";
+$PMF_LANG["msgHeaderFAQOverview"] = "FAQ Administration";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";

@@ -133,7 +133,7 @@ $PMF_LANG["msgMailContact"] = "Jūsų pranešimas buvo išsiųstas administrator
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Nėra ryšio su duomenų baze.";
 $PMF_LANG["err_noHeaders"] = "Nerasta grupė.";
-$PMF_LANG["err_noArticles"] = "Nėra prieinamų DUK.";
+$PMF_LANG["msgErrorNoRecords"] = "Nėra prieinamų DUK.";
 $PMF_LANG["err_badID"] = "Blogas identifikatorius.";
 $PMF_LANG["err_noTopTen"] = "Populiariausi DUK kol kas neprieinami.";
 $PMF_LANG["err_nothingFound"] = "Įrašų nerasta.";
@@ -205,7 +205,7 @@ $PMF_LANG["ad_user_deleted"] = "Naudotojas sėkmingai pašalintas.";
 $PMF_LANG["ad_user_checkall"] = "Pažymėti viską";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Įrašų administravimas";
+$PMF_LANG["msgHeaderFAQOverview"] = "Įrašų administravimas";
 $PMF_LANG["ad_entry_id"] = "Identifikatorius";
 $PMF_LANG["ad_entry_topic"] = "Tema";
 $PMF_LANG["ad_entry_action"] = "Veiksmas";

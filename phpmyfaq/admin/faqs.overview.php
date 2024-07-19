@@ -48,17 +48,12 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 
 $templateVars = [
-    'msgHeaderFAQOverview' => Translation::get('ad_entry_aor'),
-    'msgOnlyInactiveFAQs' => Translation::get('msgOnlyInactiveFAQs'),
-    'msgOnlyNewFAQs' => Translation::get('msgOnlyNewFAQs'),
     'msgSearch' => Translation::get('ad_menu_searchfaqs'),
     'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),
-    'errorNoRecords' => Translation::get('err_noArticles'),
     'csrfTokenOverview' => Token::getInstance()->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),
     'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
     'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
-    'msgRecords' => Translation::get('msgEntries'),
     'msgComments' => Translation::get('ad_start_comments'),
     'msgQuestion' => Translation::get('ad_entry_theme'),
     'msgDate' => Translation::get('ad_entry_date'),

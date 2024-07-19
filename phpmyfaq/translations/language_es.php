@@ -140,7 +140,7 @@ $PMF_LANG['msgMailContact'] = "Tu mensaje ha sido enviado al administrador";
 // Mensajes de error
 $PMF_LANG['err_noDatabase'] = "!No hay conexión con la base de datos!";
 $PMF_LANG['err_noHeaders'] = "¡No se encontró ninguna categoría!";
-$PMF_LANG['err_noArticles'] = "Aún no hay FAQs.";
+$PMF_LANG['msgErrorNoRecords'] = "Aún no hay FAQs.";
 $PMF_LANG['err_badID'] = "¡ID incorrecto!";
 $PMF_LANG['err_noTopTen'] = "Aún no hay FAQs populares disponibles.";
 $PMF_LANG['err_nothingFound'] = "No se encontró ninguna entrada.";
@@ -212,7 +212,7 @@ $PMF_LANG['ad_user_deleted'] = 'El usuario ha sido eliminado.';
 $PMF_LANG['ad_user_checkall'] = 'Seleccionar todos';
 
 // Gestión de las contribuciones
-$PMF_LANG['ad_entry_aor'] = 'Resumen de FAQs ';
+$PMF_LANG['msgHeaderFAQOverview'] = 'Resumen de FAQs ';
 $PMF_LANG['ad_entry_id'] = 'ID';
 $PMF_LANG['ad_entry_topic'] = 'Pregunta';
 $PMF_LANG['ad_entry_action'] = 'Acción';

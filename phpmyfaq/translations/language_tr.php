@@ -125,7 +125,7 @@ $PMF_LANG["msgMailContact"] = "Mesajınız yöneticiye gönderildi.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Veritabanı bağlantısı başarısız.";
 $PMF_LANG["err_noHeaders"] = "Kategori bulunamadı.";
-$PMF_LANG["err_noArticles"] = "Soru bulunamadı.";
+$PMF_LANG["msgErrorNoRecords"] = "Soru bulunamadı.";
 $PMF_LANG["err_badID"] = "Geçersiz ID.";
 $PMF_LANG["err_noTopTen"] = "Henüz popüler soru bulunmuyor.";
 $PMF_LANG["err_nothingFound"] = "Kayıt bulunamadı.";
@@ -197,7 +197,7 @@ $PMF_LANG["ad_user_deleted"] = "Kullanıcı başarıyla silindi.";
 $PMF_LANG["ad_user_checkall"] = "Tümünü seç";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Soru yönetimi";
+$PMF_LANG["msgHeaderFAQOverview"] = "Soru yönetimi";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Konu";
 $PMF_LANG["ad_entry_action"] = "Eylem";

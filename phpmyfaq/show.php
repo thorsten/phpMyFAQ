@@ -73,7 +73,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             ->setCategory($subCategory);
 
         if (empty($records)) {
-            $records = sprintf('<div class="mb-5 alert alert-info">%s</div>', Translation::get('err_noArticles'));
+            $records = sprintf('<div class="mb-5 alert alert-info">%s</div>', Translation::get('msgErrorNoRecords'));
         }
 
         if ((is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) !== 0) {

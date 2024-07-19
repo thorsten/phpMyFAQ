@@ -137,7 +137,7 @@ $PMF_LANG["msgMailContact"] = "Zure mezua administratzaileari bidali diogu!";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ez dago datu-basearekin konexiorik!";
 $PMF_LANG["err_noHeaders"] = "Ez da atalik aurkitu!";
-$PMF_LANG["err_noArticles"] = "Ez dago sarrerarik.";
+$PMF_LANG["msgErrorNoRecords"] = "Ez dago sarrerarik.";
 $PMF_LANG["err_badID"] = "ID okerra!";
 $PMF_LANG["err_noTopTen"] = "Oraindik ez dago TOP Ten-ik.";
 $PMF_LANG["err_nothingFound"] = "Ez da sarrerarik aurkitu.";
@@ -209,7 +209,7 @@ $PMF_LANG["ad_user_deleted"] = "Erabiltzailea ezabatua izan da.";
 $PMF_LANG["ad_user_checkall"] = "Hautatu dena";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Erregistroen administrazioa";
+$PMF_LANG["msgHeaderFAQOverview"] = "Erregistroen administrazioa";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Gaia";
 $PMF_LANG["ad_entry_action"] = "Ekintza";

@@ -129,7 +129,7 @@ $PMF_LANG["msgMailContact"] = "Tvoje sporo&egrave;ilo je bilo poslano administra
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ni povezave z bazo.";
 $PMF_LANG["err_noHeaders"] = "Ni kategorij.";
-$PMF_LANG["err_noArticles"] = "Ni nobenega vnosa.";
+$PMF_LANG["msgErrorNoRecords"] = "Ni nobenega vnosa.";
 $PMF_LANG["err_badID"] = "Napa&egrave;en ID.";
 $PMF_LANG["err_noTopTen"] = "Ni 10 NAJ vnosov trenutno.";
 $PMF_LANG["err_nothingFound"] = "Ne najdem vnosa.";
@@ -200,7 +200,7 @@ $PMF_LANG["ad_user_del_3"] = "Si prepri&egrave;an?";
 $PMF_LANG["ad_user_deleted"] = "Uporabnik uspešno odstranjen.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Administriranje vnosov";
+$PMF_LANG["msgHeaderFAQOverview"] = "Administriranje vnosov";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Vsebina";
 $PMF_LANG["ad_entry_action"] = "Akcija";

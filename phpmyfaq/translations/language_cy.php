@@ -134,7 +134,7 @@ $PMF_LANG["msgMailContact"] = "Anfonwyd eich neges at y gweinyddwr.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Does dim cysylltiad cronfa ddata ar gael.";
 $PMF_LANG["err_noHeaders"] = "Ni chafwyd categori.";
-$PMF_LANG["err_noArticles"] = "Dim cofnodion ar gael.";
+$PMF_LANG["msgErrorNoRecords"] = "Dim cofnodion ar gael.";
 $PMF_LANG["err_badID"] = "Gwybodaeth adnabod anghywir.";
 $PMF_LANG["err_noTopTen"] = "Does dim Deg Uchaf ar gael eto.";
 $PMF_LANG["err_nothingFound"] = "Ni chafwyd cofnod.";
@@ -206,7 +206,7 @@ $PMF_LANG["ad_user_deleted"] = "Dilëwyd y defnyddiwr yn llwyddiannus.";
 $PMF_LANG["ad_user_checkall"] = "Dewis oll";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Gweinyddu Cofnodion";
+$PMF_LANG["msgHeaderFAQOverview"] = "Gweinyddu Cofnodion";
 $PMF_LANG["ad_entry_id"] = "Gwybodaeth Adnabod";
 $PMF_LANG["ad_entry_topic"] = "Pwnc";
 $PMF_LANG["ad_entry_action"] = "Gweithred";

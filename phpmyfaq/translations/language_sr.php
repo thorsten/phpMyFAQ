@@ -131,7 +131,7 @@ $PMF_LANG["msgMailContact"] = "Vasa poruka je poslana administratoru.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Nije uspeo pristup bazi.";
 $PMF_LANG["err_noHeaders"] = "Nema kategorija.";
-$PMF_LANG["err_noArticles"] = "Nema unosa.";
+$PMF_LANG["msgErrorNoRecords"] = "Nema unosa.";
 $PMF_LANG["err_badID"] = "Pogre&#353;an ID.";
 $PMF_LANG["err_noTopTen"] = "TOP10 jo&#353; ne postoji.";
 $PMF_LANG["err_nothingFound"] = "Unos nije prona&#273;en.";
@@ -202,7 +202,7 @@ $PMF_LANG["ad_user_del_3"] = "Da li si siguran?";
 $PMF_LANG["ad_user_deleted"] = "Korisnik je uspe&#353;no obrisan.";
 
 // Beitragsverwaltung
-$PMF_LANG["ad_entry_aor"] = "Administracija Unosa";
+$PMF_LANG["msgHeaderFAQOverview"] = "Administracija Unosa";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Tema";
 $PMF_LANG["ad_entry_action"] = "Akcija";

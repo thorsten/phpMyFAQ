@@ -139,7 +139,7 @@ $PMF_LANG['msgMailContact'] = "Die Anfrage wurde erfolgreich versendet!";
 // Fehlermeldungen
 $PMF_LANG['err_noDatabase'] = "Keine Datenbankverbindung möglich!";
 $PMF_LANG['err_noHeaders'] = "Keine Kategorie gefunden";
-$PMF_LANG['err_noArticles'] = "Es gibt noch keine Einträge.";
+$PMF_LANG['msgErrorNoRecords'] = "Es gibt noch keine Einträge.";
 $PMF_LANG['err_badID'] = "Fehlerhafte ID!";
 $PMF_LANG['err_noTopTen'] = "Derzeit sind keine beliebten FAQs verfügbar.";
 $PMF_LANG['err_nothingFound'] = "Es wurde kein Eintrag gefunden.";
@@ -211,7 +211,7 @@ $PMF_LANG['ad_user_deleted'] = "Der Benutzer wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_user_checkall'] = "Alle auswählen";
 
 // Beitragsverwaltung
-$PMF_LANG['ad_entry_aor'] = "FAQ-Verwaltung";
+$PMF_LANG['msgHeaderFAQOverview'] = "FAQ-Verwaltung";
 $PMF_LANG['ad_entry_id'] = "ID";
 $PMF_LANG['ad_entry_topic'] = "Frage";
 $PMF_LANG['ad_entry_action'] = "Aktion";
