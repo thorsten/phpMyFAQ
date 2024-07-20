@@ -10,7 +10,7 @@ offering user and group-based permissions on categories and records.
 It includes a wiki-like revision feature, a news system, and configurable user-tracking.
 With support for over 40 languages, it also boasts enhanced automatic content negotiation and HTML5- / CSS3-based
 responsive templates.
-These templates allow for the inclusion of your own text and HTML snippets.
+These Twig based templates allow for the inclusion of your own text and HTML snippets.
 
 Additional features include PDF support, a backup system, a dynamic sitemap,
 related FAQs, tagging, and built-in spam protection systems.

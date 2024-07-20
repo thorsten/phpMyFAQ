@@ -105,7 +105,13 @@ The admin backend templates are located in the **assets/templates/admin** direct
 Usually, you don't need to modify these templates, but if you want to, you can do so.
 Please be aware that changes to the admin backend templates can break the functionality of phpMyFAQ.
 
-## 6.3 REST APIs
+## 6.3 Custom CSS
+
+You can add custom CSS to your phpMyFAQ installation by adding the CSS code in the admin configuration in the layout
+tab. This way, you can customize the look and feel of your phpMyFAQ installation and you don't want to modify the SCSS
+files.
+
+## 6.4 REST APIs
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
@@ -113,7 +119,7 @@ phpMyFAQ installation.
 
 The API documentation can be found at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
-## 6.4 phpMyFAQ development
+## 6.5 phpMyFAQ development
 
 Since phpMyFAQ is an Open Source project, we encourage developers to contribute patches and code for us to include in
 the main package of phpMyFAQ.
@@ -127,12 +133,12 @@ These basic rules makes it possible for us to earn a living of the phpMyFAQ proj
 remains Open Source and under the MPL 2.0 license.
 All contributions will be added to the changelog and on the phpMyFAQ website.
 
-### 6.4.1 How to contribute?
+### 6.5.1 How to contribute?
 
 Contributing to phpMyFAQ is quite easy: just fork the [project on GitHub](https://github.com/thorsten/phpMyFAQ),
 work on your copy and send pull requests.
 
-### 6.4.2 Setup a local phpMyFAQ development environment
+### 6.5.2 Setup a local phpMyFAQ development environment
 
 Before working on phpMyFAQ, set up a local environment with the following software:
 
@@ -144,7 +150,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - PNPM
 - Docker
 
-### 6.4.3 Configure your Git installation
+### 6.5.3 Configure your Git installation
 
 Set up your user information with your real name and a working e-mail address:
 
@@ -152,7 +158,7 @@ Set up your user information with your real name and a working e-mail address:
     $ git config --global user.email you@example.com
     $ git config core.autocrlf # if you're on Windows
 
-### 6.4.4 How to get the phpMyFAQ source code?
+### 6.5.4 How to get the phpMyFAQ source code?
 
 Clone your forked phpMyFAQ repository locally:
 
@@ -166,7 +172,7 @@ Add the upstream repository as remote:
 Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
 Every PR on GitHub will check the coding standards and tests as well.
 
-### 6.4.5 Run Docker Compose
+### 6.5.5 Run Docker Compose
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purpose.
@@ -202,7 +208,7 @@ Then services will be available at the following addresses:
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
-### 6.4.6 Fetch 3rd party libraries and install phpMyFAQ
+### 6.5.6 Fetch 3rd party libraries and install phpMyFAQ
 
 After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
 
@@ -230,7 +236,7 @@ To run the Jest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 6.4.7 Rebase your Patch
+### 6.5.7 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -240,16 +246,16 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase 4.0
 
-### 6.4.8 Make a Pull Request
+### 6.5.8 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
-## 6.5 Builtin Twig Extensions
+## 6.6 Builtin Twig Extensions
 
 phpMyFAQ v4 and later uses the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
 
-### 6.5.1 Category Name
+### 6.6.1 Category Name
 
 The category name extension is used to get the name of a category by its ID.
 
@@ -257,7 +263,7 @@ Example:
 
     {{ categoryId | categoryName }}
 
-### 6.5.2 FAQ question
+### 6.6.2 FAQ question
 
 The FAQ question extension is used to get the question of a FAQ entry by its ID.
 
@@ -265,7 +271,7 @@ Example:
 
     {{ faqId | faqQuestion }}
 
-### 6.5.3 Formatting bytes
+### 6.6.3 Formatting bytes
 
 The format bytes extension is used to format a number of bytes to a human-readable format.
 
@@ -273,7 +279,7 @@ Example:
 
     {{ bytes | formatBytes }}
 
-### 6.5.4 Format date
+### 6.6.4 Format date
 
 The format date extension is used to format a date to a human-readable format.
 
@@ -281,7 +287,7 @@ Example:
 
     {{ date | formatDate }}
 
-### 6.5.5 ISO date format
+### 6.6.5 ISO date format
 
 The ISO date format extension is used to format a date to an ISO date format.
 
@@ -289,7 +295,7 @@ Example:
 
     {{ date | createIsoDate }}
 
-### 6.5.6 Language code
+### 6.6.6 Language code
 
 The language code extension is used to get the language name by its language code.
 
@@ -297,7 +303,7 @@ Example:
 
     {{ languageCode | getFromLanguageCode }}
 
-### 6.5.7 Permission translation
+### 6.6.7 Permission translation
 
 The permission translation extension is used to get the permission name by its permission string.
 
@@ -305,7 +311,7 @@ Example:
 
     {{ permissionString | permission }}
 
-### 6.5.8 Translation
+### 6.6.8 Translation
 
 The translation extension is used to get the translation of a string.
 
@@ -313,7 +319,7 @@ Example:
 
     {{ 'string' | translate }}
 
-### 6.5.9 User name
+### 6.6.9 User name
 
 The username extension is used to get the name of a user by its ID.
 
@@ -321,9 +327,9 @@ Example:
 
     {{ userId | userName }}
 
-## 6.6 Working with the Docker container
+## 6.7 Working with the Docker container
 
-### 6.6.1 Create a new SSL certificate
+### 6.7.1 Create a new SSL certificate
 
 To create a new SSL certificate, you can use the following command:
 
