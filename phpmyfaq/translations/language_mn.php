@@ -1068,7 +1068,7 @@ $LANG_CONF['cache.varnishSecret'] = array('input', 'Varnish secret');
 $LANG_CONF['cache.varnishTimeout'] = array('input', 'Varnish timeout');
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = 'Хайлт хийх - FAQs';
+$PMF_LANG['msgAdminSearchFaqs'] = 'Хайлт хийх - FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF["records.enableCloseQuestion"] = array("checkbox", "Нээлттэй асуултад хариулсны дараа хаах уу?");

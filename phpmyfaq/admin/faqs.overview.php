@@ -48,7 +48,6 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 
 $templateVars = [
-    'msgSearch' => Translation::get('ad_menu_searchfaqs'),
     'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),
     'csrfTokenOverview' => Token::getInstance()->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),

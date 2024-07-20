@@ -1043,7 +1043,7 @@ $PMF_LANG["ad_verification_notokay"] = "Votre version de phpMyFAQ a été chang�
 $PMF_LANG["ad_verification_okay"] = "Votre version phpMyFAQ a été vérifiée avec succés";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG["ad_menu_searchfaqs"] = "Chercher dans les FAQs";
+$PMF_LANG["msgAdminSearchFaqs"] = "Chercher dans les FAQs";
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF["records.enableCloseQuestion"] = ["checkbox", "Fermer les questions ouvertes après une réponse ?"];

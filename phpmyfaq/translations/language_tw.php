@@ -1031,7 +1031,7 @@ $PMF_LANG["ad_verification_notokay"] = "您的 phpMyFAQ 版本有語系檔異動
 $PMF_LANG["ad_verification_okay"] = "您的 phpMyFAQ 版本已驗證完成。 (Your version of phpMyFAQ was successfully verified.)";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten 開發者
-$PMF_LANG['ad_menu_searchfaqs'] = "FAQs 的搜尋 (Search for FAQs)";
+$PMF_LANG['msgAdminSearchFaqs'] = "FAQs 的搜尋 (Search for FAQs)";
 
 // added v2.8.0-alpha - 2012-01-13 by Peter 開發者
 $LANG_CONF["records.enableCloseQuestion"] = array("checkbox", "待回答問題有答案後，便關?<br>Close open question after answer?");

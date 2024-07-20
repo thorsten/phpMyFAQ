@@ -1041,7 +1041,7 @@ $PMF_LANG['ad_verification_notokay'] = "Diese phpMyFAQ-Installation hat lokale �
 $PMF_LANG['ad_verification_okay'] = "Diese phpMyFAQ-Installation wurde erfolgreich überprüft.";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = 'FAQs suchen';
+$PMF_LANG['msgAdminSearchFaqs'] = 'FAQs suchen';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF['records.enableCloseQuestion'] = ["checkbox", "Offene Frage nach Beantwortung schließen?"];

@@ -1057,7 +1057,7 @@ $PMF_LANG["ad_verification_notokay"] = "Twoja wersja phpMyFAQ zawiera lokalne zm
 $PMF_LANG["ad_verification_okay"] = "Twoja wersja phpMyFAQ została pomyślnie zweryfikowana.";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = 'Wyszukaj FAQs';
+$PMF_LANG['msgAdminSearchFaqs'] = 'Wyszukaj FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF["records.enableCloseQuestion"] = ["checkbox", "Zamknąć otwarte pytanie po odpowiedzi?"];

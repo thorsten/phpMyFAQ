@@ -1041,7 +1041,7 @@ $PMF_LANG['ad_verification_notokay'] = 'Esta instalación de phpMyFAQ tiene camb
 $PMF_LANG['ad_verification_okay'] = 'Esta instalación de phpMyFAQ ha sido verificada con éxito.';
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = 'Buscar FAQs';
+$PMF_LANG['msgAdminSearchFaqs'] = 'Buscar FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF['records.enableCloseQuestion'] = array('checkbox', '¿Cerrar pregunta abierta después de la respuesta?');

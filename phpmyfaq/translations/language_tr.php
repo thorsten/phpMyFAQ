@@ -1031,7 +1031,7 @@ $PMF_LANG["ad_verification_notokay"] = "Sisteminizde değiştirilmiş dosyalar t
 $PMF_LANG["ad_verification_okay"] = "phpMyFAQ kurulumunuz başarıyla doğrulandı.";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
-$PMF_LANG['ad_menu_searchfaqs'] = "İçeriklerde ara";
+$PMF_LANG['msgAdminSearchFaqs'] = "İçeriklerde ara";
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
 $LANG_CONF["records.enableCloseQuestion"] = array("checkbox", "Close open question after answer?");
