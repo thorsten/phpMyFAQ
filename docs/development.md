@@ -32,7 +32,7 @@ set the following code in src/Bootstrap.php:
 ### 6.2.1 Introduction
 
 phpMyFAQ v4 and later uses Twig, a modern template engine for PHP. It is fast, secure, and flexible.
-This documentation provides an overview of how to use Twig in your projects.
+This documentation provides an overview of how to use Twig in phpMyFAQ.
 
 The default layout of phpMyFAQ is saved in the **assets/templates/default/index.twig** file.
 
@@ -102,6 +102,8 @@ For more detailed information, visit the [Twig documentation](https://twig.symfo
 ### 6.2.2 Admin backend templates
 
 The admin backend templates are located in the **assets/templates/admin** directory.
+Usually, you don't need to modify these templates, but if you want to, you can do so.
+Please be aware that changes to the admin backend templates can break the functionality of phpMyFAQ.
 
 ## 6.3 REST APIs
 
@@ -242,10 +244,10 @@ Before submitting your patch, please update your local branch:
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
-## 6.5 Twig Extensions
+## 6.5 Builtin Twig Extensions
 
-phpMyFAQ uses the Twig template engine for the frontend and the backend. We have added some custom extensions to Twig to
-make it easier to work with phpMyFAQ.
+phpMyFAQ v4 and later uses the Twig template engine for the frontend and the backend.
+We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
 
 ### 6.5.1 Category Name
 
@@ -319,9 +321,9 @@ Example:
 
     {{ userId | userName }}
 
-## Docker container
+## 6.6 Working with the Docker container
 
-### Create a new SSL certificate
+### 6.6.1 Create a new SSL certificate
 
 To create a new SSL certificate, you can use the following command:
 

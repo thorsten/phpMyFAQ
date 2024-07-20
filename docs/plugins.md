@@ -31,7 +31,7 @@ phpMyFAQ comes with a example plugin that demonstrate how to use the plugin syst
 
 ### 7.5.1 PHP code
 
-```
+```php
 <?php
 
 namespace App\Plugins\Plugin1;
@@ -94,16 +94,14 @@ class MyPlugin implements PluginInterface
 
 ### 7.5.2 Twig template
 
-´´´
+´´´twig
 
-    <div>
-        <h2>Content Loaded Event</h2>
-        {{ phpMyFAQPlugin('content.loaded', 'Hello, World!') | raw }}
-    </div>
-
-    <div>
-        <h2>User Login Event</h2>
-        {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
-    </div>
-
+<div>
+    <h2>Content Loaded Event</h2>
+    {{ phpMyFAQPlugin('content.loaded', 'Hello, World!') | raw }}
+</div>
+<div>
+    <h2>User Login Event</h2>
+    {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
+</div>
 ´´´
