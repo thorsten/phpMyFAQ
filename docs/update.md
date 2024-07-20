@@ -9,7 +9,7 @@ versions:
 - phpMyFAQ 4.0.x
 
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
-support for updating an old FAQ from the 1.x or 2.x series, [please email us](thorsten_AT_phpmyfaq_DOT_de).
+support for updating an old FAQ from the 1.x or 2.x series, [please email us](mailto:thorsten_AT_phpmyfaq_DOT_de).
 
 ## Before you upgrade
 

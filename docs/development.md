@@ -7,14 +7,14 @@ is a templates/default directory where the default layouts get shipped.
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
 your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
-_assets/themes/default/_. All original templates are valid HTML5 based on Bootstrap v5.3.
+_assets/templates/default/_. All original templates are valid HTML5 based on Bootstrap v5.3.
 
 ### 6.1.1 Creating a custom layout
 
 Follow these steps to create a custom template set:
 
-- copy the directory assets/themes/default to assets/themes/example
-- adjust template files in assets/themes/example to fit your needs
+- copy the directory assets/templates/default to assets/themes/example
+- adjust template files in assets/templates/example to fit your needs
 - activate "example" within Admin->Config->Main
 
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
@@ -29,24 +29,79 @@ set the following code in src/Bootstrap.php:
 
 ## 6.2 Templating
 
-### 6.2.1 Frontend
+### 6.2.1 Introduction
 
-The default layout of phpMyFAQ is saved in the **assets/themes/default/templates/index.html** file. This is a normal
-HTML5 file including some variables in double curly brackets like Twig or Handlebars, serving as placeholders for
-content.
+phpMyFAQ v4 and later uses Twig, a modern template engine for PHP. It is fast, secure, and flexible.
+This documentation provides an overview of how to use Twig in your projects.
 
-Example:
+The default layout of phpMyFAQ is saved in the **assets/templates/default/index.twig** file.
 
-`<span class="useronline">{{ userOnline }}</span>`
+### 6.2.2 Template files
 
-The current template engine of the FAQ converts the placeholder _{{ userOnline }}_ to the actual number of visitors
-online.
+#### Variables
 
-You can change the template as you wish, but you may want to keep the original template in case something goes wrong.
+In Twig templates, variables are enclosed in double curly braces.
+
+```twig
+Hello, {{ name }}!
+```
+
+#### Filters
+
+Filters modify the value of a variable. They are applied using the pipe (`|`) symbol.
+
+```twig
+{{ name | upper }}
+```
+
+#### Functions
+
+Functions are used to perform tasks. Twig comes with many built-in functions.
+
+```twig
+{{ date('now') }}
+```
+
+#### Control Structures
+
+##### If Statement
+
+The `if` statement evaluates a condition and renders content based on its truthiness.
+
+```twig
+{% if name %}
+    Hello, {{ name }}!
+{% else %}
+    Hello, Stranger!
+{% endif %}
+```
+
+##### For Loop
+
+The `for` loop iterates over arrays or objects.
+
+```twig
+{% for user in users %}
+    <p>{{ user.name }}</p>
+{% endfor %}
+```
+
+#### Debugging
+
+To enable debugging in Twig, set the `DEBUG` option in the file src/Bootstrap.php to `true`.
+You can then use the `dump` function in your templates.
+
+```twig
+{{ dump(variable) }}
+```
+
+#### Conclusion
+
+For more detailed information, visit the [Twig documentation](https://twig.symfony.com/doc/).
 
 ### 6.2.2 Admin backend templates
 
-The admin backend templates are located in the **assets/templates/admin** directory. We use Twig as the template engine.
+The admin backend templates are located in the **assets/templates/admin** directory.
 
 ## 6.3 REST APIs
 

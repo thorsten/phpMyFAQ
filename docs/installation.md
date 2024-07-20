@@ -78,11 +78,11 @@ If you want to use Git, please run the following commands on your shell:
     $ pnpm install
     $ pnpm build
 
-You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [here](). Copy
-all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.
+You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found in the development section.
+Copy all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.
 
 **Important:**
-Writing permission for your script is needed in this directory to be able to write the file **config/database.php**
+Writing permission for your script is needed in this directory to be able to write the file **content/core/config/database.php**
 during installation. The installation script will stop when your web server isn't configured as needed.
 
 It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems during the installation. If you're
@@ -189,7 +189,7 @@ To configure phpMyFAQ point your browser to
 
 Please use your chosen username and your password for your first login into the admin section.
 
-Some variables that do not change regularly, they can be edited in the file _config/constants.php_.
+Some variables that do not change regularly, they can be edited in the file _content/core/config/constants.php_.
 You can change
 
 - the time zone of your server (default: "Europe/Berlin")
@@ -231,8 +231,9 @@ themselves in phpMyFAQ against your LDAP server or a Microsoft Active Directory 
 If you need special options for your LDAP or ADS configuration, you can change the LDAP configuration in the admin
 configuration panel.
 
-If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template, and if you rename
-it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
+If you want to add LDAP support later, you can use the file **content/core/config/ldap.php.original** as template, and
+if you rename it to **content/core/config/ldap.php** you can use the LDAP features as well after you enabled it in the
+administration backend.
 
 ## 2.11 PDF export
 
