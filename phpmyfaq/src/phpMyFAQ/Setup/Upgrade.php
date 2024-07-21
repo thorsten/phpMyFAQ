@@ -82,22 +82,6 @@ class Upgrade extends Setup
             throw new Exception('The folder /phpmyfaq/assets/themes is missing.');
         }
 
-        if (!is_dir(PMF_CONTENT_DIR . '/user/attachments')) {
-            return false;
-        }
-
-        if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
-            return false;
-        }
-
-        if (!is_dir(PMF_CONTENT_DIR . '/core/data')) {
-            return false;
-        }
-
-        if (!is_dir(PMF_ROOT_DIR . '/assets/themes')) {
-            return false;
-        }
-
         if (
             is_file(PMF_CONTENT_DIR . '/core/config/constants.php') &&
             is_file(PMF_CONTENT_DIR . '/core/config/database.php')
@@ -124,6 +108,7 @@ class Upgrade extends Setup
 
             return true;
         }
+
         throw new Exception(
             'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
         );
