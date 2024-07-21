@@ -47,10 +47,10 @@
     <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
       <div class="card-body">
         <h5 class="card-title">
-          {{ headerDownloadPackage }}
+          {{ 'headerDownloadPackage' | translate }}
         </h5>
         <p class="card-text">
-          {{ msgDownloadPackage }}
+          {{ 'msgDownloadPackage' | translate }}
         </p>
         <!-- Nightlies can be downloaded always if activated -->
         {% if isOnNightlies %}
@@ -61,9 +61,16 @@
           </p>
           <div class="d-grid gap-2 d-md-flex justify-content-between">
             <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
-              {{ buttonDownloadPackage }}
+              {{ 'buttonDownloadPackage' | translate }}
             </button>
-            <output id="result-download-nightly"></output>
+            <output id="result-download-new-version"></output>
+          </div>
+        {% else %}
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+              {{ 'buttonDownloadPackage' | translate }}
+            </button>
+            <output id="result-download-new-version"></output>
           </div>
         {% endif %}
       </div>
@@ -134,20 +141,24 @@
   <div class="col-6">
     <div>
       <p class="alert alert-info">
-        {{ msgNoteManualUpdate | raw }}
+        {{ 'msgNoteManualUpdate' | translate | raw }}
       </p>
     </div>
     <div>
-      {{ msgLastCheckDate }}
+      {{ 'msgLastCheckDate' | translate }}
       {% set lastCheck = dateLastChecked == 'Invalid Date' ? 'n/a' : dateLastChecked | date('Y-m-d H:i:s') %}
       <output id="dateLastChecked">{{ lastCheck }}</output>
     </div>
     <div>
-      {{ msgLastVersionAvailable }}
+      {{ 'msgCurrentVersion' | translate }}
+      <output id="versionCurrent">{{ versionCurrent }}</output>
+    </div>
+    <div>
+      {{ 'msgLastVersionAvailable' | translate }}
       <output id="versionLastChecked">n/a</output>
     </div>
     <div>
-      {{ msgReleaseEnvironment }}
+      {{ 'msgReleaseEnvironment' | translate }}
       <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
     </div>
   </div>

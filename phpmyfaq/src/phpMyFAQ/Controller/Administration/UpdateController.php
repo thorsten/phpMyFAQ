@@ -132,7 +132,7 @@ class UpdateController extends AbstractController
                 return $this->json(
                     [
                         'version' => $versions[$branch],
-                        'message' => Translation::get('currentVersion') . $versions[$branch],
+                        'message' => Translation::get('msgCurrentVersion') . $versions[$branch],
                         'dateLastChecked' => $dateLastChecked,
                     ],
                     Response::HTTP_OK

@@ -115,7 +115,7 @@ export const handleCheckForUpdates = () => {
       if (releaseEnvironment.innerText.toLowerCase() === 'nightly') {
         version = 'nightly';
       } else {
-        version = versionLastChecked;
+        version = versionLastChecked.innerText;
       }
 
       fetch(window.location.pathname + `api/download-package/${version}`, {
@@ -132,7 +132,7 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok: ', { cause: { response } });
         })
         .then((response) => {
-          const result = document.getElementById('result-download-nightly');
+          const result = document.getElementById('result-download-new-version');
           const divExtractPackage = document.getElementById('pmf-update-step-extract-package');
           const card = document.getElementById('pmf-update-step-download');
 
@@ -148,7 +148,7 @@ export const handleCheckForUpdates = () => {
         })
         .catch(async (error) => {
           const errorMessage = await error.cause.response.json();
-          const result = document.getElementById('result-download-nightly');
+          const result = document.getElementById('result-download-new-version');
           result.replaceWith(addElement('p', { innerText: errorMessage.error }));
         });
     });

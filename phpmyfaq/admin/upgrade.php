@@ -44,9 +44,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
         'headerCheckUpdates' => Translation::get('headerCheckUpdates'),
         'msgUpdateCheck' => Translation::get('msgUpdateCheck'),
         'buttonCheckUpdates' => Translation::get('buttonCheckUpdates'),
-        'headerDownloadPackage' => Translation::get('headerDownloadPackage'),
-        'msgDownloadPackage' => Translation::get('msgDownloadPackage'),
-        'buttonDownloadPackage' => Translation::get('buttonDownloadPackage'),
         'headerExtractPackage' => Translation::get('headerExtractPackage'),
         'msgExtractPackage' => Translation::get('msgExtractPackage'),
         'buttonExtractPackage' => Translation::get('buttonExtractPackage'),
@@ -55,13 +52,10 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
         'msgInstallDownloadedPackage' => Translation::get('msgInstallDownloadedPackage'),
         'msgBackupCurrentInstallation' => Translation::get('msgBackupCurrentInstallation'),
         'msgInstallationNewFiles' => Translation::get('msgInstallationNewFiles'),
-        'msgNoteManualUpdate' => Translation::get('msgNoteManualUpdate'),
         'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
-        'msgReleaseEnvironment' => Translation::get('msgReleaseEnvironment'),
         'releaseEnvironment' => ucfirst((string) $faqConfig->get('upgrade.releaseEnvironment')),
-        'msgLastCheckDate' => Translation::get('msgLastCheckDate'),
         'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked'),
-        'msgLastVersionAvailable' => Translation::get('msgLastVersionAvailable'),
+        'versionCurrent' => $faqConfig->get('main.currentVersion'),
     ];
 
     echo $template->render($templateVars);
