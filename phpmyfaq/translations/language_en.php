@@ -1340,6 +1340,7 @@ $PMF_LANG['msgExtractToFileSystem'] = 'This extracts the downloaded package into
 $PMF_LANG['msgInstallDownloadedPackage'] = 'Install downloaded package';
 $PMF_LANG['msgBackupCurrentInstallation'] = 'Backup of current installation';
 $PMF_LANG['msgInstallationNewFiles'] = 'Installation of new files';
+$PMF_LANG['msgDatabaseUpdate'] = 'Update of the database';
 $PMF_LANG['alertNightlyBuild'] = 'You are using a development version of phpMyFAQ. You can update to the latest nightly build.';
 $PMF_LANG['noteNightlyBuild'] = 'Please note that the previous day build will be downloaded (saved in /content/upgrades). Because each new build is not created until 2am (UTC) by GitHub.';
 $PMF_LANG['buttonCheckHealth'] = 'Check System health now';

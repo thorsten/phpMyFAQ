@@ -147,7 +147,7 @@ class UpdateController extends AbstractController
                     Response::HTTP_OK
                 );
             }
-        } catch (Exception | TransportExceptionInterface | DecodingExceptionInterface $e) {
+        } catch (TransportExceptionInterface | DecodingExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

@@ -109,13 +109,14 @@
           <div class="d-grid gap-2 d-md-flex justify-content-between">
             <div>
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
-                {{ msgInstallDownloadedPackage }}
+                {{ 'msgInstallDownloadedPackage' | translate }}
               </button>
             </div>
             <div>
               <ol>
-                <li>{{ msgBackupCurrentInstallation }} <span id="pmf-backup-done"></span></li>
-                <li>{{ msgInstallationNewFiles }} <span id="pmf-installation-done"></span></li>
+                <li>{{ 'msgBackupCurrentInstallation' | translate }} <span id="pmf-backup-done"></span></li>
+                <li>{{ 'msgInstallationNewFiles' | translate }} <span id="pmf-installation-done"></span></li>
+                <li>{{ 'msgDatabaseUpdate' | translate }} <span id="pmf-installation-done"></span></li>
               </ol>
             </div>
             <div class="w-25">
@@ -128,6 +129,12 @@
               <div class="progress w-100" role="progressbar">
                 <div class="progress-bar progress-bar-striped progress-bar-animated"
                      id="result-install-package" style="width: 0">
+                  0%
+                </div>
+              </div>
+              <div class="progress w-100" role="progressbar">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                     id="result-update-database" style="width: 0">
                   0%
                 </div>
               </div>

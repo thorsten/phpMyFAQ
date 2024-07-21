@@ -277,4 +277,45 @@ const installPackage = async () => {
     .catch((error) => {
       console.error(error);
     });
+
+  await updateDatabase();
+};
+
+const updateDatabase = async () => {
+  await fetch(window.location.pathname + 'api/update-database', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(async (response) => {
+      const progressBarInstallation = document.getElementById('result-update-database');
+      const reader = response.body.getReader();
+      const card = document.getElementById('pmf-update-step-install-package');
+
+      function pump() {
+        return reader.read().then(({ done, value }) => {
+          const decodedValue = new TextDecoder().decode(value);
+
+          if (done) {
+            progressBarInstallation.style.width = '100%';
+            progressBarInstallation.innerText = '100%';
+            progressBarInstallation.classList.remove('progress-bar-animated');
+            card.classList.add('text-bg-success');
+            return;
+          } else {
+            progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+            progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+          }
+
+          return pump();
+        });
+      }
+
+      return pump();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };

@@ -50,8 +50,6 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
         'headerInstallDownloadedPackage' => Translation::get('headerInstallDownloadedPackage'),
         'msgExtractToFileSystem' => Translation::get('msgExtractToFileSystem'),
         'msgInstallDownloadedPackage' => Translation::get('msgInstallDownloadedPackage'),
-        'msgBackupCurrentInstallation' => Translation::get('msgBackupCurrentInstallation'),
-        'msgInstallationNewFiles' => Translation::get('msgInstallationNewFiles'),
         'isOnNightlies' => $faqConfig->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value,
         'releaseEnvironment' => ucfirst((string) $faqConfig->get('upgrade.releaseEnvironment')),
         'dateLastChecked' => $faqConfig->get('upgrade.dateLastChecked'),
