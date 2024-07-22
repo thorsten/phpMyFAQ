@@ -97,46 +97,37 @@ export const renderVisitorCharts = () => {
   }
 };
 
-export const getLatestVersion = () => {
+export const getLatestVersion = async () => {
   const loader = document.getElementById('version-loader');
   const versionText = document.getElementById('phpmyfaq-latest-version');
 
   if (loader) {
-    loader.classList.remove('d-none');
-    fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=version', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          const version = await response.json();
-          loader.classList.add('d-none');
-          if (version.success) {
-            versionText.insertAdjacentElement(
-              'afterend',
-              addElement('div', {
-                classList: 'alert alert-success',
-                innerText: version.success,
-              })
-            );
-          } else {
-            versionText.insertAdjacentElement(
-              'afterend',
-              addElement('div', {
-                classList: 'alert alert-info',
-                innerText: version.info,
-              })
-            );
-          }
-        }
-        throw new Error('Network response was not ok: ', { cause: { response } });
-      })
-      .catch(async (error) => {
+    try {
+      loader.classList.remove('d-none');
+      const response = await fetch('index.php?action=ajax&ajax=dashboard&ajaxaction=version', {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok', { cause: { response } });
+      }
+
+      const version = await response.json();
+      loader.classList.add('d-none');
+
+      const message = addElement('div', {
+        classList: version.success ? 'alert alert-success' : 'alert alert-info',
+        innerText: version.success || version.info,
+      });
+      versionText.insertAdjacentElement('afterend', message);
+    } catch (error) {
+      if (error.cause && error.cause.response) {
         const errorMessage = await error.cause.response.json();
         loader.classList.add('d-none');
         versionText.insertAdjacentElement(
@@ -146,6 +137,9 @@ export const getLatestVersion = () => {
             innerText: errorMessage.error,
           })
         );
-      });
+      } else {
+        console.error('Fetch error: ', error);
+      }
+    }
   }
 };
