@@ -25,6 +25,7 @@ use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -55,17 +56,21 @@ class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         $api = new Api($this->configuration);
+        $releaseEnvironment = $this->configuration->get('upgrade.releaseEnvironment');
+
         try {
             $versions = $api->getVersions();
-            if (version_compare($versions['installed'], $versions['stable']) < 0) {
-                $info = ['success' => Translation::get('ad_you_should_update')];
+            if (version_compare($versions['installed'], $versions[$releaseEnvironment]) < 0) {
+                $info = ['warning' => Translation::get('ad_you_should_update')];
             } else {
                 $info = ['success' => Translation::get('ad_xmlrpc_latest') . ': phpMyFAQ ' . $versions['stable']];
             }
 
             return $this->json($info);
         } catch (DecodingExceptionInterface | TransportExceptionInterface $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 

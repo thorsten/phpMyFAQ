@@ -226,12 +226,22 @@ export const getLatestVersion = async () => {
               innerText: version.success,
             })
           );
-        } else {
+        }
+        if (version.warning) {
           versionText.insertAdjacentElement(
             'afterend',
             addElement('div', {
-              classList: 'alert alert-info',
-              innerText: version.info,
+              classList: 'alert alert-danger',
+              innerText: version.warning,
+            })
+          );
+        }
+        if (version.error) {
+          versionText.insertAdjacentElement(
+            'afterend',
+            addElement('div', {
+              classList: 'alert alert-danger',
+              innerText: version.error,
             })
           );
         }
