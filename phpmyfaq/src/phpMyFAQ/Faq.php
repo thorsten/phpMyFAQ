@@ -927,7 +927,7 @@ class Faq
             $this->config->getDb()->escape($faq->getAuthor()),
             $this->config->getDb()->escape($faq->getEmail()),
             $faq->isComment() ? 'y' : 'n',
-            $faq->getUpdatedDate()->format('YmdHis'),
+            date('YmdHis'),
             '00000000000000',
             '99991231235959',
             date('Y-m-d H:i:s'),
