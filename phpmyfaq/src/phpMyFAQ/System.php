@@ -52,7 +52,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'alpha.3';
+    private const VERSION_PRE_RELEASE = 'alpha.4';
 
     /**
      * API version.
