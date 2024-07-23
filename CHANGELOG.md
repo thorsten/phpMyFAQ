@@ -45,6 +45,10 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Polish translation (Zięba Bogusław Chaffinch)
 - updated French translation
 
+### phpMyFAQ v3.2.9 - 2024-07-23
+
+- fixed bugs introduced with v3.2.8 (Thorsten)
+
 ### phpMyFAQ v3.2.8 - 2024-07-21
 
 - fixed security vulnerability (Thorsten)
