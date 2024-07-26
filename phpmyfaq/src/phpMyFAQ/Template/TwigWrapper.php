@@ -37,7 +37,7 @@ class TwigWrapper
     /** @var string Name of an active template set. */
     private static string $templateSetName = 'default';
 
-    public function __construct(string $templatePath)
+    public function __construct(string $templatePath, bool $isSetup = false)
     {
         $filesystemLoader = new FilesystemLoader($templatePath);
         $this->twigEnvironment = new Environment(
@@ -51,7 +51,9 @@ class TwigWrapper
         $this->twigEnvironment->addExtension(new TranslateTwigExtension());
 
         // Always add the plugin extension
-        $this->twigEnvironment->addExtension(new PluginTwigExtension());
+        if (!$isSetup) {
+            $this->twigEnvironment->addExtension(new PluginTwigExtension());
+        }
 
         // If we're on a development version or debug is enabled, add the debug extension
         if (System::isDevelopmentVersion() || DEBUG) {

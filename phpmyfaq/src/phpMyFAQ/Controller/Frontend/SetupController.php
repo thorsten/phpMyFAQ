@@ -129,12 +129,12 @@ class SetupController
      *
      * @param string[] $templateVars
      * @param Response|null $response
-     * @throws TemplateException
+     * @throws TemplateException|Exception
      */
     public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
     {
         $response ??= new Response();
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates', true);
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));
