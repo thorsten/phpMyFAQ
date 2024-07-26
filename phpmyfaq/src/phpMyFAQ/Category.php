@@ -1050,7 +1050,7 @@ class Category
     public function getMissingCategories(): void
     {
         $query = sprintf(
-            'SELECT id, lang, parent_id, name, description, user_id FROM %sfaqcategories',
+            'SELECT id, lang, parent_id, name, description, user_id, group_id, active FROM %sfaqcategories',
             Database::getTablePrefix()
         );
         if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
