@@ -707,16 +707,16 @@ class User
             return [];
         }
 
-        $result = [];
+        $users = [];
         if ($this->configuration->getDb()->numRows($result) === 0) {
             return $result;
         }
 
         while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $result[] = (int) $row['user_id'];
+            $users[] = (int) $row['user_id'];
         }
 
-        return $result;
+        return $users;
     }
 
     /**
