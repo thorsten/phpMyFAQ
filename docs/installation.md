@@ -146,7 +146,7 @@ Read the definitions and configure according to your needs. If you have any doub
 
 Open your browser and type in the following URL:
 
-`http://www.example.com/faq/setup/index.php`
+`http://www.example.com/faq/setup/`
 
 ### Step 1: Database server
 

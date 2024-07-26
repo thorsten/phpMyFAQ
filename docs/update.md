@@ -32,7 +32,7 @@ Second, you have to delete all files **except**:
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
 
-`http://www.example.com/faq/setup/update.php`
+`http://www.example.com/faq/update`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
 updated.
@@ -52,7 +52,7 @@ Second, you have to delete all files **except**:
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
 
-`http://www.example.com/faq/setup/update.php`
+`http://www.example.com/faq/update`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
 updated.
@@ -73,7 +73,7 @@ Second, you have to delete all files **except**:
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
 
-`http://www.example.com/faq/setup/update.php`
+`http://www.example.com/faq/update`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
 updated.
@@ -92,7 +92,7 @@ Second, you have to delete all files **except**:
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
 URL in your browser:
 
-`http://www.example.com/faq/setup/update.php`
+`http://www.example.com/faq/update`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
 updated.
