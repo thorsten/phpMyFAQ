@@ -79,8 +79,8 @@
     <div class="position-sticky" style="top: 2rem">
       {% if isTagSearch %}
       <div class="p-4 mb-3 bg-light-subtle border rounded">
-        <h4 class="fst-italic">msgCurrentTags{{ msgCurrentTags }}</h4>
-        <div class="pmf-tag-cloud">{{ searchTags }}</div>
+        <h4 class="fst-italic">{{ msgCurrentTags }}</h4>
+        <div class="pmf-tag-cloud">{{ searchTags | raw }}</div>
       </div>
       {% endif %}
 
