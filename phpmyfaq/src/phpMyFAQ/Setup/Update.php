@@ -719,7 +719,7 @@ class Update extends Setup
                             title TEXT DEFAULT NULL,
                             description TEXT DEFAULT NULL,
                             slug TEXT DEFAULT NULL,
-                            created DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
                         Database::getTablePrefix()
                     );
