@@ -77,15 +77,22 @@ export const handleFaqOverview = async () => {
             const existingLink = element.nextElementSibling.childNodes[0];
             const regionNames = new Intl.DisplayNames([language], { type: 'language' });
             const faqId = element.getAttribute('data-pmf-faq-id');
+            let options = [];
 
             for (const [languageCode, languageName] of Object.entries(translations)) {
               if (languageCode !== language) {
-                const newTranslationLink = addElement('a', {
-                  classList: 'dropdown-item',
-                  href: `?action=editentry&id=${faqId}&cat=${categoryId}&translateTo=${languageCode}`,
-                  innerText: `→ ${regionNames.of(languageCode)}`,
+                const translationLinks = document.querySelectorAll('#dropdownTranslation').forEach((link) => {
+                  options.push(link.innerText);
                 });
-                existingLink.insertAdjacentElement('afterend', newTranslationLink);
+                if (!options.includes(`→ ${regionNames.of(languageCode)}`)) {
+                  const newTranslationLink = addElement('a', {
+                    classList: 'dropdown-item',
+                    id: 'dropdownTranslation',
+                    href: `?action=editentry&id=${faqId}&cat=${categoryId}&translateTo=${languageCode}`,
+                    innerText: `→ ${regionNames.of(languageCode)}`,
+                  });
+                  existingLink.insertAdjacentElement('afterend', newTranslationLink);
+                }
               }
             }
           });
@@ -304,7 +311,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
             [addElement('i', { classList: 'bi bi-globe', 'aria-hidden': 'true' })]
           ),
           addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
-            addElement('a', { classList: 'dropdown-item', innerText: 'n/a' }),
+            addElement('a', { classList: 'dropdown-item', id: 'dropdownTranslation', innerText: 'n/a' }),
           ]),
         ]),
       ])
