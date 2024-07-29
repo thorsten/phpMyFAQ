@@ -145,7 +145,7 @@ readonly class StatisticsHelper
                     $first = $candidateFirst;
                 }
 
-                unlink(PMF_ROOT_DIR . '/data/' . $trackingFile);
+                unlink(PMF_CONTENT_DIR . '/core/data/' . $trackingFile);
             }
         }
 
@@ -159,7 +159,7 @@ readonly class StatisticsHelper
         $this->visits->resetAll();
 
         // Delete logfiles
-        $files = glob(PMF_ROOT_DIR . '/data/*');
+        $files = glob(PMF_CONTENT_DIR . '/core/data/*');
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
