@@ -50,6 +50,9 @@ const setUserData = async (userId) => {
   if (userData.is_superadmin) {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.setAttribute('checked', 'checked');
+    document.querySelectorAll('.permission').forEach((checkbox) => {
+      checkbox.setAttribute('disabled', '');
+    })
   }
 
   if (userData.twofactor_enabled === '1') {
@@ -121,7 +124,22 @@ export const handleUsers = async () => {
   const addUserError = document.getElementById('pmf-add-user-error-message');
   const passwordToggle = document.getElementById('add_user_automatic_password');
   const passwordInputs = document.getElementById('add_user_show_password_inputs');
+  const isSuperAdmin = document.getElementById('is_superadmin');
 
+  if (isSuperAdmin) {
+    isSuperAdmin.addEventListener('click', () => {
+      if (isSuperAdmin.checked) {
+        document.querySelectorAll('.permission').forEach((checkbox) => {
+          checkbox.setAttribute('disabled', '');
+        });
+      } else {
+        document.querySelectorAll('.permission').forEach((checkbox) => {
+          checkbox.removeAttribute('disabled');
+        });
+      }
+    })
+  }
+  
   if (passwordToggle) {
     passwordToggle.addEventListener('click', () => {
       passwordInputs.classList.toggle('d-none');
