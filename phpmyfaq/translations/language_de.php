@@ -1459,4 +1459,8 @@ $PMF_LANG['msgShareLinkVia'] = 'Teilen mit';
 $PMF_LANG['msgCopyLink'] = 'oder kopiere den Link';
 $LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Aktiviere Rich Snippets'];
 
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Statistics successfully deleted.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'An error occured while deleting the statistics';
+
 return $PMF_LANG;
