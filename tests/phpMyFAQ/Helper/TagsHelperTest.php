@@ -23,9 +23,9 @@ class TagsHelperTest extends TestCase
         $this->tagsHelper->setTaggingIds([1, 2]);
 
         $expectedOutput = '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=2">tag1 ' .
-            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ' .
+            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ' .
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=1">tag2 ' .
-            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ';
+            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ';
 
         $result = $this->tagsHelper->renderTagList($tags);
         $this->assertEquals($expectedOutput, $result);
@@ -39,7 +39,7 @@ class TagsHelperTest extends TestCase
         $this->tagsHelper->setTaggingIds([1, 2]);
 
         $expectedOutput = '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=2">tag1 ' .
-            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ';
+            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ';
 
         $result = $this->tagsHelper->renderSearchTag($tagId, $tagName);
         $this->assertEquals($expectedOutput, $result);
