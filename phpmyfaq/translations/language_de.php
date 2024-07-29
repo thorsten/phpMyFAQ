@@ -1089,7 +1089,7 @@ $LANG_CONF['main.enableWysiwygEditorFrontend'] = ["checkbox", "Aktivierung des W
 $LANG_CONF['main.enableGravatarSupport'] = ["checkbox", "Gravatar Unterstützung"];
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
-$PMF_LANG['ad_stopwords_desc'] = "Bitte wählen Sie eine Sprache aus, um neue Stopwörter hinzuzufügen oder zu bearbeiten.";
+$PMF_LANG['ad_stopwords_desc'] = "Bitte wählen Sie eine Sprache aus, um neue Stoppwörter hinzuzufügen oder zu bearbeiten.";
 $PMF_LANG['ad_visits_per_day'] = "Besucher pro Tag";
 
 // added v2.8.0-RC2 - 2013-02-17 by Thorsten
