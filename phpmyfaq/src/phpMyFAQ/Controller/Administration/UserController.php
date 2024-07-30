@@ -184,7 +184,7 @@ class UserController extends AbstractController
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
+            $jsonResponse->setData(['error' => Translation::get('msgPasswordTooShort')]);
             return $jsonResponse;
         }
 
@@ -205,7 +205,7 @@ class UserController extends AbstractController
             $jsonResponse->setData(['success' => Translation::get('ad_passwdsuc')]);
         } else {
             $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
+            $jsonResponse->setData(['error' => Translation::get('msgPasswordsMustBeEqual')]);
         }
 
         return $jsonResponse;
