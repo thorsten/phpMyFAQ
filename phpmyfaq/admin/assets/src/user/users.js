@@ -235,11 +235,10 @@ export const handleUsers = async () => {
   const buttonOverwritePassword = document.getElementById('pmf-user-password-overwrite-action');
   const container = document.getElementById('pmf-modal-user-password-overwrite');
 
-  if (buttonOverwritePassword) {
+   if (buttonOverwritePassword) {
     const modal = new Modal(container);
-    const message = document.getElementById('pmf-user-message');
 
-    buttonOverwritePassword.addEventListener('click', (event) => {
+    buttonOverwritePassword.addEventListener('click', async (event) => {
       event.preventDefault();
 
       const csrf = document.getElementById('modal_csrf').value;
@@ -247,40 +246,14 @@ export const handleUsers = async () => {
       const newPassword = document.getElementById('npass').value;
       const passwordRepeat = document.getElementById('bpass').value;
 
-      fetch('./api/user/overwrite-password', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          csrf: csrf,
-          userId: userId,
-          newPassword: newPassword,
-          passwordRepeat: passwordRepeat,
-        }),
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success }),
-          );
-          modal.hide();
-        })
-        .catch(async (error) => {
-          const errorMessage = await error.cause.response.json();
-          console.error(errorMessage.error);
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error }),
-          );
-        });
+      const response = await overwritePassword(csrf, userId, newPassword, passwordRepeat);
+      if (response.success) {
+        pushNotification(response.success);
+        modal.hide();
+      }
+      if (response.error) {
+        pushErrorNotification(response.error);
+      }
     });
   }
 
