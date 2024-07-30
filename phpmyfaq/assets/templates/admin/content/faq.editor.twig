@@ -22,8 +22,8 @@
 
 {% if faqData['notes'] != '' %}
   <div class="alert alert-info alert-dismissible fade show" role="alert">
-    <h4 class="alert-heading">Private Notizen</h4>
-    <p>Es liegen private Notizen eines Editors vor: {{ faqData['notes'] }}</p>
+    <h4 class="alert-heading">{{ 'ad_admin_notes' | translate }}</h4>
+    <p>{{ 'msgPrivateNotesOfEditor' | translate }} {{ faqData['notes'] }}</p>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 {% endif %}
