@@ -62,12 +62,13 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ? sprintf(
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
-            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ',
+            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
             $taggingIds,
             Strings::htmlentities($tagName)
         ) : sprintf(
-            '<a class="btn btn-primary m-1" href="?action=search&amp;search=">%s ' .
-            '<i aria-hidden="true" class="bi bi-minus-square"></i></a> ',
+            '<a class="btn btn-primary m-1" href="?action=search&amp;search=%s">%s ' .
+            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
+            Strings::htmlentities($tagName),
             Strings::htmlentities($tagName)
         );
     }

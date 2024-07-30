@@ -352,7 +352,6 @@ class UserController extends AbstractController
             $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
             $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
             $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
-            $isSuperAdmin = $isSuperAdmin === 'on';
             $deleteTwofactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
             $deleteTwofactor = $deleteTwofactor === 'on';
 

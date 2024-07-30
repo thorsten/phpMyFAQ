@@ -743,7 +743,7 @@ $PMF_LANG['msgCategoryRemark_overview'] = "Die richtige Reihenfolge der Kategori
 
 // added v2.0.0 - 2006-10-15 by Matteo
 $PMF_LANG['msgUsersOnline'] = "%d Gäste und %d Angemeldete";
-$PMF_LANG['ad_adminlog_del_older_30d'] = "Automatisches Löschen von Logs älter als 30 Tage";
+$PMF_LANG['ad_adminlog_del_older_30d'] = "Sofortiges Löschen von Logs älter als 30 Tage";
 $PMF_LANG['ad_adminlog_delete_success'] = "Die alten Logdateien wurden erfolgreich gelöscht.";
 $PMF_LANG['ad_adminlog_delete_failure'] = "Es wurden keine Logs gelöscht, da ein Fehler aufgetreten ist.";
 
@@ -1089,7 +1089,7 @@ $LANG_CONF['main.enableWysiwygEditorFrontend'] = ["checkbox", "Aktivierung des W
 $LANG_CONF['main.enableGravatarSupport'] = ["checkbox", "Gravatar Unterstützung"];
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
-$PMF_LANG['ad_stopwords_desc'] = "Bitte wählen Sie eine Sprache aus, um neue Stopwörter hinzuzufügen oder zu bearbeiten.";
+$PMF_LANG['ad_stopwords_desc'] = "Bitte wählen Sie eine Sprache aus, um neue Stoppwörter hinzuzufügen oder zu bearbeiten.";
 $PMF_LANG['ad_visits_per_day'] = "Besucher pro Tag";
 
 // added v2.8.0-RC2 - 2013-02-17 by Thorsten
