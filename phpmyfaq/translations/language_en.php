@@ -1483,5 +1483,7 @@ $LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Enable Rich Snippets'];
 // added v4.0.0-alpha.4 - 2024-07-29 by Jan
 $PMF_LANG['msgDeleteAllVotings'] = 'Statistiken erfolgreich gelöscht.';
 $PMF_LANG['msgDeleteAllVotingsError'] = 'Beim Löschen der Statistiken ist ein Fehler aufgetreten.';
+$PMF_LANG['msgPasswordTooShort'] = 'The new password is required to have at least 8 characters.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Both passwords do not match.';
 
 return $PMF_LANG;
