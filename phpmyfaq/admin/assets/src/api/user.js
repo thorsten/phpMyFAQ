@@ -109,6 +109,33 @@ export const fetchAllUsers = async () => {
   }
 };
 
+export const overwritePassword = async (csrf, userId, newPassword, passwordRepeat) => {
+  try {
+    const response = await fetch('./api/user/overwrite-password', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrf: csrf,
+        userId: userId,
+        newPassword: newPassword,
+        passwordRepeat: passwordRepeat,
+      }),
+    })
+
+    if (response.status === 200 || response.status === 400 || response.status === 401) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok.');
+    }
+  } catch (error) {
+    console.error('Error overwriting user password:', error);
+    throw error;
+  }
+};
+
 export const postUserData = async (url = '', data = {}) => {
   try {
     return await fetch(url, {
