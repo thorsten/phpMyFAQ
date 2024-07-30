@@ -247,6 +247,21 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
                     $permissions['restricted_groups']
                 )
             ) {
+                // Add SERP-Title and Description to translated category
+                $seoEntity = new SeoEntity();
+                $seoEntity
+                    ->setType(SeoType::CATEGORY)
+                    ->setReferenceId($categoryEntity->getId())
+                    ->setReferenceLanguage($categoryEntity->getLang())
+                    ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+
+                if ($seo->get(clone $seoEntity)->getId() === null) {
+                    $seo->create($seoEntity);
+                } else {
+                    $seo->update($seoEntity);
+                }
+
                 $templateVars = [
                     ...$templateVars,
                     'isSuccess' => true,
