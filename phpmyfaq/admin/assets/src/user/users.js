@@ -52,7 +52,11 @@ const setUserData = async (userId) => {
     superAdmin.setAttribute('checked', 'checked');
     document.querySelectorAll('.permission').forEach((checkbox) => {
       checkbox.setAttribute('disabled', '');
-    })
+    });
+    document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
+      element.setAttribute('disabled', '');
+    });
+    document.getElementById('checkAll').setAttribute('disabled', '');
   }
 
   if (userData.twofactor_enabled === '1') {
@@ -132,10 +136,18 @@ export const handleUsers = async () => {
         document.querySelectorAll('.permission').forEach((checkbox) => {
           checkbox.setAttribute('disabled', '');
         });
+        document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
+          element.setAttribute('disabled', '');
+        });
+        document.getElementById('checkAll').setAttribute('disabled', '');
       } else {
         document.querySelectorAll('.permission').forEach((checkbox) => {
           checkbox.removeAttribute('disabled');
         });
+        document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
+          element.removeAttribute('disabled', '');
+        });
+        document.getElementById('checkAll').removeAttribute('disabled', '');
       }
     })
   }
