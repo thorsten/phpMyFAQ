@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Administration\HttpStreamer;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Category;
@@ -31,7 +32,6 @@ use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,7 +68,7 @@ class ExportController extends AbstractController
             } else {
                 $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
             }
-        } catch (Exception | \JsonException $e) {
+        } catch (Exception | \JsonException | CommonMarkException $e) {
             echo $e->getMessage();
         }
     }

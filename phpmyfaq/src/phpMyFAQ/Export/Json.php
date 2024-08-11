@@ -62,7 +62,7 @@ class Json extends Export
         // Initialize categories
         $this->category->transform($categoryId);
 
-        $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $faqData = $this->faq->get('faq_export_json', $categoryId, $downwards, $language);
 
         foreach ($faqData as $data) {
             $generated[] = [

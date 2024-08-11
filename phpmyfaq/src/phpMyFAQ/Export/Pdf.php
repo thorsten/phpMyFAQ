@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Export;
 
 use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
@@ -78,8 +79,9 @@ class Pdf extends Export
      * Generates the export.
      *
      * @param int    $categoryId CategoryHelper Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param bool   $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
+     * @throws CommonMarkException
      */
     public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
@@ -95,7 +97,7 @@ class Pdf extends Export
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
-        $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $faqData = $this->faq->get('faq_export_pdf', $categoryId, $downwards, $language);
 
         $currentCategory = 0;
 
