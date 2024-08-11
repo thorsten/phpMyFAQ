@@ -1487,4 +1487,8 @@ $PMF_LANG['msgPasswordTooShort'] = 'The new password is required to have at leas
 $PMF_LANG['msgPasswordsMustBeEqual'] = 'Both passwords do not match.';
 $PMF_LANG['msgPrivateNotesOfEditor'] = 'There are private notes of other editors:';
 
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Cleanup missing attachments';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshed';
+
 return $PMF_LANG;

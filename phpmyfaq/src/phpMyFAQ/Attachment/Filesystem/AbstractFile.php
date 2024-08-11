@@ -163,7 +163,7 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @return bool
      */
-    public function isOk()
+    public function isOk(): bool
     {
         return is_resource($this->handle);
     }

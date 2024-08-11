@@ -363,7 +363,7 @@ abstract class AttachmentAbstract
         $assoc = [];
 
         $sql = sprintf(
-            "SELECT COUNT(1) AS count FROM  %sfaqattachment WHERE virtual_hash = '%s'",
+            "SELECT COUNT(1) AS count FROM %sfaqattachment WHERE virtual_hash = '%s'",
             Database::getTablePrefix(),
             $this->db->escape($this->virtualHash),
         );
@@ -380,7 +380,7 @@ abstract class AttachmentAbstract
     /**
      * Remove metadata from the database.
      */
-    protected function deleteMeta(): void
+    public function deleteMeta(): void
     {
         $sql = sprintf(
             'DELETE FROM %sfaqattachment WHERE id = %d',

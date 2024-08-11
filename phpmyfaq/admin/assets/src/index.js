@@ -49,6 +49,7 @@ import {
   handleEditNews,
   handleSaveFaqData,
   handleUpdateQuestion,
+  handleRefreshAttachments,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Content → Attachments
   handleDeleteAttachments();
+  handleRefreshAttachments();
 
   // Content → Glossary
   handleDeleteGlossary();

@@ -88,12 +88,12 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * filepath given will be processed and moved to appropriate
      * location.
      *
-     * @param string $filePath full path to the attachment file
-     * @param string $filename filename to force
+     * @param string      $filePath full path to the attachment file
+     * @param string|null $filename filename to force
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
-    public function save($filePath, $filename = null): bool
+    public function save($filePath, string $filename = null): bool
     {
         $success = false;
 

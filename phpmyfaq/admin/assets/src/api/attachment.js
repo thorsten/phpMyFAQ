@@ -29,3 +29,20 @@ export const deleteAttachments = async (attachmentId, csrfToken) => {
     console.error(error);
   }
 };
+
+export const refreshAttachments = async (attachmentId, csrfToken) => {
+  try {
+    const response = await fetch('./api/content/attachments/refresh', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};

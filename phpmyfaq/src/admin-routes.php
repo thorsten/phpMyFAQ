@@ -51,6 +51,11 @@ $routesConfig = [
         'controller' => [AttachmentController::class, 'delete'],
         'methods' => 'DELETE'
     ],
+    'admin.api.content.attachments.refresh' => [
+        'path' => '/content/attachments/refresh',
+        'controller' => [AttachmentController::class, 'refresh'],
+        'methods' => 'POST'
+    ],
     'admin.api.content.attachments.upload' => [
         'path' => '/content/attachments/upload',
         'controller' => [AttachmentController::class, 'upload'],

@@ -1466,4 +1466,8 @@ $PMF_LANG['msgPasswordTooShort'] = 'Das neue Passwort muss mind. 8 Zeichen entha
 $PMF_LANG['msgPasswordsMustBeEqual'] = 'Die angegebenen Passwörter stimmen nicht überein.';
 $PMF_LANG['msgPrivateNotesOfEditor'] = 'Es liegen private Notizen eines Editors vor:';
 
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Fehlenden Anhänge bereinigen';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Anhang wurde erfolgreich aktualisiert.';
+
 return $PMF_LANG;

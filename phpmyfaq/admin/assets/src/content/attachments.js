@@ -12,7 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-22
  */
-import { deleteAttachments } from '../api/attachment';
+import { deleteAttachments, refreshAttachments } from '../api/attachment';
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleDeleteAttachments = () => {
@@ -20,11 +20,9 @@ export const handleDeleteAttachments = () => {
 
   if (deleteButtons.length > 0) {
     deleteButtons.forEach((button) => {
-      // Clone the button to remove all existing event listeners
       const newButton = button.cloneNode(true);
       button.replaceWith(newButton);
 
-      // Attach the event listener to the new button
       newButton.addEventListener('click', async (event) => {
         event.preventDefault();
 
@@ -38,6 +36,38 @@ export const handleDeleteAttachments = () => {
           const row = document.getElementById(`attachment_${attachmentId}`);
           row.style.opacity = '0';
           row.addEventListener('transitionend', () => row.remove());
+        }
+        if (response.error) {
+          pushErrorNotification(response.error);
+        }
+      });
+    });
+  }
+};
+
+export const handleRefreshAttachments = () => {
+  const refreshButton = document.querySelectorAll('.btn-refresh-attachment');
+
+  if (refreshButton.length > 0) {
+    refreshButton.forEach((button) => {
+      const newButton = button.cloneNode(true);
+      button.replaceWith(newButton);
+
+      newButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const attachmentId = newButton.getAttribute('data-attachment-id');
+        const csrf = newButton.getAttribute('data-csrf');
+
+        const response = await refreshAttachments(attachmentId, csrf);
+
+        if (response.success) {
+          pushNotification(response.success);
+          if (response.delete) {
+            const row = document.getElementById(`attachment_${attachmentId}`);
+            row.style.opacity = '0';
+            row.addEventListener('transitionend', () => row.remove());
+          }
         }
         if (response.error) {
           pushErrorNotification(response.error);

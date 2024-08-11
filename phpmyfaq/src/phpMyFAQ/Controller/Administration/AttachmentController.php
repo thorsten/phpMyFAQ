@@ -62,6 +62,34 @@ class AttachmentController extends AbstractController
     }
 
     /**
+     * @throws Exception
+     */
+    #[Route('./admin/api/content/attachments/refresh')]
+    public function refresh(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
+
+        $dataToCheck = json_decode($request->getContent());
+        try {
+            if (!Token::getInstance()->verifyToken('refresh-attachment', $dataToCheck->csrf)) {
+                return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            }
+
+            $attachment = AttachmentFactory::create($dataToCheck->attId);
+            if (!$attachment->isStorageOk()) {
+                $attachment->deleteMeta();
+                $result = ['success' => Translation::get('ad_att_delsuc'), 'delete' => true];
+            } else {
+                $result = ['success' => Translation::get('msgAdminAttachmentRefreshed'), 'delete' => false];
+            }
+            return $this->json($result, Response::HTTP_OK);
+        } catch (AttachmentException $attachmentException) {
+            $result = ['error' => $attachmentException->getMessage()];
+            return $this->json($result, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * @throws AttachmentException
      * @throws FileException
      * @throws Exception
