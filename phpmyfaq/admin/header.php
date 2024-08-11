@@ -187,7 +187,7 @@ switch ($action) {
     case 'showcategory':
     case 'faqs-overview':
     case 'editentry':
-    case 'saveentry':
+    case 'copyentry':
     case 'glossary':
     case 'saveglossary':
     case 'updateglossary':

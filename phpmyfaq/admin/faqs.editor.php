@@ -82,6 +82,7 @@ if (
     $userHelper = new UserHelper($user);
     $tagging = new Tags($faqConfig);
     $seo = new Seo($faqConfig);
+    $logging = new AdminLog($faqConfig);
 
     $date = new Date($faqConfig);
 
@@ -119,47 +120,8 @@ if (
         $notifyEmail = '';
     }
 
-    if ('editpreview' === $action) {
-        $faqData['id'] = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        if (!is_null($faqData['id'])) {
-            $queryString = 'saveentry&id=' . $faqData['id'];
-        } else {
-            $queryString = 'insertentry';
-        }
-
-        $faqData['lang'] = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-        $selectedCategory = Filter::filterInputArray(
-            INPUT_POST,
-            [
-                'rubrik' => [
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                ],
-            ]
-        );
-
-        if (is_array($selectedCategory)) {
-            foreach ($selectedCategory as $cats) {
-                $categories[] = ['category_id' => $cats, 'category_lang' => $faqData['lang']];
-            }
-        }
-
-        $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['keywords'] = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['title'] = Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['content'] = Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['author'] = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['solution_id'] = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-        $faqData['revision_id'] = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
-        $faqData['sticky'] = Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
-        $faqData['tags'] = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['changed'] = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['dateStart'] = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['dateEnd'] = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['content'] = html_entity_decode((string)$faqData['content']);
-    } elseif ('editentry' === $action) {
+    if ('editentry' === $action) {
+        $logging->log($user, 'admin-edit-faq');
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
         $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -188,8 +150,6 @@ if (
                 $faqData['lang'] = $translateTo; // once again
             }
             $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
-
-            $queryString = 'saveentry&amp;id=' . $faqData['id'];
         } else {
             $queryString = 'insertentry';
             if (isset($categoryId)) {
@@ -197,6 +157,7 @@ if (
             }
         }
     } elseif ('copyentry' === $action) {
+        $logging->log($user, 'admin-copy-faq');
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
         $categories = $categoryRelation->getCategories($faqData['id'], $faqData['lang']);
@@ -205,9 +166,10 @@ if (
 
         $faqData = $faq->faqRecord;
         $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
+        $faqData['id'] = 0;
+        $faqData['revision_id'] = 0;
         $queryString = 'insertentry';
     } else {
-        $logging = new AdminLog($faqConfig);
         $logging->log($user, 'admin-add-faq');
         $queryString = 'insertentry';
         if (!is_array($categories)) {
