@@ -64,6 +64,12 @@ class FaqHelper extends Helper
 
     /**
      * Renders a select box with all translations of a FAQ.
+     *
+     * @todo This method should be moved to a Twig macro.
+     *
+     * @param Faq $faq
+     * @param int $categoryId
+     * @return string
      */
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
@@ -80,7 +86,8 @@ class FaqHelper extends Helper
 
         if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
             $html = '<form method="post">';
-            $html .= '<select name="language" onchange="top.location.href = this.options[this.selectedIndex].value;">';
+            $html .= '<select class="form-select" name="language" ';
+            $html .= 'onchange="top.location.href = this.options[this.selectedIndex].value;">';
 
             foreach ($availableLanguages as $availableLanguage) {
                 $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $availableLanguage));
