@@ -16,29 +16,33 @@ import { deleteAttachments } from '../api/attachment';
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const handleDeleteAttachments = () => {
-  const attachmentTable = document.getElementById('attachment-table');
+  const deleteButtons = document.querySelectorAll('.btn-delete-attachment');
 
-  if (attachmentTable) {
-    attachmentTable.addEventListener('click', async (event) => {
-      event.preventDefault();
+  if (deleteButtons.length > 0) {
+    deleteButtons.forEach((button) => {
+      // Clone the button to remove all existing event listeners
+      const newButton = button.cloneNode(true);
+      button.replaceWith(newButton);
 
-      const isButton = event.target.className.includes('btn-delete-attachment');
-      if (isButton) {
-        const attachmentId = event.target.getAttribute('data-attachment-id');
-        const csrf = event.target.getAttribute('data-csrf');
+      // Attach the event listener to the new button
+      newButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        const attachmentId = newButton.getAttribute('data-attachment-id');
+        const csrf = newButton.getAttribute('data-csrf');
 
         const response = await deleteAttachments(attachmentId, csrf);
 
         if (response.success) {
           pushNotification(response.success);
           const row = document.getElementById(`attachment_${attachmentId}`);
-          row.addEventListener('click', () => (row.style.opacity = '0'));
+          row.style.opacity = '0';
           row.addEventListener('transitionend', () => row.remove());
         }
         if (response.error) {
           pushErrorNotification(response.error);
         }
-      }
+      });
     });
   }
 };
