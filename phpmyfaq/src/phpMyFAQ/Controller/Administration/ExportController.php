@@ -82,7 +82,6 @@ class ExportController extends AbstractController
         $this->userHasPermission(PermissionType::REPORTS);
 
         $data = json_decode($request->getContent())->data;
-
         if (!Token::getInstance()->verifyToken('create-report', $data->{'pmf-csrf-token'})) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -107,14 +106,14 @@ class ExportController extends AbstractController
             $i = $reportData['faq_id'];
             if (isset($data->category) && isset($reportData['category_name'])) {
                 if (0 !== $reportData['category_parent']) {
-                    $text[$i][] = $reportData['category_parent'];
+                    $text[$i][] = Report::sanitize($reportData['category_parent']);
                 } else {
-                    $text[$i][] = $report->convertEncoding($reportData['category_name']);
+                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 }
             }
             if (isset($data->sub_category)) {
                 if (0 != $reportData['category_parent']) {
-                    $text[$i][] = $report->convertEncoding($reportData['category_name']);
+                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 } else {
                     $text[$i][] = 'n/a';
                 }
@@ -132,21 +131,21 @@ class ExportController extends AbstractController
                 $text[$i][] = $reportData['faq_sticky'];
             }
             if (isset($data->title)) {
-                $text[$i][] = $report->convertEncoding($reportData['faq_question']);
+                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_question']));
             }
             if (isset($data->creation_date)) {
                 $text[$i][] = $reportData['faq_updated'];
             }
             if (isset($data->owner)) {
-                $text[$i][] = $report->convertEncoding($reportData['faq_org_author']);
+                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
             }
             if (isset($data->last_modified_person) && isset($reportData['faq_last_author'])) {
-                $text[$i][] = $report->convertEncoding($reportData['faq_last_author']);
+                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
             } else {
                 $text[$i][] = '';
             }
             if (isset($data->url)) {
-                $text[$i][] = $report->convertEncoding(
+                $text[$i][] = Report::sanitize($report->convertEncoding(
                     sprintf(
                         '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $this->configuration->getDefaultUrl(),
@@ -154,25 +153,28 @@ class ExportController extends AbstractController
                         $reportData['faq_id'],
                         $reportData['faq_language']
                     )
-                );
+                ));
             }
             if (isset($data->visits)) {
                 $text[$i][] = $reportData['faq_visits'];
             }
         }
 
-        $content = '';
+        $handle = fopen('php://temp', 'r+');
         foreach ($text as $row) {
-            $csvRow = array_map(['phpMyFAQ\Administration\Report', 'sanitize'], $row);
-            $content .= implode(';', $csvRow);
-            $content .= "\r\n";
+            fputcsv($handle, $row);
         }
 
-        $httpStreamer = new HttpStreamer('csv', $content);
-        try {
-            $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        rewind($handle);
+
+        $content = stream_get_contents($handle);
+
+        fclose($handle);
+
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="report.csv"');
+
+        return $response;
     }
 }

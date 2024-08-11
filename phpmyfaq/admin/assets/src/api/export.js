@@ -15,7 +15,7 @@ export const createReport = async (data, csrfToken) => {
     });
 
     if (response.ok) {
-      return await response.text();
+      return await response.blob();
     } else {
       return await response.json();
     }

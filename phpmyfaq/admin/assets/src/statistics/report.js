@@ -19,12 +19,15 @@ export const handleCreateReport = () => {
       if (response.error) {
         pushErrorNotification(response.error);
       } else {
-        window.open(encodeURI(response));
-
-        let hiddenElement = document.createElement('a');
-        hiddenElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURI(response));
-        hiddenElement.setAttribute('download', 'phpmyfaq-report-' + new Date().toISOString().substring(0, 10) + '.csv');
-        hiddenElement.click();
+        // Create a download link
+        const url = window.URL.createObjectURL(response);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'phpmyfaq-report-' + new Date().toISOString().substring(0, 10) + '.csv';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        window.URL.revokeObjectURL(url);
       }
     });
   }
