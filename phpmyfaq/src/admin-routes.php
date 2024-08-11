@@ -409,6 +409,11 @@ $routesConfig = [
         'controller' => [UserController::class, 'list'],
         'methods' => 'GET'
     ],
+    'admin.api.user.users.csv' => [
+        'path' => '/user/users/csv',
+        'controller' => [UserController::class, 'csvExport'],
+        'methods' => 'GET'
+    ],
     'admin.api.user.add' => [
         'path' => '/user/add',
         'controller' => [UserController::class, 'addUser'],

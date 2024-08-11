@@ -149,9 +149,9 @@ export const handleUsers = async () => {
         });
         document.getElementById('checkAll').removeAttribute('disabled', '');
       }
-    })
+    });
   }
-  
+
   if (passwordToggle) {
     passwordToggle.addEventListener('click', () => {
       passwordInputs.classList.toggle('d-none');
@@ -232,40 +232,16 @@ export const handleUsers = async () => {
   const buttonExportAllUsers = document.getElementById('pmf-button-export-users');
 
   if (buttonExportAllUsers) {
-    buttonExportAllUsers.addEventListener('click', async (event) => {
+    buttonExportAllUsers.addEventListener('click', (event) => {
       event.preventDefault();
-
-      await fetchAllUsers()
-        .then((userData) => {
-          const replacer = (key, value) => (value === null ? '' : value);
-          const header = Object.keys(userData[0]);
-          let csv = userData.map((row) =>
-            header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(','),
-          );
-          csv.unshift(header.join(','));
-          csv = csv.join('\r\n');
-
-          window.open(encodeURI(csv));
-
-          let hiddenElement = document.createElement('a');
-          hiddenElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURI(csv));
-          hiddenElement.setAttribute('target', '_blank');
-          hiddenElement.setAttribute(
-            'download',
-            'phpmyfaq-users-' + new Date().toISOString().substring(0, 10) + '.csv',
-          );
-          hiddenElement.click();
-        })
-        .catch((error) => {
-          console.log('Final Request failure: ', error);
-        });
+      window.location.href = './api/user/users/csv';
     });
   }
 
   const buttonOverwritePassword = document.getElementById('pmf-user-password-overwrite-action');
   const container = document.getElementById('pmf-modal-user-password-overwrite');
 
-   if (buttonOverwritePassword) {
+  if (buttonOverwritePassword) {
     const modal = new Modal(container);
 
     buttonOverwritePassword.addEventListener('click', async (event) => {
@@ -335,7 +311,7 @@ export const handleUsers = async () => {
         user_status: document.getElementById('user_status').value,
         is_superadmin: document.getElementById('is_superadmin').checked,
         overwrite_twofactor: document.getElementById('overwrite_twofactor').checked,
-        userId: userId
+        userId: userId,
       };
 
       console.log(userData);
@@ -362,12 +338,12 @@ export const handleUsers = async () => {
           rightData.push(checkbox.value);
         }
       });
-      const userId = document.getElementById('rights_user_id').value
+      const userId = document.getElementById('rights_user_id').value;
       let data = {
         csrfToken: document.getElementById('pmf-csrf-token-rights').value,
         userId: userId,
-        userRights: rightData
-      }
+        userRights: rightData,
+      };
       const response = await postUserData('./api/user/update-rights', data);
       const json = await response.json();
       if (json.success) {

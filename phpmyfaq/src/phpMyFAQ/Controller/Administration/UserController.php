@@ -49,7 +49,6 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
         $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
 
         $filtered = Filter::filterVar($request->query->get('filter'), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -83,6 +82,50 @@ class UserController extends AbstractController
 
             return $this->json($allUsers, Response::HTTP_OK);
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('admin/api/user/users/csv')]
+    public function csvExport(): Response
+    {
+        $this->userHasUserPermission();
+
+        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $allUsers = $user->getAllUsers(false);
+
+        $handle = fopen('php://temp', 'r+');
+        fputcsv(
+            $handle,
+            ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source']
+        );
+
+        foreach ($allUsers as $allUser) {
+            $user->getUserById($allUser, true);
+            fputcsv($handle, [
+                $user->getUserId(),
+                $user->getStatus(),
+                $user->isSuperAdmin() ? 'true' : 'false',
+                $user->getUserData('is_visible') ? 'true' : 'false',
+                Report::sanitize($user->getUserData('display_name')),
+                Report::sanitize($user->getLogin()),
+                $user->getUserData('email'),
+                $user->getUserAuthSource(),
+            ]);
+        }
+
+        rewind($handle);
+
+        $content = stream_get_contents($handle);
+
+        fclose($handle);
+
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="users.csv"');
+
+        return $response;
     }
 
     /**
