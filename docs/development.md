@@ -236,7 +236,13 @@ To run the Jest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 6.5.7 Rebase your Patch
+### 6.5.7 Coding standards
+
+The following coding standards are used in phpMyFAQ:
+
+- PHP: [PER Coding Style 2.0](https://www.php-fig.org/per/coding-style/)
+
+### 6.5.8 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -246,7 +252,7 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase 4.0
 
-### 6.5.8 Make a Pull Request
+### 6.5.9 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
@@ -255,7 +261,7 @@ You can now make a pull request on the phpMyFAQ GitHub repository.
 phpMyFAQ v4 and later uses the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
 
-### 6.6.1 Category Name
+### 6.6.1 Category Name Twig Extensions
 
 The category name extension is used to get the name of a category by its ID.
 
@@ -263,7 +269,7 @@ Example:
 
     {{ categoryId | categoryName }}
 
-### 6.6.2 FAQ question
+### 6.6.2 FAQ question Twig Extensions
 
 The FAQ question extension is used to get the question of a FAQ entry by its ID.
 
@@ -271,7 +277,7 @@ Example:
 
     {{ faqId | faqQuestion }}
 
-### 6.6.3 Formatting bytes
+### 6.6.3 Formatting bytes Twig Extensions
 
 The format bytes extension is used to format a number of bytes to a human-readable format.
 
@@ -279,7 +285,7 @@ Example:
 
     {{ bytes | formatBytes }}
 
-### 6.6.4 Format date
+### 6.6.4 Format date Twig Extensions
 
 The format date extension is used to format a date to a human-readable format.
 
@@ -287,7 +293,7 @@ Example:
 
     {{ date | formatDate }}
 
-### 6.6.5 ISO date format
+### 6.6.5 ISO date format Twig Extensions
 
 The ISO date format extension is used to format a date to an ISO date format.
 
@@ -295,7 +301,7 @@ Example:
 
     {{ date | createIsoDate }}
 
-### 6.6.6 Language code
+### 6.6.6 Language code Twig Extensions
 
 The language code extension is used to get the language name by its language code.
 
@@ -303,7 +309,7 @@ Example:
 
     {{ languageCode | getFromLanguageCode }}
 
-### 6.6.7 Permission translation
+### 6.6.7 Permission translation Twig Extensions
 
 The permission translation extension is used to get the permission name by its permission string.
 
@@ -311,7 +317,7 @@ Example:
 
     {{ permissionString | permission }}
 
-### 6.6.8 Translation
+### 6.6.8 Translation Twig Extensions
 
 The translation extension is used to get the translation of a string.
 
@@ -319,7 +325,7 @@ Example:
 
     {{ 'string' | translate }}
 
-### 6.6.9 User name
+### 6.6.9 User name Twig Extensions
 
 The username extension is used to get the name of a user by its ID.
 
