@@ -19,8 +19,8 @@ export const createBookmark = async (faqId, csrf) => {
       method: 'POST',
       cache: 'no-cache',
       body: JSON.stringify({
-        'id': faqId,
-        'csrfToken': csrf
+        id: faqId,
+        csrfToken: csrf,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ export const createBookmark = async (faqId, csrf) => {
   } catch (error) {
     console.error('Error adding bookmark:', error);
   }
-}
+};
 
 export const deleteBookmark = async (faqId, csrf) => {
   try {
@@ -40,8 +40,8 @@ export const deleteBookmark = async (faqId, csrf) => {
       method: 'DELETE',
       cache: 'no-cache',
       body: JSON.stringify({
-        'id': faqId,
-        'csrfToken': csrf
+        id: faqId,
+        csrfToken: csrf,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -53,4 +53,24 @@ export const deleteBookmark = async (faqId, csrf) => {
   } catch (error) {
     console.error('Error removing bookmark:', error);
   }
-}
+};
+
+export const deleteAllBookmarks = async (csrf) => {
+  try {
+    const response = await fetch(`api/bookmark/delete-all`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      body: JSON.stringify({
+        csrfToken: csrf,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error removing all bookmarks:', error);
+  }
+};

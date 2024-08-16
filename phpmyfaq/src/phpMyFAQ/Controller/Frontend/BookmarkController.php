@@ -32,38 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookmarkController extends AbstractController
 {
     /**
-     * @throws Exception
-     */
-    #[Route('api/bookmark/delete')]
-    public function delete(Request $request): JsonResponse
-    {
-        $this->userIsAuthenticated();
-
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!Token::getInstance()->verifyToken('delete-bookmark', $csrfToken)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-
-        $bookmark = new Bookmark($this->configuration, $currentUser);
-
-        if ($bookmark->remove($id)) {
-            return $this->json([
-                'success' => Translation::get('msgBookmarkRemoved'),
-                'linkText' => Translation::get('msgAddBookmark'),
-                'csrfToken' => Token::getInstance()->getTokenString('add-bookmark')
-            ], JsonResponse::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgError')], JsonResponse::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @throws Exception
+     * @throws Exception|\JsonException
      */
     #[Route('api/bookmark/create')]
     public function create(Request $request): JsonResponse
@@ -87,9 +56,62 @@ class BookmarkController extends AbstractController
                 'success' => Translation::get('msgBookmarkAdded'),
                 'linkText' => Translation::get('removeBookmark'),
                 'csrfToken' => Token::getInstance()->getTokenString('delete-bookmark')
-            ], JsonResponse::HTTP_OK);
+            ], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('msgError')], JsonResponse::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @throws Exception|\JsonException
+     */
+    #[Route('api/bookmark/delete')]
+    public function delete(Request $request): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('delete-bookmark', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+
+        $bookmark = new Bookmark($this->configuration, $currentUser);
+
+        if ($bookmark->remove($id)) {
+            return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);
+        } else {
+            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @throws Exception|\JsonException
+     */
+    #[Route('api/bookmark/delete-all')]
+    public function deleteAll(Request $request): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!Token::getInstance()->verifyToken('delete-all-bookmarks', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+
+        $bookmark = new Bookmark($this->configuration, $currentUser);
+
+        if ($bookmark->removeAll()) {
+            return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);
+        } else {
+            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
         }
     }
 }

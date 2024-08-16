@@ -14,7 +14,7 @@
  * @since     2024-07-03
  */
 
-import { deleteBookmark } from '../api';
+import { deleteAllBookmarks, deleteBookmark } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../admin/assets/src/utils';
 
 export const handleDeleteBookmarks = () => {
@@ -26,14 +26,35 @@ export const handleDeleteBookmarks = () => {
         const bookmarkId = event.target.getAttribute('data-pmf-bookmark-id');
         const csrfToken = event.target.getAttribute('data-pmf-csrf');
         const bookmarkToDelete = document.getElementById(`delete-bookmark-${bookmarkId}`);
-        bookmarkToDelete.remove();
         const response = await deleteBookmark(bookmarkId, csrfToken);
         if (response.success) {
           pushNotification(response.success);
+          bookmarkToDelete.remove();
         } else {
           pushErrorNotification(response.error);
         }
       });
+    });
+  }
+};
+
+export const handleRemoveAllBookmarks = () => {
+  const removeAllBookmarksButton = document.getElementById('pmf-bookmarks-delete-all');
+
+  if (removeAllBookmarksButton) {
+    removeAllBookmarksButton.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const csrfToken = event.target.getAttribute('data-pmf-csrf');
+      const bookmarksToDelete = document.getElementById('bookmarkAccordion');
+
+      const response = await deleteAllBookmarks(csrfToken);
+
+      if (response.success) {
+        pushNotification(response.success);
+        bookmarksToDelete.remove();
+      } else {
+        pushErrorNotification(response.error);
+      }
     });
   }
 };

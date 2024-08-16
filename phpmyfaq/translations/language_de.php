@@ -177,7 +177,7 @@ $PMF_LANG['ad_msg_passmatch'] = "Beide Passwörter müssen übereinstimmen!";
 $PMF_LANG['ad_msg_savedsuc_1'] = "Das Profil von";
 $PMF_LANG['ad_msg_savedsuc_2'] = "wurde erfolgreich gespeichert.";
 $PMF_LANG['ad_msg_mysqlerr'] = "Aufgrund eines Datenbankfehlers konnte das Profil nicht gespeichert werden.";
-$PMF_LANG['ad_msg_noauth'] = "Hierfür nicht authorisiert.";
+$PMF_LANG['ad_msg_noauth'] = "Sie sind dazu nicht berechtigt.";
 
 // Allgemein
 $PMF_LANG['ad_gen_page'] = "Seite";
@@ -1469,5 +1469,6 @@ $PMF_LANG['msgPrivateNotesOfEditor'] = 'Es liegen private Notizen eines Editors 
 // added v4.0.0-beta - 2024-08-11 by Thorsten
 $PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Fehlenden Anhänge bereinigen';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Anhang wurde erfolgreich aktualisiert.';
+$PMF_LANG['msgRemoveAll'] = 'Alles löschen';
 
 return $PMF_LANG;

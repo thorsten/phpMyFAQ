@@ -41,7 +41,8 @@ $templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
     'bookmarksList' => $bookmark->getBookmarkList(),
-    'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark')
+    'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
+    'csrfTokenDeleteAllBookmarks' => Token::getInstance()->getTokenString('delete-all-bookmarks')
 ];
 
 return $templateVars;

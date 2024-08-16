@@ -2,9 +2,18 @@
 
 {% block content %}
 <div class="row g-5">
-  <div class="col-md-12">
-    <h2 class="pb-4 mb-4 border-bottom">{{ 'msgMyBookmarks' | translate }}</h2>
+  <div class="col justify-content-start">
+    <h2>{{ 'msgMyBookmarks' | translate }}</h2>
+  </div>
+  <div class="col justify-content-end text-end">
+    <button type="button" class="btn btn-outline-danger" id="pmf-bookmarks-delete-all"
+            data-pmf-csrf="{{ csrfTokenDeleteAllBookmarks }}">
+      <i aria-hidden="true" class="bi bi-trash"></i>
+      {{ 'msgRemoveAll' | translate }}
+    </button>
+  </div>
 
+  <div class="col-12 mt-4">
     <div class="accordion" id="bookmarkAccordion">
       {% set count = 1 %}
       {% for bookmark in bookmarksList %}
@@ -13,16 +22,17 @@
             <button class="accordion-button d-flex collapsed justify-content-between" type="button"
                     data-bs-toggle="collapse" data-bs-target="#collapse{{ count }}" aria-expanded="true"
                     aria-controls="collapse{{ count }}">
-              <span class="flex-grow-1 text-start">{{ count }}. {{ bookmark['title'] }}</span>
+              <span class="flex-grow-1 text-start">{{ bookmark['title'] }}</span>
               <i class="bi bi-trash text-danger m-1 pmf-delete-bookmark" title="{{ 'removeBookmark' | translate }}"
                  data-bs-toggle="tooltip" data-bs-placement="top" data-pmf-bookmark-id="{{ bookmark['id'] }}"
                  data-pmf-csrf="{{ csrfTokenDeleteBookmark }}">
               </i>&nbsp;
             </button>
           </h2>
-          <div id="collapse{{ count }}" class="accordion-collapse collapse" aria-labelledby="heading{{ count }}" data-bs-parent="#bookmarkAccordion">
+          <div id="collapse{{ count }}" class="accordion-collapse collapse" aria-labelledby="heading{{ count }}"
+               data-bs-parent="#bookmarkAccordion">
             <div class="accordion-body">
-              {{ bookmark['answer']|raw }}
+              {{ bookmark['answer'] | raw }}
               <a href="{{ bookmark['url'] }}">{{ 'msgLinkToFAQ' | translate }}</a>
             </div>
           </div>

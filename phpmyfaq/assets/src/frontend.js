@@ -29,6 +29,7 @@ import { handleAutoComplete, handleQuestion } from './search';
 import {
   handleDeleteBookmarks,
   handleRegister,
+  handleRemoveAllBookmarks,
   handleRequestRemoval,
   handleUserControlPanel,
   handleUserPassword,
@@ -89,6 +90,7 @@ handleQuestion();
 // Handle Bookmarks
 //
 handleDeleteBookmarks();
+handleRemoveAllBookmarks();
 
 //
 // Handle user control panel

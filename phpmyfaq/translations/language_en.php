@@ -1490,5 +1490,6 @@ $PMF_LANG['msgPrivateNotesOfEditor'] = 'There are private notes of other editors
 // added v4.0.0-beta - 2024-08-11 by Thorsten
 $PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Cleanup missing attachments';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshed';
+$PMF_LANG['msgRemoveAll'] = 'Remove all';
 
 return $PMF_LANG;

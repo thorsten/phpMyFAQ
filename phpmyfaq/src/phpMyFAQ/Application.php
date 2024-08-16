@@ -126,11 +126,10 @@ readonly class Application
         } catch (ErrorException | Exception $exception) {
             $response = new Response(
                 sprintf(
-                    'An error occurred: %s at line %d at %s<br>%s',
+                    'An error occurred: %s at line %d at %s',
                     $exception->getMessage(),
                     $exception->getLine(),
-                    $exception->getFile(),
-                    implode('<br>', $exception->getTrace())
+                    $exception->getFile()
                 ),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

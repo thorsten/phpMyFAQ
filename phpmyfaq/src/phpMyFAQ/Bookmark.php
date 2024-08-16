@@ -102,6 +102,21 @@ readonly class Bookmark
         return (bool) $this->configuration->getDb()->query($query);
     }
 
+    /**
+     * Removes all bookmarks from the current user.
+     *
+     */
+    public function removeAll(): bool
+    {
+        $query = sprintf(
+            'DELETE FROM %sfaqbookmarks WHERE userid = %d',
+            Database::getTablePrefix(),
+            $this->currentUser->getUserId()
+        );
+
+        return (bool) $this->configuration->getDb()->query($query);
+    }
+
     public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();

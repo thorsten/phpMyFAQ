@@ -52,7 +52,6 @@ $apiVersion = System::getApiVersion();
 
 $routes = new RouteCollection();
 
-
 $routesConfig = [
     // Public REST API
     'api.attachments' => [
@@ -201,15 +200,20 @@ $routesConfig = [
         'controller' => [AutoCompleteController::class, 'search'],
         'methods' => 'GET'
     ],
+    'api.private.bookmark.create' => [
+        'path' => 'bookmark/create',
+        'controller' => [BookmarkController::class, 'create'],
+        'methods' => 'POST'
+    ],
     'api.private.bookmark.delete' => [
         'path' => 'bookmark/delete',
         'controller' => [BookmarkController::class, 'delete'],
         'methods' => 'DELETE'
     ],
-    'api.private.bookmark.create' => [
-        'path' => 'bookmark/create',
-        'controller' => [BookmarkController::class, 'create'],
-        'methods' => 'POST'
+    'api.private.bookmark.delete-all' => [
+        'path' => 'bookmark/delete-all',
+        'controller' => [BookmarkController::class, 'deleteAll'],
+        'methods' => 'DELETE'
     ],
     'api.private.captcha' => [
         'path' => 'captcha',
