@@ -63,7 +63,7 @@ paths:
             type: string
       responses:
         '200':
-          description: 'The current backup as a file or ZipArchive in case of "content"-type.'
+          description: 'The current backup as a file or a ZipArchive in case of "content"-type.'
           headers:
             Accept-Language:
               description: 'The language code for the login.'
@@ -74,14 +74,11 @@ paths:
               schema:
                 type: string
           content:
-            application/octet-stream:
-              schema:
-                type: string
-            application/zip:
+            'application/octet-stream or application/zip':
               schema:
                 type: string
         '400':
-          description: 'If the backup type is wrong'
+          description: 'If the backup type is wrong or an internal error occurred'
           headers:
             Accept-Language:
               description: 'The language code for the login.'
@@ -1130,3 +1127,8 @@ paths:
             application/json:
               schema: {}
               example: 4.0.0
+tags:
+  - name: 'Public Endpoints'
+    description: 'Public Endpoints'
+  - name: 'Endpoints with Authentication'
+    description: 'Endpoints with Authentication'
