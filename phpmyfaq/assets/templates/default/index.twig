@@ -29,7 +29,7 @@
 </head>
 <body class="pmf-page-wrapper" dir="{{ dir }}">
 
-<nav class="p-3 text-bg-primary border-bottom">
+<nav class="p-3 bg-dark bg-gradient border-bottom">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <a href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}"
@@ -84,7 +84,7 @@
           <i class="bi bi-search"></i>
           <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
                  name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
-          <button type="submit" class="btn btn-info btn-lg">{{ searchBox }}</button>
+          <button type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
         </form>
       </div>
       <div>
@@ -115,7 +115,7 @@
   </div>
 </section>
 
-<footer class="pt-4 text-bg-dark">
+<footer class="pt-4 text-bg-dark bg-gradient">
   <div class="container">
     {% if not isMaintenanceMode %}
     <div class="row">

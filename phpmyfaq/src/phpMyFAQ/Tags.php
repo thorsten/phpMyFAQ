@@ -465,8 +465,8 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $html .= sprintf(
-                '<a class="btn btn-primary m-1" href="?action=search&tagging_id=%d">%s ' .
-                '<span class="badge bg-info">%d</span></a>',
+                '<a class="btn btn-secondary m-1" href="?action=search&tagging_id=%d">%s ' .
+                '<span class="badge text-bg-primary">%d</span></a>',
                 $tagId,
                 Strings::htmlentities($tagName),
                 $tagFreq

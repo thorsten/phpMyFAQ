@@ -5,7 +5,7 @@
 <!-- Header -->
 <div class="row">
   <div class="col-12">
-    <h1>{{ pageHeader }}</h1>
+    <h1 class="mb-3 fw-bold lh-1 text-center">{{ pageHeader }}</h1>
   </div>
 </div>
 
@@ -14,13 +14,13 @@
 <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
   {% for decks in startPageCategoryDecks %}
     <div class="col">
-      <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-3 shadow-lg p-1"
+      <div class="card card-cover h-100 overflow-hidden text-bg-dark bg-gradient rounded-3 shadow-lg p-1"
       {% if decks['image'] != '' %}
         style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
       {% endif %}
       >
-        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{ decks['name'] }}</h3>
-        <a class="btn btn-primary" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
+        <h3 class="pt-5 mt-5 mb-3 lh-1 fw-semibold">{{ decks['name'] }}</h3>
+        <a class="btn btn-primary bg-gradient" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
       </div>
     </div>
   {% endfor %}
@@ -33,7 +33,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">{{ stickyRecordsHeader }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-exclamation-square"></i>
+          {{ stickyRecordsHeader }}
+        </h5>
         <ul class="list-unstyled">
           {% for stickyRecord in stickyRecordsList %}
           <li class="mb-1">
@@ -52,7 +55,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">{{ writeTopTenHeader }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-trophy"></i>
+          {{ writeTopTenHeader }}
+        </h5>
         <ol class="list-unstyled">
           {% if topRecordsList is not empty %}
             {% for topten in topRecordsList %}
@@ -79,7 +85,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">{{ writeNewestHeader }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-lightning"></i>
+          {{ writeNewestHeader }}
+        </h5>
         <ol class="list-unstyled">
           {% if latestRecordsList is not empty %}
             {% for latest in latestRecordsList %}
@@ -101,7 +110,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">{{ msgTrendingFAQs }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-graph-up-arrow"></i>
+          {{ msgTrendingFAQs }}
+        </h5>
         <ol class="list-unstyled">
           {% if trendingRecordsList is not empty %}
             {% for trending in trendingRecordsList %}
@@ -124,7 +136,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{ writeNewsHeader }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-newspaper"></i>
+          {{ writeNewsHeader }}
+        </h5>
         <p class="card-text">{{ writeNews | raw }}</p>
       </div>
     </div>
@@ -134,7 +149,10 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{ msgTags }}</h5>
+        <h5 class="card-title text-center">
+          <i class="bi bi-tags"></i>
+          {{ msgTags }}
+        </h5>
         <p class="card-text pmf-tag-cloud">{{ tagList | raw }}</p>
       </div>
     </div>

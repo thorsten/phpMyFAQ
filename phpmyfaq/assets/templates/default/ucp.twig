@@ -5,7 +5,7 @@
   <div class="col-4 pmf-personal-gravatar">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h5 class="h6 m-0 font-weight-bold text-primary">{{ msgGravatar }}</h5>
+        <h5 class="h6 m-0 font-weight-bold">{{ msgGravatar }}</h5>
       </div>
       <div class="card-body">
         <div class="text-center">{{ ucpGravatarImage|raw }}</div>
@@ -19,7 +19,7 @@
 
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="h6 m-0 font-weight-bold text-primary">{{ msgHeaderUserData }}</h6>
+        <h6 class="h6 m-0 font-weight-bold">{{ msgHeaderUserData }}</h6>
       </div>
       <div class="card-body">
         <div class="row mb-2">
@@ -216,7 +216,10 @@
           </div>
 
           <div class="row">
-            <div class="col-lg-12 text-end">
+            <div class="col-12">
+              <button type="reset" class="btn btn-outline-secondary">
+                {{ 'ad_gen_reset' | translate }}
+              </button>
               <button class="btn btn-primary" type="submit" id="pmf-submit-user-control-panel"
                       data-pmf-form="submit-user-data">
                 {{ msgSave }}

@@ -39,3 +39,6 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import 'layout/login';
 @import 'layout/navigation';
 @import 'layout/setup';
+
+$enable-gradients: true;
+$enable-shadows: true;
