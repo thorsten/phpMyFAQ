@@ -115,11 +115,10 @@ readonly class Application
         } catch (BadRequestException $exception) {
             $response = new Response(
                 sprintf(
-                    'An error occurred: %s at line %d at %s<br>%s',
+                    'An error occurred: %s at line %d at %s',
                     $exception->getMessage(),
                     $exception->getLine(),
-                    $exception->getFile(),
-                    implode('<br>', $exception->getTrace())
+                    $exception->getFile()
                 ),
                 Response::HTTP_BAD_REQUEST
             );
