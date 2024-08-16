@@ -371,7 +371,7 @@ class Tags
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
-            $oLink->class = 'btn btn-primary mr-1 my-1';
+            $oLink->class = 'btn btn-secondary mr-1 my-1';
             $html .= $oLink->toHtmlAnchor();
             $html .= (count($tags) == $i ? '' : ' ');
         }

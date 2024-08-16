@@ -11,10 +11,10 @@
 
 <!-- Start page -->
 {% if startPageCategories %}
-<div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4">
+<div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-4 mb-4">
   {% for decks in startPageCategoryDecks %}
     <div class="col">
-      <div class="card card-cover h-100 overflow-hidden text-bg-dark bg-gradient rounded-3 shadow-lg p-1"
+      <div class="card card-cover h-100 overflow-hidden text-bg-light rounded-3 shadow-lg p-1"
       {% if decks['image'] != '' %}
         style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
       {% endif %}

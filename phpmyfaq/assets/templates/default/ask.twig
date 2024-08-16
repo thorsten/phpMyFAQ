@@ -31,7 +31,7 @@
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="name">{{ id3_label }}:
+      <label class="col-sm-3 col-form-label" for="name">{{ id3_label }}:
         <span style="color: red"> *</span></label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" required>
@@ -39,7 +39,7 @@
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="email">{{ id4_label }}:
+      <label class="col-sm-3 col-form-label" for="email">{{ id4_label }}:
         <span style="color: red"> *</span></label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" required>
@@ -48,7 +48,7 @@
 
     {% if id5_label is defined %}
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="category">{{ id5_label }}:
+      <label class="col-sm-3 col-form-label" for="category">{{ id5_label }}:
       {% if id5_required == 'required' %}<span style="color: red"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
@@ -60,7 +60,7 @@
     {% endif %}
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="question">{{ id6_label }}:
+      <label class="col-sm-3 col-form-label" for="question">{{ id6_label }}:
         <span style="color: red"> *</span></label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="45" rows="5" name="question" id="question" required></textarea>
