@@ -401,7 +401,7 @@ class Faq
                     Utils::chopString(strip_tags((string) $row->answer), 20)
                 );
                 $renderedItems[$row->id] .= sprintf(
-                    '<span id="viewsPerRecord" class="badge bg-primary rounded-pill">%s</span></li>',
+                    '<span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">%s</span></li>',
                     $this->plurals->getMsg('plmsgViews', $visits)
                 );
             }

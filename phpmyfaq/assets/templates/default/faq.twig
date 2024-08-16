@@ -40,7 +40,7 @@
                 <i aria-hidden="true" class="bi bi-clock"></i>
                 <span class="data" id="pmf-reading-time-minutes">~ 0 min</span>
               </div>
-              <a class="badge bg-secondary rounded-pill text-decoration-none" href="{{ solutionIdLink }}">
+              <a class="badge text-bg-secondary rounded-pill text-decoration-none" href="{{ solutionIdLink }}">
                 ID #{{ solutionId }}
               </a>
             </li>
@@ -49,12 +49,12 @@
               <span class="data" rel="author">{{ faqAuthor }}</span>
             </li>
             <li class="list-group-item bg-transparent">
-              <i aria-hidden="true" class="bi bi-calendar"></i>
+              <i aria-hidden="true" class="bi bi-calendar-date"></i>
               <span class="data">{{ faqDate }}</span>
             </li>
             {% if numberOfComments is defined %}
               <li class="list-group-item bg-transparent">
-                <i aria-hidden="true" class="bi bi-comments"></i>
+                <i aria-hidden="true" class="bi bi-chat-left-quote"></i>
                 {{ numberOfComments }}
               </li>
             {% endif %}
@@ -76,7 +76,7 @@
             </li>
             {% if enableSendToFriend == true %}
               <li class="list-group-item bg-transparent">
-                <i aria-hidden="true" class="bi bi-envelope"></i>
+                <i aria-hidden="true" class="bi bi-share"></i>
                 <a rel="nofollow" href="#" class="text-decoration-none" data-bs-toggle="modal"
                    data-bs-target="#shareModel"
                    id="shareButton" data-bs-placement="top"> {{ msgSend2Friend }}</a>

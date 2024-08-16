@@ -2,14 +2,16 @@
 
 {% block content %}
 <section class="col-12">
-  <h1>{{ pageHeader }}</h1>
-  <p>{{ msgUserRemovalText }}</p>
+  <h1>{{ 'msgUserRemoval' | translate }}</h1>
+  <p>{{ 'msgUserRemovalText' | translate }}</p>
 
   <p>
-    {{ msgContactPrivacyNote }}
-    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank" rel="noopener"> {{ msgPrivacyNote }} </a>
+    {{ 'msgContactPrivacyNote' | translate }}
+    <a title="{{ 'msgPrivacyNote' | translate }}" href="{{ privacyURL }}" target="_blank" rel="noopener">
+      {{ 'msgPrivacyNote' | translate }}
+    </a>
   </p>
-  <p><strong>{{ msgContactRemove }}</strong></p>
+  <p><strong>{{ 'msgContactRemove' | translate }}</strong></p>
 
   <div class="row mb-2">
     <div class="col">
@@ -26,11 +28,11 @@
     {{ csrf | raw }}
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="name">{{ msgUsername }}</label>
-      <div class="col-sm-9">
+      <label class="col-3 col-form-label" for="loginname">{{ 'msgUsername' | translate }}</label>
+      <div class="col-9">
         <input
           type="text"
-          class="form-control"
+          class="form-control-plaintext"
           name="loginname"
           id="loginname"
           value="{{ defaultLoginName }}"
@@ -41,11 +43,11 @@
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
-      <div class="col-sm-9">
+      <label class="col-sm-3 col-form-label" for="name">{{ msgNewContentName }}</label>
+      <div class="col-9">
         <input
           type="text"
-          class="form-control"
+          class="form-control-plaintext"
           name="name"
           id="name"
           value="{{ defaultContentName }}"
@@ -56,11 +58,11 @@
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
-      <div class="col-sm-9">
+      <label class="col-sm-3 col-form-label" for="email">{{ msgNewContentMail }}</label>
+      <div class="col-9">
         <input
           type="email"
-          class="form-control"
+          class="form-control-plaintext"
           name="email"
           id="email"
           value="{{ defaultContentMail }}"
@@ -71,8 +73,8 @@
     </div>
 
     <div class="row mb-2">
-      <label class="col-sm-3 form-control-label" for="question">{{ msgMessage }}</label>
-      <div class="col-sm-9">
+      <label class="col-sm-3 col-form-label" for="question">{{ 'msgMessage' | translate }}</label>
+      <div class="col-9">
         <textarea class="form-control" cols="37" rows="5" name="question" id="question" required></textarea>
       </div>
     </div>
@@ -85,7 +87,7 @@
           id="pmf-submit-request-removal"
           data-pmf-form="submit-request-removal"
         >
-          {{ msgS2FButton }}
+          {{ 'msgNewContentSubmit' | translate }}
         </button>
       </div>
     </div>

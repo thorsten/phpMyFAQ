@@ -60,7 +60,7 @@ class Tags
             $oLink->itemTitle = $title;
             $oLink->text = $title;
             $oLink->tooltip = $title;
-            $oLink->class = 'badge bg-primary text-decoration-none';
+            $oLink->class = 'badge text-bg-primary text-decoration-none';
             $tagListing .= $oLink->toHtmlAnchor() . ' ';
         }
 

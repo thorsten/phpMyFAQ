@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -38,25 +37,14 @@ $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'pageHeader' => Translation::get('msgUserRemoval'),
-    'msgContact' => Translation::get('msgContact'),
-    'msgUserRemovalText' => Translation::get('msgUserRemovalText'),
-    'msgContactRemove' => Translation::get('msgContactRemove'),
-    'msgContactPrivacyNote' => Translation::get('msgContactPrivacyNote'),
-    'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
-    'privacyURL' => Strings::htmlentities($faqConfig->get('main.privacyURL')),
+    'privacyURL' => $faqConfig->get('main.privacyURL'),
     'msgNewContentName' => Translation::get('msgNewContentName'),
     'msgNewContentMail' => Translation::get('msgNewContentMail'),
-    'msgUsername' => Translation::get('msgUsername'),
     'csrf' => Token::getInstance()->getTokenInput('request-removal'),
     'lang' => $Language->getLanguage(),
     'userId' => $user->getUserId(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' =>
-        ($user->getUserId() > 0) ? Strings::htmlentities($user->getUserData('display_name')) : '',
-    'defaultLoginName' => ($user->getUserId() > 0) ? Strings::htmlentities($user->getLogin()) : '',
-    'msgMessage' => Translation::get('msgMessage'),
-    'msgS2FButton' => Translation::get('msgS2FButton')
+    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+    'defaultLoginName' => ($user->getUserId() > 0) ? $user->getLogin() : '',
 ];
-
 return $templateVars;

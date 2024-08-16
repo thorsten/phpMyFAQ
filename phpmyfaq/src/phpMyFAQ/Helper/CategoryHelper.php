@@ -149,7 +149,7 @@ class CategoryHelper extends Helper
                 }
 
                 $html .= sprintf(
-                    '<li data-category-id="%d">%s <span class="badge bg-primary">%s</span><br><small>%s</small>',
+                    '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span><br><small>%s</small>',
                     $node['id'],
                     $name,
                     $this->plurals->getMsg('plmsgEntries', $number),
