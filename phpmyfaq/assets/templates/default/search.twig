@@ -110,7 +110,7 @@
         <div class="clearfix">
           {% for popular in mostPopularSearches %}
             <a class="btn btn-primary m-1" href="?search={{ popular['searchterm'] }}&submit=Search&action=search">
-              {{ popular['searchterm'] }} <span class="badge bg-secondary">{{ popular['number'] }}x</span>
+              {{ popular['searchterm'] }} <span class="badge bg-info">{{ popular['number'] }}x</span>
             </a>
           {% endfor %}
         </div>

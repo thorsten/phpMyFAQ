@@ -106,7 +106,7 @@ class TagsHelper extends Helper
     {
         return sprintf(
             '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s %s ' .
-            '<span class="badge bg-secondary">%d</span></a>',
+            '<span class="badge bg-info">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="bi bi-plus-square"></i> ',
             Strings::htmlentities($tagName),

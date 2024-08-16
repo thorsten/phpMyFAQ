@@ -64,7 +64,7 @@ class TagsHelperTest extends TestCase
 
         $expectedOutput = '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=2,3,1">' .
             '<i aria-hidden="true" class="bi bi-plus-square"></i>  tag1 ' .
-            '<span class="badge bg-secondary">10</span></a>';
+            '<span class="badge bg-info">10</span></a>';
 
         $result = $this->tagsHelper->renderRelatedTag($tagId, $tagName, $relevance);
         $this->assertEquals($expectedOutput, $result);
