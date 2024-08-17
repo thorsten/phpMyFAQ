@@ -131,25 +131,25 @@
         {% if renderTags is defined %}
           <div class="p-4 mb-3 bg-light-subtle border rounded">
             <h4 class="fst-italic">{{ renderTagsHeader }}</h4>
-            <div>{{ renderTags|raw }}</div>
+            <div>{{ renderTags | raw }}</div>
           </div>
         {% endif %}
         {% if renderRelatedArticles is defined %}
           <div class="p-4 mb-3 bg-light-subtle border rounded">
             <h4 class="fst-italic">{{ renderRelatedArticlesHeader }}</h4>
-            {{ renderRelatedArticles|raw }}
+            {{ renderRelatedArticles | raw }}
           </div>
         {% endif %}
         {% if renderRelatedCategories is defined %}
           <div class="p-4 mb-3 bg-light-subtle border rounded">
             <h4 class="fst-italic">{{ renderRelatedCategoriesHeader }}</h4>
-            {{ renderRelatedCategories|raw }}
+            {{ renderRelatedCategories | raw }}
           </div>
         {% endif %}
         {% if notes is defined %}
           <div class="p-4 mb-3 bg-light-subtle border rounded">
             <h4>{{ notesHeader }}</h4>
-            <p>{{ notes|raw }}</p>
+            <p>{{ notes | raw }}</p>
           </div>
         {% endif %}
       </div>

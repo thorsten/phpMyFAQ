@@ -60,7 +60,7 @@ class Tags
             $oLink->itemTitle = $title;
             $oLink->text = $title;
             $oLink->tooltip = $title;
-            $oLink->class = 'badge text-bg-primary text-decoration-none';
+            $oLink->class = 'btn btn-outline-primary';
             $tagListing .= $oLink->toHtmlAnchor() . ' ';
         }
 
@@ -371,7 +371,7 @@ class Tags
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
-            $oLink->class = 'btn btn-secondary mr-1 my-1';
+            $oLink->class = 'btn btn-outline-light mr-1 my-1';
             $html .= $oLink->toHtmlAnchor();
             $html .= (count($tags) == $i ? '' : ' ');
         }
@@ -465,8 +465,8 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $html .= sprintf(
-                '<a class="btn btn-secondary m-1" href="?action=search&tagging_id=%d">%s ' .
-                '<span class="badge text-bg-primary">%d</span></a>',
+                '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%d">%s ' .
+                '<span class="badge text-bg-secondary">%d</span></a>',
                 $tagId,
                 Strings::htmlentities($tagName),
                 $tagFreq

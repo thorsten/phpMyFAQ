@@ -93,6 +93,7 @@ if (
     $template = $twig->loadTemplate('./admin/content/faq.editor.twig');
 
     $selectedCategory = '';
+    $queryString = '';
     $categories = [];
     $faqData = [
         'id' => 0,
