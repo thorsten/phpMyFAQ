@@ -2,17 +2,17 @@
 
 {% block content %}
 <section class="col-12">
-  <h1>{{ pageHeader }}</h1>
+  <h1>{{ 'msgSitemap' | translate }} » {{ pageHeader }}</h1>
 
   <div class="navbar navbar-expand-lg">
     <ul class="nav">
       {% for letter in letters %}
-      <a class="nav-link" href="{{ letter.url }}">{{ letter.letter }}</a>
+      <a class="btn btn-outline-primary me-1" href="{{ letter.url }}">{{ letter.letter }}</a>
       {% endfor %}
     </ul>
   </div>
 
-  <ul>
+  <ul class="my-4">
     {% for faq in faqs %}
     <li>
       <a title="{{ faq.question }}" href="{{ faq.url }}">{{ faq.question }}</a>

@@ -8,25 +8,45 @@
   {% for faq in faqOverview %}
 
     {% if (faq['category_id'] != null and faq['category_id'] != lastCategory) %}
-      <h3>
-        {{ faq['category_id'] | categoryName }}
-      </h3>
+      <header class="d-flex align-items-center justify-content-between my-4">
+        <h4>
+          <span class="badge bg-info shadow-info fs-base fw-normal">{{ faq['category_id'] | categoryName }}</span>
+        </h4>
+        <a href="#" class="btn btn-outline-primary ms-4">
+          {{ 'msgGoToCategory' | translate }}
+          <i class="bx bx-right-arrow-alt ms-1 fs-lg"></i>
+        </a>
+      </header>
     {% endif %}
 
-    <h4>
-      {{ faq['title'] }}
-    </h4>
-    <article>
-      {{ faq['content'] | raw }}
+    <article class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <a href="#" class="btn btn-icon btn-secondary btn-sm rounded-circle position-absolute top-0 end-0 zindex-5 me-3 mt-3"
+             data-bs-toggle="tooltip" data-bs-placement="left" aria-label="{{ 'msgAddBookmark' | translate }}"
+             data-bs-original-title="{{ 'msgAddBookmark' | translate }}">
+            <i class="bi bi-bookmark"></i>
+          </a>
+        </div>
+        <h3 class="h4">
+          {{ faq['title'] }}
+        </h3>
+        <p class="mb-4">
+          {{ faq['content'] | raw }}
+        </p>
+        <div class="d-flex align-items-center text-muted">
+          <div class="fs-sm border-end pe-3 me-3">
+            <i class="bi bi-calendar-date"></i>
+            {{ faq['updated'] | date('Y-m-d H:i') }}
+          </div>
+          <div class="d-flex align-items-center me-3">
+            <i class="bi bi-person fs-lg me-1"></i>
+            <span class="fs-sm">{{ faq['author'] }}</span>
+          </div>
+        </div>
+      </div>
     </article>
 
-    <p>
-      {{ msgAuthor }}: {{ faq['author'] }}
-      <br>
-      {{ msgLastUpdateArticle }} {{ faq['updated'] | date('Y-m-d H:i') }}
-    </p>
-
-    <hr>
     {% set lastCategory = faq['category_id'] %}
   {% endfor %}
 </section>

@@ -115,56 +115,63 @@
   </div>
 </section>
 
-<footer class="pt-4 text-bg-pmf-nav">
-  <div class="container">
-    {% if not isMaintenanceMode %}
-    <div class="row">
-      <div class="col-md-8 mb-md-0 mb-4">
-        <h5 class="footer-heading">{{ msgTagCloudHeader }}</h5>
-        <p class="card-text pmf-tag-cloud">{{ renderedTags | raw }}</p>
-      </div>
-      <div class="col-md-4 mb-md-0 mb-4">
-        <h5 class="footer-heading">{{ languageBox }}</h5>
-        <form accept-charset="utf-8" action="{{ renderUri }}" method="post" class="subscribe-form">
+<footer class="footer text-bg-pmf-footer pt-5 pb-4 pb-lg-5" data-bs-theme="dark">
+  <div class="container pt-lg-4">
+    <div class="row pb-2">
+      <div class="col-lg-4 col-md-6">
+        {% if not isMaintenanceMode %}
+        <label class="form-label" for="pmf-footer-language-switcher">{{ languageBox }}</label>
+        <form accept-charset="utf-8" action="{{ renderUri }}" method="post" id="pmf-footer-language-switcher">
           <div class="form-group d-flex">
             {{ switchLanguages | raw }}
             <input name="action" type="hidden" value="">
           </div>
         </form>
+        {% endif %}
+      </div>
+      <div class="col-xl-6 col-lg-7 col-md-5 offset-xl-2 offset-md-1 pt-4 pt-md-1 pt-lg-0">
+        <div id="footer-links" class="row">
+          <div class="col-lg-4">
+            <ul class="nav flex-column pb-lg-1 mb-lg-3">
+              {% if not isMaintenanceMode %}
+                {% for item in footerNavigation %}
+                  <li class="nav-item">
+                    <a href="{{ item['link'] }}" class="nav-link d-inline-block px-0 pt-1 pb-2 {{ item['active'] }}">
+                      {{ item['name'] }}
+                    </a>
+                  </li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+          <div class="col-lg-4">
+            <ul class="nav flex-column pb-lg-1 mb-lg-3">
+              {% if not isMaintenanceMode %}
+                {% if isPrivacyLinkEnabled %}
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="{{ urlPrivacyLink }}">
+                      {{ msgPrivacyNote }}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if isCookieConsentEnabled %}
+                  <li class="nav-item">
+                    <a id="showCookieConsent" class="nav-link d-inline-block px-0 pt-1 pb-2" href="#">
+                      {{ cookiePreferences }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  {% endif %}
-  <div class="w-100">
-    <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p class="col-md-6 mb-0 text-white">
-          powered with ❤️ and ☕️ by
-          <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a>
-          {{ version }}
-        </p>
-
-        <ul class="nav col-md-6 justify-content-end w-100">
-          {% if not isMaintenanceMode %}
-            {% for item in footerNavigation %}
-              <li class="nav-item">
-                <a class="pmf-nav-link-footer {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
-              </li>
-            {% endfor %}
-            {% if isPrivacyLinkEnabled %}
-            <li class="nav-item">
-              <a class="pmf-nav-link-footer" target="_blank" href="{{ urlPrivacyLink }}">{{ msgPrivacyNote }}</a>
-            </li>
-            {% endif %}
-            {% if isCookieConsentEnabled %}
-            <li class="nav-item">
-              <a id="showCookieConsent" class="pmf-nav-link-footer" href="#">{{ cookiePreferences }}</a>
-            </li>
-            {% endif %}
-          {% endif %}
-        </ul>
-      </div>
-    </div>
+    <p class="nav d-block fs-xs text-center text-md-start pb-2 pb-lg-0 mb-0">
+      <span class="text-light opacity-75">© All rights reserved. Powered with ❤️ and ☕️ by </span>
+      <a class="nav-link d-inline-block p-0" href="https://www.phpmyfaq.de/" target="_blank" rel="noopener">phpMyFAQ</a>
+      <span class="text-light opacity-75">{{ version }}</span>
+    </p>
   </div>
 </footer>
 

@@ -531,8 +531,6 @@ $templateVars = [
     'msgSubmit' => Translation::get('msgNewContentSubmit'),
     'loginPageMessage' => Translation::get('loginPageMessage'),
     'msgAdvancedSearch' => Translation::get('msgAdvancedSearch'),
-    'msgTagCloudHeader' => Translation::get('msg_tags'),
-    'renderedTags' => $oTag->renderTagCloud(),
     'currentYear' => date('Y', time()),
     'cookieConsentEnabled' =>  $faqConfig->get('layout.enableCookieConsent'),
 ];
