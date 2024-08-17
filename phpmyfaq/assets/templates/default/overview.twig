@@ -9,12 +9,12 @@
 
     {% if (faq['category_id'] != null and faq['category_id'] != lastCategory) %}
       <header class="d-flex align-items-center justify-content-between my-4">
-        <h4>
+        <h3>
           <span class="badge bg-info shadow-info fs-base fw-normal">{{ faq['category_id'] | categoryName }}</span>
-        </h4>
+        </h3>
         <a href="#" class="btn btn-outline-primary ms-4">
           {{ 'msgGoToCategory' | translate }}
-          <i class="bx bx-right-arrow-alt ms-1 fs-lg"></i>
+          <i class="bi bi-arrow-right ms-1 fs-lg"></i>
         </a>
       </header>
     {% endif %}
@@ -28,9 +28,9 @@
             <i class="bi bi-bookmark"></i>
           </a>
         </div>
-        <h3 class="h4">
+        <h4 class="h4">
           {{ faq['title'] }}
-        </h3>
+        </h4>
         <p class="mb-4">
           {{ faq['content'] | raw }}
         </p>
