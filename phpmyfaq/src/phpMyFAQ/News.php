@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Entity\NewsMessage;
+use stdClass;
 
 /**
  * Class News
@@ -35,58 +36,40 @@ readonly class News
     }
 
     /**
-     * Function for generating the HTML5 code for the current news.
-     *
-     * @todo move method to a helper class
+     * Returns the current news as an array.
      *
      * @param bool $showArchive Show archived news
      * @param bool $active Show active news
+     * @return stdClass[]
      * @throws Exception
      */
-    public function getAll(bool $showArchive = false, bool $active = true): string
+    public function getAll(bool $showArchive = false, bool $active = true): array
     {
-        $output = '';
-        $news = $this->getLatestData($showArchive, $active);
+        $output = [];
+        $newsData = $this->getLatestData($showArchive, $active);
         $date = new Date($this->configuration);
 
-        foreach ($news as $new) {
+        foreach ($newsData as $news) {
+            $entry = new stdClass();
             $url = sprintf(
-                '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
+                '%sindex.php?action=news&newsid=%d&newslang=%s',
                 $this->configuration->getDefaultUrl(),
-                $new['id'],
-                $new['lang']
+                $news['id'],
+                $news['lang']
             );
 
-            $oLink = new Link($url, $this->configuration);
+            $link = new Link($url, $this->configuration);
+            $link->itemTitle = $news['header'];
 
-            if (isset($new['header'])) {
-                $oLink->itemTitle = Strings::htmlentities($new['header']);
-            }
+            $entry->url = $link->toString();
+            $entry->header = $news['header'];
+            $entry->content = strip_tags((string) $news['content']);
+            $entry->date =  $date->format($news['date']);
 
-            $output .= sprintf(
-                '<h5%s><a id="news_%d" href="%s">%s</a> <i aria-hidden="true" class="bi bi-caret-right"></i></h6>',
-                ' class="mt-3 pmf-news-heading"',
-                $new['id'],
-                Strings::htmlentities($oLink->toString()),
-                Strings::htmlentities($new['header'])
-            );
-
-            $output .= strip_tags((string) $new['content']);
-
-            if (strlen((string) $new['link']) > 1) {
-                $output .= sprintf(
-                    '<br>%s <a href="%s" target="_%s">%s</a>',
-                    Translation::get('msgInfo'),
-                    Strings::htmlentities($new['link']),
-                    $new['target'],
-                    Strings::htmlentities($new['linkTitle'])
-                );
-            }
-
-            $output .= sprintf('<small class="text-muted ms-1">%s</small>', $date->format($new['date']));
+            $output[] = $entry;
         }
 
-        return ('' == $output) ? Translation::get('msgNoNews') : $output;
+        return $output;
     }
 
     /**

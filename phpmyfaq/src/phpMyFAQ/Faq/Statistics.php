@@ -152,6 +152,8 @@ class Statistics
 
     /**
      * This function generates the list with the most trending FAQs.
+     *
+     * @return stdClass[]
      */
     public function getTrending(): array
     {

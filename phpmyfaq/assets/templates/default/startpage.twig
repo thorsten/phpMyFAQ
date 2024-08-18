@@ -168,9 +168,33 @@
       <div class="card-body">
         <h5 class="card-title text-center mb-4">
           <i class="bi bi-newspaper"></i>
-          {{ writeNewsHeader }}
+          {{ msgNewsHeader }}
         </h5>
-        <p class="card-text">{{ writeNews | raw }}</p>
+        <ol class="list-unstyled">
+          {% if newsList is not empty %}
+            {% for news in newsList %}
+              <li class="border-bottom pb-2 mb-2">
+                <h4 class="h6 mb-2">
+                  <a class="news-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ news.header }}" href="{{ news.url }}">
+                    {{ news.header }}
+                  </a>
+                </h4>
+                <p>
+                  {{ news.content }}
+                </p>
+                <div class="d-flex align-items-center text-muted">
+                  <small class="pe-2 me-2">
+                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
+                    {{ news.date }}
+                  </small>
+                </div>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>{{ errorMsgTrendingFaqs }}</li>
+          {% endif %}
+        </ol>
       </div>
     </div>
   </div>
