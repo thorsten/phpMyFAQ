@@ -85,7 +85,7 @@ if (
 ) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
     $groupMembers = $_POST['group_members'] ?? [];
 
     if ($groupId == 0) {
@@ -115,7 +115,7 @@ if (
 ) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
     if ($groupId == 0) {
         $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
@@ -144,7 +144,7 @@ if (
 ) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
     if ($groupId == 0) {
         $message .= sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_user_error_noId'));
     } else {
@@ -204,7 +204,7 @@ if (
 if ($groupAction == 'delete' && $user->perm->hasPermission($user->getUserId(), PermissionType::GROUP_DELETE->value)) {
     $message = '';
     $user = new User($faqConfig);
-    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
     $csrfOkay = true;
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
     if (!Token::getInstance()->verifyToken('delete-group', $csrfToken)) {
