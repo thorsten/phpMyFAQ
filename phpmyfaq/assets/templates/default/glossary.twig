@@ -2,15 +2,19 @@
 
 {% block content %}
 <section class="col-12">
-  <h1>{{ pageHeader }}</h1>
-  <article>
+  <h1 class="mb-4 border-bottom">{{ pageHeader }}</h1>
+  <div class="row mb-4">
     {% for glossary in glossaryItems %}
-    <dl>
-      <dd><strong>{{ glossary['item'] }}</strong></dd>
-      <dd>{{ glossary['definition'] }}</dd>
-    </dl>
+    <div class="col-sm-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ glossary['item'] }}</h5>
+          <p class="card-text">{{ glossary['definition'] }}</p>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-  </article>
+  </div>
 
   <div class="pagination justify-content-center">
     <div>

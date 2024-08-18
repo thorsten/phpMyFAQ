@@ -38,7 +38,7 @@ $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 1);
 $glossary = new Glossary($faqConfig);
 $glossaryItems = $glossary->fetchAll();
 $numItems = is_countable($glossaryItems) ? count($glossaryItems) : 0;
-$itemsPerPage = 10;
+$itemsPerPage = 8;
 
 $baseUrl = sprintf(
     '%sindex.php?action=glossary&amp;page=%d',
