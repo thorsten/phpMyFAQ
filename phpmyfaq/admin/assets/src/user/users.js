@@ -120,7 +120,8 @@ export const handleUsers = async () => {
     await updateUser(currentUserId.value);
   }
 
-  const toggleUserRights = document.getElementById('checkAll');
+  const toggleCheckAll = document.getElementById('checkAll');
+  const toggleUncheckAll = document.getElementById('uncheckAll');
   const modal = document.getElementById('addUserModal');
   const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
   const addUser = document.getElementById('pmf-add-user-action');
@@ -158,13 +159,15 @@ export const handleUsers = async () => {
     });
   }
 
-  if (toggleUserRights) {
-    toggleUserRights.addEventListener('click', (event) => {
-      event.preventDefault();
-
-      const checkboxes = document.querySelectorAll('.permission');
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = !checkbox.checked;
+  if (toggleCheckAll && toggleUncheckAll) {
+    toggleCheckAll.addEventListener('click', () => {
+      document.querySelectorAll('.permission').forEach((checkbox) => {
+        checkbox.checked = true;
+      });
+    });
+    toggleUncheckAll.addEventListener('click', () => {
+      document.querySelectorAll('.permission').forEach((checkbox) => {
+        checkbox.checked = false;
       });
     });
   }
