@@ -21,7 +21,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,13 +107,13 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $categoryImage = $faqConfig->getDefaultUrl() . 'content/user/images/' . $categoryData->getImage();
     }
 
-    $categoryHeader = Translation::get('msgEntriesIn') . Strings::htmlentities($categoryData->getName());
+    $categoryHeader = Translation::get('msgEntriesIn') . $categoryData->getName();
 
     // Twig template variables
     $templateVars = [
         ... $templateVars,
         'categoryFaqsHeader' => $categoryData->getName(),
-        'categoryDescription' => Strings::htmlspecialchars($categoryData->getDescription() ?? ''),
+        'categoryDescription' => $categoryData->getDescription() ?? '',
         'categorySubsHeader' => Translation::get('msgSubCategories'),
         'categoryImage' => $categoryImage ?? null,
         'categoryContent' => $records,

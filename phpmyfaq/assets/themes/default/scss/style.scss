@@ -35,6 +35,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 // Layouts
 @import 'layout/autocomplete';
+@import 'layout/category';
 @import 'layout/faq';
 @import 'layout/login';
 @import 'layout/navigation';
