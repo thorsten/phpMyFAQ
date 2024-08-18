@@ -33,18 +33,20 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-exclamation-square"></i>
           {{ stickyRecordsHeader }}
         </h5>
         <ul class="list-unstyled">
           {% for stickyRecord in stickyRecordsList %}
-          <li class="mb-1">
-            <a class="sticky-faqs" title="{{ stickyRecord['question'] }}" href="{{ stickyRecord['url'] }}"
-               data-bs-toggle="tooltip" data-bs-placement="top">
-              {{ stickyRecord['question'] }}
-            </a>
-          </li>
+            <li class="border-bottom pb-2 mb-2">
+              <h4 class="h6 mb-2">
+                <a class="sticky-faqs" data-bs-toggle="tooltip" data-bs-placement="top"
+                   title="{{ stickyRecord['question'] }}" href="{{ stickyRecord['url'] }}">
+                  {{ stickyRecord['question'] }}
+                </a>
+              </h4>
+            </li>
           {% endfor %}
         </ul>
       </div>
@@ -55,19 +57,26 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-trophy"></i>
           {{ writeTopTenHeader }}
         </h5>
         <ol class="list-unstyled">
           {% if topRecordsList is not empty %}
             {% for topten in topRecordsList %}
-              <li class="mb-1">
-                <a class="topten" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ topten.preview }}"
-                   href="{{ topten.url }}">
-                  {{ topten.title }}
-                </a>
-                <small>({{ topten.visits }}{{ topten.voted }})</small>
+              <li class="border-bottom pb-2 mb-2">
+                <h4 class="h6 mb-2">
+                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ topten.preview }}" href="{{ topten.url }}">
+                    {{ topten.title }}
+                  </a>
+                </h4>
+                <div class="d-flex align-items-center text-muted">
+                  <small class="pe-2 me-2">
+                    <i aria-hidden="true" class="bi bi-eye"></i>
+                    {{ topten.visits }}
+                  </small>
+                </div>
               </li>
             {% endfor %}
           {% else %}
@@ -85,18 +94,27 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-lightning"></i>
           {{ writeNewestHeader }}
         </h5>
         <ol class="list-unstyled">
           {% if latestRecordsList is not empty %}
             {% for latest in latestRecordsList %}
-            <li class="mb-1">
-              <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ latest.preview }}"
-                href="{{ latest.url }}">{{ latest.title }}</a>
-              <small>({{ latest.date }})</small>
-            </li>
+              <li class="border-bottom pb-2 mb-2">
+                <h4 class="h6 mb-2">
+                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ latest.preview }}" href="{{ latest.url }}">
+                    {{ latest.title }}
+                  </a>
+                </h4>
+                <div class="d-flex align-items-center text-muted">
+                  <small class="pe-2 me-2">
+                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
+                    {{ latest.date }}
+                  </small>
+                </div>
+              </li>
             {% endfor %}
           {% else %}
           <li>{{ errorMsgLatest }}</li>
@@ -110,19 +128,31 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-graph-up-arrow"></i>
           {{ msgTrendingFAQs }}
         </h5>
         <ol class="list-unstyled">
           {% if trendingRecordsList is not empty %}
             {% for trending in trendingRecordsList %}
-            <li class="mb-1">
-              <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ trending.preview }}"
-                 href="{{ trending.url }}">{{ trending.title }}</a>
-              <br>
-              <small>({{ trending.visits }}, {{ trending.date }})</small>
-            </li>
+              <li class="border-bottom pb-2 mb-2">
+                <h4 class="h6 mb-2">
+                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                     title="{{ trending.preview }}" href="{{ trending.url }}">
+                    {{ trending.title }}
+                  </a>
+                </h4>
+                <div class="d-flex align-items-center text-muted">
+                  <small class="pe-2 me-2 border-end">
+                    <i aria-hidden="true" class="bi bi-eye"></i>
+                    {{ trending.visits }}
+                  </small>
+                  <small class="pe-2 me-2">
+                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
+                    {{ trending.date }}
+                  </small>
+                </div>
+              </li>
             {% endfor %}
           {% else %}
           <li>{{ errorMsgTrendingFaqs }}</li>
@@ -136,7 +166,7 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-newspaper"></i>
           {{ writeNewsHeader }}
         </h5>
@@ -149,7 +179,7 @@
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title text-center">
+        <h5 class="card-title text-center mb-4">
           <i class="bi bi-tags"></i>
           {{ msgTags }}
         </h5>
@@ -157,6 +187,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 {% endblock %}
