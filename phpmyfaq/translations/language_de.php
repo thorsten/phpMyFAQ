@@ -243,7 +243,6 @@ $PMF_LANG['ad_entry_del_2'] = "des Benutzers";
 $PMF_LANG['ad_entry_del_3'] = "gelöscht werden soll?";
 $PMF_LANG['ad_entry_delsuc'] = "Der FAQ-Eintrag erfolgreich gelöscht.";
 $PMF_LANG['ad_entry_delfail'] = "Die FAQ-Eintrag wurde nicht gelöscht!";
-$PMF_LANG['ad_entry_back'] = "Zurück";
 
 // Newsverwaltung
 $PMF_LANG['ad_news_header'] = "Überschrift";

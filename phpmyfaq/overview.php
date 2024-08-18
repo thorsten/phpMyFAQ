@@ -17,6 +17,8 @@
 
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Template\CategoryNameTwigExtension;
+use phpMyFAQ\Template\CreateLinkTwigExtension;
+use phpMyFAQ\Template\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
@@ -34,6 +36,8 @@ $faq->setGroups($currentGroups);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twig->addExtension(new CategoryNameTwigExtension());
+$twig->addExtension(new CreateLinkTwigExtension());
+$twig->addExtension(new FaqTwigExtension());
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [

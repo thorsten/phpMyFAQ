@@ -12,7 +12,7 @@
         <h3>
           <span class="badge bg-info shadow-info fs-base fw-normal">{{ faq['category_id'] | categoryName }}</span>
         </h3>
-        <a href="#" class="btn btn-outline-primary ms-4">
+        <a href="{{ categoryLink(faq['category_id']) }}" class="btn btn-outline-primary ms-4">
           {{ 'msgGoToCategory' | translate }}
           <i class="bi bi-arrow-right ms-1 fs-lg"></i>
         </a>
@@ -22,10 +22,11 @@
     <article class="card mb-4">
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
-          <a href="#" class="btn btn-icon btn-secondary btn-sm rounded-circle position-absolute top-0 end-0 zindex-5 me-3 mt-3"
-             data-bs-toggle="tooltip" data-bs-placement="left" aria-label="{{ 'msgAddBookmark' | translate }}"
-             data-bs-original-title="{{ 'msgAddBookmark' | translate }}">
-            <i class="bi bi-bookmark"></i>
+          <a href="{{ faqLink(faq['category_id'], faq['id'], faq['lang']) }}"
+             class="btn btn-icon btn-secondary btn-sm rounded-circle position-absolute top-0 end-0 zindex-5 me-3 mt-3"
+             data-bs-toggle="tooltip" data-bs-placement="left" aria-label="{{ faq['id'] | faqQuestion }}"
+             data-bs-original-title="{{ faq['id'] | faqQuestion }}">
+            <i class="bi bi-link"></i>
           </a>
         </div>
         <h4 class="h4">

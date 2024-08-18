@@ -236,7 +236,7 @@ $PMF_LANG["msgDelete"] = "delete";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure ";
 $PMF_LANG["ad_entry_delcom_2"] = "'s comment should be deleted?";
 $PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
-$PMF_LANG["ad_entry_back"] = "Back to the article";
+$PMF_LANG["ad_entry_back"] = "Back to the FAQ";
 $PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
 $PMF_LANG["ad_entry_savedsuc"] = "The changes were saved <strong>successfully</strong>.";
 $PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occurred.";
@@ -245,7 +245,6 @@ $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
 $PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
 $PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
-$PMF_LANG["ad_entry_back"] = "Back";
 
 // News management
 $PMF_LANG["ad_news_header"] = "Article header";

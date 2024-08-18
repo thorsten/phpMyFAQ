@@ -261,7 +261,7 @@ You can now make a pull request on the phpMyFAQ GitHub repository.
 phpMyFAQ v4 and later uses the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
 
-### 6.6.1 Category Name Twig Extensions
+### Category Name Twig Extension
 
 The category name extension is used to get the name of a category by its ID.
 
@@ -269,7 +269,19 @@ Example:
 
     {{ categoryId | categoryName }}
 
-### 6.6.2 FAQ question Twig Extensions
+### Create Link Twig Extension
+
+The create link extension is used to create a link to a category or FAQ entry by its ID.
+
+Example for a category link:
+
+    {{ categoryLink(categoryId) }}
+
+Example for a FAQ entry link:
+
+    {{ faqLink(categoryId, faqId, faqLanguage) }}
+
+### FAQ question Twig Extensions
 
 The FAQ question extension is used to get the question of a FAQ entry by its ID.
 
@@ -277,7 +289,7 @@ Example:
 
     {{ faqId | faqQuestion }}
 
-### 6.6.3 Formatting bytes Twig Extensions
+### Formatting bytes Twig Extensions
 
 The format bytes extension is used to format a number of bytes to a human-readable format.
 
@@ -285,7 +297,7 @@ Example:
 
     {{ bytes | formatBytes }}
 
-### 6.6.4 Format date Twig Extensions
+### Format date Twig Extensions
 
 The format date extension is used to format a date to a human-readable format.
 
@@ -293,7 +305,7 @@ Example:
 
     {{ date | formatDate }}
 
-### 6.6.5 ISO date format Twig Extensions
+### ISO date format Twig Extensions
 
 The ISO date format extension is used to format a date to an ISO date format.
 
@@ -301,7 +313,7 @@ Example:
 
     {{ date | createIsoDate }}
 
-### 6.6.6 Language code Twig Extensions
+### Language code Twig Extensions
 
 The language code extension is used to get the language name by its language code.
 
@@ -309,7 +321,7 @@ Example:
 
     {{ languageCode | getFromLanguageCode }}
 
-### 6.6.7 Permission translation Twig Extensions
+### Permission translation Twig Extensions
 
 The permission translation extension is used to get the permission name by its permission string.
 
@@ -317,7 +329,7 @@ Example:
 
     {{ permissionString | permission }}
 
-### 6.6.8 Translation Twig Extensions
+### Translation Twig Extensions
 
 The translation extension is used to get the translation of a string.
 
@@ -325,7 +337,7 @@ Example:
 
     {{ 'string' | translate }}
 
-### 6.6.9 User name Twig Extensions
+### User name Twig Extensions
 
 The username extension is used to get the name of a user by its ID.
 

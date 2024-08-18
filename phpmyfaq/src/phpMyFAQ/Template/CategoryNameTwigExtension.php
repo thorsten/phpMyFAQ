@@ -21,9 +21,16 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class CategoryNameTwigExtension extends AbstractExtension
 {
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('categoryName', $this->getCategoryName(...)),
+        ];
+    }
     public function getFilters(): array
     {
         return [
