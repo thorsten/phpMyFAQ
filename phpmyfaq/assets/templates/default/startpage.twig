@@ -91,6 +91,7 @@
   </div>
 
   <!-- Latest FAQs -->
+  {% if latestRecordsList is not empty %}
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
@@ -99,7 +100,6 @@
           {{ writeNewestHeader }}
         </h5>
         <ol class="list-unstyled">
-          {% if latestRecordsList is not empty %}
             {% for latest in latestRecordsList %}
               <li class="border-bottom pb-2 mb-2">
                 <h4 class="h6 mb-2">
@@ -116,15 +116,14 @@
                 </div>
               </li>
             {% endfor %}
-          {% else %}
-          <li>{{ errorMsgLatest }}</li>
-          {% endif %}
         </ol>
       </div>
     </div>
   </div>
+  {% endif %}
 
   <!-- Trending FAQs -->
+  {% if trendingRecordsList is not empty %}
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
@@ -133,36 +132,34 @@
           {{ msgTrendingFAQs }}
         </h5>
         <ol class="list-unstyled">
-          {% if trendingRecordsList is not empty %}
-            {% for trending in trendingRecordsList %}
-              <li class="border-bottom pb-2 mb-2">
-                <h4 class="h6 mb-2">
-                  <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                     title="{{ trending.preview }}" href="{{ trending.url }}">
-                    {{ trending.title }}
-                  </a>
-                </h4>
-                <div class="d-flex align-items-center text-muted">
-                  <small class="pe-2 me-2 border-end">
-                    <i aria-hidden="true" class="bi bi-eye"></i>
-                    {{ trending.visits }}
-                  </small>
-                  <small class="pe-2 me-2">
-                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
-                    {{ trending.date }}
-                  </small>
-                </div>
-              </li>
-            {% endfor %}
-          {% else %}
-          <li>{{ errorMsgTrendingFaqs }}</li>
-          {% endif %}
+          {% for trending in trendingRecordsList %}
+            <li class="border-bottom pb-2 mb-2">
+              <h4 class="h6 mb-2">
+                <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                   title="{{ trending.preview }}" href="{{ trending.url }}">
+                  {{ trending.title }}
+                </a>
+              </h4>
+              <div class="d-flex align-items-center text-muted">
+                <small class="pe-2 me-2 border-end">
+                  <i aria-hidden="true" class="bi bi-eye"></i>
+                  {{ trending.visits }}
+                </small>
+                <small class="pe-2 me-2">
+                  <i aria-hidden="true" class="bi bi-calendar-date"></i>
+                  {{ trending.date }}
+                </small>
+              </div>
+            </li>
+          {% endfor %}
         </ol>
       </div>
     </div>
   </div>
+  {% endif %}
 
-  <!-- News | @todo needs refactoring -->
+  <!-- News -->
+  {% if newsList is not empty %}
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
@@ -171,35 +168,33 @@
           {{ msgNewsHeader }}
         </h5>
         <ol class="list-unstyled">
-          {% if newsList is not empty %}
-            {% for news in newsList %}
-              <li class="border-bottom pb-2 mb-2">
-                <h4 class="h6 mb-2">
-                  <a class="news-entries" data-bs-toggle="tooltip" data-bs-placement="top"
-                     title="{{ news.header }}" href="{{ news.url }}">
-                    {{ news.header }}
-                  </a>
-                </h4>
-                <p>
-                  {{ news.content }}
-                </p>
-                <div class="d-flex align-items-center text-muted">
-                  <small class="pe-2 me-2">
-                    <i aria-hidden="true" class="bi bi-calendar-date"></i>
-                    {{ news.date }}
-                  </small>
-                </div>
-              </li>
-            {% endfor %}
-          {% else %}
-            <li>{{ errorMsgTrendingFaqs }}</li>
-          {% endif %}
+          {% for news in newsList %}
+            <li class="border-bottom pb-2 mb-2">
+              <h4 class="h6 mb-2">
+                <a class="news-entries" data-bs-toggle="tooltip" data-bs-placement="top"
+                   title="{{ news.header }}" href="{{ news.url }}">
+                  {{ news.header }}
+                </a>
+              </h4>
+              <p>
+                {{ news.content }}
+              </p>
+              <div class="d-flex align-items-center text-muted">
+                <small class="pe-2 me-2">
+                  <i aria-hidden="true" class="bi bi-calendar-date"></i>
+                  {{ news.date }}
+                </small>
+              </div>
+            </li>
+          {% endfor %}
         </ol>
       </div>
     </div>
   </div>
+  {% endif %}
 
-  <!-- Tag Cloud | @todo needs refactoring -->
+  <!-- Tag Cloud -->
+  {% if tagsList is not empty %}
   <div class="col-sm-6 col-lg-4 mb-4">
     <div class="card">
       <div class="card-body">
@@ -208,17 +203,16 @@
           {{ msgTags }}
         </h5>
         <p class="card-text pmf-tag-cloud">
-          {% if tagsList is not empty %}
-            {% for tagId, tagFrequency in tagsList %}
-              <a class="btn btn-outline-primary m-1" href="?action=search&tagging_id={{ tagId }}">
-                {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
-              </a>
-            {% endfor %}
-          {% endif %}
+          {% for tagId, tagFrequency in tagsList %}
+            <a class="btn btn-outline-primary m-1" href="?action=search&tagging_id={{ tagId }}">
+              {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
+            </a>
+          {% endfor %}
         </p>
       </div>
     </div>
   </div>
+  {% endif %}
 
 </div>
 
