@@ -19,10 +19,10 @@ import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
   const collapsedCategories = document.querySelectorAll('.accordion-collapse');
-  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive');
-  const filterForNew = document.getElementById('pmf-checkbox-filter-new');
 
   if (collapsedCategories) {
+    initializeCheckboxState();
+
     collapsedCategories.forEach((category) => {
       const categoryId = category.getAttribute('data-pmf-categoryId');
       const language = category.getAttribute('data-pmf-language');
@@ -32,8 +32,8 @@ export const handleFaqOverview = async () => {
       });
 
       category.addEventListener('shown.bs.collapse', async () => {
-        const onlyInactive = filterForInactive.checked;
-        const onlyNew = filterForNew.checked;
+        const onlyInactive = getInactiveCheckboxState();
+        const onlyNew = getNewCheckboxState();
 
         const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs);
@@ -81,7 +81,7 @@ export const handleFaqOverview = async () => {
 
             for (const [languageCode, languageName] of Object.entries(translations)) {
               if (languageCode !== language) {
-                const translationLinks = document.querySelectorAll('#dropdownTranslation').forEach((link) => {
+                document.querySelectorAll('#dropdownTranslation').forEach((link) => {
                   options.push(link.innerText);
                 });
                 if (!options.includes(`→ ${regionNames.of(languageCode)}`)) {
@@ -369,4 +369,44 @@ const allFaqsAreSticky = (categoryId) => {
       mainCheckboxToggle.checked = true;
     }
   }
+};
+
+const initializeCheckboxState = () => {
+  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive');
+  const filterForNew = document.getElementById('pmf-checkbox-filter-new');
+
+  const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
+  const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
+
+  if (storedInactiveState !== null) {
+    filterForInactive.checked = JSON.parse(storedInactiveState);
+  }
+
+  if (storedNewState !== null) {
+    filterForNew.checked = JSON.parse(storedNewState);
+  }
+
+  if (filterForInactive) {
+    filterForInactive.addEventListener('change', () => {
+      localStorage.setItem('pmfCheckboxFilterInactive', filterForInactive.checked);
+    });
+  }
+
+  if (filterForNew) {
+    filterForNew.addEventListener('change', () => {
+      localStorage.setItem('pmfCheckboxFilterNew', filterForNew.checked);
+    });
+  }
+};
+
+// Getter for the inactive checkbox state
+const getInactiveCheckboxState = () => {
+  const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
+  return storedInactiveState !== null ? JSON.parse(storedInactiveState) : null;
+};
+
+// Getter for the new checkbox state
+const getNewCheckboxState = () => {
+  const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
+  return storedNewState !== null ? JSON.parse(storedNewState) : null;
 };
