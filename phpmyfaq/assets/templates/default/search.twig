@@ -89,7 +89,7 @@
         <h4 class="fst-italic">{{ msgTags }}</h4>
         <div class="clearfix">
           {% for tagId, tagFrequency in tagList %}
-            <a class="btn btn-primary m-1" href="?action=search&tagging_id={{ tagId }}">
+            <a class="btn btn-outline-primary m-1" href="?action=search&tagging_id={{ tagId }}">
               {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
             </a>
           {% endfor %}

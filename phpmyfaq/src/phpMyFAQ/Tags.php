@@ -26,17 +26,12 @@ use phpMyFAQ\Entity\Tag as Tag;
  *
  * @package phpMyFAQ
  */
-class Tags
+readonly class Tags
 {
-    /**
-     * @var array<int, string>
-     */
-    private array $recordsByTagName = [];
-
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -368,28 +363,6 @@ class Tags
         }
 
         return $records;
-    }
-
-    /**
-     * @param int $limit
-     * @return string
-     * @deprecated
-     */
-    public function renderPopularTags(int $limit = 0): string
-    {
-        $html = '';
-        foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
-            $tagName = $this->getTagNameById($tagId);
-            $html .= sprintf(
-                '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%d">%s ' .
-                '<span class="badge text-bg-secondary">%d</span></a>',
-                $tagId,
-                Strings::htmlentities($tagName),
-                $tagFreq
-            );
-        }
-
-        return $html;
     }
 
     /**

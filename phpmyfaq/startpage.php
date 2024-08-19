@@ -21,6 +21,7 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\TagNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,7 @@ $startPageCategories = $startPageCategory->getCategories();
 $param = $faqConfig->get('records.orderingPopularFaqs') == 'visits' ? 'visits' : 'voted';
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./startpage.twig');
 
 // Twig template variables
@@ -75,7 +77,7 @@ $templateVars = [
     'newsList' => $news->getAll(),
     'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faqStatistics->totalFaqs($faqLangCode)),
     'msgTags' => Translation::get('msgPopularTags'),
-    'tagList' => $oTag->renderPopularTags(12),
+    'tagsList' => $oTag->getPopularTags(12),
     'formActionUrl' => '?' . $sids . 'action=search',
     'searchBox' => Translation::get('msgSearch'),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
