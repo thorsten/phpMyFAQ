@@ -288,7 +288,6 @@ $templateVars = [
     'currentPage' => $page,
     'from' => Translation::get('msgVoteFrom'),
     'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults),
-    'msgSearchContent' => Translation::get('msgSearchContent'),
     'searchTerm' => $searchTerm,
     'searchTags' =>  ($tagSearch ? $tagHelper->renderTagList($tags) : ''),
     'msgSearchWord' => Translation::get('msgSearchWord'),

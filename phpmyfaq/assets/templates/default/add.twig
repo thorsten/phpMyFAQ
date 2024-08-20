@@ -6,7 +6,7 @@
 <div class="alert alert-danger">{{ msgFormDisabledDueToMissingCategories|raw }}</div>
 {% else %}
   {% if (id1_active == true) or (displayFullForm == true) %}
-  <h1>{{ id1_label }}</h1>
+  <h2 class="mb-4 border-bottom">{{ id1_label }}</h2>
   {% endif %}
   {% if (id2_active == true) or (displayFullForm == true) %}
   <p>{{ id2_label|raw }}</p>

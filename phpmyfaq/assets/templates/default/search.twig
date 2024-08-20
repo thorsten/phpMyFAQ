@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row g-5">
   <div class="col-md-8">
-    <h2 class="pb-4 mb-4 border-bottom">{{ pageHeader }}</h2>
+    <h2 class="mb-4 border-bottom">{{ pageHeader }}</h2>
 
     {% if isTagSearch == false %}
     <div class="jumbotron justify-content-center col-12 border rounded p-2 mb-2 bg-light-subtle" id="searchBox">
@@ -26,7 +26,7 @@
           </div>
 
           <div class="col-2">
-            <button type="submit" class="btn btn-lg btn-primary mb-2" aria-label="{{ msgSearch }}">
+            <button type="submit" class="btn btn-lg btn-primary mt-4 mb-2" aria-label="{{ msgSearch }}">
               <i class="bi bi-search"></i>
             </button>
           </div>
@@ -45,7 +45,7 @@
 
     <section>
       {% if numberOfSearchResults > 0 %}
-        <h4 class="mt-3">{{ msgSearchResults }}</h4>
+        <h4 class="my-4">{{ msgSearchResults }}</h4>
 
         {% if totalPages > 1 %}
           <p>
@@ -55,13 +55,13 @@
 
         <ul class="phpmyfaq-search-results list-unstyled">
         {% for result in searchResults %}
-          <li class="mb-2">
+          <li class="my-2">
             {{ result.renderedScore | raw }}
             <strong>{{ result.path }}</strong><br>
             <i class="bi bi-question-circle-o"></i>
             <a title="Test" href="{{ result.url }}">{{ result.question | raw }}</a>
             <br>
-            <small class="small"><strong>{{ msgSearchContent }}</strong> {{ result.answerPreview | raw }}...</small>
+            <small class="small"><i class="bi bi-chat-dots"></i> {{ result.answerPreview | raw }}...</small>
           </li>
         {% endfor %}
         </ul>

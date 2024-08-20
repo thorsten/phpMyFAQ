@@ -2,13 +2,16 @@
 
 {% block content %}
 <div class="row">
+  <h2 class="mb-4 border-bottom">{{ 'headerUserControlPanel' | translate }}</h2>
+
+
   <div class="col-4 pmf-personal-gravatar">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h5 class="h6 m-0 font-weight-bold">{{ msgGravatar }}</h5>
       </div>
       <div class="card-body">
-        <div class="text-center">{{ ucpGravatarImage|raw }}</div>
+        <div class="text-center">{{ ucpGravatarImage | raw }}</div>
         {% if ucpGravatarImage == '' %}
         <div class="alert alert-info">{{ msgGravatarNotConnected }}</div>
         {% endif %}
