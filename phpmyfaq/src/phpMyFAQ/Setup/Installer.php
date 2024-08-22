@@ -846,7 +846,7 @@ class Installer extends Setup
                 INPUT_POST,
                 'sql_sqlitefile',
                 FILTER_SANITIZE_SPECIAL_CHARS,
-                $setup['dbServer']
+                $setup['dbServer'] ?? null
             );
             if (is_null($dbSetup['dbServer'])) {
                 throw new Exception('Installation Error: Please add a SQLite database filename.');

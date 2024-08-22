@@ -102,6 +102,7 @@ class SetupController
 
     /**
      * @throws TemplateException
+     * @throws Exception
      */
     #[Route('/setup/update', name: 'public.setup.update')]
     public function update(Request $request): Response
