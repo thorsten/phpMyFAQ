@@ -52,33 +52,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   showTab(currentTab);
 
-  function showTab(n) {
+  function showTab(number) {
     const currentStep = document.getElementsByClassName('step');
 
     if (currentStep.length > 0) {
-      currentStep[n].style.display = 'block';
+      currentStep[number].style.display = 'block';
     }
 
     const prevButton = document.getElementById('prevBtn');
     const nextButton = document.getElementById('nextBtn');
 
     if (prevButton && nextButton) {
-      if (n === 0) {
+      if (number === 0) {
         prevButton.style.display = 'none';
       } else {
         prevButton.style.display = 'inline';
       }
-      if (n === currentStep.length - 1) {
+      if (number === currentStep.length - 1) {
         nextButton.innerHTML = 'Submit';
       } else {
         nextButton.innerHTML = 'Next';
       }
-      stepIndicator(n);
+      stepIndicator(number);
     }
   }
 
   const nextPrev = (n) => {
     const currentStep = document.getElementsByClassName('step');
+    const prevButton = document.getElementById('prevBtn');
+    const nextButton = document.getElementById('nextBtn');
+    const installButton = document.getElementById('installingBtn');
 
     if (n === 1 && !validateForm()) {
       return false;
@@ -87,9 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
     currentStep[currentTab].style.display = 'none';
     currentTab = currentTab + n;
     if (currentTab >= currentStep.length) {
+      prevButton.classList.add('d-none');
+      nextButton.classList.add('d-none');
+      installButton.classList.remove('d-none');
       document.getElementById('phpmyfaq-setup-form').submit();
       return false;
     }
+
     showTab(currentTab);
   };
 
