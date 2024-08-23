@@ -38,14 +38,9 @@ export const handleFaqOverview = async () => {
         const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
         await populateCategoryTable(categoryId, faqs.faqs);
         const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
-        const toggleStickyAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-sticky');
         const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
-        const toggleActiveAllFaqs = document.querySelectorAll('.pmf-admin-faqs-all-active');
         const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
         const translationDropdown = document.querySelectorAll('#dropdownAddNewTranslation');
-
-        allFaqsAreActive(categoryId);
-        allFaqsAreSticky(categoryId);
 
         deleteFaqButtons.forEach((element) => {
           element.addEventListener('click', async (event) => {
@@ -98,29 +93,6 @@ export const handleFaqOverview = async () => {
           });
         });
 
-        toggleStickyAllFaqs.forEach((element) => {
-          element.addEventListener('change', async (event) => {
-            event.preventDefault();
-
-            const categoryId = event.target.getAttribute('data-pmf-category-id');
-            const faqIds = [];
-            const token = event.target.getAttribute('data-pmf-csrf');
-
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            if (checkboxes) {
-              checkboxes.forEach((checkbox) => {
-                if (checkbox.getAttribute('data-pmf-category-id-sticky') === categoryId) {
-                  checkbox.checked = element.checked;
-                  if (checkbox.checked === true) {
-                    faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
-                  }
-                }
-              });
-              await saveStatus(categoryId, faqIds, token, event.target.checked, 'sticky');
-            }
-          });
-        });
-
         toggleStickyFaq.forEach((element) => {
           element.addEventListener('change', async (event) => {
             event.preventDefault();
@@ -130,29 +102,6 @@ export const handleFaqOverview = async () => {
             const token = event.target.getAttribute('data-pmf-csrf');
 
             await saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
-          });
-        });
-
-        toggleActiveAllFaqs.forEach((element) => {
-          element.addEventListener('change', async (event) => {
-            event.preventDefault();
-
-            const categoryId = event.target.getAttribute('data-pmf-category-id');
-            const faqIds = [];
-            const token = event.target.getAttribute('data-pmf-csrf');
-
-            const checkboxes = document.querySelectorAll('input[type=checkbox]');
-            if (checkboxes) {
-              checkboxes.forEach((checkbox) => {
-                if (checkbox.getAttribute('data-pmf-category-id-active') === categoryId) {
-                  checkbox.checked = element.checked;
-                  if (checkbox.checked === true) {
-                    faqIds.push(checkbox.getAttribute('data-pmf-faq-id'));
-                  }
-                }
-              });
-              await saveStatus(categoryId, faqIds, token, event.target.checked, 'active');
-            }
           });
         });
 
@@ -347,28 +296,6 @@ const populateCategoryTable = async (catgoryId, faqs) => {
 const clearCategoryTable = (categoryId) => {
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`);
   tableBody.innerHTML = '';
-};
-
-const allFaqsAreActive = (categoryId) => {
-  const checkboxes = document.querySelectorAll('.pmf-admin-active-faq');
-  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
-  if (allChecked) {
-    const mainCheckboxToggle = document.getElementById(`active_category_block_${categoryId}`);
-    if (mainCheckboxToggle) {
-      mainCheckboxToggle.checked = true;
-    }
-  }
-};
-
-const allFaqsAreSticky = (categoryId) => {
-  const checkboxes = document.querySelectorAll('.pmf-admin-sticky-faq');
-  const allChecked = Array.from(checkboxes).every((checkbox) => checkbox.checked);
-  if (allChecked) {
-    const mainCheckboxToggle = document.getElementById(`sticky_category_block_${categoryId}`);
-    if (mainCheckboxToggle) {
-      mainCheckboxToggle.checked = true;
-    }
-  }
 };
 
 const initializeCheckboxState = () => {

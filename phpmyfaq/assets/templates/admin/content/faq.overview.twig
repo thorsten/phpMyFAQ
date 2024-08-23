@@ -71,24 +71,10 @@
               {{ msgDate }}
             </th>
             <th class="align-middle">
-              <div class="form-check">
-                <input class="form-check-input pmf-admin-faqs-all-sticky" type="checkbox" value=""
-                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
-                       id="sticky_category_block_{{ category.id }}">
-                <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
-                  {{ msgSticky }}
-                </label>
-              </div>
+              {{ msgSticky }}
             </th>
             <th class="align-middle">
-              <div class="form-check">
-                <input class="form-check-input pmf-admin-faqs-all-active" type="checkbox" value=""
-                       data-pmf-category-id="{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}"
-                       id="active_category_block_{{ category.id }}">
-                <label class="form-check-label" for="sticky_category_block_{{ category.id }}">
-                  {{ msgActive }}
-                </label>
-              </div>
+              {{ msgActive }}
             </th>
             <th colspan="4" class="align-middle">
               Actions
