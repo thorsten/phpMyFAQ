@@ -36,12 +36,24 @@
             </label>
           </td>
           <td>
-            <a href="mailto:{{ comment.email }}">{{ comment.username }}</a> |
-            {{ comment.date | format_datetime(locale=currentLocale) }} |
-            <a href="../?action=faq&cat={{ comment.categoryId }}&id={{ comment.recordId }}&artlang={{ currentLocale }}">
-              {{ comment.recordId | faqQuestion | raw }}
-            </a>
-            <br>
+            <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
+              <div class="border-end pe-3 me-3 mb-2">
+                <i aria-hidden="true" class="bi bi-person"></i>
+                <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
+              </div>
+              <div class="d-flex mb-2">
+                <div class="d-flex border-end align-items-center pe-3 me-3">
+                  <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
+                  {{ comment.date | format_datetime(locale=currentLocale) }}
+                </div>
+                <div class="d-flex align-items-center me-3">
+                  <i aria-hidden="true" class="bi bi-chat-dots me-1"></i>
+                  <a href="../?action=faq&cat={{ comment.categoryId }}&id={{ comment.recordId }}&artlang={{ currentLocale }}">
+                    {{ comment.recordId | faqQuestion | raw }}
+                  </a>
+                </div>
+              </div>
+            </div>
             {{ comment.comment }}
           </td>
         </tr>
@@ -69,12 +81,23 @@
             </label>
           </td>
           <td>
-            <a href="mailto:{{ comment.email }}">{{ comment.username }}</a> |
-            {{ comment.date | format_datetime(locale=currentLocale) }} |
-            <a href="../?action=news&newsid={{ comment.recordId }}&artlang={{ currentLocale }}">
-              <i class="bi bi-newspaper"></i>
-            </a>
-            <br>
+            <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
+              <div class="border-end pe-3 me-3 mb-2">
+                <i aria-hidden="true" class="bi bi-person"></i>
+                <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
+              </div>
+              <div class="d-flex mb-2">
+                <div class="d-flex border-end align-items-center pe-3 me-3">
+                  <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
+                  {{ comment.date | format_datetime(locale=currentLocale) }}
+                </div>
+                <div class="d-flex align-items-center me-3">
+                  <a href="../?action=news&newsid={{ comment.recordId }}&artlang={{ currentLocale }}">
+                    <i class="bi bi-newspaper"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
             {{ comment.comment }}
           </td>
         </tr>
