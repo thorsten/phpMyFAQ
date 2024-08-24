@@ -55,11 +55,8 @@ $templateVars = [
         System::getGitHubIssuesUrl()
     ),
     'adminDashboardInfoNumVisits' => $faqSession->getNumberOfSessions(),
-    'adminDashboardInfoFaqs' => Translation::get('ad_start_articles'),
     'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
-    'adminDashboardInfoComments' => Translation::get('ad_start_comments'),
     'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
-    'adminDashboardInfoQuestions' => Translation::get('msgOpenQuestions'),
     'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
     'adminDashboardInfoUser' => Translation::get('msgNews'),
     'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,

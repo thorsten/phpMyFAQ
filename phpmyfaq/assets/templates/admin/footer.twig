@@ -71,7 +71,7 @@
               </a>
               &middot;
               <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">
-                Facebook
+                <i aria-hidden="true" class="bi bi-facebook"></i>
               </a>
               &middot;
               &copy; 2001 - {{ currentYear }}
@@ -86,7 +86,7 @@
   </div>
 
   {% if isUserLoggedIn %}
-  <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
+  <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang={{ currentLanguage }}" width="0" height="0"
           style="display: none;" name="keep-phpmyfaq-session-alive"></iframe>
   {% endif %}
 
