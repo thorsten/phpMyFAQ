@@ -1469,5 +1469,7 @@ $PMF_LANG['msgPrivateNotesOfEditor'] = 'Es liegen private Notizen eines Editors 
 $PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Fehlenden Anhänge bereinigen';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Anhang wurde erfolgreich aktualisiert.';
 $PMF_LANG['msgRemoveAll'] = 'Alles löschen';
+$PMF_LANG['msgError404'] = 'Fehler 404';
+$PMF_LANG['msgError404Description'] = 'Die Seite, die Sie suchen, wurde verschoben, entfernt oder hat möglicherweise nie existiert.';
 
 return $PMF_LANG;

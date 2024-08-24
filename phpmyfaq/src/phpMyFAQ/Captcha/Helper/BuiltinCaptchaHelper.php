@@ -54,7 +54,7 @@ class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
         $html = '';
 
         if (true === $this->configuration->get('spam.enableCaptchaCode') && !$auth) {
-            $html .= '<div class="row mb-2">';
+            $html .= '<div class="row g-4">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-4">';
             $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage());

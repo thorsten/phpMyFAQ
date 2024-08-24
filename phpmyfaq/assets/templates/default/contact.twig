@@ -31,17 +31,17 @@
         <input type="hidden" name="lang" id="lang" value="{{ lang }}">
         <div class="row g-4">
           <div class="col-sm-6 mb-2">
-            <label for="name" class="form-label fs-base">{{ 'msgNewContentName' | translate }}</label>
+            <label for="name" class="form-label">{{ 'msgNewContentName' | translate }}</label>
             <input type="text" class="form-control form-control-lg" id="name" value="{{ defaultContentName }}" required>
             <div class="invalid-feedback">Please enter your full name!</div>
           </div>
           <div class="col-sm-6 mb-2">
-            <label for="email" class="form-label fs-base">{{ 'msgNewContentMail' | translate }}</label>
+            <label for="email" class="form-label">{{ 'msgNewContentMail' | translate }}</label>
             <input type="email" class="form-control form-control-lg" id="email" value="{{ defaultContentMail }}" required>
             <div class="invalid-feedback">Please provide a valid email address!</div>
           </div>
           <div class="col-12 mb-2">
-            <label for="question" class="form-label fs-base">{{ 'msgMessage' | translate }}</label>
+            <label for="question" class="form-label">{{ 'msgMessage' | translate }}</label>
             <textarea class="form-control form-control-lg" id="question" name="question" rows="3" required=""></textarea>
             <div class="invalid-feedback">Please provide a valid email address!</div>
           </div>

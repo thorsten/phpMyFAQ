@@ -1490,5 +1490,7 @@ $PMF_LANG['msgPrivateNotesOfEditor'] = 'There are private notes of other editors
 $PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Cleanup missing attachments';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshed';
 $PMF_LANG['msgRemoveAll'] = 'Remove all';
+$PMF_LANG['msgError404'] = 'Error 404';
+$PMF_LANG['msgError404Description'] = 'The page you are looking for was moved, removed or might never existed.';
 
 return $PMF_LANG;
