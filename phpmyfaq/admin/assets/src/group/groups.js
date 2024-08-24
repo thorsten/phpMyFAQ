@@ -70,6 +70,25 @@ const handleGroupSelect = async (event) => {
     await getUserList();
     clearMemberList();
     await getMemberList(groupId);
+
+    // Activate user inputs
+    const saveGroupDetails = document.getElementById('saveGroupDetails');
+    const saveMembersList = document.getElementById('saveMembersList');
+    const saveGroupRights = document.getElementById('saveGroupRights');
+    const deleteGroup = document.getElementById('deleteGroup');
+    const groupAddMember = document.getElementById('groupAddMember');
+    const groupRemoveMember = document.getElementById('groupRemoveMember');
+
+    saveGroupDetails.disabled = false;
+    saveMembersList.disabled = false;
+    saveGroupRights.disabled = false;
+    deleteGroup.disabled = false;
+    groupAddMember.disabled = false;
+    groupRemoveMember.disabled = false;
+
+    const rightCheckboxes = document.querySelectorAll('.permission').forEach((item) => {
+      item.disabled = false;
+    });
   }
 };
 
