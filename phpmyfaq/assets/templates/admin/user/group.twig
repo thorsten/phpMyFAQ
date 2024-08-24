@@ -93,7 +93,7 @@
         </div>
         <div class="card-footer">
           <div class="card-button text-end">
-            <button class="btn btn-danger" type="submit">
+            <button id="deleteGroup" class="btn btn-danger" type="submit" disabled>
               {{ ad_gen_delete }}
             </button>
           </div>
@@ -140,7 +140,7 @@
         </div>
         <div class="card-footer">
           <div class="card-button text-end">
-            <button class="btn btn-primary" type="submit">
+            <button id="saveGroupDetails" class="btn btn-primary" type="submit" disabled>
               {{ ad_gen_save }}
             </button>
           </div>
@@ -183,9 +183,9 @@
           <div class="row">
             <div class="text-center mt-2">
               <input class="btn btn-success pmf-add-member" type="button"
-                     value="{{ ad_group_addMember }}">
+                     value="{{ ad_group_addMember }}" id="groupAddMember" disabled>
               <input class="btn btn-danger pmf-remove-member" type="button"
-                     value="{{ ad_group_removeMember }}">
+                     value="{{ ad_group_removeMember }}" id="groupRemoveMember" disabled>
             </div>
           </div>
         </div>
@@ -219,7 +219,7 @@
         </div>
         <div class="card-footer">
           <div class="card-button text-end">
-            <button class="btn btn-primary" type="submit">
+            <button id="saveMembersList" class="btn btn-primary" type="submit" disabled>
               {{ ad_gen_save }}
             </button>
           </div>
@@ -250,7 +250,7 @@
           <div class="form-check">
             <input id="group_right_{{ right.right_id }}" type="checkbox"
                    name="group_rights[]" value="{{ right.right_id }}"
-                   class="form-check-input permission">
+                   class="form-check-input permission" disabled>
             <label class="form-check-label" for="group_right_{{ right.right_id }}">
               {{ right.name|permission }}
             </label>
@@ -259,7 +259,7 @@
         </div>
         <div class="card-footer">
           <div class="card-button text-end">
-            <button class="btn btn-primary" type="submit">
+            <button id="saveGroupRights" class="btn btn-primary" type="submit" disabled>
               {{ ad_gen_save }}
             </button>
           </div>
