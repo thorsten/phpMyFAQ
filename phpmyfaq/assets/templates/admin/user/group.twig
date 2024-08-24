@@ -239,9 +239,12 @@
 
         <div class="card-body">
           <div class="text-center mb-3">
-            <a class="btn btn-primary btn-sm" href="#" id="checkAll">
-              {{ ad_user_checkall }} / {{ ad_user_uncheckall }}
-            </a>
+            <button type="button" class="btn btn-primary btn-sm" id="checkAll">
+              {{ ad_user_checkall }}
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="uncheckAll">
+              {{ ad_user_uncheckall }}
+            </button>
           </div>
           {% for right in rightData %}
           <div class="form-check">
