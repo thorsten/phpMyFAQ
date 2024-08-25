@@ -305,11 +305,11 @@ const initializeCheckboxState = () => {
   const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
   const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
 
-  if (storedInactiveState !== null) {
+  if (filterForInactive && storedInactiveState !== null) {
     filterForInactive.checked = JSON.parse(storedInactiveState);
   }
 
-  if (storedNewState !== null) {
+  if (filterForNew && storedNewState !== null) {
     filterForNew.checked = JSON.parse(storedNewState);
   }
 
