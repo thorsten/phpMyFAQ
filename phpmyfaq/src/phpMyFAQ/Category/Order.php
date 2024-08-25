@@ -71,33 +71,48 @@ readonly class Order
      * @param stdClass[] $categoryTree
      * @param int|null $parentId
      */
-    public function setCategoryTree(array $categoryTree, int $parentId = null, int $position = 1): void
-    {
-        $this->configuration->getDb()->query(sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix()));
-
-        $insertQueries = [];
-        foreach ($categoryTree as $category) {
-            $id = $category->id;
-
-            $insertQueries[] = sprintf(
-                'INSERT INTO %sfaqcategory_order(category_id, parent_id, position) VALUES (%d, %d, %d)',
-                Database::getTablePrefix(),
-                $id,
-                $parentId,
-                $position
+    public function setCategoryTree(
+        array $categoryTree,
+        int $parentId = null,
+        int $position = 1,
+        array &$insertQueries = []
+    ): void {
+        // Clear existing category order table
+        if ($parentId === null) {
+            $this->configuration->getDb()->query(
+                sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix())
             );
-
-            if (!empty($category->children)) {
-                $this->setCategoryTree($category->children, $id, $position);
-            }
-
-            ++$position;
         }
 
-        foreach ($insertQueries as $insertQuery) {
-            $this->configuration->getDb()->query($insertQuery);
+        foreach ($categoryTree as $category) {
+            $id = (int) $category->id;
+
+            if ($id > 0) {
+                $insertQueries[] = sprintf(
+                    'INSERT INTO %sfaqcategory_order(category_id, parent_id, position) VALUES (%d, %d, %d)',
+                    Database::getTablePrefix(),
+                    $id,
+                    $parentId,
+                    $position
+                );
+
+                if (!empty($category->children)) {
+                    // Pass the same reference of $insertQueries to the recursive call
+                    $this->setCategoryTree($category->children, $id, 1, $insertQueries);
+                }
+
+                ++$position;
+            }
+        }
+
+        // Execute queries only on the top-level call
+        if ($parentId === null) {
+            foreach ($insertQueries as $insertQuery) {
+                $this->configuration->getDb()->query($insertQuery);
+            }
         }
     }
+
 
     /**
      * Returns the category tree.
@@ -109,7 +124,7 @@ readonly class Order
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parent_id'] == $parentId) {
+            if ((int) $category['parent_id'] === $parentId) {
                 $children = $this->getCategoryTree($categories, $category['category_id']);
                 $result[$category['category_id']] = $children;
             }
