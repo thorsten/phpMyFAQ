@@ -19,8 +19,9 @@
 {% if isDebugMode %}
   <section class="row">
     <div class="col-12">
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ 'msgAdminWarningDebugMode' | translate | raw }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     </div>
   </section>
@@ -37,7 +38,7 @@
                 The phpMyFAQ version number stored in your database ({{ currentVersionDatabase }}) is lower than the
                 version number of the installed application ({{ currentVersionApp }}), please update
                 <a href="../update" class="text-white-50">your installation here</a> to avoid an unintended
-                behaviour.
+                behavior.
               </div>
             </div>
           </div>
@@ -50,8 +51,9 @@
 {% if isDevelopmentVersion %}
   <section class="row">
     <div class="col">
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ msgAdminWarningDevelopmentVersion | raw }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     </div>
   </section>
