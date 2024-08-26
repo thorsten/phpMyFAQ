@@ -13,9 +13,9 @@ _assets/templates/default/_. All original templates are valid HTML5 based on Boo
 
 Follow these steps to create a custom template set:
 
-- copy the directory assets/templates/default to assets/themes/example
+- copy the directory assets/templates/default to e.g. assets/themes/example
 - adjust template files in assets/templates/example to fit your needs
-- activate "example" within Admin->Config->Main
+- activate your "example" template set within Admin -> Configuration -> Main
 
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.

@@ -18,6 +18,7 @@ Please make sure that you're running at least PHP 8.2, otherwise the upgrade won
 ## Upgrading from phpMyFAQ 3.0.x
 
 Upgrading from 3.0.x is a major upgrade.
+Your existing templates will not work with phpMyFAQ 4.0.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
@@ -39,6 +40,8 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.1.x
 
+Upgrading from 3.1.x is a major upgrade.
+Your existing templates will not work with phpMyFAQ 4.0.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
@@ -59,6 +62,8 @@ updated.
 
 ## Upgrading from phpMyFAQ 3.2.x
 
+Upgrading from 3.2.x is a major upgrade.
+Your existing templates will not work with phpMyFAQ 4.0.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)

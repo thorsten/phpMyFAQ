@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-alpha.4 - 2024-07-23
+### phpMyFAQ v4.0.0-beta - unreleased
 
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)

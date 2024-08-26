@@ -40,6 +40,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
@@ -95,6 +96,11 @@ try {
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
+
+//
+// Set actual template set name
+//
+TwigWrapper::setTemplateSetName($faqConfig->get('layout.templateSet'));
 
 /*
  * Initialize attachment factory
@@ -482,7 +488,7 @@ $templateVars = [
     'isCompletelySecured' => $faqConfig->get('security.enableLoginOnly'),
     'isDebugEnabled' => DEBUG,
     'richSnippetsEnabled' => $faqConfig->get('seo.enableRichSnippets'),
-    'tplSetName' => 'default', // @todo change this value
+    'tplSetName' => TwigWrapper::getTemplateSetName(),
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'isUserLoggedIn' => $user->isLoggedIn(),
     'title' => $title,
