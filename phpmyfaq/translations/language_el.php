@@ -608,7 +608,6 @@ $PMF_LANG['ad_user_blocked'] = 'φραγμένος';
 $PMF_LANG['ad_user_protected'] = 'προστατευόμενος';
 $PMF_LANG['ad_entry_intlink'] = 'Επιλέξτε μια καταχώρηση για εισαγωγή ως δεσμό...';
 $PMF_LANG['ad_categ_paste2'] = 'Επικόλληση μετά';
-$PMF_LANG['msgCategoryRemark_move'] = 'Η αλλάγή δύο κατηγοριών είναι εφικτή μόνο στο ίδιο επίπεδο.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Η σωστή σειρά όλων των κατηγοριών είναι εφικτή μόνο αν όλες οι κατηγορίες είναι μεταφρασμένες στην επιλεγμένη γλώσσα (πρώτη στήλη).';
 $PMF_LANG['msgUsersOnline'] = '%d Φίλοι και %d Χρήστες';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Διαγραφή ημερολογιακών αρχείων αρχαιότερα 30 ημερών.';

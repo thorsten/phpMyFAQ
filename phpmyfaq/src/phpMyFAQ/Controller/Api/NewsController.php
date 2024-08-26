@@ -18,14 +18,23 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\News;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class NewsController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(
         path: '/api/v3.0/news',
         operationId: 'getNews',
@@ -67,9 +76,7 @@ class NewsController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-
-        $news = new News($configuration);
+        $news = new News($this->configuration);
         $result = $news->getLatestData(false, true, true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);

@@ -738,7 +738,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Selecciona un registro de la FAQ para insertarl
 
 // added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG['ad_categ_paste2'] = 'Pegar después';
-$PMF_LANG['msgCategoryRemark_move'] = 'Mover dos categorías sólo es posible dentro del mismo nivel.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'El orden correcto de las categorías se muestra cuando todas las categorías se definen en el idioma actual (primera columna).';
 
 // added v2.0.0 - 2006-10-15 by Matteo

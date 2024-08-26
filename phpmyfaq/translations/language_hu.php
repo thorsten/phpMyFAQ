@@ -826,7 +826,6 @@ $PMF_LANG['ad_user_blocked'] = 'tiltva';
 $PMF_LANG['ad_user_protected'] = 'védve';
 $PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
 $PMF_LANG['ad_categ_paste2'] = 'Beillesztés utána';
-$PMF_LANG['msgCategoryRemark_move'] = 'The exchange of 2 categories is only possible at the same level.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'The correct order of categories will be shown, if all categories are defined for the actual language (first column).';
 $PMF_LANG['msgUsersOnline'] = '%d vendég és %d tag';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30 napnál régebbi logok törlése';

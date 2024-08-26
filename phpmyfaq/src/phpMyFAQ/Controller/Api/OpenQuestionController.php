@@ -18,14 +18,23 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class OpenQuestionController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(
         path: '/api/v3.0/open-questions',
         operationId: 'getOpenQuestions',
@@ -61,9 +70,7 @@ class OpenQuestionController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-
-        $question = new Question($configuration);
+        $question = new Question($this->configuration);
         $result = $question->getAll();
 
         if ((is_countable($result) ? count($result) : 0) === 0) {

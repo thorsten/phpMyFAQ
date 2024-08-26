@@ -26,9 +26,19 @@ use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class CommentController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(
         path: '/api/v3.0/comments/{faqId}',
         operationId: 'getComments',

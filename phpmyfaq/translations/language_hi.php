@@ -751,7 +751,6 @@ $PMF_LANG['ad_entry_intlink'] = 'किसी FAQ को कड़ी के त
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "के बाद चिपकायें";
-$PMF_LANG["msgCategoryRemark_move"] = "दो वर्गों का आपस में बदलाव केवल समतल पर ही मुमकिन है.";
 $PMF_LANG["msgCategoryRemark_overview"] = "वर्गों का सही क्रम दिखाया जाएगा, यदि उस भाषा के लिए सभी वर्ग बताये गए हैं तो (पहला स्तम्भ).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

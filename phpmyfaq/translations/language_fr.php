@@ -741,7 +741,6 @@ $PMF_LANG["ad_entry_intlink"] = "Sélectionnez une FAQ à insérer comme un lien
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Coller après";
-$PMF_LANG["msgCategoryRemark_move"] = "L'échange de 2 catégories est seulement possible au même niveau.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Le bon ordre des catégories sera affiché si toutes les catégories sont définies pour la même langue (première colonne).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

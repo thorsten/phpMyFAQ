@@ -18,16 +18,25 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class GroupController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -63,10 +72,9 @@ class GroupController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $faqConfig = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($faqConfig);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
-        $mediumPermission = new MediumPermission($faqConfig);
+        $mediumPermission = new MediumPermission($this->configuration);
         $result = $mediumPermission->getAllGroups($user);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);

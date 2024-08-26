@@ -591,7 +591,6 @@ $PMF_LANG['ad_user_blocked'] = 'bloqueado';
 $PMF_LANG['ad_user_protected'] = 'protegido';
 $PMF_LANG['ad_entry_intlink'] = 'Selecione um registo de FAQ para o inserir como <em>link</em>…';
 $PMF_LANG['ad_categ_paste2'] = 'Colar depois de';
-$PMF_LANG['msgCategoryRemark_move'] = 'Só é possível trocar a ordem de 2 categorias se elas se encontrem no mesmo nível.';
 $PMF_LANG['msgCategoryRemark_overview'] = '<em>Nota</em>: só se pode obter e apresentar a <em>ordenação correta</em> das categorias caso <em>todas existam</em> no idioma atual (primeira coluna).';
 $PMF_LANG['msgUsersOnline'] = '%d Convidado(s) e %d Registado(s)';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Apagar imediatamente os <em>logs</em> com mais de 30 dias';

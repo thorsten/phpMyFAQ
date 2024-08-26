@@ -724,7 +724,6 @@ $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'Activate relevance support? (default: disabled)');
 $PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
 $PMF_LANG['ad_categ_paste2'] = 'لصق بعد';
-$PMF_LANG['msgCategoryRemark_move'] = 'The exchange of 2 categories is only possible at the same level.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'The correct order of categories will be shown, if all categories are defined for the actual language (first column).';
 $PMF_LANG['msgUsersOnline'] = '%d ضيوف و %d اعضاء مسجلين';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';

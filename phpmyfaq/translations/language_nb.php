@@ -584,7 +584,6 @@ $PMF_LANG['ad_user_blocked'] = 'blokkert';
 $PMF_LANG['ad_user_protected'] = 'beskyttet';
 $PMF_LANG['ad_entry_intlink'] = 'Velg en FAQ-oppføring for å legge den til som lenke';
 $PMF_LANG['ad_categ_paste2'] = 'Lim inn etter';
-$PMF_LANG['msgCategoryRemark_move'] = 'Utvekslingen av to kategorier er bare mulig på samme nivå.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Den riktige rangeringen av kategorier som vises vil bli vist om alle kategorier er definert for selve språket (første kolonne).';
 $PMF_LANG['msgUsersOnline'] = '%d Gjester og %d Registrerte';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Slett logger umiddelbart om de er over 30 dager';

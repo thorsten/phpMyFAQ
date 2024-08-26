@@ -45,6 +45,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 abstract class AbstractController
 {
     protected ?Configuration $configuration = null;
+
     /**
      * Check if the FAQ should be secured.
      * @throws Exception
@@ -217,5 +218,10 @@ abstract class AbstractController
         }
 
         return false;
+    }
+
+    protected function isApiEnabled(): bool
+    {
+        return (bool) $this->configuration->get('api.enableAccess');
     }
 }

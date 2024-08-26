@@ -102,16 +102,8 @@ readonly class Application
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException) {
             $response = new Response('Not Found', Response::HTTP_NOT_FOUND);
-        } catch (UnauthorizedHttpException $exception) {
-            $response = new Response(
-                sprintf(
-                    'Unauthorized:  %s at line %d at %s',
-                    $exception->getMessage(),
-                    $exception->getLine(),
-                    $exception->getFile()
-                ),
-                Response::HTTP_UNAUTHORIZED
-            );
+        } catch (UnauthorizedHttpException) {
+            $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         } catch (BadRequestException $exception) {
             $response = new Response(
                 sprintf(

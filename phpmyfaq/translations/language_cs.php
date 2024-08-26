@@ -606,7 +606,6 @@ $PMF_LANG['ad_user_blocked'] = 'blokováno';
 $PMF_LANG['ad_user_protected'] = 'chráněno';
 $PMF_LANG['ad_entry_intlink'] = 'Vyberte záznam, který chcete vložit jako odkaz...';
 $PMF_LANG['ad_categ_paste2'] = 'Vložit za';
-$PMF_LANG['msgCategoryRemark_move'] = 'Změna 2 kategorií je možná pouze na stejné úrovni.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Korektní pořadí kategorií bude znázorněno, když jsou všechny kategorie definovány ve stejném jazyce (první slouepc).';
 $PMF_LANG['msgUsersOnline'] = '%d hostů a %d registrovaných';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Trvale smazat logy starší 30 dnů';

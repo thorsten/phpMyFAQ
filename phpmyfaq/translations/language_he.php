@@ -602,7 +602,6 @@ $PMF_LANG['ad_user_blocked'] = 'חסום';
 $PMF_LANG['ad_user_protected'] = 'מוגן';
 $PMF_LANG['ad_entry_intlink'] = 'בחר ערך להכנסה כקישור...';
 $PMF_LANG['ad_categ_paste2'] = 'הדבק אחרי';
-$PMF_LANG['msgCategoryRemark_move'] = 'החלפה בין שתי קטגוריות אפשרי רק באותה רמה.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'הקטגוריות יוצגו בסדר נכון רק אם הוגדרו עבור אותה שפה (תור ראשון).';
 $PMF_LANG['msgUsersOnline'] = '%d אורחים ו %d רשומים';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'מחק רישומים בני יותר מ 30 יום';

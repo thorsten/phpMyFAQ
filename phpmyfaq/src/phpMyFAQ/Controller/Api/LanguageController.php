@@ -18,11 +18,21 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class LanguageController
+class LanguageController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(
         path: '/api/v3.0/language',
         operationId: 'getLanguage',
@@ -35,6 +45,6 @@ class LanguageController
     )]
     public function index(): JsonResponse
     {
-        return new JsonResponse(Configuration::getConfigurationInstance()->getLanguage()->getLanguage());
+        return new JsonResponse($this->configuration->getLanguage()->getLanguage());
     }
 }

@@ -604,7 +604,6 @@ $PMF_LANG['ad_user_blocked'] = 'ブロック';
 $PMF_LANG['ad_user_protected'] = '保護';
 $PMF_LANG['ad_entry_intlink'] = 'リンクとして挿入する FAQ レコードを選択します...';
 $PMF_LANG['ad_categ_paste2'] = '次のカテゴリー配下に貼り付け';
-$PMF_LANG['msgCategoryRemark_move'] = 'ふたつのカテゴリーの交換は同じレベルでのみできます。';
 $PMF_LANG['msgCategoryRemark_overview'] = 'カテゴリーがすべて実際の言語に対して定義された場合、カテゴリーの順序は正しく表示されるでしょう。 (はじめのカラム).';
 $PMF_LANG['msgUsersOnline'] = '%d 人のゲストと %d 人の登録者です';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '30日より古いログをすぐに削除する';

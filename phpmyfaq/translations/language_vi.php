@@ -748,7 +748,6 @@ $PMF_LANG["ad_entry_intlink"] = 'Chọn một nội dung trong Câu hỏi thư�
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Dán sau";
-$PMF_LANG["msgCategoryRemark_move"] = "Việc hoán đổi giữa 2 mục chỉ được cho phép nếu chúng ở cùng cấp độ.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Thứ tự đúng của các mục sẽ hiện ra, nếu tất cả các mục đều hiện có trong ngôn ngữ này (cột đầu).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

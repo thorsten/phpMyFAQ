@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
@@ -29,9 +28,19 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class PdfController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -74,12 +83,11 @@ class PdfController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $faq = new Faq($configuration);
+        $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -93,9 +101,9 @@ class PdfController extends AbstractController
             $result = new stdClass();
             return $this->json($result, Response::HTTP_NOT_FOUND);
         } else {
-            $service = new Services($configuration);
+            $service = new Services($this->configuration);
             $service->setFaqId($faqId);
-            $service->setLanguage($configuration->getLanguage()->getLanguage());
+            $service->setLanguage($this->configuration->getLanguage()->getLanguage());
             $service->setCategoryId($categoryId);
 
             $result = $service->getPdfApiLink();

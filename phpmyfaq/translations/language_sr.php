@@ -743,7 +743,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Izaberite FAQ unos da bi ste ga ubacili kao lin
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Nalepi iza";
-$PMF_LANG["msgCategoryRemark_move"] = "Razmena 2 kategorije je mogu&#263;a samo na istom nivou.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Ta&#269;an red kategorija &#269;e biti prikazan, ako su sve kategorije definisane za odre&#273;eni jezik (prva kolona).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

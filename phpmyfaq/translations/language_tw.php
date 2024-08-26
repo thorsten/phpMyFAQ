@@ -728,7 +728,6 @@ $PMF_LANG['ad_entry_intlink'] = "選取一個 FAQ 記錄，以連結的方式來
 
 //added 2.0.0 - 2006-10-10 by Rudi 開發者
 $PMF_LANG["ad_categ_paste2"] = "下一頁 Paste after";
-$PMF_LANG["msgCategoryRemark_move"] = "要更換兩個類別，只能在同一層才能變更。The exchange of 2 categories is only possible at the same level.";
 $PMF_LANG["msgCategoryRemark_overview"] = "如果全部類別都在語言的第一欄定義，類別的正確排序會顯示出來。The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo 開發者

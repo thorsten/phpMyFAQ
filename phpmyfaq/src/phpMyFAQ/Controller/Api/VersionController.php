@@ -17,13 +17,22 @@
 
 namespace phpMyFAQ\Controller\Api;
 
-use phpMyFAQ\Configuration;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class VersionController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(path: '/api/v3.0/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
@@ -32,6 +41,6 @@ class VersionController extends AbstractController
     )]
     public function index(): JsonResponse
     {
-        return $this->json(Configuration::getConfigurationInstance()->getVersion());
+        return $this->json($this->configuration->getVersion());
     }
 }

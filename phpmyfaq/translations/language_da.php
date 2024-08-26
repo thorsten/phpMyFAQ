@@ -602,7 +602,6 @@ $PMF_LANG['ad_user_blocked'] = 'Blokeret';
 $PMF_LANG['ad_user_protected'] = 'Beskyttet';
 $PMF_LANG['ad_entry_intlink'] = 'Select a FAQ record to insert it as a link...';
 $PMF_LANG['ad_categ_paste2'] = 'Paste after';
-$PMF_LANG['msgCategoryRemark_move'] = 'The exchange of 2 categories is only possible at the same level.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'The correct order of categories will be shown, if all categories are defined for the actual language (first column).';
 $PMF_LANG['msgUsersOnline'] = '%d g&aelig;ster og %d registrerede';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Delete immediately logs older than 30 days';

@@ -733,7 +733,6 @@ $PMF_LANG['ad_entry_intlink'] = 'FAQ  бичлэг сонгоод энэ хол�
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Буулгасны (Paste) дараа";
-$PMF_LANG["msgCategoryRemark_move"] = "The exchange of 2 categories is only possible at the same level.";
 $PMF_LANG["msgCategoryRemark_overview"] = "The correct order of categories will be shown, if all categories are defined for the actual language (first column).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

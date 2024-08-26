@@ -728,7 +728,6 @@ $PMF_LANG['ad_entry_intlink'] = "Bağlantı olarak eklemek istediğiniz içeriğ
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Kendisinden sonra yapıştır";
-$PMF_LANG["msgCategoryRemark_move"] = "Yalnızca aynı seviyedeki iki kategori birbiriyle değiştirilebilir.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Eğer dil ayarları doğru yapılandırıldıysa (ilk sütunda), kategori sıralaması doğru olarak gösterilir.";
 
 // added v2.0.0 - 2006-10-15 by Matteo

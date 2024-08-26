@@ -583,7 +583,6 @@ $PMF_LANG['ad_user_blocked'] = 'заблокирован';
 $PMF_LANG['ad_user_protected'] = 'защищен';
 $PMF_LANG['ad_entry_intlink'] = 'Выберите запись, чтобы вставить его в качестве связующего звена...';
 $PMF_LANG['ad_categ_paste2'] = 'Вставить после';
-$PMF_LANG['msgCategoryRemark_move'] = 'Обмен двух категорий возможен, только на одном уровне';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Будет показан правильный порядок категорий, если все категории определены для языка(первая колонка).';
 $PMF_LANG['msgUsersOnline'] = '%d гостей и %d зарегистрированных';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Удалить логи старше 30 дней';

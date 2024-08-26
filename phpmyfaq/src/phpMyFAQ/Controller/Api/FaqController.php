@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Api;
 use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
@@ -33,9 +32,19 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class FaqController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws \phpMyFAQ\Core\Exception
      */

@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Api;
 use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -31,9 +30,19 @@ use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class SearchController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -71,21 +80,20 @@ class SearchController extends AbstractController
     )]
     public function search(Request $request): JsonResponse
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($faqConfig);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
-        $search = new Search($faqConfig);
-        $search->setCategory(new Category($faqConfig));
+        $search = new Search($this->configuration);
+        $search->setCategory(new Category($this->configuration));
 
-        $faqPermission = new Permission($faqConfig);
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $faqConfig);
+        $faqPermission = new Permission($this->configuration);
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
 
         $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search($searchString, false);
         $searchResultSet->reviewResultSet($searchResults);
 
         if ($searchResultSet->getNumberOfResults() > 0) {
-            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+            $url = $this->configuration->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $result = [];
             foreach ($searchResultSet->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
@@ -136,9 +144,7 @@ class SearchController extends AbstractController
     )]
     public function popular(): JsonResponse
     {
-        $configuration = Configuration::getConfigurationInstance();
-
-        $search = new Search($configuration);
+        $search = new Search($this->configuration);
         $result = $search->getMostPopularSearches(7, true);
 
         if ((is_countable($result) ? count($result) : 0) === 0) {

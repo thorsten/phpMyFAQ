@@ -615,7 +615,6 @@ $PMF_LANG['ad_user_blocked'] = 'estetty';
 $PMF_LANG['ad_user_protected'] = 'suojattu';
 $PMF_LANG['ad_entry_intlink'] = 'Valitse tietue lisätäksesi se linkkinä...';
 $PMF_LANG['ad_categ_paste2'] = 'Lisää jälkeen';
-$PMF_LANG['msgCategoryRemark_move'] = 'Kahden kategorian vaihto on mahdollinen vain jos ne ovat samalla tasolla.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Kategoriat näytetään oikeassa järjestyksessä mikäli kaikki kategoriat on määritetty samalla kielellä (ensimmäinen sarake).';
 $PMF_LANG['msgUsersOnline'] = '%d vierailijaa ja %d rekisteröitynyttä';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Poista yli 30 päivää vanhat lokit';

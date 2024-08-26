@@ -584,7 +584,6 @@ $PMF_LANG['ad_user_blocked'] = '阻止';
 $PMF_LANG['ad_user_protected'] = '保护';
 $PMF_LANG['ad_entry_intlink'] = '选择一个问答记录以一个链接插入...';
 $PMF_LANG['ad_categ_paste2'] = '粘贴附后';
-$PMF_LANG['msgCategoryRemark_move'] = '两个目录的交换仅可能在同一个水平.';
 $PMF_LANG['msgCategoryRemark_overview'] = '如所有的目录针对实际语言(第一列)做好定义，正确的目录排序将被显示。';
 $PMF_LANG['msgUsersOnline'] = '%d 游客  %d 注册用户';
 $PMF_LANG['ad_adminlog_del_older_30d'] = '立即删除超过三十天的日志';

@@ -604,7 +604,6 @@ $PMF_LANG['ad_user_blocked'] = 'disekat';
 $PMF_LANG['ad_user_protected'] = 'dilindungi';
 $PMF_LANG['ad_entry_intlink'] = 'Pilih rekod FAQ untuk masukkan sebagai link...';
 $PMF_LANG['ad_categ_paste2'] = 'Tampal selepas';
-$PMF_LANG['msgCategoryRemark_move'] = 'Pertukaran di antara 2 kategori hanya dibenarkan dalam peringkat yang sama.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Urutan kategori yang betul akan dipaparkan sekiranya semua kategori telah ditakrifkan untuk bahasa yang sebenar (lajur pertama).';
 $PMF_LANG['msgUsersOnline'] = '%d Tetamu dan %d Berdaftar';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Padam serta merta log lama selepas 30 hari';

@@ -19,19 +19,28 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class QuestionController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws Exception
      * @throws \JsonException
@@ -91,37 +100,31 @@ class QuestionController extends AbstractController
     {
         $this->hasValidToken();
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $visibility = $configuration->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
+        $visibility = $this->configuration->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
 
-        $questionData = [
-            'username' => $author,
-            'email' => $email,
-            'category_id' => $categoryId,
-            'question' => $question,
-            'is_visible' => $visibility
-        ];
+        $questionEntity = new QuestionEntity();
+        $questionEntity
+            ->setUsername($author)
+            ->setEmail($email)
+            ->setCategoryId($categoryId)
+            ->setQuestion($question)
+            ->setIsVisible($visibility === 'Y');
 
-        $questionObject = new Question($configuration);
-        $questionObject->add($questionData);
+        $questionObject = new Question($this->configuration);
+        $questionObject->add($questionEntity);
 
-        $category = new Category($configuration);
+        $category = new Category($this->configuration);
         $category->getCategoryData($categoryId);
         $categories = $category->getAllCategories();
 
-        $questionHelper = new QuestionHelper($configuration, $category);
-        try {
-            $questionHelper->sendSuccessMail($questionData, $categories);
-        } catch (TransportExceptionInterface | Exception $e) {
-            return $this->json(['error' => $e->getMessage() ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $questionHelper = new Notification($this->configuration);
+        $questionHelper->sendQuestionSuccessMail($questionEntity, $categories);
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
     }

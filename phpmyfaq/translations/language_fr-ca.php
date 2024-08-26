@@ -751,7 +751,6 @@ $PMF_LANG['ad_user_blocked'] = 'bloqué';
 $PMF_LANG['ad_user_protected'] = 'protégé';
 $PMF_LANG['ad_entry_intlink'] = 'Sélectionnez une FAQ  à insérer comme un lien ...';
 $PMF_LANG['ad_categ_paste2'] = 'Coller après';
-$PMF_LANG['msgCategoryRemark_move'] = 'L\'échange de deux catégories est seulement possible au même niveau.';
 $PMF_LANG['msgUsersOnline'] = '%d Invité(s) et %d Inscrit(s)';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Supprimer immédiatement les journaux de plus de 30 jours';
 $PMF_LANG['ad_adminlog_delete_success'] = 'Anciens journaux supprimés avec succès.';

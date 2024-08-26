@@ -605,7 +605,6 @@ $PMF_LANG['ad_user_blocked'] = 'ยกเลิกใช้งาน';
 $PMF_LANG['ad_user_protected'] = 'สงวนไว้';
 $PMF_LANG['ad_entry_intlink'] = 'เลือกข้อมูล FAQ ที่จะเพิ่มเป็นลิงค์...';
 $PMF_LANG['ad_categ_paste2'] = 'วางหัวข้อหลังจาก';
-$PMF_LANG['msgCategoryRemark_move'] = 'การแลกเปลี่ยนข้อมูลระหว่าง 2 หัวข้อสามารถทำได้เฉพาะที่อยู่ในระดับเดียวกันเท่านั้น';
 $PMF_LANG['msgCategoryRemark_overview'] = 'การเรียงลำดับหัวข้อที่ถูกต้อง ถ้าหัวข้อได้ถูกกำหนดไว้ในภาษาที่ถูกต้อง (คอลัมน์แรก)';
 $PMF_LANG['msgUsersOnline'] = '%d คนทั่วไป และ %d คนที่ลงทะเบียน';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'ลบรายการที่ระบบบันทึกไว้ที่นานกว่า 30 วัน';

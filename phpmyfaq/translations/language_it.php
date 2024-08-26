@@ -608,7 +608,6 @@ $PMF_LANG['ad_user_blocked'] = 'bloccato';
 $PMF_LANG['ad_user_protected'] = 'protetto';
 $PMF_LANG['ad_entry_intlink'] = 'Seleziona una FAQ per aggiungerla come link...';
 $PMF_LANG['ad_categ_paste2'] = 'Incolla dopo';
-$PMF_LANG['msgCategoryRemark_move'] = 'Lo scambio di due categorie è possibile solo con elementi dello stesso livello.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'Viene mostrato l\'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).';
 $PMF_LANG['msgUsersOnline'] = '%d Ospiti e %d Registrati';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati più vecchi di 30 giorni';

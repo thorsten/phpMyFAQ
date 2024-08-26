@@ -757,7 +757,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Pasirinkite DUK įrašą, norėdami jį įterpt
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Įdėti po";
-$PMF_LANG["msgCategoryRemark_move"] = "Dviejų grupių sukeitimas įmanomas tik tame pačiame lygyje.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Grupės bus rodomos teisinga tvarka, jei visos grupės yra apibrėžtos dabartinėje kalboje (pirmas stulpelis).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

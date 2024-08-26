@@ -745,7 +745,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Wybierz rekord FAQ, aby wstawić go jako link..
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Wklej po";
-$PMF_LANG["msgCategoryRemark_move"] = "Zamiana 2 kategorii jest możliwa tylko na tym samym poziomie.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Prawidłowa kolejność kategorii zostanie wyświetlona, jeśli dla danego języka zdefiniowano wszystkie kategorie (pierwsza kolumna).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

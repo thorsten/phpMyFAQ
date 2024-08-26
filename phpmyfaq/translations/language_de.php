@@ -20,7 +20,7 @@
 
 /**
  *                !!! IMPORTANT NOTE !!!
- * Please consider following while defining new vars:
+ * Please consider the following while defining new vars:
  * - one variable definition per line !!!
  * - the perfect case is to define a scalar string value
  * - if some dynamic content is needed, use sprintf() syntax
@@ -97,7 +97,7 @@ $PMF_LANG['msgSearchContent'] = "Antwort: ";
 
 // new Content
 $PMF_LANG['msgNewContentHeader'] = "Vorschlag für neuen FAQ-Eintrag";
-$PMF_LANG['msgNewContentAddon'] = "Ihr Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung von uns überprüft. Pflichtfelder sind mit * gekennzeichnete Felder.";
+$PMF_LANG['msgNewContentAddon'] = "Der Vorschlag erscheint nicht sofort, sondern wird vor der Veröffentlichung überprüft. Pflichtfelder sind mit * gekennzeichnete Felder.";
 $PMF_LANG['msgNewContentName'] = "Name";
 $PMF_LANG['msgNewContentMail'] = "E-Mail";
 $PMF_LANG['msgNewContentCategory'] = "Kategorie";
@@ -110,7 +110,7 @@ $PMF_LANG['msgInfo'] = "Mehr Informationen unter: ";
 $PMF_LANG['msgNewContentThanks'] = "Vielen Dank für diesen Vorschlag!";
 
 // ask Question
-$PMF_LANG['msgNewQuestion'] = "Auf dieser Seite können Fragen an die FAQ-Leser gestellt werden und so neue FAQ-Einträge fördern. Nur durch Fragen können wir erfahren, zu welchen Themen Antworten gewünscht werden! Die gestellten Fragen erscheinen in der Kategorie der offenen Fragen. Mit * markierte Felder sind Pflichtfelder.";
+$PMF_LANG['msgNewQuestion'] = "Auf dieser Seite können Fragen gestellt werden und so neue FAQ-Einträge fördern. Nur durch Fragen können wir erfahren, zu welchen Themen Antworten gewünscht werden! Die gestellten Fragen erscheinen in der Kategorie der offenen Fragen. Mit * markierte Felder sind Pflichtfelder.";
 $PMF_LANG['msgAskCategory'] = "Kategorie";
 $PMF_LANG['msgAskYourQuestion'] = "Frage";
 $PMF_LANG['msgAskThx4Mail'] = "Vielen Dank für diese Anfrage.";
@@ -137,7 +137,7 @@ $PMF_LANG['msgMailCheck'] = "Es ist ein neuer FAQ-Beitrag vorhanden. Sie können
 $PMF_LANG['msgMailContact'] = "Die Anfrage wurde erfolgreich versendet!";
 
 // Fehlermeldungen
-$PMF_LANG['err_noDatabase'] = "Keine Datenbankverbindung möglich!";
+$PMF_LANG['err_noDatabase'] = "Es ist kein Datenbankverbindung möglich.";
 $PMF_LANG['err_noHeaders'] = "Keine Kategorie gefunden";
 $PMF_LANG['msgErrorNoRecords'] = "Es gibt noch keine Einträge.";
 $PMF_LANG['err_badID'] = "Fehlerhafte ID!";
@@ -151,7 +151,7 @@ $PMF_LANG['err_noMailAdress'] = "Die angegebene E-Mail-Adresse ist nicht korrekt
 $PMF_LANG['err_sendMail'] = "Pflichtfelder sind u.a. Name und E-Mail-Adresse!";
 
 // Hilfe zur Suche
-$PMF_LANG['help_search'] = 'Antwort finden:<br>Mit der Eingabe "Begriff1 Begriff2" können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.Hinweis: Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.';
+$PMF_LANG['help_search'] = 'Mit der Eingabe "Begriff1 Begriff2" können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen. Hinweis: Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.';
 
 // Menü
 $PMF_LANG['ad'] = "ADMIN-BEREICH";
@@ -500,7 +500,7 @@ $PMF_LANG['permission::addnews'] = "Neuigkeiten hinzufügen";
 $PMF_LANG['permission::editnews'] = "Neuigkeiten bearbeiten";
 $PMF_LANG['permission::delnews'] = "Neuigkeiten löschen";
 $PMF_LANG['permission::addcateg'] = "Kategorie hinzufügen";
-$PMF_LANG['permission::editcateg'] = "Kategorie editeren";
+$PMF_LANG['permission::editcateg'] = "Kategorie bearbeiten";
 $PMF_LANG['permission::delcateg'] = "Kategorie löschen";
 $PMF_LANG['permission::passwd'] = "Passwort ändern";
 $PMF_LANG['permission::editconfig'] = "Konfiguration bearbeiten";
@@ -530,15 +530,15 @@ $LANG_CONF['main.languageDetection'] = ["checkbox", "Automatische Spracherkennun
 $LANG_CONF['main.titleFAQ'] = ['input', 'Titel der FAQ', 'Pflichtfeld'];
 $LANG_CONF['main.currentVersion'] = ['print', 'phpMyFAQ Version'];
 $LANG_CONF['main.metaDescription'] = ["input", "Beschreibung der Seite"];
-$LANG_CONF['main.metaPublisher'] = ["input", "Name des Veröffentlichers", 'Pflichtfeld'];
+$LANG_CONF['main.metaPublisher'] = ["input", "Name des Herausgebers", 'Pflichtfeld'];
 $LANG_CONF['main.administrationMail'] = ['input', 'E-Mailadresse des Administrators', 'Pflichtfeld'];
 $LANG_CONF['main.contactInformation'] = ["area", "Kontaktdaten / Impressum"];
-$LANG_CONF['main.send2friendText'] = ["area", "Text für die Empfehlungs-Seite"];
+$LANG_CONF['main.send2friendText'] = ["area", "Text für die Weiterempfehlung"];
 $LANG_CONF['records.maxAttachmentSize'] = ["input", "Maximalgröße von Anhängen in Bytes (max. %sByte)"];
 $LANG_CONF['records.disableAttachments'] = ["checkbox", "Anhänge unter den Beiträgen anzeigen"];
 $LANG_CONF['main.enableUserTracking'] = ["checkbox", "User-Tracking aktiviert?"];
 $LANG_CONF['main.enableAdminLog'] = ["checkbox", "Admin-Logging aktiviert?"];
-$LANG_CONF["main.enableCategoryRestrictions"] = ["checkbox", "Kategoriebeschränkungen aktivieren"];
+$LANG_CONF["main.enableCategoryRestrictions"] = ["checkbox", "Kategorie-Beschränkungen aktivieren"];
 $LANG_CONF['security.ipCheck'] = ["checkbox", "IP zur Überprüfung im Admin-Bereich nutzen"];
 $LANG_CONF['records.numberOfRecordsPerPage'] = ["input", "Anzahl der FAQs pro Seite"];
 $LANG_CONF['records.numberOfShownNewsEntries'] = ["input", "Anzahl der angezeigten Neuigkeiten auf der Startseite"];
@@ -733,11 +733,10 @@ $PMF_LANG['ad_user_blocked'] = "geblockt";
 $PMF_LANG['ad_user_protected'] = "geschützt";
 
 // added v2.0.0 - 2006-10-07 by Matteo
-$PMF_LANG['ad_entry_intlink'] = 'Wählen Sie einen FAQ-Datensatz aus, um ihn als Link einzufügen...';
+$PMF_LANG['ad_entry_intlink'] = 'Wählen Sie eine FAQ aus, um ihn als Link einzufügen...';
 
 // added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG['ad_categ_paste2'] = "Einfügen hinter";
-$PMF_LANG['msgCategoryRemark_move'] = "Das Verschieben zweier Kategorien ist nur innerhalb der gleichen Ebene möglich.";
 $PMF_LANG['msgCategoryRemark_overview'] = "Die richtige Reihenfolge der Kategorien zeigt sich wenn alle Kategorien in der aktuelle Sprache (erste Spalte) definiert sind.";
 
 // added v2.0.0 - 2006-10-15 by Matteo
@@ -1205,7 +1204,7 @@ $PMF_LANG['ad_user_show_home'] = "Auf der Startseite anzeigen";
 $PMF_LANG['ad_view_faq'] = 'FAQ ansehen';
 
 // added 3.0.0-alpha - 2018-01-04 by Thorsten
-$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktiviere Kategoriebeschränkungen'];
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktiviere Kategorie-Beschränkungen'];
 $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktiviere Weiterempfehlung'];
 $PMF_LANG['msgUserRemovalText'] = 'Sie können die Löschung Ihres Accounts und Ihrer persönlichen Daten beantragen. Eine E-Mail wird an das Admin-Team gesendet. Das Team wird Ihren Account, Ihre Kommentare und Fragen löschen. Da es sich um einen manuellen Prozess handelt, kann es bis zu 24 Stunden dauern. Danach erhalten Sie eine Löschbestätigung per E-Mail.';
 $PMF_LANG['msgUserRemoval'] = "Antrag zur Löschung des Benutzers";

@@ -328,7 +328,6 @@ $templateVars = [
     'msgAverageVote' => Translation::get('msgAverageVote'),
     'renderVotingResult' => $rating->get($faqId),
     'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
-    'msgVoteUsability' => Translation::get('msgVoteUsability'),
     'msgVoteBad' => Translation::get('msgVoteBad'),
     'msgVoteGood' => Translation::get('msgVoteGood'),
     'msgVoteSubmit' => Translation::get('msgVoteSubmit'),

@@ -745,7 +745,6 @@ $PMF_LANG['ad_entry_intlink'] = 'Zvoľte FAQ záznam pre jeho vloženie ako odka
 
 //added 2.0.0 - 2006-10-10 by Rudi
 $PMF_LANG["ad_categ_paste2"] = "Vložiť po";
-$PMF_LANG["msgCategoryRemark_move"] = "Výmena 2 kategórií je možná iba v rámci rovnakej úrovne.";
 $PMF_LANG["msgCategoryRemark_overview"] = "Správne poradie kategórií bude zobrazené vtedy, keď budú všetky kategórie definované pre aktuálny jazyk (prvý stĺpec).";
 
 // added v2.0.0 - 2006-10-15 by Matteo

@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
@@ -27,10 +26,20 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     /**
      * @throws TransportExceptionInterface
      * @throws Exception
@@ -102,8 +111,7 @@ class RegistrationController extends AbstractController
     {
         $this->hasValidToken();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $registration = new RegistrationHelper($configuration);
+        $registration = new RegistrationHelper($this->configuration);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 

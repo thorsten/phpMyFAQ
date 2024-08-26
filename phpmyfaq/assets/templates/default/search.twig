@@ -70,8 +70,14 @@
           {{ pagination | raw }}
         {% endif %}
 
+      {% else %}
+        <p class="text-muted mt-5">
+          {{ 'help_search' | translate | raw }}
+        </p>
       {% endif %}
     </section>
+
+
 
   </div>
 

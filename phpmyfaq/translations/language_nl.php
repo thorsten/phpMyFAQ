@@ -582,7 +582,6 @@ $PMF_LANG['ad_user_blocked'] = 'geblokkeerd';
 $PMF_LANG['ad_user_protected'] = 'beveiligd';
 $PMF_LANG['ad_entry_intlink'] = 'Selecteer een FAQ vraag om deze als link toe te voegen...';
 $PMF_LANG['ad_categ_paste2'] = 'Plakken achter';
-$PMF_LANG['msgCategoryRemark_move'] = 'Het omwisselen van 2 categoriën is enkel mogelijk op hetzelfde level.';
 $PMF_LANG['msgCategoryRemark_overview'] = 'De juiste volgorde van de categoriën wordt zichtbaar, als alle categoriën van de actuele taal (eerste kolom) gedefiniëerd zijn.';
 $PMF_LANG['msgUsersOnline'] = '<br>%d Gasten <br>%d Geregistreerd';
 $PMF_LANG['ad_adminlog_del_older_30d'] = 'Verwijder logs ouder dan 30 dagen';

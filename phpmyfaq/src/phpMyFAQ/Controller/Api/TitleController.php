@@ -18,12 +18,21 @@
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class TitleController extends AbstractController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (!$this->isApiEnabled()) {
+            throw new UnauthorizedHttpException('API is not enabled');
+        }
+    }
+
     #[OA\Get(
         path: '/api/v3.0/title',
         operationId: 'getTitle',
@@ -32,10 +41,10 @@ class TitleController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
-        content: new OA\JsonContent(example: 'phpMyFAQ Codename Pontus'),
+        content: new OA\JsonContent(example: 'phpMyFAQ Codename Pallas'),
     )]
     public function index(): JsonResponse
     {
-        return $this->json(Configuration::getConfigurationInstance()->getTitle());
+        return $this->json($this->configuration->getTitle());
     }
 }
