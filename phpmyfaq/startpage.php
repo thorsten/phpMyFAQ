@@ -59,6 +59,7 @@ $twigTemplate = $twig->loadTemplate('./startpage.twig');
 $templateVars = [
     ... $templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
+    'title' => $faqConfig->getTitle(),
     'pageHeader' => $faqConfig->getTitle(),
     'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
     'startPageCategoryDecks' => $startPageCategories,

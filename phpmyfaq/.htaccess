@@ -37,6 +37,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 # Set Gzip compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
     AddOutputFilterByType DEFLATE application/x-font

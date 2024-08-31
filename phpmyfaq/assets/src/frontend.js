@@ -13,7 +13,6 @@
  * @since     2019-12-20
  */
 
-import 'bootstrap';
 import Masonry from 'masonry-layout';
 
 import { handleContactForm } from './contact';
