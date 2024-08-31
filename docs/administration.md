@@ -68,12 +68,15 @@ category.
 This is quite nice if you want to share the work in your FAQ between various admin users.
 
 If you display category images, they are saved as separate files in /images/ as follows:
+
 - category-1-de.ext
 - category-2-de.ext
 - category-3-de.ext
 - etc.
 
-For SEO reasons (reduced file size), you may want to **display the exact same file** as a background image **multiple times**. To do this, simply enter the same file name for each entry in your **database, faqcategories table, image field**.
+For SEO reasons (reduced file size),
+you may want to **display the exact same file** as a background image **multiple times**.
+To do this, enter the same file name for each entry in your **database, "faqcategories" table, image field**.
 
 ### 5.2.2 FAQ Administration
 
@@ -103,7 +106,7 @@ time with all the relevant data of the specific entry. The meaning of the fields
 
 - **Attachments**
   You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the
-  button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload
+  button, a popup opens, and you can upload an attachment. Please keep in mind that the PHP configuration about upload
   size will be checked.
 
 - **Keywords**
@@ -314,7 +317,7 @@ This also applies to the _solution_id_, which can be used later to access indivi
 The keywords for the respective post should be entered in the _keywords_ column, separated by commas.
 In the _topic_ column you enter the question or the title of your post.
 The HTML-formatted content of the post should be entered in the _content_ column.
-For the remaining columns, just use the existing entries as a guide.
+For the remaining columns, use the existing entries as a guide.
 Check everything you have entered again.
 It's better to look at it once too often at the beginning until it becomes easier for you later.
 Save the table in exactly the same format as a CSV file, then you can close it.
@@ -347,7 +350,7 @@ You can now enter the numbers so that the posts end up in the right category.
 On the right at record_id we have the unique ID that identifies the post.
 Once you have entered everything, save and close.
 
-The fourth file called _faqdata_user.csv_ is easy.
+The fourth file called _faqdata_user.csv_ is straightforward.
 Put in the _unique id_ of your new entries at the left and _-1_ at the right.
 Save and close.
 Same for the fifth file _faqdata_groups_.

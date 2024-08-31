@@ -161,13 +161,13 @@ of SQLite.
 
 ### Step 2: LDAP or Microsoft Active Directory support
 
-If PHP was compiled with the LDAP extension you can add your LDAP or Microsoft Active Directory information, too. Then
-you can to insert your LDAP or Microsoft Active Directory information as well.
+If PHP was compiled with the LDAP extension, you can add your LDAP or Microsoft Active Directory information, too.
+Then you can insert your LDAP or Microsoft Active Directory information as well.
 
 ### Step 3: Elasticsearch support
 
-If you want to use Elasticsearch, you can activate this in the third step. You just have to add at least one
-Elasticsearch node and the index name.
+If you want to use Elasticsearch, you can activate this in the third step. You have to add at least one Elasticsearch
+node and the index name.
 
 ### Step 4: Admin user setup
 
@@ -297,7 +297,7 @@ Please be aware:
 ## 2.15 Syntax Highlighting
 
 The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside
-of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn't work for
+&lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn't work for
 you, you can specify the language in the class attribute:
 
     <pre><code class="html">...</code></pre>

@@ -87,7 +87,7 @@ The user-generated accounts are unactivated by default, and the administrator ha
 Every registered user can edit their name, email address and the password.
 If the email address of the user is registered at Gravatar, phpMyFAQ uses the images fetched from Gravatar for this
 email address.
-The users can also enable or disable the permission to show their names in the public frontend, e.g. if they added an
+The users can also enable or disable the permission to show their names in the public frontend, e.g., if they added an
 own question.
 Additionally, every user can activate the builtin two-factor authentication to enhance security.
 You can use authentication apps like Google Authenticator for [iOS](https://apps.apple.com/app/google-authenticator/id388497605)

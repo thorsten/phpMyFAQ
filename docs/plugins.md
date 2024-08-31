@@ -27,7 +27,7 @@ To uninstall a plugin, you can delete the plugin directory from the `content/plu
 
 ## 7.5 Plugin examples
 
-phpMyFAQ comes with a example plugin that demonstrate how to use the plugin system called `HelloWorldPlugin`.
+phpMyFAQ comes with an example plugin that demonstrates how to use the plugin system called `HelloWorldPlugin`.
 
 ### 7.5.1 PHP code
 
