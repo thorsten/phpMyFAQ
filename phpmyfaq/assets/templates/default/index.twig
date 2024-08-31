@@ -120,8 +120,8 @@
     <div class="row pb-2">
       <div class="col-lg-4 col-md-6">
         {% if not isMaintenanceMode %}
-        <label class="form-label" for="pmf-footer-language-switcher">{{ languageBox }}</label>
-        <form accept-charset="utf-8" action="{{ renderUri }}" method="post" id="pmf-footer-language-switcher">
+        <label class="form-label" for="language">{{ languageBox }}</label>
+        <form accept-charset="utf-8" action="./" method="post" id="pmf-footer-language-switcher">
           <div class="form-group d-flex">
             {{ switchLanguages | raw }}
             <input name="action" type="hidden" value="">

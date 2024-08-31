@@ -447,7 +447,6 @@ if (!isset(Link::$allowedActionParameters[$action])) {
 if ($action !== 'main') {
     $includeTemplate = $action . '.html';
     $includePhp = $action . '.php';
-    $renderUri = '?sid=' . $faqSession->getCurrentSessionId();
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
@@ -457,8 +456,6 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
-
-    $renderUri = '?sid=' . $faqSession->getCurrentSessionId();
 }
 
 //
@@ -513,7 +510,6 @@ $templateVars = [
     'msgCategory' => Translation::get('msgCategory'),
     'msgExportAllFaqs' => Translation::get('msgExportAllFaqs'),
     'languageBox' => Translation::get('msgLanguageSubmit'),
-    'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(true),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
