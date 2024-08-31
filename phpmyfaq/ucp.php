@@ -32,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->isLoggedIn()) {
     $faqSession->userTracking('user_control_panel', $user->getUserId());
@@ -73,12 +74,11 @@ if ($user->isLoggedIn()) {
     $templateVars = [
         ... $templateVars,
         'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
-        'msgGravatar' => Translation::get('msgGravatar'),
         'ucpGravatarImage' => $gravatarImg,
         'msgHeaderUserData' => Translation::get('headerUserControlPanel'),
         'userid' => $user->getUserId(),
         'csrf' => Token::getInstance()->getTokenInput('ucp'),
-        'lang' => $Language->getLanguage(),
+        'lang' => $faqConfig->getLanguage()->getLanguage(),
         'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
         'msgRealName' => Translation::get('ad_user_name'),
         'realname' => Strings::htmlentities($user->getUserData('display_name')),

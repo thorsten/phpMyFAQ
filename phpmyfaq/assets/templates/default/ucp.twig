@@ -8,7 +8,10 @@
   <div class="col-4 pmf-personal-gravatar">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h5 class="h6 m-0 font-weight-bold">{{ msgGravatar }}</h5>
+        <h5 class="h6 m-0 font-weight-bold">
+          <i aria-hidden="true" class="bi bi-person-circle"></i>
+          {{ 'msgGravatar' | translate }}
+        </h5>
       </div>
       <div class="card-body">
         <div class="text-center">{{ ucpGravatarImage | raw }}</div>
@@ -16,13 +19,21 @@
         <div class="alert alert-info">{{ msgGravatarNotConnected }}</div>
         {% endif %}
       </div>
+      <div class="card-footer text-end">
+        <a target="_blank" href="https://gravatar.com" class="btn btn-secondary">
+        <i aria-hidden="true" class="bi bi-link-45deg"></i> Gravatar
+        </a>
+      </div>
     </div>
   </div>
   <div class="col-8 pmf-personal-info">
 
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="h6 m-0 font-weight-bold">{{ msgHeaderUserData }}</h6>
+        <h6 class="h6 m-0 font-weight-bold">
+          <i aria-hidden="true" class="bi bi-postcard"></i>
+          {{ msgHeaderUserData }}
+        </h6>
       </div>
       <div class="card-body">
         <div class="row mb-2">
@@ -219,7 +230,7 @@
           </div>
 
           <div class="row">
-            <div class="col-12">
+            <div class="col-12 text-end">
               <button type="reset" class="btn btn-outline-secondary">
                 {{ 'ad_gen_reset' | translate }}
               </button>
