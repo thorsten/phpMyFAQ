@@ -3,3 +3,12 @@ body {
   height: 100%;
   background: var(--bs-light);
 }
+
+.text-bg-pmf-nav {
+  background-color: var(--bs-pmf-nav);
+}
+
+.text-bg-pmf-footer {
+  color: var(--bs-light);
+  background-color: var(--bs-pmf-footer);
+}

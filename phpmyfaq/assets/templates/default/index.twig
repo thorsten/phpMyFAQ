@@ -16,6 +16,7 @@
   {% if isDebugEnabled %}<link href="{{ baseHref }}assets/dist/debugMode.css" rel="stylesheet">{% endif %}
 
   <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" media="screen">
+  <link href="{{ baseHref }}assets/themes/{{ tplSetName }}/theme.css" rel="stylesheet" media="screen">
   <style type="text/css" media="screen">
     {{ customCss }}
   </style>
@@ -50,9 +51,6 @@
           {% endfor %}
         {% endif %}
       </ul>
-
-
-
 
       <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
         <li class="nav-item dropdown">
@@ -122,7 +120,7 @@
   </div>
 </section>
 
-<footer class="footer text-bg-pmf-footer pt-5 pb-4 pb-lg-5" data-bs-theme="dark">
+<footer class="footer text-bg-pmf-footer pt-5 pb-4 pb-lg-5">
   <div class="container pt-lg-4">
     <div class="row pb-2">
       <div class="col-lg-4 col-md-6">

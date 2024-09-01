@@ -19,7 +19,7 @@
 // Import default theme
 @import '../themes/default/theme';
 
-$theme-colors: map-merge($theme-colors, $custom-colors);
+//$theme-colors: map-merge($theme-colors, $custom-colors);
 
 // Import Bootstrap
 @import '~bootstrap/scss/bootstrap';
