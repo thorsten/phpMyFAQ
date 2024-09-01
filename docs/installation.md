@@ -17,7 +17,14 @@ To install it, you will need a web server that meets the following requirements:
 - SPL support
 - FileInfo support
 
-### Apache requirements
+### Web server requirements
+
+You can use phpMyFAQ with the following web servers:
+
+- [Apache](http://www.apache.org) 2.4 or later (with mod_rewrite) and mod_ssl (if you wish to run phpMyFAQ under SSL)
+- [Nginx](http://www.nginx.org) 1.0 or later (with URL rewriting) and SSL support
+
+#### Apache requirements
 
 - mod_rewrite
 - mod_ssl (if you wish to run phpMyFAQ under SSL)
@@ -44,8 +51,8 @@ that the `.htaccess` file processes correctly, and rewrite rules take effect.
 - **Docker** (optional)
 - **Kubernetes** (optional)
 
-In case PHP runs as a module of the Apache, you will have to be able to do a chown on the files before installation. The
-files and directories must be owned by the web server's user.
+In case PHP runs as a module of Apache, you will have to be able to do a chown on the files before installation.
+The files and directories must be owned by the web server's user.
 
 You can determine which versions your web server is running by creating a file called **info.php** with the following
 content: `<?php phpinfo();`
@@ -54,6 +61,8 @@ Upload this file to your webspace and open it using your browser. The installati
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
 In case you're running PHP before 8.2, you cannot use phpMyFAQ.
+
+### Browser requirements
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are the latest Mozilla Firefox
 (Windows/macOS/Linux), the latest Safari (macOS/iOS), the latest Chrome (Windows/macOS/Linux), the latest Opera
