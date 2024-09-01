@@ -16,8 +16,8 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
-// Import Theme
-@import 'theme';
+// Import default theme
+@import '../themes/default/theme';
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
