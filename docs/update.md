@@ -70,7 +70,6 @@ First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
 
 - all files in the directory **config/**
-- all files in the directory **assets/themes/**
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**

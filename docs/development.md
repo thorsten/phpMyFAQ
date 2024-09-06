@@ -6,16 +6,16 @@ phpMyFAQ users have even more customization opportunities. The key feature is th
 is a templates/default directory where the default layouts get shipped.
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit
-your own needs. The most important files for phpMyFAQ's default layout can be found in the directory
-_assets/templates/default/_. All original templates are valid HTML5 based on Bootstrap v5.3.
+your own needs. All files for phpMyFAQ's default layout can be found in the directory _assets/templates/default/_.
 
 ### 6.1.1 Creating a custom layout
 
 Follow these steps to create a custom template set:
 
-- copy the directory assets/templates/default to e.g. assets/themes/example
+- copy the directory assets/templates/default to e.g., assets/templates/example
 - adjust template files in assets/templates/example to fit your needs
-- activate your "example" template set within Admin -> Configuration -> Main
+- adjust the CSS theme in assets/templates/example/theme.css to fit your needs
+- activate your "example" template set within Admin → Configuration → Main
 
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.
@@ -105,10 +105,18 @@ The admin backend templates are located in the **assets/templates/admin** direct
 Usually, you don't need to modify these templates, but if you want to, you can do so.
 Please be aware that changes to the admin backend templates can break the functionality of phpMyFAQ.
 
-## 6.3 Custom CSS
+## 6.3 Themes
+
+The default CSS theme is located in the **assets/templates/default** directory and is stored in the file **theme.css**.
+You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
+The CSS theme is based on Bootstrap’s CSS custom properties for fast and forward-looking design and development.
+We support a light and a dark mode in our default theme.
+
+## 6.4 Custom CSS
 
 You can add custom CSS to your phpMyFAQ installation by adding the CSS code in the admin configuration in the layout
-tab. This way, you can customize the look and feel of your phpMyFAQ installation and you don't want to modify the SCSS
+tab.
+This way, you can customize the look and feel of your phpMyFAQ installation, and you don't want to modify the SCSS
 files.
 
 ## 6.4 REST APIs

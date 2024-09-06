@@ -13,7 +13,22 @@
  * @since     2024-09-01
  */
 
-:root {
+:root,
+[data-bs-theme='light'] {
+  --bs-light: #eceff9;
+  --bs-dark: #060508;
+  --bs-primary: #083c83;
+  --bs-secondary: #1d646a;
+  --bs-info: #40b0ae;
+  --bs-success: #0aa05c;
+  --bs-warning: #e1ca0a;
+  --bs-danger: #f01704;
+  --bs-pmf-nav: #2f3035;
+  --bs-pmf-footer: #142f48;
+  --bs-pmf-background: #9eb6c9;
+}
+
+[data-bs-theme='dark'] {
   --bs-light: #eceff9;
   --bs-dark: #060508;
   --bs-primary: #083c83;

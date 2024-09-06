@@ -78,8 +78,8 @@ class Upgrade extends Setup
             throw new Exception('The folder /content/core/data is missing.');
         }
 
-        if (!is_dir(PMF_ROOT_DIR . '/assets/themes')) {
-            throw new Exception('The folder /phpmyfaq/assets/themes is missing.');
+        if (!is_dir(PMF_ROOT_DIR . '/assets/templates')) {
+            throw new Exception('The folder /phpmyfaq/assets/templates is missing.');
         }
 
         if (

@@ -9,7 +9,7 @@
 
     &:focus {
       box-shadow: none;
-      border: 2px solid $primary-border-subtle-dark;
+      border: 2px solid var(--bs-primary);
     }
   }
 
