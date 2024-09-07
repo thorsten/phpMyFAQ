@@ -27,12 +27,12 @@ use phpMyFAQ\User;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-/**
- * Class AuthAzureActiveDirectory
+/**q
+ * Class AuthEntraId
  *
  * @package phpMyFAQ\Auth
  */
-class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
+class AuthEntraId extends Auth implements AuthDriverInterface
 {
     private readonly Session $session;
 
@@ -41,10 +41,10 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
     private string $oAuthChallenge;
 
     /** @var string */
-    private const AAD_CHALLENGE_METHOD = 'S256';
+    private const ENTRAID_CHALLENGE_METHOD = 'S256';
 
     /** @var string URL to logout */
-    private const AAD_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
+    private const ENTRAID_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
 
     /**
      * @inheritDoc
@@ -140,7 +140,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
             urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
-            self::AAD_CHALLENGE_METHOD
+            self::ENTRAID_CHALLENGE_METHOD
         );
 
         $redirectResponse = new RedirectResponse($oAuthURL);
@@ -153,7 +153,7 @@ class AuthAzureActiveDirectory extends Auth implements AuthDriverInterface
      */
     public function logout(): void
     {
-        $redirectResponse = new RedirectResponse(self::AAD_LOGOUT_URL);
+        $redirectResponse = new RedirectResponse(self::ENTRAID_LOGOUT_URL);
         $redirectResponse->send();
     }
 

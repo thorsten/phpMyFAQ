@@ -15,7 +15,7 @@
  * @since     2022-09-09
  */
 
-use phpMyFAQ\Auth\AuthAzureActiveDirectory;
+use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
@@ -50,7 +50,7 @@ $error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPE
 
 $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
-$auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
+$auth = new AuthEntraId($faqConfig, $oAuth);
 
 $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
 

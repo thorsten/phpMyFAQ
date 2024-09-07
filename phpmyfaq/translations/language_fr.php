@@ -1278,7 +1278,7 @@ $LANG_CONF["security.loginWithEmailAddress"] = ["checkbox", "Se logger uniquemen
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Se connecter avec Microsoft';
-$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Activer la connexion avec Microsoft (Entra ID)'];
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Activer la connexion avec Microsoft Entra ID'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Activer "Poser une question"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Activer les notifications'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Envoyer un email de test à l’administrateur via SMTP'];

@@ -1298,7 +1298,7 @@ $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Zaloguj się wyłą
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Logowanie za pomocą Microsoft)';
-$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Włącz logowanie za pomocą Microsoft (Entra ID)'];
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Włącz logowanie za pomocą Microsoft Entra ID'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Włącz opcję "Zadaj pytanie"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Włącz powiadomienia'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Wyślij e-mail testowy do administratora poprzez SMTP'];

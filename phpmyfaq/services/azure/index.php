@@ -15,7 +15,7 @@
  * @since     2022-09-09
  */
 
-use phpMyFAQ\Auth\AuthAzureActiveDirectory;
+use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session;
@@ -36,7 +36,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 
 $session = new Session($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
-$auth = new AuthAzureActiveDirectory($faqConfig, $oAuth);
+$auth = new AuthEntraId($faqConfig, $oAuth);
 
 try {
     $auth->authorize();

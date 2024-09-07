@@ -1254,7 +1254,7 @@ $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Login nur mit E-Mai
 
 // added v3.2.0-alpha - 2022-09-10 by Thorsten
 $PMF_LANG['msgSignInWithMicrosoft'] = 'Mit Microsoft anmelden';
-$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft (Entra ID)'];
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiviere Anmeldung mit Microsoft Entra ID'];
 $LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiviere "Frage stellen"'];
 $LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiviere Benachrichtigungen'];
 $LANG_CONF['mail.sendTestEmail'] = ['button', 'Test-E-Mail an den Administrator über SMTP'];
