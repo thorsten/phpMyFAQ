@@ -4,14 +4,28 @@ body {
   background: var(--bs-light);
 }
 
+//
+// Top navigation
+//
 .text-bg-pmf-nav {
   color: var(--bs-light);
   background-color: var(--bs-pmf-nav);
 }
 
+//
+// Footer
+//
 .text-bg-pmf-footer {
   color: var(--bs-light);
   background-color: var(--bs-pmf-footer);
+
+  .nav-link {
+    color: var(--bs-light);
+    &:hover {
+      color: var(--bs-light);
+      text-decoration: underline;
+    }
+  }
 }
 
 //
