@@ -4723,22 +4723,22 @@
         },
         {
             "name": "twig/intl-extra",
-            "version": "v3.12.0",
+            "version": "v3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/intl-extra.git",
-                "reference": "61e1189333120a475d2b67b93664b8002668fc27"
+                "reference": "1b8d78c5db08bdc61015fd55009d2e84b3aa7e38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/intl-extra/zipball/61e1189333120a475d2b67b93664b8002668fc27",
-                "reference": "61e1189333120a475d2b67b93664b8002668fc27",
+                "url": "https://api.github.com/repos/twigphp/intl-extra/zipball/1b8d78c5db08bdc61015fd55009d2e84b3aa7e38",
+                "reference": "1b8d78c5db08bdc61015fd55009d2e84b3aa7e38",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0.2",
                 "symfony/intl": "^5.4|^6.4|^7.0",
-                "twig/twig": "^3.10"
+                "twig/twig": "^3.13|^4.0"
             },
             "require-dev": {
                 "symfony/phpunit-bridge": "^6.4|^7.0"
@@ -4771,7 +4771,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/intl-extra/tree/v3.12.0"
+                "source": "https://github.com/twigphp/intl-extra/tree/v3.13.0"
             },
             "funding": [
                 {
@@ -4783,20 +4783,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-10T10:32:24+00:00"
+            "time": "2024-09-03T13:08:40+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.12.0",
+            "version": "v3.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "4d19472d4ac1838e0b1f0e029ce1fa4040eb34ea"
+                "reference": "afc0eb63dc66c248c5a94504dc2b255bc9b86575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/4d19472d4ac1838e0b1f0e029ce1fa4040eb34ea",
-                "reference": "4d19472d4ac1838e0b1f0e029ce1fa4040eb34ea",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/afc0eb63dc66c248c5a94504dc2b255bc9b86575",
+                "reference": "afc0eb63dc66c248c5a94504dc2b255bc9b86575",
                 "shasum": ""
             },
             "require": {
@@ -4850,7 +4850,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.12.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.13.0"
             },
             "funding": [
                 {
@@ -4862,7 +4862,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-08-29T09:51:12+00:00"
+            "time": "2024-09-07T08:01:12+00:00"
         }
     ],
     "packages-dev": [
