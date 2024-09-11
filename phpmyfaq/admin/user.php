@@ -104,13 +104,13 @@ if ($userAction == 'listallusers') {
         ++$displayedCounter;
 
         $tempUser = [
-            'display_name' => Strings::htmlentities($user->getUserData('display_name')),
+            'display_name' => $user->getUserData('display_name'),
             'id' => $user->getUserId(),
-            'email' => Strings::htmlentities($user->getUserData('email')),
+            'email' => $user->getUserData('email'),
             'status' => $user->getStatus(),
             'isSuperAdmin' => $user->isSuperAdmin(),
             'isVisible' => $user->getUserData('is_visible'),
-            'login' => Strings::htmlentities($user->getLogin())
+            'login' => $user->getLogin()
         ];
 
         $users[] = $tempUser;

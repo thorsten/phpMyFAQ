@@ -47,7 +47,6 @@ class AuthHttpTest extends TestCase
     {
         $login = 'testUser';
         $password = 'testPassword';
-        $this->authHttp->create($login, $password);
 
         $this->assertTrue($this->authHttp->checkCredentials($login, $password));
     }
@@ -58,8 +57,6 @@ class AuthHttpTest extends TestCase
     public function testIsValidLogin(): void
     {
         $login = 'testUser';
-        $password = 'testPassword';
-        $this->authHttp->create($login, $password);
 
         $this->assertEquals(1, $this->authHttp->isValidLogin($login));
     }

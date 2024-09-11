@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Controller\FrontController;
+use phpMyFAQ\Controller\WebAuthnController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -26,7 +27,7 @@ $routesConfig = [
         'path' => '/',
         'controller' => [FrontController::class, 'handle'],
         'methods' => 'GET'
-    ],
+    ]
 ];
 
 foreach ($routesConfig as $name => $config) {

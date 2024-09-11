@@ -25,6 +25,7 @@
     "ext-xml": "*",
     "ext-xmlwriter": "*",
     "ext-zip": "*",
+    "2tvenom/cborencode": "^1.0",
     "elasticsearch/elasticsearch": "8.*",
     "endroid/qr-code": "^5.0",
     "guzzlehttp/guzzle": "^7.5",

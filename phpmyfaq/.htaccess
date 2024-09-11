@@ -162,6 +162,9 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ tags page
     RewriteRule ^tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
 
+    # Authentication services
+    RewriteRule ^services/webauthn(.*) services/webauthn/index.php [L,QSA]
+
     # User pages
     RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
 
@@ -173,7 +176,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
 
     # Private APIs
-    RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create) api/index.php [L,QSA]
+    RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login) api/index.php [L,QSA]
 
     # Setup APIs
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]

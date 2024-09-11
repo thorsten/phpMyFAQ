@@ -24,4 +24,5 @@ enum AuthenticationSourceType: string
     case AUTH_LDAP = 'ldap';
     case AUTH_HTTP = 'http';
     case AUTH_SSO = 'sso';
+    case AUTH_WEB_AUTHN = 'webauthn';
 }

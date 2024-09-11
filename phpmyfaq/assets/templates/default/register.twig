@@ -1,62 +1,104 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<section class="col-12">
-  <h2 class="mb-4 border-bottom">{{ 'msgRegistration' | translate }}</h2>
-  <p>{{ 'msgRegistrationCredentials' | translate }} {{ 'msgRegistrationNote' | translate }}</p>
 
-  <div class="row mb-2">
-    <div class="col">
+  <section class="row">
+    <div class="col-12">
+      <h2 class="mb-4 border-bottom">{{ 'msgRegistration' | translate }}</h2>
+      <p class="pb-3 mb-3">
+        {{ 'msgAlreadyHaveAccount' | translate }} <a href="./login">{{ 'msgSignInHere' | translate }}</a>
+      </p>
+
       <div class="spinner-border text-primary d-none" id="loader" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
       <div id="pmf-register-response"></div>
     </div>
-  </div>
+  </section>
 
-  <form id="pmf-register-form" method="post" action="#" class="needs-validation" novalidate>
-    <input type="hidden" name="lang" id="lang" value="{{ lang }}">
 
-    <div class="row mb-2">
-      <label class="col-3 form-control-label" for="realname">{{ 'msgRealname' | translate }}</label>
-      <div class="col-9">
-        <input type="text" name="realname" id="realname" required class="form-control">
+  <section class="row">
+
+    <div class="col-6 border-end">
+      <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 526px;">
+
+        <p class="pb-3 mb-3">
+          {{ 'msgRegistrationCredentials' | translate }} {{ 'msgRegistrationNote' | translate }}
+        </p>
+
+        <form id="pmf-register-form" method="post" action="#" class="needs-validation" novalidate>
+          <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="position-relative mb-4">
+                <label for="realname" class="form-label">{{ 'msgRealname' | translate }}</label>
+                <input type="text" id="realname" name="realname" class="form-control form-control-lg" required>
+                <div class="invalid-feedback position-absolute start-0 top-100">Please enter your name!</div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="position-relative mb-4">
+                <label for="name" class="form-label">{{ 'msgUsername' | translate }}</label>
+                <input type="text" id="name" name="name" class="form-control form-control-lg" required>
+                <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mb-4">
+              <label class="form-label" for="email">{{ 'msgEmail' | translate }}</label>
+              <input type="email" name="email" id="email" required class="form-control form-control-lg">
+              <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!</div>
+            </div>
+            <div class="col-12 mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="isVisible" name="isVisible">
+                <label class="form-check-label" for="isVisible"> {{ 'msgUserDataVisible' | translate }} </label>
+              </div>
+            </div>
+          </div>
+
+          {{ captchaFieldset | raw }}
+
+          <button type="submit" class="btn btn-primary shadow-primary btn-lg w-100" id="pmf-submit-register"
+                  data-pmf-form="save-registration">
+            {{ 'submitRegister' | translate }}
+          </button>
+        </form>
       </div>
     </div>
 
-    <div class="row mb-2">
-      <label class="col-3 form-control-label" for="name">{{ 'msgUsername' | translate }}</label>
-      <div class="col-9">
-        <input type="text" name="name" id="name" required class="form-control">
-      </div>
-    </div>
+    {% if isWebAuthnEnabled %}
+      <div class="col-6">
+        <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 526px;">
 
-    <div class="row mb-2">
-      <label class="col-3 form-control-label" for="email">{{ 'msgEmail' | translate }}</label>
-      <div class="col-9">
-        <input type="email" name="email" id="email" required class="form-control">
-      </div>
-    </div>
+          <p class="pb-3 mb-3">
+            {{ 'msgRegistrationWithPasskeys' | translate }}
+          </p>
 
-    <div class="row mb-2">
-      <div class="offset-3 col-sm-9">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="isVisible" name="isVisible">
-          <label class="form-check-label" for="isVisible"> {{ 'msgUserDataVisible' | translate }} </label>
+
+          <p id="pmf-webauthn-error" class="alert alert-danger d-none"></p>
+
+          <p id="pmf-webauthn-success" class="alert alert-success d-none"></p>
+
+          <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form">
+            <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+
+            <div class="col-12 mb-4">
+              <label class="form-label" for="webauthn">{{ 'msgEmail' | translate }}</label>
+              <input type="email" name="webauthn" id="webauthn" required class="form-control form-control-lg">
+              <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary shadow-primary btn-lg w-100">
+              {{ 'msgContinue' | translate }}
+            </button>
+          </form>
+
         </div>
       </div>
-    </div>
+    {% endif %}
+  </section>
 
-    {{ captchaFieldset | raw }}
-
-    <div class="row mb-2">
-      <div class="col-12 text-end">
-        <button class="btn btn-primary" type="submit" id="pmf-submit-register" data-pmf-form="save-registration">
-          {{ 'submitRegister' | translate }}
-        </button>
-      </div>
-    </div>
-  </form>
-</section>
 
 {% endblock %}

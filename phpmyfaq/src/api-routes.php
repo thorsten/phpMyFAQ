@@ -44,6 +44,7 @@ use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendC
 use phpMyFAQ\Controller\Frontend\UnauthorizedUserController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
+use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\System;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -284,6 +285,27 @@ $routesConfig = [
     'api.private.setup.update-database' => [
         'path' => 'setup/update-database',
         'controller' => [SetupController::class, 'updateDatabase'],
+        'methods' => 'POST'
+    ],
+    // WebAuthn REST API
+    'api.private.webauthn.login' => [
+        'path' => 'webauthn/login',
+        'controller' => [WebAuthnController::class, 'login'],
+        'methods' => 'POST'
+    ],
+    'api.private.webauthn.prepare' => [
+        'path' => 'webauthn/prepare',
+        'controller' => [WebAuthnController::class, 'prepare'],
+        'methods' => 'POST'
+    ],
+    'api.private.webauthn.prepare-login' => [
+        'path' => 'webauthn/prepare-login',
+        'controller' => [WebAuthnController::class, 'prepareLogin'],
+        'methods' => 'POST'
+    ],
+    'api.private.webauthn.register' => [
+        'path' => 'webauthn/register',
+        'controller' => [WebAuthnController::class, 'register'],
         'methods' => 'POST'
     ],
 ];

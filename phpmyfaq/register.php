@@ -54,6 +54,7 @@ $templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
     'lang' => $faqLangCode,
+    'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'register',

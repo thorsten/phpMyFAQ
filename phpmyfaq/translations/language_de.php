@@ -518,7 +518,7 @@ $PMF_LANG['ad_user_action'] = "Aktion";
 $PMF_LANG['msgEmail'] = "E-Mail";
 $PMF_LANG['ad_entry_allowComments'] = "Kommentare zulassen";
 $PMF_LANG['msgWriteNoComment'] = "Kommentieren nicht möglich";
-$PMF_LANG['msgRealname'] = "Echter Name";
+$PMF_LANG['msgRealname'] = "Vollständiger Name";
 $PMF_LANG['ad_export_generate_pdf'] = "Als PDF-Datei exportieren";
 $PMF_LANG['ad_export_full_faq'] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG['err_bannedIP'] = "Diese IP ist gesperrt.";
@@ -1470,5 +1470,12 @@ $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Anhang wurde erfolgreich aktualisier
 $PMF_LANG['msgRemoveAll'] = 'Alles löschen';
 $PMF_LANG['msgError404'] = 'Fehler 404';
 $PMF_LANG['msgError404Description'] = 'Die Seite, die Sie suchen, wurde verschoben, entfernt oder hat möglicherweise nie existiert.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Sie haben bereits ein Konto?';
+$PMF_LANG['msgSignInHere'] = 'Melden Sie sich hier an.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Bei der Registrierung mit Passkeys müssen Nutzer lediglich einen Namen oder eine E-Mail-Adresse angeben, während die Authentifizierung sicher über biometrische Daten oder ein gerätebasiertes Passwort erfolgt.';
+$PMF_LANG['msgContinue'] = 'Weiter';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktiviere WebAuthn Unterstützung (Experimental)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Mit Passkey anmelden';
+
 
 return $PMF_LANG;

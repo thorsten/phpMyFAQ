@@ -35,6 +35,7 @@ import {
 } from './user';
 import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, handleReloadCaptcha } from './utils';
 import './utils/tooltip';
+import { handleWebAuthn } from './webauthn/webauthn';
 
 //
 // Reload Captchas
@@ -115,6 +116,7 @@ handleContactForm();
 // Handle the registration form
 //
 handleRegister();
+handleWebAuthn();
 
 //
 // Masonry on startpage

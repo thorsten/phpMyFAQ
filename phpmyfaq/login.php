@@ -57,7 +57,7 @@ $templateVars = [
     'enableRegistration' => $faqConfig->get('security.enableRegistration'),
     'registerUser' => Translation::get('msgRegistration'),
     'useSignInWithMicrosoft' => $faqConfig->isSignInWithMicrosoftActive(),
-    'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+    'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
 ];
 
 return $templateVars;

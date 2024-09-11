@@ -286,7 +286,7 @@ class User
             WHERE
                 remember_me = '%s' AND account_status != 'blocked'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($cookie)
+            $this->configuration->getDb()->escape($cookie),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -375,7 +375,7 @@ class User
             WHERE 
                 login LIKE '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($search . '%')
+            $this->configuration->getDb()->escape($search . '%'),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -407,16 +407,12 @@ class User
 
         // is $login valid?
         if (!$this->isValidLogin($login)) {
-            $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
-
-            return false;
+            throw new Exception(self::ERROR_USER_LOGINNAME_TOO_SHORT);
         }
 
         // does $login already exist?
         if ($this->getUserByLogin($login, false)) {
-            $this->errors[] = self::ERROR_USER_LOGIN_NOT_UNIQUE;
-
-            return false;
+            throw new Exception(self::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
         // set user-ID
@@ -433,7 +429,7 @@ class User
             $this->getUserId(),
             $this->configuration->getDb()->escape($login),
             $_SERVER['REQUEST_TIME'],
-            date('YmdHis', $_SERVER['REQUEST_TIME'])
+            date('YmdHis', $_SERVER['REQUEST_TIME']),
         );
 
         $this->configuration->getDb()->query($insert);
@@ -443,9 +439,7 @@ class User
 
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
-            $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USERDATA;
-
-            return false;
+            throw new Exception(self::ERROR_USER_CANNOT_CREATE_USERDATA);
         }
 
         // create authentication entry
@@ -461,7 +455,7 @@ class User
             }
 
             if (!$auth->create($login, $pass, $domain)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
+                throw new Exception(self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name);
             } else {
                 $success = true;
             }
@@ -505,19 +499,20 @@ class User
      *
      * @param string $login Login name
      * @param bool   $raiseError Raise error?
+     * @throws Core\Exception
      */
     public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
         $select = sprintf(
             "SELECT user_id, login, account_status, is_superadmin, auth_source FROM %sfaquser WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($login)
+            $this->configuration->getDb()->escape($login),
         );
 
         $result = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($result) !== 1) {
             if ($raiseError) {
-                $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
+                throw new Core\Exception(self::ERROR_USER_INCORRECT_LOGIN);
             }
 
             return false;
@@ -616,7 +611,7 @@ class User
         $delete = sprintf(
             'DELETE FROM %sfaquser WHERE user_id = %d',
             Database::getTablePrefix(),
-            $this->userId
+            $this->userId,
         );
 
         $res = $this->configuration->getDb()->query($delete);
@@ -699,7 +694,7 @@ class User
             'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s ORDER BY user_id ASC',
             Database::getTablePrefix(),
             ($withoutAnonymous ? 'AND user_id <> -1' : ''),
-            ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
+            ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -741,7 +736,7 @@ class User
             WHERE
                 user_id = %d ' . ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
             Database::getTablePrefix(),
-            $userId
+            $userId,
         );
 
         $result = $this->configuration->getDb()->query($select);
@@ -759,7 +754,7 @@ class User
             $select = sprintf(
                 "SELECT pass FROM %sfaquserlogin WHERE login = '%s'",
                 Database::getTablePrefix(),
-                $this->login
+                $this->login,
             );
 
             $res = $this->configuration->getDb()->query($select);
@@ -868,7 +863,7 @@ class User
                 "Name: %s<br>Login name: %s<br>New password: %s",
                 $this->getUserData('display_name'),
                 $this->getLogin(),
-                $newPassword
+                $newPassword,
             );
             // Only set to active if the activation mail sent correctly.
             if ($this->mailUser($subject, $message) !== 0) {
@@ -915,7 +910,7 @@ class User
             "UPDATE %sfaquser SET account_status = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($status),
-            $this->userId
+            $this->userId,
         );
 
         $res = $this->configuration->getDb()->query($update);
@@ -931,7 +926,7 @@ class User
             "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($authSource),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -1008,7 +1003,7 @@ class User
             "UPDATE %sfaquser SET is_superadmin = %d WHERE user_id = %d",
             Database::getTablePrefix(),
             (int)$this->isSuperAdmin,
-            $this->userId
+            $this->userId,
         );
 
         $res = $this->configuration->getDb()->query($update);
@@ -1023,7 +1018,7 @@ class User
         $update = sprintf(
             "UPDATE %sfaquser SET session_id = '' WHERE user_id = %d",
             Database::getTablePrefix(),
-            $this->userId
+            $this->userId,
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -1042,5 +1037,34 @@ class User
         $this->status = (string)$user['account_status'];
         $this->isSuperAdmin = (bool)$user['is_superadmin'];
         $this->authSource = (string) $user['auth_source'];
+    }
+
+    public function setWebAuthnKeys(string $webAuthnKeys): bool
+    {
+         $query = sprintf(
+             "UPDATE %sfaquser SET webauthnkeys = '%s' WHERE user_id = %d",
+             Database::getTablePrefix(),
+             $this->configuration->getDb()->escape($webAuthnKeys),
+             $this->getUserId(),
+         );
+
+         return (bool) $this->configuration->getDb()->query($query);
+    }
+
+    public function getWebAuthnKeys(): string
+    {
+        $select = sprintf(
+            "SELECT webauthnkeys FROM %sfaquser WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->getUserId(),
+        );
+
+        $result = $this->configuration->getDb()->query($select);
+        if ($this->configuration->getDb()->numRows($result) === 1) {
+            $user = $this->configuration->getDb()->fetchArray($result);
+            return (string) $user['webauthnkeys'];
+        }
+
+        return '';
     }
 }

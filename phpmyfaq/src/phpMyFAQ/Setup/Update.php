@@ -102,6 +102,7 @@ class Update extends Setup
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     public function applyUpdates(callable $progressCallback): bool
     {
@@ -122,6 +123,7 @@ class Update extends Setup
         $this->applyUpdates400Alpha();
         $this->applyUpdates400Alpha2();
         $this->applyUpdates400Alpha3();
+        $this->applyUpdates400Beta2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -790,6 +792,26 @@ class Update extends Setup
             $this->configuration->rename('main.templateSet', 'layout.templateSet');
             $this->configuration->rename('main.enableCookieConsent', 'layout.enableCookieConsent');
             $this->configuration->rename('main.contactInformationHTML', 'layout.contactInformationHTML');
+        }
+    }
+
+    private function applyUpdates400Beta2(): void
+    {
+        if (version_compare($this->version, '4.0.0-beta.2', '<')) {
+            // WebAuthn support
+            $this->configuration->add('security.enableWebAuthnSupport', false);
+
+            if ('sqlite3' === Database::getType()) {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquser ADD COLUMN webauthnkeys TEXT NULL DEFAULT NULL;',
+                    Database::getTablePrefix()
+                );
+            } else {
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaquser ADD webauthnkeys TEXT NULL DEFAULT NULL;',
+                    Database::getTablePrefix()
+                );
+            }
         }
     }
 

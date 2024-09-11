@@ -55,6 +55,7 @@ $templateVars = [
     'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
     'secureUrl' => sprintf('https://%s%s', $request->getHost(), $request->getRequestUri()),
     'msgNotSecure' => Translation::get('msgSecureSwitch'),
+    'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
 ];
 
 echo $template->render($templateVars);

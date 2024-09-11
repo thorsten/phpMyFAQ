@@ -1,0 +1,48 @@
+{% extends 'default/index.twig' %}
+
+{% block content %}
+
+  <p id="pmf-webauthn-error" class="alert alert-danger d-none">
+
+  </p>
+
+  <p id="pmf-webauthn-success" class="alert alert-success d-none">
+
+  </p>
+
+  <div id="phpmyfaq-login" class="mb-5">
+    <div id="phpmyfaq-login-content">
+      <main>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-6">
+              <div class="card shadow-lg border-1 rounded-lg mt-5">
+                <div class="card-header">
+                  <h2 class="text-center font-weight-light my-4">phpMyFAQ Login</h2>
+                </div>
+                <div class="card-body">
+                  <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form">
+                    <div class="form-floating mb-3">
+                      <input
+                        class="form-control"
+                        id="faqusername"
+                        name="faqusername"
+                        type="text"
+                        placeholder="{{ 'msgEmail' | translate }}"
+                      />
+                      <label for="faqusername">{{ 'msgEmail' | translate }}</label>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                      <button type="submit" class="w-100 btn btn-primary">{{ 'msgContinue' | translate }}</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+{% endblock %}

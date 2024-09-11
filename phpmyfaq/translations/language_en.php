@@ -1491,5 +1491,11 @@ $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshe
 $PMF_LANG['msgRemoveAll'] = 'Remove all';
 $PMF_LANG['msgError404'] = 'Error 404';
 $PMF_LANG['msgError404Description'] = 'The page you are looking for was moved, removed or might never existed.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Already have an account?';
+$PMF_LANG['msgSignInHere'] = 'Sign in here.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'When registering with Passkeys, users only need to enter a name or e-mail address, while authentication is carried out securely using biometric data or a device-based password.';
+$PMF_LANG['msgContinue'] = 'Continue';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Activate WebAuthn support (Experimental)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Login with Passkey';
 
 return $PMF_LANG;

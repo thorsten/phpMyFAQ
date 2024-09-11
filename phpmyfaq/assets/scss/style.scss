@@ -16,11 +16,6 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 
-// Import default theme
-@import '../templates/default/theme.css';
-
-//$theme-colors: map-merge($theme-colors, $custom-colors);
-
 // Import Bootstrap
 @import '~bootstrap/scss/bootstrap';
 

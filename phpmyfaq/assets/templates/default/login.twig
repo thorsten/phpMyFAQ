@@ -70,7 +70,13 @@
                   {% if useSignInWithMicrosoft %}
                   <a class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" href="./services/azure">
                     <i class="bi bi-windows" aria-hidden="true"></i>
-                    {{ msgSignInWithMicrosoft }}
+                    {{ 'msgSignInWithMicrosoft' | translate }}
+                  </a>
+                  {% endif %}
+                  {%  if isWebAuthnEnabled %}
+                  <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="./services/webauthn">
+                    <i class="bi bi-key" aria-hidden="true"></i>
+                    {{ 'msgSignInWithPasskey' | translate }}
                   </a>
                   {% endif %}
                 </div>
