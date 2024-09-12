@@ -499,7 +499,7 @@ class User
      *
      * @param string $login Login name
      * @param bool   $raiseError Raise error?
-     * @throws Core\Exception
+     * @throws Exception
      */
     public function getUserByLogin(string $login, bool $raiseError = true): bool
     {
@@ -520,7 +520,6 @@ class User
 
         $this->extractUserFromResult($result);
 
-        // get user-data
         if (!$this->userdata instanceof UserData) {
             $this->userdata = new UserData($this->configuration);
         }

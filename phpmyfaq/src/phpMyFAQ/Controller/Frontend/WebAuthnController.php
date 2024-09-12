@@ -47,7 +47,7 @@ class WebAuthnController extends AbstractController
 
     /**
      * @throws RandomException|\JsonException
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('api/webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
@@ -55,7 +55,7 @@ class WebAuthnController extends AbstractController
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!$this->user->getUserByLogin($username)) {
+        if (!$this->user->getUserByLogin($username, false)) {
             try {
                 $this->user->createUser($username);
                 $this->user->setStatus('active');

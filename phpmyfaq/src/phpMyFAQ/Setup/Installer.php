@@ -373,6 +373,7 @@ class Installer extends Setup
         'security.googleReCaptchaV2SiteKey' => '',
         'security.googleReCaptchaV2SecretKey' => '',
         'security.loginWithEmailAddress' => 'false',
+        'security.enableWebAuthnSupport' => 'false',
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,
