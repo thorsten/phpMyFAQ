@@ -1,249 +1,316 @@
 {% extends 'index.twig' %}
 
 {% block content %}
-<div class="row">
-  <h2 class="mb-4 border-bottom">{{ 'headerUserControlPanel' | translate }}</h2>
+  <div class="row">
+    <h2 class="mb-4 border-bottom">{{ 'headerUserControlPanel' | translate }}</h2>
 
 
-  <div class="col-4 pmf-personal-gravatar">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h5 class="h6 m-0 font-weight-bold">
-          <i aria-hidden="true" class="bi bi-person-circle"></i>
-          {{ 'msgGravatar' | translate }}
-        </h5>
-      </div>
-      <div class="card-body">
-        <div class="text-center">{{ ucpGravatarImage | raw }}</div>
-        {% if ucpGravatarImage == '' %}
-        <div class="alert alert-info">{{ msgGravatarNotConnected }}</div>
-        {% endif %}
-      </div>
-      <div class="card-footer text-end">
-        <a target="_blank" href="https://gravatar.com" class="btn btn-secondary">
-        <i aria-hidden="true" class="bi bi-link-45deg"></i> Gravatar
-        </a>
+    <div class="col-4 pmf-personal-gravatar">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h5 class="h6 m-0 font-weight-bold">
+            <i aria-hidden="true" class="bi bi-person-circle"></i>
+            {{ 'msgGravatar' | translate }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="text-center">{{ ucpGravatarImage | raw }}</div>
+          {% if ucpGravatarImage == '' %}
+            <div class="alert alert-info">{{ msgGravatarNotConnected }}</div>
+          {% endif %}
+        </div>
+        <div class="card-footer text-end">
+          <a target="_blank" href="https://gravatar.com" class="btn btn-secondary">
+            <i aria-hidden="true" class="bi bi-link-45deg"></i> Gravatar
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-8 pmf-personal-info">
+    <div class="col-8 pmf-personal-info">
+      <form id="pmf-user-control-panel-form" action="#" method="post" class="needs-validation">
 
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="h6 m-0 font-weight-bold">
-          <i aria-hidden="true" class="bi bi-postcard"></i>
-          {{ msgHeaderUserData }}
-        </h6>
-      </div>
-      <div class="card-body">
-        <div class="row mb-2">
-          <div class="col">
-            <div class="spinner-border text-primary d-none" id="loader" role="status">
-              <span class="visually-hidden">Loading...</span>
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="h6 m-0 font-weight-bold">
+              <i aria-hidden="true" class="bi bi-postcard"></i>
+              {{ msgHeaderUserData }}
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col">
+                <div class="spinner-border text-primary d-none" id="loader" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div id="pmf-user-control-panel-response"></div>
+              </div>
             </div>
-            <div id="pmf-user-control-panel-response"></div>
+
+            <input type="hidden" name="userid" value="{{ userid }}" />
+            {{ csrf|raw }}
+            <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="name">{{ msgRealName }}: *</label>
+              <div class="col-lg-8 controls">
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value="{{ realname|raw }}"
+                  class="form-control"
+                  required
+                  {{ readonly }}
+                />
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="email">{{ msgEmail }}: *</label>
+              <div class="col-lg-8 controls">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value="{{ email|raw }}"
+                  class="form-control"
+                  required
+                  {{ readonly }}
+                />
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}: *</label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input
+                    type="password"
+                    autocomplete="off"
+                    name="faqpassword"
+                    id="faqpassword"
+                    class="form-control"
+                    data-pmf-toggle="faqpassword_toggle"
+                    required
+                    {{ readonly }}
+                  />
+                  <span class="input-group-text" id="faqpassword_toggle">
+                  <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
+                </span>
+                </div>
+              </div>
+              <div class="offset-4 col-lg-8">
+                <div class="progress mt-2 w-100">
+                  <div class="progress-bar progress-bar-striped" id="strength"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}: *</label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input
+                    type="password"
+                    autocomplete="off"
+                    name="faqpassword_confirm"
+                    id="faqpassword_confirm"
+                    class="form-control"
+                    data-pmf-toggle="faqpassword_confirm_toggle"
+                    required
+                    {{ readonly }}
+                  />
+                  <span class="input-group-text" id="faqpassword_confirm_toggle">
+                  <i class="bi bi-eye-slash" id="faqpassword_confirm_toggle_icon"></i>
+                </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="offset-4 col-lg-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" {{ checked }} />
+                  <label class="form-check-label" for="is_visible"> {{ msgIsVisible }} </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="reset" class="btn btn-outline-secondary">
+                  {{ 'ad_gen_reset' | translate }}
+                </button>
+                <button class="btn btn-primary" type="submit" id="pmf-submit-user-control-panel"
+                        data-pmf-form="submit-user-data">
+                  {{ msgSave }}
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <form id="pmf-user-control-panel-form" action="#" method="post" class="needs-validation">
-          <input type="hidden" name="userid" value="{{ userid }}" />
-          {{ csrf|raw }}
-          <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
-
-          <div class="row mb-2">
-            <label class="col-lg-4 col-form-label" for="name">{{ msgRealName }}: *</label>
-            <div class="col-lg-8 controls">
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value="{{ realname|raw }}"
-                class="form-control"
-                required
-                {{ readonly }}
-              />
-            </div>
+        <!-- 2FA -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="h6 m-0 font-weight-bold">
+              <i aria-hidden="true" class="bi bi-shield-check"></i>
+              {{ 'msgTwofactorConfig' | translate }}
+            </h6>
           </div>
+          <div class="card-body">
 
-          <div class="row mb-2">
-            <label class="col-lg-4 col-form-label" for="email">{{ msgEmail }}: *</label>
-            <div class="col-lg-8 controls">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value="{{ email|raw }}"
-                class="form-control"
-                required
-                {{ readonly }}
-              />
-            </div>
-          </div>
-
-          <div class="row mb-2">
-            <label class="col-lg-4 col-form-label" for="faqpassword">{{ msgPassword }}: *</label>
-            <div class="col-lg-8">
-              <div class="input-group">
-                <input
-                  type="password"
-                  autocomplete="off"
-                  name="faqpassword"
-                  id="faqpassword"
-                  class="form-control"
-                  data-pmf-toggle="faqpassword_toggle"
-                  required
-                  {{ readonly }}
-                />
-                <span class="input-group-text" id="faqpassword_toggle">
-                  <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
-                </span>
-              </div>
-            </div>
-            <div class="offset-4 col-lg-8">
-              <div class="progress mt-2 w-100">
-                <div class="progress-bar progress-bar-striped" id="strength"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-4">
-            <label class="col-lg-4 col-form-label" for="faqpassword_confirm">{{ msgConfirm }}: *</label>
-            <div class="col-lg-8">
-              <div class="input-group">
-                <input
-                  type="password"
-                  autocomplete="off"
-                  name="faqpassword_confirm"
-                  id="faqpassword_confirm"
-                  class="form-control"
-                  data-pmf-toggle="faqpassword_confirm_toggle"
-                  required
-                  {{ readonly }}
-                />
-                <span class="input-group-text" id="faqpassword_confirm_toggle">
-                  <i class="bi bi-eye-slash" id="faqpassword_confirm_toggle_icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-4">
-            <div class="offset-4 col-lg-8">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" {{ checked }} />
-                <label class="form-check-label" for="is_visible"> {{ msgIsVisible }} </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-4">
-            <div class="offset-4 col-lg-8 border-top">
-              <div class="form-check mt-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="twofactor_enabled"
-                  name="twofactor_enabled"
-                  {% if twofactor_enabled == true %} checked {% endif %}
-                />
-                <label class="form-check-label" for="twofactor_enabled"> {{ msgTwofactorEnabled }} </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-4">
-            <div class="offset-4 col-lg-8">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#twofactor_config">
-                {{ msgTwofactorConfig }}
-              </button>
-            </div>
-          </div>
-          {% if twofactor_enabled == true %}
-          <div class="row mb-4">
-            <div class="offset-4 col-lg-8">
-              <button type="button" class="btn btn-secondary" id="removeCurrentConfig" data-bs-toggle="modal" data-bs-target="#twofactor_removeModal">
-                {{ msgTwofactorNewSecret }}
-              </button>
-            </div>
-          </div>
-          {% endif %}
-
-          <!-- QR Code Modal -->
-          <div
-            class="modal fade"
-            id="twofactor_config"
-            tabindex="-1"
-            aria-labelledby="twofactor_configLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="twofactor_configLabel">{{ msgTwofactorConfigModelTitle }}</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <img
-                    class="rounded mx-auto d-block"
-                    src="{{ qr_code_secret }}"
-                    width="200"
-                    height="200"
-                    alt="{{ qr_code_secret_alt }}"
+            <div class="row mb-4">
+              <div class="offset-4 col-lg-8">
+                <div class="form-check mt-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="twofactor_enabled"
+                    name="twofactor_enabled"
+                    {% if twofactor_enabled == true %} checked {% endif %}
                   />
-                  <p class="text-center">Secret-Key: {{ twofactor_secret }}</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ msgSave }}</button>
+                  <label class="form-check-label" for="twofactor_enabled"> {{ msgTwofactorEnabled }} </label>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Confirm removing of 2FA-configuration Modal -->
-          <div
-            class="modal fade"
-            id="twofactor_removeModal"
-            tabindex="-1"
-            aria-labelledby="twofactor_removeLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="twofactor_removeLabel"><i class="bi bi-exclamation-triangle"></i> {{ msgWarning }}</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <input id="pmf-csrf-token-remove-twofactor" value="{{ csrfTokenRemoveTwofactor }}" type="hidden" />
-                  <p>{{ msgConfirmTwofactorConfig }}</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">
-                    {{ ad_gen_no }}
-                  </button>
-                  <button class="btn btn-outline-danger" id="pmf-remove-twofactor-confirm" data-bs-dismiss="modal">
-                    {{ ad_gen_yes }}
+            <div class="row mb-4">
+              <div class="offset-4 col-lg-8">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#twofactor_config">
+                  {{ msgTwofactorConfig }}
+                </button>
+              </div>
+            </div>
+            {% if twofactor_enabled == true %}
+              <div class="row mb-4">
+                <div class="offset-4 col-lg-8">
+                  <button type="button" class="btn btn-secondary" id="removeCurrentConfig" data-bs-toggle="modal"
+                          data-bs-target="#twofactor_removeModal">
+                    {{ msgTwofactorNewSecret }}
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+            {% endif %}
 
-          <div class="row">
-            <div class="col-12 text-end">
-              <button type="reset" class="btn btn-outline-secondary">
-                {{ 'ad_gen_reset' | translate }}
-              </button>
-              <button class="btn btn-primary" type="submit" id="pmf-submit-user-control-panel"
-                      data-pmf-form="submit-user-data">
-                {{ msgSave }}
-              </button>
+            <!-- QR Code Modal -->
+            <div
+              class="modal fade"
+              id="twofactor_config"
+              tabindex="-1"
+              aria-labelledby="twofactor_configLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="twofactor_configLabel">{{ msgTwofactorConfigModelTitle }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <img
+                      class="rounded mx-auto d-block"
+                      src="{{ qr_code_secret }}"
+                      width="200"
+                      height="200"
+                      alt="{{ qr_code_secret_alt }}"
+                    />
+                    <p class="text-center">Secret-Key: {{ twofactor_secret }}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{ msgSave }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Confirm removing of 2FA-configuration Modal -->
+            <div
+              class="modal fade"
+              id="twofactor_removeModal"
+              tabindex="-1"
+              aria-labelledby="twofactor_removeLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="twofactor_removeLabel"><i
+                        class="bi bi-exclamation-triangle"></i> {{ msgWarning }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <input id="pmf-csrf-token-remove-twofactor" value="{{ csrfTokenRemoveTwofactor }}" type="hidden" />
+                    <p>{{ msgConfirmTwofactorConfig }}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">
+                      {{ ad_gen_no }}
+                    </button>
+                    <button class="btn btn-outline-danger" id="pmf-remove-twofactor-confirm" data-bs-dismiss="modal">
+                      {{ ad_gen_yes }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="reset" class="btn btn-outline-secondary">
+                  {{ 'ad_gen_reset' | translate }}
+                </button>
+                <button class="btn btn-primary" type="submit" id="pmf-submit-user-control-panel"
+                        data-pmf-form="submit-user-data">
+                  {{ msgSave }}
+                </button>
+              </div>
             </div>
           </div>
-        </form>
+        </div>
+      </form>
+
+      <!-- Passkey -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="h6 m-0 font-weight-bold">
+            <i aria-hidden="true" class="bi bi-shield-check"></i>
+            {{ 'msgSignInWithPasskey' | translate }}
+          </h6>
+        </div>
+        <div class="card-body">
+          <p class="pb-3 mb-3">
+            {{ 'msgRegistrationWithPasskeys' | translate }}
+          </p>
+
+          <p id="pmf-webauthn-error" class="alert alert-danger d-none"></p>
+
+          <p id="pmf-webauthn-success" class="alert alert-success d-none"></p>
+
+          <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form" id="pmf-webauthn-form">
+            <input type="hidden" name="lang" id="lang" value="{{ lang }}">
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label" for="webauthn">{{ msgEmail }}: *</label>
+              <div class="col-lg-8 controls">
+                <input type="text" name="webauthn" id="webauthn" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">
+                  {{ 'msgContinue' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
+
+
     </div>
   </div>
-</div>
 
 {% endblock %}
