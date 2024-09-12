@@ -339,6 +339,7 @@ class Pgsql extends Database implements Driver
             access_token TEXT NULL DEFAULT NULL,
             code_verifier VARCHAR(255) NULL DEFAULT NULL,
             jwt TEXT NULL DEFAULT NULL,
+            webauthnkeys TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
