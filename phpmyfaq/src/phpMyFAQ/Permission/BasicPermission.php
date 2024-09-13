@@ -225,7 +225,7 @@ class BasicPermission extends Permission implements PermissionInterface
      */
     public function getUserRightsCount(CurrentUser $currentUser): int
     {
-        $userRights = $this->getAllUserRights($currentUser->getUserId());
+        $userRights = $this->getUserRights($currentUser->getUserId());
 
         return is_countable($userRights) ? count($userRights) : 0;
     }

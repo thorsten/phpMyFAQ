@@ -13,7 +13,7 @@
  * @since     2022-01-31
  */
 
-// TinyMCE global which is used to init the editor
+// TinyMCE global, which is used to init the editor
 import tinymce from 'tinymce/tinymce';
 import 'tinymce/models/dom';
 
@@ -88,6 +88,7 @@ export const renderEditor = () => {
       extended_valid_elements: 'code[class],video[*],audio[*],source[*]',
       removeformat: [{ selector: '*', attributes: ['style'], split: false, expand: false, deep: true }],
       importcss_append: true,
+      sandbox_iframes: true,
 
       // Font handling
       fontsize_formats: '6pt 8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 36pt 48pt',

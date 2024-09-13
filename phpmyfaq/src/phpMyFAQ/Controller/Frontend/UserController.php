@@ -63,7 +63,7 @@ class UserController extends AbstractController
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $isAzureAdUser = $user->getUserAuthSource() === 'azure';
-
+        $isWebAuthnUser = $user->getUserAuthSource() === 'webauthn';
 
         if ($userId !== $user->getUserId()) {
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
@@ -77,15 +77,22 @@ class UserController extends AbstractController
                 );
             }
 
-            if (strlen($password) <= 7 || strlen($confirm) <= 7) {
+            if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
                 return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_CONFLICT);
             } else {
-                $userData = [
-                    'display_name' => $userName,
-                    'email' => $email,
-                    'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
-                ];
+                if ($isWebAuthnUser) {
+                    $userData = [
+                        'display_name' => $userName,
+                        'is_visible' => $isVisible === 'on' ? 1 : 0,
+                    ];
+                } else {
+                    $userData = [
+                        'display_name' => $userName,
+                        'email' => $email,
+                        'is_visible' => $isVisible === 'on' ? 1 : 0,
+                        'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
+                    ];
+                }
 
                 $success = $user->setUserData($userData);
 
