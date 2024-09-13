@@ -110,7 +110,13 @@ class WebAuthnController extends AbstractController
         }
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
-            return $this->json(['success' => 'ok'], Response::HTTP_OK);
+            return $this->json(
+                [
+                    'success' => 'ok',
+                    'message' => Translation::get('msgPasskeyRegistrationSuccess'),
+                ],
+                Response::HTTP_OK
+            );
         }
 
         return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);

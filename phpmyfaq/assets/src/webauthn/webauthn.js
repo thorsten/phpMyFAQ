@@ -53,10 +53,9 @@ export const handleWebAuthn = () => {
                 });
 
                 const jsonResponse = await response.json();
-
                 if (jsonResponse.success === 'ok') {
                   successMessage.classList.remove('d-none');
-                  successMessage.textContent = 'registration completed successfully';
+                  successMessage.textContent = jsonResponse.message;
                   errorMessage.classList.add('d-none');
                 } else {
                   throw new Error('Registration failed.');
@@ -79,6 +78,7 @@ export const handleWebAuthn = () => {
       }
     });
   }
+
   if (loginForm) {
     loginForm.addEventListener('submit', async (ev) => {
       ev.preventDefault();

@@ -15,42 +15,58 @@
 
 export const webauthnAuthenticate = async (webAuthnKey, callback) => {
   try {
-    const privateKey = webAuthnKey;
-    const originalChallenge = privateKey.challenge;
+    const { challenge, allowCredentials, ...rest } = webAuthnKey;
+    const originalChallenge = challenge;
 
-    privateKey.challenge = new Uint8Array(privateKey.challenge);
+    const publicKeyCredentialRequestOptions = {
+      ...rest,
+      challenge: new Uint8Array(challenge),
+      allowCredentials: allowCredentials.map((cred) => ({
+        ...cred,
+        id: new Uint8Array(cred.id),
+      })),
+    };
 
-    privateKey.allowCredentials = privateKey.allowCredentials.map((cred) => ({
-      ...cred,
-      id: new Uint8Array(cred.id),
-    }));
-
-    const assertion = await navigator.credentials.get({ publicKey: privateKey });
+    const assertion = await navigator.credentials.get({
+      publicKey: publicKeyCredentialRequestOptions,
+    });
 
     const arrayBufferToArray = (buffer) => Array.from(new Uint8Array(buffer));
 
-    const rawId = arrayBufferToArray(assertion.rawId);
-    const clientData = JSON.parse(new TextDecoder().decode(assertion.response.clientDataJSON));
-    const clientDataJSON = arrayBufferToArray(assertion.response.clientDataJSON);
-    const authenticatorData = arrayBufferToArray(assertion.response.authenticatorData);
-    const signature = arrayBufferToArray(assertion.response.signature);
+    const {
+      rawId,
+      response: {
+        clientDataJSON: clientDataJSONBuffer,
+        authenticatorData: authenticatorDataBuffer,
+        signature: signatureBuffer,
+      },
+      type,
+    } = assertion;
+
+    const clientDataJSON = JSON.parse(new TextDecoder().decode(clientDataJSONBuffer));
+
+    const rawIdArray = arrayBufferToArray(rawId);
+    const clientDataJSONArray = arrayBufferToArray(clientDataJSONBuffer);
+    const authenticatorDataArray = arrayBufferToArray(authenticatorDataBuffer);
+    const signatureArray = arrayBufferToArray(signatureBuffer);
 
     const info = {
-      type: assertion.type,
-      originalChallenge: originalChallenge,
-      rawId: rawId,
+      type,
+      originalChallenge,
+      rawId: rawIdArray,
       response: {
-        authenticatorData: authenticatorData,
-        clientData: clientData,
-        clientDataJSONarray: clientDataJSON,
-        signature: signature,
+        authenticatorData: authenticatorDataArray,
+        clientData: clientDataJSON,
+        clientDataJSONarray: clientDataJSONArray,
+        signature: signatureArray,
       },
     };
 
     callback(true, info);
   } catch (error) {
-    if (['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'].includes(error.name)) {
-      callback(false, 'abort');
+    const abortErrors = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
+    if (abortErrors.includes(error.name)) {
+      callback(false, 'Authentication aborted by user.');
     } else {
       callback(false, error.toString());
     }

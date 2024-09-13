@@ -1476,6 +1476,7 @@ $PMF_LANG['msgRegistrationWithPasskeys'] = 'Bei der Registrierung mit Passkeys m
 $PMF_LANG['msgContinue'] = 'Weiter';
 $LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktiviere WebAuthn Unterstützung (Experimental)'];
 $PMF_LANG['msgSignInWithPasskey'] = 'Mit Passkey anmelden';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Die Registrierung für Passkeys erfolgreich.';
 
 
 return $PMF_LANG;

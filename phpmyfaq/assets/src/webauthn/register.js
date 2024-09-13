@@ -15,46 +15,62 @@
 
 export const webauthnRegister = async (challenge, callback) => {
   try {
-    challenge.publicKey.attestation = undefined;
-    challenge.publicKey.challenge = new Uint8Array(challenge.publicKey.challenge);
-    challenge.publicKey.user.id = new Uint8Array(challenge.publicKey.user.id);
+    const { publicKey, b64challenge } = challenge;
 
-    const newCredential = await navigator.credentials.create({ publicKey: challenge.publicKey });
+    const publicKeyCredentialCreationOptions = {
+      ...publicKey,
+      attestation: undefined, // Not requesting attestation
+      challenge: new Uint8Array(publicKey.challenge), // Convert challenge to Uint8Array
+      user: {
+        ...publicKey.user,
+        id: new Uint8Array(publicKey.user.id), // Convert user ID to Uint8Array
+      },
+    };
 
-    const clientDataJSON = JSON.parse(new TextDecoder().decode(new Uint8Array(newCredential.response.clientDataJSON)));
+    const credential = await navigator.credentials.create({
+      publicKey: publicKeyCredentialCreationOptions,
+    });
 
-    if (challenge.b64challenge !== clientDataJSON.challenge) {
-      return callback(false, 'The challenge is not the same.');
+    const decodeClientDataJSON = (buffer) => {
+      const decodedString = new TextDecoder().decode(buffer);
+      return JSON.parse(decodedString);
+    };
+
+    const clientDataJSON = decodeClientDataJSON(credential.response.clientDataJSON);
+
+    if (b64challenge !== clientDataJSON.challenge) {
+      return callback(false, 'The challenge does not match.');
     }
 
-    if (`https://${challenge.publicKey.rp.name}` !== clientDataJSON.origin) {
-      return callback(false, 'The origin is not the same.');
+    const expectedOrigin = window.location.origin;
+    if (expectedOrigin !== clientDataJSON.origin) {
+      return callback(false, 'The origin does not match.');
     }
 
-    if (!('type' in clientDataJSON) || clientDataJSON.type !== 'webauthn.create') {
-      return callback(false, 'The type is not the same.');
+    if (clientDataJSON.type !== 'webauthn.create') {
+      return callback(false, 'Incorrect clientDataJSON type.');
     }
 
     const arrayBufferToArray = (buffer) => Array.from(new Uint8Array(buffer));
 
-    const attestationObject = arrayBufferToArray(newCredential.response.attestationObject);
-    const rawId = arrayBufferToArray(newCredential.rawId);
+    const attestationObject = arrayBufferToArray(credential.response.attestationObject);
+    const rawId = arrayBufferToArray(credential.rawId);
 
-    const info = {
+    const registrationInfo = {
+      id: credential.id,
       rawId,
-      id: newCredential.id,
-      type: newCredential.type,
+      type: credential.type,
       response: {
         attestationObject,
         clientDataJSON,
       },
     };
 
-    // Pass the result to the callback
-    callback(true, JSON.stringify(info));
+    callback(true, JSON.stringify(registrationInfo));
   } catch (error) {
-    if (['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'].includes(error.name)) {
-      callback(false, 'abort');
+    const abortErrors = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
+    if (abortErrors.includes(error.name)) {
+      callback(false, 'Registration aborted by user.');
     } else {
       callback(false, error.toString());
     }
