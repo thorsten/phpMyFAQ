@@ -38,7 +38,7 @@
     "highlight.js": "^11.10.0",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.2",
-    "tinymce": "^6.8.4",
+    "tinymce": "^7.0.0",
     "vanilla-cookieconsent": "^3.0.1"
   },
   "devDependencies": {
