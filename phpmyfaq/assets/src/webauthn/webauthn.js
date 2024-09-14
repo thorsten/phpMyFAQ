@@ -18,7 +18,7 @@ import { webauthnAuthenticate } from './authenticate';
 
 export const handleWebAuthn = () => {
   const registerForm = document.getElementById('pmf-webauthn-form');
-  const loginForm = document.getElementById('pmf-webauthn-form');
+  const loginForm = document.getElementById('pmf-webauthn-login-form');
   const errorMessage = document.getElementById('pmf-webauthn-error');
   const successMessage = document.getElementById('pmf-webauthn-success');
 

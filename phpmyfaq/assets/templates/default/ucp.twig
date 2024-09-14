@@ -135,30 +135,13 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-12 text-end">
-                <button type="reset" class="btn btn-outline-secondary">
-                  {{ 'ad_gen_reset' | translate }}
-                </button>
-                <button class="btn btn-primary" type="submit" id="pmf-submit-user-control-panel"
-                        data-pmf-form="submit-user-data">
-                  {{ msgSave }}
-                </button>
-              </div>
+            <!-- 2FA -->
+            <div class="row mb-4">
+              <h6 class="h6 m-0 font-weight-bold">
+                <i aria-hidden="true" class="bi bi-shield-check"></i>
+                {{ 'msgTwofactorConfig' | translate }}
+              </h6>
             </div>
-
-          </div>
-        </div>
-
-        <!-- 2FA -->
-        <div class="card shadow mb-4">
-          <div class="card-header py-3">
-            <h6 class="h6 m-0 font-weight-bold">
-              <i aria-hidden="true" class="bi bi-shield-check"></i>
-              {{ 'msgTwofactorConfig' | translate }}
-            </h6>
-          </div>
-          <div class="card-body">
 
             <div class="row mb-4">
               <div class="offset-4 col-lg-8">
