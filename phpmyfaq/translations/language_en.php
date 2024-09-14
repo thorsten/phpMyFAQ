@@ -1498,5 +1498,6 @@ $PMF_LANG['msgContinue'] = 'Continue';
 $LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Activate WebAuthn support (Experimental)'];
 $PMF_LANG['msgSignInWithPasskey'] = 'Login with Passkey';
 $PMF_LANG['msgPasskeyRegistrationSuccess'] = 'The registration was successful. You can now log in with your Passkey.';
+$PMF_LANG['msgSupportUs'] = 'Support phpMyFAQ';
 
 return $PMF_LANG;
