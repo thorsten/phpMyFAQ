@@ -43,7 +43,7 @@ class AuthWebAuthn extends Auth
     {
         parent::__construct($configuration);
 
-        $this->appId = Utils::getHostFromUrl($configuration->getDefaultUrl());
+        $this->setAppId(Utils::getHostFromUrl($configuration->getDefaultUrl()));
     }
 
     /**
@@ -322,7 +322,7 @@ class AuthWebAuthn extends Auth
 
         $originalChallenge = rtrim(
             strtr(base64_encode(self::arrayToString($info->originalChallenge)), '+/', '-_'),
-            '='
+            '=',
         );
         if ($originalChallenge != $info->response->clientData->challenge) {
             throw new Exception('Challenge mismatch');
@@ -378,6 +378,11 @@ class AuthWebAuthn extends Auth
             0 => false,
             default => throw new Exception('Cannot decode key response because of ' . openssl_error_string()),
         };
+    }
+
+    public function setAppId(string $appId): void
+    {
+        $this->appId = $appId;
     }
 
     /**
