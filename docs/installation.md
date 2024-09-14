@@ -337,26 +337,172 @@ This is commonly used by several SSO systems that integrate with web servers,
 especially when using standard authentication mechanisms like HTTP Basic Authentication,
 HTTP Digest Authentication, or more advanced protocols.
 
-### Configuring NGINX and PHP-FPM to Pass `REMOTE_USER` to PHP
+### Configuring Apache with `mod_php` to Pass `REMOTE_USER` to PHP
 
-To make the `REMOTE_USER` variable available to PHP through NGINX,
-follow these steps to modify both the NGINX configuration and the PHP-FPM settings.
+When using Apache with `mod_php`,
+the `REMOTE_USER` variable can be automatically passed to PHP without the need for PHP-FPM.
+Here’s how to configure Apache to pass `REMOTE_USER` to PHP when using basic authentication or Single Sign-On
+(SSO) systems.
 
-#### Step 1: Modify NGINX Configuration to Pass `REMOTE_USER`
+#### Step 1: Configure Apache to Pass `REMOTE_USER`
 
-Open the FastCGI parameters file in NGINX. This file is typically located at `/etc/nginx/fastcgi_params.default`:
+In your Apache virtual host configuration file (commonly located at `/etc/apache2/sites-available/your-site.conf`),
+add the following directives to ensure `REMOTE_USER` is passed to PHP.
+
+```apache
+<VirtualHost *:80>
+    ServerName your-site.com
+    DocumentRoot /var/www/html
+
+    <Directory "/var/www/html/admin">
+        # Enable basic authentication or SSO
+        AuthType Basic
+        AuthName "Restricted Area"
+        AuthUserFile /etc/apache2/.htpasswd
+        Require valid-user
+
+        # Ensure REMOTE_USER is available for PHP
+        SetEnvIf Authorization "(.*)" REMOTE_USER=$1
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+In this configuration:
+
+- The `AuthType` and `AuthUserFile` specify the use of Basic Authentication, but this can be adapted for other authentication mechanisms (such as SSO).
+- The `SetEnvIf` directive ensures that `REMOTE_USER` is passed to PHP correctly.
+
+If using Basic Authentication, create a `.htpasswd` file with usernames and encrypted passwords. You can skip this step if using an SSO system.
+
+```bash
+sudo htpasswd -c /etc/apache2/.htpasswd username
+```
+
+#### Step 2: Verify `mod_php` is Enabled
+
+Ensure that the `mod_php` module is enabled in Apache:
+
+```bash
+sudo a2enmod php7.4
+sudo systemctl restart apache2
+```
+
+Make sure to replace `php7.4` with your PHP version if it differs.
+
+#### Step 3: Restart Apache
+
+After making these changes, restart Apache to apply the new configuration:
+
+```bash
+sudo systemctl restart apache2
+```
+
+#### Step 4: Test the Configuration
+
+To confirm that `REMOTE_USER` is being passed correctly, create a simple PHP file to output the `REMOTE_USER` value:
+
+```php
+<?php
+echo 'REMOTE_USER: ' . $_SERVER['REMOTE_USER'];
+```
+
+Access this PHP file in the restricted area to ensure the `REMOTE_USER` variable is correctly populated.
+
+### Configuring Apache and PHP-FPM to Pass `REMOTE_USER` to PHP
+
+To make the `REMOTE_USER` variable available to PHP through Apache,
+follow these steps to modify both the Apache configuration and the PHP-FPM settings.
+
+#### Step 1: Modify Apache Configuration to Pass `REMOTE_USER`
+
+Ensure that the `mod_proxy_fcgi` module is enabled in Apache. This module is responsible for handling FastCGI requests:
+
+```bash
+sudo a2enmod proxy_fcgi
+sudo systemctl restart apache2
+```
+
+In your Apache virtual host configuration file (commonly located at `/etc/apache2/sites-available/your-site.conf`),
+add the following configuration to ensure that `REMOTE_USER` is passed to PHP-FPM:
+
+```apache
+<VirtualHost *:80>
+    ServerName your-site.com
+    DocumentRoot /var/www/html
+
+    <Location "/admin">
+        # Pass REMOTE_USER to PHP-FPM
+        SetEnvIf Authorization "(.*)" REMOTE_USER=$1
+
+        ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/var/run/php/php7.4-fpm.sock|fcgi://localhost/var/www/html
+    </Location>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+This configuration ensures that Apache passes the `REMOTE_USER` variable to PHP-FPM,
+specifically for requests to the `/admin` section.
+
+#### Step 2: Modify PHP-FPM Configuration
+
+Open the PHP-FPM pool configuration file
+(commonly located at `/etc/php-fpm.d/www.conf` or similar, depending on your PHP version):
+
+```bash
+sudo nano /etc/php-fpm.d/www.conf
+```
+
+Find the following line and uncomment it to ensure that environment variables are passed through to PHP:
+
+```ini
+clear_env = no
+```
+
+#### Step 3: Restart Services
+
+After making these changes, restart both Apache and PHP-FPM to apply the configuration:
+
+```bash
+sudo systemctl restart apache2
+sudo systemctl restart php-fpm
+```
+
+#### Step 4: Test the Configuration
+
+To confirm that `REMOTE_USER` is being passed correctly, create a simple PHP file to output the `REMOTE_USER` value:
+
+```php
+<?php
+echo 'REMOTE_USER: ' . $_SERVER['REMOTE_USER'];
+```
+
+Access this PHP file through your browser in the admin area to ensure the `REMOTE_USER` variable is correctly populated.
+
+### Configuring nginx and PHP-FPM to Pass `REMOTE_USER` to PHP
+
+To make the `REMOTE_USER` variable available to PHP through nginx,
+follow these steps to modify both the nginx configuration and the PHP-FPM settings.
+
+#### Step 1: Modify nginx Configuration to Pass `REMOTE_USER`
+
+Open the FastCGI parameters file in nginx. This file is typically located at `/etc/nginx/fastcgi_params.default`:
 
 ```bash
 sudo nano /etc/nginx/fastcgi_params.default
 ```
 
-Add the following line to pass the `REMOTE_USER` variable from NGINX to PHP:
+Add the following line to pass the `REMOTE_USER` variable from nginx to PHP:
 
 ```nginx
 fastcgi_param REMOTE_USER $remote_user;
 ```
 
-In the NGINX configuration file for your specific site (usually located at `/etc/nginx/sites-available/your-site.conf`),
+In the nginx configuration file for your specific site (usually located at `/etc/nginx/sites-available/your-site.conf`),
 ensure the `REMOTE_USER` variable is passed to PHP only in the appropriate location blocks
 (e.g., admin areas).
 
@@ -387,7 +533,7 @@ clear_env = no
 
 #### Step 3: Restart Services
 
-After making these changes, restart both NGINX and PHP-FPM to apply the configuration:
+After making these changes, restart both nginx and PHP-FPM to apply the configuration:
 
 ```bash
 sudo systemctl restart nginx
