@@ -22,11 +22,11 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\WebAuthn\WebAuthnUser;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Utils;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Math\BigInteger;
 use Random\RandomException;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class AuthWebAuthn extends Auth
@@ -43,7 +43,7 @@ class AuthWebAuthn extends Auth
     {
         parent::__construct($configuration);
 
-        $this->appId = Request::createFromGlobals()->getHost();
+        $this->appId = Utils::getHostFromUrl($configuration->getDefaultUrl());
     }
 
     /**
@@ -51,59 +51,94 @@ class AuthWebAuthn extends Auth
      *
      * @param string $username
      * @param string $userId
-     * @return array
+     * @return array<string, string>
      * @throws RandomException
      */
     public function prepareChallengeForRegistration(string $username, string $userId): array
     {
-        $result = new stdClass();
         $challenge = random_bytes(16);
-        $result->challenge = self::stringToArray($challenge);
-        $result->user = new stdClass();
-        $result->user->name = $result->user->displayName = $username;
-        $result->user->id = self::stringToArray($userId);
 
-        $result->rp = new stdClass();
-        $result->rp->name = $this->appId;
+        // Convert the challenge to an array of bytes
+        $challengeArray = self::stringToArray($challenge);
 
-        // We need to set the ID only if we are not on localhost
+        // Prepare user information
+        $user = [
+            'name'         => $username,
+            'displayName'  => $username,
+            'id'           => self::stringToArray($userId),
+        ];
+
+        // Prepare relying party (rp) information
+        $rp = [
+            'name' => $this->appId,
+        ];
+
+        // Set the 'id' field if not running on localhost
         if (!str_contains($this->appId, 'localhost')) {
-            $result->rp->id = $this->appId;
+            $rp['id'] = $this->appId;
         }
 
-        $result->pubKeyCredParams = [
+        // Prepare public key credential parameters
+        $pubKeyCredParams = [
             [
-                'alg' => self::ES256,
+                'alg'  => self::ES256,
                 'type' => 'public-key',
             ],
             [
-                'alg' => self::RS256,
+                'alg'  => self::RS256,
                 'type' => 'public-key',
             ],
         ];
 
-        $result->authenticatorSelection = new stdClass();
-        $result->authenticatorSelection->requireResidentKey = false;
-        $result->authenticatorSelection->userVerification = 'discouraged';
+        // Prepare authenticator selection criteria
+        $authenticatorSelection = [
+            'requireResidentKey' => false,
+            'userVerification'   => 'discouraged',
+        ];
 
-        $result->attestation = null;
-        $result->timeout = 60000;
-        $result->excludeCredentials = []; // No excludeList
-        $result->extensions = new stdClass();
-        $result->extensions->exts = true;
+        // Prepare extensions
+        $extensions = [
+            'exts' => true,
+        ];
 
+        // Build the publicKey object
+        $publicKey = [
+            'challenge'              => $challengeArray,
+            'user'                   => $user,
+            'rp'                     => $rp,
+            'pubKeyCredParams'       => $pubKeyCredParams,
+            'authenticatorSelection' => $authenticatorSelection,
+            'attestation'            => null,
+            'timeout'                => 60000,
+            'excludeCredentials'     => [],
+            'extensions'             => $extensions,
+        ];
+
+        // Base64 URL-encode the challenge for later verification
+        $b64challenge = rtrim(strtr(base64_encode($challenge), '+/', '-_'), '=');
+
+        // Return the prepared data
         return [
-            'publicKey' => $result,
-            'b64challenge' => rtrim(strtr(base64_encode($challenge), '+/', '-_'), '='),
+            'publicKey'    => $publicKey,
+            'b64challenge' => $b64challenge,
         ];
     }
 
+    /**
+     * Store the WebAuth user information in the session
+     * @param WebAuthnUser $user
+     * @return void
+     */
     public function storeUserInSession(WebAuthnUser $user): void
     {
         $session = new Session();
         $session->set('webauthn', $user);
     }
 
+    /**
+     * Get the WebAuth user information from the session
+     * @return WebAuthnUser|null
+     */
     public function getUserFromSession(): ?WebAuthnUser
     {
         $session = new Session();

@@ -135,6 +135,44 @@ class UtilsTest extends TestCase
         }
     }
 
+    public function testGetHostFromValidUrl(): void
+    {
+        $url = 'https://example.com/path?query=param';
+        $host = Utils::getHostFromUrl($url);
+        $this->assertEquals('example.com', $host);
+    }
+
+    public function testGetHostFromUrlWithSubdomain(): void
+    {
+        $url = 'https://sub.example.com/path';
+        $host = Utils::getHostFromUrl($url);
+        $this->assertEquals('sub.example.com', $host);
+    }
+
+    public function testGetHostFromUrlWithoutScheme(): void
+    {
+        $url = 'example.com/path';
+        $host = Utils::getHostFromUrl($url);
+        $this->assertNull($host); // parse_url won't recognize 'example.com' without scheme
+    }
+
+    public function testGetHostFromInvalidUrl(): void
+    {
+        $url = 'not_a_url';
+        $host = Utils::getHostFromUrl($url);
+        $this->assertNull($host);
+    }
+
+    /**
+     * Test URL without a host part.
+     */
+    public function testGetHostFromUrlWithoutHost(): void
+    {
+        $url = 'ftp://user:password@';
+        $host = Utils::getHostFromUrl($url);
+        $this->assertNull($host);
+    }
+
     public function testChopString(): void
     {
         // Test case 1: String has more words than desired length

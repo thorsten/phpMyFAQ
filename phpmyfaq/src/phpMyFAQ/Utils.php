@@ -239,6 +239,23 @@ class Utils
     }
 
     /**
+     * Extracts the hostname from a given URL.
+     *
+     * @param string $url The URL from which to extract the hostname.
+     * @return string|null The hostname or null if the URL is invalid.
+     */
+    public static function getHostFromUrl(string $url): ?string
+    {
+        $parsedUrl = parse_url($url);
+
+        if ($parsedUrl && isset($parsedUrl['host'])) {
+            return $parsedUrl['host'];
+        }
+
+        return null;
+    }
+
+    /**
      * Moves given key of an array to the top
      *
      * @param array<int> $array
