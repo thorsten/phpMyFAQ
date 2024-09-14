@@ -327,3 +327,80 @@ Elasticsearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
 If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import and delete your
 index with a user-friendly interface.
+
+## 2.17 SSO (Single Sign-On) Support
+
+phpMyFAQ supports SSO (Single Sign-On)
+with the REMOTE_USER server variable is populated by the web server or application server
+to indicate the authenticated user's identity.
+This is commonly used by several SSO systems that integrate with web servers,
+especially when using standard authentication mechanisms like HTTP Basic Authentication,
+HTTP Digest Authentication, or more advanced protocols.
+
+### Configuring NGINX and PHP-FPM to Pass `REMOTE_USER` to PHP
+
+To make the `REMOTE_USER` variable available to PHP through NGINX,
+follow these steps to modify both the NGINX configuration and the PHP-FPM settings.
+
+#### Step 1: Modify NGINX Configuration to Pass `REMOTE_USER`
+
+Open the FastCGI parameters file in NGINX. This file is typically located at `/etc/nginx/fastcgi_params.default`:
+
+```bash
+sudo nano /etc/nginx/fastcgi_params.default
+```
+
+Add the following line to pass the `REMOTE_USER` variable from NGINX to PHP:
+
+```nginx
+fastcgi_param REMOTE_USER $remote_user;
+```
+
+In the NGINX configuration file for your specific site (usually located at `/etc/nginx/sites-available/your-site.conf`),
+ensure the `REMOTE_USER` variable is passed to PHP only in the appropriate location blocks
+(e.g., admin areas).
+
+Example configuration for the admin area:
+
+```nginx
+location ~ \.php$ {
+    # Other configurations
+    fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+    fastcgi_param REMOTE_USER $remote_user;  # Pass REMOTE_USER to PHP
+    include fastcgi_params;
+}
+```
+
+#### Step 2: Modify PHP-FPM Configuration
+
+Open the PHP-FPM pool configuration file (commonly located at `/etc/php-fpm.d/www.conf` or similar, depending on your PHP version):
+
+```bash
+sudo nano /etc/php-fpm.d/www.conf
+```
+
+Find the following line and uncomment it to ensure that environment variables are passed through to PHP:
+
+```ini
+clear_env = no
+```
+
+#### Step 3: Restart Services
+
+After making these changes, restart both NGINX and PHP-FPM to apply the configuration:
+
+```bash
+sudo systemctl restart nginx
+sudo systemctl restart php-fpm
+```
+
+## Step 4: Test the Configuration
+
+To confirm that `REMOTE_USER` is being passed correctly, create a simple PHP file to output the `REMOTE_USER` value:
+
+```php
+<?php
+echo 'REMOTE_USER: ' . $_SERVER['REMOTE_USER'];
+```
+
+Access this PHP file through your browser in the admin area to ensure the `REMOTE_USER` variable is correctly populated.
