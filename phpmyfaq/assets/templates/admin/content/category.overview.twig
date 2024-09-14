@@ -18,7 +18,7 @@
   <div class="col">
     <form method="post">
       {{ csrfTokenInput | raw }}
-      <div id="pmf-category-tree" class="list-group nested-sortable">
+      <div id="pmf-category-tree" class="list-group nested-sortable shadow">
         {{ _self.renderCategories(categoryTree, categoryInfo) }}
       </div>
     </form>
