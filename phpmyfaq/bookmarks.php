@@ -22,6 +22,7 @@ use phpMyFAQ\Bookmark;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Session\Token;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -31,18 +32,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
-$bookmark = new Bookmark($faqConfig, $user);
+if ($user->isLoggedIn()) {
+    $bookmark = new Bookmark($faqConfig, $user);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
-$twigTemplate = $twig->loadTemplate('./bookmarks.twig');
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+    $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 
-// Twig template variables
-$templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
-    'bookmarksList' => $bookmark->getBookmarkList(),
-    'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
-    'csrfTokenDeleteAllBookmarks' => Token::getInstance()->getTokenString('delete-all-bookmarks')
-];
+    // Twig template variables
+    $templateVars = [
+        ... $templateVars,
+        'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
+        'bookmarksList' => $bookmark->getBookmarkList(),
+        'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
+        'csrfTokenDeleteAllBookmarks' => Token::getInstance()->getTokenString('delete-all-bookmarks')
+    ];
 
-return $templateVars;
+    return $templateVars;
+} else {
+    // Redirect to log in
+    $response = new RedirectResponse($faqConfig->getDefaultUrl());
+    $response->send();
+}
