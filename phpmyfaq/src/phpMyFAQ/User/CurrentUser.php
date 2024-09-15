@@ -112,6 +112,7 @@ class CurrentUser extends User
      * @param string $login Login name
      * @param string $password Password
      * @throws Exception
+     * @throws \Exception
      */
     public function login(string $login, string $password): bool
     {
@@ -229,11 +230,18 @@ class CurrentUser extends User
         return true;
     }
 
+    /**
+     * Sets loggedIn to false and deletes the login from session.
+     */
     public function setLoggedIn(bool $loggedIn): void
     {
         $this->loggedIn = $loggedIn;
     }
 
+    /**
+     * Returns true if the user is a local user, otherwise false.
+     * @return bool
+     */
     public function isLocalUser(): bool
     {
         $query = sprintf(
@@ -248,10 +256,8 @@ class CurrentUser extends User
     }
 
     /**
-     * Returns false if the CurrentUser object stored in the
-     * session is valid and not timed out. There are two
-     * parameters for session timeouts: $this->_sessionTimeout
-     * and $this->_sessionIdTimeout.
+     * Returns false if the CurrentUser object stored in the session is valid and not timed out.
+     * There are two parameters for session timeouts: $this->sessionTimeout and $this->sessionIdTimeout.
      */
     public function sessionIsTimedOut(): bool
     {
