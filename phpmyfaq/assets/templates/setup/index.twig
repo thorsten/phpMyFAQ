@@ -27,8 +27,14 @@
           </div>
 
           {% for hint in nonCriticalSettings %}
-              {{ hint | raw }}
+            {{ hint | raw }}
           {% endfor %}
+
+          {% if filePermissions != null %}
+            <div class="alert alert-danger my-5" role="alert">
+              {{ filePermissions | raw }}
+            </div>
+          {% endif %}
 
           {% if checkBasicError %}
             <div class="alert alert-danger my-5" role="alert">
@@ -36,298 +42,301 @@
             </div>
           {% else %}
 
-          <div class="step">
+            <div class="step">
 
-            <h3 class="mb-3"> Step 1/4: Database setup</h3>
+              <h3 class="mb-3"> Step 1/4: Database setup</h3>
 
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
-              <div class="col-sm-9">
-                <select name="sql_type" id="sql_type" class="form-select" required>
-                  <option selected disabled value="">Please choose your preferred database ...</option>
-                  {% for extension, database in supportedDatabases %}
-                    <option value="{{ extension }}">{{ database }}</option>
-                  {% endfor %}
-                </select>
-                <small class="form-text text-muted">Please select your preferred database type.</small>
-              </div>
-            </div>
-
-            <div id="dbdatafull" class="d-block">
               <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
+                <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
                 <div class="col-sm-9">
-                  <input type="text" name="sql_server" id="sql_server" class="form-control"
-                         placeholder="e.g. 127.0.0.1" required>
-                  <small class="form-text text-muted">
-                    Please enter the host or path to the socket of your database server.
-                  </small>
+                  <select name="sql_type" id="sql_type" class="form-select" required>
+                    <option selected disabled value="">Please choose your preferred database ...</option>
+                    {% for extension, database in supportedDatabases %}
+                      <option value="{{ extension }}">{{ database }}</option>
+                    {% endfor %}
+                  </select>
+                  <small class="form-text text-muted">Please select your preferred database type.</small>
                 </div>
               </div>
-              <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
-                <div class="col-sm-9">
-                  <input type="number" name="sql_port" id="sql_port" class="form-control"
-                         value="" required>
-                  <small class="form-text text-muted">Please enter the port your database server.</small>
+
+              <div id="dbdatafull" class="d-block">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_server" id="sql_server" class="form-control"
+                           placeholder="e.g. 127.0.0.1" required>
+                    <small class="form-text text-muted">
+                      Please enter the host or path to the socket of your database server.
+                    </small>
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
-                <div class="col-sm-9">
-                  <input type="text" name="sql_user" id="sql_user" class="form-control" required>
-                  <small class="form-text text-muted">Please enter your database user.</small>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
+                  <div class="col-sm-9">
+                    <input type="number" name="sql_port" id="sql_port" class="form-control"
+                           value="" required>
+                    <small class="form-text text-muted">Please enter the port your database server.</small>
+                  </div>
                 </div>
-              </div>
-              <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="faqpassword">Password:</label>
-                <div class="col-sm-9">
-                  <div class="input-group">
-                    <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
-                           class="form-control" data-pmf-toggle="togglePasswordSQL" required>
-                    <span class="input-group-text" id="togglePasswordSQL">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_user" id="sql_user" class="form-control" required>
+                    <small class="form-text text-muted">Please enter your database user.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="faqpassword">Password:</label>
+                  <div class="col-sm-9">
+                    <div class="input-group">
+                      <input name="sql_password" type="password" autocomplete="off" id="faqpassword"
+                             class="form-control" data-pmf-toggle="togglePasswordSQL" required>
+                      <span class="input-group-text" id="togglePasswordSQL">
                         <i class="bi bi-eye-slash" id="togglePasswordSQL_icon"></i>
                       </span>
+                    </div>
+                    <small class="form-text text-muted">Please enter your database password.</small>
                   </div>
-                  <small class="form-text text-muted">Please enter your database password.</small>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_db" id="sql_db" class="form-control" required>
+                    <small class="form-text text-muted">Please enter your existing database name.</small>
+                  </div>
                 </div>
               </div>
-              <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
-                <div class="col-sm-9">
-                  <input type="text" name="sql_db" id="sql_db" class="form-control" required>
-                  <small class="form-text text-muted">Please enter your existing database name.</small>
-                </div>
-              </div>
-            </div>
 
-            <div id="dbsqlite" class="d-none">
+              <div id="dbsqlite" class="d-none">
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
+                           value="{{ currentPath }}" required>
+                    <small class="form-text text-muted">
+                      Please enter the full path to your SQLite datafile which should be outside your document root.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
               <div class="row mb-2">
-                <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
+                <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
                 <div class="col-sm-9">
-                  <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
-                         value="{{ currentPath }}" required>
+                  <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
                   <small class="form-text text-muted">
-                    Please enter the full path to your SQLite datafile which should be outside your document root.
+                    Please enter a table prefix here if you want to install more phpMyFAQ installations in one
+                    database.
                   </small>
                 </div>
               </div>
             </div>
 
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
-              <div class="col-sm-9">
-                <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
-                <small class="form-text text-muted">
-                  Please enter a table prefix here if you want to install more phpMyFAQ installations in one
-                  database.
-                </small>
-              </div>
+            <div class="step">
+              <h3 class="mb-3"> Step 2/4: LDAP setup</h3>
+              {% if isLdapEnabled %}
+                <div class="form-group">
+                  <div class="form-check">
+                    <input id="ldap_enabled" class="form-check-input" type="checkbox" name="ldap_enabled"
+                           value="yes">
+                    <label class="form-check-label" for="ldap_enabled">
+                      Enable LDAP support?
+                    </label>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="ldap_server">Host:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="ldap_server" id="ldap_server" class="form-control"
+                           placeholder="127.0.0.1">
+                    <small class="form-text text-muted">Please enter the host of your LDAP server.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="ldap_port">Port:</label>
+                  <div class="col-sm-9">
+                    <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
+                    <small class="form-text text-muted">Please enter the port of your LDAP server.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="ldap_user">User DN:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="ldap_user" id="ldap_user" class="form-control">
+                    <small class="form-text text-muted">Please enter your specified RDN username.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
+                  <div class="col-sm-9">
+                    <input name="ldap_password" type="password" autocomplete="off" id="ldap_password"
+                           class="form-control">
+                    <small class="form-text text-muted">Please enter your LDAP password.</small>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="ldap_base">Base DN:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="ldap_base" id="ldap_base" class="form-control">
+                    <small class="form-text text-muted">
+                      Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
+                    </small>
+                  </div>
+                </div>
+                <p class="alert alert-info my-4">
+                  <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
+                  You can add additional LDAP configurations later in the admin configuration panel.
+                </p>
+              {% else %}
+                <p class="alert alert-info my-4">
+                  <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
+                  LDAP support is not enabled in your PHP installation.
+                </p>
+              {% endif %}
             </div>
-          </div>
 
-          <div class="step">
-            <h3 class="mb-3"> Step 2/4: LDAP setup</h3>
-            {% if isLdapEnabled %}
-            <div class="form-group">
-              <div class="form-check">
-                <input id="ldap_enabled" class="form-check-input" type="checkbox" name="ldap_enabled"
-                       value="yes">
-                <label class="form-check-label" for="ldap_enabled">
-                  Enable LDAP support?
-                </label>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="ldap_server">Host:</label>
-              <div class="col-sm-9">
-                <input type="text" name="ldap_server" id="ldap_server" class="form-control"
-                       placeholder="127.0.0.1">
-                <small class="form-text text-muted">Please enter the host of your LDAP server.</small>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="ldap_port">Port:</label>
-              <div class="col-sm-9">
-                <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
-                <small class="form-text text-muted">Please enter the port of your LDAP server.</small>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="ldap_user">User DN:</label>
-              <div class="col-sm-9">
-                <input type="text" name="ldap_user" id="ldap_user" class="form-control">
-                <small class="form-text text-muted">Please enter your specified RDN username.</small>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
-              <div class="col-sm-9">
-                <input name="ldap_password" type="password" autocomplete="off" id="ldap_password"
-                       class="form-control">
-                <small class="form-text text-muted">Please enter your LDAP password.</small>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="ldap_base">Base DN:</label>
-              <div class="col-sm-9">
-                <input type="text" name="ldap_base" id="ldap_base" class="form-control">
-                <small class="form-text text-muted">
-                  Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
-                </small>
-              </div>
-            </div>
-            <p class="alert alert-info my-4">
-              <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
-              You can add additional LDAP configurations later in the admin configuration panel.
-            </p>
-            {% else %}
-            <p class="alert alert-info my-4">
-              <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
-              LDAP support is not enabled in your PHP installation.
-            </p>
-            {% endif %}
-          </div>
-
-          <div class="step">
-            <h3 class="mb-3"> Step 3/4: Elasticsearch setup</h3>
-            {% if isElasticsearchEnabled %}
-            <div class="form-group">
-              <div class="form-check">
-                <input id="elasticsearch_enabled" class="form-check-input" type="checkbox"
-                       name="elasticsearch_enabled" value="yes">
-                <label class="form-check-label" for="elasticsearch_enabled">
-                  Enable Elasticsearch support?
-                </label>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="elasticsearch_server">Server(s):</label>
-              <div class="col-sm-9">
-                <div class="input-group" id="elasticsearch-server-wrapper">
-                  <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
-                         class="form-control" placeholder="127.0.0.1:9200">
-                  <span class="input-group-text" id="pmf-add-elasticsearch-host" style="cursor: pointer;">
+            <div class="step">
+              <h3 class="mb-3"> Step 3/4: Elasticsearch setup</h3>
+              {% if isElasticsearchEnabled %}
+                <div class="form-group">
+                  <div class="form-check">
+                    <input id="elasticsearch_enabled" class="form-check-input" type="checkbox"
+                           name="elasticsearch_enabled" value="yes">
+                    <label class="form-check-label" for="elasticsearch_enabled">
+                      Enable Elasticsearch support?
+                    </label>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="elasticsearch_server">Server(s):</label>
+                  <div class="col-sm-9">
+                    <div class="input-group" id="elasticsearch-server-wrapper">
+                      <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
+                             class="form-control" placeholder="127.0.0.1:9200">
+                      <span class="input-group-text" id="pmf-add-elasticsearch-host" style="cursor: pointer;">
                         Add another Elasticsearch Host
                       </span>
+                    </div>
+                    <small class="form-text text-muted">
+                      Please enter the host (domain or IP) with port number of your Elasticsearch server.
+                    </small>
+                  </div>
                 </div>
-                <small class="form-text text-muted">
-                  Please enter the host (domain or IP) with port number of your Elasticsearch server.
-                </small>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="elasticsearch_index">Index name:</label>
-              <div class="col-sm-9">
-                <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
-                <small class="form-text text-muted">Please enter your Elasticsearch index name.</small>
-              </div>
-            </div>
-            {% else %}
-            <p class="alert alert-info my-4">
-              <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
-              cURL and OpenSSL support are not enabled in your PHP installation.
-            </p>
-            {% endif %}
-          </div>
-
-          <div class="step">
-            <h3 class="mb-3"> Step 4/4: Admin user setup</h3>
-
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="language">Default language:</label>
-              <div class="col-sm-9">
-                <select name="language" id="language" class="form-control">
-                  {% for code, name in supportedTranslations %}
-                    {% set selected = code == currentLanguage ? 'selected' : '' %}
-                    <option value="{{ code }}" {{ selected }}>{{ name }}</option>
-                  {% endfor %}
-                </select>
-                <small class="form-text text-muted">Please select your default language.</small>
-              </div>
+                <div class="row mb-2">
+                  <label class="col-sm-3 col-form-label" for="elasticsearch_index">Index name:</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
+                    <small class="form-text text-muted">Please enter your Elasticsearch index name.</small>
+                  </div>
+                </div>
+              {% else %}
+                <p class="alert alert-info my-4">
+                  <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
+                  cURL and OpenSSL support are not enabled in your PHP installation.
+                </p>
+              {% endif %}
             </div>
 
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
-              <div class="col-sm-9">
-                <select id="permLevel" name="permLevel" class="form-control" required>
-                  <option value="basic">Basic (no group support)</option>
-                  <option value="medium">Medium (with group support)</option>
-                </select>
-                <small class="form-text text-muted">
-                  Complexity of rights and permissions.
-                </small>
+            <div class="step">
+              <h3 class="mb-3"> Step 4/4: Admin user setup</h3>
+
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="language">Default language:</label>
+                <div class="col-sm-9">
+                  <select name="language" id="language" class="form-control">
+                    {% for code, name in supportedTranslations %}
+                      {% set selected = code == currentLanguage ? 'selected' : '' %}
+                      <option value="{{ code }}" {{ selected }}>{{ name }}</option>
+                    {% endfor %}
+                  </select>
+                  <small class="form-text text-muted">Please select your default language.</small>
+                </div>
               </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
-              <div class="col-sm-9">
-                <input name="realname" id="realname" type="text" class="form-control" placeholder="Your name" required>
-                <small class="form-text text-muted">Please enter your real name.</small>
+
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
+                <div class="col-sm-9">
+                  <select id="permLevel" name="permLevel" class="form-control" required>
+                    <option value="basic">Basic (no group support)</option>
+                    <option value="medium">Medium (with group support)</option>
+                  </select>
+                  <small class="form-text text-muted">
+                    Complexity of rights and permissions.
+                  </small>
+                </div>
               </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
-              <div class="col-sm-9">
-                <input name="email" id="email" type="email" class="form-control" placeholder="Your email" required>
-                <small class="form-text text-muted">Please enter your email address.</small>
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
+                <div class="col-sm-9">
+                  <input name="realname" id="realname" type="text" class="form-control" placeholder="Your name"
+                         required>
+                  <small class="form-text text-muted">Please enter your real name.</small>
+                </div>
               </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
-              <div class="col-sm-9">
-                <input type="text" name="loginname" id="loginname" class="form-control" placeholder="Your login name"
-                       required>
-                <small class="form-text text-muted">Please enter your login name.</small>
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
+                <div class="col-sm-9">
+                  <input name="email" id="email" type="email" class="form-control" placeholder="Your email" required>
+                  <small class="form-text text-muted">Please enter your email address.</small>
+                </div>
               </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="password">Your password:</label>
-              <div class="col-sm-9">
-                <div class="input-group">
-                  <input type="password" autocomplete="off" name="password" id="password" class="form-control"
-                         placeholder="Your password with at least 8 characters" minlength="8" data-pmf-toggle="togglePasswordFAQ" required>
-                  <span class="input-group-text" id="togglePasswordFAQ">
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
+                <div class="col-sm-9">
+                  <input type="text" name="loginname" id="loginname" class="form-control" placeholder="Your login name"
+                         required>
+                  <small class="form-text text-muted">Please enter your login name.</small>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="password">Your password:</label>
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input type="password" autocomplete="off" name="password" id="password" class="form-control"
+                           placeholder="Your password with at least 8 characters" minlength="8"
+                           data-pmf-toggle="togglePasswordFAQ" required>
+                    <span class="input-group-text" id="togglePasswordFAQ">
                     <i class="bi bi-eye-slash" id="togglePasswordFAQ_icon"></i>
                 </span>
+                  </div>
+                  <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
                 </div>
-                <small class="form-text text-muted">Please enter your password with at least 8 characters.</small>
               </div>
-            </div>
-            <div class="row mb-2">
-              <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
-              <div class="col-sm-9">
-                <div class="input-group">
-                  <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
-                         placeholder="Retype the password" minlength="8" class="form-control" data-pmf-toggle="togglePasswordFAQ_confirm" required>
-                  <span class="input-group-text" id="togglePasswordFAQ_confirm">
+              <div class="row mb-2">
+                <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input type="password" autocomplete="off" name="password_retyped" id="password_retype"
+                           placeholder="Retype the password" minlength="8" class="form-control"
+                           data-pmf-toggle="togglePasswordFAQ_confirm" required>
+                    <span class="input-group-text" id="togglePasswordFAQ_confirm">
                     <i class="bi bi-eye-slash" id="togglePasswordFAQ_confirm_icon"></i>
                 </span>
+                  </div>
+                  <small class="form-text text-muted">Please retype your password.</small>
                 </div>
-                <small class="form-text text-muted">Please retype your password.</small>
+              </div>
+              <div class="row mb-2">
+                <div class="col-sm">
+                  <p class="alert alert-info text-center mt-4">
+                    <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
+                    After clicking the "Submit" button, all necessary tables will be created and filled with your data.
+                    Depending on your system, this may take some time. Stay tuned.
+                  </p>
+                </div>
               </div>
             </div>
-            <div class="row mb-2">
-              <div class="col-sm">
-                <p class="alert alert-info text-center mt-4">
-                  <i aria-hidden="true" class="bi bi-info-circle bi-fw"></i>
-                  After clicking the "Submit" button, all necessary tables will be created and filled with your data.
-                  Depending on your system, this may take some time. Stay tuned.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          <!-- start previous / next buttons -->
-          <div class="form-footer d-flex mt-5">
-            <button class="btn btn-lg btn-danger w-100" type="button" id="prevBtn">Previous</button>
-            <button class="btn btn-lg btn-success w-100" type="button" id="nextBtn">Next</button>
-            <button class="btn btn-lg btn-primary w-100 d-none" type="button" id="installingBtn" disabled>
-              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-              <span role="status">Installing ...</span>
-            </button>
-          </div>
-          <!-- end previous / next buttons -->
+            <!-- start previous / next buttons -->
+            <div class="form-footer d-flex mt-5">
+              <button class="btn btn-lg btn-danger w-100" type="button" id="prevBtn">Previous</button>
+              <button class="btn btn-lg btn-success w-100" type="button" id="nextBtn">Next</button>
+              <button class="btn btn-lg btn-primary w-100 d-none" type="button" id="installingBtn" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Installing ...</span>
+              </button>
+            </div>
+            <!-- end previous / next buttons -->
 
           {% endif %}
         </form>

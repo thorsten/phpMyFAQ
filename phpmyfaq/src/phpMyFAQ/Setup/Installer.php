@@ -429,6 +429,10 @@ class Installer extends Setup
         'layout.customCss' => '',
     ];
 
+    /**
+     * Array with form inputs
+     * @var array<array>
+     */
     public array $formInputs = [
         // Ask Question inputs
         [
@@ -574,7 +578,7 @@ class Installer extends Setup
      *
      * @throws \Exception
      */
-    public function __construct(protected System $system)
+    public function __construct(private System $system)
     {
         parent::__construct();
 
@@ -592,8 +596,6 @@ class Installer extends Setup
 
     /**
      * Removes the database.php and the ldap.php if an installation failed.
-     *
-     * @todo have to be moved to the Installer class
      */
     public static function cleanFailedInstallationFiles(): void
     {
@@ -609,27 +611,21 @@ class Installer extends Setup
     }
 
     /**
-     * Check absolutely necessary stuff and die.
+     * Check the necessary stuff and throw an exception if something is wrong.
      * @throws Exception
      */
     public function checkBasicStuff(): void
     {
         if (!$this->checkMinimumPhpVersion()) {
-            throw new Exception(
-                sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
-            );
+            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
         }
 
         if (!function_exists('date_default_timezone_set')) {
-            throw new Exception(
-                'Sorry, but setting a default timezone does not work in your environment!'
-            );
+            throw new Exception('Sorry, but setting a default timezone does not work in your environment!');
         }
 
         if (!$this->system->checkDatabase()) {
-            throw new Exception(
-                'No supported database detected!'
-            );
+            throw new Exception('No supported database detected!');
         }
 
         if (!$this->system->checkRequiredExtensions()) {
@@ -642,55 +638,14 @@ class Installer extends Setup
         }
 
         if (!$this->system->checkInstallation()) {
-            throw new Exception(
-                'phpMyFAQ is already installed! Please use the <a href="../update">update</a>.'
-            );
-        }
-    }
-
-    /**
-     * Checks for the minimum PHP requirement and if the database credentials file is readable.
-     *
-     * @throws Exception
-     * @todo this method should be in the the Update class
-     */
-    public function checkPreUpgrade(string $databaseType): void
-    {
-        $database = null;
-        if (!$this->checkMinimumPhpVersion()) {
-            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
-        }
-
-        if (!is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')) {
-            throw new Exception(
-                'It seems you never run a version of phpMyFAQ. Please use the <a href="/setup">installation script</a>'
-            );
-        }
-
-        if ('' !== $databaseType) {
-            $databaseFound = false;
-            foreach (array_keys($this->system->getSupportedDatabases()) as $database) {
-                if ($database === $databaseType) {
-                    $databaseFound = true;
-                    break;
-                }
-            }
-
-            if (!$databaseFound) {
-                throw new Exception(
-                    sprintf(
-                        'It seems you are using an unsupported database version. We found %s',
-                        ucfirst((string) $database)
-                    )
-                );
-            }
+            throw new Exception('phpMyFAQ is already installed! Please use the <a href="../update">update</a>.');
         }
     }
 
     /**
      * Checks if the file permissions are okay.
      */
-    public function checkFilesystemPermissions(): void
+    public function checkFilesystemPermissions(): string|null
     {
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
@@ -705,22 +660,27 @@ class Installer extends Setup
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs = count($failedDirs);
 
+        $hints = '';
         if (1 <= $numDirs) {
-            printf(
+            $hints .= sprintf(
                 '<p class="alert alert-danger">The following %s could not be created or %s not writable:</p><ul>',
                 (1 < $numDirs) ? 'directories' : 'directory',
                 (1 < $numDirs) ? 'are' : 'is'
             );
             foreach ($failedDirs as $failedDir) {
-                echo "<li>{$failedDir}</li>\n";
+                $hints .= "<li>{$failedDir}</li>\n";
             }
 
-            printf(
+            $hints .= sprintf(
                 '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
                 'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
+
+            return $hints;
         }
+
+        return null;
     }
 
     /**
@@ -872,8 +832,6 @@ class Installer extends Setup
         //
         $ldapEnabled = Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
-            $ldapSetup = [];
-
             // check LDAP entries
             $ldapSetup['ldapServer'] = Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_SPECIAL_CHARS);
             if (is_null($ldapSetup['ldapServer'])) {
@@ -965,7 +923,7 @@ class Installer extends Setup
             $esSetup = [];
         }
 
-        // check login name
+        // check the login name
         if (!isset($setup['loginname'])) {
             $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {

@@ -61,6 +61,7 @@ class SetupController
                 'documentationUrl' => System::getDocumentationUrl(),
                 'checkBasicError' => $checkBasicError,
                 'nonCriticalSettings' => $installer->checkNoncriticalSettings(),
+                'filePermissions' => $installer->checkFilesystemPermissions(),
                 'supportedDatabases' => $system->getSupportedSafeDatabases(),
                 'currentPath' => dirname(__DIR__, 4),
                 'isLdapEnabled' => $installer->hasLdapSupport(),
