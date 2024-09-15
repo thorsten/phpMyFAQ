@@ -100,7 +100,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $link->text = $text;
         $link->tooltip = Translation::get('msgCategoryUp');
 
-        $up = sprintf('<i class="bi bi-level-up" aria-hidden="true"></i> %s', $link->toHtmlAnchor());
+        $up = sprintf('<i class="bi bi-arrow-90deg-up"></i> %s', $link->toHtmlAnchor());
     }
 
     if (!is_null($categoryData->getImage()) && strlen((string) $categoryData->getImage()) > 0) {
