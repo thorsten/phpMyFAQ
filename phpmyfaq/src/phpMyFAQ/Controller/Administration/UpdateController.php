@@ -124,7 +124,7 @@ class UpdateController extends AbstractController
         $branch = $configuration->get('upgrade.releaseEnvironment');
 
         try {
-            $api = new Api($configuration);
+            $api = new Api($configuration, new System());
             $versions = $api->getVersions();
             $configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 

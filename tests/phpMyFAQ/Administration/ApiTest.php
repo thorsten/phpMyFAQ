@@ -3,8 +3,10 @@
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\System;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
@@ -18,12 +20,15 @@ class ApiTest extends TestCase
     private Configuration $configuration;
     private HttpClientInterface $httpClient;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->configuration = $this->createMock(Configuration::class);
         $this->httpClient = $this->createMock(HttpClientInterface::class);
 
-        $this->api = new Api($this->configuration);
+        $this->api = new Api($this->configuration, new System());
         $this->api->setHttpClient($this->httpClient);
     }
 
@@ -62,6 +67,11 @@ class ApiTest extends TestCase
         $this->assertEquals($expected, $this->api->getVersions());
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \JsonException
+     */
     public function testIsVerifiedSuccess(): void
     {
         $response = $this->createMock(ResponseInterface::class);
@@ -75,6 +85,10 @@ class ApiTest extends TestCase
         $this->assertTrue($this->api->isVerified());
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
     public function testIsVerifiedFailure(): void
     {
         $response = $this->createMock(ResponseInterface::class);
@@ -96,5 +110,36 @@ class ApiTest extends TestCase
 
         $this->expectException('Symfony\Component\HttpClient\Exception\TransportException');
         $this->api->isVerified();
+    }
+
+    /**
+     * @throws \JsonException|Exception
+     */
+    public function testGetVerificationIssues(): void
+    {
+        $this->configuration = $this->createMock(Configuration::class);
+        $mockSystem = $this->getMockBuilder(System::class)
+            ->onlyMethods(['createHashes'])
+            ->getMock();
+
+        $mockSystem->expects($this->once())
+            ->method('createHashes')
+            ->willReturn(json_encode([
+                'hash1' => 'abc123',
+                'hash2' => 'def456',
+                'hash3' => 'ghi789'
+            ]));
+
+        $api = new Api($this->configuration, $mockSystem);
+
+        $api->setRemoteHashes(json_encode([
+            'hash1' => 'abc123',
+            'hash3' => 'ghi789'
+        ]));
+
+        $result = $api->getVerificationIssues();
+
+        $expected = ['hash2' => 'def456'];
+        $this->assertEquals($expected, $result);
     }
 }

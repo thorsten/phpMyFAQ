@@ -47,7 +47,7 @@ class Api
     /**
      * Api constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private readonly Configuration $configuration, private readonly System $system)
     {
         $this->setHttpClient(HttpClient::create(['max_redirects' => 2, 'timeout' => 30]));
     }
@@ -129,9 +129,8 @@ class Api
      */
     public function getVerificationIssues(): array
     {
-        $system = new System();
         return array_diff(
-            json_decode($system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
+            json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
             json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
         );
     }

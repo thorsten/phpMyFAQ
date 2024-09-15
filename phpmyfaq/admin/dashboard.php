@@ -77,7 +77,7 @@ if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) {
 }
 
 if ($user->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
-    $api = new Api($faqConfig);
+    $api = new Api($faqConfig, $faqSystem);
 
     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_SPECIAL_CHARS);
     if (!$faqConfig->get('main.enableAutoUpdateHint')) {

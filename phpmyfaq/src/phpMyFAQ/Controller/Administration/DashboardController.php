@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Session;
+use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = $request->getContent();
-        $api = new Api($this->configuration);
+        $api = new Api($this->configuration, new System());
 
         return $this->json($api->setRemoteHashes($data)->getVerificationIssues());
     }
@@ -55,7 +56,7 @@ class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $api = new Api($this->configuration);
+        $api = new Api($this->configuration, new System());
         $releaseEnvironment = $this->configuration->get('upgrade.releaseEnvironment');
 
         try {
