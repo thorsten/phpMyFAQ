@@ -1478,5 +1478,8 @@ $LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktiviere WebAuthn 
 $PMF_LANG['msgSignInWithPasskey'] = 'Mit Passkey anmelden';
 $PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Die Registrierung für Passkeys erfolgreich.';
 $PMF_LANG['msgSupportUs'] = 'Unterstütze phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'Bitte geben Sie Ihren vollständigen Namen ein.';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+$PMF_LANG['msgErrorEnterMessage'] = 'Bitte geben Sie eine Nachricht ein.';
 
 return $PMF_LANG;
