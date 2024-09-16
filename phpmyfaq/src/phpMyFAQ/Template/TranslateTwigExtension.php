@@ -42,6 +42,6 @@ class TranslateTwigExtension extends AbstractExtension
 
     public function translate(string $translationKey): string
     {
-        return Translation::get($translationKey);
+        return Translation::get($translationKey) ?? $translationKey;
     }
 }

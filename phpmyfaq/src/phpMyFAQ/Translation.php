@@ -67,7 +67,9 @@ class Translation
             return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey];
         } catch (Exception) {
             // handle exception
-            // log to stderr
+            Configuration::getConfigurationInstance()->getLogger()->error(
+                'Error while fetching translation key: ' . $languageKey
+            );
         }
 
         return null;
