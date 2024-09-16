@@ -255,6 +255,20 @@ class CurrentUser extends User
         return (bool) $this->configuration->getDb()->fetchRow($result);
     }
 
+    public function isBlocked(): bool
+    {
+        $query = sprintf(
+            "SELECT account_status FROM %sfaquser WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->getUserId()
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $row = $this->configuration->getDb()->fetchRow($result);
+
+        return $row === 'blocked';
+    }
+
     /**
      * Returns false if the CurrentUser object stored in the session is valid and not timed out.
      * There are two parameters for session timeouts: $this->sessionTimeout and $this->sessionIdTimeout.

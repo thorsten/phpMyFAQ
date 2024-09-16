@@ -114,7 +114,8 @@ export const handleWebAuthn = () => {
                   const result = await response.json();
                   window.location.href = result.redirect;
                 } else {
-                  throw new Error(await response.json());
+                  const result = await response.json();
+                  throw new Error(result.error);
                 }
               } catch (error) {
                 errorMessage.textContent = error;

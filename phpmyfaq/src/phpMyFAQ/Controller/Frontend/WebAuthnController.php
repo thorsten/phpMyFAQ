@@ -146,6 +146,7 @@ class WebAuthnController extends AbstractController
     /**
      * @throws Exception
      * @throws \JsonException
+     * @throws \Exception
      */
     #[Route('api/webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
@@ -161,13 +162,17 @@ class WebAuthnController extends AbstractController
         if ($this->authWebAuthn->authenticate($loginData, $webAuthnKeys)) {
             $currentUser = new CurrentUser($this->configuration);
             $currentUser->getUserByLogin($login);
+
+            if ($currentUser->isBlocked()) {
+                return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+            }
+
             $currentUser->setLoggedIn(true);
             $currentUser->setSuccess(true);
             $currentUser->updateSessionId(true);
             $currentUser->saveToSession();
-
             return $this->json(
-                [ 'success' => 'ok', 'redirect' => $this->configuration->getDefaultUrl()],
+                [ 'success' => 'ok', 'redirect' => $this->configuration->getDefaultUrl() ],
                 Response::HTTP_OK,
             );
         }
