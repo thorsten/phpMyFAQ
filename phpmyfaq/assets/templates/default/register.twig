@@ -20,7 +20,7 @@
   <section class="row">
 
     <div class="col-6 border-end">
-      <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 526px;">
+      <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 580px;">
 
         <p class="pb-3 mb-3">
           {{ 'msgRegistrationCredentials' | translate }} {{ 'msgRegistrationNote' | translate }}
@@ -34,21 +34,28 @@
               <div class="position-relative mb-4">
                 <label for="realname" class="form-label">{{ 'msgRealname' | translate }}</label>
                 <input type="text" id="realname" name="realname" class="form-control form-control-lg" required>
-                <div class="invalid-feedback position-absolute start-0 top-100">Please enter your name!</div>
+                <div class="invalid-feedback position-absolute start-0 top-100">
+                  {{ 'msgErrorEnterFullName' | translate }}
+                </div>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="position-relative mb-4">
                 <label for="name" class="form-label">{{ 'msgUsername' | translate }}</label>
                 <input type="text" id="name" name="name" class="form-control form-control-lg" required>
-                <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!
+                <div class="invalid-feedback position-absolute start-0 top-100">
+                  {{ 'msgErrorEnterLoginName' | translate }}
                 </div>
               </div>
             </div>
             <div class="col-12 mb-4">
-              <label class="form-label" for="email">{{ 'msgEmail' | translate }}</label>
-              <input type="email" name="email" id="email" required class="form-control form-control-lg">
-              <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!</div>
+              <div class="position-relative mb-4">
+                <label class="form-label" for="email">{{ 'msgEmail' | translate }}</label>
+                <input type="email" name="email" id="email" required class="form-control form-control-lg">
+                <div class="invalid-feedback position-absolute start-0 top-100">
+                  {{ 'msgErrorEnterValidMail' | translate }}
+                </div>
+              </div>
             </div>
             <div class="col-12 mb-4">
               <div class="form-check">
@@ -70,12 +77,11 @@
 
     {% if isWebAuthnEnabled %}
       <div class="col-6">
-        <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 526px;">
+        <div class="w-100 align-self-end pt-1 pt-md-4 pb-4" style="max-width: 580px;">
 
           <p class="pb-3 mb-3">
             {{ 'msgRegistrationWithPasskeys' | translate }}
           </p>
-
 
           <p id="pmf-webauthn-error" class="alert alert-danger d-none"></p>
 
@@ -87,7 +93,9 @@
             <div class="col-12 mb-4">
               <label class="form-label" for="webauthn">{{ 'msgEmail' | translate }}</label>
               <input type="email" name="webauthn" id="webauthn" required class="form-control form-control-lg">
-              <div class="invalid-feedback position-absolute start-0 top-100">Please enter a valid email address!</div>
+              <div class="invalid-feedback">
+                {{ 'msgErrorEnterValidMail' | translate }}
+              </div>
             </div>
 
             <button type="submit" class="btn btn-primary shadow-primary btn-lg w-100">
