@@ -21,9 +21,38 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 interface PluginInterface
 {
+    /**
+     * Returns the name of the plugin
+     *
+     * @return string
+     */
     public function getName(): string;
+
+    /**
+     * Returns the version of the plugin
+     *
+     * @return string
+     */
     public function getVersion(): string;
+
+    /**
+     * Returns the dependencies of the plugin
+     *
+     * @return array
+     */
     public function getDependencies(): array;
+
+    /**
+     * Returns the configuration of the plugin
+     *
+     * @return array
+     */
     public function getConfig(): array;
+
+    /**
+     * Register the events
+     *
+     * @param EventDispatcherInterface $dispatcher
+     */
     public function registerEvents(EventDispatcherInterface $dispatcher): void;
 }
