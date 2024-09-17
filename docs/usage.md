@@ -81,6 +81,7 @@ If the spam protection is enabled, they have to enter the correct captcha code, 
 
 Users of the FAQ also have the possibility to register themselves.
 The user-generated accounts are unactivated by default, and the administrator has to activate them.
+If enabled by the administrator, the user can also register for login via passkey.
 
 ## 4.9 User control panel
 
@@ -92,6 +93,7 @@ own question.
 Additionally, every user can activate the builtin two-factor authentication to enhance security.
 You can use authentication apps like Google Authenticator for [iOS](https://apps.apple.com/app/google-authenticator/id388497605)
 or [Android](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2).
+If enabled by the administrator, the user can also register for login via passkey.
 
 ## 4.10 Related FAQs
 

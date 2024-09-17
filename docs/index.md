@@ -13,7 +13,7 @@ responsive templates.
 These Twig-based templates allow for the inclusion of your own text and HTML snippets.
 
 Additional features include PDF support, a backup system, a dynamic sitemap,
-related FAQs, tagging, and built-in spam protection systems.
+related FAQs, tagging, a plugin system, and built-in spam protection systems.
 It also supports OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID.
 The system is easy to install, thanks to its user-friendly installation script.
 

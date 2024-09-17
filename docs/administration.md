@@ -398,8 +398,8 @@ To back up the whole data located on your web server, you can run our simple bac
 
 ### 5.6.1 Main configuration
 
-Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, Social networks
-settings, Mail setup for SMTP, LDAP configuration, and API settings of phpMyFAQ.
+Here you can edit the general, FAQ specific, search, spam protection, spam control center, SEO related, layout
+settings, Mail setup for SMTP, API settings, online update settings, and if enabled, LDAP configuration of phpMyFAQ.
 
 ### 5.6.2 FAQ Multi-sites
 
