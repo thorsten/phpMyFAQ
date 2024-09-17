@@ -111,6 +111,7 @@ The default CSS theme is located in the **assets/templates/default** directory a
 You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
 The CSS theme is based on Bootstrap’s CSS custom properties for fast and forward-looking design and development.
 We support a light and a dark mode in our default theme.
+For more information check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
 ## 6.4 Custom CSS
 
@@ -154,7 +155,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - PHP 8.2+
 - PHPUnit 10.x
 - Composer
-- Node.js v18+
+- Node.js v20+
 - PNPM
 - Docker
 
