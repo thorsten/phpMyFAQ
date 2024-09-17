@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ConcatPlugin = require('@mcler/webpack-concat-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -23,6 +24,9 @@ module.exports = {
     aggregateTimeout: 200,
     poll: 1000,
   },
+  optimization: {
+    minimizer: [`...`, new CssMinimizerPlugin()],
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
@@ -34,6 +38,7 @@ module.exports = {
       fileName: '../../../phpmyfaq/assets/dist/plugins/phpmyfaq/plugin.js',
       filesToConcat: [path.resolve(__dirname, 'phpmyfaq/admin/assets/src/tinymce/phpmyfaq.tinymce.plugin.js')],
     }),
+    new MiniCssExtractPlugin(),
   ],
   module: {
     rules: [
