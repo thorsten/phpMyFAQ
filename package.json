@@ -78,9 +78,6 @@
     "webpack-merge": "^5.10.0",
     "webpack-sources": "^3.2.3"
   },
-  "browserslist": [
-    "defaults"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "composer lint && composer validate && composer test && pnpm pretty-quick --staged && pnpm test",
