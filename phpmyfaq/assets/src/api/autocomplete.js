@@ -14,22 +14,23 @@
  */
 
 export const fetchAutoCompleteData = async (searchString) => {
-  return await fetch(`api/autocomplete?search=${searchString}`, {
-    method: 'GET',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-  })
-    .then(async (response) => {
-      if (response.status === 200) {
-        return response.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then((response) => {
-      return response;
+  try {
+    const response = await fetch(`api/autocomplete?search=${searchString}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
     });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
 };

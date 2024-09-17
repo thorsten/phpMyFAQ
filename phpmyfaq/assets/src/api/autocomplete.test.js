@@ -1,19 +1,24 @@
 import { fetchAutoCompleteData } from './autocomplete';
+import fetchMock from 'jest-fetch-mock';
 
-describe('fetchAutoCompleteData function', () => {
-  it('fetches autocomplete data successfully', async () => {
-    // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 200,
-      json: () => Promise.resolve({ data: 'autocomplete data' }),
-    });
+fetchMock.enableMocks();
 
-    // Call the function
-    const result = await fetchAutoCompleteData('searchString');
+describe('fetchAutoCompleteData', () => {
+  beforeEach(() => {
+    fetch.resetMocks();
+  });
 
-    // Assertions
-    expect(result).toEqual({ data: 'autocomplete data' });
-    expect(fetch).toHaveBeenCalledWith('api/autocomplete?search=searchString', {
+  it('should return autocomplete data when the response is successful', async () => {
+    const mockData = { suggestions: ['apple', 'banana', 'orange'] };
+
+    fetch.mockResponseOnce(JSON.stringify(mockData));
+
+    const searchString = 'fruit';
+    const data = await fetchAutoCompleteData(searchString);
+
+    expect(data).toEqual(mockData);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith(`api/autocomplete?search=${searchString}`, {
       method: 'GET',
       cache: 'no-cache',
       headers: {
@@ -24,13 +29,31 @@ describe('fetchAutoCompleteData function', () => {
     });
   });
 
-  it('throws an error if network response is not ok', async () => {
-    // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
-      status: 404,
-    });
+  it('should throw an error when the response is not successful', async () => {
+    fetch.mockResponseOnce(null, { status: 500 });
 
-    // Assertions
-    await expect(fetchAutoCompleteData('searchString')).rejects.toThrow('Network response was not ok.');
+    const searchString = 'fruit';
+
+    await expect(fetchAutoCompleteData(searchString)).rejects.toThrow('Network response was not ok.');
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith(`api/autocomplete?search=${searchString}`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+  });
+
+  it('should handle fetch error', async () => {
+    // Simulating a network failure or fetch error
+    fetch.mockRejectOnce(new Error('API is down'));
+
+    const searchString = 'fruit';
+
+    await expect(fetchAutoCompleteData(searchString)).rejects.toThrow('API is down');
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 });
