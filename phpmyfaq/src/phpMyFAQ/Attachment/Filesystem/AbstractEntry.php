@@ -29,21 +29,21 @@ abstract class AbstractEntry implements \Stringable
      *
      * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * This opened handle.
      *
      * @var resource
      */
-    protected $handle;
+    public $handle;
 
     /**
-     * Move file to another location.
+     * Move a file to another location.
      *
      * @param object|string $entry an entry to move to
      */
-    public function moveTo($entry): bool
+    public function moveTo(object|string $entry): bool
     {
         return $this->copyTo($entry) && $this->delete();
     }
@@ -53,14 +53,14 @@ abstract class AbstractEntry implements \Stringable
      *
      * @param object|string $entry an entry to copy to
      */
-    abstract public function copyTo($entry): bool;
+    abstract public function copyTo(object|string $entry): bool;
 
     /**
      * Delete this file.
      *
      * @return bool
      */
-    abstract public function delete();
+    abstract public function delete(): bool;
 
     /**
      * Either file is encrypted.
@@ -71,7 +71,7 @@ abstract class AbstractEntry implements \Stringable
     }
 
     /**
-     * Return current file path.
+     * Return the current file path.
      */
     public function getPath(): string
     {

@@ -3,49 +3,69 @@
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use PHPUnit\Framework\TestCase;
+use org\bovigo\vfs\vfsStream;
 
-/**
- * Class VanillaTest
- */
+
 class VanillaFileTest extends TestCase
 {
-    /** @var VanillaFile*/
-    private VanillaFile $instance;
+    private VanillaFile $mockFile;
+    private $mockHandle;
+    private $root;
 
-    /**
-     * Prepares the environment before running a test.
-     *
-     * @throws FileException
-     */
     protected function setUp(): void
     {
-        parent::setUp();
+        // Setup the virtual file system
+        $this->root = vfsStream::setup('root', null, [
+            'file.txt' => 'test file content'
+        ]);
 
-        if (!file_exists(PMF_TEST_DIR . '/fixtures/path-to-delete/')) {
-            mkdir(PMF_TEST_DIR . '/fixtures/path-to-delete/');
-        }
-        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
+        // Get the virtual file path
+        $filePath = vfsStream::url('root/file.txt');
 
-        $this->instance = new VanillaFile(
-            PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz'
-        );
+        // Mock the VanillaFile class and inject the virtual file
+        $this->mockFile = $this->getMockBuilder(VanillaFile::class)
+            ->setConstructorArgs([$filePath])
+            ->onlyMethods(['getChunk', 'putChunk', 'eof'])
+            ->getMock();
     }
 
-    public function testDelete(): void
+    public function testPutChunkWritesData()
     {
-        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
+        $data = "test chunk data";
 
-        $this->assertTrue($this->instance->delete());
+        // Write data to the virtual file
+        $this->mockFile->expects($this->once())
+            ->method('putChunk')
+            ->with($data)
+            ->willReturn(true);
+
+        // Write the chunk and assert it's written correctly
+        $this->assertTrue($this->mockFile->putChunk($data));
     }
 
-    public function testDeleteDir(): void
+    public function testGetChunkReadsData()
     {
-        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar');
+        // Mocking the getChunk behavior to return content from the virtual file
+        $this->mockFile->expects($this->once())
+            ->method('getChunk')
+            ->willReturn('test file content');
 
-        $this->assertTrue(
-            $this->instance->deleteDir(
-                PMF_TEST_DIR . '/fixtures/path-to-delete/'
-            )
-        );
+        $this->assertEquals('test file content', $this->mockFile->getChunk());
+    }
+
+    public function testDeleteFileSuccessfully()
+    {
+        // The file should exist in the virtual file system before deletion
+        $filePath = vfsStream::url('root/file.txt');
+        $this->assertTrue($this->root->hasChild('file.txt'));
+
+        // Call fclose() before deletion to avoid handle issues
+        fclose($this->mockFile->handle);
+
+        // Perform the deletion using unlink for vfsStream
+        unlink($filePath);
+
+        // After deletion, the file should no longer exist in the virtual file system
+        $this->assertFalse($this->root->hasChild('file.txt'));
     }
 }

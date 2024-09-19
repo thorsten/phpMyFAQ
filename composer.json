@@ -48,6 +48,7 @@
   },
   "require-dev": {
     "doctrine/instantiator": "2.*",
+    "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
     "phpstan/phpstan": "^1.0.0",
     "phpunit/phpunit": "11.*",

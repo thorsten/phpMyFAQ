@@ -45,7 +45,7 @@ class VanillaFile extends AbstractFile
     /**
      * @inheritdoc
      */
-    public function copyTo($entry): bool
+    public function copyTo(object|string $entry): bool
     {
         $doSimple = is_string($entry) || $entry instanceof self;
         if ($doSimple) {
