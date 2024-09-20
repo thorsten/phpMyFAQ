@@ -127,7 +127,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'serpTitle' => $seoData->getTitle(),
         'msgSerpDescription' => Translation::get('msgSerpDescription'),
         'serpDescription' => $seoData->getDescription(),
-        'buttonUpdate' => Translation::get('ad_categ_update'),
+        'buttonUpdate' => Translation::get('ad_gen_save'),
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
