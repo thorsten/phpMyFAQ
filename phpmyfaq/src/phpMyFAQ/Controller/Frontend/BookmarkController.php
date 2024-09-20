@@ -83,7 +83,11 @@ class BookmarkController extends AbstractController
         $bookmark = new Bookmark($this->configuration, $currentUser);
 
         if ($bookmark->remove($id)) {
-            return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);
+            return $this->json([
+                'success' => Translation::get('msgBookmarkRemoved'),
+                'linkText' => Translation::get('msgAddBookmark'),
+                'csrfToken' => Token::getInstance()->getTokenString('add-bookmark')
+            ], Response::HTTP_OK);
         } else {
             return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
         }
