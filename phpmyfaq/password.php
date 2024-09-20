@@ -16,8 +16,8 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$faqSession = new Session($faqConfig);
 
 $faqSession->userTracking('forgot_password', 0);
 
@@ -33,11 +34,7 @@ $twigTemplate = $twig->loadTemplate('./password.twig');
 
 $templateVars = [
     ... $templateVars,
-    'pageHeader' => Translation::get('lostPassword'),
     'lang' => $faqConfig->getLanguage()->getLanguage(),
-    'msgUsername' => Translation::get('ad_auth_user'),
-    'msgEmail' => Translation::get('msgEmail'),
-    'msgSubmit' => Translation::get('msgNewContentSubmit'),
 ];
 
 return $templateVars;
