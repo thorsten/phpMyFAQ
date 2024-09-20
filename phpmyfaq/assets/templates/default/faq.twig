@@ -257,7 +257,10 @@
           <div class="field d-flex align-items-center justify-content-between">
             <span class="bi bi-link text-center"></span>
             <input type="text" class="form-control" id="pmf-share-link" value="{{ currentPageUrl }}" readonly>
-            <button class="btn btn-primary" id="pmf-share-link-copy-button">{{ 'msgCopy' | translate }}</button>
+            <button class="btn btn-primary" id="pmf-share-link-copy-button"
+                    data-pmf-message="{{ 'msgLinkCopied' | translate }}">
+              {{ 'msgCopy' | translate }}
+            </button>
           </div>
         </div>
       </div>

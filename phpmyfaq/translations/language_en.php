@@ -1503,5 +1503,6 @@ $PMF_LANG['msgErrorEnterFullName'] = 'Please enter your full name!';
 $PMF_LANG['msgErrorEnterLoginName'] = 'Please enter your login name!';
 $PMF_LANG['msgErrorEnterValidMail'] = 'Please provide a valid email address!';
 $PMF_LANG['msgErrorEnterMessage'] = 'Please enter a message!';
+$PMF_LANG['msgLinkCopied'] = 'Link copied to clipboard';
 
 return $PMF_LANG;

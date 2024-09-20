@@ -86,8 +86,10 @@ export const handleShareLinkButton = () => {
       event.preventDefault();
       event.stopPropagation();
       const shareLink = document.getElementById('pmf-share-link');
+      const shareButton = document.getElementById('pmf-share-link-copy-button');
+      const message = shareButton.getAttribute('data-pmf-message');
       navigator.clipboard.writeText(shareLink.value);
-      pushNotification('Link copied to clipboard');
+      pushNotification(message);
     });
   }
 };
