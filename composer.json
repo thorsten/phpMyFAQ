@@ -59,6 +59,7 @@
   },
   "suggest": {
     "ext-ldap": "*",
+    "ext-openssl": "*",
     "ext-pgsql": "*",
     "ext-sqlite3": "*",
     "ext-sqlsrv": "*"
