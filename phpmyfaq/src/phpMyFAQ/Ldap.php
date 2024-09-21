@@ -85,7 +85,6 @@ class Ldap
                 'Unable to connect to LDAP server (Error: %s)',
                 ldap_error($this->ds)
             );
-            $this->errno = ldap_errno($this->ds);
 
             return false;
         }
@@ -201,7 +200,6 @@ class Ldap
         $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
-            $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
                 $username,
@@ -276,7 +274,6 @@ class Ldap
         $sr = ldap_search($this->ds, $this->base, $filter);
 
         if (false === $sr) {
-            $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
                 $username,
@@ -289,7 +286,6 @@ class Ldap
         $entryId = ldap_first_entry($this->ds, $sr);
 
         if (false === $entryId) {
-            $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
                 ldap_error($this->ds)
