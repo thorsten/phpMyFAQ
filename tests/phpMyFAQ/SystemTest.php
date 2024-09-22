@@ -69,4 +69,71 @@ class SystemTest extends TestCase
 
         $this->assertEquals($expectedUrl, $actualUrl);
     }
+
+    public function testGetGitHubIssuesUrl(): void
+    {
+        $expectedUrl = 'https://github.com/thorsten/phpMyFAQ/issues';
+        $actualUrl = System::getGitHubIssuesUrl();
+
+        $this->assertEquals($expectedUrl, $actualUrl);
+    }
+    
+    public function testGetAvailableTemplates()
+    {
+        $system = new System();
+        $result = $system->getAvailableTemplates();
+
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetSupportedSafeDatabases()
+    {
+        $system = new System();
+        $result = $system->getSupportedSafeDatabases();
+
+        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetSystemUri(): void
+    {
+        $configuration = Configuration::getConfigurationInstance();
+        $configuration->set('main.referenceURL', 'https://example.com');
+        $system = new System();
+        $result = $system->getSystemUri($configuration);
+
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+        $this->assertStringContainsString('http', $result);
+    }
+
+    public function testCheckDatabase(): void
+    {
+        $system = new System();
+        $result = $system->checkDatabase();
+
+        $this->assertTrue($result);
+    }
+
+    public function testGetMissingExtensions(): void
+    {
+        $system = new System();
+        $result = $system->getMissingExtensions();
+
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testCreateHashes(): void
+    {
+        $system = new System();
+        $result = $system->createHashes();
+
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+        $this->assertStringContainsString('created', $result);
+    }
 }
