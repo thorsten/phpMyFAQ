@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'cs';
 $PMF_LANG['language'] = 'Czech';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '3';
 $PMF_LANG['msgCategory'] = 'Kategorie';
 $PMF_LANG['msgShowAllCategories'] = 'Zobrazit všechny kategorie';

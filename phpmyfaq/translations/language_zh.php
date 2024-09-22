@@ -21,7 +21,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'zh';
 $PMF_LANG['language'] = 'Chinese Simplified (UTF-8)';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '1';
 $PMF_LANG['msgCategory'] = '类别';
 $PMF_LANG['msgShowAllCategories'] = '所有类别';

@@ -19,14 +19,8 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "lt";
 $PMF_LANG["language"] = "lietuvių";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
-$PMF_LANG["dir"] = "ltr";
-
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "3";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Grupės";

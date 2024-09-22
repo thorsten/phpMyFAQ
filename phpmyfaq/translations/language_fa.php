@@ -20,7 +20,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fa';
 $PMF_LANG['language'] = 'Farsi';
-$PMF_LANG['dir'] = 'rtl';
+$PMF_LANG['direction']= 'rtl';
 $PMF_LANG['nplurals'] = '2';
 
 $PMF_LANG['msgCategory'] = 'موضوع';

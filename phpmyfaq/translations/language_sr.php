@@ -20,7 +20,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sr";
 $PMF_LANG["language"] = "Serbian";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 
 $PMF_LANG["nplurals"] = "3";
 

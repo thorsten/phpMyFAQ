@@ -19,7 +19,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sl";
 $PMF_LANG["language"] = "Slovenian";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "4";
 
 // Navigation

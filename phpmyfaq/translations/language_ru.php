@@ -20,7 +20,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ru';
 $PMF_LANG['language'] = 'Russian';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '3';
 $PMF_LANG['msgCategory'] = 'Разделы';
 $PMF_LANG['msgShowAllCategories'] = 'Разделы';

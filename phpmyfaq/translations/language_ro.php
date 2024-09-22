@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ro';
 $PMF_LANG['language'] = 'romanian';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '3';
 $PMF_LANG['msgCategory'] = 'Categorii';
 $PMF_LANG['msgShowAllCategories'] = 'Toate categoriile';

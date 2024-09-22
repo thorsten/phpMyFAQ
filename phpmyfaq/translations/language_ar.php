@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ar';
 $PMF_LANG['language'] = 'Arabic';
-$PMF_LANG['dir'] = 'rtl';
+$PMF_LANG['direction']= 'rtl';
 $PMF_LANG['nplurals'] = '6';
 $PMF_LANG['msgCategory'] = 'التصنيفات';
 $PMF_LANG['msgShowAllCategories'] = 'عرض جميع التصنيفات';

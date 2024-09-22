@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'pt-BR';
 $PMF_LANG['language'] = 'Brazilian Portuguese';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Categorias';
 $PMF_LANG['msgShowAllCategories'] = 'Mostrar todas categorias';

@@ -19,7 +19,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "vi";
 $PMF_LANG["language"] = "Vietnamese";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "1";
 
 // Navigation

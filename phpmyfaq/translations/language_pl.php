@@ -19,26 +19,10 @@
  * @codingStandardsIgnoreFile
  */
 
-/**
- *                !!! WAŻNA INFORMACJA !!!
- * Podczas definiowania nowych zmiennych należy wziąć pod uwagę poniższe wskazówki:
- * - jedna definicja zmiennej w każdym wierszu !!!
- * - idealnym przypadkiem jest zdefiniowanie wartości ciągu skalarnego
- * - jeśli potrzebna jest dynamiczna zawartość, użyj składni sprintf()
- * - tablice są dozwolone, ale nie zalecane
- * - brak komentarzy na końcu linii po definicji var
- * - nie używaj znaku '=' w kluczach tablicy
- *   (np. $PMF_LANG["a=b"] jest niedozwolone)
- *
- *  Prosimy zachować spójność z tym formatem, ponieważ jest on nam potrzebny aby
- *  narzędzie tłumaczenia działało poprawnie
- */
-
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pl';
 $PMF_LANG['language'] = 'polski';
-// ltr: left to right (e.g., English language); rtl: right to left (e.g., Arabic language)
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "2";
 
 // Navigation

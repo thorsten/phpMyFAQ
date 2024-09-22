@@ -20,7 +20,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "uk";
 $PMF_LANG["language"] = "Ukranian";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "3";
 
 // Navigation

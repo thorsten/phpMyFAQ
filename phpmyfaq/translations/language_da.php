@@ -20,7 +20,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'da';
 $PMF_LANG['language'] = 'Danish';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Kategorier';
 $PMF_LANG['msgShowAllCategories'] = 'Vis alle kategorier';

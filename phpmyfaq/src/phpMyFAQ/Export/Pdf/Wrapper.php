@@ -278,7 +278,7 @@ class Wrapper extends TCPDF
         $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // Check on RTL
-        if ('rtl' == Translation::get('dir')) {
+        if ('rtl' === Translation::get('direction')) {
             $this->setRTL(true);
         }
 

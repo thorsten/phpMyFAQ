@@ -21,7 +21,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "tr";
 $PMF_LANG["language"] = "Turkish";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "1";
 
 // Navigation

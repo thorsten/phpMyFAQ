@@ -23,7 +23,7 @@
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nl';
 $PMF_LANG['language'] = 'Nederlands';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Categorieën';
 $PMF_LANG['msgShowAllCategories'] = 'Toon alle categorieën';

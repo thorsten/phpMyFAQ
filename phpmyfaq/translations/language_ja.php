@@ -20,7 +20,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ja';
 $PMF_LANG['language'] = '日本語';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '0';
 $PMF_LANG['msgCategory'] = 'カテゴリー';
 $PMF_LANG['msgShowAllCategories'] = '全カテゴリーを表示する';

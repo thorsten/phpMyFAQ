@@ -260,7 +260,7 @@ $templateVars = [
     'currentYear' => date('Y'),
     'metaRobots' => $faqConfig->get('seo.metaTagsAdmin'),
     'templateSetName' => TwigWrapper::getTemplateSetName(),
-    'pageDirection' => Translation::get('dir'),
+    'pageDirection' => Translation::get('direction'),
     'userHasAccessPermission' => $adminHelper->canAccessContent($user),
     'msgSessionExpiration' => Translation::get('ad_session_expiration'),
     'pageAction' => isset($action) ? '?action=' . $action : '',

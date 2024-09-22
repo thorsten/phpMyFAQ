@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'el';
 $PMF_LANG['language'] = 'Ελληνικά';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'Κατηγορίες';
 $PMF_LANG['msgShowAllCategories'] = 'Ολες οι κατηγορίες';

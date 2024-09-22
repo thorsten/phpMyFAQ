@@ -20,7 +20,7 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "tw";
 $PMF_LANG["language"] = "台灣繁體中文 Taiwan Traditioal Chinese";
-$PMF_LANG["dir"] = "ltr";
+$PMF_LANG['direction'] = "ltr";
 $PMF_LANG["nplurals"] = "1";
 
 // Navigation 導覽

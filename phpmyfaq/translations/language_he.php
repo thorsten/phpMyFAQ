@@ -21,7 +21,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'he';
 $PMF_LANG['language'] = 'hebrew';
-$PMF_LANG['dir'] = 'rtl';
+$PMF_LANG['direction']= 'rtl';
 $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'קטגוריות';
 $PMF_LANG['msgShowAllCategories'] = 'הראה את כל הקטגוריות';

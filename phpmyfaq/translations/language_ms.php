@@ -19,7 +19,7 @@
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ms';
 $PMF_LANG['language'] = 'malay';
-$PMF_LANG['dir'] = 'ltr';
+$PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '1';
 $PMF_LANG['msgCategory'] = 'Kategori';
 $PMF_LANG['msgShowAllCategories'] = 'Semua Kategori';
