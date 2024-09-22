@@ -464,7 +464,7 @@ switch ($action) {
 
             try {
                 $notification = new Notification($faqConfig);
-                $notification->sendNewFaqAdded($moderators, $recordId, $faqLanguage);
+                $notification->sendNewFaqAdded($moderators, $recordId, $faqEntity->getLanguage());
             } catch (Exception | TransportExceptionInterface $e) {
                 $faqConfig->getLogger()->info('Notification could not be sent: ', [ $e->getMessage() ]);
             }
