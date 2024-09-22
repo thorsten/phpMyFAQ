@@ -15,23 +15,31 @@
  * @since     2015-09-27
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\CategoryNameTwigExtension;
 use phpMyFAQ\Template\CreateLinkTwigExtension;
 use phpMyFAQ\Template\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
+
 $faqSession->userTracking('overview', 0);
 
 $faqHelper = new FaqHelper($faqConfig);
 
-$faq->setUser($currentUser);
+$faq->setUser($user->getUserId());
 $faq->setGroups($currentGroups);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());

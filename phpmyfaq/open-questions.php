@@ -17,17 +17,22 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\QuestionHelper;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$faqSession->userTracking('open_questions', 0);
-
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
+
+$faqSession->userTracking('open_questions', 0);
 
 $questionHelper = new QuestionHelper($faqConfig);
 $questionHelper->setCategory($category);

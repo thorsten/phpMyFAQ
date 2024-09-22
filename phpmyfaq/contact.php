@@ -18,6 +18,7 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -27,10 +28,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqSession->userTracking('contact', 0);
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
+
+$faqSession->userTracking('contact', 0);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);

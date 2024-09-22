@@ -16,9 +16,9 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,18 +28,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 $faqSession->userTracking('request_removal', 0);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 
-// Twig template variables
 $templateVars = [
     ... $templateVars,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
-    'msgNewContentName' => Translation::get('msgNewContentName'),
-    'msgNewContentMail' => Translation::get('msgNewContentMail'),
     'csrf' => Token::getInstance()->getTokenInput('request-removal'),
     'lang' => $Language->getLanguage(),
     'userId' => $user->getUserId(),
@@ -47,4 +46,5 @@ $templateVars = [
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'defaultLoginName' => ($user->getUserId() > 0) ? $user->getLogin() : '',
 ];
+
 return $templateVars;

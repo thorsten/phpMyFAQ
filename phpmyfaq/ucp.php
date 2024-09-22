@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
@@ -33,6 +34,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 if ($user->isLoggedIn()) {
     $faqSession->userTracking('user_control_panel', $user->getUserId());

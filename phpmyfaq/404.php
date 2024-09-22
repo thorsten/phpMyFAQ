@@ -15,13 +15,21 @@
  * @since     2019-01-25
  */
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\SessionActionType;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 $faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
 

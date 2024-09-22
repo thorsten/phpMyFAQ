@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category\Startpage;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
@@ -30,6 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
+
+$faqConfig = Configuration::getConfigurationInstance();
 
 $news = new News($faqConfig);
 $categoryHelper = new CategoryHelper();

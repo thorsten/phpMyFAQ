@@ -29,10 +29,12 @@ use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CommentHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
+use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -41,6 +43,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 $captcha = Captcha::getInstance($faqConfig);
 $captcha->setSessionId($sids);

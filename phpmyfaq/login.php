@@ -16,8 +16,10 @@
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -25,6 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 $loginMessage = '';
 
@@ -43,7 +48,7 @@ $templateVars = [
     'loginHeader' => Translation::get('msgLoginUser'),
     'sendPassword' => Translation::get('lostPassword'),
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
+    'writeLoginPath' => $faqConfig->getDefaultUrl(),
     'faqloginaction' => $action,
     'login' => Translation::get('ad_auth_ok'),
     'username' => Translation::get('ad_auth_user'),

@@ -27,6 +27,7 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
+use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template\TagNameTwigExtension;
@@ -41,9 +42,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqSession->userTracking('fulltext_search', 0);
-
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
+
+$faqSession->userTracking('fulltext_search', 0);
 
 $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
@@ -84,10 +88,6 @@ if ($inputLanguage !== '') {
 if ($allLanguages) {
     $category = new Category($faqConfig);
     $category->transform(0);
-}
-
-if (is_null($user)) {
-    $user = new CurrentUser($faqConfig);
 }
 
 $faqSearch = new Search($faqConfig);

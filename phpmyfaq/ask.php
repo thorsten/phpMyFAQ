@@ -22,6 +22,7 @@ use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -35,10 +36,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    $response = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
+    $response = new RedirectResponse($faqConfig->getDefaultUrl() . 'login');
     $response->send();
 }
 

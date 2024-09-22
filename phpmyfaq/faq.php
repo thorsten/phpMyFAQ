@@ -42,6 +42,7 @@ use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
+use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -59,6 +60,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
+$user = CurrentUser::getCurrentUser($faqConfig);
 
 $glossary = new Glossary($faqConfig);
 $tagging = new Tags($faqConfig);
@@ -69,6 +71,9 @@ $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new Permission($faqConfig);
 $seo = new Seo($faqConfig);
 $attachmentHelper = new AttachmentHelper();
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
+
 $converter = new CommonMarkConverter([
     'html_input' => 'strip',
     'allow_unsafe_links' => false,

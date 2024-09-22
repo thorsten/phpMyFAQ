@@ -19,6 +19,7 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -33,9 +34,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+$faqSession = new Session($faqConfig);
+$faqSession->setCurrentUser($user);
 
 if (!$faqConfig->get('security.enableRegistration')) {
-    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig));
+    $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
     $redirect->send();
 }
 
