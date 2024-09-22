@@ -25,18 +25,21 @@
       {% for translation in translations %}
         <tr id="item_{{ translation.input_lang }}">
           <th>{{ translation.input_lang|languageCode }}</th>
-          <td><input class="form-control" type="text" id="labelInput_{{ translation.input_lang }}"
-                     value="{{ translation.input_label }}" disabled /></td>
+          <td>
+            <input class="form-control" type="text" id="labelInput_{{ translation.input_lang }}"
+                   value="{{ translation.input_label }}" disabled />
+          </td>
           <td>
             {% if translation.input_lang != 'default' %}
               <button class="btn btn-primary" id="editTranslation" data-pmf-lang="{{ translation.input_lang }}"
-                    data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                    data-pmf-csrf="{{ csrfTokenEditTranslation }}">
-                    <i aria-hidden="true" class="bi bi-pencil bi-white"></i></button>
+                      data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
+                      data-pmf-csrf="{{ csrfTokenEditTranslation }}">
+                <i aria-hidden="true" class="bi bi-pencil bi-white"></i></button>
               <button class="btn btn-danger" id="deleteTranslation" data-pmf-lang="{{ translation.input_lang }}"
-                    data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                    data-pmf-csrf="{{ csrfTokenDeleteTranslation }}" data-pmf-langname="{{ translation.input_lang|languageCode }}">
-              <i aria-hidden="true" class="bi bi-trash3 bi-white"></i></button>
+                      data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
+                      data-pmf-csrf="{{ csrfTokenDeleteTranslation }}"
+                      data-pmf-langname="{{ translation.input_lang|languageCode }}">
+                <i aria-hidden="true" class="bi bi-trash3 bi-white"></i></button>
             {% endif %}
           </td>
         </tr>
@@ -50,9 +53,9 @@
     <form>
       <div class="form-group">
         <label class="mb-1" for="languageSelect">{{ msgSelectLanguage }}:</label>
-        <select class="form-control mb-2" id="languageSelect">
+        <select class="form-select mb-2" id="languageSelect">
           {% for language in languages %}
-          <option>{{ language }}</option>
+            <option>{{ language }}</option>
           {% endfor %}
         </select>
       </div>
@@ -61,7 +64,8 @@
         <input type="text" class="mb-4 form-control" id="translationText" />
       </div>
       <button type="submit" id="addTranslation" class="btn btn-primary" data-pmf-csrf="{{ csrfTokenAddTranslation }}"
-              data-pmf-formid="{{ formId }}" data-pmf-inputid="{{ inputId }}">{{ msgAddTranslation }}
+              data-pmf-formid="{{ formId }}" data-pmf-inputid="{{ inputId }}">
+        {{ msgAddTranslation }}
       </button>
     </form>
   </div>
