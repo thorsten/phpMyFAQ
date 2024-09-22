@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-beta.2 - unreleased
+### phpMyFAQ v4.0.0-beta.2 - 2024-09-22
 
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
@@ -14,7 +14,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Twig as new template engine (Thorsten, Jan Harms)
 - added Symfony Routing (Thorsten)
 - added trending FAQs (Thorsten)
-- (WIP) added new frontend layout (Thorsten)
+- added new frontend layout (Thorsten)
 - added new admin configuration frontend (Thorsten)
 - added new admin category management frontend with full drag and drop sorting support (Thorsten)
 - added new admin FAQ management frontend (Thorsten)

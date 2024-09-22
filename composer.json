@@ -92,5 +92,11 @@
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --coverage-text"
+  },
+  "support": {
+    "docs": "https://phpmyfaq.readthedocs.io/",
+    "forum": "https://forum.phpmyfaq.de/",
+    "issues": "https://github.com/thorsten/phpMyFAQ/issues",
+    "source": "https://github.com/thorsten/phpMyFAQ"
   }
 }
