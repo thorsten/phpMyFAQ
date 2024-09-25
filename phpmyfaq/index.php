@@ -130,7 +130,7 @@ $faqpassword = Filter::filterVar(
 $faqaction = Filter::filterVar($request->request->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 $rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 $token = Filter::filterVar($request->request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
-$userid = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_INT);
+$userId = Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_INT);
 
 //
 // Set username via SSO
@@ -153,12 +153,12 @@ if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)
 //
 // Validating token from 2FA if given; else: returns error message
 //
-if ($token !== '' && !is_null($userid)) {
+if ($token !== '' && !is_null($userId)) {
     if (strlen((string)$token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
-        $user->getUserById($userid);
+        $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig);
-        $res = $tfa->validateToken($token, $userid);
+        $res = $tfa->validateToken($token, $userId);
         if (!$res) {
             $error = Translation::get('msgTwofactorErrorToken');
             $action = 'twofactor';
@@ -183,7 +183,7 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     $userAuth->setRememberMe($rememberMe ?? false);
     try {
         $user = $userAuth->authenticate($faqusername, $faqpassword);
-        $userid = $user->getUserId();
+        $userId = $user->getUserId();
     } catch (Exception $e) {
         $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
         $action = 'login';
@@ -476,6 +476,7 @@ $categoryHelper->setConfiguration($faqConfig);
 $categoryHelper->setCategoryRelation($categoryRelation);
 
 $loginMessage = is_null($error) ? '' : '<p class="alert alert-danger">' . $error . '</p>';
+$isUserHasAdminRights = $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value);
 
 //
 // Twig Template variables
@@ -488,6 +489,7 @@ $templateVars = [
     'tplSetName' => TwigWrapper::getTemplateSetName(),
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),
     'isUserLoggedIn' => $user->isLoggedIn(),
+    'isUserHasAdminRights' => $isUserHasAdminRights || $user->isSuperAdmin(),
     'title' => $title,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'customCss' => $faqConfig->getCustomCss(),

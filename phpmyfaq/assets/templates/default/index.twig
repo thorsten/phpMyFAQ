@@ -67,7 +67,9 @@
             {% else %}
               <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
               <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
-              <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
+              {% if isUserHasAdminRights %}
+                <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
+              {% endif %}
               <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="./user/logout?csrf={{ csrfLogout }}">{{ msgLogoutUser }}</a></li>
