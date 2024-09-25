@@ -59,7 +59,7 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.3.1 \
+RUN pecl install xdebug-3.3.2  \
     && docker-php-ext-enable xdebug
 
 #=== php default ===
