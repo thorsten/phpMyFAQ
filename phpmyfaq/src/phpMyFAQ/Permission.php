@@ -42,9 +42,6 @@ use phpMyFAQ\Permission\MediumPermission;
  */
 class Permission
 {
-    /**
-     * Constructor.
-     */
     public function __construct(protected Configuration $configuration)
     {
     }
@@ -53,17 +50,16 @@ class Permission
      * Permission::selectPerm() returns an instance of a subclass of
      * Permission. $permLevel which subclass is returned.
      *
+     * @param string        $permLevel
+     * @param Configuration $configuration
      * @return Permission|BasicPermission|MediumPermission
      */
     public static function selectPerm(
         string $permLevel,
         Configuration $configuration
     ): Permission|BasicPermission|MediumPermission {
-        $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
-        if (class_exists($permClass)) {
-            return new $permClass($configuration);
-        }
+        $permClass = sprintf('\phpMyFAQ\Permission\%sPermission', ucfirst(strtolower($permLevel)));
 
-        return new self($configuration);
+        return class_exists($permClass) ? new $permClass($configuration) : new self($configuration);
     }
 }
