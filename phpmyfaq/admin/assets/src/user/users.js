@@ -57,6 +57,9 @@ const setUserData = async (userId) => {
       element.setAttribute('disabled', '');
     });
     document.getElementById('checkAll').setAttribute('disabled', '');
+  } else {
+    const superAdmin = document.getElementById('is_superadmin');
+    superAdmin.removeAttribute('checked');
   }
 
   if (userData.twofactor_enabled === '1') {
