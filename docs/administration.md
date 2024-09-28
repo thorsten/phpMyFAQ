@@ -503,3 +503,19 @@ Follow these steps to create an App Registration in Microsoft Azure:
 1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
 2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
 3. Then, activate Microsoft Entra ID support in the administration under "Security"
+
+## 5.8 Troubleshooting
+
+### 5.8.1 Hard password reset
+
+If you can't log into your phpMyFAQ installation,
+and your password reset doesn't work, you can reset your password on this page:
+[Password Hash Generator Tool for phpMyFAQ]{https://password.phpmyfaq.de)
+You need your phpMyFAQ salt (from the table `faqconfig` in the database) and the username you used to log in,
+usually `admin`.
+You can choose a new password, and the tool will generate a new password hash for you.
+Copy the hash and paste it into the `pass` field in the `faquserlogin` table in the database for the user "admin".
+Then you can log in with the new password.
+
+For transparency reasons, the whole code base is available on GitHub.
+You can find the code here: https://github.com/phpMyFAQ/password.phpmyfaq.de
