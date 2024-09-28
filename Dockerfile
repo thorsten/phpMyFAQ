@@ -1,12 +1,12 @@
 #
-# This image uses a php:8.3-apache base image and do not have any phpMyFAQ code with it.
+# This image uses a php:8.4.0RC1-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8-apache
+FROM php:8.4.0RC1-apache
 
 #=== Install gd PHP dependencie ===
 RUN set -x \
@@ -59,8 +59,8 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.3.2  \
-    && docker-php-ext-enable xdebug
+#RUN pecl install xdebug-3.4.0alpha1  \
+#    && docker-php-ext-enable xdebug
 
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
