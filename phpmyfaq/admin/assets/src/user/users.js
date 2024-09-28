@@ -77,6 +77,7 @@ const setUserData = async (userId) => {
 };
 
 const setUserRights = async (userId) => {
+  clearUserRights();
   const userRights = await fetchUserRights(userId);
   userRights.forEach((right) => {
     const checkbox = document.getElementById(`user_right_${right}`);
@@ -98,14 +99,18 @@ const clearUserForm = async () => {
   updateInput('email', '');
   updateInput('overwrite_twofactor', '');
 
+  clearUserRights();
+
+  document.getElementById('pmf-user-save').classList.add('disabled');
+  document.getElementById('pmf-delete-user').classList.add('disabled');
+};
+
+const clearUserRights = () => {
   document.querySelectorAll('.permission').forEach((item) => {
     if (item.checked) {
       item.removeAttribute('checked');
     }
   });
-
-  document.getElementById('pmf-user-save').classList.add('disabled');
-  document.getElementById('pmf-delete-user').classList.add('disabled');
 };
 
 const updateInput = (id, value) => {
@@ -271,7 +276,7 @@ export const handleUsers = async () => {
 
   // Delete user
   const deleteUserButton = document.getElementById('pmf-delete-user');
-  const deleteUser_yes = document.getElementById('pmf-delete-user-yes');
+  const deleteUserConfirmed = document.getElementById('pmf-delete-user-yes');
 
   if (deleteUserButton) {
     deleteUserButton.addEventListener('click', (event) => {
@@ -284,7 +289,7 @@ export const handleUsers = async () => {
       userid.value = document.getElementById('current_user_id').value;
       document.getElementById('source_page').value = 'users';
     });
-    deleteUser_yes.addEventListener('click', async (event) => {
+    deleteUserConfirmed.addEventListener('click', async (event) => {
       event.preventDefault();
       const source = document.getElementById('source_page');
       if (source.value === 'users') {
@@ -319,8 +324,6 @@ export const handleUsers = async () => {
         overwrite_twofactor: document.getElementById('overwrite_twofactor').checked,
         userId: userId,
       };
-
-      console.log(userData);
 
       const response = await postUserData('./api/user/edit', userData);
       const json = await response.json();
