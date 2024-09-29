@@ -333,7 +333,7 @@ class UserController extends AbstractController
             $errorMessage[] = Translation::get('ad_user_error_loginInvalid');
         }
 
-        if ($newUser->getUserByLogin($userName)) {
+        if ($newUser->getUserByLogin($userName, false)) {
             $errorMessage[] = Translation::get('ad_adus_exerr');
         }
 
