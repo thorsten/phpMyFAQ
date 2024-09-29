@@ -62,6 +62,10 @@ RUN set -ex \
 #RUN pecl install xdebug-3.4.0alpha1  \
 #    && docker-php-ext-enable xdebug
 
+#=== Install xdebug via PIE (PHP Extension Installer) ===
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN install-php-extensions xdebug/xdebug@master
+
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_ENABLE_UPLOADS=On \
