@@ -90,7 +90,7 @@ class Search
      *
      * @param string $searchTerm Text to auto complete
      * @throws Exception
-     * @return mixed[]
+     * @return array
      */
     public function autoComplete(string $searchTerm): array
     {
@@ -232,16 +232,12 @@ class Search
     public function deleteSearchTermById(int $searchTermId): bool
     {
         $query = sprintf(
-            "
-            DELETE FROM
-                %s
-            WHERE
-                id = '%d'",
+            "DELETE FROM %s WHERE id = '%d'",
             $this->table,
             $searchTermId
         );
 
-        return $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -251,7 +247,7 @@ class Search
     {
         $query = sprintf('DELETE FROM %s', $this->table);
 
-        return $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -305,18 +301,15 @@ class Search
     public function getSearchesCount(): int
     {
         $sql = sprintf(
-            'SELECT COUNT(1) AS count FROM %s',
+            'SELECT COUNT(*) AS count FROM %s',
             $this->table
         );
 
         $result = $this->configuration->getDb()->query($sql);
 
-        return (int)$this->configuration->getDb()->fetchObject($result)->count;
+        return (int) $this->configuration->getDb()->fetchObject($result)->count;
     }
 
-    /**
-     * Sets the Entity object.
-     */
     public function setCategory(Category $category): void
     {
         $this->category = $category;
