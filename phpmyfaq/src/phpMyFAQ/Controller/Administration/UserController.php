@@ -333,7 +333,7 @@ class UserController extends AbstractController
             $errorMessage[] = Translation::get('ad_user_error_loginInvalid');
         }
 
-        if ($newUser->getUserByLogin($userName)) {
+        if ($newUser->getUserByLogin($userName, false)) {
             $errorMessage[] = Translation::get('ad_adus_exerr');
         }
 
@@ -450,6 +450,7 @@ class UserController extends AbstractController
             return $this->json(['error' => Translation::get('ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         } else {
             $user = new User($this->configuration);
+            $user->getUserById($userId);
             $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
             if (!$user->perm->refuseAllUserRights($userId)) {
                 return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
