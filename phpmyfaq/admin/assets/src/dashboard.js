@@ -13,6 +13,7 @@
  * @since     2020-04-22
  */
 
+import Masonry from 'masonry-layout';
 import { Chart, registerables } from 'chart.js';
 import { getRemoteHashes, verifyHashes } from './api';
 import { addElement } from '../../../assets/src/utils';
@@ -289,5 +290,15 @@ export const handleVerificationModal = async () => {
       updates.appendChild(ul);
       spinner.classList.add('d-none');
     });
+  }
+};
+
+//
+// Masonry on dashboard
+//
+window.onload = () => {
+  const masonryElement = document.querySelector('.masonry-grid');
+  if (masonryElement) {
+    new Masonry(masonryElement, { columnWidth: 0 });
   }
 };
