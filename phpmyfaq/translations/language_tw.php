@@ -846,16 +846,11 @@ $PMF_LANG['msgEdit'] = "編輯 Edit";
 $PMF_LANG['msgDelete'] = "刪除 Delete";
 $PMF_LANG['msgYes'] = "是 yes";
 $PMF_LANG['msgNo'] = "否 no";
-$PMF_LANG['msgTransToolSureDeleteFile'] = "您確定要刪除此語言檔案? Are you sure you want to delete this language file?";
-$PMF_LANG['msgTransToolFileRemoved'] = "語言檔案移除成功 Language file successfully removed";
-$PMF_LANG['msgTransToolErrorRemovingFile'] = "移除語言檔案發生錯誤 Error removing the language file";
 $PMF_LANG['msgVariable'] = "變數 Variable";
 $PMF_LANG['msgCancel'] = "取消 Cancel";
 $PMF_LANG['msgSave'] = "儲存 Save";
 $PMF_LANG['msgSaving3Dots'] = "儲存中 saving ...";
 $PMF_LANG['msgRemoving3Dots'] = "移除中... removing ...";
-$PMF_LANG['msgTransToolFileSaved'] = "語言檔案儲存成功 Language file saved successfully";
-$PMF_LANG['msgTransToolErrorSavingFile'] = "儲存語言檔案發生錯誤 Error saving the language file";
 $PMF_LANG['msgLanguage'] = "語言 Language";
 $PMF_LANG['msgTransToolLanguageCharset'] = "語言的文字編碼字串 Language charset";
 $PMF_LANG['msgTransToolLanguageDir'] = "語言方向 Language direction";
@@ -886,12 +881,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d 位使用者們在線上 (users online)";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy 開發者
 $LANG_CONF['layout.templateSet'] = array("select", "設定要使用的佈景 (Template set to be used)");
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fi禳eras 開發者
-$PMF_LANG['msgTransToolRemove'] = "移除";
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "重複表單的數量 (Number of plural forms)";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = "此語言只有一個複數的表單 (This language has only one plural form)";
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "(Plural form support for language %s is disabled (nplurals not set))";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fi禳eras - Plural messages - 複數訊息
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "線上有 %d 筆 FAQ";

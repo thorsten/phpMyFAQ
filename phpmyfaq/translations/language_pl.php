@@ -848,16 +848,11 @@ $PMF_LANG['msgEdit'] = 'Edytuj';
 $PMF_LANG['msgDelete'] = 'Usuń';
 $PMF_LANG['msgYes'] = 'Tak';
 $PMF_LANG['msgNo'] = 'Nie';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Czy na pewno chcesz usunąć ten plik językowy?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Plik językowy został pomyślnie usunięty';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Błąd podczas usuwania pliku językowego';
 $PMF_LANG['msgVariable'] = 'Zmienna';
 $PMF_LANG['msgCancel'] = 'Anuluj';
 $PMF_LANG['msgSave'] = 'Zapisz';
 $PMF_LANG['msgSaving3Dots'] = 'zapisywanie ...';
 $PMF_LANG['msgRemoving3Dots'] = 'usuwanie ...';
-$PMF_LANG['msgTransToolFileSaved'] = 'Plik językowy został pomyślnie zapisany';
-$PMF_LANG['msgTransToolErrorSavingFile'] = 'Błąd podczas zapisywania pliku językowego';
 $PMF_LANG['msgLanguage'] = 'Język';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Kodowanie języka';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Kierunek języka';
@@ -887,12 +882,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d użytkowników on-line";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = ["select", "Zestaw szablonów do użycia"];
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas FiĹˇeras
-$PMF_LANG['msgTransToolRemove'] = 'Usuń';
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Liczba form liczby mnogiej";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Język ten ma tylko jedną formę liczby mnogiej';
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Obsługa form liczby mnogiej dla języka %s jest wyłączona (nie ustawiono liczby mnogiej)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas FiĹˇeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Znajduje się tam %d FAQ on-line";
@@ -1224,10 +1213,6 @@ $PMF_LANG['rightsLanguage::view_faqs'] = 'Zobacz FAQs';
 $PMF_LANG['rightsLanguage::view_categories'] = 'Zobacz kategorie';
 $PMF_LANG['rightsLanguage::view_sections'] = 'Zobacz sekcje';
 $PMF_LANG['rightsLanguage::view_news'] = 'Zobacz wiadomości';
-$PMF_LANG['rightsLanguage::add_section'] = 'Dodaj sekcje';
-$PMF_LANG['rightsLanguage::edit_section'] = 'Edytuj sekcje';
-$PMF_LANG['rightsLanguage::delete_section'] = 'Usuń sekcje';
-$PMF_LANG['rightsLanguage::administrate_sections'] = 'Zarządzaj sekcjami';
 $PMF_LANG['rightsLanguage::administrate_groups'] = 'Zarządzaj grupami';
 $PMF_LANG['ad_group_rights'] = 'Uprawnienia grupy';
 $PMF_LANG['ad_menu_meta'] = 'Metadane Szablonu';

@@ -841,16 +841,11 @@ $PMF_LANG['msgEdit'] = "Bearbeiten";
 $PMF_LANG['msgDelete'] = "Löschen";
 $PMF_LANG['msgYes'] = "ja";
 $PMF_LANG['msgNo'] = "nein";
-$PMF_LANG['msgTransToolSureDeleteFile'] = "Wollen Sie diese Sprachdatei wirklich löschen?";
-$PMF_LANG['msgTransToolFileRemoved'] = "Sprachdatei erfolgreich gelöscht";
-$PMF_LANG['msgTransToolErrorRemovingFile'] = "Fehler beim Löschen der Sprachdatei";
 $PMF_LANG['msgVariable'] = "Variable";
 $PMF_LANG['msgCancel'] = "Abbrechen";
 $PMF_LANG['msgSave'] = "Speichern";
 $PMF_LANG['msgSaving3Dots'] = "speichern ...";
 $PMF_LANG['msgRemoving3Dots'] = "löschen ...";
-$PMF_LANG['msgTransToolFileSaved'] = "Sprachdatei erfolgreich gespeichert";
-$PMF_LANG['msgTransToolErrorSavingFile'] = "Fehler beim Speichern der Sprachdatei";
 $PMF_LANG['msgLanguage'] = "Sprache";
 $PMF_LANG['msgTransToolLanguageCharset'] = "Zeichensatz";
 $PMF_LANG['msgTransToolLanguageDir'] = "Schriftrichtung";
@@ -868,7 +863,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = "Beim Versenden der Sprachdatei ist 
 $PMF_LANG['msgTransToolPercent'] = "Vollständigkeit";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = ["input", "Pfad zum Speichern der Anhänge.<br><small>Relativer Pfad wird ab Webroot gesucht.</small>"];
+$LANG_CONF['records.attachmentsPath'] = ['input', 'Pfad zum Speichern der Anhänge', 'Relativer Pfad wird ab Webroot gesucht.'];
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Die Datei wurde auf dem Server nicht gefunden";
@@ -880,12 +875,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d Besucher online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = ["select", "Ausgewähltes Template"];
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = "Entfernen";
-$PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = "Anzahl der Pluralformen";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = "Diese Sprache hat nur eine Pluralform";
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Für %s ist die Unterstützung für Pluralformen deaktiviert (nplurals nicht gesetzt).";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG['plmsgHomeArticlesOnline'][0] = "Es ist %d FAQ-Eintrag online.";
@@ -915,7 +904,7 @@ $PMF_LANG['permission::approverec'] = "Eintrag freigeben";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF['records.enableAttachmentEncryption'] = ["checkbox", "Verschlüsselung der Anhänge"];
-$LANG_CONF['records.defaultAttachmentEncKey'] = ["input", "Standardschlüssel für Verschlüsselung<br/><small style=\"color: red\">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>"];
+$LANG_CONF['records.defaultAttachmentEncKey'] = ['input', 'Standardschlüssel für Verschlüsselung', 'Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Update";
@@ -1133,8 +1122,8 @@ $LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'SMTP Passwort'];
 $LANG_CONF['security.enableRegistration'] = ['checkbox', 'Erlaube Registrierung externer Besucher'];
 
 // added v2.9.0-alpha3 - 2015-02-08 by Thorsten
-$LANG_CONF['main.customPdfHeader'] = ['area', 'Eigener PDF Header (HTML erlaubt)'];
-$LANG_CONF['main.customPdfFooter'] = ['area', 'Eigener PDF Footer (HTML erlaubt)'];
+$LANG_CONF['main.customPdfHeader'] = ['area', 'Eigener PDF Header', 'HTML erlaubt'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Eigener PDF Footer', 'HTML erlaubt'];
 $LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Erlaube Downloads von Gästen'];
 $PMF_LANG['ad_msgNoteAboutPasswords'] = "Achtung! Beim Ausfüllen der Passwortfelder überschreiben Sie die Passwörter des Benutzers.";
 $PMF_LANG['ad_delete_all_votings'] = "Alle Bewertungen löschen";
@@ -1168,19 +1157,19 @@ $PMF_LANG['ad_admin_notes_hint'] = ' (nur für Editoren sichtbar)';
 $PMF_LANG['ad_quick_entry'] = 'Neue FAQ in dieser Kategorie anlegen';
 
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
-$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP Mapping für den Namen, "cn" bei Nutzung eines ADS'];
-$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP Mapping für den Usernamen, "samAccountName" bei Nutzung eines ADS'];
-$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP Mapping für E-Mmail, "mail" bei Nutzung eines ADS'];
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP Mapping für den Namen', '"cn" bei Nutzung eines ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP Mapping für den Usernamen', '"samAccountName" bei Nutzung eines ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP Mapping für E-Mmail', '"mail" bei Nutzung eines ADS'];
 $LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP Mapping für "member of" bei Nutzung von LDAP Gruppen'];
-$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP Domänenprefix, z.B. "DOMAIN\username"'];
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP Protokoll Version (Standard: 3)'];
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP Verweise (Standard: 0)'];
-$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Unterstützung für LDAP Gruppen, z.B. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP Domänenprefix', 'z.B. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP Protokoll Version', 'Standard: 3'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP Verweise', 'Standard: 0'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Unterstützung für LDAP Gruppen', 'z.B. "DOMAIN\username"'];
 $LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Unterstützung für LDAP mit SASL'];
 $LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Unterstützung für multiple LDAP Server'];
 $LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Unterstützung für anonyme LDAP Verbindungen'];
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Unterstützung für dynamisches User Binding'];
-$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP Attribut bei dynamischen User Binding, "uid" bei Nutzung eines ADS'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP Attribut bei dynamischen User Binding', '"uid" bei Nutzung eines ADS'];
 $LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Aktiviere XML Sitemap'];
 $PMF_LANG['ad_category_image'] = 'Kategorie-Bild';
 $PMF_LANG['ad_user_show_home'] = "Auf der Startseite anzeigen";
@@ -1194,7 +1183,7 @@ $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktiviere Weiterempfehlung
 $PMF_LANG['msgUserRemovalText'] = 'Sie können die Löschung Ihres Accounts und Ihrer persönlichen Daten beantragen. Eine E-Mail wird an das Admin-Team gesendet. Das Team wird Ihren Account, Ihre Kommentare und Fragen löschen. Da es sich um einen manuellen Prozess handelt, kann es bis zu 24 Stunden dauern. Danach erhalten Sie eine Löschbestätigung per E-Mail.';
 $PMF_LANG['msgUserRemoval'] = "Antrag zur Löschung des Benutzers";
 $PMF_LANG['ad_menu_RequestRemove'] = "Benutzer löschen";
-$PMF_LANG['msgContactRemove'] = "Antrag auf Entfernung des Benutzers beim Admin Team";
+$PMF_LANG['msgContactRemove'] = "Antrag auf Entfernung des Benutzers beim Admin-Team";
 $PMF_LANG['msgContactPrivacyNote'] = "Bitte beachten sie unsere";
 $PMF_LANG['msgPrivacyNote'] = "Datenschutzerklärung";
 
@@ -1207,10 +1196,6 @@ $PMF_LANG['permission::view_faqs'] = 'FAQs lesen';
 $PMF_LANG['permission::view_categories'] = 'Kategorien lesen';
 $PMF_LANG['permission::view_sections'] = 'Bereiche lesen';
 $PMF_LANG['permission::view_news'] = 'Neuigkeiten lesen';
-$PMF_LANG['permission::add_section'] = 'Bereiche hinzufügen';
-$PMF_LANG['permission::edit_section'] = 'Bereiche bearbeiten';
-$PMF_LANG['permission::delete_section'] = 'Bereiche löschen';
-$PMF_LANG['permission::administrate_sections'] = 'Bereiche administrieren';
 $PMF_LANG['permission::administrate_groups'] = 'Gruppen administrieren';
 $PMF_LANG['ad_group_rights'] = 'Rechte der Gruppe';
 $PMF_LANG['permission::viewadminlink'] = 'Link zur Administration sichtbar';
@@ -1334,7 +1319,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Lesezeichen erfolgreich entfernt!';
 $PMF_LANG['msgNoHashAllowed'] = "Die Frage darf '#' nicht enthalten.";
 
 // added v4.0.0-alpha - 2023-12-24 by Jan
-$LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren (Mit Kommas trennen)'];
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren', 'Mit Kommas trennen'];
 
 // added v4.0.0-alpha - 2023-12-26 by Thorsten
 $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
@@ -1416,7 +1401,7 @@ $LANG_CONF['seo.title'] = ['input', 'SERP Titel'];
 $LANG_CONF['seo.description'] = ['area', 'SERP Beschreibung'];
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
-$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Erlaubte externe Hosts für Medieninhalte (Mit Kommas trennen)'];
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Erlaubte externe Hosts für Medieninhalte', 'Mit Kommas trennen'];
 $PMF_LANG['msgConfirmTwofactorConfig'] = 'Bist du sicher, dass du deine aktuelle Konfiguration der 2-Faktor-Authentifizierung löschen möchtest?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ist aktuell nicht aktiviert.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';

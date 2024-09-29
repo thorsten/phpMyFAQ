@@ -859,16 +859,11 @@ $PMF_LANG['msgEdit'] = 'Засах';
 $PMF_LANG['msgDelete'] = 'Устгах';
 $PMF_LANG['msgYes'] = 'тийм';
 $PMF_LANG['msgNo'] = 'үгүй';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Та энэ хэлний файлыг устгахыг хүсч байна уу?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Хэлний файл устгагдсан';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Хэлний файлыг устгахад алдаа гарлаа';
 $PMF_LANG['msgVariable'] = 'Хувьсагч';
 $PMF_LANG['msgCancel'] = 'Болих';
 $PMF_LANG['msgSave'] = 'Хадгалах';
 $PMF_LANG['msgSaving3Dots'] = 'хадгалж байна ...';
 $PMF_LANG['msgRemoving3Dots'] = 'устгаж байна ...';
-$PMF_LANG['msgTransToolFileSaved'] = 'Хэлний файл амжилттай хадгалагдлаа';
-$PMF_LANG['msgTransToolErrorSavingFile'] = 'Хэлний файл хадгалхад алдаа гарлаа';
 $PMF_LANG['msgLanguage'] = 'Хэл';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Хэлний тэмдэг - charset';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Хэлний чиглэл (зүүн, баруун)';
@@ -902,12 +897,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d хэрэглэгч онлайн";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = array("сонгох", "Загвар хэрэглэгдэж байна");
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = 'Устгах';
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Олон тооны формын тоо";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Энэ хэл олон тооны формын зөвхөн нэгэнд л хэрэглэгдэнэ';
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = " %s хэлэнд олон хэлний форм дэмжигдэхгүй (nplurals тохируулагдаагүй)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Энд %d FAQ онлайн байна";

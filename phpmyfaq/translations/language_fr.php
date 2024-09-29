@@ -844,16 +844,11 @@ $PMF_LANG["msgEdit"] = "Editer";
 $PMF_LANG["msgDelete"] = "Effacer";
 $PMF_LANG["msgYes"] = "oui";
 $PMF_LANG["msgNo"] = "non";
-$PMF_LANG["msgTransToolSureDeleteFile"] = "Êtes-vous sûr(e) de vouloir supprimer ce fichier de langue ?";
-$PMF_LANG["msgTransToolFileRemoved"] = "Fichiers de langue supprimé avec succès";
-$PMF_LANG["msgTransToolErrorRemovingFile"] = "Erreur en supprimant ce fichier de langue";
 $PMF_LANG["msgVariable"] = "Variable";
 $PMF_LANG["msgCancel"] = "Annuler";
 $PMF_LANG["msgSave"] = "Sauvegarder";
 $PMF_LANG["msgSaving3Dots"] = "enregistrement en cours ...";
 $PMF_LANG["msgRemoving3Dots"] = "suppression en cours ...";
-$PMF_LANG["msgTransToolFileSaved"] = "Fichier de langue enregistré avec succès";
-$PMF_LANG["msgTransToolErrorSavingFile"] = "Erreur lors de l'enregistrement de ce fichier de langue";
 $PMF_LANG["msgLanguage"] = "Langues";
 $PMF_LANG["msgTransToolLanguageCharset"] = "Encodage du fichier de langue";
 $PMF_LANG["msgTransToolLanguageDir"] = "Sens de lecture de la langue";
@@ -882,12 +877,6 @@ $PMF_LANG["plmsgUserOnline"]["0"] = "%d utilisateur en ligne";
 $PMF_LANG["plmsgUserOnline"]["1"] = "%d utilisateurs en ligne";
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF["layout.templateSet"] = ["select", "Template à utiliser"];
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG["msgTransToolRemove"] = "Supprimer";
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Nombre de forme de pluriels";
-$PMF_LANG["msgTransToolLanguageOnePlural"] = "Cette langue a seulement une forme de pluriel";
-$PMF_LANG["msgTransToolLanguagePluralNotSet"] = "Le support du pluriel pour la langue %s est désactivé (nplurals non activé)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"]["0"] = "Il y a %d FAQ en ligne";
@@ -1211,10 +1200,6 @@ $PMF_LANG["permission::view_faqs"] = "Voir les FAQs";
 $PMF_LANG["permission::view_categories"] = "Voir les catégories";
 $PMF_LANG["permission::view_sections"] = "Voir les sections";
 $PMF_LANG["permission::view_news"] = "Voir les actualités";
-$PMF_LANG["permission::add_section"] = "Ajouter des sections";
-$PMF_LANG["permission::edit_section"] = "Editer les sections";
-$PMF_LANG["permission::delete_section"] = "Supprimer les sections";
-$PMF_LANG["permission::administrate_sections"] = "Administrer les sections";
 $PMF_LANG["permission::administrate_groups"] = "Administrer les groupes";
 $PMF_LANG["ad_group_rights"] = "Permissions de groupe";
 

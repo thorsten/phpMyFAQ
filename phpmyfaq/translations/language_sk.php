@@ -863,16 +863,11 @@ $PMF_LANG['msgEdit'] = 'Upraviť';
 $PMF_LANG['msgDelete'] = 'Vymazať';
 $PMF_LANG['msgYes'] = 'áno';
 $PMF_LANG['msgNo'] = 'nie';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Ste si istý, že jazykový súbor musí byť vymazaný?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Jazykový súbor úspešne odstránený';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Chyba pri odstraňovaní jazykového súboru';
 $PMF_LANG['msgVariable'] = 'Nastaviteľné';
 $PMF_LANG['msgCancel'] = 'Cancel';
 $PMF_LANG['msgSave'] = 'Ulož';
 $PMF_LANG['msgSaving3Dots'] = 'ukladanie ...';
 $PMF_LANG['msgRemoving3Dots'] = 'odstraňovanie ...';
-$PMF_LANG['msgTransToolFileSaved'] = 'Jazykový súbor úspešne uložený';
-$PMF_LANG['msgTransToolErrorSavingFile'] = 'Chyba pri ukladaní jazykového súboru';
 $PMF_LANG['msgLanguage'] = 'Jazyk';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Kódovanie jazyka';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Kontrola jazyka';
@@ -903,12 +898,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d užívatelia online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = array("select", "Šablóna nastavená na použitie");
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = 'Odstrániť';
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Počet množných tvarov";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Tento jazyk má iba jeden množný tvar';
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Podpora množných tvarov pre jazyk %s je vypnutá (množné čísla nenastavené)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Je tu %d FAQ online";

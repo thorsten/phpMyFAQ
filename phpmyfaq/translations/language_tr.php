@@ -846,16 +846,11 @@ $PMF_LANG['msgEdit'] = "Düzenle";
 $PMF_LANG['msgDelete'] = "Sil";
 $PMF_LANG['msgYes'] = "Evet";
 $PMF_LANG['msgNo'] = "Hayır";
-$PMF_LANG['msgTransToolSureDeleteFile'] = "Bu dil dosyasını silmek istediğinizden emin misiniz?";
-$PMF_LANG['msgTransToolFileRemoved'] = "Dil dosyası başarıyla silindi.";
-$PMF_LANG['msgTransToolErrorRemovingFile'] = "Dil dosyası silinemedi";
 $PMF_LANG['msgVariable'] = "Değişken";
 $PMF_LANG['msgCancel'] = "İptal";
 $PMF_LANG['msgSave'] = "kaydet";
 $PMF_LANG['msgSaving3Dots'] = "Kaydediliyor...";
 $PMF_LANG['msgRemoving3Dots'] = "Siliniyor...";
-$PMF_LANG['msgTransToolFileSaved'] = "Dil dosyası başarıyla kaydedildi.";
-$PMF_LANG['msgTransToolErrorSavingFile'] = "Dil dosyası kaydedilirken hata oluştu";
 $PMF_LANG['msgLanguage'] = "Dil";
 $PMF_LANG['msgTransToolLanguageCharset'] = "Karakter kümesi";
 $PMF_LANG['msgTransToolLanguageDir'] = "dil yönü";
@@ -886,12 +881,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d kullanıcı çevrimiçi";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = array("select", "Template set to be used");
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = "Sil";
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Çoğuul form sayısı";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = "Bu dilde yalnızca bir çoğul formu destekleniyor";
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "%s dili için çoğul desteği devredışı, (nplurals belirlenmemiş)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Toplam %d içerik mevcut";
@@ -1196,10 +1185,6 @@ $PMF_LANG['permission::view_faqs'] = "Soruları görüntüle";
 $PMF_LANG['permission::view_categories'] = "Kategorileri görüntüle";
 $PMF_LANG['permission::view_sections'] = "Bölümleri görüntüle";
 $PMF_LANG['permission::view_news'] = "Duyuruları görüntüle";
-$PMF_LANG['permission::add_section'] = "Bölüm ekle";
-$PMF_LANG['permission::edit_section'] = "Bölüm düzenle";
-$PMF_LANG['permission::delete_section'] = "Bölüm sil";
-$PMF_LANG['permission::administrate_sections'] = "Bölüm yönet";
 $PMF_LANG['permission::administrate_groups'] = "Grupları yönet";
 $PMF_LANG['ad_group_rights'] = "Grup izinleri";
 

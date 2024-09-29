@@ -869,16 +869,11 @@ $PMF_LANG['msgEdit'] = 'Redaguoti';
 $PMF_LANG['msgDelete'] = 'Šalinti';
 $PMF_LANG['msgYes'] = 'taip';
 $PMF_LANG['msgNo'] = 'ne';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Ar tikrai pašalinti šį kalbos failą?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Kalbos failas sėkmingai pašalintas';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Klaida šalinant kalbos failą';
 $PMF_LANG['msgVariable'] = 'Kintamasis';
 $PMF_LANG['msgCancel'] = 'Atsisakyti';
 $PMF_LANG['msgSave'] = 'Išsaugoti';
 $PMF_LANG['msgSaving3Dots'] = 'saugoma ...';
 $PMF_LANG['msgRemoving3Dots'] = 'šalinama ...';
-$PMF_LANG['msgTransToolFileSaved'] = 'Kalbos failas sėkmingai išsaugotas';
-$PMF_LANG['msgTransToolErrorSavingFile'] = 'Klaida saugant kalbos failą';
 $PMF_LANG['msgLanguage'] = 'Kalba';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Kalbos ženklų rinkinys';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Kalbos kryptis';
@@ -908,12 +903,6 @@ $PMF_LANG["plmsgUserOnline"][2] = "%d prisijungusių naudotojų";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = array("select", "Naudojamas šablonų rinkinys");
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = 'Šalinti';
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Daugiskaitos formų skaičius";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = 'Ši kalba turi tik vieną daugiskaitos formą';
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Daugiskaitos formų palaikymas kalbai „%s“ neįjungtas („nplurals“ reikšmė nenustatyta)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Yra pateiktas %d DUK";

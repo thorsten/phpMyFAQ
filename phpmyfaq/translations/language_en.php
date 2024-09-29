@@ -842,16 +842,11 @@ $PMF_LANG['msgEdit'] = 'Edit';
 $PMF_LANG['msgDelete'] = 'Delete';
 $PMF_LANG['msgYes'] = 'yes';
 $PMF_LANG['msgNo'] = 'no';
-$PMF_LANG['msgTransToolSureDeleteFile'] = 'Are you sure you want to delete this language file?';
-$PMF_LANG['msgTransToolFileRemoved'] = 'Language file successfully removed';
-$PMF_LANG['msgTransToolErrorRemovingFile'] = 'Error removing the language file';
 $PMF_LANG['msgVariable'] = 'Variable';
 $PMF_LANG['msgCancel'] = 'Cancel';
 $PMF_LANG['msgSave'] = 'Save';
 $PMF_LANG['msgSaving3Dots'] = 'saving ...';
 $PMF_LANG['msgRemoving3Dots'] = 'removing ...';
-$PMF_LANG['msgTransToolFileSaved'] = 'Language file saved successfully';
-$PMF_LANG['msgTransToolErrorSavingFile'] = 'Error saving the language file';
 $PMF_LANG['msgLanguage'] = 'Language';
 $PMF_LANG['msgTransToolLanguageCharset'] = 'Language charset';
 $PMF_LANG['msgTransToolLanguageDir'] = 'Language direction';
@@ -881,12 +876,6 @@ $PMF_LANG["plmsgUserOnline"][1] = "%d users online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
 $LANG_CONF['layout.templateSet'] = ["select", "Template set to be used"];
-
-// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
-$PMF_LANG['msgTransToolRemove'] = 'Remove';
-$PMF_LANG["msgTransToolLanguageNumberOfPlurals"] = "Number of plural forms";
-$PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
-$PMF_LANG['msgTransToolLanguagePluralNotSet'] = "Plural form support for language %s is disabled (nplurals not set)";
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "There is %d FAQ online";
@@ -1208,10 +1197,6 @@ $PMF_LANG['permission::view_faqs'] = 'View FAQs';
 $PMF_LANG['permission::view_categories'] = 'View categories';
 $PMF_LANG['permission::view_sections'] = 'View sections';
 $PMF_LANG['permission::view_news'] = 'View news';
-$PMF_LANG['permission::add_section'] = 'Add sections';
-$PMF_LANG['permission::edit_section'] = 'Edit sections';
-$PMF_LANG['permission::delete_section'] = 'Delete sections';
-$PMF_LANG['permission::administrate_sections'] = 'Administrate sections';
 $PMF_LANG['permission::administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 
