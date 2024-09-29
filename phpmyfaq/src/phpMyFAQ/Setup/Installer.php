@@ -692,8 +692,10 @@ class Installer extends Setup
     {
         $hints = [];
         if (!$this->system->getHttpsStatus()) {
-            $hints[] = '<p class="alert alert-warning">phpMyFAQ could not find HTTPS support. For security reasons ' .
-                'we recommend activating HTTPS.</p>';
+            $hints[] = '<p class="alert alert-warning">HTTPS support is not enabled in your web server.' .
+                ' To ensure the security of your data and protect against potential vulnerabilities,' .
+                ' we highly recommend enabling HTTPS. Please configure your web server to support HTTPS as soon as' .
+                ' possible.</p>';
         }
 
         if (!extension_loaded('gd')) {
@@ -704,7 +706,7 @@ class Installer extends Setup
 
         if (!function_exists('imagettftext')) {
             $hints[] = '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension ' .
-                ' ofyour PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
+                ' of your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
                 'for spam protection will be quite easy to break.</p>';
         }
 
