@@ -15,96 +15,69 @@
  * @since     2009-09-07
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Tags;
 
 /**
  * Class Helper
  *
  * @package phpMyFAQ
  */
-abstract class Helper
+abstract class AbstractHelper
 {
-    /**
-     * Entity class.
-     */
     protected ?Category $Category = null;
 
     protected Relation $categoryRelation;
 
-    /**
-     * Tagging class.
-     */
     protected ?Tags $Tags = null;
 
-    /**
-     * Plurals class.
-     */
     protected ?Plurals $plurals = null;
 
-    /**
-     * phpMyFAQ's session ID.
-     *
-     * @var int|string|null
-     */
     protected mixed $sessionId = null;
 
     protected Configuration $configuration;
 
-    /**
-     * Entity Setter.
-     *
-     * @param Category $Category Entity object
-     */
-    public function setCategory(Category $Category): Helper
+    public function setCategory(Category $Category): AbstractHelper
     {
         $this->Category = $Category;
         return $this;
     }
 
-    public function setCategoryRelation(Relation $categoryRelation): Helper
+    public function getCategory(): Category
+    {
+        return $this->Category;
+    }
+
+    public function setCategoryRelation(Relation $categoryRelation): AbstractHelper
     {
         $this->categoryRelation = $categoryRelation;
         return $this;
     }
 
-    /**
-     * Tagging Setter.
-     */
-    public function setTags(Tags $Tags): Helper
+    public function setTags(Tags $Tags): AbstractHelper
     {
         $this->Tags = $Tags;
         return $this;
     }
 
-    /**
-     * Plurals setter.
-     *
-     * @param Plurals $plurals Plurals object
-     */
-    public function setPlurals(Plurals $plurals): Helper
+    public function setPlurals(Plurals $plurals): AbstractHelper
     {
         $this->plurals = $plurals;
         return $this;
     }
 
-    /**
-     * Session ID setter.
-     *
-     * @param int|string $sid Session id
-     */
-    public function setSessionId(int|string $sid): Helper
+    public function setSessionId(int|string $sid): AbstractHelper
     {
         $this->sessionId = $sid;
         return $this;
     }
 
-    /**
-     * Sets configuration.
-     */
-    public function setConfiguration(Configuration $configuration): Helper
+    public function setConfiguration(Configuration $configuration): AbstractHelper
     {
         $this->configuration = $configuration;
         return $this;

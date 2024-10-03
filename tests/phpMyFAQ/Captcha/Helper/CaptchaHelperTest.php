@@ -29,7 +29,7 @@ class CaptchaHelperTest extends TestCase
 
         $captchaHelper = CaptchaHelper::getInstance($this->configuration);
 
-        $this->assertInstanceOf(GoogleRecaptchaHelper::class, $captchaHelper);
+        $this->assertInstanceOf(GoogleRecaptchaAbstractHelper::class, $captchaHelper);
     }
 
     public function testGetInstanceWithGoogleRecaptchaDisabled(): void
@@ -38,6 +38,6 @@ class CaptchaHelperTest extends TestCase
 
         $captchaHelper = CaptchaHelper::getInstance($this->configuration);
 
-        $this->assertInstanceOf(BuiltinCaptchaHelper::class, $captchaHelper);
+        $this->assertInstanceOf(BuiltinCaptchaAbstractHelper::class, $captchaHelper);
     }
 }

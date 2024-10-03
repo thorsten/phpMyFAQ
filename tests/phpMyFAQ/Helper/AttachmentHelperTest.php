@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Attachment\AttachmentAbstract;
+use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ class AttachmentHelperTest extends TestCase
 
     public function testRenderAttachmentListWithAttachments()
     {
-        $attachmentMock = $this->createMock(AttachmentAbstract::class);
+        $attachmentMock = $this->createMock(AbstractAttachment::class);
         $attachmentMock->method('getMimeType')->willReturn('application/pdf');
         $attachmentMock->method('buildUrl')->willReturn('http://example.com/file.pdf');
         $attachmentMock->method('getFilename')->willReturn('file.pdf');

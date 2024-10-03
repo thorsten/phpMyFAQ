@@ -17,37 +17,21 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\Strings;
-use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\Utils;
 use stdClass;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class QuestionHelper
  * @package phpMyFAQ\Helper
  */
-readonly class QuestionHelper
+class QuestionHelper extends AbstractHelper
 {
-    private Category $category;
-
-    /**
-     * QuestionHelper constructor.
-     */
-    public function __construct(private Configuration $configuration)
-    {
-    }
-
     public function generateSmartAnswer(SearchResultSet $faqSearchResult): string
     {
         $plr = new Plurals();
@@ -105,7 +89,6 @@ readonly class QuestionHelper
         );
 
         $result = $this->configuration->getDb()->query($query);
-        $output = '';
 
         if ($result && $this->configuration->getDb()->numRows($result) > 0) {
             $openQuestions->numberQuestions = $this->configuration->getDb()->numRows($result);
@@ -116,7 +99,7 @@ readonly class QuestionHelper
                 $question->email = $mail->safeEmail($row->email);
                 $question->userName = $row->username;
                 $question->categoryId = $row->category_id;
-                $question->categoryName = $this->category->categoryName[$row->category_id]['name'] ?? '';
+                $question->categoryName = $this->getCategory()->categoryName[$row->category_id]['name'] ?? '';
                 $question->question = $row->question;
                 $question->answerId = $row->answer_id;
 
@@ -125,11 +108,5 @@ readonly class QuestionHelper
         }
 
         return $openQuestions;
-    }
-
-    public function setCategory(Category $category): QuestionHelper
-    {
-        $this->category = $category;
-        return $this;
     }
 }

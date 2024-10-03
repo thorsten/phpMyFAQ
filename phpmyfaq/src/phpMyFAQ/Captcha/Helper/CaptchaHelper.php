@@ -30,9 +30,9 @@ class CaptchaHelper
         self::$configuration = $configuration;
 
         if (self::$configuration->get('security.enableGoogleReCaptchaV2')) {
-            self::$captchaHelper = new GoogleRecaptchaHelper(self::$configuration);
+            self::$captchaHelper = new GoogleRecaptchaAbstractHelper(self::$configuration);
         } else {
-            self::$captchaHelper = new BuiltinCaptchaHelper(self::$configuration);
+            self::$captchaHelper = new BuiltinCaptchaAbstractHelper(self::$configuration);
         }
 
         return self::$captchaHelper;

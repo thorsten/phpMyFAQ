@@ -24,10 +24,7 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Link;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Search;
@@ -57,7 +54,12 @@ class QuestionController extends AbstractController
 
         $stopWords = new StopWords($this->configuration);
         $category = new Category($this->configuration);
-        $questionHelper = new QuestionHelper($this->configuration, $category);
+
+        $questionHelper = new QuestionHelper();
+        $questionHelper
+            ->setConfiguration($this->configuration)
+            ->setCategory($category);
+
         $categories = $category->getAllCategories();
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);

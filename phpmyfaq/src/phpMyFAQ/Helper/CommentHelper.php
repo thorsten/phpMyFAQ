@@ -4,19 +4,19 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 
-class CommentHelper extends Helper
+class CommentHelper extends AbstractHelper
 {
     /**
      * Returns all user comments (HTML formatted) from a record by type.
      *
      * @param Comment[] $comments
+     * @deprecated Rewrite this method to use Twig
      */
     public function getComments(array $comments): string
     {

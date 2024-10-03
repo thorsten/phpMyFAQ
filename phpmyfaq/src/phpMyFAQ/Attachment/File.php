@@ -27,10 +27,10 @@ use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
  *
  * @package phpMyFAQ\Attachment
  */
-class File extends AttachmentAbstract implements AttachmentInterface
+class File extends AbstractAttachment implements AttachmentInterface
 {
     /**
-     * Build file path under which the attachment, file is accessible in filesystem
+     * Build a file path under which the attachment, file is accessible in filesystem
      *
      * @throws AttachmentException
      */

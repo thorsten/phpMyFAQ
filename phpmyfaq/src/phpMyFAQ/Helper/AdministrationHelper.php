@@ -125,7 +125,7 @@ class AdministrationHelper
 
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-        if (false != $allUserRights) {
+        if (false !== $allUserRights) {
             foreach ($allRights as $allRight) {
                 if (in_array($allRight['right_id'], $allUserRights)) {
                     $this->permission[$allRight['name']] = true;
@@ -133,7 +133,7 @@ class AdministrationHelper
             }
         }
 
-        // If user is super admin, give all rights
+        // If a user is super admin, give all rights
         if ($user->isSuperAdmin()) {
             foreach ($allRights as $allRight) {
                 $this->permission[$allRight['name']] = true;

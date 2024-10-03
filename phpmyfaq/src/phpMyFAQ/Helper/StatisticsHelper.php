@@ -27,11 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 readonly class StatisticsHelper
 {
-    public function __construct(
-        private Session $session,
-        private Visits $visits,
-        private Date $date
-    ) {
+    public function __construct(private Session $session, private Visits $visits, private Date $date)
+    {
     }
 
     public function getTrackingFilesStatistics(): object

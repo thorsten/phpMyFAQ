@@ -17,7 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Attachment\AttachmentAbstract;
+use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 
@@ -30,7 +30,8 @@ class AttachmentHelper
     /**
      * Returns an HTML list of attached files.
      *
-     * @param AttachmentAbstract[] $attachmentList
+     * @param AbstractAttachment[] $attachmentList
+     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
     public function renderAttachmentList(array $attachmentList): string
     {

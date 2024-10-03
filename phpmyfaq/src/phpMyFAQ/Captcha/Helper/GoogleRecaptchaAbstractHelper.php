@@ -19,9 +19,9 @@ namespace phpMyFAQ\Captcha\Helper;
 
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Helper;
+use phpMyFAQ\Helper\AbstractHelper;
 
-class GoogleRecaptchaHelper extends Helper implements CaptchaHelperInterface
+class GoogleRecaptchaAbstractHelper extends AbstractHelper implements CaptchaHelperInterface
 {
     /**
      * Constructor.

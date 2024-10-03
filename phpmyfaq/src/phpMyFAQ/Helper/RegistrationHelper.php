@@ -19,7 +19,6 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
@@ -32,7 +31,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  *
  * @package phpMyFAQ\Helper
  */
-class RegistrationHelper extends Helper
+class RegistrationHelper extends AbstractHelper
 {
     /**
      * RegistrationHelper constructor.

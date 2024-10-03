@@ -18,14 +18,13 @@
 namespace phpMyFAQ\Helper;
 
 use Exception;
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use stdClass;
 
@@ -34,7 +33,7 @@ use stdClass;
  *
  * @package phpMyFAQ\Helper
  */
-class SearchHelper extends Helper
+class SearchHelper extends AbstractHelper
 {
     /**
      * Pagination object.
@@ -163,7 +162,7 @@ class SearchHelper extends Helper
      * Returns the result page for the main search page
      *
      * @return stdClass[]
-     * @throws Exception
+     * @throws Exception|CommonMarkException
      */
     public function getSearchResult(SearchResultSet $searchResultSet, int $currentPage): array
     {
@@ -301,30 +300,6 @@ class SearchHelper extends Helper
             }
 
             $html .= '</ul>';
-        }
-
-        return $html;
-    }
-
-    /**
-     * Renders the list of the most popular search terms.
-     *
-     * @param array $mostPopularSearches Array with popular search terms
-     */
-    public function renderMostPopularSearches(array $mostPopularSearches): string
-    {
-        $html = '';
-
-        foreach ($mostPopularSearches as $mostPopularSearch) {
-            if (Strings::strlen($mostPopularSearch['searchterm']) > 0) {
-                $html .= sprintf(
-                    '<a class="btn btn-primary m-1" href="?search=%s&submit=Search&action=search">%s ' .
-                    '<span class="badge bg-secondary">%dx</span> </a>',
-                    urlencode((string) $mostPopularSearch['searchterm']),
-                    $mostPopularSearch['searchterm'],
-                    $mostPopularSearch['number']
-                );
-            }
         }
 
         return $html;

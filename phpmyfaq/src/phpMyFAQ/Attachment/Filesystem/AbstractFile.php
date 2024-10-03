@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Attachment\Filesystem;
 
-use phpMyFAQ\Attachment\Filesystem\AbstractEntry;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

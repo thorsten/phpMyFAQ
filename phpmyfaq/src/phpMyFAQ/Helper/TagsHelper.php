@@ -18,14 +18,13 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Strings;
 
 /**
  * Class TagsHelper
  * @package phpMyFAQ\Helper
  */
-class TagsHelper extends Helper
+class TagsHelper extends AbstractHelper
 {
     /**
      * @var int[] Array of Tag IDs

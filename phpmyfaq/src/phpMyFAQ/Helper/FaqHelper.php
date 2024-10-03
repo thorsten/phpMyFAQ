@@ -23,7 +23,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Link;
 use phpMyFAQ\Utils;
@@ -36,7 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package phpMyFAQ\Helper
  */
-class FaqHelper extends Helper
+class FaqHelper extends AbstractHelper
 {
     /**
      * Constructor.
@@ -65,11 +64,11 @@ class FaqHelper extends Helper
     /**
      * Renders a select box with all translations of a FAQ.
      *
-     * @todo This method should be moved to a Twig macro.
-     *
      * @param Faq $faq
      * @param int $categoryId
      * @return string
+     * @todo This method should be moved to a Twig macro.
+     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {

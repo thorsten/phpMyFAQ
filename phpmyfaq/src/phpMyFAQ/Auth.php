@@ -109,7 +109,6 @@ class Auth
      */
     public function selectAuth(string $method): Auth
     {
-        // verify selected authentication
         $method = ucfirst(strtolower($method));
         $authClass = '\phpMyFAQ\\Auth\\Auth' . $method;
 

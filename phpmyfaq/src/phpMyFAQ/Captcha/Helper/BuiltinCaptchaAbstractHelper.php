@@ -20,14 +20,14 @@ namespace phpMyFAQ\Captcha\Helper;
 use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Helper;
+use phpMyFAQ\Helper\AbstractHelper;
 
 /**
  * Class CaptchaHelper
  *
  * @package phpMyFAQ\Helper
  */
-class BuiltinCaptchaHelper extends Helper implements CaptchaHelperInterface
+class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelperInterface
 {
     private const FORM_ID = 'captcha';
 

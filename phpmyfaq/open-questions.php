@@ -15,6 +15,7 @@
  * @since     2002-09-17
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Session;
@@ -29,13 +30,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
+
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
-
 $faqSession->userTracking('open_questions', 0);
 
-$questionHelper = new QuestionHelper($faqConfig);
-$questionHelper->setCategory($category);
+$category = new Category($faqConfig);
+$questionHelper = new QuestionHelper();
+$questionHelper
+    ->setConfiguration($faqConfig)
+    ->setCategory($category);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');

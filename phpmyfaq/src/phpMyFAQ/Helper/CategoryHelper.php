@@ -19,21 +19,18 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Helper;
 use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
-use stdClass;
 
 /**
  * Class CategoryHelper
  *
  * @package phpMyFAQ\Helper
  */
-class CategoryHelper extends Helper
+class CategoryHelper extends AbstractHelper
 {
     /**
      * Get all categories in <option> tags.

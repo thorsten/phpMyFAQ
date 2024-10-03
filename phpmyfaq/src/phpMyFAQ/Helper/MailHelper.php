@@ -31,14 +31,14 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
  *
  * @package phpMyFAQ\Helper
  */
-class MailHelper
+readonly class MailHelper
 {
-    private readonly Mail $mail;
+    private Mail $mail;
 
     /**
      * MailHelper constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
         $this->mail = new Mail($this->configuration);
     }
