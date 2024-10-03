@@ -53,7 +53,7 @@ class CategoryHelper extends AbstractHelper
         }
 
         $i = 0;
-        foreach ($this->Category->getCategoryTree() as $cat) {
+        foreach ($this->getCategory()->getCategoryTree() as $cat) {
             $indent = str_repeat('....', $cat['indent']);
 
             $categories .= sprintf('<option value="%s"', $cat['id']);
@@ -68,7 +68,7 @@ class CategoryHelper extends AbstractHelper
                 }
             }
 
-            $categories .= sprintf('>%s %s </option>', $indent, Strings::htmlentities($cat['name']));
+            $categories .= sprintf('>%s %s </option>', $indent, $cat['name']);
             ++$i;
         }
 
@@ -80,10 +80,10 @@ class CategoryHelper extends AbstractHelper
      */
     public function renderCategoryTree(int $parentId = 0): string
     {
-        $categoryRelation = new Relation($this->configuration, $this->Category);
-        $categoryRelation->setGroups($this->Category->getGroups());
+        $categoryRelation = new Relation($this->getConfiguration(), $this->getCategory());
+        $categoryRelation->setGroups($this->getCategory()->getGroups());
 
-        $categoryTree = $this->Category->getOrderedCategories();
+        $categoryTree = $this->getCategory()->getOrderedCategories();
         $categoryNumbers = $categoryRelation->getCategoryWithFaqs();
         $normalizedCategoryNumbers = $this->normalizeCategoryTree($categoryTree, $categoryNumbers);
         $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
@@ -94,7 +94,7 @@ class CategoryHelper extends AbstractHelper
                 $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
             );
         }
-        $languagesAvailable = $this->Category->getCategoryLanguagesTranslated($parentId);
+        $languagesAvailable = $this->getCategory()->getCategoryLanguagesTranslated($parentId);
         return sprintf(
             '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
             Translation::get('msgCategoryMissingButTranslationAvailable'),

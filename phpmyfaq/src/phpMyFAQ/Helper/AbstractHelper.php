@@ -82,4 +82,9 @@ abstract class AbstractHelper
         $this->configuration = $configuration;
         return $this;
     }
+
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
 }
