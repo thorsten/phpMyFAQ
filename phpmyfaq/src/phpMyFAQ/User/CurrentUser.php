@@ -470,7 +470,7 @@ class CurrentUser extends User
      * @param CurrentUser|null $user
      * @return array{0: int, 1: int[]}
      */
-    public static function getCurrentUserGroupId(CurrentUser $user = null): array
+    public static function getCurrentUserGroupId(?CurrentUser $user = null): array
     {
         if (!is_null($user)) {
             $currentUser = $user->getUserId();

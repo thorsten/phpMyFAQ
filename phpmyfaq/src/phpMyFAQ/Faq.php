@@ -634,7 +634,7 @@ class Faq
      * @param int|null $faqRevisionId Revision ID
      * @param bool     $isAdmin Must be true if it is called by an admin/author context
      */
-    public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false): void
+    public function getRecord(int $faqId, ?int $faqRevisionId = null, bool $isAdmin = false): void
     {
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
         $defaultLanguage = $this->configuration->getDefaultLanguage();
@@ -711,7 +711,7 @@ class Faq
     public function getRecordResult(
         int $faqId,
         string $faqLanguage,
-        int $faqRevisionId = null,
+        ?int $faqRevisionId = null,
         bool $isAdmin = false
     ): mixed {
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -1253,11 +1253,11 @@ class Faq
      *
      * @param int        $sortType  Sorting type
      * @param array|null $condition Condition
-     * @param ?string     $sortOrder Sorting order
+     * @param ?string    $sortOrder Sorting order
      */
     public function getAllRecords(
         int $sortType = FAQ_SORTING_TYPE_CATID_FAQID,
-        array $condition = null,
+        ?array $condition = null,
         ?string $sortOrder = 'ASC'
     ): void {
         $where = '';

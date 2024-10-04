@@ -276,10 +276,10 @@ class Session
     /**
      * Tracks the user and log what he did.
      *
-     * @param string          $action Action string
-     * @param int|string|null $data
+     * @param string   $action Action string
+     * @param int|null $data
      */
-    public function userTracking(string $action, int|string $data = null): void
+    public function userTracking(string $action, ?int $data = null): void
     {
         if (!$this->configuration->get('main.enableUserTracking')) {
             return;
