@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Helper;
 
-use phpDocumentor\Reflection\Types\This;
 use phpMyFAQ\Date;
 use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
@@ -42,12 +41,12 @@ readonly class StatisticsHelper
                 ++$numberOfDays;
             }
 
-            if (Date::getTrackingFileDate($dat) > $last) {
-                $last = Date::getTrackingFileDate($dat);
+            if ($this->date->getTrackingFileDate($dat) > $last) {
+                $last = $this->date->getTrackingFileDate($dat);
             }
 
-            if (Date::getTrackingFileDate($dat) < $first && Date::getTrackingFileDate($dat) > 0) {
-                $first = Date::getTrackingFileDate($dat);
+            if ($this->date->getTrackingFileDate($dat) < $first && $this->date->getTrackingFileDate($dat) > 0) {
+                $first = $this->date->getTrackingFileDate($dat);
             }
         }
 
@@ -113,7 +112,7 @@ readonly class StatisticsHelper
         $trackingDates = [];
         while (false !== ($dat = readdir($dir))) {
             if ($dat != '.' && $dat != '..' && strlen($dat) == 16 && !is_dir($dat)) {
-                $trackingDates[] = Date::getTrackingFileDate($dat);
+                $trackingDates[] = $this->date->getTrackingFileDate($dat);
             }
         }
 
@@ -132,8 +131,8 @@ readonly class StatisticsHelper
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
             if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
-                $candidateFirst = Date::getTrackingFileDate($trackingFile);
-                $candidateLast = Date::getTrackingFileDate($trackingFile, true);
+                $candidateFirst = $this->date->getTrackingFileDate($trackingFile);
+                $candidateLast = $this->date->getTrackingFileDate($trackingFile, true);
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
                     $last = $candidateLast;
                 }
@@ -171,7 +170,12 @@ readonly class StatisticsHelper
     {
         $oldValue = mktime(0, 0, 0, 1, 1, 1970);
         $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
-        foreach ($this->getAllTrackingDates() as $trackingDate) {
+
+        $trackingDates = $this->getAllTrackingDates();
+
+        var_dump($trackingDates);
+
+        foreach ($trackingDates as $trackingDate) {
             if (date('Y-m', $oldValue) !== date('Y-m', $trackingDate)) {
                 // The filename format is: trackingDDMMYYYY
                 // e.g.: tracking02042006

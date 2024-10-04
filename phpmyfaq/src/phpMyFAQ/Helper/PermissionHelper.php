@@ -28,7 +28,6 @@ class PermissionHelper
      * Renders a select box for permission types.
      *
      * @param  string $current Selected option
-     * @deprecated Rewrite this method to use Twig
      */
     public static function permOptions(string $current): string
     {

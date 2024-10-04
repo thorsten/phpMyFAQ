@@ -66,7 +66,7 @@ readonly class Date
      * @param string $file     Filename
      * @param bool   $endOfDay End of day?
      */
-    public static function getTrackingFileDate(string $file, bool $endOfDay = false): int
+    public function getTrackingFileDate(string $file, bool $endOfDay = false): int
     {
         if (Strings::strlen($file) >= 16) {
             $day = Strings::substr($file, 8, 2);

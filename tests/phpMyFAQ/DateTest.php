@@ -42,21 +42,22 @@ class DateTest extends TestCase
 
     public function testGetTrackingFileDate(): void
     {
+        $date = new Date($this->configuration);
         $file = 'tracking01042022';
         $expected = 1648764000;
 
-        $result = Date::getTrackingFileDate($file);
+        $result = $date->getTrackingFileDate($file);
         $this->assertEquals($expected, $result);
 
         $expected = 1648850399;
 
-        $result = Date::getTrackingFileDate($file, true);
+        $result = $date->getTrackingFileDate($file, true);
         $this->assertEquals($expected, $result);
 
         $file = 'tracking42';
         $expected = -1;
 
-        $result = Date::getTrackingFileDate($file);
+        $result = $date->getTrackingFileDate($file);
         $this->assertEquals($expected, $result);
     }
 
