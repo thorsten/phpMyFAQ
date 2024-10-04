@@ -47,7 +47,6 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@mcler/webpack-concat-plugin": "^4.1.6",
-    "@playwright/test": "^1.47.1",
     "@testing-library/jest-dom": "^6.5.0",
     "@types/node": "^20.16.5",
     "autoprefixer": "^10.4.20",

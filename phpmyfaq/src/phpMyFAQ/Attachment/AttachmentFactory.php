@@ -51,7 +51,7 @@ class AttachmentFactory
      * @param string|null $key Key
      * @throws AttachmentException
      */
-    public static function create(int $id = null, ?string $key = null): File
+    public static function create(?int $id = null, ?string $key = null): File
     {
         $return = match (self::$storageType) {
             AttachmentStorageType::FILESYSTEM->value => new File($id),

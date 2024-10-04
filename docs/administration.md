@@ -254,7 +254,7 @@ You can import faqs from a csv file. Further, you find an example of such a csv 
 | 1           | Can you buy me an ice cream? | Strawberry or chocolate is available. | ice,strawberry,chocolate | en            | Thorsten | thorsten@phpmyfaq.de    | true   | true   |
 
 > [!NOTE]
-> All cells are required except of the keywords. Additionally, you are able to use several keywords that are seperated with commas.
+> All cells are required except for the keywords. Additionally, you are able to use several keywords that are seperated with commas.
 
 ### 5.4.2 Exports
 
