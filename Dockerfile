@@ -63,6 +63,12 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 RUN install-php-extensions xdebug/xdebug@master \
     && docker-php-ext-enable xdebug
 
+#=== Install xdebug via PIE (PHP Extension Installer) ===
+#RUN curl -L --output /usr/local/bin/pie https://php.github.io/pie/pie-nightly.phar \
+#    && chmod +x /usr/local/bin/pie
+#RUN pie xdebug/xdebug:3.4.0alpha1 \
+#    && docker-php-ext-enable xdebug
+
 #=== Install xdebug PHP dependencies ===
 #RUN pecl install xdebug-3.4.0alpha1  \
 #    && docker-php-ext-enable xdebug
