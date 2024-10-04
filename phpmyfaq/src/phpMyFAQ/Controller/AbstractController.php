@@ -65,7 +65,7 @@ abstract class AbstractController
      * @return Response
      * @throws Exception
      */
-    public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
+    public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');

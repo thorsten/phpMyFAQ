@@ -416,7 +416,7 @@ class BuiltinCaptcha implements CaptchaInterface
      *
      * @param string|null $code Captcha Code
      */
-    public function checkCaptchaCode(string $code = null): bool
+    public function checkCaptchaCode(?string $code = null): bool
     {
         if ($this->isUserIsLoggedIn()) {
             return true;
@@ -479,7 +479,7 @@ class BuiltinCaptcha implements CaptchaInterface
      *
      * @param string|null $captchaCode Captcha code
      */
-    private function removeCaptcha(string $captchaCode = null): void
+    private function removeCaptcha(?string $captchaCode = null): void
     {
         if ($captchaCode == null) {
             $captchaCode = $this->code;

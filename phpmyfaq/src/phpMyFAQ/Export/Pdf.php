@@ -179,7 +179,7 @@ class Pdf extends Export
      *
      * @param string|null $filename
      */
-    public function generateFile(array $faqData, string $filename = null): string
+    public function generateFile(array $faqData, ?string $filename = null): string
     {
         // Default filename: FAQ-<id>-<language>.pdf
         if ($filename === null || $filename === '') {

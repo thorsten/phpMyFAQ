@@ -177,7 +177,7 @@ readonly class Tags
      * @return array<int, string>
      */
     public function getAllTags(
-        string $search = null,
+        ?string $search = null,
         int $limit = PMF_TAGS_CLOUD_RESULT_SET_SIZE,
         bool $showInactive = false
     ): array {

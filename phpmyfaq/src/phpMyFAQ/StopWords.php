@@ -131,10 +131,10 @@ class StopWords
     /**
      * Retrieve all the stop words by a certain language.
      *
-     * @param string|null $lang      Language to retrieve stop words by
+     * @param  string|null $lang      Language to retrieve stop words by
      * @return string[]
      */
-    public function getByLang(string $lang = null, bool $wordsOnly = false): array
+    public function getByLang(?string $lang = null, bool $wordsOnly = false): array
     {
         $lang = is_null($lang) ? $this->configuration->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(

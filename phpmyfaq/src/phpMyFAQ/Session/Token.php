@@ -124,11 +124,14 @@ class Token
     }
 
     /**
+     * @param string      $page
      * @param string|null $requestToken
+     * @param bool        $removeToken
+     * @return bool
      */
-    public function verifyToken(string $page, string $requestToken = null, bool $removeToken = false): bool
+    public function verifyToken(string $page, ?string $requestToken = null, bool $removeToken = false): bool
     {
-        // if the request token has not been passed, check POST
+        // if the request token has not been passed, check $_POST
         $requestToken ??= $_POST[self::PMF_SESSION_NAME] ?? null;
 
         if (is_null($requestToken)) {

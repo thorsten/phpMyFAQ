@@ -69,11 +69,13 @@ readonly class Order
      * Stores the category tree in the database.
      *
      * @param stdClass[] $categoryTree
-     * @param int|null $parentId
+     * @param int|null   $parentId
+     * @param int        $position
+     * @param array      $insertQueries
      */
     public function setCategoryTree(
         array $categoryTree,
-        int $parentId = null,
+        ?int $parentId = null,
         int $position = 1,
         array &$insertQueries = []
     ): void {
@@ -137,9 +139,11 @@ readonly class Order
      * Returns the parent ID of a given categoryTree.
      *
      * @param stdClass[] $categoryTree
-     * @param int|null $parentId
+     * @param int        $categoryId
+     * @param int|null   $parentId
+     * @return int|null
      */
-    public function getParentId(array $categoryTree, int $categoryId, int $parentId = null): ?int
+    public function getParentId(array $categoryTree, int $categoryId, ?int $parentId = null): ?int
     {
         foreach ($categoryTree as $category) {
             if ((int)$category->id === $categoryId) {

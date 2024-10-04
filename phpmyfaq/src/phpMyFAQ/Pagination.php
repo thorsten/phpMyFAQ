@@ -113,7 +113,7 @@ class Pagination
     /**
      * Constructor.
      * We read in the current page from the baseUrl, so if it contains
-     * no pageParamName, first page is assumed
+     * no pageParamName, the first page is assumed
      *
      * @param array<string|int|bool> $options initialization options,
      *                               possible options: -
@@ -128,7 +128,7 @@ class Pagination
      *                               layoutTpl -
      *                               pageParamName (default "page")
      */
-    public function __construct(array $options = null)
+    public function __construct(?array $options = null)
     {
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];

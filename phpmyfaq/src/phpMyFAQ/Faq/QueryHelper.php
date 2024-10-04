@@ -166,9 +166,11 @@ readonly class QueryHelper
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
+     * @param int           $categoryId
      * @param Category|null $category
+     * @return string
      */
-    private function getCategoryIdWhereSequence(int $categoryId, Category $category = null): string
+    private function getCategoryIdWhereSequence(int $categoryId, ?Category $category = null): string
     {
         $sqlWhereFilter = '';
 

@@ -236,7 +236,7 @@ class Mail
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function setFrom(string $address, string $name = null): bool
+    public function setFrom(string $address, ?string $name = null): bool
     {
         return $this->setEmailTo($this->from, 'From', $address, $name);
     }
@@ -251,7 +251,7 @@ class Mail
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    private function setEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
+    private function setEmailTo(array &$target, string $targetAlias, string $address, ?string $name = null): bool
     {
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
@@ -275,7 +275,7 @@ class Mail
      * @throws Exception
      * @return bool True if successful, false otherwise.
      */
-    private function addEmailTo(array &$target, string $targetAlias, string $address, string $name = null): bool
+    private function addEmailTo(array &$target, string $targetAlias, string $address, ?string $name = null): bool
     {
         // Check
         if (!self::validateEmail($address)) {
@@ -340,7 +340,7 @@ class Mail
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function addCc(string $address, string $name = null): bool
+    public function addCc(string $address, ?string $name = null): bool
     {
         return $this->addEmailTo($this->cc, 'Cc', $address, $name);
     }
@@ -349,7 +349,7 @@ class Mail
      * Add a recipient as <TO>.
      *
      * @param string $address User e-mail address.
-     * @param string|null   $name User name (optional).
+     * @param string|null   $name Username (optional).
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
@@ -722,7 +722,7 @@ class Mail
      * @return bool True if successful, false otherwise.
      * @throws Exception
      */
-    public function setReplyTo(string $address, string $name = null): bool
+    public function setReplyTo(string $address, ?string $name = null): bool
     {
         return $this->setEmailTo($this->replyTo, 'Reply-To', $address, $name);
     }
