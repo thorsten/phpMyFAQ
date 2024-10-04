@@ -50,6 +50,7 @@
     "doctrine/instantiator": "2.*",
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
+    "phpmd/phpmd" : "@stable",
     "phpstan/phpstan": "^1.0.0",
     "phpunit/phpunit": "11.*",
     "rector/rector": "^1.0.0",
@@ -89,6 +90,7 @@
     "openapi:json": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php -f json ./phpmyfaq/src/phpMyFAQ -o docs/openapi.json",
     "openapi:yaml": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php ./phpmyfaq/src/phpMyFAQ -o docs/openapi.yaml",
     "phpstan": "./phpmyfaq/src/libs/bin/phpstan analyze --memory-limit=4G",
+    "phpmd": "./phpmyfaq/src/libs/bin/phpmd ./phpmyfaq/src/phpMyFAQ xml rulesets.xml",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --coverage-text"
