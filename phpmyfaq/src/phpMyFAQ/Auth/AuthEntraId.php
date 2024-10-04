@@ -102,7 +102,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        array $optionalData = []
+        ?array $optionalData = []
     ): bool {
         $this->create($login, '');
         return true;
@@ -111,7 +111,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin(string $login, array $optionalData = []): int
+    public function isValidLogin(string $login, ?array $optionalData = []): int
     {
         if ($login === $this->oAuth->getMail()) {
             return 1;

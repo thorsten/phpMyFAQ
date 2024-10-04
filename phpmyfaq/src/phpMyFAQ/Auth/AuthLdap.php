@@ -113,7 +113,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        array $optionalData = null
+        ?array $optionalData = null
     ): bool {
         if ('' === trim($password)) {
             throw new AuthException(User::ERROR_USER_INCORRECT_PASSWORD);
@@ -162,7 +162,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin(string $login, array $optionalData = null): int
+    public function isValidLogin(string $login, ?array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

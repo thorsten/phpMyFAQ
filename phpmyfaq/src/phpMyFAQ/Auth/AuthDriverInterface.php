@@ -66,7 +66,7 @@ interface AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[\SensitiveParameter] string $password,
-        array $optionalData = []
+        ?array $optionalData = []
     ): bool;
 
     /**
@@ -75,5 +75,5 @@ interface AuthDriverInterface
      * @param string $login Login name
      * @param array<string>  $optionalData Optional data
      */
-    public function isValidLogin(string $login, array $optionalData = []): int;
+    public function isValidLogin(string $login, ?array $optionalData = []): int;
 }

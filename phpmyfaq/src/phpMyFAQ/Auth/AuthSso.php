@@ -75,7 +75,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        array $optionalData = null
+        ?array $optionalData = null
     ): bool {
         if (!isset($_SERVER['REMOTE_USER'])) {
             throw new AuthException('Remote User not set!');
@@ -102,7 +102,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin(string $login, array $optionalData = null): int
+    public function isValidLogin(string $login, ?array $optionalData = null): int
     {
         return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
     }

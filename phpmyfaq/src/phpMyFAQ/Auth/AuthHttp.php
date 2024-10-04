@@ -75,7 +75,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function checkCredentials(string $login, #[SensitiveParameter] $password, array $optionalData = null): bool
+    public function checkCredentials(string $login, #[SensitiveParameter] $password, ?array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
@@ -86,7 +86,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      */
-    public function isValidLogin($login, array $optionalData = null): int
+    public function isValidLogin($login, ?array $optionalData = null): int
     {
         return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }

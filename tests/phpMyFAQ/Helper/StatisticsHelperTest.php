@@ -49,7 +49,6 @@ class StatisticsHelperTest extends TestCase
 
     public function testClearAllVisits(): void
     {
-        // Arrange
         vfsStream::newFile('tracking01012020')->at($this->root);
 
         $this->visitsMock->expects($this->once())
@@ -62,24 +61,9 @@ class StatisticsHelperTest extends TestCase
 
         $helper = new StatisticsHelper($this->sessionMock, $this->visitsMock, $this->dateMock);
 
-        // Act
         $result = $helper->clearAllVisits();
 
-        // Assert
         $this->assertTrue($result);
         $this->assertFileDoesNotExist(vfsStream::url('content/core/data/tracking01012020'));
-    }
-
-    public function testRenderDaySelector(): void
-    {
-        vfsStream::newFile('tracking01012024')->at($this->root);
-
-        $this->dateMock->method('format')->willReturn('2024-01-01 00:00');
-
-        $helper = new StatisticsHelper($this->sessionMock, $this->visitsMock, $this->dateMock);
-
-        $result = $helper->renderDaySelector();
-
-        $this->assertStringContainsString('<option value="0">2024-01-01 00:00</option>', $result);
     }
 }

@@ -148,7 +148,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[\SensitiveParameter] string $password,
-        array|null $optionalData = null
+        ?array $optionalData = null
     ): bool {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
@@ -188,7 +188,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * @inheritDoc
      * @throws AuthException
      */
-    public function isValidLogin(string $login, array|null $optionalData = null): int
+    public function isValidLogin(string $login, ?array $optionalData = null): int
     {
         $check = sprintf(
             "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
