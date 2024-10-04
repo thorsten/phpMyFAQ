@@ -130,7 +130,7 @@ $question = $faq->getQuestion($faqId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $converter->convert($faq->faqRecord['content'])->getContent();
 } else {
-    $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
+    $answer = $faqHelper->rewriteLanguageMarkupClass($faq->faqRecord['content']);
 }
 
 // Cleanup answer content first

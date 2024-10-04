@@ -56,7 +56,7 @@ class Encryption
     /**
      * This method is called statically. The parameter encType specifies the
      * of encryption method for the encryption object. Supported
-     * are 'crypt', 'hash', 'bcrypt', and 'none'.
+     * are 'bcrypt', 'hash', and 'none'.
      * $enc = EncryptionTypes::selectEnc('hash');
      * $enc is an instance of the class EncryptionTypes\Hash.
      * If the given encryption-type is not supported, selectEnc() will return an
@@ -90,7 +90,8 @@ class Encryption
 
     /**
      * The string returned by error() contains messages for all errors that
-     * during object processing. Messages are separated by new lines.
+     * during object processing.
+     * New lines separate messages.
      */
     public function error(): string
     {

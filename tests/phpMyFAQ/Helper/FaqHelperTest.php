@@ -30,11 +30,11 @@ class FaqHelperTest extends TestCase
         $this->faqHelper = new FaqHelper($this->configuration);
     }
 
-    public function testRenderMarkupContent(): void
+    public function testRewriteLanguageMarkupClass(): void
     {
         $this->assertEquals(
             '<div class="language-html">Foobar</div>',
-            $this->faqHelper->renderMarkupContent('<div class="language-markup">Foobar</div>')
+            $this->faqHelper->rewriteLanguageMarkupClass('<div class="language-markup">Foobar</div>')
         );
     }
 
