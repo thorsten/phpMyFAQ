@@ -172,9 +172,6 @@ readonly class StatisticsHelper
         $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
 
         $trackingDates = $this->getAllTrackingDates();
-
-        var_dump($trackingDates);
-
         foreach ($trackingDates as $trackingDate) {
             if (date('Y-m', $oldValue) !== date('Y-m', $trackingDate)) {
                 // The filename format is: trackingDDMMYYYY
