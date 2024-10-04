@@ -69,27 +69,19 @@ class Utils
     public static function makeShorterText(string $string, int $characters): string
     {
         $string = Strings::preg_replace('/\s+/u', ' ', $string);
-        $arrStr = explode(' ', (string) $string);
-        $shortStr = '';
-        $num = count($arrStr);
+        $arrStr = explode(' ', $string);
 
-        if ($num > $characters) {
-            for ($j = 0; $j < $characters; ++$j) {
-                $shortStr .= $arrStr[$j] . ' ';
-            }
-
-            $shortStr .= '...';
-        } else {
-            $shortStr = $string;
+        if (count($arrStr) > $characters) {
+            return implode(' ', array_slice($arrStr, 0, $characters)) . ' ...';
         }
 
-        return $shortStr;
+        return $string;
     }
 
     /**
-     * Resolves the PMF markers like e.g. %sitename%.
+     * Resolves the phpMyFAQ markers like e.g. %sitename%.
      *
-     * @param string $text Text contains PMF markers
+     * @param string $text Text contains phpMyFAQ markers
      */
     public static function resolveMarkers(string $text, Configuration $configuration): string
     {

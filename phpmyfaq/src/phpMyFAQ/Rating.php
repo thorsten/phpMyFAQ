@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language\Plurals;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Rating
@@ -71,7 +72,7 @@ readonly class Rating
      */
     public function check(int $id, string $ip): bool
     {
-        $check = $_SERVER['REQUEST_TIME'] - 300;
+        $check = Request::createFromGlobals()->server->get('REQUEST_TIME') - 300;
         $query = sprintf(
             "SELECT id FROM %sfaqvoting WHERE artikel = %d AND (ip = '%s' AND datum > '%s')",
             Database::getTablePrefix(),
@@ -116,7 +117,7 @@ readonly class Rating
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
             $votingData->getFaqId(),
             $votingData->getVote(),
-            $_SERVER['REQUEST_TIME'],
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->configuration->getDb()->escape($votingData->getIp())
         );
 
@@ -135,7 +136,7 @@ readonly class Rating
             "UPDATE %sfaqvoting SET vote = vote + %d, usr = usr + 1, datum = %d, ip = '%s' WHERE artikel = %d",
             Database::getTablePrefix(),
             $votingData->getVote(),
-            $_SERVER['REQUEST_TIME'],
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->configuration->getDb()->escape($votingData->getIp()),
             $votingData->getFaqId()
         );

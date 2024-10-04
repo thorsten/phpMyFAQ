@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Export
@@ -57,6 +58,6 @@ class Export
      */
     public static function getExportTimestamp(): string
     {
-        return date('Y-m-d-H-i-s', $_SERVER['REQUEST_TIME']);
+        return date('Y-m-d-H-i-s', Request::createFromGlobals()->server->get('REQUEST_TIME'));
     }
 }

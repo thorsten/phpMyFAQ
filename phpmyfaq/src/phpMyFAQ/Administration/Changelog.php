@@ -19,6 +19,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Changelog
@@ -51,7 +52,7 @@ readonly class Changelog
             $lang,
             $revisionId,
             $userId,
-            $_SERVER['REQUEST_TIME'],
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $text
         );
 

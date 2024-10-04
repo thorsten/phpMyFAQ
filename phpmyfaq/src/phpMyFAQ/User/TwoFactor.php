@@ -38,7 +38,7 @@ readonly class TwoFactor
     /**
      * @throws TwoFactorAuthException
      */
-    public function __construct(private Configuration $configuration)
+    public function __construct(private Configuration $configuration, private CurrentUser $currentUser)
     {
         $this->qrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
@@ -52,7 +52,6 @@ readonly class TwoFactor
 
     /**
      * Generates and returns a new secret without saving
-     * @throws TwoFactorAuthException
      */
     public function generateSecret(): string
     {
@@ -64,15 +63,15 @@ readonly class TwoFactor
      *
      * @param string $secret
      * @return bool
+     * @throws Exception
      */
     public function saveSecret(string $secret): bool
     {
         if (strlen($secret) === 0) {
             return false;
         }
-        $user = CurrentUser::getFromSession($this->configuration);
-        $user->setUserData(['secret' => $secret]);
-        return true;
+
+        return $this->currentUser->setUserData(['secret' => $secret]);
     }
 
     /**
@@ -106,8 +105,7 @@ readonly class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-        $label = $this->configuration->getTitle() . ':' . $currentUser->getUserData('email');
+        $label = $this->configuration->getTitle() . ':' . $this->currentUser->getUserData('email');
         $qrCodeText = sprintf(
             '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),

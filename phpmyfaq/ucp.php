@@ -55,18 +55,20 @@ if ($user->isLoggedIn()) {
 
     $qrCode = '';
     try {
-        $tfa = new TwoFactor($faqConfig);
-        $secret = $tfa->getSecret(CurrentUser::getFromSession($faqConfig));
+        $twoFactor = new TwoFactor($faqConfig, $user);
+        $secret = $twoFactor->getSecret($user);
         if ('' === $secret || is_null($secret)) {
             try {
-                $secret = $tfa->generateSecret();
+                $secret = $twoFactor->generateSecret();
             } catch (TwoFactorAuthException $e) {
                 $faqConfig->getLogger()->error('Cannot generate 2FA secret: ' . $e->getMessage());
             }
-            $tfa->saveSecret($secret);
+            $twoFactor->saveSecret($secret);
         }
-        $qrCode = $tfa->getQrCode($secret);
+        $qrCode = $twoFactor->getQrCode($secret);
     } catch (TwoFactorAuthException $e) {
+        // handle exception
+    } catch (\phpMyFAQ\Core\Exception $e) {
         // handle exception
     }
 
@@ -97,7 +99,7 @@ if ($user->isLoggedIn()) {
         'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
         'msgTwofactorConfig' => Translation::get('msgTwofactorConfig'),
         'msgTwofactorConfigModelTitle' => Translation::get('msgTwofactorConfigModelTitle'),
-        'twofactor_secret' => $secret,
+        'twofactor_secret' => $secret ?? '',
         'qr_code_secret' => $qrCode,
         'qr_code_secret_alt' => Translation::get('qr_code_secret_alt'),
         'msgTwofactorNewSecret' => Translation::get('msgTwofactorNewSecret'),

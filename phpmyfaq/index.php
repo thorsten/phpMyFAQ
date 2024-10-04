@@ -157,7 +157,7 @@ if ($token !== '' && !is_null($userId)) {
     if (strlen((string)$token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
-        $tfa = new TwoFactor($faqConfig);
+        $tfa = new TwoFactor($faqConfig, $user);
         $res = $tfa->validateToken($token, $userId);
         if (!$res) {
             $error = Translation::get('msgTwofactorErrorToken');

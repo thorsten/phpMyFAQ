@@ -19,6 +19,7 @@ namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * UserData.
@@ -59,13 +60,8 @@ class UserData
      */
     public function get(mixed $field): mixed
     {
-        $singleReturn = false;
-        if (!is_array($field)) {
-            $singleReturn = true;
-            $fields = $field;
-        } else {
-            $fields = implode(', ', $field);
-        }
+        $singleReturn = !is_array($field);
+        $fields = $singleReturn ? $field : implode(', ', $field);
 
         $select = sprintf(
             'SELECT %s FROM %sfaquserdata WHERE user_id = %d',
@@ -79,12 +75,9 @@ class UserData
             return false;
         }
 
-        $arr = $this->configuration->getDb()->fetchArray($res);
-        if ($singleReturn && $field != '*') {
-            return $arr[$field];
-        }
+        $array = $this->configuration->getDb()->fetchArray($res);
 
-        return $arr;
+        return $singleReturn && $field != '*' ? $array[$field] : $array;
     }
 
     /**
@@ -224,7 +217,7 @@ class UserData
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            date('YmdHis', $_SERVER['REQUEST_TIME']),
+            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME')),
             $this->configuration->getDb()->escape($this->data['display_name']),
             $this->configuration->getDb()->escape($this->data['email'] ?? ''),
             $this->data['is_visible'],
@@ -259,7 +252,7 @@ class UserData
             (%d, '%s', 1, 0, '')",
             Database::getTablePrefix(),
             $this->userId,
-            date('YmdHis', $_SERVER['REQUEST_TIME'])
+            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME'))
         );
 
         $res = $this->configuration->getDb()->query($insert);

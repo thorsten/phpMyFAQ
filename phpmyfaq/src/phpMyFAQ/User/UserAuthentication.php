@@ -33,7 +33,7 @@ class UserAuthentication
 {
     private bool $rememberMe = false;
 
-    private bool $twoFactorAuthentication = false;
+    private bool $twoFactorAuth = false;
 
     public function __construct(
         private readonly Configuration $configuration,
@@ -53,12 +53,12 @@ class UserAuthentication
 
     public function hasTwoFactorAuthentication(): bool
     {
-        return $this->twoFactorAuthentication;
+        return $this->twoFactorAuth;
     }
 
-    public function setTwoFactorAuthentication(bool $twoFactorAuthentication): void
+    public function setTwoFactorAuth(bool $twoFactorAuth): void
     {
-        $this->twoFactorAuthentication = $twoFactorAuthentication;
+        $this->twoFactorAuth = $twoFactorAuth;
     }
 
     /**
@@ -92,7 +92,7 @@ class UserAuthentication
         // Local
         if ($this->currentUser->login($username, $password)) {
             if ($this->currentUser->getUserData('twofactor_enabled')) {
-                $this->setTwoFactorAuthentication(true);
+                $this->setTwoFactorAuth(true);
                 $this->currentUser->setLoggedIn(false);
             } elseif ($this->currentUser->getStatus() !== 'blocked') {
                 $this->currentUser->setLoggedIn(true);

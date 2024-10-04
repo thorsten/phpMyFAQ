@@ -185,7 +185,8 @@ class Mail
         // Set default value for public properties
         $this->agent = $configuration->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
         $this->boundary = self::createBoundary();
-        $this->messageId = '<' . $_SERVER['REQUEST_TIME'] . '.' . md5(microtime()) . '@' . self::getServerName() . '>';
+        $this->messageId = '<' . Request::createFromGlobals()->server->get('REQUEST_TIME') . '.' . md5(microtime()) .
+            '@' . self::getServerName() . '>';
 
         // Set default value for private properties
         $this->configuration = $configuration;
@@ -556,7 +557,7 @@ class Mail
      */
     public static function getTime(): int
     {
-        return $_SERVER['REQUEST_TIME'] ?? time();
+        return Request::createFromGlobals()->server->get('REQUEST_TIME') ?? time();
     }
 
     /**

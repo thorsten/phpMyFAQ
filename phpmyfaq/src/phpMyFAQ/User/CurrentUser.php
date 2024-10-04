@@ -1,17 +1,15 @@
 <?php
 
 /**
- * Manages authentication process using PHP sessions.
- *
- * The CurrentUser class is an extension of the User class. It provides methods
- * manage user authentication using multiple database accesses. There are three
- * ways of making a new current user object, using the login(), getFromSession(),
- * getFromCookie() or manually. login(), getFromSession() and getFromCookie() may
- * be combined.
+ * Manages the authentication process using PHP sessions.
+ * The CurrentUser class is an extension of the User class.
+ * It provides methods to manage user authentication using multiple database accesses.
+ * There are three ways of making a new current user object, using the login(), getFromSession(), getFromCookie() or
+ * manually. login(), getFromSession() and getFromCookie() may be combined.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at https://mozilla.org/MPL/2.0/.
+ * * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
@@ -176,7 +174,7 @@ class CurrentUser extends User
                 $this->session->setCookie(
                     Session::PMF_COOKIE_NAME_REMEMBERME,
                     $rememberMe,
-                    $_SERVER['REQUEST_TIME'] + self::PMF_REMEMBER_ME_EXPIRED_TIME
+                    Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
             }
 
@@ -295,7 +293,7 @@ class CurrentUser extends User
             return 0;
         }
 
-        return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
+        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
     }
 
     /**
@@ -356,7 +354,10 @@ class CurrentUser extends User
         }
 
         // store session-ID age
-        $_SESSION[SESSION_ID_TIMESTAMP] = $_SERVER['REQUEST_TIME'];
+        $_SESSION[SESSION_ID_TIMESTAMP] = Request::createFromGlobals()->server->get('REQUEST_TIME');
+
+        $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
+
         // save session information in user table
         $update = sprintf(
             "
@@ -371,8 +372,8 @@ class CurrentUser extends User
                 user_id = %d",
             Database::getTablePrefix(),
             session_id(),
-            $_SERVER['REQUEST_TIME'],
-            $updateLastLogin ? "last_login = '" . date('YmdHis', $_SERVER['REQUEST_TIME']) . "'," : '',
+            $requestTime,
+            $updateLastLogin ? "last_login = '" . date('YmdHis', $requestTime) . "'," : '',
             Request::createFromGlobals()->getClientIp(),
             $this->getUserId()
         );
@@ -560,16 +561,18 @@ class CurrentUser extends User
      * On success, a valid CurrentUser object is returned.
      *
      * @static
+     * @throws Exception
      */
     public static function getFromCookie(Configuration $configuration): ?CurrentUser
     {
-        if (!isset($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME])) {
+        $request = Request::createFromGlobals();
+        if ($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME) === null) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserByCookie($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME]);
+        $user->getUserByCookie($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME));
 
         if (-1 === $user->getUserId()) {
             return null;
@@ -708,7 +711,7 @@ class CurrentUser extends User
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'],
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
             Request::createFromGlobals()->getClientIp(),
             $this->getUserId()
         );
@@ -742,7 +745,7 @@ class CurrentUser extends User
                 login_attempts > 5",
             Database::getTablePrefix(),
             $this->getUserId(),
-            $_SERVER['REQUEST_TIME'],
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->lockoutTime,
             Request::createFromGlobals()->getClientIp()
         );

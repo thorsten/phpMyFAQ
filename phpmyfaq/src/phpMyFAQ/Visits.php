@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class Visits
  *
@@ -34,15 +36,15 @@ readonly class Visits
     /**
      * Counting the views of a FAQ record.
      *
-     * @param int $id FAQ record ID
+     * @param int $faqId FAQ record ID
      */
-    public function logViews(int $id): void
+    public function logViews(int $faqId): void
     {
         $nVisits = 0;
         $query = sprintf(
             "SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $id,
+            $faqId,
             $this->configuration->getLanguage()->getLanguage()
         );
 
@@ -53,26 +55,27 @@ readonly class Visits
         }
 
         if ($nVisits === 0) {
-            $this->add($id);
-        } else {
-            $this->update($id);
+            $this->add($faqId);
+            return;
         }
+
+        $this->update($faqId);
     }
 
     /**
      * Adds a new entry in the table "faqvisits".
      *
-     * @param int $id Record ID
+     * @param int $faqId Record ID
      */
-    public function add(int $id): bool
+    public function add(int $faqId): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqvisits VALUES (%d, '%s', %d, %d)",
             Database::getTablePrefix(),
-            $id,
+            $faqId,
             $this->configuration->getLanguage()->getLanguage(),
             1,
-            $_SERVER['REQUEST_TIME']
+            Request::createFromGlobals()->server->get('REQUEST_TIME')
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -81,19 +84,19 @@ readonly class Visits
     /**
      * Updates an entry in the table "faqvisits".
      *
-     * @param int $id FAQ record ID
+     * @param int $faqId FAQ record ID
      */
-    private function update(int $id): bool
+    private function update(int $faqId): void
     {
         $query = sprintf(
             "UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'],
-            $id,
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            $faqId,
             $this->configuration->getLanguage()->getLanguage()
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -124,7 +127,7 @@ readonly class Visits
     }
 
     /**
-     * Resets all visits to current date and one visit per FAQ.
+     * Resets all visits to the current date and one visit per FAQ.
      */
     public function resetAll(): bool
     {
@@ -132,7 +135,7 @@ readonly class Visits
             sprintf(
                 'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
                 Database::getTablePrefix(),
-                $_SERVER['REQUEST_TIME']
+                Request::createFromGlobals()->server->get('REQUEST_TIME')
             )
         );
     }

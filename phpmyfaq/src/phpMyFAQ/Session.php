@@ -241,7 +241,7 @@ class Session
             Database::getTablePrefix(),
             $sessionIdToCheck,
             $ip,
-            $_SERVER['REQUEST_TIME'] - 86400
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86400
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -254,7 +254,7 @@ class Session
             $query = sprintf(
                 "UPDATE %sfaqsessions SET time = %d, user_id = %d WHERE sid = %d AND ip = '%s'",
                 Database::getTablePrefix(),
-                $_SERVER['REQUEST_TIME'],
+                Request::createFromGlobals()->server->get('REQUEST_TIME'),
                 $this->currentUser->getUserId(),
                 $sessionIdToCheck,
                 $ip
@@ -344,7 +344,7 @@ class Session
                     $this->getCurrentSessionId(),
                     $this->currentUser->getUserId(),
                     $remoteAddress,
-                    $_SERVER['REQUEST_TIME']
+                    Request::createFromGlobals()->server->get('REQUEST_TIME')
                 );
 
                 $this->configuration->getDb()->query($query);
@@ -357,7 +357,7 @@ class Session
                 str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
                 str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
                 str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
-                $_SERVER['REQUEST_TIME'] . ";\n";
+                Request::createFromGlobals()->server->get('REQUEST_TIME') . ";\n";
 
             $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
 
@@ -389,7 +389,7 @@ class Session
             $name,
             $sessionId ?? '',
             [
-                'expires' => $_SERVER['REQUEST_TIME'] + $timeout,
+                'expires' => Request::createFromGlobals()->server->get('REQUEST_TIME') + $timeout,
                 'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
                 'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => $strict ? 'strict' : '',
@@ -420,7 +420,7 @@ class Session
         $visits = [];
         $completeData = [];
         $startDate = strtotime('-1 month');
-        $endDate = $_SERVER['REQUEST_TIME'];
+        $endDate = Request::createFromGlobals()->server->get('REQUEST_TIME');
 
         $query = sprintf(
             'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',

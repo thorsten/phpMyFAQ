@@ -91,7 +91,7 @@ readonly class AdminLog
                 "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
                 $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                $this->configuration->getDb()->escape($_SERVER['REQUEST_TIME']),
+                Request::createFromGlobals()->server->get('REQUEST_TIME'),
                 $user->getUserId(),
                 $this->configuration->getDb()->escape(nl2br($logText)),
                 $this->configuration->getDb()->escape(Request::createFromGlobals()->getClientIp())
@@ -110,7 +110,7 @@ readonly class AdminLog
         $query = sprintf(
             'DELETE FROM %sfaqadminlog WHERE time < %d',
             Database::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] - 30 * 86400
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 30 * 86400
         );
 
         return (bool) $this->configuration->getDb()->query($query);

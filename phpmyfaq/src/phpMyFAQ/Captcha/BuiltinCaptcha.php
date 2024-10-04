@@ -286,7 +286,7 @@ class BuiltinCaptcha implements CaptchaInterface
      * @param int $time The time (sec) to define a captcha code old and ready
      *                  to be deleted (default: 1 week)
      */
-    private function garbageCollector(int $time = 604800)
+    private function garbageCollector(int $time = 604800): void
     {
         $delete = sprintf(
             '
@@ -295,7 +295,7 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE 
                 captcha_time < %d',
             Database::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] - $time
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - $time
         );
 
         $this->configuration->getDb()->query($delete);

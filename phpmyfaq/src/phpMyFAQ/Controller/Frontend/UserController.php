@@ -201,18 +201,18 @@ class UserController extends AbstractController
     #[Route('api/user/remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
+        $user = CurrentUser::getCurrentUser($this->configuration);
+
         $data = json_decode($request->getContent());
-        $twofactor = new TwoFactor($this->configuration);
+        $twoFactor = new TwoFactor($this->configuration, $user);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance()->verifyToken('remove-twofactor', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         if ($user->isLoggedIn()) {
-            $newSecret = $twofactor->generateSecret();
+            $newSecret = $twoFactor->generateSecret();
 
             if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
                 return $this->json(

@@ -220,7 +220,7 @@ abstract class AbstractController
         return false;
     }
 
-    protected function isApiEnabled(): bool
+    public function isApiEnabled(): bool
     {
         return (bool) $this->configuration->get('api.enableAccess');
     }

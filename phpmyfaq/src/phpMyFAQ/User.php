@@ -27,6 +27,7 @@ use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 if (!defined('PMF_ENCRYPTION_TYPE')) {
@@ -84,26 +85,18 @@ class User
 
     final public const STATUS_USER_ACTIVE = 'User account is active. ';
 
-    /**
-     * Permission container.
-     */
     public Permission $perm;
 
-    /**
-     * User-data storage container.
-     */
     public ?UserData $userdata = null;
 
     /**
      * Public array that contains error messages.
-     *
      * @var array<string>
      */
     public array $errors = [];
 
     /**
      * authentication container.
-     *
      * @var array<string, Auth|AuthDriverInterface>
      */
     protected array $authContainer = [];
@@ -122,14 +115,8 @@ class User
         'readOnly' => false,
     ];
 
-    /**
-     * login string.
-     */
     private string $login = '';
 
-    /**
-     * minimum length of login string (default: 2).
-     */
     private int $loginMinLength = 2;
 
     /**
@@ -138,19 +125,11 @@ class User
      */
     private string $validUsername = '/^[a-z0-9][\w.\-@]+/i';
 
-    /**
-     * user ID.
-     */
     private int $userId = -1;
 
-    /**
-     * Status of user.
-     */
     private string $status = '';
 
-    /**
-     * IS the user a super admin?
-     */
+    /** Is the user a super admin? */
     private bool $isSuperAdmin = false;
 
     /** @var string $authSource Authentication, e.g. local, ldap, azure, sso, ... */
@@ -238,8 +217,8 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param Auth $authDriver Driver object
-     * @param string                                                          $name Auth name
+     * @param Auth   $authDriver Driver object
+     * @param string $name       Auth name
      */
     public function addAuth(Auth $authDriver, string $name): bool
     {
@@ -259,18 +238,11 @@ class User
      */
     protected function checkAuth(Auth $auth): bool
     {
-        $methods = ['checkCredentials'];
-        foreach ($methods as $method) {
-            if (!method_exists($auth, $method)) {
-                return false;
-            }
-        }
-
-        return true;
+        return method_exists($auth, 'checkCredentials');
     }
 
     /**
-     * loads basic user information from the database selecting the user with
+     * Loads basic user information from the database selecting the user with
      * specified cookie information.
      */
     public function getUserByCookie(string $cookie): bool
@@ -365,15 +337,7 @@ class User
     public function searchUsers(string $search): array
     {
         $select = sprintf(
-            "
-            SELECT
-                login, 
-                user_id,
-                account_status
-            FROM
-                %sfaquser
-            WHERE 
-                login LIKE '%s'",
+            "SELECT login, user_id, account_status FROM %sfaquser WHERE login LIKE '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($search . '%'),
         );
@@ -416,7 +380,7 @@ class User
         }
 
         // set user-ID
-        if (0 == $userId) {
+        if (0 === $userId) {
             $this->userId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
@@ -428,8 +392,8 @@ class User
             Database::getTablePrefix(),
             $this->getUserId(),
             $this->configuration->getDb()->escape($login),
-            $_SERVER['REQUEST_TIME'],
-            date('YmdHis', $_SERVER['REQUEST_TIME']),
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME')),
         );
 
         $this->configuration->getDb()->query($insert);
@@ -448,7 +412,6 @@ class User
         }
 
         $success = false;
-
         foreach ($this->authContainer as $name => $auth) {
             if ($auth->setReadOnly()) {
                 continue;
@@ -473,10 +436,9 @@ class User
     }
 
     /**
-     * returns true if login is a valid login string.
-     * $this->loginMinLength defines the minimum length the
-     * login string. If login has more characters than allowed,
-     * false is returned.
+     * Returns true if login is a valid login string.
+     * $this->loginMinLength defines the minimum length of the login string.
+     * If login has more characters than allowed, false is returned.
      * $this->login_invalidRegExp is a regular expression.
      * If login matches this false is returned.
      *
@@ -652,8 +614,8 @@ class User
 
     /**
      * Returns a string with error messages.
-     * The string returned by error() contains messages for all errors that
-     * during object processing. Messages are separated by new lines.
+     * The string returned by error() contains messages for all errors that during object processing.
+     * New lines separate messages.
      * Error messages are stored in the public array errors.
      */
     public function error(): string
