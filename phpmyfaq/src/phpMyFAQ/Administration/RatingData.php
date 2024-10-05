@@ -121,8 +121,6 @@ readonly class RatingData
 
     private function mapRowToRating(object $row): array
     {
-        var_dump($this->configuration->getDefaultUrl());
-
         $question = Strings::htmlspecialchars(trim((string) $row->question));
         $url = sprintf(
             '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
