@@ -46,8 +46,6 @@ class Upgrade extends Setup
 
     private bool $isNightly;
 
-    private bool $isMaintenanceEnabled = false;
-
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -151,7 +149,7 @@ class Upgrade extends Setup
     /**
      * Method to verify the downloaded phpMyFAQ package
      *
-     * @param string $path | Path to zip file
+     * @param string $path | Path to a zip file
      * @param string $version | Version to verify
      * @throws TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|JsonException
      */
@@ -255,26 +253,6 @@ class Upgrade extends Setup
         return file_exists($outputZipFile);
     }
 
-     /**
-     * Method to delete the temporary created backup.
-     *
-     * @param string $backupName | Name of the created backup
-     */
-    public function deleteTemporaryBackup(string $backupName): bool
-    {
-        if (is_file($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName)) {
-            return unlink($this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName);
-        }
-        return false;
-    }
-
-    /**
-     * Method to restore from the temporary backup
-     */
-    public function restoreTemporaryBackup()
-    {
-    }
-
     /**
      * Method to install the package
      */
@@ -372,11 +350,6 @@ class Upgrade extends Setup
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
     }
 
-    public function getUpgradeDirectory(): string
-    {
-        return $this->upgradeDirectory;
-    }
-
     public function setUpgradeDirectory(string $upgradeDirectory): void
     {
         $this->upgradeDirectory = $upgradeDirectory;
@@ -394,14 +367,6 @@ class Upgrade extends Setup
 
     public function isMaintenanceEnabled(): bool
     {
-        return $this->isMaintenanceEnabled = $this->configuration->get('main.maintenanceMode');
-    }
-
-    public function setIsMaintenanceEnabled(bool $isMaintenanceEnabled): Upgrade
-    {
-        $this->isMaintenanceEnabled = $isMaintenanceEnabled;
-        $this->configuration->set('main.maintenanceMode', $isMaintenanceEnabled);
-
-        return $this;
+        return $this->configuration->get('main.maintenanceMode');
     }
 }

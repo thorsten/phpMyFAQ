@@ -578,7 +578,7 @@ class Installer extends Setup
      *
      * @throws \Exception
      */
-    public function __construct(private System $system)
+    public function __construct(private readonly System $system)
     {
         parent::__construct();
 
