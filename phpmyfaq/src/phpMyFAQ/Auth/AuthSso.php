@@ -23,6 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
 use SensitiveParameter;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Sso
@@ -31,6 +32,18 @@ use SensitiveParameter;
  */
 class AuthSso extends Auth implements AuthDriverInterface
 {
+    private Request $request;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(Configuration $configuration)
+    {
+        parent::__construct($configuration);
+
+        $this->request = Request::createFromGlobals();
+    }
+
     /**
      * @inheritDoc
      * @throws Exception
@@ -71,23 +84,24 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * @inheritDoc
      * @throws AuthException
+     * @throws Exception
      */
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
         ?array $optionalData = null
     ): bool {
-        if (!isset($_SERVER['REMOTE_USER'])) {
+        if ($this->request->server->get('REMOTE_USER') === null) {
             throw new AuthException('Remote User not set!');
         }
 
         // Check if "DOMAIN\user", "user@DOMAIN" or only "user"
-        $remoteUser = explode('\\', (string) $_SERVER['REMOTE_USER']);
-        if (is_array($remoteUser) && count($remoteUser) > 1) {
-            $user = $remoteUser[1];
+        $remote = explode('\\', $this->request->server->get('REMOTE_USER'));
+        if (is_array($remote) && count($remote) > 1) {
+            $user = $remote[1];
         } else {
-            $remoteUser = explode('@', (string) $_SERVER['REMOTE_USER']);
-            $user = is_array($remoteUser) && count($remoteUser) > 1 ? $remoteUser[0] : $_SERVER['REMOTE_USER'];
+            $remote = explode('@', $this->request->server->get('REMOTE_USER'));
+            $user = is_array($remote) && count($remote) > 1 ? $remote[0] : $this->request->server->get('REMOTE_USER');
         }
 
         if ($user === $login) {
@@ -104,6 +118,6 @@ class AuthSso extends Auth implements AuthDriverInterface
      */
     public function isValidLogin(string $login, ?array $optionalData = null): int
     {
-        return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
+        return $this->request->server->get('PHP_AUTH_USER') !== null ? 1 : 0;
     }
 }

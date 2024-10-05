@@ -19,6 +19,7 @@ use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Setup\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
+use Symfony\Component\HttpFoundation\Request;
 
 date_default_timezone_set('Europe/Berlin');
 
@@ -81,6 +82,8 @@ $setup = [
 ];
 
 Strings::init();
+
+Request::setTrustedHosts(['^localhost$', '^127\.0\.0\.1$', '^example\.com$']);
 
 try {
     $installer = new Installer(new System());

@@ -21,7 +21,7 @@ class LinkTest extends TestCase
 
         Strings::init();
 
-        $_SERVER['HTTP_HOST'] = 'faq.example.org';
+        $_SERVER['HTTP_HOST'] = 'example.com';
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
@@ -36,10 +36,10 @@ class LinkTest extends TestCase
         $method = $class->getMethod('isHomeIndex');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/index.php', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/index.php', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
@@ -49,10 +49,10 @@ class LinkTest extends TestCase
         $method = $class->getMethod('isInternalReference');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/index.php#foobar', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
         $this->link = new Link('#foobar', $this->configuration);
@@ -68,7 +68,7 @@ class LinkTest extends TestCase
         $method = $class->getMethod('isSystemLink');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
@@ -81,10 +81,10 @@ class LinkTest extends TestCase
         $method = $class->getMethod('hasScheme');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
 
-        $this->link = new Link('faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('example.com/my-test-faq/', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
     }
 
@@ -93,7 +93,7 @@ class LinkTest extends TestCase
      */
     public function testGetSEOItemTitle(): void
     {
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
 
         $this->assertEquals(
             'hd-ready',
@@ -130,16 +130,16 @@ class LinkTest extends TestCase
         $method = $class->getMethod('getHttpGetParameters');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/?foo=bar', $this->configuration);
         $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
 
         $this->link = new Link(
-            'https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction',
+            'https://example.com/my-test-faq/?foo=bar&amp;action=noaction',
             $this->configuration
         );
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar&action=noaction', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/?foo=bar&action=noaction', $this->configuration);
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
     }
 
@@ -152,10 +152,10 @@ class LinkTest extends TestCase
         $method = $class->getMethod('getQuery');
         $method->setAccessible(true);
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/?foo=bar', $this->configuration);
         $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar#baz', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/?foo=bar#baz', $this->configuration);
         $this->assertEquals(array('main' => 'foo=bar', 'fragment' => 'baz'), $method->invokeArgs($this->link, array()));
     }
 
@@ -169,7 +169,7 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->configuration->set('security.useSslOnly', 'true');
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertEquals('https://', $method->invokeArgs($this->link, []));
     }
 
@@ -178,7 +178,7 @@ class LinkTest extends TestCase
      */
     public function testGetSystemScheme(): void
     {
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertEquals('https://', $this->link->getSystemScheme());
     }
 
@@ -187,7 +187,7 @@ class LinkTest extends TestCase
      */
     public function testGetSystemRelativeUri(): void
     {
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
 
         $_SERVER['SCRIPT_NAME'] = '/my-test-faq/src/Link.php';
         $this->assertEquals('/my-test-faq', $this->link->getSystemRelativeUri());
@@ -201,12 +201,12 @@ class LinkTest extends TestCase
      */
     public function testGetSystemUri(): void
     {
-        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
 
         $_SERVER['SCRIPT_NAME'] = '/my-test-faq/index.php';
-        $_SERVER['HTTP_HOST'] = 'faq.example.org';
-        $this->assertEquals('https://faq.example.org/my-test-faq/index.php', $this->link->getSystemUri());
-        $this->assertEquals('https://faq.example.org/my-test-faq/', $this->link->getSystemUri('index.php'));
+        $_SERVER['HTTP_HOST'] = 'example.com';
+        $this->assertEquals('https://example.com/my-test-faq/index.php', $this->link->getSystemUri());
+        $this->assertEquals('https://example.com/my-test-faq/', $this->link->getSystemUri('index.php'));
     }
 
     /**
@@ -214,7 +214,7 @@ class LinkTest extends TestCase
      */
     public function testToHtmlAnchor(): void
     {
-        $url = 'https://faq.example.org/my-test-faq/';
+        $url = 'https://example.com/my-test-faq/';
 
         $this->link = new Link($url, $this->configuration);
         $this->link->class = 'pmf-foo';
@@ -253,9 +253,9 @@ class LinkTest extends TestCase
         $method = $class->getMethod('appendSids');
         $method->setAccessible(true);
 
-        $this->link = new Link('http://faq.example.org/my-test-faq/', $this->configuration);
-        $actual = $method->invokeArgs($this->link, array('http://faq.example.org/my-test-faq/', 4711));
-        $expected = 'http://faq.example.org/my-test-faq/?sid=4711';
+        $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
+        $actual = $method->invokeArgs($this->link, array('http://example.com/my-test-faq/', 4711));
+        $expected = 'http://example.com/my-test-faq/?sid=4711';
 
         $this->assertEquals($expected, $actual);
     }
@@ -266,31 +266,31 @@ class LinkTest extends TestCase
      */
     public function testToStringWithEnabledRewriteRules(): void
     {
-        $this->link = new Link('http://faq.example.org/my-test-faq/', $this->configuration);
+        $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
         $this->assertEquals(
-            'http://faq.example.org/my-test-faq/',
+            'http://example.com/my-test-faq/',
             $this->link->toString()
         );
 
-        $this->link = new Link('http://faq.example.org/my-test-faq/index.php?action=add', $this->configuration);
+        $this->link = new Link('http://example.com/my-test-faq/index.php?action=add', $this->configuration);
         $this->assertEquals(
-            'http://faq.example.org/my-test-faq/add-faq.html',
+            'http://example.com/my-test-faq/add-faq.html',
             $this->link->toString()
         );
 
-        $this->link = new Link('http://faq.example.org/my-test-faq/index.php?action=bookmarks', $this->configuration);
+        $this->link = new Link('http://example.com/my-test-faq/index.php?action=bookmarks', $this->configuration);
         $this->assertEquals(
-            'http://faq.example.org/my-test-faq/user/bookmarks',
+            'http://example.com/my-test-faq/user/bookmarks',
             $this->link->toString()
         );
 
         $this->link = new Link(
-            'http://faq.example.org/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
+            'http://example.com/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
             $this->configuration
         );
         $this->link->itemTitle = 'HD Ready';
         $this->assertEquals(
-            'http://faq.example.org/my-test-faq/content/1/36/de/hd-ready.html',
+            'http://example.com/my-test-faq/content/1/36/de/hd-ready.html',
             $this->link->toString()
         );
     }
@@ -301,19 +301,19 @@ class LinkTest extends TestCase
      */
     public function testToStringWithDisabledRewriteRules(): void
     {
-        $url = 'https://faq.example.org/my-test-faq/';
+        $url = 'https://example.com/my-test-faq/';
         $this->link = new Link($url, $this->configuration);
         $this->assertEquals($url, $this->link->toString(true));
 
-        $url = 'https://faq.example.org/my-test-faq/add-faq.html';
+        $url = 'https://example.com/my-test-faq/add-faq.html';
         $this->link = new Link($url, $this->configuration);
         $this->assertEquals($url, $this->link->toString(true));
 
-        $url = 'https://faq.example.org/my-test-faq/index.php?sid=4711&action=faq&cat=1&id=36&artlang=de';
+        $url = 'https://example.com/my-test-faq/index.php?sid=4711&action=faq&cat=1&id=36&artlang=de';
         $this->link = new Link($url, $this->configuration);
         $this->link->itemTitle = 'Foobar';
         $this->assertEquals(
-            'https://faq.example.org/my-test-faq/content/1/36/de/foobar.html',
+            'https://example.com/my-test-faq/content/1/36/de/foobar.html',
             $this->link->toString(true)
         );
     }

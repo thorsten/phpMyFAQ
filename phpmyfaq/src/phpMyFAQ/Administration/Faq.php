@@ -114,8 +114,6 @@ class Faq
                     'created' => $row->created,
                 ];
             }
-        } else {
-            return $faqData;
         }
 
         return $faqData;

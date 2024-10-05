@@ -36,8 +36,20 @@ readonly class RatingData
     public function getAll(): array
     {
         $ratings = [];
+        $query = $this->buildQuery();
+        $result = $this->configuration->getDb()->query($query);
 
-        $query = match (Database::getType()) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $ratings[] = $this->mapRowToRating($row);
+        }
+
+        return $ratings;
+    }
+
+    private function buildQuery(): string
+    {
+        $prefix = Database::getTablePrefix();
+        return match (Database::getType()) {
             'sqlsrv' => sprintf(
                 '
                     SELECT
@@ -68,9 +80,7 @@ readonly class RatingData
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix()
+                $prefix, $prefix, $prefix
             ),
             default => sprintf(
                 '
@@ -102,37 +112,37 @@ readonly class RatingData
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix()
+                $prefix,
+                $prefix,
+                $prefix
             ),
         };
+    }
 
-        $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $question = Strings::htmlspecialchars(trim((string) $row->question));
-            $url = sprintf(
-                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-                $this->configuration->getDefaultUrl(),
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
+    private function mapRowToRating(object $row): array
+    {
+        var_dump($this->configuration->getDefaultUrl());
 
-            $link = new Link($url, $this->configuration);
-            $link->itemTitle = $question;
+        $question = Strings::htmlspecialchars(trim((string) $row->question));
+        $url = sprintf(
+            '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+            $this->configuration->getDefaultUrl(),
+            $row->category_id,
+            $row->id,
+            $row->lang
+        );
 
-            $ratings[] = [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'category_id' => $row->category_id,
-                'question' => $question,
-                'url' => $link->toString(),
-                'number' => $row->num,
-                'user' => $row->usr
-            ];
-        }
+        $link = new Link($url, $this->configuration);
+        $link->itemTitle = $question;
 
-        return $ratings;
+        return [
+            'id' => $row->id,
+            'lang' => $row->lang,
+            'category_id' => $row->category_id,
+            'question' => $question,
+            'url' => $link->toString(),
+            'number' => $row->num,
+            'user' => $row->usr
+        ];
     }
 }

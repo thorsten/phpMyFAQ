@@ -24,6 +24,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\User;
 use SensitiveParameter;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AuthHttp
@@ -32,12 +33,16 @@ use SensitiveParameter;
  */
 class AuthHttp extends Auth implements AuthDriverInterface
 {
+    private Request $request;
+
     /**
      * @inheritDoc
      */
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
+
+        $this->request = Request::createFromGlobals();
     }
 
     /**
@@ -77,10 +82,14 @@ class AuthHttp extends Auth implements AuthDriverInterface
      */
     public function checkCredentials(string $login, #[SensitiveParameter] $password, ?array $optionalData = null): bool
     {
-        if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
+        if ($this->request->server->get('PHP_AUTH_USER') === null && $this->request->server->get('PHP_AUTH_PW')) {
             return false;
         }
-        return ($_SERVER['PHP_AUTH_USER'] === $login && $_SERVER['PHP_AUTH_PW'] === $password);
+
+        return (
+            $this->request->server->get('PHP_AUTH_USER') === $login &&
+            $this->request->server->get('PHP_AUTH_PW') === $password
+        );
     }
 
     /**
@@ -88,6 +97,6 @@ class AuthHttp extends Auth implements AuthDriverInterface
      */
     public function isValidLogin($login, ?array $optionalData = null): int
     {
-        return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
+        return $this->request->server->get('PHP_AUTH_USER') !== null ? 1 : 0;
     }
 }

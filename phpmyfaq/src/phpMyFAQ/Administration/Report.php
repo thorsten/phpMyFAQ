@@ -98,22 +98,22 @@ readonly class Report
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($row->id == $lastId) {
                 ++$report[$row->id]['faq_translations'];
-            } else {
-                $report[$row->id] = [
-                    'faq_id' => $row->id,
-                    'faq_language' => $row->lang,
-                    'category_id' => $row->category_id,
-                    'category_parent' => $row->parent_id,
-                    'category_name' => $row->category_name,
-                    'faq_translations' => 0,
-                    'faq_sticky' => $row->sticky,
-                    'faq_question' => $row->question,
-                    'faq_org_author' => $row->original_author,
-                    'faq_updated' => Date::createIsoDate($row->updated),
-                    'faq_visits' => $row->visits,
-                    'faq_last_author' => $row->last_author,
-                ];
             }
+
+            $report[$row->id] = [
+                'faq_id' => $row->id,
+                'faq_language' => $row->lang,
+                'category_id' => $row->category_id,
+                'category_parent' => $row->parent_id,
+                'category_name' => $row->category_name,
+                'faq_translations' => 0,
+                'faq_sticky' => $row->sticky,
+                'faq_question' => $row->question,
+                'faq_org_author' => $row->original_author,
+                'faq_updated' => Date::createIsoDate($row->updated),
+                'faq_visits' => $row->visits,
+                'faq_last_author' => $row->last_author,
+            ];
 
             $lastId = $row->id;
         }

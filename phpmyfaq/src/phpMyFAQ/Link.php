@@ -21,6 +21,8 @@
 
 namespace phpMyFAQ;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class Link
  *
@@ -589,7 +591,7 @@ class Link
         }
 
         // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
-        return str_contains($this->url, (string) $_SERVER['HTTP_HOST']);
+        return str_contains($this->url, Request::createFromGlobals()->getHost());
     }
 
     /**

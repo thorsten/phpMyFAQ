@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\File;
+use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 use phpseclib3\Crypt\AES;
 
 /**
@@ -32,14 +33,14 @@ class EncryptedFile extends File
      *
      * @var string
      */
-    private const CHUNKDELIMITER = 'ฒૐᥤ';
+    private const CHUNK_DELIMITER = 'ฒૐᥤ';
 
     /**
      * AES instance.
      *
-     * @var object
+     * @var AES
      */
-    protected $aes;
+    protected AES $aes;
 
     /** @var resource */
     private $handle;
@@ -57,7 +58,7 @@ class EncryptedFile extends File
 
     public function putChunk(string $chunk): int|false
     {
-        $content = $this->aes->encrypt($chunk) . self::CHUNKDELIMITER;
+        $content = $this->aes->encrypt($chunk) . self::CHUNK_DELIMITER;
 
         return fwrite($this->handle, $content);
     }
@@ -67,12 +68,12 @@ class EncryptedFile extends File
      */
     public function copyTo(string $target): bool
     {
-        $retval = false;
+        $return = false;
 
         if (is_string($target)) {
-            $target = new VanillaFile($target, self::MODE_WRITE);
+            $target = new VanillaFile($target, AbstractFile::MODE_WRITE);
         } else {
-            $target->setMode(self::MODE_WRITE);
+            $target->setMode(AbstractFile::MODE_WRITE);
         }
 
         if ($target->isOk()) {
@@ -80,24 +81,21 @@ class EncryptedFile extends File
                 $target->putChunk($this->getChunk());
             }
 
-            $retval = true;
+            $return = true;
         }
 
-        return $retval;
+        return $return;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getChunk(): string
     {
         $readEnd = false;
         $chunk = '';
-        $chunkDelimLen = strlen(self::CHUNKDELIMITER);
+        $chunkDelimLen = strlen(self::CHUNK_DELIMITER);
 
         while (!$readEnd && !$this->eof()) {
             $chunk .= fread($this->handle, 1);
-            $readEnd = self::CHUNKDELIMITER == substr($chunk, -$chunkDelimLen);
+            $readEnd = self::CHUNK_DELIMITER == substr($chunk, -$chunkDelimLen);
         }
 
         $chunk = substr($chunk, 0, -$chunkDelimLen);

@@ -24,7 +24,7 @@ class ClientTest extends TestCase
 
         Strings::init();
 
-        $_SERVER['HTTP_HOST'] = 'faq.example.org';
+        $_SERVER['HTTP_HOST'] = 'example.com';
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

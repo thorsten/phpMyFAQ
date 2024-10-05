@@ -83,14 +83,14 @@ class Api
             ) {
                 throw new Core\Exception('phpMyFAQ Version API is not available: ' .  $e->getMessage());
             }
-        } else {
-            return [
-                'installed' => $this->configuration->getVersion(),
-                'stable' => 'n/a',
-                'development' => 'n/a',
-                'nightly' => 'n/a'
-            ];
         }
+
+        return [
+            'installed' => $this->configuration->getVersion(),
+            'stable' => 'n/a',
+            'development' => 'n/a',
+            'nightly' => 'n/a'
+        ];
     }
 
     /**

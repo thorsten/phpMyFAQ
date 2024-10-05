@@ -47,14 +47,14 @@ class AttachmentFactory
     /**
      * Create an attachment exemplar.
      *
-     * @param int|null    $id  ID
+     * @param int|null    $attachmentId  ID
      * @param string|null $key Key
      * @throws AttachmentException
      */
-    public static function create(?int $id = null, ?string $key = null): File
+    public static function create(?int $attachmentId = null, ?string $key = null): File
     {
         $return = match (self::$storageType) {
-            AttachmentStorageType::FILESYSTEM->value => new File($id),
+            AttachmentStorageType::FILESYSTEM->value => new File($attachmentId),
             default => throw new AttachmentException('Unknown attachment storage type'),
         };
 
@@ -63,8 +63,6 @@ class AttachmentFactory
          */
         if (self::$encryptionEnabled) {
             $key ??= self::$defaultKey;
-        } else {
-            $key = null;
         }
 
         $return->setKey($key);

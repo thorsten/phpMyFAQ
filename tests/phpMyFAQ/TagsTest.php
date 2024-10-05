@@ -18,6 +18,8 @@ class TagsTest extends TestCase
     {
         parent::setUp();
 
+        $_SERVER['HTTP_HOST'] = 'example.com';
+
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
@@ -82,7 +84,7 @@ class TagsTest extends TestCase
         $this->tags->create(1, $testData);
 
         $this->assertEquals(
-            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/index.php?action=search&amp;tagging_id=1">Foo</a>',
+            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/tags/1/foo.html">Foo</a>',
             $this->tags->getAllLinkTagsById(1),
         );
     }

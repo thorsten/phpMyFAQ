@@ -92,8 +92,8 @@ tests/fixtures/path-to-delete/foo.bar.baz
 # Jest related stuff
 coverage/*
 
-# Playwright related stuff
-playwright-report/
+# PHPMD
+phpmd.html
 
 # Netbeans project folder
 nbproject/

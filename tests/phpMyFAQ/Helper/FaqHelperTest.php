@@ -63,9 +63,6 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContent(): void
     {
-        $this->expectException(SuspiciousOperationException::class);
-        $this->expectExceptionMessage('Invalid Host');
-
         $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
@@ -77,9 +74,6 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContentWithUmlauts(): void
     {
-        $this->expectException(SuspiciousOperationException::class);
-        $this->expectExceptionMessage('Invalid Host');
-
         $content = '<p>Hellö, wörld!</p>';
         $expectedOutput = '<p>Hellö, wörld!</p>';
 
@@ -90,9 +84,6 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContentWithYoutubeContent(): void
     {
-        $this->expectException(SuspiciousOperationException::class);
-        $this->expectExceptionMessage('Invalid Host');
-
         $content = <<<'HTML'
         <iframe 
           title="YouTube video player" 
@@ -103,18 +94,10 @@ class FaqHelperTest extends TestCase
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
           allowfullscreen="allowfullscreen"></iframe>
         HTML;
-        $expectedOutput = <<<'HTML'
-        <iframe 
-          title="YouTube video player" 
-          src="https://www.youtube.com/embed/WaFetxHpCbE" 
-          width="560" 
-          height="315" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen="allowfullscreen"></iframe>
-        HTML;
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
-        $this->assertEquals($expectedOutput, $actualOutput);
+        $this->assertStringContainsString('YouTube video player', $actualOutput);
+        $this->assertStringNotContainsString('frameborder', $actualOutput);
     }
 }

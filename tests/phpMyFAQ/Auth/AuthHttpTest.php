@@ -40,9 +40,6 @@ class AuthHttpTest extends TestCase
         $this->assertTrue($this->authHttp->delete($login));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testCheckCredentials(): void
     {
         $login = 'testUser';
@@ -51,9 +48,6 @@ class AuthHttpTest extends TestCase
         $this->assertTrue($this->authHttp->checkCredentials($login, $password));
     }
 
-    /**
-     * @throws Exception
-     */
     public function testIsValidLogin(): void
     {
         $login = 'testUser';

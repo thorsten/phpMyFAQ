@@ -17,7 +17,7 @@ class SitemapTest extends TestCase
     {
         parent::setUp();
 
-        $_SERVER['HTTP_HOST'] = 'faq.example.org';
+        $_SERVER['HTTP_HOST'] = 'example.com';
 
         $dbConfig = new DatabaseConfiguration(PMF_TEST_DIR . '/content/core/config/database.php');
         Database::setTablePrefix($dbConfig->getPrefix());
@@ -30,7 +30,7 @@ class SitemapTest extends TestCase
             $dbConfig->getPort()
         );
         $configuration = new Configuration($this->db);
-        $configuration->set('main.referenceURL', 'https://faq.example.org/');
+        $configuration->set('main.referenceURL', 'https://example.com/');
 
         $language = new Language($configuration);
         $language->setLanguage(false, 'en');
@@ -59,7 +59,7 @@ class SitemapTest extends TestCase
         $letters = $this->sitemap->getAllFirstLetters();
         $expected = new stdClass();
         $expected->letter = 'S';
-        $expected->url = 'https://faq.example.org/sitemap/S/en.html';
+        $expected->url = 'https://example.com/sitemap/S/en.html';
         $this->assertIsArray($letters);
         $this->assertEquals([$expected], $letters);
     }

@@ -182,9 +182,9 @@ readonly class Backup
 
             if ($file->isDir()) {
                 $zipArchive->addEmptyDir($relativePath);
-            } else {
-                $zipArchive->addFile($filePath, $relativePath);
             }
+
+            $zipArchive->addFile($filePath, $relativePath);
         }
 
         $zipArchive->close();

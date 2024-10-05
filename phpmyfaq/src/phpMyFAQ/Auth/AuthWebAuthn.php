@@ -69,13 +69,13 @@ class AuthWebAuthn extends Auth
         ];
 
         // Prepare relying party (rp) information
-        $rp = [
+        $relyingParty = [
             'name' => $this->appId,
         ];
 
         // Set the 'id' field if not running on localhost
         if (!str_contains($this->appId, 'localhost')) {
-            $rp['id'] = $this->appId;
+            $relyingParty['id'] = $this->appId;
         }
 
         // Prepare public key credential parameters
@@ -91,7 +91,7 @@ class AuthWebAuthn extends Auth
         ];
 
         // Prepare authenticator selection criteria
-        $authenticatorSelection = [
+        $authSelection = [
             'requireResidentKey' => false,
             'userVerification'   => 'discouraged',
         ];
@@ -105,9 +105,9 @@ class AuthWebAuthn extends Auth
         $publicKey = [
             'challenge'              => $challengeArray,
             'user'                   => $user,
-            'rp'                     => $rp,
+            'rp'                     => $relyingParty,
             'pubKeyCredParams'       => $pubKeyCredParams,
-            'authenticatorSelection' => $authenticatorSelection,
+            'authenticatorSelection' => $authSelection,
             'attestation'            => null,
             'timeout'                => 60000,
             'excludeCredentials'     => [],
@@ -179,6 +179,7 @@ class AuthWebAuthn extends Auth
         if (empty($attestationObject->authData)) {
             throw new Exception('Cannot decode key for authentication data');
         }
+
         $byteString = $attestationObject->authData->get_byte_string();
 
         if ($attestationObject->fmt === 'fido-u2f') {
@@ -346,12 +347,12 @@ class AuthWebAuthn extends Auth
             throw new Exception("Type mismatch for '{$info->response->clientData->type}'");
         }
 
-        $authenticatorDataString = self::arrayToString($info->response->authenticatorData);
+        $authDataString = self::arrayToString($info->response->authenticatorData);
 
         $authenticatorData = new stdClass();
-        $authenticatorData->rpIdHash = substr($authenticatorDataString, 0, 32);
-        $authenticatorData->flags = ord(substr($authenticatorDataString, 32, 1));
-        $authenticatorData->counter = substr($authenticatorDataString, 33, 4);
+        $authenticatorData->rpIdHash = substr($authDataString, 0, 32);
+        $authenticatorData->flags = ord(substr($authDataString, 32, 1));
+        $authenticatorData->counter = substr($authDataString, 33, 4);
 
         $hashId = hash('sha256', $this->appId, true);
         if ($hashId != $authenticatorData->rpIdHash) {
