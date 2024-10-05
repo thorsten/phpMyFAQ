@@ -73,21 +73,8 @@ class UserAuthentication
             $this->currentUser->enableRememberMe();
         }
 
-        // LDAP
-        if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
-            try {
-                $authLdap = new AuthLdap($this->configuration);
-                $this->currentUser->addAuth($authLdap, 'ldap');
-            } catch (Exception $exception) {
-                throw new UserException($exception->getMessage());
-            }
-        }
-
-        // SSO
-        if ($this->configuration->get('security.ssoSupport')) {
-            $authSso = new AuthSso($this->configuration);
-            $this->currentUser->addAuth($authSso, 'sso');
-        }
+        $this->authenticateLdap();
+        $this->authenticateSso();
 
         // Local
         if ($this->currentUser->login($username, $password)) {
@@ -105,5 +92,25 @@ class UserAuthentication
         }
 
         return $this->currentUser;
+    }
+
+    private function authenticateLdap(): void
+    {
+        if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
+            try {
+                $authLdap = new AuthLdap($this->configuration);
+                $this->currentUser->addAuth($authLdap, 'ldap');
+            } catch (Exception $exception) {
+                throw new UserException($exception->getMessage());
+            }
+        }
+    }
+
+    private function authenticateSso(): void
+    {
+        if ($this->configuration->get('security.ssoSupport')) {
+            $authSso = new AuthSso($this->configuration);
+            $this->currentUser->addAuth($authSso, 'sso');
+        }
     }
 }

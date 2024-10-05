@@ -29,7 +29,7 @@ use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
 use RobThree\Auth\Algorithm;
 
-readonly class TwoFactor
+class TwoFactor
 {
     private TwoFactorAuth $twoFactorAuth;
 
@@ -38,8 +38,10 @@ readonly class TwoFactor
     /**
      * @throws TwoFactorAuthException
      */
-    public function __construct(private Configuration $configuration, private CurrentUser $currentUser)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly CurrentUser $currentUser
+    ) {
         $this->qrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
             $this->qrCodeProvider,
@@ -63,7 +65,6 @@ readonly class TwoFactor
      *
      * @param string $secret
      * @return bool
-     * @throws Exception
      */
     public function saveSecret(string $secret): bool
     {
@@ -84,24 +85,20 @@ readonly class TwoFactor
 
     /**
      * Validates a given token. Returns true if the token is correct.
-     *
-     * @throws Exception
      */
     public function validateToken(string $token, int $userId): bool
     {
         if (strlen($token) !== 6) {
             return false;
         }
-        $currentUser = new CurrentUser($this->configuration);
-        $currentUser->getUserById($userId);
 
-        return $this->twoFactorAuth->verifyCode($currentUser->getUserData('secret'), $token);
+        $this->currentUser->getUserById($userId);
+
+        return $this->twoFactorAuth->verifyCode($this->currentUser->getUserData('secret'), $token);
     }
 
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
-     *
-     * @throws Exception
      */
     public function getQrCode(string $secret): string
     {
