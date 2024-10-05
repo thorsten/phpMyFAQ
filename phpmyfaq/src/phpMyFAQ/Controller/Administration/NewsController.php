@@ -30,6 +30,7 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class NewsController extends AbstractController
 {
@@ -49,8 +50,6 @@ class NewsController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $dateStart = Filter::filterVar($data->dateStart, FILTER_SANITIZE_SPECIAL_CHARS);
-        $dateEnd = Filter::filterVar($data->dateEnd, FILTER_SANITIZE_SPECIAL_CHARS);
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -71,8 +70,6 @@ class NewsController extends AbstractController
             ->setEmail($email)
             ->setActive($active)
             ->setComment($comment)
-            ->setDateStart(new DateTime($dateStart))
-            ->setDateEnd(new DateTime($dateEnd))
             ->setLink($link ?? '')
             ->setLinkTitle($linkTitle ?? '')
             ->setLinkTarget($target ?? '')
@@ -80,9 +77,9 @@ class NewsController extends AbstractController
 
         if ($news->create($newsMessage)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_news_insertfail')], Response::HTTP_BAD_GATEWAY);
         }
+
+        return $this->json(['error' => Translation::get('ad_news_insertfail')], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -105,9 +102,9 @@ class NewsController extends AbstractController
 
         if ($news->delete((int)$deleteId)) {
             return $this->json(['success' => Translation::get('ad_news_delsuc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
+
+        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -127,8 +124,6 @@ class NewsController extends AbstractController
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $dateStart = Filter::filterVar($data->dateStart, FILTER_SANITIZE_SPECIAL_CHARS);
-        $dateEnd = Filter::filterVar($data->dateEnd, FILTER_SANITIZE_SPECIAL_CHARS);
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
         $content = Filter::filterVar($data->news, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->authorName, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -150,8 +145,6 @@ class NewsController extends AbstractController
             ->setEmail($email)
             ->setActive($active)
             ->setComment($comment)
-            ->setDateStart(new DateTime($dateStart))
-            ->setDateEnd(new DateTime($dateEnd))
             ->setLink($link ?? '')
             ->setLinkTitle($linkTitle ?? '')
             ->setLinkTarget($target ?? '')
@@ -159,11 +152,14 @@ class NewsController extends AbstractController
 
         if ($news->update($newsMessage)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
+
+        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/news/activate')]
     public function activate(Request $request): JsonResponse
     {
@@ -176,13 +172,13 @@ class NewsController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $status = Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($news->activate($id, $status)) {
+        if ($news->activate($newsId, $status)) {
             return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
         }
+
+        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
     }
 }

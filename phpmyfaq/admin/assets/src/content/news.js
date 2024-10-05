@@ -32,8 +32,6 @@ export const handleAddNews = () => {
       });
 
       const data = {
-        dateStart: document.getElementById('dateStart').value,
-        dateEnd: document.getElementById('dateEnd').value,
         news: tinymce.get('editor').getContent(),
         newsHeader: document.getElementById('newsheader').value,
         authorName: document.getElementById('authorName').value,
@@ -91,8 +89,6 @@ export const handleEditNews = () => {
       const data = {
         id: document.getElementById('id').value,
         csrfToken: document.getElementById('pmf-csrf-token').value,
-        dateStart: document.getElementById('dateStart').value,
-        dateEnd: document.getElementById('dateEnd').value,
         news: tinymce.get('editor').getContent(),
         newsHeader: document.getElementById('newsheader').value,
         authorName: document.getElementById('authorName').value,
