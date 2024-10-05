@@ -20,6 +20,7 @@ namespace phpMyFAQ\Attachment\Filesystem;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class File.
@@ -97,23 +98,21 @@ abstract class AbstractFile extends AbstractEntry
     /**
      * Deletes the file.
      *
-     * @see inc/PMF_Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#delete()
-     *
      * @throws FileException
      */
     public function delete(): bool
     {
-        $deleted = true;
-
         if ($this->handle) {
             fclose($this->handle);
         }
 
-        if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
+        $request = Request::createFromGlobals();
+        $uploadedFile = $request->files->get('userfile');
+        if ($uploadedFile && $this->path !== $uploadedFile->getPathname() && file_exists($this->path)) {
             return $this->deleteDir(dirname($this->path));
         }
 
-        return $deleted;
+        return true;
     }
 
     /**

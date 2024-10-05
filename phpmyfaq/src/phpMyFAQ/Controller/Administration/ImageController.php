@@ -38,8 +38,7 @@ class ImageController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $uploadDir =  PMF_CONTENT_DIR . '/user/images/';
+        $uploadDir = PMF_CONTENT_DIR . '/user/images/';
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
         $timestamp = time();
 
@@ -47,34 +46,33 @@ class ImageController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        reset($_FILES);
-        $temp = current($_FILES);
+        $file = $request->files->get('file');
         $headers = [];
-        if (is_uploaded_file($temp['tmp_name'])) {
+        if ($file && $file->isValid()) {
             if (
                 $request->server->get('HTTP_ORIGIN') !== null &&
-                $request->server->get('HTTP_ORIGIN') . '/' === $configuration->getDefaultUrl()
+                $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
             ) {
                 $headers = ['Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN')];
             }
 
             // Sanitize input
-            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", (string) $temp['name'])) {
+            if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $file->getClientOriginalName())) {
                 return $this->json([], Response::HTTP_BAD_REQUEST, $headers);
             }
 
             // Verify extension
-            if (!in_array(strtolower(pathinfo((string) $temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
+            if (!in_array(strtolower($file->getClientOriginalExtension()), $validFileExtensions)) {
                 return $this->json([], Response::HTTP_BAD_REQUEST, $headers);
             }
 
             // Accept upload if there was no origin, or if it is an accepted origin
-            $fileName = $timestamp . '_' . $temp['name'];
-            move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
+            $fileName = $timestamp . '_' . $file->getClientOriginalName();
+            $file->move($uploadDir, $fileName);
 
             // Respond to the successful upload with JSON with the full URL of the uploaded image.
             return $this->json(
-                ['location' => $configuration->getDefaultUrl() . 'content/user/images/' . $fileName],
+                ['location' => $this->configuration->getDefaultUrl() . 'content/user/images/' . $fileName],
                 Response::HTTP_OK,
                 $headers
             );

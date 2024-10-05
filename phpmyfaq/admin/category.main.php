@@ -31,6 +31,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -45,7 +46,8 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 //
 // Image upload
 //
-$uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
+$request = Request::createFromGlobals();
+$uploadedFile = $request->files->get('image');
 $categoryImage = new Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 

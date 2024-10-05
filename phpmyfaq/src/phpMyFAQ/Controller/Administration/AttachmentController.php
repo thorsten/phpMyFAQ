@@ -49,12 +49,10 @@ class AttachmentController extends AbstractController
 
             $attachment = AttachmentFactory::create($deleteData->attId);
             if ($attachment->delete()) {
-                $result = ['success' => Translation::get('msgAttachmentsDeleted')];
-                return $this->json($result, Response::HTTP_OK);
-            } else {
-                $result = ['error' => Translation::get('ad_att_delfail')];
-                return $this->json($result, Response::HTTP_BAD_REQUEST);
+                return $this->json(['success' => Translation::get('msgAttachmentsDeleted')], Response::HTTP_OK);
             }
+
+            return $this->json(['error' => Translation::get('ad_att_delfail')], Response::HTTP_BAD_REQUEST);
         } catch (AttachmentException $attachmentException) {
             $result = ['error' => $attachmentException->getMessage()];
             return $this->json($result, Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -99,24 +97,24 @@ class AttachmentController extends AbstractController
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
 
-        if (!isset($_FILES['filesToUpload'])) {
-            return $this->json([], Response::HTTP_BAD_REQUEST);
+        $files = $request->files->get('filesToUpload');
+
+        if (!$files) {
+            return $this->json(['error' => 'No files to upload.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $files = AttachmentFactory::rearrangeUploadedFiles($_FILES['filesToUpload']);
         $uploadedFiles = [];
-
         foreach ($files as $file) {
             if (
-                is_uploaded_file($file['tmp_name']) &&
-                $file['size'] <= Configuration::getConfigurationInstance()->get('records.maxAttachmentSize') &&
-                $file['type'] !== "text/html"
+                $file->isValid() &&
+                $file->getSize() <= $this->configuration->get('records.maxAttachmentSize') &&
+                $file->getMimeType() !== 'text/html'
             ) {
                 $attachment = AttachmentFactory::create();
                 $attachment->setRecordId($request->request->get('record_id'));
                 $attachment->setRecordLang($request->request->get('record_lang'));
                 try {
-                    if (!$attachment->save($file['tmp_name'], $file['name'])) {
+                    if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
                         throw new AttachmentException();
                     }
                 } catch (AttachmentException) {
@@ -130,7 +128,7 @@ class AttachmentController extends AbstractController
                     'faqLanguage' => $request->request->get('record_lang')
                 ];
             } else {
-                return $this->json('The image is too large.', Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => 'The image is too large.'], Response::HTTP_BAD_REQUEST);
             }
         }
 

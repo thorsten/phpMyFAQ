@@ -47,8 +47,6 @@ class Image
 
     /**
      * Sets the uploaded file array from $_FILES.
-     *
-     *
      */
     public function setUploadedFile(array $uploadedFile): Image
     {

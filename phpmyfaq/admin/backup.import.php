@@ -26,6 +26,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -48,14 +49,17 @@ if (
         'adminHeaderRestore' => Translation::get('ad_csv_rest')
     ];
 
-    if (isset($_FILES['userfile']) && 0 === $_FILES['userfile']['error']) {
+    $request = Request::createFromGlobals();
+    $file = $request->files->get('userfile');
+
+    if ($file && $file->isValid()) {
         $ok = 1;
         $fileInfo = new finfo(FILEINFO_MIME_ENCODING);
 
         $dbHelper = new DatabaseHelper($faqConfig);
         $backup = new Backup($faqConfig, $dbHelper);
 
-        if ('utf-8' !== $fileInfo->file($_FILES['userfile']['tmp_name'])) {
+        if ('utf-8' !== $fileInfo->file($file->getPathname())) {
             $templateVars = [
                 ...$templateVars,
                 'errorMessageWrongEncoding' => 'This file is not UTF-8 encoded.'
@@ -63,16 +67,16 @@ if (
             $ok = 0;
         }
 
-        $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $handle = fopen($file->getPathname(), 'r');
         $backupData = fgets($handle, 65536);
         $versionFound = Strings::substr($backupData, 0, 9);
         $versionExpected = '-- pmf' . substr($faqConfig->getVersion(), 0, 3);
         $queries = [];
 
-        $fileName = $_FILES['userfile']['name'];
+        $fileName = $file->getClientOriginalName();
 
         try {
-            $verification = $backup->verifyBackup(file_get_contents($_FILES['userfile']['tmp_name']), $fileName);
+            $verification = $backup->verifyBackup(file_get_contents($file->getPathname()), $fileName);
             if ($verification) {
                 $ok = 1;
             } else {
@@ -184,7 +188,7 @@ if (
             ];
         }
     } else {
-        $errorMessage = match ($_FILES['userfile']['error']) {
+        $errorMessage = match ($file->getError()) {
             1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
             2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' . 'HTML form.',
             3 => 'The uploaded file was only partially uploaded.',

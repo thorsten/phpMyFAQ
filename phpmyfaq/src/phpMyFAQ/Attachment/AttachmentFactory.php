@@ -116,25 +116,4 @@ class AttachmentFactory
             self::$encryptionEnabled = $encryptionEnabled;
         }
     }
-
-    /**
-     * Re-arranges the $_FILES array for multiple file uploads.
-     *
-     * @param array $filePost
-     * @return array
-     */
-    public static function rearrangeUploadedFiles(array $filePost): array
-    {
-        $filesArray = [];
-        $filesCount = is_countable($filePost['name']) ? count($filePost['name']) : 0;
-        $filesKeys = array_keys($filePost);
-
-        for ($i = 0; $i < $filesCount; ++$i) {
-            foreach ($filesKeys as $fileKey) {
-                $filesArray[$i][$fileKey] = $filePost[$fileKey][$i];
-            }
-        }
-
-        return $filesArray;
-    }
 }
