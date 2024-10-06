@@ -45,7 +45,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @see query()
      */
-    private string $sqllog = '';
+    private string $sqlLog = '';
 
     /** @var string */
     private const ERROR_MESSAGE =
@@ -152,7 +152,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function log(): string
     {
-        return $this->sqllog;
+        return $this->sqlLog;
     }
 
     /**
@@ -166,8 +166,8 @@ class Sqlite3 implements DatabaseDriver
 
         $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
         while ($row = $this->fetchAssoc($result)) {
-            $num_result = $this->query('SELECT * FROM ' . $row['name']);
-            $arr[$row['name']] = $this->numRows($num_result);
+            $numResult = $this->query('SELECT * FROM ' . $row['name']);
+            $arr[$row['name']] = $this->numRows($numResult);
         }
 
         return $arr;
@@ -180,7 +180,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): \SQLite3Result|bool
     {
-        $this->sqllog .= Utils::debug($query);
+        $this->sqlLog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
@@ -189,7 +189,7 @@ class Sqlite3 implements DatabaseDriver
         $result = $this->conn->query($query);
 
         if (!$result) {
-            $this->sqllog .= $this->error();
+            $this->sqlLog .= $this->error();
         }
 
         return $result;
@@ -207,11 +207,12 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * Number of rows in a result.
+     * @throws Exception
      */
     public function numRows(mixed $result): int
     {
         if (isset($result->fetchedByPMF) && $result->fetchedByPMF) {
-            die(self::ERROR_MESSAGE);
+            throw new Exception(self::ERROR_MESSAGE);
         }
 
         $numberOfRows = 0;
@@ -281,14 +282,14 @@ class Sqlite3 implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id the name of the ID column
+     * @param string $columnId the name of the ID column
      */
-    public function nextId(string $table, string $id): int
+    public function nextId(string $table, string $columnId): int
     {
         $result = (int)$this->conn->querySingle(
             sprintf(
                 'SELECT max(%s) AS current_id FROM %s',
-                $id,
+                $columnId,
                 $table
             )
         );
@@ -310,7 +311,6 @@ class Sqlite3 implements DatabaseDriver
     public function clientVersion(): string
     {
         $version = \Sqlite3::version();
-
         return $version['versionString'];
     }
 

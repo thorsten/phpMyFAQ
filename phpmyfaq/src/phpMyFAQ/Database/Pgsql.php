@@ -36,7 +36,7 @@ class Pgsql implements DatabaseDriver
      *
      * @var string
      */
-    public $sqllog = '';
+    private string $sqlLog = '';
 
     /**
      * Tables.
@@ -92,7 +92,7 @@ class Pgsql implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): bool|Result
     {
-        $this->sqllog .= Utils::debug($query);
+        $this->sqlLog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d OFFSET %d', $rowcount, $offset);
@@ -101,7 +101,7 @@ class Pgsql implements DatabaseDriver
         $result = pg_query($this->conn, $query);
 
         if (!$result) {
-            $this->sqllog .= $this->error();
+            $this->sqlLog .= $this->error();
         }
 
         if (pg_result_status($result) === PGSQL_COMMAND_OK) {
@@ -178,7 +178,7 @@ class Pgsql implements DatabaseDriver
      */
     public function log(): string
     {
-        return $this->sqllog;
+        return $this->sqlLog;
     }
 
     /**
@@ -226,11 +226,11 @@ class Pgsql implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id    the name of the ID column
+     * @param string $columnId    the name of the ID column
      */
-    public function nextId(string $table, string $id): int
+    public function nextId(string $table, string $columnId): int
     {
-        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
+        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $columnId . "_seq') as current_id;");
     }
 
     /**
@@ -238,8 +238,8 @@ class Pgsql implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        $pg_version = pg_version($this->conn);
-        return $pg_version['client'] ?? 'n/a';
+        $pgVersion = pg_version($this->conn);
+        return $pgVersion['client'] ?? 'n/a';
     }
 
     /**
@@ -247,8 +247,8 @@ class Pgsql implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        $pg_version = pg_version($this->conn);
-        return $pg_version['server_version'] ?? 'n/a';
+        $pgVersion = pg_version($this->conn);
+        return $pgVersion['server'] ?? 'n/a';
     }
 
     /**

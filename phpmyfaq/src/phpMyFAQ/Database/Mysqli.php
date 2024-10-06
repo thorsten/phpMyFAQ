@@ -47,7 +47,7 @@ class Mysqli implements DatabaseDriver
     /**
      * The query log string.
      */
-    private string $sqllog = '';
+    private string $sqlLog = '';
 
     /**
      * Connects to the database.
@@ -180,7 +180,7 @@ class Mysqli implements DatabaseDriver
      */
     public function log(): string
     {
-        return $this->sqllog;
+        return $this->sqlLog;
     }
 
     /**
@@ -267,9 +267,9 @@ class Mysqli implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $id    The name of the ID column
+     * @param string $columnId    The name of the ID column
      */
-    public function nextId(string $table, string $id): int
+    public function nextId(string $table, string $columnId): int
     {
         $select = sprintf(
             '
@@ -277,7 +277,7 @@ class Mysqli implements DatabaseDriver
                MAX(%s) AS current_id
            FROM
                %s',
-            $id,
+            $columnId,
             $table
         );
 
@@ -296,7 +296,7 @@ class Mysqli implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqllog .= Utils::debug($query);
+        $this->sqlLog .= Utils::debug($query);
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
@@ -309,7 +309,7 @@ class Mysqli implements DatabaseDriver
         }
 
         if (false === $result) {
-            $this->sqllog .= $this->conn->errno . ': ' . $this->error();
+            $this->sqlLog .= $this->conn->errno . ': ' . $this->error();
         }
 
         return $result;

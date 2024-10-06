@@ -36,7 +36,7 @@ class Sqlsrv implements DatabaseDriver
     private $conn = false;
 
     /** The query log string. */
-    private string $sqllog = '';
+    private string $sqlLog = '';
 
     /**
      * Connection options array.
@@ -162,7 +162,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function log(): string
     {
-        return $this->sqllog;
+        return $this->sqlLog;
     }
 
     /**
@@ -201,7 +201,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqllog .= Utils::debug($query);
+        $this->sqlLog .= Utils::debug($query);
 
         $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 
@@ -212,7 +212,7 @@ class Sqlsrv implements DatabaseDriver
         $result = sqlsrv_query($this->conn, $query, [], $options);
 
         if (!$result) {
-            $this->sqllog .= $this->error();
+            $this->sqlLog .= $this->error();
         }
 
         return $result;
@@ -222,9 +222,9 @@ class Sqlsrv implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id    the name of the ID column
+     * @param string $columnId    the name of the ID column
      */
-    public function nextId(string $table, string $id): int
+    public function nextId(string $table, string $columnId): int
     {
         $select = sprintf(
             '
@@ -232,7 +232,7 @@ class Sqlsrv implements DatabaseDriver
                max(%s) as current_id
            FROM 
                %s',
-            $id,
+            $columnId,
             $table
         );
 
@@ -247,9 +247,8 @@ class Sqlsrv implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        $client_info = sqlsrv_client_info($this->conn);
-
-        return $client_info['DriverODBCVer'] . ' ' . $client_info['DriverVer'];
+        $clientInfo = sqlsrv_client_info($this->conn);
+        return $clientInfo['DriverODBCVer'] . ' ' . $clientInfo['DriverVer'];
     }
 
     /**
@@ -257,9 +256,8 @@ class Sqlsrv implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        $server_info = sqlsrv_server_info($this->conn);
-
-        return $server_info['SQLServerVersion'];
+        $serverInfo = sqlsrv_server_info($this->conn);
+        return $serverInfo['SQLServerVersion'];
     }
 
     /**

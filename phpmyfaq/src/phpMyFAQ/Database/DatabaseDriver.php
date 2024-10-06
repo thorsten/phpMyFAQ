@@ -105,9 +105,9 @@ interface DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table The name of the table
-     * @param string $id The name of the ID column
+     * @param string $columnId The name of the ID column
      */
-    public function nextId(string $table, string $id): int;
+    public function nextId(string $table, string $columnId): int;
 
     /**
      * Returns the error string.
