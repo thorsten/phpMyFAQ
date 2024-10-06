@@ -62,14 +62,6 @@ class Strings
     }
 
     /**
-     * Get current encoding.
-     */
-    public static function getEncoding(): string
-    {
-        return self::$instance->getEncoding();
-    }
-
-    /**
      * Get string character count.
      *
      * @param string $str String
@@ -98,7 +90,7 @@ class Strings
      * @param string $needle Needle
      * @param int    $offset Offset
      */
-    public static function strpos(string $haystack, string $needle, $offset = 0): int
+    public static function strpos(string $haystack, string $needle, int $offset = 0): int
     {
         return self::$instance->strpos($haystack, $needle, $offset);
     }
@@ -130,7 +122,7 @@ class Strings
      * @param string $needle Needle
      * @param bool   $part Part
      */
-    public static function strstr(string $haystack, string $needle, $part = false): string|false
+    public static function strstr(string $haystack, string $needle, bool $part = false): string|false
     {
         return self::$instance->strstr($haystack, $needle, $part);
     }
@@ -154,9 +146,9 @@ class Strings
     /**
      * Find position of last occurrence of a char in a string.
      *
-     * @param int    $offset
+     * @param int $offset
      */
-    public static function strrpos(string $haystack, string $needle, $offset = 0): int
+    public static function strrpos(string $haystack, string $needle, int $offset = 0): int
     {
         return self::$instance->strrpos($haystack, $needle, $offset);
     }
@@ -164,16 +156,19 @@ class Strings
     /**
      * Match a regexp.
      *
+     * @param string $pattern
+     * @param string $subject
      * @param null   $matches
      * @param int    $flags
      * @param int    $offset
+     * @return int
      */
     public static function preg_match(
         string $pattern,
         string $subject,
         &$matches = null,
-        $flags = 0,
-        $offset = 0
+        int $flags = 0,
+        int $offset = 0
     ): int // phpcs:ignore
     {
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
@@ -182,16 +177,19 @@ class Strings
     /**
      * Match a regexp globally.
      *
+     * @param string $pattern
+     * @param string $subject
      * @param null   $matches
      * @param int    $flags
      * @param int    $offset
+     * @return int
      */
     public static function preg_match_all(
         string $pattern,
         string $subject,
         &$matches = null,
-        $flags = 0,
-        $offset = 0
+        int $flags = 0,
+        int $offset = 0
     ): int // phpcs:ignore
     {
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
@@ -200,10 +198,13 @@ class Strings
     /**
      * Split string by a regexp.
      *
+     * @param string $pattern
+     * @param string $subject
      * @param int    $limit
      * @param int    $flags
+     * @return array|bool
      */
-    public static function preg_split(string $pattern, string $subject, $limit = -1, $flags = 0): array|bool // phpcs:ignore
+    public static function preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|bool // phpcs:ignore
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
@@ -211,17 +212,19 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
+     * @param string          $pattern
+     * @param callable        $callback
      * @param string|string[] $subject
-     * @param int $limit
-     * @param int $count
+     * @param int             $limit
+     * @param int             $count
      * @return string|string[]
      */
     public static function preg_replace_callback(
         string $pattern,
         callable $callback,
         string|array $subject,
-        $limit = -1,
-        &$count = 0
+        int $limit = -1,
+        int &$count = 0
     ): string|array {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -242,7 +245,7 @@ class Strings
     }
 
     /**
-     * Convert special chars to html entities.
+     * Convert special chars to HTML entities.
      *
      * @param string|null $string The input string.
      * @param int         $quoteStyle Quote style

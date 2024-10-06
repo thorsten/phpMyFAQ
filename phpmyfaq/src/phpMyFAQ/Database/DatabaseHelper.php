@@ -26,12 +26,12 @@ use phpMyFAQ\Strings;
  *
  * @package phpMyFAQ\Database
  */
-class DatabaseHelper
+readonly class DatabaseHelper
 {
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
     }
 
@@ -41,8 +41,6 @@ class DatabaseHelper
      * to the (new) prefix of the system upon which the backup will be restored
      * This alignment will be performed upon all the SQL query "patterns"
      * provided within the PMF backup file.
-     *
-     *
      */
     public static function alignTablePrefix(string $query, string $oldValue, string $newValue): string
     {
@@ -58,8 +56,6 @@ class DatabaseHelper
      * to the (new) prefix of the system upon which the backup will be restored.
      * This alignment will be performed ONLY upon those given SQL queries starting
      * with the given pattern.
-     *
-     *
      */
     private static function alignTablePrefixByPattern(
         string $query,
@@ -88,35 +84,41 @@ class DatabaseHelper
      */
     public function buildInsertQueries(string $query, string $table): array
     {
-        if (!$result = $this->configuration->getDb()->query($query)) {
+        $result = $this->configuration->getDb()->query($query);
+        if (!$result) {
             return [];
         }
 
-        $ret = [];
+        $queries = [];
 
-        $ret[] = "\r\n-- Table: " . $table;
+        $queries[] = "\r\n-- Table: " . $table;
 
         while ($row = $this->configuration->getDb()->fetchArray($result)) {
-            $p1 = [];
-            $p2 = [];
+            $columns = [];
+            $values = [];
             foreach ($row as $key => $val) {
                 if (is_int($key)) {
                     continue; // Fix for SQLite3
                 }
 
-                $p1[] = $key;
+                $columns[] = $key;
                 if ('rights' != $key && is_numeric($val)) {
-                    $p2[] = $val;
+                    $values[] = $val;
                 } elseif (is_null($val)) {
-                    $p2[] = 'NULL';
+                    $values[] = 'NULL';
                 } else {
-                    $p2[] = sprintf("'%s'", $this->configuration->getDb()->escape($val));
+                    $values[] = sprintf("'%s'", $this->configuration->getDb()->escape($val));
                 }
             }
 
-            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' . implode(',', $p2) . ');';
+            $queries[] = sprintf(
+                'INSERT INTO %s (%s) VALUES (%s);',
+                $table,
+                implode(',', $columns),
+                implode(',', $values)
+            );
         }
 
-        return $ret;
+        return $queries;
     }
 }
