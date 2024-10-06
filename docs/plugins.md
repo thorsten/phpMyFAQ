@@ -94,7 +94,7 @@ class MyPlugin implements PluginInterface
 
 ### 7.5.2 Twig template
 
-´´´twig
+```twig
 
 <div>
     <h2>Content Loaded Event</h2>
@@ -104,4 +104,4 @@ class MyPlugin implements PluginInterface
     <h2>User Login Event</h2>
     {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
 </div>
-´´´
+```
