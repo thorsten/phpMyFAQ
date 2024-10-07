@@ -15,7 +15,6 @@
  * @since     2023-01-22
  */
 
-use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,10 +22,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 
 $privacyUrl = $faqConfig->get('main.privacyURL');
-
 $redirectUrl = strlen((string) $privacyUrl) > 0 ? $privacyUrl : $faqConfig->get('main.referenceURL');
 
 $response = new RedirectResponse($redirectUrl);

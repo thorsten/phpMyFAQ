@@ -15,7 +15,6 @@
  * @since     2019-01-25
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
@@ -26,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

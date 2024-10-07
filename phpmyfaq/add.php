@@ -18,7 +18,6 @@
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -42,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $request = Request::createFromGlobals();
 $faqSystem = new System();
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

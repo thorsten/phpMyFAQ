@@ -15,7 +15,6 @@
  * @since     2012-01-12
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
@@ -32,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

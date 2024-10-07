@@ -16,7 +16,6 @@
  * @since     2023-07-20
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Translation;
@@ -29,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->isLoggedIn()) {

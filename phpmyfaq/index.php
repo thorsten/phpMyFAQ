@@ -45,6 +45,9 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,7 +69,18 @@ $request = Request::createFromGlobals();
 $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 
-$faqConfig = Configuration::getConfigurationInstance();
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+
+$faqConfig = $container->get('phpmyfaq.configuration');
 
 //
 // Get language (default: english)

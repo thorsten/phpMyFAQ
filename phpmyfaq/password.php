@@ -15,7 +15,6 @@
  * @since     2012-03-26
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 
@@ -24,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $faqSession = new Session($faqConfig);
 
 $faqSession->userTracking('forgot_password', 0);

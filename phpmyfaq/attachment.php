@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
@@ -39,7 +38,7 @@ if (headers_sent()) {
 
 $attachmentErrors = [];
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $request = Request::createFromGlobals();
 
 // authenticate with session information

@@ -16,7 +16,6 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
@@ -28,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $faqSession = new Session($faqConfig);

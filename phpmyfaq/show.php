@@ -16,7 +16,6 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
@@ -35,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

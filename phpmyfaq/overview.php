@@ -15,7 +15,6 @@
  * @since     2015-09-27
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Session;
 use phpMyFAQ\Template\CategoryNameTwigExtension;
@@ -30,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

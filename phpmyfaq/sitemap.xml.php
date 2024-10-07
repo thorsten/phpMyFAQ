@@ -19,14 +19,13 @@
  */
 
 use phpMyFAQ\Application;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\SitemapController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 require './src/Bootstrap.php';
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 
 $routes = new RouteCollection();
 $routes->add('public.sitemap.xml', new Route('/sitemap.xml', ['_controller' => [SitemapController::class, 'index']]));

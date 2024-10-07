@@ -15,7 +15,6 @@
  * @since     2012-09-03
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
@@ -30,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);

@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -29,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
