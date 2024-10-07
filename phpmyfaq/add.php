@@ -15,21 +15,16 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Captcha\Captcha;
-use phpMyFAQ\Captcha\Helper\CaptchaHelper;
-use phpMyFAQ\Category;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
-use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -42,8 +37,9 @@ $request = Request::createFromGlobals();
 $faqSystem = new System();
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
+
+$faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 
 // Check user permissions
@@ -58,7 +54,7 @@ if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(),
     $response->send();
 }
 
-$captcha = Captcha::getInstance($faqConfig);
+$captcha = $container->get('phpmyfaq.captcha');
 $captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
@@ -86,12 +82,12 @@ $category->buildCategoryTree();
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 
-$captchaHelper = CaptchaHelper::getInstance($faqConfig);
+$captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
-$category = new Category($faqConfig);
+$category = new $container->get('phpmyfaq.category');
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());

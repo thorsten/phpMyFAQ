@@ -78,7 +78,7 @@ try {
 Strings::init($faqLangCode);
 
 // authenticate with session information
-$user = CurrentUser::getCurrentUser($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
 
 // Get current user and group id - default: -1
 [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);

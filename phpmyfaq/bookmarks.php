@@ -19,7 +19,6 @@
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Session\Token;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -29,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
 
 if ($user->isLoggedIn()) {
     $bookmark = new Bookmark($faqConfig, $user);

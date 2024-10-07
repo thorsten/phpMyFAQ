@@ -15,12 +15,9 @@
  * @since     2002-09-17
  */
 
-use phpMyFAQ\Category;
 use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -28,13 +25,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = new Session($faqConfig);
+$faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('open_questions', 0);
 
-$category = new Category($faqConfig);
+$category = new $container->get('phpmyfaq.category');
 $questionHelper = new QuestionHelper();
 $questionHelper
     ->setConfiguration($faqConfig)

@@ -15,16 +15,12 @@
  * @since     2002-09-17
  */
 
-use phpMyFAQ\Captcha\Captcha;
-use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,9 +29,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$request = Request::createFromGlobals();
+
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
+
+$faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 
 // Check user permissions
@@ -44,8 +43,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGue
     $response->send();
 }
 
-$request = Request::createFromGlobals();
-$captcha = Captcha::getInstance($faqConfig);
+$captcha = $container->get('phpmyfaq.captcha');
 $captcha->setSessionId($sids);
 
 $faqSession->userTracking('ask_question', 0);
@@ -57,7 +55,7 @@ $categoryId = Filter::filterVar($request->query->get('category_id'), FILTER_VALI
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 
-$captchaHelper = CaptchaHelper::getInstance($faqConfig);
+$captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);

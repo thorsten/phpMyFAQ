@@ -15,13 +15,10 @@
  * @since     2012-01-12
  */
 
-use phpMyFAQ\Services\Gravatar;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,15 +29,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
 if ($user->isLoggedIn()) {
+    $faqSession = $container->get('phpmyfaq.session');
+    $faqSession->setCurrentUser($user);
     $faqSession->userTracking('user_control_panel', $user->getUserId());
 
     if ($faqConfig->get('main.enableGravatarSupport')) {
-        $gravatar = new Gravatar();
+        $gravatar = $container->get('phpmyfaq.services.gravatar');
         $gravatarImg = sprintf(
             '<a target="_blank" href="https://www.gravatar.com">%s</a>',
             $gravatar->getImage(
@@ -65,9 +62,7 @@ if ($user->isLoggedIn()) {
             $twoFactor->saveSecret($secret);
         }
         $qrCode = $twoFactor->getQrCode($secret);
-    } catch (TwoFactorAuthException $e) {
-        // handle exception
-    } catch (\phpMyFAQ\Core\Exception $e) {
+    } catch (TwoFactorAuthException | Exception $e) {
         // handle exception
     }
 

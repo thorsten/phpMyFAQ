@@ -50,7 +50,7 @@ class TwigWrapper
         // Always add the translation extension
         $this->twigEnvironment->addExtension(new TranslateTwigExtension());
 
-        // Always add the plugin extension
+        // Add the plugin extension if it's not in the setup phase
         if (!$isSetup) {
             $this->twigEnvironment->addExtension(new PluginTwigExtension());
         }

@@ -15,10 +15,8 @@
  * @since     2012-02-12
  */
 
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -26,9 +24,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
+
+$faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
+$faqSession->userTracking('login', 0);
 
 $loginMessage = '';
 
@@ -36,7 +36,6 @@ if (!is_null($error)) {
     $loginMessage = '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 }
 
-$faqSession->userTracking('login', 0);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./login.twig');

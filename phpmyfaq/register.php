@@ -16,12 +16,8 @@
  * @since     2008-01-25
  */
 
-use phpMyFAQ\Captcha\Captcha;
-use phpMyFAQ\Captcha\Helper\CaptchaHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,21 +28,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $request = Request::createFromGlobals();
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
 if (!$faqConfig->get('security.enableRegistration')) {
     $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
     $redirect->send();
 }
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('registration', 0);
 
-$captcha = Captcha::getInstance($faqConfig);
+$captcha = $container->get('phpmyfaq.captcha');
 $captcha->setSessionId($sids);
 
-$captchaHelper = CaptchaHelper::getInstance($faqConfig);
+$captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
 $twigTemplate = $twig->loadTemplate('./register.twig');

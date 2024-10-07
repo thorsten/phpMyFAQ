@@ -18,10 +18,8 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('glossary', 0);
 
 $request = Request::createFromGlobals();

@@ -18,9 +18,7 @@
 namespace phpMyFAQ;
 
 use DateTimeInterface;
-use Exception;
 use phpMyFAQ\Entity\CommentType;
-use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Entity\Comment;
 
 /**

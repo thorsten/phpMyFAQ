@@ -15,12 +15,8 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Captcha\Captcha;
-use phpMyFAQ\Captcha\Helper\CaptchaHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -29,16 +25,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('contact', 0);
 
-$captcha = Captcha::getInstance($faqConfig);
+$captcha = $container->get('phpmyfaq.captcha');
 $captcha->setSessionId($sids);
 
-$captchaHelper = CaptchaHelper::getInstance($faqConfig);
+$captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 if ($faqConfig->get('layout.contactInformationHTML')) {
     $contactText = html_entity_decode((string) $faqConfig->get('main.contactInformation'));

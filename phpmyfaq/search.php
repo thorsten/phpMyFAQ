@@ -15,7 +15,6 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -26,13 +25,11 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\Session;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template\TagNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,10 +39,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('fulltext_search', 0);
 
 $faq = new Faq($faqConfig);
@@ -85,7 +82,7 @@ if ($inputLanguage !== '') {
 //       for any of the multi-language faq records and the Entity list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $category = new Category($faqConfig);
+    $category = $container->get('phpmyfaq.category');
     $category->transform(0);
 }
 

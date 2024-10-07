@@ -22,7 +22,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,7 +41,7 @@ $faqConfig = $container->get('phpmyfaq.configuration');
 $request = Request::createFromGlobals();
 
 // authenticate with session information
-$user = CurrentUser::getCurrentUser($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
 
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 

@@ -16,13 +16,11 @@
  */
 
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\CategoryNameTwigExtension;
 use phpMyFAQ\Template\CreateLinkTwigExtension;
 use phpMyFAQ\Template\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -30,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('overview', 0);
 
 $faqHelper = new FaqHelper($faqConfig);

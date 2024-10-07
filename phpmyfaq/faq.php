@@ -19,8 +19,6 @@
 use League\CommonMark\CommonMarkConverter;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Bookmark;
-use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
@@ -41,7 +39,6 @@ use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -59,7 +56,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
+$user = $container->get('phpmyfaq.user.current_user');
 
 $glossary = new Glossary($faqConfig);
 $tagging = new Tags($faqConfig);
@@ -70,7 +67,8 @@ $faqHelper = new HelperFaq($faqConfig);
 $faqPermission = new Permission($faqConfig);
 $seo = new Seo($faqConfig);
 $attachmentHelper = new AttachmentHelper();
-$faqSession = new Session($faqConfig);
+
+$faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 
 $converter = new CommonMarkConverter([
@@ -88,7 +86,7 @@ $templateVars = [
 
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
-$captcha = Captcha::getInstance($faqConfig);
+$captcha = $container->get('phpmyfaq.captcha');
 $captcha->setSessionId($sids);
 
 $currentCategory = $cat;
@@ -100,7 +98,7 @@ $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZ
 $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Handle bookmarks
-$bookmark = new Bookmark($faqConfig, $user);
+$bookmark = $container->get('phpmyfaq.bookmark');
 if ($bookmarkAction === 'add' && isset($faqId)) {
     $bookmark->add($faqId);
 }

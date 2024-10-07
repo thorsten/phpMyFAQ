@@ -17,12 +17,9 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
-use phpMyFAQ\Sitemap;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
-$user = CurrentUser::getCurrentUser($faqConfig);
-$faqSession = new Session($faqConfig);
-$faqSession->setCurrentUser($user);
+$user = $container->get('phpmyfaq.user.current_user');
 
+$faqSession = $container->get('phpmyfaq.session');
+$faqSession->setCurrentUser($user);
 $faqSession->userTracking('sitemap', 0);
 
 $request = Request::createFromGlobals();
@@ -45,7 +42,7 @@ if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $currLetter = '';
 }
 
-$siteMap = new Sitemap($faqConfig);
+$siteMap = $container->get('phpmyfaq.sitemap');
 $siteMap->setUser($currentUser);
 $siteMap->setGroups($currentGroups);
 
