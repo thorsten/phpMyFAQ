@@ -61,7 +61,7 @@ class Statistics
      *
      * @param string|null $language Language
      */
-    public function totalFaqs(string $language = null): int
+    public function totalFaqs(?string $language = null): int
     {
         $now = date('YmdHis');
 
@@ -186,7 +186,7 @@ class Statistics
      * @param int    $count    Number of records
      * @param string $language Language
      */
-    public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, $language = null): array
+    public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {
         global $sids;
 
@@ -295,7 +295,7 @@ class Statistics
      * @param string|null $language Language
      * @return array
      */
-    public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, string $language = null): array
+    public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, ?string $language = null): array
     {
         $now = date('YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -404,7 +404,7 @@ class Statistics
     public function getTopTenData(
         int $count = PMF_NUMBER_RECORDS_TOPTEN,
         int $categoryId = 0,
-        string $language = null
+        ?string $language = null
     ): array {
         global $sids;
 
@@ -520,10 +520,10 @@ class Statistics
     /**
      * This function generates data-set with the most voted FAQs.
      *
-     * @param int    $count    Number of records
+     * @param int         $count    Number of records
      * @param string|null $language Language
      */
-    public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, string $language = null): array
+    public function getTopVotedData(int $count = PMF_NUMBER_RECORDS_TOPTEN, ?string $language = null): array
     {
         global $sids;
         $topten = [];
