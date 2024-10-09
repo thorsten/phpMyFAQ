@@ -231,16 +231,16 @@ class Session
     /**
      * Checks the Session ID.
      *
-     * @param int $sessionIdToCheck Session ID
-     * @param string $ip IP
+     * @param int    $sessionIdToCheck Session ID
+     * @param string $ipAddress IP
      */
-    public function checkSessionId(int $sessionIdToCheck, string $ip): void
+    public function checkSessionId(int $sessionIdToCheck, string $ipAddress): void
     {
         $query = sprintf(
             "SELECT sid FROM %sfaqsessions WHERE sid = %d AND ip = '%s' AND time > %d",
             Database::getTablePrefix(),
             $sessionIdToCheck,
-            $ip,
+            $ipAddress,
             Request::createFromGlobals()->server->get('REQUEST_TIME') - 86400
         );
         $result = $this->configuration->getDb()->query($query);
@@ -257,7 +257,7 @@ class Session
                 Request::createFromGlobals()->server->get('REQUEST_TIME'),
                 $this->currentUser->getUserId(),
                 $sessionIdToCheck,
-                $ip
+                $ipAddress
             );
             $this->configuration->getDb()->query($query);
         }
@@ -276,10 +276,10 @@ class Session
     /**
      * Tracks the user and log what he did.
      *
-     * @param string   $action Action string
-     * @param int|null $data
+     * @param string          $action Action string
+     * @param int|string|null $data
      */
-    public function userTracking(string $action, ?int $data = null): void
+    public function userTracking(string $action, int|string|null $data = null): void
     {
         if (!$this->configuration->get('main.enableUserTracking')) {
             return;
@@ -312,8 +312,8 @@ class Session
         $remoteAddress = Request::createFromGlobals()->getClientIp();
         $localAddresses = ['127.0.0.1', '::1'];
 
-        if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        if (in_array($remoteAddress, $localAddresses) && $request->headers->has('X-Forwarded-For')) {
+            $remoteAddress = $request->headers->get('X-Forwarded-For');
         }
 
         // clean up as well
@@ -344,7 +344,7 @@ class Session
                     $this->getCurrentSessionId(),
                     $this->currentUser->getUserId(),
                     $remoteAddress,
-                    Request::createFromGlobals()->server->get('REQUEST_TIME')
+                    $request->server->get('REQUEST_TIME')
                 );
 
                 $this->configuration->getDb()->query($query);
@@ -354,10 +354,10 @@ class Session
                 str_replace(';', ',', $action) . ';' .
                 $data . ';' .
                 $remoteAddress . ';' .
-                str_replace(';', ',', $_SERVER['QUERY_STRING'] ?? '') . ';' .
-                str_replace(';', ',', $_SERVER['HTTP_REFERER'] ?? '') . ';' .
-                str_replace(';', ',', urldecode((string) $_SERVER['HTTP_USER_AGENT'])) . ';' .
-                Request::createFromGlobals()->server->get('REQUEST_TIME') . ";\n";
+                str_replace(';', ',', $request->server->get('QUERY_STRING') ?? '') . ';' .
+                str_replace(';', ',', $request->server->get('HTTP_REFERER') ?? '') . ';' .
+                str_replace(';', ',', urldecode((string) $request->server->get('HTTP_USER_AGENT'))) . ';' .
+                $request->server->get('REQUEST_TIME') . ";\n";
 
             $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
 
@@ -365,11 +365,11 @@ class Session
                 touch($file);
             }
 
-            if (is_writable($file)) {
-                file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
-            } else {
+            if (!is_writable($file)) {
                 $this->configuration->getLogger()->error('Cannot write to ' . $file);
             }
+
+            file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
         }
     }
 
@@ -383,17 +383,17 @@ class Session
      */
     public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600, bool $strict = true): bool
     {
-        $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
+        $request = Request::createFromGlobals();
 
         return setcookie(
             $name,
             $sessionId ?? '',
             [
-                'expires' => Request::createFromGlobals()->server->get('REQUEST_TIME') + $timeout,
-                'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
+                'expires' => $request->server->get('REQUEST_TIME') + $timeout,
+                'path' => dirname($request->server->get('SCRIPT_NAME')),
                 'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => $strict ? 'strict' : '',
-                'secure' => $secure,
+                'secure' => $request->isSecure(),
                 'httponly' => true,
             ]
         );
@@ -406,7 +406,8 @@ class Session
      */
     public function getCookie(string $name): string
     {
-        return $_COOKIE[$name];
+        $request = Request::createFromGlobals();
+        return $request->cookies->get($name, '');
     }
 
     /**
