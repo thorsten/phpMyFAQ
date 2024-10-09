@@ -52,6 +52,9 @@ class ImportTest extends TestCase
         fclose($csvFile);
     }
 
+    /**
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testIsCSVFile(): void
     {
         // Create a mock for the file object (replace with your actual File class)

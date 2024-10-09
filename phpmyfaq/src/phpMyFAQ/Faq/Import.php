@@ -102,11 +102,12 @@ readonly class Import
      *
      * @param resource $handle
      *
-     * @return array $csvData
+     * @return array<int<0, max>, array> $csvData
      */
     public function parseCSV($handle): array
     {
-        while (($record = fgetcsv($handle)) !== false) {
+        $csvData = [];
+        while (($record = fgetcsv($handle, null, ',', '"', '')) !== false) {
             $csvData[] = $record;
         }
 
