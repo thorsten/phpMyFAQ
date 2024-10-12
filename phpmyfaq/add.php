@@ -15,6 +15,7 @@
  * @since     2002-09-16
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -87,7 +88,7 @@ $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
-$category = new $container->get('phpmyfaq.category');
+$category = new Category($faqConfig);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());

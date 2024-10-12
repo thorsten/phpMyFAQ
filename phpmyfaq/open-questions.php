@@ -15,6 +15,7 @@
  * @since     2002-09-17
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -31,7 +32,7 @@ $faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('open_questions', 0);
 
-$category = new $container->get('phpmyfaq.category');
+$category = new Category($faqConfig);
 $questionHelper = new QuestionHelper();
 $questionHelper
     ->setConfiguration($faqConfig)

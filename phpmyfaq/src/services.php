@@ -18,7 +18,6 @@
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
-use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
@@ -48,11 +47,6 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.captcha.helper.captcha_helper', CaptchaHelper::class)
         ->factory([CaptchaHelper::class, 'getInstance'])
-        ->args([
-            new Reference('phpmyfaq.configuration')
-        ]);
-
-    $services->set('phpmyfaq.category', Category::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

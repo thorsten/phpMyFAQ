@@ -15,6 +15,7 @@
  * @since     2002-09-16
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
@@ -82,7 +83,7 @@ if ($inputLanguage !== '') {
 //       for any of the multi-language faq records and the Entity list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $category = $container->get('phpmyfaq.category');
+    $category = new Category($faqConfig);
     $category->transform(0);
 }
 
