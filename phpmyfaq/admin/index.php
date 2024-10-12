@@ -33,6 +33,9 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,6 +56,17 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 //
 $response = new Response();
 $request = Request::createFromGlobals();
+
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
 
 $faqConfig = Configuration::getConfigurationInstance();
 

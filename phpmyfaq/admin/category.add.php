@@ -16,9 +16,7 @@
  * @since     2003-12-20
  */
 
-use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\UserHelper;
@@ -26,23 +24,23 @@ use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
-$currentUser = CurrentUser::getCurrentUser($faqConfig);
+$faqConfig = $container->get('phpmyfaq.configuration');
+$currentUser = $container->get('phpmyfaq.user.current_user');
 
 if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::CATEGORY_ADD->value)) {
-    $category = new Category($faqConfig, [], false);
-    $category->setUser($currentAdminUser);
+    $category = $container->get('phpmyfaq.admin.category');
+    $category->setUser($currentUser->getUserId());
     $category->setGroups($currentAdminGroups);
+    $category->setLanguage($faqConfig->getLanguage()->getLanguage());
+    $category->loadCategories();
 
-    $categoryPermission = new Permission($faqConfig);
-
+    $categoryPermission = $container->get('phpmyfaq.category.permission');
     $userHelper = new UserHelper($currentUser);
 
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);

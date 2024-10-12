@@ -55,16 +55,20 @@ class Category
 
 
     /**
-     * Returns all categories with ordered category IDs .
+     * Returns all categories with ordered category IDs.
+     *
+     * @return array<int, array> Ordered categories
      */
-    public function getOrderedCategories(): array
+    public function loadCategories(): array
     {
         $categories = [];
         $languageCheck = '';
 
-        if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $languageCheck .= "
-                fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
+        if ($this->getLanguage() !== null && preg_match("/^[a-z\-]{2,}$/", $this->getLanguage())) {
+            $languageCheck .= sprintf(
+                "AND fc.lang = '%s'",
+                $this->configuration->getDb()->escape($this->getLanguage())
+            );
         }
 
         $query = sprintf(
@@ -138,6 +142,10 @@ class Category
                     'level' => $this->getLevelOf($row['id'])
                 ];
             }
+
+            foreach ($this->categoryName as $id) {
+                $this->categoryName[$id['id']]['level'] = $this->getLevelOf($this->categoryName[$id['id']]['id']);
+            }
         }
 
         return $categories;
@@ -159,6 +167,18 @@ class Category
         }
 
         return $result;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?string $language): Category
+    {
+        $this->language = $language;
+
+        return $this;
     }
 
     public function getUser(): int
