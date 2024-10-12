@@ -26,6 +26,8 @@ use phpMyFAQ\Helper\LanguageHelper;
 /**
  * Class Category
  *
+ * @todo Refactor this class and split it into smaller classes.
+ *
  * @package phpMyFAQ
  */
 class Category
