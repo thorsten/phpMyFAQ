@@ -121,7 +121,7 @@ if (true === $getAll && $user->perm->hasPermission($user->getUserId(), Permissio
         exit();
     }
 
-    $faq->getRecord($id);
+    $faq->getFaq($id);
     $faq->faqRecord['category_id'] = $currentCategory;
 
     $filename = 'FAQ-' . $id . '-' . $lang . '.pdf';

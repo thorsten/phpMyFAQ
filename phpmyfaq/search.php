@@ -50,6 +50,8 @@ $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
+$category = new Category($faqConfig);
+
 $plurals = new Plurals();
 
 // Get possible user input
@@ -78,12 +80,7 @@ if ($inputLanguage !== '') {
     $languages = '';
 }
 
-// HACK: (re)evaluate the Entity object w/o passing the user language
-//       so the result set of a Search will have the Entity Path
-//       for any of the multi-language faq records and the Entity list
-//       on the left pane will not be affected
 if ($allLanguages) {
-    $category = new Category($faqConfig);
     $category->transform(0);
 }
 
@@ -126,7 +123,7 @@ if ('' !== $inputTag) {
             $resultTags = $tagging->getAllTagsById($recordId);
             foreach (array_keys($resultTags) as $resultTagId) {
                 if (isset($tags[$resultTagId])) {
-                    // if the given tag is in the search term we don't want to list it
+                    // if the given tag is in the search term, we don't want to list it
                     continue;
                 }
 
@@ -148,7 +145,7 @@ if ('' !== $inputTag) {
             }
         }
 
-        $searchResult = $faq->renderRecordsByFaqIds($recordIds);
+        $searchResult = $faq->renderFaqsByFaqIds($recordIds);
     }
 } else {
     $searchResult = '';
@@ -179,7 +176,7 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
     }
 
     foreach ($searchResults as $faqKey => $faqValue) {
-        $checkedFaq = $faq->getRecordResult($faqValue->id, $faqValue->lang);
+        $checkedFaq = $faq->getFaqResult($faqValue->id, $faqValue->lang);
         if (0 === $faqConfig->getDb()->numRows($checkedFaq)) {
             unset($searchResults[$faqKey]);
         }
@@ -193,8 +190,6 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
     } catch (Exception $exception) {
         $faqConfig->getLogger()->debug($exception->getMessage());
     }
-} else {
-    $inputSearchTerm = '';
 }
 
 // Change a little the $searchCategory value;

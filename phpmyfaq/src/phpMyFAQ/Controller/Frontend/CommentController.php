@@ -125,7 +125,7 @@ class CommentController extends AbstractController
             if ($comment->create($commentEntity)) {
                 $notification = new Notification($this->configuration);
                 if ('faq' == $type) {
-                    $faq->getRecord($id);
+                    $faq->getFaq($id);
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
                     $news = new News($this->configuration);

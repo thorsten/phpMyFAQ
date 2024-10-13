@@ -125,7 +125,7 @@ readonly class Bookmark
         $list = [];
 
         foreach ($bookmarks as $bookmark) {
-            $faq->getRecord((int) $bookmark->faqid);
+            $faq->getFaq((int) $bookmark->faqid);
             $faqData = $faq->faqRecord;
 
             $url = sprintf(

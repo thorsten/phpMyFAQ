@@ -592,7 +592,7 @@ class FaqController extends AbstractController
         $adminLog->log($user, 'Deleted FAQ ID ' . $faqId);
 
         try {
-            $faq->deleteRecord($faqId, $faqLanguage);
+            $faq->delete($faqId, $faqLanguage);
         } catch (FileException | AttachmentException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }

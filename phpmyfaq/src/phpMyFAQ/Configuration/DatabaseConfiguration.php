@@ -27,7 +27,7 @@ readonly class DatabaseConfiguration
 
     private string $password;
 
-    private string $db;
+    private string $database;
 
     private string $prefix;
 
@@ -51,7 +51,7 @@ readonly class DatabaseConfiguration
         $this->port = $DB['port'] === '' ? null : (int) $DB['port'];
         $this->user = $DB['user'];
         $this->password = $DB['password'];
-        $this->db = $DB['db'];
+        $this->database = $DB['db'];
         $this->prefix = $DB['prefix'];
         $this->type = $DB['type'];
     }
@@ -78,7 +78,7 @@ readonly class DatabaseConfiguration
 
     public function getDatabase(): string
     {
-        return $this->db;
+        return $this->database;
     }
 
     public function getPrefix(): string

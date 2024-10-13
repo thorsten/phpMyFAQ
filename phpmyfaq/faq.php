@@ -109,9 +109,9 @@ if ($bookmarkAction === 'remove' && isset($faqId)) {
 
 // Get all data from the FAQ record
 if (0 === (int)$solutionId) {
-    $faq->getRecord($faqId);
+    $faq->getFaq($faqId);
 } else {
-    $faq->getRecordBySolutionId($solutionId);
+    $faq->getFaqBySolutionId($solutionId);
 }
 
 if (isset($faq->faqRecord['id'])) {

@@ -78,7 +78,7 @@ class ElasticsearchController extends AbstractController
 
         $elasticsearch = new Elasticsearch($this->configuration);
         $faq = new Faq($this->configuration);
-        $faq->getAllRecords();
+        $faq->getAllFaqs();
 
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
         if (isset($bulkIndexResult['success'])) {

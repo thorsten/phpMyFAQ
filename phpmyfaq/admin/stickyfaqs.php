@@ -32,7 +32,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/content/stickyfaqs.twig');
 
 $faq = new Faq($faqConfig);
-$stickyData = $faq->getStickyRecordsData();
+$stickyData = $faq->getStickyFaqsData();
 
 $templateVars = [
     'stickyFAQsHeader' => Translation::get('stickyRecordsHeader'),

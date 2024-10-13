@@ -145,7 +145,7 @@ if (
                 ];
             }
 
-            $faq->getRecord($id, null, true);
+            $faq->getFaq($id, null, true);
             $faqData = $faq->faqRecord;
             if (!is_null($translateTo)) {
                 $faqData['lang'] = $translateTo; // once again
@@ -163,7 +163,7 @@ if (
         $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
         $categories = $categoryRelation->getCategories($faqData['id'], $faqData['lang']);
 
-        $faq->getRecord($faqData['id'], null, true);
+        $faq->getFaq($faqData['id'], null, true);
 
         $faqData = $faq->faqRecord;
         $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
@@ -284,7 +284,7 @@ if (
         $revisions = $faqRevision->get($faqData['id'], $faqData['lang'], $faqData['author']);
 
         if (isset($selectedRevisionId) && isset($faqData['revision_id']) && $selectedRevisionId !== $faqData['revision_id']) {
-            $faq->getRecord($faqData['id'], $selectedRevisionId, true);
+            $faq->getFaq($faqData['id'], $selectedRevisionId, true);
             $faqData = $faq->faqRecord;
             $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
             $faqData['revision_id'] = $selectedRevisionId;

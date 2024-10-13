@@ -89,7 +89,7 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getRecord($faq->getId(), null, true);
+            $this->faq->getFaq($faq->getId(), null, true);
 
             $url = sprintf(
                 '%sadmin/?action=editentry&id=%d&lang=%s',

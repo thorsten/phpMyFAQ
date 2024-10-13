@@ -51,7 +51,7 @@ class FaqTest extends TestCase
         parent::tearDown();
 
         $faqEntity = $this->getFaqEntity();
-        $this->faq->deleteRecord(1, $faqEntity->getLanguage());
+        $this->faq->delete(1, $faqEntity->getLanguage());
     }
 
     public function testSetGroups(): void
@@ -119,7 +119,7 @@ class FaqTest extends TestCase
         $faqEntity = $this->getFaqEntity();
         $faqEntity->setId($this->faq->create($faqEntity)->getId());
 
-        $result = $this->faq->deleteRecord($faqEntity->getId(), $faqEntity->getLanguage());
+        $result = $this->faq->delete($faqEntity->getId(), $faqEntity->getLanguage());
 
         $this->assertTrue($result);
     }
@@ -156,7 +156,7 @@ class FaqTest extends TestCase
         $faqEntity->setSolutionId(42);
         $this->faq->create($faqEntity);
 
-        $this->faq->getRecordBySolutionId(42);
+        $this->faq->getFaqBySolutionId(42);
 
         $this->assertEquals(1, $faqEntity->getId());
     }

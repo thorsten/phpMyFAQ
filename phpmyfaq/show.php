@@ -60,7 +60,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $faqSession->userTracking('show_category', $selectedCategoryId);
 
     $categoryData = $category->getCategoryData($selectedCategoryId);
-    $records = $faq->renderRecordsByCategoryId(
+    $records = $faq->renderFaqsByCategoryId(
         $selectedCategoryId,
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')

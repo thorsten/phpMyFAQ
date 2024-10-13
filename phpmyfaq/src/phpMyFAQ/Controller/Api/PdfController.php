@@ -94,7 +94,7 @@ class PdfController extends AbstractController
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faq->getRecord($faqId);
+        $faq->getFaq($faqId);
         $result = $faq->faqRecord;
 
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {

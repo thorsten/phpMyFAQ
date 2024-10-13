@@ -177,7 +177,7 @@ class FaqController extends AbstractController
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faq->getRecord($faqId);
+        $faq->getFaq($faqId);
         $result = $faq->faqRecord;
 
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
@@ -248,7 +248,7 @@ class FaqController extends AbstractController
         $recordIds = $tags->getFaqsByTagId($tagId);
 
         try {
-            $result = $faq->getRecordsByIds($recordIds);
+            $result = $faq->getFaqsByIds($recordIds);
             return $this->json($result, Response::HTTP_OK);
         } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -455,7 +455,7 @@ class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $result = array_values($faq->getStickyRecordsData());
+        $result = array_values($faq->getStickyFaqsData());
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
@@ -517,7 +517,7 @@ class FaqController extends AbstractController
         $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllRecords(
+        $faq->getAllFaqs(
             FAQ_SORTING_TYPE_CATID_FAQID,
             ['lang' => $this->configuration->getLanguage()->getLanguage()]
         );

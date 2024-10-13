@@ -358,7 +358,7 @@ $faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
 //
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 if ($id !== 0) {
-    $faq->getRecord($id);
+    $faq->getFaq($id);
 
     $seoEntity
         ->setType(SeoType::FAQ)
