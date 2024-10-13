@@ -31,44 +31,35 @@ const generateUUID = () => {
   });
 };
 
-const handleSendTestMail = () => {
+const handleSendTestMail = async () => {
   const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
   if (button) {
     const csrf = document.querySelector('#pmf-csrf-token').value;
 
-    fetch('./api/configuration/send-test-mail', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-      }),
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok: ', { cause: { response } });
-      })
-      .then((response) => {
-        if (response.success === 1) {
-          const element = document.createElement('span');
-          element.textContent = ' ✅';
-          button.append(element);
-        } else {
-          const element = document.createElement('span');
-          element.textContent = '👎 ' + response.error;
-          button.append(element);
-        }
-      })
-      .catch(async (error) => {
-        const element = document.createElement('span');
-        const errorMessage = await error.cause.response.json();
-        element.textContent = '👎 ' + errorMessage.error;
-        button.append(element);
+    try {
+      const response = await fetch('./api/configuration/send-test-mail', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ csrf }),
       });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+
+      const element = document.createElement('span');
+      element.textContent = result.success === 1 ? ' ✅' : '👎 ' + result.error;
+      button.append(element);
+    } catch (error) {
+      const element = document.createElement('span');
+      element.textContent = '👎 ' + error.message;
+      button.append(element);
+    }
   }
 };
 
