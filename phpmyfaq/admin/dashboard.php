@@ -66,6 +66,7 @@ $templateVars = [
     'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
     'hasPermissionEditConfig' => $user->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value),
     'showVersion' => $faqConfig->get('main.enableAutoUpdateHint'),
+    'documentationUrl' => System::getDocumentationUrl(),
 ];
 
 if (version_compare($faqConfig->getVersion(), System::getVersion(), '<')) {

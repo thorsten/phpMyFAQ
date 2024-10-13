@@ -1453,5 +1453,6 @@ $PMF_LANG['msgErrorEnterLoginName'] = 'Bitte geben Sie Ihren Login-Namen ein.';
 $PMF_LANG['msgErrorEnterValidMail'] = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
 $PMF_LANG['msgErrorEnterMessage'] = 'Bitte geben Sie eine Nachricht ein.';
 $PMF_LANG['msgLinkCopied'] = 'Link in die Zwischenablage kopiert.';
+$PMF_LANG['msgDocumentation'] = 'Dokumentation';
 
 return $PMF_LANG;
