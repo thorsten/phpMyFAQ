@@ -60,6 +60,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
         'systemInformation' => [
             'phpMyFAQ Version' => $faqSystem->getVersion(),
             'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
+            'phpMyFAQ Plugin API Version' => $faqSystem->getPluginVersion(),
             'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), 2),
             'Web server software' => $request->server->get('SERVER_SOFTWARE'),
             'Web server document root' => $request->server->get('DOCUMENT_ROOT'),
