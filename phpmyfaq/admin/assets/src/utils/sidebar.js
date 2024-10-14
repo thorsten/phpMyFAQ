@@ -14,16 +14,11 @@
  * @since     2014-03-22
  */
 
-/**
- * Toggle the side navigation
- */
 export const sidebarToggle = () => {
   const sidebarToggle = document.body.querySelector('#sidebarToggle');
 
   if (sidebarToggle) {
     sidebarToggle.addEventListener('click', (event) => {
-      console.log('sidebarToggle', event);
-
       event.preventDefault();
       document.body.classList.toggle('pmf-admin-sidenav-toggled');
       localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('pmf-admin-sidenav-toggled'));
