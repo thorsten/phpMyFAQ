@@ -21,10 +21,12 @@
         <p class="mb-0 small">{{ categoryDescription }}</p>
       </div>
 
+      {% if subCategoryContent != null %}
       <div class="p-4 mb-3 bg-light-subtle rounded border">
         <h4 class="fst-italic">{{ categorySubsHeader }}</h4>
         {{ subCategoryContent | raw }}
       </div>
+      {% endif %}
 
     </div>
   </div>

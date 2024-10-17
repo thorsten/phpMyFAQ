@@ -39,7 +39,7 @@ $faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 
 $selectedCategoryId = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
-$subCategoryContent = '';
+$subCategoryContent = null;
 
 if ($selectedCategoryId === 0) {
     $selectedCategoryId = null;
