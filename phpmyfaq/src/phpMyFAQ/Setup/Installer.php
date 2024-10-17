@@ -183,17 +183,17 @@ class Installer extends Setup
             'name' => PermissionType::GROUP_DELETE->value,
             'description' => 'Right to delete group accounts',
         ],
-        //30 => "addtranslation",
+        //30 => "addtranslation", @deprecated will be removed in 4.1
         [
             'name' => 'addtranslation',
             'description' => 'Right to add translation',
         ],
-        //31 => "edittranslation",
+        //31 => "edittranslation", @deprecated will be removed in 4.1
         [
             'name' => 'edittranslation',
             'description' => 'Right to edit translations',
         ],
-        //32 => "deltranslation",
+        //32 => "deltranslation", @deprecated will be removed in 4.1
         [
             'name' => 'deltranslation',
             'description' => 'Right to delete translations',
