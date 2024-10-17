@@ -30,7 +30,7 @@ Second, you have to delete all files **except**:
 - the directory data/
 - the directory images/
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/update`
@@ -52,7 +52,7 @@ Second, you have to delete all files **except**:
 - the directory **data/**
 - the directory **images/**
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/update`
@@ -74,7 +74,7 @@ Second, you have to delete all files **except**:
 - the directory **data/**
 - the directory **images/**
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/update`

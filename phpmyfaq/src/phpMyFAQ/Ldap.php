@@ -81,10 +81,7 @@ class Ldap
         $this->ds = ldap_connect($ldapServer . ':' . $ldapPort);
 
         if (!$this->ds) {
-            $this->error = sprintf(
-                'Unable to connect to LDAP server (Error: %s)',
-                ldap_error($this->ds)
-            );
+            $this->error = 'Unable to connect to LDAP server';
 
             return false;
         }

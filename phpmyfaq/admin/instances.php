@@ -51,6 +51,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         $system = new System();
         $updatedClient = new Client($faqConfig);
         $moveInstance = false;
+        $instance->setId($instanceId);
 
         // Collect updated data for database
         $updatedData = new InstanceEntity();
@@ -61,7 +62,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         // Original data
         $originalData = $currentClient->getById($instanceId);
 
-        if ($originalData->url !== $updatedData->getUrl()) {
+        if ($originalData->url !== $updatedData->getUrl() && !$instance->getConfig('isMaster')) {
             $moveInstance = true;
         }
 
