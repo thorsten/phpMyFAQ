@@ -28,7 +28,7 @@ Second, you have to delete all files **except**:
 - the directory data/
 - the directory images/
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -46,7 +46,7 @@ enable the maintenance mode. Second, you have to delete all files **except**:
 - the directory **data/**
 - the directory **images/**
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -65,7 +65,7 @@ enable the maintenance mode. Second, you have to delete all files **except**:
 - the directory **data/**
 - the directory **images/**
 
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -76,7 +76,7 @@ updated.
 ## Modifying templates for phpMyFAQ 3.2
 
 We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).
-Please don't forget that the style sheets are written with [SCSS](https://sass-lang.com/).
+Please remember that the style sheets are written with [SCSS](https://sass-lang.com/).
 You have to compile the SCSS files into CSS using a SCSS compiler with Node.js.
 
 If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/).
