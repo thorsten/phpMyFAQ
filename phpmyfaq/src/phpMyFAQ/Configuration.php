@@ -44,17 +44,18 @@ class Configuration
 
     protected string $tableName = 'faqconfig';
 
+    private PluginManager $pluginManager;
 
-    /**
-     * Constructor.
-     *
-     * @throws PluginException
-*/
+
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
         $this->setLogger();
-        $this->setPluginManager();
+        try {
+            $this->setPluginManager();
+        } catch (PluginException $e) {
+            $this->getLogger()->error($e->getMessage());
+        }
 
         if (is_null(self::$configuration)) {
             self::$configuration = $this;
@@ -518,10 +519,10 @@ class Configuration
      */
     public function setPluginManager(): Configuration
     {
-        $pluginManager = new PluginManager();
-        $pluginManager->loadPlugins();
+        $this->pluginManager = new PluginManager();
+        $this->pluginManager->loadPlugins();
 
-        $this->config['core.pluginManager'] = $pluginManager;
+        $this->config['core.pluginManager'] = $this->pluginManager;
         return $this;
     }
 
@@ -530,12 +531,12 @@ class Configuration
         return $this->config['core.pluginManager'];
     }
 
-    public function triggerEvent(string $eventName, $data = null)
+    public function triggerEvent(string $eventName, $data = null): void
     {
         $this->pluginManager->triggerEvent($eventName, $data);
     }
 
-    public function getPluginConfig(string $pluginName)
+    public function getPluginConfig(string $pluginName): array
     {
         return $this->pluginManager->getPluginConfig($pluginName);
     }
