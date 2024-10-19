@@ -5,7 +5,7 @@
     {% if configItem.element == 'area' %}
       {{ macros.generateTextarea(configItem.label, key, configurationData[key], configItem.description) }}
     {% elseif configItem.element == 'checkbox' %}
-      {{ macros.generateCheckbox(configItem.label, key, configurationData, specialCases) }}
+      {{ macros.generateCheckbox(configItem.label, key, configurationData, specialCases, configItem.description) }}
     {% elseif configItem.element == 'password' %}
       {{ macros.generatePasswordInput(configItem.label, key, configurationData[key]) }}
     {% elseif configItem.element == 'input' %}

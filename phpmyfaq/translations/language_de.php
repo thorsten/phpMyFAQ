@@ -780,8 +780,8 @@ $PMF_LANG['mainControlCenter'] = "Allgemein";
 $PMF_LANG['recordsControlCenter'] = "FAQs";
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = ["checkbox", "Neue FAQs sofort sichtbar?"];
-$LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Kommentare bei FAQs erlaubt?"];
+$LANG_CONF['records.defaultActivation'] = ["checkbox", "Neue FAQs sofort sichtbar?", 'Standard: deaktiviert'];
+$LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Kommentare bei FAQs erlaubt?", 'Standard: deaktiviert'];
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = "FAQs in dieser Kategorie";

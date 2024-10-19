@@ -802,8 +802,8 @@ $PMF_LANG['mainControlCenter'] = 'Main Control Center';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array("checkbox", "Activate a new records (default: deactivated)");
-$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments for new records (default: disallowed)");
+$LANG_CONF['records.defaultActivation'] = array("checkbox", 'Activate a new records', 'Default: disallowed');
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", 'Allow comments for new records', 'Default: disallowed');
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'এই বিভাগের প্রশ্ন';

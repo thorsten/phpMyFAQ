@@ -2,7 +2,7 @@
 {# Macros #}
 
 {# input type=checkbox #}
-{% macro generateCheckbox(label, key, config, special) %}
+{% macro generateCheckbox(label, key, config, special, description) %}
   {% set checked = config[key] == 'true' ? ' checked' : '' %}
 
   {% set disabled = '' %}
@@ -17,6 +17,9 @@
     <div class="form-check">
       <input class="form-check-input" type="checkbox" name="edit[{{ key }}]" id="edit[{{ key }}]" value="true"{{ checked }}{{ disabled }}>
       <label class="form-check-label" for="edit[{{ key }}]">{{ label | raw }}</label>
+      {% if description != '' %}
+      <br><span class="form-text">{{ description }}</span>
+      {% endif %}
     </div>
   </div>
 {% endmacro %}

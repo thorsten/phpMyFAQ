@@ -792,7 +792,7 @@ $PMF_LANG['ad_system_info'] = 'System Information';
 $PMF_LANG['msgRegisterUser'] = 'سجل هنا';
 $LANG_CONF['records.orderby'] = array('select', 'Record sorting (according to property)');
 $LANG_CONF['records.sortby'] = array('select', 'Record sorting (descending or ascending)');
-$LANG_CONF['records.defaultActivation'] = array('checkbox', 'Activate new records (default: deactivated)');
-$LANG_CONF['records.defaultAllowComments'] = array('checkbox', 'Allow comments for new records (default: disallowed)');
+$LANG_CONF['records.defaultActivation'] = array('checkbox', 'Activate new records', 'Default: disallowed');
+$LANG_CONF['records.defaultAllowComments'] = array('checkbox', 'Allow comments for new records', 'Default: disallowed');
 
 return $PMF_LANG;
