@@ -128,8 +128,10 @@
   {% set value = config[key] | replace({'"': '&quot;'}) %}
 
   <label for="edit[{{ key }}]" class="col-3 col-form-label mb-1 text-end">
-    {{ label | raw }}<br>
-    <span class="form-text">{{ description }}</span>
+    {{ label | raw }}
+    {% if description != '' %}
+      <br><span class="form-text">{{ description }}</span>
+    {% endif %}
   </label>
   <div class="col-3">
     <select id="edit[{{ key }}]" name="edit[{{ key }}]" class="form-select"

@@ -111,7 +111,7 @@ class AdministrationHelperTest extends TestCase
 
     public function testSortingKeyOptions(): void
     {
-        $expected = '<option value="id" selected>ID<br>(default)</option><option value="thema">Title</option>' .
+        $expected = '<option value="id" selected>ID (default)</option><option value="thema">Title</option>' .
             '<option value="visits">Number of visitors</option><option value="updated">Date</option>' .
             '<option value="author">Author</option>';
         $actual = AdministrationHelper::sortingKeyOptions('id');

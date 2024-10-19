@@ -775,7 +775,7 @@ $PMF_LANG['ad_groups'] = "Gruplar";
 // added v2.0.0 - 2007-03-10 by Thorsten
 $LANG_CONF['records.orderby'] = array('select', 'Record sorting (according to property)');
 $LANG_CONF['records.sortby'] = array('select', 'Record sorting (descending or ascending)');
-$PMF_LANG['ad_conf_order_id'] = "ID<br>(varsayılan)";
+$PMF_LANG['ad_conf_order_id'] = "ID (varsayılan)";
 $PMF_LANG['ad_conf_order_thema'] = "Başlık";
 $PMF_LANG['ad_conf_order_visits'] = "Ziyaretçi sayısı";
 $PMF_LANG['ad_conf_order_updated'] = "Tarih";

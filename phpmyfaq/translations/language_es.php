@@ -770,7 +770,7 @@ $PMF_LANG['ad_groups'] = 'Grupos';
 // added v2.0.0 - 2007-03-10 by Thorsten
 $LANG_CONF['records.orderby'] = array('select', 'Ordenar (por propiedad)');
 $LANG_CONF['records.sortby'] = array('select', 'Ordenar (descendente/ascendente)');
-$PMF_LANG['ad_conf_order_id'] = 'ID<br>(Estándar)';
+$PMF_LANG['ad_conf_order_id'] = 'ID (Estándar)';
 $PMF_LANG['ad_conf_order_thema'] = 'Pregunta';
 $PMF_LANG['ad_conf_order_visits'] = 'Número de visitas';
 $PMF_LANG['ad_conf_order_updated'] = 'Fecha';

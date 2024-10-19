@@ -772,7 +772,7 @@ $PMF_LANG["ad_groups"] = "Groupes";
 // added v2.0.0 - 2007-03-10 by Thorsten
 $LANG_CONF["records.orderby"] = ["select", "Trier les enregistrements par"];
 $LANG_CONF["records.sortby"] = ["select", "Type de Tri (descendant ou ascendant)"];
-$PMF_LANG["ad_conf_order_id"] = "ID<br/>(défaut)";
+$PMF_LANG["ad_conf_order_id"] = "ID (défaut)";
 $PMF_LANG["ad_conf_order_thema"] = "Titre";
 $PMF_LANG["ad_conf_order_visits"] = "Nombre de visites";
 $PMF_LANG["ad_conf_order_updated"] = "Date";
