@@ -17,6 +17,10 @@
  * @since     2022-02-19
  */
 
+/**
+ * Generates a UUID Version 4 compatible universally unique identifier.
+ * @returns {string} The generated UUID.
+ */
 const generateUUID = () => {
   let date = new Date().getTime();
 
@@ -31,6 +35,9 @@ const generateUUID = () => {
   });
 };
 
+/**
+ * Sends a test email to the admin.
+ */
 const handleSendTestMail = async () => {
   const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
   if (button) {
@@ -51,23 +58,32 @@ const handleSendTestMail = async () => {
       }
 
       const result = await response.json();
-
-      const element = document.createElement('span');
-      element.textContent = result.success === 1 ? ' ✅' : '👎 ' + result.error;
-      button.append(element);
+      displayResult(button, result.success === 1 ? ' ✅' : '👎 ' + result.error);
     } catch (error) {
-      const element = document.createElement('span');
-      element.textContent = '👎 ' + error.message;
-      button.append(element);
+      displayResult(button, '👎 ' + error.message);
     }
   }
 };
 
-function generateApiToken() {
+/**
+ * Displays the result of the test email operation.
+ * @param {HTMLElement} button - The button element to append the result to.
+ * @param {string} message - The message to display.
+ */
+const displayResult = (button, message) => {
+  const element = document.createElement('span');
+  element.textContent = message;
+  button.append(element);
+};
+
+/**
+ * Generates an API token if the input field is empty.
+ */
+const generateApiToken = () => {
   const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
   const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 
   if (buttonGenerateApiToken && inputConfigurationApiToken.value === '') {
     inputConfigurationApiToken.value = generateUUID();
   }
-}
+};
