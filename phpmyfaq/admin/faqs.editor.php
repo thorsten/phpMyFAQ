@@ -122,11 +122,11 @@ if (
     }
 
     if ('editentry' === $action) {
-        $logging->log($user, 'admin-edit-faq');
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
         $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+        $logging->log($user, 'admin-edit-faq ' . $id);
 
         if (!is_null($translateTo)) {
             $faqData['lang'] = $lang = $translateTo;

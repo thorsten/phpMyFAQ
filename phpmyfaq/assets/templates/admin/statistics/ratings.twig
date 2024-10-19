@@ -64,26 +64,20 @@
         {% set currentCategory = rating['category_id'] %}
       {% endfor %}
       </tbody>
-      {% if numberOfRatings > 0 %}
-      <tfoot>
-        <tr>
-          <td colspan="6">
-            <small>
-              <span class="bg-success text-white fw-bold">{{ green }}</span>
-              {{ greenNote }}
-              <span class="bg-danger text-white fw-bold">{{ red }}</span>
-              {{ redNote }}
-            </small>
-          </td>
-        </tr>
-      </tfoot>
-      {% else %}
-      <tfoot>
-        <tr>
-          <td colspan="6">{{ msgNoRatings }}</td>
-        </tr>
-      </tfoot>
-      {% endif %}
     </table>
+
+    {% if numberOfRatings > 0 %}
+    <p>
+      <small>
+        <span class="bg-success text-white fw-bold">{{ green }}</span>
+        {{ greenNote }}<br>
+        <span class="bg-danger text-white fw-bold">{{ red }}</span>
+        {{ redNote }}
+      </small>
+    </p>
+    {% else %}
+      <p>{{ msgNoRatings }}</p>
+    {% endif %}
+
   </div>
 </div>
