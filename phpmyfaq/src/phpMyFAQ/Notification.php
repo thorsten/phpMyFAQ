@@ -146,10 +146,16 @@ readonly class Notification
         $urlToContent = $link->toString();
 
         $commentMail =
-            sprintf('User: %s, mailto:%s<br>', $comment->getUsername(), $comment->getEmail()) .
-            sprintf('Title: %s<br>', $title) .
-            sprintf('New comment posted here: %s<br><br>', $urlToContent) .
-            sprintf('%s', wordwrap($comment->getComment(), 72));
+            sprintf(
+                '%s: %s, <a href="mailto:%s">%s</a><br>',
+                Translation::get('ad_stat_report_owner'),
+                $comment->getUsername(),
+                $comment->getEmail(),
+                $comment->getEmail(),
+            ) .
+            sprintf('%s: %s<br>', Translation::get('msgYourComment'), $title) .
+            sprintf('%s: %s<br><br>', Translation::get('ad_news_link_url'), $urlToContent) .
+            sprintf('%s', strip_tags(wordwrap($comment->getComment(), 72)));
 
         $send = [];
 
@@ -175,7 +181,7 @@ readonly class Notification
         }
 
         $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
-        $this->mail->message = strip_tags($commentMail);
+        $this->mail->message = $commentMail;
 
         $this->mail->send();
     }
@@ -206,10 +212,16 @@ readonly class Notification
         $urlToContent = $link->toString();
 
         $commentMail =
-            sprintf('User: %s, mailto:%s<br>', $comment->getUsername(), $comment->getEmail()) .
-            sprintf('Title: %s<br>', $title) .
-            sprintf('New comment posted here: %s<br><br>', $urlToContent) .
-            sprintf('%s', wordwrap($comment->getComment(), 72));
+            sprintf(
+                '%s: %s, <a href="mailto:%s">%s</a><br>',
+                Translation::get('ad_stat_report_owner'),
+                $comment->getUsername(),
+                $comment->getEmail(),
+                $comment->getEmail(),
+            ) .
+            sprintf('%s: %s<br>', Translation::get('msgYourComment'), $title) .
+            sprintf('%s: %s<br><br>', Translation::get('ad_news_link_url'), $urlToContent) .
+            sprintf('%s', strip_tags(wordwrap($comment->getComment(), 72)));
 
         $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
 
@@ -217,7 +229,7 @@ readonly class Notification
         $send[$this->configuration->getAdminEmail()] = 1;
 
         $this->mail->subject = $this->configuration->getTitle() . ': New comment for "' . $title . '"';
-        $this->mail->message = strip_tags($commentMail);
+        $this->mail->message = $commentMail;
 
         $this->mail->send();
     }

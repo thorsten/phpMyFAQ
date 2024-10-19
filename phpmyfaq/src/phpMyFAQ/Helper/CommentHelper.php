@@ -58,25 +58,29 @@ class CommentHelper extends AbstractHelper
     /**
      * Adds some fancy HTML if a comment is too long.
      */
-    private function showShortComment(int $id, string $comment): string
+    private function showShortComment(int $commentId, string $comment): string
     {
-        $words = explode(' ', nl2br($comment));
+        $words = explode(' ', $comment);
         $numWords = 0;
 
         $comment = '';
         foreach ($words as $word) {
-            $comment .= Strings::htmlentities($word . ' ');
+            $comment .= $word . ' ';
             if (15 === $numWords) {
-                $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
-                    '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
-                    '">' . Translation::get('msgShowMore') . '</a>' .
-                    '<span class="comment-more-' . $id . ' d-none">';
+                $comment .= sprintf(
+                    '<span class="comment-dots-%d">&hellip; </span><a href="#" data-comment-id="%d" ' .
+                    'class="pmf-comments-show-more comment-show-more-%d">%s</a><span class="comment-more-%d d-none">',
+                    $commentId,
+                    $commentId,
+                    $commentId,
+                    Translation::get('msgShowMore'),
+                    $commentId
+                );
             }
 
             ++$numWords;
         }
 
-        // Convert URLs to HTML anchors
         return Utils::parseUrl($comment) . '</span>';
     }
 }
