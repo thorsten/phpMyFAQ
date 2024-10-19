@@ -2,9 +2,8 @@
 phpmyfaq/admin/assets/js/editor/
 phpmyfaq/src/libs/
 
-# Ignore all PHP and HTML files
+# Ignore all PHP files
 *.php
-*.html
 
 # Ignore code for build
 .github
