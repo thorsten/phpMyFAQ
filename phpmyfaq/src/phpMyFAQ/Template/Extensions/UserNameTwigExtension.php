@@ -15,7 +15,7 @@
  * @since     2024-04-21
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;

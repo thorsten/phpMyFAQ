@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Configuration;
 use Twig\Extension\AbstractExtension;

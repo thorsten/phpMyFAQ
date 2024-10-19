@@ -1,37 +1,37 @@
 <?php
 
 /**
- * Twig extension to create an ISO date.
+ * Twig extension to format bytes
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ\Template
- * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2024 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2023-2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2024-04-27
+ * @since     2023-05-21
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
-use phpMyFAQ\Date;
+use phpMyFAQ\Utils;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class IsoDateTwigExtension extends AbstractExtension
+class FormatBytesTwigExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
         return [
-            new TwigFilter('createIsoDate', $this->createIsoDate(...)),
+            new TwigFilter('formatBytes', $this->formatBytes(...)),
         ];
     }
 
-    private function createIsoDate(string $string): string
+    public function formatBytes(int $bytes, int $precision = 2): string
     {
-        return Date::createIsoDate($string);
+        return Utils::formatBytes($bytes, $precision);
     }
 }

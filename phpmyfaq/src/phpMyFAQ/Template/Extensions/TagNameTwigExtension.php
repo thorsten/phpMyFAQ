@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Tags;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class TagNameTwigExtension extends AbstractExtension
 {

@@ -1,37 +1,34 @@
 <?php
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class LanguageCodeTwigExtensionTest extends TestCase
+class CreateLinkTwigExtensionTest extends TestCase
 {
-    private LanguageCodeTwigExtension $extension;
+    private CreateLinkTwigExtension $extension;
 
     protected function setUp(): void
     {
-        $this->extension = new LanguageCodeTwigExtension();
+        $this->extension = new CreateLinkTwigExtension();
     }
-
     public function testGetFunctions(): void
     {
         $functions = $this->extension->getFunctions();
 
-        $this->assertCount(1, $functions);
-
+        $this->assertCount(2, $functions);
         $this->assertInstanceOf(TwigFunction::class, $functions[0]);
-        $this->assertEquals('getFromLanguageCode', $functions[0]->getName());
+        $this->assertInstanceOf(TwigFunction::class, $functions[1]);
     }
 
     public function testGetFilters(): void
     {
         $filters = $this->extension->getFilters();
 
-        $this->assertCount(1, $filters);
-
+        $this->assertCount(2, $filters);
         $this->assertInstanceOf(TwigFilter::class, $filters[0]);
-        $this->assertEquals('getFromLanguageCode', $filters[0]->getName());
+        $this->assertInstanceOf(TwigFilter::class, $filters[1]);
     }
 }

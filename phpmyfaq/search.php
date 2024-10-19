@@ -28,7 +28,7 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Template\TagNameTwigExtension;
+use phpMyFAQ\Template\Extensions\TagNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;

@@ -17,15 +17,15 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class CreateLinkTwigExtension extends AbstractExtension
 {

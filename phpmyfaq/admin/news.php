@@ -23,8 +23,8 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\FormatDateTwigExtension;
-use phpMyFAQ\Template\IsoDateTwigExtension;
+use phpMyFAQ\Template\Extensions\FormatDateTwigExtension;
+use phpMyFAQ\Template\Extensions\IsoDateTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 

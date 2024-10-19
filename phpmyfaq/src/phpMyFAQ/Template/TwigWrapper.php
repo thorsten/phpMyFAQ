@@ -19,6 +19,8 @@ namespace phpMyFAQ\Template;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
+use phpMyFAQ\Template\Extensions\PluginTwigExtension;
+use phpMyFAQ\Template\Extensions\TranslateTwigExtension;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

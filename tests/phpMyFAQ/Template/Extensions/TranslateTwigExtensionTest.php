@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;

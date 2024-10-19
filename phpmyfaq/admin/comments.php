@@ -22,7 +22,7 @@ use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\FaqTwigExtension;
+use phpMyFAQ\Template\Extensions\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Twig\Extra\Intl\IntlExtension;

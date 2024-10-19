@@ -22,7 +22,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\CategoryNameTwigExtension;
+use phpMyFAQ\Template\Extensions\CategoryNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;

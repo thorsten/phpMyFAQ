@@ -15,7 +15,7 @@
  * @since     2024-04-26
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;

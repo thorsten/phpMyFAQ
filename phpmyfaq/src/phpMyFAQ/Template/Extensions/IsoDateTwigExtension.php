@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Twig extension to translate the permission string.
+ * Twig extension to create an ISO date.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,24 +15,23 @@
  * @since     2024-04-27
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
-use phpMyFAQ\Translation;
+use phpMyFAQ\Date;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class PermissionTranslationTwigExtension extends AbstractExtension
+class IsoDateTwigExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
         return [
-            new TwigFilter('permission', $this->getPermissionTranslation(...)),
+            new TwigFilter('createIsoDate', $this->createIsoDate(...)),
         ];
     }
 
-    private function getPermissionTranslation(string $string): string
+    private function createIsoDate(string $string): string
     {
-        $translationCode = sprintf('permission::%s', $string);
-        return Translation::get($translationCode);
+        return Date::createIsoDate($string);
     }
 }

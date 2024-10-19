@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Twig extension to format the date
+ * Twig extension to translate the permission string.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,26 +15,24 @@
  * @since     2024-04-27
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Date;
+use phpMyFAQ\Translation;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class FormatDateTwigExtension extends AbstractExtension
+class PermissionTranslationTwigExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
         return [
-            new TwigFilter('formatDate', $this->formatDate(...)),
+            new TwigFilter('permission', $this->getPermissionTranslation(...)),
         ];
     }
 
-    private function formatDate(string $string): string
+    private function getPermissionTranslation(string $string): string
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-        $date = new Date($faqConfig);
-        return $date->format($string);
+        $translationCode = sprintf('permission::%s', $string);
+        return Translation::get($translationCode);
     }
 }

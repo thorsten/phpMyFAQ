@@ -22,7 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\LanguageCodeTwigExtension;
+use phpMyFAQ\Template\Extensions\LanguageCodeTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;

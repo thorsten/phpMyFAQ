@@ -1,17 +1,17 @@
 <?php
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
 use PHPUnit\Framework\TestCase;
 use Twig\TwigFilter;
 
-class FaqTwigExtensionTest extends TestCase
+class FormatDateTwigExtensionTest extends TestCase
 {
-    private FaqTwigExtension $extension;
+    private FormatDateTwigExtension $extension;
 
     protected function setUp(): void
     {
-        $this->extension = new FaqTwigExtension();
+        $this->extension = new FormatDateTwigExtension();
     }
 
     public function testGetFilters(): void
@@ -21,6 +21,6 @@ class FaqTwigExtensionTest extends TestCase
         $this->assertCount(1, $filters);
 
         $this->assertInstanceOf(TwigFilter::class, $filters[0]);
-        $this->assertEquals('faqQuestion', $filters[0]->getName());
+        $this->assertEquals('formatDate', $filters[0]->getName());
     }
 }

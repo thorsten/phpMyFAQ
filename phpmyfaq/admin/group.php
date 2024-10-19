@@ -22,11 +22,11 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
+use phpMyFAQ\Template\Extensions\PermissionTranslationTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Template\PermissionTranslationTwigExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);

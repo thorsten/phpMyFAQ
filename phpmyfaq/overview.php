@@ -16,9 +16,9 @@
  */
 
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Template\CategoryNameTwigExtension;
-use phpMyFAQ\Template\CreateLinkTwigExtension;
-use phpMyFAQ\Template\FaqTwigExtension;
+use phpMyFAQ\Template\Extensions\CategoryNameTwigExtension;
+use phpMyFAQ\Template\Extensions\CreateLinkTwigExtension;
+use phpMyFAQ\Template\Extensions\FaqTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Twig extension to return the language name from the language code.
+ * Twig extension to translate the given translation key
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,36 +12,36 @@
  * @copyright 2024 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2024-05-09
+ * @since     2024-04-21
  */
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Template\Extensions;
 
-use phpMyFAQ\Language\LanguageCodes;
+use phpMyFAQ\Translation;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class LanguageCodeTwigExtension extends AbstractExtension
+class TranslateTwigExtension extends AbstractExtension
 {
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('getFromLanguageCode', $this->getFromLanguageCode(...)),
+            new TwigFunction('translate', $this->translate(...)),
         ];
     }
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('getFromLanguageCode', $this->getFromLanguageCode(...)),
+            new TwigFilter('translate', $this->translate(...)),
         ];
     }
 
-    public function getFromLanguageCode(string $languageCode): string
+    public function translate(string $translationKey): string
     {
-        return LanguageCodes::get($languageCode);
+        return Translation::get($translationKey) ?? $translationKey;
     }
 }

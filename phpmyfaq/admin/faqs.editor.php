@@ -37,10 +37,10 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Template\FormatBytesTwigExtension;
-use phpMyFAQ\Template\IsoDateTwigExtension;
+use phpMyFAQ\Template\Extensions\FormatBytesTwigExtension;
+use phpMyFAQ\Template\Extensions\IsoDateTwigExtension;
+use phpMyFAQ\Template\Extensions\UserNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Template\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
