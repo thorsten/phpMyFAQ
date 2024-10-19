@@ -221,7 +221,7 @@ if (
 
     // Group permissions
     $groupPermission = $faqPermission->get(FaqPermission::GROUP, $faqData['id']);
-    if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
+    if (empty($groupPermission) || in_array(-1, $groupPermission, true)) {
         $allGroups = true;
         $restrictedGroups = false;
         $groupPermission[0] = -1;
