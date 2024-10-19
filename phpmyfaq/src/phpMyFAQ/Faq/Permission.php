@@ -88,9 +88,8 @@ class Permission
             $mode,
             $faqId
         );
-        $this->configuration->getDb()->query($query);
 
-        return true;
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
