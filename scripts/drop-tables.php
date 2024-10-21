@@ -46,9 +46,10 @@ try {
         $prefix . 'faqadminlog, ' . $prefix . 'faqattachment, ' . $prefix . 'faqattachment_file, ' .
         $prefix . 'faqcaptcha, ' . $prefix . 'faqcategories, ' . $prefix . 'faqcategoryrelations, ' .
         $prefix . 'faqcategory_group, ' . $prefix . 'faqcategory_news, ' . $prefix . 'faqcategory_order, ' .
-        $prefix . 'faqcategory_user, ' . $prefix . 'faqchanges, ' . $prefix . 'faqcomments, ' . $prefix . 'faqconfig, ' .
-        $prefix . 'faqdata, ' . $prefix . 'faqdata_group, ' . $prefix . 'faqdata_revisions, ' . $prefix . 'faqdata_tags, ' .
-        $prefix . 'faqdata_user, ' . $prefix . 'faqglossary, ' . $prefix . 'faqgroup, ' . $prefix . 'faqgroup_right, ' .
+        $prefix . 'faqcategory_user, ' . $prefix . 'faqchanges, ' . $prefix . 'faqcomments, ' .
+        $prefix . 'faqconfig, ' . $prefix . 'faqdata, ' . $prefix . 'faqdata_group, ' .
+        $prefix . 'faqdata_revisions, ' . $prefix . 'faqdata_tags, ' . $prefix . 'faqdata_user, ' .
+        $prefix . 'faqglossary, ' . $prefix . 'faqgroup, ' . $prefix . 'faqgroup_right, ' .
         $prefix . 'faqinstances, ' . $prefix . 'faqinstances_config, ' . $prefix . 'faqmeta, ' . $prefix . 'faqnews, ' .
         $prefix . 'faqquestions, ' . $prefix . 'faqright, ' . $prefix . 'faqsearches, ' . $prefix . 'faqsessions, ' .
         $prefix . 'faqstopwords, ' . $prefix . 'faqtags, ' . $prefix . 'faquser, ' . $prefix . 'faquserdata, ' .
