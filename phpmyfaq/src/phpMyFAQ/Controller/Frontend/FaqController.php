@@ -24,7 +24,6 @@ use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
-use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
@@ -33,7 +32,6 @@ use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Session;
 use phpMyFAQ\StopWords;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -117,7 +115,7 @@ class FaqController extends AbstractController
             $faqEntity
                 ->setLanguage($languageCode)
                 ->setQuestion($questionText)
-                ->setActive((bool)($autoActivate ? QueryHelper::FAQ_SQL_ACTIVE_YES : QueryHelper::FAQ_SQL_ACTIVE_NO))
+                ->setActive($autoActivate)
                 ->setSticky(false)
                 ->setAnswer($answer)
                 ->setKeywords($keywords)
