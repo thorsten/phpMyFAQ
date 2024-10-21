@@ -2,21 +2,17 @@
 
 /**
  * This class manages user permissions and group memberships.
- *
- * There are three possible extensions of this class: basic and medium by the
+ * There are currently two possible extensions of this class: basic and medium by the
  * classes BasicPermission and MediumPermission.
- *
- * The permission type can be selected by calling $perm = Permission(perm_type) or
- * static method $perm = Permission::selectPerm(perm_type) where perm_type is
- * 'medium'. Both ways, a BasicPermission or MediumPermission is returned.
- *
- * Perhaps the most important method is $perm->hasPermission(right_name). This
- * checks whether the user having the user_id set with $perm->setPerm()
- *
+ * The permission type can be selected by calling the static method $perm = Permission::selectPerm(perm_type)
+ * where perm_type is 'medium'.
+ * Both ways, a BasicPermission or MediumPermission is returned.
+ * Perhaps the most important method is $perm->hasPermission(right_name).
+ * This checks whether the user has the user_id set with $perm->setPerm()
  * The permission object is added to a user using the user's addPerm() method.
- * a single permission-object is allowed for each user. The permission-object is
- * in the user's $perm variable. Permission methods are performed using the
- * variable (e.g. $user->perm->method() ).
+ * A single permission-object is allowed for each user.
+ * The permission-object is in the user's $perm variable.
+ * Permission methods are performed using the variable (e.g., $user->perm->method()).
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -32,6 +28,7 @@
 
 namespace phpMyFAQ;
 
+use InvalidArgumentException;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
 
@@ -42,24 +39,23 @@ use phpMyFAQ\Permission\MediumPermission;
  */
 class Permission
 {
-    public function __construct(protected Configuration $configuration)
-    {
-    }
-
     /**
-     * Permission::selectPerm() returns an instance of a subclass of
-     * Permission. $permLevel which subclass is returned.
+     * Permission::selectPerm() returns an instance of an implementation of the Permission interface.
      *
-     * @param string        $permLevel
-     * @param Configuration $configuration
-     * @return Permission|BasicPermission|MediumPermission
+     * @param  string        $permLevel
+     * @param  Configuration $configuration
+     * @return BasicPermission|MediumPermission
      */
-    public static function selectPerm(
+    public static function createPermission(
         string $permLevel,
         Configuration $configuration
-    ): Permission|BasicPermission|MediumPermission {
+    ): BasicPermission|MediumPermission {
         $permClass = sprintf('\phpMyFAQ\Permission\%sPermission', ucfirst(strtolower($permLevel)));
 
-        return class_exists($permClass) ? new $permClass($configuration) : new self($configuration);
+        if (!class_exists($permClass)) {
+            throw new InvalidArgumentException(sprintf('Invalid permission level: %s', $permLevel));
+        }
+
+        return new $permClass($configuration);
     }
 }

@@ -25,7 +25,9 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\User\UserData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -85,7 +87,7 @@ class User
 
     final public const STATUS_USER_ACTIVE = 'User account is active. ';
 
-    public Permission $perm;
+    public PermissionInterface $perm;
 
     public ?UserData $userdata = null;
 
@@ -153,7 +155,10 @@ class User
 */
     public function __construct(protected ?Configuration $configuration)
     {
-        $permission = Permission::selectPerm($this->configuration->get('security.permLevel'), $this->configuration);
+        $permission = Permission::createPermission(
+            $this->configuration->get('security.permLevel'),
+            $this->configuration
+        );
         if (!$this->addPerm($permission)) {
             return;
         }
@@ -185,9 +190,9 @@ class User
     /**
      * Adds a permission object to the user.
      *
-     * @param Permission $permission Permission object
+     * @param PermissionInterface $permission Permission object
      */
-    public function addPerm(Permission $permission): bool
+    public function addPerm(PermissionInterface $permission): bool
     {
         $this->perm = $permission;
         return true;

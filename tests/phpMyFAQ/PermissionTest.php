@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Permission\BasicPermission;
@@ -16,14 +17,11 @@ class PermissionTest extends TestCase
     {
         $mockConfig = $this->createMock(Configuration::class);
 
-        $basicPermission = Permission::selectPerm('basic', $mockConfig);
+        $basicPermission = Permission::createPermission('basic', $mockConfig);
         $this->assertInstanceOf(BasicPermission::class, $basicPermission);
 
-        $mediumPermission = Permission::selectPerm('medium', $mockConfig);
+        $mediumPermission = Permission::createPermission('medium', $mockConfig);
         $this->assertInstanceOf(MediumPermission::class, $mediumPermission);
-
-        $invalidPermission = Permission::selectPerm('invalid', $mockConfig);
-        $this->assertInstanceOf(Permission::class, $invalidPermission);
     }
 
     /**
@@ -33,8 +31,8 @@ class PermissionTest extends TestCase
     {
         $mockConfig = $this->createMock(Configuration::class);
 
-        $invalidPermission = Permission::selectPerm('nonexistent', $mockConfig);
-
-        $this->assertInstanceOf(Permission::class, $invalidPermission);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid permission level: nonexistent');
+        Permission::createPermission('nonexistent', $mockConfig);
     }
 }

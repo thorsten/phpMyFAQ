@@ -30,6 +30,11 @@ use phpMyFAQ\User\CurrentUser;
  */
 class MediumPermission extends BasicPermission implements PermissionInterface
 {
+    public function __construct(protected Configuration $configuration)
+    {
+        parent::__construct($configuration);
+    }
+
     /**
      * Default data for new groups.
      *

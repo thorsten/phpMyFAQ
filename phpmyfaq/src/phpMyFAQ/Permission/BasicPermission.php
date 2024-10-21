@@ -17,9 +17,9 @@
 
 namespace phpMyFAQ\Permission;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
-use phpMyFAQ\Permission;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -27,8 +27,12 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Permission
  */
-class BasicPermission extends Permission implements PermissionInterface
+class BasicPermission implements PermissionInterface
 {
+    public function __construct(protected Configuration $configuration)
+    {
+    }
+
     /**
      * Default right data stored when a new right is created.
      *
