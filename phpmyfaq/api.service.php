@@ -422,7 +422,7 @@ switch ($action) {
             $faqEntity
                 ->setLanguage(($isTranslation === true ? $newLanguage : $languageCode))
                 ->setQuestion($question)
-                ->setActive(($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO))
+                ->setActive($autoActivate)
                 ->setSticky(false)
                 ->setAnswer($answer)
                 ->setKeywords($keywords)
