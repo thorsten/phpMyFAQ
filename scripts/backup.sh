@@ -20,13 +20,19 @@
 # @link      https://www.phpmyfaq.de
 # @version   2015-12-29
 
-cwd=`pwd`
+current_dir=$(pwd)
 
-mkdir -p $cwd/backup
+mkdir -p "$current_dir/backup"
 
-SRCDIR=$cwd/phpmyfaq/
-DESTDIR=$cwd/backup/
-FILENAME=phpmyfaq-$(date +%-Y%-m%-d)-$(date +%-T).tgz
-tar cfzP $DESTDIR$FILENAME -C $SRCDIR*
+source_dir="$current_dir/phpmyfaq/"
+backup_dir="$current_dir/backup/"
+filename="phpmyfaq-$(date +%Y-%m-%d)-$(date +%T).tgz"
 
-echo "done.";
+if tar cfzP "$backup_dir$filename" -C "$source_dir" .; then
+    echo "Backup created successfully: $backup_dir$filename"
+else
+    echo "Error: Failed to create backup" >&2
+    exit 1
+fi
+
+echo "done."

@@ -14,10 +14,10 @@
 # @link      https://www.phpmyfaq.de
 # @since     2012-03-07
 
-find . -name "*.php" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.js" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.scss" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.html" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.twig" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.md" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
-find . -name "*.sh" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
+# List of file extensions to process
+extensions=("php" "js" "scss" "html" "twig" "md" "sh")
+
+# Loop through each extension and execute the perl command
+for ext in "${extensions[@]}"; do
+    find . -name "*.${ext}" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
+done
