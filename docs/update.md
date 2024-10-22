@@ -11,6 +11,8 @@ versions:
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x or 2.x series, [please email us](mailto:thorsten_AT_phpmyfaq_DOT_de).
 
+Please note, that the requirements of phpMyFAQ have to fulfilled.
+
 ## Before you upgrade
 
 Please make sure that you're running at least PHP 8.2, otherwise the upgrade won't work.
@@ -35,8 +37,7 @@ URL in your browser:
 
 `http://www.example.com/faq/update`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
-updated.
+Click the button of the update script, your version will automatically be updated.
 
 ## Upgrading from phpMyFAQ 3.1.x
 
@@ -57,8 +58,7 @@ URL in your browser:
 
 `http://www.example.com/faq/update`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
-updated.
+Click the button of the update script, your version will automatically be updated.
 
 ## Upgrading from phpMyFAQ 3.2.x
 
@@ -79,8 +79,7 @@ URL in your browser:
 
 `http://www.example.com/faq/update`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
-updated.
+Click the button of the update script, your version will automatically be updated.
 
 ## Upgrading from phpMyFAQ 4.0.x
 
@@ -98,12 +97,11 @@ URL in your browser:
 
 `http://www.example.com/faq/update`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be
-updated.
+Click the button of the update script, your version will automatically be updated.
 
-### Automatic upgrade (Experimental feature)
+### Online update (Experimental feature)
 
-If you're running phpMyFAQ 4.0.0 or later, you can use the built-in automatic upgrade feature.
+If you're running phpMyFAQ 4.0.0 or later, you can use the built-in online update feature.
 Log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
 Then go to the "phpMyFAQ Update" page in the configuration section click through the update wizard:
