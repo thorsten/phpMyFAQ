@@ -27,7 +27,7 @@
     "ext-zip": "*",
     "2tvenom/cborencode": "^1.0",
     "elasticsearch/elasticsearch": "8.*",
-    "endroid/qr-code": "^5.0",
+    "endroid/qr-code": "^6.0",
     "guzzlehttp/guzzle": "^7.5",
     "league/commonmark": "^2.4",
     "monolog/monolog": "^3.3",
