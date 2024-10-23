@@ -23,7 +23,6 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
