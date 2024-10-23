@@ -273,6 +273,7 @@ class Pgsql implements DatabaseDriver
             $prefix . 'faqadminlog',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
+            $prefix . 'faqbackup',
             $prefix . 'faqcaptcha',
             $prefix . 'faqcategories',
             $prefix . 'faqcategoryrelations',
