@@ -126,14 +126,17 @@ class SetupController
             ]
         );
     }
+
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string[] $templateVars
+     * @param string        $pathToTwigFile
+     * @param string[]      $templateVars
      * @param Response|null $response
-     * @throws TemplateException|Exception
+     * @return Response
+     * @throws Exception
      */
-    public function render(string $pathToTwigFile, array $templateVars = [], Response $response = null): Response
+    public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates', true);
