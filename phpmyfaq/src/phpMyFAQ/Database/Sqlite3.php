@@ -241,6 +241,7 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
             $prefix . 'faqbackup',
+            $prefix . 'faqbookmarks',
             $prefix . 'faqcaptcha',
             $prefix . 'faqcategories',
             $prefix . 'faqcategoryrelations',
