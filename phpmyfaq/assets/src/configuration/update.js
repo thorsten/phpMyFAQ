@@ -30,7 +30,7 @@ export const handleUpdateInformation = async () => {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
-      const response = await fetch('../../api/setup/check', {
+      const response = await fetch('../api/setup/check', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -71,7 +71,7 @@ export const handleConfigBackup = async () => {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
-      const response = await fetch('../../api/setup/backup', {
+      const response = await fetch('../api/setup/backup', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -100,7 +100,7 @@ export const handleDatabaseUpdate = async () => {
     const installedVersion = document.getElementById('phpmyfaq-update-installed-version');
 
     try {
-      const response = await fetch('../../api/setup/update-database', {
+      const response = await fetch('../api/setup/update-database', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
