@@ -70,6 +70,16 @@ class ConfigurationTest extends TestCase
         $this->assertEquals($value, $this->configuration->get($key));
     }
 
+    public function testAdd(): void
+    {
+        $key = 'test.add';
+
+        $result = $this->configuration->add($key, 'foo');
+
+        $this->assertTrue($result);
+        $this->assertEquals('foo', $this->configuration->get($key));
+    }
+
     public function testGetDb(): void
     {
         $db = $this->configuration->getDb();
