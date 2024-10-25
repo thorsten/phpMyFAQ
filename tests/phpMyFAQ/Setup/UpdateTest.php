@@ -20,6 +20,7 @@ class UpdateTest extends TestCase
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($this->dbHandle);
         $configuration->set('main.currentVersion', '4.0.0');
+        $configuration->getAll();
 
         $this->update = new Update(new System(), Configuration::getConfigurationInstance());
     }
@@ -60,6 +61,34 @@ class UpdateTest extends TestCase
         $result = $this->update->applyUpdates($progressCallback);
 
         $this->assertTrue($result);
+    }
+
+    public function testApplyUpdatesWithDryRunForAlpha3(): void
+    {
+        $progressCallback = function ($query) {
+            echo $query;
+        };
+
+        $this->update->setVersion('4.0.0-alpha.2');
+        $this->update->setDryRun(true);
+        $this->update->applyUpdates($progressCallback);
+
+        $result = $this->update->getDryRunQueries();
+
+        $this->assertIsArray($result);
+        $this->assertStringContainsString(
+            "CREATE TABLE faqseo (
+                            id INT NOT NULL,
+                            type VARCHAR(32) NOT NULL,
+                            reference_id INT NOT NULL,
+                            reference_language VARCHAR(5) NOT NULL,
+                            title TEXT NULL,
+                            description TEXT NULL,
+                            slug TEXT NULL,
+                            created DATE NOT NULL DEFAULT (date('now')),
+                            PRIMARY KEY (id))",
+            $result[0]
+        );
     }
 
     public function testSetDryRun()

@@ -382,15 +382,19 @@ class Configuration
      */
     public function add(string $name, mixed $value): bool
     {
-        $insert = sprintf(
-            "INSERT INTO %s%s VALUES ('%s', '%s')",
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->getDb()->escape(trim($name)),
-            $this->getDb()->escape(trim((string) $value))
-        );
+        if (!isset($this->config[$name])) {
+            $insert = sprintf(
+                "INSERT INTO %s%s VALUES ('%s', '%s')",
+                Database::getTablePrefix(),
+                $this->tableName,
+                $this->getDb()->escape(trim($name)),
+                $this->getDb()->escape(trim((string)$value))
+            );
 
-        return (bool) $this->getDb()->query($insert);
+            return (bool)$this->getDb()->query($insert);
+        }
+
+        return true;
     }
 
     /**

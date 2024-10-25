@@ -40,6 +40,9 @@ class Update extends Setup
 
     private bool $dryRun = false;
 
+    /** @var string[] */
+    private array $dryRunQueries = [];
+
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
         parent::__construct($this->system);
@@ -158,6 +161,11 @@ class Update extends Setup
         $this->dryRun = $dryRun;
     }
 
+    public function getDryRunQueries(): array
+    {
+        return $this->dryRunQueries;
+    }
+
     /**
      * @throws Exception
      */
@@ -165,7 +173,7 @@ class Update extends Setup
     {
         if ($this->dryRun) {
             foreach ($this->queries as $query) {
-                echo $query . PHP_EOL;
+                array_push($this->dryRunQueries, $query);
             }
         } else {
             foreach ($this->queries as $query) {
