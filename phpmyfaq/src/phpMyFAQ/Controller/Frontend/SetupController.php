@@ -118,7 +118,7 @@ class SetupController
             'setup/update.twig',
             [
                 'currentStep' => $currentStep ?? 1,
-                'installedVersion' => System::getVersion(),
+                'installedVersion' => $configuration->getVersion(),
                 'newVersion' => System::getVersion(),
                 'currentYear' => date('Y'),
                 'documentationUrl' => System::getDocumentationUrl(),

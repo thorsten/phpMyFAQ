@@ -73,7 +73,7 @@ class SetupController extends AbstractController
         }
 
         $update = new Update(new System(), $this->configuration);
-        $update->setVersion(System::getVersion());
+        $update->setVersion($this->configuration->getVersion());
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
