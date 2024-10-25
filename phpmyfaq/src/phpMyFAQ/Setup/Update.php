@@ -153,6 +153,11 @@ class Update extends Setup
         }
     }
 
+    public function setDryRun(bool $dryRun): void
+    {
+        $this->dryRun = $dryRun;
+    }
+
     /**
      * @throws Exception
      */

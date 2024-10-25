@@ -3,13 +3,13 @@
 namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 
 class UpdateTest extends TestCase
 {
-    private Configuration $configuration;
     private Sqlite3 $dbHandle;
     private Update $update;
     protected function setUp(): void
@@ -18,12 +18,15 @@ class UpdateTest extends TestCase
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($this->dbHandle);
-        $this->configuration->set('main.currentVersion', '4.0.0');
+        $configuration = new Configuration($this->dbHandle);
+        $configuration->set('main.currentVersion', '4.0.0');
 
         $this->update = new Update(new System(), Configuration::getConfigurationInstance());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCreateConfigBackup(): void
     {
         $this->update->setVersion('4.0.0');
@@ -42,5 +45,32 @@ class UpdateTest extends TestCase
     {
         $this->update->setVersion('4.0.0');
         $this->assertFalse($this->update->isConfigTableNotAvailable($this->dbHandle));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testApplyUpdates(): void
+    {
+        $progressCallback = function ($query) {
+            echo $query;
+        };
+
+        $this->update->setVersion('4.0.0');
+        $result = $this->update->applyUpdates($progressCallback);
+
+        $this->assertTrue($result);
+    }
+
+    public function testSetDryRun()
+    {
+        $this->update->setDryRun(true);
+        $reflection = new \ReflectionClass($this->update);
+        $property = $reflection->getProperty('dryRun');
+        $property->setAccessible(true);
+        $this->assertTrue($property->getValue($this->update));
+
+        $this->update->setDryRun(false);
+        $this->assertFalse($property->getValue($this->update));
     }
 }
