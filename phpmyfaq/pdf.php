@@ -29,6 +29,9 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,6 +79,18 @@ try {
 // Initializing static string wrapper
 //
 Strings::init($faqLangCode);
+
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+
 
 // authenticate with session information
 $user = $container->get('phpmyfaq.user.current_user');
