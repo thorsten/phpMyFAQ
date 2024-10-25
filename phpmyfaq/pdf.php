@@ -91,7 +91,6 @@ try {
     echo $e->getMessage();
 }
 
-
 // authenticate with session information
 $user = $container->get('phpmyfaq.user.current_user');
 
