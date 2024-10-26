@@ -267,6 +267,7 @@ class Sqlite3 implements DatabaseDriver
             $prefix . 'faqquestions',
             $prefix . 'faqright',
             $prefix . 'faqsearches',
+            $prefix . 'faqseo',
             $prefix . 'faqsessions',
             $prefix . 'faqstopwords',
             $prefix . 'faqtags',
