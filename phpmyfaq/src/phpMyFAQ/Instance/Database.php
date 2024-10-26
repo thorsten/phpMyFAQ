@@ -105,7 +105,7 @@ class Database
      */
     public static function getInstance(): ?Driver
     {
-        if (!self::$instance instanceof \phpMyFAQ\Instance\Database\Driver) {
+        if (!self::$instance instanceof Driver) {
             $className = self::class;
             self::$instance = new $className();
         }
