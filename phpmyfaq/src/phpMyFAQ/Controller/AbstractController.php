@@ -25,6 +25,9 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,15 +47,18 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]
 abstract class AbstractController
 {
+    protected ?ContainerBuilder $container = null;
     protected ?Configuration $configuration = null;
 
     /**
      * Check if the FAQ should be secured.
+     *
      * @throws Exception
      */
     public function __construct()
     {
-        $this->configuration = Configuration::getConfigurationInstance();
+        $this->container = $this->createContainer();
+        $this->configuration = $this->container->get('phpmyfaq.configuration');
         $this->isSecured();
     }
 
@@ -60,7 +66,7 @@ abstract class AbstractController
      * Returns a Twig rendered template as response.
      *
      * @param string        $pathToTwigFile
-     * @param array         $templateVars
+     * @param string[]      $templateVars
      * @param Response|null $response
      * @return Response
      * @throws Exception
@@ -223,5 +229,18 @@ abstract class AbstractController
     public function isApiEnabled(): bool
     {
         return (bool) $this->configuration->get('api.enableAccess');
+    }
+
+    protected function createContainer(): ContainerBuilder
+    {
+        $container = new ContainerBuilder();
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+        try {
+            $loader->load('../../services.php');
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+
+        return $container;
     }
 }
