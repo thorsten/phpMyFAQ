@@ -19,7 +19,7 @@ namespace phpMyFAQ\Session;
 
 use Exception;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\System;
+use Symfony\Component\HttpFoundation\Request;
 
 class Token
 {
@@ -131,8 +131,7 @@ class Token
      */
     public function verifyToken(string $page, ?string $requestToken = null, bool $removeToken = false): bool
     {
-        // if the request token has not been passed, check $_POST
-        $requestToken ??= $_POST[self::PMF_SESSION_NAME] ?? null;
+        $requestToken ??= Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME) ?? null;
 
         if (is_null($requestToken)) {
             return false;
@@ -180,6 +179,7 @@ class Token
      */
     private function setSession(string $page, int $expiry): Token
     {
+        $request = Request::createFromGlobals();
         $randomToken = md5(base64_encode(random_bytes(32)));
         $token = new self();
         $token
@@ -193,10 +193,10 @@ class Token
             (string) $token->getCookieToken(),
             [
                 'expires' => $token->getExpiry(),
-                'path' => dirname((string) $_SERVER['SCRIPT_NAME']),
+                'path' => dirname($request->server->get('SCRIPT_NAME')),
                 'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => 'strict',
-                'secure' => $this->isSecure(),
+                'secure' => $request->isSecure(),
                 'httponly' => true,
             ]
         );
@@ -207,10 +207,5 @@ class Token
     private function getCookieName(string $page): string
     {
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));
-    }
-
-    private function isSecure(): bool
-    {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] === 443;
     }
 }
