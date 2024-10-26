@@ -267,7 +267,7 @@ class Wrapper extends TCPDF
      */
     public function __construct()
     {
-        parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT);
 
         $this->setFontSubsetting(false);
 
@@ -334,7 +334,7 @@ class Wrapper extends TCPDF
         $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
 
         $this->SetTextColor(0, 0, 0);
-        $this->SetFont($this->currentFont, 'B', 18);
+        $this->SetFont($this->currentFont, 'B', 14);
 
         if (0 < Strings::strlen($this->customHeader)) {
             $this->writeHTMLCell(0, 0, 0, 0, $this->customHeader);
@@ -389,7 +389,7 @@ class Wrapper extends TCPDF
         );
 
         if (0 < Strings::strlen($this->customFooter)) {
-            $this->writeHTMLCell(0, 0, '', '', $this->customFooter);
+            $this->writeHTMLCell(0, 0, null, null, $this->customFooter);
         }
 
         $currentTextColor = $this->TextColor;
@@ -412,22 +412,21 @@ class Wrapper extends TCPDF
             $this->SetFont($this->currentFont, '', 8);
             $baseUrl = 'index.php';
             if ($this->faq !== []) {
-                $baseUrl .= '?action=faq&amp;';
+                $baseUrl .= '?action=faq&';
                 if (array_key_exists($this->category, $this->categories)) {
                     $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
                 } else {
                     $baseUrl .= 'cat=0';
                 }
 
-                $baseUrl .= '&amp;id=' . $this->faq['id'];
-                $baseUrl .= '&amp;artlang=' . $this->faq['lang'];
+                $baseUrl .= '&id=' . $this->faq['id'];
+                $baseUrl .= '&artlang=' . $this->faq['lang'];
             }
 
             $url = $this->config->getDefaultUrl() . $baseUrl;
             $link = new Link($url, $this->config);
             $link->itemTitle = $this->question;
-            $_url = str_replace('&amp;', '&', $link->toString());
-            $this->Cell(0, 10, 'URL: ' . $_url, 0, 1, 'C', 0, $_url);
+            $this->Cell(0, 10, 'URL: ' . $link->toString(), 0, 1, 'C', false, $link->toString());
         }
 
         $this->TextColor = $currentTextColor;
@@ -450,12 +449,12 @@ class Wrapper extends TCPDF
 
         // Title
         $this->SetFont($this->currentFont, 'B', 24);
-        $this->MultiCell(0, 0, $this->config->getTitle(), 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, $this->config->getTitle(), 0, 'C');
         $this->Ln();
 
         // TOC
         $this->SetFont($this->currentFont, 'B', 16);
-        $this->MultiCell(0, 0, Translation::get('msgTableOfContent'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, Translation::get('msgTableOfContent'), 0, 'C');
         $this->Ln();
         $this->SetFont($this->currentFont, '', 12);
 
@@ -503,19 +502,20 @@ class Wrapper extends TCPDF
      * @param string $palign Allows centering or aligning the image on the current line.
      * @param bool   $ismask true if this image is a mask, false otherwise
      * @param mixed  $imgmask Image object returned by this function or false
-     * @param int    $border Indicates if borders must be drawn around the cell.
-     * @param mixed  $fitbox If not, false scale image dimensions proportionally to fit within the ($w, $h) box.
+     * @param int   $border Indicates if borders must be drawn around the cell.
+     * @param mixed $fitbox If not, false scale image dimensions proportionally to fit within the ($w, $h) box.
      *                          $fitbox can be true or a 2-character string indicating the image alignment inside
      *                          the box. The first character indicates the horizontal alignment (L = left, C =
      *                          center, R = right) the second character indicates the vertical algnment (T = top, M
      *                          = middle, B = bottom).
-     * @param bool   $hidden If true, do not display the image.
-     * @param bool   $fitonpage If true, the image is resized to not exceed page dimensions.
-     * @param bool   $alt If true, the image will be added as alternative and not directly printed (the ID of the
+     * @param bool  $hidden If true, do not display the image.
+     * @param bool  $fitonpage If true, the image is resized to not exceed page dimensions.
+     * @param bool  $alt If true, the image will be added as alternative and not directly printed (the ID of the
      *                          image will be returned).
-     * @param array  $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
-     *                          an integer representing the image ID (the value returned by the Image method) and a
-     *                          boolean value to indicate if the image is the default for printing.
+     * @param array $alternateImages Array of alternate images IDs. Each alternative image must be an array with
+     *                               two values:
+     *                               an integer representing the image ID (the value returned by the Image method) and a
+     *                               boolean value to indicate if the image is the default for printing.
      */
     public function Image(// phpcs:ignore
         $file,
@@ -536,7 +536,7 @@ class Wrapper extends TCPDF
         $hidden = false,
         $fitonpage = false,
         $alt = false,
-        $altimgs = []
+        $alternateImages = []
     ): void {
         if (strpos($file, 'data:image/png;base64,')) {
             $file = '@' . base64_decode(
@@ -563,7 +563,7 @@ class Wrapper extends TCPDF
             $hidden,
             $fitonpage,
             $alt,
-            $altimgs
+            $alternateImages
         );
     }
 }

@@ -21,6 +21,7 @@ use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Date;
 use phpMyFAQ\Export;
 use phpMyFAQ\Export\Pdf\Wrapper;
@@ -177,7 +178,11 @@ class Pdf extends Export
     /**
      * Builds the PDF delivery for the given faq.
      *
+     * @param array       $faqData
      * @param string|null $filename
+     * @return string
+     * @throws CommonMarkException
+     * @throws Exception
      */
     public function generateFile(array $faqData, ?string $filename = null): string
     {
@@ -185,6 +190,8 @@ class Pdf extends Export
         if ($filename === null || $filename === '') {
             $filename = sprintf('FAQ-%s-%s.pdf', $faqData['id'], $faqData['lang']);
         }
+
+        $date = new Date($this->config);
 
         $this->pdf->setFaq($faqData);
         $this->pdf->setCategory($faqData['category_id']);
@@ -199,13 +206,14 @@ class Pdf extends Export
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 10);
         $this->pdf->SetDisplayMode('real');
         $this->pdf->Ln();
-        $this->pdf->WriteHTML('<h2>' . $faqData['title'] . '</h2>');
+        $this->pdf->Ln();
+        $this->pdf->WriteHTML('<h3>' . $faqData['title'] . '</h3>');
         $this->pdf->Ln();
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
             $this->pdf->WriteHTML(
-                str_replace('../', '', (string) $this->converter->convert($faqData['content'])->getContent())
+                str_replace('../', '', $this->converter->convert($faqData['content'])->getContent())
             );
         } else {
             $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']));
@@ -224,7 +232,7 @@ class Pdf extends Export
         $this->pdf->Ln();
         $this->pdf->Write(5, Translation::get('msgAuthor') . ': ' . $author);
         $this->pdf->Ln();
-        $this->pdf->Write(5, Translation::get('msgLastUpdateArticle') . $faqData['date']);
+        $this->pdf->Write(5, Translation::get('msgLastUpdateArticle') . $date->format($faqData['date']));
 
         return $this->pdf->Output($filename);
     }
