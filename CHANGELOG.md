@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-RC.2 - 2024-10-23
+### phpMyFAQ v4.0.0-RC.3 - unreleased
 
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
@@ -26,11 +26,11 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
 - added possibility to add custom CSS via admin frontend (Thorsten)
-- added experimental plugin manager (Thorsten)
-- added experimental support for PHP 8.4 (Thorsten)
+- added support for PHP 8.4 (Thorsten)
 - added "share with" feature (Jan Harms, Thorsten)
 - added user bookmarks (Jan Harms)
 - added basic support for Rich Snippets (Thorsten)
+- added experimental plugin manager (Thorsten)
 - added experimental support for WebAuthn / Passkeys (Thorsten)
 - improved installation and update (Thorsten)
 - improved SEO support (Thorsten)
