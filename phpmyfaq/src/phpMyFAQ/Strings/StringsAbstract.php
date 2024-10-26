@@ -49,7 +49,7 @@ abstract class StringsAbstract
     protected string $language = self::DEFAULT_LANGUAGE;
 
     /**
-     * Check if the string is a unicode string.
+     * Check if the string is a Unicode string.
      *
      * @param string $str String
      */
@@ -65,21 +65,5 @@ abstract class StringsAbstract
             . '[\xf1-\xf3][\x80-\xbf]{3}|'
             . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
         return preg_match($regex, $str) === 1;
-    }
-
-    /**
-     * Get current encoding.
-     */
-    public function getEncoding(): string
-    {
-        return $this->encoding;
-    }
-
-    /**
-     * Set current encoding.
-     */
-    public function setEncoding(string $encoding): void
-    {
-        $this->encoding = $encoding;
     }
 }

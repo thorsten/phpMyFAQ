@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Strings;
 
 use phpMyFAQ\Language;
-use phpMyFAQ\Strings\StringsAbstract;
 
 /**
  * Class Mbstring
@@ -79,18 +78,6 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Get position of the first occurrence of a string.
-     *
-     * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param int    $offset Offset
-     */
-    public function strpos(string $haystack, string $needle, int $offset = 0): int
-    {
-        return mb_strpos($haystack, $needle, $offset, $this->encoding);
-    }
-
-    /**
      * Make a string lower case.
      *
      * @param string $str String
@@ -123,17 +110,14 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Count substring occurrences.
-     */
-    public function substr_count(string $haystack, string $needle): int
-    {
-        return mb_substr_count($haystack, $needle, $this->encoding);
-    }
-
-    /**
      * Match a regexp.
      *
-     * @param        $matches
+     * @param string $pattern
+     * @param string $subject
+     * @param null   $matches
+     * @param int    $flags
+     * @param int    $offset
+     * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
     {
@@ -173,11 +157,16 @@ class Mbstring extends StringsAbstract
      *
      * @return string|string[]
      */
-    public function preg_replace_callback(string|array $pattern, callable $callback, string|array $subject, int $limit = -1, int &$count = 0): string|array
-    {
+    public function preg_replace_callback(
+        string|array $pattern,
+        callable $callback,
+        string|array $subject,
+        int $limit = -1,
+        int &$count = 0
+    ): string|array {
         if (is_array($pattern)) {
-            foreach ($pattern as &$p) {
-                $p = $this->appendU($p);
+            foreach ($pattern as &$item) {
+                $item = $this->appendU($item);
             }
         } else {
             $pattern = $this->appendU($pattern);
@@ -203,8 +192,8 @@ class Mbstring extends StringsAbstract
         int &$count = 0
     ): string|array|null {
         if (is_array($pattern)) {
-            foreach ($pattern as &$p) {
-                $p = $this->appendU($p);
+            foreach ($pattern as &$item) {
+                $item = $this->appendU($item);
             }
         } else {
             $pattern = $this->appendU($pattern);

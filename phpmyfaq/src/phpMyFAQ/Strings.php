@@ -84,18 +84,6 @@ class Strings
     }
 
     /**
-     * Get position of the first occurrence of a string.
-     *
-     * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param int    $offset Offset
-     */
-    public static function strpos(string $haystack, string $needle, int $offset = 0): int
-    {
-        return self::$instance->strpos($haystack, $needle, $offset);
-    }
-
-    /**
      * Make a string lower case.
      *
      * @param string $str String
@@ -125,32 +113,6 @@ class Strings
     public static function strstr(string $haystack, string $needle, bool $part = false): string|false
     {
         return self::$instance->strstr($haystack, $needle, $part);
-    }
-
-    /**
-     * Set current encoding.
-     */
-    public static function setEncoding(string $encoding): void
-    {
-        self::$instance->setEncoding($encoding);
-    }
-
-    /**
-     * Count substring occurrences.
-     */
-    public static function substr_count(string $haystack, string $needle): int // phpcs:ignore
-    {
-        return self::$instance->substr_count($haystack, $needle);
-    }
-
-    /**
-     * Find position of last occurrence of a char in a string.
-     *
-     * @param int $offset
-     */
-    public static function strrpos(string $haystack, string $needle, int $offset = 0): int
-    {
-        return self::$instance->strrpos($haystack, $needle, $offset);
     }
 
     /**
@@ -239,8 +201,13 @@ class Strings
      * @param int $count
      * @return string|string[]|null
      */
-    public static function preg_replace(string|array $pattern, string|array $replacement, string|array $subject, $limit = -1, &$count = 0): string|array|null
-    {
+    public static function preg_replace(
+        string|array $pattern,
+        string|array $replacement,
+        string|array $subject,
+        int $limit = -1,
+        int &$count = 0
+    ): string|array|null {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
 

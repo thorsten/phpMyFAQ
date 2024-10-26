@@ -31,7 +31,7 @@ class StringBasic extends StringsAbstract
      *
      * @var string
      */
-    final public const DEFAULT_ENCODING = 'utf-8';
+    final public const DEFAULT_ENCODING = 'UTF-8';
 
     /**
      * Instance.
@@ -48,9 +48,10 @@ class StringBasic extends StringsAbstract
     /**
      * Create and return an instance.
      *
-     * @param string|null $encoding
+     * @param string $language
+     * @return StringBasic
      */
-    public static function getInstance(string $encoding = null, string $language = 'en'): StringBasic
+    public static function getInstance(string $language = 'en'): StringBasic
     {
         if (!(self::$instance instanceof StringBasic)) {
             self::$instance = new self();
@@ -127,26 +128,6 @@ class StringBasic extends StringsAbstract
     public function strstr(string $haystack, string $needle, bool $part = false): string|false
     {
         return strstr($haystack, $needle, $part);
-    }
-
-    /**
-     * Count substring occurrences.
-     *
-     * @return int
-     */
-    public function substr_count(string $haystack, string $needle) // phpcs:ignore
-    {
-        return substr_count($haystack, $needle);
-    }
-
-    /**
-     * Find position of last occurrence of a char in a string.
-     *
-     * @return int
-     */
-    public function strrpos(string $haystack, string $needle, int $offset = 0) // phpcs:ignore
-    {
-        return strrpos($haystack, $needle, $offset);
     }
 
     /**
