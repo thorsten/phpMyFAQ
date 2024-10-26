@@ -67,7 +67,7 @@ If you add a new category, you can set the permissions for users and groups, and
 category.
 This is quite nice if you want to share the work in your FAQ between various admin users.
 
-If you display category images, they are saved as separate files in /images/ as follows:
+If you display category images, they are saved as separate files in /content/user/images/ as follows:
 
 - category-1-de.ext
 - category-2-de.ext
@@ -416,9 +416,11 @@ For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it
 
     .
     |-- [...]
-    |-- config
-    |   |-- constants.php
-    |   `-- database.php
+    |-- content
+    |   |-- core
+    |   |   |-- config
+    |   |   |   |-- constants.php
+    |   |   |   `-- database.php
     `-- multisite
         |-- multisite.php
         `-- beta.faq.example.org

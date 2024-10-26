@@ -102,7 +102,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
         'ad_instance_add' => Translation::get('ad_instance_add'),
         'allInstances' => $instance->getAll(),
         'csrfTokenDeleteInstance' => Token::getInstance()->getTokenString('delete-instance'),
-        'csrfTokenAddInstance' => Token::getInstance()->getTokenString('add_instance'),
+        'csrfTokenAddInstance' => Token::getInstance()->getTokenString('add-instance'),
         'mainConfig' => $mainConfig,
         'requestHost' => Request::createFromGlobals()->getHost(),
         'ad_instance_button' => Translation::get('ad_instance_button'),

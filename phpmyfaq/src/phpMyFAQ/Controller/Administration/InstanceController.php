@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -26,7 +25,6 @@ use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Session\Token;
@@ -41,13 +39,14 @@ class InstanceController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/instance/add')]
     public function add(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->container->get('phpmyfaq.configuration');
 
         $data = json_decode($request->getContent());
 
@@ -77,7 +76,7 @@ class InstanceController extends AbstractController
             ->setInstance($instance)
             ->setComment($comment);
 
-        $faqInstance = new Instance($configuration);
+        $faqInstance = $this->container->get('phpmyfaq.instance');
         $instanceId = $faqInstance->create($data);
 
         $faqInstanceClient = new Client($configuration);
@@ -149,13 +148,14 @@ class InstanceController extends AbstractController
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/instance/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $configuration = Configuration::getConfigurationInstance();
+        $configuration = $this->container->get('phpmyfaq.configuration');
 
         $data = json_decode($request->getContent());
 
