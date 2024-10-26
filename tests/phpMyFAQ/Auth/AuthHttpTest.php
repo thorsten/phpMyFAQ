@@ -13,7 +13,7 @@ class AuthHttpTest extends TestCase
     protected function setUp(): void
     {
         $this->authHttp = new AuthHttp(Configuration::getConfigurationInstance());
-        $this->authHttp->selectEncType('sha1');
+        $this->authHttp->getEncryptionContainer('sha1');
     }
 
     /**

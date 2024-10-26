@@ -235,7 +235,7 @@ class UserController extends AbstractController
 
         $auth = new Auth($configuration);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
-        $authSource->selectEncType($user->getAuthData('encType'));
+        $authSource->getEncryptionContainer($user->getAuthData('encType'));
 
         if ($newPassword === $retypedPassword) {
             if (!$user->changePassword($newPassword)) {

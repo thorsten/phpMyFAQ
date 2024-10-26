@@ -25,7 +25,6 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Core\Exception;
 
 /**
@@ -70,27 +69,23 @@ class Auth
      *
      * @param string $encType encryption type
      */
-    public function selectEncType(string $encType): Encryption
+    public function getEncryptionContainer(string $encType): Encryption
     {
-        $this->encContainer = Encryption::selectEnc($encType, $this->configuration);
+        $this->encContainer = Encryption::getInstance($encType, $this->configuration);
         return $this->encContainer;
     }
 
     /**
      * The string returned by error() contains messages for all errors that
-     * during object processing. Messages are separated by new lines.
+     * during object processing. New lines separate messages.
      * Error messages are stored in the public array errors.
      */
-    public function error(): string
+    public function getErrors(): string
     {
         $message = '';
 
-        if (!is_array($this->errors)) {
-            $this->errors = [(string)$this->errors];
-        }
-
         foreach ($this->errors as $error) {
-            $message .= $error . "\n";
+            $message .= $error . PHP_EOL;
         }
 
         return $message . $this->encContainer->error();

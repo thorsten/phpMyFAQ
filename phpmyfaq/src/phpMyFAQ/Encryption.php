@@ -49,7 +49,7 @@ class Encryption
     /**
      * Constructor.
      */
-    public function __construct(protected ?Configuration $configuration)
+    private function __construct(protected ?Configuration $configuration)
     {
     }
 
@@ -57,13 +57,13 @@ class Encryption
      * This method is called statically. The parameter encType specifies the
      * of encryption method for the encryption object. Supported
      * are 'bcrypt', 'hash', and 'none'.
-     * $enc = EncryptionTypes::selectEnc('hash');
+     * $enc = EncryptionTypes::getInstance('hash');
      * $enc is an instance of the class EncryptionTypes\Hash.
      * If the given encryption-type is not supported, selectEnc() will return an
      * object without database access and with an error message. See the
      * of the error() method for further details.
      */
-    public static function selectEnc(string $encType, Configuration $configuration): Encryption
+    public static function getInstance(string $encType, Configuration $configuration): Encryption
     {
         $self = new self($configuration);
         $encType = ucfirst(strtolower($encType));
@@ -79,7 +79,7 @@ class Encryption
     }
 
     /**
-     * Encrypts the string str and returns the result.
+     * Encrypts the given string and returns the result.
      *
      * @param string $password String
      */
@@ -95,13 +95,10 @@ class Encryption
      */
     public function error(): string
     {
-        if (!is_array($this->errors)) {
-            $this->errors = [(string)$this->errors];
-        }
-
         $message = '';
+
         foreach ($this->errors as $error) {
-            $message .= $error . "\n";
+            $message .= $error . PHP_EOL;
         }
 
         return $message;
@@ -115,7 +112,6 @@ class Encryption
     public function setSalt(string $login): Encryption
     {
         $this->salt = $this->configuration->get('security.salt') . $login;
-
         return $this;
     }
 }

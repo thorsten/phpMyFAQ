@@ -29,24 +29,22 @@ class AuthTest extends TestCase
         $this->auth = new Auth($this->configuration);
     }
 
-    public function testSelectEncType(): void
+    public function testGetEncryptionContainer(): void
     {
-        $encryptionType = $this->auth->selectEncType('bcrypt');
+        $encryptionType = $this->auth->getEncryptionContainer('bcrypt');
         $this->assertInstanceOf('phpMyFAQ\EncryptionTypes\Bcrypt', $encryptionType);
     }
 
     public function testErrorWithNoError(): void
     {
-        $this->auth->selectEncType('bcrypt');
-
-        $this->assertEquals('', $this->auth->error());
+        $this->auth->getEncryptionContainer('bcrypt');
+        $this->assertEquals('', $this->auth->getErrors());
     }
 
     public function testErrorWithError(): void
     {
-        $this->auth->selectEncType('foobar');
-
-        $this->assertEquals("EncryptionTypes method could not be found.\n", $this->auth->error());
+        $this->auth->getEncryptionContainer('foobar');
+        $this->assertEquals("EncryptionTypes method could not be found.\n", $this->auth->getErrors());
     }
 
     /**
@@ -74,7 +72,7 @@ class AuthTest extends TestCase
 
     public function testEncrypt(): void
     {
-        $this->auth->selectEncType('bcrypt');
+        $this->auth->getEncryptionContainer('bcrypt');
         $hash = $this->auth->encrypt('foobar');
 
         $this->assertIsString($hash);

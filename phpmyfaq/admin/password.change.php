@@ -45,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::PASSWORD_CHAN
         // Define the (Local/Current) Authentication Source
         $auth = new Auth($faqConfig);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
-        $authSource->selectEncType($user->getAuthData('encType'));
+        $authSource->getEncryptionContainer($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
         $oldPassword = Filter::filterInput(INPUT_POST, 'faqpassword_old', FILTER_SANITIZE_SPECIAL_CHARS);

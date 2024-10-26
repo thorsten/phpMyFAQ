@@ -102,7 +102,7 @@ class UserController extends AbstractController
                     }
 
                     if (!$auth->update($user->getLogin(), $password)) {
-                        return $this->json(['error' => $auth->error()], Response::HTTP_BAD_REQUEST);
+                        return $this->json(['error' => $auth->getErrors()], Response::HTTP_BAD_REQUEST);
                     } else {
                         $success = true;
                     }

@@ -13,7 +13,7 @@ class AuthDatabaseTest extends TestCase
     protected function setUp(): void
     {
         $this->authDatabase = new AuthDatabase(Configuration::getConfigurationInstance());
-        $this->authDatabase->selectEncType('sha1');
+        $this->authDatabase->getEncryptionContainer('sha1');
     }
 
     protected function tearDown(): void

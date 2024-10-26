@@ -168,7 +168,7 @@ class User
         $auth = new Auth($this->configuration);
 
         $selectedAuth = $auth->selectAuth($this->getAuthSource('name'));
-        $selectedAuth->selectEncType($this->getAuthData('encType'));
+        $selectedAuth->getEncryptionContainer($this->getAuthData('encType'));
         $selectedAuth->setReadOnly($this->getAuthData('readOnly'));
 
         if (!$this->addAuth($selectedAuth, $this->getAuthSource('type'))) {
