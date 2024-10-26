@@ -22,6 +22,9 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,6 +39,17 @@ if (headers_sent()) {
 }
 
 $attachmentErrors = [];
+
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
 
 $faqConfig = $container->get('phpmyfaq.configuration');
 $request = Request::createFromGlobals();
