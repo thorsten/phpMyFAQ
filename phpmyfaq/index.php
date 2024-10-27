@@ -609,7 +609,8 @@ $templateVars = [
     'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
     'msgPrivacyNote' => Translation::get('msgPrivacyNote'),
     'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
-    'cookiePreferences' => Translation::get('cookiePreferences')
+    'cookiePreferences' => Translation::get('cookiePreferences'),
+    'currentYear' => date('Y', time()),
 ];
 
 //
