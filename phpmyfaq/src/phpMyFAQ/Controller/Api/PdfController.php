@@ -83,9 +83,7 @@ class PdfController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);

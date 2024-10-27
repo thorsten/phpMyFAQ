@@ -22,7 +22,6 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export\Pdf;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
@@ -42,8 +41,21 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require __DIR__ . '/src/Bootstrap.php';
 
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+
+$faqConfig = $container->get('phpmyfaq.configuration');
+
 // get language (default: english)
-$Language = new Language($faqConfig);
+$Language = $container->get('phpmyfaq.language');
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
@@ -80,17 +92,6 @@ try {
 //
 Strings::init($faqLangCode);
 
-//
-// Service Containers
-//
-$container = new ContainerBuilder();
-$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
-try {
-    $loader->load('src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
-}
-
 // authenticate with session information
 $user = $container->get('phpmyfaq.user.current_user');
 
@@ -102,7 +103,7 @@ $currentCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDAT
 $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 $getAll = Filter::filterVar($request->query->get('getAll'), FILTER_VALIDATE_BOOLEAN, false);
 
-$faq = new Faq($faqConfig);
+$faq = $container->get('phpmyfaq.faq');
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 

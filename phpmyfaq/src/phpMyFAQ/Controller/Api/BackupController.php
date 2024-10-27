@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Enums\PermissionType;
@@ -29,7 +29,6 @@ class BackupController extends AbstractController
 
     /**
      * @throws Exception
-     * @throws \Exception
      */
     #[OA\Get(
         path: '/api/v3.0/backup/{type}',

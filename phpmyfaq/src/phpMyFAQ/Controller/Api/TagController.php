@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Tags;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -35,6 +34,9 @@ class TagController extends AbstractController
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     #[OA\Get(
         path: '/api/v3.0/tags',
         operationId: 'getTags',
@@ -55,7 +57,7 @@ class TagController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $tags = new Tags($this->configuration);
+        $tags = $this->container->get('phpmyfaq.tags');
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

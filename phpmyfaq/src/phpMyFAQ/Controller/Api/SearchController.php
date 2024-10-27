@@ -25,7 +25,6 @@ use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,13 +79,11 @@ class SearchController extends AbstractController
     )]
     public function search(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $search = new Search($this->configuration);
         $search->setCategory(new Category($this->configuration));
 
         $faqPermission = new Permission($this->configuration);
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
+        $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search($searchString, false);

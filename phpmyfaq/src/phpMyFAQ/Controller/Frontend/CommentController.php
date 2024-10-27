@@ -24,7 +24,6 @@ use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Session;
@@ -55,7 +54,7 @@ class CommentController extends AbstractController
         $session = new Session($this->configuration);
         $session->setCurrentUser($user);
 
-        $language = new Language($this->configuration);
+        $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
             $this->configuration->get('main.languageDetection'),
             $this->configuration->get('main.language')

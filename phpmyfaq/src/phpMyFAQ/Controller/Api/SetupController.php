@@ -93,12 +93,8 @@ class SetupController extends AbstractController
 
     public function updateDatabase(Request $request): StreamedResponse|JsonResponse
     {
-
         if (empty($request->getContent())) {
-            $response = new JsonResponse();
-            $response->setStatusCode(Response::HTTP_CONFLICT);
-            $response->setData(['message' => 'No version given.']);
-            return $response;
+            return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);

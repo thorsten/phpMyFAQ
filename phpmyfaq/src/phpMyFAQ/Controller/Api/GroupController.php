@@ -21,7 +21,6 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -72,10 +71,8 @@ class GroupController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $mediumPermission = new MediumPermission($this->configuration);
-        $result = $mediumPermission->getAllGroups($user);
+        $result = $mediumPermission->getAllGroups($this->currentUser);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);
         }

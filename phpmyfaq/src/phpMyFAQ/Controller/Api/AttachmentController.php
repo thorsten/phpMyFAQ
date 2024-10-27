@@ -79,13 +79,12 @@ class AttachmentController extends AbstractController
     public function list(Request $request): JsonResponse
     {
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
-        $attachments = [];
         $result = [];
 
         try {
             $attachments = AttachmentFactory::fetchByRecordId($this->configuration, $recordId);
         } catch (AttachmentException) {
-            $result = [];
+            return $this->json($result, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         foreach ($attachments as $attachment) {

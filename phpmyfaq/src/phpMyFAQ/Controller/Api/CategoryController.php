@@ -43,6 +43,9 @@ class CategoryController extends AbstractController
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     #[OA\Get(
         path: '/api/v3.0/categories',
         operationId: 'getCategories',
@@ -80,11 +83,10 @@ class CategoryController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $language = new Language($this->configuration);
+        $language = $this->container->get('phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
@@ -101,8 +103,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @throws Exception
-     * @throws \JsonException
+     * @throws Exception|\JsonException
      */
     #[OA\Post(
         path: '/api/v3.0/category',
@@ -189,9 +190,7 @@ class CategoryController extends AbstractController
     {
         $this->hasValidToken();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 

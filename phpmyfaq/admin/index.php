@@ -64,16 +64,16 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 
 //
 // Get language (default: english)
 //
-$Language = new Language($faqConfig);
+$Language = $container->get('phpmyfaq.language');
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 

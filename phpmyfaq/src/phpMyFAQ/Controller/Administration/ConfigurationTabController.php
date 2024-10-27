@@ -24,7 +24,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -47,7 +46,7 @@ class ConfigurationTabController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $language = new Language($this->configuration);
+        $language = $this->container->get('phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
         try {

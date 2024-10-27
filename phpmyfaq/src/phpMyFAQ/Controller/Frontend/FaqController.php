@@ -42,14 +42,13 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class FaqController extends AbstractController
 {
     /**
-     * @throws Exception
-     * @throws \JsonException
+     * @throws Exception|\JsonException|\Exception
      */
     public function create(Request $request): JsonResponse
     {
         $user = CurrentUser::getCurrentUser($this->configuration);
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faqHelper = new FaqHelper($this->configuration);
         $category = new Category($this->configuration);
         $question = new Question($this->configuration);
@@ -57,7 +56,7 @@ class FaqController extends AbstractController
         $session = new Session($this->configuration);
         $session->setCurrentUser($user);
 
-        $language = new Language($this->configuration);
+        $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
             $this->configuration->get('main.languageDetection'),
             $this->configuration->get('main.language')

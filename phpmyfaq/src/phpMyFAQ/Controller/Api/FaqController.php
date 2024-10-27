@@ -18,15 +18,12 @@
 namespace phpMyFAQ\Controller\Api;
 
 use Exception;
+use League\CommonMark\Exception\CommonMarkException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\MetaData;
-use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,7 +43,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/{categoryId}',
@@ -91,11 +88,9 @@ class FaqController extends AbstractController
     )]
     public function getByCategoryId(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -106,11 +101,13 @@ class FaqController extends AbstractController
             return $this->json($result, Response::HTTP_OK);
         } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (CommonMarkException $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faq/{categoryId}/{faqId}',
@@ -167,11 +164,9 @@ class FaqController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -189,7 +184,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/tags/{tagId}',
@@ -234,17 +229,15 @@ class FaqController extends AbstractController
     )]
     public function getByTagId(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
         $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
 
-        $tags = new Tags($this->configuration);
+        $tags = $this->container->get('phpmyfaq.tags');
         $recordIds = $tags->getFaqsByTagId($tagId);
 
         try {
@@ -256,7 +249,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/popular',
@@ -289,11 +282,9 @@ class FaqController extends AbstractController
     )]
     public function getPopular(): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -308,6 +299,7 @@ class FaqController extends AbstractController
 
     /**
      * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/latest',
@@ -340,11 +332,9 @@ class FaqController extends AbstractController
     )]
     public function getLatest(): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -358,7 +348,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/trending',
@@ -391,11 +381,9 @@ class FaqController extends AbstractController
     )]
     public function getTrending(): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -409,7 +397,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs/sticky',
@@ -447,11 +435,9 @@ class FaqController extends AbstractController
     )]
     public function getSticky(): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -465,7 +451,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
         path: '/api/v3.0/faqs',
@@ -510,11 +496,9 @@ class FaqController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllFaqs(
@@ -531,8 +515,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
-     * @throws \JsonException
+     * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
     #[OA\Post(
         path: '/api/v3.0/faq/create',
@@ -625,9 +608,7 @@ class FaqController extends AbstractController
     {
         $this->hasValidToken();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -638,7 +619,7 @@ class FaqController extends AbstractController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -699,7 +680,7 @@ class FaqController extends AbstractController
 
         $faqId = $faq->create($faqData);
 
-        $faqMetaData = new MetaData($this->configuration);
+        $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
         $faqMetaData
             ->setFaqId($faqId)
             ->setFaqLanguage($languageCode)
@@ -710,8 +691,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
-     * @throws \JsonException
+     * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
     #[OA\Put(
         path: '/api/v3.0/faq/update',
@@ -795,9 +775,7 @@ class FaqController extends AbstractController
     {
         $this->hasValidToken();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -808,7 +786,7 @@ class FaqController extends AbstractController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 

@@ -21,11 +21,15 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
+use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -68,13 +72,27 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.configuration', Configuration::class)
         ->factory([Configuration::class, 'getConfigurationInstance']);
 
+    $services->set('phpmyfaq.faq', Faq::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.faq.metadata', MetaData::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.faq.statistics', Statistics::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
 
-
     $services->set('phpmyfaq.instance', Instance::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.language', Language::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
@@ -90,6 +108,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.services.gravatar', Gravatar::class);
+
+    $services->set('phpmyfaq.tags', Tags::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
 
     $services->set('phpmyfaq.user.current_user', CurrentUser::class)
         ->factory([CurrentUser::class, 'getCurrentUser'])

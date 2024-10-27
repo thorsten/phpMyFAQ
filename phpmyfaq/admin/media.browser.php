@@ -14,25 +14,39 @@
  * @since     2015-10-18
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 const IS_VALID_PHPMYFAQ = null;
 
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
-$faqConfig = Configuration::getConfigurationInstance();
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+
+$faqConfig = $container->get('phpmyfaq.configuration');
+
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 //
 // Get language (default: english)
 //
-$Language = new Language($faqConfig);
+$Language = $container->get('phpmyfaq.language');
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
