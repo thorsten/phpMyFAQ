@@ -20,7 +20,7 @@
 
 /**
  * Set the string below, according to your users (main) timezone.
- * For your convenience, find below the list of the available timezones: .
+ * For your convenience, find below the list of the available timezones:
  *
  * https://www.php.net/manual/en/timezones.php
  *
@@ -32,9 +32,9 @@
  */
 const DATETIME_TIMEZONE_DEFAULT = 'Europe/Berlin';
 
-//
-// Set the default timezone used by all date/time functions
-//
+/**
+ * Set the default timezone used by all date/time functions
+ */
 date_default_timezone_set(DATETIME_TIMEZONE_DEFAULT);
 
 /**
@@ -94,13 +94,6 @@ const PMF_NUMBER_RECORDS_LATEST = 5;
 const PMF_NUMBER_RECORDS_TRENDING = 5;
 
 /**
- * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
- *
- * @var bool
- */
-const PMF_SITEMAP_GOOGLE_USE_SEO = true;
-
-/**
  * This is the flag with which the Tags Cloud list is limited to
  *
  * @var int
@@ -136,14 +129,12 @@ const PMF_ENCRYPTION_TYPE = 'hash';
  *     '',         // Files with no extension not allowed
  *     'shtml',    // SSI files not allowed
  *     'php',      // PHP files not allowed
- *     'php3',
- *     'php4',
  *     'cgi',      // CGI not allowed
  *     'pl',
  *     'exe'       // Win executables not allowed
  * );
  * </code>
  *
- * @var string[]
+ * @var string[] $denyUploadExts
  */
 $denyUploadExts = [];
