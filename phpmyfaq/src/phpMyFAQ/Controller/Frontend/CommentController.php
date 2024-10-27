@@ -17,18 +17,14 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
-use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
-use phpMyFAQ\Link;
-use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Session;

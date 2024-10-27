@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
@@ -82,11 +81,9 @@ class CommentController extends AbstractController
     )]
     public function list(Request $request): JsonResponse
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
 
-        $comments = new Comments($faqConfig);
+        $comments = new Comments($this->configuration);
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);

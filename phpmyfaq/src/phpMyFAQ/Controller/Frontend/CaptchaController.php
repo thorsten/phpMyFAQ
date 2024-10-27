@@ -19,15 +19,14 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CaptchaController extends AbstractController
 {
     /**
-     * @throws \JsonException
+     * @throws \JsonException|\Exception
      */
-    public function renderImage(Request $request): Response
+    public function renderImage(): Response
     {
         $captcha = Captcha::getInstance($this->configuration);
 

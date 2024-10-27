@@ -21,7 +21,6 @@ use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -81,14 +80,13 @@ class CategoryController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-        $language = new Language($faqConfig);
+        $language = new Language($this->configuration);
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
-        $user = CurrentUser::getCurrentUser($faqConfig);
+        $user = CurrentUser::getCurrentUser($this->configuration);
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
-        $category = new Category($faqConfig, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
@@ -191,21 +189,20 @@ class CategoryController extends AbstractController
     {
         $this->hasValidToken();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        $currentLanguage = $configuration->getLanguage()->getLanguage();
+        $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $categoryPermission = new Permission($configuration);
+        $categoryPermission = new Permission($this->configuration);
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
@@ -251,7 +248,7 @@ class CategoryController extends AbstractController
         $categoryId = $category->create($categoryData);
 
         // Category Order entry
-        $categoryOrder = new Order($configuration);
+        $categoryOrder = new Order($this->configuration);
         $categoryOrder->add($categoryId, $parentId);
 
         if ($categoryId) {

@@ -26,8 +26,10 @@ class BackupController extends AbstractController
             throw new UnauthorizedHttpException('API is not enabled');
         }
     }
+
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[OA\Get(
         path: '/api/v3.0/backup/{type}',

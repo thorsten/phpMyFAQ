@@ -35,7 +35,6 @@ class UnauthorizedUserController
     protected ?Configuration $configuration = null;
     /**
      * Check if the FAQ should be secured.
-     * @throws Exception
      */
     public function __construct()
     {
@@ -52,6 +51,7 @@ class UnauthorizedUserController
 
         $username = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
+
         if ($username !== '' && $username !== '0' && ($email !== '' && $email !== '0')) {
             $user = CurrentUser::getCurrentUser($this->configuration);
             $loginExist = $user->getUserByLogin($username);
