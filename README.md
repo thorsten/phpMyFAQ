@@ -1,4 +1,4 @@
-# phpMyFAQ 4.0-RC
+# phpMyFAQ 4.0
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -142,36 +142,6 @@ To run our Javascript tests via Jest, just execute this command on your CLI
     $ curl -fsSL https://get.pnpm.io/install.sh | sh -
     $ pnpm install
     $ pnpm test
-
-### End-to-end tests
-
-> **Note**: Not implemented yet.
-
-To run our end-to-end tests via Playwright, you can use several commands:
-
-    $ pnpm exec playwright test
-
-Run the end-to-end tests.
-
-    $ pnpm exec playwright test --ui
-
-Start the interactive UI mode.
-
-    $ pnpm exec playwright test --project=chromium
-
-Runs the tests only on Desktop Chrome.
-
-    $ pnpm exec playwright test example
-
-Run the tests in a specific file.
-
-    $ pnpm exec playwright test --debug
-
-Run the tests in debug mode.
-
-    $ pnpm exec playwright codegen
-
-Auto generate tests with Codegen.
 
 ## Versioning
 
