@@ -302,7 +302,7 @@ class Installer extends Setup
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
-        'main.titleFAQ' => 'phpMyFAQ Codename Pallas',
+        'main.titleFAQ' => 'phpMyFAQ Codename Porus',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
         'main.enableMarkdownEditor' => 'false',
@@ -381,7 +381,7 @@ class Installer extends Setup
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
 
-        'seo.title' => 'phpMyFAQ Codename Pallas',
+        'seo.title' => 'phpMyFAQ Codename Porus',
         'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
         'seo.enableXMLSitemap' => 'true',
         'seo.enableRichSnippets' => 'false',

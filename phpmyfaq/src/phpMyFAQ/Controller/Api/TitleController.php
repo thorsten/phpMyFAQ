@@ -41,7 +41,7 @@ class TitleController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
-        content: new OA\JsonContent(example: 'phpMyFAQ Codename Pallas'),
+        content: new OA\JsonContent(example: 'phpMyFAQ Codename Porus'),
     )]
     public function index(): JsonResponse
     {
