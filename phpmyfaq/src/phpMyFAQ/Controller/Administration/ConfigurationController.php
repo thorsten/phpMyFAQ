@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -40,8 +39,6 @@ class ConfigurationController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('configuration', $data->csrf)) {
@@ -49,10 +46,10 @@ class ConfigurationController extends AbstractController
         }
 
         try {
-            $mail = new Mail($configuration);
-            $mail->addTo($configuration->getAdminEmail());
-            $mail->setReplyTo($configuration->getNoReplyEmail());
-            $mail->subject = $configuration->getTitle() . ': Mail test successful.';
+            $mail = new Mail($this->configuration);
+            $mail->addTo($this->configuration->getAdminEmail());
+            $mail->setReplyTo($this->configuration->getNoReplyEmail());
+            $mail->subject = $this->configuration->getTitle() . ': Mail test successful.';
             $mail->message = 'It works on my machine. 🚀';
             $result = $mail->send();
 

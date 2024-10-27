@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Permission\MediumPermission;
@@ -37,7 +36,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
 
@@ -61,7 +60,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $users = [];
         foreach ($user->getAllUsers(true, false) as $singleUser) {
@@ -83,7 +82,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 
@@ -98,7 +97,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 
@@ -122,7 +121,7 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 

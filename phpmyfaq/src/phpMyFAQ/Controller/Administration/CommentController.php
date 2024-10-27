@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Comments;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -45,7 +44,7 @@ class CommentController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $comments = new Comments(Configuration::getConfigurationInstance());
+        $comments = new Comments($this->configuration);
         $commentIds = $data->data->{'comments[]'} ?? [];
 
         $result = false;

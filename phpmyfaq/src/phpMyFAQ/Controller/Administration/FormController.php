@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Translation;
@@ -39,7 +38,8 @@ class FormController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
-        $forms = new Forms(Configuration::getConfigurationInstance());
+
+        $forms = new Forms($this->configuration);
         if (!Token::getInstance()->verifyToken('activate-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -60,7 +60,8 @@ class FormController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_INT);
         $formId = Filter::filterVar($data->formid, FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
-        $forms = new Forms(Configuration::getConfigurationInstance());
+
+        $forms = new Forms($this->configuration);
         if (!Token::getInstance()->verifyToken('require-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -82,7 +83,8 @@ class FormController extends AbstractController
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $forms = new Forms(Configuration::getConfigurationInstance());
+
+        $forms = new Forms($this->configuration);
         if (!Token::getInstance()->verifyToken('edit-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -103,7 +105,8 @@ class FormController extends AbstractController
         $formId = Filter::filterVar($data->formId, FILTER_SANITIZE_NUMBER_INT);
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $forms = new Forms(Configuration::getConfigurationInstance());
+
+        $forms = new Forms($this->configuration);
         if (!Token::getInstance()->verifyToken('delete-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -133,8 +136,8 @@ class FormController extends AbstractController
         $inputId = Filter::filterVar($data->inputId, FILTER_SANITIZE_NUMBER_INT);
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
-        $forms = new Forms(Configuration::getConfigurationInstance());
 
+        $forms = new Forms($this->configuration);
         if (!Token::getInstance()->verifyToken('add-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }

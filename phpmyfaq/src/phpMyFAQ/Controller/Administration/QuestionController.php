@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -39,8 +38,6 @@ class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
@@ -48,7 +45,7 @@ class QuestionController extends AbstractController
         }
 
         $questionIds = $data->data->{'questions[]'};
-        $question = new Question($configuration);
+        $question = new Question($this->configuration);
 
         if (!is_null($questionIds)) {
             if (!is_array($questionIds)) {

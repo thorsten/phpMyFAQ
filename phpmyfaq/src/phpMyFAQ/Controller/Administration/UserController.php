@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -49,7 +48,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $filtered = Filter::filterVar($request->query->get('filter'), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -92,7 +91,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
         $allUsers = $user->getAllUsers(false);
 
         $handle = fopen('php://temp', 'r+');
@@ -136,7 +135,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $user->getUserById($request->get('userId'), true);
 
@@ -163,7 +162,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $userId = $request->get('userId');
         $user->getUserById($userId, true);
@@ -179,7 +178,7 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser(Configuration::getConfigurationInstance());
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
         if (!Token::getInstance()->verifyToken('activate-user', $data->csrfToken)) {
@@ -202,15 +201,14 @@ class UserController extends AbstractController
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/user/overwrite-password')]
     public function overwritePassword(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -220,38 +218,28 @@ class UserController extends AbstractController
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance()->verifyToken('overwrite-password', $csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('msgPasswordTooShort')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('msgPasswordTooShort')], Response::HTTP_BAD_REQUEST);
         }
 
         $user->getUserById($userId, true);
 
-        $auth = new Auth($configuration);
+        $auth = new Auth($this->configuration);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
         $authSource->getEncryptionContainer($user->getAuthData('encType'));
 
         if ($newPassword === $retypedPassword) {
             if (!$user->changePassword($newPassword)) {
-                $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-                $jsonResponse->setData(['error' => Translation::get('ad_passwd_fail')]);
-                $jsonResponse->send();
+                return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 
-            $jsonResponse->setStatusCode(Response::HTTP_OK);
-            $jsonResponse->setData(['success' => Translation::get('ad_passwdsuc')]);
+            return $this->json(['success' => Translation::get('ad_passwdsuc')], Response::HTTP_OK);
         } else {
-            $jsonResponse->setStatusCode(Response::HTTP_BAD_REQUEST);
-            $jsonResponse->setData(['error' => Translation::get('msgPasswordsMustBeEqual')]);
+            return $this->json(['error' => Translation::get('msgPasswordsMustBeEqual')], Response::HTTP_BAD_REQUEST);
         }
-
-        return $jsonResponse;
     }
 
     #[Route('admin/api/user/delete')]
@@ -259,42 +247,36 @@ class UserController extends AbstractController
     {
         $this->userHasPermission(PermissionType::USER_DELETE);
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('delete-user', $data->csrfToken)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
         $user->getUserById($userId, true);
-        if ($user->getStatus() == 'protected' || $userId == 1) {
-            $json = $this->json(
+        if ($user->getStatus() === 'protected' || $userId === 1) {
+            return $this->json(
                 ['error' => Translation::get('ad_user_error_protectedAccount')],
                 Response::HTTP_BAD_REQUEST
             );
         } elseif (!$user->deleteUser()) {
-            $json = $this->json(['error' => Translation::get('ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get('ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         } else {
-            $category = new Category($configuration, [], false);
+            $category = new Category($this->configuration, [], false);
             $category->moveOwnership((int) $userId, 1);
 
             // Remove the user from groups
-            if ('basic' !== $configuration->get('security.permLevel')) {
-                $permissions = Permission::createPermission('medium', $configuration);
+            if ('basic' !== $this->configuration->get('security.permLevel')) {
+                $permissions = Permission::createPermission('medium', $this->configuration);
                 $permissions->removeFromAllGroups($userId);
             }
 
-            $json = $this->json(['success' => Translation::get('ad_user_deleted')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get('ad_user_deleted')], Response::HTTP_OK);
         }
-
-        return $json;
     }
 
     /**
@@ -305,19 +287,13 @@ class UserController extends AbstractController
     {
         $this->userHasUserPermission();
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('add-user', $data->csrf)) {
-            $jsonResponse->setStatusCode(Response::HTTP_UNAUTHORIZED);
-            $jsonResponse->setData(['error' => Translation::get('err_NotAuth')]);
-            return $jsonResponse;
+            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $errorMessage = [];
-        $successMessage = '';
 
         $userName = Filter::filterVar($data->userName, FILTER_SANITIZE_SPECIAL_CHARS);
         $userRealName = Filter::filterVar($data->realName, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -327,7 +303,7 @@ class UserController extends AbstractController
         $userPasswordConfirm = Filter::filterVar($data->passwordConfirm, FILTER_SANITIZE_SPECIAL_CHARS);
         $userIsSuperAdmin = Filter::filterVar($data->isSuperAdmin, FILTER_VALIDATE_BOOLEAN);
 
-        $newUser = new User($configuration);
+        $newUser = new User($this->configuration);
 
         if (!$newUser->isValidLogin($userName)) {
             $errorMessage[] = Translation::get('ad_user_error_loginInvalid');
@@ -360,7 +336,7 @@ class UserController extends AbstractController
                 $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                 $newUser->setStatus('active');
                 $newUser->setSuperAdmin((bool)$userIsSuperAdmin);
-                $mailHelper = new MailHelper($configuration);
+                $mailHelper = new MailHelper($this->configuration);
                 try {
                     $mailHelper->sendMailToNewUser($newUser, $userPassword);
                 } catch (Exception | TransportExceptionInterface) {
@@ -395,8 +371,8 @@ class UserController extends AbstractController
             $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
             $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
             $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
-            $deleteTwofactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
-            $deleteTwofactor = $deleteTwofactor === 'on';
+            $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
+            $deleteTwoFactor = $deleteTwoFactor === 'on';
 
             $user = new User($this->configuration);
             $user->getUserById($userId, true);
@@ -404,7 +380,7 @@ class UserController extends AbstractController
             $stats = $user->getStatus();
 
             // reset two-factor authentication if required
-            if ($deleteTwofactor) {
+            if ($deleteTwoFactor) {
                 $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
             }
 
@@ -433,6 +409,9 @@ class UserController extends AbstractController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('admin/api/user/update-rights')]
     public function updateUserRights(Request $request): JsonResponse
     {

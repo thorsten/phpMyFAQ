@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -41,11 +40,9 @@ class StopWordController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $stopWords = new StopWords($configuration);
-
         $language = Filter::filterVar($request->query->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $stopWords = new StopWords($this->configuration);
         if (Language::isASupportedLanguage($language)) {
             $stopWordsList = $stopWords->getByLang($language);
             return $this->json($stopWordsList, Response::HTTP_OK);
@@ -62,14 +59,12 @@ class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $stopWords = new StopWords($configuration);
-
         $data = json_decode($request->getContent());
 
         $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
         $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $stopWords = new StopWords($this->configuration);
         if (!Token::getInstance()->verifyToken('stopwords', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
@@ -92,15 +87,13 @@ class StopWordController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $stopWords = new StopWords($configuration);
-
         $data = json_decode($request->getContent());
 
         $stopWordId = Filter::filterVar($data->stopWordId, FILTER_VALIDATE_INT);
         $stopWordsLang = Filter::filterVar($data->stopWordsLang, FILTER_SANITIZE_SPECIAL_CHARS);
         $stopWord = Filter::filterVar($data->stopWord, FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $stopWords = new StopWords($this->configuration);
         if (!Token::getInstance()->verifyToken('stopwords', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }

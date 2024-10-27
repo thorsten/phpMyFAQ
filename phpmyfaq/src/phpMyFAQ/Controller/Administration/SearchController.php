@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -42,7 +41,7 @@ class SearchController extends AbstractController
 
         $deleteData = json_decode($request->getContent());
 
-        $search = new Search(Configuration::getConfigurationInstance());
+        $search = new Search($this->configuration);
 
         if (!Token::getInstance()->verifyToken('delete-searchterm', $deleteData->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);

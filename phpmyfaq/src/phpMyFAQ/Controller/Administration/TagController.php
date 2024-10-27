@@ -43,8 +43,7 @@ class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $tags = new Tags($configuration);
+        $tags = new Tags($this->configuration);
 
         $postData = json_decode($request->getContent());
 
@@ -74,9 +73,8 @@ class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
-        $tag = new Tags($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        $tag = new Tags($this->configuration);
 
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -96,11 +94,11 @@ class TagController extends AbstractController
         }
 
         if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT)) {
-            $i = 0;
+            $numTags = 0;
             $tagNames = [];
             foreach ($tags as $tag) {
-                ++$i;
-                if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
+                ++$numTags;
+                if ($numTags <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $currentTag = new stdClass();
                     $currentTag->tagName = $tag;
                     $tagNames[] = $currentTag;

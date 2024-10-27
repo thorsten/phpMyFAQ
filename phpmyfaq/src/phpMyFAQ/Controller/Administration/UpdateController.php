@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Administration;
 use DateTime;
 use DateTimeInterface;
 use phpMyFAQ\Administration\Api;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -52,9 +51,8 @@ class UpdateController extends AbstractController
         $this->userIsAuthenticated();
 
         $dateTime = new DateTime();
-        $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $upgrade = new Upgrade(new System(), $configuration);
+        $upgrade = new Upgrade(new System(), $this->configuration);
 
         if (!$upgrade->isMaintenanceEnabled()) {
             return $this->json(
@@ -119,14 +117,13 @@ class UpdateController extends AbstractController
         $this->userIsAuthenticated();
 
         $dateTime = new DateTime();
-        $configuration = Configuration::getConfigurationInstance();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $branch = $configuration->get('upgrade.releaseEnvironment');
+        $branch = $this->configuration->get('upgrade.releaseEnvironment');
 
         try {
-            $api = new Api($configuration, new System());
+            $api = new Api($this->configuration, new System());
             $versions = $api->getVersions();
-            $configuration->set('upgrade.dateLastChecked', $dateLastChecked);
+            $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
                 return $this->json(
@@ -165,13 +162,9 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $jsonResponse = new JsonResponse();
-        $configuration = Configuration::getConfigurationInstance();
-
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = new Upgrade(new System(), $configuration);
-
+        $upgrade = new Upgrade(new System(), $this->configuration);
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
         if ($pathToPackage === false) {
@@ -185,7 +178,7 @@ class UpdateController extends AbstractController
             }
         }
 
-        $configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
+        $this->configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
 
         return $this->json(['success' => Translation::get('downloadSuccessful')], Response::HTTP_OK);
     }
@@ -198,10 +191,8 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $upgrade = new Upgrade(new System(), $configuration);
-
-        $pathToPackage = urldecode((string) $configuration->get('upgrade.lastDownloadedPackage'));
+        $upgrade = new Upgrade(new System(), $this->configuration);
+        $pathToPackage = urldecode((string) $this->configuration->get('upgrade.lastDownloadedPackage'));
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
             $progressCallback = static function ($progress) {
@@ -225,9 +216,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $upgrade = new Upgrade(new System(), $configuration);
-
+        $upgrade = new Upgrade(new System(), $this->configuration);
         $backupHash = md5(uniqid());
 
         return new StreamedResponse(static function () use ($upgrade, $backupHash) {
@@ -252,9 +241,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $upgrade = new Upgrade(new System(), $configuration);
-
+        $upgrade = new Upgrade(new System(), $this->configuration);
         return new StreamedResponse(static function () use ($upgrade) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
@@ -277,8 +264,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $update = new Update(new System(), $configuration);
+        $update = new Update(new System(), $this->configuration);
         $update->setVersion(System::getVersion());
 
         return new StreamedResponse(static function () use ($update) {
@@ -305,9 +291,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $upgrade = new Upgrade(new System(), $configuration);
-
+        $upgrade = new Upgrade(new System(), $this->configuration);
         $upgrade->cleanUp();
 
         return $this->json(['message' => '✅ Cleanup successful.'], Response::HTTP_OK);

@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
@@ -40,12 +39,10 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
         $glossaryLanguage = Filter::filterVar($request->get('glossaryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $glossary = new Glossary($configuration);
+        $glossary = new Glossary($this->configuration);
         $glossary->setLanguage($glossaryLanguage);
 
         return $this->json($glossary->fetch($glossaryId), Response::HTTP_OK);
@@ -59,8 +56,6 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -70,7 +65,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($configuration);
+        $glossary = new Glossary($this->configuration);
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->delete($glossaryId)) {
@@ -88,8 +83,6 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         $glossaryLanguage = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -100,7 +93,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($configuration);
+        $glossary = new Glossary($this->configuration);
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
@@ -118,8 +111,6 @@ class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-
         $data = json_decode($request->getContent());
 
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -131,7 +122,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($configuration);
+        $glossary = new Glossary($this->configuration);
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {

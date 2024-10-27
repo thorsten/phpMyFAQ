@@ -26,7 +26,6 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Entity\SeoEntity;
@@ -455,7 +454,7 @@ class FaqController extends AbstractController
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
 
-        $faqPermission = new FaqPermission(Configuration::getConfigurationInstance());
+        $faqPermission = new FaqPermission($this->configuration);
 
         return $this->json(
             [
@@ -548,7 +547,7 @@ class FaqController extends AbstractController
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new \phpMyFAQ\Administration\Faq(Configuration::getConfigurationInstance());
+            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
             $success = false;
 
             foreach ($faqIds as $faqId) {
@@ -575,9 +574,8 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_DELETE);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
-        $faq = new Faq($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
+        $faq = new Faq($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -588,7 +586,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $adminLog = new AdminLog($configuration);
+        $adminLog = new AdminLog($this->configuration);
         $adminLog->log($user, 'Deleted FAQ ID ' . $faqId);
 
         try {
@@ -608,8 +606,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $configuration = Configuration::getConfigurationInstance();
-        $user = CurrentUser::getCurrentUser($configuration);
+        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -617,11 +614,11 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faqPermission = new FaqPermission($configuration);
-        $faqSearch = new Search($configuration);
-        $faqSearch->setCategory(new Category($configuration));
+        $faqPermission = new FaqPermission($this->configuration);
+        $faqSearch = new Search($this->configuration);
+        $faqSearch->setCategory(new Category($this->configuration));
 
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $configuration);
+        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
         $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($searchString)) {
@@ -629,7 +626,7 @@ class FaqController extends AbstractController
 
             $searchResultSet->reviewResultSet($searchResult);
 
-            $searchHelper = new SearchHelper($configuration);
+            $searchHelper = new SearchHelper($this->configuration);
             $searchHelper->setSearchTerm($searchString);
 
             return $this->json(
@@ -655,7 +652,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faq = new Faq(Configuration::getConfigurationInstance());
+        $faq = new Faq($this->configuration);
         $faq->setStickyFaqOrder($data->faqIds);
 
         return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);
@@ -678,7 +675,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faqImport = new Import(Configuration::getConfigurationInstance());
+        $faqImport = new Import($this->configuration);
 
         $errors = [];
 

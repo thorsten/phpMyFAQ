@@ -51,15 +51,13 @@ class ExportController extends AbstractController
         $inlineDisposition = Filter::filterVar($request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
         $type = Filter::filterVar($request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
-        $configuration = Configuration::getConfigurationInstance();
-
-        $faq = new Faq($configuration);
-        $category = new Category($configuration, [], false);
+        $faq = new Faq($this->configuration);
+        $category = new Category($this->configuration, [], false);
         $category->buildCategoryTree($categoryId);
 
         try {
-            $export = Export::create($faq, $category, $configuration, $type);
-            $content = $export->generate($categoryId, $downwards, $configuration->getLanguage()->getLanguage());
+            $export = Export::create($faq, $category, $this->configuration, $type);
+            $content = $export->generate($categoryId, $downwards, $this->configuration->getLanguage()->getLanguage());
 
             // Stream the file content
             $httpStreamer = new HttpStreamer($type, $content);

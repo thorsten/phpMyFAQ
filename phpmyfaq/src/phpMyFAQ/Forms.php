@@ -122,7 +122,7 @@ class Forms
             $inputId
         );
 
-        return (bool)$this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**

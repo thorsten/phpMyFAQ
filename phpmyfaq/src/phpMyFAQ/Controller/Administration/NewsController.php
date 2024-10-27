@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use DateTime;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\NewsMessage;

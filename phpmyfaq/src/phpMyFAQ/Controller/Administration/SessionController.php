@@ -19,7 +19,6 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use Exception;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
@@ -42,14 +41,13 @@ class SessionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $configuration = Configuration::getConfigurationInstance();
         $requestData = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $session = new Session($configuration);
+        $session = new Session($this->configuration);
         $data = $session->getSessionsByDate(
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour)
