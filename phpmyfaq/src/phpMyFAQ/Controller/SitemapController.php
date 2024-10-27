@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +32,7 @@ class SitemapController extends AbstractController
     public function index(): Response
     {
         $response = new Response();
-        $faqStatistics = new Statistics($this->configuration);
+        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
 
         $items = $faqStatistics->getTopTenData(self::PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 

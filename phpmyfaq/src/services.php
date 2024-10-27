@@ -21,6 +21,7 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
@@ -66,6 +67,12 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.configuration', Configuration::class)
         ->factory([Configuration::class, 'getConfigurationInstance']);
+
+    $services->set('phpmyfaq.faq.statistics', Statistics::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
 
     $services->set('phpmyfaq.instance', Instance::class)
         ->args([

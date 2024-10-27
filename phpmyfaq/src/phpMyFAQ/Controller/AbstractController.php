@@ -49,16 +49,19 @@ abstract class AbstractController
 {
     protected ?ContainerBuilder $container = null;
     protected ?Configuration $configuration = null;
+    protected ?CurrentUser $currentUser = null;
 
     /**
      * Check if the FAQ should be secured.
      *
      * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
         $this->container = $this->createContainer();
         $this->configuration = $this->container->get('phpmyfaq.configuration');
+        $this->currentUser = $this->container->get('phpmyfaq.user.current_user');
         $this->isSecured();
     }
 
@@ -85,8 +88,8 @@ abstract class AbstractController
     /**
      * Returns a Twig rendered template as string.
      *
-     * @param string $pathToTwigFile
-     * @param array  $templateVars
+     * @param string                                                  $pathToTwigFile
+     * @param array<string, array<int<0, max>, array<string, mixed>>> $templateVars
      * @return string
      * @throws Exception
      */
@@ -112,7 +115,7 @@ abstract class AbstractController
     }
 
     /**
-     * @throws UnauthorizedHttpException
+     * @throws UnauthorizedHttpException|\Exception
      */
     protected function hasValidToken(): void
     {
@@ -127,8 +130,7 @@ abstract class AbstractController
      */
     protected function isSecured(): void
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-        if (!$currentUser->isLoggedIn() && $this->configuration->get('security.enableLoginOnly')) {
+        if (!$this->currentUser->isLoggedIn() && $this->configuration->get('security.enableLoginOnly')) {
             throw new UnauthorizedHttpException('You are not allowed to view this content.');
         }
     }
@@ -139,7 +141,7 @@ abstract class AbstractController
      */
     protected function userIsAuthenticated(): void
     {
-        if (!CurrentUser::getCurrentUser($this->configuration)->isLoggedIn()) {
+        if (!$this->currentUser->isLoggedIn()) {
             throw new UnauthorizedHttpException('User is not authenticated.');
         }
     }
@@ -150,7 +152,7 @@ abstract class AbstractController
      */
     protected function userIsSuperAdmin(): void
     {
-        if (!CurrentUser::getCurrentUser($this->configuration)->isSuperAdmin()) {
+        if (!$this->currentUser->isSuperAdmin()) {
             throw new UnauthorizedHttpException('User is not super admin.');
         }
     }
@@ -161,7 +163,7 @@ abstract class AbstractController
      */
     protected function userHasGroupPermission(): void
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
@@ -174,11 +176,10 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userHasUserPermission(): void
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = $this->currentUser;
         if (
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
             !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
@@ -190,26 +191,22 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {
-        $configuration = Configuration::getConfigurationInstance();
-        $currentUser = CurrentUser::getCurrentUser($configuration);
+        $currentUser = $this->currentUser;
         if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
             throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permissionType->value));
         }
     }
 
     /**
-     * @throws Exception
      * @throws \JsonException
      */
     protected function captchaCodeIsValid(Request $request): bool
     {
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
         $captcha = Captcha::getInstance($this->configuration);
-        $captcha->setUserIsLoggedIn($currentUser->isLoggedIn());
+        $captcha->setUserIsLoggedIn($this->currentUser->isLoggedIn());
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
