@@ -40,6 +40,7 @@ services:
 
   phpmyfaq:
     build: .
+    container_name: phpmyfaq-41
     restart: always
     stdin_open: true
     environment:
