@@ -275,6 +275,7 @@ class UpdateController extends AbstractController
             };
             try {
                 if ($update->applyUpdates($progressCallback)) {
+                    $this->configuration->set('main.maintenanceMode', 'false');
                     echo json_encode(['message' => '✅ Database successfully updated.']);
                 }
             } catch (Exception $exception) {

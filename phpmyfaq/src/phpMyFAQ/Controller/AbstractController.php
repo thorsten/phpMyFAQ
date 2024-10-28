@@ -48,7 +48,9 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 abstract class AbstractController
 {
     protected ?ContainerBuilder $container = null;
+    /** @var Configuration|null */
     protected ?Configuration $configuration = null;
+    /** @var CurrentUser|null */
     protected ?CurrentUser $currentUser = null;
 
     /**
