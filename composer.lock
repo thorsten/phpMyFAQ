@@ -4764,16 +4764,16 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.7.6",
+            "version": "6.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "4cf1ab192e87e6916d20f93077b2bdfa96a2f848"
+                "reference": "cfbc0028cc23f057f2baf9e73bdc238153c22086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/4cf1ab192e87e6916d20f93077b2bdfa96a2f848",
-                "reference": "4cf1ab192e87e6916d20f93077b2bdfa96a2f848",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/cfbc0028cc23f057f2baf9e73bdc238153c22086",
+                "reference": "cfbc0028cc23f057f2baf9e73bdc238153c22086",
                 "shasum": ""
             },
             "require": {
@@ -4824,7 +4824,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.7.6"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.7.7"
             },
             "funding": [
                 {
@@ -4832,7 +4832,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-10-06T10:54:28+00:00"
+            "time": "2024-10-26T12:15:02+00:00"
         },
         {
             "name": "twig/intl-extra",
@@ -7724,7 +7724,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2.0"
     },
