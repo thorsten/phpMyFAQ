@@ -53,7 +53,7 @@ define('K_PATH_FONTS', PMF_SRC_DIR . '/fonts/');
 /*
  * cache directory for temporary files (full path)
  */
-define('K_PATH_CACHE', PMF_ROOT_DIR . '/images/');
+define('K_PATH_CACHE', PMF_ROOT_DIR . '/content/user/images/');
 
 /*
  * cache directory for temporary files (url path)
@@ -63,7 +63,7 @@ define('K_PATH_URL_CACHE', K_PATH_CACHE);
 /*
  * images directory
  */
-define('K_PATH_IMAGES', K_PATH_MAIN . 'images/');
+define('K_PATH_IMAGES', PMF_ROOT_DIR . '/content/user/images/');
 
 /*
  * blank image
@@ -543,6 +543,8 @@ class Wrapper extends TCPDF
                 chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
             );
         }
+
+        $file = parse_url($file, PHP_URL_PATH);
 
         parent::Image(
             $file,
