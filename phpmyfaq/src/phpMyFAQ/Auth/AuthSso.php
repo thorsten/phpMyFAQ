@@ -93,8 +93,6 @@ class AuthSso extends Auth implements AuthDriverInterface
                 }
             }
             if ($user === $login) {
-                $this->create($login, $password);
-
                 return true;
             } else {
                 return false;
