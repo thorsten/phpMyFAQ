@@ -379,10 +379,10 @@ class System
         try {
             foreach ($files as $file) {
                 if (
-                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) && !str_contains(
-                        (string)$file->getPath(),
-                        '/tests/'
-                    )
+                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) &&
+                    !str_contains((string)$file->getPath(), '/tests/') &&
+                    !str_contains((string)$file->getPath(), '/multisites/') &&
+                    !str_contains((string)$file->getPath(), '/upgrades/')
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', (string) $file->getPathname());
 
@@ -393,8 +393,8 @@ class System
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
             }
-        } catch (UnexpectedValueException $unexpectedValueException) {
-            $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();
+        } catch (UnexpectedValueException $exception) {
+            $hashes[$current . ' failed'] = $exception->getMessage();
         }
 
         return json_encode($hashes, JSON_THROW_ON_ERROR);
