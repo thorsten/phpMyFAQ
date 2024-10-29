@@ -17,8 +17,8 @@
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Date;
-use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 use stdClass;
@@ -68,7 +68,7 @@ readonly class StatisticsHelper
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate))) {
             $fp = @fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate), 'r');
-            while (($data = fgetcsv($fp, 1024, ';')) !== false) {
+            while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
             }
 
@@ -86,7 +86,7 @@ readonly class StatisticsHelper
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $lastDate))) {
             $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $lastDate), 'r');
 
-            while (($data = fgetcsv($fp, 1024, ';')) !== false) {
+            while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
             }
 

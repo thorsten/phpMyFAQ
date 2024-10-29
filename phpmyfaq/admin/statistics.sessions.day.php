@@ -15,11 +15,9 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -31,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $request = Request::createFromGlobals();
 
@@ -41,7 +39,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $firstHour = strtotime('midnight', $day);
     $lastHour = strtotime('tomorrow', $firstHour) - 1;
 
-    $session = new Session($faqConfig);
+    $session = $container->get('phpmyfaq.admin.session');
     $sessionData = $session->getSessionsByDate($firstHour, $lastHour);
     $date = new Date($faqConfig);
 

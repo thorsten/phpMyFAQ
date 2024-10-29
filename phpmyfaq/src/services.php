@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Administration\Category;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
@@ -31,6 +32,7 @@ use phpMyFAQ\Session;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -42,6 +44,11 @@ return static function (ContainerConfigurator $container): void {
     $services = $container->services();
 
     $services->set('phpmyfaq.admin.category', Category::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.admin.session', AdminSession::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
@@ -119,4 +126,10 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
+
+    $services->set('phpmyfaq.visits', Visits::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
 };

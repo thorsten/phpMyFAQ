@@ -15,17 +15,14 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\StatisticsHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,14 +30,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $request = Request::createFromGlobals();
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
-    $session = new Session($faqConfig);
+    $session = $container->get('phpmyfaq.admin.session');
     $date = new Date($faqConfig);
-    $visits = new Visits($faqConfig);
+    $visits = $container->get('phpmyfaq.visits');
     $statisticsHelper = new StatisticsHelper($session, $visits, $date);
 
     $stats = $statisticsHelper->getTrackingFilesStatistics();

@@ -26,6 +26,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 //
 // Debug mode:
@@ -178,7 +180,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
         session_save_path(PMF_SESSION_SAVE_PATH);
     }
+
     session_start();
+    $session = new Session(new PhpBridgeSessionStorage());
+    $session->start();
 }
 
 //

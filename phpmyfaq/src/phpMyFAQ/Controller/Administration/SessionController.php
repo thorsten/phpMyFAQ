@@ -47,7 +47,7 @@ class SessionController extends AbstractController
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $session = new Session($this->configuration);
+        $session = $this->container->get('phpmyfaq.admin.session');
         $data = $session->getSessionsByDate(
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour)
