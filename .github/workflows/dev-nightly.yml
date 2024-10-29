@@ -1,0 +1,103 @@
+name: phpMyFAQ Nightly Dev Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: ['ubuntu-latest']
+        php-versions: ['8.2']
+    name: phpMyFAQ Nightly Build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get current date
+        id: date
+        run: |
+          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Get Release name
+        run: |
+          echo "release_name=nightly-${{ env.date }}" >> $GITHUB_ENV
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: development-
+          custom_tag: ${{ env.release_name }}
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, curl, fileinfo, filter, gd, json, zip, xml, sqlite3, xdebug, pcov
+          coverage: xdebug
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: composer install --no-progress --prefer-dist --no-dev
+
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8.15.5
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Node.JS dependencies
+        run: pnpm install
+
+      - name: Run "pnpm build" to build frontend production build
+        run: pnpm build
+
+      - name: Create release artifact
+        uses: montudor/action-zip@v1.0.0
+        with:
+          args: zip -X -r phpMyFAQ-${{ env.release_name }}.zip phpmyfaq -x "phpmyfaq/src/libs/tecnickcom/tcpdf/fonts/*"
+
+      - name: Update nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          generate_release_notes: false
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          files: phpMyFAQ-${{ env.release_name }}.zip
