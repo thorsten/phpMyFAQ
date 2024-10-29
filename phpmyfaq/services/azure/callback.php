@@ -81,7 +81,7 @@ if ($session->getCurrentSessionKey()) {
         $user->setTokenData([
                 'refresh_token' => $oAuth->getRefreshToken(),
                 'access_token' => $oAuth->getAccessToken(),
-                'code_verifier' => $session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER),
+                'code_verifier' => $session->get(Session::ENTRA_ID_OAUTH_VERIFIER),
                 'jwt' => $oAuth->getToken()
             ]);
         $user->setSuccess(true);

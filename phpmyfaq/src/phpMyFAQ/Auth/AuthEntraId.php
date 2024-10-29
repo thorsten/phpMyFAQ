@@ -129,8 +129,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     {
         $this->createOAuthChallenge();
         $this->session->setCurrentSessionKey();
-        $this->session->set(Session::PMF_AZURE_AD_OAUTH_VERIFIER, $this->oAuthVerifier);
-        $this->session->setCookie(Session::PMF_AZURE_AD_OAUTH_VERIFIER, $this->oAuthVerifier, 7200, false);
+        $this->session->set(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
+        $this->session->setCookie(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier, 7200, false);
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .

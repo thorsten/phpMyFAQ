@@ -248,8 +248,8 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterVar($request->query->get(Session::PMF_GET_KEY_NAME_SESSIONID), FILTER_VALIDATE_INT);
-$sidCookie = Filter::filterVar($request->cookies->get(Session::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
+$sidGet = Filter::filterVar($request->query->get(Session::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterVar($request->cookies->get(Session::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
 $faqSession->setCurrentUser($user);
 
@@ -277,7 +277,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
-        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId());
+        $faqSession->setCookie(Session::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
@@ -286,13 +286,12 @@ if ($faqConfig->get('main.enableUserTracking')) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
         }
     }
-} elseif (
-    !$faqSession->setCookie(
-        Session::PMF_COOKIE_NAME_SESSIONID,
+} else {
+    $faqSession->setCookie(
+        Session::COOKIE_NAME_SESSION_ID,
         $faqSession->getCurrentSessionId(),
         $request->server->get('REQUEST_TIME') + 3600
-    )
-) {
+    );
     $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
 

@@ -22,6 +22,7 @@ use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\User\CurrentUser;
 use Random\RandomException;
 use stdClass;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,22 +34,22 @@ use Symfony\Component\HttpFoundation\Request;
 class Session
 {
     /** @var string Name of the "remember me" cookie */
-    final public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
+    final public const COOKIE_NAME_REMEMBER_ME = 'pmf-remember-me';
 
     /** @var string Name of the session cookie */
-    final public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
+    final public const COOKIE_NAME_SESSION_ID = 'pmf-sid';
 
     /** @var string Name of the session GET parameter */
-    final public const PMF_GET_KEY_NAME_SESSIONID = 'sid';
+    final public const KEY_NAME_SESSION_ID = 'sid';
 
     /** @var string EntraID session key */
-    final public const PMF_AZURE_AD_SESSIONKEY = 'phpmyfaq_aad_sessionkey';
+    final public const ENTRA_ID_SESSION_KEY = 'pmf-entra-id-session-key';
 
     /** @var string */
-    final public const PMF_AZURE_AD_OAUTH_VERIFIER = 'phpmyfaq_azure_ad_oauth_verifier';
+    final public const ENTRA_ID_OAUTH_VERIFIER = 'pmf-entra-id-oauth-verifier';
 
     /** @var string */
-    final public const PMF_AZURE_AD_JWT = 'phpmyfaq_azure_ad_jwt';
+    final public const ENTRA_ID_JWT = 'pmf-entra-id-jwt';
 
     private ?int $currentSessionId = null;
 
@@ -92,7 +93,7 @@ class Session
      */
     public function getCurrentSessionKey(): ?string
     {
-        return $this->currentSessionKey ?? $this->get(self::PMF_AZURE_AD_SESSIONKEY);
+        return $this->currentSessionKey ?? $this->get(self::ENTRA_ID_SESSION_KEY);
     }
 
     /**
@@ -106,7 +107,7 @@ class Session
             $this->createCurrentSessionKey();
         }
 
-        $this->set(self::PMF_AZURE_AD_SESSIONKEY, $this->currentSessionKey);
+        $this->set(self::ENTRA_ID_SESSION_KEY, $this->currentSessionKey);
 
         return $this;
     }
@@ -289,10 +290,10 @@ class Session
         $bots = 0;
         $banned = false;
         $this->currentSessionId = Filter::filterVar(
-            $request->query->get(self::PMF_GET_KEY_NAME_SESSIONID),
+            $request->query->get(self::KEY_NAME_SESSION_ID),
             FILTER_VALIDATE_INT
         );
-        $cookieId = Filter::filterVar($request->query->get(self::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
+        $cookieId = Filter::filterVar($request->query->get(self::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
 
         if (!is_null($cookieId)) {
             $this->setCurrentSessionId($cookieId);
@@ -335,7 +336,7 @@ class Session
                 );
                 // Check: force the session cookie to contains the current $sid
                 if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
-                    self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $this->getCurrentSessionId());
+                    self::setCookie(self::COOKIE_NAME_SESSION_ID, $this->getCurrentSessionId());
                 }
 
                 $query = sprintf(
@@ -381,22 +382,18 @@ class Session
      * @param int|string|null $sessionId Session ID
      * @param int             $timeout Cookie timeout
      */
-    public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600, bool $strict = true): bool
+    public function setCookie(string $name, int|string|null $sessionId, int $timeout = 3600, bool $strict = true): void
     {
         $request = Request::createFromGlobals();
 
-        return setcookie(
-            $name,
-            $sessionId ?? '',
-            [
-                'expires' => $request->server->get('REQUEST_TIME') + $timeout,
-                'path' => dirname($request->server->get('SCRIPT_NAME')),
-                'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
-                'samesite' => $strict ? 'strict' : '',
-                'secure' => $request->isSecure(),
-                'httponly' => true,
-            ]
-        );
+        Cookie::create($name)
+            ->withValue($sessionId ?? '')
+            ->withExpires($request->server->get('REQUEST_TIME') + $timeout)
+            ->withPath(dirname($request->server->get('SCRIPT_NAME')))
+            ->withDomain(parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST))
+            ->withSameSite($strict ? 'strict' : '')
+            ->withSecure($request->isSecure())
+            ->withHttpOnly();
     }
 
     /**

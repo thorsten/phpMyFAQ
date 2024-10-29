@@ -172,7 +172,7 @@ class CurrentUser extends User
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
                 $this->session->setCookie(
-                    Session::PMF_COOKIE_NAME_REMEMBERME,
+                    Session::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
                     Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
@@ -434,7 +434,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME, '');
+            $this->session->setCookie(Session::COOKIE_NAME_REMEMBER_ME, '');
         }
 
         session_destroy();
@@ -566,13 +566,13 @@ class CurrentUser extends User
     public static function getFromCookie(Configuration $configuration): ?CurrentUser
     {
         $request = Request::createFromGlobals();
-        if ($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME) === null) {
+        if ($request->cookies->get(Session::COOKIE_NAME_REMEMBER_ME) === null) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserByCookie($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME));
+        $user->getUserByCookie($request->cookies->get(Session::COOKIE_NAME_REMEMBER_ME));
 
         if (-1 === $user->getUserId()) {
             return null;

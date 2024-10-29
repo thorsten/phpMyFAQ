@@ -50,7 +50,7 @@ class OAuthTest extends TestCase
 
         $this->mockSession->expects($this->exactly(1))
             ->method('get')
-            ->with(Session::PMF_AZURE_AD_OAUTH_VERIFIER)
+            ->with(Session::ENTRA_ID_OAUTH_VERIFIER)
             ->willReturnOnConsecutiveCalls('', 'code_verifier');
 
         $this->mockClient->expects($this->once())
@@ -115,7 +115,7 @@ class OAuthTest extends TestCase
 
         $this->mockSession->expects($this->once())
             ->method('set')
-            ->with(Session::PMF_AZURE_AD_JWT, $this->stringContains('John Doe'));
+            ->with(Session::ENTRA_ID_JWT, $this->stringContains('John Doe'));
 
         $this->oAuth->setToken($token);
 
