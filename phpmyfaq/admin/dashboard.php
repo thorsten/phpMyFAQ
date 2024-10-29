@@ -21,7 +21,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;

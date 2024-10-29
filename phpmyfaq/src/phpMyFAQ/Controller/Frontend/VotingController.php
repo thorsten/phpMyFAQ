@@ -22,9 +22,9 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Rating;
-use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,7 +38,7 @@ class VotingController extends AbstractController
     {
         $user = CurrentUser::getCurrentUser($this->configuration);
         $rating = new Rating($this->configuration);
-        $session = new Session($this->configuration);
+        $session = new UserSession($this->configuration);
         $session->setCurrentUser($user);
 
         $data = json_decode($request->getContent());

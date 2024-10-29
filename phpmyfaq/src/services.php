@@ -28,10 +28,10 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
-use phpMyFAQ\Session;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -104,7 +104,7 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
-    $services->set('phpmyfaq.session', Session::class)
+    $services->set('phpmyfaq.session', UserSession::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

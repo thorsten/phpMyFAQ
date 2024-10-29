@@ -18,7 +18,7 @@
 use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Session;
+use phpMyFAQ\User\UserSession;
 
 //
 // Prepend and start the PHP session
@@ -34,7 +34,7 @@ require PMF_CONFIG_DIR . '/azure.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-$session = new Session($faqConfig);
+$session = new UserSession($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
 $auth = new AuthEntraId($faqConfig, $oAuth);
 

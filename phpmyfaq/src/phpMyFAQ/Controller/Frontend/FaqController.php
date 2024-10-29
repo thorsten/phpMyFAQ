@@ -22,18 +22,16 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
-use phpMyFAQ\Session;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +51,7 @@ class FaqController extends AbstractController
         $category = new Category($this->configuration);
         $question = new Question($this->configuration);
         $stopWords = new StopWords($this->configuration);
-        $session = new Session($this->configuration);
+        $session = new UserSession($this->configuration);
         $session->setCurrentUser($user);
 
         $language = $this->container->get('phpmyfaq.language');

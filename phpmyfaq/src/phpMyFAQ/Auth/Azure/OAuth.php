@@ -18,7 +18,7 @@
 namespace phpMyFAQ\Auth\Azure;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Session;
+use phpMyFAQ\User\UserSession;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -43,7 +43,7 @@ class OAuth
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
+    public function __construct(private readonly Configuration $configuration, private readonly UserSession $session)
     {
         $this->client = HttpClient::create();
     }
@@ -66,10 +66,10 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        if ($this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER) !== '') {
-            $codeVerifier = $this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER);
+        if ($this->session->get(UserSession::ENTRA_ID_OAUTH_VERIFIER) !== '') {
+            $codeVerifier = $this->session->get(UserSession::ENTRA_ID_OAUTH_VERIFIER);
         } else {
-            $codeVerifier = $this->session->getCookie(Session::ENTRA_ID_OAUTH_VERIFIER);
+            $codeVerifier = $this->session->getCookie(UserSession::ENTRA_ID_OAUTH_VERIFIER);
         }
 
         $response = $this->client->request('POST', $url, [
@@ -118,7 +118,7 @@ class OAuth
     {
         $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
         $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
-        $this->session->set(Session::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+        $this->session->set(UserSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
         return $this;
     }
 

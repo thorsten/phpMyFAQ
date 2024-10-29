@@ -16,12 +16,12 @@
  */
 
 use phpMyFAQ\Auth\AuthEntraId;
+use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
-use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -48,7 +48,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $code = Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_SPECIAL_CHARS);
 $error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
 
-$session = new Session($faqConfig);
+$session = new UserSession($faqConfig);
 $oAuth = new OAuth($faqConfig, $session);
 $auth = new AuthEntraId($faqConfig, $oAuth);
 
@@ -81,7 +81,7 @@ if ($session->getCurrentSessionKey()) {
         $user->setTokenData([
                 'refresh_token' => $oAuth->getRefreshToken(),
                 'access_token' => $oAuth->getAccessToken(),
-                'code_verifier' => $session->get(Session::ENTRA_ID_OAUTH_VERIFIER),
+                'code_verifier' => $session->get(UserSession::ENTRA_ID_OAUTH_VERIFIER),
                 'jwt' => $oAuth->getToken()
             ]);
         $user->setSuccess(true);

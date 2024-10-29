@@ -22,8 +22,8 @@ use phpMyFAQ\Auth\Azure\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
-use phpMyFAQ\Session;
 use phpMyFAQ\User;
+use phpMyFAQ\User\UserSession;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class AuthEntraId extends Auth implements AuthDriverInterface
 {
-    private readonly Session $session;
+    private readonly UserSession $session;
 
     private string $oAuthVerifier = '';
 
@@ -52,7 +52,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     public function __construct(Configuration $configuration, private readonly OAuth $oAuth)
     {
         $this->configuration = $configuration;
-        $this->session = new Session($configuration);
+        $this->session = new UserSession($configuration);
 
         parent::__construct($configuration);
     }
@@ -129,8 +129,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     {
         $this->createOAuthChallenge();
         $this->session->setCurrentSessionKey();
-        $this->session->set(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
-        $this->session->setCookie(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier, 7200, false);
+        $this->session->set(UserSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
+        $this->session->setCookie(UserSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier, 7200, false);
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .

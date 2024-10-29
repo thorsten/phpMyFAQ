@@ -15,11 +15,15 @@
  * @since     2007-03-31
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\User;
 
 use Exception;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database;
 use phpMyFAQ\Enums\SessionActionType;
-use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Network;
+use phpMyFAQ\Strings;
 use Random\RandomException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\IpUtils;
@@ -30,7 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @package phpMyFAQ
  */
-class Session
+class UserSession
 {
     /** @var string Name of the "remember me" cookie */
     final public const COOKIE_NAME_REMEMBER_ME = 'pmf-remember-me';
@@ -72,7 +76,7 @@ class Session
     /**
      * Sets the current session ID.
      */
-    public function setCurrentSessionId(int $currentSessionId): Session
+    public function setCurrentSessionId(int $currentSessionId): UserSession
     {
         $this->currentSessionId = $currentSessionId;
         return $this;
@@ -81,7 +85,7 @@ class Session
     /**
      * Sets current User object
      */
-    public function setCurrentUser(CurrentUser $currentUser): Session
+    public function setCurrentUser(CurrentUser $currentUser): UserSession
     {
         $this->currentUser = $currentUser;
         return $this;
@@ -100,7 +104,7 @@ class Session
      *
      * @throws Exception
      */
-    public function setCurrentSessionKey(): Session
+    public function setCurrentSessionKey(): UserSession
     {
         if (!isset($this->currentSessionKey)) {
             $this->createCurrentSessionKey();

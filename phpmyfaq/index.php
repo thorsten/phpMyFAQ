@@ -34,7 +34,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -44,6 +43,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -248,9 +248,9 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterVar($request->query->get(Session::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
-$sidCookie = Filter::filterVar($request->cookies->get(Session::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
-$faqSession = new Session($faqConfig);
+$sidGet = Filter::filterVar($request->query->get(UserSession::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterVar($request->cookies->get(UserSession::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$faqSession = new UserSession($faqConfig);
 $faqSession->setCurrentUser($user);
 
 // Note: do not track internal calls
@@ -277,7 +277,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
-        $faqSession->setCookie(Session::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
+        $faqSession->setCookie(UserSession::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
@@ -288,7 +288,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     }
 } else {
     $faqSession->setCookie(
-        Session::COOKIE_NAME_SESSION_ID,
+        UserSession::COOKIE_NAME_SESSION_ID,
         $faqSession->getCurrentSessionId(),
         $request->server->get('REQUEST_TIME') + 3600
     );
