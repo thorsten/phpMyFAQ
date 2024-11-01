@@ -9,6 +9,7 @@ use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
 use phpMyFAQ\Strings;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,22 +41,14 @@ class Tracking
     /**
      * @throws Exception
      */
-    public function log(string $action, int|string|null $data = null): void
+    public function log(string $action, int|string|null $data = null): bool
     {
         if (!$this->configuration->get('main.enableUserTracking')) {
-            return;
+            return false;
         }
 
-        $bots = 0;
-        $banned = false;
-        $this->currentSessionId = Filter::filterVar(
-            $this->request->query->get(UserSession::KEY_NAME_SESSION_ID),
-            FILTER_VALIDATE_INT
-        );
-        $cookieId = Filter::filterVar(
-            $this->request->query->get(UserSession::COOKIE_NAME_SESSION_ID),
-            FILTER_VALIDATE_INT
-        );
+        $this->initializeSessionId();
+        $cookieId = $this->getCookieId();
 
         if (!is_null($cookieId)) {
             $this->userSession->setCurrentSessionId($cookieId);
@@ -65,78 +58,117 @@ class Tracking
             $this->userSession->setCurrentSessionId(0);
         }
 
+        $bots = $this->countBots();
+        $remoteAddress = $this->getRemoteAddress();
+        $banned = $this->isBanned($remoteAddress);
+
+        if (0 === $bots && false === $banned) {
+            $this->handleSession($cookieId, $remoteAddress, $action, $data);
+        }
+
+        return true;
+    }
+
+    private function initializeSessionId(): void
+    {
+        $sessionId = $this->request->query->get(UserSession::KEY_NAME_SESSION_ID);
+        if ($sessionId) {
+            $this->currentSessionId = $sessionId;
+        }
+    }
+
+    private function getCookieId(): ?int
+    {
+        return Filter::filterVar(
+            $this->request->query->get(UserSession::COOKIE_NAME_SESSION_ID),
+            FILTER_VALIDATE_INT
+        );
+    }
+
+    private function countBots(): int
+    {
+        $bots = 0;
         foreach ($this->getBotIgnoreList() as $bot) {
-            if (Strings::strstr($this->request->headers->get('user-agent'), $bot)) {
+            if (Strings::strstr($this->getRequestHeaders()->get('user-agent') ?? 1, $bot)) {
                 ++$bots;
             }
         }
+        return $bots;
+    }
 
-        // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
+    public function getRemoteAddress(): string
+    {
         $remoteAddress = $this->request->getClientIp();
         $localAddresses = ['127.0.0.1', '::1'];
 
-        if (in_array($remoteAddress, $localAddresses) && $this->request->headers->has('X-Forwarded-For')) {
-            $remoteAddress = $this->request->headers->get('X-Forwarded-For');
+        if (in_array($remoteAddress, $localAddresses) && $this->getRequestHeaders()->has('X-Forwarded-For')) {
+            $remoteAddress = $this->getRequestHeaders()->get('X-Forwarded-For');
         }
 
-        // clean up as well
-        $remoteAddress = preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
+        return preg_replace('([^0-9a-z:.]+)i', '', (string)$remoteAddress);
+    }
 
-        // Anonymize IP address
-        $remoteAddress = IpUtils::anonymize($remoteAddress);
-
+    private function isBanned(string $remoteAddress): bool
+    {
         $network = new Network($this->configuration);
-        if ($network->isBanned($remoteAddress)) {
-            $banned = true;
+        return $network->isBanned(IpUtils::anonymize($remoteAddress));
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function handleSession(?int $cookieId, string $remoteAddress, string $action, int|string|null $data): void
+    {
+        if ($this->currentSessionId === null) {
+            $this->currentSessionId = $this->configuration->getDb()->nextId(
+                Database::getTablePrefix() . 'faqsessions',
+                'sid'
+            );
+
+            if (!is_null($cookieId) && (!$cookieId != $this->userSession->getCurrentSessionId())) {
+                $this->userSession->setCookie(
+                    UserSession::COOKIE_NAME_SESSION_ID,
+                    $this->userSession->getCurrentSessionId()
+                );
+            }
+
+            $query = sprintf(
+                "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
+                Database::getTablePrefix(),
+                $this->userSession->getCurrentSessionId(),
+                CurrentUser::getCurrentUser($this->configuration)->getUserId(),
+                $remoteAddress,
+                $this->request->server->get('REQUEST_TIME')
+            );
+
+            $this->configuration->getDb()->query($query);
         }
 
-        if (0 === $bots && false === $banned) {
-            if ($this->currentSessionId === null) {
-                $this->currentSessionId = $this->configuration->getDb()->nextId(
-                    Database::getTablePrefix() . 'faqsessions',
-                    'sid'
-                );
-                // Check: force the session cookie to contains the current $sid
-                if (!is_null($cookieId) && (!$cookieId != $this->userSession->getCurrentSessionId())) {
-                    $this->userSession->setCookie(
-                        UserSession::COOKIE_NAME_SESSION_ID,
-                        $this->userSession->getCurrentSessionId()
-                    );
-                }
+        $this->writeTrackingData($action, $data, $remoteAddress);
+    }
 
-                $query = sprintf(
-                    "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
-                    Database::getTablePrefix(),
-                    $this->userSession->getCurrentSessionId(),
-                    CurrentUser::getCurrentUser($this->configuration)->getUserId(),
-                    $remoteAddress,
-                    $this->request->server->get('REQUEST_TIME')
-                );
+    private function writeTrackingData(string $action, int|string|null $data, string $remoteAddress): void
+    {
+        $data = $this->userSession->getCurrentSessionId() . ';' .
+            str_replace(';', ',', $action) . ';' .
+            $data . ';' .
+            $remoteAddress . ';' .
+            str_replace(';', ',', $this->request->server->get('QUERY_STRING') ?? '') . ';' .
+            str_replace(';', ',', $this->request->server->get('HTTP_REFERER') ?? '') . ';' .
+            str_replace(';', ',', urldecode((string) $this->request->server->get('HTTP_USER_AGENT'))) . ';' .
+            $this->request->server->get('REQUEST_TIME') . ";\n";
 
-                $this->configuration->getDb()->query($query);
-            }
+        $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
 
-            $data = $this->userSession->getCurrentSessionId() . ';' .
-                str_replace(';', ',', $action) . ';' .
-                $data . ';' .
-                $remoteAddress . ';' .
-                str_replace(';', ',', $this->request->server->get('QUERY_STRING') ?? '') . ';' .
-                str_replace(';', ',', $this->request->server->get('HTTP_REFERER') ?? '') . ';' .
-                str_replace(';', ',', urldecode((string) $this->request->server->get('HTTP_USER_AGENT'))) . ';' .
-                $this->request->server->get('REQUEST_TIME') . ";\n";
-
-            $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
-
-            if (!is_file($file)) {
-                touch($file);
-            }
-
-            if (!is_writable($file)) {
-                $this->configuration->getLogger()->error('Cannot write to ' . $file);
-            }
-
-            file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
+        if (!is_file($file)) {
+            touch($file);
         }
+
+        if (!is_writable($file)) {
+            $this->configuration->getLogger()->error('Cannot write to ' . $file);
+        }
+
+        file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
     }
 
     /**
@@ -146,5 +178,10 @@ class Tracking
     private function getBotIgnoreList(): array
     {
         return explode(',', (string) $this->configuration->get('main.botIgnoreList'));
+    }
+
+    private function getRequestHeaders(): HeaderBag
+    {
+        return $this->request->headers;
     }
 }
