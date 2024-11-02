@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\User;
 
-use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\SessionActionType;
@@ -45,24 +44,12 @@ class UserSession
     /** @var string Name of the session GET parameter */
     final public const KEY_NAME_SESSION_ID = 'sid';
 
-    /** @var string EntraID session key */
-    final public const ENTRA_ID_SESSION_KEY = 'pmf-entra-id-session-key';
-
-    /** @var string */
-    final public const ENTRA_ID_OAUTH_VERIFIER = 'pmf-entra-id-oauth-verifier';
-
-    /** @var string */
-    final public const ENTRA_ID_JWT = 'pmf-entra-id-jwt';
-
     private ?int $currentSessionId = null;
-
-    private string $currentSessionKey;
 
     private ?CurrentUser $currentUser = null;
 
     public function __construct(private readonly Configuration $configuration)
     {
-        $this->createCurrentSessionKey();
     }
 
     /**
@@ -89,48 +76,6 @@ class UserSession
     {
         $this->currentUser = $currentUser;
         return $this;
-    }
-
-    /**
-     * Returns the current UUID session key
-     */
-    public function getCurrentSessionKey(): ?string
-    {
-        return $this->currentSessionKey ?? $this->get(self::ENTRA_ID_SESSION_KEY);
-    }
-
-    /**
-     * Sets the current UUID session key
-     *
-     * @throws Exception
-     */
-    public function setCurrentSessionKey(): UserSession
-    {
-        if (!isset($this->currentSessionKey)) {
-            $this->createCurrentSessionKey();
-        }
-
-        $this->set(self::ENTRA_ID_SESSION_KEY, $this->currentSessionKey);
-
-        return $this;
-    }
-
-    /**
-     * Creates the current UUID session key
-     */
-    public function createCurrentSessionKey(): void
-    {
-        $this->currentSessionKey = $this->uuid();
-    }
-
-    public function set(string $key, string $value): void
-    {
-        $_SESSION[$key] = $value;
-    }
-
-    public function get(string $key): string
-    {
-        return $_SESSION[$key] ?? '';
     }
 
     /**
@@ -298,39 +243,5 @@ class UserSession
             ->withSameSite($strict ? 'strict' : '')
             ->withSecure($request->isSecure())
             ->withHttpOnly();
-    }
-
-    /**
-     * Returns the value of a cookie.
-     *
-     * @param string $name Cookie name
-     */
-    public function getCookie(string $name): string
-    {
-        $request = Request::createFromGlobals();
-        return $request->cookies->get($name, '');
-    }
-
-    /**
-     * Returns a UUID Version 4 compatible universally unique identifier.
-     */
-    public function uuid(): string
-    {
-        try {
-            return sprintf(
-                '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0x0fff) | 0x4000,
-                random_int(0, 0x3fff) | 0x8000,
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0xffff)
-            );
-        } catch (RandomException $e) {
-            $this->configuration->getLogger()->error('Cannot generate UUID: ' . $e->getMessage());
-            return '';
-        }
     }
 }

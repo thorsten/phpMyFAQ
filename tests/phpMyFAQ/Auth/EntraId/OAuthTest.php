@@ -1,9 +1,8 @@
 <?php
 
-namespace phpMyFAQ\Auth\Azure;
+namespace phpMyFAQ\Auth\EntraId;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\User\UserSession;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -19,8 +18,7 @@ const AAD_OAUTH_SCOPE = 'fake_scope';
 class OAuthTest extends TestCase
 {
     private HttpClientInterface $mockClient;
-    private Configuration $mockConfiguration;
-    private UserSession $mockSession;
+    private Session $mockSession;
     private OAuth $oAuth;
 
     /**
@@ -29,10 +27,10 @@ class OAuthTest extends TestCase
     protected function setUp(): void
     {
         $this->mockClient = $this->createMock(HttpClientInterface::class);
-        $this->mockConfiguration = $this->createMock(Configuration::class);
-        $this->mockSession = $this->createMock(UserSession::class);
+        $this->mockSession = $this->createMock(Session::class);
+        $mockConfiguration = $this->createMock(Configuration::class);
 
-        $this->oAuth = new OAuth($this->mockConfiguration, $this->mockSession);
+        $this->oAuth = new OAuth($mockConfiguration, $this->mockSession);
     }
 
     /**
@@ -50,7 +48,7 @@ class OAuthTest extends TestCase
 
         $this->mockSession->expects($this->exactly(1))
             ->method('get')
-            ->with(UserSession::ENTRA_ID_OAUTH_VERIFIER)
+            ->with(Session::ENTRA_ID_OAUTH_VERIFIER)
             ->willReturnOnConsecutiveCalls('', 'code_verifier');
 
         $this->mockClient->expects($this->once())
@@ -115,7 +113,7 @@ class OAuthTest extends TestCase
 
         $this->mockSession->expects($this->once())
             ->method('set')
-            ->with(UserSession::ENTRA_ID_JWT, $this->stringContains('John Doe'));
+            ->with(Session::ENTRA_ID_JWT, $this->stringContains('John Doe'));
 
         $this->oAuth->setToken($token);
 

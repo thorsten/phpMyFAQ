@@ -485,7 +485,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 
 1. In the "Name" field, provide a name for your App Registration, e.g. "phpMyFAQ".
 2. Choose the supported account types that your application will authenticate: "Accounts in this organizational directory only"
-3. In the "Redirect URI" section, specify the redirect URI where Entra ID will send authentication responses: `http://www.example.com/faq/services/azure/callback.php`
+3. In the "Redirect URI" section, specify the redirect URI where Entra ID will send authentication responses: `http://www.example.com/faq/services/entra-id/callback.php`
 4. Click the "Register" button to create the App Registration.
 
 **Step 5: Configure Authentication**

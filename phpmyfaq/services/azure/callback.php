@@ -16,14 +16,20 @@
  */
 
 use phpMyFAQ\Auth\AuthEntraId;
-use phpMyFAQ\Auth\Azure\OAuth;
+use phpMyFAQ\Auth\EntraId\OAuth;
+use phpMyFAQ\Auth\EntraId\Session as EntraIdSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(-1);
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
@@ -48,13 +54,16 @@ $faqConfig = Configuration::getConfigurationInstance();
 $code = Filter::filterInput(INPUT_GET, 'code', FILTER_SANITIZE_SPECIAL_CHARS);
 $error = Filter::filterInput(INPUT_GET, 'error_description', FILTER_SANITIZE_SPECIAL_CHARS);
 
-$session = new UserSession($faqConfig);
-$oAuth = new OAuth($faqConfig, $session);
+$session = new Session(new PhpBridgeSessionStorage());
+$session->start();
+
+$entraIdSession = new EntraIdSession($faqConfig, $session);
+$oAuth = new OAuth($faqConfig, $entraIdSession);
 $auth = new AuthEntraId($faqConfig, $oAuth);
 
 $redirect = new RedirectResponse($faqConfig->getDefaultUrl());
 
-if ($session->getCurrentSessionKey()) {
+if ($entraIdSession->getCurrentSessionKey()) {
     try {
         $token = $oAuth->getOAuthToken($code);
         $oAuth->setToken($token)->setAccessToken($token->access_token)->setRefreshToken($token->refresh_token);
@@ -81,7 +90,7 @@ if ($session->getCurrentSessionKey()) {
         $user->setTokenData([
                 'refresh_token' => $oAuth->getRefreshToken(),
                 'access_token' => $oAuth->getAccessToken(),
-                'code_verifier' => $session->get(UserSession::ENTRA_ID_OAUTH_VERIFIER),
+                'code_verifier' => $entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER),
                 'jwt' => $oAuth->getToken()
             ]);
         $user->setSuccess(true);

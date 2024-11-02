@@ -232,7 +232,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     }
 
     if ($faqConfig->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
-        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
+        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/entra-id/logout.php');
         $redirect->send();
     }
 

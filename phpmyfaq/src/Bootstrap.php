@@ -195,6 +195,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 } else {
     $ldap = null;
 }
+
 //
 // Connect to Elasticsearch if enabled
 //
