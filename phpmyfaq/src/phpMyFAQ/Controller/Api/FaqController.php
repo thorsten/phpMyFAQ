@@ -417,14 +417,14 @@ class FaqController extends AbstractController
             {
                 "question": "How can I survive without phpMyFAQ?",
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de",
-                "id": "8",
-                "order": "1"
+                "id": 8,
+                "order": 1
             },
             {
                 "question": "Is there life after death?",
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en",
-                "id": "10",
-                "order": "2"
+                "id": 10,
+                "order": 2
             }
         ]')
     )]

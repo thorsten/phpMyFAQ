@@ -1608,8 +1608,8 @@ class Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
-                $data['id'] = $row->id;
-                $data['order'] = $row->sticky_order;
+                $data['id'] = (int) $row->id;
+                $data['order'] = (int) $row->sticky_order;
 
                 $sticky[] = $data;
             }
