@@ -136,7 +136,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
             AAD_OAUTH_TENANTID,
             AAD_OAUTH_CLIENTID,
-            urlencode($this->configuration->getDefaultUrl() . 'services/entra-id/callback.php'),
+            urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
             self::ENTRAID_CHALLENGE_METHOD

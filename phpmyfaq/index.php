@@ -232,7 +232,7 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
     }
 
     if ($faqConfig->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
-        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/entra-id/logout.php');
+        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'services/azure/logout.php');
         $redirect->send();
     }
 
@@ -279,11 +279,11 @@ if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
         $faqSession->setCookie(UserSession::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie) && !is_null($sidGet)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $sidGet, $faqLangCode);
         }
     }
 } else {
