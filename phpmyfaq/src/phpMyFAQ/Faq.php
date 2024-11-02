@@ -1151,11 +1151,14 @@ class Faq
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             'SELECT
-                *
+                fd.*, COALESCE(fdg.group_id, -1) AS group_id, fdu.user_id
             FROM
                 %sfaqdata fd
-            LEFT JOIN
-                %sfaqdata_group fdg
+            LEFT JOIN (
+                SELECT record_id, group_id FROM %sfaqdata_group fdg WHERE fdg.group_id <> -1
+                UNION ALL
+                SELECT fd.id AS record_id, -1 AS group_id FROM %sfaqdata fd WHERE fd.solution_id = %d
+            ) AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
@@ -1167,6 +1170,8 @@ class Faq
                 %s',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $solutionId,
             Database::getTablePrefix(),
             $solutionId,
             $queryHelper->queryPermission($this->groupSupport)
