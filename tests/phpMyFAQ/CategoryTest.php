@@ -4,12 +4,17 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CategoryEntity;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CategoryTest extends TestCase
 {
     private Category $category;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,7 +23,7 @@ class CategoryTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 

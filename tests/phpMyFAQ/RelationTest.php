@@ -4,8 +4,10 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class RelationTest extends TestCase
 {
@@ -21,6 +23,7 @@ class RelationTest extends TestCase
 
     /**
      * @throws \Exception
+     * @throws Exception
      */
     public function testGetAllRelatedByQuestion(): void
     {
@@ -37,7 +40,7 @@ class RelationTest extends TestCase
         $configuration = new Configuration($this->db);
         $configuration->set('search.enableRelevance', false);
 
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 

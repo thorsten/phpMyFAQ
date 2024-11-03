@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Language\LanguageCodes;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class Language
@@ -42,8 +43,10 @@ class Language
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly SessionInterface $session
+    ) {
     }
 
     /**
@@ -95,7 +98,7 @@ class Language
     {
         $detectedLang = $this->detectLanguage($configDetection, $configLanguage);
         self::$language = $this->selectLanguage($detectedLang);
-        $_SESSION['lang'] = self::$language;
+        $this->session->set('lang', self::$language);
         return self::$language;
     }
 
@@ -166,7 +169,7 @@ class Language
 
     private function getSessionLanguage(): ?string
     {
-        $lang = $_SESSION['lang'] ?? null;
+        $lang = $this->session->get('lang');
         return $this->isASupportedLanguage($lang) ? trim((string) $lang) : null;
     }
 

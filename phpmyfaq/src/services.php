@@ -28,6 +28,7 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -35,6 +36,7 @@ use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 return static function (ContainerConfigurator $container): void {
     // Parameters
@@ -42,6 +44,8 @@ return static function (ContainerConfigurator $container): void {
 
     // Services
     $services = $container->services();
+
+    $services->set('session', Session::class);
 
     $services->set('phpmyfaq.admin.category', Category::class)
         ->args([
@@ -101,12 +105,19 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.language', Language::class)
         ->args([
-            new Reference('phpmyfaq.configuration')
+            new Reference('phpmyfaq.configuration'),
+            new Reference('session')
         ]);
 
     $services->set('phpmyfaq.session', UserSession::class)
         ->args([
             new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.session.token', Token::class)
+        ->factory([Token::class, 'getInstance'])
+        ->args([
+            new Reference('session')
         ]);
 
     $services->set('phpmyfaq.sitemap', Sitemap::class)

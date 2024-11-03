@@ -5,7 +5,9 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CommentsTest extends TestCase
 {
@@ -13,6 +15,9 @@ class CommentsTest extends TestCase
 
     private Configuration $configuration;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -20,7 +25,7 @@ class CommentsTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
-        $language = new Language($this->configuration);
+        $language = new Language($this->configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $this->configuration->setLanguage($language);
 

@@ -139,7 +139,7 @@ class SetupController
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates', true);
         $twigWrapper->setSetup(true);
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 

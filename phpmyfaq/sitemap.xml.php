@@ -39,12 +39,10 @@ try {
     echo $e->getMessage();
 }
 
-$faqConfig = $container->get('phpmyfaq.configuration');
-
 $routes = new RouteCollection();
 $routes->add('public.sitemap.xml', new Route('/sitemap.xml', ['_controller' => [SitemapController::class, 'index']]));
 
-$app = new Application($faqConfig);
+$app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {

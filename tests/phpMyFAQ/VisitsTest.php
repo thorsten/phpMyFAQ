@@ -2,8 +2,10 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class VisitsTest extends TestCase
 {
@@ -12,6 +14,10 @@ class VisitsTest extends TestCase
 
     private Visits $visits;
 
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,7 +33,7 @@ class VisitsTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
 
-        $language = new Language($this->configuration);
+        $language = new Language($this->configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $this->configuration->setLanguage($language);
 

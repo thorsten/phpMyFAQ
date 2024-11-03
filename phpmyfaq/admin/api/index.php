@@ -17,15 +17,26 @@
  */
 
 use phpMyFAQ\Application;
-use phpMyFAQ\Configuration;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 require '../../src/Bootstrap.php';
 
-$faqConfig = Configuration::getConfigurationInstance();
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../../src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
 
 $routes = include PMF_SRC_DIR  . '/admin-routes.php';
 
-$app = new Application($faqConfig);
+$app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {

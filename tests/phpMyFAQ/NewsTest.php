@@ -5,11 +5,17 @@ namespace phpMyFAQ;
 use DateTime;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\NewsMessage;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class NewsTest extends TestCase
 {
     private News $news;
+
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,7 +24,7 @@ class NewsTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
 
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $configuration->setLanguage($language);
 
         $this->news = new News($configuration);
