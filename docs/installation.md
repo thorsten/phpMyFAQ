@@ -30,7 +30,7 @@ You can use phpMyFAQ with the following web servers:
 - mod_ssl (if you wish to run phpMyFAQ under SSL)
 
 You should also ensure you have `AllowOverride All` set in the `<Directory>` and/or `<VirtualHost>` blocks so
-that the `.htaccess` file processes correctly, and rewrite rules take effect. Please check, if your path in 
+that the `.htaccess` file processes correctly, and rewrite rules take effect. Please check, if your path in
 `RewriteBase` is correct. By default, it's `/`, the root path. If you installed phpMyFAQ in the folder `faq`,
 it has to be `RewriteBase /faq/`.
 
@@ -542,7 +542,7 @@ sudo systemctl restart nginx
 sudo systemctl restart php-fpm
 ```
 
-## Step 4: Test the Configuration
+#### Step 4: Test the Configuration
 
 To confirm that `REMOTE_USER` is being passed correctly, create a simple PHP file to output the `REMOTE_USER` value:
 
