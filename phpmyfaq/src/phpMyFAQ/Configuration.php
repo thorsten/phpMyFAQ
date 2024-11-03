@@ -225,6 +225,8 @@ class Configuration
 
     /**
      * Fetches and returns all configuration items into an array.
+     *
+     * @return string[]
      */
     public function getAll(): array
     {
