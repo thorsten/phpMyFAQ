@@ -41,7 +41,7 @@ $templateVars = [
     'orderingStickyFaqsActivated' => $faqConfig->get('records.orderStickyFaqsCustom'),
     'alertMessageStickyFaqsDeactivated' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
     'alertMessageNoStickyRecords' => Translation::get('msgNoStickyFaqs'),
-    'csrfToken' => Token::getInstance()->getTokenString('order-stickyfaqs')
+    'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('order-stickyfaqs')
 ];
 
 echo $template->render($templateVars);

@@ -48,7 +48,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $ratingData = new RatingData($faqConfig);
     $ratings = new Rating($faqConfig);
 
-    if ($csrfToken && !Token::getInstance()->verifyToken('clear-statistics', $csrfToken)) {
+    if ($csrfToken && !Token::getInstance($container->get('session'))->verifyToken('clear-statistics', $csrfToken)) {
         $clearStatistics = false;
     } else {
         $clearStatistics = true;
@@ -68,7 +68,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $templateVars = [
         'adminHeaderRatings' => Translation::get('ad_rs'),
-        'csrfToken' => Token::getInstance()->getTokenString('clear-statistics'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('clear-statistics'),
         'buttonDeleteAllVotings' => Translation::get('ad_delete_all_votings'),
         'isDeleteAllVotings' => 'clear-statistics' === $action && $clearStatistics,
         'isDeletedStatistics' => $deletedStatistics ?? false,

@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
 $captcha = $container->get('phpmyfaq.captcha');
@@ -149,7 +149,7 @@ $templateVars = [
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'msgYourComment' => Translation::get('msgYourComment'),
-    'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
+    'csrfInput' => Token::getInstance($container->get('session'))->getTokenInput('add-comment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(

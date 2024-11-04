@@ -85,7 +85,7 @@ class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance()->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

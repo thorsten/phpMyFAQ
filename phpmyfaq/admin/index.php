@@ -224,7 +224,7 @@ if (isset($userAuth)) {
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 if (
     $csrfToken &&
-    Token::getInstance()->verifyToken('admin-logout', $csrfToken) &&
+    Token::getInstance($container->get('session'))->verifyToken('admin-logout', $csrfToken) &&
     $action === 'logout' &&
     $user->isLoggedIn()
 ) {

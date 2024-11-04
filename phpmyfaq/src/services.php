@@ -20,6 +20,7 @@ use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
@@ -75,6 +76,11 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.category.order', Order::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.category.permission', Permission::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -109,11 +115,6 @@ return static function (ContainerConfigurator $container): void {
             new Reference('session')
         ]);
 
-    $services->set('phpmyfaq.session', UserSession::class)
-        ->args([
-            new Reference('phpmyfaq.configuration')
-        ]);
-
     $services->set('phpmyfaq.session.token', Token::class)
         ->factory([Token::class, 'getInstance'])
         ->args([
@@ -134,6 +135,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.user.current_user', CurrentUser::class)
         ->factory([CurrentUser::class, 'getCurrentUser'])
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.user.session', UserSession::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

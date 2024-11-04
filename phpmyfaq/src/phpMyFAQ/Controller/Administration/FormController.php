@@ -40,7 +40,7 @@ class FormController extends AbstractController
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance()->verifyToken('activate-input', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -62,7 +62,7 @@ class FormController extends AbstractController
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance()->verifyToken('require-input', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('require-input', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -85,7 +85,7 @@ class FormController extends AbstractController
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance()->verifyToken('edit-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -107,7 +107,7 @@ class FormController extends AbstractController
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance()->verifyToken('delete-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -138,7 +138,7 @@ class FormController extends AbstractController
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance()->verifyToken('add-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('add-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $faqConfig = $container->get('phpmyfaq.configuration');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->userTracking('forgot_password', 0);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());

@@ -48,7 +48,7 @@ class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -150,7 +150,7 @@ class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

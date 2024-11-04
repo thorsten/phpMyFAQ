@@ -51,11 +51,11 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $csrfTokenFromPost = Filter::filterVar($request->request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfTokenFromGet = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if ($csrfTokenFromPost && !Token::getInstance()->verifyToken('sessions', $csrfTokenFromPost)) {
+    if (!Token::getInstance($container->get('session'))->verifyToken('sessions', $csrfTokenFromPost)) {
         $statdelete = null;
     }
 
-    if ($csrfTokenFromGet && !Token::getInstance()->verifyToken('clear-visits', $csrfTokenFromGet)) {
+    if (!Token::getInstance($container->get('session'))->verifyToken('clear-visits', $csrfTokenFromGet)) {
         $clearVisits = false;
     } else {
         $clearVisits = true;
@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $templateVars = [
         'adminHeaderSessions' => Translation::get('ad_stat_sess'),
-        'csrfTokenClearVisits' => Token::getInstance()->getTokenString('clear-visits'),
+        'csrfTokenClearVisits' => Token::getInstance($container->get('session'))->getTokenString('clear-visits'),
         'msgClearVisits' => Translation::get('ad_clear_all_visits'),
         'hasMessage' => $hasMessage ?? false,
         'message' => $message ?? '',
@@ -93,13 +93,13 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
         'buttonOkay' => Translation::get('ad_stat_ok'),
         'msgSessionManagement' => Translation::get('ad_stat_management'),
-        'csrfTokenSessions' => Token::getInstance()->getTokenInput('sessions'),
+        'csrfTokenSessions' => Token::getInstance($container->get('session'))->getTokenInput('sessions'),
         'msgChooseMonth' => Translation::get('ad_stat_choose'),
         'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
         'buttonDeleteMonth' => Translation::get('ad_stat_delete'),
         'msgExportSessions' => Translation::get('msgExportSessions'),
         'msgExportSessionsAsCSV' => Translation::get('msgExportSessionsAsCSV'),
-        'csrfTokenExport' => Token::getInstance()->getTokenString('export-sessions'),
+        'csrfTokenExport' => Token::getInstance($container->get('session'))->getTokenString('export-sessions'),
         'dateToday' => date('Y-m-d'),
         'msgExportSessionsFrom' => Translation::get('msgExportSessionsFrom'),
         'msgExportSessionsTo' => Translation::get('msgExportSessionsTo'),

@@ -19,7 +19,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\SeoEntity;
@@ -38,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $currentUser = CurrentUser::getCurrentUser($faqConfig);
 
 $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -60,7 +59,10 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     ];
 
     // Save a new category
-    if ($action === 'savecategory' && Token::getInstance()->verifyToken('save-category', $csrfToken)) {
+    if (
+        $action === 'savecategory' &&
+        Token::getInstance($container->get('session'))->verifyToken('save-category', $csrfToken)
+    ) {
         $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -176,7 +178,10 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     }
 
     // Updates an existing category
-    if ($action === 'updatecategory' && Token::getInstance()->verifyToken('update-category', $csrfToken)) {
+    if (
+        $action === 'updatecategory' &&
+        Token::getInstance($container->get('session'))->verifyToken('update-category', $csrfToken)
+    ) {
         $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);

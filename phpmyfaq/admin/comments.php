@@ -53,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELET
         'currentLocale' => $faqConfig->getLanguage()->getLanguage(),
         'faqComments' => $faqComments,
         'newsComments' => $newsComments,
-        'csrfToken' => Token::getInstance()->getTokenString('delete-comment'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('delete-comment'),
     ];
 
     echo $template->render($templateVars);

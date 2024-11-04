@@ -40,7 +40,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::BACKUP->value
         'adminBackupCardBody' => Translation::get('ad_csv_make'),
         'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),
         'adminBackupLinkLogs' => Translation::get('ad_csv_linklog'),
-        'csrfToken' => Token::getInstance()->getTokenString('restore'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('restore'),
         'adminRestoreCardHeader' => Translation::get('ad_csv_head2'),
         'adminRestoreCardBody' => Translation::get('ad_csv_restore'),
         'adminRestoreLabel' => Translation::get('ad_csv_file'),

@@ -2,19 +2,27 @@
 
 namespace phpMyFAQ\Session;
 
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class TokenTest extends TestCase
 {
+    private SessionInterface $session;
+
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $_SERVER['SERVER_PORT'] = 443;
+        $this->session = $this->createMock(SessionInterface::class);
     }
 
     public function testGetInstance(): void
     {
-        $token1 = Token::getInstance();
-        $token2 = Token::getInstance();
+        $token1 = Token::getInstance($this->session);
+        $token2 = Token::getInstance($this->session);
 
         $this->assertInstanceOf(Token::class, $token1);
         $this->assertSame($token1, $token2);
@@ -25,7 +33,7 @@ class TokenTest extends TestCase
      */
     public function testGetTokenInput(): void
     {
-        $token = Token::getInstance();
+        $token = Token::getInstance($this->session);
         $page = 'example_page';
 
         $tokenInput = $token->getTokenInput($page);
@@ -41,7 +49,7 @@ class TokenTest extends TestCase
      */
     public function testVerifyToken(): void
     {
-        $token = Token::getInstance();
+        $token = Token::getInstance($this->session);
         $page = 'example_page';
 
         $_POST['pmf-csrf-token'] = $token->getTokenString($page);
@@ -55,7 +63,7 @@ class TokenTest extends TestCase
      */
     public function testRemoveToken(): void
     {
-        $token = Token::getInstance();
+        $token = Token::getInstance($this->session);
         $page = 'example_page';
 
         // Add a token to session and cookie

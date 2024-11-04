@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse
@@ -40,7 +40,10 @@ class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})
+        ) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

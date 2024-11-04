@@ -46,7 +46,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
     $templateVars = [
-        'csrfTokenInput' => Token::getInstance()->getTokenInput('save-category'),
+        'csrfTokenInput' => Token::getInstance($container->get('session'))->getTokenInput('save-category'),
         'faqLangCode' => $faqLangCode,
         'parentId' => $parentId,
         'ad_categ_new' => Translation::get('ad_categ_new'),

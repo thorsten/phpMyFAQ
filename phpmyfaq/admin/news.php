@@ -45,7 +45,7 @@ $templateVars = [
     'defaultUrl' => $faqConfig->getDefaultUrl(),
     'enableWysiwyg' => $faqConfig->get('main.enableWysiwygEditor'),
     'ad_news_add' => Translation::get('ad_news_add'),
-    'csrfToken_saveNews' => Token::getInstance()->getTokenString('save-news'),
+    'csrfToken_saveNews' => Token::getInstance($container->get('session'))->getTokenString('save-news'),
     'ad_news_author_name' => Translation::get('ad_news_author_name'),
     'ad_news_set_active' => Translation::get('ad_news_set_active'),
     'ad_news_link_url' => Translation::get('ad_news_link_url'),
@@ -82,10 +82,10 @@ $templateVars = [
     'ad_news_delsuc' => Translation::get('ad_news_delsuc'),
     'ad_news_updatesuc' => Translation::get('ad_news_updatesuc'),
     'msgDeleteNews' => Translation::get('msgDeleteNews'),
-    'csrfToken_deleteNews' => Token::getInstance()->getTokenString('delete-news'),
-    'csrfToken_updateNews' => Token::getInstance()->getTokenString('update-news'),
+    'csrfToken_deleteNews' => Token::getInstance($container->get('session'))->getTokenString('delete-news'),
+    'csrfToken_updateNews' => Token::getInstance($container->get('session'))->getTokenString('update-news'),
     'ad_entry_active' => Translation::get('ad_entry_active'),
-    'csrfToken_activateNews' => Token::getInstance()->getTokenString('activate-news')
+    'csrfToken_activateNews' => Token::getInstance($container->get('session'))->getTokenString('activate-news')
 ];
 
 if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_ADD)) {

@@ -42,7 +42,7 @@ class SessionController extends AbstractController
 
         $requestData = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('export-sessions', $requestData->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

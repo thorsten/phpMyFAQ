@@ -25,7 +25,6 @@ class ApplicationTest extends TestCase
         $this->assertInstanceOf(Application::class, $application);
     }
 
-
     /**
      * @throws Exception
      * @throws \ReflectionException

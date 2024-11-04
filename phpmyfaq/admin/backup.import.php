@@ -40,7 +40,7 @@ $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHAR
 
 if (
     $user->perm->hasPermission($user->getUserId(), PermissionType::RESTORE->value) &&
-    Token::getInstance()->verifyToken('restore', $csrfToken)
+    Token::getInstance($container->get('session'))->verifyToken('restore', $csrfToken)
 ) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $template = $twig->loadTemplate('./admin/backup/import.twig');

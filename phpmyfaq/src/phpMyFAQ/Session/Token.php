@@ -20,6 +20,7 @@ namespace phpMyFAQ\Session;
 use Exception;
 use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Token
 {
@@ -40,7 +41,7 @@ class Token
     /**
      * Constructor.
      */
-    final private function __construct()
+    final private function __construct(private readonly SessionInterface $session)
     {
     }
 
@@ -89,10 +90,13 @@ class Token
     }
 
 
-    public static function getInstance(): Token
+    /**
+     * @throws Exception
+     */
+    public static function getInstance(SessionInterface $session): Token
     {
         if (!(self::$token instanceof Token)) {
-            self::$token = new self();
+            self::$token = new self($session);
         }
 
         return self::$token;
@@ -181,7 +185,7 @@ class Token
     {
         $request = Request::createFromGlobals();
         $randomToken = md5(base64_encode(random_bytes(32)));
-        $token = new self();
+        $token = new self($this->session);
         $token
             ->setPage($page)
             ->setExpiry(time() + $expiry)

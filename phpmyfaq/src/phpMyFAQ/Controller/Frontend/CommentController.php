@@ -70,7 +70,10 @@ class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance()->verifyToken('add-comment', $data->{'pmf-csrf-token'})) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('add-comment', $data->{'pmf-csrf-token'})
+        ) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 

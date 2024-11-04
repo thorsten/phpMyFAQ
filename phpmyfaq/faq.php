@@ -68,7 +68,7 @@ $faqPermission = new Permission($faqConfig);
 $seo = new Seo($faqConfig);
 $attachmentHelper = new AttachmentHelper();
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
 $converter = new CommonMarkConverter([
@@ -344,7 +344,7 @@ $templateVars = [
     'msgYourComment' => Translation::get('msgYourComment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    'csrfTokenAddComment' => Token::getInstance()->getTokenString('add-comment'),
+    'csrfTokenAddComment' => Token::getInstance($container->get('session'))->getTokenString('add-comment'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
@@ -360,8 +360,8 @@ $templateVars = [
     'bookmarkAction' => $bookmarkAction ?? '',
     'msgBookmarkAdded' => Translation::get('msgBookmarkAdded'),
     'msgBookmarkRemoved' => Translation::get('msgBookmarkRemoved'),
-    'csrfTokenRemoveBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
-    'csrfTokenAddBookmark' => Token::getInstance()->getTokenString('add-bookmark')
+    'csrfTokenRemoveBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
+    'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark')
 ];
 
 return $templateVars;

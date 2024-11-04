@@ -157,7 +157,7 @@ if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER
 // Get CSRF Token
 //
 $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
-if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)) {
+if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyToken('logout', $csrfToken)) {
     $csrfChecked = true;
 } else {
     $csrfChecked = false;
@@ -638,7 +638,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         'msgBookmarks' => Translation::get('msgBookmarks'),
         'msgUserRemoval' => Translation::get('ad_menu_RequestRemove'),
         'msgLogoutUser' => Translation::get('ad_menu_logout'),
-        'csrfLogout' => Token::getInstance()->getTokenString('logout'),
+        'csrfLogout' => Token::getInstance($container->get('session'))->getTokenString('logout'),
     ];
 }
 
