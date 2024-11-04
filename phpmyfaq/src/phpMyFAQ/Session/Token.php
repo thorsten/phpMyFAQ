@@ -163,19 +163,22 @@ class Token
 
     public function removeToken(string $page): bool
     {
-        unset($_COOKIE[$this->getCookie($page)], $_SESSION[self::PMF_SESSION_NAME][$page]);
+        Request::createFromGlobals()->cookies->remove($this->getCookieName($page));
+        $this->session->remove(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
 
         return true;
     }
 
     private function getSession(string $page): ?Token
     {
-        return empty($_SESSION[self::PMF_SESSION_NAME][$page]) ? null : $_SESSION[self::PMF_SESSION_NAME][$page];
+        return $this->session->get(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
     }
 
     private function getCookie(string $page): string
     {
-        return empty($_COOKIE[$this->getCookieName($page)]) ? '' : $_COOKIE[$this->getCookieName($page)];
+        $cookieValue = Request::createFromGlobals()->cookies->get($this->getCookieName($page), '');
+
+        return empty($cookieValue) ? '' : $cookieValue;
     }
 
     /**
@@ -205,7 +208,9 @@ class Token
             ]
         );
 
-        return $_SESSION[self::PMF_SESSION_NAME][$page] = $token;
+        $this->session->set(sprintf('%s.%s', self::PMF_SESSION_NAME, $page), $token);
+
+        return $token;
     }
 
     private function getCookieName(string $page): string
