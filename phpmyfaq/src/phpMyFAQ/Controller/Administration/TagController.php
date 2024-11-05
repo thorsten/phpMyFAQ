@@ -47,7 +47,7 @@ class TagController extends AbstractController
 
         $postData = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('tags', $postData->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('tags', $postData->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

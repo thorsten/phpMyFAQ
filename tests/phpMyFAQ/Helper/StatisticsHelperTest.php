@@ -3,8 +3,8 @@
 namespace phpMyFAQ\Helper;
 
 use org\bovigo\vfs\vfsStreamDirectory;
+use phpMyFAQ\Administration\Session;
 use phpMyFAQ\Date;
-use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Visits;
 use PHPUnit\Framework\MockObject\Exception;

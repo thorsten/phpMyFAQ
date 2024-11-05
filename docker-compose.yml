@@ -35,12 +35,12 @@ services:
     ports:
       - 1433:1433
     environment:
-      SA_PASSWORD: 'phpMyFAQ-4.0'
+      SA_PASSWORD: 'phpMyFAQ-4.1'
       ACCEPT_EULA: 'Y'
 
   phpmyfaq:
     build: .
-    container_name: phpmyfaq-40
+    container_name: phpmyfaq-41
     restart: always
     stdin_open: true
     environment:
@@ -114,7 +114,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
-    container_name: phpmyfaq-40_elasticsearch-v8
+    container_name: phpmyfaq-41_elasticsearch-v8
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster

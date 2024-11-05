@@ -16,9 +16,11 @@
  */
 
 use phpMyFAQ\Administration\Category;
+use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
@@ -27,12 +29,15 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
-use phpMyFAQ\Session;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
+use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 return static function (ContainerConfigurator $container): void {
     // Parameters
@@ -41,7 +46,14 @@ return static function (ContainerConfigurator $container): void {
     // Services
     $services = $container->services();
 
+    $services->set('session', Session::class);
+
     $services->set('phpmyfaq.admin.category', Category::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.admin.session', AdminSession::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
@@ -60,6 +72,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.captcha.helper.captcha_helper', CaptchaHelper::class)
         ->factory([CaptchaHelper::class, 'getInstance'])
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.category.order', Order::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
@@ -94,12 +111,14 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.language', Language::class)
         ->args([
-            new Reference('phpmyfaq.configuration')
+            new Reference('phpmyfaq.configuration'),
+            new Reference('session')
         ]);
 
-    $services->set('phpmyfaq.session', Session::class)
+    $services->set('phpmyfaq.session.token', Token::class)
+        ->factory([Token::class, 'getInstance'])
         ->args([
-            new Reference('phpmyfaq.configuration')
+            new Reference('session')
         ]);
 
     $services->set('phpmyfaq.sitemap', Sitemap::class)
@@ -119,4 +138,15 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
+
+    $services->set('phpmyfaq.user.session', UserSession::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.visits', Visits::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
 };

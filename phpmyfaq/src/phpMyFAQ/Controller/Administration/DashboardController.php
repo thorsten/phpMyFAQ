@@ -21,7 +21,6 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Session;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -84,7 +83,7 @@ class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         if ($this->configuration->get('main.enableUserTracking')) {
-            $session = new Session($this->configuration);
+            $session = $this->container->get('phpmyfaq.admin.session');
             return $this->json($session->getLast30DaysVisits());
         }
 

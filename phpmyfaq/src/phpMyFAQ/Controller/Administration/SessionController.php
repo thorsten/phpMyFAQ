@@ -22,12 +22,11 @@ use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -43,11 +42,11 @@ class SessionController extends AbstractController
 
         $requestData = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('export-sessions', $requestData->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('export-sessions', $requestData->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $session = new Session($this->configuration);
+        $session = $this->container->get('phpmyfaq.admin.session');
         $data = $session->getSessionsByDate(
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour)

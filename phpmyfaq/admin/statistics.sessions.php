@@ -15,17 +15,14 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\StatisticsHelper;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Visits;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,14 +30,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 $request = Request::createFromGlobals();
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
-    $session = new Session($faqConfig);
+    $session = $container->get('phpmyfaq.admin.session');
     $date = new Date($faqConfig);
-    $visits = new Visits($faqConfig);
+    $visits = $container->get('phpmyfaq.visits');
     $statisticsHelper = new StatisticsHelper($session, $visits, $date);
 
     $stats = $statisticsHelper->getTrackingFilesStatistics();
@@ -54,11 +51,11 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $csrfTokenFromPost = Filter::filterVar($request->request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
     $csrfTokenFromGet = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if ($csrfTokenFromPost && !Token::getInstance()->verifyToken('sessions', $csrfTokenFromPost)) {
+    if (!Token::getInstance($container->get('session'))->verifyToken('sessions', $csrfTokenFromPost)) {
         $statdelete = null;
     }
 
-    if ($csrfTokenFromGet && !Token::getInstance()->verifyToken('clear-visits', $csrfTokenFromGet)) {
+    if (!Token::getInstance($container->get('session'))->verifyToken('clear-visits', $csrfTokenFromGet)) {
         $clearVisits = false;
     } else {
         $clearVisits = true;
@@ -78,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $templateVars = [
         'adminHeaderSessions' => Translation::get('ad_stat_sess'),
-        'csrfTokenClearVisits' => Token::getInstance()->getTokenString('clear-visits'),
+        'csrfTokenClearVisits' => Token::getInstance($container->get('session'))->getTokenString('clear-visits'),
         'msgClearVisits' => Translation::get('ad_clear_all_visits'),
         'hasMessage' => $hasMessage ?? false,
         'message' => $message ?? '',
@@ -96,13 +93,13 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
         'buttonOkay' => Translation::get('ad_stat_ok'),
         'msgSessionManagement' => Translation::get('ad_stat_management'),
-        'csrfTokenSessions' => Token::getInstance()->getTokenInput('sessions'),
+        'csrfTokenSessions' => Token::getInstance($container->get('session'))->getTokenInput('sessions'),
         'msgChooseMonth' => Translation::get('ad_stat_choose'),
         'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
         'buttonDeleteMonth' => Translation::get('ad_stat_delete'),
         'msgExportSessions' => Translation::get('msgExportSessions'),
         'msgExportSessionsAsCSV' => Translation::get('msgExportSessionsAsCSV'),
-        'csrfTokenExport' => Token::getInstance()->getTokenString('export-sessions'),
+        'csrfTokenExport' => Token::getInstance($container->get('session'))->getTokenString('export-sessions'),
         'dateToday' => date('Y-m-d'),
         'msgExportSessionsFrom' => Translation::get('msgExportSessionsFrom'),
         'msgExportSessionsTo' => Translation::get('msgExportSessionsTo'),

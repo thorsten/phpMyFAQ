@@ -49,7 +49,7 @@ class UserController extends AbstractController
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance()->verifyToken('ucp', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('ucp', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -137,7 +137,7 @@ class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('request-removal', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -206,7 +206,7 @@ class UserController extends AbstractController
         $twoFactor = new TwoFactor($this->configuration, $user);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('remove-twofactor', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('remove-twofactor', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 

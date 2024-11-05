@@ -9,6 +9,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class FaqTest extends TestCase
 {
@@ -20,6 +21,7 @@ class FaqTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     protected function setUp(): void
     {
@@ -36,7 +38,7 @@ class FaqTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
 
-        $language = new Language($this->configuration);
+        $language = new Language($this->configuration, $this->createMock(Session::class));
         $this->configuration->setLanguage($language);
 
         $this->faq = new Faq($this->configuration);

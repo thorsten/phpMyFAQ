@@ -42,7 +42,7 @@ class StatisticsController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance()->verifyToken('delete-adminlog', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-adminlog', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -64,7 +64,10 @@ class StatisticsController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance()->verifyToken('truncate-search-terms', $data->csrfToken)) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('truncate-search-terms', $data->csrfToken)
+        ) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

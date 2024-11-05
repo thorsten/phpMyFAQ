@@ -333,7 +333,7 @@ if (
         'openQuestionId' => $questionId,
         'notifyUser' => $notifyUser,
         'notifyEmail' => $notifyEmail,
-        'csrfToken' => Token::getInstance()->getTokenString('edit-faq'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('edit-faq'),
         'ad_entry_theme' => Translation::get('ad_entry_theme'),
         'msgNoHashAllowed' => Translation::get('msgNoHashAllowed'),
         'msgShowHelp' => Translation::get('msgShowHelp'),
@@ -351,7 +351,7 @@ if (
             PermissionType::ATTACHMENT_DELETE->value
         ),
         'ad_menu_attachments' => Translation::get('ad_menu_attachments'),
-        'csrfTokenDeleteAttachment' => Token::getInstance()->getTokenString('delete-attachment'),
+        'csrfTokenDeleteAttachment' => Token::getInstance($container->get('session'))->getTokenString('delete-attachment'),
         'attachments' => $attList,
         'ad_att_add' => Translation::get('ad_att_add'),
         'ad_entry_tags' => Translation::get('ad_entry_tags'),
@@ -410,7 +410,7 @@ if (
         'ad_att_addto_2' => Translation::get('ad_att_addto_2'),
         'ad_att_att' => Translation::get('ad_att_att'),
         'maxAttachmentSize' => $faqConfig->get('records.maxAttachmentSize'),
-        'csrfTokenUploadAttachment' => Token::getInstance()->getTokenString('upload-attachment'),
+        'csrfTokenUploadAttachment' => Token::getInstance($container->get('session'))->getTokenString('upload-attachment'),
         'msgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
         'ad_att_butt' => Translation::get('ad_att_butt'),
     ];

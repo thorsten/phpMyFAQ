@@ -34,7 +34,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -44,6 +43,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -157,7 +157,7 @@ if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER
 // Get CSRF Token
 //
 $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
-if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)) {
+if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyToken('logout', $csrfToken)) {
     $csrfChecked = true;
 } else {
     $csrfChecked = false;
@@ -248,9 +248,9 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterVar($request->query->get(Session::PMF_GET_KEY_NAME_SESSIONID), FILTER_VALIDATE_INT);
-$sidCookie = Filter::filterVar($request->cookies->get(Session::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
-$faqSession = new Session($faqConfig);
+$sidGet = Filter::filterVar($request->query->get(UserSession::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterVar($request->cookies->get(UserSession::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$faqSession = new UserSession($faqConfig);
 $faqSession->setCurrentUser($user);
 
 // Note: do not track internal calls
@@ -277,22 +277,21 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
-        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId());
+        $faqSession->setCookie(UserSession::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie) && !is_null($sidGet)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $sidGet, $faqLangCode);
         }
     }
-} elseif (
-    !$faqSession->setCookie(
-        Session::PMF_COOKIE_NAME_SESSIONID,
+} else {
+    $faqSession->setCookie(
+        UserSession::COOKIE_NAME_SESSION_ID,
         $faqSession->getCurrentSessionId(),
         $request->server->get('REQUEST_TIME') + 3600
-    )
-) {
+    );
     $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
 
@@ -639,7 +638,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         'msgBookmarks' => Translation::get('msgBookmarks'),
         'msgUserRemoval' => Translation::get('ad_menu_RequestRemove'),
         'msgLogoutUser' => Translation::get('ad_menu_logout'),
-        'csrfLogout' => Token::getInstance()->getTokenString('logout'),
+        'csrfLogout' => Token::getInstance($container->get('session'))->getTokenString('logout'),
     ];
 }
 

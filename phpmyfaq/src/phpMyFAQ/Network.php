@@ -39,13 +39,12 @@ readonly class Network
     /**
      * Performs a check if an IPv4 or IPv6 address is banned.
      *
-     * @param string $ip IPv4 or IPv6 address
-     *
+     * @param string $ipAddress IPv4 or IPv6 address
      * @return bool false, if not banned
      */
-    public function isBanned(string $ip): bool
+    public function isBanned(string $ipAddress): bool
     {
         $bannedIps = explode(' ', (string) $this->configuration->get('security.bannedIPs'));
-        return IpUtils::checkIp($ip, $bannedIps);
+        return IpUtils::checkIp($ipAddress, $bannedIps);
     }
 }

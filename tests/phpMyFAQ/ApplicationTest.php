@@ -2,32 +2,33 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Application;
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Language;
-use phpMyFAQ\Translation;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 class ApplicationTest extends TestCase
 {
+    /**
+     * @throws Exception
+     */
     public function testConstructor(): void
     {
-        $config = $this->createMock(Configuration::class);
-        $application = new Application($config);
+        $container = $this->createMock(ContainerInterface::class);
+        $application = new Application($container);
         $this->assertInstanceOf(Application::class, $application);
     }
 
-
+    /**
+     * @throws Exception
+     * @throws \ReflectionException
+     */
     public function testHandleRequest(): void
     {
         $routeCollection = $this->createMock(RouteCollection::class);

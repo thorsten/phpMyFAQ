@@ -26,12 +26,14 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Init;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 //
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-const DEBUG = false;
+const DEBUG = true;
 if (DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
@@ -178,7 +180,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
         session_save_path(PMF_SESSION_SAVE_PATH);
     }
+
     session_start();
+    $session = new Session(new PhpBridgeSessionStorage());
+    $session->start();
 }
 
 //
@@ -190,6 +195,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 } else {
     $ldap = null;
 }
+
 //
 // Connect to Elasticsearch if enabled
 //

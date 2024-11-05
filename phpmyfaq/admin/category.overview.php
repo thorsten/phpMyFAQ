@@ -16,8 +16,6 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Order;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,13 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $request = Request::createFromGlobals();
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 
 $category = new Category($faqConfig, [], false);
 $category->buildCategoryTree();
 $categoryInfo = $category->getAllCategories();
 
-$categoryOrder = new Order($faqConfig);
+$categoryOrder = $container->get('phpmyfaq.category.order');
 $orderedCategories = $categoryOrder->getAllCategories();
 $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
@@ -47,7 +45,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/content/category.overview.twig');
 
 $templateVars = [
-    'csrfTokenInput' => Token::getInstance()->getTokenInput('category'),
+    'csrfTokenInput' => Token::getInstance($container->get('session'))->getTokenInput('category'),
     'categoryTree' => $categoryTree,
     'categoryInfo' => $categoryInfo,
 ];

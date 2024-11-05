@@ -51,7 +51,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
         'seperateWithCommas' => Translation::get('msgSeperateWithCommas'),
         'tags' => Translation::get('ad_entry_tags'),
         'msgImportRecordsColumnStructure' => Translation::get('msgImportRecordsColumnStructure'),
-        'csrfToken' => Token::getInstance()->getTokenString('importfaqs'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('importfaqs'),
         'is_active' => Translation::get('ad_entry_active'),
         'is_sticky' => Translation::get('ad_entry_sticky'),
         'trueFalse' => Translation::get('msgCSVImportTrueOrFalse')

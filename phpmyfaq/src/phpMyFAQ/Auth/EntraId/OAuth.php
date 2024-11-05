@@ -15,10 +15,9 @@
  * @since     2022-09-09
  */
 
-namespace phpMyFAQ\Auth\Azure;
+namespace phpMyFAQ\Auth\EntraId;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Session;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -66,10 +65,10 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        if ($this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER) !== '') {
-            $codeVerifier = $this->session->get(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
+        if ($this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER) !== '') {
+            $codeVerifier = $this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER);
         } else {
-            $codeVerifier = $this->session->getCookie(Session::PMF_AZURE_AD_OAUTH_VERIFIER);
+            $codeVerifier = $this->session->getCookie(Session::ENTRA_ID_OAUTH_VERIFIER);
         }
 
         $response = $this->client->request('POST', $url, [
@@ -118,8 +117,13 @@ class OAuth
     {
         $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
         $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
-        $this->session->set(Session::PMF_AZURE_AD_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+        $this->session->set(Session::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
         return $this;
+    }
+
+    public function getSession(): Session
+    {
+        return $this->session;
     }
 
     public function getRefreshToken(): ?string

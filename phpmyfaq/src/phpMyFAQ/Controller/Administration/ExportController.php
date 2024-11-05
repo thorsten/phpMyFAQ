@@ -80,7 +80,10 @@ class ExportController extends AbstractController
         $this->userHasPermission(PermissionType::REPORTS);
 
         $data = json_decode($request->getContent())->data;
-        if (!Token::getInstance()->verifyToken('create-report', $data->{'pmf-csrf-token'})) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('create-report', $data->{'pmf-csrf-token'})
+        ) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

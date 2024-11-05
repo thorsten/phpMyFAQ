@@ -33,7 +33,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->value)) {
     $templateVars = [
         'ad_menu_reports' => Translation::get('ad_menu_reports'),
-        'csrfTokenInput' => Token::getInstance()->getTokenInput('create-report'),
+        'csrfTokenInput' => Token::getInstance($container->get('session'))->getTokenInput('create-report'),
         'ad_stat_report_make_report' => Translation::get('ad_stat_report_make_report'),
         'ad_stat_report_fields' => Translation::get('ad_stat_report_fields'),
         'ad_stat_report_category' => Translation::get('ad_stat_report_category'),

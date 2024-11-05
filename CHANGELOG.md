@@ -1,10 +1,12 @@
-# phpMyFAQ 4.0
+# phpMyFAQ 4.1
 
-**Codename "Pallas"**
+**Codename "Porus"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v4.1.0-dev - unreleased
 
 ### phpMyFAQ v4.0.0-RC.3 - 2024-10-27
 

@@ -45,7 +45,7 @@ class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance()->verifyToken('save-news', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('save-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -93,7 +93,7 @@ class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance()->verifyToken('delete-news', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -118,7 +118,7 @@ class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance()->verifyToken('update-news', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -167,7 +167,7 @@ class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance()->verifyToken('activate-news', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-news', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

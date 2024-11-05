@@ -15,10 +15,8 @@
  * @since     2003-02-24
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -28,13 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $sessionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VIEWLOGS->value)) {
-    $session = new Session($faqConfig);
+    $session = $container->get('phpmyfaq.admin.session');
     $time = $session->getTimeFromSessionId($sessionId);
     $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
 

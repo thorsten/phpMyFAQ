@@ -70,7 +70,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
         'permLevel' => $faqConfig->get('security.permLevel'),
         'groupPermission' => $groupPermission[0],
         'userPermission' => $userPermission[0],
-        'csrf' => Token::getInstance()->getTokenString('update-category'),
+        'csrf' => Token::getInstance($container->get('session'))->getTokenString('update-category'),
         'ad_categ_title' => Translation::get('ad_categ_titel'),
         'ad_categ_lang' => Translation::get('ad_categ_lang'),
         'langToTranslate' => $category->getCategoryLanguagesToTranslate($id, $selectedLanguage),

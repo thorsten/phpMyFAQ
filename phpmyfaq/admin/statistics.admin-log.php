@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
     $templateVars = [
         'headerAdminLog' => Translation::get('ad_menu_adminlog'),
         'buttonDeleteAdminLog' => Translation::get('ad_adminlog_del_older_30d'),
-        'csrfDeleteAdminLogToken' => Token::getInstance()->getTokenString('delete-adminlog'),
+        'csrfDeleteAdminLogToken' => Token::getInstance($container->get('session'))->getTokenString('delete-adminlog'),
         'currentLocale' => $faqConfig->getLanguage()->getLanguage(),
         'pagination' => $pagination->render(),
         'msgId' => Translation::get('ad_categ_id'),

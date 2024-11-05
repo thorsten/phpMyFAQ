@@ -3,14 +3,17 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class GlossaryTest extends TestCase
 {
-    private Configuration $config;
-
     private Glossary $glossary;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,12 +22,12 @@ class GlossaryTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->config = new Configuration($dbHandle);
-        $language = new Language($this->config);
+        $config = new Configuration($dbHandle);
+        $language = new Language($config, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
-        $this->config->setLanguage($language);
+        $config->setLanguage($language);
 
-        $this->glossary = new Glossary($this->config);
+        $this->glossary = new Glossary($config);
         $this->glossary->setLanguage('en');
     }
 

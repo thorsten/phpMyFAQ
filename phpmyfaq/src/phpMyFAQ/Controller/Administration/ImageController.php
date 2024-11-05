@@ -41,7 +41,10 @@ class ImageController extends AbstractController
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
         $timestamp = time();
 
-        if (!Token::getInstance()->verifyToken('edit-faq', $request->query->get('csrf'))) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('edit-faq', $request->query->get('csrf'))
+        ) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

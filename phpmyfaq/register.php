@@ -35,7 +35,7 @@ if (!$faqConfig->get('security.enableRegistration')) {
     $redirect->send();
 }
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('registration', 0);
 

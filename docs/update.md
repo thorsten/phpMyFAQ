@@ -7,6 +7,7 @@ versions:
 - phpMyFAQ 3.1.x
 - phpMyFAQ 3.2.x
 - phpMyFAQ 4.0.x
+- phpMyFAQ 4.1.x
 
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x or 2.x series, [please email us](mailto:thorsten_AT_phpmyfaq_DOT_de).
@@ -99,6 +100,24 @@ URL in your browser:
 
 Click the button of the update script, your version will automatically be updated.
 
+## Upgrading from phpMyFAQ 4.1.x
+
+### Manual upgrade
+
+Please make a full backup before you run the upgrade!
+First, log in as admin into the admin section and enable the maintenance mode.
+(Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
+Second, you have to delete all files **except**:
+
+- all files in the directory **content/**
+
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following
+URL in your browser:
+
+`http://www.example.com/faq/update`
+
+Click the button of the update script, your version will automatically be updated.
+
 ### Online update (Experimental feature)
 
 If you're running phpMyFAQ 4.0.0 or later, you can use the built-in online update feature.
@@ -113,7 +132,7 @@ Then go to the "phpMyFAQ Update" page in the configuration section click through
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
    files into your installation and in the end, the database is updated
 
-## Modifying templates for phpMyFAQ 4.0
+## Modifying templates for phpMyFAQ 4.1
 
 We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).
 Please remember that the style sheets are written with [SCSS](https://sass-lang.com/).

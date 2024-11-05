@@ -181,8 +181,8 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Setup APIs
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
 
-    # REST API v3.0
-    # * http://[...]/api/v3.0/<ACTION>
-    RewriteRule ^api/v3.0/(.*) api/index.php [L,QSA]
+    # REST API v3.0 and v3.1
+    # * http://[...]/api/v3.x/<ACTION>
+    RewriteRule ^api/v3\.[01]/(.*) api/index.php [L,QSA]
 
 </IfModule>

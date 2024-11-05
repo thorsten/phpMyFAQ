@@ -181,7 +181,7 @@ class UserController extends AbstractController
         $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
-        if (!Token::getInstance()->verifyToken('activate-user', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-user', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -217,7 +217,7 @@ class UserController extends AbstractController
         $newPassword = Filter::filterVar($data->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance()->verifyToken('overwrite-password', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('overwrite-password', $csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -251,7 +251,7 @@ class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('delete-user', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-user', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -289,7 +289,7 @@ class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('add-user', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('add-user', $data->csrf)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -357,7 +357,7 @@ class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('update-user-data', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-user-data', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -419,7 +419,10 @@ class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance()->verifyToken('update-user-rights', $data->csrfToken)) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('update-user-rights', $data->csrfToken)
+        ) {
             return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
         }
 

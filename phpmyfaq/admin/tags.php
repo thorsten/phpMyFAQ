@@ -52,7 +52,7 @@ $tagData = $tags->getAllTags();
 
 $templateVars = [
     'adminHeaderTags' => Translation::get('ad_entry_tags'),
-    'csrfToken' => Token::getInstance()->getTokenInput('tags'),
+    'csrfToken' => Token::getInstance($container->get('session'))->getTokenInput('tags'),
     'isDelete' => 'delete-tag' === $action,
     'isDeleteSuccess' => $deleteSuccess ?? false,
     'msgDeleteSuccess' => Translation::get('ad_tag_delete_success'),

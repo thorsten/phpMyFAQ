@@ -193,7 +193,7 @@ if (
             'groupName' => Strings::htmlentities($groupData['name']),
             'ad_group_deleteQuestion' => Translation::get('ad_group_deleteQuestion'),
             'groupId' => $groupId,
-            'csrfDeleteGroup' => Token::getInstance()->getTokenString('delete-group'),
+            'csrfDeleteGroup' => Token::getInstance($container->get('session'))->getTokenString('delete-group'),
             'ad_gen_no' => Translation::get('ad_gen_no'),
             'ad_gen_yes' => Translation::get('ad_gen_yes'),
             'showDeleteGroupForm' => $showDeleteGroupForm

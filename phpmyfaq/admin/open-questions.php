@@ -43,10 +43,10 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
     $category->setGroups($currentAdminGroups);
     $date = new Date($faqConfig);
 
-    $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $questionId= Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    if ($csrfToken && Token::getInstance()->verifyToken('toggle-question-visibility', $csrfToken)) {
+    if (Token::getInstance($container->get('session'))->verifyToken('toggle-question-visibility', $csrfToken)) {
         $csrfChecked = true;
     } else {
         $csrfChecked = false;

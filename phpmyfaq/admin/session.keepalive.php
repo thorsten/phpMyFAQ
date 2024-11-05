@@ -28,6 +28,9 @@ use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
@@ -41,6 +44,17 @@ const IS_VALID_PHPMYFAQ = null;
 //
 require PMF_ROOT_DIR . '/src/Bootstrap.php';
 require PMF_ROOT_DIR . '/translations/language_en.php';
+
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../src/services.php');
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 $faqConfig = Configuration::getConfigurationInstance();
 
@@ -81,7 +95,7 @@ $templateVars = [
     'phpMyFAQVersion' => System::getVersion(),
     'currentYear' => date('Y'),
     'isUserLoggedIn' => $user->isLoggedIn() && ($refreshTime > 0),
-    'csrfToken' => Token::getInstance()->getTokenString('admin-logout'),
+    'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('admin-logout'),
     'msgConfirm' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
     'sessionTimeout' => PMF_AUTH_TIMEOUT,
     'refreshTime' => $refreshTime,

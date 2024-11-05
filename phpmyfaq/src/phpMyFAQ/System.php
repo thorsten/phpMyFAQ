@@ -42,7 +42,7 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 0;
+    private const VERSION_MINOR = 1;
 
     /**
      * Patch level.
@@ -52,17 +52,17 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC.3';
+    private const VERSION_PRE_RELEASE = 'dev';
 
     /**
      * API version.
      */
-    private const VERSION_API = '3.0';
+    private const VERSION_API = '3.1';
 
     /**
      * Plugin version.
      */
-    private const PLUGIN_VERSION = '0.1.0';
+    private const PLUGIN_VERSION = '0.2.0';
 
     /**
      * Minimum required PHP version.

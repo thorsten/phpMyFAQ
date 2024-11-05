@@ -19,6 +19,7 @@ namespace phpMyFAQ;
 
 use ErrorException;
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 readonly class Application
 {
-    public function __construct(private ?Configuration $configuration = null)
+    public function __construct(private ?ContainerInterface $container = null)
     {
     }
 
@@ -49,8 +50,9 @@ readonly class Application
 
     private function setLanguage(): string
     {
-        if ($this->configuration) {
-            $language = new Language($this->configuration);
+        if (!is_null($this->container)) {
+            $configuration = $this->container->get('phpmyfaq.configuration');
+            $language = $this->container->get('phpmyfaq.language');
             $currentLanguage = $language->setLanguageByAcceptLanguage();
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
@@ -58,7 +60,7 @@ readonly class Application
                 require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, $currentLanguage);
             }
 
-            $this->configuration->setLanguage($language);
+            $configuration->setLanguage($language);
 
             return $currentLanguage;
         }

@@ -4,13 +4,19 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class BookmarkTest extends TestCase
 {
     private Bookmark $bookmark;
 
+    /**
+     * @throws Exception
+     * @throws Core\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,7 +37,7 @@ class BookmarkTest extends TestCase
         $configuration->set('main.referenceURL', 'http://example.com');
 
         $user = CurrentUser::getCurrentUser($configuration);
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 

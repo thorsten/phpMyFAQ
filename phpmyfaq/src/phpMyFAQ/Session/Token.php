@@ -20,6 +20,7 @@ namespace phpMyFAQ\Session;
 use Exception;
 use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Token
 {
@@ -40,7 +41,7 @@ class Token
     /**
      * Constructor.
      */
-    final private function __construct()
+    final private function __construct(private readonly SessionInterface $session)
     {
     }
 
@@ -89,10 +90,13 @@ class Token
     }
 
 
-    public static function getInstance(): Token
+    /**
+     * @throws Exception
+     */
+    public static function getInstance(SessionInterface $session): Token
     {
         if (!(self::$token instanceof Token)) {
-            self::$token = new self();
+            self::$token = new self($session);
         }
 
         return self::$token;
@@ -159,19 +163,22 @@ class Token
 
     public function removeToken(string $page): bool
     {
-        unset($_COOKIE[$this->getCookie($page)], $_SESSION[self::PMF_SESSION_NAME][$page]);
+        Request::createFromGlobals()->cookies->remove($this->getCookieName($page));
+        $this->session->remove(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
 
         return true;
     }
 
     private function getSession(string $page): ?Token
     {
-        return empty($_SESSION[self::PMF_SESSION_NAME][$page]) ? null : $_SESSION[self::PMF_SESSION_NAME][$page];
+        return $this->session->get(sprintf('%s.%s', self::PMF_SESSION_NAME, $page));
     }
 
     private function getCookie(string $page): string
     {
-        return empty($_COOKIE[$this->getCookieName($page)]) ? '' : $_COOKIE[$this->getCookieName($page)];
+        $cookieValue = Request::createFromGlobals()->cookies->get($this->getCookieName($page), '');
+
+        return empty($cookieValue) ? '' : $cookieValue;
     }
 
     /**
@@ -181,7 +188,7 @@ class Token
     {
         $request = Request::createFromGlobals();
         $randomToken = md5(base64_encode(random_bytes(32)));
-        $token = new self();
+        $token = new self($this->session);
         $token
             ->setPage($page)
             ->setExpiry(time() + $expiry)
@@ -201,7 +208,9 @@ class Token
             ]
         );
 
-        return $_SESSION[self::PMF_SESSION_NAME][$page] = $token;
+        $this->session->set(sprintf('%s.%s', self::PMF_SESSION_NAME, $page), $token);
+
+        return $token;
     }
 
     private function getCookieName(string $page): string

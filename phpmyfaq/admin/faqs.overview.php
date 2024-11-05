@@ -48,8 +48,8 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/content/faq.overview.twig');
 
 $templateVars = [
-    'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),
-    'csrfTokenOverview' => Token::getInstance()->getTokenString('faq-overview'),
+    'csrfTokenSearch' => Token::getInstance($container->get('session'))->getTokenInput('edit-faq'),
+    'csrfTokenOverview' => Token::getInstance($container->get('session'))->getTokenString('faq-overview'),
     'categories' => $category->getCategoryTree(),
     'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
     'numberOfComments' => $comments->getNumberOfCommentsByCategory(),

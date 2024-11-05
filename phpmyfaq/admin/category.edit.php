@@ -94,7 +94,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'categoryId' => $categoryId,
         'categoryLanguage' => $categoryData->getLang(),
         'parentId' => $categoryData->getParentId(),
-        'csrfInputToken' => Token::getInstance()->getTokenInput('update-category'),
+        'csrfInputToken' => Token::getInstance($container->get('session'))->getTokenInput('update-category'),
         'categoryImage' => $categoryData->getImage(),
         'categoryNameLabel' => Translation::get('ad_categ_titel'),
         'categoryName' => $categoryData->getName(),

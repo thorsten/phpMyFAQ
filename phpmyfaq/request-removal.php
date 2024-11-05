@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('request_removal', 0);
 
@@ -36,7 +36,7 @@ $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 $templateVars = [
     ... $templateVars,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
-    'csrf' => Token::getInstance()->getTokenInput('request-removal'),
+    'csrf' => Token::getInstance($container->get('session'))->getTokenInput('request-removal'),
     'lang' => $Language->getLanguage(),
     'userId' => $user->getUserId(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',

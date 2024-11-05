@@ -21,7 +21,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Session;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -39,7 +38,7 @@ $faqTableInfo = $faqConfig->getDb()->getTableStatus(Database::getTablePrefix());
 $user = CurrentUser::getCurrentUser($faqConfig);
 $userId = $user->getUserId();
 $faqSystem = new System();
-$faqSession = new Session($faqConfig);
+$session = $container->get('phpmyfaq.admin.session');
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/dashboard.twig');
@@ -54,7 +53,7 @@ $templateVars = [
         System::getVersion(),
         System::getGitHubIssuesUrl()
     ),
-    'adminDashboardInfoNumVisits' => $faqSession->getNumberOfSessions(),
+    'adminDashboardInfoNumVisits' => $session->getNumberOfSessions(),
     'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
     'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
     'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],

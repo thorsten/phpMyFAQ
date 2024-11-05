@@ -26,12 +26,12 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +51,7 @@ class CommentController extends AbstractController
         $faq = new Faq($this->configuration);
         $comment = new Comments($this->configuration);
         $stopWords = new StopWords($this->configuration);
-        $session = new Session($this->configuration);
+        $session = new UserSession($this->configuration);
         $session->setCurrentUser($user);
 
         $language = $this->container->get('phpmyfaq.language');
@@ -70,7 +70,10 @@ class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance()->verifyToken('add-comment', $data->{'pmf-csrf-token'})) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('add-comment', $data->{'pmf-csrf-token'})
+        ) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 

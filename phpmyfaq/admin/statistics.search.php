@@ -76,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $templateVars = [
         'ad_menu_searchstats' => Translation::get('ad_menu_searchstats'),
-        'csrfToken' => Token::getInstance()->getTokenString('truncate-search-terms'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('truncate-search-terms'),
         'ad_searchterm_del' => Translation::get('ad_searchterm_del'),
         'ad_searchstats_search_term' => Translation::get('ad_searchstats_search_term'),
         'ad_searchstats_search_term_count' => Translation::get('ad_searchstats_search_term_count'),

@@ -27,7 +27,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
-use phpMyFAQ\Session;
 use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -62,7 +61,7 @@ class CurrentUser extends User
     /**
      * The Session class object
      */
-    private readonly Session $session;
+    private readonly UserSession $session;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -96,7 +95,7 @@ class CurrentUser extends User
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
-        $this->session = new Session($configuration);
+        $this->session = new UserSession($configuration);
     }
 
     /**
@@ -172,7 +171,7 @@ class CurrentUser extends User
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
                 $this->session->setCookie(
-                    Session::PMF_COOKIE_NAME_REMEMBERME,
+                    UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
                     Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
@@ -434,7 +433,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME, '');
+            $this->session->setCookie(UserSession::COOKIE_NAME_REMEMBER_ME, '');
         }
 
         session_destroy();
@@ -566,13 +565,13 @@ class CurrentUser extends User
     public static function getFromCookie(Configuration $configuration): ?CurrentUser
     {
         $request = Request::createFromGlobals();
-        if ($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME) === null) {
+        if ($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME) === null) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserByCookie($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME));
+        $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME));
 
         if (-1 === $user->getUserId()) {
             return null;

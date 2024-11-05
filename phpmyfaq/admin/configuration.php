@@ -36,7 +36,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION
 
     $templateVars = [
         'adminHeaderConfiguration' => Translation::get('ad_config_edit'),
-        'csrfToken' => Token::getInstance()->getTokenString('configuration'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('configuration'),
         'language' => $faqLangCode,
         'adminConfigurationButtonReset' => Translation::get('ad_config_reset'),
         'adminConfigurationButtonSave' => Translation::get('ad_config_save'),

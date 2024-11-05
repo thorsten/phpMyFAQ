@@ -7,6 +7,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class ExportTest extends TestCase
 {
@@ -16,6 +17,7 @@ class ExportTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     protected function setUp(): void
     {
@@ -33,7 +35,7 @@ class ExportTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
 
-        $language = new Language($this->configuration);
+        $language = new Language($this->configuration, $this->createMock(Session::class));
         $this->configuration->setLanguage($language);
 
         $this->faq = new Faq($this->configuration);

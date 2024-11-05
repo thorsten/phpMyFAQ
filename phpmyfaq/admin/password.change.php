@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqConfig = Configuration::getConfigurationInstance();
+$faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
@@ -41,7 +41,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::PASSWORD_CHAN
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
     $successMessage = $errorMessage = '';
 
-    if (!is_null($save) && Token::getInstance()->verifyToken('password', $csrfToken)) {
+    if (!is_null($save) && Token::getInstance($container->get('session'))->verifyToken('password', $csrfToken)) {
         // Define the (Local/Current) Authentication Source
         $auth = new Auth($faqConfig);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::PASSWORD_CHAN
         'adminHeaderPasswordChange' => Translation::get('ad_passwd_cop'),
         'successMessage' => $successMessage,
         'errorMessage' => $errorMessage,
-        'csrfToken' => Token::getInstance()->getTokenString('password'),
+        'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('password'),
         'adminMsgOldPassword' => Translation::get('ad_passwd_old'),
         'adminMsgNewPassword' => Translation::get('ad_passwd_new'),
         'adminMsgNewPasswordConfirm' => Translation::get('ad_passwd_con'),

@@ -5,14 +5,16 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Plugin\PluginException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class TagsTest extends TestCase
 {
     private Tags $tags;
 
     /**
-     * @throws PluginException
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -25,7 +27,7 @@ class TagsTest extends TestCase
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.referenceURL', 'http://example.com');
 
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 
