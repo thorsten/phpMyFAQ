@@ -113,6 +113,8 @@ class CurrentUser extends User
      */
     public function login(string $login, string $password): bool
     {
+        $request = Request::createFromGlobals();
+
         // Check if the login is an email address and convert it to a username if needed
         if (
             $this->configuration->get('security.loginWithEmailAddress') &&
@@ -141,7 +143,11 @@ class CurrentUser extends User
         }
 
         // Handle SSO authentication
-        if ($this->configuration->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
+        if (
+            $this->configuration->get('security.ssoSupport') &&
+            $request->server->get('REMOTE_USER') &&
+            '' === $password
+        ) {
             $login = strtok($login, '@\\');
         }
 
@@ -173,7 +179,7 @@ class CurrentUser extends User
                 $this->session->setCookie(
                     UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
-                    Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
+                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
             }
 
