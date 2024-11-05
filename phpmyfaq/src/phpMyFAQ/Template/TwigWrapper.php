@@ -36,13 +36,14 @@ class TwigWrapper
 {
     private Environment $twigEnvironment;
 
-    private bool $isSetup = false;
+    private bool $isSetup;
 
     /** @var string Name of an active template set. */
     private static string $templateSetName = 'default';
 
-    public function __construct(string $templatePath)
+    public function __construct(string $templatePath, bool $isSetup = false)
     {
+        $this->isSetup = $isSetup;
         $filesystemLoader = new FilesystemLoader($templatePath);
         $this->twigEnvironment = new Environment(
             $filesystemLoader,
