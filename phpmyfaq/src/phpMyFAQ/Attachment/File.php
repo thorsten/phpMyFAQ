@@ -84,16 +84,15 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Save current attachment to the appropriate storage. The
-     * filepath given will be processed and moved to appropriate
-     * location.
+     * Save current attachment to the appropriate storage.
+     * The filepath given will be processed and moved to the appropriate location.
      *
      * @param string      $filePath full path to the attachment file
      * @param string|null $filename filename to force
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
-    public function save($filePath, string $filename = null): bool
+    public function save($filePath, ?string $filename = null): bool
     {
         $success = false;
 
@@ -106,7 +105,7 @@ class File extends AbstractAttachment implements AttachmentInterface
 
             $targetFile = $this->buildFilePath();
 
-            if (null !== $this->id && $this->createSubDirs($targetFile)) {
+            if ($this->createSubDirs($targetFile)) {
                 // Doing this check, we're sure not to unnecessarily
                 // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
@@ -134,7 +133,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     /**
      * Delete attachment.
      *
-     * @throws FileException
+     * @throws FileException|AttachmentException
      */
     public function delete(): bool
     {
@@ -182,13 +181,13 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Factory method to initialise the corresponding file object.
+     * Factory method to initialize the corresponding file object.
      *
      * @param string $mode File mode for file open
      * @return VanillaFile|EncryptedFile
      * @throws AttachmentException
      */
-    private function getFile($mode = FilesystemFile::MODE_READ)
+    private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
     {
         if ($this->encrypted) {
             return new EncryptedFile(
