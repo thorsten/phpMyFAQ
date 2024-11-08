@@ -208,15 +208,13 @@ class Pdf extends Export
         $this->pdf->Ln();
         $this->pdf->Ln();
         $this->pdf->WriteHTML('<h3>' . $faqData['title'] . '</h3>');
-        $this->pdf->Ln();
+        $this->pdf->Ln(5);
         $this->pdf->Ln();
 
         if ($this->config->get('main.enableMarkdownEditor')) {
-            $this->pdf->WriteHTML(
-                str_replace('../', '', $this->converter->convert($faqData['content'])->getContent())
-            );
+            $this->pdf->WriteHTML($this->converter->convert($faqData['content'])->getContent());
         } else {
-            $this->pdf->WriteHTML(str_replace('../', '', (string) $faqData['content']));
+            $this->pdf->WriteHTML((string) $faqData['content']);
         }
 
         $this->pdf->Ln(10);
