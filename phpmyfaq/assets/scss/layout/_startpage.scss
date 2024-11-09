@@ -1,0 +1,7 @@
+h1.pmf-start-page {
+  font-size: 48px;
+  background: #083c83;
+  background: linear-gradient(to right, var(--bs-primary) 0%, var(--bs-danger) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

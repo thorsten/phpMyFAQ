@@ -5,7 +5,7 @@
 <!-- Header -->
 <div class="row">
   <div class="col-12">
-    <h1 class="mb-3 fw-bold lh-1 text-center">{{ pageHeader }}</h1>
+    <h1 class="mb-3 fw-bold text-center pmf-start-page">{{ pageHeader }}</h1>
   </div>
 </div>
 
@@ -19,7 +19,7 @@
         style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
       {% endif %}
       >
-        <h3 class="pt-5 mt-5 mb-3 lh-1 fw-semibold text-center">{{ decks['name'] }}</h3>
+        <h3 class="pt-5 mt-5 mb-3 fw-semibold text-center">{{ decks['name'] }}</h3>
         <a class="btn btn-primary bg-gradient" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
       </div>
     </div>
