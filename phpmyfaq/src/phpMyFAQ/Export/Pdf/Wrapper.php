@@ -538,13 +538,14 @@ class Wrapper extends TCPDF
         $alt = false,
         $alternateImages = []
     ): void {
-        if (strpos($file, 'data:image/png;base64,')) {
-            $file = '@' . base64_decode(
-                chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
-            );
-        }
-
         $file = parse_url($file, PHP_URL_PATH);
+
+        $type = pathinfo($file, PATHINFO_EXTENSION);
+        $data = file_get_contents(PMF_ROOT_DIR . $file);
+
+        if ($this->checkBase64Image($data)) {
+            $file = '@' . $data;
+        }
 
         parent::Image(
             $file,
@@ -567,5 +568,18 @@ class Wrapper extends TCPDF
             $alt,
             $alternateImages
         );
+    }
+
+    private function checkBase64Image(string $base64): bool
+    {
+        $img = imagecreatefromstring($base64);
+        if (!$img) {
+            return false;
+        }
+
+        $info = getimagesizefromstring($base64);
+        imagedestroy($img);
+
+        return $info && $info[0] > 0 && $info[1] > 0 && isset($info['mime']);
     }
 }
