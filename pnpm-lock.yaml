@@ -36,8 +36,8 @@ dependencies:
     specifier: ^1.15.3
     version: 1.15.3
   tinymce:
-    specifier: ^6.8.4
-    version: 6.8.4
+    specifier: ^7.2.0
+    version: 7.2.0
   vanilla-cookieconsent:
     specifier: ^3.0.1
     version: 3.0.1
@@ -95,7 +95,7 @@ devDependencies:
     specifier: ^4.0.0
     version: 4.0.0(prettier@3.3.3)
   sass:
-    specifier: ^1.77.6
+    specifier: ^1.80.6
     version: 1.80.6
   sigmund:
     specifier: ^1.0.1
@@ -4390,6 +4390,7 @@ packages:
   /is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dev: true
 
   /is-fullwidth-code-point@3.0.0:
@@ -6021,8 +6022,8 @@ packages:
     resolution: {integrity: sha512-tVGE0mVJPGb0chKhqmsoosjsS+qUnJVGJpZgsHYQcGoPlG3B51R3PouqTgEGH2Dc9jjFyOqOpix6ZHNMXp1FZg==}
     dev: true
 
-  /tinymce@6.8.4:
-    resolution: {integrity: sha512-okoJyxuPv1gzASxQDNgQbnUXOdAIyoOSXcXcZZu7tiW0PSKEdf3SdASxPBupRj+64/E3elHwVRnzSdo82Emqbg==}
+  /tinymce@7.2.0:
+    resolution: {integrity: sha512-R460NlE4REIFuLcZd9mpHK8zRsHdOueLV2m6Wsn0JHfGhDWMcfB1IqUX2QGrSbJga93ygJbJbNMwb2sakFlE/g==}
     dev: false
 
   /tmpl@1.0.5:
