@@ -57,7 +57,7 @@ export const handleAddFaq = () => {
   }
 };
 
-export const handleShowFaq = async () => {
+export const handleShowFaq = () => {
   const bookmarkToggle = document.getElementById('pmf-bookmark-toggle');
   if (bookmarkToggle) {
     bookmarkToggle.addEventListener('click', async (event) => {

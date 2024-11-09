@@ -13,16 +13,18 @@
  * @since     2022-01-31
  */
 
-// TinyMCE global, which is used to init the editor
-import tinymce from 'tinymce/tinymce';
-import 'tinymce/models/dom';
+/* Import TinyMCE */
+import tinymce from 'tinymce';
 
-// Theme
-import 'tinymce/themes/silver';
-// Toolbar icons
-import 'tinymce/icons/default';
-// Editor styles
-import 'tinymce/skins/ui/oxide/skin.min.css';
+/* Default icons are required. After that, import custom icons if applicable */
+import 'tinymce/icons/default/icons.min.js';
+
+/* Required TinyMCE components */
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
+
+/* Import a skin (can be a custom skin instead of the default) */
+import 'tinymce/skins/ui/oxide/skin.js';
 
 // importing the plugin js.
 import 'tinymce/plugins/advlist';
@@ -51,8 +53,11 @@ import 'tinymce/plugins/emoticons';
 import 'tinymce/plugins/emoticons/js/emojis';
 import 'tinymce/plugins/fullscreen';
 
-import contentCss from '!!raw-loader!tinymce/skins/content/default/content.min.css';
-import contentUiCss from '!!raw-loader!tinymce/skins/ui/oxide/content.min.css';
+/* content UI CSS is required */
+import contentUiSkinCss from 'tinymce/skins/ui/oxide/content.js';
+
+/* The default content CSS can be changed or replaced with appropriate CSS for the editor content. */
+import contentCss from 'tinymce/skins/content/default/content.js';
 
 export const renderEditor = () => {
   const form = document.getElementById('faqEditor');
@@ -69,9 +74,8 @@ export const renderEditor = () => {
       // General options
       language: editorLanguage,
       document_base_url: defaultLanguage,
-      skin: false,
-      content_css: false,
-      content_style: [contentCss, contentUiCss].join('\n'),
+      skin_url: 'default',
+      content_css: 'default',
       selector: 'textarea#editor',
       relative_urls: false,
       convert_urls: false,
@@ -113,7 +117,7 @@ export const renderEditor = () => {
       plugins:
         'advlist autolink link image lists charmap preview anchor pagebreak ' +
         'searchreplace wordcount visualblocks visualchars code insertdatetime media nonbreaking ' +
-        'save table directionality help emoticons fullscreen phpmyfaq',
+        'save table directionality help emoticons fullscreen',
 
       emoticons_database: 'emojis',
 
@@ -126,7 +130,7 @@ export const renderEditor = () => {
         'insertfile | cut copy codesample | bullist numlist |' +
         'link unlink anchor image media | charmap | insertdatetime | table |' +
         'forecolor backcolor emoticons | searchreplace | ' +
-        'pagebreak | code | phpmyfaq | fullscreen | preview',
+        'pagebreak | code | fullscreen | preview',
 
       // Formatting
       style_formats: [

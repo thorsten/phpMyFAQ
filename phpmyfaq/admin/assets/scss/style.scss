@@ -14,15 +14,15 @@
  */
 
 // Import Variables
-@import 'variables.scss';
+@import './variables.scss';
 @import './variables/spacing.scss';
 @import './variables/navigation.scss';
 
 // Import Bootstrap
-@import '~bootstrap/scss/bootstrap.scss';
+@import '../../../../node_modules/bootstrap/scss/bootstrap.scss';
 
 // Bootstrap Icons
-@import '~bootstrap-icons/font/bootstrap-icons.css';
+@import '../../../../node_modules/bootstrap-icons/font/bootstrap-icons';
 
 // Import Mixins
 @import 'mixins.scss';

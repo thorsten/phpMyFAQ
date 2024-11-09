@@ -60,7 +60,7 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.3 support:_
+_Running apache web server with PHP 8.4 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
