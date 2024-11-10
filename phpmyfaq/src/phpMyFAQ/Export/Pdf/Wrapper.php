@@ -480,7 +480,8 @@ class Wrapper extends TCPDF
     }
 
     /**
-     * Extends the TCPDF::Image() method to handle base64 encoded images.
+     * Extends the TCPDF::Image() method to convert all images to base64 encoded images.
+     * This is necessary as TCPDF does not support external images from self-signed certificates.
      *
      * @param string $file Name of the file containing the image or a '@' character followed by the image data
      *                          string. To link an image without embedding it on the document, set an asterisk
@@ -541,7 +542,7 @@ class Wrapper extends TCPDF
         $file = parse_url($file, PHP_URL_PATH);
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
-        $data = file_get_contents(PMF_ROOT_DIR . $file);
+        $data = file_get_contents($this->concatenatePaths($file));
 
         if ($this->checkBase64Image($data)) {
             $file = '@' . $data;
@@ -581,5 +582,19 @@ class Wrapper extends TCPDF
         imagedestroy($img);
 
         return $info && $info[0] > 0 && $info[1] > 0 && isset($info['mime']);
+    }
+
+    private function concatenatePaths(string $file): string
+    {
+        $trimmedPath = rtrim(PMF_ROOT_DIR, '/');
+        $trimmedFile = ltrim($file, '/');
+
+        if (str_starts_with($trimmedFile, basename($trimmedPath))) {
+            $relativePath = substr($trimmedFile, strlen(basename($trimmedPath)));
+        } else {
+            $relativePath = $trimmedFile;
+        }
+
+        return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
     }
 }
