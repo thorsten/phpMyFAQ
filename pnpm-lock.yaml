@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.11.8
     version: 2.11.8
   autocompleter:
-    specifier: ^8.0.4
-    version: 8.0.4
+    specifier: ^9.3.2
+    version: 9.3.2
   bootstrap:
     specifier: ^5.3.3
     version: 5.3.3(@popperjs/core@2.11.8)
@@ -21,8 +21,8 @@ dependencies:
     specifier: ^1.11.3
     version: 1.11.3
   chart.js:
-    specifier: ^4.4.4
-    version: 4.4.4
+    specifier: ^4.4.6
+    version: 4.4.6
   handlebars:
     specifier: 4.7.8
     version: 4.7.8
@@ -56,8 +56,8 @@ devDependencies:
     specifier: ^19.5.0
     version: 19.5.0
   '@testing-library/jest-dom':
-    specifier: ^6.6.2
-    version: 6.6.2
+    specifier: ^6.6.3
+    version: 6.6.3
   '@types/node':
     specifier: ^20.16.5
     version: 20.16.5
@@ -2421,8 +2421,8 @@ packages:
       '@sinonjs/commons': 3.0.1
     dev: true
 
-  /@testing-library/jest-dom@6.6.2:
-    resolution: {integrity: sha512-P6GJD4yqc9jZLbe98j/EkyQDTPgqftohZF5FBkHY5BUERZmcf4HeO2k0XaefEg329ux2p21i1A1DmyQ1kKw2Jw==}
+  /@testing-library/jest-dom@6.6.3:
+    resolution: {integrity: sha512-IteBhl4XqYNkM54f4ejhLRJiZNqcSCoXUOG2CPK7qbD322KjQozM4kHQOfkG2oln9b9HTYqs+Sae8vBATubxxA==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     dependencies:
       '@adobe/css-tools': 4.4.0
@@ -2663,8 +2663,8 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: true
 
-  /autocompleter@8.0.4:
-    resolution: {integrity: sha512-q334YswwucSBphN5djVkEt3beVhHotrCtPGNIXmyilw9UnXV9Cb+gNAZ2yhZSfiBSzP6rxHLLT2gpr57xgbcwQ==}
+  /autocompleter@9.3.2:
+    resolution: {integrity: sha512-rLbf2TLGOD7y+gOS36ksrZdIsvoHa2KXc2A7503w+NBRPrcF73zzFeYBxEcV/iMPjaBH3jFhNIYObZ7zt1fkCQ==}
     dev: false
 
   /autoprefixer@10.4.20(postcss@8.4.47):
@@ -3408,8 +3408,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chart.js@4.4.4:
-    resolution: {integrity: sha512-emICKGBABnxhMjUjlYRR12PmOXhJ2eJjEHL2/dZlWjxRAZT1D8xplLFq5M0tMQK8ja+wBS/tuVEJB5C6r7VxJA==}
+  /chart.js@4.4.6:
+    resolution: {integrity: sha512-8Y406zevUPbbIBA/HRk33khEmQPk5+cxeflWE/2rx1NJsjVWMPw/9mSP9rxHP5eqi6LNoPBVMfZHxbwLSgldYA==}
     engines: {pnpm: '>=8'}
     dependencies:
       '@kurkle/color': 0.3.2
