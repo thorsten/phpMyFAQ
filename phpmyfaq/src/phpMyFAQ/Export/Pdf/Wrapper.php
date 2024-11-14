@@ -542,7 +542,7 @@ class Wrapper extends TCPDF
         $file = parse_url($file, PHP_URL_PATH);
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
-        $data = file_get_contents($this->concatenatePaths($file));
+        $data = file_get_contents(PMF_ROOT_DIR, $this->concatenatePaths($file));
 
         if ($this->checkBase64Image($data)) {
             $file = '@' . $data;
@@ -584,16 +584,13 @@ class Wrapper extends TCPDF
         return $info && $info[0] > 0 && $info[1] > 0 && isset($info['mime']);
     }
 
-    private function concatenatePaths(string $file): string
+    public function concatenatePaths(string $path, string $file): string
     {
-        $trimmedPath = rtrim(PMF_ROOT_DIR, '/');
+        $trimmedPath = rtrim(str_replace('\\', '/', $path), '/');
         $trimmedFile = ltrim($file, '/');
 
-        if (str_starts_with($trimmedFile, basename($trimmedPath))) {
-            $relativePath = substr($trimmedFile, strlen(basename($trimmedPath)));
-        } else {
-            $relativePath = $trimmedFile;
-        }
+        $pos = strpos($trimmedFile, 'content');
+        $relativePath = substr($trimmedFile, $pos);
 
         return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
     }
