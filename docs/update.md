@@ -113,6 +113,11 @@ Then go to the "phpMyFAQ Update" page in the configuration section click through
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
    files into your installation and in the end, the database is updated
 
+Note:
+The online update feature is experimental and might not work in all environments.
+For example, if you're running phpMyFAQ in a subdirectory, the online update will break your RewriteBase path in the
+.htaccess file.
+
 ## Modifying templates for phpMyFAQ 4.0
 
 We recommend you take a look at the main [Bootstrap documentation](https://getbootstrap.com/).
