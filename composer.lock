@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdbb86190af31eab1cc79616781a6e9d",
+    "content-hash": "6d9da8071a92749476d385929179b982",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -7927,7 +7927,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2.0"
     },

@@ -23,8 +23,6 @@ use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
 use phpMyFAQ\Strings;
-use Random\RandomException;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -235,13 +233,13 @@ class UserSession
     {
         $request = Request::createFromGlobals();
 
-        Cookie::create($name)
-            ->withValue($sessionId ?? '')
-            ->withExpires($request->server->get('REQUEST_TIME') + $timeout)
-            ->withPath(dirname($request->server->get('SCRIPT_NAME')))
-            ->withDomain(parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST))
-            ->withSameSite($strict ? 'strict' : '')
-            ->withSecure($request->isSecure())
-            ->withHttpOnly();
+        setcookie($name, $sessionId ?? '', [
+            'expires' => $request->server->get('REQUEST_TIME') + $timeout,
+            'path' => dirname($request->server->get('SCRIPT_NAME')),
+            'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
+            'secure' => $request->isSecure(),
+            'httponly' => true,
+            'samesite' => $strict ? 'strict' : '',
+        ]);
     }
 }
