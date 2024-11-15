@@ -44,6 +44,7 @@
     "symfony/mailer": "^7.0",
     "symfony/routing": "^7.0",
     "tecnickcom/tcpdf": "~6.0",
+    "tivie/htaccess-parser": "*",
     "twig/intl-extra": "^3.10",
     "twig/twig": "^3.10"
   },
