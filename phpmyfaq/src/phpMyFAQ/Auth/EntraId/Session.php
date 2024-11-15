@@ -1,14 +1,29 @@
 <?php
 
+/**
+ * Session class for Entra ID.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-11-02
+ */
+
 namespace phpMyFAQ\Auth\EntraId;
 
 use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\AbstractSession;
-use Random\RandomException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
+use Symfony\Component\Uid\Uuid;
 
 class Session extends AbstractSession
 {
@@ -35,7 +50,7 @@ class Session extends AbstractSession
      */
     public function createCurrentSessionKey(): void
     {
-        $this->currentSessionKey = $this->uuid();
+        $this->currentSessionKey = Uuid::v4();
     }
 
     /**
@@ -93,28 +108,5 @@ class Session extends AbstractSession
     {
         $request = Request::createFromGlobals();
         return $request->cookies->get($name, '');
-    }
-
-    /**
-     * Returns a UUID Version 4 compatible universally unique identifier.
-     */
-    public function uuid(): string
-    {
-        try {
-            return sprintf(
-                '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0x0fff) | 0x4000,
-                random_int(0, 0x3fff) | 0x8000,
-                random_int(0, 0xffff),
-                random_int(0, 0xffff),
-                random_int(0, 0xffff)
-            );
-        } catch (RandomException $e) {
-            $this->configuration->getLogger()->error('Cannot generate UUID: ' . $e->getMessage());
-            return '';
-        }
     }
 }

@@ -36,13 +36,4 @@ class SessionTest extends TestCase
         $this->session->setCurrentSessionKey();
         $this->assertNotNull($this->session->getCurrentSessionKey());
     }
-
-    public function testUuid(): void
-    {
-        $uuid = $this->session->uuid();
-        $this->assertMatchesRegularExpression(
-            '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/',
-            $uuid
-        );
-    }
 }
