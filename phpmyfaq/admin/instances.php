@@ -18,7 +18,7 @@
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;

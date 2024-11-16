@@ -51,13 +51,6 @@ class InstallerTest extends TestCase
         $this->installer->checkBasicStuff();
     }
 
-    public function testAdjustRewriteBaseHtaccessThrowsExceptionForMissingFile(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The /path/to/.htaccess file does not exist!');
-        $this->installer->adjustRewriteBaseHtaccess('/path/to');
-    }
-
     public function testHasLdapSupport(): void
     {
         if (extension_loaded('ldap')) {

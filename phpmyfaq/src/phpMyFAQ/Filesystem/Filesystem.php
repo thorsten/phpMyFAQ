@@ -15,7 +15,7 @@
  * @since     2012-04-02
  */
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Filesystem;
 
 use phpMyFAQ\Core\Exception;
 
@@ -117,7 +117,7 @@ class Filesystem
     }
 
     /**
-     * Deletes given directory.
+     * Deletes the given directory.
      */
     public function deleteDirectory(string $pathname): bool
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ;
+namespace phpMyFAQ\Filesystem;
 
 use PHPUnit\Framework\TestCase;
 

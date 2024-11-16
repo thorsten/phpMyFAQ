@@ -22,7 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;

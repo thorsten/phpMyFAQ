@@ -41,6 +41,7 @@ use phpMyFAQ\Ldap;
 use phpMyFAQ\Link;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Installer
@@ -1142,7 +1143,8 @@ class Installer extends Setup
         }
 
         // adjust RewriteBase in .htaccess
-        $this->adjustRewriteBaseHtaccess($rootDir);
+        $envConfiguration = new EnvironmentConfigurator($rootDir, Request::createFromGlobals());
+        $envConfiguration->adjustRewriteBaseHtaccess();
     }
 
     /**
@@ -1152,37 +1154,6 @@ class Installer extends Setup
     public function checkMinimumPhpVersion(): bool
     {
         return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) >= 0;
-    }
-
-    /**
-     * Adjusts the RewriteBase in the .htaccess file for the user's environment to avoid errors with controllers.
-     * Returns true, if the file was successfully changed.
-     *
-     * @throws Exception
-     */
-    public function adjustRewriteBaseHtaccess(string $path): bool
-    {
-        $htaccessPath = $path . '/.htaccess';
-
-        if (!file_exists($htaccessPath)) {
-            throw new Exception(sprintf('The %s file does not exist!', $htaccessPath));
-        }
-
-        $lines = file($htaccessPath);
-        $newLines = [];
-
-        foreach ($lines as $line) {
-            if (str_starts_with($line, 'RewriteBase')) {
-                $requestUri = filter_input(INPUT_SERVER, 'PHP_SELF');
-                $rewriteBase = substr((string) $requestUri, 0, strpos((string) $requestUri, 'setup/index.php'));
-                $rewriteBase = ($rewriteBase === '') ? '/' : $rewriteBase;
-                $newLines[] = 'RewriteBase ' . $rewriteBase . PHP_EOL;
-            } else {
-                $newLines[] = $line;
-            }
-        }
-
-        return file_put_contents($htaccessPath, implode('', $newLines)) !== false;
     }
 
     public function hasLdapSupport(): bool

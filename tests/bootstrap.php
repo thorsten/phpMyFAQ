@@ -39,8 +39,8 @@ const PMF_TEST_DIR = __DIR__;
 const IS_VALID_PHPMYFAQ = true;
 const DEBUG = true;
 
-$_SERVER['HTTP_HOST'] = 'https://localhost/';
-$_SERVER['SERVER_NAME'] = 'https://localhost/';
+$_SERVER['HTTP_HOST'] = 'https://localhost/phpmyfaq-test/';
+$_SERVER['SERVER_NAME'] = 'https://localhost/phpmyfaq-test/';
 
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
@@ -63,7 +63,7 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
 //
-// Delete possible SQLite file first
+// Delete a possible SQLite file first
 //
 @unlink(PMF_TEST_DIR . '/test.db');
 

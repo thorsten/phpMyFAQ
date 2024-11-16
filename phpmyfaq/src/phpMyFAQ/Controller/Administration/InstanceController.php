@@ -23,7 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;

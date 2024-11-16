@@ -183,9 +183,6 @@ class UpdateController extends AbstractController
         return $this->json(['success' => Translation::get('downloadSuccessful')], Response::HTTP_OK);
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
@@ -208,9 +205,6 @@ class UpdateController extends AbstractController
         });
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
@@ -233,9 +227,6 @@ class UpdateController extends AbstractController
         });
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
@@ -256,9 +247,6 @@ class UpdateController extends AbstractController
         });
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
     {
