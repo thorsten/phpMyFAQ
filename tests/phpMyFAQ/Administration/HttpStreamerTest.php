@@ -25,7 +25,7 @@ class HttpStreamerTest extends TestCase
 
         $headers = xdebug_get_headers();
 
-        //$this->assertContains('Content-Type: application/pdf', $headers); // @todo test with PHP 8.4 final
+        $this->assertContains('Content-Type: application/pdf', $headers);
         $this->assertContains('Content-Description: phpMyFAQ PDF export file', $headers);
         $this->assertContains('Content-Transfer-Encoding: binary', $headers);
         $this->assertContains('Accept-Ranges: none', $headers);
