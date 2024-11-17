@@ -1,6 +1,6 @@
 import { handleReloadCaptcha } from './captcha';
 
-global.fetch = jest.fn(() =>
+global.fetch = vi.fn(() =>
   Promise.resolve({
     status: 200,
   })

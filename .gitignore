@@ -89,7 +89,7 @@ tests/content/core/config/ldap.php
 tests/content/upgrades
 tests/fixtures/path-to-delete/foo.bar.baz
 
-# Jest related stuff
+# Vitest related stuff
 coverage/*
 
 # PHPMD

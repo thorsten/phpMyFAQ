@@ -6,11 +6,11 @@ describe('fetchCaptchaImage function', () => {
 
   beforeEach(() => {
     // Mocking fetch function
-    fetchMock = jest.fn();
+    fetchMock = vi.fn();
     global.fetch = fetchMock;
 
     // Mocking console.error
-    consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {

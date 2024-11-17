@@ -4,7 +4,7 @@ import { serialize } from '../utils';
 describe('createComment function', () => {
   it('creates a comment successfully', async () => {
     // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       status: 200,
       json: () => Promise.resolve({ message: 'Comment created successfully' }),
     });
@@ -31,7 +31,7 @@ describe('createComment function', () => {
 
   it('throws an error if network response is not ok', async () => {
     // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });

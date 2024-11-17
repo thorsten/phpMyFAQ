@@ -9,6 +9,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.1.0-dev - unreleased
 
 - removed Webpack, now using Vite (Thorsten)
+- migrated from Jest to vitest (Thorsten)
 
 ### phpMyFAQ v4.0.0-RC.4 - 2024-11-09
 

@@ -1,4 +1,3 @@
-import '@testing-library/jest-dom';
 import { calculateReadingTime } from './reading-time';
 
 describe('calculateReadingTime', () => {

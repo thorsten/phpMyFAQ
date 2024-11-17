@@ -1,11 +1,13 @@
 import { fetchAutoCompleteData } from './autocomplete';
-import fetchMock from 'jest-fetch-mock';
+import createFetchMock from 'vitest-fetch-mock';
 
-fetchMock.enableMocks();
+const fetchMocker = createFetchMock(vi);
+
+fetchMocker.enableMocks();
 
 describe('fetchAutoCompleteData', () => {
   beforeEach(() => {
-    fetch.resetMocks();
+    fetchMocker.resetMocks();
   });
 
   it('should return autocomplete data when the response is successful', async () => {

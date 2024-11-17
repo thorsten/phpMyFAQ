@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import path from 'path';
 import { createHtmlPlugin } from 'vite-plugin-html';
@@ -58,5 +59,10 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {},
     },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    include: ['**/phpmyfaq/assets/**/*.test.js', '**/phpmyfaq/admin/assets/**/*.test.js'],
   },
 });

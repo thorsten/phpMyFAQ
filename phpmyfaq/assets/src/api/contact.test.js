@@ -4,7 +4,7 @@ import { serialize } from '../utils';
 describe('send function', () => {
   it('sends a message successfully', async () => {
     // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       status: 200,
       json: () => Promise.resolve({ success: 'Contact message sent successfully' }),
     });
@@ -31,7 +31,7 @@ describe('send function', () => {
 
   it('throws an error if network response is not ok', async () => {
     // Mocking fetch function
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       status: 400,
       json: () => Promise.resolve({ error: 'Something went wrong' }),
     });
