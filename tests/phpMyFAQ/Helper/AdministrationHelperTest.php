@@ -58,7 +58,9 @@ class AdministrationHelperTest extends TestCase
      */
     public function testAddMenuEntryWithProperPermissionAndActive(): void
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
 
         $user = new CurrentUser(Configuration::getConfigurationInstance());
         $user->login('admin', 'password');
@@ -80,7 +82,9 @@ class AdministrationHelperTest extends TestCase
 
     public function testAddMenuEntryWithProperPermissionAndMultipleRestrictions(): void
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
 
         $user = new CurrentUser(Configuration::getConfigurationInstance());
         $user->login('admin', 'password');
