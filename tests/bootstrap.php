@@ -39,8 +39,8 @@ const PMF_TEST_DIR = __DIR__;
 const IS_VALID_PHPMYFAQ = true;
 const DEBUG = true;
 
-$_SERVER['HTTP_HOST'] = 'https://localhost/phpmyfaq-test/';
-$_SERVER['SERVER_NAME'] = 'https://localhost/phpmyfaq-test/';
+$_SERVER['HTTP_HOST'] = 'https://localhost/';
+$_SERVER['SERVER_NAME'] = 'https://localhost/';
 
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
@@ -78,7 +78,8 @@ $setup = [
     'loginname' => 'admin',
     'password' => 'password',
     'password_retyped' => 'password',
-    'rootDir' => PMF_TEST_DIR
+    'rootDir' => PMF_TEST_DIR,
+    'mainUrl' => 'https://localhost/',
 ];
 
 Strings::init();

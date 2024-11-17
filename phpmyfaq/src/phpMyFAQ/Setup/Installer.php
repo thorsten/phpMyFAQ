@@ -1083,7 +1083,7 @@ class Installer extends Setup
             $configuration->add($name, $value);
         }
 
-        $configuration->update(['main.referenceURL' => $link->getSystemUri('/setup/index.php')]);
+        $configuration->update(['main.referenceURL' => $setup['mainUrl'] ?? $link->getSystemUri('/setup/index.php')]);
         $configuration->add('security.salt', md5($configuration->getDefaultUrl()));
 
         // add an admin account and rights
