@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\System;
@@ -228,18 +229,19 @@ class UpdateController extends AbstractController
     }
 
     #[Route('admin/api/install-package')]
-    public function installPackage(): StreamedResponse
+    public function installPackage(Request $request): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $upgrade = new Upgrade(new System(), $this->configuration);
-        return new StreamedResponse(static function () use ($upgrade) {
+        $configurator = new EnvironmentConfigurator(PMF_ROOT_DIR, $request);
+        return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-            if ($upgrade->installPackage($progressCallback)) {
+            if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
                 echo json_encode(['message' => '✅ Package successfully installed.']);
             } else {
                 echo json_encode(['message' => 'Install package failed']);
