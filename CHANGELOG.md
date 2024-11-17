@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.0-dev - unreleased
 
+- added configuration to edit robots.txt (Thorsten)
 - removed Webpack, now using Vite (Thorsten)
 - migrated from Jest to vitest (Thorsten)
 

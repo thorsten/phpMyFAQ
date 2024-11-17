@@ -655,7 +655,7 @@ require $includePhp;
 // Check for 404 HTTP status code
 //
 if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404') {
-    // @todo handle 404 :-)
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
 $response->setContent($twigTemplate->render($templateVars));

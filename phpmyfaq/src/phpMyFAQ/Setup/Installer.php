@@ -391,6 +391,7 @@ class Installer extends Setup
         'seo.metaTagsCategories' => 'index, follow',
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
+        'seo.contentRobotsText' => 'User-agent: *\nDisallow: /admin/\nSitemap: /sitemap.xml',
 
         'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',

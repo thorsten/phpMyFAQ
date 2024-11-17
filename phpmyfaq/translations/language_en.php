@@ -1475,4 +1475,7 @@ $PMF_LANG['msgErrorEnterMessage'] = 'Please enter a message!';
 $PMF_LANG['msgLinkCopied'] = 'Link copied to clipboard';
 $PMF_LANG['msgDocumentation'] = 'Dokumentation';
 
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Content for robots.txt', ''];
+
 return $PMF_LANG;

@@ -97,7 +97,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
         RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
     </IfModule>
     # the path to your phpMyFAQ installation
-    RewriteBase //localhost/phpmyfaq-test/./phpmyfaq/src/libs/bin/phpunit/
+    RewriteBase /
     # Error pages
     ErrorDocument 404 /index.php?action=404
     # General pages
@@ -124,9 +124,11 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ sitemap
     RewriteRule ^sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
-    RewriteRule ^sitemap.xml$ sitemap.xml.php [L]
-    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L]
-    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L]
+    RewriteRule ^sitemap.xml$ sitemap.xml.php [L,QSA]
+    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L,QSA]
+    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L,QSA]
+    # robots.txt
+    RewriteRule ^robots.txt$ robots.txt.php [L,QSA]
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
