@@ -229,12 +229,12 @@ class UpdateController extends AbstractController
     }
 
     #[Route('admin/api/install-package')]
-    public function installPackage(Request $request): StreamedResponse
+    public function installPackage(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $upgrade = new Upgrade(new System(), $this->configuration);
-        $configurator = new EnvironmentConfigurator(PMF_ROOT_DIR, $request);
+        $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
         return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";

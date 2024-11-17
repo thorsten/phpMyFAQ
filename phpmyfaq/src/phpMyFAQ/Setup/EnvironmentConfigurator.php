@@ -2,9 +2,9 @@
 
 namespace phpMyFAQ\Setup;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use SplFileObject;
-use Symfony\Component\HttpFoundation\Request;
 use Tivie\HtaccessParser\Exception\SyntaxException;
 use Tivie\HtaccessParser\Parser;
 
@@ -12,21 +12,11 @@ use const Tivie\HtaccessParser\Token\TOKEN_DIRECTIVE;
 
 class EnvironmentConfigurator
 {
-    private string $rootFilePath;
-
     private string $htaccessPath;
 
-    private string $serverPath;
-
-    public function __construct(string $rootPath = '', private readonly ?Request $request = null)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->rootFilePath = $rootPath;
-        $this->htaccessPath = $this->rootFilePath . '/.htaccess';
-    }
-
-    public function getRootFilePath(): string
-    {
-        return $this->rootFilePath;
+        $this->htaccessPath = $this->configuration->getRootPath() . '/.htaccess';
     }
 
     public function getHtaccessPath(): string
@@ -36,7 +26,7 @@ class EnvironmentConfigurator
 
     public function getServerPath(): string
     {
-        return $this->serverPath = $this->request->getPathInfo();
+        return parse_url($this->configuration->getDefaultUrl(), PHP_URL_PATH);
     }
 
     /**
@@ -67,7 +57,7 @@ class EnvironmentConfigurator
     public function adjustRewriteBaseHtaccess(): bool
     {
         if (!file_exists($this->htaccessPath)) {
-            throw new Exception(sprintf('The %s file does not exist!', $this->htaccessPath));
+            throw new Exception(sprintf('The %s/.htaccess file does not exist!', $this->getServerPath()));
         }
 
         $file = new SplFileObject($this->htaccessPath);

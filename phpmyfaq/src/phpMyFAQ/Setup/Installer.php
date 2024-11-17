@@ -1130,21 +1130,21 @@ class Installer extends Setup
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {
-            $elasticsearchConfiguration = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
+            $esConfiguration = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
 
-            $configuration->setElasticsearchConfig($elasticsearchConfiguration);
+            $configuration->setElasticsearchConfig($esConfiguration);
 
-            $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
+            $esClient = ClientBuilder::create()->setHosts($esConfiguration->getHosts())->build();
 
             $configuration->setElasticsearch($esClient);
 
-            $faqInstanceElasticsearch = new Elasticsearch($configuration);
-            $faqInstanceElasticsearch->createIndex();
+            $esInstance = new Elasticsearch($configuration);
+            $esInstance->createIndex();
         }
 
         // adjust RewriteBase in .htaccess
-        $envConfiguration = new EnvironmentConfigurator($rootDir, Request::createFromGlobals());
-        $envConfiguration->adjustRewriteBaseHtaccess();
+        $configurator = new EnvironmentConfigurator($configuration);
+        $configurator->adjustRewriteBaseHtaccess();
     }
 
     /**
