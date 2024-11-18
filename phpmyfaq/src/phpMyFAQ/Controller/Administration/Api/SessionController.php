@@ -16,7 +16,7 @@
  * @since     2024-01-13
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use Exception;
 use phpMyFAQ\Controller\AbstractController;

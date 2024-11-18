@@ -15,9 +15,8 @@
  * @since     2023-10-27
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Tag;

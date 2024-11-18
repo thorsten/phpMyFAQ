@@ -15,7 +15,7 @@
  * @since     2023-10-27
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Image;

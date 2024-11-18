@@ -15,7 +15,7 @@
  * @since     2024-04-21
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
 use phpMyFAQ\Administration\AdminLog;

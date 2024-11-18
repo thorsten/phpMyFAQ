@@ -14,7 +14,7 @@
  * @since     2023-10-28
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use Exception;
@@ -32,8 +32,8 @@ use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Faq\Import;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;

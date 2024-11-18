@@ -15,7 +15,7 @@
  * @since     2023-10-26
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AttachmentController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('./admin/api/content/attachments')]
     public function delete(Request $request): JsonResponse
@@ -62,7 +62,7 @@ class AttachmentController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('./admin/api/content/attachments/refresh')]
     public function refresh(Request $request): JsonResponse

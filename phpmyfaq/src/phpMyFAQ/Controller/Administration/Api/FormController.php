@@ -15,17 +15,18 @@
  * @since     2024-03-09
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Administration\Route;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Forms;
+use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use phpMyFAQ\Filter;
-use phpMyFAQ\Session\Token;
-use phpMyFAQ\Forms;
 use Symfony\Component\HttpFoundation\Response;
 
 class FormController extends AbstractController

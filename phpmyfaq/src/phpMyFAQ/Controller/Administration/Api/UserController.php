@@ -15,7 +15,7 @@
  * @since     2023-10-27
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Auth;

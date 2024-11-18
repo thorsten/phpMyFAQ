@@ -15,30 +15,30 @@
  * @since     2023-07-08
  */
 
-use phpMyFAQ\Controller\Administration\AttachmentController;
-use phpMyFAQ\Controller\Administration\CategoryController;
-use phpMyFAQ\Controller\Administration\CommentController;
-use phpMyFAQ\Controller\Administration\ConfigurationController;
-use phpMyFAQ\Controller\Administration\ConfigurationTabController;
-use phpMyFAQ\Controller\Administration\DashboardController;
-use phpMyFAQ\Controller\Administration\ElasticsearchController;
-use phpMyFAQ\Controller\Administration\ExportController;
-use phpMyFAQ\Controller\Administration\FaqController;
-use phpMyFAQ\Controller\Administration\FormController;
-use phpMyFAQ\Controller\Administration\GlossaryController;
-use phpMyFAQ\Controller\Administration\GroupController;
-use phpMyFAQ\Controller\Administration\ImageController;
-use phpMyFAQ\Controller\Administration\InstanceController;
-use phpMyFAQ\Controller\Administration\MarkdownController;
-use phpMyFAQ\Controller\Administration\NewsController;
-use phpMyFAQ\Controller\Administration\QuestionController;
-use phpMyFAQ\Controller\Administration\SearchController;
-use phpMyFAQ\Controller\Administration\SessionController;
-use phpMyFAQ\Controller\Administration\StatisticsController;
-use phpMyFAQ\Controller\Administration\StopWordController;
-use phpMyFAQ\Controller\Administration\TagController;
-use phpMyFAQ\Controller\Administration\UpdateController;
-use phpMyFAQ\Controller\Administration\UserController;
+use phpMyFAQ\Controller\Administration\Api\AttachmentController;
+use phpMyFAQ\Controller\Administration\Api\CategoryController;
+use phpMyFAQ\Controller\Administration\Api\CommentController;
+use phpMyFAQ\Controller\Administration\Api\ConfigurationController;
+use phpMyFAQ\Controller\Administration\Api\ConfigurationTabController;
+use phpMyFAQ\Controller\Administration\Api\DashboardController;
+use phpMyFAQ\Controller\Administration\Api\ElasticsearchController;
+use phpMyFAQ\Controller\Administration\Api\ExportController;
+use phpMyFAQ\Controller\Administration\Api\FaqController;
+use phpMyFAQ\Controller\Administration\Api\FormController;
+use phpMyFAQ\Controller\Administration\Api\GlossaryController;
+use phpMyFAQ\Controller\Administration\Api\GroupController;
+use phpMyFAQ\Controller\Administration\Api\ImageController;
+use phpMyFAQ\Controller\Administration\Api\InstanceController;
+use phpMyFAQ\Controller\Administration\Api\MarkdownController;
+use phpMyFAQ\Controller\Administration\Api\NewsController;
+use phpMyFAQ\Controller\Administration\Api\QuestionController;
+use phpMyFAQ\Controller\Administration\Api\SearchController;
+use phpMyFAQ\Controller\Administration\Api\SessionController;
+use phpMyFAQ\Controller\Administration\Api\StatisticsController;
+use phpMyFAQ\Controller\Administration\Api\StopWordController;
+use phpMyFAQ\Controller\Administration\Api\TagController;
+use phpMyFAQ\Controller\Administration\Api\UpdateController;
+use phpMyFAQ\Controller\Administration\Api\UserController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 

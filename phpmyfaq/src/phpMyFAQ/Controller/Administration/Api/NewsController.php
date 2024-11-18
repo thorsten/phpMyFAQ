@@ -15,7 +15,7 @@
  * @since     2024-04-20
  */
 
-namespace phpMyFAQ\Controller\Administration;
+namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use phpMyFAQ\Controller\AbstractController;
