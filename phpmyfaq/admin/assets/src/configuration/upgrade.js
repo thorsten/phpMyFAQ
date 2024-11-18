@@ -261,7 +261,6 @@ const installPackage = async () => {
             progressBarInstallation.style.width = '100%';
             progressBarInstallation.innerText = '100%';
             progressBarInstallation.classList.remove('progress-bar-animated');
-            card.classList.add('text-bg-success');
             return;
           } else {
             progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
