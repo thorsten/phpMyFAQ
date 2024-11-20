@@ -15,7 +15,7 @@
   ],
   "homepage": "https://www.phpmyfaq.de/",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "type": "module",
   "scripts": {
@@ -24,7 +24,7 @@
     "build:prod": "vite build",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "prepare": "husky install",
+    "prepare": "husky",
     "pretty-quick": "pretty-quick",
     "test": "vitest --run",
     "test:watch": "vitest",

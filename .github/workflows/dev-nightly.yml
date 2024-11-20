@@ -57,10 +57,10 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist --no-dev
 
-      - name: Set Node.js 20.x
+      - name: Set Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
 
       - uses: pnpm/action-setup@v4
         name: Install pnpm

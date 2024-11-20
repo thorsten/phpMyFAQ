@@ -67,7 +67,7 @@ services:
       - pnpm
 
   pnpm:
-    image: node:20-alpine
+    image: node:22-alpine
     restart: 'no'
     command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
     working_dir: /app
