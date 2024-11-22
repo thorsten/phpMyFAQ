@@ -1,44 +1,48 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-wrench"></i>
-    {{ adminHeaderStopWords }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-{% if hasPermission %}
-  <div class="row">
-    <div class="col-lg-12">
-      <p>
-        {{ msgDescription }}
-      </p>
-      <form class="row row-cols-lg-auto g-3 align-items-center">
-        {{ csrfToken | raw }}
-
-        <div class="col-12">
-          <label class="visually-hidden" for="pmf-stop-words-language-selector">
-            {{ msgDescription }}
-          </label>
-          <select id="pmf-stop-words-language-selector" class="form-select">
-            <option value="none">---</option>
-            {% for key, value in sortedLanguageCodes %}
-            <option value="{{ key | lower }}">{{ value }}</option>
-            {% endfor %}
-          </select>
-          <span id="pmf-stop-words-loading-indicator"></span>
-        </div>
-
-        <div class="col-12">
-          <button class="btn btn-primary" type="button" id="pmf-stop-words-add-input" disabled>
-            <i aria-hidden="true" class="bi bi-plus"></i> {{ buttonAdd }}
-          </button>
-        </div>
-      </form>
-    </div>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-wrench"></i>
+      {{ adminHeaderStopWords }}
+    </h1>
   </div>
 
-  <div class="row">
-    <div class="col-12">
-      <div class="mt-3" id="pmf-stopwords-content"></div>
+  {% if hasPermission %}
+    <div class="row">
+      <div class="col-lg-12">
+        <p>
+          {{ msgDescription }}
+        </p>
+        <form class="row row-cols-lg-auto g-3 align-items-center">
+          {{ csrfToken | raw }}
+
+          <div class="col-12">
+            <label class="visually-hidden" for="pmf-stop-words-language-selector">
+              {{ msgDescription }}
+            </label>
+            <select id="pmf-stop-words-language-selector" class="form-select">
+              <option value="none">---</option>
+              {% for key, value in sortedLanguageCodes %}
+                <option value="{{ key | lower }}">{{ value }}</option>
+              {% endfor %}
+            </select>
+            <span id="pmf-stop-words-loading-indicator"></span>
+          </div>
+
+          <div class="col-12">
+            <button class="btn btn-primary" type="button" id="pmf-stop-words-add-input" disabled>
+              <i aria-hidden="true" class="bi bi-plus"></i> {{ buttonAdd }}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
-{% endif %}
+
+    <div class="row">
+      <div class="col-12">
+        <div class="mt-3" id="pmf-stopwords-content"></div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

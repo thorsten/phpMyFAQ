@@ -39,7 +39,7 @@ $faqHelper = new FaqHelper($faqConfig);
 $faq->setUser($user->getUserId());
 $faq->setGroups($currentGroups);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twig->addExtension(new CategoryNameTwigExtension());
 $twig->addExtension(new CreateLinkTwigExtension());
 $twig->addExtension(new FaqTwigExtension());

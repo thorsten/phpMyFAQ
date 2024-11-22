@@ -808,7 +808,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Los términos de búsqueda más populares
 $LANG_CONF['main.enableWysiwygEditor'] = array('checkbox', 'Habilitar editor WYSIWYG');
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Estadística de búsqueda';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Estadística de búsqueda';
 $PMF_LANG['ad_searchstats_search_term'] = 'Términos de búsqueda';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Número';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Idioma';
@@ -908,7 +908,7 @@ $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Encriptaci
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Clave predeterminada para el cifrado<br/><small style=\"color: red\">¡Advertencia: No la cambie después de habilitar la encriptación!</small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Actualizar';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Actualizar';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Estás usando la versión actual de phpMyFAQ. No es necesaria una actualización.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "¿Permitir los inicios de sesión sólo vía SSL/TLS?");
 $PMF_LANG['msgSecureSwitch'] = 'Cambiar a modo seguro de inicio de sesión';
@@ -1141,12 +1141,12 @@ $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Habilitar la respuesta i
 
 // añadido v2.9.0-beta2 - 2015-12-23 por Thorsten
 $LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Activar soporte para Elasticsearch'];
-$PMF_LANG['ad_menu_elasticsearch'] = 'Configuración Elasticsearch';
-$PMF_LANG['ad_es_create_index'] = 'Crear índice de búsqueda';
-$PMF_LANG['ad_es_drop_index'] = 'Eliminar índice de búsqueda';
-$PMF_LANG['ad_es_bulk_index'] = 'Importación completa';
-$PMF_LANG['ad_es_create_index_success'] = 'El índice de búsqueda de Elasticsearch fue creado con éxito.';
-$PMF_LANG['ad_es_drop_index_success'] = 'El índice de búsqueda de Elasticsearch ha sido eliminado con éxito.';
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Configuración Elasticsearch';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Crear índice de búsqueda';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Eliminar índice de búsqueda';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Importación completa';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'El índice de búsqueda de Elasticsearch fue creado con éxito.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'El índice de búsqueda de Elasticsearch ha sido eliminado con éxito.';
 $PMF_LANG['ad_export_generate_json'] = 'Exportar como archivo JSON';
 $PMF_LANG['ad_media_name_search'] = 'Buscar el nombre del medio';
 

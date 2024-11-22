@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Twig\Error\LoaderError;
+use Twig\Extension\ExtensionInterface;
 
 #[OA\Info(
     version: '3.0',
@@ -52,6 +54,8 @@ abstract class AbstractController
     protected ?Configuration $configuration = null;
     /** @var CurrentUser|null */
     protected ?CurrentUser $currentUser = null;
+    /** @var ExtensionInterface[] */
+    private array $twigExtensions = [];
 
     /**
      * Check if the FAQ should be secured.
@@ -75,11 +79,12 @@ abstract class AbstractController
      * @param Response|null $response
      * @return Response
      * @throws Exception
+     * @throws LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = $this->getTwigWrapper();
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));
@@ -93,11 +98,11 @@ abstract class AbstractController
      * @param string                                                  $pathToTwigFile
      * @param array<string, array<int<0, max>, array<string, mixed>>> $templateVars
      * @return string
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
     {
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = $this->getTwigWrapper();
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         return $template->render($templateVars);
@@ -117,6 +122,23 @@ abstract class AbstractController
     }
 
     /**
+     * @return TwigWrapper
+     * @throws LoaderError
+     */
+    public function getTwigWrapper(): TwigWrapper
+    {
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+
+        if (!empty($this->twigExtensions)) {
+            foreach ($this->twigExtensions as $extension) {
+                $twigWrapper->addExtension($extension);
+            }
+        }
+
+        return $twigWrapper;
+    }
+
+    /**
      * @throws UnauthorizedHttpException|\Exception
      */
     protected function hasValidToken(): void
@@ -128,7 +150,7 @@ abstract class AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     protected function isSecured(): void
     {
@@ -139,7 +161,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userIsAuthenticated(): void
     {
@@ -150,7 +171,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userIsSuperAdmin(): void
     {
@@ -161,7 +181,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userHasGroupPermission(): void
     {
@@ -204,6 +223,7 @@ abstract class AbstractController
 
     /**
      * @throws \JsonException
+     * @throws \Exception
      */
     protected function captchaCodeIsValid(Request $request): bool
     {
@@ -228,6 +248,11 @@ abstract class AbstractController
     public function isApiEnabled(): bool
     {
         return (bool) $this->configuration->get('api.enableAccess');
+    }
+
+    public function addExtension(ExtensionInterface $extension): void
+    {
+        $this->twigExtensions[] = $extension;
     }
 
     protected function createContainer(): ContainerBuilder

@@ -14,6 +14,7 @@
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-26
+ * @deprecated will be removed in phpMyFAQ 4.1
  */
 
 use phpMyFAQ\Configuration;
@@ -31,7 +32,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/footer.twig');
+$template = $twig->loadTemplate('@admin/footer.twig');
 
 $templateVars = [
     'msgSessionExpiringSoon' => Translation::get('msgSessionExpiringSoon'),

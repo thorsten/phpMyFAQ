@@ -36,7 +36,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($user);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/import-export/export.twig');
+$template = $twig->loadTemplate('@admin/import-export/export.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::EXPORT->value)) {
     $category = new Category($faqConfig, [], false);

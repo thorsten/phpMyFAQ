@@ -259,7 +259,7 @@ if ('' == $searchResult && !is_null($inputSearchTerm)) {
 $confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
 $totalPages = (int)ceil($numOfResults / $confPerPage);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./search.twig');
 

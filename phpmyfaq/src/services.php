@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Session as AdminSession;
+use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
@@ -32,6 +33,7 @@ use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
@@ -55,6 +57,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.admin.session', AdminSession::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.attachment-collection', AttachmentCollection::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
@@ -110,6 +117,11 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.instance.client', Instance\Client::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.language', Language::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
@@ -128,6 +140,8 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.services.gravatar', Gravatar::class);
+
+    $services->set('phpmyfaq.system', System::class);
 
     $services->set('phpmyfaq.tags', Tags::class)
         ->args([

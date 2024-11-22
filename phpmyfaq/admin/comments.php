@@ -39,7 +39,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new IntlExtension());
 $twig->addExtension(new FaqTwigExtension());
-$template = $twig->loadTemplate('./admin/content/comments.twig');
+$template = $twig->loadTemplate('@admin/content/comments.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_DELETE->value)) {
     $comment = new Comments($faqConfig);

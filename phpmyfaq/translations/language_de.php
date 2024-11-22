@@ -807,7 +807,7 @@ $PMF_LANG['msgMostPopularSearches'] = "Beliebte Suchbegriffe";
 $LANG_CONF['main.enableWysiwygEditor'] = ["checkbox", "Aktivierung des WYSIWYG Editors"];
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = "Suchstatistik";
+$PMF_LANG['msgAdminElasticsearchStats'] = "Suchstatistik";
 $PMF_LANG['ad_searchstats_search_term'] = "Suchbegriff";
 $PMF_LANG['ad_searchstats_search_term_count'] = "Anzahl";
 $PMF_LANG['ad_searchstats_search_term_lang'] = "Sprache";
@@ -907,7 +907,7 @@ $LANG_CONF['records.enableAttachmentEncryption'] = ["checkbox", "Verschlüsselun
 $LANG_CONF['records.defaultAttachmentEncKey'] = ['input', 'Standardschlüssel für Verschlüsselung', 'Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Update";
+$PMF_LANG['msgAdminHeaderUpdate'] = "phpMyFAQ Update";
 $PMF_LANG['ad_you_shouldnt_update'] = "Sie nutzen die aktuelle Version von phpMyFAQ. Eine Aktualisierung ist nicht notwendig.";
 $LANG_CONF['security.useSslForLogins'] = ["checkbox", "Logins nur über SSL/TLS erlauben? "];
 $PMF_LANG['msgSecureSwitch'] = "Zum sicheren Login wechseln";
@@ -1139,13 +1139,13 @@ $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Aktivierung von Smart An
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Aktiviere Elasticsearch Unterstützung'];
-$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch Konfiguration';
-$PMF_LANG['ad_es_create_index'] = 'Erstelle Suchindex';
-$PMF_LANG['ad_es_drop_index'] = 'Lösche Suchindex';
-$PMF_LANG['ad_es_bulk_index'] = 'Komplett-Import';
-$PMF_LANG['ad_es_create_index_success'] = 'Der Elasticsearch Suchindex erfolgreich erstellt.';
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch Konfiguration';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Erstelle Suchindex';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Lösche Suchindex';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Komplett-Import';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Der Elasticsearch Suchindex erfolgreich erstellt.';
 $PMF_LANG['ad_es_create_import_success'] = 'Der Elasticsearch Import war erfolgreich.';
-$PMF_LANG['ad_es_drop_index_success'] = 'Der Elasticsearch Suchindex erfolgreich gelöscht.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Der Elasticsearch Suchindex erfolgreich gelöscht.';
 $PMF_LANG['ad_export_generate_json'] = 'Als JSON-Datei exportieren';
 $PMF_LANG['ad_media_name_search'] = 'Suche nach Mediennamen';
 

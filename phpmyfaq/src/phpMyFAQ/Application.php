@@ -101,8 +101,16 @@ readonly class Application
             $arguments = $argumentResolver->getArguments($request, $controller);
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
-        } catch (ResourceNotFoundException) {
-            $response = new Response('Not Found', Response::HTTP_NOT_FOUND);
+        } catch (ResourceNotFoundException $exception) {
+            $response = new Response(
+                sprintf(
+                    'Not Found: %s at line %d at %s',
+                    $exception->getMessage(),
+                    $exception->getLine(),
+                    $exception->getFile()
+                ),
+                Response::HTTP_NOT_FOUND
+            );
         } catch (UnauthorizedHttpException) {
             $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         } catch (BadRequestException $exception) {

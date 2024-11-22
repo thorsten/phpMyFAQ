@@ -366,25 +366,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'config':
                 require 'configuration.php';
                 break;
-            case 'system':
-                require 'system.php';
-                break;
-            case 'update-instance':
-            case 'instances':
-                require 'instances.php';
-                break;
-            case 'edit-instance':
-                require 'instances.edit.php';
-                break;
-            case 'stopwordsconfig':
-                require 'stopwords.php';
-                break;
-            case 'elasticsearch':
-                require 'elasticsearch.php';
-                break;
-            case 'upgrade':
-                require 'upgrade.php';
-                break;
             // functions for backup administration
             case 'backup':
                 require 'backup.main.php';
@@ -398,10 +379,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 break;
             case 'export':
                 require 'export.php';
-                break;
-            // attachment administration
-            case 'attachments':
-                require 'attachments.php';
                 break;
             case 'forms':
                 require 'forms.php';

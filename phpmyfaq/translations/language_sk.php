@@ -829,7 +829,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Najčastejšie vyhľadávania sú:';
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Povoliť WYSIWYG editor (prednastavené: povoliť)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Štatistiky vyhľadávania';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Štatistiky vyhľadávania';
 $PMF_LANG['ad_searchstats_search_term'] = 'Kľúčové slová';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Počet';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Jazyk';
@@ -930,7 +930,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť �
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Máte najnovšiu verziu phpMyFAQ. Teraz nepotrebujete upgrade.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Povoliť iba prihlásenia cez zabezpečené pripojenie? (prednastavené: nepovoliť)");
 $PMF_LANG['msgSecureSwitch'] = "Prepnúť na bezpečný mód pre prihlásenie!";

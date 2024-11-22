@@ -1,114 +1,118 @@
-<form id="configuration-list" name="configuration-list" method="post" action="#">
-  <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
-  <input type="hidden" id="pmf-language" name="pmf-language" value="{{ language }}">
+{% extends '@admin/index.twig' %}
 
-  <div
-    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-wrench"></i>
-      {{ adminHeaderConfiguration }}
-    </h1>
+{% block content %}
+  <form id="configuration-list" name="configuration-list" method="post" action="#">
+    <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+    <input type="hidden" id="pmf-language" name="pmf-language" value="{{ language }}">
 
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <button class="btn btn-outline-success" id="save-configuration" type="button">
-          <i class="bi bi-save" aria-hidden="true"></i>
-          {{ adminConfigurationButtonSave }}
-        </button>
-      </div>
-    </div>
-  </div>
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i aria-hidden="true" class="bi bi-wrench"></i>
+        {{ adminHeaderConfiguration }}
+      </h1>
 
-  <div id="pmf-configuration-result"></div>
-
-  <div class="row">
-    <div class="col-lg-12">
-      <div id="pmf-admin-configuration-container">
-
-        <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="nav-item">
-            <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
-              <i aria-hidden="true" class="bi bi-house-check"></i>
-              {{ 'mainControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-list"></i>
-              {{ 'recordsControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-search"></i>
-              {{ 'searchControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-exclamation-circle"></i>
-              {{ 'securityControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-hand-thumbs-down"></i>
-              {{ 'spamControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-search"></i>
-              {{ 'seoCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#layout" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-pencil"></i>
-              {{ 'layoutControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-inbox"></i>
-              {{ 'mailControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-gear"></i>
-              API
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#upgrade" aria-controls="upgrade" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-arrow-clockwise"></i>
-              {{ 'upgradeControlCenter' | translate }}
-            </a>
-          </li>
-          <li role="presentation" class="nav-item">
-            <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
-              <i aria-hidden="true" class="bi bi-database"></i>
-              LDAP
-            </a>
-          </li>
-        </ul>
-
-        <div class="tab-content p-2 pt-4 pmf-configuration-panel border-bottom mb-4 shadow">
-          <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
-          <div role="tabpanel" class="tab-pane fade" id="records"></div>
-          <div role="tabpanel" class="tab-pane fade" id="search"></div>
-          <div role="tabpanel" class="tab-pane fade" id="security"></div>
-          <div role="tabpanel" class="tab-pane fade" id="spam"></div>
-          <div role="tabpanel" class="tab-pane fade" id="seo"></div>
-          <div role="tabpanel" class="tab-pane fade" id="layout"></div>
-          <div role="tabpanel" class="tab-pane fade" id="mail"></div>
-          <div role="tabpanel" class="tab-pane fade" id="api"></div>
-          <div role="tabpanel" class="tab-pane fade" id="upgrade"></div>
-          <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <button class="btn btn-outline-success" id="save-configuration" type="button">
+            <i class="bi bi-save" aria-hidden="true"></i>
+            {{ adminConfigurationButtonSave }}
+          </button>
         </div>
       </div>
     </div>
-  </div>
 
-</form>
+    <div id="pmf-configuration-result"></div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div id="pmf-admin-configuration-container">
+
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item">
+              <a href="#main" aria-controls="main" role="tab" data-bs-toggle="tab" class="nav-link active">
+                <i aria-hidden="true" class="bi bi-house-check"></i>
+                {{ 'mainControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#records" aria-controls="records" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-list"></i>
+                {{ 'recordsControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#search" aria-controls="search" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-search"></i>
+                {{ 'searchControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#security" aria-controls="security" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-exclamation-circle"></i>
+                {{ 'securityControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#spam" aria-controls="spam" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-hand-thumbs-down"></i>
+                {{ 'spamControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#seo" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-search"></i>
+                {{ 'seoCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#layout" aria-controls="seo" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-pencil"></i>
+                {{ 'layoutControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#mail" aria-controls="mail" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-inbox"></i>
+                {{ 'mailControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#api" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-gear"></i>
+                API
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#upgrade" aria-controls="upgrade" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-arrow-clockwise"></i>
+                {{ 'upgradeControlCenter' | translate }}
+              </a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a href="#ldap" aria-controls="ldap" role="tab" data-bs-toggle="tab" class="nav-link">
+                <i aria-hidden="true" class="bi bi-database"></i>
+                LDAP
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content p-2 pt-4 pmf-configuration-panel border-bottom mb-4 shadow">
+            <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
+            <div role="tabpanel" class="tab-pane fade" id="records"></div>
+            <div role="tabpanel" class="tab-pane fade" id="search"></div>
+            <div role="tabpanel" class="tab-pane fade" id="security"></div>
+            <div role="tabpanel" class="tab-pane fade" id="spam"></div>
+            <div role="tabpanel" class="tab-pane fade" id="seo"></div>
+            <div role="tabpanel" class="tab-pane fade" id="layout"></div>
+            <div role="tabpanel" class="tab-pane fade" id="mail"></div>
+            <div role="tabpanel" class="tab-pane fade" id="api"></div>
+            <div role="tabpanel" class="tab-pane fade" id="upgrade"></div>
+            <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+{% endblock %}

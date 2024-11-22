@@ -42,7 +42,7 @@ if (empty($categoryTree)) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/content/category.overview.twig');
+$template = $twig->loadTemplate('@admin/content/category.overview.twig');
 
 $templateVars = [
     'csrfTokenInput' => Token::getInstance($container->get('session'))->getTokenInput('category'),

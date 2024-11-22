@@ -42,7 +42,7 @@ if ($faqConfig->get('layout.contactInformationHTML')) {
     $contactText = nl2br($faqConfig->get('main.contactInformation'));
 }
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./contact.twig');
 
 // Twig template variables

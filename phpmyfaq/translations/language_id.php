@@ -830,7 +830,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Pencarian yang paling populer adalah:';
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Aktifkan editor WYSIWYG yang terbundel (default: aktif)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Statistik Pencarian';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Statistik Pencarian';
 $PMF_LANG['ad_searchstats_search_term'] = 'Kata Kunci';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Jumlah';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Bahasa';

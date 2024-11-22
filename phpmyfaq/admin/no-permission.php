@@ -19,7 +19,7 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/no-permission.twig');
+$template = $twig->loadTemplate('@admin/no-permission.twig');
 
 echo $template->render(
     [

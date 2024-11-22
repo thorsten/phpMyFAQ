@@ -34,7 +34,7 @@ try {
     echo $e->getMessage();
 }
 
-$routes = include PMF_SRC_DIR  . '/admin-routes.php';
+$routes = include PMF_SRC_DIR  . '/admin-api-routes.php';
 
 $app = new Application($container);
 try {

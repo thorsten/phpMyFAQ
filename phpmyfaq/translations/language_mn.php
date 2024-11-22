@@ -826,7 +826,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Түгээмэл хайлт хийгдс�
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "WYSIWYG засварлагчийг идэвхжүүлэх (үндсэн: идэвхтэй)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Статистикаас хайх';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Статистикаас хайх';
 $PMF_LANG['ad_searchstats_search_term'] = 'Түлхүүр үг';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Тоо';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Хэл';
@@ -935,7 +935,7 @@ $LANG_CONF["records.defaultAttachmentEncKey"] = array(
 );
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Та phpMyFAQ -н сүүлийн хувилбарыг хэрэглэж байна. Та шинэчлэлт хийх шаардлагагүй.';
 $LANG_CONF['security.useSslForLogins'] = array(
     'checkbox',

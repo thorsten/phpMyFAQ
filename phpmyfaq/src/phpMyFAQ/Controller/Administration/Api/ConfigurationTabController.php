@@ -63,7 +63,7 @@ class ConfigurationTabController extends AbstractController
         $configurationList = Translation::getConfigurationItems($mode);
 
         return $this->render(
-            './admin/configuration/tab-list.twig',
+            '@admin/configuration/tab-list.twig',
             [
                 'mode' => $mode,
                 'configurationList' => $configurationList,

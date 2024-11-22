@@ -38,7 +38,7 @@ $questionHelper
     ->setConfiguration($faqConfig)
     ->setCategory($category);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
 $templateVars = [

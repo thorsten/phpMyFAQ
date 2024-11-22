@@ -12,7 +12,7 @@ use Twig\TwigFunction;
 class TwigWrapperTest extends TestCase
 {
     private TwigWrapper $twigWrapper;
-    private string $templatePath = PMF_ROOT_DIR . '/assets/templates/default';
+    private string $templatePath = PMF_ROOT_DIR . '/assets/templates';
 
     /**
      */
@@ -105,5 +105,7 @@ class TwigWrapperTest extends TestCase
     {
         TwigWrapper::setTemplateSetName('newTemplateSet');
         $this->assertEquals('newTemplateSet', TwigWrapper::getTemplateSetName());
+        TwigWrapper::setTemplateSetName('default');
+
     }
 }

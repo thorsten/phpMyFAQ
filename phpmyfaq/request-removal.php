@@ -30,7 +30,7 @@ $faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('request_removal', 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 
 $templateVars = [

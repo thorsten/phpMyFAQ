@@ -814,7 +814,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Najpopularniejsze wyszukiwania';
 $LANG_CONF['main.enableWysiwygEditor'] = ["checkbox", "Włącz dołączony edytor WYSIWYG"];
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Statystyki Wyszukiwania';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Statystyki Wyszukiwania';
 $PMF_LANG['ad_searchstats_search_term'] = 'Słowo kluczowe';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Ilość';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Język';
@@ -914,7 +914,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Włącz szyfrow
 $LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Domyślny klucz szyfrowania załączników>Ignorowany, jeśli szyfrowanie załączników jest wyłączone</small><br><small><span class="text-danger">OSTRZEŻENIE: Nie zmieniaj tego po ustawieniu i włączeniu szyfrowania plików! !</span></small>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'Aktualizacja';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'Aktualizacja';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Masz najnowszą wersję phpMyFAQ. Nie ma potrzeby aktualizacji.';
 $LANG_CONF['security.useSslForLogins'] = ['checkbox', "Zezwalać na logowanie tylko za pośrednictwem połączenia SSL?"];
 $PMF_LANG['msgSecureSwitch'] = "Aby się zalogować, przejdź do trybu bezpiecznego!";
@@ -1156,13 +1156,13 @@ $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Włącz inteligentne odp
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Włącz obsługę Elasticsearch'];
-$PMF_LANG['ad_menu_elasticsearch'] = 'Konfiguracja Elasticsearch';
-$PMF_LANG['ad_es_create_index'] = 'Utwórz Indeks';
-$PMF_LANG['ad_es_drop_index'] = 'Usuń Indeks';
-$PMF_LANG['ad_es_bulk_index'] = 'Pełny import';
-$PMF_LANG['ad_es_create_index_success'] = 'Indeks został pomyślnie utworzony.';
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Konfiguracja Elasticsearch';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Utwórz Indeks';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Usuń Indeks';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Pełny import';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Indeks został pomyślnie utworzony.';
 $PMF_LANG['ad_es_create_import_success'] = 'Import przebiegł pomyślnie.';
-$PMF_LANG['ad_es_drop_index_success'] = 'Indeks został pomyślnie usunięty.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Indeks został pomyślnie usunięty.';
 $PMF_LANG['ad_export_generate_json'] = 'Utwórz plik JSON';
 $PMF_LANG['ad_media_name_search'] = 'Szukaj nazwy nośnika';
 

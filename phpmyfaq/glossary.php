@@ -57,7 +57,7 @@ $options = [
 ];
 $pagination = new Pagination($options);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./glossary.twig');
 
 // Twig template variables

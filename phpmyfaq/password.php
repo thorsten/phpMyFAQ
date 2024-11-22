@@ -27,7 +27,7 @@ $faqConfig = $container->get('phpmyfaq.configuration');
 $faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->userTracking('forgot_password', 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./password.twig');
 
 $templateVars = [

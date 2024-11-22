@@ -42,7 +42,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new IntlExtension());
     $twig->addExtension(new UserNameTwigExtension());
-    $template = $twig->loadTemplate('./admin/statistics/admin-log.twig');
+    $template = $twig->loadTemplate('@admin/statistics/admin-log.twig');
 
     $date = new Date($faqConfig);
     $itemsPerPage = 15;

@@ -75,7 +75,7 @@ class WebAuthnController extends AbstractController
         ];
 
         return $this->render(
-            TwigWrapper::getTemplateSetName() . '/webauthn.twig',
+            '/webauthn.twig',
             [
                 'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
                 'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),

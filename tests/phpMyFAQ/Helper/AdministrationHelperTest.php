@@ -40,7 +40,15 @@ class AdministrationHelperTest extends TestCase
     public function testAddMenuEntryWithoutPermission(): void
     {
         $expected = '<a class="nav-link" href="?action=edit">Categories</a>' . "\n";
-        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', '', false);
+        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', null, false);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testAddMenuEntryWithRouteWithoutPermission(): void
+    {
+        $expected = '<a class="nav-link" href="./edit">Categories</a>' . "\n";
+        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', 'edit', false);
 
         $this->assertEquals($expected, $actual);
     }
@@ -71,8 +79,7 @@ class AdministrationHelperTest extends TestCase
         $actual = $this->instance->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'editentry',
-            'ad_entry_add',
-            'editentry'
+            'ad_entry_add'
         );
 
         $this->assertEquals($expected, $actual);
@@ -95,8 +102,7 @@ class AdministrationHelperTest extends TestCase
         $actual = $this->instance->addMenuEntry(
             'add_user+edit_user+delete_user',
             'user',
-            'ad_menu_user_administration',
-            'user'
+            'ad_menu_user_administration'
         );
 
         $this->assertEquals($expected, $actual);

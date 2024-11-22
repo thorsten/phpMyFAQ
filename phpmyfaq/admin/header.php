@@ -2,7 +2,6 @@
 
 /**
  * Header of the admin area.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -13,6 +12,7 @@
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-26
+ * @deprecated will be removed in phpMyFAQ 4.1
  */
 
 use phpMyFAQ\Configuration;
@@ -48,128 +48,119 @@ $adminHelper->setUser($user);
 $secLevelEntries['user'] = $adminHelper->addMenuEntry(
     'add_user+edit_user+delete_user',
     'user',
-    'ad_menu_user_administration',
-    $action
+    'ad_menu_user_administration'
 );
 if ($faqConfig->get('security.permLevel') !== 'basic') {
     $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
         'addgroup+editgroup+delgroup',
         'group',
-        'ad_menu_group_administration',
-        $action
+        'ad_menu_group_administration'
     );
 }
 $secLevelEntries['content'] = $adminHelper->addMenuEntry(
     'addcateg+editcateg+delcateg',
     'category-overview',
-    'msgHeaderCategoryOverview',
-    $action
+    'msgHeaderCategoryOverview'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
     'editentry',
-    'ad_entry_add',
-    $action
+    'ad_entry_add'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'faqs-overview',
-    'msgHeaderFAQOverview',
-    $action
+    'msgHeaderFAQOverview'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'stickyfaqs',
-    'stickyRecordsHeader',
-    $action
+    'stickyRecordsHeader'
 );
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments');
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addattachment+editattachment+delattachment',
     'attachments',
     'ad_menu_attachments',
-    $action
+    'attachments'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'tags',
-    'ad_entry_tags',
-    $action
+    'ad_entry_tags'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addglossary+editglossary+delglossary',
     'glossary',
-    'ad_menu_glossary',
-    $action
+    'ad_menu_glossary'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addnews+editnews+delnews',
     'news',
-    'ad_menu_news_edit',
-    $action
+    'ad_menu_news_edit'
 );
 
 $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,
     'statistics',
-    'ad_menu_stat',
-    $action
+    'ad_menu_stat'
 );
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,
     'viewsessions',
-    'ad_menu_session',
-    $action
+    'ad_menu_session'
 );
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_ADMINLOG->value,
     'adminlog',
-    'ad_menu_adminlog',
-    $action
+    'ad_menu_adminlog'
 );
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,
     'searchstats',
-    'ad_menu_searchstats',
-    $action
+    'msgAdminElasticsearchStats'
 );
-$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
+$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports');
 
 $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
     'importcsv',
-    'msgImportRecords',
-    $action
+    'msgImportRecords'
 );
-$secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', $action);
+$secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export');
 
-$secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', $action);
+$secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup');
 
-$secLevelEntries['config'] = $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'forms', 'msgEditForms', $action);
+$secLevelEntries['config'] = $adminHelper->addMenuEntry(
+    'editconfig',
+    'config',
+    'ad_menu_editconfig',
+    'configuration'
+);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'forms', 'msgEditForms');
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
     'instances',
     'ad_menu_instances',
-    $action
+    'instances'
 );
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editconfig',
     'stopwordsconfig',
     'ad_menu_stopwordsconfig',
-    $action
+    'stopwords'
 );
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'msgAdminHeaderUpdate', 'update');
 if ($faqConfig->get('search.enableElasticsearch')) {
     $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
         'editconfig',
         'elasticsearch',
-        'ad_menu_elasticsearch',
-        $action
+        'msgAdminHeaderElasticsearch',
+        'elasticsearch'
     );
 }
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
     case 'user':
@@ -241,7 +232,7 @@ switch ($action) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/header.twig');
+$template = $twig->loadTemplate('@admin/header.twig');
 
 if ($faqConfig->get('main.enableGravatarSupport')) {
     $avatar = new Gravatar();

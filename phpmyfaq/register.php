@@ -44,7 +44,7 @@ $captcha->setSessionId($sids);
 
 $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./register.twig');
 
 // Twig template variables

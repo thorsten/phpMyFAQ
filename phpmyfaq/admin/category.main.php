@@ -339,7 +339,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     }
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/content/category.main.twig');
+    $template = $twig->loadTemplate('@admin/content/category.main.twig');
 
     echo $template->render($templateVars);
 } else {

@@ -66,7 +66,7 @@ if ($user->isLoggedIn()) {
         // handle exception
     }
 
-    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
     $twigTemplate = $twig->loadTemplate('./ucp.twig');
 
     // Twig template variables

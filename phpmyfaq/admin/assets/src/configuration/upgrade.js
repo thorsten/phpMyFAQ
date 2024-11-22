@@ -60,7 +60,7 @@ export const handleCheckForUpdates = () => {
   if (checkUpdateButton) {
     checkUpdateButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/update-check', {
+      fetch('./api/update-check', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -118,7 +118,7 @@ export const handleCheckForUpdates = () => {
         version = versionLastChecked.innerText;
       }
 
-      fetch(window.location.pathname + `api/download-package/${version}`, {
+      fetch(`./api/download-package/${version}`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -158,7 +158,7 @@ export const handleCheckForUpdates = () => {
   if (extractButton) {
     extractButton.addEventListener('click', (event) => {
       event.preventDefault();
-      fetch(window.location.pathname + 'api/extract-package', {
+      fetch('./api/extract-package', {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -202,7 +202,7 @@ export const handleCheckForUpdates = () => {
 };
 
 const createTemporaryBackup = async () => {
-  await fetch(window.location.pathname + 'api/create-temporary-backup', {
+  await fetch('./api/create-temporary-backup', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -241,7 +241,7 @@ const createTemporaryBackup = async () => {
 };
 
 const installPackage = async () => {
-  await fetch(window.location.pathname + 'api/install-package', {
+  await fetch('./api/install-package', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -282,7 +282,7 @@ const installPackage = async () => {
 };
 
 const updateDatabase = async () => {
-  await fetch(window.location.pathname + 'api/update-database', {
+  await fetch('./api/update-database', {
     method: 'POST',
     headers: {
       Accept: 'application/json, text/plain, */*',

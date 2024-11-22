@@ -33,7 +33,7 @@ $faqConfig = $container->get('phpmyfaq.configuration');
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/user/password.change.twig');
+$template = $twig->loadTemplate('@admin/user/password.change.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::PASSWORD_CHANGE->value)) {
     // If we have to save a new password, do that first

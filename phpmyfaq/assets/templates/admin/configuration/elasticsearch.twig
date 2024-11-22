@@ -1,41 +1,46 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i aria-hidden="true" class="bi bi-wrench"></i>
-        {{ adminHeaderElasticsearch }}
-        <?= Translation::get('ad_menu_elasticsearch') ?>
+      <i aria-hidden="true" class="bi bi-wrench"></i>
+      {{ 'msgAdminHeaderElasticsearch' | translate }}
+      <?= Translation::get('msgAdminHeaderElasticsearch') ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-            <button class="btn btn-outline-primary pmf-elasticsearch" data-action="create">
-                <i aria-hidden="true" class="bi bi-database-fill-add"></i> {{ adminElasticsearchButtonCreate }}
-            </button>
+      <div class="btn-group mr-2">
+        <button class="btn btn-outline-primary pmf-elasticsearch" data-action="create">
+          <i aria-hidden="true" class="bi bi-database-fill-add"></i>
+          {{ 'msgAdminElasticsearchCreateIndex' | translate }}
+        </button>
 
-            <button class="btn btn-outline-success pmf-elasticsearch" data-action="import">
-                <i aria-hidden="true" class="bi bi-database-fill-gear"></i> {{ adminElasticsearchButtonIndex }}
-            </button>
+        <button class="btn btn-outline-success pmf-elasticsearch" data-action="import">
+          <i aria-hidden="true" class="bi bi-database-fill-gear"></i> {{ 'msgAdminElasticsearchImportIndex' | translate }}
+        </button>
 
-            <button class="btn btn-outline-danger pmf-elasticsearch" data-action="drop">
-                <i aria-hidden="true" class="bi bi-database-slash"></i> {{ adminElasticsearchButtonDelete }}
-            </button>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-2">
-    <div class="col-12">
-        <div id="pmf-elasticsearch-result"></div>
-    </div>
-</div>
-
-<div class="row mb-2">
-  <div class="col-6">
-    <div class="card shadow">
-      <h5 class="card-header">
-        {{ adminElasticsearchStats }}
-      </h5>
-      <div class="card-body">
-        <div id="pmf-elasticsearch-stats"></div>
+        <button class="btn btn-outline-danger pmf-elasticsearch" data-action="drop">
+          <i aria-hidden="true" class="bi bi-database-slash"></i> {{ 'msgAdminElasticsearchDropIndex' | translate }}
+        </button>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="row mb-2">
+    <div class="col-12">
+      <div id="pmf-elasticsearch-result"></div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-6">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminElasticsearchStats' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-elasticsearch-stats"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

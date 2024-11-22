@@ -61,7 +61,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new IntlExtension());
     $twig->addExtension(new CategoryNameTwigExtension());
-    $template = $twig->loadTemplate('./admin/content/open-questions.twig');
+    $template = $twig->loadTemplate('@admin/content/open-questions.twig');
 
     $openQuestions = $question->getAll();
 

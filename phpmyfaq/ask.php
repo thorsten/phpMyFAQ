@@ -62,7 +62,7 @@ $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 
 $categories = $category->getAllCategoryIds();
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [

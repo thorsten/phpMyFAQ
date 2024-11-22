@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="{{ metaLanguage }}" data-bs-theme="{{ layoutMode }}">
+<head>
+  <meta charset="utf-8">
+
+  <title>{{ pageTitle }}</title>
+  <base href="{{ baseHref }}">
+
+  <meta name="description" content="Only Chuck Norris can divide by zero.">
+  <meta name="author" content="phpMyFAQ Team">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="application-name" content="phpMyFAQ {{ version }}">
+  <meta name="copyright" content="© 2001-{{ currentYear }} phpMyFAQ Team">
+  <meta name="publisher" content="phpMyFAQ Team">
+  <meta name="robots" content="{{ metaRobots }}">
+
+  <link rel="stylesheet" href="../assets/dist/admin.css">
+
+  <script src="assets/js/configuration.js"></script>
+  <link rel="shortcut icon" href="../assets/images/favicon.ico">
+</head>
+<body dir="{{ pageDirection }}" id="page-top">
+
+<!-- phpMyFAQ Admin Top Bar -->
+<nav class="pmf-admin-topnav navbar navbar-expand text-bg-dark">
+  <a class="navbar-brand text-white text-center ps-3" href="../" title="phpMyFAQ {{ version }}">
+    <img height="50" src="../assets/images/logo-transparent.svg" alt="phpMyFAQ Logo">
+  </a>
+
+  {% if userHasAccessPermission %}
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
+            name="sidebar-toggle" href="#">
+      <i class="bi bi-list h6"></i>
+    </button>
+
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+      <li class="px-2">
+        <div class="text-white small">
+          {{ version }}
+        </div>
+      </li>
+      <li class="px-2">
+        <div class="text-white small">
+          <i class="bi bi-clock-o bi-fw"></i> {{ msgSessionExpiration }}:
+          <span id="pmf-session-counter" class="pl-2">
+          <span class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </span>
+        </span>
+          <div id="pmf-show-session-warning" data-value="hide"></div>
+        </div>
+      </li>
+    </ul>
+  {% endif %}
+
+  <!-- Language Switcher -->
+  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0 navbar-search"
+        action="index.php" method="post">
+    {{ renderedLanguageSelection | raw }}
+  </form>
+
+  {% if userHasAccessPermission %}
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+           aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline small">
+          {{ userName }}
+        </span>
+          {% if hasGravatarSupport %}
+            {{ gravatarImage | raw }}
+          {% else %}
+            <i aria-hidden="true" class="bi bi-person"></i>
+          {% endif %}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item" href="index.php?action=passwd">{{ msgChangePassword }}</a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item" href="index.php?action=logout&csrf={{ csrfTokenLogout }}">{{ msgLogout }}</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  {% endif %}
+</nav>
+<!-- /phpMyFAQ Admin Top Bar -->
+
+<div id="pmf-admin-layout-sidenav">
+
+  {% if userHasAccessPermission %}
+    <!-- phpMyFAQ Admin Side Navigation -->
+    <div id="pmf-admin-layout-sidenav_nav">
+      <nav class="pmf-admin-sidenav accordion pmf-admin-sidenav-dark" id="sidenavAccordion">
+        <div class="pmf-admin-sidenav-menu mt-2">
+          <div class="nav">
+
+            <!-- Dashboard -->
+            <a class="nav-link" href="index.php">
+              <div class="pmf-admin-nav-link-icon"><i class="bi bi-speedometer h6"></i></div>
+              Dashboard
+            </a>
+
+            <!-- User -->
+            {% if secondLevelEntries['user'] != '' %}
+              <a class="nav-link {{ userPage ? '' : 'collapsed' }}" href="?action=user" data-bs-toggle="collapse"
+                 data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
+                <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
+                {{ menuUsers }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ userPage ? '' : 'collapse' }}" id="collapseUsers" aria-labelledby="headingOne"
+                   data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['user'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+            <!-- Content -->
+            {% if secondLevelEntries['content'] != '' %}
+              <a class="nav-link {{ contentPage ? '' : 'collapsed' }}" href="?action=faqs-overview" data-bs-toggle="collapse"
+                 data-bs-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+                <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-pencil-square h6"></i></div>
+                {{ menuContent }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ contentPage ? '' : 'collapse' }}" id="collapseContent"
+                   aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['content'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+            <!-- Statistics -->
+            {% if secondLevelEntries['statistics'] != '' %}
+              <a class="nav-link {{ statisticsPage ? '' : 'collapsed' }}" href="?action=statistics" data-bs-toggle="collapse"
+                 data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
+                <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-graph-up-arrow h6"></i></div>
+                {{ menuStatistics }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ statisticsPage ? '' : 'collapse' }}" id="collapseStatistics"
+                   aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['statistics'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+            <!-- Exports -->
+            {% if secondLevelEntries['imports_exports'] != '' %}
+              <a class="nav-link {{ exportsPage ? '' : 'collapsed' }}" href="?action=export" data-bs-toggle="collapse"
+                 data-bs-target="#collapseExports" aria-expanded="false" aria-controls="collapseExports">
+                <div class="pmf-admin-nav-link-icon">
+                  <i aria-hidden="true" class="bi bi-archive h6"></i>
+                </div>
+                {{ menuImportsExports }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ exportsPage ? '' : 'collapse' }}" id="collapseExports"
+                   aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['imports_exports'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+            <!-- Backup -->
+            {% if secondLevelEntries['backup'] != '' %}
+              <a class="nav-link {{ backupPage ? '' : 'collapsed' }}" href="?action=backup" data-bs-toggle="collapse"
+                 data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
+                <div class="pmf-admin-nav-link-icon">
+                  <i aria-hidden="true" class="bi bi-cloud-download"></i>
+                </div>
+                {{ menuBackup }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ backupPage ? '' : 'collapse' }}" id="collapseBackupAdmin"
+                   aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['backup'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+            <!-- Config -->
+            {% if secondLevelEntries['config'] != '' %}
+              <a class="nav-link {{ configurationPage ? '' : 'collapsed' }}" href="?action=config"
+                 data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
+                 aria-controls="collapseConfigAdmin">
+                <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
+                {{ menuConfiguration }}
+                <div class="pmf-admin-sidenav-collapse-arrow"><i class="bi bi-arrow-down"></i></div>
+              </a>
+              <div class="{{ configurationPage ? '' : 'collapse' }}" id="collapseConfigAdmin"
+                   aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="pmf-admin-sidenav-menu-nested nav">
+                  {{ secondLevelEntries['config'] | raw }}
+                </nav>
+              </div>
+            {% endif %}
+
+
+          </div>
+        </div>
+        <div class="pmf-admin-sidenav-footer">
+          <div class="small">Logged in as:</div>
+          {{ userName }}
+        </div>
+      </nav>
+    </div>
+  {% endif %}
+  <!-- /phpMyFAQ Admin Side Navigation -->
+
+  <!-- phpMyFAQ Admin Main Content -->
+  <div id="pmf-admin-layout-sidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+
+        {% block content %}{% endblock %}
+
+      </div>
+    </main>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x mt-5 p-3">
+      <div id="pmf-notification" class="toast align-items-center text-bg-primary shadow border-0" role="alert"
+           aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body" id="pmf-notification-message">
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                  aria-label="Close">
+          </button>
+        </div>
+      </div>
+
+      <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0"
+           role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body" id="pmf-notification-error-message">
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                  aria-label="Close">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Warning Modal -->
+    <div class="modal fade" id="sessionWarningModal" tabindex="-1" aria-labelledby="sessionWarningModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="sessionWarningModalLabel">
+              {{ msgSessionExpiringSoon }}
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {{ msgModalSessionWarning }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              {{ msgNoLogMeOut }}
+            </button>
+            <button type="button" class="btn btn-primary" id="pmf-button-reload-page">
+              {{ msgYesKeepMeLoggedIn }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+          <div class="text-muted">
+            Proudly {{ msgPoweredBy }} |
+            <a target="_blank" class="text-decoration-none"
+               href="https://en.isupportukraine.eu/trombinoscope">
+              #StandWithUkraine
+            </a>
+          </div>
+          <div>
+            <a target="_blank" rel="noopener" href="{{ documentationUrl }}">
+              {{ 'msgDocumentation' | translate }}
+            </a>
+            &middot;
+            <a target="_blank" rel="noopener" href="https://www.buymeacoffee.com/thorsten">
+              Buy us a coffee
+            </a>
+            &middot;
+            <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">
+              <i aria-hidden="true" class="bi bi-facebook"></i>
+            </a>
+            &middot;
+            &copy; 2001 - {{ currentYear }}
+            <a target="_blank" rel="noopener" href="{{ phpMyFaqUrl }}">
+              phpMyFAQ Team
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+{% if isUserLoggedIn %}
+  <iframe id="keepPMFSessionAlive" src="./session.keepalive.php?lang={{ currentLanguage }}" width="0" height="0"
+          style="display: none;" name="keep-phpmyfaq-session-alive"></iframe>
+{% endif %}
+
+<script type="module" src="../assets/dist/backend.js?{{ currentTimeStamp}}"></script>
+</body>
+</html>

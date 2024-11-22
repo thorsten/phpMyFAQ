@@ -88,7 +88,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/session-keepalive.twig');
+$template = $twig->loadTemplate('@admin/session-keepalive.twig');
 
 $templateVars = [
     'metaLanguage' => Translation::get('metaLanguage'),

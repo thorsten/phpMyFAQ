@@ -91,7 +91,7 @@ $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 $category = new Category($faqConfig);
 $categories = $category->getAllCategoryIds();
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables

@@ -123,7 +123,7 @@ if (
 }
 
 // If we're here, there was an error with file download
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./attachment.twig');
 
 // Twig template variables

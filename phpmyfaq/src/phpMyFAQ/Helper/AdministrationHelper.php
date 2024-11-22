@@ -42,19 +42,23 @@ class AdministrationHelper
      * @param string $restrictions Restrictions
      * @param string $action       Action parameter
      * @param string $caption      Caption
-     * @param string|null $active  Active
+     * @param string|null $route   Route, will be used if it's not empty
      * @param bool   $checkPerm    Check permission (default: true)
      */
     public function addMenuEntry(
         string $restrictions = '',
         string $action = '',
         string $caption = '',
-        string|null $active = '',
+        ?string $route = null,
         bool $checkPerm = true
     ): string {
 
         if ($action !== '') {
-            $action = 'action=' . $action;
+            $action = '?action=' . $action;
+        }
+
+        if (!is_null($route)) {
+            $action = './' . $route;
         }
 
         if (Translation::get($caption) !== null) {
@@ -64,7 +68,7 @@ class AdministrationHelper
         }
 
         $output = sprintf(
-            '<a class="nav-link" href="?%s">%s</a>%s',
+            '<a class="nav-link" href="%s">%s</a>%s',
             $action,
             $renderedCaption,
             "\n"

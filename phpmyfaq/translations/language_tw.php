@@ -813,7 +813,7 @@ $PMF_LANG['msgMostPopularSearches'] = "熱門搜尋是: The most popular searche
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "啟用內建的所見即得的文字編輯器 (WYSIWYG editor) <br> Enable bundled WYSIWYG editor (default: enabled)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy 開發者
-$PMF_LANG['ad_menu_searchstats'] = "搜尋統計 Search Statistics";
+$PMF_LANG['msgAdminElasticsearchStats'] = "搜尋統計 Search Statistics";
 $PMF_LANG['ad_searchstats_search_term'] = "關鍵字 Keyword";
 $PMF_LANG['ad_searchstats_search_term_count'] = "次數 Count";
 $PMF_LANG['ad_searchstats_search_term_lang'] = "語言 Language";
@@ -913,7 +913,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "啟用附�
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", '預設附加檔案加密金鑰 <br><small>附加檔案加密如果是關閉的，便會忽略。</small><br><small><font color="red">強烈注意: 開啟檔案加密之後，以後不可變更!!!</font></small><br>Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten 開發者
-$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Upgrade";
+$PMF_LANG['msgAdminHeaderUpdate'] = "phpMyFAQ Upgrade";
 $PMF_LANG['ad_you_shouldnt_update'] = "您已是最新的 phpMyFAQ 版本，無需升級。(You have the latest version of phpMyFAQ. You do not need to upgrade.)";
 $LANG_CONF['security.useSslForLogins'] = array("checkbox", "只允許以 SSL 安全性連線登入嘛? (預設: 關閉) <br>Only allow logins over SSL connection? (default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "切換到安全模式來登入! (Switch to secure mode to login!)";

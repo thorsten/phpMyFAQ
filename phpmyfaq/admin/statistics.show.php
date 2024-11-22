@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/statistics/statistics.show.twig');
+    $template = $twig->loadTemplate('@admin/statistics/statistics.show.twig');
 
     echo $template->render($templateVars);
 } else {

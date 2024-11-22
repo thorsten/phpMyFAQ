@@ -40,7 +40,7 @@ if (
     $glossary->setLanguage($faqLangCode);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/content/glossary.twig');
+    $template = $twig->loadTemplate('@admin/content/glossary.twig');
 
     $templateVars = [
         'adminHeaderGlossary' => Translation::get('ad_menu_glossary'),

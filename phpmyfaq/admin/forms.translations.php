@@ -68,7 +68,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
         'msgSelectLanguage' => Translation::get('msgSelectLanguage'),
         'msgTranslationText' => Translation::get('msgTranslationText'),
         'msgAddTranslation' => Translation::get('msgAddTranslation'),
-        'csrfTokenAddTranslation' => Token::getInstance()->getTokenString('add-translation'),
+        'csrfTokenAddTranslation' => Token::getInstance($container->get('session'))->getTokenString('add-translation'),
         'formId' => $formId,
         'inputId' => $inputId,
         'msgEditForms' => Translation::get('msgEditForms')
@@ -76,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addFilter($filter);
-    $template = $twig->loadTemplate('./admin/configuration/forms.translations.twig');
+    $template = $twig->loadTemplate('@admin/configuration/forms.translations.twig');
 
     echo $template->render($templateVars);
 } else {

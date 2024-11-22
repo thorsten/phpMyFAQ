@@ -45,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->getExtension(CoreExtension::class)->setDateFormat('Y-m-d H:i', '%d days');
-    $template = $twig->loadTemplate('./admin/statistics/sessions.day.twig');
+    $template = $twig->loadTemplate('@admin/statistics/sessions.day.twig');
 
     $templateVars = [
         'adminHeaderSessionsPerDay' => Translation::get('ad_sess_session'),

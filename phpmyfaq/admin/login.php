@@ -33,7 +33,7 @@ if (isset($error) && 0 < strlen((string) $error)) {
 $request = Request::createFromGlobals();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/login.twig');
+$template = $twig->loadTemplate('@admin/login.twig');
 
 $templateVars = [
     'isSecure' => $request->isSecure() || !$faqConfig->get('security.useSslForLogins'),

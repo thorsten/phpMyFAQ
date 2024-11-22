@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new LanguageCodeTwigExtension());
-    $template = $twig->loadTemplate('./admin/statistics/search.twig');
+    $template = $twig->loadTemplate('@admin/statistics/search.twig');
 
     $searchesCount = $search->getSearchesCount();
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
@@ -75,7 +75,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $pagination = new Pagination($options);
 
     $templateVars = [
-        'ad_menu_searchstats' => Translation::get('ad_menu_searchstats'),
+        'msgAdminElasticsearchStats' => Translation::get('msgAdminElasticsearchStats'),
         'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('truncate-search-terms'),
         'ad_searchterm_del' => Translation::get('ad_searchterm_del'),
         'ad_searchstats_search_term' => Translation::get('ad_searchstats_search_term'),
@@ -85,7 +85,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
         'pagination' => $pagination->render(),
         'searchesCount' => $searchesCount,
         'searchesList' => $searchesList,
-        'csrfTokenDelete' => Token::getInstance()->getTokenString('delete-searchterm'),
+        'csrfTokenDelete' => Token::getInstance($container->get('session'))->getTokenString('delete-searchterm'),
         'ad_news_delete' => Translation::get('ad_news_delete'),
     ];
 

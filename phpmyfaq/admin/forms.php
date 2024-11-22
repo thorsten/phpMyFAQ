@@ -53,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/configuration/forms.twig');
+    $template = $twig->loadTemplate('@admin/configuration/forms.twig');
 
     echo $template->render($templateVars);
 } else {

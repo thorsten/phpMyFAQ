@@ -664,7 +664,7 @@ $PMF_LANG['msgRegThankYou'] = '登録ありがとうございます';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] 登録: 新規ユーザー';
 $PMF_LANG['msgMostPopularSearches'] = 'もっとも人気の検索:';
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "同梱の WYSIWYG エディターを有効にする (初期値: 有効)");
-$PMF_LANG['ad_menu_searchstats'] = '統計の検索';
+$PMF_LANG['msgAdminElasticsearchStats'] = '統計の検索';
 $PMF_LANG['ad_searchstats_search_term'] = 'キーワード';
 $PMF_LANG['ad_searchstats_search_term_count'] = '回数';
 $PMF_LANG['ad_searchstats_search_term_lang'] = '言語';
@@ -735,7 +735,7 @@ $PMF_LANG['permission::deltranslation'] = '翻訳の削除';
 $PMF_LANG['permission::approverec'] = 'レコードの承認';
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "添付の暗号化を有効にする <br><small>添付が無効のときは無視</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array("input", "標準の添付暗号化鍵 <br><small>添付の暗号化が無効の場合は無視</small><br><small><font color=&quot;red&quot;>警告: 一度設定しファイルが暗号化されている場合、既存設定の変更はしないでください!!!</font></small>");
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ アップグレード';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ アップグレード';
 $PMF_LANG['ad_you_shouldnt_update'] = 'phpMyFAQ のバージョンは最新です。アップグレードの必要はありません。';
 $LANG_CONF['security.useSslForLogins'] = array("checkbox", "セキュア接続のログインのみ許可しますか? (初期値: 無効)");
 $PMF_LANG['msgSecureSwitch'] = 'セキュア モードのログインに切り替えます!';
@@ -902,13 +902,13 @@ $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'スマート回答を有
 
 // added v2.9.0-beta2
 $LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Elasticsearchを有効化'];
-$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch設定';
-$PMF_LANG['ad_es_create_index'] = 'Index作成';
-$PMF_LANG['ad_es_drop_index'] = 'Index削除';
-$PMF_LANG['ad_es_bulk_index'] = '全件インポート';
-$PMF_LANG['ad_es_create_index_success'] = 'Indexを作成しました。';
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch設定';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Index作成';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Index削除';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = '全件インポート';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Indexを作成しました。';
 $PMF_LANG['ad_es_create_import_success'] = 'インポートに成功しました。';
-$PMF_LANG['ad_es_drop_index_success'] = 'Indexを削除しました。';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Indexを削除しました。';
 $PMF_LANG['ad_export_generate_json'] = 'JSONファイルの作成';
 $PMF_LANG['ad_media_name_search'] = 'メディア名で検索';
 

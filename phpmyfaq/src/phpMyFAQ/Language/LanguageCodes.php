@@ -241,7 +241,7 @@ class LanguageCodes
         'zh-mo' => 'Chinese (Macau SAR)',
         'zh-sg' => 'Chinese (Singapore)',
         'zh-tw' => 'Chinese (Taiwan)',
-        'zu' => 'Zulu'
+        'zu' => 'Zulu',
     ];
 
     /**
@@ -291,7 +291,7 @@ class LanguageCodes
         'tw' => 'Twi',
         'uk' => 'Ukrainian',
         'vi' => 'Vietnamese',
-        'cy' => 'Welsh'
+        'cy' => 'Welsh',
     ];
 
     /**
@@ -302,6 +302,13 @@ class LanguageCodes
     public static function getAll(): array
     {
         return static::$languageCodes;
+    }
+
+    public static function getAllSorted(): array
+    {
+        $sortedLanguageCodes = static::$languageCodes;
+        asort($sortedLanguageCodes);
+        return $sortedLanguageCodes;
     }
 
     /**

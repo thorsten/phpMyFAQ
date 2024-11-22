@@ -835,7 +835,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Populiariausios paieškos yra:';
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Įjungti pridėtinį WYSIWYG redaktorių (numatyta r.: įjungti)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Paieškos statistika';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Paieškos statistika';
 $PMF_LANG['ad_searchstats_search_term'] = 'Raktažodis';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Skaičius';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Kalba';
@@ -943,7 +943,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti p
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Atnaujinti';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Atnaujinti';
 $PMF_LANG['ad_you_shouldnt_update'] = 'Jūs turite naujausią phpMyFAQ versiją. Jums nereikia atnaujinti.';
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Leisti prisijungimus tik per saugujį ryšį? (numatyta r.: išjungta)");
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";

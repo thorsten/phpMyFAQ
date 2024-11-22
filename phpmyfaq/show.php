@@ -53,7 +53,7 @@ if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCat
 $categoryHelper = new CategoryHelper();
 $categoryHelper->setPlurals(new Plurals());
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./show.twig');
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {

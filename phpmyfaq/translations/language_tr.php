@@ -813,7 +813,7 @@ $PMF_LANG['msgMostPopularSearches'] = "En çok aranan içerikler";
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Enable bundled WYSIWYG editor");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = "Arama İstatistikleri";
+$PMF_LANG['msgAdminElasticsearchStats'] = "Arama İstatistikleri";
 $PMF_LANG['ad_searchstats_search_term'] = "Sözcük";
 $PMF_LANG['ad_searchstats_search_term_count'] = "Aranma";
 $PMF_LANG['ad_searchstats_search_term_lang'] = "Dil";
@@ -913,7 +913,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable att
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Yükselt";
+$PMF_LANG['msgAdminHeaderUpdate'] = "phpMyFAQ Yükselt";
 $PMF_LANG['ad_you_shouldnt_update'] = "Şu an phpMyFAQ yazılımının son sürümünü kullanıyorsunuz. Yükseltme işlemi gerekli değil.";
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Only allow logins over SSL connection?");
 $PMF_LANG['msgSecureSwitch'] = "Giriş yapabilmek için güvenli moda geçin!";
@@ -1131,12 +1131,12 @@ $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answer
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support');
-$PMF_LANG['ad_menu_elasticsearch'] = "Elasticsearch yapılandırması";
-$PMF_LANG['ad_es_create_index'] = "Index oluştur";
-$PMF_LANG['ad_es_drop_index'] = "Index kaldır";
-$PMF_LANG['ad_es_bulk_index'] = "Tam içe aktarma";
-$PMF_LANG['ad_es_create_index_success'] = "Index başarıyla oluşturuldu.";
-$PMF_LANG['ad_es_drop_index_success'] = "Index başarıyla kaldırıldı.";
+$PMF_LANG['msgAdminHeaderElasticsearch'] = "Elasticsearch yapılandırması";
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = "Index oluştur";
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = "Index kaldır";
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = "Tam içe aktarma";
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = "Index başarıyla oluşturuldu.";
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = "Index başarıyla kaldırıldı.";
 $PMF_LANG['ad_export_generate_json'] = "JSON dosyası oluştur";
 $PMF_LANG['ad_media_name_search'] = "Görsel adıyla ara";
 

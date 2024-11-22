@@ -809,7 +809,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Most popular searches';
 $LANG_CONF['main.enableWysiwygEditor'] = ["checkbox", "Enable bundled WYSIWYG editor"];
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Search Statistics';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Search Statistics';
 $PMF_LANG['ad_searchstats_search_term'] = 'Keyword';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Count';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Language';
@@ -908,7 +908,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachme
 $LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span></small>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = 'phpMyFAQ Upgrade';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
 $LANG_CONF['security.useSslForLogins'] = ['checkbox', "Only allow logins over SSL connection?"];
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
@@ -1140,13 +1140,13 @@ $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Enable smart answering f
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Enable Elasticsearch support'];
-$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch configuration';
-$PMF_LANG['ad_es_create_index'] = 'Create Index';
-$PMF_LANG['ad_es_drop_index'] = 'Drop Index';
-$PMF_LANG['ad_es_bulk_index'] = 'Full import';
-$PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch configuration';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Create Index';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Drop Index';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Full import';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Index successfully created.';
 $PMF_LANG['ad_es_create_import_success'] = 'Import was successful.';
-$PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Index successfully dropped.';
 $PMF_LANG['ad_export_generate_json'] = 'Create JSON file';
 $PMF_LANG['ad_media_name_search'] = 'Search for media name';
 
