@@ -180,7 +180,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): \SQLite3Result|bool
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

@@ -15,6 +15,7 @@
  * @since     2024-10-07
  */
 
+use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
@@ -24,6 +25,7 @@ use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
@@ -64,6 +66,12 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.attachment-collection', AttachmentCollection::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.backup', Backup::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.database.helper')
         ]);
 
     $services->set('phpmyfaq.bookmark', Bookmark::class)
@@ -108,6 +116,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.faq.statistics', Statistics::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.database.helper', DatabaseHelper::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

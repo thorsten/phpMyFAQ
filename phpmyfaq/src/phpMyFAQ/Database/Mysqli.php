@@ -270,7 +270,8 @@ class Mysqli implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $columnId    The name of the ID column
+     * @param string $columnId The name of the ID column
+     * @throws Exception
      */
     public function nextId(string $table, string $columnId): int
     {
@@ -299,7 +300,7 @@ class Mysqli implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

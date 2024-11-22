@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Controller\Administration\AttachmentsController;
+use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\InstanceController;
@@ -31,6 +32,21 @@ $routesConfig = [
     'admin.attachments' => [
         'path' => '/attachments',
         'controller' => [AttachmentsController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.backup.export' => [
+        'path' => '/backup/export/{type}',
+        'controller' => [BackupController::class, 'export'],
+        'methods' => 'GET'
+    ],
+    'admin.backup.restore' => [
+        'path' => '/backup/restore',
+        'controller' => [BackupController::class, 'restore'],
+        'methods' => 'POST'
+    ],
+    'admin.backup' => [
+        'path' => '/backup',
+        'controller' => [BackupController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.configuration' => [

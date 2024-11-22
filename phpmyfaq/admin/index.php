@@ -356,22 +356,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'statistics.search.php';
                 break;
             // Reports
+            case 'reportview':
             case 'reports':
                 require 'report.main.php';
-                break;
-            case 'reportview':
-                require 'report.view.php';
-                break;
-            // Config administration
-            case 'config':
-                require 'configuration.php';
-                break;
-            // functions for backup administration
-            case 'backup':
-                require 'backup.main.php';
-                break;
-            case 'restore':
-                require 'backup.import.php';
                 break;
             // functions for FAQ import and export
             case 'importcsv':
@@ -380,6 +367,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'export':
                 require 'export.php';
                 break;
+            // Config administration
             case 'forms':
                 require 'forms.php';
                 break;

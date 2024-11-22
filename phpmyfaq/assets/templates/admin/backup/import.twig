@@ -1,58 +1,56 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-download"></i>
-    {{ adminHeaderRestore }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-lg-12">
-    {% if errorMessageWrongEncoding %}
-      <div class="alert alert-danger">
-        {{ errorMessageWrongEncoding }}
-      </div>
-    {% endif %}
-
-    {% if errorMessageNoVerification %}
-      <div class="alert alert-danger">
-        {{ errorMessageNoVerification }}
-      </div>
-    {% endif %}
-
-    {% if errorMessageVersionMisMatch %}
-      <div class="alert alert-danger">
-        {{ errorMessageVersionMisMatch }}
-      </div>
-    {% endif %}
-
-    <p>{{ prepareMessage }}</p>
-    <p>{{ processMessage }}</p>
-
-    {% if errorMessageQueryFailed %}
-      <div class="alert alert-danger">
-        {{ errorMessageQueryFailed | raw }}
-      </div>
-    {% endif %}
-
-    {% if errorMessageImportNotPossible %}
-      <div class="alert alert-danger">
-        {{ errorMessageImportNotPossible }}
-      </div>
-    {% endif %}
-
-    {% if errorMessageUpload %}
-      <div class="alert alert-danger">
-        <p>{{ errorMessageUpload }}</p>
-        <hr>
-        <p>{{ errorMessageUploadDetails }}</p>
-      </div>
-    {% endif %}
-
-    {% if successMessage %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ successMessage }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endif %}
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-download"></i>
+      {{ adminHeaderRestore }}
+    </h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      {% if errorMessageNoVerification %}
+        <div class="alert alert-danger">
+          {{ errorMessageNoVerification }}
+        </div>
+      {% endif %}
+
+      {% if errorMessageVersionMisMatch %}
+        <div class="alert alert-danger">
+          {{ errorMessageVersionMisMatch }}
+        </div>
+      {% endif %}
+
+      <p>{{ prepareMessage }}</p>
+      <p>{{ processMessage }}</p>
+
+      {% if errorMessageQueryFailed %}
+        <div class="alert alert-danger">
+          {{ errorMessageQueryFailed | raw }}
+        </div>
+      {% endif %}
+
+      {% if errorMessageImportNotPossible %}
+        <div class="alert alert-danger">
+          {{ errorMessageImportNotPossible }}
+        </div>
+      {% endif %}
+
+      {% if errorMessageUpload %}
+        <div class="alert alert-danger">
+          <p>{{ errorMessageUpload }}</p>
+          <hr>
+          <p>{{ errorMessageUploadDetails }}</p>
+        </div>
+      {% endif %}
+
+      {% if successMessage %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successMessage }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -143,7 +143,7 @@ class AbstractAdministrationController extends AbstractController
             'ad_menu_export'
         );
 
-        $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup');
+        $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', 'backup');
 
         $secLevelEntries['config'] = $adminHelper->addMenuEntry(
             'editconfig',
@@ -245,6 +245,11 @@ class AbstractAdministrationController extends AbstractController
         switch ($request->attributes->get('_route')) {
             case 'admin.attachments':
                 $contentPage = true;
+                break;
+            case 'admin.backup':
+            case 'admin.backup.export':
+            case 'admin.backup.restore':
+                $backupPage = true;
                 break;
             case 'admin.configuration':
             case 'admin.elasticsearch':

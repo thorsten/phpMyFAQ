@@ -201,7 +201,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 

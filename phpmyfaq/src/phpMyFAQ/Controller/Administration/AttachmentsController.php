@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;

@@ -130,7 +130,7 @@ $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
 );
 $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export');
 
-$secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup');
+$secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', 'backup');
 
 $secLevelEntries['config'] = $adminHelper->addMenuEntry(
     'editconfig',

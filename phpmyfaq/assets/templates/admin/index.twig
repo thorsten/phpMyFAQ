@@ -172,7 +172,7 @@
 
             <!-- Backup -->
             {% if secondLevelEntries['backup'] != '' %}
-              <a class="nav-link {{ backupPage ? '' : 'collapsed' }}" href="?action=backup" data-bs-toggle="collapse"
+              <a class="nav-link {{ backupPage ? '' : 'collapsed' }}" href="./backup" data-bs-toggle="collapse"
                  data-bs-target="#collapseBackupAdmin" aria-expanded="false" aria-controls="collapseBackupAdmin">
                 <div class="pmf-admin-nav-link-icon">
                   <i aria-hidden="true" class="bi bi-cloud-download"></i>
@@ -190,7 +190,7 @@
 
             <!-- Config -->
             {% if secondLevelEntries['config'] != '' %}
-              <a class="nav-link {{ configurationPage ? '' : 'collapsed' }}" href="?action=config"
+              <a class="nav-link {{ configurationPage ? '' : 'collapsed' }}" href="./configuration"
                  data-bs-toggle="collapse" data-bs-target="#collapseConfigAdmin" aria-expanded="false"
                  aria-controls="collapseConfigAdmin">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-wrench"></i></div>
