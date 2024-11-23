@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
+use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
@@ -106,6 +107,16 @@ $routesConfig = [
         'path' => '/update',
         'controller' => [UpdateController::class, 'index'],
         'methods' => 'GET'
+    ],
+    'admin.password.change' => [
+        'path' => '/password/change',
+        'controller' => [PasswordChangeController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.password.update' => [
+        'path' => '/password/update',
+        'controller' => [PasswordChangeController::class, 'update'],
+        'methods' => 'POST'
     ]
 ];
 

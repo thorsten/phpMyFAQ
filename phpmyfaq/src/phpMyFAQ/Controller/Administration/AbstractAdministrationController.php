@@ -63,6 +63,13 @@ class AbstractAdministrationController extends AbstractController
                 'ad_menu_group_administration'
             );
         }
+        $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
+            PermissionType::PASSWORD_CHANGE->value,
+            'password/change',
+            'ad_menu_passwd',
+            'password/change'
+        );
+
         $secLevelEntries['content'] = $adminHelper->addMenuEntry(
             'addcateg+editcateg+delcateg',
             'category-overview',
@@ -195,7 +202,6 @@ class AbstractAdministrationController extends AbstractController
         switch ($action) {
             case 'user':
             case 'group':
-            case 'passwd':
             case 'cookies':
                 $userPage = true;
                 break;
@@ -247,6 +253,10 @@ class AbstractAdministrationController extends AbstractController
         }
 
         switch ($request->attributes->get('_route')) {
+            case 'admin.password.change':
+            case 'admin.password.update':
+                $userPage = true;
+                break;
             case 'admin.attachments':
                 $contentPage = true;
                 break;

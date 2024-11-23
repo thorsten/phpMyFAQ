@@ -91,6 +91,7 @@ class InstanceController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
+    #[Route('/instance/update', name: 'admin.instance.update', methods: ['POST'])]
     public function update(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);
@@ -146,10 +147,10 @@ class InstanceController extends AbstractAdministrationController
     }
 
     /**
+     * @return array<string, string>
+     * @throws \Exception
      * @throws LoaderError
      * @throws Exception
-     * @throws \Exception
-     * @return string[]
      */
     private function getBaseTemplateVars(): array
     {

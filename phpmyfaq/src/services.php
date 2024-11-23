@@ -19,6 +19,7 @@ use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
+use phpMyFAQ\Auth;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
@@ -65,6 +66,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.attachment-collection', AttachmentCollection::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.auth', Auth::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);

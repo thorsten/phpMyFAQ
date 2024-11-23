@@ -166,7 +166,6 @@ $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system',
 switch ($action) {
     case 'user':
     case 'group':
-    case 'passwd':
     case 'cookies':
         $userPage = true;
         break;
