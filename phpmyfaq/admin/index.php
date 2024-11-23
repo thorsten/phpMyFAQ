@@ -360,10 +360,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'reports':
                 require 'report.main.php';
                 break;
-            // functions for FAQ import and export
-            case 'importcsv':
-                require 'import.csv.php';
-                break;
             // Config administration
             case 'forms':
                 require 'forms.php';

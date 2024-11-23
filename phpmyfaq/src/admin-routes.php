@@ -20,6 +20,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
+use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
@@ -64,6 +65,11 @@ $routesConfig = [
     'admin.export' => [
         'path' => '/export',
         'controller' => [ExportController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.import' => [
+        'path' => '/import',
+        'controller' => [ImportController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.instance.edit' => [

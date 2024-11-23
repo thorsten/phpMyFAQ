@@ -126,7 +126,8 @@ $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports
 $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
     'importcsv',
-    'msgImportRecords'
+    'msgImportRecords',
+    'import'
 );
 $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', 'export');
 

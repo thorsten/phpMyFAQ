@@ -135,19 +135,25 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'importcsv',
-            'msgImportRecords'
+            'msgImportRecords',
+            'import'
         );
         $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry(
-            'export',
+            PermissionType::EXPORT->value,
             'export',
             'ad_menu_export',
             'export'
         );
 
-        $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', 'backup');
+        $secLevelEntries['backup'] = $adminHelper->addMenuEntry(
+            PermissionType::CONFIGURATION_EDIT->value,
+            'backup',
+            'ad_menu_backup',
+            'backup'
+        );
 
         $secLevelEntries['config'] = $adminHelper->addMenuEntry(
-            'editconfig',
+            PermissionType::CONFIGURATION_EDIT->value,
             'config',
             'ad_menu_editconfig',
             'configuration'
@@ -160,26 +166,31 @@ class AbstractAdministrationController extends AbstractController
             'instances'
         );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
-            'editconfig',
+            PermissionType::CONFIGURATION_EDIT->value,
             'stopwordsconfig',
             'ad_menu_stopwordsconfig',
             'stopwords'
         );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
-            'editconfig',
+            PermissionType::CONFIGURATION_EDIT->value,
             'upgrade',
             'msgAdminHeaderUpdate',
             'update'
         );
         if ($this->configuration->get('search.enableElasticsearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
-                'editconfig',
+                PermissionType::CONFIGURATION_EDIT->value,
                 'elasticsearch',
                 'msgAdminHeaderElasticsearch',
                 'elasticsearch'
             );
         }
-        $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
+        $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+            PermissionType::CONFIGURATION_EDIT->value,
+            'system',
+            'ad_system_info',
+            'system'
+        );
 
         switch ($action) {
             case 'user':
@@ -228,13 +239,6 @@ class AbstractAdministrationController extends AbstractController
             case 'reportview':
                 $statisticsPage = true;
                 break;
-            case 'importcsv':
-                $exportsPage = true;
-                break;
-            case 'backup':
-                $backupPage = true;
-                break;
-            case 'config':
             case 'forms':
                 $configurationPage = true;
                 break;
@@ -247,6 +251,7 @@ class AbstractAdministrationController extends AbstractController
                 $contentPage = true;
                 break;
             case 'admin.export':
+            case 'admin.import':
                 $exportsPage = true;
                 break;
             case 'admin.backup':
