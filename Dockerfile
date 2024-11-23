@@ -1,12 +1,12 @@
 #
-# This image uses a php:8.4.0RC1-apache base image and do not have any phpMyFAQ code with it.
+# This image uses a php:8.4.1-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.4.0RC3-apache
+FROM php:8.4.1-apache
 
 #=== Install gd PHP dependencie ===
 RUN set -x \
