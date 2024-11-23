@@ -20,6 +20,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\InstanceController;
+use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
 use phpMyFAQ\Controller\Administration\UpdateController;
@@ -72,6 +73,11 @@ $routesConfig = [
     'admin.instances' => [
         'path' => '/instances',
         'controller' => [InstanceController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.session.keepalive' => [
+        'path' => '/session-keep-alive',
+        'controller' => [SessionKeepAliveController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.stopwords' => [
