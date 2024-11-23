@@ -97,21 +97,32 @@ class UserController extends AbstractController
         $handle = fopen('php://temp', 'r+');
         fputcsv(
             $handle,
-            ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source']
+            ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source'],
+            ',',
+            '"',
+            '\\',
+            PHP_EOL
         );
 
         foreach ($allUsers as $allUser) {
             $user->getUserById($allUser, true);
-            fputcsv($handle, [
-                $user->getUserId(),
-                $user->getStatus(),
-                $user->isSuperAdmin() ? 'true' : 'false',
-                $user->getUserData('is_visible') ? 'true' : 'false',
-                Report::sanitize($user->getUserData('display_name')),
-                Report::sanitize($user->getLogin()),
-                $user->getUserData('email'),
-                $user->getUserAuthSource(),
-            ]);
+            fputcsv(
+                $handle,
+                [
+                    $user->getUserId(),
+                    $user->getStatus(),
+                    $user->isSuperAdmin() ? 'true' : 'false',
+                    $user->getUserData('is_visible') ? 'true' : 'false',
+                    Report::sanitize($user->getUserData('display_name')),
+                    Report::sanitize($user->getLogin()),
+                    $user->getUserData('email'),
+                    $user->getUserAuthSource(),
+                ],
+                ',',
+                '"',
+                '\\',
+                PHP_EOL
+            );
         }
 
         rewind($handle);

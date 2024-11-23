@@ -39,6 +39,7 @@ use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
@@ -171,6 +172,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.setup.environment_configurator', EnvironmentConfigurator::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.user', User::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

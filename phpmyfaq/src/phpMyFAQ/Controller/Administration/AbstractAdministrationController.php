@@ -54,7 +54,8 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['user'] = $adminHelper->addMenuEntry(
             'add_user+edit_user+delete_user',
             'user',
-            'ad_menu_user_administration'
+            'ad_menu_user_administration',
+            'user'
         );
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
@@ -200,9 +201,7 @@ class AbstractAdministrationController extends AbstractController
         );
 
         switch ($action) {
-            case 'user':
             case 'group':
-            case 'cookies':
                 $userPage = true;
                 break;
             case 'category-overview':
@@ -255,6 +254,8 @@ class AbstractAdministrationController extends AbstractController
         switch ($request->attributes->get('_route')) {
             case 'admin.password.change':
             case 'admin.password.update':
+            case 'admin.user':
+            case 'admin.user.list':
                 $userPage = true;
                 break;
             case 'admin.attachments':
@@ -334,10 +335,7 @@ class AbstractAdministrationController extends AbstractController
     protected function getFooter(): array
     {
         return [
-            'msgSessionExpiringSoon' => Translation::get('msgSessionExpiringSoon'),
             'msgModalSessionWarning' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
-            'msgNoLogMeOut' => Translation::get('msgNoLogMeOut'),
-            'msgYesKeepMeLoggedIn' => Translation::get('msgYesKeepMeLoggedIn'),
             'msgPoweredBy' => System::getPoweredByString(),
             'documentationUrl' => System::getDocumentationUrl(),
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,

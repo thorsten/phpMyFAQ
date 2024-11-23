@@ -106,7 +106,7 @@
 
             <!-- User -->
             {% if secondLevelEntries['user'] != '' %}
-              <a class="nav-link {{ userPage ? '' : 'collapsed' }}" href="?action=user" data-bs-toggle="collapse"
+              <a class="nav-link {{ userPage ? '' : 'collapsed' }}" href="./user" data-bs-toggle="collapse"
                  data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseUsers">
                 <div class="pmf-admin-nav-link-icon"><i aria-hidden="true" class="bi bi-person h6"></i></div>
                 {{ menuUsers }}
@@ -258,7 +258,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="sessionWarningModalLabel">
-              {{ msgSessionExpiringSoon }}
+              {{ 'msgSessionExpiringSoon' | translate }}
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -267,10 +267,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              {{ msgNoLogMeOut }}
+              {{ 'msgNoLogMeOut' | translate }}
             </button>
             <button type="button" class="btn btn-primary" id="pmf-button-reload-page">
-              {{ msgYesKeepMeLoggedIn }}
+              {{ 'msgYesKeepMeLoggedIn' | translate }}
             </button>
           </div>
         </div>

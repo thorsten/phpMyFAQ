@@ -21,7 +21,6 @@
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -242,13 +241,6 @@ if (
 //
 [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($user);
 
-// are we running a PMF export file request?
-switch ($action) {
-    case 'reportexport':
-        require 'report.export.php';
-        exit();
-}
-
 // Header of the admin page including the navigation
 require 'header.php';
 
@@ -265,9 +257,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
         // the various sections of the admin area
         switch ($action) {
             // functions for user administration
-            case 'user':
-                require 'user.php';
-                break;
             case 'group':
                 require 'group.php';
                 break;

@@ -51,12 +51,12 @@ const setUserData = async (userId) => {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.setAttribute('checked', 'checked');
     document.querySelectorAll('.permission').forEach((checkbox) => {
-      checkbox.setAttribute('disabled', '');
+      checkbox.removeAttribute('disabled');
     });
     document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-      element.setAttribute('disabled', '');
+      element.removeAttribute('disabled');
     });
-    document.getElementById('checkAll').setAttribute('disabled', '');
+    document.getElementById('checkAll').removeAttribute('disabled');
   } else {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.removeAttribute('checked');
@@ -74,6 +74,8 @@ const setUserData = async (userId) => {
   }
   const saveUser = document.getElementById('pmf-user-save');
   saveUser.classList.remove('disabled');
+
+  window.history.pushState({}, '', `./user/edit/${userId}`);
 };
 
 const setUserRights = async (userId) => {
@@ -143,10 +145,10 @@ export const handleUsers = async () => {
     isSuperAdmin.addEventListener('click', () => {
       if (isSuperAdmin.checked) {
         document.querySelectorAll('.permission').forEach((checkbox) => {
-          checkbox.setAttribute('disabled', '');
+          checkbox.removeAttribute('disabled');
         });
         document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-          element.setAttribute('disabled', '');
+          element.removeAttribute('disabled');
         });
         document.getElementById('checkAll').setAttribute('disabled', '');
       } else {
@@ -154,9 +156,9 @@ export const handleUsers = async () => {
           checkbox.removeAttribute('disabled');
         });
         document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-          element.removeAttribute('disabled', '');
+          element.removeAttribute('disabled');
         });
-        document.getElementById('checkAll').removeAttribute('disabled', '');
+        document.getElementById('checkAll').removeAttribute('disabled');
       }
     });
   }

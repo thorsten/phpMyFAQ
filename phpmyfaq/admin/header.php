@@ -48,7 +48,8 @@ $adminHelper->setUser($user);
 $secLevelEntries['user'] = $adminHelper->addMenuEntry(
     'add_user+edit_user+delete_user',
     'user',
-    'ad_menu_user_administration'
+    'ad_menu_user_administration',
+    'user'
 );
 if ($faqConfig->get('security.permLevel') !== 'basic') {
     $secLevelEntries['user'] .= $adminHelper->addMenuEntry(

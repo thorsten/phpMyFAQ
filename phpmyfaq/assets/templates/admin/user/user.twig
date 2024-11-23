@@ -1,0 +1,195 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-person"></i>
+      {{ 'ad_user' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        {% if permissionAddUser == true %}
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                  data-bs-target="#addUserModal">
+            <i class="bi bi-person-add" aria-label="true"></i> {{ 'ad_user_add' | translate }}
+          </button>
+        {% endif %}
+        {% if permissionEditUser == true %}
+          <a class="btn btn-outline-info" href="./user/list">
+            <i class="bi bi-people" aria-label="true"></i> {{ 'list_all_users' | translate }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-6 offset-3">
+      <form name="user_select" id="user_select" action="./user/delete"
+            method="post" role="form" class="form_inline">
+        <input type="hidden" id="current_user_id" value="{{ userId }}">
+        <div class="card shadow mb-4">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-search"></i> {{ 'msgSearch' | translate }}
+          </h5>
+          <div class="card-body">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="pmf-user-list-autocomplete" aria-controls=""
+                     name="user_list_search" placeholder="{{ 'ad_auth_user' | translate }}"
+                     spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="2048">
+              <label for="pmf-user-list-autocomplete">{{ 'ad_auth_user' | translate }}</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+
+    <div class="col-lg-8">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3" id="user_data_legend">
+          <i aria-hidden="true" class="bi bi-person"></i> {{ 'ad_user_profou' | translate }}
+        </h5>
+        <div class="card-body">
+          <input type="hidden" id="last_modified" name="last_modified" value="">
+          <input id="update_user_id" type="hidden" name="user_id" value="0">
+          <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken_updateUserData }}" />
+
+          <div class="row mb-2">
+            <label for="auth_source" class="col-lg-4 col-form-label">
+              {{ 'msgAuthenticationSource' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <input id="auth_source" class="form-control-plaintext" type="text" value="n/a" readonly>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="user_status" class="col-lg-4 col-form-label">
+              {{ 'ad_user_status' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <select id="user_status" class="form-select" name="user_status" disabled>
+                <option value="active">{{ 'ad_user_active' | translate }}</option>
+                <option value="blocked">{{ 'ad_user_blocked' | translate }}</option>
+                <option value="protected">{{ 'ad_user_protected' | translate }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-lg-4 col-form-label" for="display_name">
+              {{ 'msgRealname' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <input type="text" id="display_name" name="display_name" value="" class="form-control" required disabled>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-lg-4 col-form-label" for="email">
+              {{ 'msgEmail' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <input type="email" id="email" name="email" value="" class="form-control" required disabled>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="offset-lg-4 col-lg-8">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="is_superadmin" name="is_superadmin">
+                <label class="form-check-label" for="is_superadmin">
+                  {{ 'ad_user_is_superadmin' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="offset-lg-4 col-lg-8">
+              <a class="btn btn-danger pmf-admin-overwrite-password" data-bs-toggle="modal"
+                 href="#pmf-modal-user-password-overwrite">
+                {{ 'ad_user_overwrite_passwd' | translate }}
+              </a>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="offset-lg-4 col-lg-8">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="overwrite_twofactor" name="overwrite_twofactor"
+                       disabled>
+                <label class="form-check-label" for="overwrite_twofactor">
+                  {{ 'ad_user_overwrite_twofactor' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="card-footer text-end">
+          {% if permissionDeleteUser == true %}
+            <button class="btn btn-danger disabled" id="pmf-delete-user">
+              {{ 'ad_user_delete' | translate }}
+            </button>
+          {% endif %}
+          <button class="btn btn-success disabled" id="pmf-user-save">
+            {{ 'ad_gen_save' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4" id="userRights">
+      <input type="hidden" name="user_id" id="rights_user_id" value="0">
+      <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token-rights" value="{{ csrfToken_updateUserRights }}">
+
+      <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between flex-wrap align-items-center py-3">
+          <h5 class="" id="user_rights_legend">
+            <i aria-hidden="true" class="bi bi-lock"></i> {{ 'ad_user_rights' | translate }}
+          </h5>
+          <div class="card-button">
+            <button class="btn btn-success" id="pmf-user-rights-save">
+              {{ 'ad_gen_save' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="text-center mb-3">
+            <button type="button" class="btn btn-primary btn-sm" id="checkAll">
+              {{ 'ad_user_checkall' | translate }}
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="uncheckAll">
+              {{ 'ad_user_uncheckall' | translate }}
+            </button>
+          </div>
+          {% for right in userRights %}
+            <div class="form-check">
+              <input id="user_right_{{ right.right_id }}" type="checkbox"
+                     name="user_rights[]" value="{{ right.right_id }}"
+                     class="form-check-input permission">
+              <label class="form-check-label" for="user_right_{{ right.right_id }}">
+                {{ right.name|permission }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="card-footer">
+          <div class="card-button text-end">
+            <button class="btn btn-success" id="pmf-user-rights-save">
+              {{ 'ad_gen_save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{ include('@admin/user/modals.twig') }}
+
+{% endblock %}

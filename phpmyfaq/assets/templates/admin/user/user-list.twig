@@ -1,0 +1,106 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i class="bi bi-people"></i>
+      {{ 'msgUserList' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-outline-primary" href="./user">
+          <i class="bi bi-three-dots" aria-label="true"></i> {{ 'ad_user' | translate }}
+        </a>
+        {% if permissionAddUser == true %}
+          <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                  data-bs-target="#addUserModal">
+            <i class="bi bi-person-add" aria-label="true"></i> {{ 'ad_user_add' | translate }}
+          </button>
+        {% endif %}
+        <button type="button" class="btn btn-outline-info" id="pmf-button-export-users">
+          <i class="bi bi-download" aria-label="true"></i> {{ 'msgExportUsersAsCSV' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-striped align-middle" id="pmf-admin-user-table">
+    <thead class="thead-dark">
+    <tr>
+      <th>{{ 'msgNewContentName' | translate }}</th>
+      <th>{{ 'msgNewContentMail' | translate }}</th>
+      <th>{{ 'ad_auth_user' | translate }}</th>
+      <th>{{ 'ad_user_status' | translate }}</th>
+      <th>{{ 'ad_user_is_superadmin' | translate }}</th>
+      <th>{{ 'ad_user_is_visible' | translate }}</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    {% if perPage < numUsers %}
+      <tfoot>
+      <tr>
+        <td colspan="8">{{ pagination|raw }}</td>
+      </tr>
+      </tfoot>
+    {% endif %}
+    <tbody>
+    {% for user in users %}
+      <tr class="row_user_id_{{ user.id }}" id="row_user_id_{{ user.id }}">
+        <td>{{ user.display_name|raw }}</td>
+        <td>
+          <a href="mailto:{{ user.email|raw }}">
+            {{ user.email|raw }}
+          </a>
+        </td>
+        <td>{{ user.login|raw }}</td>
+
+        <td class="text-center"><i class="fa
+    {% if user.status == 'active' %}
+    bi-person-fill-check text-success
+    {% endif %}
+    {% if user.status == 'blocked' %}
+    bi-person-fill-slash text-danger
+    {% endif %}
+    {% if user.status == 'protected' %}
+    bi-person-fill-lock text-warning
+    {% endif %} icon_user_id_{{ user.id }}"></i></td>
+        <td class="text-center">
+          <i class="fa {% if user.isSuperAdmin == true %} bi-person-fill-check text-success {% else %} bi-person {% endif %}"</i>
+        </td>
+        <td class="text-center">
+          <i class="fa {% if user.isVisible == true %} bi-person-fill {% else %} bi-person {% endif %}"</i>
+        </td>
+
+        <td>
+          <a href="./user/edit/{{ user.id }}"
+             class="btn">
+            <i class="bi bi-pencil text-info"></i> {{ ad_user_edit }}
+          </a>
+          {% if user.status == 'blocked' %}
+            <button type="button" class="btn btn-activate-user"
+                    id="btn_activate_user_id_{{ user.id }}"
+                    data-csrf-token="{{ csrfToken_activateUser }}"
+                    data-user-id="{{ user.id }}">
+              <i class="bi bi-unlock-fill text-success"
+                 data-csrf-token="{{ csrfToken_activateUser }}"
+                 data-user-id="{{ user.id }}"></i>
+              {{ ad_news_set_active }}
+            </button>
+          {% endif %}
+          {% if user.status != 'protected' and permissionDeleteUser == true %}
+            <button type="button" class="btn btn-delete-user"
+                    id="btn_user_id_{{ user.id }}"
+                    data-csrf-token="{{ csrfToken_deleteUser }}"
+                    data-user-id="{{ user.id }}"
+                    data-username="{{ user.login }}">
+              <i class="bi bi-trash text-danger" data-csrf-token="{{ csrfToken_deleteUser }}"
+                 data-user-id="{{ user.id }}"></i>
+              {{ ad_user_delete }}
+            </button>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

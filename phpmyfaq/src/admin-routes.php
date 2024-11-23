@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
 use phpMyFAQ\Controller\Administration\UpdateController;
+use phpMyFAQ\Controller\Administration\UserController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -88,6 +89,16 @@ $routesConfig = [
         'controller' => [InstanceController::class, 'index'],
         'methods' => 'GET'
     ],
+    'admin.password.change' => [
+        'path' => '/password/change',
+        'controller' => [PasswordChangeController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.password.update' => [
+        'path' => '/password/update',
+        'controller' => [PasswordChangeController::class, 'update'],
+        'methods' => 'POST'
+    ],
     'admin.session.keepalive' => [
         'path' => '/session-keep-alive',
         'controller' => [SessionKeepAliveController::class, 'index'],
@@ -108,16 +119,21 @@ $routesConfig = [
         'controller' => [UpdateController::class, 'index'],
         'methods' => 'GET'
     ],
-    'admin.password.change' => [
-        'path' => '/password/change',
-        'controller' => [PasswordChangeController::class, 'index'],
+    'admin.user' => [
+        'path' => '/user',
+        'controller' => [UserController::class, 'index'],
         'methods' => 'GET'
     ],
-    'admin.password.update' => [
-        'path' => '/password/update',
-        'controller' => [PasswordChangeController::class, 'update'],
-        'methods' => 'POST'
-    ]
+    'admin.user.edit' => [
+        'path' => '/user/edit/{userId}',
+        'controller' => [UserController::class, 'edit'],
+        'methods' => 'GET'
+    ],
+    'admin.user.list' => [
+        'path' => '/user/list',
+        'controller' => [UserController::class, 'list'],
+        'methods' => 'GET'
+    ],
 ];
 
 foreach ($routesConfig as $name => $config) {
