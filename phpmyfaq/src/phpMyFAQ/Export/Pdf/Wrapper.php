@@ -542,7 +542,7 @@ class Wrapper extends TCPDF
         $file = parse_url($file, PHP_URL_PATH);
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
-        $data = file_get_contents(PMF_ROOT_DIR, $this->concatenatePaths($file));
+        $data = file_get_contents($this->concatenatePaths(PMF_ROOT_DIR, $file));
 
         if ($this->checkBase64Image($data)) {
             $file = '@' . $data;

@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use finfo;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
@@ -130,6 +129,7 @@ class BackupController extends AbstractAdministrationController
 
     /**
      * @throws \Exception
+     * @todo: Refactor this method
      */
     #[Route('/backup/restore', name: 'admin.backup.restore', methods: ['POST'])]
     public function restore(Request $request): Response

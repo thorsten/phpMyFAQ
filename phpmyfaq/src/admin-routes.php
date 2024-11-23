@@ -19,6 +19,7 @@ use phpMyFAQ\Controller\Administration\AttachmentsController;
 use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
+use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
@@ -58,6 +59,11 @@ $routesConfig = [
     'admin.elasticsearch' => [
         'path' => '/elasticsearch',
         'controller' => [ElasticsearchController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.export' => [
+        'path' => '/export',
+        'controller' => [ExportController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.instance.edit' => [

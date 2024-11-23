@@ -39,6 +39,8 @@ class SessionKeepAliveController extends AbstractAdministrationController
     #[Route('/session-keep-alive', name: 'admin.session.keepalive', methods: ['GET'])]
     public function index(Request $request): Response
     {
+        $this->userIsAuthenticated();
+
         $language = Filter::filterVar($request->query->get('lang', 'en'), FILTER_SANITIZE_SPECIAL_CHARS);
         $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 

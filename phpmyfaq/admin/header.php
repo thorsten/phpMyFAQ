@@ -128,7 +128,7 @@ $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
     'importcsv',
     'msgImportRecords'
 );
-$secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export');
+$secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry('export', 'export', 'ad_menu_export', 'export');
 
 $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 'ad_menu_backup', 'backup');
 

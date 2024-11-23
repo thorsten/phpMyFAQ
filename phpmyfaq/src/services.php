@@ -29,6 +29,7 @@ use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
@@ -124,6 +125,8 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
+
+    $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
 
     $services->set('phpmyfaq.instance', Instance::class)
         ->args([

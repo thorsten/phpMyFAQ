@@ -364,9 +364,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'importcsv':
                 require 'import.csv.php';
                 break;
-            case 'export':
-                require 'export.php';
-                break;
             // Config administration
             case 'forms':
                 require 'forms.php';
