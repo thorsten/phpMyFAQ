@@ -1,0 +1,33 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-people-fill"></i>
+      {{ 'ad_group_deleteGroup' | translate }} "{{ groupName }}"
+    </h1>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 offset-3">
+      <div class="card shadow">
+        <div class="card-body">
+          <h5 class="card-title text-center pb-5">{{ 'ad_group_deleteQuestion' | translate }}</h5>
+          <form action="./group/delete" method="post">
+            <input type="hidden" name="group_id" value="{{ groupId }}">
+            <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfDeleteGroup }}">
+            <p class="text-center">
+              <button class="btn btn-secondary" type="submit" name="cancel">
+                {{ 'ad_gen_no' | translate }}
+              </button>
+              <button class="btn btn-primary" type="submit">
+                {{ 'ad_gen_yes' | translate }}
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

@@ -61,7 +61,8 @@ class AbstractAdministrationController extends AbstractController
             $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
                 'addgroup+editgroup+delgroup',
                 'group',
-                'ad_menu_group_administration'
+                'ad_menu_group_administration',
+                'group'
             );
         }
         $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
@@ -201,9 +202,6 @@ class AbstractAdministrationController extends AbstractController
         );
 
         switch ($action) {
-            case 'group':
-                $userPage = true;
-                break;
             case 'category-overview':
             case 'addcategory':
             case 'savecategory':
@@ -252,10 +250,19 @@ class AbstractAdministrationController extends AbstractController
         }
 
         switch ($request->attributes->get('_route')) {
+            case 'admin.group':
+            case 'admin.group.add':
+            case 'admin.group.create':
+            case 'admin.group.confirm':
+            case 'admin.group.delete':
+            case 'admin.group.update':
+            case 'admin.group.update.members':
+            case 'admin.group.update.permissions':
             case 'admin.password.change':
             case 'admin.password.update':
             case 'admin.user':
             case 'admin.user.list':
+            case 'admin.user.edit':
                 $userPage = true;
                 break;
             case 'admin.attachments':

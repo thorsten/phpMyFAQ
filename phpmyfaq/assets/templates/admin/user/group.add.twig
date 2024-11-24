@@ -1,0 +1,62 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-people-fill"></i>
+    {{ 'ad_group_add' | translate }}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div id="user_message">{{ message }}</div>
+    <form name="group_create" action="./group/create" method="post">
+      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfAddGroup }}">
+
+      <div class="row mb-2">
+        <label class="col-lg-3 col-form-label" for="group_name">
+          {{ 'ad_group_name' | translate }}
+        </label>
+        <div class="col-lg-3">
+          <input type="text" name="group_name" id="group_name" autofocus class="form-control" value="{{ groupName }}"
+                 tabindex="1">
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <label class="col-lg-3 col-form-label" for="group_description">
+          {{ 'ad_group_description' | translate }}
+        </label>
+        <div class="col-lg-3">
+            <textarea name="group_description" id="group_description" cols="15" rows="3" tabindex="2"
+                      class="form-control">{{ groupDescription }}</textarea>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-lg-3 offset-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="group_auto_join" id="group_auto_join" value="1"
+                   tabindex="3" {{ autoJoinCheckbox }}>
+            <label class="form-check-label" for="group_auto_join">
+              {{ 'ad_group_autoJoin' | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 text-end">
+          <a class="btn btn-info" href="./group">
+            {{ 'ad_gen_cancel' | translate }}
+          </a>
+          <button class="btn btn-primary" type="submit">
+            {{ 'ad_gen_save' | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -45,6 +45,7 @@ class UserController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
+    #[Route('/user/edit/:userId', name: 'admin.user.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::USER_ADD);

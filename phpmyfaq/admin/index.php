@@ -256,10 +256,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {
-            // functions for user administration
-            case 'group':
-                require 'group.php';
-                break;
             // functions for content administration
             case 'faqs-overview':
                 require 'faqs.overview.php';

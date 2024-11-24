@@ -55,7 +55,8 @@ if ($faqConfig->get('security.permLevel') !== 'basic') {
     $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
         'addgroup+editgroup+delgroup',
         'group',
-        'ad_menu_group_administration'
+        'ad_menu_group_administration',
+        'group'
     );
 }
 $secLevelEntries['content'] = $adminHelper->addMenuEntry(

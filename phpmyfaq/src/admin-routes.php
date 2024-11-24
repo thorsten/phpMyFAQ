@@ -20,6 +20,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
+use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
@@ -39,6 +40,11 @@ $routesConfig = [
         'controller' => [AttachmentsController::class, 'index'],
         'methods' => 'GET'
     ],
+    'admin.backup' => [
+        'path' => '/backup',
+        'controller' => [BackupController::class, 'index'],
+        'methods' => 'GET'
+    ],
     'admin.backup.export' => [
         'path' => '/backup/export/{type}',
         'controller' => [BackupController::class, 'export'],
@@ -48,11 +54,6 @@ $routesConfig = [
         'path' => '/backup/restore',
         'controller' => [BackupController::class, 'restore'],
         'methods' => 'POST'
-    ],
-    'admin.backup' => [
-        'path' => '/backup',
-        'controller' => [BackupController::class, 'index'],
-        'methods' => 'GET'
     ],
     'admin.configuration' => [
         'path' => '/configuration',
@@ -68,6 +69,46 @@ $routesConfig = [
         'path' => '/export',
         'controller' => [ExportController::class, 'index'],
         'methods' => 'GET'
+    ],
+    'admin.group' => [
+        'path' => '/group',
+        'controller' => [GroupController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.group.add' => [
+        'path' => '/group/add',
+        'controller' => [GroupController::class, 'add'],
+        'methods' => 'GET'
+    ],
+    'admin.group.create' => [
+        'path' => '/group/create',
+        'controller' => [GroupController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'admin.group.confirm' => [
+        'path' => '/group/confirm',
+        'controller' => [GroupController::class, 'confirm'],
+        'methods' => 'POST'
+    ],
+    'admin.group.delete' => [
+        'path' => '/group/delete',
+        'controller' => [GroupController::class, 'delete'],
+        'methods' => 'POST'
+    ],
+    'admin.group.update' => [
+        'path' => '/group/update',
+        'controller' => [GroupController::class, 'update'],
+        'methods' => 'POST'
+    ],
+    'admin.group.update.members' => [
+        'path' => '/group/update/members',
+        'controller' => [GroupController::class, 'updateMembers'],
+        'methods' => 'POST'
+    ],
+    'admin.group.update.permissions' => [
+        'path' => '/group/update/permissions',
+        'controller' => [GroupController::class, 'updatePermissions'],
+        'methods' => 'POST'
     ],
     'admin.import' => [
         'path' => '/import',
