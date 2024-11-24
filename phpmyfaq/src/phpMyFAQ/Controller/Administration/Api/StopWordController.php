@@ -66,7 +66,7 @@ class StopWordController extends AbstractController
 
         $stopWords = new StopWords($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('stopwords', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
@@ -95,7 +95,7 @@ class StopWordController extends AbstractController
 
         $stopWords = new StopWords($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('stopwords', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (null != $stopWord && Language::isASupportedLanguage($stopWordsLang)) {

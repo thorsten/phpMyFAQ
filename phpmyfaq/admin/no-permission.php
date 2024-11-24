@@ -16,14 +16,8 @@
  */
 
 use phpMyFAQ\Template\TwigWrapper;
-use phpMyFAQ\Translation;
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('@admin/no-permission.twig');
 
-echo $template->render(
-    [
-        'adminHeaderNoPermission' => Translation::get('ad_entryins_fail'),
-        'msgNoPermission' => Translation::get('err_NotAuth')
-    ]
-);
+echo $template->render();

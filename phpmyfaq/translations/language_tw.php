@@ -367,7 +367,7 @@ $PMF_LANG["ad_att_none"] = "沒有可用的附加檔案";
 $PMF_LANG["ad_att_att"] = "附加檔案";
 $PMF_LANG["ad_att_add"] = "新增附加檔案";
 $PMF_LANG["ad_entryins_suc"] = "記錄儲存成功。";
-$PMF_LANG["ad_entryins_fail"] = "發生一個錯誤。";
+$PMF_LANG["msgErrorOccurred"] = "發生一個錯誤。";
 $PMF_LANG["ad_att_del"] = "刪除";
 $PMF_LANG["ad_att_nope"] = "只能在編輯的狀態下，新增附加檔案。";
 $PMF_LANG["ad_att_delsuc"] = "附加檔案刪除成功。";
@@ -457,7 +457,7 @@ $PMF_LANG["msgCopy"] = "複製";
 $PMF_LANG["ad_categ_process"] = "處理類別中...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten 開發者
-$PMF_LANG["err_NotAuth"] = "<strong>您沒有足夠的權限。</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>您沒有足夠的權限。</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten 開發者
 $PMF_LANG["msgPreviusPage"] = "前一頁";

@@ -371,7 +371,7 @@ $PMF_LANG["ad_att_none"] = "Nav pievienotu failu";
 $PMF_LANG["ad_att_att"] = "Pievienotie faili";
 $PMF_LANG["ad_att_add"] = "Pievienot failu";
 $PMF_LANG["ad_entryins_suc"] = "Ieraksts veiksm&icirc;gi saglab&acirc;ts.";
-$PMF_LANG["ad_entryins_fail"] = "Notikusi k&iuml;&ucirc;da.";
+$PMF_LANG["msgErrorOccurred"] = "Notikusi k&iuml;&ucirc;da.";
 $PMF_LANG["ad_att_del"] = "Dz&ccedil;st";
 $PMF_LANG["ad_att_nope"] = "Failus var pievienot tikai modific&ccedil;jot ierakstu.";
 $PMF_LANG["ad_att_delsuc"] = "Pievienotais fails veiksm&icirc;gi izdz&ccedil;sts.";
@@ -456,7 +456,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Sada&iuml;u apstr&acirc;de...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Neuatoriz&ccedil;ta piek&iuml;uve.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Neuatoriz&ccedil;ta piek&iuml;uve.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "&laquo;";

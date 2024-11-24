@@ -364,7 +364,7 @@ $PMF_LANG['ad_menu_editconfig'] = "FAQ-Konfiguration";
 $PMF_LANG['ad_att_none'] = "Keine Anhänge vorhanden";
 $PMF_LANG['ad_att_add'] = "Neuen Anhang hinzufügen";
 $PMF_LANG['ad_entryins_suc'] = "Eintrag erfolgreich erstellt.";
-$PMF_LANG['ad_entryins_fail'] = "Leider ist ein Fehler aufgetreten.";
+$PMF_LANG['msgErrorOccurred'] = "Leider ist ein Fehler aufgetreten.";
 $PMF_LANG['ad_att_del'] = "Löschen";
 $PMF_LANG['ad_att_nope'] = "Anhänge sind erst beim Bearbeiten möglich.";
 $PMF_LANG['ad_att_delsuc'] = "Der Anhang wurde erfolgreich gelöscht.";
@@ -452,7 +452,7 @@ $PMF_LANG['msgCopy'] = "Kopieren";
 $PMF_LANG['ad_categ_process'] = "Bearbeite Kategorien...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG['err_NotAuth'] = "Sie haben keine ausreichende Berechtigung hierfür.";
+$PMF_LANG['msgNoPermission'] = "Sie haben keine ausreichende Berechtigung hierfür.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG['msgPreviusPage'] = "vorherige Seite";

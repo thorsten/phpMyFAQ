@@ -47,7 +47,7 @@ class TagController extends AbstractController
         $postData = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('tags', $postData->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
@@ -60,7 +60,7 @@ class TagController extends AbstractController
         if ($tags->update($tagEntity)) {
             return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
         }
     }
 

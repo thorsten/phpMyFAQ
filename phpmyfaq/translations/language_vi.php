@@ -373,7 +373,7 @@ $PMF_LANG["ad_att_none"] = "Không có tập tin đính kèm";
 $PMF_LANG["ad_att_att"] = "Tập tin đính kèm";
 $PMF_LANG["ad_att_add"] = "Đính kèm một tập tin";
 $PMF_LANG["ad_entryins_suc"] = "Bài đã được lưu.";
-$PMF_LANG["ad_entryins_fail"] = "Có lỗi xảy ra.";
+$PMF_LANG["msgErrorOccurred"] = "Có lỗi xảy ra.";
 $PMF_LANG["ad_att_del"] = "Xóa";
 $PMF_LANG["ad_att_nope"] = "Chỉ có thể thêm tập tin đính kèm khi chỉnh sửa.";
 $PMF_LANG["ad_att_delsuc"] = "Tập tin đính kèm đã được xóa.";
@@ -458,7 +458,7 @@ $PMF_LANG["msgCopy"] = "chép";
 $PMF_LANG["ad_categ_process"] = "Đang tiến hành với mục...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Bạn không được phép thực hiện điều này.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Bạn không được phép thực hiện điều này.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "trang trước";

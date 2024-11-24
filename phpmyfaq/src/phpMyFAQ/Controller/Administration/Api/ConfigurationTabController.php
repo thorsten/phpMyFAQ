@@ -92,7 +92,7 @@ class ConfigurationTabController extends AbstractController
         $oldConfigurationData = $this->configuration->getAll();
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         } else {
             // Set the new values
             $newConfigValues = [];

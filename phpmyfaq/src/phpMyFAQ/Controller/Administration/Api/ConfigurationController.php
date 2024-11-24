@@ -42,7 +42,7 @@ class ConfigurationController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {

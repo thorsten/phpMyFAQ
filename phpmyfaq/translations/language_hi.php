@@ -370,7 +370,7 @@ $PMF_LANG["ad_att_none"] = "कोई भी फाइल जुडी नही
 $PMF_LANG["ad_att_att"] = "जुडी हुई फाइलें";
 $PMF_LANG["ad_att_add"] = "फाइल जोडें";
 $PMF_LANG["ad_entryins_suc"] = "रिकॉर्ड सफलतापूर्वक लजोया गया है.";
-$PMF_LANG["ad_entryins_fail"] = "क्षमा करें, कोई खरीबी हो गयी है.";
+$PMF_LANG["msgErrorOccurred"] = "क्षमा करें, कोई खरीबी हो गयी है.";
 $PMF_LANG["ad_att_del"] = "मिटा दें";
 $PMF_LANG["ad_att_nope"] = "फाइलें केवल सम्पादन के समय ही जोड़ी जा सकती हैं.";
 $PMF_LANG["ad_att_delsuc"] = "जुडी हुई फाइल मिटा दी गयी है.";
@@ -461,7 +461,7 @@ $PMF_LANG["msgCopy"] = "नक़ल करें (copy)";
 $PMF_LANG["ad_categ_process"] = "वर्ग संसाधित हो रहा है...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>आपके पास अधिकार नहीं है.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>आपके पास अधिकार नहीं है.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "पिछला पृष्ठ";

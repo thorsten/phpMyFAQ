@@ -219,7 +219,7 @@ class UserController extends AbstractController
                     Response::HTTP_OK
                 );
             } else {
-                return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
             }
         } else {
             throw new Exception('The user is not logged in.');

@@ -370,7 +370,7 @@ $PMF_LANG["ad_att_none"] = "Nėra priedų";
 $PMF_LANG["ad_att_att"] = "Priedai";
 $PMF_LANG["ad_att_add"] = "Pridėti failą";
 $PMF_LANG["ad_entryins_suc"] = "Įrašas sėkmingai išsaugotas.";
-$PMF_LANG["ad_entryins_fail"] = "Įvyko klaida.";
+$PMF_LANG["msgErrorOccurred"] = "Įvyko klaida.";
 $PMF_LANG["ad_att_del"] = "Šalinti";
 $PMF_LANG["ad_att_nope"] = "Priedai gali būti pridėti tik kai redaguojama.";
 $PMF_LANG["ad_att_delsuc"] = "Priedas sėkmingai pašalintas.";
@@ -460,7 +460,7 @@ $PMF_LANG["msgCopy"] = "kopijuoti";
 $PMF_LANG["ad_categ_process"] = "Apdorojamos grupės...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Jūs nesate sankcionuotas.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Jūs nesate sankcionuotas.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "ankstesnis tinklalapis";

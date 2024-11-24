@@ -45,7 +45,7 @@ class ImageController extends AbstractController
             !Token::getInstance($this->container->get('session'))
                 ->verifyToken('edit-faq', $request->query->get('csrf'))
         ) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $file = $request->files->get('file');

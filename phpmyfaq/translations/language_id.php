@@ -371,7 +371,7 @@ $PMF_LANG["ad_att_none"] = "Lampiran tidak tersedia";
 $PMF_LANG["ad_att_att"] = "Lampiran";
 $PMF_LANG["ad_att_add"] = "Lampirkan berkas";
 $PMF_LANG["ad_entryins_suc"] = "Data berhasil disimpan.";
-$PMF_LANG["ad_entryins_fail"] = "Terjadi kesalahan.";
+$PMF_LANG["msgErrorOccurred"] = "Terjadi kesalahan.";
 $PMF_LANG["ad_att_del"] = "Hapus";
 $PMF_LANG["ad_att_nope"] = "Lampiran hanya bisa dimasukkan saat mengedit materi.";
 $PMF_LANG["ad_att_delsuc"] = "Lampiran berhasil dihapus.";
@@ -461,7 +461,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Memproses kategori...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Anda tidak memiliki kewenangan.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Anda tidak memiliki kewenangan.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "halaman sebelumnya";

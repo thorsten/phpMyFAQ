@@ -44,7 +44,7 @@ class CommentController extends AbstractController
             !Token::getInstance($this->container->get('session'))
                 ->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})
         ) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $comments = new Comments($this->configuration);

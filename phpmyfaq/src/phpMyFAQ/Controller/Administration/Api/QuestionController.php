@@ -43,7 +43,7 @@ class QuestionController extends AbstractController
             !Token::getInstance($this->container->get('session'))
                 ->verifyToken('delete-questions', $data->data->{'pmf-csrf-token'})
         ) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $questionIds = $data->data->{'questions[]'};
@@ -60,7 +60,7 @@ class QuestionController extends AbstractController
 
             return $this->json(['success' => Translation::get('ad_open_question_deleted')], Response::HTTP_OK);
         } else {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

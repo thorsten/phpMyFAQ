@@ -51,7 +51,7 @@ class InstanceController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('add-instance', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -160,7 +160,7 @@ class InstanceController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-instance', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);

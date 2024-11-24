@@ -371,7 +371,7 @@ $PMF_LANG["ad_att_none"] = "Файли відсутні";
 $PMF_LANG["ad_att_att"] = "Файли";
 $PMF_LANG["ad_att_add"] = "Прикріпити фал";
 $PMF_LANG["ad_entryins_suc"] = "Запис збережений.";
-$PMF_LANG["ad_entryins_fail"] = "Помилка.";
+$PMF_LANG["msgErrorOccurred"] = "Помилка.";
 $PMF_LANG["ad_att_del"] = "Видалити";
 $PMF_LANG["ad_att_nope"] = "Прикріплення файлів можливе тільки при редагуванні відповіді.";
 $PMF_LANG["ad_att_delsuc"] = "Файл успішно прикріплений.";
@@ -463,7 +463,7 @@ $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
 
-$PMF_LANG["err_NotAuth"] = "Ви не авторизовані.";
+$PMF_LANG["msgNoPermission"] = "Ви не авторизовані.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 

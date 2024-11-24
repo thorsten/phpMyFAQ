@@ -367,7 +367,7 @@ $PMF_LANG["ad_att_none"] = "Eklenti mevcut değil";
 $PMF_LANG["ad_att_att"] = "Eklentiler";
 $PMF_LANG["ad_att_add"] = "Yeni eklenti ekle";
 $PMF_LANG["ad_entryins_suc"] = "Kayıt başarıyla eklendi.";
-$PMF_LANG["ad_entryins_fail"] = "Bir hata oluştu.";
+$PMF_LANG["msgErrorOccurred"] = "Bir hata oluştu.";
 $PMF_LANG["ad_att_del"] = "Sil";
 $PMF_LANG["ad_att_nope"] = "Eklentiler yalnızca düzenleme sırasında eklenebilir.";
 $PMF_LANG["ad_att_delsuc"] = "Seçilen eklenti başarıyla silindi.";
@@ -457,7 +457,7 @@ $PMF_LANG["msgCopy"] = "kopyala";
 $PMF_LANG["ad_categ_process"] = "Kategoriler işleniyor...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Yetkiniz bulunmuyor.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Yetkiniz bulunmuyor.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "Önceki sayfa";

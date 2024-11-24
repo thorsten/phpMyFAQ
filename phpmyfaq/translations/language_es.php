@@ -366,7 +366,7 @@ $PMF_LANG['ad_menu_editconfig'] = 'Configuración de la FAQ';
 $PMF_LANG['ad_att_none'] = 'No hay archivos adjuntos disponibles';
 $PMF_LANG['ad_att_add'] = 'Adjuntar archivo';
 $PMF_LANG['ad_entryins_suc'] = 'Registro guardado con éxito.';
-$PMF_LANG['ad_entryins_fail'] = 'Ha ocurrido un error.';
+$PMF_LANG['msgErrorOccurred'] = 'Ha ocurrido un error.';
 $PMF_LANG['ad_att_del'] = 'Eliminar';
 $PMF_LANG['ad_att_nope'] = 'Los archivos adjuntos sólo puden añadirse durante la edición.';
 $PMF_LANG['ad_att_delsuc'] = 'Adjunto eliminado correctamente.';
@@ -454,7 +454,7 @@ $PMF_LANG['msgCopy'] = 'copiar';
 $PMF_LANG['ad_categ_process'] = 'Procesando categorías...';
 
 // Añadido v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG['err_NotAuth'] = '<strong>No tienes autorización.</strong>';
+$PMF_LANG['msgNoPermission'] = '<strong>No tienes autorización.</strong>';
 
 // Añadido v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG['msgPreviusPage'] = 'página anterior';

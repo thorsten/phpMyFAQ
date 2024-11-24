@@ -370,7 +370,7 @@ $PMF_LANG["ad_att_none"] = "No attachments available";
 $PMF_LANG["ad_att_att"] = "Attachments";
 $PMF_LANG["ad_att_add"] = "Attach file";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
-$PMF_LANG["ad_entryins_fail"] = "An error occurred.";
+$PMF_LANG["msgErrorOccurred"] = "An error occurred.";
 $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
@@ -460,7 +460,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>আপনার অনুমতি নেই।</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>আপনার অনুমতি নেই।</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "আগের পাতা";

@@ -369,7 +369,7 @@ $PMF_LANG["ad_att_none"] = "Nid oes atodiadau ar gael";
 $PMF_LANG["ad_att_att"] = "Atodiadau";
 $PMF_LANG["ad_att_add"] = "Atodi ffeil";
 $PMF_LANG["ad_entryins_suc"] = "Cadwyd y cofnod yn llwyddiannus.";
-$PMF_LANG["ad_entryins_fail"] = "Gwall.";
+$PMF_LANG["msgErrorOccurred"] = "Gwall.";
 $PMF_LANG["ad_att_del"] = "Dileu";
 $PMF_LANG["ad_att_nope"] = "Gellir ychwanegu atodiadau wrth olygu yn unig.";
 $PMF_LANG["ad_att_delsuc"] = "Dilëwyd yr atodiad yn llwyddiannus.";
@@ -458,7 +458,7 @@ $PMF_LANG["msgCopy"] = "copïo";
 $PMF_LANG["ad_categ_process"] = "Prosesu categorïau...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Nid oes caniatâd gennych.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Nid oes caniatâd gennych.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "tudalen blaenorol";

@@ -366,7 +366,7 @@ $PMF_LANG["ad_menu_editconfig"] = "Configuration";
 $PMF_LANG["ad_att_none"] = "Pas de pièce-jointe";
 $PMF_LANG["ad_att_add"] = "Joindre un fichier";
 $PMF_LANG["ad_entryins_suc"] = "FAQ enregistrée.";
-$PMF_LANG["ad_entryins_fail"] = "Une erreur est survenue.";
+$PMF_LANG["msgErrorOccurred"] = "Une erreur est survenue.";
 $PMF_LANG["ad_att_del"] = "Supprimer";
 $PMF_LANG["ad_att_nope"] = "Les pièces-jointes ne peuvent être ajoutées qu'en édition.";
 $PMF_LANG["ad_att_delsuc"] = "La pièce-jointe a été supprimée.";
@@ -454,7 +454,7 @@ $PMF_LANG["msgCopy"] = "Copier";
 $PMF_LANG["ad_categ_process"] = "Traitement des catégories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Vous n'êtes pas autorisé.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Vous n'êtes pas autorisé.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "Page précédente";

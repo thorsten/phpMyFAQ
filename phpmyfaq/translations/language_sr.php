@@ -373,7 +373,7 @@ $PMF_LANG["ad_att_none"] = "Nema fajlova";
 $PMF_LANG["ad_att_att"] = "Fajlovi (attachments)";
 $PMF_LANG["ad_att_add"] = "Zaka&#269;i (attach) fajl";
 $PMF_LANG["ad_entryins_suc"] = "Unos uspe&#353;no snimljen.";
-$PMF_LANG["ad_entryins_fail"] = "Desila se gre&#353;ka.";
+$PMF_LANG["msgErrorOccurred"] = "Desila se gre&#353;ka.";
 $PMF_LANG["ad_att_del"] = "Obri&#353;i";
 $PMF_LANG["ad_att_nope"] = "Fajlovi mogu biti dodani samo kada se menja unos.";
 $PMF_LANG["ad_att_delsuc"] = "Fajl je uspe&#353;no obrisan.";
@@ -463,7 +463,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Procesiram kategorije...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Niste autorizovani.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Niste autorizovani.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "prethodna strana";

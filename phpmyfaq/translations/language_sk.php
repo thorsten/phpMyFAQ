@@ -370,7 +370,7 @@ $PMF_LANG["ad_att_none"] = "Nie sú dostupné žiadne prílohy";
 $PMF_LANG["ad_att_att"] = "Prílohy";
 $PMF_LANG["ad_att_add"] = "Priložiť súbor";
 $PMF_LANG["ad_entryins_suc"] = "Záznam úspešne uložený.";
-$PMF_LANG["ad_entryins_fail"] = "Vyskytla sa chyba.";
+$PMF_LANG["msgErrorOccurred"] = "Vyskytla sa chyba.";
 $PMF_LANG["ad_att_del"] = "Vymazať";
 $PMF_LANG["ad_att_nope"] = "Prílohy môžu byť pridané len počas úprav.";
 $PMF_LANG["ad_att_delsuc"] = "Príloha bola úspešne vymazaná.";
@@ -460,7 +460,7 @@ $PMF_LANG["msgCopy"] = "kopírovať";
 $PMF_LANG["ad_categ_process"] = "Spracovanie kategórií...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Nemáte oprávnenie.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Nemáte oprávnenie.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "predchádzajúca stránka";

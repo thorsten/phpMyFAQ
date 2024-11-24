@@ -46,7 +46,7 @@ class AttachmentController extends AbstractController
                 !Token::getInstance($this->container->get('session'))
                     ->verifyToken('delete-attachment', $deleteData->csrf)
             ) {
-                return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+                return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
             $attachment = AttachmentFactory::create($deleteData->attId);
@@ -75,7 +75,7 @@ class AttachmentController extends AbstractController
                 !Token::getInstance($this->container->get('session'))
                     ->verifyToken('refresh-attachment', $dataToCheck->csrf)
             ) {
-                return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+                return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
             $attachment = AttachmentFactory::create($dataToCheck->attId);

@@ -368,7 +368,7 @@ $PMF_LANG["ad_menu_editconfig"] = "Edycja konfiguracji";
 $PMF_LANG["ad_att_none"] = "Brak dostępnych załączników";
 $PMF_LANG["ad_att_add"] = "Dodaj nowy załącznik";
 $PMF_LANG["ad_entryins_suc"] = "Rekord został pomyślnie zapisany.";
-$PMF_LANG["ad_entryins_fail"] = "Wystąpił błąd.";
+$PMF_LANG["msgErrorOccurred"] = "Wystąpił błąd.";
 $PMF_LANG["ad_att_del"] = "Usuń";
 $PMF_LANG["ad_att_nope"] = "Załączniki można dodawać wyłącznie podczas edycji.";
 $PMF_LANG["ad_att_delsuc"] = "Załącznik został pomyślnie usunięty.";
@@ -456,7 +456,7 @@ $PMF_LANG["msgCopy"] = "kopiuj";
 $PMF_LANG["ad_categ_process"] = "Przetwarzanie kategorii...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Nie masz uprawnień.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Nie masz uprawnień.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "poprzednia strona";

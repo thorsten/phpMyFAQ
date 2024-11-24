@@ -371,7 +371,7 @@ $PMF_LANG["ad_att_none"] = "파일을 첨부할 수 없습니다.";
 $PMF_LANG["ad_att_att"] = "첨부";
 $PMF_LANG["ad_att_add"] = "첨부 파일";
 $PMF_LANG["ad_entryins_suc"] = "성공적으로 저장되었습니다.";
-$PMF_LANG["ad_entryins_fail"] = "에러가 발생하였습니다.";
+$PMF_LANG["msgErrorOccurred"] = "에러가 발생하였습니다.";
 $PMF_LANG["ad_att_del"] = "삭제";
 $PMF_LANG["ad_att_nope"] = "첨부파일은 내용 편집중에만 추가될 수 있습니다.";
 $PMF_LANG["ad_att_delsuc"] = "첨부파일을 성공적으로 삭제하였습니다.";
@@ -461,7 +461,7 @@ $PMF_LANG["msgCopy"] = "복사";
 $PMF_LANG["ad_categ_process"] = "카테고리 처리중......";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>사용 권한이 없습니다.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>사용 권한이 없습니다.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "이전 페이지";

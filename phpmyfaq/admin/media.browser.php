@@ -92,7 +92,7 @@ if (is_dir(PMF_CONTENT_DIR . '/user/images')) {
 $templateVars = [
     'metaLanguage' => Translation::get('metaLanguage'),
     'notAuthenticated' => !$user->isLoggedIn(),
-    'msgNotAuthenticated' => Translation::get('err_NotAuth'),
+    'msgNotAuthenticated' => Translation::get('msgNoPermission'),
     'msgMediaSearch' => Translation::get('ad_media_name_search'),
     'isImageDirectoryMissing' => !is_dir(PMF_CONTENT_DIR . '/user/images'),
     'msgImageDirectoryMissing' => sprintf(Translation::get('ad_dir_missing'), '/images'),

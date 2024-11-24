@@ -366,7 +366,7 @@ $PMF_LANG["ad_att_none"] = "Хавсралт алга";
 $PMF_LANG["ad_att_att"] = "Хавсралт:";
 $PMF_LANG["ad_att_add"] = "Хавсралт нэмэх";
 $PMF_LANG["ad_entryins_suc"] = "Бичлэг амжилттай хадгалагдлаа.";
-$PMF_LANG["ad_entryins_fail"] = "Алдаа илэрлээ.";
+$PMF_LANG["msgErrorOccurred"] = "Алдаа илэрлээ.";
 $PMF_LANG["ad_att_del"] = "Устгах";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "Хавсралт устгагдлаа.";
@@ -456,7 +456,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Ангилал боловсруулж байна...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Та зөвшөөрөлгүй байна.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Та зөвшөөрөлгүй байна.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "өмнөх хуудас";

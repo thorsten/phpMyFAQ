@@ -46,7 +46,7 @@ class NewsController extends AbstractController
         $news = new News($this->configuration);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('save-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -94,7 +94,7 @@ class NewsController extends AbstractController
         $news = new News($this->configuration);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -119,7 +119,7 @@ class NewsController extends AbstractController
         $news = new News($this->configuration);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('update-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -168,7 +168,7 @@ class NewsController extends AbstractController
         $news = new News($this->configuration);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);

@@ -371,7 +371,7 @@ $PMF_LANG["ad_att_none"] = "Ni dostopnih priponk";
 $PMF_LANG["ad_att_att"] = "Priponke";
 $PMF_LANG["ad_att_add"] = "Pripni datoteko";
 $PMF_LANG["ad_entryins_suc"] = "Zapis uspešno shranjen.";
-$PMF_LANG["ad_entryins_fail"] = "Prišlo je do napake.";
+$PMF_LANG["msgErrorOccurred"] = "Prišlo je do napake.";
 $PMF_LANG["ad_att_del"] = "Odstrani";
 $PMF_LANG["ad_att_nope"] = "Priponka se lahko doda samo med urejanjem.";
 $PMF_LANG["ad_att_delsuc"] = "Priponka uspešno odstranjena.";
@@ -461,7 +461,7 @@ $PMF_LANG["msgCopy"] = "kopiraj";
 $PMF_LANG["ad_categ_process"] = "Proces za kategorije...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Nisi avtoriziran.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Nisi avtoriziran.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "prejšnja stran";

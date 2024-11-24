@@ -43,7 +43,7 @@ class StatisticsController extends AbstractController
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-adminlog', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $logging = new AdminLog($this->configuration);
@@ -68,7 +68,7 @@ class StatisticsController extends AbstractController
             !Token::getInstance($this->container->get('session'))
                 ->verifyToken('truncate-search-terms', $data->csrfToken)
         ) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $search = new Search($this->configuration);

@@ -374,7 +374,7 @@ $PMF_LANG["ad_att_none"] = "Ez dago fitxategi erantsirik";
 $PMF_LANG["ad_att_att"] = "Fitxategi erantsiak";
 $PMF_LANG["ad_att_add"] = "Fitxategia erantsi";
 $PMF_LANG["ad_entryins_suc"] = "Erregistroa ondo gorde da.";
-$PMF_LANG["ad_entryins_fail"] = "Akats bat egon da.";
+$PMF_LANG["msgErrorOccurred"] = "Akats bat egon da.";
 $PMF_LANG["ad_att_del"] = "Ezabatu";
 $PMF_LANG["ad_att_nope"] = "Eranskinak editatzean soilik dago erabilgarri.";
 $PMF_LANG["ad_att_delsuc"] = "Eranskina ondo ezabatu da.";
@@ -464,7 +464,7 @@ $PMF_LANG["msgCopy"] = "kopiatu";
 $PMF_LANG["ad_categ_process"] = "Kategoriak prozesatzen...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Ez duzu baimenik, barkatu eragozpenak.</strong>";
+$PMF_LANG["msgNoPermission"] = "<strong>Ez duzu baimenik, barkatu eragozpenak.</strong>";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "aurreko orria";

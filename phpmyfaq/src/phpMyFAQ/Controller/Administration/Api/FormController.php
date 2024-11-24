@@ -42,7 +42,7 @@ class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-input', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -64,7 +64,7 @@ class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('require-input', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -87,7 +87,7 @@ class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -109,7 +109,7 @@ class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -140,7 +140,7 @@ class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('add-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {

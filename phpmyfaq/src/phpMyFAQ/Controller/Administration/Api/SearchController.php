@@ -47,7 +47,7 @@ class SearchController extends AbstractController
             !Token::getInstance($this->container->get('session'))
                 ->verifyToken('delete-searchterm', $deleteData->csrf)
         ) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);
