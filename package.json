@@ -79,5 +79,5 @@
       "pre-push": "composer lint && composer validate && composer test && yarn pretty-quick --staged && yarn test"
     }
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.22"
 }

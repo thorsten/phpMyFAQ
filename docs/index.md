@@ -1,13 +1,15 @@
 # phpMyFAQ Manual
 
-phpMyFAQ is a multilingual, completely database-driven FAQ system. It supports various databases to store all data,
-PHP 8.1+ is needed to access this data. phpMyFAQ also offers a multi-language Content Management System with a
+phpMyFAQ is a multilingual, completely database-driven FAQ system.
+It supports various databases to store all data; PHP 8.1+ is needed to access this data.
+phpMyFAQ also offers a multi-language Content Management System with a
 WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking,
 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates with support for
 own text and HTML snippets, PDF-support, a backup-system, a dynamic sitemap, related FAQs, tagging, built-in spam
 protection systems, OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID support, and an easy-to-use
-installation script. You can run phpMyFAQ on almost every web hosting provider or in the cloud in a Docker container.
+installation script.
+You can run phpMyFAQ on almost every web hosting provider or in the cloud in a Docker container.
 
 This documentation should help you with installing, updating, using and administrating phpMyFAQ.
 
@@ -32,10 +34,9 @@ This documentation is licensed under a [Creative Commons License](http://creativ
 
 ### Support
 
-If you should run into any problems using phpMyFAQ check out our support forums at
+If you should run into any problems using phpMyFAQ, check out our support forums at
 [forum.phpmyfaq.de](https://forum.phpmyfaq.de/).
-You can also use our BlueSky account [@phpmyfaq.bsky.social](https://bsky.app/profile/phpmyfaq.bsky.social)
-to ask us short question.
+You can also use our Bluesky account [@phpmyfaq.de](https://bsky.app/profile/phpmyfaq.de) to ask us short question.
 There is no free support by phone or email, please refrain from calling or mailing us.
 
 The phpMyFAQ team offers the following paid services:
