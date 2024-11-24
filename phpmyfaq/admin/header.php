@@ -106,7 +106,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,
     'statistics',
-    'ad_menu_stat'
+    'ad_menu_stat',
+    'statistics/ratings'
 );
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,

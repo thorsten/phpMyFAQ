@@ -15,8 +15,10 @@
  * @since     2024-10-07
  */
 
+use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
+use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth;
@@ -33,6 +35,8 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
+use phpMyFAQ\Rating;
+use phpMyFAQ\Search;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
@@ -56,7 +60,17 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('session', Session::class);
 
+    $services->set('phpmyfaq.admin.admin-log', AdminLog::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
     $services->set('phpmyfaq.admin.category', Category::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.admin.rating-data', RatingData::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
@@ -123,6 +137,11 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.rating', Rating::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
     $services->set('phpmyfaq.faq.statistics', Statistics::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -149,6 +168,11 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration'),
             new Reference('session')
+        ]);
+
+    $services->set('phpmyfaq.search', Search::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
         ]);
 
     $services->set('phpmyfaq.session.token', Token::class)

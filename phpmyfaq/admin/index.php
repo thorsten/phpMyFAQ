@@ -328,10 +328,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'viewsession':
                 require 'statistics.show.php';
                 break;
-            case 'clear-statistics':
-            case 'statistics':
-                require 'statistics.ratings.php';
-                break;
             case 'truncatesearchterms':
             case 'searchstats':
                 require 'statistics.search.php';

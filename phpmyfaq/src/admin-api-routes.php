@@ -476,6 +476,11 @@ $routesConfig = [
         'controller' => [StatisticsController::class, 'truncateSearchTerms'],
         'methods' => 'DELETE'
     ],
+    'admin.api.statistics.ratings.clear' => [
+        'path' => '/statistics/ratings/clear',
+        'controller' => [StatisticsController::class, 'clearRatings'],
+        'methods' => 'DELETE'
+    ],
     // Forms API
     'admin.api.forms.activate' => [
         'path' => '/forms/activate',

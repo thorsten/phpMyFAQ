@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
+use phpMyFAQ\Controller\Administration\RatingController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
@@ -143,6 +144,11 @@ $routesConfig = [
     'admin.session.keepalive' => [
         'path' => '/session-keep-alive',
         'controller' => [SessionKeepAliveController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.statistics.ratings' => [
+        'path' => '/statistics/ratings',
+        'controller' => [RatingController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.stopwords' => [

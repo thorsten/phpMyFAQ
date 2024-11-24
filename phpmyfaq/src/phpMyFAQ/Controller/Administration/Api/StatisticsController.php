@@ -18,22 +18,21 @@
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use JsonException;
-use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Search;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class StatisticsController extends AbstractController
 {
     /**
      * @throws Exception|JsonException
+     * @throws \Exception
      */
     #[Route('./admin/api/statistics/admin-log', methods: ['DELETE'])]
     public function deleteAdminLog(Request $request): JsonResponse
@@ -46,8 +45,7 @@ class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $logging = new AdminLog($this->configuration);
-        if ($logging->delete()) {
+        if ($this->container->get('phpmyfaq.admin.admin-log')->delete()) {
             return $this->json(['success' => Translation::get('ad_adminlog_delete_success')], Response::HTTP_OK);
         }
 
@@ -56,6 +54,7 @@ class StatisticsController extends AbstractController
 
     /**
      * @throws Exception|JsonException
+     * @throws \Exception
      */
     #[Route('./admin/api/statistics/search-terms', methods: ['DELETE'])]
     public function truncateSearchTerms(Request $request): JsonResponse
@@ -71,11 +70,31 @@ class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $search = new Search($this->configuration);
-        if ($search->deleteAllSearchTerms()) {
+        if ($this->container->get('phpmyfaq.search')->deleteAllSearchTerms()) {
             return $this->json(['success' => Translation::get('ad_searchterm_del_suc')], Response::HTTP_OK);
         }
 
         return $this->json(['error' => Translation::get('ad_searchterm_del_err')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('./admin/api/statistics/ratings/clear', name: 'admin.api.statistics.ratings.clear', methods: ['DELETE'])]
+    public function clearRatings(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('clear-statistics', $data->csrfToken)) {
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($this->container->get('phpmyfaq.rating')->deleteAll()) {
+            return $this->json(['success' => Translation::get('msgDeleteAllVotings')], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => Translation::get('msgDeleteAllVotings')], Response::HTTP_BAD_REQUEST);
     }
 }
