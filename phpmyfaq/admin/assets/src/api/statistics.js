@@ -75,3 +75,45 @@ export const clearRatings = async (csrfToken) => {
     console.error(error);
   }
 };
+export const clearVisits = async (csrfToken) => {
+  try {
+    const response = await fetch(`./api/statistics/visits/clear`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteSessions = async (csrfToken, month) => {
+  try {
+    const response = await fetch(`./api/statistics/sessions`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+        month: month,
+      }),
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};

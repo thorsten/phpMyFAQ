@@ -16,8 +16,10 @@
 import { getLatestVersion, renderVisitorCharts, renderTopTenCharts, handleVerificationModal } from './dashboard';
 import {
   handleClearRatings,
+  handleClearVisits,
   handleCreateReport,
   handleDeleteAdminLog,
+  handleDeleteSessions,
   handleSessions,
   handleStatistics,
 } from './statistics';
@@ -131,6 +133,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleCreateReport();
   handleTruncateSearchTerms();
   handleClearRatings();
+  handleClearVisits();
+  handleDeleteSessions();
 
   // Configuration → FAQ configuration
   await handleConfiguration();

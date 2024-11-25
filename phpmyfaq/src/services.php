@@ -29,10 +29,12 @@ use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseHelper;
+use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Rating;
@@ -127,6 +129,11 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.configuration', Configuration::class)
         ->factory([Configuration::class, 'getConfigurationInstance']);
 
+    $services->set('phpmyfaq.date', Date::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
     $services->set('phpmyfaq.faq', Faq::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -135,6 +142,13 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.faq.metadata', MetaData::class)
         ->args([
             new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.helper.statistics', StatisticsHelper::class)
+        ->args([
+            new Reference('phpmyfaq.admin.session'),
+            new Reference('phpmyfaq.visits'),
+            new Reference('phpmyfaq.date')
         ]);
 
     $services->set('phpmyfaq.rating', Rating::class)

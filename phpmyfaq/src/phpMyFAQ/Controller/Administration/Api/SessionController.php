@@ -55,7 +55,14 @@ class SessionController extends AbstractController
         $file = fopen($filePath, 'w');
         if ($file) {
             foreach ($data as $row) {
-                fputcsv($file, [$row['ip'], $row['time']]);
+                fputcsv(
+                    $file,
+                    [$row['ip'],  $row['time']],
+                    ',',
+                    '"',
+                    '\\',
+                    PHP_EOL
+                );
             }
 
             fclose($file);

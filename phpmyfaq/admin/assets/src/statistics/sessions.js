@@ -13,7 +13,8 @@
  * @since     2024-01-14
  */
 
-import { pushErrorNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
+import { clearVisits, deleteSessions } from '../api/index.js';
 
 export const handleSessions = () => {
   const firstHour = document.getElementById('firstHour');
@@ -63,6 +64,43 @@ export const handleSessions = () => {
         }
       } catch (error) {
         console.error(error.message);
+      }
+    });
+  }
+};
+
+export const handleClearVisits = () => {
+  const buttonClearRatings = document.getElementById('pmf-admin-clear-visits');
+
+  if (buttonClearRatings) {
+    buttonClearRatings.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const csrf = event.target.getAttribute('data-pmf-csrf');
+      const response = await clearVisits(csrf);
+
+      if (response.success) {
+        pushNotification(response.success);
+      } else {
+        pushErrorNotification(response.error);
+      }
+    });
+  }
+};
+
+export const handleDeleteSessions = () => {
+  const buttonClearRatings = document.getElementById('pmf-admin-delete-sessions');
+
+  if (buttonClearRatings) {
+    buttonClearRatings.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const csrf = document.getElementById('pmf-csrf-token').value;
+      const month = document.getElementById('month').value;
+      const response = await deleteSessions(csrf, month);
+
+      if (response.success) {
+        pushNotification(response.success);
+      } else {
+        pushErrorNotification(response.error);
       }
     });
   }

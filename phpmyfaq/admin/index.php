@@ -318,13 +318,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'adminlog':
                 require 'statistics.admin-log.php';
                 break;
-            case 'viewsessions':
-            case 'clear-visits':
-                require 'statistics.sessions.php';
-                break;
-            case 'sessionbrowse':
-                require 'statistics.sessions.day.php';
-                break;
             case 'viewsession':
                 require 'statistics.show.php';
                 break;

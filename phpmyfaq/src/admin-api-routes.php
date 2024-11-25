@@ -471,14 +471,24 @@ $routesConfig = [
         'controller' => [StatisticsController::class, 'deleteAdminLog'],
         'methods' => 'DELETE'
     ],
+    'admin.api.statistics.ratings.clear' => [
+        'path' => '/statistics/ratings/clear',
+        'controller' => [StatisticsController::class, 'clearRatings'],
+        'methods' => 'DELETE'
+    ],
     'admin.api.statistics.search-terms.truncate' => [
         'path' => '/statistics/search-terms',
         'controller' => [StatisticsController::class, 'truncateSearchTerms'],
         'methods' => 'DELETE'
     ],
-    'admin.api.statistics.ratings.clear' => [
-        'path' => '/statistics/ratings/clear',
-        'controller' => [StatisticsController::class, 'clearRatings'],
+    'admin.api.statistics.sessions.truncate' => [
+        'path' => '/statistics/sessions',
+        'controller' => [StatisticsController::class, 'truncateSessions'],
+        'methods' => 'DELETE'
+    ],
+    'admin.api.statistics.visits.clear' => [
+        'path' => '/statistics/visits/clear',
+        'controller' => [StatisticsController::class, 'clearVisits'],
         'methods' => 'DELETE'
     ],
     // Forms API

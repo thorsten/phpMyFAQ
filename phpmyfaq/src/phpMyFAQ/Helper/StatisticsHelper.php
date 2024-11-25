@@ -124,6 +124,8 @@ readonly class StatisticsHelper
 
     public function deleteTrackingFiles(string $month): bool
     {
+        return false;
+        /*
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         $first = PHP_INT_MAX;
         $last = 0;
@@ -148,6 +150,7 @@ readonly class StatisticsHelper
         closedir($dir);
 
         return $this->session->deleteSessions($first, $last);
+        */
     }
 
     public function clearAllVisits(): bool

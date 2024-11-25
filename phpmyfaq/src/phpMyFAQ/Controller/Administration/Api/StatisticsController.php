@@ -21,6 +21,7 @@ use JsonException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,6 +51,32 @@ class StatisticsController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get('ad_adminlog_delete_failure')], Response::HTTP_BAD_REQUEST);
+    }
+
+
+    /**
+     * @throws Exception|JsonException
+     * @throws \Exception
+     */
+    #[Route('./admin/api/statistics/sessions', name: 'admin.api.statistics.sessions.truncate', methods: ['DELETE'])]
+    public function truncateSessions(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('sessions', $data->csrfToken)
+        ) {
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $month = Filter::filterVar($request->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($this->container->get('phpmyfaq.helper.statistics')->deleteTrackingFiles($month)) {
+            return $this->json(['success' => Translation::get('ad_adminlog_delete_success')], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => 'Cannot delete sessions.'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -96,5 +123,26 @@ class StatisticsController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get('msgDeleteAllVotings')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('./admin/api/statistics/visits/clear', name: 'admin.api.statistics.visits.clear', methods: ['DELETE'])]
+    public function clearVisits(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+
+        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('clear-visits', $data->csrfToken)) {
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($this->container->get('phpmyfaq.helper.statistics')->clearAllVisits()) {
+            return $this->json(['success' => Translation::get('ad_reset_visits_success')], Response::HTTP_OK);
+        }
+
+        return $this->json(['error' => 'Cannot clear visits.'], Response::HTTP_BAD_REQUEST);
     }
 }
