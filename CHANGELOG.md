@@ -10,7 +10,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - added configuration to edit robots.txt (Thorsten)
 - WIP: added Symfony Routing for administration backend (Thorsten)
-- removed Webpack, now using Vite (Thorsten)
+- removed Webpack, now using Vite v6 (Thorsten)
 - migrated from Jest to vitest (Thorsten)
 
 ### phpMyFAQ v4.0.0-RC.4 - 2024-11-09
