@@ -197,8 +197,8 @@ class Pagination
 
         if ($url !== '' && $url !== '0') {
             $match = [];
-            if (Strings::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match) !== 0) {
-                $page = $match[2] ?? $page;
+            if (Strings::preg_match('/[?&]' . $this->pageParamName . '=(\d+)/', $url, $match) !== 0) {
+                $page = $match[1] ?? $page;
             }
         }
 
@@ -281,7 +281,8 @@ class Pagination
             return sprintf($this->rewriteUrl, $page);
         }
         $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-        return sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        $separator = (!str_contains($cleanedUrl, '?')) ? '?' : '&';
+        return sprintf('%s%s%s=%d', $cleanedUrl, $separator, $this->pageParamName, $page);
     }
 
     /**

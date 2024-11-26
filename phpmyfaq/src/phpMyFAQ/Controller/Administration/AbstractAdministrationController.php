@@ -134,7 +134,8 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_ADMINLOG->value,
             'adminlog',
-            'ad_menu_adminlog'
+            'ad_menu_adminlog',
+            'statistics/admin-log'
         );
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_VIEWLOGS->value,
@@ -234,8 +235,6 @@ class AbstractAdministrationController extends AbstractController
             case 'stickyfaqs':
                 $contentPage = true;
                 break;
-            case 'sessionsuche':
-            case 'adminlog':
             case 'searchstats':
             case 'reports':
             case 'reportview':
@@ -267,6 +266,7 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.attachments':
                 $contentPage = true;
                 break;
+            case 'admin.statistics.admin-log':
             case 'admin.statistics.ratings':
             case 'admin.statistics.sessions':
             case 'admin.statistics.session':

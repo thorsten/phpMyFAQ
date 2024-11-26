@@ -315,9 +315,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'glossary.php';
                 break;
             // functions for session administration
-            case 'adminlog':
-                require 'statistics.admin-log.php';
-                break;
             case 'viewsession':
                 require 'statistics.show.php';
                 break;

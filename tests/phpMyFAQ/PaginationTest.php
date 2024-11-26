@@ -17,15 +17,15 @@ class PaginationTest extends TestCase
         $expectedOutput =
             '<ul class="pagination justify-content-center">' .
             '<li class="page-item active">' .
-            '<a class="page-link" href="http://example.com?action=foo&amp;page=1">1</a>' .
+            '<a class="page-link" href="http://example.com?action=foo&page=1">1</a>' .
             '</li>&nbsp;&nbsp;<li class="page-item">' .
-            '<a class="page-link" href="http://example.com?action=foo&amp;page=2">2</a>' .
+            '<a class="page-link" href="http://example.com?action=foo&page=2">2</a>' .
             '</li>&nbsp;&nbsp;<li class="page-item">' .
-            '<a class="page-link" href="http://example.com?action=foo&amp;page=3">3</a>' .
+            '<a class="page-link" href="http://example.com?action=foo&page=3">3</a>' .
             '</li>&nbsp;&nbsp;<li class="page-item">' .
-            '<a class="page-link" href="http://example.com?action=foo&amp;page=2">&rarr;</a>' .
+            '<a class="page-link" href="http://example.com?action=foo&page=2">&rarr;</a>' .
             '</li>&nbsp;&nbsp;<li class="page-item">' .
-            '<a class="page-link" href="http://example.com?action=foo&amp;page=3">&#8677;</a>' .
+            '<a class="page-link" href="http://example.com?action=foo&page=3">&#8677;</a>' .
             '</li></ul>';
 
         $this->assertEquals($expectedOutput, $pagination->render());

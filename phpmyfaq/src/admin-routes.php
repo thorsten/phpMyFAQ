@@ -15,6 +15,7 @@
  * @since     2024-11-22
  */
 
+use phpMyFAQ\Controller\Administration\AdminLogController;
 use phpMyFAQ\Controller\Administration\AttachmentsController;
 use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
@@ -145,6 +146,11 @@ $routesConfig = [
     'admin.session.keepalive' => [
         'path' => '/session-keep-alive',
         'controller' => [SessionKeepAliveController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.statistics.admin-log' => [
+        'path' => '/statistics/admin-log',
+        'controller' => [AdminLogController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.statistics.ratings' => [
