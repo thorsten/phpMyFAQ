@@ -74,12 +74,13 @@ class StatisticsSessionsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/statistics/session', name: 'admin.statistics.session', methods: ['GET'])]
-    public function session(Request $request): Response
+    #[Route('/statistics/sessions/:day', name: 'admin.statistics.session', methods: ['GET'])]
+    public function viewDay(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $day = Filter::filterVar($request->get('day'), FILTER_VALIDATE_INT);
+
         $firstHour = strtotime('midnight', $day);
         $lastHour = strtotime('tomorrow', $firstHour) - 1;
 
@@ -97,6 +98,39 @@ class StatisticsSessionsController extends AbstractAdministrationController
                 'msgSessionDate' => Translation::get('ad_sess_s_date'),
                 'msgSession' => Translation::get('ad_sess_session'),
                 'sessionData' => $sessionData,
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route('/statistics/session/:sessionId', name: 'admin.statistics.session', methods: ['POST'])]
+    public function viewSession(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
+
+        $sessionId = Filter::filterVar($request->get('sessionId'), FILTER_VALIDATE_INT);
+
+        $session = $this->container->get('phpmyfaq.admin.session');
+        $time = $session->getTimeFromSessionId($sessionId);
+        $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
+
+        return $this->render(
+            '@admin/statistics/sessions.session.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'ad_sess_session' => Translation::get('ad_sess_session'),
+                'sessionId' => $sessionId,
+                'ad_sess_back' => Translation::get('ad_sess_back'),
+                'ad_sess_referer' => Translation::get('ad_sess_referer'),
+                'ad_sess_browser' => Translation::get('ad_sess_browser'),
+                'ad_sess_ip' => Translation::get('ad_sess_ip'),
+                'trackingData' => $trackingData,
+                'thisDay' => date('Y-m-d', $time),
             ]
         );
     }

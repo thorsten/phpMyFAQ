@@ -126,13 +126,12 @@ readonly class Session
      *
      * @return array<int, stdClass>
      */
-    public function getLast30DaysVisits(): array
+    public function getLast30DaysVisits(int $endDate): array
     {
         $stats = [];
         $visits = [];
         $completeData = [];
         $startDate = strtotime('-1 month');
-        $endDate = Request::createFromGlobals()->server->get('REQUEST_TIME');
 
         $query = sprintf(
             'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',

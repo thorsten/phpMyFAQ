@@ -47,8 +47,8 @@
             <tr>
               <th>{{ msgSessionBrowse }}</th>
               <td class="col-lg-10">
-                <form action="./statistics/session" method="post" accept-charset="utf-8"
-                      class="row row-cols-lg-auto g-3 align-items-center">
+                <form class="row row-cols-lg-auto g-3 align-items-center" method="post" id="pmf-admin-form-session"
+                      action="">
                   <div class="mr-2">
                     <label for="day" class="d-none">
                       {{ msgSessionBrowse }}
@@ -57,7 +57,7 @@
                       {{ renderedDaySelector | raw }}
                     </select>
                   </div>
-                  <button class="btn btn-primary" type="submit" name="statbrowse">
+                  <button class="btn btn-primary" type="button" id="pmf-admin-session-day">
                     {{ buttonOkay }}
                   </button>
                 </form>

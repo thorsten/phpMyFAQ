@@ -21,6 +21,7 @@ use ErrorException;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -112,7 +113,7 @@ readonly class Application
                 Response::HTTP_NOT_FOUND
             );
         } catch (UnauthorizedHttpException) {
-            $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
+            $response = new RedirectResponse('/login');
         } catch (BadRequestException $exception) {
             $response = new Response(
                 sprintf(

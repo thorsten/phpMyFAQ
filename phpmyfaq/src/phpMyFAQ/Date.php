@@ -74,10 +74,10 @@ readonly class Date
             $year = Strings::substr($file, 12, 4);
 
             if (!$endOfDay) {
-                return mktime(0, 0, 0, (int)$month, (int)$day, (int)$year);
+                return gmmktime(0, 0, 0, (int)$month, (int)$day, (int)$year);
             }
 
-            return mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
+            return gmmktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
         }
 
         return -1;

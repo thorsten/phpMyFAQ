@@ -78,13 +78,14 @@ class DashboardController extends AbstractController
      * @throws \Exception
      */
     #[Route('admin/api/dashboard/visits')]
-    public function visits(): JsonResponse
+    public function visits(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
         if ($this->configuration->get('main.enableUserTracking')) {
             $session = $this->container->get('phpmyfaq.admin.session');
-            return $this->json($session->getLast30DaysVisits());
+            $endDate = $request->server->get('REQUEST_TIME');
+            return $this->json($session->getLast30DaysVisits($endDate));
         }
 
         return $this->json(['error' => 'User tracking is disabled.'], 400);

@@ -163,10 +163,15 @@ $routesConfig = [
         'controller' => [StatisticsSessionsController::class, 'index'],
         'methods' => 'GET'
     ],
-    'admin.statistics.session' => [
-        'path' => '/statistics/session',
-        'controller' => [StatisticsSessionsController::class, 'session'],
-        'methods' => 'POST'
+    'admin.statistics.sessions.day' => [
+        'path' => '/statistics/sessions/{date}',
+        'controller' => [StatisticsSessionsController::class, 'viewDay'],
+        'methods' => 'POST, GET'
+    ],
+    'admin.statistics.session.id' => [
+        'path' => '/statistics/session/{sessionId}',
+        'controller' => [StatisticsSessionsController::class, 'viewSession'],
+        'methods' => 'GET'
     ],
     'admin.stopwords' => [
         'path' => '/stopwords',

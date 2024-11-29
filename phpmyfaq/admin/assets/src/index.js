@@ -21,6 +21,7 @@ import {
   handleDeleteAdminLog,
   handleDeleteSessions,
   handleSessions,
+  handleSessionsFilter,
   handleStatistics,
 } from './statistics';
 import {
@@ -135,6 +136,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleClearRatings();
   handleClearVisits();
   handleDeleteSessions();
+  handleSessionsFilter();
 
   // Configuration → FAQ configuration
   await handleConfiguration();

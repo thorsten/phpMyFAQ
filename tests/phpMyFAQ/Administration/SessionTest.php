@@ -132,7 +132,7 @@ class SessionTest extends TestCase
         $this->databaseMock->method('query')->willReturn(true);
         $this->databaseMock->method('fetchObject')->willReturnOnConsecutiveCalls($resultMock, false);
 
-        $actualVisits = $this->session->getLast30DaysVisits();
+        $actualVisits = $this->session->getLast30DaysVisits($endDate);
 
         $expectedVisits = [];
         for ($date = $startDate; $date <= $endDate; $date += 86400) {

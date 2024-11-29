@@ -23,10 +23,15 @@
           <tr>
             <td>{{ data.ip }}</td>
             <td>{{ data.time | date }}</td>
-            <td><a href="?action=viewsession&id={{ sid }}">{{ sid }}</a></td>
+            <td><a href="./statistics/session/{{ sid }}">{{ sid }}</a></td>
           </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3"><a href="./statistics/sessions">{{ 'ad_sess_back' | translate }}</a></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>

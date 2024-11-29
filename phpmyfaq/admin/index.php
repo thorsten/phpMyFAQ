@@ -315,9 +315,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'glossary.php';
                 break;
             // functions for session administration
-            case 'viewsession':
-                require 'statistics.show.php';
-                break;
             case 'truncatesearchterms':
             case 'searchstats':
                 require 'statistics.search.php';

@@ -16,6 +16,21 @@
 import { pushErrorNotification, pushNotification } from '../utils';
 import { clearVisits, deleteSessions } from '../api/index.js';
 
+export const handleSessionsFilter = () => {
+  const button = document.getElementById('pmf-admin-session-day');
+
+  if (button) {
+    button.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const form = document.getElementById('pmf-admin-form-session');
+      const timestamp = document.getElementById('day').value;
+      const day = new Date(timestamp * 1000).toISOString().split('T')[0];
+      form.action = `./statistics/sessions/${day}`;
+      form.submit();
+    });
+  }
+};
+
 export const handleSessions = () => {
   const firstHour = document.getElementById('firstHour');
   const lastHour = document.getElementById('lastHour');
