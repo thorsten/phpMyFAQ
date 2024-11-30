@@ -35,7 +35,10 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/configuration/upgrade.twig');
 
-if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
+if (
+    $faqConfig->get('upgrade.onlineUpdateEnabled') &&
+    $user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)
+) {
     $templateVars = [
         'adminHeaderUpgrade' => Translation::get('ad_menu_upgrade'),
         'headerCheckHealth' => Translation::get('headerCheckHealth'),

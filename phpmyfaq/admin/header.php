@@ -160,7 +160,9 @@ $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'ad_menu_stopwordsconfig',
     $action
 );
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
+if ($faqConfig->get('upgrade.onlineUpdateEnabled')) {
+    $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'upgrade', 'ad_menu_upgrade', $action);
+}
 if ($faqConfig->get('search.enableElasticsearch')) {
     $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
         'editconfig',
