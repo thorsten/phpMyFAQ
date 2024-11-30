@@ -127,7 +127,12 @@ $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     'msgAdminElasticsearchStats',
     'statistics/search'
 );
-$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports');
+$secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
+    'reports',
+    'reports',
+    'ad_menu_reports',
+    'statistics/report'
+);
 
 $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
@@ -170,11 +175,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
-    case 'user':
-    case 'group':
-    case 'cookies':
-        $userPage = true;
-        break;
     case 'category-overview':
     case 'addcategory':
     case 'savecategory':
@@ -206,28 +206,6 @@ switch ($action) {
     case 'stickyfaqs':
         $contentPage = true;
         break;
-    case 'statistics':
-    case 'viewsessions':
-    case 'sessionbrowse':
-    case 'adminlog':
-    case 'searchstats':
-    case 'reports':
-    case 'reportview':
-        $statisticsPage = true;
-        break;
-    case 'export':
-    case 'importcsv':
-        $exportsPage = true;
-        break;
-    case 'backup':
-        $backupPage = true;
-        break;
-    case 'config':
-    case 'stopwordsconfig':
-    case 'upgrade':
-    case 'instances':
-    case 'system':
-    case 'elasticsearch':
     case 'forms':
         $configurationPage = true;
         break;

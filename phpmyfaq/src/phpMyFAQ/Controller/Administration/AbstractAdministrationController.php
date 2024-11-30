@@ -236,11 +236,6 @@ class AbstractAdministrationController extends AbstractController
             case 'stickyfaqs':
                 $contentPage = true;
                 break;
-            case 'searchstats':
-            case 'reports':
-            case 'reportview':
-                $statisticsPage = true;
-                break;
             case 'forms':
                 $configurationPage = true;
                 break;
@@ -269,6 +264,7 @@ class AbstractAdministrationController extends AbstractController
                 break;
             case 'admin.statistics.admin-log':
             case 'admin.statistics.ratings':
+            case 'admin.statistics.report':
             case 'admin.statistics.sessions':
             case 'admin.statistics.session.day':
             case 'admin.statistics.session.id':
