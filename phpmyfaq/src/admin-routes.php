@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\RatingController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
+use phpMyFAQ\Controller\Administration\StatisticsSearchController;
 use phpMyFAQ\Controller\Administration\StatisticsSessionsController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
@@ -156,6 +157,11 @@ $routesConfig = [
     'admin.statistics.ratings' => [
         'path' => '/statistics/ratings',
         'controller' => [RatingController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.statistics.search' => [
+        'path' => '/statistics/search',
+        'controller' => [StatisticsSearchController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.statistics.sessions' => [

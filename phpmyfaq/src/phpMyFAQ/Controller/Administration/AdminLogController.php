@@ -35,11 +35,9 @@ class AdminLogController extends AbstractAdministrationController
         $itemsPerPage = 15;
         $page = Filter::filterVar($request->get('page'), FILTER_VALIDATE_INT, 1);
 
-        $baseUrl = sprintf('./statistics/admin-log?page=%d', $page);
-
         // Pagination options
         $options = [
-            'baseUrl' => $baseUrl,
+            'baseUrl' => $request->getUri(),
             'total' => $adminLog->getNumberOfEntries(),
             'perPage' => $itemsPerPage,
             'pageParamName' => 'page',
@@ -47,9 +45,6 @@ class AdminLogController extends AbstractAdministrationController
         $pagination = new Pagination($options);
 
         $loggingData = $adminLog->getAll();
-
-        $totalItems = count($loggingData);
-        $totalPages = ceil($totalItems / $itemsPerPage);
 
         $offset = ($page - 1) * $itemsPerPage;
         $currentItems = array_slice($loggingData, $offset, $itemsPerPage);

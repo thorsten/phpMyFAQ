@@ -1,36 +1,39 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-bar-chart"></i>
-    {{ msgAdminElasticsearchStats }}
-  </h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <button class="btn btn-outline-danger" type="button" id="pmf-button-truncate-search-terms"
-              data-pmf-csrf-token="{{ csrfToken }}">
-        <i aria-hidden="true" class="bi bi-trash"></i>{{ ad_searchterm_del}}
-      </button>
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-bar-chart"></i>
+      {{ msgAdminElasticsearchStats }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button class="btn btn-outline-danger" type="button" id="pmf-button-truncate-search-terms"
+                data-pmf-csrf-token="{{ csrfToken }}">
+          <i aria-hidden="true" class="bi bi-trash"></i>{{ ad_searchterm_del }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-lg-12">
-    <table class="table table-striped align-middle border shadow" id="pmf-table-search-terms">
-      <thead>
-      <tr>
-        <th>{{ ad_searchstats_search_term }}</th>
-        <th>{{ ad_searchstats_search_term_count }}</th>
-        <th>{{ ad_searchstats_search_term_lang }}</th>
-        <th colspan="2">{{ ad_searchstats_search_term_percentage }}</th>
-        <th>&nbsp;</th>
-      </tr>
-      </thead>
-      <tfoot>
-      <tr>
-        <td colspan="6">{{ pagination | raw }}</td>
-      </tr>
-      </tfoot>
-      <tbody>
+  <div class="row">
+    <div class="col-lg-12">
+      <table class="table table-striped align-middle border shadow" id="pmf-table-search-terms">
+        <thead>
+        <tr>
+          <th>{{ ad_searchstats_search_term }}</th>
+          <th>{{ ad_searchstats_search_term_count }}</th>
+          <th>{{ ad_searchstats_search_term_lang }}</th>
+          <th colspan="2">{{ ad_searchstats_search_term_percentage }}</th>
+          <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <td colspan="6">{{ pagination | raw }}</td>
+        </tr>
+        </tfoot>
+        <tbody>
         {% for searchItem in searchesList %}
           {% set num = searchItem.number / searchesCount * 100 %}
           <tr id="row-search-id-{{ searchItem.id }}">
@@ -50,7 +53,8 @@
             </td>
           </tr>
         {% endfor %}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+{% endblock %}

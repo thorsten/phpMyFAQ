@@ -124,7 +124,8 @@ $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
     PermissionType::STATISTICS_VIEWLOGS->value,
     'searchstats',
-    'msgAdminElasticsearchStats'
+    'msgAdminElasticsearchStats',
+    'statistics/search'
 );
 $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports');
 
