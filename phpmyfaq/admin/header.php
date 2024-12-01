@@ -96,7 +96,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addglossary+editglossary+delglossary',
     'glossary',
-    'ad_menu_glossary'
+    'ad_menu_glossary',
+    'glossary'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addnews+editnews+delnews',
@@ -186,12 +187,6 @@ switch ($action) {
     case 'faqs-overview':
     case 'editentry':
     case 'copyentry':
-    case 'glossary':
-    case 'saveglossary':
-    case 'updateglossary':
-    case 'deleteglossary':
-    case 'addglossary':
-    case 'editglossary':
     case 'news':
     case 'add-news':
     case 'edit-news':

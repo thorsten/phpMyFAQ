@@ -21,7 +21,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Glossary;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GlossaryController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/glossary')]
     public function fetch(Request $request): JsonResponse
@@ -42,14 +41,14 @@ class GlossaryController extends AbstractController
         $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
         $glossaryLanguage = Filter::filterVar($request->get('glossaryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $glossary = new Glossary($this->configuration);
+        $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         return $this->json($glossary->fetch($glossaryId), Response::HTTP_OK);
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/glossary/delete')]
     public function delete(Request $request): JsonResponse
@@ -65,7 +64,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($this->configuration);
+        $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->delete($glossaryId)) {
@@ -76,7 +75,7 @@ class GlossaryController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/glossary/create')]
     public function create(Request $request): JsonResponse
@@ -93,7 +92,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($this->configuration);
+        $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
@@ -104,7 +103,7 @@ class GlossaryController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/glossary/update')]
     public function update(Request $request): JsonResponse
@@ -122,7 +121,7 @@ class GlossaryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = new Glossary($this->configuration);
+        $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {

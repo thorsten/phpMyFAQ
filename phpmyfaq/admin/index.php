@@ -305,10 +305,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'showcategory':
                 require 'category.showstructure.php';
                 break;
-            // glossary
-            case 'glossary':
-                require 'glossary.php';
-                break;
             // Config administration
             case 'forms':
                 require 'forms.php';

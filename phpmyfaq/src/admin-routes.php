@@ -21,6 +21,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
+use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
@@ -74,6 +75,11 @@ $routesConfig = [
     'admin.export' => [
         'path' => '/export',
         'controller' => [ExportController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.glossary' => [
+        'path' => '/glossary',
+        'controller' => [GlossaryController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.group' => [
