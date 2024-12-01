@@ -362,6 +362,11 @@ $routesConfig = [
         'controller' => [TagController::class, 'search'],
         'methods' => 'GET'
     ],
+    'admin.api.content.tags.id' => [
+        'path' => '/content/tags/{tagId}',
+        'controller' => [TagController::class, 'delete'],
+        'methods' => 'GET'
+    ],
     // Update API
     'admin.api.health-check' => [
         'path' => '/health-check',

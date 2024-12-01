@@ -276,11 +276,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'stickyfaqs':
                 require 'stickyfaqs.php';
                 break;
-            // functions for tags
-            case 'tags':
-            case 'delete-tag':
-                require 'tags.php';
-                break;
             // news administration
             case 'news':
             case 'add-news':

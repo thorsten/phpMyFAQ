@@ -260,6 +260,7 @@ class AbstractAdministrationController extends AbstractController
                 $userPage = true;
                 break;
             case 'admin.attachments':
+            case 'admin.tags':
                 $contentPage = true;
                 break;
             case 'admin.statistics.admin-log':

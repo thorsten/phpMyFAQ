@@ -15,10 +15,12 @@
 
 import autocomplete from 'autocompleter';
 import { addElement } from '../../../../assets/src/utils';
-import { fetchTags } from '../api';
+import { deleteTag, fetchTags } from '../api';
+import { pushNotification } from '../utils/index.js';
 
 export const handleTags = () => {
   const editTagButtons = document.querySelectorAll('.btn-edit');
+  const deleteButtons = document.querySelectorAll('.btn-delete');
   const tagForm = document.getElementById('tag-form');
   const tagsAutocomplete = document.querySelector('.pmf-tags-autocomplete');
 
@@ -46,6 +48,23 @@ export const handleTags = () => {
               id: `tag-id-${tagId}`,
             })
           );
+        }
+      });
+    });
+  }
+
+  if (deleteButtons) {
+    deleteButtons.forEach((element) => {
+      element.addEventListener('click', async (event) => {
+        const tagId = event.target.getAttribute('data-pmf-id');
+
+        const response = await deleteTag(tagId);
+        if (response.success) {
+          pushNotification(response.success);
+          const row = document.getElementById(`pmf-row-tag-id-${tagId}`);
+          row.remove();
+        } else {
+          throw new Error('Network response was not ok: ' + JSON.stringify(response.error));
         }
       });
     });

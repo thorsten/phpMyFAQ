@@ -25,7 +25,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +41,6 @@ class TagController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $tags = new Tags($this->configuration);
-
         $postData = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('tags', $postData->csrf)) {
@@ -57,7 +54,7 @@ class TagController extends AbstractController
         $tagEntity->setId($id);
         $tagEntity->setName($newTag);
 
-        if ($tags->update($tagEntity)) {
+        if ($this->container->get('phpmyfaq.tags')->update($tagEntity)) {
             return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
         } else {
             return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
@@ -72,8 +69,7 @@ class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        $tag = new Tags($this->configuration);
+        $tag = $this->container->get('phpmyfaq.tags');
 
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -92,7 +88,7 @@ class TagController extends AbstractController
             $tags = $tag->getAllTags();
         }
 
-        if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT)) {
+        if ($this->currentUser->perm->hasPermission($this->currentUser->getUserId(), PermissionType::FAQ_EDIT)) {
             $numTags = 0;
             $tagNames = [];
             foreach ($tags as $tag) {
@@ -108,5 +104,22 @@ class TagController extends AbstractController
         }
 
         return $this->json([], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('admin/api/content/tag/:tagId')]
+    public function delete(Request $request): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
+
+        if ($this->container->get('phpmyfaq.tags')->delete($tagId)) {
+            return $this->json(['success' => Translation::get('ad_tag_delete_success')], Response::HTTP_OK);
+        } else {
+            return $this->json(['error' => Translation::get('ad_tag_delete_error')], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

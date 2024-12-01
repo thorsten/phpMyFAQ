@@ -1,58 +1,61 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-tags"></i>
-    {{ adminHeaderTags }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-tags"></i>
+      {{ adminHeaderTags }}
+    </h1>
+  </div>
 
 
-<div class="row">
-  <div class="col-lg-12">
-    <form action="" method="post" id="tag-form">
-      {{ csrfToken | raw }}
+  <div class="row">
+    <div class="col-lg-12">
+      <form action="" method="post" id="tag-form">
+        {{ csrfToken | raw }}
 
-      {% if isDelete %}
-        {% if isDeleteSuccess %}
-          <div class="alert alert-success" role="alert">
-            {{ msgDeleteSuccess }}
-          </div>
-        {% else %}
-          <div class="alert alert-danger" role="alert">
-            {{ msgDeleteError }}
+        {% if isDelete %}
+          {% if isDeleteSuccess %}
+            <div class="alert alert-success" role="alert">
+              {{ msgDeleteSuccess }}
+            </div>
+          {% else %}
+            <div class="alert alert-danger" role="alert">
+              {{ msgDeleteError }}
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {% if tags|length == 0 %}
+          <div class="alert alert-info" role="alert">
+            {{ noTags }}
           </div>
         {% endif %}
-      {% endif %}
 
-      {% if tags|length == 0 %}
-        <div class="alert alert-info" role="alert">
-          {{ noTags }}
-        </div>
-      {% endif %}
+        <table class="table table-hover align-middle border shadow">
+          <tbody>
 
-      <table class="table table-hover align-middle border shadow">
-        <tbody>
+          {% for key, tag in tags %}
+            <tr id="pmf-row-tag-id-{{ key }}">
+              <td>
+                <span id="tag-id-{{ key }}">{{ tag }}</span>
+              </td>
+              <td>
+                <a class="btn btn-primary btn-edit" data-btn-id="{{ key }}" title="{{ buttonEdit }}">
+                  <i aria-hidden="true" class="bi bi-pencil" data-btn-id="{{ key }}"></i>
+                </a>
+              </td>
+              <td>
+                <button class="btn btn-danger btn-delete" type="button" data-pmf-id="{{ key }}">
+                  <i aria-hidden="true" class="bi bi-trash"></i> {{ buttonDelete }}
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
 
-        {% for key, tag in tags %}
-          <tr>
-            <td>
-              <span id="tag-id-{{ key }}">{{ tag }}</span>
-            </td>
-            <td>
-              <a class="btn btn-primary btn-edit" data-btn-id="{{ key }}" title="{{ buttonEdit }}">
-                <i aria-hidden="true" class="bi bi-pencil" data-btn-id="{{ key }}"></i>
-              </a>
-            </td>
-            <td>
-              <a class="btn btn-danger" onclick="return confirm('{{ msgConfirm }}');"
-                 href="?action=delete-tag&amp;id={{ key }}">
-                <span title="{{ buttonDelete }}"><i aria-hidden="true" class="bi bi-trash"></i></span>
-              </a>
-            </td>
-          </tr>
-        {% endfor %}
-
-        </tbody>
-      </table>
-    </form>
+          </tbody>
+        </table>
+      </form>
+    </div>
   </div>
-</div>
+{% endblock %}

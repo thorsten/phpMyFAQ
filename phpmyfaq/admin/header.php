@@ -90,7 +90,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'tags',
-    'ad_entry_tags'
+    'ad_entry_tags',
+    'tags'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addglossary+editglossary+delglossary',
@@ -201,8 +202,6 @@ switch ($action) {
     case 'takequestion':
     case 'comments':
     case 'attachments':
-    case 'tags':
-    case 'delete-tag':
     case 'stickyfaqs':
         $contentPage = true;
         break;

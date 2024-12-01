@@ -39,3 +39,30 @@ export const fetchTags = async (searchString) => {
     throw error;
   }
 };
+
+export const deleteTag = async (tagId) => {
+  try {
+    const response = await fetch(`./api/content/tags/${tagId}`, {
+      method: 'DELETE',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error('Network response was not ok: ', { cause: { response } });
+    }
+  } catch (error) {
+    console.error('Error deleting tag:', error);
+    if (error.cause && error.cause.response) {
+      const errorMessage = await error.cause.response.json();
+      console.error(errorMessage);
+    }
+    throw error;
+  }
+};

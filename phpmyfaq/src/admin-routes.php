@@ -32,6 +32,7 @@ use phpMyFAQ\Controller\Administration\StatisticsSearchController;
 use phpMyFAQ\Controller\Administration\StatisticsSessionsController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
+use phpMyFAQ\Controller\Administration\TagController;
 use phpMyFAQ\Controller\Administration\UpdateController;
 use phpMyFAQ\Controller\Administration\UserController;
 use Symfony\Component\Routing\Route;
@@ -193,6 +194,11 @@ $routesConfig = [
     'admin.system' => [
         'path' => '/system',
         'controller' => [SystemInformationController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.tags' => [
+        'path' => '/tags',
+        'controller' => [TagController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.update' => [
