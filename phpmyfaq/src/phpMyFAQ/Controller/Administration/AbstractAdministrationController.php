@@ -120,7 +120,8 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addnews+editnews+delnews',
             'news',
-            'ad_menu_news_edit'
+            'ad_menu_news_edit',
+            'news'
         );
 
         $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
@@ -266,6 +267,9 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.attachments':
             case 'admin.comments':
             case 'admin.glossary':
+            case 'admin.news':
+            case 'admin.news.add':
+            case 'admin.news.edit':
             case 'admin.tags':
                 $contentPage = true;
                 break;

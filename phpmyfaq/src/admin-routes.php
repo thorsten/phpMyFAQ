@@ -26,6 +26,7 @@ use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
+use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\RatingController;
 use phpMyFAQ\Controller\Administration\ReportController;
@@ -147,6 +148,21 @@ $routesConfig = [
         'path' => '/instances',
         'controller' => [InstanceController::class, 'index'],
         'methods' => 'GET'
+    ],
+    'admin.news' => [
+        'path' => '/news',
+        'controller' => [NewsController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.news.add' => [
+        'path' => '/news/add',
+        'controller' => [NewsController::class, 'add'],
+        'methods' => 'GET'
+    ],
+    'admin.news.edit' => [
+        'path' => '/news/edit/{newsId}',
+        'controller' => [NewsController::class, 'edit'],
+        'methods' => 'POST'
     ],
     'admin.password.change' => [
         'path' => '/password/change',

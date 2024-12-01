@@ -39,6 +39,7 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
+use phpMyFAQ\News;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Services\Gravatar;
@@ -158,11 +159,6 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.date')
         ]);
 
-    $services->set('phpmyfaq.rating', Rating::class)
-        ->args([
-            new Reference('phpmyfaq.configuration'),
-        ]);
-
     $services->set('phpmyfaq.faq.statistics', Statistics::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -194,6 +190,16 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration'),
             new Reference('session')
+        ]);
+
+    $services->set('phpmyfaq.news', News::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.rating', Rating::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
         ]);
 
     $services->set('phpmyfaq.search', Search::class)

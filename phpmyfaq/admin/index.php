@@ -273,15 +273,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'stickyfaqs':
                 require 'stickyfaqs.php';
                 break;
-            // news administration
-            case 'news':
-            case 'add-news':
-            case 'edit-news':
-            case 'save-news':
-            case 'update-news':
-            case 'delete-news':
-                require 'news.php';
-                break;
             // category administration
             case 'savecategory':
             case 'updatecategory':

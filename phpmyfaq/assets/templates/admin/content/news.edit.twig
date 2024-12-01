@@ -1,0 +1,161 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-pencil"></i>
+      {{ ad_news_edit }}
+    </h1>
+  </div>
+
+  <div class="row">
+  <div class="col-12">
+  <form id="faqEditor" accept-charset="utf-8" class="needs-validation"
+        data-pmf-enable-editor="{{ enableWysiwyg }}"
+        data-pmf-editor-language="en"
+        data-pmf-default-url="{{ defaultUrl }}">
+    <input type="hidden" id="id" value="{{ newsData.id }}">
+    <input type="hidden" id="pmf-csrf-token" value="{{ csrfToken_updateNews }}" />
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="newsheader">
+        {{ ad_news_header }}
+      </label>
+      <div class="col-9">
+        <input type="text" name="newsheader" id="newsheader" class="form-control"
+               value="{% if newsData.header != null %} {{ newsData.header }} {% endif %}">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="news">
+        {{ ad_news_text }}:
+      </label>
+      <div class="col-9">
+        <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+        <textarea id="editor" class="form-control" rows="5">{{ newsDataContent|raw }}</textarea>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="authorName">
+        {{ ad_news_author_name }}
+      </label>
+      <div class="col-9">
+        <input type="text" id="authorName"
+               value="{{ newsData.authorName|escape }}" class="form-control">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="authorEmail">
+        {{ ad_news_author_email }}
+      </label>
+      <div class="col-9">
+        <input type="email" id="authorEmail"
+               value="{{ newsData.authorEmail|escape }}" class="form-control">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="offset-3 col-9">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="y" id="active" name="active"
+            {% if newsData.active is defined and newsData.active == true %} checked {% endif %}>
+          <label class="form-check-label" for="active">
+            {{ ad_news_set_active }}
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="y" id="comment" name="comment"
+            {% if newsData.allowComments is defined and newsData.allowComments == true %} checked {% endif %}>
+          <label class="form-check-label" for="comment">
+            {{ ad_news_allowComments }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="link">
+        {{ ad_news_link_url }}
+      </label>
+      <div class="col-9">
+        <input type="text" id="link" name="link" value="{{ newsData.link|escape }}" class="form-control">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="linkTitle">
+        {{ ad_news_link_title }}
+      </label>
+      <div class="col-9">
+        <input type="text" id="linkTitle" name="linkTitle" value="{{ newsData.linkTitle|escape }}"
+               class="form-control">
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label">{{ ad_news_link_target }}</label>
+      <div class="col-9 radio">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="target" value="blank"
+            {% if newsData.target == 'blank' %} checked {% endif %}>
+          <label class="form-check-label" for="blank">
+            {{ ad_news_link_window }}
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="target" value="self"
+            {% if newsData.target == 'self' %} checked {% endif %}>
+          <label class="form-check-label" for="self">
+            {{ ad_news_link_faq }}
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" id="target" value="parent"
+            {% if newsData.target == 'parent' %} checked {% endif %}>
+          <label class="form-check-label" for="parent">
+            {{ ad_news_link_parent }}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <label class="col-3 col-form-label" for="langTo">{{ ad_entry_locale }}:</label>
+      <div class="col-9">
+        {{ selectLanguage|raw }}
+      </div>
+    </div>
+
+    <div class="row my-4">
+      <div class="col-12 text-end">
+        <a class="btn btn-secondary" href="./news">
+          {{ ad_entry_back }}
+        </a>
+        <a class="btn btn-primary" id="submitEditNews">
+          {{ ad_news_edit }}
+        </a>
+      </div>
+    </div>
+  </form>
+  {% if comments|length > 0 %}
+    <div class="row"><strong>{{ ad_entry_comment }}</strong></div>
+  {% endif %}
+  {% for item in comments %}
+    <div class="row">
+      {{ ad_entry_commentby }}
+      <a href="mailto:{{ item.email }}">
+        {{ item.user }}
+      </a>:<br>
+      {{ item.content }}<br>
+      {{ newsCommentDate }}{{ item.date|createIsoDate }}
+      <a href="?action=delcomment&artid={{ newsId }}&cmtid={{ item.id }}&type={{ commentTypeNews }}">
+        <i aria-hidden="true" class="bi bi-trash"></i>
+      </a>
+    </div>
+    </div>
+    </div>
+  {% endfor %}
+{% endblock %}

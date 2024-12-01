@@ -102,7 +102,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addnews+editnews+delnews',
     'news',
-    'ad_menu_news_edit'
+    'ad_menu_news_edit',
+    'news'
 );
 
 $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
@@ -187,12 +188,6 @@ switch ($action) {
     case 'faqs-overview':
     case 'editentry':
     case 'copyentry':
-    case 'news':
-    case 'add-news':
-    case 'edit-news':
-    case 'save-news':
-    case 'update-news':
-    case 'delete-news':
     case 'question':
     case 'takequestion':
     case 'stickyfaqs':

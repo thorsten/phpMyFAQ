@@ -67,7 +67,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
 
     $templateVars = [
         'msgOpenQuestions' => Translation::get('msgOpenQuestions'),
-        'csrfTokenDeleteQuestion' => Token::getInstance()->getTokenString('delete-questions'),
+        'csrfTokenDeleteQuestion' => Token::getInstance($container->get('session'))->getTokenString('delete-questions'),
         'currentLocale' => $faqConfig->getLanguage()->getLanguage(),
         'msgAuthor' => Translation::get('ad_entry_author'),
         'msgQuestion' => Translation::get('ad_entry_theme'),
@@ -78,7 +78,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_DELE
         'enableCloseQuestion' => $faqConfig->get('records.enableCloseQuestion'),
         'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
         'msgTakeQuestion' => Translation::get('ad_ques_take'),
-        'csrfTokenToggleVisibility' => Token::getInstance()->getTokenString('toggle-question-visibility'),
+        'csrfTokenToggleVisibility' => Token::getInstance($container->get('session'))->getTokenString('toggle-question-visibility'),
         'msgDeleteAllOpenQuestions' => Translation::get('msgDelete'),
     ];
 

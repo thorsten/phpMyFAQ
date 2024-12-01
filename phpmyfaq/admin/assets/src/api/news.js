@@ -13,6 +13,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2024-04-21
  */
+
 import { pushErrorNotification, pushNotification } from '../utils';
 
 export const addNews = async (data = {}) => {
@@ -32,7 +33,7 @@ export const addNews = async (data = {}) => {
     if (result.success) {
       pushNotification(result.success);
       setTimeout(function () {
-        window.location.href = '?action=news';
+        window.location.href = './news';
       }, 3000);
     } else {
       pushErrorNotification(result.error);
@@ -91,7 +92,7 @@ export const updateNews = async (data = {}) => {
     if (result.success) {
       pushNotification(result.success);
       setTimeout(function () {
-        window.location.href = '?action=news';
+        window.location.href = './news';
       }, 3000);
     } else {
       pushErrorNotification(result.error);
