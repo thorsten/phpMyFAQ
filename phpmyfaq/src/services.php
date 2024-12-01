@@ -27,6 +27,7 @@ use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Date;
@@ -123,6 +124,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.category.permission', Permission::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.comments', Comments::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

@@ -18,6 +18,7 @@
 use phpMyFAQ\Controller\Administration\AdminLogController;
 use phpMyFAQ\Controller\Administration\AttachmentsController;
 use phpMyFAQ\Controller\Administration\BackupController;
+use phpMyFAQ\Controller\Administration\CommentsController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
@@ -61,6 +62,11 @@ $routesConfig = [
         'path' => '/backup/restore',
         'controller' => [BackupController::class, 'restore'],
         'methods' => 'POST'
+    ],
+    'admin.comments' => [
+        'path' => '/comments',
+        'controller' => [CommentsController::class, 'index'],
+        'methods' => 'GET'
     ],
     'admin.configuration' => [
         'path' => '/configuration',

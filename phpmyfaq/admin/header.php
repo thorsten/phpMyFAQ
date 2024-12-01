@@ -80,7 +80,7 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'stickyRecordsHeader'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments');
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', 'comments');
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addattachment+editattachment+delattachment',
     'attachments',
@@ -195,8 +195,6 @@ switch ($action) {
     case 'delete-news':
     case 'question':
     case 'takequestion':
-    case 'comments':
-    case 'attachments':
     case 'stickyfaqs':
         $contentPage = true;
         break;

@@ -1,114 +1,120 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-chat-right-dots"></i>
-    {{ 'adminHeaderComments' | translate }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div id="returnMessage"></div>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-chat-right-dots"></i>
+      {{ 'adminHeaderComments' | translate }}
+    </h1>
+  </div>
 
-<ul class="nav nav-tabs" id="comments" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#faqs-tab-pane" type="button"
-            role="tab" aria-controls="home-tab-pane" aria-selected="true">
-      {{ 'msgAdminCommentFaqs' | translate }}
-    </button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#news-tab-pane" type="button"
-            role="tab" aria-controls="news-tab-pane" aria-selected="false">
-      {{ 'msgAdminCommentNews' | translate }}
-    </button>
-  </li>
-</ul>
-<div class="tab-content" id="commentsContent">
-  <div class="tab-pane fade show active mt-2" id="faqs-tab-pane" role="tabpanel" aria-labelledby="faqs-tab" tabindex="0">
-    <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
-      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+  <div id="returnMessage"></div>
 
-      <table class="table table-striped border align-middle">
-        {% for comment in faqComments %}
-        <tr id="comments_{{ comment.id }}">
-          <td>
-            <label>
-              <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
-                     value="{{ comment.id }}">
-            </label>
-          </td>
-          <td>
-            <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
-              <div class="border-end pe-3 me-3 mb-2">
-                <i aria-hidden="true" class="bi bi-person"></i>
-                <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
-              </div>
-              <div class="d-flex mb-2">
-                <div class="d-flex border-end align-items-center pe-3 me-3">
-                  <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
-                  {{ comment.date | format_datetime(locale=currentLocale) }}
-                </div>
-                <div class="d-flex align-items-center me-3">
-                  <i aria-hidden="true" class="bi bi-chat-dots me-1"></i>
-                  <a href="../?action=faq&cat={{ comment.categoryId }}&id={{ comment.recordId }}&artlang={{ currentLocale }}">
-                    {{ comment.recordId | faqQuestion | raw }}
-                  </a>
-                </div>
-              </div>
-            </div>
-            {{ comment.comment }}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-
-    </form>
-    <div class="text-end">
-      <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
-        {{ 'msgDelete' | translate }}
+  <ul class="nav nav-tabs" id="comments" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#faqs-tab-pane" type="button"
+              role="tab" aria-controls="home-tab-pane" aria-selected="true">
+        {{ 'msgAdminCommentFaqs' | translate }}
       </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#news-tab-pane" type="button"
+              role="tab" aria-controls="news-tab-pane" aria-selected="false">
+        {{ 'msgAdminCommentNews' | translate }}
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content" id="commentsContent">
+    <div class="tab-pane fade show active mt-2" id="faqs-tab-pane" role="tabpanel" aria-labelledby="faqs-tab"
+         tabindex="0">
+      <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
+        <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+
+        <table class="table table-striped border align-middle">
+          {% for comment in faqComments %}
+            <tr id="comments_{{ comment.id }}">
+              <td>
+                <label>
+                  <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                         value="{{ comment.id }}">
+                </label>
+              </td>
+              <td>
+                <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
+                  <div class="border-end pe-3 me-3 mb-2">
+                    <i aria-hidden="true" class="bi bi-person"></i>
+                    <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
+                  </div>
+                  <div class="d-flex mb-2">
+                    <div class="d-flex border-end align-items-center pe-3 me-3">
+                      <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
+                      {{ comment.date | format_datetime(locale=currentLocale) }}
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                      <i aria-hidden="true" class="bi bi-chat-dots me-1"></i>
+                      <a
+                        href="../?action=faq&cat={{ comment.categoryId }}&id={{ comment.recordId }}&artlang={{ currentLocale }}">
+                        {{ comment.recordId | faqQuestion | raw }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {{ comment.comment | striptags }}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+
+      </form>
+      <div class="text-end">
+        <button class="btn btn-danger" id="pmf-button-delete-faq-comments" type="button">
+          {{ 'msgDelete' | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="tab-pane fade mt-2" id="news-tab-pane" role="tabpanel" aria-labelledby="news-tab" tabindex="0">
+      <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
+        <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+
+        <table class="table table-striped border align-middle">
+          {% for comment in newsComments %}
+            <tr id="comments_{{ comment.id }}">
+              <td>
+                <label>
+                  <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
+                         value="{{ comment.id }}">
+                </label>
+              </td>
+              <td>
+                <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
+                  <div class="border-end pe-3 me-3 mb-2">
+                    <i aria-hidden="true" class="bi bi-person"></i>
+                    <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
+                  </div>
+                  <div class="d-flex mb-2">
+                    <div class="d-flex border-end align-items-center pe-3 me-3">
+                      <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
+                      {{ comment.date | format_datetime(locale=currentLocale) }}
+                    </div>
+                    <div class="d-flex align-items-center me-3">
+                      <a href="../?action=news&newsid={{ comment.recordId }}&artlang={{ currentLocale }}">
+                        <i class="bi bi-newspaper"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {{ comment.comment }}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+
+      </form>
+      <div class="text-end">
+        <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
+          {{ 'msgDelete' | translate }}
+        </button>
+      </div>
     </div>
   </div>
-  <div class="tab-pane fade mt-2" id="news-tab-pane" role="tabpanel" aria-labelledby="news-tab" tabindex="0">
-    <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
-      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
-
-      <table class="table table-striped border align-middle">
-        {% for comment in newsComments %}
-        <tr id="comments_{{ comment.id }}">
-          <td>
-            <label>
-              <input type="checkbox" class="form-check-input" id="comments[]" name="comments[]"
-                     value="{{ comment.id }}">
-            </label>
-          </td>
-          <td>
-            <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
-              <div class="border-end pe-3 me-3 mb-2">
-                <i aria-hidden="true" class="bi bi-person"></i>
-                <a href="mailto:{{ comment.email }}">{{ comment.username }}</a>
-              </div>
-              <div class="d-flex mb-2">
-                <div class="d-flex border-end align-items-center pe-3 me-3">
-                  <i aria-hidden="true" class="bi bi-calendar-date me-1"></i>
-                  {{ comment.date | format_datetime(locale=currentLocale) }}
-                </div>
-                <div class="d-flex align-items-center me-3">
-                  <a href="../?action=news&newsid={{ comment.recordId }}&artlang={{ currentLocale }}">
-                    <i class="bi bi-newspaper"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            {{ comment.comment }}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-
-    </form>
-    <div class="text-end">
-      <button class="btn btn-danger" id="pmf-button-delete-news-comments" type="button">
-        {{ 'msgDelete' | translate }}
-      </button>
-    </div>
-  </div>
-</div>
+{% endblock %}

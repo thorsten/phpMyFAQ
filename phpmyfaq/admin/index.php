@@ -270,9 +270,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'question':
                 require 'open-questions.php';
                 break;
-            case 'comments':
-                require 'comments.php';
-                break;
             case 'stickyfaqs':
                 require 'stickyfaqs.php';
                 break;

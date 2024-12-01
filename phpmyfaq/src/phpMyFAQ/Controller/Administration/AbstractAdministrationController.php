@@ -96,22 +96,26 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'delcomment',
             'comments',
-            'ad_menu_comments'
+            'ad_menu_comments',
+            'comments'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addattachment+editattachment+delattachment',
             'attachments',
-            'ad_menu_attachments'
+            'ad_menu_attachments',
+            'attachments'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,
             'tags',
-            'ad_entry_tags'
+            'ad_entry_tags',
+            'tags'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addglossary+editglossary+delglossary',
             'glossary',
-            'ad_menu_glossary'
+            'ad_menu_glossary',
+            'glossary'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addnews+editnews+delnews',
@@ -260,6 +264,7 @@ class AbstractAdministrationController extends AbstractController
                 $userPage = true;
                 break;
             case 'admin.attachments':
+            case 'admin.comments':
             case 'admin.glossary':
             case 'admin.tags':
                 $contentPage = true;
