@@ -40,6 +40,7 @@ use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
+use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Services\Gravatar;
@@ -193,6 +194,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.news', News::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.question', Question::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

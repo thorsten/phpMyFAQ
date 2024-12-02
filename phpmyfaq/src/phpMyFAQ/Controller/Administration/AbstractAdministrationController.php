@@ -92,7 +92,12 @@ class AbstractAdministrationController extends AbstractController
             'stickyfaqs',
             'stickyRecordsHeader'
         );
-        $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+        $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+            'delquestion',
+            'question',
+            'ad_menu_open',
+            'questions'
+        );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'delcomment',
             'comments',
@@ -148,7 +153,12 @@ class AbstractAdministrationController extends AbstractController
             'msgAdminElasticsearchStats',
             'statistics/search'
         );
-        $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports');
+        $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
+            'reports',
+            'reports',
+            'ad_menu_reports',
+            'reports'
+        );
 
         $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
@@ -221,23 +231,7 @@ class AbstractAdministrationController extends AbstractController
             case 'faqs-overview':
             case 'editentry':
             case 'copyentry':
-            case 'glossary':
-            case 'saveglossary':
-            case 'updateglossary':
-            case 'deleteglossary':
-            case 'addglossary':
-            case 'editglossary':
-            case 'news':
-            case 'add-news':
-            case 'edit-news':
-            case 'save-news':
-            case 'update-news':
-            case 'delete-news':
-            case 'question':
             case 'takequestion':
-            case 'comments':
-            case 'tags':
-            case 'delete-tag':
             case 'stickyfaqs':
                 $contentPage = true;
                 break;
@@ -270,6 +264,7 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.news':
             case 'admin.news.add':
             case 'admin.news.edit':
+            case 'admin.questions':
             case 'admin.tags':
                 $contentPage = true;
                 break;

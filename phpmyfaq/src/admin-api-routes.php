@@ -329,6 +329,11 @@ $routesConfig = [
         'controller' => [QuestionController::class, 'delete'],
         'methods' => 'DELETE'
     ],
+    'admin.api.question.toggle' => [
+        'path' => '/question/visibility/toggle',
+        'controller' => [QuestionController::class, 'toggle'],
+        'methods' => 'PUT'
+    ],
     // Search API
     'admin.api.search.term' => [
         'path' => '/search/term',

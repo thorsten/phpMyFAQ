@@ -24,6 +24,11 @@ export default defineConfig({
         format: 'es',
         entryFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
+        manualChunks: {
+          bootstrap: ['bootstrap'],
+          chart: ['chart.js'],
+          tinymce: ['tinymce'],
+        },
       },
     },
     sourcemap: true,
@@ -57,7 +62,9 @@ export default defineConfig({
   ],
   css: {
     preprocessorOptions: {
-      scss: {},
+      scss: {
+        silenceDeprecations: ['mixed-decls', 'color-functions', 'global-builtin', 'import'],
+      },
     },
   },
   test: {

@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\NewsController;
+use phpMyFAQ\Controller\Administration\OpenQuestionsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\RatingController;
 use phpMyFAQ\Controller\Administration\ReportController;
@@ -173,6 +174,11 @@ $routesConfig = [
         'path' => '/password/update',
         'controller' => [PasswordChangeController::class, 'update'],
         'methods' => 'POST'
+    ],
+    'admin.questions' => [
+        'path' => '/questions',
+        'controller' => [OpenQuestionsController::class, 'index'],
+        'methods' => 'GET'
     ],
     'admin.session.keepalive' => [
         'path' => '/session-keep-alive',

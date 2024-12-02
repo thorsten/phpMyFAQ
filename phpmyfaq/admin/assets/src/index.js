@@ -59,6 +59,7 @@ import {
   handleSaveFaqData,
   handleUpdateQuestion,
   handleRefreshAttachments,
+  handleToggleVisibility,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -111,6 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Content → Open questions
   handleOpenQuestions();
+  handleToggleVisibility();
 
   // Content → Attachments
   handleDeleteAttachments();

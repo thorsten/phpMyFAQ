@@ -20,7 +20,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:watch": "vite build --watch -d",
+    "build:watch": "vite build --watch",
     "build:prod": "vite build",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",

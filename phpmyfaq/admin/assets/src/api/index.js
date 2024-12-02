@@ -3,6 +3,7 @@ export * from './faqs';
 export * from './glossary';
 export * from './group';
 export * from './news';
+export * from './question';
 export * from './statistics';
 export * from './tags';
 export * from './upgrade';
