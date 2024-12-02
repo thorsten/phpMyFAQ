@@ -34,6 +34,7 @@ use phpMyFAQ\Controller\Administration\ReportController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
 use phpMyFAQ\Controller\Administration\StatisticsSearchController;
 use phpMyFAQ\Controller\Administration\StatisticsSessionsController;
+use phpMyFAQ\Controller\Administration\StickyFaqsController;
 use phpMyFAQ\Controller\Administration\StopWordsController;
 use phpMyFAQ\Controller\Administration\SystemInformationController;
 use phpMyFAQ\Controller\Administration\TagController;
@@ -64,6 +65,11 @@ $routesConfig = [
         'path' => '/backup/restore',
         'controller' => [BackupController::class, 'restore'],
         'methods' => 'POST'
+    ],
+    'admin.content.sticky-faqs' => [
+        'path' => '/sticky-faqs',
+        'controller' => [StickyFaqsController::class, 'index'],
+        'methods' => 'GET'
     ],
     'admin.comments' => [
         'path' => '/comments',

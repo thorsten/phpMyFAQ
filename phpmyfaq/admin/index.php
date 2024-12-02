@@ -267,9 +267,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'copyentry':
                 require 'faqs.editor.php';
                 break;
-            case 'stickyfaqs':
-                require 'stickyfaqs.php';
-                break;
             // category administration
             case 'savecategory':
             case 'updatecategory':

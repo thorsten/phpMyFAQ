@@ -77,7 +77,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'stickyfaqs',
-    'stickyRecordsHeader'
+    'stickyRecordsHeader',
+    'sticky-faqs'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', 'questions');
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', 'comments');

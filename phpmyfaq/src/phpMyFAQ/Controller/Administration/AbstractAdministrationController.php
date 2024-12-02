@@ -90,7 +90,8 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,
             'stickyfaqs',
-            'stickyRecordsHeader'
+            'stickyRecordsHeader',
+            'sticky-faqs'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'delquestion',
@@ -232,7 +233,6 @@ class AbstractAdministrationController extends AbstractController
             case 'editentry':
             case 'copyentry':
             case 'takequestion':
-            case 'stickyfaqs':
                 $contentPage = true;
                 break;
             case 'forms':
@@ -259,6 +259,7 @@ class AbstractAdministrationController extends AbstractController
                 $userPage = true;
                 break;
             case 'admin.attachments':
+            case 'admin.content.sticky-faqs':
             case 'admin.comments':
             case 'admin.glossary':
             case 'admin.news':
