@@ -75,7 +75,8 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] = $adminHelper->addMenuEntry(
             'addcateg+editcateg+delcateg',
             'category-overview',
-            'msgHeaderCategoryOverview'
+            'msgHeaderCategoryOverview',
+            'category'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
@@ -259,6 +260,7 @@ class AbstractAdministrationController extends AbstractController
                 $userPage = true;
                 break;
             case 'admin.attachments':
+            case 'admin.category':
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
             case 'admin.glossary':

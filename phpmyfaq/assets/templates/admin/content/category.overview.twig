@@ -1,13 +1,16 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="bi bi-folder"></i> {{ 'msgHeaderCategoryOverview' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-outline-success" href="?action=addcategory" id="addCategoryModal">
+      <a class="btn btn-outline-success" href="./category/add" id="addCategoryModal">
         <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgAddCategory' | translate }}
       </a>
-      <a class="btn btn-outline-info" href="?action=showcategory">
+      <a class="btn btn-outline-info" href="./category/matrix">
         <i aria-hidden="true" class="bi bi-list"></i> {{ 'msgCategoryMatrix' | translate }}
       </a>
     </div>
@@ -105,3 +108,4 @@
     </div>
   {% endfor %}
 {% endmacro %}
+{% endblock %}

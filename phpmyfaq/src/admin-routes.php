@@ -18,6 +18,7 @@
 use phpMyFAQ\Controller\Administration\AdminLogController;
 use phpMyFAQ\Controller\Administration\AttachmentsController;
 use phpMyFAQ\Controller\Administration\BackupController;
+use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentsController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
@@ -65,6 +66,16 @@ $routesConfig = [
         'path' => '/backup/restore',
         'controller' => [BackupController::class, 'restore'],
         'methods' => 'POST'
+    ],
+    'admin.category' => [
+        'path' => '/category',
+        'controller' => [CategoryController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.category.add' => [
+        'path' => '/category/add',
+        'controller' => [CategoryController::class, 'add'],
+        'methods' => 'GET'
     ],
     'admin.content.sticky-faqs' => [
         'path' => '/sticky-faqs',

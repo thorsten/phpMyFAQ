@@ -58,6 +58,7 @@
     "postcss": "^8.4.49",
     "prettier": "^3.4.1",
     "pretty-quick": "^4.0.0",
+    "rollup-plugin-sbom": "^1.1.1",
     "sass": "^1.81.0",
     "sigmund": "^1.0.1",
     "vite": "^6.0.1",

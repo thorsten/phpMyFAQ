@@ -5,6 +5,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import viteCompression from 'vite-plugin-compression';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
+import sbom from 'rollup-plugin-sbom';
 
 export default defineConfig({
   build: {
@@ -20,7 +21,7 @@ export default defineConfig({
         debugMode: path.resolve(__dirname, 'phpmyfaq/assets/scss/debug-mode.scss'),
       },
       output: {
-        dir: path.resolve(__dirname, 'phpmyfaq/assets/dist'),
+        dir: path.resolve(__dirname, 'phpmyfaq/assets/public'),
         format: 'es',
         entryFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
@@ -41,24 +42,29 @@ export default defineConfig({
       targets: [
         {
           src: path.resolve(__dirname, 'phpmyfaq/admin/assets/src/tinymce/phpmyfaq.tinymce.plugin.js'),
-          dest: '../phpmyfaq/assets/dist/plugins/phpmyfaq',
+          dest: '../phpmyfaq/assets/public/plugins/phpmyfaq',
           rename: 'plugin.js',
         },
         {
           src: path.resolve(__dirname, 'phpmyfaq/assets/fonts/*'),
-          dest: '../phpmyfaq/assets/dist/fonts',
+          dest: '../phpmyfaq/assets/public/fonts',
         },
         {
           src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/bootstrap-icons.css'),
-          dest: '../phpmyfaq/assets/dist',
+          dest: '../phpmyfaq/assets/public',
         },
         {
           src: path.resolve(__dirname, 'node_modules/bootstrap-icons/font/fonts/*'),
-          dest: '../phpmyfaq/assets/dist/fonts',
+          dest: '../phpmyfaq/assets/public/fonts',
         },
       ],
     }),
     ViteMinifyPlugin(),
+    sbom({
+      includeWellKnown: false,
+      outFilename: 'sbom-node',
+      outFormats: ['json'],
+    }),
   ],
   css: {
     preprocessorOptions: {
