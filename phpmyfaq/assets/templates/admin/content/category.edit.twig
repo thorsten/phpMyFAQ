@@ -1,176 +1,180 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-folder"></i> {{ header }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row mb-2">
-  <div class="col-12">
-    <form enctype="multipart/form-data" action="?action=updatecategory" method="post">
-      <input type="hidden" name="id" value="{{ categoryId }}">
-      <input type="hidden" name="catlang" id="catlang" value="{{ categoryLanguage }}">
-      <input type="hidden" name="parent_id" value="{{ parentId }}">
-      {{ csrfInputToken | raw }}
-      <input type="hidden" name="existing_image" value="{{ categoryImage }}" id="pmf-category-existing-image">
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-folder"></i> {{ header }}
+    </h1>
+  </div>
 
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="name">
-          {{ categoryNameLabel }}
-        </label>
-        <div class="col-lg-4">
-          <input type="text" id="name" name="name" value="{{ categoryName }}" class="form-control">
-        </div>
-      </div>
+  <div class="row mb-2">
+    <div class="col-12">
+      <form enctype="multipart/form-data" action="?action=updatecategory" method="post">
+        <input type="hidden" name="id" value="{{ categoryId }}">
+        <input type="hidden" name="catlang" id="catlang" value="{{ categoryLanguage }}">
+        <input type="hidden" name="parent_id" value="{{ parentId }}">
+        {{ csrfInputToken | raw }}
+        <input type="hidden" name="existing_image" value="{{ categoryImage }}" id="pmf-category-existing-image">
 
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="description">
-          {{ categoryDescriptionLabel }}
-        </label>
-        <div class="col-lg-4">
-          <textarea id="description" name="description" rows="3" class="form-control"
-          >{{ categoryDescription }}</textarea>
-        </div>
-      </div>
-
-      <div class="row mb-2">
-        <div class="offset-lg-2 col-lg-4">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="active" id='active' value="1" {{ categoryActive }}>
-            <label class="form-check-label" for="active">{{ categoryActiveLabel }}</label>
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="name">
+            {{ categoryNameLabel }}
+          </label>
+          <div class="col-lg-4">
+            <input type="text" id="name" name="name" value="{{ categoryName }}" class="form-control">
           </div>
         </div>
-      </div>
 
-      <div class="row mb-2">
-        <div class="offset-lg-2 col-lg-4">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="show_home" id='show_home' value="1"
-              {{ categoryShowHome }}>
-            <label class="form-check-label" for="show_home">{{ categoryShowHomeLabel }}</label>
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="description">
+            {{ categoryDescriptionLabel }}
+          </label>
+          <div class="col-lg-4">
+            <textarea id="description" name="description" rows="3" class="form-control"
+            >{{ categoryDescription }}</textarea>
           </div>
         </div>
-      </div>
 
-
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-          {{ categoryImageLabel }}
-        </label>
-        <div class="col-lg-4">
-          <div class="input-group">
-            <input class="form-control" type="file" name="image" id="pmf-category-image-upload"
-                   value="{{ categoryImage }}">
-            <span class="input-group-text" id="pmf-category-image-label">{{ categoryImage }}</span>
+        <div class="row mb-2">
+          <div class="offset-lg-2 col-lg-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="active" id='active' value="1" {{ categoryActive }}>
+              <label class="form-check-label" for="active">{{ categoryActiveLabel }}</label>
+            </div>
           </div>
-          <div class="input-group mt-2">
-            <button type="button" class="btn btn-info" id="button-reset-category-image">
-              {{ categoryImageReset }}
+        </div>
+
+        <div class="row mb-2">
+          <div class="offset-lg-2 col-lg-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="show_home" id='show_home' value="1"
+                {{ categoryShowHome }}>
+              <label class="form-check-label" for="show_home">{{ categoryShowHomeLabel }}</label>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
+            {{ categoryImageLabel }}
+          </label>
+          <div class="col-lg-4">
+            <div class="input-group">
+              <input class="form-control" type="file" name="image" id="pmf-category-image-upload"
+                     value="{{ categoryImage }}">
+              <span class="input-group-text" id="pmf-category-image-label">{{ categoryImage }}</span>
+            </div>
+            <div class="input-group mt-2">
+              <button type="button" class="btn btn-info" id="button-reset-category-image">
+                {{ categoryImageReset }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="user_id">
+            {{ categoryOwnerLabel }}
+          </label>
+          <div class="col-lg-4">
+            <select id="user_id" name="user_id" class="form-select">
+              {{ categoryOwnerOptions | raw }}
+            </select>
+          </div>
+        </div>
+
+        {% if isMediumPermission %}
+          <div class="row mb-2">
+            <label class="col-lg-2 col-form-label" for="group_id">
+              {{ categoryModeratorLabel }}
+            </label>
+            <div class="col-lg-4">
+              <select name="group_id" id="group_id" class="form-select">
+                {{ allGroupsOptions | raw }}
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-lg-2 col-form-label" for="restricted_groups">
+              {{ categoryGroupPermissionLabel }}
+            </label>
+            <div class="col-lg-4">
+              <div class="form-check">
+                <input type="radio" name="grouppermission" id="grouppermission_all" value="all"
+                       class="form-check-input" {{ allGroups }}>
+                <label class="form-check-label" for="grouppermission_all">
+                  {{ categoryGroupPermissionAllLabel }}
+                </label>
+              </div>
+              <div class="form-check">
+                <input type="radio" name="grouppermission" id="grouppermission" value="restricted"
+                       class="form-check-input" {{ restrictedGroups }}>
+                <label class="form-check-label" for="grouppermission">
+                  {{ restrictedGroupsLabel }}
+                </label>
+              </div>
+              <select name="restricted_groups[]" id="restricted_groups" size="3" class="form-select" multiple>
+                {{ restrictedGroupsOptions | raw }}
+              </select>
+            </div>
+          </div>
+
+        {% else %}
+          <input type="hidden" name="group_id" value="-1">
+          <input type="hidden" name="grouppermission" value="all">
+        {% endif %}
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="restricted_users">
+            {{ userPermissionLabel }}
+          </label>
+          <div class="col-lg-4">
+            <div class="form-check">
+              <input type="radio" name="userpermission" id="userpermission_all" value="all"
+                     class="form-check-input" {{ allUsers }}>
+              <label class="form-check-label" for="userpermission_all">
+                {{ allUsersLabel }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input type="radio" name="userpermission" id="userpermission" value="restricted"
+                     class="form-check-input">
+              <label class="form-check-label" for="userpermission" {{ restrictedUsers }}>
+                {{ restrictedUsersLabel }}
+              </label>
+            </div>
+            <select name="restricted_users" id="restricted_users" class="form-select">
+              {{ allUsersOptions | raw }}
+            </select>
+          </div>
+        </div>
+
+        <!-- SERP Title -->
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
+          <div class="col-lg-4">
+            <input type="text" name="serpTitle" id="serpTitle" value="{{ serpTitle }}" class="form-control">
+          </div>
+        </div>
+
+        <!-- SERP Description -->
+        <div class="row mb-2">
+          <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+          <div class="col-lg-4">
+                  <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
+                  >{{ serpDescription }}</textarea>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="offset-lg-2 col-lg-4 text-end">
+            <button class="btn btn-primary" type="submit" name="submit">
+              {{ buttonUpdate }}
             </button>
           </div>
         </div>
-      </div>
-
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="user_id">
-          {{ categoryOwnerLabel }}
-        </label>
-        <div class="col-lg-4">
-          <select id="user_id" name="user_id" class="form-select">
-            {{ categoryOwnerOptions | raw }}
-          </select>
-        </div>
-      </div>
-
-      {% if isMediumPermission %}
-        <div class="row mb-2">
-          <label class="col-lg-2 col-form-label" for="group_id">
-            {{ categoryModeratorLabel }}
-          </label>
-          <div class="col-lg-4">
-            <select name="group_id" id="group_id" class="form-select">
-              {{ allGroupsOptions | raw }}
-            </select>
-          </div>
-        </div>
-
-        <div class="row mb-2">
-          <label class="col-lg-2 col-form-label" for="restricted_groups">
-            {{ categoryGroupPermissionLabel }}
-          </label>
-          <div class="col-lg-4">
-            <div class="form-check">
-              <input type="radio" name="grouppermission" id="grouppermission_all" value="all"
-                     class="form-check-input" {{ allGroups }}>
-              <label class="form-check-label" for="grouppermission_all">
-                {{ categoryGroupPermissionAllLabel }}
-              </label>
-            </div>
-            <div class="form-check">
-              <input type="radio" name="grouppermission" id="grouppermission" value="restricted"
-                     class="form-check-input" {{ restrictedGroups }}>
-              <label class="form-check-label" for="grouppermission">
-                {{ restrictedGroupsLabel }}
-              </label>
-            </div>
-            <select name="restricted_groups[]" id="restricted_groups" size="3" class="form-select" multiple>
-              {{ restrictedGroupsOptions | raw }}
-            </select>
-          </div>
-        </div>
-
-      {% else %}
-        <input type="hidden" name="group_id" value="-1">
-        <input type="hidden" name="grouppermission" value="all">
-      {% endif %}
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="restricted_users">
-          {{ userPermissionLabel }}
-        </label>
-        <div class="col-lg-4">
-          <div class="form-check">
-            <input type="radio" name="userpermission" id="userpermission_all" value="all"
-                   class="form-check-input" {{ allUsers }}>
-            <label class="form-check-label" for="userpermission_all">
-              {{ allUsersLabel }}
-            </label>
-          </div>
-          <div class="form-check">
-            <input type="radio" name="userpermission" id="userpermission" value="restricted"
-                   class="form-check-input">
-            <label class="form-check-label" for="userpermission" {{ restrictedUsers }}>
-              {{ restrictedUsersLabel }}
-            </label>
-          </div>
-          <select name="restricted_users" id="restricted_users" class="form-select">
-            {{ allUsersOptions | raw }}
-          </select>
-        </div>
-      </div>
-
-      <!-- SERP Title -->
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
-        <div class="col-lg-4">
-          <input type="text" name="serpTitle" id="serpTitle" value="{{ serpTitle }}" class="form-control">
-        </div>
-      </div>
-
-      <!-- SERP Description -->
-      <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
-        <div class="col-lg-4">
-                <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
-                >{{ serpDescription }}</textarea>
-        </div>
-      </div>
-
-      <div class="row mb-2">
-        <div class="offset-lg-2 col-lg-4 text-end">
-          <button class="btn btn-primary" type="submit" name="submit">
-            {{ buttonUpdate }}
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+{% endblock %}

@@ -37,12 +37,14 @@ use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
@@ -177,6 +179,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
 
+    $services->set('phpmyfaq.helper.user-helper', UserHelper::class)
+        ->args([
+            new Reference('phpmyfaq.user.current_user')
+        ]);
+
     $services->set('phpmyfaq.instance', Instance::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -229,6 +236,11 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.system', System::class);
 
     $services->set('phpmyfaq.tags', Tags::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.seo', Seo::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

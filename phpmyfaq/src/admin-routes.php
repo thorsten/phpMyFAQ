@@ -77,6 +77,16 @@ $routesConfig = [
         'controller' => [CategoryController::class, 'add'],
         'methods' => 'GET'
     ],
+    'admin.category.add.child' => [
+        'path' => '/category/add/{parentId}/{language}',
+        'controller' => [CategoryController::class, 'addChild'],
+        'methods' => 'GET'
+    ],
+    'admin.category.edit' => [
+        'path' => '/category/edit/{categoryId}',
+        'controller' => [CategoryController::class, 'edit'],
+        'methods' => 'GET'
+    ],
     'admin.content.sticky-faqs' => [
         'path' => '/sticky-faqs',
         'controller' => [StickyFaqsController::class, 'index'],

@@ -224,9 +224,7 @@ class AbstractAdministrationController extends AbstractController
 
         switch ($action) {
             case 'category-overview':
-            case 'addcategory':
             case 'savecategory':
-            case 'editcategory':
             case 'translatecategory':
             case 'updatecategory':
             case 'showcategory':
@@ -261,6 +259,10 @@ class AbstractAdministrationController extends AbstractController
                 break;
             case 'admin.attachments':
             case 'admin.category':
+            case 'admin.category.add':
+            case 'admin.category.add.child':
+            case 'admin.category.edit':
+            case 'admin.category.translate':
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
             case 'admin.glossary':

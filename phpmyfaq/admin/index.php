@@ -272,12 +272,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'updatecategory':
                 require 'category.main.php';
                 break;
-            case 'addcategory':
-                require 'category.add.php';
-                break;
-            case 'editcategory':
-                require 'category.edit.php';
-                break;
             case 'translatecategory':
                 require 'category.translate.php';
                 break;
