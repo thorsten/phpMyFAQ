@@ -1,7 +1,8 @@
 # Contributing
 
-Since phpMyFAQ is an Open Source project we encourage developers to contribute patches and code for us to include in the
-main package of phpMyFAQ. However, there are a few rules and limitations when doing so and this page lists them.
+Since phpMyFAQ is an Open Source project, we encourage developers to contribute patches and code for us to include in
+the main package of phpMyFAQ.
+However, there are a few rules and limitations when doing so, and this page lists them.
 
 1. Contributed code will be licensed under the MPL 2.0 license.
 2. Copyright notices will be changed to phpMyFAQ Team. But contributors will get credit for their work!
