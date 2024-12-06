@@ -78,7 +78,7 @@ handleAddFaq();
 //
 // Handle show FAQ
 //
-await handleShowFaq();
+handleShowFaq();
 handleShareLinkButton();
 
 //
