@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.0-RC.5 - 2024-11-15
+### phpMyFAQ v4.0.0 - 2024-12-06
 
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
@@ -47,6 +47,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v11 (Thorsten)
 - updated Polish translation (Zięba Bogusław Chaffinch)
 - updated French translation
+- fixed security vulnerability (Thorsten)
 
 ### phpMyFAQ v3.2.10 - 2024-11-09
 
