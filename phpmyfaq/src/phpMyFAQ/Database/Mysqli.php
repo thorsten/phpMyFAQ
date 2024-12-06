@@ -62,7 +62,7 @@ class Mysqli implements DatabaseDriver
      */
     public function connect(
         string $host,
-        string $user,
+        #[\SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
         int|null $port = null

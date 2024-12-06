@@ -48,7 +48,7 @@ class Pgsql implements DatabaseDriver
     /**
      * The connection resource.
      */
-    private Connection|null $conn = null;
+    private Connection|bool $conn = false;
 
     /**
      * Connects to the database.
@@ -61,8 +61,8 @@ class Pgsql implements DatabaseDriver
      */
     public function connect(
         string $host,
-        string $user,
-        string $password,
+        #[\SensitiveParameter] string $user,
+        #[\SensitiveParameter] string $password,
         string $database = '',
         int|null $port = null
     ): ?bool {
@@ -75,10 +75,18 @@ class Pgsql implements DatabaseDriver
             $password
         );
 
-        $this->conn = pg_connect($connectionString);
+        try {
+            $this->conn = pg_connect($connectionString);
 
-        if ($database === '' || !$this->conn) {
-            Database::errorPage(pg_last_error($this->conn));
+            if ($this->conn === false) {
+                throw new Exception('No PostgreSQL connection opened yet');
+            }
+
+            if ($database === '') {
+                throw new Exception('Database name is empty');
+            }
+        } catch (Exception $e) {
+            Database::errorPage($e->getMessage());
             die();
         }
 

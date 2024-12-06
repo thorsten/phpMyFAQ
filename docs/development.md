@@ -22,8 +22,8 @@ template file.
 
 ### 6.1.2 DEBUG mode
 
-If you want to see possible errors or the log of the SQL queries, you can enable the hidden DEBUG mode. To do so, please
-set the following code in src/Bootstrap.php:
+If you want to see possible errors, you can enable the hidden DEBUG mode.
+To do so, please set the following code in src/Bootstrap.php:
 
 `const DEBUG = true;`
 

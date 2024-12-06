@@ -65,7 +65,7 @@ class Sqlite3 implements DatabaseDriver
     public function connect(
         string $host,
         string $user,
-        string $password,
+        #[\SensitiveParameter] string $password,
         string $database = '',
         int|null $port = null
     ): ?bool {

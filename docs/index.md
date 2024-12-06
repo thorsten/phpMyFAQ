@@ -46,8 +46,7 @@ This documentation is licensed under a [Creative Commons License](http://creativ
 
 If you should run into any problems using phpMyFAQ, check out our support forums at
 [forum.phpmyfaq.de](https://forum.phpmyfaq.de/).
-You can also use our BlueSky account [@phpmyfaq.bsky.social](https://bsky.app/profile/phpmyfaq.bsky.social)
-to ask us short question.
+You can also use our Bluesky account [@phpmyfaq.de](https://bsky.app/profile/phpmyfaq.de) to ask us short question.
 There is no free support by phone or email, please refrain from calling or mailing us.
 
 The phpMyFAQ team offers the following paid services:
