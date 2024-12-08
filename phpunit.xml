@@ -9,10 +9,10 @@
          cacheDirectory=".phpunit.cache"
          requireCoverageMetadata="false"
          beStrictAboutCoverageMetadata="true"
-         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnPhpunitDeprecations="false"
          displayDetailsOnIncompleteTests="true"
          displayDetailsOnSkippedTests="true"
-         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerDeprecations="false"
          displayDetailsOnTestsThatTriggerErrors="true"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerWarnings="true">
