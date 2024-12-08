@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.0.1 - unreleased
 
+- improved update handling of .htaccess file (Thorsten)
 - updated 3rd party dependencies (Thorsten)
 
 ### phpMyFAQ v4.0.0 - 2024-12-06

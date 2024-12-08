@@ -1142,7 +1142,8 @@ class Installer extends Setup
         }
 
         // adjust RewriteBase in .htaccess
-        $this->adjustRewriteBaseHtaccess($rootDir);
+        $configurator = new EnvironmentConfigurator($configuration);
+        $configurator->adjustRewriteBaseHtaccess();
     }
 
     /**

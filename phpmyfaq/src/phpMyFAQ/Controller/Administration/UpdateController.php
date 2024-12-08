@@ -234,7 +234,7 @@ class UpdateController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/install-package')]
     public function installPackage(): StreamedResponse
@@ -242,13 +242,14 @@ class UpdateController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $upgrade = new Upgrade(new System(), $this->configuration);
-        return new StreamedResponse(static function () use ($upgrade) {
+        $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
+        return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
-            if ($upgrade->installPackage($progressCallback)) {
+            if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
                 echo json_encode(['message' => '✅ Package successfully installed.']);
             } else {
                 echo json_encode(['message' => 'Install package failed']);

@@ -28,6 +28,7 @@ use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
+use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -108,6 +109,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.services.gravatar', Gravatar::class);
+
+    $services->set('phpmyfaq.setup.environment_configurator', EnvironmentConfigurator::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
 
     $services->set('phpmyfaq.tags', Tags::class)
         ->args([

@@ -78,7 +78,8 @@ $setup = [
     'loginname' => 'admin',
     'password' => 'password',
     'password_retyped' => 'password',
-    'rootDir' => PMF_TEST_DIR
+    'rootDir' => PMF_TEST_DIR,
+    'mainUrl' => 'https://localhost/',
 ];
 
 Strings::init();

@@ -201,6 +201,11 @@ class Configuration
         return $defaultUrl;
     }
 
+    public function getRootPath(): string
+    {
+        return PMF_ROOT_DIR;
+    }
+
     /**
      * Returns a configuration item.
      *
