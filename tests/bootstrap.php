@@ -25,7 +25,7 @@ date_default_timezone_set('Europe/Berlin');
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL & ~E_DEPRECATED);
 
 //
 // The root directory
@@ -63,7 +63,7 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
 //
-// Delete possible SQLite file first
+// Delete a possible SQLite file first
 //
 @unlink(PMF_TEST_DIR . '/test.db');
 
