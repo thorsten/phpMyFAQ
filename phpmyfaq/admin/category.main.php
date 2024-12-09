@@ -47,7 +47,7 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 // Image upload
 //
 $request = Request::createFromGlobals();
-$uploadedFile = $request->files->get('image');
+$uploadedFile = $request->files->get('image') ?? [];
 $categoryImage = new Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
@@ -75,9 +75,9 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             ->setName(Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUserId(Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT))
-            ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT))
+            ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT) ?? -1)
             ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT) ?? false)
-            ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
+            ->setImage($categoryImage->getFileName($categoryId, $categoryLang) ?? '')
             ->setParentId($parentId)
             ->setShowHome(Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT));
 
