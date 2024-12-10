@@ -53,7 +53,9 @@ export const handleUpdateInformation = async () => {
       button.disabled = false;
     } catch (errorMessage) {
       if (errorMessage instanceof SyntaxError) {
-        errorMessage = 'The requested resource was not found on the server. Please check your server configuration.';
+        errorMessage =
+          'The requested resource was not found on the server. ' +
+          'Please check your server configuration, especially the RewriteBase in your .htaccess configuration.';
       } else {
         errorMessage = errorMessage.message;
       }
