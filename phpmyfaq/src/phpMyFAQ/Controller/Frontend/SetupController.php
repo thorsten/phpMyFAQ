@@ -51,8 +51,6 @@ class SetupController
             $checkBasicError = $e->getMessage();
         }
 
-        $installer->adjustRewriteBaseHtaccess(PMF_ROOT_DIR);
-
         return $this->render(
             'setup/index.twig',
             [
