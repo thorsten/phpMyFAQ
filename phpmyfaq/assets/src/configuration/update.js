@@ -144,10 +144,13 @@ export const handleDatabaseUpdate = async () => {
 
         await pump();
       }
+
       await pump();
     } catch (error) {
       const errorMessage =
-        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
+        error.cause && error.cause.response
+          ? await error.cause.response.json()
+          : { error: 'Unknown database error during update.' };
       const alert = document.getElementById('phpmyfaq-update-database-error');
 
       alert.classList.remove('d-none');
