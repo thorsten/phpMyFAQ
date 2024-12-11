@@ -53,7 +53,9 @@ export const handleUpdateInformation = async () => {
       button.disabled = false;
     } catch (errorMessage) {
       if (errorMessage instanceof SyntaxError) {
-        errorMessage = 'The requested resource was not found on the server. Please check your server configuration.';
+        errorMessage =
+          'The requested resource was not found on the server. ' +
+          'Please check your server configuration, especially the RewriteBase in your .htaccess configuration.';
       } else {
         errorMessage = errorMessage.message;
       }
@@ -142,10 +144,13 @@ export const handleDatabaseUpdate = async () => {
 
         await pump();
       }
+
       await pump();
     } catch (error) {
       const errorMessage =
-        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
+        error.cause && error.cause.response
+          ? await error.cause.response.json()
+          : { error: 'Unknown database error during update.' };
       const alert = document.getElementById('phpmyfaq-update-database-error');
 
       alert.classList.remove('d-none');
