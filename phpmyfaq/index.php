@@ -682,4 +682,13 @@ $response->setCache([
     'last_modified' => new DateTime()
 ]);
 
+//
+// Avoid automatic downloads
+// and prevent browsers from interpreting files as a different MIME type than what is specified
+//
+if ($action !== 'attachment') {
+    $response->headers->set('Content-Disposition', 'inline');
+}
+$response->headers->set('X-Content-Type-Options', 'nosniff');
+
 $response->send();
