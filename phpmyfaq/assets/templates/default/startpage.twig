@@ -68,7 +68,7 @@
                 <h4 class="h6 mb-2">
                   <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
                      title="{{ topten.preview }}" href="{{ topten.url }}">
-                    {{ topten.title }}
+                    {{ topten.title | raw }}
                   </a>
                 </h4>
                 <div class="d-flex align-items-center text-muted">
@@ -105,7 +105,7 @@
                 <h4 class="h6 mb-2">
                   <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
                      title="{{ latest.preview }}" href="{{ latest.url }}">
-                    {{ latest.title }}
+                    {{ latest.title | raw }}
                   </a>
                 </h4>
                 <div class="d-flex align-items-center text-muted">
@@ -137,7 +137,7 @@
               <h4 class="h6 mb-2">
                 <a class="latest-entries" data-bs-toggle="tooltip" data-bs-placement="top"
                    title="{{ trending.preview }}" href="{{ trending.url }}">
-                  {{ trending.title }}
+                  {{ trending.title | raw }}
                 </a>
               </h4>
               <div class="d-flex align-items-center text-muted">
