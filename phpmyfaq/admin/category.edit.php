@@ -79,7 +79,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         $restrictedGroups = true;
     }
 
-    $header = Translation::get('ad_categ_edit_1') . ' "' . Strings::htmlentities($categoryData->getName()) . '" ' .
+    $header = Translation::get('ad_categ_edit_1') . ' "' . $categoryData->getName() . '" ' .
         Translation::get('ad_categ_edit_2');
 
     $allGroupsOptions = '';

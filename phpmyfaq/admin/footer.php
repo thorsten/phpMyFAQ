@@ -28,7 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $faqConfig = Configuration::getConfigurationInstance();
-$user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $template = $twig->loadTemplate('./admin/footer.twig');

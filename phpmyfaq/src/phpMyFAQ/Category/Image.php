@@ -19,6 +19,7 @@ namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class CategoryImage
@@ -32,7 +33,7 @@ class Image
 
     private bool $isUpload = false;
 
-    private array $uploadedFile = [];
+    private UploadedFile $uploadedFile;
 
     private string $fileName = '';
 
@@ -46,11 +47,11 @@ class Image
     }
 
     /**
-     * Sets the uploaded file array from $_FILES.
+     * Sets the uploaded file
      */
-    public function setUploadedFile(array $uploadedFile): Image
+    public function setUploadedFile(UploadedFile $uploadedFile): Image
     {
-        if (isset($uploadedFile['error']) && UPLOAD_ERR_OK === $uploadedFile['error']) {
+        if ($uploadedFile->isValid()) {
             $this->isUpload = true;
         }
 
@@ -70,7 +71,7 @@ class Image
                     'category-%d-%s.%s',
                     $categoryId,
                     $categoryName,
-                    $this->getFileExtension($this->uploadedFile['type'])
+                    $this->getFileExtension($this->uploadedFile->getMimeType())
                 )
             );
         }
@@ -106,12 +107,10 @@ class Image
     /**
      * Checks for valid image MIME types, returns true if valid
      */
-    private function isValidMimeType(string $file): bool
+    private function isValidMimeType(string $contentType): bool
     {
         $types = ['image/jpeg','image/gif','image/png', 'image/webp'];
-        $type = mime_content_type($file);
-
-        return in_array($type, $types);
+        return in_array($contentType, $types);
     }
 
     /**
@@ -122,20 +121,18 @@ class Image
     public function upload(): bool
     {
         if (
-            $this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
-            && $this->uploadedFile['size'] < $this->configuration->get('records.maxAttachmentSize')
+            $this->isUpload && $this->uploadedFile->isValid()
+            && $this->uploadedFile->getSize() < $this->configuration->get('records.maxAttachmentSize')
         ) {
-            if (false === getimagesize($this->uploadedFile['tmp_name'])) {
+            if (false === $this->uploadedFile->getSize()) {
                 throw new Exception('Cannot detect image size');
             }
 
-            if (!$this->isValidMimeType($this->uploadedFile['tmp_name'])) {
+            if (!$this->isValidMimeType($this->uploadedFile->getClientMimeType())) {
                 throw new Exception('Image MIME type validation failed.');
             }
 
-            if (!move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
-                throw new Exception('Cannot move uploaded image');
-            }
+            $this->uploadedFile->move(self::UPLOAD_DIR, $this->fileName);
 
             return true;
         }

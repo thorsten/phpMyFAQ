@@ -21,7 +21,6 @@
 
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
