@@ -56,6 +56,12 @@
 
           {{ include('./setup/update/step' ~ currentStep ~ '.twig') }}
 
+          {% if checkBasicError %}
+            <div class="alert alert-danger my-5" role="alert">
+              {{ checkBasicError | raw }}
+            </div>
+          {% endif %}
+
         </div>
         </section>
     </main>
