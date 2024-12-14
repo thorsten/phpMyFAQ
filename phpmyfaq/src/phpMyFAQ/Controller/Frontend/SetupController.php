@@ -38,15 +38,20 @@ class SetupController
      * @throws \Exception
      */
     #[Route('/setup', name: 'public.setup.update')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $system = new System();
         $installer = new Installer($system);
 
         $checkBasicError = '';
-
         try {
             $installer->checkBasicStuff();
+        } catch (Exception $e) {
+            $checkBasicError = $e->getMessage();
+        }
+
+        try {
+            $installer->checkInitialRewriteBasePath($request);
         } catch (Exception $e) {
             $checkBasicError = $e->getMessage();
         }
@@ -104,8 +109,9 @@ class SetupController
     /**
      * @throws TemplateException
      * @throws Exception
+     * @throws \Exception
      */
-    #[Route('/setup/update', name: 'public.setup.update')]
+    #[Route('/update', name: 'public.setup.update')]
     public function update(Request $request): Response
     {
         $currentStep = Filter::filterVar($request->get('step'), FILTER_VALIDATE_INT);
@@ -114,12 +120,20 @@ class SetupController
 
         $update = new Update(new System(), $configuration);
 
+        $checkBasicError = '';
+        try {
+            $update->checkInitialRewriteBasePath($request);
+        } catch (Exception $e) {
+            $checkBasicError = $e->getMessage();
+        }
+
         return $this->render(
             'setup/update.twig',
             [
                 'currentStep' => $currentStep ?? 1,
                 'installedVersion' => $configuration->getVersion(),
                 'newVersion' => System::getVersion(),
+                'checkBasicError' => $checkBasicError,
                 'currentYear' => date('Y'),
                 'documentationUrl' => System::getDocumentationUrl(),
                 'configTableNotAvailable' => $update->isConfigTableNotAvailable($configuration->getDb()),

@@ -13,10 +13,18 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed Webpack, now using Vite v6 (Thorsten)
 - migrated from Jest to vitest (Thorsten)
 
-### phpMyFAQ v4.0.1 - unreleased
+### phpMyFAQ v4.0.2 - unreleased
 
 - improved update handling of .htaccess file (Thorsten)
 - updated 3rd party dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
+
+### phpMyFAQ v4.0.1 - 2024-12-13
+
+- fixed security vulnerability (Thorsten)
+- improved update handling of .htaccess file (Thorsten)
+- updated 3rd party dependencies (Thorsten)
+- fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v4.0.0 - 2024-12-06
 

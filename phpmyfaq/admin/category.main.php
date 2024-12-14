@@ -30,6 +30,7 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -48,7 +49,9 @@ $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_SPECIAL_CHA
 $request = Request::createFromGlobals();
 $uploadedFile = $request->files->get('image') ?? [];
 $categoryImage = new Image($faqConfig);
-$categoryImage->setUploadedFile($uploadedFile);
+if ($uploadedFile instanceof UploadedFile) {
+    $categoryImage->setUploadedFile($uploadedFile);
+}
 
 $categoryPermission = new Permission($faqConfig);
 $seo = new Seo($faqConfig);
@@ -79,7 +82,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             ->setUserId(Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT))
             ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT) ?? -1)
             ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT) ?? false)
-            ->setImage($categoryImage->getFileName($categoryId, $categoryLang) ?? '')
+            ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
             ->setParentId($parentId)
             ->setShowHome(Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT));
 
