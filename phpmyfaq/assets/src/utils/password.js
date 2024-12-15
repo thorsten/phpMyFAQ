@@ -36,19 +36,29 @@ export const handlePasswordStrength = () => {
 
   if (password && strength) {
     password.addEventListener('keyup', () => {
-      strength.style.width = (passwordStrength(password.value) * 25).toString() + '%';
+      const strengthValue = passwordStrength(password.value) * 25;
+      strength.style.width = strengthValue.toString() + '%';
+      strength.classList.remove('bg-danger', 'bg-warning', 'bg-success');
+
+      if (strengthValue < 75) {
+        strength.classList.add('bg-danger');
+      } else if (strengthValue < 90) {
+        strength.classList.add('bg-warning');
+      } else {
+        strength.classList.add('bg-success');
+      }
     });
   }
 };
 
 /**
  * Rules for the password strength calculation:
- *  - at least 8 characters
- *  - bonus if longer
- *  - a lower letter
- *  - an upper letter
- *  - a digit
- *  -a special character
+ * - at least eight characters
+ * - bonus if longer
+ * - a lower letter
+ * - an upper letter
+ * - a digit
+ * - a special character
  *
  * @param password
  * @returns {number}
