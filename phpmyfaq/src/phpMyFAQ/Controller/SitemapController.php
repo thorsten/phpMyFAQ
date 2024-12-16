@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Template\TemplateException;
-use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Response;
 
 class SitemapController extends AbstractController
