@@ -41,10 +41,14 @@ class TwigWrapper
     /** @var string Name of an active template set. */
     private static string $templateSetName = 'default';
 
+    /**
+     * @throws LoaderError
+     */
     public function __construct(string $templatePath, bool $isSetup = false)
     {
         $this->isSetup = $isSetup;
-        $filesystemLoader = new FilesystemLoader($templatePath);
+        $filesystemLoader = new FilesystemLoader();
+        $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
         $this->twigEnvironment = new Environment(
             $filesystemLoader,
             [

@@ -33,7 +33,7 @@ $user = $container->get('phpmyfaq.user.current_user');
 if ($user->isLoggedIn()) {
     $bookmark = new Bookmark($faqConfig, $user);
 
-    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
     $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 
     // Twig template variables

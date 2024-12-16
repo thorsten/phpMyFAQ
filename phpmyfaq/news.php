@@ -127,7 +127,7 @@ $commentHelper->setConfiguration($faqConfig);
 $comment = new Comments($faqConfig);
 $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./news.twig');
 
 $templateVars = [

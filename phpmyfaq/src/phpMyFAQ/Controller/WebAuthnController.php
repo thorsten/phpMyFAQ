@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * The WebAuthn Controller
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-09-11
+ */
+
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
@@ -75,7 +90,7 @@ class WebAuthnController extends AbstractController
         ];
 
         return $this->render(
-            TwigWrapper::getTemplateSetName() . '/webauthn.twig',
+            '/webauthn.twig',
             [
                 'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
                 'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),

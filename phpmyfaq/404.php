@@ -30,5 +30,5 @@ $faqSession = $container->get('phpmyfaq.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./404.twig');

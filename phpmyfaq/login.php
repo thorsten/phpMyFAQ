@@ -37,7 +37,7 @@ if (!is_null($error)) {
 }
 
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./login.twig');
 
 $templateVars = [

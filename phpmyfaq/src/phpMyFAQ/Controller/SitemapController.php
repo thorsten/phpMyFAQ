@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Template\TemplateException;
-use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Response;
 
 class SitemapController extends AbstractController
@@ -45,7 +44,7 @@ class SitemapController extends AbstractController
             ];
         }
 
-        $xml = $this->renderView(TwigWrapper::getTemplateSetName() . '/sitemap.xml.twig', ['urls' => $urls]);
+        $xml = $this->renderView('./sitemap.xml.twig', ['urls' => $urls]);
 
         $response->headers->set('Content-Type', 'text/xml');
         $response->setStatusCode(Response::HTTP_OK);

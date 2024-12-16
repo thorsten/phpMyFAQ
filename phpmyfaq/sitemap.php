@@ -46,7 +46,7 @@ $siteMap = $container->get('phpmyfaq.sitemap');
 $siteMap->setUser($currentUser);
 $siteMap->setGroups($currentGroups);
 
-$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/' . TwigWrapper::getTemplateSetName());
+$twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 
 // Twig template variables
