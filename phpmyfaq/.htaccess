@@ -12,22 +12,28 @@
 # @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      https://www.phpmyfaq.de
 # @since     2004-11-13
+
 DirectoryIndex index.php
+
 # always follow the symlinks
 <IfModule mod_negotiation.c>
     Options +FollowSymlinks -MultiViews -Indexes
 </IfModule>
+
 # X-Frame-Options to prevent clickjacking
 Header always append X-Frame-Options SAMEORIGIN
+
 # CORS
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
 Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
 # Set cache control
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
     Header set Cache-Control "max-age=84600, no-store"
     Header set Pragma "no-cache"
 </filesMatch>
+
 # Set Gzip compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE application/javascript
@@ -53,6 +59,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/xml
 </IfModule>
+
 # Enable Expires headers to set expiration dates for various file types
 <IfModule mod_expires.c>
     ExpiresActive On
@@ -82,24 +89,30 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     ExpiresByType application/pdf "access plus 1 year"
     ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
 </IfModule>
+
 # Enable Cache-Control headers to set caching policies for various file types
 <IfModule mod_headers.c>
     <FilesMatch "\.(flv|gif|ico|jpg|jpeg|mp4|mpeg|png|svg|swf|webp|webm|js|pdf|css|woff|woff2)$">
         Header set Cache-Control "max-age=31536000, public"
     </FilesMatch>
 </IfModule>
+
 # Set mod_rewrite
 <IfModule mod_rewrite.c>
     # This has to be 'On'
     RewriteEngine On
+
     <IfModule mod_fcgid.c>
         RewriteCond %{HTTP:Authorization} .
         RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
     </IfModule>
+
     # the path to your phpMyFAQ installation
     RewriteBase /
+
     # Error pages
     ErrorDocument 404 /index.php?action=404
+
     # General pages
     RewriteRule add-faq.html$ index.php?action=add [L,QSA]
     RewriteRule add-question.html$ index.php?action=ask [L,QSA]
