@@ -176,6 +176,21 @@ class FaqHelper extends AbstractHelper
                 ->allowMediaHosts($allowedMediaHosts)
         );
 
-        return $htmlSanitizer->sanitize($content);
+        $sanitizedContent = $htmlSanitizer->sanitize($content);
+
+        $sanitizedContent = preg_replace('/<iframe\b(?:(?!src)[^>])*>\s*<\/iframe>/i', '', $sanitizedContent);
+
+        return preg_replace_callback(
+            '/style\s*=\s*"([^"]*)"/i',
+            function ($matches) {
+                $styles = explode(';', $matches[1]);
+                $filteredStyles = array_filter($styles, function ($style) {
+                    return stripos(trim($style), 'overflow:') !== 0; // Exclude 'overflow' properties
+                });
+                $newStyle = implode('; ', $filteredStyles);
+                return $newStyle ? 'style="' . $newStyle . '"' : ''; // Remove style attribute if empty
+            },
+            $sanitizedContent
+        );
     }
 }

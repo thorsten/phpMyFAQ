@@ -100,4 +100,24 @@ class FaqHelperTest extends TestCase
         $this->assertStringContainsString('YouTube video player', $actualOutput);
         $this->assertStringNotContainsString('frameborder', $actualOutput);
     }
+
+    public function testCleanUpEmptyIframes(): void
+    {
+        $content = '<iframe></iframe>';
+        $expectedOutput = '';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    public function testCleanUpContentWithOverflow(): void
+    {
+        $content = '<p style="position: relative; overflow: auto;">Foobar!</p>';
+        $expectedOutput = '<p style="position: relative; ">Foobar!</p>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
 }
