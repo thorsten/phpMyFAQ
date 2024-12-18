@@ -65,7 +65,7 @@ class User
 
     final public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen login name is too short.';
 
-    final public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
+    final public const ERROR_USER_LOGIN_NOT_UNIQUE = 'The Login name already exists.';
 
     final public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
         'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
