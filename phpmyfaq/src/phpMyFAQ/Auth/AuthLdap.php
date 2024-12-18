@@ -147,14 +147,14 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$this->activeServer]['ldap_port'],
             $this->ldapServer[$this->activeServer]['ldap_base'],
             $bindLogin,
-            htmlspecialchars_decode((string) $password)
+            htmlspecialchars_decode($password)
         );
 
-        if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode((string) $password))) {
+        if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode($password))) {
             throw new AuthException($this->ldapCore->error);
         }
 
-        $this->create($login, htmlspecialchars_decode((string) $password));
+        $this->create($login, htmlspecialchars_decode($password));
 
         return true;
     }
