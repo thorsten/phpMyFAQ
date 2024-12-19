@@ -62,7 +62,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DE
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new FormatBytesTwigExtension());
-    $template = $twig->loadTemplate('./admin/content/attachments.twig');
+    $template = $twig->loadTemplate('@admin/content/attachments.twig');
 
     $templateVars = [
         'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),

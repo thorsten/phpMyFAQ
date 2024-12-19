@@ -51,7 +51,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::REPORTS->valu
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/statistics/report.main.twig');
+    $template = $twig->loadTemplate('@admin/statistics/report.main.twig');
 
     echo $template->render($templateVars);
 } else {

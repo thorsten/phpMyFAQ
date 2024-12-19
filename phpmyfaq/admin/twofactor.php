@@ -26,7 +26,7 @@ $request = Request::createFromGlobals();
 $faqConfig = Configuration::getConfigurationInstance();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/user/twofactor.twig');
+$template = $twig->loadTemplate('@admin/user/twofactor.twig');
 
 $templateVars = [
     'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),

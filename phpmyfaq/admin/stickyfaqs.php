@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/content/stickyfaqs.twig');
+$template = $twig->loadTemplate('@admin/content/stickyfaqs.twig');
 
 $faq = new Faq($faqConfig);
 $stickyData = $faq->getStickyFaqsData();

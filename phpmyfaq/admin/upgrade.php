@@ -33,7 +33,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/configuration/upgrade.twig');
+$template = $twig->loadTemplate('@admin/configuration/upgrade.twig');
 
 if (
     $faqConfig->get('upgrade.onlineUpdateEnabled') &&

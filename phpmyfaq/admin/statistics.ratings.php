@@ -40,7 +40,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/statistics/ratings.twig');
+    $template = $twig->loadTemplate('@admin/statistics/ratings.twig');
 
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

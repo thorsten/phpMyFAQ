@@ -45,7 +45,7 @@ $categoryRelation->setGroups($currentAdminGroups);
 $comments = new Comments($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/content/faq.overview.twig');
+$template = $twig->loadTemplate('@admin/content/faq.overview.twig');
 
 $templateVars = [
     'csrfTokenSearch' => Token::getInstance()->getTokenInput('edit-faq'),

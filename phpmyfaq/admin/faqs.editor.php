@@ -90,7 +90,7 @@ if (
     $twig->addExtension(new FormatBytesTwigExtension());
     $twig->addExtension(new IsoDateTwigExtension());
     $twig->addExtension(new UserNameTwigExtension());
-    $template = $twig->loadTemplate('./admin/content/faq.editor.twig');
+    $template = $twig->loadTemplate('@admin/content/faq.editor.twig');
 
     $selectedCategory = '';
     $queryString = '';

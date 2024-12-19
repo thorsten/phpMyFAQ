@@ -32,7 +32,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/configuration/main.twig');
+    $template = $twig->loadTemplate('@admin/configuration/main.twig');
 
     $templateVars = [
         'adminHeaderConfiguration' => Translation::get('ad_config_edit'),

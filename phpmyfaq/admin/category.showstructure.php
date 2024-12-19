@@ -125,7 +125,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/content/category.showstructure.twig');
+    $template = $twig->loadTemplate('@admin/content/category.showstructure.twig');
 
     echo $template->render($templateVars);
 } else {

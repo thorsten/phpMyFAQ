@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = Configuration::getConfigurationInstance();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/footer.twig');
+$template = $twig->loadTemplate('@admin/footer.twig');
 
 $templateVars = [
     'msgSessionExpiringSoon' => Translation::get('msgSessionExpiringSoon'),

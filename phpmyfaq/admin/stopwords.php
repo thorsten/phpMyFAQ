@@ -33,7 +33,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/configuration/stopwords.twig');
+$template = $twig->loadTemplate('@admin/configuration/stopwords.twig');
 
 $sortedLanguageCodes = [];
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {

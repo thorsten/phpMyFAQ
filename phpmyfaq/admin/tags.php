@@ -35,7 +35,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 $tagId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/content/tags.twig');
+$template = $twig->loadTemplate('@admin/content/tags.twig');
 
 $tags = new Tags($faqConfig);
 

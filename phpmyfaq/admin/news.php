@@ -128,6 +128,6 @@ if ('add-news' == $action && $user->perm->hasPermission($user->getUserId(), Perm
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new IsoDateTwigExtension());
 $twig->addExtension(new FormatDateTwigExtension());
-$template = $twig->loadTemplate('./admin/content/news.twig');
+$template = $twig->loadTemplate('@admin/content/news.twig');
 
 echo $template->render($templateVars);

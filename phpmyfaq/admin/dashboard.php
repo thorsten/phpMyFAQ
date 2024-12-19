@@ -42,7 +42,7 @@ $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/dashboard.twig');
+$template = $twig->loadTemplate('@admin/dashboard.twig');
 
 $templateVars = [
     'isDebugMode' => DEBUG,

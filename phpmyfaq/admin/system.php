@@ -38,7 +38,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 $user = CurrentUser::getCurrentUser($faqConfig);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/configuration/system.twig');
+$template = $twig->loadTemplate('@admin/configuration/system.twig');
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::CONFIGURATION_EDIT->value)) {
     $faqSystem = new System();

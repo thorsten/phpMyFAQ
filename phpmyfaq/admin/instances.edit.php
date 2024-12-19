@@ -45,7 +45,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::INSTANCE_EDIT
     ];
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/configuration/instances.edit.twig');
+    $template = $twig->loadTemplate('@admin/configuration/instances.edit.twig');
 
     echo $template->render($templateVars);
 } else {

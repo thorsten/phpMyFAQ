@@ -75,7 +75,7 @@ Strings::init($faqLangCode);
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', 'wmv', 'avi', 'webm'];
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/content/media.browser.twig');
+$template = $twig->loadTemplate('@admin/content/media.browser.twig');
 
 $images = [];
 if (is_dir(PMF_CONTENT_DIR . '/user/images')) {

@@ -186,6 +186,6 @@ $templateVars = [
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new PermissionTranslationTwigExtension());
-$template = $twig->loadTemplate('./admin/user/users.twig');
+$template = $twig->loadTemplate('@admin/user/users.twig');
 
 echo $template->render($templateVars);

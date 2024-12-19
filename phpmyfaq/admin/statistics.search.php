@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addExtension(new LanguageCodeTwigExtension());
-    $template = $twig->loadTemplate('./admin/statistics/search.twig');
+    $template = $twig->loadTemplate('@admin/statistics/search.twig');
 
     $searchesCount = $search->getSearchesCount();
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);

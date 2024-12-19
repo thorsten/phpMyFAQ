@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $visitsPerDay = $session->getNumberOfSessions();
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/statistics/sessions.twig');
+    $template = $twig->loadTemplate('@admin/statistics/sessions.twig');
 
     $statdelete = Filter::filterVar($request->request->get('statdelete'), FILTER_SANITIZE_SPECIAL_CHARS);
     $month = Filter::filterVar($request->request->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);

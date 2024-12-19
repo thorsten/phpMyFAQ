@@ -243,7 +243,7 @@ switch ($action) {
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-$template = $twig->loadTemplate('./admin/header.twig');
+$template = $twig->loadTemplate('@admin/header.twig');
 
 if ($faqConfig->get('main.enableGravatarSupport')) {
     $avatar = new Gravatar();

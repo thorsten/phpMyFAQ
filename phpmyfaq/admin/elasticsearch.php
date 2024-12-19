@@ -38,7 +38,7 @@ if (
     $esConfigData = $faqConfig->getElasticsearchConfig();
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/configuration/elasticsearch.twig');
+    $template = $twig->loadTemplate('@admin/configuration/elasticsearch.twig');
 
     $templateVars = [
         'adminHeaderElasticsearch' => Translation::get('ad_menu_elasticsearch'),

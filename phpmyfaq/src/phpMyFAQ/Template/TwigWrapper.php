@@ -49,6 +49,7 @@ class TwigWrapper
         $this->isSetup = $isSetup;
         $filesystemLoader = new FilesystemLoader();
         $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
+        $filesystemLoader->addPath($templatePath . '/admin', 'admin');
         $this->twigEnvironment = new Environment(
             $filesystemLoader,
             [

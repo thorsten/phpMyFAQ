@@ -32,7 +32,7 @@ $user = CurrentUser::getCurrentUser($faqConfig);
 
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)) {
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
-    $template = $twig->loadTemplate('./admin/import-export/import.csv.twig');
+    $template = $twig->loadTemplate('@admin/import-export/import.csv.twig');
 
     $templateVars = [
         'adminHeaderImport' => Translation::get('msgImportRecords'),

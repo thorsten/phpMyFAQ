@@ -326,6 +326,6 @@ if ('list' === $groupAction) {
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 $twig->addExtension(new PermissionTranslationTwigExtension());
-$template = $twig->loadTemplate('./admin/user/group.twig');
+$template = $twig->loadTemplate('@admin/user/group.twig');
 
 echo $template->render($templateVars);

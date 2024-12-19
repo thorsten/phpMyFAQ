@@ -76,7 +76,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
 
     $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
     $twig->addFilter($filter);
-    $template = $twig->loadTemplate('./admin/configuration/forms.translations.twig');
+    $template = $twig->loadTemplate('@admin/configuration/forms.translations.twig');
 
     echo $template->render($templateVars);
 } else {
