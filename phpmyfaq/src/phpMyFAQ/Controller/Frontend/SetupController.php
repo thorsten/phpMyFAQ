@@ -57,7 +57,7 @@ class SetupController
         }
 
         return $this->render(
-            'setup/index.twig',
+            '@setup/index.twig',
             [
                 'newVersion' => System::getVersion(),
                 'setupType' => 'Setup',
@@ -95,7 +95,7 @@ class SetupController
         }
 
         return $this->render(
-            'setup/install.twig',
+            '@setup/install.twig',
             [
                 'newVersion' => System::getVersion(),
                 'setupType' => 'Setup',
@@ -128,7 +128,7 @@ class SetupController
         }
 
         return $this->render(
-            'setup/update.twig',
+            '@setup/update.twig',
             [
                 'currentStep' => $currentStep ?? 1,
                 'installedVersion' => $configuration->getVersion(),

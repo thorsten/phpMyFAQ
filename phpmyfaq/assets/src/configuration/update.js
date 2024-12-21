@@ -125,7 +125,17 @@ export const handleDatabaseUpdate = async () => {
           alert.classList.remove('d-none');
           return;
         } else {
-          const value = JSON.parse(decodedValue);
+          let value;
+          try {
+            value = JSON.parse(decodedValue);
+          } catch (error) {
+            console.error('Failed to parse JSON:', error);
+            const alert = document.getElementById('phpmyfaq-update-database-error');
+            const errorMessage = document.getElementById('error-messages');
+            alert.classList.remove('d-none');
+            errorMessage.innerText = `Error: ${error.message}\nFull Error: ${decodedValue}`;
+            return;
+          }
           if (value.progress) {
             progressBarInstallation.style.width = value.progress;
             progressBarInstallation.innerText = value.progress;
@@ -147,14 +157,10 @@ export const handleDatabaseUpdate = async () => {
 
       await pump();
     } catch (error) {
-      const errorMessage =
-        error.cause && error.cause.response
-          ? await error.cause.response.json()
-          : { error: 'Unknown database error during update.' };
+      console.error('Error details:', error);
       const alert = document.getElementById('phpmyfaq-update-database-error');
-
       alert.classList.remove('d-none');
-      alert.innerHTML = errorMessage.error;
+      alert.innerText = `Error: ${error.message}`;
     }
   }
 };
