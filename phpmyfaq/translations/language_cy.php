@@ -260,17 +260,16 @@ $PMF_LANG["ad_news_delsuc"] = "Dilëwyd yr eitem newyddion.";
 $PMF_LANG["ad_news_updatenews"] = "Diweddaru'r newyddion";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Ychwanegu categori newydd";
+$PMF_LANG["msgNewCategory"] = "Ychwanegu categori newydd";
 $PMF_LANG["ad_categ_catnum"] = "Rhif Categori";
 $PMF_LANG["ad_categ_subcatnum"] = "Rhif Isgategori";
 $PMF_LANG["ad_categ_nya"] = "<em>ddim ar gael eto!</em>";
-$PMF_LANG["ad_categ_titel"] = "Tetil y Categori";
+$PMF_LANG["categoryNameLabel"] = "Tetil y Categori";
 $PMF_LANG["ad_categ_add"] = "Ychwanegu Categori";
 $PMF_LANG["ad_categ_existing"] = "Categorïau Presennol";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Categori";
 $PMF_LANG["ad_categ_subcateg"] = "Isgategori";
-$PMF_LANG["ad_categ_titel"] = "Tetil y Categori";
 $PMF_LANG["ad_categ_action"] = "Gweithred";
 $PMF_LANG["ad_categ_update"] = "diweddaru";
 $PMF_LANG["ad_categ_delete"] = "dileu";
@@ -548,11 +547,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", " Nifer yr erthy
 $LANG_CONF['security.bannedIPs'] = array("area", " Gwahardd yr Ips hyn");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
+$PMF_LANG["msgNewCategory_main_cat"] = "fel prif gategori newydd";
 $PMF_LANG["ad_categ_paste_error"] = "Nid yw'n bosibl symud y categori hwn.";
 $PMF_LANG["ad_categ_move"] = "symud y categori";
 $PMF_LANG["ad_categ_lang"] = "Iaith";
-$PMF_LANG["ad_categ_desc"] = "Disgrifiad";
+$PMF_LANG["categoryDescriptionLabel"] = "Disgrifiad";
 $PMF_LANG["ad_categ_change"] = "Newid gyda";
 
 $PMF_LANG["lostPassword"] = "Anghofio cyfrinair? Cliciwch yma.";

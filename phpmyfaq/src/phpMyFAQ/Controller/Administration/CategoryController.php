@@ -119,7 +119,6 @@ class CategoryController extends AbstractAdministrationController
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $templateVars = [
                 'groupsOptions' => $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser),
-                'ad_categ_moderator' => Translation::get('ad_categ_moderator')
             ];
         }
 
@@ -137,6 +136,26 @@ class CategoryController extends AbstractAdministrationController
                 'categoryName' => $category->categoryName[$parentId]['name'],
                 'msgMainCategory' => Translation::get('msgMainCategory'),
                 ... $templateVars,
+            ],
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route('/category/create', name: 'admin.category.create', methods: ['POST'])]
+    public function create(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CATEGORY_ADD);
+
+        return $this->render(
+            '@admin/content/category.overview.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
             ],
         );
     }
@@ -195,13 +214,13 @@ class CategoryController extends AbstractAdministrationController
             Translation::get('ad_categ_edit_2');
 
         $allGroupsOptions = '';
-        $restrictedGroupsOptions = '';
+        $restrictedGroupOptions = '';
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $allGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
                 [$categoryData->getGroupId()],
                 $this->currentUser
             );
-            $restrictedGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
+            $restrictedGroupOptions = $this->currentUser->perm->getAllGroupsOptions(
                 $groupPermission,
                 $this->currentUser
             );
@@ -218,36 +237,27 @@ class CategoryController extends AbstractAdministrationController
                 'parentId' => $categoryData->getParentId(),
                 'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
                 'categoryImage' => $categoryData->getImage(),
-                'categoryNameLabel' => Translation::get('ad_categ_titel'),
                 'categoryName' => $categoryData->getName(),
-                'categoryDescriptionLabel' => Translation::get('ad_categ_desc'),
                 'categoryDescription' => $categoryData->getDescription(),
-                'categoryActiveLabel' => Translation::get('ad_user_active'),
                 'categoryActive' => 1 === (int)$categoryData->getActive() ? 'checked' : '',
-                'categoryShowHomeLabel' => Translation::get('ad_user_show_home'),
                 'categoryShowHome' => 1 === (int)$categoryData->getShowHome() ? 'checked' : '',
-                'categoryImageLabel' => Translation::get('ad_category_image'),
-                'categoryImageReset' => 'Reset category image',
-                'categoryOwnerLabel' => Translation::get('ad_categ_owner'),
+                'categoryImageReset' => 'Reset category image', // @todo needs translation
                 'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
                 'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
-                'categoryModeratorLabel' => Translation::get('ad_categ_moderator'),
                 'allGroupsOptions' => $allGroupsOptions,
                 'categoryGroupPermissionLabel' => Translation::get('ad_entry_grouppermission'),
                 'allGroups' => $allGroups ? 'checked' : '',
                 'categoryGroupPermissionAllLabel' => Translation::get('ad_entry_all_groups'),
                 'restrictedGroups' => $restrictedGroups ? 'checked' : '',
                 'restrictedGroupsLabel' => Translation::get('ad_entry_restricted_groups'),
-                'restrictedGroupsOptions' => $restrictedGroupsOptions,
+                'restrictedGroupsOptions' => $restrictedGroupOptions,
                 'userPermissionLabel' => Translation::get('ad_entry_userpermission'),
                 'allUsers' => $allUsers ? 'checked' : '',
-                'allUsersLabel' => Translation::get('ad_entry_all_users'),
                 'restrictedUsers' => $restrictedUsers ? 'checked' : '',
                 'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
                 'allUsersOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
                 'msgSerpTitle' => Translation::get('msgSerpTitle'),
                 'serpTitle' => $seoData->getTitle(),
-                'msgSerpDescription' => Translation::get('msgSerpDescription'),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
             ],
@@ -265,17 +275,9 @@ class CategoryController extends AbstractAdministrationController
 
         return [
             'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
-            'ad_categ_new' => Translation::get('ad_categ_new'),
-            'msgCategoryMatrix' => Translation::get('msgCategoryMatrix'),
             'userOptions' => $userHelper->getAllUserOptions(),
-            'ad_categ_title' => Translation::get('ad_categ_titel'),
-            'ad_categ_owner' => Translation::get('ad_categ_owner'),
-            'ad_categ_desc' => Translation::get('ad_categ_desc'),
-            'ad_category_image' => Translation::get('ad_category_image'),
-            'ad_user_active' => Translation::get('ad_user_active'),
-            'ad_user_show_home' => Translation::get('ad_user_show_home'),
             'permLevel' => $this->configuration->get('security.permLevel'),
-            'ad_entry_all_users' => Translation::get('ad_entry_all_users'),
+            'msgAccessAllUsers' => Translation::get('msgAccessAllUsers'),
             'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),
             'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
             'ad_categ_add' => Translation::get('ad_categ_add'),
@@ -283,7 +285,6 @@ class CategoryController extends AbstractAdministrationController
             'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
             'msgSerpTitle' => Translation::get('msgSerpTitle'),
-            'msgSerpDescription' => Translation::get('msgSerpDescription'),
             'restricted_groups' => ($this->configuration->get('security.permLevel') === 'medium') ?
                 $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser) : '',
         ];

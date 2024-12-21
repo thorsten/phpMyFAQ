@@ -21,7 +21,7 @@
       <input type="hidden" name="csrf" id="csrf" value="{{ csrf }}">
 
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="name">{{ ad_categ_title }}:</label>
+        <label class="col-lg-2 col-form-label" for="name">{{ 'categoryNameLabel' | translate }}:</label>
         <div class="col-lg-4">
           <input type="text" name="name" class="form-control" id="name">
         </div>
@@ -37,14 +37,16 @@
       </div>
 
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label">{{ ad_categ_desc }}:</label>
+        <label class="col-lg-2 col-form-label">{{ 'categoryDescriptionLabel' | translate }}</label>
         <div class="col-lg-4">
           <textarea name="description" rows="3" class="form-control"></textarea>
         </div>
       </div>
 
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label">{{ ad_categ_owner }}:</label>
+        <label class="col-lg-2 col-form-label">
+          {{ 'categoryOwnerLabel' | translate }}
+        </label>
         <div class="col-lg-4">
           <select name="user_id" class="form-control">
             {{ userOptions|raw }}

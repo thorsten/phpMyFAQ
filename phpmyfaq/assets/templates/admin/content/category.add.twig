@@ -3,12 +3,12 @@
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-folder"></i> {{ ad_categ_new }}
+    <i aria-hidden="true" class="bi bi-folder"></i> {{ 'msgNewCategory' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
       <a class="btn btn-info" href="./category">
-        <i aria-hidden="true" class="bi bi-list"></i> {{ msgCategoryMatrix }}
+        <i aria-hidden="true" class="bi bi-list"></i> {{ 'msgCategoryMatrix' | translate }}
       </a>
     </div>
   </div>
@@ -34,7 +34,7 @@
       {% endif %}
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="name">
-          {{ ad_categ_title }}
+          {{ 'categoryNameLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <input type="text" id="name" name="name" class="form-control" required>
@@ -43,7 +43,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="description">
-          {{ ad_categ_desc }}
+          {{ 'categoryDescriptionLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <textarea id="description" name="description" rows="3" class="form-control"></textarea>
@@ -55,7 +55,7 @@
           <div class="form-check">
             <input type="checkbox" name="active" id="active" value="1" class="form-check-input" checked>
             <label class="form-check-label" for="active">
-              {{ ad_user_active }}
+              {{ 'msgActive' | translate }}
             </label>
           </div>
         </div>
@@ -66,7 +66,7 @@
           <div class="form-check">
             <input type="checkbox" name="show_home" id="show_home" value="1" class="form-check-input">
             <label class="form-check-label" for="show_home">
-              {{ ad_user_show_home }}
+              {{ 'categoryShowHomeLabel' | translate }}
             </label>
           </div>
         </div>
@@ -74,7 +74,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-          {{ ad_category_image }}:
+          {{ categoryShowHomeLabel }}:
         </label>
         <div class="col-lg-4">
           <input class="form-control" type="file" name="image" id="pmf-category-image-upload">
@@ -83,7 +83,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="user_id">
-          {{ ad_categ_owner }}
+          {{ 'categoryOwnerLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <select name="user_id" id="user_id" class="form-select">
@@ -94,7 +94,8 @@
       {% if permLevel != 'basic' %}
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="group_id">
-            {{ ad_categ_moderator }}</label>
+            {{ 'categoryModeratorLabel' | translate }}
+          </label>
           <div class="col-lg-4">
             <select name="group_id" id="group_id" class="form-select">
               {{ groupsOptions|raw }}
@@ -143,7 +144,7 @@
               <input type="radio" name="userpermission" id="userpermission_all" value="all"
                      class="form-check-input" checked>
               <label class="form-check-label" for="userpermission_all">
-                {{ ad_entry_all_users }}
+                {{ 'msgAccessAllUsers' | translate }}
               </label>
             </div>
             <div class="form-check">
@@ -169,7 +170,9 @@
 
       <!-- SERP Description -->
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+        <label class="col-lg-2 col-form-label" for="serpDescription">
+          {{ 'msgSerpDescription' | translate }}
+        </label>
         <div class="col-lg-4">
                 <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
                 ></textarea>

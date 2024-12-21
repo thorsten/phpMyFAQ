@@ -261,17 +261,16 @@ $PMF_LANG["ad_news_delsuc"] = "Nội dung đã được xóa.";
 $PMF_LANG["ad_news_updatenews"] = "Chỉnh sửa nội dung";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Thêm một mục mới";
+$PMF_LANG["msgNewCategory"] = "Thêm một mục mới";
 $PMF_LANG["ad_categ_catnum"] = "Mục số";
 $PMF_LANG["ad_categ_subcatnum"] = "Tiểu mục số";
 $PMF_LANG["ad_categ_nya"] = "<em>chưa có!</em>";
-$PMF_LANG["ad_categ_titel"] = "Tên của mục";
+$PMF_LANG["categoryNameLabel"] = "Tên của mục";
 $PMF_LANG["ad_categ_add"] = "Thêm mục";
 $PMF_LANG["ad_categ_existing"] = "Những mục hiện có";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Mục";
 $PMF_LANG["ad_categ_subcateg"] = "Tiểu mục";
-$PMF_LANG["ad_categ_titel"] = "Tên của mục";
 $PMF_LANG["ad_categ_action"] = "Hành động";
 $PMF_LANG["ad_categ_update"] = "chỉnh sửa";
 $PMF_LANG["ad_categ_delete"] = "xóa";
@@ -551,11 +550,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Khoảng cách giữa c
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Không chọn chức năng cho xem các câu hỏi mới?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
-$PMF_LANG['ad_categ_new_main_cat'] = 'như mục chính';
+$PMF_LANG['msgNewCategory_main_cat'] = 'như mục chính';
 $PMF_LANG["ad_categ_paste_error"] = "Không thể di chuyển mục này.";
 $PMF_LANG["ad_categ_move"] = "di chuyển mục";
 $PMF_LANG["ad_categ_lang"] = "Ngôn ngữ";
-$PMF_LANG["ad_categ_desc"] = "Mô tả";
+$PMF_LANG["categoryDescriptionLabel"] = "Mô tả";
 $PMF_LANG["ad_categ_change"] = "Thay đổi với";
 $PMF_LANG["lostPassword"] = "Quên mật khẩu? Nhấp vào đây.";
 $PMF_LANG["lostpwd_err_1"] = "Lỗi: Tên đăng nhập và địa chỉ email không tìm thấy.";
@@ -699,7 +698,7 @@ $PMF_LANG['ad_unlinked_themes'] = 'Gợi ý chủ đề:';
 $PMF_LANG['ad_linked_themes']   = 'Chủ đề liên kết:';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Chủ nhân của mục';
+$PMF_LANG["categoryOwnerLabel"] = 'Chủ nhân của mục';
 $PMF_LANG['adminSection'] = 'Quản trị';
 $PMF_LANG['err_expiredArticle'] = 'Nội dung này đã quá hạn và bạn không thể xem';
 $PMF_LANG['err_expiredNews'] = 'Nội dung này đã quá hạn và bạn không thể xem';
@@ -729,12 +728,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Xem tổng quan các Mục, kể cả c�
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Quyền của thành viên:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Quyền của nhóm:';
-$PMF_LANG['ad_entry_all_users'] = 'Quyền truy cập cho mọi thành viên';
+$PMF_LANG['msgAccessAllUsers'] = 'Quyền truy cập cho mọi thành viên';
 $PMF_LANG['ad_entry_restricted_users'] = 'Quyền truy cập chỉ dành cho';
 $PMF_LANG['ad_entry_all_groups'] = 'Quyền truy cập cho mọi nhóm';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Quyền truy cập chỉ dành cho';
 $PMF_LANG['ad_session_expiration'] = 'Session của bạn sẽ hết hạn trong';
-$PMF_LANG['ad_user_active'] = 'kích hoạt';
+$PMF_LANG['msgActive'] = 'kích hoạt';
 $PMF_LANG['ad_user_blocked'] = 'khóa';
 $PMF_LANG['ad_user_protected'] = 'được bảo vệ';
 

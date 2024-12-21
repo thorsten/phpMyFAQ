@@ -256,11 +256,11 @@ $PMF_LANG["ad_news_delsuc"] = "L'actualité a été supprimée avec succès.";
 $PMF_LANG["ad_news_updatenews"] = "Actualité mise à jour.";
 
 // Category management
-$PMF_LANG["ad_categ_new"] = "Ajouter une nouvelle catégorie";
+$PMF_LANG["msgNewCategory"] = "Ajouter une nouvelle catégorie";
 $PMF_LANG["ad_categ_catnum"] = "Catégorie numéro";
 $PMF_LANG["ad_categ_subcatnum"] = "Sous-catégorie numéro";
 $PMF_LANG["ad_categ_nya"] = "<em>non disponible !</em>";
-$PMF_LANG["ad_categ_titel"] = "Titre de la catégorie";
+$PMF_LANG["categoryNameLabel"] = "Titre de la catégorie";
 $PMF_LANG["ad_categ_add"] = "Ajouter une catégorie";
 $PMF_LANG["ad_categ_existing"] = "Catégories existantes";
 $PMF_LANG["ad_categ_id"] = "#";
@@ -536,11 +536,11 @@ $LANG_CONF["main.urlValidateInterval"] = ["input", "Intervalle entre la vérific
 $LANG_CONF["records.enableVisibilityQuestions"] = ["checkbox", "Désactiver la visibilité de nouvelles questions ?"];
 $LANG_CONF["security.permLevel"] = ["select", "Niveau d'autorisation"];
 
-$PMF_LANG["ad_categ_new_main_cat"] = "comme catégorie principale";
+$PMF_LANG["msgNewCategory_main_cat"] = "comme catégorie principale";
 $PMF_LANG["ad_categ_paste_error"] = "Déplacer cette catégorie est impossible.";
 $PMF_LANG["ad_categ_move"] = "Déplacer la catégorie";
 $PMF_LANG["ad_categ_lang"] = "Langue";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Changer avec";
 
 $PMF_LANG["lostPassword"] = "Mot de passe oublié ?";
@@ -681,7 +681,7 @@ $PMF_LANG["admin_mainmenu_configuration"] = "Configuration";
 $PMF_LANG["admin_mainmenu_logout"] = "Déconnexion";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Propriétaire de la catégorie";
+$PMF_LANG["categoryOwnerLabel"] = "Propriétaire de la catégorie";
 $PMF_LANG["adminSection"] = "Administration";
 $PMF_LANG["err_expiredArticle"] = "Cette entrée a expiré et ne peut plus être affichée";
 $PMF_LANG["err_expiredNews"] = "Cette news a expiré et ne peut plus être affichée";
@@ -711,12 +711,12 @@ $PMF_LANG["ad_menu_categ_structure"] = "Vue d'ensemble des catégories incluant 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG["ad_entry_userpermission"] = "Permissions des utilisateurs :";
 $PMF_LANG["ad_entry_grouppermission"] = "Permissions des groupes :";
-$PMF_LANG["ad_entry_all_users"] = "Accessible à tous les utilisateurs";
+$PMF_LANG["msgAccessAllUsers"] = "Accessible à tous les utilisateurs";
 $PMF_LANG["ad_entry_restricted_users"] = "Accès restreint à";
 $PMF_LANG["ad_entry_all_groups"] = "Accessible à tous les groupes";
 $PMF_LANG["ad_entry_restricted_groups"] = "Accès restreint à";
 $PMF_LANG["ad_session_expiration"] = "La session expire dans";
-$PMF_LANG["ad_user_active"] = "Actif";
+$PMF_LANG["msgActive"] = "Actif";
 $PMF_LANG["ad_user_blocked"] = "Bloqué";
 $PMF_LANG["ad_user_protected"] = "Protégé";
 
@@ -1131,7 +1131,7 @@ $LANG_CONF["main.customPdfFooter"] = ["area", "Pied-de-page PDF personnalisé (H
 $LANG_CONF["records.allowDownloadsForGuests"] = ["checkbox", "Autoriser le téléchargement pour les invités"];
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Attention! Si vous saisissez un mot de passe, vous écraserez le mot de passe de l'utilisateur.";
 $PMF_LANG["ad_delete_all_votings"] = "Effacer tous les votes";
-$PMF_LANG["ad_categ_moderator"] = "Modérateur";
+$PMF_LANG["categoryModeratorLabel"] = "Modérateur";
 $PMF_LANG["ad_clear_all_visits"] = "Effacer toutes les visites";
 $PMF_LANG["ad_reset_visits_success"] = "Les visites ont été effacées avec succès.";
 $LANG_CONF["main.enableMarkdownEditor"] = ["checkbox", "Activer l'éditeur Markdown intégré"];
@@ -1175,8 +1175,8 @@ $LANG_CONF["ldap.ldap_use_anonymous_login"] = ["checkbox", "Enable anonymous LDA
 $LANG_CONF["ldap.ldap_use_dynamic_login"] = ["checkbox", "Enable LDAP dynamic user binding"];
 $LANG_CONF["ldap.ldap_dynamic_login_attribute"] = ["input", "LDAP attribute for dynamic user binding, \"uid\" when using an ADS"];
 $LANG_CONF["seo.enableXMLSitemap"] = ["checkbox", "Activer le sitemap XML"];
-$PMF_LANG["ad_category_image"] = "Image de la catégorie";
-$PMF_LANG["ad_user_show_home"] = "Afficher sur l'accueil";
+$PMF_LANG["categoryImageLabel"] = "Image de la catégorie";
+$PMF_LANG["categoryShowHomeLabel"] = "Afficher sur l'accueil";
 
 // added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
 $PMF_LANG["ad_view_faq"] = "Voir la FAQ";

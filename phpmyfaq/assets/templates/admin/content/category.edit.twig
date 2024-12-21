@@ -18,7 +18,7 @@
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="name">
-            {{ categoryNameLabel }}
+            {{ 'categoryNameLabel' | translate }}
           </label>
           <div class="col-lg-4">
             <input type="text" id="name" name="name" value="{{ categoryName }}" class="form-control">
@@ -27,7 +27,7 @@
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="description">
-            {{ categoryDescriptionLabel }}
+            {{ 'categoryDescriptionLabel' | translate }}
           </label>
           <div class="col-lg-4">
             <textarea id="description" name="description" rows="3" class="form-control"
@@ -39,7 +39,9 @@
           <div class="offset-lg-2 col-lg-4">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="active" id='active' value="1" {{ categoryActive }}>
-              <label class="form-check-label" for="active">{{ categoryActiveLabel }}</label>
+              <label class="form-check-label" for="active">
+                {{ 'msgActive' | translate }}
+              </label>
             </div>
           </div>
         </div>
@@ -49,7 +51,9 @@
             <div class="form-check">
               <input class="form-check-input" type="checkbox" name="show_home" id='show_home' value="1"
                 {{ categoryShowHome }}>
-              <label class="form-check-label" for="show_home">{{ categoryShowHomeLabel }}</label>
+              <label class="form-check-label" for="show_home">
+                {{ 'categoryShowHomeLabel' | translate }}
+              </label>
             </div>
           </div>
         </div>
@@ -57,7 +61,7 @@
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-            {{ categoryImageLabel }}
+            {{ 'categoryImageLabel' | translate }}
           </label>
           <div class="col-lg-4">
             <div class="input-group">
@@ -75,7 +79,7 @@
 
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="user_id">
-            {{ categoryOwnerLabel }}
+            {{ 'categoryOwnerLabel' | translate }}
           </label>
           <div class="col-lg-4">
             <select id="user_id" name="user_id" class="form-select">
@@ -87,7 +91,7 @@
         {% if isMediumPermission %}
           <div class="row mb-2">
             <label class="col-lg-2 col-form-label" for="group_id">
-              {{ categoryModeratorLabel }}
+              {{ 'categoryModeratorLabel' | translate }}
             </label>
             <div class="col-lg-4">
               <select name="group_id" id="group_id" class="form-select">
@@ -134,7 +138,7 @@
               <input type="radio" name="userpermission" id="userpermission_all" value="all"
                      class="form-check-input" {{ allUsers }}>
               <label class="form-check-label" for="userpermission_all">
-                {{ allUsersLabel }}
+                {{ 'msgAccessAllUsers' | translate }}
               </label>
             </div>
             <div class="form-check">
@@ -160,7 +164,9 @@
 
         <!-- SERP Description -->
         <div class="row mb-2">
-          <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+          <label class="col-lg-2 col-form-label" for="serpDescription">
+            {{ 'msgSerpDescription' | translate }}
+          </label>
           <div class="col-lg-4">
                   <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
                   >{{ serpDescription }}</textarea>

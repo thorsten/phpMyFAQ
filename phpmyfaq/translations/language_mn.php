@@ -255,17 +255,16 @@ $PMF_LANG["ad_news_delsuc"] = "Мэдээ устгагдлаа.";
 $PMF_LANG["ad_news_updatenews"] = "Мэдээний өгөгдөл шинэчлэгдсэн.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Шинэ ангилал нэмэх";
+$PMF_LANG["msgNewCategory"] = "Шинэ ангилал нэмэх";
 $PMF_LANG["ad_categ_catnum"] = "Ангиллын дугаар:";
 $PMF_LANG["ad_categ_subcatnum"] = "Дэд ангиллын дугаар:";
 $PMF_LANG["ad_categ_nya"] = "<em>бэлэн биш!</em>";
-$PMF_LANG["ad_categ_titel"] = "Ангиллын нэр:";
+$PMF_LANG["categoryNameLabel"] = "Ангиллын нэр:";
 $PMF_LANG["ad_categ_add"] = "Ангилал нэмэх";
 $PMF_LANG["ad_categ_existing"] = "Бэлэн байгаа ангиллууд";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Ангилал";
 $PMF_LANG["ad_categ_subcateg"] = "Дэд ангилал";
-$PMF_LANG["ad_categ_titel"] = "Ангиллын гарчиг(нэр)";
 $PMF_LANG["ad_categ_action"] = "үйлдэл";
 $PMF_LANG["ad_categ_update"] = "шинэчлэх";
 $PMF_LANG["ad_categ_delete"] = "устгах";
@@ -537,11 +536,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX l
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Зөвшөөрлийн түвшин");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "шинэ үндсэн ангиллын хувьд";
+$PMF_LANG["msgNewCategory_main_cat"] = "шинэ үндсэн ангиллын хувьд";
 $PMF_LANG["ad_categ_paste_error"] = "Энэ ангилалд шилжих боломжгүй.";
 $PMF_LANG["ad_categ_move"] = "ангилал шилжих";
 $PMF_LANG["ad_categ_lang"] = "Хэл";
-$PMF_LANG["ad_categ_desc"] = "Тодорхойлолт";
+$PMF_LANG["categoryDescriptionLabel"] = "Тодорхойлолт";
 $PMF_LANG["ad_categ_change"] = "Өөрчлөх";
 
 $PMF_LANG["lostPassword"] = "Нууц үгээ мартсан уу?";
@@ -689,7 +688,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Тохиргоо';
 $PMF_LANG['admin_mainmenu_logout'] = 'Гарах';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Ангилал эзэмшигч';
+$PMF_LANG["categoryOwnerLabel"] = 'Ангилал эзэмшигч';
 $PMF_LANG['adminSection'] = 'Удирдлага';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
@@ -719,12 +718,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Ангиллын тойм нь хэл б
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Хэрэглэгчийн зөвшөөрлүүд:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Бүлгийн зөвшөөрлүүд:';
-$PMF_LANG['ad_entry_all_users'] = 'Бүх хэрэглэгчид хандах боломжтой';
+$PMF_LANG['msgAccessAllUsers'] = 'Бүх хэрэглэгчид хандах боломжтой';
 $PMF_LANG['ad_entry_restricted_users'] = 'Хязгаарлалттай хандалт';
 $PMF_LANG['ad_entry_all_groups'] = 'Бүх бүлэг хандах боломжтой';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Хязгаарлалттай хандалт';
 $PMF_LANG['ad_session_expiration'] = 'Session expires in';
-$PMF_LANG['ad_user_active'] = 'идэвхтэй';
+$PMF_LANG['msgActive'] = 'идэвхтэй';
 $PMF_LANG['ad_user_blocked'] = 'блоклогдсон';
 $PMF_LANG['ad_user_protected'] = 'хамгаалагдсан';
 

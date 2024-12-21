@@ -259,17 +259,16 @@ $PMF_LANG["ad_news_delsuc"] = "Materi berita sudah dihapus.";
 $PMF_LANG["ad_news_updatenews"] = "Materi berita sudah diperbarui.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Tambah kategori baru";
+$PMF_LANG["msgNewCategory"] = "Tambah kategori baru";
 $PMF_LANG["ad_categ_catnum"] = "Nomor Kategori";
 $PMF_LANG["ad_categ_subcatnum"] = "Nomor Subkategori";
 $PMF_LANG["ad_categ_nya"] = "<em>belum tersedia!</em>";
-$PMF_LANG["ad_categ_titel"] = "Judul Kategori";
+$PMF_LANG["categoryNameLabel"] = "Judul Kategori";
 $PMF_LANG["ad_categ_add"] = "Tambah Kategori";
 $PMF_LANG["ad_categ_existing"] = "Kategori yang Ada";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategori";
 $PMF_LANG["ad_categ_subcateg"] = "Subkategori";
-$PMF_LANG["ad_categ_titel"] = "Judul kategori";
 $PMF_LANG["ad_categ_action"] = "Perintah";
 $PMF_LANG["ad_categ_update"] = "perbarui";
 $PMF_LANG["ad_categ_delete"] = "hapus";
@@ -555,11 +554,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval antara verifik
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Nonaktifkan link untuk membuat Pertanyaan Baru?");
 $LANG_CONF['security.permLevel'] = array("select", "Level Hak Akses");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
+$PMF_LANG["msgNewCategory_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Memidahkan kategori ini tidak dimungkinkan.";
 $PMF_LANG["ad_categ_move"] = "pindahkan kategori";
 $PMF_LANG["ad_categ_lang"] = "Bahasa";
-$PMF_LANG["ad_categ_desc"] = "Keterangan";
+$PMF_LANG["categoryDescriptionLabel"] = "Keterangan";
 $PMF_LANG["ad_categ_change"] = "Ganti dengan";
 
 $PMF_LANG["lostPassword"] = "Lupa kata sandi? Klik di sini.";
@@ -702,7 +701,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasi';
 $PMF_LANG['admin_mainmenu_logout'] = 'Keluar';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Pemilik kategori';
+$PMF_LANG["categoryOwnerLabel"] = 'Pemilik kategori';
 $PMF_LANG['adminSection'] = 'Administrasi';
 $PMF_LANG['err_expiredArticle'] = 'Masa berlaku entri ini sudah berakhir sehingga tidak bisa ditampilkan';
 $PMF_LANG['err_expiredNews'] = 'Masa berlaku berita ini sudah berakhir sehingga tidak bisa ditampilkan';
@@ -732,12 +731,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Ikhtisar Kategori termasuk bahasanya";
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Hak Akses Pengguna:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Hak Akses Grup:';
-$PMF_LANG['ad_entry_all_users'] = 'Akses untuk semua pengguna';
+$PMF_LANG['msgAccessAllUsers'] = 'Akses untuk semua pengguna';
 $PMF_LANG['ad_entry_restricted_users'] = 'Batasi hanya untuk';
 $PMF_LANG['ad_entry_all_groups'] = 'Akses untuk semua grup';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Batasi hanya untuk';
 $PMF_LANG['ad_session_expiration'] = 'Sisa waktu sebelum sesi berakhir';
-$PMF_LANG['ad_user_active'] = 'aktif';
+$PMF_LANG['msgActive'] = 'aktif';
 $PMF_LANG['ad_user_blocked'] = 'diblokir';
 $PMF_LANG['ad_user_protected'] = 'diproteksi';
 

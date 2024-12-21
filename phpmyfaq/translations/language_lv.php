@@ -259,17 +259,16 @@ $PMF_LANG["ad_news_delsuc"] = "Jaunums izdz&ccedil;sts.";
 $PMF_LANG["ad_news_updatenews"] = "Jaunums izmain&icirc;ts";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Pievienot sada&iuml;u";
+$PMF_LANG["msgNewCategory"] = "Pievienot sada&iuml;u";
 $PMF_LANG["ad_categ_catnum"] = "Sada&iuml;a numur";
 $PMF_LANG["ad_categ_subcatnum"] = "Apak&eth;sada&iuml;a numur";
 $PMF_LANG["ad_categ_nya"] = "<em>pa&eth;laik nav pieejama!</em>";
-$PMF_LANG["ad_categ_titel"] = "Sada&iuml;as virsraksts";
+$PMF_LANG["categoryNameLabel"] = "Sada&iuml;as virsraksts";
 $PMF_LANG["ad_categ_add"] = "Pievienot sada&iuml;u";
 $PMF_LANG["ad_categ_existing"] = "Eso&eth;&acirc;s sada&iuml;as";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Sada&iuml;a";
 $PMF_LANG["ad_categ_subcateg"] = "Apak&eth;sada&iuml;a";
-$PMF_LANG["ad_categ_titel"] = "Virsraksts";
 $PMF_LANG["ad_categ_action"] = "Darb&icirc;ba";
 $PMF_LANG["ad_categ_update"] = "izmain&icirc;t";
 $PMF_LANG["ad_categ_delete"] = "Dz&ccedil;st";
@@ -540,11 +539,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG["msgNewCategory_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
 $PMF_LANG["ad_categ_move"] = "move category";
 $PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "Password forgotten? Click here.";

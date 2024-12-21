@@ -259,17 +259,16 @@ $PMF_LANG["ad_news_delsuc"] = "Novice odstranjena.";
 $PMF_LANG["ad_news_updatenews"] = "Posodobi novice";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Dodaj novo kategorjio";
+$PMF_LANG["msgNewCategory"] = "Dodaj novo kategorjio";
 $PMF_LANG["ad_categ_catnum"] = "Št. kategorije";
 $PMF_LANG["ad_categ_subcatnum"] = "Št. podkategorjie";
 $PMF_LANG["ad_categ_nya"] = "<em>še ni dostopno!</em>";
-$PMF_LANG["ad_categ_titel"] = "Opis kategorjie";
+$PMF_LANG["categoryNameLabel"] = "Opis kategorjie";
 $PMF_LANG["ad_categ_add"] = "Dodaj kategorjio";
 $PMF_LANG["ad_categ_existing"] = "Obstoje&egrave;e kategorije";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategorija";
 $PMF_LANG["ad_categ_subcateg"] = "Podkategorija";
-$PMF_LANG["ad_categ_titel"] = "Opis kategorij";
 $PMF_LANG["ad_categ_action"] = "Akcija";
 $PMF_LANG["ad_categ_update"] = "posodobi";
 $PMF_LANG["ad_categ_delete"] = "odstrani";
@@ -550,11 +549,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG["msgNewCategory_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
 $PMF_LANG["ad_categ_move"] = "move category";
 $PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "Password forgotten? Click here.";

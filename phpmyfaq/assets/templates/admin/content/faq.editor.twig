@@ -260,7 +260,9 @@
 
             <!-- SERP Description -->
             <div class="row mb-2">
-              <label class="col-lg-3 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+              <label class="col-lg-3 col-form-label" for="serpDescription">
+                {{ 'msgSerpDescription' | translate }}
+              </label>
               <div class="col-lg-9">
                 <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
                 >{{ faqData['serp-description'] }}</textarea>
@@ -307,7 +309,7 @@
                     <input type="radio" id="allusers" name="userpermission" value="all" class="form-check-input"
                       {{ allUsers ? 'checked' : '' }}>
                     <label class="form-check-label" for="allusers">
-                      {{ ad_entry_all_users }}
+                      {{ 'msgAccessAllUsers' | translate }}
                     </label>
                   </div>
                   <div class="form-check">

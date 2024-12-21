@@ -262,17 +262,16 @@ $PMF_LANG["ad_news_delsuc"] = " Albisteak ezabatu dira.";
 $PMF_LANG["ad_news_updatenews"] = "Albisteak eguneratu";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Atal berria gehitu";
+$PMF_LANG["msgNewCategory"] = "Atal berria gehitu";
 $PMF_LANG["ad_categ_catnum"] = "Atalaren zenbakia";
 $PMF_LANG["ad_categ_subcatnum"] = "Azpiatalaren zenbakia";
 $PMF_LANG["ad_categ_nya"] = "<em>oraindik ezin da erabili!</em>";
-$PMF_LANG["ad_categ_titel"] = "Atalen izenburua";
+$PMF_LANG["categoryNameLabel"] = "Atalen izenburua";
 $PMF_LANG["ad_categ_add"] = "Atala gehitu";
 $PMF_LANG["ad_categ_existing"] = "Dauden atalak";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Atala";
 $PMF_LANG["ad_categ_subcateg"] = "Azpiatala";
-$PMF_LANG["ad_categ_titel"] = "Atalaren izenburua";
 $PMF_LANG["ad_categ_action"] = "Ekintza";
 $PMF_LANG["ad_categ_update"] = "eguneratu";
 $PMF_LANG["ad_categ_delete"] = "ezabatu";
@@ -554,11 +553,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Artikulu berrie
 $LANG_CONF['security.bannedIPs'] = array("area", "IP hauek blokeatu");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";
+$PMF_LANG["msgNewCategory_main_cat"] = "Atal nagusi berri gisa";
 $PMF_LANG["ad_categ_paste_error"] = "Ezinezkoa da atal hau mugitzea.";
 $PMF_LANG["ad_categ_move"] = "Atala mugitu.";
 $PMF_LANG["ad_categ_lang"] = "Hizkuntza";
-$PMF_LANG["ad_categ_desc"] = "Deskribapena";
+$PMF_LANG["categoryDescriptionLabel"] = "Deskribapena";
 $PMF_LANG["ad_categ_change"] = "Honekin aldatu: ";
 
 $PMF_LANG["lostPassword"] = "Zure pasahitza ahaztu al duzu? Hemen klikatu.";

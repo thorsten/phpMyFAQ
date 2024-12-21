@@ -258,17 +258,16 @@ $PMF_LANG["ad_news_delsuc"] = "Naujienų elementas pašalintas.";
 $PMF_LANG["ad_news_updatenews"] = "Naujienų elementas atnaujintas.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Pridėti naują grupę";
+$PMF_LANG["msgNewCategory"] = "Pridėti naują grupę";
 $PMF_LANG["ad_categ_catnum"] = "Grupės numeris";
 $PMF_LANG["ad_categ_subcatnum"] = "Pogrupio numeris";
 $PMF_LANG["ad_categ_nya"] = "<em>dar neprieinama!</em>";
-$PMF_LANG["ad_categ_titel"] = "Grupės pavadinimas";
+$PMF_LANG["categoryNameLabel"] = "Grupės pavadinimas";
 $PMF_LANG["ad_categ_add"] = "Pridėti grupę";
 $PMF_LANG["ad_categ_existing"] = "Egzistuojančios grupės";
 $PMF_LANG["ad_categ_id"] = "nr.";
 $PMF_LANG["ad_categ_categ"] = "Grupė";
 $PMF_LANG["ad_categ_subcateg"] = "Pogrupis";
-$PMF_LANG["ad_categ_titel"] = "Grupės pavadinimas";
 $PMF_LANG["ad_categ_action"] = "Veiksmas";
 $PMF_LANG["ad_categ_update"] = "atnaujinti";
 $PMF_LANG["ad_categ_delete"] = "šalinti";
@@ -560,11 +559,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Intervalas tarp AJAX sa
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Išjungti naujų klausimų matomumą?");
 $LANG_CONF['security.permLevel'] = array("select", "Leidimų lygis");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "kaip naują pagrindinę grupę";
+$PMF_LANG["msgNewCategory_main_cat"] = "kaip naują pagrindinę grupę";
 $PMF_LANG["ad_categ_paste_error"] = "Šios grupės perkelti neįmanoma.";
 $PMF_LANG["ad_categ_move"] = "perkelti grupę";
 $PMF_LANG["ad_categ_lang"] = "Kalba";
-$PMF_LANG["ad_categ_desc"] = "Aprašas";
+$PMF_LANG["categoryDescriptionLabel"] = "Aprašas";
 $PMF_LANG["ad_categ_change"] = "Sukeisti su";
 
 $PMF_LANG["lostPassword"] = "Užmiršote slaptažodį? Spauskite čia.";
@@ -707,7 +706,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigūracija';
 $PMF_LANG['admin_mainmenu_logout'] = 'Atsijungti';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Grupės valdytojas';
+$PMF_LANG["categoryOwnerLabel"] = 'Grupės valdytojas';
 $PMF_LANG['adminSection'] = 'Administravimas';
 $PMF_LANG['err_expiredArticle'] = 'Šis įrašas nebegalioja ir negali būti parodytas';
 $PMF_LANG['err_expiredNews'] = 'Ši naujiena nebegalioja ir negali būti parodyta';
@@ -737,12 +736,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Grupių ir jų vertimų apžvalga";
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Naudotojo teisės:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Naudotojų grupės teisės:';
-$PMF_LANG['ad_entry_all_users'] = 'Prieiga visiems naudotojams';
+$PMF_LANG['msgAccessAllUsers'] = 'Prieiga visiems naudotojams';
 $PMF_LANG['ad_entry_restricted_users'] = 'Ribotoji prieiga';
 $PMF_LANG['ad_entry_all_groups'] = 'Prieiga visoms grupėms';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Ribotoji prieiga';
 $PMF_LANG['ad_session_expiration'] = 'Laikas iki seanso galiojimo pabaigos';
-$PMF_LANG['ad_user_active'] = 'aktyvus';
+$PMF_LANG['msgActive'] = 'aktyvus';
 $PMF_LANG['ad_user_blocked'] = 'blokuotas';
 $PMF_LANG['ad_user_protected'] = 'apsaugotas';
 

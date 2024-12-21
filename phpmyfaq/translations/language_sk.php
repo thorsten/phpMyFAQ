@@ -258,17 +258,16 @@ $PMF_LANG["ad_news_delsuc"] = "Novinka vymazaná.";
 $PMF_LANG["ad_news_updatenews"] = "Novinka aktualizovaná.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Pridať novú kategóriu";
+$PMF_LANG["msgNewCategory"] = "Pridať novú kategóriu";
 $PMF_LANG["ad_categ_catnum"] = "Číslo kategórie";
 $PMF_LANG["ad_categ_subcatnum"] = "Číslo podkategórie";
 $PMF_LANG["ad_categ_nya"] = "<em>nie je prístupné!</em>";
-$PMF_LANG["ad_categ_titel"] = "Názov kategórie";
+$PMF_LANG["categoryNameLabel"] = "Názov kategórie";
 $PMF_LANG["ad_categ_add"] = "Pridať kategóriu";
 $PMF_LANG["ad_categ_existing"] = "Existujúce kategórie";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategória";
 $PMF_LANG["ad_categ_subcateg"] = "Podkategória";
-$PMF_LANG["ad_categ_titel"] = "Názov kategórie";
 $PMF_LANG["ad_categ_action"] = "Akcia";
 $PMF_LANG["ad_categ_update"] = "aktualizovať";
 $PMF_LANG["ad_categ_delete"] = "vymazať";
@@ -554,11 +553,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval medzi AJAX ove
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Vypnúť viditeľnosť nových otázok?");
 $LANG_CONF['security.permLevel'] = array("select", "Úroveň povolenia");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "ako novú hlavnú kategóriu";
+$PMF_LANG["msgNewCategory_main_cat"] = "ako novú hlavnú kategóriu";
 $PMF_LANG["ad_categ_paste_error"] = "Presunúť túto kategóriu nie je možné.";
 $PMF_LANG["ad_categ_move"] = "presunúť kategóriu";
 $PMF_LANG["ad_categ_lang"] = "Jazyk";
-$PMF_LANG["ad_categ_desc"] = "Popis";
+$PMF_LANG["categoryDescriptionLabel"] = "Popis";
 $PMF_LANG["ad_categ_change"] = "Zmeniť šírku";
 
 $PMF_LANG["lostPassword"] = "Zabudli ste heslo? Kliknite sem.";
@@ -701,7 +700,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurácia';
 $PMF_LANG['admin_mainmenu_logout'] = 'Odhlásenie';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Zakladateľ kategórie';
+$PMF_LANG["categoryOwnerLabel"] = 'Zakladateľ kategórie';
 $PMF_LANG['adminSection'] = 'Administrácia';
 $PMF_LANG['err_expiredArticle'] = 'Táto položka vypršala a nemôže byť zobrazená';
 $PMF_LANG['err_expiredNews'] = 'Táto novinka vypršala a nemôže byť zobrazená';
@@ -731,12 +730,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Prehľad kategórií a jazykov";
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Oprávnenia užívateľov:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Oprávnenia skupiny:';
-$PMF_LANG['ad_entry_all_users'] = 'Prístup pre všetkých užívateľov';
+$PMF_LANG['msgAccessAllUsers'] = 'Prístup pre všetkých užívateľov';
 $PMF_LANG['ad_entry_restricted_users'] = 'Obmedzený prístup pre';
 $PMF_LANG['ad_entry_all_groups'] = 'Prístup pre všetky skupiny';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Obmedzený prístup pre';
 $PMF_LANG['ad_session_expiration'] = 'Čas do konca porady';
-$PMF_LANG['ad_user_active'] = 'aktívny';
+$PMF_LANG['msgActive'] = 'aktívny';
 $PMF_LANG['ad_user_blocked'] = 'blokovaný';
 $PMF_LANG['ad_user_protected'] = 'chránený';
 

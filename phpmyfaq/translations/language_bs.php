@@ -258,17 +258,16 @@ $PMF_LANG["ad_news_delsuc"] = "Novost obrisana.";
 $PMF_LANG["ad_news_updatenews"] = "Izmeni novost";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Dodaj novu kategoriju";
+$PMF_LANG["msgNewCategory"] = "Dodaj novu kategoriju";
 $PMF_LANG["ad_categ_catnum"] = "Broj kategorije";
 $PMF_LANG["ad_categ_subcatnum"] = "Broj podkategorije";
 $PMF_LANG["ad_categ_nya"] = "<em>nije dostupan!</em>";
-$PMF_LANG["ad_categ_titel"] = "Ime Kategorije";
+$PMF_LANG["categoryNameLabel"] = "Ime Kategorije";
 $PMF_LANG["ad_categ_add"] = "Dodaj Kategoriju";
 $PMF_LANG["ad_categ_existing"] = "Postoje&#263;e Kategorije";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategorija";
 $PMF_LANG["ad_categ_subcateg"] = "Podkategorija";
-$PMF_LANG["ad_categ_titel"] = "Ima Kategorije";
 $PMF_LANG["ad_categ_action"] = "Akcija";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "Obri&#353;i";
@@ -549,11 +548,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Broj &#269;lana
 $LANG_CONF['security.bannedIPs'] = array("area", "Banuj ove IP");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
+$PMF_LANG["msgNewCategory_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";
 $PMF_LANG["ad_categ_move"] = "premesti kategoriju";
 $PMF_LANG["ad_categ_lang"] = "Jezik";
-$PMF_LANG["ad_categ_desc"] = "Opis";
+$PMF_LANG["categoryDescriptionLabel"] = "Opis";
 $PMF_LANG["ad_categ_change"] = "Zameni sa";
 
 $PMF_LANG["lostPassword"] = "Zaboravljena lozinka? Kliknite ovde.";
@@ -696,7 +695,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguracija';
 $PMF_LANG['admin_mainmenu_logout'] = 'Odjava';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Vlasnik kategorije';
+$PMF_LANG["categoryOwnerLabel"] = 'Vlasnik kategorije';
 $PMF_LANG['adminSection'] = 'Administracija';
 $PMF_LANG['err_expiredArticle'] = 'Ovaj unos je istekao i ne mo&#382;e biti prikazan';
 $PMF_LANG['err_expiredNews'] = 'Ove vesti su istekle i ne mogu biti prikazane';
@@ -726,12 +725,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Pregled kategorije uklju&#269;uju&#263;i
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Ovla&scaron;&#263;enja korisnika:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Grupna ovla&scaron;&#263;enja:';
-$PMF_LANG['ad_entry_all_users'] = 'Pristup svim korisnicima';
+$PMF_LANG['msgAccessAllUsers'] = 'Pristup svim korisnicima';
 $PMF_LANG['ad_entry_restricted_users'] = 'Zabranjen pristup za';
 $PMF_LANG['ad_entry_all_groups'] = 'Pristup za sve grupe';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Zabranjen pristup za';
 $PMF_LANG['ad_session_expiration'] = 'Vreme do isticanja sesije';
-$PMF_LANG['ad_user_active'] = 'aktivno';
+$PMF_LANG['msgActive'] = 'aktivno';
 $PMF_LANG['ad_user_blocked'] = 'blokirano';
 $PMF_LANG['ad_user_protected'] = 'za&scaron;ti&#263;eno';
 

@@ -256,17 +256,16 @@ $PMF_LANG["ad_news_delsuc"] = "Duyuru öğesi başarıyla silindi.";
 $PMF_LANG["ad_news_updatenews"] = "Duyuru öğesi başarıyla güncellendi.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Yeni kategori ekle";
+$PMF_LANG["msgNewCategory"] = "Yeni kategori ekle";
 $PMF_LANG["ad_categ_catnum"] = "Kategori no";
 $PMF_LANG["ad_categ_subcatnum"] = "Alt kategori no";
 $PMF_LANG["ad_categ_nya"] = "<em>henüz geçerli değil!</em>";
-$PMF_LANG["ad_categ_titel"] = "Kategori başlığı";
+$PMF_LANG["categoryNameLabel"] = "Kategori başlığı";
 $PMF_LANG["ad_categ_add"] = "Kategori ekle";
 $PMF_LANG["ad_categ_existing"] = "Mevcut kategoriler";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategori";
 $PMF_LANG["ad_categ_subcateg"] = "Alt kategori";
-$PMF_LANG["ad_categ_titel"] = "Kategori başlığı";
 $PMF_LANG["ad_categ_action"] = "Eylem";
 $PMF_LANG["ad_categ_update"] = "güncelle";
 $PMF_LANG["ad_categ_delete"] = "sil";
@@ -539,11 +538,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX l
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "ana kategori olarak";
+$PMF_LANG["msgNewCategory_main_cat"] = "ana kategori olarak";
 $PMF_LANG["ad_categ_paste_error"] = "Bu kategori taşınamaz.";
 $PMF_LANG["ad_categ_move"] = "Kategori taşı";
 $PMF_LANG["ad_categ_lang"] = "Dil";
-$PMF_LANG["ad_categ_desc"] = "Açıklama";
+$PMF_LANG["categoryDescriptionLabel"] = "Açıklama";
 $PMF_LANG["ad_categ_change"] = "Şununla değiştir";
 
 $PMF_LANG["lostPassword"] = "Şifrenizi mi unuttunuz?";
@@ -684,7 +683,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = "Yapılandırma";
 $PMF_LANG['admin_mainmenu_logout'] = "Çıkış";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Kategori sahibi";
+$PMF_LANG["categoryOwnerLabel"] = "Kategori sahibi";
 $PMF_LANG['adminSection'] = "Yönetim";
 $PMF_LANG['err_expiredArticle'] = "Bu girdinin geçerlilik tarihi sona erdi ve görüntülenemez";
 $PMF_LANG['err_expiredNews'] = "Bu duyurunun geçerlilik tarihi sona erdi ve görüntülenemez";
@@ -714,12 +713,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Kategori özeti ilgili dilleri de kapsar
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = "Kullanıcı izinleri";
 $PMF_LANG['ad_entry_grouppermission'] = "Grup izinleri";
-$PMF_LANG['ad_entry_all_users'] = "Tüm kullanıcılara izin ver";
+$PMF_LANG['msgAccessAllUsers'] = "Tüm kullanıcılara izin ver";
 $PMF_LANG['ad_entry_restricted_users'] = "Şu kullanıcıyla sınırlandır";
 $PMF_LANG['ad_entry_all_groups'] = "Tüm gruplara izin ver";
 $PMF_LANG['ad_entry_restricted_groups'] = "Şu grupla sınırlandır";
 $PMF_LANG['ad_session_expiration'] = "Oturum sonlanma zamanı";
-$PMF_LANG['ad_user_active'] = "Etkin";
+$PMF_LANG['msgActive'] = "Etkin";
 $PMF_LANG['ad_user_blocked'] = "Yasaklı";
 $PMF_LANG['ad_user_protected'] = "Korumalı";
 
@@ -1119,7 +1118,7 @@ $LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allo
 $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests');
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Dikkat! girdiğiniz şifre kullanıcı şifresinin üzerine yazılacaktır.";
 $PMF_LANG["ad_delete_all_votings"] = "Tüm oylamaları temizle";
-$PMF_LANG["ad_categ_moderator"] = "Moderatörler";
+$PMF_LANG["categoryModeratorLabel"] = "Moderatörler";
 $PMF_LANG['ad_clear_all_visits'] = "Tüm ziyaretleri temizle";
 $PMF_LANG['ad_reset_visits_success'] = "Ziyaretçi kayıtları başarıyla sıfırlandı.";
 $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Markdown editor');
@@ -1159,8 +1158,8 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymou
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding');
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array('input', 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap');
-$PMF_LANG['ad_category_image'] = "Kategori görseli";
-$PMF_LANG["ad_user_show_home"] = "başlangıç sayfasında göster";
+$PMF_LANG['categoryImageLabel'] = "Kategori görseli";
+$PMF_LANG["categoryShowHomeLabel"] = "başlangıç sayfasında göster";
 
 // added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
 $PMF_LANG['ad_view_faq'] = "Görüntüle";

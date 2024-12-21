@@ -258,17 +258,16 @@ $PMF_LANG["ad_news_delsuc"] = "समाचार मिटा दिया ग�
 $PMF_LANG["ad_news_updatenews"] = "समाचार अपडेट हो गया.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "नया वर्ग जोडें";
+$PMF_LANG["msgNewCategory"] = "नया वर्ग जोडें";
 $PMF_LANG["ad_categ_catnum"] = "वर्ग संख्या";
 $PMF_LANG["ad_categ_subcatnum"] = "उपवर्ग संख्या";
 $PMF_LANG["ad_categ_nya"] = "<em>अभी तक उपलब्ध नहीं है!</em>";
-$PMF_LANG["ad_categ_titel"] = "वर्ग का विषय";
+$PMF_LANG["categoryNameLabel"] = "वर्ग का विषय";
 $PMF_LANG["ad_categ_add"] = "वर्ग जोडें";
 $PMF_LANG["ad_categ_existing"] = "मौजूद वर्ग";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "वर्ग";
 $PMF_LANG["ad_categ_subcateg"] = "उपवर्ग";
-$PMF_LANG["ad_categ_titel"] = "वर्ग का विषय";
 $PMF_LANG["ad_categ_action"] = "क्रिया";
 $PMF_LANG["ad_categ_update"] = "अभीतकका (update)";
 $PMF_LANG["ad_categ_delete"] = "मिटा दें";
@@ -555,11 +554,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX कड़ी स�
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "नए सवाल न दिखायें?");
 $LANG_CONF['security.permLevel'] = array("input", "आज्ञा समतल");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "नए मुख्य वर्ग के रूप में";
+$PMF_LANG["msgNewCategory_main_cat"] = "नए मुख्य वर्ग के रूप में";
 $PMF_LANG["ad_categ_paste_error"] = "इस वर्ग को यहाँ से हटाना संभव नहीं है.";
 $PMF_LANG["ad_categ_move"] = "वर्ग हटायें";
 $PMF_LANG["ad_categ_lang"] = "भाषा";
-$PMF_LANG["ad_categ_desc"] = "वर्णन";
+$PMF_LANG["categoryDescriptionLabel"] = "वर्णन";
 $PMF_LANG["ad_categ_change"] = "इसके साथ बदलें";
 
 $PMF_LANG["lostPassword"] = "संकेतक शब्द भूल गए? यहाँ क्लिक करें.";
@@ -702,7 +701,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'सरंचना';
 $PMF_LANG['admin_mainmenu_logout'] = 'सत्रांत';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'वर्ग मालिक';
+$PMF_LANG["categoryOwnerLabel"] = 'वर्ग मालिक';
 $PMF_LANG['adminSection'] = 'प्रबंधन';
 $PMF_LANG['err_expiredArticle'] = 'यह एंट्री समाप्त हो चुकी है, इसलिए दिखाई नहीं जा सकती';
 $PMF_LANG['err_expiredNews'] = 'यह समाचार समाप्त हो चुका है, इसलिए दिखाया नहीं जा सकता';
@@ -732,12 +731,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "वर्ग का भाषाओं �
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'प्रयोगकर्ता के अधिकार:';
 $PMF_LANG['ad_entry_grouppermission'] = 'दल के अधिकार:';
-$PMF_LANG['ad_entry_all_users'] = 'सभी के लिए अभिगम्य';
+$PMF_LANG['msgAccessAllUsers'] = 'सभी के लिए अभिगम्य';
 $PMF_LANG['ad_entry_restricted_users'] = 'प्रवेश सिमित';
 $PMF_LANG['ad_entry_all_groups'] = 'सभी दलों के लिए अभिगम्य';
 $PMF_LANG['ad_entry_restricted_groups'] = 'प्रवेश सिमित';
 $PMF_LANG['ad_session_expiration'] = 'आपके सत्र समाप्ति का समय';
-$PMF_LANG['ad_user_active'] = 'सक्रिय';
+$PMF_LANG['msgActive'] = 'सक्रिय';
 $PMF_LANG['ad_user_blocked'] = 'प्रतिबंधित';
 $PMF_LANG['ad_user_protected'] = 'सुरक्षित';
 

@@ -258,17 +258,16 @@ $PMF_LANG["ad_news_delsuc"] = "News item deleted.";
 $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Add new category";
+$PMF_LANG["msgNewCategory"] = "Add new category";
 $PMF_LANG["ad_categ_catnum"] = "Entity Number";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Entity Title";
+$PMF_LANG["categoryNameLabel"] = "Entity Title";
 $PMF_LANG["ad_categ_add"] = "Add Entity";
 $PMF_LANG["ad_categ_existing"] = "Existing Categories";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Entity";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Entity title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
@@ -554,11 +553,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX l
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG["msgNewCategory_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
 $PMF_LANG["ad_categ_move"] = "move category";
 $PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "গোপন সংকেত ভুলে গেছেন?";
@@ -701,7 +700,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Entity owner';
+$PMF_LANG["categoryOwnerLabel"] = 'Entity owner';
 $PMF_LANG['adminSection'] = 'প্রশাসক';
 $PMF_LANG['err_expiredArticle'] = 'প্রশ্নটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['err_expiredNews'] = 'খবরটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
@@ -731,12 +730,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages"
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions';
 $PMF_LANG['ad_entry_grouppermission'] = 'Group permissions';
-$PMF_LANG['ad_entry_all_users'] = 'Access for all users';
+$PMF_LANG['msgAccessAllUsers'] = 'Access for all users';
 $PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
 $PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
 $PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
-$PMF_LANG['ad_user_active'] = 'active';
+$PMF_LANG['msgActive'] = 'active';
 $PMF_LANG['ad_user_blocked'] = 'blocked';
 $PMF_LANG['ad_user_protected'] = 'protected';
 

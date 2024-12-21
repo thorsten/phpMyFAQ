@@ -114,7 +114,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::CATEGORY_EDIT
         'basePath' => $request->getBasePath(),
         'faqlangcode' => $faqLangCode,
         'msgCategoryRemark_overview' => Translation::get('msgCategoryRemark_overview'),
-        'ad_categ_title' => Translation::get('ad_categ_titel'),
+        'categoryNameLabel' => Translation::get('categoryNameLabel'),
         'ad_categ_translate' => Translation::get('ad_categ_translate'),
         'ad_menu_categ_structure' => Translation::get('ad_menu_categ_structure'),
         'msgAddCategory' => Translation::get('msgAddCategory'),

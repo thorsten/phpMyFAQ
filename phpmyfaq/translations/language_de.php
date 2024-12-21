@@ -253,17 +253,16 @@ $PMF_LANG['ad_news_delsuc'] = "Der Eintrag wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_news_updatenews'] = "Neuigkeiten-Eintrag bearbeiten";
 
 // Kategorieverwaltung
-$PMF_LANG['ad_categ_new'] = "Neue Kategorie hinzufügen";
+$PMF_LANG['msgNewCategory'] = "Neue Kategorie hinzufügen";
 $PMF_LANG['ad_categ_catnum'] = "Kategorienummer";
 $PMF_LANG['ad_categ_subcatnum'] = "Unterkategorienummer";
 $PMF_LANG['ad_categ_nya'] = "Noch nicht verfügbar!";
-$PMF_LANG['ad_categ_titel'] = "Kategoriename";
+$PMF_LANG['categoryNameLabel'] = "Kategoriename";
 $PMF_LANG['ad_categ_add'] = "Kategorie hinzufügen";
 $PMF_LANG['ad_categ_existing'] = "Bestehende Kategorien";
 $PMF_LANG['ad_categ_id'] = "#";
 $PMF_LANG['ad_categ_categ'] = "Kategorie-ID";
 $PMF_LANG['ad_categ_subcateg'] = "Unterkategorie-ID";
-$PMF_LANG['ad_categ_titel'] = "Kategoriename";
 $PMF_LANG['ad_categ_action'] = "Aktion";
 $PMF_LANG['ad_categ_update'] = "Bearbeiten";
 $PMF_LANG['ad_categ_delete'] = "Löschen";
@@ -533,11 +532,11 @@ $LANG_CONF['main.referenceURL'] = ['input', 'URL der FAQ', 'zB https://www.examp
 $LANG_CONF['records.enableVisibilityQuestions'] = ["checkbox", "Sichtbarkeit von neuen Fragen"];
 $LANG_CONF['security.permLevel'] = ["select", "Berechtigungsebene"];
 
-$PMF_LANG['ad_categ_new_main_cat'] = "Als neue Hauptkategorie";
+$PMF_LANG['msgNewCategory_main_cat'] = "Als neue Hauptkategorie";
 $PMF_LANG['ad_categ_paste_error'] = "Diese Kategorie kann hier nicht eingefügt werden.";
 $PMF_LANG['ad_categ_move'] = "Kategorie verschieben";
 $PMF_LANG['ad_categ_lang'] = "Sprache";
-$PMF_LANG['ad_categ_desc'] = "Beschreibung";
+$PMF_LANG['categoryDescriptionLabel'] = "Beschreibung";
 $PMF_LANG['ad_categ_change'] = "Austauschen mit";
 
 $PMF_LANG['lostPassword'] = "Passwort vergessen?";
@@ -678,7 +677,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = "Konfiguration";
 $PMF_LANG['admin_mainmenu_logout'] = "Ausloggen";
 
 // added v2.0.0 - 2006-08-15 by Thorsten
-$PMF_LANG['ad_categ_owner'] = "Kategorieverwalter";
+$PMF_LANG['categoryOwnerLabel'] = "Kategorieverwalter";
 $PMF_LANG['adminSection'] = "Administration";
 $PMF_LANG['err_expiredArticle'] = "Diese FAQ ist abgelaufen und kann nicht angezeigt werden";
 $PMF_LANG['err_expiredNews'] = "Diese Nachricht ist abgelaufen und kann nicht angezeigt werden";
@@ -708,12 +707,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "Übersicht der Kategorien und der Übers
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = "Benutzerrechte";
 $PMF_LANG['ad_entry_grouppermission'] = "Gruppenrechte";
-$PMF_LANG['ad_entry_all_users'] = "Zugriff für alle Benutzer";
+$PMF_LANG['msgAccessAllUsers'] = "Zugriff für alle Benutzer";
 $PMF_LANG['ad_entry_restricted_users'] = "Zugriff nur für";
 $PMF_LANG['ad_entry_all_groups'] = "Zugriff für alle Gruppen";
 $PMF_LANG['ad_entry_restricted_groups'] = "Zugriff nur für";
 $PMF_LANG['ad_session_expiration'] = "Ablauf der Session";
-$PMF_LANG['ad_user_active'] = "aktiv";
+$PMF_LANG['msgActive'] = "aktiv";
 $PMF_LANG['ad_user_blocked'] = "geblockt";
 $PMF_LANG['ad_user_protected'] = "geschützt";
 
@@ -1127,7 +1126,7 @@ $LANG_CONF['main.customPdfFooter'] = ['area', 'Eigener PDF Footer', 'HTML erlaub
 $LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Erlaube Downloads von Gästen'];
 $PMF_LANG['ad_msgNoteAboutPasswords'] = "Achtung! Beim Ausfüllen der Passwortfelder überschreiben Sie die Passwörter des Benutzers.";
 $PMF_LANG['ad_delete_all_votings'] = "Alle Bewertungen löschen";
-$PMF_LANG['ad_categ_moderator'] = "Moderatoren";
+$PMF_LANG['categoryModeratorLabel'] = "Moderatoren";
 $PMF_LANG['ad_clear_all_visits'] = "Alle Besuche zurücksetzen";
 $PMF_LANG['ad_reset_visits_success'] = 'Die Besuche wurden erfolgreich zurückgesetzt';
 $LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Aktivierung des Markdown Editors'];
@@ -1171,8 +1170,8 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Unterstützung für 
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Unterstützung für dynamisches User Binding'];
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP Attribut bei dynamischen User Binding', '"uid" bei Nutzung eines ADS'];
 $LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Aktiviere XML Sitemap'];
-$PMF_LANG['ad_category_image'] = 'Kategorie-Bild';
-$PMF_LANG['ad_user_show_home'] = "Auf der Startseite anzeigen";
+$PMF_LANG['categoryImageLabel'] = 'Kategorie-Bild';
+$PMF_LANG['categoryShowHomeLabel'] = "Auf der Startseite anzeigen";
 
 // added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
 $PMF_LANG['ad_view_faq'] = 'FAQ ansehen';

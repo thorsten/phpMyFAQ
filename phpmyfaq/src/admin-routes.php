@@ -82,6 +82,11 @@ $routesConfig = [
         'controller' => [CategoryController::class, 'addChild'],
         'methods' => 'GET'
     ],
+    'admin.category.create' => [
+        'path' => '/category/create',
+        'controller' => [CategoryController::class, 'create'],
+        'methods' => 'POST'
+    ],
     'admin.category.edit' => [
         'path' => '/category/edit/{categoryId}',
         'controller' => [CategoryController::class, 'edit'],

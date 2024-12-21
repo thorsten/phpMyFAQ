@@ -259,17 +259,16 @@ $PMF_LANG["ad_news_delsuc"] = "삭제되었습니다.";
 $PMF_LANG["ad_news_updatenews"] = "공지 수정";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "카테고리 추가";
+$PMF_LANG["msgNewCategory"] = "카테고리 추가";
 $PMF_LANG["ad_categ_catnum"] = "카테고리 번호";
 $PMF_LANG["ad_categ_subcatnum"] = "하위 카테고리 번호";
 $PMF_LANG["ad_categ_nya"] = "<em>사용할 수 없습니다.</em>";
-$PMF_LANG["ad_categ_titel"] = "카테고리명";
+$PMF_LANG["categoryNameLabel"] = "카테고리명";
 $PMF_LANG["ad_categ_add"] = "카테고리 추가";
 $PMF_LANG["ad_categ_existing"] = "등록된 카테고리";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "카테고리";
 $PMF_LANG["ad_categ_subcateg"] = "하위 카테고리";
-$PMF_LANG["ad_categ_titel"] = "카테고리명";
 $PMF_LANG["ad_categ_action"] = "동작";
 $PMF_LANG["ad_categ_update"] = "수정";
 $PMF_LANG["ad_categ_delete"] = "삭제";
@@ -550,11 +549,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "공지사항 �
 $LANG_CONF['security.bannedIPs'] = array("area", "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
+$PMF_LANG["msgNewCategory_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";
 $PMF_LANG["ad_categ_move"] = "카테고리 이동";
 $PMF_LANG["ad_categ_lang"] = "언어";
-$PMF_LANG["ad_categ_desc"] = "설명";
+$PMF_LANG["categoryDescriptionLabel"] = "설명";
 $PMF_LANG["ad_categ_change"] = "선택한 카테고리와 자리 바꿈";
 
 $PMF_LANG["lostPassword"] = "비밀번호를 잊으셨나요? 여기를 클릭하세요.";

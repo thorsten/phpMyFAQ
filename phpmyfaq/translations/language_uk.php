@@ -257,17 +257,16 @@ $PMF_LANG["ad_news_delsuc"] = "Новина видалена.";
 $PMF_LANG["ad_news_updatenews"] = "Зберегти";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Створення нової категорії";
+$PMF_LANG["msgNewCategory"] = "Створення нової категорії";
 $PMF_LANG["ad_categ_catnum"] = "Номер категорії";
 $PMF_LANG["ad_categ_subcatnum"] = "Номер підкатегорії";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Назва категорії";
+$PMF_LANG["categoryNameLabel"] = "Назва категорії";
 $PMF_LANG["ad_categ_add"] = "Додати категорію";
 $PMF_LANG["ad_categ_existing"] = "Категорії";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Категорія";
 $PMF_LANG["ad_categ_subcateg"] = "Підкатегорія";
-$PMF_LANG["ad_categ_titel"] = "Заголовок";
 $PMF_LANG["ad_categ_action"] = "Дія";
 $PMF_LANG["ad_categ_update"] = "відновити";
 $PMF_LANG["ad_categ_delete"] = "видалити";
@@ -550,11 +549,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG["msgNewCategory_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
 $PMF_LANG["ad_categ_move"] = "move category";
 $PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "Password forgotten? Click here.";
@@ -595,7 +594,7 @@ $PMF_LANG["ad_you_should_update"] = "Your phpMyFAQ installation is outdated. You
 $PMF_LANG["msgAdvancedSearch"] = "Докладний пошук";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Entity owner";
+$PMF_LANG["categoryOwnerLabel"] = "Entity owner";
 $PMF_LANG["adminSection"] = "Administration";
 $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed";
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";
@@ -656,7 +655,7 @@ $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Власник категорії";
+$PMF_LANG["categoryOwnerLabel"] = "Власник категорії";
 $PMF_LANG["adminSection"] = "Адміністрування";
 $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed";
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";

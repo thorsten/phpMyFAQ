@@ -256,17 +256,16 @@ $PMF_LANG["ad_news_delsuc"] = "新聞已經刪除成功。 (The news has been su
 $PMF_LANG["ad_news_updatenews"] = "新聞項目已更新。";
 
 // Kategorieverwaltung / Entity Administration / 類別管理
-$PMF_LANG["ad_categ_new"] = "新增類別";
+$PMF_LANG["msgNewCategory"] = "新增類別";
 $PMF_LANG["ad_categ_catnum"] = "類別編號";
 $PMF_LANG["ad_categ_subcatnum"] = "子類別編號";
 $PMF_LANG["ad_categ_nya"] = "<em>尚未可以使用!</em>";
-$PMF_LANG["ad_categ_titel"] = "類別標題";
+$PMF_LANG["categoryNameLabel"] = "類別標題";
 $PMF_LANG["ad_categ_add"] = "新增類別";
 $PMF_LANG["ad_categ_existing"] = "已存在類別";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "類別";
 $PMF_LANG["ad_categ_subcateg"] = "子類別";
-$PMF_LANG["ad_categ_titel"] = "類別標題";
 $PMF_LANG["ad_categ_action"] = "動作";
 $PMF_LANG["ad_categ_update"] = "更新";
 $PMF_LANG["ad_categ_delete"] = "刪除";
@@ -538,11 +537,11 @@ $LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX 連結確認時間
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "新問題不可被顯示? Disable visibility of new questions?");
 $LANG_CONF["security.permLevel"] = array("select", "權限等級 Permission level");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "為新的主類別 (as new main category)";
+$PMF_LANG["msgNewCategory_main_cat"] = "為新的主類別 (as new main category)";
 $PMF_LANG["ad_categ_paste_error"] = "不可移動此類別。 (Moving this category isn't possible.)";
 $PMF_LANG["ad_categ_move"] = "移動類別 (move category)";
 $PMF_LANG["ad_categ_lang"] = "語言 (Language)";
-$PMF_LANG["ad_categ_desc"] = "敘述 (Description)";
+$PMF_LANG["categoryDescriptionLabel"] = "敘述 (Description)";
 $PMF_LANG["ad_categ_change"] = "變更與 (Change with)";
 
 $PMF_LANG["lostPassword"] = "忘記密碼? (Password forgotten?)";
@@ -684,7 +683,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = "設定 Configuration";
 $PMF_LANG['admin_mainmenu_logout'] = "登出 Logout";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo 開發者
-$PMF_LANG["ad_categ_owner"] = "類別擁有者 CategoryHelper owner";
+$PMF_LANG["categoryOwnerLabel"] = "類別擁有者 CategoryHelper owner";
 $PMF_LANG['adminSection'] = "系統管理 Administration";
 $PMF_LANG['err_expiredArticle'] = "此 entry 已過期，與不能被顯示! This entry is expired and can not be displayed";
 $PMF_LANG['err_expiredNews'] = "這條新聞已過期，與不能被顯示。This news is expired and can not be displayed";
@@ -714,12 +713,12 @@ $PMF_LANG['ad_menu_categ_structure'] = "類別概況包含它的語言 Entity Ov
 // added v2.0.0 - 2006-09-26 by Thorsten 開發者
 $PMF_LANG['ad_entry_userpermission'] = "使用者權限 User permissions";
 $PMF_LANG['ad_entry_grouppermission'] = "群組權限 Group permissions";
-$PMF_LANG['ad_entry_all_users'] = "全部使用者的存取 Access for all users";
+$PMF_LANG['msgAccessAllUsers'] = "全部使用者的存取 Access for all users";
 $PMF_LANG['ad_entry_restricted_users'] = "限制存取 Restricted access to";
 $PMF_LANG['ad_entry_all_groups'] = "全部群組的存取 Access for all groups";
 $PMF_LANG['ad_entry_restricted_groups'] = "限制存取 Restricted access to";
 $PMF_LANG['ad_session_expiration'] = "連線 Session 時間終止於 Session expires in";
-$PMF_LANG['ad_user_active'] = "作用中 active";
+$PMF_LANG['msgActive'] = "作用中 active";
 $PMF_LANG['ad_user_blocked'] = "已封鎖 blocked";
 $PMF_LANG['ad_user_protected'] = "已保護 protected";
 
