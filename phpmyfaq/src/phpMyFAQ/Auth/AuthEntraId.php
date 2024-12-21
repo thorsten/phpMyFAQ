@@ -63,8 +63,15 @@ class AuthEntraId extends Auth implements AuthDriverInterface
      */
     public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): mixed
     {
+        $result = false;
         $user = new User($this->configuration);
-        $result = $user->createUser($login, '', $domain);
+
+        try {
+            $result = $user->createUser($login, '', $domain);
+        } catch (\Exception $e) {
+            $this->configuration->getLogger()->info($e->getMessage());
+        }
+
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
 
