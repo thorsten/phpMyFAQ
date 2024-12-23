@@ -72,7 +72,7 @@ export const handleInstances = () => {
               addElement(
                 'a',
                 {
-                  href: `?action=edit-instance&instance_id=${response.added}`,
+                  href: `./instance/edit/${response.added}`,
                   classList: 'btn btn-info',
                 },
                 [addElement('i', { classList: 'bi bi-pencil', ariaHidden: true })]
