@@ -25,6 +25,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
+use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Comments;
@@ -118,6 +119,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.captcha.helper.captcha_helper', CaptchaHelper::class)
         ->factory([CaptchaHelper::class, 'getInstance'])
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.category.image', Image::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
@@ -216,6 +222,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.search', Search::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.seo', Seo::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

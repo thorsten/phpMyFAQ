@@ -268,10 +268,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
                 require 'faqs.editor.php';
                 break;
             // category administration
-            case 'savecategory':
-            case 'updatecategory':
-                require 'category.main.php';
-                break;
             case 'translatecategory':
                 require 'category.translate.php';
                 break;

@@ -16,7 +16,7 @@
 
 <div class="row mb-2">
   <div class="col-lg-12">
-    <form enctype="multipart/form-data" action="?action=savecategory" method="post">
+    <form enctype="multipart/form-data" action="./category/create" method="post">
       <input type="hidden" id="lang" name="lang" value="{{ faqLangCode }}">
       <input type="hidden" name="parent_id" value="{{ parentId }}">
       {{ csrfTokenInput|raw }}

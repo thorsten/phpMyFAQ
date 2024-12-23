@@ -92,6 +92,11 @@ $routesConfig = [
         'controller' => [CategoryController::class, 'edit'],
         'methods' => 'GET'
     ],
+    'admin.category.update' => [
+        'path' => '/category/update',
+        'controller' => [CategoryController::class, 'update'],
+        'methods' => 'POST'
+    ],
     'admin.content.sticky-faqs' => [
         'path' => '/sticky-faqs',
         'controller' => [StickyFaqsController::class, 'index'],

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
@@ -15,6 +18,7 @@ use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -150,12 +154,143 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
+        $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('save-category', $csrfToken)) {
+            throw new Exception('Invalid CSRF token');
+        }
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $categoryPermission = new Permission($this->configuration);
+        $seo = $this->container->get('phpmyfaq.seo');
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $parentId = Filter::filterVar($request->get('parent_id'), FILTER_VALIDATE_INT);
+        $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
+        $categoryLang = Filter::filterVar($request->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $uploadedFile = $request->files->get('image') ?? [];
+        $categoryImage = $this->container->get('phpmyfaq.category.image');
+        if ($uploadedFile instanceof UploadedFile) {
+            $categoryImage->setUploadedFile($uploadedFile);
+        }
+
+        $categoryEntity = new CategoryEntity();
+        $categoryEntity
+            ->setParentId($parentId)
+            ->setLang($categoryLang)
+            ->setName(Filter::filterVar($request->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setDescription(Filter::filterVar($request->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
+            ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
+            ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
+            ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
+            ->setParentId($parentId)
+            ->setShowHome(Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
+
+        $permissions = [];
+        if ('all' === Filter::filterVar($request->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+            $permissions += [
+                'restricted_user' => [
+                    -1,
+                ],
+            ];
+        } else {
+            $permissions += [
+                'restricted_user' => [
+                    Filter::filterVar($request->get('restricted_users'), FILTER_VALIDATE_INT),
+                ],
+            ];
+        }
+
+        if ('all' === Filter::filterVar($request->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+            $permissions += [
+                'restricted_groups' => [
+                    -1,
+                ],
+            ];
+        } else {
+            $permissions += Filter::filterArray(
+                [
+                    'restricted_groups' => [
+                        'filter' => FILTER_VALIDATE_INT,
+                        'flags' => FILTER_REQUIRE_ARRAY,
+                    ],
+                ]
+            );
+        }
+
+        $templateVars = [
+            'msgHeaderCategoryMain' => Translation::get('msgHeaderCategoryOverview'),
+        ];
+
+        if ($category->checkIfCategoryExists($categoryEntity) > 0) {
+            $templateVars = [
+                ...$templateVars,
+                'isError' => true,
+                'errorMessage' => Translation::get('ad_categ_existing'),
+            ];
+        }
+
+        $categoryId = $category->create($categoryEntity);
+
+        if ($categoryId) {
+            $categoryPermission->add(Permission::USER, [$categoryId], $permissions['restricted_user']);
+            $categoryPermission->add(
+                Permission::GROUP,
+                [$categoryId],
+                $permissions['restricted_groups']
+            );
+
+            if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+                try {
+                    $categoryImage->upload();
+                } catch (Exception $exception) {
+                    $templateVars = [
+                        ...$templateVars,
+                        'isWarning' => true,
+                        'warningMessage' => $exception->getMessage(),
+                    ];
+                }
+            }
+
+            // Category Order entry
+            $categoryOrder = $this->container->get('phpmyfaq.category.order');
+            $categoryOrder->add($categoryId, $parentId);
+
+            // SEO data
+            $seoEntity = new SeoEntity();
+            $seoEntity
+                ->setType(SeoType::CATEGORY)
+                ->setReferenceId($categoryId)
+                ->setReferenceLanguage($categoryLang)
+                ->setTitle(Filter::filterVar($request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setDescription(Filter::filterVar($request->get('serpDescription'), FILTER_SANITIZE_SPECIAL_CHARS));
+            $seo->create($seoEntity);
+
+            $templateVars = [
+                ...$templateVars,
+                'isSuccess' => true,
+                'successMessage' => Translation::get('ad_categ_added')
+            ];
+        } else {
+            $templateVars = [
+                ...$templateVars,
+                'isError' => true,
+                'errorMessage' => $this->configuration->getDb()->error(),
+            ];
+        }
+
         return $this->render(
-            '@admin/content/category.overview.twig',
+            '@admin/content/category.main.twig',
             [
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
                 ... $this->getBaseTemplateVars(),
+                ...$templateVars,
             ],
         );
     }
@@ -260,6 +395,204 @@ class CategoryController extends AbstractAdministrationController
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
+            ],
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route('/category/update', name: 'admin.category.update', methods: ['POST'])]
+    public function update(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
+
+        $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-category', $csrfToken)) {
+            throw new Exception('Invalid CSRF token');
+        }
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $categoryPermission = new Permission($this->configuration);
+        $seo = $this->container->get('phpmyfaq.seo');
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $parentId = Filter::filterVar($request->get('parent_id'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
+        $categoryLang = Filter::filterVar($request->get('catlang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $existingImage = Filter::filterVar($request->get('existing_image'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $uploadedFile = $request->files->get('image') ?? [];
+        $categoryImage = $this->container->get('phpmyfaq.category.image');
+        if ($uploadedFile instanceof UploadedFile) {
+            $categoryImage->setUploadedFile($uploadedFile);
+        }
+
+        $existingImage = is_null($existingImage) ? '' : $existingImage;
+        $image = count($uploadedFile) ? $categoryImage->getFileName(
+            $categoryId,
+            $categoryLang
+        ) : $existingImage;
+
+
+        $categoryEntity = new CategoryEntity();
+        $categoryEntity
+            ->setId($categoryId)
+            ->setLang($categoryLang)
+            ->setParentId($parentId)
+            ->setName(Filter::filterVar($request->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setDescription(Filter::filterVar($request->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
+            ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
+            ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
+            ->setImage($image)
+            ->setShowHome(Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
+
+        $permissions = [];
+        if ('all' === Filter::filterVar($request->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+            $permissions += [
+                'restricted_user' => [
+                    -1,
+                ],
+            ];
+        } else {
+            $permissions += [
+                'restricted_user' => [
+                    Filter::filterVar($request->get('restricted_users'), FILTER_VALIDATE_INT),
+                ],
+            ];
+        }
+
+        if ('all' === Filter::filterVar($request->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+            $permissions += [
+                'restricted_groups' => [
+                    -1,
+                ],
+            ];
+        } else {
+            $permissions += Filter::filterArray(
+                [
+                    'restricted_groups' => [
+                        'filter' => FILTER_VALIDATE_INT,
+                        'flags' => FILTER_REQUIRE_ARRAY,
+                    ],
+                ]
+            );
+        }
+
+        $templateVars = [
+            'msgHeaderCategoryMain' => Translation::get('msgHeaderCategoryOverview'),
+        ];
+
+        if (!$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang())) {
+            if (
+                $category->create($categoryEntity) && $categoryPermission->add(
+                    Permission::USER,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_user']
+                ) && $categoryPermission->add(
+                    Permission::GROUP,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_groups']
+                )
+            ) {
+                // Add SERP-Title and Description to translated category
+                $seoEntity = new SeoEntity();
+                $seoEntity
+                    ->setType(SeoType::CATEGORY)
+                    ->setReferenceId($categoryEntity->getId())
+                    ->setReferenceLanguage($categoryEntity->getLang())
+                    ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+
+                if ($seo->get(clone $seoEntity)->getId() === null) {
+                    $seo->create($seoEntity);
+                } else {
+                    $seo->update($seoEntity);
+                }
+
+                $templateVars = [
+                    ...$templateVars,
+                    'isSuccess' => true,
+                    'successMessage' => Translation::get('ad_categ_translated')
+                ];
+            } else {
+                $templateVars = [
+                    ...$templateVars,
+                    'isError' => true,
+                    'errorMessage' => $this->configuration->getDb()->error(),
+                ];
+            }
+        } else {
+            if ($category->update($categoryEntity)) {
+                $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
+                $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
+                $categoryPermission->add(
+                    Permission::USER,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_user']
+                );
+                $categoryPermission->add(
+                    Permission::GROUP,
+                    [$categoryEntity->getId()],
+                    $permissions['restricted_groups']
+                );
+
+                if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+                    try {
+                        $categoryImage->upload();
+                    } catch (Exception $exception) {
+                        $templateVars = [
+                            ...$templateVars,
+                            'isWarning' => true,
+                            'warningMessage' => $exception->getMessage(),
+                        ];
+                    }
+                }
+
+                // SEO data
+                $seoEntity = new SeoEntity();
+                $seoEntity
+                    ->setType(SeoType::CATEGORY)
+                    ->setReferenceId($categoryId)
+                    ->setReferenceLanguage($categoryLang)
+                    ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                    ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+
+                if ($seo->get(clone $seoEntity)->getId() === null) {
+                    $seo->create($seoEntity);
+                } else {
+                    $seo->update($seoEntity);
+                }
+
+                $templateVars = [
+                    ...$templateVars,
+                    'isSuccess' => true,
+                    'successMessage' => Translation::get('ad_categ_updated')
+                ];
+            } else {
+                $templateVars = [
+                    ...$templateVars,
+                    'isError' => true,
+                    'errorMessage' => $this->configuration->getDb()->error(),
+                ];
+            }
+        }
+
+
+        return $this->render(
+            '@admin/content/category.main.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                ...$templateVars,
             ],
         );
     }
