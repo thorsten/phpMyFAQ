@@ -267,10 +267,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
             case 'copyentry':
                 require 'faqs.editor.php';
                 break;
-            // category administration
-            case 'showcategory':
-                require 'category.showstructure.php';
-                break;
             // Config administration
             case 'forms':
                 require 'forms.php';

@@ -92,6 +92,11 @@ $routesConfig = [
         'controller' => [CategoryController::class, 'edit'],
         'methods' => 'GET'
     ],
+    'admin.category.hierarchy' => [
+        'path' => '/category/hierarchy',
+        'controller' => [CategoryController::class, 'hierarchy'],
+        'methods' => 'GET'
+    ],
     'admin.category.translate' => [
         'path' => '/category/translate/{categoryId}',
         'controller' => [CategoryController::class, 'translate'],

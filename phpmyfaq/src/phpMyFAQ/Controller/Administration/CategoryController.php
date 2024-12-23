@@ -405,6 +405,78 @@ class CategoryController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
+    #[Route('/category/hierarchy', name: 'admin.category.hierarchy', methods: ['GET'])]
+    public function hierarchy(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $category->getMissingCategories();
+        $category->buildCategoryTree();
+
+        $currentLangCode = $this->configuration->getLanguage()->getLanguage();
+        $currentLanguage = LanguageCodes::get($currentLangCode);
+
+        // get languages in use for all categories
+        $allLanguages = $this->configuration->getLanguage()->isLanguageAvailable(0, 'faqcategories');
+        $languages = [];
+        foreach ($allLanguages as $lang) {
+            $languages[$lang] = LanguageCodes::get($lang);
+        }
+        asort($languages);
+
+        $translations = [];
+
+        foreach ($category->getCategoryTree() as $cat) {
+            $languageIds = $category->getCategoryLanguagesTranslated((int) $cat['id']);
+            $translationArray = [];
+            foreach ($languageIds as $lang => $title) {
+                $translationArray[] = $lang;
+            }
+            $translations[$cat['id']] = $translationArray;
+        }
+
+        $languageCodes = [LanguageCodes::getKey($currentLanguage)];
+        foreach ($languages as $language) {
+            if ($language !== $currentLanguage) {
+                $languageCodes[] = LanguageCodes::getKey($language);
+            }
+        }
+
+        return $this->render(
+            '@admin/content/category.hierarchy.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'currentLanguage' => $currentLanguage,
+                'allLangs' => $languages,
+                'allLangCodes' => $languageCodes,
+                'categoryTree' => $category->getCategoryTree(),
+                'basePath' => $request->getBasePath(),
+                'faqlangcode' => $currentLangCode,
+                'msgCategoryRemark_overview' => Translation::get('msgCategoryRemark_overview'),
+                'categoryNameLabel' => Translation::get('categoryNameLabel'),
+                'ad_categ_translate' => Translation::get('ad_categ_translate'),
+                'ad_menu_categ_structure' => Translation::get('ad_menu_categ_structure'),
+                'msgAddCategory' => Translation::get('msgAddCategory'),
+                'msgHeaderCategoryOverview' => Translation::get('msgHeaderCategoryOverview'),
+                'msgCategory' => Translation::get('msgCategory'),
+                'translations' => $translations,
+                'ad_categ_translated' => Translation::get('ad_categ_translated')
+            ],
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
     #[Route('/category/translate/:categoryId', name: 'admin.category.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
@@ -421,33 +493,34 @@ class CategoryController extends AbstractAdministrationController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $id = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $translateTo = Filter::filterVar($request->query->get('translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $userPermission = $categoryPermission->get(Permission::USER, [$id]);
-        $groupPermission = $categoryPermission->get(Permission::GROUP, [$id]);
+        $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
+        $groupPermission = $categoryPermission->get(Permission::GROUP, [$categoryId]);
 
         return $this->render(
             '@admin/content/category.translate.twig',
             [
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
-                'categoryName' => $category->categoryName[$id]['name'],
+                'categoryName' => $category->categoryName[$categoryId]['name'],
                 'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
                 'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
-                'categoryId' => $id,
-                'category' => $category->categoryName[$id],
+                'categoryId' => $categoryId,
+                'category' => $category->categoryName[$categoryId],
                 'permLevel' => $this->configuration->get('security.permLevel'),
                 'groupPermission' => $groupPermission[0],
                 'userPermission' => $userPermission[0],
                 'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
                 'categoryNameLabel' => Translation::get('categoryNameLabel'),
                 'ad_categ_lang' => Translation::get('ad_categ_lang'),
-                'langToTranslate' => $category->getCategoryLanguagesToTranslate($id, 'de'),
+                'langToTranslate' => $category->getCategoryLanguagesToTranslate($categoryId, $translateTo),
                 'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
                 'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
-                'userOptions' => $userHelper->getAllUserOptions((int) $category->categoryName[$id]['user_id']),
+                'userOptions' => $userHelper->getAllUserOptions((int) $category->categoryName[$categoryId]['user_id']),
                 'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
-                'langTranslated' => $category->getCategoryLanguagesTranslated($id),
+                'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
                 'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg')
 
             ],
