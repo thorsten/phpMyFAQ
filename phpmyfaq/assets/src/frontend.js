@@ -14,7 +14,6 @@
  */
 
 import Masonry from 'masonry-layout';
-
 import { handleContactForm } from './contact';
 import {
   handleAddFaq,
@@ -37,94 +36,66 @@ import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, han
 import './utils/tooltip';
 import { handleWebAuthn } from './webauthn/webauthn';
 
-//
-// Reload Captchas
-//
-const reloadButton = document.querySelector('#captcha-button');
-if (reloadButton !== null) {
-  handleReloadCaptcha(reloadButton);
-}
+document.addEventListener('DOMContentLoaded', () => {
+  // Reload Captchas
+  const reloadButton = document.querySelector('#captcha-button');
+  if (reloadButton !== null) {
+    handleReloadCaptcha(reloadButton);
+  }
 
-//
-// Password helpers
-//
-handlePasswordToggle();
-handlePasswordStrength();
+  // Password helpers
+  handlePasswordToggle();
+  handlePasswordStrength();
 
-//
-// Calculate reading time
-//
-const faqBody = document.querySelector('.pmf-faq-body');
-if (faqBody !== null) {
-  calculateReadingTime();
-}
+  // Calculate reading time
+  const faqBody = document.querySelector('.pmf-faq-body');
+  if (faqBody !== null) {
+    calculateReadingTime();
+  }
 
-//
-// Handle votings
-//
-handleUserVoting();
+  // Handle votings
+  handleUserVoting();
 
-//
-// Handle comments
-//
-handleSaveComment();
-handleComments();
+  // Handle comments
+  handleSaveComment();
+  handleComments();
 
-//
-// Handle Add a FAQ
-//
-handleAddFaq();
+  // Handle Add a FAQ
+  handleAddFaq();
 
-//
-// Handle show FAQ
-//
-handleShowFaq();
-handleShareLinkButton();
+  // Handle show FAQ
+  handleShowFaq();
+  handleShareLinkButton();
 
-//
-// Handle Add a Question
-//
-handleQuestion();
+  // Handle Add a Question
+  handleQuestion();
 
-//
-// Handle Bookmarks
-//
-handleDeleteBookmarks();
-handleRemoveAllBookmarks();
+  // Handle Bookmarks
+  handleDeleteBookmarks();
+  handleRemoveAllBookmarks();
 
-//
-// Handle user control panel
-//
-handleUserControlPanel();
+  // Handle user control panel
+  handleUserControlPanel();
 
-//
-// Handle user password
-//
-handleUserPassword();
+  // Handle user password
+  handleUserPassword();
 
-//
-// Handle request removal
-//
-handleRequestRemoval();
+  // Handle request removal
+  handleRequestRemoval();
 
-//
-// Handle the contact form
-//
-handleContactForm();
+  // Handle the contact form
+  handleContactForm();
 
-//
-// Handle the registration form
-//
-handleRegister();
-handleWebAuthn();
+  // Handle the registration form
+  handleRegister();
+  handleWebAuthn();
 
-//
-// Masonry on startpage
-//
-window.onload = () => {
-  handleAutoComplete();
+  // Masonry on startpage
   const masonryElement = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
-};
+
+  // AutoComplete
+  handleAutoComplete();
+});
