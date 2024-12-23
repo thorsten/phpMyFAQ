@@ -14,6 +14,7 @@ use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -395,6 +396,60 @@ class CategoryController extends AbstractAdministrationController
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
+            ],
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route('/category/translate/:categoryId', name: 'admin.category.translate', methods: ['GET'])]
+    public function translate(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::CATEGORY_EDIT);
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $session = $this->container->get('session');
+
+        $categoryPermission = new Permission($this->configuration);
+        $userHelper = new UserHelper($this->currentUser);
+
+        $category = new Category($this->configuration, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $id = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+
+        $userPermission = $categoryPermission->get(Permission::USER, [$id]);
+        $groupPermission = $categoryPermission->get(Permission::GROUP, [$id]);
+
+        return $this->render(
+            '@admin/content/category.translate.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'categoryName' => $category->categoryName[$id]['name'],
+                'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
+                'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
+                'categoryId' => $id,
+                'category' => $category->categoryName[$id],
+                'permLevel' => $this->configuration->get('security.permLevel'),
+                'groupPermission' => $groupPermission[0],
+                'userPermission' => $userPermission[0],
+                'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
+                'categoryNameLabel' => Translation::get('categoryNameLabel'),
+                'ad_categ_lang' => Translation::get('ad_categ_lang'),
+                'langToTranslate' => $category->getCategoryLanguagesToTranslate($id, 'de'),
+                'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
+                'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
+                'userOptions' => $userHelper->getAllUserOptions((int) $category->categoryName[$id]['user_id']),
+                'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
+                'langTranslated' => $category->getCategoryLanguagesTranslated($id),
+                'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg')
+
             ],
         );
     }

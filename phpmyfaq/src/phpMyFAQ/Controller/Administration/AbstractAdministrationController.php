@@ -223,11 +223,6 @@ class AbstractAdministrationController extends AbstractController
         );
 
         switch ($action) {
-            case 'category-overview':
-            case 'savecategory':
-            case 'translatecategory':
-            case 'updatecategory':
-            case 'showcategory':
             case 'faqs-overview':
             case 'editentry':
             case 'copyentry':

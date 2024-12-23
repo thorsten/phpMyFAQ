@@ -180,7 +180,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
-    case 'translatecategory':
     case 'faqs-overview':
     case 'editentry':
     case 'copyentry':

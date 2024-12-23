@@ -92,6 +92,11 @@ $routesConfig = [
         'controller' => [CategoryController::class, 'edit'],
         'methods' => 'GET'
     ],
+    'admin.category.translate' => [
+        'path' => '/category/translate/{categoryId}',
+        'controller' => [CategoryController::class, 'translate'],
+        'methods' => 'POST'
+    ],
     'admin.category.update' => [
         'path' => '/category/update',
         'controller' => [CategoryController::class, 'update'],
