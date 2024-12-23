@@ -1365,7 +1365,7 @@ $PMF_LANG['msgGravatar'] = 'Obraz Gravatara';
 // added v4.0.0-alpha - 2023-12-27 by Jan
 $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Niestandardow kolejność przyklejonych wpisów jest wyłączona w głównej konfiguracji. Jeśli chcesz z niego skorzystać, aktywuj go w <a href="./?action=config">main configuration</a> -> rekordów.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Niestandardowa kolejność przyklejonych wpisów'];
-$PMF_LANG['msgNoStickyFaqs'] = 'Nie masz jeszcze żadnych przyklejonych wpisów. Możesz oznaczyć rekordy jako przyklejone w pliku <a href="./?action=faqs-overview" class="alert-link">FAQ Przegląd</a>.';
+$PMF_LANG['msgNoStickyFaqs'] = 'Nie masz jeszcze żadnych przyklejonych wpisów. Możesz oznaczyć rekordy jako przyklejone w pliku <a href="./faqs" class="alert-link">FAQ Przegląd</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktywuj zgodę na pliki cookie'];

@@ -73,7 +73,8 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',
     'faqs-overview',
-    'msgHeaderFAQOverview'
+    'msgHeaderFAQOverview',
+    'faqs'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
@@ -180,7 +181,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
-    case 'faqs-overview':
     case 'editentry':
     case 'copyentry':
     case 'question':

@@ -1326,7 +1326,7 @@ $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
 // added v4.0.0-alpha - 2023-12-27 by Jan
 $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="./?action=config">Konfiguration</a> -> FAQs.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
-$PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./?action=faqs-overview" class="alert-link">FAQ-Verwaltung</a>, um FAQs als wichtig zu markieren.';
+$PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./faqs" class="alert-link">FAQ-Verwaltung</a>, um FAQs als wichtig zu markieren.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];

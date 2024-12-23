@@ -257,11 +257,6 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
         // the various sections of the admin area
         switch ($action) {
             // functions for content administration
-            case 'faqs-overview':
-                require 'faqs.overview.php';
-                break;
-            case 'viewinactive':
-            case 'viewactive':
             case 'takequestion':
             case 'editentry':
             case 'copyentry':

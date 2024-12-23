@@ -1348,7 +1348,7 @@ $PMF_LANG['msgGravatar'] = 'Image Gravatar';
 // added v4.0.0-alpha - 2023-12-27 by Jan
 $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Le tri personnalisé des enregistrements épinglés est désactivé dans la configuration principale. Si vous souhaitez l’utiliser, veuillez l’activer dans la <a href="./?action=config">configuration principale</a> -> enregistrements.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Tri personnalisé des enregistrements épinglés'];
-$PMF_LANG['msgNoStickyFaqs'] = 'Vous n’avez pas encore d’enregistrements épinglés. Vous pouvez marquer les enregistrements comme épinglés dans la <a href="./?action=faqs-overview" class="alert-link">vue d’ensemble des FAQs</a>.';
+$PMF_LANG['msgNoStickyFaqs'] = 'Vous n’avez pas encore d’enregistrements épinglés. Vous pouvez marquer les enregistrements comme épinglés dans la <a href="./faqs" class="alert-link">vue d’ensemble des FAQs</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activer le consentement aux cookies'];

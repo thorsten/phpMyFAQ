@@ -23,6 +23,7 @@ use phpMyFAQ\Controller\Administration\CommentsController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
+use phpMyFAQ\Controller\Administration\FaqController;
 use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
@@ -120,6 +121,11 @@ $routesConfig = [
     'admin.configuration' => [
         'path' => '/configuration',
         'controller' => [ConfigurationController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.faqs' => [
+        'path' => '/faqs',
+        'controller' => [FaqController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.elasticsearch' => [

@@ -263,6 +263,7 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.category.update':
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
+            case 'admin.faqs':
             case 'admin.glossary':
             case 'admin.news':
             case 'admin.news.add':
