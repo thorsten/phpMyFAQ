@@ -207,13 +207,13 @@ $PMF_LANG["ad_entry_topic"] = "Topiks";
 $PMF_LANG["ad_entry_action"] = "Darb&icirc;ba";
 $PMF_LANG["ad_entry_edit_1"] = "Modific&ccedil;t ierakstu";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Jaut&acirc;jums (virsraksts)";
+$PMF_LANG["msgQuestion"] = "Jaut&acirc;jums (virsraksts)";
 $PMF_LANG["ad_entry_content"] = "Atbilde";
 $PMF_LANG["ad_entry_keywords"] = "Atsl&ccedil;gv&acirc;rdi";
 $PMF_LANG["ad_entry_author"] = "Autors";
 $PMF_LANG["ad_entry_category"] = "Sada&iuml;a";
 $PMF_LANG["ad_entry_active"] = "Akt&icirc;vs?";
-$PMF_LANG["ad_entry_date"] = "Datums";
+$PMF_LANG["msgDate"] = "Datums";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Modific&ccedil;ts?";
 $PMF_LANG["ad_entry_changelog"] = "Modific&ccedil;&eth;anas v&ccedil;sture";
@@ -446,7 +446,7 @@ $PMF_LANG["ad_log_beed"] = "Ieraksta modific&ccedil;&eth;ana: ";
 $PMF_LANG["ad_log_bede"] = "Ieraksts dz&ccedil;sts: ";
 $PMF_LANG["msgVisits"] = "Apmekl&ccedil;jumi";
 $PMF_LANG["ad_start_articles"] = "Ieraksti";
-$PMF_LANG["ad_start_comments"] = "Koment&acirc;ri";
+$PMF_LANG["msgComments"] = "Koment&acirc;ri";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";

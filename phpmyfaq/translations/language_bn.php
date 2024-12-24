@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Question";
+$PMF_LANG["msgQuestion"] = "Question";
 $PMF_LANG["ad_entry_content"] = "Answer";
 $PMF_LANG["ad_entry_keywords"] = "Keywords";
 $PMF_LANG["ad_entry_author"] = "Author";
 $PMF_LANG["ad_entry_category"] = "Entity";
 $PMF_LANG["ad_entry_active"] = "Active?";
-$PMF_LANG["ad_entry_date"] = "Date";
+$PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ Status";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -449,7 +449,7 @@ $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 
 $PMF_LANG["msgVisits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
-$PMF_LANG["ad_start_comments"] = "Comments";
+$PMF_LANG["msgComments"] = "Comments";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

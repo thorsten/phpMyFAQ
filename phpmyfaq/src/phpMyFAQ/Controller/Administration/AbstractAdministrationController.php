@@ -81,12 +81,14 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'editentry',
-            'ad_entry_add'
+            'ad_entry_add',
+            'faq/add'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'edit_faq+delete_faq',
             'faqs-overview',
-            'msgHeaderFAQOverview'
+            'msgHeaderFAQOverview',
+            'faqs'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,

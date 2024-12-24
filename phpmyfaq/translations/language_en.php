@@ -203,13 +203,13 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Question";
+$PMF_LANG["msgQuestion"] = "Question";
 $PMF_LANG["ad_entry_content"] = "Answer";
 $PMF_LANG["ad_entry_keywords"] = "Keywords";
 $PMF_LANG["ad_entry_author"] = "Author";
 $PMF_LANG["ad_entry_category"] = "Category";
 $PMF_LANG["ad_entry_active"] = "Visible";
-$PMF_LANG["ad_entry_date"] = "Date";
+$PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ status";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -443,7 +443,7 @@ $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 
 $PMF_LANG["msgVisits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
-$PMF_LANG["ad_start_comments"] = "Comments";
+$PMF_LANG["msgComments"] = "Comments";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
@@ -816,7 +816,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Percentage';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
-$PMF_LANG['ad_entry_sticky'] = 'Sticky';
+$PMF_LANG['msgStickyFAQ'] = 'Sticky';
 $PMF_LANG['stickyRecordsHeader'] = 'Sticky FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

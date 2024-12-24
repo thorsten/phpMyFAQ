@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Tema";
 $PMF_LANG["ad_entry_action"] = "Veiksmas";
 $PMF_LANG["ad_entry_edit_1"] = "Redaguoti įrašą";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Klausimas";
+$PMF_LANG["msgQuestion"] = "Klausimas";
 $PMF_LANG["ad_entry_content"] = "Atsakymas";
 $PMF_LANG["ad_entry_keywords"] = "Raktažodžiai";
 $PMF_LANG["ad_entry_author"] = "Autorius";
 $PMF_LANG["ad_entry_category"] = "Grupė";
 $PMF_LANG["ad_entry_active"] = "Aktyvus?";
-$PMF_LANG["ad_entry_date"] = "Data";
+$PMF_LANG["msgDate"] = "Data";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Pakeistas?";
 $PMF_LANG["ad_entry_changelog"] = "Keitimų žurnalas";
@@ -449,7 +449,7 @@ $PMF_LANG["ad_log_bede"] = "Pašalintas šis įrašas: ";
 
 $PMF_LANG["msgVisits"] = "Apsilankymai";
 $PMF_LANG["ad_start_articles"] = "Straipsniai";
-$PMF_LANG["ad_start_comments"] = "Komentarai";
+$PMF_LANG["msgComments"] = "Komentarai";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -842,7 +842,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Procentai';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Lipnus';
-$PMF_LANG['ad_entry_sticky'] = 'Lipnus';
+$PMF_LANG['msgStickyFAQ'] = 'Lipnus';
 $PMF_LANG['stickyRecordsHeader'] = 'Lipnūs DUK';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

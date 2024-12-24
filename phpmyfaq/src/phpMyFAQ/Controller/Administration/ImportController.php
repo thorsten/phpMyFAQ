@@ -63,7 +63,7 @@ class ImportController extends AbstractAdministrationController
                 'msgImportRecordsColumnStructure' => Translation::get('msgImportRecordsColumnStructure'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('importfaqs'),
                 'is_active' => Translation::get('ad_entry_active'),
-                'is_sticky' => Translation::get('ad_entry_sticky'),
+                'is_sticky' => Translation::get('msgStickyFAQ'),
                 'trueFalse' => Translation::get('msgCSVImportTrueOrFalse')
             ]
         );

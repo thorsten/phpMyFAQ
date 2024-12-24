@@ -15,8 +15,15 @@
 
 export const fetchAllFaqsByCategory = async (categoryId, language, onlyInactive, onlyNew) => {
   try {
-    const currentUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const url = new URL(`${currentUrl}api/faqs/${categoryId}/${language}`);
+    let currentUrl = window.location.protocol + '//' + window.location.host;
+    let pathname = window.location.pathname;
+
+    if (pathname.endsWith('/faqs')) {
+      pathname = pathname.slice(0, -5);
+    }
+
+    currentUrl += pathname;
+    const url = new URL(`${currentUrl}/api/faqs/${categoryId}/${language}`);
     if (onlyInactive) {
       url.searchParams.set('only-inactive', onlyInactive);
     }

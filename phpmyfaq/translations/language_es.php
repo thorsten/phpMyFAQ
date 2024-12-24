@@ -203,13 +203,13 @@ $PMF_LANG['ad_entry_topic'] = 'Pregunta';
 $PMF_LANG['ad_entry_action'] = 'Acción';
 $PMF_LANG['ad_entry_edit_1'] = 'FAQ';
 $PMF_LANG['ad_entry_edit_2'] = 'editar';
-$PMF_LANG['ad_entry_theme'] = 'Pregunta';
+$PMF_LANG['msgQuestion'] = 'Pregunta';
 $PMF_LANG['ad_entry_content'] = 'Respuesta';
 $PMF_LANG['ad_entry_keywords'] = 'Buscar palabras claves:';
 $PMF_LANG['ad_entry_author'] = 'Autor';
 $PMF_LANG['ad_entry_category'] = 'Categoría';
 $PMF_LANG['ad_entry_active'] = 'Activado';
-$PMF_LANG['ad_entry_date'] = 'Fecha';
+$PMF_LANG['msgDate'] = 'Fecha';
 $PMF_LANG['ad_entry_status'] = 'Estado de la FAQ';
 $PMF_LANG['ad_entry_changed'] = '¿Qué se cambió?';
 $PMF_LANG['ad_entry_changelog'] = 'Cambios';
@@ -444,7 +444,7 @@ $PMF_LANG['ad_log_bede'] = 'Eliminada la entrada: ';
 
 $PMF_LANG['msgVisits'] = 'Visitas';
 $PMF_LANG['ad_start_articles'] = 'FAQs';
-$PMF_LANG['ad_start_comments'] = 'Comentarios';
+$PMF_LANG['msgComments'] = 'Comentarios';
 
 // Añadido v1.1 - 30.01.2002 - Bastian
 $PMF_LANG['ad_categ_paste'] = 'pegar';
@@ -815,7 +815,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Porcentaje';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Pegajoso';
-$PMF_LANG['ad_entry_sticky'] = 'FAQ pegajosa';
+$PMF_LANG['msgStickyFAQ'] = 'FAQ pegajosa';
 $PMF_LANG['stickyRecordsHeader'] = 'FAQs pegajosas';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

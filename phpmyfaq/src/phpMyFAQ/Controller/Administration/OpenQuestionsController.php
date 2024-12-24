@@ -55,7 +55,7 @@ class OpenQuestionsController extends AbstractAdministrationController
                 'csrfTokenDeleteQuestion' => Token::getInstance($session)->getTokenString('delete-questions'),
                 'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
                 'msgAuthor' => Translation::get('ad_entry_author'),
-                'msgQuestion' => Translation::get('ad_entry_theme'),
+                'msgQuestion' => Translation::get('msgQuestion'),
                 'msgVisibility' => Translation::get('ad_entry_visibility'),
                 'questions' => $question->getAll(),
                 'yes' => Translation::get('ad_gen_yes'),

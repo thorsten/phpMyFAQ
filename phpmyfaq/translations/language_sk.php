@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Téma";
 $PMF_LANG["ad_entry_action"] = "Akcia";
 $PMF_LANG["ad_entry_edit_1"] = "Uprav nahrávku";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Otázka";
+$PMF_LANG["msgQuestion"] = "Otázka";
 $PMF_LANG["ad_entry_content"] = "Odpoveď";
 $PMF_LANG["ad_entry_keywords"] = "Kľúčové slová";
 $PMF_LANG["ad_entry_author"] = "Autor";
 $PMF_LANG["ad_entry_category"] = "Kategória";
 $PMF_LANG["ad_entry_active"] = "Aktívny?";
-$PMF_LANG["ad_entry_date"] = "Dátum";
+$PMF_LANG["msgDate"] = "Dátum";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Zmenený?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -449,7 +449,7 @@ $PMF_LANG["ad_log_bede"] = "Vymazať nasledovnú položku: ";
 
 $PMF_LANG["msgVisits"] = "Návštevy";
 $PMF_LANG["ad_start_articles"] = "Články";
-$PMF_LANG["ad_start_comments"] = "Komentáre";
+$PMF_LANG["msgComments"] = "Komentáre";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -836,7 +836,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Percento';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Otravné';
-$PMF_LANG['ad_entry_sticky'] = 'Otravné';
+$PMF_LANG['msgStickyFAQ'] = 'Otravné';
 $PMF_LANG['stickyRecordsHeader'] = 'Otravné FAQ';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

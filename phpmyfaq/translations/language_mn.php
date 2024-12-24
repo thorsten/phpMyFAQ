@@ -202,13 +202,13 @@ $PMF_LANG["ad_entry_topic"] = "Сэдэв";
 $PMF_LANG["ad_entry_action"] = "Үйлдэл";
 $PMF_LANG["ad_entry_edit_1"] = "Бичлэг засах";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Асуулт";
+$PMF_LANG["msgQuestion"] = "Асуулт";
 $PMF_LANG["ad_entry_content"] = "Хариулт:";
 $PMF_LANG["ad_entry_keywords"] = "Түлхүүр үг:";
 $PMF_LANG["ad_entry_author"] = "Зохиогч:";
 $PMF_LANG["ad_entry_category"] = "Ангилал:";
 $PMF_LANG["ad_entry_active"] = "Хандах боломжтой:";
-$PMF_LANG["ad_entry_date"] = "Огноо:";
+$PMF_LANG["msgDate"] = "Огноо:";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Өөрчилсөн үү?";
 $PMF_LANG["ad_entry_changelog"] = "Өөрчлөлт:";
@@ -445,7 +445,7 @@ $PMF_LANG["ad_log_bede"] = "Дараа хөгөгдөл устгагдсан: ";
 
 $PMF_LANG["msgVisits"] = "Зочлолт";
 $PMF_LANG["ad_start_articles"] = "Нийтлэлүүд";
-$PMF_LANG["ad_start_comments"] = "Сэтгэгдлүүд";
+$PMF_LANG["msgComments"] = "Сэтгэгдлүүд";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -833,7 +833,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Хувь';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Наалдамтгай';
-$PMF_LANG['ad_entry_sticky'] = 'Наалдамтгай';
+$PMF_LANG['msgStickyFAQ'] = 'Наалдамтгай';
 $PMF_LANG['stickyRecordsHeader'] = 'Наалдамтгай FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

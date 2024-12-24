@@ -206,13 +206,13 @@ $PMF_LANG["ad_entry_topic"] = "Topik";
 $PMF_LANG["ad_entry_action"] = "Perintah";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Materi";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Pertanyaan";
+$PMF_LANG["msgQuestion"] = "Pertanyaan";
 $PMF_LANG["ad_entry_content"] = "Jawaban";
 $PMF_LANG["ad_entry_keywords"] = "Kata Kunci";
 $PMF_LANG["ad_entry_author"] = "Penulis";
 $PMF_LANG["ad_entry_category"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Aktif?";
-$PMF_LANG["ad_entry_date"] = "Tanggal";
+$PMF_LANG["msgDate"] = "Tanggal";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Berubah?";
 $PMF_LANG["ad_entry_changelog"] = "Catatan perubahan";
@@ -450,7 +450,7 @@ $PMF_LANG["ad_log_bede"] = "Entri berikut sudah dihapus: ";
 
 $PMF_LANG["msgVisits"] = "Kunjungan";
 $PMF_LANG["ad_start_articles"] = "Artikel";
-$PMF_LANG["ad_start_comments"] = "Komentar";
+$PMF_LANG["msgComments"] = "Komentar";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -837,7 +837,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Persentase';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
-$PMF_LANG['ad_entry_sticky'] = 'Sticky';
+$PMF_LANG['msgStickyFAQ'] = 'Sticky';
 $PMF_LANG['stickyRecordsHeader'] = 'Artikel Pilihan';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

@@ -112,7 +112,7 @@ class FormsTest extends TestCase
     public function testGetTranslations(): void
     {
         $result = $this->forms->getTranslations(1, 1);
-        $this->assertEquals('Add question', $result[0]->input_label);
+        $this->assertEquals('Question', $result[0]->input_label);
         $this->assertEquals('default', $result[0]->input_lang);
     }
 

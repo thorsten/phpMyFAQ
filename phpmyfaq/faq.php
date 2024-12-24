@@ -220,7 +220,7 @@ if (
     );
     $templateVars = [
         ... $templateVars,
-        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments')),
+        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('msgComments')),
         'writeCommentMsg' => $commentMessage
     ];
 }

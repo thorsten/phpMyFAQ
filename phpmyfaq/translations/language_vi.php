@@ -208,13 +208,13 @@ $PMF_LANG["ad_entry_topic"] = "Tiêu đề";
 $PMF_LANG["ad_entry_action"] = "Hành động";
 $PMF_LANG["ad_entry_edit_1"] = "Chỉnh sửa nội dung";
 $PMF_LANG["ad_entry_edit_2"] = "Chỉnh sửa nội dung";
-$PMF_LANG["ad_entry_theme"] = "Câu hỏi";
+$PMF_LANG["msgQuestion"] = "Câu hỏi";
 $PMF_LANG["ad_entry_content"] = "Câu trả lời";
 $PMF_LANG["ad_entry_keywords"] = "Từ khóa";
 $PMF_LANG["ad_entry_author"] = "Tác giả";
 $PMF_LANG["ad_entry_category"] = "Mục";
 $PMF_LANG["ad_entry_active"] = "Kích hoạt?";
-$PMF_LANG["ad_entry_date"] = "Ngày";
+$PMF_LANG["msgDate"] = "Ngày";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Bạn đã thay đổi những gì?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -448,7 +448,7 @@ $PMF_LANG["ad_log_beed"] = "Bảng chỉnh sửa đã được thay đổi: ";
 $PMF_LANG["ad_log_bede"] = "Bài sau đã bị xóa: ";
 $PMF_LANG["msgVisits"] = "Lượt thăm";
 $PMF_LANG["ad_start_articles"] = "Bài";
-$PMF_LANG["ad_start_comments"] = "Bình luận";
+$PMF_LANG["msgComments"] = "Bình luận";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "dán";

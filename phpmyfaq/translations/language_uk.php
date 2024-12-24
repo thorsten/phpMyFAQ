@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Тема";
 $PMF_LANG["ad_entry_action"] = "Дія";
 $PMF_LANG["ad_entry_edit_1"] = "Редагування записів";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Питання";
+$PMF_LANG["msgQuestion"] = "Питання";
 $PMF_LANG["ad_entry_content"] = "Відповідь";
 $PMF_LANG["ad_entry_keywords"] = "Ключі";
 $PMF_LANG["ad_entry_author"] = "Автор";
 $PMF_LANG["ad_entry_category"] = "Розділ";
 $PMF_LANG["ad_entry_active"] = "Активувати?";
-$PMF_LANG["ad_entry_date"] = "Дата";
+$PMF_LANG["msgDate"] = "Дата";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Змінено?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -450,7 +450,7 @@ $PMF_LANG["ad_log_bede"] = "Видалений запис: ";
 
 $PMF_LANG["msgVisits"] = "Відвідин";
 $PMF_LANG["ad_start_articles"] = "Записів";
-$PMF_LANG["ad_start_comments"] = "Коментарів";
+$PMF_LANG["msgComments"] = "Коментарів";
 
 
     // Added v1.1 - 30.01.2002 - Bastian

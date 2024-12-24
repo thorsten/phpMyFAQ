@@ -203,13 +203,13 @@ $PMF_LANG["ad_entry_topic"] = "主題";
 $PMF_LANG["ad_entry_action"] = "動作";
 $PMF_LANG["ad_entry_edit_1"] = "編輯記錄";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "問題";
+$PMF_LANG["msgQuestion"] = "問題";
 $PMF_LANG["ad_entry_content"] = "答案";
 $PMF_LANG["ad_entry_keywords"] = "關鍵字";
 $PMF_LANG["ad_entry_author"] = "作者";
 $PMF_LANG["ad_entry_category"] = "類別";
 $PMF_LANG["ad_entry_active"] = "可被看到";
-$PMF_LANG["ad_entry_date"] = "日期";
+$PMF_LANG["msgDate"] = "日期";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "已變更?";
 $PMF_LANG["ad_entry_changelog"] = "異動日誌 Changelog";
@@ -446,7 +446,7 @@ $PMF_LANG["ad_log_bede"] = "刪除下列記錄: ";
 
 $PMF_LANG["msgVisits"] = "訪客次數 (Visits)";
 $PMF_LANG["ad_start_articles"] = "文章";
-$PMF_LANG["ad_start_comments"] = "評論";
+$PMF_LANG["msgComments"] = "評論";
 
 
 // Added v1.1 - 30.01.2002 - Bastian - admin - 管理
@@ -820,7 +820,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = "% 百分比 Percentage";
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy 開發者
 $PMF_LANG['ad_record_sticky'] = "置頂 Sticky";
-$PMF_LANG['ad_entry_sticky'] = "置頂 Sticky";
+$PMF_LANG['msgStickyFAQ'] = "置頂 Sticky";
 $PMF_LANG['stickyRecordsHeader'] = "置頂 FAQs Sticky FAQs";
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy 開發者

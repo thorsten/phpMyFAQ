@@ -206,13 +206,13 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "동작";
 $PMF_LANG["ad_entry_edit_1"] = "FAQ 추가(수정)";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "제목";
+$PMF_LANG["msgQuestion"] = "제목";
 $PMF_LANG["ad_entry_content"] = "내용";
 $PMF_LANG["ad_entry_keywords"] = "키워드";
 $PMF_LANG["ad_entry_author"] = "작성자";
 $PMF_LANG["ad_entry_category"] = "카테고리";
 $PMF_LANG["ad_entry_active"] = "사용";
-$PMF_LANG["ad_entry_date"] = "날짜";
+$PMF_LANG["msgDate"] = "날짜";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "변경?";
 $PMF_LANG["ad_entry_changelog"] = "변경이력";
@@ -450,7 +450,7 @@ $PMF_LANG["ad_log_bede"] = "다음 글이 삭제됨: ";
 
 $PMF_LANG["msgVisits"] = "방문";
 $PMF_LANG["ad_start_articles"] = "글(FAQ)";
-$PMF_LANG["ad_start_comments"] = "코멘트";
+$PMF_LANG["msgComments"] = "코멘트";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

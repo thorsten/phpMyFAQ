@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Tema";
 $PMF_LANG["ad_entry_action"] = "Akcija";
 $PMF_LANG["ad_entry_edit_1"] = "Dodaj/Izmeni Unos";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Tema";
+$PMF_LANG["msgQuestion"] = "Tema";
 $PMF_LANG["ad_entry_content"] = "Sadr&#382;aj";
 $PMF_LANG["ad_entry_keywords"] = "Klju&#269;ne re&#269;i";
 $PMF_LANG["ad_entry_author"] = "Autor";
 $PMF_LANG["ad_entry_category"] = "Kategorija";
 $PMF_LANG["ad_entry_active"] = "Aktivno?";
-$PMF_LANG["ad_entry_date"] = "Datum";
+$PMF_LANG["msgDate"] = "Datum";
 $PMF_LANG["ad_entry_status"] = "Status FAQ";
 $PMF_LANG["ad_entry_changed"] = "Izmenjeno?";
 $PMF_LANG["ad_entry_changelog"] = "Log izmena";
@@ -449,7 +449,7 @@ $PMF_LANG["ad_log_bede"] = "Obrisan unos: ";
 
 $PMF_LANG["msgVisits"] = "Poseta";
 $PMF_LANG["ad_start_articles"] = "&#268;lanaka";
-$PMF_LANG["ad_start_comments"] = "Komentara";
+$PMF_LANG["msgComments"] = "Komentara";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

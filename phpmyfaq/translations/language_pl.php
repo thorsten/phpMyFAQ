@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "Temat";
 $PMF_LANG["ad_entry_action"] = "Działanie";
 $PMF_LANG["ad_entry_edit_1"] = "Edytuj Rekord";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Pytanie";
+$PMF_LANG["msgQuestion"] = "Pytanie";
 $PMF_LANG["ad_entry_content"] = "Odpowiedź";
 $PMF_LANG["ad_entry_keywords"] = "Słowa kluczowe";
 $PMF_LANG["ad_entry_author"] = "Autor";
 $PMF_LANG["ad_entry_category"] = "Kategoria";
 $PMF_LANG["ad_entry_active"] = "Widoczne";
-$PMF_LANG["ad_entry_date"] = "Data";
+$PMF_LANG["msgDate"] = "Data";
 $PMF_LANG["ad_entry_status"] = "FAQ status";
 $PMF_LANG["ad_entry_changed"] = "Zmieniony?";
 $PMF_LANG["ad_entry_changelog"] = "Dziennik zmian";
@@ -446,7 +446,7 @@ $PMF_LANG["ad_log_bede"] = "Usunięto następujący wpis: ";
 
 $PMF_LANG["msgVisits"] = "Wizyty";
 $PMF_LANG["ad_start_articles"] = "Artykuły";
-$PMF_LANG["ad_start_comments"] = "Komentarze";
+$PMF_LANG["msgComments"] = "Komentarze";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "wklej";
@@ -821,7 +821,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Procentowo';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Przyklej';
-$PMF_LANG['ad_entry_sticky'] = 'Przyklej';
+$PMF_LANG['msgStickyFAQ'] = 'Przyklej';
 $PMF_LANG['stickyRecordsHeader'] = 'Przyklejone FAQs';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

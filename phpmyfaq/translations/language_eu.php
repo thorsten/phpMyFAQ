@@ -209,13 +209,13 @@ $PMF_LANG["ad_entry_topic"] = "Gaia";
 $PMF_LANG["ad_entry_action"] = "Ekintza";
 $PMF_LANG["ad_entry_edit_1"] = "";
 $PMF_LANG["ad_entry_edit_2"] = ". erregistroa editatu";
-$PMF_LANG["ad_entry_theme"] = "Galdera";
+$PMF_LANG["msgQuestion"] = "Galdera";
 $PMF_LANG["ad_entry_content"] = "Edukia";
 $PMF_LANG["ad_entry_keywords"] = "Hitz gakoak";
 $PMF_LANG["ad_entry_author"] = "Egilea";
 $PMF_LANG["ad_entry_category"] = "Atala";
 $PMF_LANG["ad_entry_active"] = "Aktibatu?";
-$PMF_LANG["ad_entry_date"] = "Eguna";
+$PMF_LANG["msgDate"] = "Eguna";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Aldatu?";
 $PMF_LANG["ad_entry_changelog"] = "Aldaketen log-a";
@@ -453,7 +453,7 @@ $PMF_LANG["ad_log_bede"] = "Hurrengo sarrera ezabatua: ";
 
 $PMF_LANG["msgVisits"] = "Bisitak";
 $PMF_LANG["ad_start_articles"] = "Artikuluak";
-$PMF_LANG["ad_start_comments"] = "iruzkin";
+$PMF_LANG["msgComments"] = "iruzkin";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

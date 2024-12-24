@@ -123,6 +123,11 @@ $routesConfig = [
         'controller' => [ConfigurationController::class, 'index'],
         'methods' => 'GET'
     ],
+    'admin.faq.add' => [
+        'path' => '/faq/add',
+        'controller' => [FaqController::class, 'add'],
+        'methods' => 'GET'
+    ],
     'admin.faqs' => [
         'path' => '/faqs',
         'controller' => [FaqController::class, 'index'],

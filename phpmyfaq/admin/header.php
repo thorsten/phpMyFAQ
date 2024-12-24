@@ -68,7 +68,8 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
     'editentry',
-    'ad_entry_add'
+    'ad_entry_add',
+    'faq/add'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'edit_faq+delete_faq',

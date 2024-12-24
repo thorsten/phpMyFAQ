@@ -18,6 +18,7 @@
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
+use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
@@ -75,6 +76,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.admin.category', Category::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.admin.changelog', Changelog::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
@@ -161,11 +167,9 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
-    $services->set('phpmyfaq.helper.statistics', StatisticsHelper::class)
+    $services->set('phpmyfaq.faq.permission', Faq\Permission::class)
         ->args([
-            new Reference('phpmyfaq.admin.session'),
-            new Reference('phpmyfaq.visits'),
-            new Reference('phpmyfaq.date')
+            new Reference('phpmyfaq.configuration')
         ]);
 
     $services->set('phpmyfaq.faq.statistics', Statistics::class)
@@ -184,6 +188,13 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
+
+    $services->set('phpmyfaq.helper.statistics', StatisticsHelper::class)
+        ->args([
+            new Reference('phpmyfaq.admin.session'),
+            new Reference('phpmyfaq.visits'),
+            new Reference('phpmyfaq.date')
+        ]);
 
     $services->set('phpmyfaq.helper.user-helper', UserHelper::class)
         ->args([

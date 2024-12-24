@@ -206,13 +206,13 @@ $PMF_LANG["ad_entry_topic"] = "Pwnc";
 $PMF_LANG["ad_entry_action"] = "Gweithred";
 $PMF_LANG["ad_entry_edit_1"] = "Golygu Cofnod";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Thema";
+$PMF_LANG["msgQuestion"] = "Thema";
 $PMF_LANG["ad_entry_content"] = "Cynnwys";
 $PMF_LANG["ad_entry_keywords"] = "Geiriau Allweddol";
 $PMF_LANG["ad_entry_author"] = "Awdur";
 $PMF_LANG["ad_entry_category"] = "Categori";
 $PMF_LANG["ad_entry_active"] = "Gweithredol?";
-$PMF_LANG["ad_entry_date"] = "Dyddiad";
+$PMF_LANG["msgDate"] = "Dyddiad";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Newidiwyd?";
 $PMF_LANG["ad_entry_changelog"] = "Newid log";
@@ -447,7 +447,7 @@ $PMF_LANG["ad_log_bede"] = "Dilëwyd y cofnod canlynol: ";
 
 $PMF_LANG["msgVisits"] = "Ymweliadau";
 $PMF_LANG["ad_start_articles"] = "Erthyglau";
-$PMF_LANG["ad_start_comments"] = "Sylwadau";
+$PMF_LANG["msgComments"] = "Sylwadau";
 
 
 // Added v1.1 - 30.01.2002 - Bastian

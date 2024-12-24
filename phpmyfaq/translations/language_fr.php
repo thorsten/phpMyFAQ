@@ -204,13 +204,13 @@ $PMF_LANG["ad_entry_topic"] = "Titre";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Éditer l'enregistrement";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Question";
+$PMF_LANG["msgQuestion"] = "Question";
 $PMF_LANG["ad_entry_content"] = "Réponse";
 $PMF_LANG["ad_entry_keywords"] = "Mots-clés";
 $PMF_LANG["ad_entry_author"] = "Auteur";
 $PMF_LANG["ad_entry_category"] = "Catégorie";
 $PMF_LANG["ad_entry_active"] = "Visible";
-$PMF_LANG["ad_entry_date"] = "Date";
+$PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "Statut de la FAQ";
 $PMF_LANG["ad_entry_changed"] = "Modifié ?";
 $PMF_LANG["ad_entry_changelog"] = "Changements";
@@ -445,7 +445,7 @@ $PMF_LANG["ad_log_bede"] = "La FAQ suivante a été supprimée : ";
 
 $PMF_LANG["msgVisits"] = "Visites";
 $PMF_LANG["ad_start_articles"] = "Articles";
-$PMF_LANG["ad_start_comments"] = "Commentaires";
+$PMF_LANG["msgComments"] = "Commentaires";
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "Coller";
@@ -819,7 +819,7 @@ $PMF_LANG["ad_searchstats_search_term_percentage"] = "Pourcentage";
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG["ad_record_sticky"] = "Epingler";
-$PMF_LANG["ad_entry_sticky"] = "Epingler";
+$PMF_LANG["msgStickyFAQ"] = "Epingler";
 $PMF_LANG["stickyRecordsHeader"] = "FAQs épinglées";
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

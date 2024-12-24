@@ -205,13 +205,13 @@ $PMF_LANG["ad_entry_topic"] = "विषय";
 $PMF_LANG["ad_entry_action"] = "क्रिया";
 $PMF_LANG["ad_entry_edit_1"] = "लेख सम्पादन";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "प्रश्न";
+$PMF_LANG["msgQuestion"] = "प्रश्न";
 $PMF_LANG["ad_entry_content"] = "ऊत्तर";
 $PMF_LANG["ad_entry_keywords"] = "कुंजी शब्द";
 $PMF_LANG["ad_entry_author"] = "लेखक";
 $PMF_LANG["ad_entry_category"] = "वर्ग";
 $PMF_LANG["ad_entry_active"] = "सक्रिय?";
-$PMF_LANG["ad_entry_date"] = "दिनांक";
+$PMF_LANG["msgDate"] = "दिनांक";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "बदला गया?";
 $PMF_LANG["ad_entry_changelog"] = "बदलाव का लॉग";
@@ -449,7 +449,7 @@ $PMF_LANG["ad_log_bede"] = "निम्न को मिटा दें: ";
 
 $PMF_LANG["msgVisits"] = "दर्शन";
 $PMF_LANG["ad_start_articles"] = "लेख";
-$PMF_LANG["ad_start_comments"] = "टिका-टिप्पणी";
+$PMF_LANG["msgComments"] = "टिका-टिप्पणी";
 
 $PMF_LANG["ad_user_chpw"] = "आप केवल मौजूदा प्रयोगकर्ता का संकेतक शब्द बदल सकते हैं \"" . $PMF_LANG["ad_menu_passwd"] . "\".";
 

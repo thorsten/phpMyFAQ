@@ -53,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->valu
         'msgImportRecordsColumnStructure' => Translation::get('msgImportRecordsColumnStructure'),
         'csrfToken' => Token::getInstance($container->get('session'))->getTokenString('importfaqs'),
         'is_active' => Translation::get('ad_entry_active'),
-        'is_sticky' => Translation::get('ad_entry_sticky'),
+        'is_sticky' => Translation::get('msgStickyFAQ'),
         'trueFalse' => Translation::get('msgCSVImportTrueOrFalse')
     ];
 

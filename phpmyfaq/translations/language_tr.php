@@ -203,13 +203,13 @@ $PMF_LANG["ad_entry_topic"] = "Konu";
 $PMF_LANG["ad_entry_action"] = "Eylem";
 $PMF_LANG["ad_entry_edit_1"] = "Düzenle";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Soru";
+$PMF_LANG["msgQuestion"] = "Soru";
 $PMF_LANG["ad_entry_content"] = "Cevap";
 $PMF_LANG["ad_entry_keywords"] = "Anahtar sözcükler";
 $PMF_LANG["ad_entry_author"] = "Oluşturan";
 $PMF_LANG["ad_entry_category"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Görünür";
-$PMF_LANG["ad_entry_date"] = "Tarih";
+$PMF_LANG["msgDate"] = "Tarih";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Değişiklik?";
 $PMF_LANG["ad_entry_changelog"] = "Değişiklik günlüğü";
@@ -446,7 +446,7 @@ $PMF_LANG["ad_log_bede"] = "Şu kayıt silindi: ";
 
 $PMF_LANG["msgVisits"] = "Ziyaret";
 $PMF_LANG["ad_start_articles"] = "İçerikler";
-$PMF_LANG["ad_start_comments"] = "Yorumlar";
+$PMF_LANG["msgComments"] = "Yorumlar";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -820,7 +820,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = "Yüzde";
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = "Sabitlenmiş";
-$PMF_LANG['ad_entry_sticky'] = "Sabitlenmiş";
+$PMF_LANG['msgStickyFAQ'] = "Sabitlenmiş";
 $PMF_LANG['stickyRecordsHeader'] = "Sabitlenmiş içerikler";
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
