@@ -238,9 +238,9 @@ if (
     }
 
     $templateVars = [
-        'ad_record_faq' => Translation::get('ad_record_faq'),
-        'ad_menu_faq_meta' => Translation::get('ad_menu_faq_meta'),
-        'ad_record_permissions' => Translation::get('ad_record_permissions'),
+        'msgQuestionAnswer' => Translation::get('msgQuestionAnswer'),
+        'msgFAQMetaData' => Translation::get('msgFAQMetaData'),
+        'msgPermissions' => Translation::get('msgPermissions'),
         'ad_admin_notes' => Translation::get('ad_admin_notes'),
         'ad_entry_changelog' => Translation::get('ad_entry_changelog'),
     ];
@@ -262,7 +262,7 @@ if (
 
         $templateVars = [
             ...$templateVars,
-            'adminFaqEditorHeader' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+            'msgAddFAQ' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
             'editExistingFaq' => true,
             'currentRevision' => $currentRevision,
             'faqUrl' => $link->toString(),
@@ -271,7 +271,7 @@ if (
     } else {
         $templateVars = [
             ...$templateVars,
-            'adminFaqEditorHeader' => Translation::get('ad_entry_add'),
+            'msgAddFAQ' => Translation::get('msgAddFAQ'),
             'editExistingFaq' => false,
         ];
     }
@@ -337,10 +337,10 @@ if (
         'msgQuestion' => Translation::get('msgQuestion'),
         'msgNoHashAllowed' => Translation::get('msgNoHashAllowed'),
         'msgShowHelp' => Translation::get('msgShowHelp'),
-        'ad_entry_content' => Translation::get('ad_entry_content'),
-        'ad_entry_category' => Translation::get('ad_entry_category'),
+        'msgAnswer' => Translation::get('msgAnswer'),
+        'msgCategory' => Translation::get('msgCategory'),
         'categoryOptions' => $categoryHelper->renderOptions($categories),
-        'ad_entry_locale' => Translation::get('ad_entry_locale'),
+        'msgLanguage' => Translation::get('msgLanguage'),
         'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
         'hasPermissionForAddAttachments' => $user->perm->hasPermission(
             $currentUserId,
@@ -350,15 +350,15 @@ if (
             $currentUserId,
             PermissionType::ATTACHMENT_DELETE->value
         ),
-        'ad_menu_attachments' => Translation::get('ad_menu_attachments'),
+        'msgAttachments' => Translation::get('msgAttachments'),
         'csrfTokenDeleteAttachment' => Token::getInstance($container->get('session'))->getTokenString('delete-attachment'),
         'attachments' => $attList,
-        'ad_att_add' => Translation::get('ad_att_add'),
-        'ad_entry_tags' => Translation::get('ad_entry_tags'),
+        'msgAddAttachment' => Translation::get('msgAddAttachment'),
+        'msgTags' => Translation::get('msgTags'),
         'ad_entry_keywords' => Translation::get('ad_entry_keywords'),
         'ad_entry_author' => Translation::get('ad_entry_author'),
         'msgEmail' => Translation::get('msgEmail'),
-        'msgSeoCenter' => Translation::get('seoCenter'),
+        'msgSeoCenter' => Translation::get('msgSeoCenter'),
         'msgSerp' => Translation::get('msgSerp'),
         'msgSerpTitle' => Translation::get('msgSerpTitle'),
         'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
@@ -386,7 +386,7 @@ if (
         'ad_entry_save' => Translation::get('ad_entry_save'),
         'msgUpdateFaqDate' => Translation::get('msgUpdateFaqDate'),
         'msgKeepFaqDate' => Translation::get('msgKeepFaqDate'),
-        'msgEditFaqDat' => Translation::get('msgEditFaqDat'),
+        'msgEditFaqDate' => Translation::get('msgEditFaqDate'),
         'ad_entry_status' => Translation::get('ad_entry_status'),
         'hasPermissionForApprove' => $user->perm->hasPermission($currentUserId, PermissionType::FAQ_APPROVE->value),
         'isActive' => $isActive,

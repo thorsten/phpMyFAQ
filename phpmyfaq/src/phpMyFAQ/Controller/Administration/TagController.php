@@ -31,7 +31,7 @@ class TagController extends AbstractAdministrationController
             [
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
-                'adminHeaderTags' => Translation::get('ad_entry_tags'),
+                'adminHeaderTags' => Translation::get('msgTags'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('tags'),
                 'tags' => $tagData,
                 'noTags' => Translation::get('ad_news_nodata'),

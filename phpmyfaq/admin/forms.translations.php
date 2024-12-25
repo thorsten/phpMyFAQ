@@ -58,7 +58,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::FORMS_EDIT->v
 
     $templateVars = [
         'translations' => $forms->getTranslations($formId, $inputId),
-        'ad_entry_locale' => Translation::get('ad_entry_locale'),
+        'msgLanguage' => Translation::get('msgLanguage'),
         'msgInputLabel' => Translation::get('msgInputLabel'),
         'ad_sess_pageviews' => Translation::get('ad_sess_pageviews'),
         'msgFormsEditTranslations' => Translation::get('msgFormsEditTranslations'),

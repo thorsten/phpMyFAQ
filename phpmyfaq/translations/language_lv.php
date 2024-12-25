@@ -208,10 +208,10 @@ $PMF_LANG["ad_entry_action"] = "Darb&icirc;ba";
 $PMF_LANG["ad_entry_edit_1"] = "Modific&ccedil;t ierakstu";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Jaut&acirc;jums (virsraksts)";
-$PMF_LANG["ad_entry_content"] = "Atbilde";
+$PMF_LANG["msgAnswer"] = "Atbilde";
 $PMF_LANG["ad_entry_keywords"] = "Atsl&ccedil;gv&acirc;rdi";
 $PMF_LANG["ad_entry_author"] = "Autors";
-$PMF_LANG["ad_entry_category"] = "Sada&iuml;a";
+$PMF_LANG["msgCategory"] = "Sada&iuml;a";
 $PMF_LANG["ad_entry_active"] = "Akt&icirc;vs?";
 $PMF_LANG["msgDate"] = "Datums";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -368,14 +368,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigur&acirc;cija saglab&acirc;ta.";
 $PMF_LANG["ad_menu_editconfig"] = "Konfigur&acirc;cija";
 $PMF_LANG["ad_att_none"] = "Nav pievienotu failu";
 $PMF_LANG["ad_att_att"] = "Pievienotie faili";
-$PMF_LANG["ad_att_add"] = "Pievienot failu";
+$PMF_LANG["msgAddAttachment"] = "Pievienot failu";
 $PMF_LANG["ad_entryins_suc"] = "Ieraksts veiksm&icirc;gi saglab&acirc;ts.";
 $PMF_LANG["msgErrorOccurred"] = "Notikusi k&iuml;&ucirc;da.";
 $PMF_LANG["ad_att_del"] = "Dz&ccedil;st";
 $PMF_LANG["ad_att_nope"] = "Failus var pievienot tikai modific&ccedil;jot ierakstu.";
 $PMF_LANG["ad_att_delsuc"] = "Pievienotais fails veiksm&icirc;gi izdz&ccedil;sts.";
 $PMF_LANG["ad_att_delfail"] = "K&iuml;&ucirc;da, dz&ccedil;&eth;ot pievienoto failu.";
-$PMF_LANG["ad_entry_add"] = "Izveidot ierakstu";
+$PMF_LANG["msgAddFAQ"] = "Izveidot ierakstu";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Rezerves kopija noz&icirc;m&ccedil;, ka tiks izveidota piln&icirc;ga &eth;&icirc;s sist&ccedil;mas datu b&acirc;zes kopija. Rezerves kopija j&acirc;izveido vismaz vienu reizi m&ccedil;nes&icirc;. Rezerves kopija ir MySQL transakcijas fails, kuru v&ccedil;l&acirc;k var import&ccedil;t jaun&acirc; sist&ccedil;m&acirc;, izmantojot phpMyAdmin vai komandrindas mysql komandu.";
@@ -468,7 +468,7 @@ $PMF_LANG["ad_passwdsuc"] = "Parole nomain&icirc;ta.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "PDF versija";
-$PMF_LANG["ad_entry_locale"] = "Valoda";
+$PMF_LANG["msgLanguage"] = "Valoda";
 $PMF_LANG["msgLanguageSubmit"] = "main&icirc;t valodu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten

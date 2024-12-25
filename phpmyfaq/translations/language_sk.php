@@ -206,10 +206,10 @@ $PMF_LANG["ad_entry_action"] = "Akcia";
 $PMF_LANG["ad_entry_edit_1"] = "Uprav nahrávku";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Otázka";
-$PMF_LANG["ad_entry_content"] = "Odpoveď";
+$PMF_LANG["msgAnswer"] = "Odpoveď";
 $PMF_LANG["ad_entry_keywords"] = "Kľúčové slová";
 $PMF_LANG["ad_entry_author"] = "Autor";
-$PMF_LANG["ad_entry_category"] = "Kategória";
+$PMF_LANG["msgCategory"] = "Kategória";
 $PMF_LANG["ad_entry_active"] = "Aktívny?";
 $PMF_LANG["msgDate"] = "Dátum";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -367,14 +367,14 @@ $PMF_LANG["ad_config_saved"] = "Nastavenia boli úspešne uložené.";
 $PMF_LANG["ad_menu_editconfig"] = "Uprav nastavenia";
 $PMF_LANG["ad_att_none"] = "Nie sú dostupné žiadne prílohy";
 $PMF_LANG["ad_att_att"] = "Prílohy";
-$PMF_LANG["ad_att_add"] = "Priložiť súbor";
+$PMF_LANG["msgAddAttachment"] = "Priložiť súbor";
 $PMF_LANG["ad_entryins_suc"] = "Záznam úspešne uložený.";
 $PMF_LANG["msgErrorOccurred"] = "Vyskytla sa chyba.";
 $PMF_LANG["ad_att_del"] = "Vymazať";
 $PMF_LANG["ad_att_nope"] = "Prílohy môžu byť pridané len počas úprav.";
 $PMF_LANG["ad_att_delsuc"] = "Príloha bola úspešne vymazaná.";
 $PMF_LANG["ad_att_delfail"] = "Počas mazania súboru sa vyskytla chyba.";
-$PMF_LANG["ad_entry_add"] = "Pridať FAQ";
+$PMF_LANG["msgAddFAQ"] = "Pridať FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Zálohou je kompletný obraz databázy. Formát zálohy je SQL súbor, a môže byť importovaný použitím nástrojov ako phpMyAdmin alebo príkazového riadku sql klienta. Záloha môže byť ukladaná najmenej jedenkrát za mesiac.";
@@ -475,7 +475,7 @@ $PMF_LANG["msgPDF"] = "Zobraziť ako PDF súbor";
 $PMF_LANG["ad_xml_head"] = "XML-záloha";
 $PMF_LANG["ad_xml_hint"] = "Uložiť všetky záznamy FAQ do jedného XML súboru.";
 $PMF_LANG["ad_xml_gen"] = "vytvoriť XML súbor";
-$PMF_LANG["ad_entry_locale"] = "Jazyk";
+$PMF_LANG["msgLanguage"] = "Jazyk";
 $PMF_LANG["msgLanguageSubmit"] = "Zvoliť jazyk";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -706,7 +706,7 @@ $PMF_LANG['err_expiredArticle'] = 'Táto položka vypršala a nemôže byť zobr
 $PMF_LANG['err_expiredNews'] = 'Táto novinka vypršala a nemôže byť zobrazená';
 $PMF_LANG['err_inactiveNews'] = 'Táto novinka sa upravuje a nemôže byť vymazaná';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Hľadať vo všetkých jazykoch:';
-$PMF_LANG['ad_entry_tags'] = 'Tagy';
+$PMF_LANG['msgTags'] = 'Tagy';
 $PMF_LANG['msg_tags'] = 'Tagy';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -960,6 +960,6 @@ $PMF_LANG['msgShowHelp'] = 'Prosím oddeľte slová čiarkou.';
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať';
-$PMF_LANG['msgEditFaqDat'] = 'upraviť';
+$PMF_LANG['msgEditFaqDate'] = 'upraviť';
 
 return $PMF_LANG;

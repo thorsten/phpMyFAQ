@@ -171,10 +171,10 @@ $PMF_LANG['ad_entry_action'] = 'عمليات';
 $PMF_LANG['ad_entry_edit_1'] = 'تحرير السؤال';
 $PMF_LANG['ad_entry_edit_2'] = '';
 $PMF_LANG['msgQuestion'] = 'عنوان السؤال:';
-$PMF_LANG['ad_entry_content'] = 'السؤال:';
+$PMF_LANG['msgAnswer'] = 'السؤال:';
 $PMF_LANG['ad_entry_keywords'] = 'كلمات البحث:';
 $PMF_LANG['ad_entry_author'] = 'الكاتب:';
-$PMF_LANG['ad_entry_category'] = 'التصنيف:';
+$PMF_LANG['msgCategory'] = 'التصنيف:';
 $PMF_LANG['ad_entry_active'] = 'نشط؟';
 $PMF_LANG['msgDate'] = 'التاريخ';
 $PMF_LANG['ad_entry_status'] = 'حالة السؤال';
@@ -309,14 +309,14 @@ $PMF_LANG['ad_config_saved'] = 'تمت عملية حفظ إعدادات البر
 $PMF_LANG['ad_menu_editconfig'] = 'تحرير الإعدادات العامة';
 $PMF_LANG['ad_att_none'] = 'لا يوجد مرفقات بعد';
 $PMF_LANG['ad_att_att'] = 'الملف';
-$PMF_LANG['ad_att_add'] = 'إرفاق ملف';
+$PMF_LANG['msgAddAttachment'] = 'إرفاق ملف';
 $PMF_LANG['ad_entryins_suc'] = 'تم حفظ السؤال بنجاح .';
 $PMF_LANG['msgErrorOccurred'] = 'حصل خطأ ما !';
 $PMF_LANG['ad_att_del'] = 'حذف';
 $PMF_LANG['ad_att_nope'] = 'يمكن وضع مرفقات أثناء تحرير السؤال';
 $PMF_LANG['ad_att_delsuc'] = 'تم حذف الملف المرفق بنجاح .';
 $PMF_LANG['ad_att_delfail'] = 'حصل خطأ ما أثناء عملية حذف الملف المرفق !';
-$PMF_LANG['ad_entry_add'] = 'إضافة سؤال';
+$PMF_LANG['msgAddFAQ'] = 'إضافة سؤال';
 $PMF_LANG['ad_csv_make'] = 'عملية نسخ قاعدة البيانات من العمليات المه';
 $PMF_LANG['ad_csv_link'] = 'تحميل نسخة إحتياطية';
 $PMF_LANG['ad_csv_head'] = 'عملية النسخ';
@@ -382,7 +382,7 @@ $PMF_LANG['msgPageDoublePoint'] = 'الصفحة: ';
 $PMF_LANG['msgMainCategory'] = 'التصنيف الرئيسي';
 $PMF_LANG['ad_passwdsuc'] = 'تمت عملية تعديل كلمة مرورك ';
 $PMF_LANG['msgPDF'] = 'عرض كملف PDF';
-$PMF_LANG['ad_entry_locale'] = 'اللغة';
+$PMF_LANG['msgLanguage'] = 'اللغة';
 $PMF_LANG['msgLanguageSubmit'] = 'تغيير اللغة';
 $PMF_LANG['ad_entry_preview'] = 'عرض';
 $PMF_LANG['ad_attach_1'] = 'فضلاً قم بتحديد مسار المجلد الذي سيتم فيه ح ';
@@ -570,7 +570,7 @@ $PMF_LANG['err_expiredArticle'] = 'هذة المداخلة قديمة ولا ي�
 $PMF_LANG['err_expiredNews'] = 'هذة الأخبار قديمة ولا يمكن عرضها';
 $PMF_LANG['err_inactiveNews'] = 'هذة الأخبار مازالت تحت المراجعة ولا يمكن عرضها الأن';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'البحث بجميع اللغات :';
-$PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msgTags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 $PMF_LANG['msg_related_articles'] = 'مداخلات ذات صلة';
 $LANG_CONF['records.numberOfRelatedArticles'] = array("input", "عدد المداخلات ذات الصلة");
@@ -609,7 +609,7 @@ $PMF_LANG['records.orderingPopularFaqs.voting'] = 'list most voted entries';
 $PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
 $PMF_LANG['msgUpdateFaqDate'] = 'تحديث';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
-$PMF_LANG['msgEditFaqDat'] = 'تحرير';
+$PMF_LANG['msgEditFaqDate'] = 'تحرير';
 $LANG_CONF['search.numberSearchTerms'] = array('input', 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top faq\'s');
 $PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'يوجد %d سؤال وجواب اونلاين';

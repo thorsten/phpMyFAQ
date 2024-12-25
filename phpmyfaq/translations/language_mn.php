@@ -203,10 +203,10 @@ $PMF_LANG["ad_entry_action"] = "Үйлдэл";
 $PMF_LANG["ad_entry_edit_1"] = "Бичлэг засах";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Асуулт";
-$PMF_LANG["ad_entry_content"] = "Хариулт:";
+$PMF_LANG["msgAnswer"] = "Хариулт:";
 $PMF_LANG["ad_entry_keywords"] = "Түлхүүр үг:";
 $PMF_LANG["ad_entry_author"] = "Зохиогч:";
-$PMF_LANG["ad_entry_category"] = "Ангилал:";
+$PMF_LANG["msgCategory"] = "Ангилал:";
 $PMF_LANG["ad_entry_active"] = "Хандах боломжтой:";
 $PMF_LANG["msgDate"] = "Огноо:";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -363,14 +363,14 @@ $PMF_LANG["ad_config_saved"] = "Тохиргоо амжилттай хадгал
 $PMF_LANG["ad_menu_editconfig"] = "Тохиргоо засах";
 $PMF_LANG["ad_att_none"] = "Хавсралт алга";
 $PMF_LANG["ad_att_att"] = "Хавсралт:";
-$PMF_LANG["ad_att_add"] = "Хавсралт нэмэх";
+$PMF_LANG["msgAddAttachment"] = "Хавсралт нэмэх";
 $PMF_LANG["ad_entryins_suc"] = "Бичлэг амжилттай хадгалагдлаа.";
 $PMF_LANG["msgErrorOccurred"] = "Алдаа илэрлээ.";
 $PMF_LANG["ad_att_del"] = "Устгах";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "Хавсралт устгагдлаа.";
 $PMF_LANG["ad_att_delfail"] = "Хавсралт устгахад алдаа гарлаа.";
-$PMF_LANG["ad_entry_add"] = "Шинэ FAQ нэмэх";
+$PMF_LANG["msgAddFAQ"] = "Шинэ FAQ нэмэх";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.";
@@ -468,7 +468,7 @@ $PMF_LANG["ad_passwdsuc"] = "Таны нууц үг өөрчлөгдлөө.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "XML экспорт үүсгэх";
-$PMF_LANG["ad_entry_locale"] = "Хэл";
+$PMF_LANG["msgLanguage"] = "Хэл";
 $PMF_LANG["msgLangaugeSubmit"] = "Хэл солих";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -694,7 +694,7 @@ $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displaye
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'бүх хэлнээс хайх';
-$PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msgTags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -968,7 +968,7 @@ $PMF_LANG['msgShowHelp'] = 'Үгнүүдийг таслалаар тусгаар
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'шинэчлэх';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
-$PMF_LANG['msgEditFaqDat'] = 'засах';
+$PMF_LANG['msgEditFaqDate'] = 'засах';
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'Instant Response on startpage (үндсэн: идэвхгүй)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
@@ -986,7 +986,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Түлхүүр үгс - 
 $PMF_LANG['msgLoginUser'] = 'Нэвтрэх';
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "FAQ Хавсралтууд";
+$PMF_LANG["msgAttachments"] = "FAQ Хавсралтууд";
 $PMF_LANG["ad_menu_attachment_admin"] = "Хавсралтын удирдлага";
 $PMF_LANG['msgAttachmentsFilename'] = 'Файлын нэр';
 $PMF_LANG['msgAttachmentsFilesize'] = 'Файлын хэмжээ';

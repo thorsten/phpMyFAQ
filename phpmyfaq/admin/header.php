@@ -68,7 +68,7 @@ $secLevelEntries['content'] = $adminHelper->addMenuEntry(
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_ADD->value,
     'editentry',
-    'ad_entry_add',
+    'msgAddFAQ',
     'faq/add'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
@@ -88,13 +88,13 @@ $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comment
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     'addattachment+editattachment+delattachment',
     'attachments',
-    'ad_menu_attachments',
+    'msgAttachments',
     'attachments'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
     PermissionType::FAQ_EDIT->value,
     'tags',
-    'ad_entry_tags',
+    'msgTags',
     'tags'
 );
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry(

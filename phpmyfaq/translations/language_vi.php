@@ -209,10 +209,10 @@ $PMF_LANG["ad_entry_action"] = "Hành động";
 $PMF_LANG["ad_entry_edit_1"] = "Chỉnh sửa nội dung";
 $PMF_LANG["ad_entry_edit_2"] = "Chỉnh sửa nội dung";
 $PMF_LANG["msgQuestion"] = "Câu hỏi";
-$PMF_LANG["ad_entry_content"] = "Câu trả lời";
+$PMF_LANG["msgAnswer"] = "Câu trả lời";
 $PMF_LANG["ad_entry_keywords"] = "Từ khóa";
 $PMF_LANG["ad_entry_author"] = "Tác giả";
-$PMF_LANG["ad_entry_category"] = "Mục";
+$PMF_LANG["msgCategory"] = "Mục";
 $PMF_LANG["ad_entry_active"] = "Kích hoạt?";
 $PMF_LANG["msgDate"] = "Ngày";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -370,14 +370,14 @@ $PMF_LANG["ad_config_saved"] = "Cấu hình đã được lưu.";
 $PMF_LANG["ad_menu_editconfig"] = "Chỉnh sửa cấu hình";
 $PMF_LANG["ad_att_none"] = "Không có tập tin đính kèm";
 $PMF_LANG["ad_att_att"] = "Tập tin đính kèm";
-$PMF_LANG["ad_att_add"] = "Đính kèm một tập tin";
+$PMF_LANG["msgAddAttachment"] = "Đính kèm một tập tin";
 $PMF_LANG["ad_entryins_suc"] = "Bài đã được lưu.";
 $PMF_LANG["msgErrorOccurred"] = "Có lỗi xảy ra.";
 $PMF_LANG["ad_att_del"] = "Xóa";
 $PMF_LANG["ad_att_nope"] = "Chỉ có thể thêm tập tin đính kèm khi chỉnh sửa.";
 $PMF_LANG["ad_att_delsuc"] = "Tập tin đính kèm đã được xóa.";
 $PMF_LANG["ad_att_delfail"] = "Có lỗi xảy ra.";
-$PMF_LANG["ad_entry_add"] = "Tạo bài";
+$PMF_LANG["msgAddFAQ"] = "Tạo bài";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Bản lưu hay backup là một hình ảnh trọn vẹn của cơ sở dữ liệu.";
@@ -473,7 +473,7 @@ $PMF_LANG["msgPDF"] = "Cho xem dưới định dạng PDF";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Lưu toàn bộ nội dung của phần Câu hỏi thường gặp trong một tập tin XML.";
 $PMF_LANG["ad_xml_gen"] = "tạo tập tin XML";
-$PMF_LANG["ad_entry_locale"] = "Ngôn ngữ";
+$PMF_LANG["msgLanguage"] = "Ngôn ngữ";
 $PMF_LANG["msgLanguageSubmit"] = "Thay đổi ngôn ngữ";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -704,7 +704,7 @@ $PMF_LANG['err_expiredArticle'] = 'Nội dung này đã quá hạn và bạn kh�
 $PMF_LANG['err_expiredNews'] = 'Nội dung này đã quá hạn và bạn không thể xem';
 $PMF_LANG['err_inactiveNews'] = 'Nội dung này đang được hiệu đính và bạn không thể xem';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Tìm kiếm trong tất cả các ngôn ngữ:';
-$PMF_LANG['ad_entry_tags'] = 'Tag';
+$PMF_LANG['msgTags'] = 'Tag';
 $PMF_LANG['msg_tags'] = 'Tag';
 
 // added v2.0.0 - 2006-09-02 by Thomas

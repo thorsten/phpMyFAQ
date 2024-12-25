@@ -206,10 +206,10 @@ $PMF_LANG["ad_entry_action"] = "Дія";
 $PMF_LANG["ad_entry_edit_1"] = "Редагування записів";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Питання";
-$PMF_LANG["ad_entry_content"] = "Відповідь";
+$PMF_LANG["msgAnswer"] = "Відповідь";
 $PMF_LANG["ad_entry_keywords"] = "Ключі";
 $PMF_LANG["ad_entry_author"] = "Автор";
-$PMF_LANG["ad_entry_category"] = "Розділ";
+$PMF_LANG["msgCategory"] = "Розділ";
 $PMF_LANG["ad_entry_active"] = "Активувати?";
 $PMF_LANG["msgDate"] = "Дата";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -368,14 +368,14 @@ $PMF_LANG["ad_config_saved"] = "Зміни збережені.";
 $PMF_LANG["ad_menu_editconfig"] = "Настройки";
 $PMF_LANG["ad_att_none"] = "Файли відсутні";
 $PMF_LANG["ad_att_att"] = "Файли";
-$PMF_LANG["ad_att_add"] = "Прикріпити фал";
+$PMF_LANG["msgAddAttachment"] = "Прикріпити фал";
 $PMF_LANG["ad_entryins_suc"] = "Запис збережений.";
 $PMF_LANG["msgErrorOccurred"] = "Помилка.";
 $PMF_LANG["ad_att_del"] = "Видалити";
 $PMF_LANG["ad_att_nope"] = "Прикріплення файлів можливе тільки при редагуванні відповіді.";
 $PMF_LANG["ad_att_delsuc"] = "Файл успішно прикріплений.";
 $PMF_LANG["ad_att_delfail"] = "При видаленні прикріпленого файлу виникла помилка.";
-$PMF_LANG["ad_entry_add"] = "Новий запись";
+$PMF_LANG["msgAddFAQ"] = "Новий запись";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Рекомендується один раз в місяць виконувати процедуру збереження образу бази даних для запобігання її поломці і втраті даних. Формат архівного файлу сумісний з інструментом phpMyAdmin.";
@@ -476,7 +476,7 @@ $PMF_LANG["ad_passwdsuc"] = "Пароль змінений.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "Скомпілювати PDF файл";
-$PMF_LANG["ad_entry_locale"] = "Мова";
+$PMF_LANG["msgLanguage"] = "Мова";
 $PMF_LANG["msgLanguageSubmit"] = "змінити мову";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -600,7 +600,7 @@ $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displaye
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";
 $PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed";
 $PMF_LANG["msgSearchOnAllLanguages"] = "Шукати у всіх мовах";
-$PMF_LANG["ad_entry_tags"] = "Tags";
+$PMF_LANG["msgTags"] = "Tags";
 $PMF_LANG["msg_tags"] = "Tags";
 
 // added 2.0.0 - 2006-11-19 by Thorsten
@@ -661,7 +661,7 @@ $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displaye
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed";
 $PMF_LANG["err_inactiveNews"] = "This news is in revision and can not be displayed";
 $PMF_LANG["msgSearchOnAllLanguages"] = "Шукати по всіх мовах";
-$PMF_LANG["ad_entry_tags"] = "Теги";
+$PMF_LANG["msgTags"] = "Теги";
 $PMF_LANG["msg_tags"] = "Теги";
 
 // added v2.0.0 - 2007-04-04 by Thorsten

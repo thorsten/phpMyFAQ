@@ -155,7 +155,7 @@ class Pdf extends Export
 
             if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->pdf->Ln();
-                $this->pdf->Write(5, Translation::get('ad_entry_tags') . ': ' . implode(', ', $tags));
+                $this->pdf->Write(5, Translation::get('msgTags') . ': ' . implode(', ', $tags));
             }
 
             $this->pdf->Ln();

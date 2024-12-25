@@ -204,10 +204,10 @@ $PMF_LANG["ad_entry_action"] = "動作";
 $PMF_LANG["ad_entry_edit_1"] = "編輯記錄";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "問題";
-$PMF_LANG["ad_entry_content"] = "答案";
+$PMF_LANG["msgAnswer"] = "答案";
 $PMF_LANG["ad_entry_keywords"] = "關鍵字";
 $PMF_LANG["ad_entry_author"] = "作者";
-$PMF_LANG["ad_entry_category"] = "類別";
+$PMF_LANG["msgCategory"] = "類別";
 $PMF_LANG["ad_entry_active"] = "可被看到";
 $PMF_LANG["msgDate"] = "日期";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -364,14 +364,14 @@ $PMF_LANG["ad_config_saved"] = "設定已儲存成功。";
 $PMF_LANG["ad_menu_editconfig"] = "編輯設定";
 $PMF_LANG["ad_att_none"] = "沒有可用的附加檔案";
 $PMF_LANG["ad_att_att"] = "附加檔案";
-$PMF_LANG["ad_att_add"] = "新增附加檔案";
+$PMF_LANG["msgAddAttachment"] = "新增附加檔案";
 $PMF_LANG["ad_entryins_suc"] = "記錄儲存成功。";
 $PMF_LANG["msgErrorOccurred"] = "發生一個錯誤。";
 $PMF_LANG["ad_att_del"] = "刪除";
 $PMF_LANG["ad_att_nope"] = "只能在編輯的狀態下，新增附加檔案。";
 $PMF_LANG["ad_att_delsuc"] = "附加檔案刪除成功。";
 $PMF_LANG["ad_att_delfail"] = "刪除附加檔案發生錯誤。(An error occurred while deleting the attachment.)";
-$PMF_LANG["ad_entry_add"] = "新增新的 FAQ";
+$PMF_LANG["msgAddFAQ"] = "新增新的 FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin - 管理
 $PMF_LANG["ad_csv_make"] = "備份是對目前資料庫內容完整的儲存。請每月至少做一次備份。備份格式是的 SQL 交易檔案文件，可以透過的 SQL 匯入工具程式像 phpMyAdmin 或是執行命令列程式恢復備份。<br>(A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.)";
@@ -469,7 +469,7 @@ $PMF_LANG["ad_passwdsuc"] = "您的密碼已變更完成。";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten 開發者
 $PMF_LANG["ad_xml_gen"] = "建立 XML 匯出檔案 (Create XML export)";
-$PMF_LANG["ad_entry_locale"] = "語言";
+$PMF_LANG["msgLanguage"] = "語言";
 $PMF_LANG["msgLanguageSubmit"] = "變更語言";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten 開發者
@@ -689,7 +689,7 @@ $PMF_LANG['err_expiredArticle'] = "此 entry 已過期，與不能被顯示! Thi
 $PMF_LANG['err_expiredNews'] = "這條新聞已過期，與不能被顯示。This news is expired and can not be displayed";
 $PMF_LANG['err_inactiveNews'] = "這條新聞是在所有的修改版本內，與不能被顯示 This news is in revision and can not be displayed";
 $PMF_LANG['msgSearchOnAllLanguages'] = "搜尋所有的語言 search in all languages";
-$PMF_LANG['ad_entry_tags'] = "標籤 Tags";
+$PMF_LANG['msgTags'] = "標籤 Tags";
 $PMF_LANG['msg_tags'] = "標籤 Tags";
 
 // added v2.0.0 - 2006-09-02 by Thomas 開發者
@@ -943,7 +943,7 @@ $PMF_LANG['msgShowHelp'] = "請用逗號(,)來分隔字串。 (Please seperate w
 // added 2.6.0-RC - 2009-11-30 by Thorsten 開發者
 $PMF_LANG['msgUpdateFaqDate'] = "更新";
 $PMF_LANG['msgKeepFaqDate'] = "保留";
-$PMF_LANG['msgEditFaqDat'] = "編輯";
+$PMF_LANG['msgEditFaqDate'] = "編輯";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt 開發者
 $LANG_CONF['search.relevance'] = array("select", "Sort by relevance");
@@ -960,7 +960,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "關鍵字 - 問題 - 答
 $PMF_LANG['msgLoginUser'] = "登入 Login";
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky 開發者
-$PMF_LANG["ad_menu_attachments"] = "FAQ 附加檔案 (Attachments)";
+$PMF_LANG["msgAttachments"] = "FAQ 附加檔案 (Attachments)";
 $PMF_LANG["ad_menu_attachment_admin"] = "附加檔案管理 (Attachment administration)";
 $PMF_LANG['msgAttachmentsFilename'] = "檔案名稱";
 $PMF_LANG['msgAttachmentsFilesize'] = "檔案大小";

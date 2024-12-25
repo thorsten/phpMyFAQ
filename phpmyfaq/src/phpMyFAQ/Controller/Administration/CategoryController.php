@@ -406,7 +406,6 @@ class CategoryController extends AbstractAdministrationController
                 'restrictedUsers' => $restrictedUsers ? 'checked' : '',
                 'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
                 'allUsersOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
-                'msgSerpTitle' => Translation::get('msgSerpTitle'),
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
@@ -759,7 +758,6 @@ class CategoryController extends AbstractAdministrationController
             'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
             'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
-            'msgSerpTitle' => Translation::get('msgSerpTitle'),
             'restricted_groups' => ($this->configuration->get('security.permLevel') === 'medium') ?
                 $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser) : '',
         ];

@@ -206,10 +206,10 @@ $PMF_LANG["ad_entry_action"] = "Veiksmas";
 $PMF_LANG["ad_entry_edit_1"] = "Redaguoti įrašą";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Klausimas";
-$PMF_LANG["ad_entry_content"] = "Atsakymas";
+$PMF_LANG["msgAnswer"] = "Atsakymas";
 $PMF_LANG["ad_entry_keywords"] = "Raktažodžiai";
 $PMF_LANG["ad_entry_author"] = "Autorius";
-$PMF_LANG["ad_entry_category"] = "Grupė";
+$PMF_LANG["msgCategory"] = "Grupė";
 $PMF_LANG["ad_entry_active"] = "Aktyvus?";
 $PMF_LANG["msgDate"] = "Data";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -367,14 +367,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigūracija sėkmingai išsaugota.";
 $PMF_LANG["ad_menu_editconfig"] = "Redaguoti konfigūraciją";
 $PMF_LANG["ad_att_none"] = "Nėra priedų";
 $PMF_LANG["ad_att_att"] = "Priedai";
-$PMF_LANG["ad_att_add"] = "Pridėti failą";
+$PMF_LANG["msgAddAttachment"] = "Pridėti failą";
 $PMF_LANG["ad_entryins_suc"] = "Įrašas sėkmingai išsaugotas.";
 $PMF_LANG["msgErrorOccurred"] = "Įvyko klaida.";
 $PMF_LANG["ad_att_del"] = "Šalinti";
 $PMF_LANG["ad_att_nope"] = "Priedai gali būti pridėti tik kai redaguojama.";
 $PMF_LANG["ad_att_delsuc"] = "Priedas sėkmingai pašalintas.";
 $PMF_LANG["ad_att_delfail"] = "Įvyko klaida šalinant priedą.";
-$PMF_LANG["ad_entry_add"] = "Pridėti DUK";
+$PMF_LANG["msgAddFAQ"] = "Pridėti DUK";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Atsarginė kopija yra pilnas duomenų bazės turinio atvaizdis. Atsarginės kopijos formatas yra SQL tranzakcijos failas, kuris gali būti importuotas naudojant tokius įrankius kaip phpMyAdmin ar komandos eilutės SQL klientas. Atsarginė kopija turėtų būti daroma bent kartą per mėnesį.";
@@ -475,7 +475,7 @@ $PMF_LANG["msgPDF"] = "Rodyti kaip PDF failą";
 $PMF_LANG["ad_xml_head"] = "XML atsarginė kopija";
 $PMF_LANG["ad_xml_hint"] = "Išsaugoti visus jūsų DUK įrašus viename XML faile.";
 $PMF_LANG["ad_xml_gen"] = "sukurti XML failą";
-$PMF_LANG["ad_entry_locale"] = "Kalba";
+$PMF_LANG["msgLanguage"] = "Kalba";
 $PMF_LANG["msgLanguageSubmit"] = "Parinkti kalbą";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -712,7 +712,7 @@ $PMF_LANG['err_expiredArticle'] = 'Šis įrašas nebegalioja ir negali būti par
 $PMF_LANG['err_expiredNews'] = 'Ši naujiena nebegalioja ir negali būti parodyta';
 $PMF_LANG['err_inactiveNews'] = 'Ši naujiena turi pataisą ir negali būti parodyta';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Ieškoti visomis kalbomis:';
-$PMF_LANG['ad_entry_tags'] = 'Gairės';
+$PMF_LANG['msgTags'] = 'Gairės';
 $PMF_LANG['msg_tags'] = 'Gairės';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -973,6 +973,6 @@ $PMF_LANG['msgShowHelp'] = 'Prašome atskirti žodžius kableliu.';
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
 $PMF_LANG['msgKeepFaqDate'] = 'palikti';
-$PMF_LANG['msgEditFaqDat'] = 'redaguoti';
+$PMF_LANG['msgEditFaqDate'] = 'redaguoti';
 
 return $PMF_LANG;

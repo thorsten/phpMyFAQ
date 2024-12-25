@@ -175,7 +175,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          href: `./faq/edit/${faq.id}/${faq.language}`,
           innerText: faq.id,
         }),
       ])
@@ -185,7 +185,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          href: `./faq/edit/${faq.id}/${faq.language}`,
           innerText: faq.solution_id,
         }),
       ])
@@ -194,7 +194,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
       addElement('td', {}, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `?action=editentry&id=${faq.id}&lang=${faq.language}`,
+          href: `./faq/edit/${faq.id}/${faq.language}`,
           innerText: faq.question,
         }),
       ])
@@ -230,14 +230,14 @@ const populateCategoryTable = async (catgoryId, faqs) => {
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('a', { classList: 'btn btn-primary', href: `?action=editentry&id=${faq.id}&lang=${faq.language}` }, [
+        addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id}/${faq.language}` }, [
           addElement('i', { classList: 'bi bi-pencil', 'aria-hidden': 'true' }),
         ]),
       ])
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('a', { classList: 'btn btn-info', href: `?action=copyentry&id=${faq.id}&lang=${faq.language}` }, [
+        addElement('a', { classList: 'btn btn-info', href: `./faq/copy/${faq.id}/${faq.language}` }, [
           addElement('i', { classList: 'bi bi-copy', 'aria-hidden': 'true' }),
         ]),
       ])

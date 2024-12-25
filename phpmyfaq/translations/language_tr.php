@@ -204,10 +204,10 @@ $PMF_LANG["ad_entry_action"] = "Eylem";
 $PMF_LANG["ad_entry_edit_1"] = "Düzenle";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Soru";
-$PMF_LANG["ad_entry_content"] = "Cevap";
+$PMF_LANG["msgAnswer"] = "Cevap";
 $PMF_LANG["ad_entry_keywords"] = "Anahtar sözcükler";
 $PMF_LANG["ad_entry_author"] = "Oluşturan";
-$PMF_LANG["ad_entry_category"] = "Kategori";
+$PMF_LANG["msgCategory"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Görünür";
 $PMF_LANG["msgDate"] = "Tarih";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -364,14 +364,14 @@ $PMF_LANG["ad_config_saved"] = "Yapılandırma seçenekleri başarıyla kaydedil
 $PMF_LANG["ad_menu_editconfig"] = "Yapılandırmayı düzenle";
 $PMF_LANG["ad_att_none"] = "Eklenti mevcut değil";
 $PMF_LANG["ad_att_att"] = "Eklentiler";
-$PMF_LANG["ad_att_add"] = "Yeni eklenti ekle";
+$PMF_LANG["msgAddAttachment"] = "Yeni eklenti ekle";
 $PMF_LANG["ad_entryins_suc"] = "Kayıt başarıyla eklendi.";
 $PMF_LANG["msgErrorOccurred"] = "Bir hata oluştu.";
 $PMF_LANG["ad_att_del"] = "Sil";
 $PMF_LANG["ad_att_nope"] = "Eklentiler yalnızca düzenleme sırasında eklenebilir.";
 $PMF_LANG["ad_att_delsuc"] = "Seçilen eklenti başarıyla silindi.";
 $PMF_LANG["ad_att_delfail"] = "Eklenti silinirken bir hata oluştu.";
-$PMF_LANG["ad_entry_add"] = "Yeni soru ekle";
+$PMF_LANG["msgAddFAQ"] = "Yeni soru ekle";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Yedekleme fonksiyonu ile, veritabanınızın tam bir kopyasını oluşturabilirsiniz. Oluşturulan yedek dosyasının formatı SQL olduğundan, phpMyAdmin ya da SQL komut satırı istemcisiyle geri yüklenebilir. Yedekleme işleminin ayda en az bir kez yapılması önerilir.";
@@ -469,7 +469,7 @@ $PMF_LANG["ad_passwdsuc"] = "Şifreniz değiştirildi.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "XML çıktısı oluştur";
-$PMF_LANG["ad_entry_locale"] = "Dil";
+$PMF_LANG["msgLanguage"] = "Dil";
 $PMF_LANG["msgLanguageSubmit"] = "Dil değiştir";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -689,7 +689,7 @@ $PMF_LANG['err_expiredArticle'] = "Bu girdinin geçerlilik tarihi sona erdi ve g
 $PMF_LANG['err_expiredNews'] = "Bu duyurunun geçerlilik tarihi sona erdi ve görüntülenemez";
 $PMF_LANG['err_inactiveNews'] = "Bu duyuru taslak halinde olduğundan görüntülenemez";
 $PMF_LANG['msgSearchOnAllLanguages'] = "tüm dillerde ara";
-$PMF_LANG['ad_entry_tags'] = "Etiketler";
+$PMF_LANG['msgTags'] = "Etiketler";
 $PMF_LANG['msg_tags'] = "Etiketler";
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -943,7 +943,7 @@ $PMF_LANG['msgShowHelp'] = "Lütfen kelimeleri virgülle ayırın";
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = "güncelle";
 $PMF_LANG['msgKeepFaqDate'] = "sakla";
-$PMF_LANG['msgEditFaqDat'] = "düzenle";
+$PMF_LANG['msgEditFaqDate'] = "düzenle";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');
@@ -960,7 +960,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "Anahtar sözcük - Soru 
 $PMF_LANG['msgLoginUser'] = "Giriş";
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "Eklentiler";
+$PMF_LANG["msgAttachments"] = "Eklentiler";
 $PMF_LANG["ad_menu_attachment_admin"] = "Dosya Eklenti yönetimi";
 $PMF_LANG['msgAttachmentsFilename'] = "Dosya adı";
 $PMF_LANG['msgAttachmentsFilesize'] = "Boyut";
@@ -1094,7 +1094,7 @@ $LANG_CONF["search.searchForSolutionId"] = array("checkbox", "Search for solutio
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Etiket başarıyla silindi.";
 $PMF_LANG["ad_tag_delete_error"] = "Etiket silinirken bir hata oluştu.";
-$PMF_LANG["seoCenter"] = "SEO";
+$PMF_LANG["msgSeoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = array("select", "Meta Tags start page");
 $LANG_CONF["seo.metaTagsFaqs"] = array("select", "Meta Tags FAQs");
 $LANG_CONF["seo.metaTagsCategories"] = array("select", "Meta Tags category pages");

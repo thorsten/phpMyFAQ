@@ -4,8 +4,7 @@
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="bi bi-pencil"></i>
-      {{ adminFaqEditorHeader }}
-      <span class="truncate-question" id="pmf-admin-question-output">
+      {{ header }}<span class="truncate-question" id="pmf-admin-question-output">
         {% if editExistingFaq %}: {{ faqData['title'] | raw }}{% endif %}
       </span>
     </h1>
@@ -41,22 +40,22 @@
           <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
-                <i class="bi bi-pencil"></i> {{ ad_record_faq }}
+                <i class="bi bi-pencil"></i> {{ 'msgQuestionAnswer' | translate }}
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
-                <i class="bi bi-database"></i> {{ ad_menu_faq_meta }}
+                <i class="bi bi-database"></i> {{ 'msgFAQMetaData' | translate }}
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" href="#tab-seo" role="tab">
-                <i class="bi bi-graph-up"></i> {{ msgSeoCenter }}
+                <i class="bi bi-graph-up"></i> {{ 'msgSeoCenter' | translate }}
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
-                <i class="bi bi-unlock"></i> {{ ad_record_permissions }}
+                <i class="bi bi-unlock"></i> {{ 'msgPermissions' | translate }}
               </a>
             </li>
             <li class="nav-item">
@@ -75,7 +74,7 @@
                 <!-- Revision -->
                 <div class="form-group mb-2">
                   <form id="selectRevision" name="selectRevision" method="post"
-                        action="?action=editentry&id={{ faqData['id'] }}&lang={{ faqLang }}">
+                        action="./faq/edit/{{ faqData['id'] }}/{{ faqLang }}">
                     <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
                       <option value="0">{{ ad_changerev }}</option>
                       {% for currentRevision in revisions %}
@@ -97,16 +96,15 @@
                 <input type="hidden" name="faqId" id="faqId" value="{{ faqData['id'] }}">
                 <input type="hidden" name="openQuestionId" id="openQuestionId" value="{{ openQuestionId }}">
                 <input type="hidden" name="notifyUser" id="notifyUser" value="{{ notifyUser }}">
-                <input type="hidden" name="notifyEmail" id="notifyEmail"
-                       value="{{ notifyEmail }}">
-                <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
+                <input type="hidden" name="notifyEmail" id="notifyEmail" value="{{ notifyEmail }}">
+                <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken }}">
 
                 <!-- Question -->
                 <div class="form-group mb-2">
                   <input type="text" name="question" id="question" class="form-control form-control-lg"
-                         placeholder="{{ msgQuestion }}" value="{{ faqData['title'] }}">
+                         placeholder="{{ 'msgQuestion' | translate }}" value="{{ faqData['title'] }}">
                   <small id="questionHelp" class="form-text visually-hidden">
-                    {{ msgNoHashAllowed }}
+                    {{ 'msgNoHashAllowed' | translate }}
                   </small>
                 </div>
 
@@ -116,7 +114,7 @@
                     <div class="col-lg-12">
                       <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                       <textarea id="editor" name="answer" class="form-control" rows="7"
-                                placeholder="{{ ad_entry_content }}"
+                                placeholder="{{ 'msgAnswer' | translate }}"
                       >{{ faqData['content'] | raw }}</textarea>
                     </div>
                   </div>
@@ -139,7 +137,7 @@
                           <div class="row">
                             <div class="col-lg-12">
                           <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
-                                    placeholder="{{ ad_entry_content }}">{{ faqData['content'] | raw }}</textarea>
+                                    placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
                             </div>
                           </div>
                         </div>
@@ -154,8 +152,8 @@
                 {% if not isEditorEnabled and not isMarkdownEditorEnabled %}
                   <div class="row">
                     <div class="col-lg-12">
-                  <textarea id="editor" name="answer" class="form-control" rows="7"
-                            placeholder="{{ ad_entry_content }}">{{ faqData['content'] | raw }}</textarea>
+                      <textarea id="editor" name="answer" class="form-control" rows="7"
+                                placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
                     </div>
                   </div>
                 {% endif %}
@@ -165,7 +163,9 @@
             <div class="tab-pane" id="tab-meta-data">
               <!-- Categories -->
               <div class="row mb-2">
-                <label class="col-2 col-form-label" for="phpmyfaq-categories">{{ ad_entry_category }}</label>
+                <label class="col-2 col-form-label" for="phpmyfaq-categories">
+                  {{ 'msgCategory' | translate }}
+                </label>
                 <div class="col-6">
                   <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple>
                     {{ categoryOptions | raw }}
@@ -176,7 +176,7 @@
               <!-- Language -->
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="lang">
-                  {{ ad_entry_locale }}
+                  {{ 'msgLanguage' | translate }}
                 </label>
                 <div class="col-lg-10">
                   {{ languageOptions | raw }}
@@ -186,7 +186,9 @@
               <!-- Attachments -->
               {% if hasPermissionForAddAttachments %}
                 <div class="row mb-2">
-                  <label class="col-lg-2 col-form-label">{{ ad_menu_attachments }}</label>
+                  <label class="col-lg-2 col-form-label">
+                    {{ 'msgAttachments' | translate }}
+                  </label>
                   <div class="col-lg-10">
                     <ul class="list adminAttachments" data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
                       {% for attachment in attachments %}
@@ -208,7 +210,7 @@
 
                     <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
                             data-bs-target="#attachmentModal">
-                      {{ ad_att_add }}
+                      {{ 'msgAddAttachment' | translate }}
                     </button>
                   </div>
                 </div>
@@ -216,11 +218,13 @@
 
               <!-- Tags -->
               <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="tags">{{ ad_entry_tags }}</label>
+                <label class="col-lg-2 col-form-label" for="tags">
+                  {{ 'msgTags' | translate }}
+                </label>
                 <div class="col-lg-10">
                   <input type="text" name="tags" id="tags" value="{{ faqData['tags'] }}" autocomplete="off"
                          class="form-control pmf-tags-autocomplete">
-                  <small id="tagsHelp" class="form-text visually-hidden">{{ msgShowHelp }}</small>
+                  <small id="tagsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
                 </div>
               </div>
 
@@ -231,7 +235,7 @@
                   <input type="text" name="keywords" id="keywords" maxlength="255" class="form-control"
                          autocomplete="off"
                          value="{{ faqData['keywords'] }}">
-                  <small id="keywordsHelp" class="form-text visually-hidden">{{ msgShowHelp }}</small>
+                  <small id="keywordsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
                 </div>
               </div>
 
@@ -245,7 +249,7 @@
 
               <!-- E-Mail -->
               <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="email">{{ msgEmail }}</label>
+                <label class="col-lg-2 col-form-label" for="email">{{ 'msgEmail' | translate }}</label>
                 <div class="col-lg-10">
                   <input type="email" name="email" id="email" value="{{ faqData['email'] | raw }}" class="form-control">
                 </div>
@@ -256,12 +260,12 @@
             <div class="tab-pane" id="tab-seo">
 
               <div class="row mb-2">
-                <p>{{ msgSerp }}</p>
+                <p>{{ 'msgSerp' | translate }}</p>
               </div>
 
               <!-- SERP Title -->
               <div class="row mb-2">
-                <label class="col-lg-3 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
+                <label class="col-lg-3 col-form-label" for="serpTitle">{{ 'msgSerpTitle' | translate }}</label>
                 <div class="col-lg-9">
                   <input type="text" name="serpTitle" id="serpTitle" value="{{ faqData['serp-title'] }}"
                          class="form-control">
@@ -344,7 +348,7 @@
               </h6>
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="changelog-date">
-                  {{ msgDate }}
+                  {{ 'msgDate' | translate }}
                 </label>
                 <div class="col-lg-10">
                   <input type="text" readonly class="form-control-plaintext" id="changelog-date"
@@ -423,28 +427,28 @@
         </div>
         <div class="card-body">
           <h5 class="mb-0">
-            {{ msgDate }}
+            {{ 'msgDate' | translate }}
           </h5>
           <div class="form-group">
             <div class="form-check">
               <input type="radio" id="updateDate" checked name="recordDateHandling" class="form-check-input"
                      onchange="setRecordDate(this.id);" value="updateDate">
               <label class="form-check-label" for="updateDate">
-                {{ msgUpdateFaqDate }}
+                {{ 'msgUpdateFaqDate' | translate }}
               </label>
             </div>
             <div class="form-check">
               <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input" value="keepDate"
                      onchange="setRecordDate(this.id);">
               <label class="form-check-label" for="keepDate">
-                {{ msgKeepFaqDate }}
+                {{ 'msgKeepFaqDate' | translate }}
               </label>
             </div>
             <div class="form-check">
               <input type="radio" id="manualDate" name="recordDateHandling" class="form-check-input" value="manualDate"
                      onchange="setRecordDate(this.id);">
               <label class="form-check-label" for="manualDate">
-                {{ msgEditFaqDat }}
+                {{ 'msgEditFaqDate' | translate }}
               </label>
             </div>
             <div id="recordDateInputContainer" class="invisible mb-2">
@@ -531,7 +535,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel"
+  <div class="modal modal-lg fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel"
        aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -562,7 +566,7 @@
               </div>
 
               <div class="pmf-attachment-upload-files invisible mb-2">
-                {{ msgAttachmentsFilesize }}
+                {{ 'msgAttachmentsFilesize' | translate }}
                 <output id="filesize"></output>
               </div>
             </fieldset>

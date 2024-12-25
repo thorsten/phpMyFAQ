@@ -207,10 +207,10 @@ $PMF_LANG["ad_entry_action"] = "Akcija";
 $PMF_LANG["ad_entry_edit_1"] = "Uredi vnos";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Tema";
-$PMF_LANG["ad_entry_content"] = "Vsebina";
+$PMF_LANG["msgAnswer"] = "Vsebina";
 $PMF_LANG["ad_entry_keywords"] = "Besede";
 $PMF_LANG["ad_entry_author"] = "Avtor";
-$PMF_LANG["ad_entry_category"] = "Kategorija";
+$PMF_LANG["msgCategory"] = "Kategorija";
 $PMF_LANG["ad_entry_active"] = "Aktivno?";
 $PMF_LANG["msgDate"] = "Datum";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -375,7 +375,7 @@ $PMF_LANG["ad_att_del"] = "Odstrani";
 $PMF_LANG["ad_att_nope"] = "Priponka se lahko doda samo med urejanjem.";
 $PMF_LANG["ad_att_delsuc"] = "Priponka uspešno odstranjena.";
 $PMF_LANG["ad_att_delfail"] = "Pri brisanju priponke je prišlo do napake.";
-$PMF_LANG["ad_entry_add"] = "Ustvari vnos";
+$PMF_LANG["msgAddFAQ"] = "Ustvari vnos";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Varnostna kopija je posnetek baze podatkov in jo je dobro narediti  vsaj 1 krat na mesec. Baza je MySql formata.";
@@ -476,7 +476,7 @@ $PMF_LANG["msgPDF"] = "Prikaži to kot PDF datoteko";
 $PMF_LANG["ad_xml_head"] = "XML-varnostna kopija";
 $PMF_LANG["ad_xml_hint"] = "Shrani vse vnose v eni XML datoteki.";
 $PMF_LANG["ad_xml_gen"] = "ustvari XML datoteko";
-$PMF_LANG["ad_entry_locale"] = "Jezik";
+$PMF_LANG["msgLanguage"] = "Jezik";
 $PMF_LANG["msgLanguageSubmit"] = "spremeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten

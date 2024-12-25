@@ -207,10 +207,10 @@ $PMF_LANG["ad_entry_action"] = "Perintah";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Materi";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Pertanyaan";
-$PMF_LANG["ad_entry_content"] = "Jawaban";
+$PMF_LANG["msgAnswer"] = "Jawaban";
 $PMF_LANG["ad_entry_keywords"] = "Kata Kunci";
 $PMF_LANG["ad_entry_author"] = "Penulis";
-$PMF_LANG["ad_entry_category"] = "Kategori";
+$PMF_LANG["msgCategory"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Aktif?";
 $PMF_LANG["msgDate"] = "Tanggal";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -368,14 +368,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigurasi berhasil disimpan.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit konfigurasi";
 $PMF_LANG["ad_att_none"] = "Lampiran tidak tersedia";
 $PMF_LANG["ad_att_att"] = "Lampiran";
-$PMF_LANG["ad_att_add"] = "Lampirkan berkas";
+$PMF_LANG["msgAddAttachment"] = "Lampirkan berkas";
 $PMF_LANG["ad_entryins_suc"] = "Data berhasil disimpan.";
 $PMF_LANG["msgErrorOccurred"] = "Terjadi kesalahan.";
 $PMF_LANG["ad_att_del"] = "Hapus";
 $PMF_LANG["ad_att_nope"] = "Lampiran hanya bisa dimasukkan saat mengedit materi.";
 $PMF_LANG["ad_att_delsuc"] = "Lampiran berhasil dihapus.";
 $PMF_LANG["ad_att_delfail"] = "Terjadi kesalahan saat menghapus lampiran.";
-$PMF_LANG["ad_entry_add"] = "Tambah Materi";
+$PMF_LANG["msgAddFAQ"] = "Tambah Materi";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Backup adalah simpanan cadangan lengkap isi database. Format yang digunakan adalah berkas transaksi SQL, yang bisa diimpor dengan alat bantu seperti phpMyAdmin atau program SQL commandline. Backup sebaiknya dilakukan secara rutin sebulan sekali.";
@@ -476,7 +476,7 @@ $PMF_LANG["msgPDF"] = "Tampilkan sebagai PDF";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Simpan semua data materi dalam satu berkas.";
 $PMF_LANG["ad_xml_gen"] = "buat berkas XML";
-$PMF_LANG["ad_entry_locale"] = "Bahasa";
+$PMF_LANG["msgLanguage"] = "Bahasa";
 $PMF_LANG["msgLanguageSubmit"] = "Pilih bahasa";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -707,7 +707,7 @@ $PMF_LANG['err_expiredArticle'] = 'Masa berlaku entri ini sudah berakhir sehingg
 $PMF_LANG['err_expiredNews'] = 'Masa berlaku berita ini sudah berakhir sehingga tidak bisa ditampilkan';
 $PMF_LANG['err_inactiveNews'] = 'Berita ini sedang direvisi sehingga tidak bisa ditampilkan';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cari di semua bahasa:';
-$PMF_LANG['ad_entry_tags'] = 'Tag';
+$PMF_LANG['msgTags'] = 'Tag';
 $PMF_LANG['msg_tags'] = 'Tag';
 
 // added v2.0.0 - 2006-09-02 by Thomas

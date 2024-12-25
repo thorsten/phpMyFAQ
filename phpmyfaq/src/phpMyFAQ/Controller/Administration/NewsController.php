@@ -152,7 +152,7 @@ class NewsController extends AbstractAdministrationController
             'ad_news_header' => Translation::get('ad_news_header'),
             'ad_news_text' => Translation::get('ad_news_text'),
             'ad_news_allowComments' => Translation::get('ad_news_allowComments'),
-            'ad_entry_locale' => Translation::get('ad_entry_locale'),
+            'msgLanguage' => Translation::get('msgLanguage'),
             'ad_entry_comment' => Translation::get('ad_entry_comment'),
             'ad_entry_commentby' => Translation::get('ad_entry_commentby'),
             'newsCommentDate' => Translation::get('newsCommentDate'),

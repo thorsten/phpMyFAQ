@@ -207,10 +207,10 @@ $PMF_LANG["ad_entry_action"] = "Gweithred";
 $PMF_LANG["ad_entry_edit_1"] = "Golygu Cofnod";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Thema";
-$PMF_LANG["ad_entry_content"] = "Cynnwys";
+$PMF_LANG["msgAnswer"] = "Cynnwys";
 $PMF_LANG["ad_entry_keywords"] = "Geiriau Allweddol";
 $PMF_LANG["ad_entry_author"] = "Awdur";
-$PMF_LANG["ad_entry_category"] = "Categori";
+$PMF_LANG["msgCategory"] = "Categori";
 $PMF_LANG["ad_entry_active"] = "Gweithredol?";
 $PMF_LANG["msgDate"] = "Dyddiad";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -366,14 +366,14 @@ $PMF_LANG["ad_config_saved"] = "Cadwyd y ffurfwedd yn llwyddiannus.";
 $PMF_LANG["ad_menu_editconfig"] = "Golygu ffurfwedd";
 $PMF_LANG["ad_att_none"] = "Nid oes atodiadau ar gael";
 $PMF_LANG["ad_att_att"] = "Atodiadau";
-$PMF_LANG["ad_att_add"] = "Atodi ffeil";
+$PMF_LANG["msgAddAttachment"] = "Atodi ffeil";
 $PMF_LANG["ad_entryins_suc"] = "Cadwyd y cofnod yn llwyddiannus.";
 $PMF_LANG["msgErrorOccurred"] = "Gwall.";
 $PMF_LANG["ad_att_del"] = "Dileu";
 $PMF_LANG["ad_att_nope"] = "Gellir ychwanegu atodiadau wrth olygu yn unig.";
 $PMF_LANG["ad_att_delsuc"] = "Dilëwyd yr atodiad yn llwyddiannus.";
 $PMF_LANG["ad_att_delfail"] = "Roedd gwall wrth ddileu'r atodiad.";
-$PMF_LANG["ad_entry_add"] = "Creu Cofnod";
+$PMF_LANG["msgAddFAQ"] = "Creu Cofnod";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "> Ffeiliau wrth gefn yw delwedd gyflawn o gynnwys y gronfa ddata. Fformat y ffeil wrth gefn yw ffeil trafod SQL y gellir ei mewnforio gan ddefnyddio offer megis phpMyAdmin neu'r gorchymyn cleient sql.  Dylid cyflawni ffeil wrth gefn o leiaf unwaith y mis..";
@@ -473,7 +473,7 @@ $PMF_LANG["msgPDF"] = "Dangoswch hwn fel ffeil PDF";
 $PMF_LANG["ad_xml_head"] = "XML-Wrth gefn";
 $PMF_LANG["ad_xml_hint"] = "Cadw pob cofnod o'ch Cwestiynau Cyffredin mewn un ffeil XML.";
 $PMF_LANG["ad_xml_gen"] = "Gwneud ffeil XML";
-$PMF_LANG["ad_entry_locale"] = "Iaith";
+$PMF_LANG["msgLanguage"] = "Iaith";
 $PMF_LANG["msgLanguageSubmit"] = "newid iaith";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten

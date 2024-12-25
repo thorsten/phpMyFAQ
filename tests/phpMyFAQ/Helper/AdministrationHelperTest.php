@@ -79,7 +79,7 @@ class AdministrationHelperTest extends TestCase
         $actual = $this->instance->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'editentry',
-            'ad_entry_add'
+            'msgAddFAQ'
         );
 
         $this->assertEquals($expected, $actual);

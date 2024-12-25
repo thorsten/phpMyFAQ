@@ -207,10 +207,10 @@ $PMF_LANG["ad_entry_action"] = "동작";
 $PMF_LANG["ad_entry_edit_1"] = "FAQ 추가(수정)";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "제목";
-$PMF_LANG["ad_entry_content"] = "내용";
+$PMF_LANG["msgAnswer"] = "내용";
 $PMF_LANG["ad_entry_keywords"] = "키워드";
 $PMF_LANG["ad_entry_author"] = "작성자";
-$PMF_LANG["ad_entry_category"] = "카테고리";
+$PMF_LANG["msgCategory"] = "카테고리";
 $PMF_LANG["ad_entry_active"] = "사용";
 $PMF_LANG["msgDate"] = "날짜";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -368,14 +368,14 @@ $PMF_LANG["ad_config_saved"] = "환경설정이 성공적으로 저장되었습�
 $PMF_LANG["ad_menu_editconfig"] = "환경설정";
 $PMF_LANG["ad_att_none"] = "파일을 첨부할 수 없습니다.";
 $PMF_LANG["ad_att_att"] = "첨부";
-$PMF_LANG["ad_att_add"] = "첨부 파일";
+$PMF_LANG["msgAddAttachment"] = "첨부 파일";
 $PMF_LANG["ad_entryins_suc"] = "성공적으로 저장되었습니다.";
 $PMF_LANG["msgErrorOccurred"] = "에러가 발생하였습니다.";
 $PMF_LANG["ad_att_del"] = "삭제";
 $PMF_LANG["ad_att_nope"] = "첨부파일은 내용 편집중에만 추가될 수 있습니다.";
 $PMF_LANG["ad_att_delsuc"] = "첨부파일을 성공적으로 삭제하였습니다.";
 $PMF_LANG["ad_att_delfail"] = "첨부 삭제시 에러가 발생하였습니다.";
-$PMF_LANG["ad_entry_add"] = "FAQ 내용 추가";
+$PMF_LANG["msgAddFAQ"] = "FAQ 내용 추가";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "데이터베이스의 내용을 그대로 백업합니다. 적어도 1달에 1번은 백업을 하시기 바랍니다. 백업 파일은 MySQL의 트랜잭션 파일 포맷으로 phpMyAdmin이나 MySQL 클라이언트 등에 의해서도 불러올 수 있습니다.";
@@ -476,7 +476,7 @@ $PMF_LANG["msgPDF"] = "PDF 형식으로 보기";
 $PMF_LANG["ad_xml_head"] = "XML-백업";
 $PMF_LANG["ad_xml_hint"] = "모든 FAQ를 한개의 XML 파일로 저장";
 $PMF_LANG["ad_xml_gen"] = "XML 파일 만들기";
-$PMF_LANG["ad_entry_locale"] = "언어";
+$PMF_LANG["msgLanguage"] = "언어";
 $PMF_LANG["msgLanguageSubmit"] = "언어 변경";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten

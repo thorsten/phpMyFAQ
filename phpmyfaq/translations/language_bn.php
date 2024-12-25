@@ -206,10 +206,10 @@ $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Question";
-$PMF_LANG["ad_entry_content"] = "Answer";
+$PMF_LANG["msgAnswer"] = "Answer";
 $PMF_LANG["ad_entry_keywords"] = "Keywords";
 $PMF_LANG["ad_entry_author"] = "Author";
-$PMF_LANG["ad_entry_category"] = "Entity";
+$PMF_LANG["msgCategory"] = "Entity";
 $PMF_LANG["ad_entry_active"] = "Active?";
 $PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ Status";
@@ -367,14 +367,14 @@ $PMF_LANG["ad_config_saved"] = "The configuration has been saved successfully.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit configuration";
 $PMF_LANG["ad_att_none"] = "No attachments available";
 $PMF_LANG["ad_att_att"] = "Attachments";
-$PMF_LANG["ad_att_add"] = "Attach file";
+$PMF_LANG["msgAddAttachment"] = "Attach file";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
 $PMF_LANG["msgErrorOccurred"] = "An error occurred.";
 $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
 $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
-$PMF_LANG["ad_entry_add"] = "Add FAQ";
+$PMF_LANG["msgAddFAQ"] = "Add FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "> A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
@@ -475,7 +475,7 @@ $PMF_LANG["msgPDF"] = "পিডিএফ হিসাবে দেখুন";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
-$PMF_LANG["ad_entry_locale"] = "Language";
+$PMF_LANG["msgLanguage"] = "Language";
 $PMF_LANG["msgLanguageSubmit"] = "ভাষা পরির্বতন";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -706,7 +706,7 @@ $PMF_LANG['err_expiredArticle'] = 'প্রশ্নটির মেয়াদ �
 $PMF_LANG['err_expiredNews'] = 'খবরটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['err_inactiveNews'] = 'এই লেখাটি সম্পাদনা করা হচ্ছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'সব ভাষায় খুঁজুন:';
-$PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msgTags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'ট্যাগ সমূহ';
 
 // added v2.0.0 - 2006-09-02 by Thomas

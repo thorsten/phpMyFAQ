@@ -62,7 +62,7 @@ class ExportController extends AbstractAdministrationController
                 'errorMessageNoFaqs' => Translation::get('msgErrorNoRecords'),
                 'hasCategories' => !Database::checkOnEmptyTable('faqcategories'),
                 'headerCategories' => Translation::get('ad_export_which_cat'),
-                'msgCategory' => Translation::get('ad_entry_category'),
+                'msgCategory' => Translation::get('msgCategory'),
                 'msgAllCategories' => Translation::get('msgShowAllCategories'),
                 'categoryOptions' => $categoryHelper->renderOptions(0),
                 'msgWithSubCategories' => Translation::get('ad_export_cat_downwards'),

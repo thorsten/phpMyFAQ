@@ -203,10 +203,10 @@ $PMF_LANG['ad_entry_action'] = "Aktion";
 $PMF_LANG['ad_entry_edit_1'] = "FAQ";
 $PMF_LANG['ad_entry_edit_2'] = "bearbeiten";
 $PMF_LANG['msgQuestion'] = "Frage";
-$PMF_LANG['ad_entry_content'] = "Antwort";
+$PMF_LANG['msgAnswer'] = "Antwort";
 $PMF_LANG['ad_entry_keywords'] = "Suchbegriffe";
 $PMF_LANG['ad_entry_author'] = "Verfasser";
-$PMF_LANG['ad_entry_category'] = "Kategorie";
+$PMF_LANG['msgCategory'] = "Kategorie";
 $PMF_LANG['ad_entry_active'] = "Aktiviert";
 $PMF_LANG['msgDate'] = "Datum";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -361,14 +361,14 @@ $PMF_LANG['ad_config_reset'] = "Zurücksetzen";
 $PMF_LANG['ad_config_saved'] = "Die Konfiguration wurde erfolgreich gespeichert.";
 $PMF_LANG['ad_menu_editconfig'] = "FAQ-Konfiguration";
 $PMF_LANG['ad_att_none'] = "Keine Anhänge vorhanden";
-$PMF_LANG['ad_att_add'] = "Neuen Anhang hinzufügen";
+$PMF_LANG['msgAddAttachment'] = "Neuen Anhang hinzufügen";
 $PMF_LANG['ad_entryins_suc'] = "Eintrag erfolgreich erstellt.";
 $PMF_LANG['msgErrorOccurred'] = "Leider ist ein Fehler aufgetreten.";
 $PMF_LANG['ad_att_del'] = "Löschen";
 $PMF_LANG['ad_att_nope'] = "Anhänge sind erst beim Bearbeiten möglich.";
 $PMF_LANG['ad_att_delsuc'] = "Der Anhang wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_att_delfail'] = "Leider ist ein Fehler beim Löschen des Anhangs aufgetreten.";
-$PMF_LANG['ad_entry_add'] = "FAQ erstellen";
+$PMF_LANG['msgAddFAQ'] = "FAQ erstellen";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG['ad_csv_make'] = "Eine Datensicherung stellt im Grunde ein komplettes Abbild der SQL-Tabellen der FAQ dar. Diese Sicherung stellt immer eine Momentaufnahme dar. Das Format der Sicherung ist eine normale SQL-Datei, man kann eine Rücksicherung also notfalls auch mit Hilfe von Tools wie phpMyAdmin oder ähnlichen Tools vornehmen.";
@@ -464,7 +464,7 @@ $PMF_LANG['ad_passwdsuc'] = "Das Passwort wurde erfolgreich geändert!";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG['ad_xml_gen'] = "Als XML-Datei exportieren";
-$PMF_LANG['ad_entry_locale'] = "Sprache";
+$PMF_LANG['msgLanguage'] = "Sprache";
 $PMF_LANG['msgLanguageSubmit'] = "Sprache ändern";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -683,7 +683,7 @@ $PMF_LANG['err_expiredArticle'] = "Diese FAQ ist abgelaufen und kann nicht angez
 $PMF_LANG['err_expiredNews'] = "Diese Nachricht ist abgelaufen und kann nicht angezeigt werden";
 $PMF_LANG['err_inactiveNews'] = "Diese Nachricht werden überarbeitet und kann nicht angezeigt werden";
 $PMF_LANG['msgSearchOnAllLanguages'] = "alle Sprachen durchsuchen";
-$PMF_LANG['ad_entry_tags'] = "Tags";
+$PMF_LANG['msgTags'] = "Tags";
 $PMF_LANG['msg_tags'] = "Tags";
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -937,7 +937,7 @@ $PMF_LANG['msgShowHelp'] = "Bitte Begriffe mit Komma trennen.";
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = "aktualisieren";
 $PMF_LANG['msgKeepFaqDate'] = "behalten";
-$PMF_LANG['msgEditFaqDat'] = "ändern";
+$PMF_LANG['msgEditFaqDate'] = "ändern";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ["select", "Sortierung nach Relevanz"];
@@ -954,7 +954,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "Schlüsselwörter - Frag
 $PMF_LANG['msgLoginUser'] = "Einloggen";
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG['ad_menu_attachments'] = "Anhänge";
+$PMF_LANG['msgAttachments'] = "Anhänge";
 $PMF_LANG['ad_menu_attachment_admin'] = "Anhang Administration";
 $PMF_LANG['msgAttachmentsFilename'] = "Dateiname";
 $PMF_LANG['msgAttachmentsFilesize'] = "Dateigröße";
@@ -1102,7 +1102,7 @@ $LANG_CONF['search.searchForSolutionId'] = ["checkbox", "Suche nach Solution ID 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG['ad_tag_delete_success'] = "Der Tag wurde erfolgreich gelöscht.";
 $PMF_LANG['ad_tag_delete_error'] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
-$PMF_LANG['seoCenter'] = "SEO";
+$PMF_LANG['msgSeoCenter'] = "SEO";
 $LANG_CONF['seo.metaTagsHome'] = ["select", "Robots Meta Tags auf Startseite"];
 $LANG_CONF['seo.metaTagsFaqs'] = ["select", "Robots Meta Tags auf FAQ-Seiten"];
 $LANG_CONF['seo.metaTagsCategories'] = ["select", "Robots Meta Tags für Kategorien"];
@@ -1201,12 +1201,12 @@ $PMF_LANG['permission::viewadminlink'] = 'Link zur Administration sichtbar';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP Server Port'];
-$PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
-$PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
+$PMF_LANG['msgQuestionAnswer'] = 'Frage und Antwort';
+$PMF_LANG['msgPermissions'] = 'Berechtigungen';
 $PMF_LANG['loginPageMessage'] = 'Login für ';
 
 // added v3.0.5 - 2020-10-03 by Thorsten
-$PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
+$PMF_LANG['msgFAQMetaData'] = 'FAQ-Metadaten';
 
 // added v3.0.8 - 2021-01-22
 $LANG_CONF['main.privacyURL'] = ['input', 'URL zum Datenschutzhinweis'];

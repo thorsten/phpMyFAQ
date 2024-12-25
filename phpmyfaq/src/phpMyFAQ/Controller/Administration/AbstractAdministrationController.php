@@ -81,7 +81,7 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'editentry',
-            'ad_entry_add',
+            'msgAddFAQ',
             'faq/add'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
@@ -111,13 +111,13 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addattachment+editattachment+delattachment',
             'attachments',
-            'ad_menu_attachments',
+            'msgAttachments',
             'attachments'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,
             'tags',
-            'ad_entry_tags',
+            'msgTags',
             'tags'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
@@ -265,6 +265,8 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.category.update':
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
+            case 'admin.faq.add':
+            case 'admin.faq.edit':
             case 'admin.faqs':
             case 'admin.glossary':
             case 'admin.news':

@@ -210,10 +210,10 @@ $PMF_LANG["ad_entry_action"] = "Ekintza";
 $PMF_LANG["ad_entry_edit_1"] = "";
 $PMF_LANG["ad_entry_edit_2"] = ". erregistroa editatu";
 $PMF_LANG["msgQuestion"] = "Galdera";
-$PMF_LANG["ad_entry_content"] = "Edukia";
+$PMF_LANG["msgAnswer"] = "Edukia";
 $PMF_LANG["ad_entry_keywords"] = "Hitz gakoak";
 $PMF_LANG["ad_entry_author"] = "Egilea";
-$PMF_LANG["ad_entry_category"] = "Atala";
+$PMF_LANG["msgCategory"] = "Atala";
 $PMF_LANG["ad_entry_active"] = "Aktibatu?";
 $PMF_LANG["msgDate"] = "Eguna";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -371,14 +371,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigurazioa ondo gorde da.";
 $PMF_LANG["ad_menu_editconfig"] = "Konfigurazioa editatu";
 $PMF_LANG["ad_att_none"] = "Ez dago fitxategi erantsirik";
 $PMF_LANG["ad_att_att"] = "Fitxategi erantsiak";
-$PMF_LANG["ad_att_add"] = "Fitxategia erantsi";
+$PMF_LANG["msgAddAttachment"] = "Fitxategia erantsi";
 $PMF_LANG["ad_entryins_suc"] = "Erregistroa ondo gorde da.";
 $PMF_LANG["msgErrorOccurred"] = "Akats bat egon da.";
 $PMF_LANG["ad_att_del"] = "Ezabatu";
 $PMF_LANG["ad_att_nope"] = "Eranskinak editatzean soilik dago erabilgarri.";
 $PMF_LANG["ad_att_delsuc"] = "Eranskina ondo ezabatu da.";
 $PMF_LANG["ad_att_delfail"] = "Fitxategi erantsia ezabatzean errore bat egon da.";
-$PMF_LANG["ad_entry_add"] = "Erregistroa sortu";
+$PMF_LANG["msgAddFAQ"] = "Erregistroa sortu";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Backup bat datu-basearen irudi oso bat da. Lan hau gutxienez hilabetean behin egin beharko litzateke. Backup-aren formatua MySQL transakziozko fitxategi bat da, eta inportatu daiteke phpMyAdmin moduko erremintekin edo mysql bezero baten komandoekin.";
@@ -479,7 +479,7 @@ $PMF_LANG["msgPDF"] = "PDF fitxategi gisa erakutsi";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Zure FAQeko erregistro guztiak XML fitxategi batean gorde.";
 $PMF_LANG["ad_xml_gen"] = "XML fitxategia sortu";
-$PMF_LANG["ad_entry_locale"] = "Hizkuntza";
+$PMF_LANG["msgLanguage"] = "Hizkuntza";
 $PMF_LANG["msgLanguageSubmit"] = "Hizkuntza aldatu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten

@@ -205,10 +205,10 @@ $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Éditer l'enregistrement";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Question";
-$PMF_LANG["ad_entry_content"] = "Réponse";
+$PMF_LANG["msgAnswer"] = "Réponse";
 $PMF_LANG["ad_entry_keywords"] = "Mots-clés";
 $PMF_LANG["ad_entry_author"] = "Auteur";
-$PMF_LANG["ad_entry_category"] = "Catégorie";
+$PMF_LANG["msgCategory"] = "Catégorie";
 $PMF_LANG["ad_entry_active"] = "Visible";
 $PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "Statut de la FAQ";
@@ -364,14 +364,14 @@ $PMF_LANG["ad_config_reset"] = "Réinitialiser";
 $PMF_LANG["ad_config_saved"] = "La configuration a bien été enregistrée.";
 $PMF_LANG["ad_menu_editconfig"] = "Configuration";
 $PMF_LANG["ad_att_none"] = "Pas de pièce-jointe";
-$PMF_LANG["ad_att_add"] = "Joindre un fichier";
+$PMF_LANG["msgAddAttachment"] = "Joindre un fichier";
 $PMF_LANG["ad_entryins_suc"] = "FAQ enregistrée.";
 $PMF_LANG["msgErrorOccurred"] = "Une erreur est survenue.";
 $PMF_LANG["ad_att_del"] = "Supprimer";
 $PMF_LANG["ad_att_nope"] = "Les pièces-jointes ne peuvent être ajoutées qu'en édition.";
 $PMF_LANG["ad_att_delsuc"] = "La pièce-jointe a été supprimée.";
 $PMF_LANG["ad_att_delfail"] = "Une erreur est survenue lors de la suppression de la pièce-jointe.";
-$PMF_LANG["ad_entry_add"] = "Ajouter une FAQ";
+$PMF_LANG["msgAddFAQ"] = "Ajouter une FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Une sauvegarde est une image complète de la base de données. Le format est un script SQL qui peut être importé dans PHPMyAdmin ou en commande SQL. Une sauvegarde devrait être effectuée au moins une fois par mois.";
@@ -467,7 +467,7 @@ $PMF_LANG["ad_passwdsuc"] = "Votre mot de passe a été modifié.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "Créer un export XML";
-$PMF_LANG["ad_entry_locale"] = "Langue";
+$PMF_LANG["msgLanguage"] = "Langue";
 $PMF_LANG["msgLanguageSubmit"] = "Changer la langue";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -687,7 +687,7 @@ $PMF_LANG["err_expiredArticle"] = "Cette entrée a expiré et ne peut plus être
 $PMF_LANG["err_expiredNews"] = "Cette news a expiré et ne peut plus être affichée";
 $PMF_LANG["err_inactiveNews"] = "Cette news est en cours de révision et ne peut pas être affichée";
 $PMF_LANG["msgSearchOnAllLanguages"] = "Chercher dans toutes les langues";
-$PMF_LANG["ad_entry_tags"] = "Tags ";
+$PMF_LANG["msgTags"] = "Tags ";
 $PMF_LANG["msg_tags"] = "Tags";
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -940,7 +940,7 @@ $PMF_LANG["msgShowHelp"] = "Merci de séparer les mots avec une virgule.";
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG["msgUpdateFaqDate"] = "Mettre à jour";
 $PMF_LANG["msgKeepFaqDate"] = "Conserver";
-$PMF_LANG["msgEditFaqDat"] = "Editer";
+$PMF_LANG["msgEditFaqDate"] = "Editer";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF["search.relevance"] = ["select", "Tri par pertinence"];
@@ -957,7 +957,7 @@ $PMF_LANG["search.relevance.keywords-thema-content"] = "Mots-clés - Question - 
 $PMF_LANG["msgLoginUser"] = "Connexion";
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "Pièces-jointes";
+$PMF_LANG["msgAttachments"] = "Pièces-jointes";
 $PMF_LANG["ad_menu_attachment_admin"] = "Administration des pièces-jointes";
 $PMF_LANG["msgAttachmentsFilename"] = "Nom de fichier";
 $PMF_LANG["msgAttachmentsFilesize"] = "Taille du fichier";
@@ -1107,7 +1107,7 @@ $LANG_CONF["socialnetworks.disableAll"] = ["checkbox", "Désactiver tous les ré
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Le tag a été supprimé avec succès.";
 $PMF_LANG["ad_tag_delete_error"] = "Le tag n'a pas été supprimé à cause d'une erreur.";
-$PMF_LANG["seoCenter"] = "SEO";
+$PMF_LANG["msgSeoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = ["select", "Metadonnées de la page d'accueil"];
 $LANG_CONF["seo.metaTagsFaqs"] = ["select", "Metadonnées des FAQs"];
 $LANG_CONF["seo.metaTagsCategories"] = ["select", "Metadonnées des pages de catégorie"];
@@ -1225,12 +1225,12 @@ $PMF_LANG["permission::viewadminlink"] = "Voir le lien vers l'administration";
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF["mail.remoteSMTPPort"] = ["input", "Port du serveur SMTP"];
-$PMF_LANG["ad_record_faq"] = "Question et réponse";
-$PMF_LANG["ad_record_permissions"] = "Permissions";
+$PMF_LANG["msgQuestionAnswer"] = "Question et réponse";
+$PMF_LANG["msgPermissions"] = "Permissions";
 $PMF_LANG["loginPageMessage"] = "Connexion à ";
 
 // added v3.0.5 - 2020-10-03 by Thorsten
-$PMF_LANG["ad_menu_faq_meta"] = "Métadonnées";
+$PMF_LANG["msgFAQMetaData"] = "Métadonnées";
 
 // added v3.0.8 - 2021-01-22
 $LANG_CONF["main.privacyURL"] = ["input", "URL pour la note de confidentialité"];

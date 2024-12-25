@@ -204,10 +204,10 @@ $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Question";
-$PMF_LANG["ad_entry_content"] = "Answer";
+$PMF_LANG["msgAnswer"] = "Answer";
 $PMF_LANG["ad_entry_keywords"] = "Keywords";
 $PMF_LANG["ad_entry_author"] = "Author";
-$PMF_LANG["ad_entry_category"] = "Category";
+$PMF_LANG["msgCategory"] = "Category";
 $PMF_LANG["ad_entry_active"] = "Visible";
 $PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ status";
@@ -362,14 +362,14 @@ $PMF_LANG["ad_config_reset"] = "Reset";
 $PMF_LANG["ad_config_saved"] = "The configuration has been saved successfully.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit configuration";
 $PMF_LANG["ad_att_none"] = "No attachments available";
-$PMF_LANG["ad_att_add"] = "Add new attachment";
+$PMF_LANG["msgAddAttachment"] = "Add new attachment";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
 $PMF_LANG["msgErrorOccurred"] = "An error occurred.";
 $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
 $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
-$PMF_LANG["ad_entry_add"] = "Add new FAQ";
+$PMF_LANG["msgAddFAQ"] = "Add new FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.";
@@ -465,7 +465,7 @@ $PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "Create XML export";
-$PMF_LANG["ad_entry_locale"] = "Language";
+$PMF_LANG["msgLanguage"] = "Language";
 $PMF_LANG["msgLanguageSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -685,7 +685,7 @@ $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displaye
 $PMF_LANG['err_expiredNews'] = 'This news entry is expired and can not be displayed';
 $PMF_LANG['err_inactiveNews'] = 'This news entry is in revision and can not be displayed';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'search in all languages';
-$PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msgTags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -938,7 +938,7 @@ $PMF_LANG['msgShowHelp'] = 'Please separate words by comma.';
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'update';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
-$PMF_LANG['msgEditFaqDat'] = 'edit';
+$PMF_LANG['msgEditFaqDate'] = 'edit';
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = ['select', 'Sort by relevance'];
@@ -955,7 +955,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - An
 $PMF_LANG['msgLoginUser'] = 'Login';
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";
+$PMF_LANG["msgAttachments"] = "FAQ Attachments";
 $PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
 $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
 $PMF_LANG['msgAttachmentsFilesize'] = 'File size';
@@ -1103,7 +1103,7 @@ $LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Search for solution ID"
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
 $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occurred.";
-$PMF_LANG["seoCenter"] = "SEO";
+$PMF_LANG["msgSeoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = ["select", "Robots Meta Tags start page"];
 $LANG_CONF["seo.metaTagsFaqs"] = ["select", "Robots Meta Tags FAQs"];
 $LANG_CONF["seo.metaTagsCategories"] = ["select", "vMeta Tags category pages"];
@@ -1221,12 +1221,12 @@ $PMF_LANG['permission::viewadminlink'] = 'View admin link';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP server port'];
-$PMF_LANG['ad_record_faq'] = 'Question and answer';
-$PMF_LANG['ad_record_permissions'] = 'Permissions';
+$PMF_LANG['msgQuestionAnswer'] = 'Question and answer';
+$PMF_LANG['msgPermissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
 
 // added v3.0.5 - 2020-10-03 by Thorsten
-$PMF_LANG['ad_menu_faq_meta'] = 'FAQ metadata';
+$PMF_LANG['msgFAQMetaData'] = 'FAQ metadata';
 
 // added v3.0.8 - 2021-01-22
 $LANG_CONF['main.privacyURL'] = ['input', 'URL for Privacy note'];

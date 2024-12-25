@@ -209,10 +209,10 @@ $PMF_LANG["ad_entry_action"] = "Akcija";
 $PMF_LANG["ad_entry_edit_1"] = "Dodaj/Izmeni Unos";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["msgQuestion"] = "Tema";
-$PMF_LANG["ad_entry_content"] = "Sadr&#382;aj";
+$PMF_LANG["msgAnswer"] = "Sadr&#382;aj";
 $PMF_LANG["ad_entry_keywords"] = "Klju&#269;ne re&#269;i";
 $PMF_LANG["ad_entry_author"] = "Autor";
-$PMF_LANG["ad_entry_category"] = "Kategorija";
+$PMF_LANG["msgCategory"] = "Kategorija";
 $PMF_LANG["ad_entry_active"] = "Aktivno?";
 $PMF_LANG["msgDate"] = "Datum";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
@@ -370,14 +370,14 @@ $PMF_LANG["ad_config_saved"] = "Konfiguracija je uspe&#353;no snimljena.";
 $PMF_LANG["ad_menu_editconfig"] = "Izmeni konfiguraciju";
 $PMF_LANG["ad_att_none"] = "Nema fajlova";
 $PMF_LANG["ad_att_att"] = "Fajlovi (attachments)";
-$PMF_LANG["ad_att_add"] = "Zaka&#269;i (attach) fajl";
+$PMF_LANG["msgAddAttachment"] = "Zaka&#269;i (attach) fajl";
 $PMF_LANG["ad_entryins_suc"] = "Unos uspe&#353;no snimljen.";
 $PMF_LANG["msgErrorOccurred"] = "Desila se gre&#353;ka.";
 $PMF_LANG["ad_att_del"] = "Obri&#353;i";
 $PMF_LANG["ad_att_nope"] = "Fajlovi mogu biti dodani samo kada se menja unos.";
 $PMF_LANG["ad_att_delsuc"] = "Fajl je uspe&#353;no obrisan.";
 $PMF_LANG["ad_att_delfail"] = "Gre&#353;ka prilikom brisanja fajla.";
-$PMF_LANG["ad_entry_add"] = "Novi unos";
+$PMF_LANG["msgAddFAQ"] = "Novi unos";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Backup &#269;uva kompletnu bazu. Backup bi trebalo raditi barem jednom mese&#269;no. Format backupa je MySQL fajl koji se mo&#382;e unesti u bazu uz pomo&#263; alatki kao &#353;to su phpMyAdmin ili mysql (command line klijent)";
@@ -478,7 +478,7 @@ $PMF_LANG["msgPDF	"] = "Prika&#382;i kao PDF fajl";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Snimi sve unose iz FAQ-a kao XML fajl.";
 $PMF_LANG["ad_xml_gen"] = "napravi XML fajl";
-$PMF_LANG["ad_entry_locale"] = "Jezik";
+$PMF_LANG["msgLanguage"] = "Jezik";
 $PMF_LANG["msgLanguageSubmit"] = "promeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -704,7 +704,7 @@ $PMF_LANG['err_expiredArticle'] = 'Ovaj unos je istekao i ne mo&#382;e biti prik
 $PMF_LANG['err_expiredNews'] = 'Ove vesti su istekle i ne mogu biti prikazane';
 $PMF_LANG['err_inactiveNews'] = 'Ove vesti su u reviziji i ne mogu biti prikazane';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Tra&#382;i u svim jezicima:';
-$PMF_LANG['ad_entry_tags'] = 'Oznake';
+$PMF_LANG['msgTags'] = 'Oznake';
 $PMF_LANG['msg_tags'] = 'Oznake';
 
 // added v2.0.0 - 2006-09-02 by Thomas

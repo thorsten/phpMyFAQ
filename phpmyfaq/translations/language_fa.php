@@ -175,10 +175,10 @@ $PMF_LANG['ad_entry_action'] = 'عمل';
 $PMF_LANG['ad_entry_edit_1'] = 'اصلاح رکورد';
 $PMF_LANG['ad_entry_edit_2'] = 'ویرایش رکورد';
 $PMF_LANG['msgQuestion'] = 'تیتر مطلب:';
-$PMF_LANG['ad_entry_content'] = 'محتوا:';
+$PMF_LANG['msgAnswer'] = 'محتوا:';
 $PMF_LANG['ad_entry_keywords'] = 'کلیدواژه:';
 $PMF_LANG['ad_entry_author'] = 'نویسنده:';
-$PMF_LANG['ad_entry_category'] = 'موضوع:';
+$PMF_LANG['msgCategory'] = 'موضوع:';
 $PMF_LANG['ad_entry_active'] = 'قابل مشاهده';
 $PMF_LANG['msgDate'] = 'تاریخ';
 $PMF_LANG['ad_entry_status'] = 'Status der FAQ';
@@ -313,14 +313,14 @@ $PMF_LANG['ad_config_saved'] = 'تنظیمات با موفقیت ذخیره شد
 $PMF_LANG['ad_menu_editconfig'] = 'اصلاح تنظیمات';
 $PMF_LANG['ad_att_none'] = 'الصاقی موجود نیست';
 $PMF_LANG['ad_att_att'] = 'فایل';
-$PMF_LANG['ad_att_add'] = 'الصاق فایل';
+$PMF_LANG['msgAddAttachment'] = 'الصاق فایل';
 $PMF_LANG['ad_entryins_suc'] = 'مطلب با موفقیت ثبت شد.';
 $PMF_LANG['msgErrorOccurred'] = 'اشکالی به وجود آمد.';
 $PMF_LANG['ad_att_del'] = 'پاک کن';
 $PMF_LANG['ad_att_nope'] = 'الصاقیها فقط در زمان اصلاح میتوانند اضافه شوند.';
 $PMF_LANG['ad_att_delsuc'] = 'الصاقی با موفقیت اضافه شد.';
 $PMF_LANG['ad_att_delfail'] = 'هنگام افزودن الصاقی مشکلی رخ داد.';
-$PMF_LANG['ad_entry_add'] = 'ایجاد مطلب';
+$PMF_LANG['msgAddFAQ'] = 'ایجاد مطلب';
 $PMF_LANG['ad_csv_make'] = '> یک پشتیبان تصویر کاملی از محتویات پایگاه داده است. فرمت پشتیبان SQL transaction است, که با ابزاری مثل phpMyAdmin یا خط فرمان sql متواند دوباره به پایگاه داده وارد شود. ایجاد حداقل یک پشتیبان در ماه توصیه میشود.';
 $PMF_LANG['ad_csv_link'] = 'دانلود پشتیبان';
 $PMF_LANG['ad_csv_head'] = 'ساخت پشتیبان';
@@ -389,7 +389,7 @@ $PMF_LANG['msgPDF'] = 'نمایش به صورت فایل پی‌دی‌اف';
 $PMF_LANG['ad_xml_head'] = 'پشتیبان اکس‌ام‌ال';
 $PMF_LANG['ad_xml_hint'] = 'ذخیره تمام پرسش‌های متداول در یک فایل XML.';
 $PMF_LANG['ad_xml_gen'] = 'ساخت فایل XML';
-$PMF_LANG['ad_entry_locale'] = 'زبان';
+$PMF_LANG['msgLanguage'] = 'زبان';
 $PMF_LANG['msgLanguageSubmit'] = 'تغییر زبان';
 $PMF_LANG['ad_entry_preview'] = 'پیش‌نمایش';
 $PMF_LANG['ad_attach_1'] = 'لطفا در تنظیمات یک شاخه برای الصاقی‌ها انتخاب کنید.';
@@ -517,7 +517,7 @@ $PMF_LANG['records.orderingPopularFAQs.voting'] = 'لیست بیشترین ام�
 $PMF_LANG['msgShowHelp'] = 'لطفاكلمات را با كاما جدا كنید..';
 $PMF_LANG['msgUpdateFAQDate'] = 'به روز رسانی';
 $PMF_LANG['msgKeepFAQDate'] = 'نگه داشتن';
-$PMF_LANG['msgEditFAQDat'] = 'ویرایش';
+$PMF_LANG['msgEditFaqDate'] = 'ویرایش';
 $PMF_LANG['searchControlCenter'] = 'جستجو';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'پرسش - پاسخ -كلمه كلیدی';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'پرسش -كلمه كلیدی - پاسخ';
@@ -531,7 +531,7 @@ $LANG_CONF['records.orderingPopularFAQs'] = array('select', 'مرتب‌ کرد�
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'پاسخ سریع در صفحه آغازین (پیش‌فرض: غیرفعال)');
 $LANG_CONF['search.relevance'] = array('select', 'مرتب کردن بر اساس رابطه');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'پشتیبانی از رابطه فعال شود؟ (پیش‌فرض: غبرفعال)');
-$PMF_LANG['ad_menu_attachments'] = 'پیوست های آموزش';
+$PMF_LANG['msgAttachments'] = 'پیوست های آموزش';
 $PMF_LANG['ad_menu_attachment_admin'] = 'مدیریت ضمیمه';
 $PMF_LANG['msgAttachmentsFilename'] = 'نام فایل';
 $PMF_LANG['msgAttachmentsFilesize'] = 'سایز فایل';
