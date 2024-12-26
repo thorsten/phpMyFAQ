@@ -128,6 +128,11 @@ $routesConfig = [
         'controller' => [FaqController::class, 'add'],
         'methods' => 'GET'
     ],
+    'admin.faq.copy' => [
+        'path' => '/faq/copy/{faqId}/{faqLanguage}',
+        'controller' => [FaqController::class, 'copy'],
+        'methods' => 'GET'
+    ],
     'admin.faq.edit' => [
         'path' => '/faq/edit/{faqId}/{faqLanguage}',
         'controller' => [FaqController::class, 'edit'],

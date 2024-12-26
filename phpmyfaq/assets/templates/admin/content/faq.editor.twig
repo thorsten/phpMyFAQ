@@ -80,7 +80,7 @@
                       {% for currentRevision in revisions %}
                         {% set selected = selectedRevisionId == faqData['revision_id'] %}
                         <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
-                          {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
+                          {{ 'msgRevision' | translate }} 1.{{ currentRevision['revision_id'] }}:
                           {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
                         </option>
                       {% endfor %}
@@ -230,18 +230,21 @@
 
               <!-- Keywords -->
               <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="keywords">{{ ad_entry_keywords }}</label>
+                <label class="col-lg-2 col-form-label" for="keywords">
+                  {{ 'msgKeywords' | translate }}
+                </label>
                 <div class="col-lg-10">
                   <input type="text" name="keywords" id="keywords" maxlength="255" class="form-control"
-                         autocomplete="off"
-                         value="{{ faqData['keywords'] }}">
+                         autocomplete="off" value="{{ faqData['keywords'] }}">
                   <small id="keywordsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
                 </div>
               </div>
 
               <!-- Author -->
               <div class="row mb-2">
-                <label class="col-lg-2 col-form-label" for="author">{{ ad_entry_author }}</label>
+                <label class="col-lg-2 col-form-label" for="author">
+                  {{ 'msgAuthor' | translate }}
+                </label>
                 <div class="col-lg-10">
                   <input type="text" name="author" id="author" value="{{ faqData['author'] }}" class="form-control">
                 </div>
@@ -289,13 +292,15 @@
               {% if not isBasicPermission %}
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-3 col-form-label pt-0">{{ ad_entry_grouppermission }}</div>
+                    <div class="col-3 col-form-label pt-0">
+                      {{ 'msgGroupPermissions' | translate }}
+                    </div>
                     <div class="col-6">
                       <div class="form-check">
                         <input type="radio" id="allgroups" name="grouppermission" value="all" class="form-check-input"
                           {{ allGroups ? 'checked' : '' }}>
                         <label class="form-check-label" for="allgroups">
-                          {{ ad_entry_all_groups }}
+                          {{ 'msgAccessAllGroups' | translate }}
                         </label>
                       </div>
                       <div class="form-check">
@@ -396,7 +401,7 @@
                         </div>
                         <div class="d-flex align-items-center me-3">
                           <i aria-hidden="true" class="bi bi-archive me-1"></i>
-                          {{ ad_entry_revision }} 1.{{ changelog['revision_id'] }}
+                          {{ 'msgRevision' | translate }} 1.{{ changelog['revision_id'] }}
                         </div>
                       </div>
                     </div>

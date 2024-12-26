@@ -395,9 +395,7 @@ class CategoryController extends AbstractAdministrationController
                 'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
                 'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
                 'allGroupsOptions' => $allGroupsOptions,
-                'categoryGroupPermissionLabel' => Translation::get('ad_entry_grouppermission'),
                 'allGroups' => $allGroups ? 'checked' : '',
-                'categoryGroupPermissionAllLabel' => Translation::get('ad_entry_all_groups'),
                 'restrictedGroups' => $restrictedGroups ? 'checked' : '',
                 'restrictedGroupsLabel' => Translation::get('ad_entry_restricted_groups'),
                 'restrictedGroupsOptions' => $restrictedGroupOptions,
@@ -755,8 +753,6 @@ class CategoryController extends AbstractAdministrationController
             'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),
             'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
             'ad_categ_add' => Translation::get('ad_categ_add'),
-            'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
-            'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
             'restricted_groups' => ($this->configuration->get('security.permLevel') === 'medium') ?
                 $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser) : '',

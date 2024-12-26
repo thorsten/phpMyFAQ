@@ -247,7 +247,7 @@ if (
 
     // Header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
-        $currentRevision = sprintf('%s 1.%d', Translation::get('ad_entry_revision'), $selectedRevisionId);
+        $currentRevision = sprintf('%s 1.%d', Translation::get('msgRevision'), $selectedRevisionId);
 
         $faqUrl = sprintf(
             '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
@@ -299,7 +299,7 @@ if (
             'ad_changerev' => Translation::get('ad_changerev'),
             'revisions' => $revisions,
             'selectedRevisionId' => $selectedRevisionId,
-            'ad_entry_revision' => Translation::get('ad_entry_revision'),
+            'msgRevision' => Translation::get('msgRevision'),
         ];
     }
 
@@ -355,14 +355,14 @@ if (
         'attachments' => $attList,
         'msgAddAttachment' => Translation::get('msgAddAttachment'),
         'msgTags' => Translation::get('msgTags'),
-        'ad_entry_keywords' => Translation::get('ad_entry_keywords'),
-        'ad_entry_author' => Translation::get('ad_entry_author'),
+        'msgKeywords' => Translation::get('msgKeywords'),
+        'msgAuthor' => Translation::get('msgAuthor'),
         'msgEmail' => Translation::get('msgEmail'),
         'msgSeoCenter' => Translation::get('msgSeoCenter'),
         'msgSerp' => Translation::get('msgSerp'),
         'msgSerpTitle' => Translation::get('msgSerpTitle'),
-        'ad_entry_grouppermission' => Translation::get('ad_entry_grouppermission'),
-        'ad_entry_all_groups' => Translation::get('ad_entry_all_groups'),
+        'msgGroupPermissions' => Translation::get('msgGroupPermissions'),
+        'msgAccessAllGroups' => Translation::get('msgAccessAllGroups'),
         'allGroups' => $allGroups,
         'restrictedGroups' => $restrictedGroups,
         'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
@@ -381,7 +381,7 @@ if (
         'ad_admin_notes' => Translation::get('ad_admin_notes'),
         'ad_entry_changelog_history' => Translation::get('ad_entry_changelog_history'),
         'changelogs' => $changelog->getByFaqId($faqData['id']),
-        'ad_entry_revision' => Translation::get('ad_entry_revision'),
+        'msgRevision' => Translation::get('msgRevision'),
         'ad_gen_reset' => Translation::get('ad_gen_reset'),
         'ad_entry_save' => Translation::get('ad_entry_save'),
         'msgUpdateFaqDate' => Translation::get('msgUpdateFaqDate'),
