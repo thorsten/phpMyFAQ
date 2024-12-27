@@ -92,7 +92,7 @@ readonly class Notification
             $this->faq->getFaq($faq->getId(), null, true);
 
             $url = sprintf(
-                '%sadmin/?action=editentry&id=%d&lang=%s',
+                '%sadmin/faq/edit/%d/%s',
                 $this->configuration->getDefaultUrl(),
                 $faq->getId(),
                 $faq->getLanguage()

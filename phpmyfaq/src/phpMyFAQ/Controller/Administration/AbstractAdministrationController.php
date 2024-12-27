@@ -225,12 +225,6 @@ class AbstractAdministrationController extends AbstractController
         );
 
         switch ($action) {
-            case 'faqs-overview':
-            case 'editentry':
-            case 'copyentry':
-            case 'takequestion':
-                $contentPage = true;
-                break;
             case 'forms':
                 $configurationPage = true;
                 break;
@@ -266,8 +260,10 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
             case 'admin.faq.add':
+            case 'admin.faq.answer':
             case 'admin.faq.copy':
             case 'admin.faq.edit':
+            case 'admin.faq.translate':
             case 'admin.faqs':
             case 'admin.glossary':
             case 'admin.news':

@@ -83,7 +83,7 @@ export const handleFaqOverview = async () => {
                   const newTranslationLink = addElement('a', {
                     classList: 'dropdown-item',
                     id: 'dropdownTranslation',
-                    href: `?action=editentry&id=${faqId}&cat=${categoryId}&translateTo=${languageCode}`,
+                    href: `./faq/translate/${faqId}/${languageCode}`,
                     innerText: `→ ${regionNames.of(languageCode)}`,
                   });
                   existingLink.insertAdjacentElement('afterend', newTranslationLink);

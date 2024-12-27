@@ -370,6 +370,172 @@ class FaqController extends AbstractAdministrationController
     }
 
     /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
+     */
+    #[Route('/faq/translate/:faqId/:faqLanguage', name: 'admin.faq.translate', methods: ['GET'])]
+    public function translate(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
+
+        $categories = [];
+
+        $faq->getFaq($faqId, null, true);
+        $faqData = $faq->faqRecord;
+        $faqData['title'] = 'Translation of ' . $faqData['title'];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => false,
+                'faqId' => 0,
+                'faqLang' => $faqLanguage,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => '',
+                'notifyEmail' => '',
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
+     */
+    #[Route('/faq/answer/:questionId/:faqLanguage', name: 'admin.faq.answer', methods: ['GET'])]
+    public function answer(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $questionId = Filter::filterVar($request->get('questionId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log(
+            $this->currentUser,
+            'admin-answer-question ' . $questionId
+        );
+
+        $question = $this->container->get('phpmyfaq.question')->get($questionId);
+
+        $faqData = [
+            'id' => 0,
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'title' => $question['question'],
+            'revision_id' => 0,
+            'author' => $this->currentUser->getUserData('display_name'),
+            'email' => $this->currentUser->getUserData('email'),
+            'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
+        ];
+
+        $categories = [
+            'category_id' => $question['category_id'],
+            'category_lang' => $faqLanguage,
+        ];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => false,
+                'faqId' => 0,
+                'faqLang' => $faqLanguage,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => $question['username'],
+                'notifyEmail' => $question['email'],
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
      * @throws \Exception
      * @return array<string, string>
      */

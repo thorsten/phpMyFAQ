@@ -182,13 +182,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
-    case 'editentry':
-    case 'copyentry':
-    case 'question':
-    case 'takequestion':
-    case 'stickyfaqs':
-        $contentPage = true;
-        break;
     case 'forms':
         $configurationPage = true;
         break;

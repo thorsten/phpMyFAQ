@@ -53,12 +53,12 @@
               </td>
               <td>
                 {% if enableCloseQuestion and question.answerId %}
-                  <a href="./faq/edit/{{ question.answerId }}/{{ currentLocale }}"
+                  <a href="./faq/answer/{{ question.answerId }}/{{ currentLocale }}"
                      class="btn btn-success">
                     {{ msg2answerFAQ }}
                   </a>
                 {% else %}
-                  <a href="./faq/add/{{ question.id }}" class="btn btn-success">
+                  <a href="./faq/answer/{{ question.id }}/{{ currentLocale }}" class="btn btn-success">
                     {{ msgTakeQuestion }}
                   </a>
                 {% endif %}
