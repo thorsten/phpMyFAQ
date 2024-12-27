@@ -190,7 +190,12 @@ class AbstractAdministrationController extends AbstractController
             'ad_menu_editconfig',
             'configuration'
         );
-        $secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'forms', 'msgEditForms');
+        $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+            'forms_edit',
+            'forms',
+            'msgEditForms',
+            'forms'
+        );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             'editinstances+addinstances+delinstances',
             'instances',
@@ -223,14 +228,6 @@ class AbstractAdministrationController extends AbstractController
             'ad_system_info',
             'system'
         );
-
-        switch ($action) {
-            case 'forms':
-                $configurationPage = true;
-                break;
-            default:
-                break;
-        }
 
         switch ($request->attributes->get('_route')) {
             case 'admin.group':
@@ -293,6 +290,7 @@ class AbstractAdministrationController extends AbstractController
                 break;
             case 'admin.configuration':
             case 'admin.elasticsearch':
+            case 'admin.forms':
             case 'admin.instance.edit':
             case 'admin.instance.update':
             case 'admin.instances':

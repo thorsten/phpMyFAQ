@@ -157,7 +157,7 @@ $secLevelEntries['config'] = $adminHelper->addMenuEntry(
     'ad_menu_editconfig',
     'configuration'
 );
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'forms', 'msgEditForms');
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'forms', 'msgEditForms', 'forms');
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
     'editinstances+addinstances+delinstances',
     'instances',
@@ -182,9 +182,6 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', 'system');
 
 switch ($action) {
-    case 'forms':
-        $configurationPage = true;
-        break;
     default:
         $dashboardPage = true;
         break;

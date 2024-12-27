@@ -36,6 +36,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
+use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
@@ -178,6 +179,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.database.helper', DatabaseHelper::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.forms', Forms::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);

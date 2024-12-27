@@ -256,16 +256,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {
-            // functions for content administration
-            case 'takequestion':
-            case 'editentry':
-            case 'copyentry':
-                require 'faqs.editor.php';
-                break;
             // Config administration
-            case 'forms':
-                require 'forms.php';
-                break;
             case 'forms-translations':
                 require 'forms.translations.php';
                 break;

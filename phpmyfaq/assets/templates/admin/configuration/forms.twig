@@ -1,112 +1,118 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ msgEditForms }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row mb-2">
-  <div class="col">
-    <ul class="nav nav-tabs" id="navigation" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active" id="ask-question-tab" data-toggle="tab" href="#" role="tab"
-           aria-controls="home" aria-selected="true">{{ msgQuestion }}</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="add-content-tab" data-toggle="tab" href="#" role="tab"
-           aria-controls="profile" aria-selected="false">{{ msgAddContent }}</a>
-      </li>
-    </ul>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ msgEditForms }}
+    </h1>
+  </div>
 
-    <div class="tab-content" id="forms" data-pmf-formid="1">
-      <div class="tab-pane fade show active" id="ask-question" role="tabpanel" aria-labelledby="ask-question-tab">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col">{{ ad_entry_id }}</th>
-            <th scope="col">{{ msgInputLabel }}</th>
-            <th scope="col">{{ msgInputType }}</th>
-            <th scope="col">{{ ad_entry_active }}</th>
-            <th scope="col">{{ msgRequiredInputField }}</th>
-            <th scope="col">{{ ad_categ_translate }}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for input in formDataAskQuestion %}
+  <div class="row mb-2">
+    <div class="col">
+      <ul class="nav nav-tabs" id="navigation" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="ask-question-tab" data-toggle="tab" href="#" role="tab"
+             aria-controls="home" aria-selected="true">{{ msgQuestion }}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="add-content-tab" data-toggle="tab" href="#" role="tab"
+             aria-controls="profile" aria-selected="false">{{ msgAddContent }}</a>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="forms" data-pmf-formid="1">
+        <div class="tab-pane fade show active" id="ask-question" role="tabpanel" aria-labelledby="ask-question-tab">
+          <table class="table">
+            <thead>
             <tr>
-              <th>{{ input.input_id }}</th>
-              <td>{{ input.input_label }}</td>
-              <td>{{ input.input_type }}</td>
-              <td>
-                <input type="checkbox" data-pmf-inputid="{{ input.input_id }}" data-pmf-csrf-token="{{ csrfActivate }}"
-                       data-pmf-formid="1"
-                       id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
-              </td>
-              <td>
-                {% if input.input_type != 'title' and input.input_type != 'message' %}
+              <th scope="col">{{ ad_entry_id }}</th>
+              <th scope="col">{{ msgInputLabel }}</th>
+              <th scope="col">{{ msgInputType }}</th>
+              <th scope="col">{{ ad_entry_active }}</th>
+              <th scope="col">{{ msgRequiredInputField }}</th>
+              <th scope="col">{{ ad_categ_translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for input in formDataAskQuestion %}
+              <tr>
+                <th>{{ input.input_id }}</th>
+                <td>{{ input.input_label }}</td>
+                <td>{{ input.input_type }}</td>
+                <td>
                   <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
-                         data-pmf-csrf-token="{{ csrfRequired }}"
+                         data-pmf-csrf-token="{{ csrfActivate }}"
                          data-pmf-formid="1"
-                         id="required" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %} />
-                {% endif %}
-              </td>
-              <td>
-                <a href="?action=forms-translations&formid={{ input.form_id }}&inputid={{ input.input_id }}">
+                         id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
+                </td>
+                <td>
+                  {% if input.input_type != 'title' and input.input_type != 'message' %}
+                    <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
+                           data-pmf-csrf-token="{{ csrfRequired }}"
+                           data-pmf-formid="1"
+                           id="required" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %} />
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="?action=forms-translations&formid={{ input.form_id }}&inputid={{ input.input_id }}">
                   <span class="badge bg-primary">
                     <i aria-hidden="true" class="bi bi-globe bi-white"></i></span>
-                </a>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="tab-content" id="forms" data-pmf-formid="2">
-      <div class="tab-pane fade show" id="add-content" role="tabpanel" aria-labelledby="add-content-tab">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col">{{ ad_entry_id }}</th>
-            <th scope="col">{{ msgInputLabel }}</th>
-            <th scope="col">{{ msgInputType }}</th>
-            <th scope="col">{{ ad_entry_active }}</th>
-            <th scope="col">{{ msgRequiredInputField }}</th>
-            <th scope="col">{{ ad_categ_translate }}</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for input in formDataAddContent %}
+      <div class="tab-content" id="forms" data-pmf-formid="2">
+        <div class="tab-pane fade show" id="add-content" role="tabpanel" aria-labelledby="add-content-tab">
+          <table class="table">
+            <thead>
             <tr>
-              <th>{{ input.input_id }}</th>
-              <td>{{ input.input_label }}</td>
-              <td>{{ input.input_type }}</td>
-              <td>
-                <input type="checkbox" data-pmf-inputid="{{ input.input_id }}" data-pmf-csrf-token="{{ csrfActivate }}"
-                       data-pmf-formid="2"
-                       id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
-              </td>
-              <td>
-                {% if input.input_type != 'title' and input.input_type != 'message' %}
+              <th scope="col">{{ ad_entry_id }}</th>
+              <th scope="col">{{ msgInputLabel }}</th>
+              <th scope="col">{{ msgInputType }}</th>
+              <th scope="col">{{ ad_entry_active }}</th>
+              <th scope="col">{{ msgRequiredInputField }}</th>
+              <th scope="col">{{ ad_categ_translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for input in formDataAddContent %}
+              <tr>
+                <th>{{ input.input_id }}</th>
+                <td>{{ input.input_label }}</td>
+                <td>{{ input.input_type }}</td>
+                <td>
+                  <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
+                         data-pmf-csrf-token="{{ csrfActivate }}"
+                         data-pmf-formid="2"
+                         id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
+                </td>
+                <td>
+                  {% if input.input_type != 'title' and input.input_type != 'message' %}
                     <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                            data-pmf-csrf-token="{{ csrfRequired }}"
                            data-pmf-formid="2"
                            id="required" {% if input.input_required %} checked {% endif %} {% if input.input_required == -1 %} disabled {% endif %}/>
-                {% endif %}
-              </td>
-              <td>
-                <a href="?action=forms-translations&formid={{ input.form_id }}&inputid={{ input.input_id }}">
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="?action=forms-translations&formid={{ input.form_id }}&inputid={{ input.input_id }}">
                   <span class="badge bg-primary">
                     <i aria-hidden="true" class="bi bi-globe bi-white"></i></span>
-                </a>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="mt-4 alert alert-info" role="alert">
-  {{ msgHintDeactivateForms|raw }}
-</div>
+  <div class="mt-4 alert alert-info" role="alert">
+    {{ msgHintDeactivateForms|raw }}
+  </div>
+{% endblock %}

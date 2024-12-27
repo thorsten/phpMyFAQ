@@ -24,6 +24,7 @@ use phpMyFAQ\Controller\Administration\ConfigurationController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\FaqController;
+use phpMyFAQ\Controller\Administration\FormsController;
 use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
@@ -151,6 +152,11 @@ $routesConfig = [
     'admin.faqs' => [
         'path' => '/faqs',
         'controller' => [FaqController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.forms' => [
+        'path' => '/forms',
+        'controller' => [FormsController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.elasticsearch' => [
