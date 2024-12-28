@@ -6,11 +6,8 @@ root = true
 end_of_line = LF
 insert_final_newline = true
 indent_style = space
+indent_size = 4
 
 # HTML, SCSS, JS, YAML and JSON files
 [{*.html,*.twig,*.scss,*.js,*.json,*.yml}]
 indent_size = 2
-
-# PHP files
-[*.php]
-indent_size = 4
