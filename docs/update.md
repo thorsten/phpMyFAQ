@@ -28,10 +28,13 @@ Second, you have to delete all files **except**:
 - in the directory **config/**
 
   - keep the file **database.php**
+
   - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
 
 - the directory **attachments/**
+
 - the directory **data/**
+
 - the directory **images/**
 
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
@@ -56,7 +59,9 @@ Second, you have to delete all files **except**:
   - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
 
 - the directory **attachments/**
+
 - the directory **data/**
+
 - the directory **images/**
 
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
@@ -78,11 +83,15 @@ Second, you have to delete all files **except**:
 - in the directory **config/**
 
   - keep the file **database.php**
-  - if you are using LDAP/ActiveDirectory support, also keep the file **ldap.php**
-  - if you are using EntraID support, also keep the file **azure.php**
+
+  - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
+
+  - only if using EntraID support also keep the file **azure.php**
 
 - the directory **attachments/**
+
 - the directory **data/**
+
 - the directory **images/**
 
 Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, then open the following
