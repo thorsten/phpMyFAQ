@@ -176,7 +176,7 @@ export const renderEditor = () => {
           x = w.innerWidth || e.clientWidth || g.clientWidth,
           y = w.innerHeight || e.clientHeight || g.clientHeight;
 
-        let mediaBrowser = 'media.browser.php';
+        let mediaBrowser = './media-browser';
         mediaBrowser += mediaBrowser.indexOf('?') < 0 ? '?type=' + type : '&type=' + type;
 
         tinymce.activeEditor.windowManager.openUrl({

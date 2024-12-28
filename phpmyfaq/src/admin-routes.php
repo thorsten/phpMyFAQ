@@ -29,6 +29,7 @@ use phpMyFAQ\Controller\Administration\GlossaryController;
 use phpMyFAQ\Controller\Administration\GroupController;
 use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
+use phpMyFAQ\Controller\Administration\MediaBrowserController;
 use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\OpenQuestionsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
@@ -237,6 +238,11 @@ $routesConfig = [
     'admin.instances' => [
         'path' => '/instances',
         'controller' => [InstanceController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.media.browser' => [
+        'path' => '/media-browser',
+        'controller' => [MediaBrowserController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.news' => [
