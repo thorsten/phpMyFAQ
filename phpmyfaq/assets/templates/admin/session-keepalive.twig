@@ -23,7 +23,7 @@
       const duration = expire - sessionStart;
 
       if (duration <= 0) {
-        parent.location.href = './index.php?action=logout&csrf={{ csrfToken }}';
+        parent.location.href = './logout?csrf={{ csrfToken }}';
         return;
       }
 

@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Controller\Administration\AdminLogController;
 use phpMyFAQ\Controller\Administration\AttachmentsController;
+use phpMyFAQ\Controller\Administration\AuthenticationController;
 use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentsController;
@@ -53,6 +54,11 @@ $routesConfig = [
     'admin.attachments' => [
         'path' => '/attachments',
         'controller' => [AttachmentsController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.auth.logout' => [
+        'path' => '/logout',
+        'controller' => [AuthenticationController::class, 'logout'],
         'methods' => 'GET'
     ],
     'admin.backup' => [
