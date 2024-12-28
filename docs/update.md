@@ -26,8 +26,10 @@ First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
 
 - in the directory **config/**
+
   - keep the file **database.php**
   - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
+
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**
@@ -49,8 +51,10 @@ First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
 
 - in the directory **config/**
+
   - keep the file **database.php**
   - only if using LDAP/ActiveDirectory support also keep the file **ldap.php**
+
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**
@@ -72,9 +76,11 @@ First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
 
 - in the directory **config/**
+
   - keep the file **database.php**
   - if you are using LDAP/ActiveDirectory support, also keep the file **ldap.php**
   - if you are using EntraID support, also keep the file **azure.php**
+
 - the directory **attachments/**
 - the directory **data/**
 - the directory **images/**
