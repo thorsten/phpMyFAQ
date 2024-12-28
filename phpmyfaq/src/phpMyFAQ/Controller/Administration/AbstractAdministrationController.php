@@ -301,7 +301,7 @@ class AbstractAdministrationController extends AbstractController
                 break;
         }
 
-        if ($this->configuration->get('main.enableGravatarSupport')) {
+        if ($this->currentUser->isLoggedIn() && $this->configuration->get('main.enableGravatarSupport')) {
             $avatar = new Gravatar();
             $gravatarImage = $avatar->getImage(
                 $this->currentUser->getUserData('email'),

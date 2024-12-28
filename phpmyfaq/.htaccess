@@ -143,7 +143,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages
-    RewriteRule ^admin/(attachments|backup|category|comments|configuration|elasticsearch|export|faq|faqs|forms|glossary|group|import|instance|instances|logout|media-browser|news|password|questions|session-keep-alive|statistics|sticky-faqs|stopwords|system|tags|update|user) admin/front.php [L,QSA]
+    RewriteRule ^admin/(attachments|authenticate|backup|category|comments|configuration|elasticsearch|export|faq|faqs|forms|glossary|group|import|instance|instances|login|logout|media-browser|news|password|questions|session-keep-alive|statistics|sticky-faqs|stopwords|system|tags|update|user) admin/front.php [L,QSA]
     #RewriteRule ^admin/(.*) admin/front.php [L,QSA]
     # Private APIs
     RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login) api/index.php [L,QSA]

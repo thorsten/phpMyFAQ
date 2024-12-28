@@ -56,6 +56,16 @@ $routesConfig = [
         'controller' => [AttachmentsController::class, 'index'],
         'methods' => 'GET'
     ],
+    'admin.auth.authenticate' => [
+        'path' => '/authenticate',
+        'controller' => [AuthenticationController::class, 'authenticate'],
+        'methods' => 'POST'
+    ],
+    'admin.auth.login' => [
+        'path' => '/login',
+        'controller' => [AuthenticationController::class, 'login'],
+        'methods' => 'GET'
+    ],
     'admin.auth.logout' => [
         'path' => '/logout',
         'controller' => [AuthenticationController::class, 'logout'],

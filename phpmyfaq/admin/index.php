@@ -35,6 +35,7 @@ use phpMyFAQ\User\UserAuthentication;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -264,7 +265,8 @@ if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->i
 // User is NOT authenticated
 } else {
     //$error = Translation::get('msgSessionExpired');
-    require 'login.php';
+    $redirect = new RedirectResponse('./login');
+    $redirect->send();
 }
 
 require 'footer.php';
