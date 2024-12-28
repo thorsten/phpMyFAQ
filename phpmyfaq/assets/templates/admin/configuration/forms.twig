@@ -3,7 +3,7 @@
 {% block content %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ msgEditForms }}
+      <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ 'msgEditForms' | translate }}
     </h1>
   </div>
 
@@ -12,11 +12,11 @@
       <ul class="nav nav-tabs" id="navigation" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="ask-question-tab" data-toggle="tab" href="#" role="tab"
-             aria-controls="home" aria-selected="true">{{ msgQuestion }}</a>
+             aria-controls="home" aria-selected="true">{{ 'msgQuestion' | translate }}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="add-content-tab" data-toggle="tab" href="#" role="tab"
-             aria-controls="profile" aria-selected="false">{{ msgAddContent }}</a>
+             aria-controls="profile" aria-selected="false">{{ 'msgAddContent' | translate }}</a>
         </li>
       </ul>
 
@@ -26,10 +26,10 @@
             <thead>
             <tr>
               <th scope="col">{{ ad_entry_id }}</th>
-              <th scope="col">{{ msgInputLabel }}</th>
-              <th scope="col">{{ msgInputType }}</th>
+              <th scope="col">{{ 'msgInputLabel' | translate }}</th>
+              <th scope="col">{{ 'msgInputType' | translate }}</th>
               <th scope="col">{{ ad_entry_active }}</th>
-              <th scope="col">{{ msgRequiredInputField }}</th>
+              <th scope="col">{{ 'msgRequiredInputField' | translate }}</th>
               <th scope="col">{{ ad_categ_translate }}</th>
             </tr>
             </thead>
@@ -43,7 +43,8 @@
                   <input type="checkbox" data-pmf-inputid="{{ input.input_id }}"
                          data-pmf-csrf-token="{{ csrfActivate }}"
                          data-pmf-formid="1"
-                         id="active" {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
+                         id="active"
+                         {% if input.input_active %} checked {% endif %} {% if input.input_active == -1 %} disabled {% endif %} />
                 </td>
                 <td>
                   {% if input.input_type != 'title' and input.input_type != 'message' %}
@@ -54,7 +55,7 @@
                   {% endif %}
                 </td>
                 <td>
-                  <a href="?action=forms-translations&formid={{ input.form_id }}&inputid={{ input.input_id }}">
+                  <a href="./forms/translate/{{ input.form_id }}/{{ input.input_id }}">
                   <span class="badge bg-primary">
                     <i aria-hidden="true" class="bi bi-globe bi-white"></i></span>
                   </a>
@@ -71,10 +72,10 @@
             <thead>
             <tr>
               <th scope="col">{{ ad_entry_id }}</th>
-              <th scope="col">{{ msgInputLabel }}</th>
-              <th scope="col">{{ msgInputType }}</th>
+              <th scope="col">{{ 'msgInputLabel' | translate }}</th>
+              <th scope="col">{{ 'msgInputType' | translate }}</th>
               <th scope="col">{{ ad_entry_active }}</th>
-              <th scope="col">{{ msgRequiredInputField }}</th>
+              <th scope="col">{{ 'msgRequiredInputField' | translate }}</th>
               <th scope="col">{{ ad_categ_translate }}</th>
             </tr>
             </thead>
@@ -113,6 +114,6 @@
     </div>
   </div>
   <div class="mt-4 alert alert-info" role="alert">
-    {{ msgHintDeactivateForms|raw }}
+    {{ msgHintDeactivateForms | raw }}
   </div>
 {% endblock %}

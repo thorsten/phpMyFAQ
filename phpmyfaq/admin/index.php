@@ -254,17 +254,7 @@ $numRights = $user->perm->getUserRightsCount($user);
 // User is authenticated
 if ($user->isLoggedIn() && $user->getUserId() > 0 && ($numRights > 0 || $user->isSuperAdmin())) {
     if (!is_null($action)) {
-        // the various sections of the admin area
-        switch ($action) {
-            // Config administration
-            case 'forms-translations':
-                require 'forms.translations.php';
-                break;
-
-            default:
-                echo 'Dave, this conversation can serve no purpose anymore. Goodbye.';
-                break;
-        }
+        echo 'Dave, this conversation can serve no purpose anymore. Goodbye.';
     } else {
         require 'dashboard.php';
     }

@@ -159,6 +159,11 @@ $routesConfig = [
         'controller' => [FormsController::class, 'index'],
         'methods' => 'GET'
     ],
+    'admin.forms.translate' => [
+        'path' => '/forms/translate/{formId}/{inputId}',
+        'controller' => [FormsController::class, 'translate'],
+        'methods' => 'GET'
+    ],
     'admin.elasticsearch' => [
         'path' => '/elasticsearch',
         'controller' => [ElasticsearchController::class, 'index'],

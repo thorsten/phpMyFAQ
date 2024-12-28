@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Error\LoaderError;
 use Twig\Extension\ExtensionInterface;
+use Twig\TwigFilter;
 
 #[OA\Info(
     version: '3.0',
@@ -56,6 +57,9 @@ abstract class AbstractController
     protected ?CurrentUser $currentUser = null;
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
+
+    /** @var TwigFilter[] */
+    private array $twigFilters = [];
 
     /**
      * Check if the FAQ should be secured.
@@ -132,6 +136,12 @@ abstract class AbstractController
         if (!empty($this->twigExtensions)) {
             foreach ($this->twigExtensions as $extension) {
                 $twigWrapper->addExtension($extension);
+            }
+        }
+
+        if (!empty($this->twigFilters)) {
+            foreach ($this->twigFilters as $filter) {
+                $twigWrapper->addFilter($filter);
             }
         }
 
@@ -253,6 +263,11 @@ abstract class AbstractController
     public function addExtension(ExtensionInterface $extension): void
     {
         $this->twigExtensions[] = $extension;
+    }
+
+    public function addFilter(TwigFilter $filter): void
+    {
+        $this->twigFilters[] = $filter;
     }
 
     protected function createContainer(): ContainerBuilder

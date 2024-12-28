@@ -19,8 +19,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Translation;
-use Symfony\Component\VarDumper\Cloner\Data;
 
 class Forms
 {
