@@ -342,7 +342,7 @@ class Session
                     "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
                     Database::getTablePrefix(),
                     $this->getCurrentSessionId(),
-                    $this->currentUser->getUserId(),
+                    isset($this->currentUser) ? $this->currentUser->getUserId() : 0,
                     $remoteAddress,
                     $request->server->get('REQUEST_TIME')
                 );
