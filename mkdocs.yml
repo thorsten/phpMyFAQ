@@ -4,8 +4,6 @@ theme:
   highlightjs: true
 plugins:
   - search
-markdown_extensions:
-  - mdx_truly_sane_lists
 nav:
   - 1. Introduction: 'index.md'
   - 2. Installation: 'installation.md'
