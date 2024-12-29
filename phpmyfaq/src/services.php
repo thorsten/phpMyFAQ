@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Administration\AdminLog;
+use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
@@ -72,6 +73,12 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('session', Session::class);
 
+    $services->set('phpmyfaq.admin.api', Api::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.system')
+        ]);
+
     $services->set('phpmyfaq.admin.admin-log', AdminLog::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
@@ -96,6 +103,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
+
 
     $services->set('phpmyfaq.attachment-collection', AttachmentCollection::class)
         ->args([

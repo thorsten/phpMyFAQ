@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Controller\Administration\CategoryController;
 use phpMyFAQ\Controller\Administration\CommentsController;
 use phpMyFAQ\Controller\Administration\ConfigurationController;
+use phpMyFAQ\Controller\Administration\DashboardController;
 use phpMyFAQ\Controller\Administration\ElasticsearchController;
 use phpMyFAQ\Controller\Administration\ExportController;
 use phpMyFAQ\Controller\Administration\FaqController;
@@ -150,6 +151,11 @@ $routesConfig = [
     'admin.configuration' => [
         'path' => '/configuration',
         'controller' => [ConfigurationController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.dashboard' => [
+        'path' => '/',
+        'controller' => [DashboardController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.faq.add' => [
