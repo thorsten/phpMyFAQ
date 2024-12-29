@@ -202,7 +202,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             ->setName(Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUserId(Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT))
-            ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT))
+            ->setGroupId(Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT) ?? -1)
             ->setActive(Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT))
             ->setImage($image)
             ->setShowHome(Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT));
