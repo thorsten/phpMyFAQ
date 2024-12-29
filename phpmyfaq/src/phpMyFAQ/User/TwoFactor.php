@@ -85,9 +85,9 @@ class TwoFactor
     /**
      * Validates a given token. Returns true if the token is correct.
      */
-    public function validateToken(string $token, int $userId): bool
+    public function validateToken(int $token, int $userId): bool
     {
-        if (strlen($token) !== 6) {
+        if (strlen((string)$token) !== 6) {
             return false;
         }
 
@@ -101,7 +101,7 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $label = $this->configuration->getTitle() . ':' . $this->currentUser->getUserData('email');
+        $label = $this->configuration->getTitle() . 'XXXXX:' . $this->currentUser->getUserData('email');
         $qrCodeText = sprintf(
             '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),

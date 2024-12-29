@@ -56,6 +56,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -294,9 +295,14 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.user.two-factor', TwoFactor::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.user.current_user')
+        ]);
+
     $services->set('phpmyfaq.visits', Visits::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
-
 };

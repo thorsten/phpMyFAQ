@@ -61,6 +61,11 @@ $routesConfig = [
         'controller' => [AuthenticationController::class, 'authenticate'],
         'methods' => 'POST'
     ],
+    'admin.auth.check' => [
+        'path' => '/check',
+        'controller' => [AuthenticationController::class, 'check'],
+        'methods' => 'POST'
+    ],
     'admin.auth.login' => [
         'path' => '/login',
         'controller' => [AuthenticationController::class, 'login'],
@@ -70,6 +75,12 @@ $routesConfig = [
         'path' => '/logout',
         'controller' => [AuthenticationController::class, 'logout'],
         'methods' => 'GET'
+    ],
+    'admin.auth.token' => [
+        'path' => '/token',
+        'controller' => [AuthenticationController::class, 'token'],
+        'methods' => 'GET',
+
     ],
     'admin.backup' => [
         'path' => '/backup',

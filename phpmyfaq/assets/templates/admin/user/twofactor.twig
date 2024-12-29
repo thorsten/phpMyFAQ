@@ -1,53 +1,52 @@
-{% if ( requestIsSecure == true ) or ( security.useSslForLogins == false ) %}
-    <div class="container py-5">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-6 mx-auto">
-              <div class="card rounded-0" id="login-form">
-                <div class="card-header">
-                  <h3 class="mb-0">
-                      {{ msgTwofactorEnabled }}
-                  </h3>
-                  {% if actionIsLogout == true %}
-                    <p class="alert alert-danger alert-dismissible fade show mt-3">
-                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button> 
-                        {{ ad_logout }}
-                    </p>
-                  {% endif %}
-                  {% if ( error is defined ) and ( error|length > 0 ) %}
-                    <p class="alert alert-danger alert-dismissible fade show mt-3">
-                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
-                        {{ error }}
-                    </p>
-                  {% endif %}
+{% extends '@admin/index.twig' %}
 
-                </div>
-                <div class="card-body">
-                  <form action="{{ systemUri }}admin/index.php" method="post"
-                        accept-charset="utf-8" role="form" class="pmf-form-login">
-                    <input type="hidden" name="userid" id="userid" value="<?= $userid ?>">
-                    <input type="hidden" name="redirect-action" value="<?= $action ?>">
-                    <div class="form-group">
-                      <label for="token">{{ msgEnterTwofactorToken }}</label>
-                      <div class="col-4 mx-auto my-2">
-                        <input type="text" class="form-control form-control-lg text-center rounded-0" name="token"
-                               id="token" autocomplete="off" maxlength="6" autofocus required>
+{% block content %}
+  {% if ( requestIsSecure == true ) or ( security.useSslForLogins == false ) %}
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6 mx-auto">
+                <div class="card rounded-0" id="login-form">
+                  <div class="card-header">
+                    <h3 class="mb-0">
+                        {{ msgTwofactorEnabled }}
+                    </h3>
+                    {% if ( error is defined ) and ( error|length > 0 ) %}
+                      xxx
+                      <p class="alert alert-danger alert-dismissible fade show mt-3">
+                          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+                          {{ error }}
+                      </p>
+                    {% endif %}
+
+                  </div>
+                  <div class="card-body">
+                    <form action="{{ systemUri }}admin/check" method="post"
+                          accept-charset="utf-8" role="form" class="pmf-form-login">
+                      <input type="hidden" name="user-id" id="user-id" value="{{ userId }}">
+                      <input type="hidden" name="redirect-action" value="{{ redirectAction }}">
+                      <div class="form-group">
+                        <label for="token">{{ msgEnterTwofactorToken }}</label>
+                        <div class="col-4 mx-auto my-2">
+                          <input type="text" class="form-control form-control-lg text-center rounded-0" name="token"
+                                 id="token" autocomplete="off" maxlength="6" autofocus required>
+                        </div>
                       </div>
-                    </div>
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                      <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
-                        {{ msgTwofactorCheck }}
-                      </button>
-                    </div>
-                  </form>
+                      <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
+                          {{ msgTwofactorCheck }}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-{% else %}
-    <p><a href="https://{{ requestHost }}{{ requestUri }}">{{ msgSecureSwitch }}</a></p>
-{% endif %}
+  {% else %}
+      <p><a href="https://{{ requestHost }}{{ requestUri }}">{{ msgSecureSwitch }}</a></p>
+  {% endif %}
+{% endblock %}

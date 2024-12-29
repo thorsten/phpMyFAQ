@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * The Administration Authentication Controller
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-12-28
+ */
+
 declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
@@ -47,12 +62,12 @@ class AuthenticationController extends AbstractAdministrationController
             try {
                 $this->currentUser = $userAuth->authenticate($username, $password);
                 if ($userAuth->hasTwoFactorAuthentication()) {
-                    return new RedirectResponse('./2fa');
+                    return new RedirectResponse('./token?user-id=' . $this->currentUser->getUserId());
                 }
             } catch (Exception $e) {
                 $logging->log(
                     $this->currentUser,
-                    'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->configuration->errors)
+                    'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors)
                 );
                 //$error = $e->getMessage();
                 return new RedirectResponse('./login');
@@ -116,6 +131,7 @@ class AuthenticationController extends AbstractAdministrationController
 
         $csrfToken = Filter::filterVar($request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('admin-logout', $csrfToken)) {
+            // add an error message
             return $redirect->send();
         }
 
@@ -127,5 +143,69 @@ class AuthenticationController extends AbstractAdministrationController
         }
 
         return $redirect->send();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('/token', name: 'admin.auth.token', methods: ['GET'])]
+    public function token(Request $request): Response
+    {
+        if ($this->currentUser->isLoggedIn()) {
+            return new RedirectResponse('./');
+        }
+
+        $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
+
+        return $this->render(
+            '@admin/user/twofactor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
+                'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
+                'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
+                'requestIsSecure' => $request->isSecure(),
+                'security.useSslForLogins' => $this->configuration->get('security.useSslForLogins'),
+                'requestHost' => $request->getHost(),
+                'requestUri' => $request->getRequestUri(),
+                'userId' => $userId,
+                'msgSecureSwitch' => Translation::get('msgSecureSwitch'),
+                'systemUri' => $this->configuration->getDefaultUrl()
+            ]
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('/check', name: 'admin.auth.check', methods: ['POST'])]
+    public function check(Request $request): Response
+    {
+        if ($this->currentUser->isLoggedIn()) {
+            return new RedirectResponse('./');
+        }
+
+        $token = Filter::filterVar($request->get('token'), FILTER_VALIDATE_INT);
+        $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
+
+        $user = $this->container->get('phpmyfaq.user.current_user');
+        $user->getUserById($userId);
+
+        if (strlen((string) $token) === 6) {
+            $tfa = $this->container->get('phpmyfaq.user.two-factor');
+            $result = $tfa->validateToken($token, $userId);
+
+            if ($result) {
+                $user->twoFactorSuccess();
+                return new RedirectResponse('./');
+            } else {
+                // add an error message
+                return new RedirectResponse('./token?user-id=' . $userId);
+            }
+        } else {
+            // add an error message
+            return new RedirectResponse('./token?user-id=' . $userId);
+        }
     }
 }
