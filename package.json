@@ -38,10 +38,10 @@
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.7",
     "handlebars": "4.7.8",
-    "highlight.js": "^11.11.0",
+    "highlight.js": "^11.11.1",
+    "jodit": "^4.2.47",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.6",
-    "tinymce": "^6.8.5",
     "vanilla-cookieconsent": "^3.0.1"
   },
   "devDependencies": {
@@ -61,7 +61,7 @@
     "rollup-plugin-sbom": "^1.1.1",
     "sass": "^1.83.0",
     "sigmund": "^1.0.1",
-    "vite": "^6.0.5",
+    "vite": "^6.0.6",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-minify": "^2.1.0",
