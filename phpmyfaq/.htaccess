@@ -99,7 +99,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # the path to your phpMyFAQ installation
     RewriteBase /
     # Exclude assets from being handled by Symfony Router
-    RewriteRule ^(admin/assets|admin/images)($|/) - [L]
+    RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
     ErrorDocument 404 /index.php?action=404
     # General pages

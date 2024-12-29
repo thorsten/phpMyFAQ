@@ -94,7 +94,6 @@ tinymce.PluginManager.add('phpmyfaq', function (editor, url) {
   // Add button to editor
   editor.ui.registry.addButton('phpmyfaq', {
     text: 'phpMyFAQ',
-    //image: 'images/phpmyfaq.gif',
     onAction: () => {
       const csrfToken = document.getElementById('pmf-csrf-token').value;
       openDialog(csrfToken);
