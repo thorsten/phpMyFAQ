@@ -24,7 +24,6 @@ RUN set -x \
  && buildDeps="libldap2-dev" \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
  \
- && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
  && docker-php-ext-install ldap \
  \
  && apt-get purge -y ${buildDeps} \
@@ -59,8 +58,8 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.4.0beta1  \
-    && docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.4.0  \
+&& docker-php-ext-enable xdebug
 
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
