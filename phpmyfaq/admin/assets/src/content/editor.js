@@ -14,30 +14,29 @@
  */
 
 import { Jodit } from 'jodit';
-import 'jodit/esm/plugins/image/image.js';
-import 'jodit/esm/plugins/video/video.js';
-import 'jodit/esm/plugins/indent/indent.js';
-import 'jodit/esm/plugins/print/print.js';
-import 'jodit/esm/plugins/copy-format/copy-format.js';
-import 'jodit/esm/plugins/line-height/line-height.js';
-import 'jodit/esm/plugins/fullsize/fullsize.js';
-import 'jodit/esm/plugins/symbols/symbols.js';
-import 'jodit/esm/plugins/delete/delete.js';
-import 'jodit/esm/plugins/source/source.js';
-import 'jodit/esm/plugins/hr/hr.js';
-import 'jodit/esm/plugins/preview/preview.js';
+import 'jodit/esm/plugins/class-span/class-span.js';
 import 'jodit/esm/plugins/clean-html/clean-html.js';
-import 'jodit/esm/plugins/search/search.js';
-import 'jodit/esm/plugins/select/select.js';
-import 'jodit/esm/plugins/justify/justify.js';
 import 'jodit/esm/plugins/clipboard/clipboard.js';
-import 'jodit/esm/plugins/media/media.js';
+import 'jodit/esm/plugins/copy-format/copy-format.js';
+import 'jodit/esm/plugins/delete/delete.js';
+import 'jodit/esm/plugins/fullsize/fullsize.js';
+import 'jodit/esm/plugins/hr/hr.js';
 import 'jodit/esm/plugins/image/image.js';
 import 'jodit/esm/plugins/image-processor/image-processor.js';
 import 'jodit/esm/plugins/image-properties/image-properties.js';
+import 'jodit/esm/plugins/indent/indent.js';
+import 'jodit/esm/plugins/justify/justify.js';
+import 'jodit/esm/plugins/line-height/line-height.js';
+import 'jodit/esm/plugins/media/media.js';
+import 'jodit/esm/plugins/preview/preview.js';
+import 'jodit/esm/plugins/print/print.js';
 import 'jodit/esm/plugins/resizer/resizer.js';
-import 'jodit/esm/plugins/class-span/class-span.js';
-import { FileSelectorWidget } from 'jodit/esm/modules/widget/file-selector/file-selector.js';
+import 'jodit/esm/plugins/search/search.js';
+import 'jodit/esm/plugins/select/select.js';
+import 'jodit/esm/plugins/source/source.js';
+import 'jodit/esm/plugins/symbols/symbols.js';
+import 'jodit/esm/modules/uploader/uploader.js';
+import 'jodit/esm/plugins/video/video.js';
 
 export const renderEditor = () => {
   const editor = document.getElementById('editor');
@@ -209,26 +208,27 @@ export const renderEditor = () => {
     ],
     events: {},
     textIcons: false,
+    uploader: {
+      url: '/admin/api/content/images?csrf=' + document.getElementById('pmf-csrf-token').value,
+      format: 'json',
+      isSuccess: (response) => {
+        return !response.error;
+      },
+      getMessage: (response) => {
+        return response.msg;
+      },
+    },
     filebrowser: {
       ajax: {
-        url: '/admin/assets/src/api/filebrowser.php',
+        url: '/admin/api/media-browser',
+        contentType: 'application/json; charset=UTF-8',
       },
+      createNewFolder: false,
+      deleteFolder: false,
+      moveFolder: false,
+      showFoldersPanel: false,
+      showFileSize: true,
+      showFileName: true,
     },
   });
-
-  FileSelectorWidget(
-    joditEditor,
-    {
-      filebrowser(data) {
-        console.log(data);
-      },
-      upload: true,
-      url(url, text) {
-        console.log(url);
-      },
-    },
-    null,
-    () => {},
-    true
-  );
 };
