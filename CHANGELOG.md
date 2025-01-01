@@ -9,7 +9,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v4.1.0-dev - unreleased
 
 - added configuration to edit robots.txt (Thorsten)
-- WIP: added Symfony Routing for administration backend (Thorsten)
+- added Symfony Routing for administration backend (Thorsten)
+- WIP: migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
 - removed Webpack, now using Vite v6 (Thorsten)
 - migrated from Jest to vitest (Thorsten)
 

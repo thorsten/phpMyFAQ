@@ -28,7 +28,6 @@ export default defineConfig({
         manualChunks: {
           bootstrap: ['bootstrap'],
           chart: ['chart.js'],
-          tinymce: ['tinymce'],
         },
       },
     },
@@ -40,11 +39,6 @@ export default defineConfig({
     viteCompression(),
     viteStaticCopy({
       targets: [
-        {
-          src: path.resolve(__dirname, 'phpmyfaq/admin/assets/src/tinymce/phpmyfaq.tinymce.plugin.js'),
-          dest: '../phpmyfaq/assets/public/plugins/phpmyfaq',
-          rename: 'plugin.js',
-        },
         {
           src: path.resolve(__dirname, 'phpmyfaq/assets/fonts/*'),
           dest: '../phpmyfaq/assets/public/fonts',

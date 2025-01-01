@@ -16,8 +16,6 @@
 
 import { activateNews, addNews, deleteNews, updateNews } from '../api';
 import { Modal } from 'bootstrap';
-import { TinyMCE } from 'tinymce';
-import tinymce from 'tinymce/tinymce';
 
 export const handleAddNews = () => {
   const submit = document.getElementById('submitAddNews');
@@ -32,7 +30,7 @@ export const handleAddNews = () => {
       });
 
       const data = {
-        news: tinymce.get('editor').getContent(),
+        news: document.getElementById('editor').value,
         newsHeader: document.getElementById('newsheader').value,
         authorName: document.getElementById('authorName').value,
         authorEmail: document.getElementById('authorEmail').value,
@@ -89,7 +87,7 @@ export const handleEditNews = () => {
       const data = {
         id: document.getElementById('id').value,
         csrfToken: document.getElementById('pmf-csrf-token').value,
-        news: tinymce.get('editor').getContent(),
+        news: document.getElementById('editor').value,
         newsHeader: document.getElementById('newsheader').value,
         authorName: document.getElementById('authorName').value,
         authorEmail: document.getElementById('authorEmail').value,

@@ -30,6 +30,7 @@ use phpMyFAQ\Controller\Administration\Api\GroupController;
 use phpMyFAQ\Controller\Administration\Api\ImageController;
 use phpMyFAQ\Controller\Administration\Api\InstanceController;
 use phpMyFAQ\Controller\Administration\Api\MarkdownController;
+use phpMyFAQ\Controller\Administration\Api\MediaBrowserController;
 use phpMyFAQ\Controller\Administration\Api\NewsController;
 use phpMyFAQ\Controller\Administration\Api\QuestionController;
 use phpMyFAQ\Controller\Administration\Api\SearchController;
@@ -192,6 +193,12 @@ $routesConfig = [
         'path' => '/content/markdown',
         'controller' => [MarkdownController::class, 'renderMarkdown'],
         'methods' => 'POST'
+    ],
+
+    'admin.api.media.browser' => [
+        'path' => '/media-browser',
+        'controller' => [MediaBrowserController::class, 'index'],
+        'methods' => 'GET'
     ],
     // Dashboard API
     'admin.api.dashboard.topten' => [
