@@ -1,5 +1,5 @@
 /**
- * TinyMCE for phpMyFAQ
+ * Jodit Editor for phpMyFAQ
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -37,6 +37,81 @@ import 'jodit/esm/plugins/source/source.js';
 import 'jodit/esm/plugins/symbols/symbols.js';
 import 'jodit/esm/modules/uploader/uploader.js';
 import 'jodit/esm/plugins/video/video.js';
+
+// Define the phpMyFAQ plugin
+Jodit.plugins.add('phpMyFAQ', (editor) => {
+  // Register the button
+  editor.registerButton({
+    name: 'phpMyFAQ',
+  });
+
+  // Register the command
+  editor.registerCommand('phpMyFAQ', () => {
+    const dialog = editor.dlg({ closeOnClickOverlay: true });
+
+    const content = `<form class="row row-cols-lg-auto g-3 align-items-center m-4">
+      <div class="col-12">
+        <label class="visually-hidden" for="pmf-search-internal-links">Search</label>
+        <input type="text" class="form-control" id="pmf-search-internal-links" placeholder="Search">
+      </div>
+    </form>
+    <div class="m-4" id="pmf-search-results"></div>
+    <div class="m-4">
+      <button type="button" class="btn btn-primary" id="select-faq-button">Select FAQ</button>
+    </div>`;
+
+    dialog.setMod('theme', editor.o.theme).setHeader('phpMyFAQ Plugin').setContent(content);
+
+    dialog.open();
+
+    const searchInput = document.getElementById('pmf-search-internal-links');
+    const resultsContainer = document.getElementById('pmf-search-results');
+    const csrfToken = document.getElementById('pmf-csrf-token').value;
+    const selectLink = document.getElementById('select-faq-button');
+
+    searchInput.addEventListener('keyup', () => {
+      const query = searchInput.value;
+      if (query.length > 0) {
+        fetch('api/faq/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            search: query,
+            csrf: csrfToken,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            resultsContainer.innerHTML = '';
+            data.success.forEach((result) => {
+              resultsContainer.innerHTML += `<label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="faqURL" value="${result.url}">
+                  ${result.question}
+                </label><br>`;
+            });
+          })
+          .catch((error) => console.error('Error:', error));
+      } else {
+        resultsContainer.innerHTML = '';
+      }
+    });
+
+    selectLink.addEventListener('click', () => {
+      const selected = document.querySelector('input[name=faqURL]:checked');
+      if (selected) {
+        const url = selected.value;
+        const question = selected.parentNode.textContent.trim();
+        const anchor = `<a href="${url}">${question}</a>`;
+        editor.selection.insertHTML(anchor);
+        dialog.close();
+      } else {
+        alert('Please select an FAQ.');
+      }
+    });
+  });
+});
 
 export const renderEditor = () => {
   const editor = document.getElementById('editor');
@@ -158,6 +233,7 @@ export const renderEditor = () => {
     imageDefaultWidth: 300,
     removeButtons: [],
     disablePlugins: [],
+    extraPlugins: ['phpMyFAQ'],
     extraButtons: [],
     buttons: [
       'source',
@@ -172,7 +248,6 @@ export const renderEditor = () => {
       'superscript',
       'subscript',
       '|',
-      'justify',
       'outdent',
       'indent',
       '|',
@@ -181,13 +256,16 @@ export const renderEditor = () => {
       'lineHeight',
       'brush',
       'paragraph',
+      'left',
+      'center',
+      'right',
+      'justify',
       '|',
       'copy',
       'cut',
       'paste',
       'selectall',
       '|',
-      'file',
       'image',
       'video',
       'table',
@@ -205,6 +283,8 @@ export const renderEditor = () => {
       'fullsize',
       'preview',
       'print',
+      '|',
+      'phpMyFAQ',
     ],
     events: {},
     textIcons: false,

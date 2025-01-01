@@ -30,14 +30,6 @@ class FaqHelperTest extends TestCase
         $this->faqHelper = new FaqHelper($this->configuration);
     }
 
-    public function testRewriteLanguageMarkupClass(): void
-    {
-        $this->assertEquals(
-            '<div class="language-html">Foobar</div>',
-            $this->faqHelper->rewriteLanguageMarkupClass('<div class="language-markup">Foobar</div>')
-        );
-    }
-
     public function testRewriteUrlFragments(): void
     {
         $content = '<a href="#Foobar">Hello, World</a>';
