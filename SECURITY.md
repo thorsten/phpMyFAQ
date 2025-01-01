@@ -6,10 +6,10 @@ If you discover a security vulnerability in phpMyFAQ, we appreciate your help in
 ## Supported Versions
 
 | Version | Supported | Active Support / Development Period |
-| ------- | --------- | ----------------------------------- |
+| ------- | --------- |-------------------------------------|
 | 4.1.x   | ✓         | 2024 -                              |
 | 4.0.x   | ✓         | 2024 -                              |
-| 3.2.x   | ✓         | 2023 -                              |
+| 3.2.x   | ✗         | 2023 - 2024                         |
 | 3.1.x   | ✗         | 2022 - 2023                         |
 | 3.0.x   | ✗         | 2020 - 2022                         |
 | < 3.0   | ✗         | 2001 - 2020                         |
@@ -27,4 +27,4 @@ we value the contributions of white-hat researchers in improving our security.
 
 Thank you for helping keep phpMyFAQ secure.
 
-Copyright © 2001–2024 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001–2025 Thorsten Rinne and the phpMyFAQ Team

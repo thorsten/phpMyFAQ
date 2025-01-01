@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * The News Administration Controller
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024-2025 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-12-01
+ */
+
 declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
@@ -81,13 +96,13 @@ class NewsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
 
-        $id = Filter::filterVar($request->get('newsId'), FILTER_VALIDATE_INT);
+        $newsId = Filter::filterVar($request->get('newsId'), FILTER_VALIDATE_INT);
 
         $news = $this->container->get('phpmyfaq.news');
         $comment = $this->container->get('phpmyfaq.comments');
-        $newsData = $news->get($id, true);
+        $newsData = $news->get($newsId, true);
 
-        $comments = $comment->getCommentsData($id, CommentType::NEWS);
+        $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
         $this->addExtension(new IsoDateTwigExtension());
         $this->addExtension(new FormatDateTwigExtension());
@@ -103,7 +118,7 @@ class NewsController extends AbstractAdministrationController
                     ENT_QUOTES
                 ) : ''),
                 'comments' => $comments,
-                'newsId' => $id,
+                'newsId' => $newsId,
                 'commentTypeNews' => CommentType::NEWS
             ]
         );
@@ -114,6 +129,7 @@ class NewsController extends AbstractAdministrationController
      * @throws \Exception
      * @throws LoaderError
      * @throws Exception
+     * @todo move to Twig translation filter
      */
     private function getBaseTemplateVars(): array
     {

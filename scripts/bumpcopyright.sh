@@ -9,7 +9,7 @@
 # @package   phpMyFAQ
 # @author    Florian Anderiasch <florian@phpmyfaq.de>
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
-# @copyright 2012-2024 phpMyFAQ Team
+# @copyright 2012-2025 phpMyFAQ Team
 # @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      https://www.phpmyfaq.de
 # @since     2012-03-07
@@ -17,7 +17,16 @@
 # List of file extensions to process
 extensions=("php" "js" "scss" "html" "twig" "md" "sh")
 
+# List of directories to ignore
+ignore_dirs=("libs" "node_modules")
+
+# Build the prune expression
+prune_expr=""
+for dir in "${ignore_dirs[@]}"; do
+    prune_expr+=" -path ./${dir} -prune -o"
+done
+
 # Loop through each extension and execute the perl command
 for ext in "${extensions[@]}"; do
-    find . -name "*.${ext}" -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}24#;' {} \;
+    find . \( ${prune_expr} -name "*.${ext}" \) -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}25#;' {} \;
 done

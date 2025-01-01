@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Pedro Lineu Orso <pedro.orso@gmail.com>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2006-04-05

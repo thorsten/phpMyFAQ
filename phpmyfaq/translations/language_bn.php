@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Md. Masum Billah <jewelurp@dhaka.net>
- * @copyright 2008-2024 phpMyFAQ Team
+ * @copyright 2008-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2008-04-01

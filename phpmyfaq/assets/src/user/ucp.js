@@ -7,7 +7,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
@@ -15,7 +15,7 @@
 
 import { removeTwofactorConfig, updateUserControlPanelData } from '../api';
 import { addElement } from '../utils';
-import { pushErrorNotification, pushNotification } from "../../../admin/assets/src/utils";
+import { pushErrorNotification, pushNotification } from '../../../admin/assets/src/utils';
 
 export const handleUserControlPanel = () => {
   const userControlPanelSubmit = document.getElementById('pmf-submit-user-control-panel');

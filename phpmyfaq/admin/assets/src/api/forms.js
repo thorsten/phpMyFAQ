@@ -8,7 +8,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Harms <modelrailroader@gmx-topmail.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2014-03-21
@@ -75,10 +75,10 @@ export const fetchSetInputAsRequired = async (csrf, formId, inputId, checked) =>
       throw new Error('Network response was not ok: ', response.text());
     }
   } catch (error) {
-      console.error('Error setting input as required:', error);
-      throw error;
-    }
-}
+    console.error('Error setting input as required:', error);
+    throw error;
+  }
+};
 
 export const fetchEditTranslation = async (csrf, formId, inputId, label, lang) => {
   try {
@@ -111,7 +111,7 @@ export const fetchEditTranslation = async (csrf, formId, inputId, label, lang) =
     console.error('Error editing translation:', error);
     throw error;
   }
-}
+};
 
 export const fetchDeleteTranslation = async (csrf, formId, inputId, lang, element) => {
   try {
@@ -125,7 +125,7 @@ export const fetchDeleteTranslation = async (csrf, formId, inputId, lang, elemen
         csrf: csrf,
         formId: formId,
         inputId: inputId,
-        lang: lang
+        lang: lang,
       }),
     });
 
@@ -147,7 +147,7 @@ export const fetchDeleteTranslation = async (csrf, formId, inputId, lang, elemen
     console.error('Error deleting translation:', error);
     throw error;
   }
-}
+};
 
 export const fetchAddTranslation = async (csrf, formId, inputId, lang, translation) => {
   try {
@@ -183,4 +183,4 @@ export const fetchAddTranslation = async (csrf, formId, inputId, lang, translati
     console.error('Error adding translation:', error);
     throw error;
   }
-}
+};
