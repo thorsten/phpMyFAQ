@@ -45,6 +45,7 @@ use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
+use phpMyFAQ\Notification;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
@@ -237,6 +238,11 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.notification', Notification::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.question', Question::class)
         ->args([
             new Reference('phpmyfaq.configuration')
@@ -270,19 +276,19 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.services.gravatar', Gravatar::class);
 
-    $services->set('phpmyfaq.system', System::class);
-
-    $services->set('phpmyfaq.tags', Tags::class)
-        ->args([
-            new Reference('phpmyfaq.configuration')
-        ]);
-
     $services->set('phpmyfaq.seo', Seo::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
 
     $services->set('phpmyfaq.setup.environment_configurator', EnvironmentConfigurator::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.system', System::class);
+
+    $services->set('phpmyfaq.tags', Tags::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
