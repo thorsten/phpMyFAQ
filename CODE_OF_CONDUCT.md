@@ -36,4 +36,4 @@ confidentiality with regard to the reporter of an incident.
 This Code of Conduct is adapted from the Contributor Covenant, version 1.3.0, available from
 http://contributor-covenant.org/version/1/3/0/
 
-Copyright © 2001 - 2024 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001 - 2025 Thorsten Rinne and the phpMyFAQ Team

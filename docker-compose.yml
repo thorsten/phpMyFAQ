@@ -1,5 +1,3 @@
-version: '3'
-
 # Use this file for development only
 
 services:
@@ -30,13 +28,13 @@ services:
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    ports:
-      - 1433:1433
-    environment:
-      SA_PASSWORD: 'phpMyFAQ-4.0'
-      ACCEPT_EULA: 'Y'
+  #sqlserver:
+  #  image: mcr.microsoft.com/mssql/server:2022-latest
+  #  ports:
+  #    - 1433:1433
+  #  environment:
+  #    SA_PASSWORD: 'phpMyFAQ-4.0'
+  #    ACCEPT_EULA: 'Y'
 
   phpmyfaq:
     build: .
