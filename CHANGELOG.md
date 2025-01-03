@@ -13,18 +13,23 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
 - removed Webpack, now using Vite v6 (Thorsten)
 - migrated from Jest to vitest (Thorsten)
+- 
+### phpMyFAQ v4.0.3 - 2025-01-03
 
-### phpMyFAQ v4.0.2 - unreleased
+- fixed installation bug introduced with v4.0.2 (Thorsten)
+- fixed minor bug (Thorsten)
+
+### phpMyFAQ v4.0.2 - 2025-01-02
 
 - improved update handling of .htaccess file (Thorsten)
-- updated 3rd party dependencies (Thorsten)
+- updated third party dependencies (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v4.0.1 - 2024-12-13
 
 - fixed security vulnerability (Thorsten)
 - improved update handling of .htaccess file (Thorsten)
-- updated 3rd party dependencies (Thorsten)
+- updated third party dependencies (Thorsten)
 - fixed minor bugs (Thorsten)
 
 ### phpMyFAQ v4.0.0 - 2024-12-06

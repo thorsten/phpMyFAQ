@@ -27,4 +27,4 @@ we value the contributions of white-hat researchers in improving our security.
 
 Thank you for helping keep phpMyFAQ secure.
 
-Copyright © 2001–2025 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001–2024 Thorsten Rinne and the phpMyFAQ Team
