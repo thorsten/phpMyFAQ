@@ -195,7 +195,7 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress]);
                 ob_flush();
                 flush();
             };
@@ -220,7 +220,7 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($upgrade, $backupHash) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress]);
                 ob_flush();
                 flush();
             };
@@ -244,7 +244,7 @@ class UpdateController extends AbstractController
         $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
         return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress]);
                 ob_flush();
                 flush();
             };
@@ -257,7 +257,7 @@ class UpdateController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/update-database')]
     public function updateDatabase(): StreamedResponse
@@ -293,15 +293,14 @@ class UpdateController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
-        $upgrade->cleanUp();
+        $this->container->get('phpmyfaq.setup.upgrade')->cleanUp();
 
         return $this->json(['message' => '✅ Cleanup successful.'], Response::HTTP_OK);
     }
