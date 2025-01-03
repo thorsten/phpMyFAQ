@@ -30,6 +30,7 @@ use phpMyFAQ\Template\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
 
 class SetupController
 {
@@ -148,7 +149,7 @@ class SetupController
      * @param string[]      $templateVars
      * @param Response|null $response
      * @return Response
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
