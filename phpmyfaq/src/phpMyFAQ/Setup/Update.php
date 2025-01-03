@@ -217,7 +217,7 @@ class Update extends Setup
             foreach ($this->queries as $query) {
                 try {
                     $this->configuration->getDb()->query($query);
-                    $progressCallback($query);
+                    $progressCallback(trim(preg_replace('/\s+/', ' ', $query)));
                 } catch (Exception $exception) {
                     throw new Exception($exception->getMessage());
                 }

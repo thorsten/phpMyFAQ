@@ -265,10 +265,12 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
+        $configuration = $this->configuration;
+
         $update = new Update(new System(), $this->configuration);
         $update->setVersion(System::getVersion());
 
-        return new StreamedResponse(static function () use ($update) {
+        return new StreamedResponse(static function () use ($configuration, $update) {
             $progressCallback = static function ($progress) {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
@@ -276,7 +278,7 @@ class UpdateController extends AbstractController
             };
             try {
                 if ($update->applyUpdates($progressCallback)) {
-                    $this->configuration->set('main.maintenanceMode', 'false');
+                    $configuration->set('main.maintenanceMode', false);
                     echo json_encode(['message' => '✅ Database successfully updated.']);
                 }
             } catch (Exception $exception) {
