@@ -211,7 +211,7 @@ class Update extends Setup
     {
         if ($this->dryRun) {
             foreach ($this->queries as $query) {
-                array_push($this->dryRunQueries, $query);
+                $this->dryRunQueries[] = $query;
             }
         } else {
             foreach ($this->queries as $query) {

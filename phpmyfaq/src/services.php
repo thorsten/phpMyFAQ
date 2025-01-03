@@ -29,7 +29,10 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
+use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -114,6 +117,20 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
+
+    $services->set('phpmyfaq.setup.update', Update::class)
+        ->args([
+            new Reference('phpmyfaq.system'),
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.setup.upgrade', Upgrade::class)
+        ->args([
+            new Reference('phpmyfaq.system'),
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.system', System::class);
 
     $services->set('phpmyfaq.tags', Tags::class)
         ->args([
