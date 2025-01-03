@@ -6,9 +6,10 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.3 - unreleased
+### phpMyFAQ v4.0.3 - 2025-01-03
 
 - fixed installation bug introduced with v4.0.2 (Thorsten)
+- fixed minor bug (Thorsten)
 
 ### phpMyFAQ v4.0.2 - 2025-01-02
 
