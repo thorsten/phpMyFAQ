@@ -189,7 +189,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_SPECIAL_CHARS);
         $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_SPECIAL_CHARS);
         $existingImage = is_null($existingImage) ? '' : $existingImage;
-        $image = count($uploadedFile) ? $categoryImage->getFileName(
+        $image = ($uploadedFile instanceof UploadedFile) ? $categoryImage->getFileName(
             $categoryId,
             $categoryLang
         ) : $existingImage;
