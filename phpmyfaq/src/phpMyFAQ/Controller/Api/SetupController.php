@@ -106,17 +106,23 @@ class SetupController extends AbstractController
         $configuration = $this->configuration;
         $response->setCallback(static function () use ($update, $configuration) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress]);
                 ob_flush();
                 flush();
             };
             try {
                 if ($update->applyUpdates($progressCallback)) {
-                    $configuration->set('main.maintenanceMode', 'false');
-                    echo json_encode(['success' => '✅ Database successfully updated.']);
+                    $configuration->set('main.maintenanceMode', false);
+                    return new JsonResponse(
+                        ['success' => '✅ Database successfully updated.'],
+                        Response::HTTP_OK
+                    );
                 }
             } catch (Exception $exception) {
-                echo json_encode(['error' => 'Update database failed: ' . $exception->getMessage()]);
+                return new JsonResponse(
+                    ['error' => 'Update database failed: ' . $exception->getMessage()],
+                    Response::HTTP_BAD_GATEWAY
+                );
             }
         });
         return $response;

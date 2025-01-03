@@ -271,17 +271,23 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($configuration, $update) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
+                echo json_encode(['progress' => $progress]);
                 ob_flush();
                 flush();
             };
             try {
                 if ($update->applyUpdates($progressCallback)) {
                     $configuration->set('main.maintenanceMode', false);
-                    echo json_encode(['message' => '✅ Database successfully updated.']);
+                    return new JsonResponse(
+                        ['success' => '✅ Database successfully updated.'],
+                        Response::HTTP_OK
+                    );
                 }
             } catch (Exception $exception) {
-                echo json_encode(['message' => 'Update database failed: ' . $exception->getMessage()]);
+                return new JsonResponse(
+                    ['error' => 'Update database failed: ' . $exception->getMessage()],
+                    Response::HTTP_BAD_GATEWAY
+                );
             }
         });
     }
