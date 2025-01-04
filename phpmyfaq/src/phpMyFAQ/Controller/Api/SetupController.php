@@ -26,6 +26,7 @@ use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedJsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SetupController extends AbstractController
@@ -91,7 +92,7 @@ class SetupController extends AbstractController
         return $this->json(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
-    public function updateDatabase(Request $request): StreamedResponse|JsonResponse
+    public function updateDatabase(Request $request): StreamedJsonResponse|JsonResponse
     {
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
@@ -99,32 +100,24 @@ class SetupController extends AbstractController
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $update = new Update(new System(), $this->configuration);
-        $update->setVersion($installedVersion);
+        $version = json_decode(html_entity_decode($installedVersion));
 
-        $response = new StreamedResponse();
+        $update = new Update(new System(), $this->configuration);
+        $update->setVersion($version->version);
+
         $configuration = $this->configuration;
-        $response->setCallback(static function () use ($update, $configuration) {
-            $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]);
-                ob_flush();
-                flush();
+        return new StreamedJsonResponse((function () use ($update, $configuration) {
+            $progressCallback = function ($progress) {
+                yield json_encode(['progress' => $progress]) . "\n";
             };
             try {
                 if ($update->applyUpdates($progressCallback)) {
-                    $configuration->set('main.maintenanceMode', false);
-                    return new JsonResponse(
-                        ['success' => '✅ Database successfully updated.'],
-                        Response::HTTP_OK
-                    );
+                    $configuration->set('main.maintenanceMode', true);
+                    yield json_encode(['success' => '✅ Database successfully updated.']) . "\n";
                 }
             } catch (Exception $exception) {
-                return new JsonResponse(
-                    ['error' => 'Update database failed: ' . $exception->getMessage()],
-                    Response::HTTP_BAD_GATEWAY
-                );
+                yield json_encode(['error' => 'Update database failed: ' . $exception->getMessage()]) . "\n";
             }
-        });
-        return $response;
+        })());
     }
 }

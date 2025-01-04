@@ -195,7 +195,7 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]);
+                echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
@@ -220,7 +220,7 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($upgrade, $backupHash) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]);
+                echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
@@ -244,7 +244,7 @@ class UpdateController extends AbstractController
         $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
         return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]);
+                echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };
@@ -271,7 +271,7 @@ class UpdateController extends AbstractController
 
         return new StreamedResponse(static function () use ($configuration, $update) {
             $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]);
+                echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
             };

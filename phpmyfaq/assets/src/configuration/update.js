@@ -108,15 +108,21 @@ export const handleDatabaseUpdate = async () => {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: installedVersion.value,
+        body: JSON.stringify({ version: installedVersion.value }),
       });
 
       const progressBarInstallation = document.getElementById('result-update');
       const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      const { done, value } = await reader.read();
+      buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
 
       async function pump() {
         const { done, value } = await reader.read();
-        const decodedValue = new TextDecoder().decode(value);
+        buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+
         if (done) {
           progressBarInstallation.style.width = '100%';
           progressBarInstallation.innerText = '100%';
@@ -124,35 +130,39 @@ export const handleDatabaseUpdate = async () => {
           const alert = document.getElementById('phpmyfaq-update-database-success');
           alert.classList.remove('d-none');
           return;
-        } else {
-          let value;
-          try {
-            value = JSON.parse(decodedValue);
-          } catch (error) {
-            console.error('Failed to parse JSON:', error);
-            const alert = document.getElementById('phpmyfaq-update-database-error');
-            const errorMessage = document.getElementById('error-messages');
-            alert.classList.remove('d-none');
-            errorMessage.innerText = `Error: ${error.message}\nFull Error: ${decodedValue}`;
-            return;
-          }
-          if (value.progress) {
-            progressBarInstallation.style.width = value.progress;
-            progressBarInstallation.innerText = value.progress;
-          }
-          if (value.error) {
-            progressBarInstallation.style.width = '100%';
-            progressBarInstallation.innerText = '100%';
-            progressBarInstallation.classList.remove('progress-bar-animated');
-            const alert = document.getElementById('phpmyfaq-update-database-error');
-            const errorMessage = document.getElementById('error-messages');
-            alert.classList.remove('d-none');
-            errorMessage.innerHTML = value.error;
-            return;
-          }
         }
 
-        await pump();
+        let boundary;
+        while ((boundary = buffer.indexOf('\n')) !== -1) {
+          const chunk = buffer.slice(0, boundary).trim();
+          buffer = buffer.slice(boundary + 1);
+          if (chunk) {
+            try {
+              const value = JSON.parse(chunk);
+              if (value.progress) {
+                progressBarInstallation.style.width = value.progress;
+                progressBarInstallation.innerText = value.progress;
+              }
+              if (value.error) {
+                progressBarInstallation.style.width = '100%';
+                progressBarInstallation.innerText = '100%';
+                progressBarInstallation.classList.remove('progress-bar-animated');
+                const alert = document.getElementById('phpmyfaq-update-database-error');
+                const errorMessage = document.getElementById('error-messages');
+                alert.classList.remove('d-none');
+                errorMessage.innerHTML = value.error;
+                return;
+              }
+            } catch (error) {
+              console.error('Failed to parse JSON:', error);
+              const alert = document.getElementById('phpmyfaq-update-database-error');
+              const errorMessage = document.getElementById('error-messages');
+              alert.classList.remove('d-none');
+              errorMessage.innerText = `Error: ${error.message}\nFull Error: ${chunk}`;
+              return;
+            }
+          }
+        }
       }
 
       await pump();
