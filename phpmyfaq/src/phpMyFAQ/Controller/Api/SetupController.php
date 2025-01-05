@@ -92,7 +92,7 @@ class SetupController extends AbstractController
         return $this->json(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
-    public function updateDatabase(Request $request): StreamedJsonResponse|JsonResponse
+    public function updateDatabase(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
@@ -105,19 +105,16 @@ class SetupController extends AbstractController
         $update = new Update(new System(), $this->configuration);
         $update->setVersion($version->version);
 
-        $configuration = $this->configuration;
-        return new StreamedJsonResponse((function () use ($update, $configuration) {
-            $progressCallback = function ($progress) {
-                yield json_encode(['progress' => $progress]) . "\n";
-            };
-            try {
-                if ($update->applyUpdates($progressCallback)) {
-                    $configuration->set('main.maintenanceMode', true);
-                    yield json_encode(['success' => '✅ Database successfully updated.']) . "\n";
-                }
-            } catch (Exception $exception) {
-                yield json_encode(['error' => 'Update database failed: ' . $exception->getMessage()]) . "\n";
+        try {
+            if ($update->applyUpdates()) {
+                $this->configuration->set('main.maintenanceMode', true);
+                return new JsonResponse(['success' => '✅ Database successfully updated.'], Response::HTTP_OK);
             }
-        })());
+        } catch (Exception $exception) {
+            return new JsonResponse(
+                ['error' => 'Update database failed: ' . $exception->getMessage()],
+                Response::HTTP_BAD_GATEWAY
+            );
+        }
     }
 }

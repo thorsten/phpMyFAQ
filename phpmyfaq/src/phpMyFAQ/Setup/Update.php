@@ -145,7 +145,7 @@ class Update extends Setup
      * @throws Exception
      * @throws \Exception
      */
-    public function applyUpdates(callable $progressCallback): bool
+    public function applyUpdates(): bool
     {
         // 3.1 updates
         $this->applyUpdates310Alpha();
@@ -170,7 +170,7 @@ class Update extends Setup
         $this->optimizeTables();
 
         // Execute queries
-        $this->executeQueries($progressCallback);
+        $this->executeQueries();
 
         // Always the last step: Update version number
         $this->updateVersion();
@@ -207,7 +207,7 @@ class Update extends Setup
     /**
      * @throws Exception
      */
-    private function executeQueries(callable $progressCallback): void
+    private function executeQueries(): void
     {
         if ($this->dryRun) {
             foreach ($this->queries as $query) {
@@ -217,7 +217,6 @@ class Update extends Setup
             foreach ($this->queries as $query) {
                 try {
                     $this->configuration->getDb()->query($query);
-                    $progressCallback(trim(preg_replace('/\s+/', ' ', $query)));
                 } catch (Exception $exception) {
                     throw new Exception($exception->getMessage());
                 }

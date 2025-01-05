@@ -260,36 +260,29 @@ class UpdateController extends AbstractController
      * @throws Exception|\Exception
      */
     #[Route('admin/api/update-database')]
-    public function updateDatabase(): StreamedResponse
+    public function updateDatabase(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
-
-        $configuration = $this->configuration;
 
         $update = $this->container->get('phpmyfaq.setup.update');
         $update->setVersion(System::getVersion());
 
-        return new StreamedResponse(static function () use ($configuration, $update) {
-            $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
-                ob_flush();
-                flush();
-            };
-            try {
-                if ($update->applyUpdates($progressCallback)) {
-                    $configuration->set('main.maintenanceMode', false);
-                    return new JsonResponse(
-                        ['success' => '✅ Database successfully updated.'],
-                        Response::HTTP_OK
-                    );
-                }
-            } catch (Exception $exception) {
+        try {
+            if ($update->applyUpdates()) {
+                $this->configuration->set('main.maintenanceMode', false);
                 return new JsonResponse(
-                    ['error' => 'Update database failed: ' . $exception->getMessage()],
-                    Response::HTTP_BAD_GATEWAY
+                    ['success' => '✅ Database successfully updated.'],
+                    Response::HTTP_OK
                 );
             }
-        });
+
+            return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
+        } catch (Exception $exception) {
+            return new JsonResponse(
+                ['error' => 'Update database failed: ' . $exception->getMessage()],
+                Response::HTTP_BAD_GATEWAY
+            );
+        }
     }
 
     /**
