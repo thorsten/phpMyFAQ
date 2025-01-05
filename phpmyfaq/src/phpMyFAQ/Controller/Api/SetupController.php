@@ -107,7 +107,7 @@ class SetupController extends AbstractController
 
         try {
             if ($update->applyUpdates()) {
-                $this->configuration->set('main.maintenanceMode', true);
+                $this->configuration->set('main.maintenanceMode', 'false');
                 return new JsonResponse(['success' => '✅ Database successfully updated.'], Response::HTTP_OK);
             }
         } catch (Exception $exception) {

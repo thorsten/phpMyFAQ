@@ -269,7 +269,7 @@ class UpdateController extends AbstractController
 
         try {
             if ($update->applyUpdates()) {
-                $this->configuration->set('main.maintenanceMode', false);
+                $this->configuration->set('main.maintenanceMode', 'false');
                 return new JsonResponse(
                     ['success' => '✅ Database successfully updated.'],
                     Response::HTTP_OK
