@@ -14,6 +14,7 @@
  */
 
 import { Jodit } from 'jodit';
+
 import 'jodit/esm/plugins/class-span/class-span.js';
 import 'jodit/esm/plugins/clean-html/clean-html.js';
 import 'jodit/esm/plugins/clipboard/clipboard.js';
@@ -28,6 +29,8 @@ import 'jodit/esm/plugins/indent/indent.js';
 import 'jodit/esm/plugins/justify/justify.js';
 import 'jodit/esm/plugins/line-height/line-height.js';
 import 'jodit/esm/plugins/media/media.js';
+import 'jodit/esm/plugins/paste-storage/paste-storage.js';
+import 'jodit/esm/plugins/paste-from-word/paste-from-word.js';
 import 'jodit/esm/plugins/preview/preview.js';
 import 'jodit/esm/plugins/print/print.js';
 import 'jodit/esm/plugins/resizer/resizer.js';
@@ -37,81 +40,8 @@ import 'jodit/esm/plugins/source/source.js';
 import 'jodit/esm/plugins/symbols/symbols.js';
 import 'jodit/esm/modules/uploader/uploader.js';
 import 'jodit/esm/plugins/video/video.js';
-
-// Define the phpMyFAQ plugin
-Jodit.plugins.add('phpMyFAQ', (editor) => {
-  // Register the button
-  editor.registerButton({
-    name: 'phpMyFAQ',
-  });
-
-  // Register the command
-  editor.registerCommand('phpMyFAQ', () => {
-    const dialog = editor.dlg({ closeOnClickOverlay: true });
-
-    const content = `<form class="row row-cols-lg-auto g-3 align-items-center m-4">
-      <div class="col-12">
-        <label class="visually-hidden" for="pmf-search-internal-links">Search</label>
-        <input type="text" class="form-control" id="pmf-search-internal-links" placeholder="Search">
-      </div>
-    </form>
-    <div class="m-4" id="pmf-search-results"></div>
-    <div class="m-4">
-      <button type="button" class="btn btn-primary" id="select-faq-button">Select FAQ</button>
-    </div>`;
-
-    dialog.setMod('theme', editor.o.theme).setHeader('phpMyFAQ Plugin').setContent(content);
-
-    dialog.open();
-
-    const searchInput = document.getElementById('pmf-search-internal-links');
-    const resultsContainer = document.getElementById('pmf-search-results');
-    const csrfToken = document.getElementById('pmf-csrf-token').value;
-    const selectLink = document.getElementById('select-faq-button');
-
-    searchInput.addEventListener('keyup', () => {
-      const query = searchInput.value;
-      if (query.length > 0) {
-        fetch('api/faq/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            search: query,
-            csrf: csrfToken,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            resultsContainer.innerHTML = '';
-            data.success.forEach((result) => {
-              resultsContainer.innerHTML += `<label class="form-check-label">
-                  <input class="form-check-input" type="radio" name="faqURL" value="${result.url}">
-                  ${result.question}
-                </label><br>`;
-            });
-          })
-          .catch((error) => console.error('Error:', error));
-      } else {
-        resultsContainer.innerHTML = '';
-      }
-    });
-
-    selectLink.addEventListener('click', () => {
-      const selected = document.querySelector('input[name=faqURL]:checked');
-      if (selected) {
-        const url = selected.value;
-        const question = selected.parentNode.textContent.trim();
-        const anchor = `<a href="${url}">${question}</a>`;
-        editor.selection.insertHTML(anchor);
-        dialog.close();
-      } else {
-        alert('Please select an FAQ.');
-      }
-    });
-  });
-});
+import '../plugins/phpmyfaq/phpmyfaq.js';
+import '../plugins/code-snippet/code-snippet.js';
 
 export const renderEditor = () => {
   const editor = document.getElementById('editor');
@@ -134,13 +64,17 @@ export const renderEditor = () => {
     minHeight: 100,
     direction: '',
     language: 'auto',
-    debugLanguage: false,
+    debugLanguage: true,
     i18n: 'en',
     tabIndex: -1,
     toolbar: true,
     enter: 'P',
     defaultMode: Jodit.MODE_WYSIWYG,
+    highlightMode: true,
     useSplitMode: false,
+    askBeforePasteFromWord: true,
+    processPasteFromWord: true,
+    defaultActionOnPasteFromWord: 'insert_clear_html',
     colors: {
       greyscale: [
         '#000000',
@@ -233,7 +167,7 @@ export const renderEditor = () => {
     imageDefaultWidth: 300,
     removeButtons: [],
     disablePlugins: [],
-    extraPlugins: ['phpMyFAQ'],
+    extraPlugins: ['phpMyFAQ', 'codeSnippet'],
     extraButtons: [],
     buttons: [
       'source',
@@ -285,6 +219,7 @@ export const renderEditor = () => {
       'print',
       '|',
       'phpMyFAQ',
+      'codeSnippet',
     ],
     events: {},
     textIcons: false,

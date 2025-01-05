@@ -126,6 +126,8 @@ $faqVisits->logViews((int) $faqId);
 $question = $faq->getQuestion($faqId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $converter->convert($faq->faqRecord['content'])->getContent();
+} else {
+    $answer = $faq->faqRecord['content'];
 }
 
 // Cleanup answer content first

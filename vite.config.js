@@ -28,6 +28,7 @@ export default defineConfig({
         manualChunks: {
           bootstrap: ['bootstrap'],
           chart: ['chart.js'],
+          jodit: ['jodit'],
         },
       },
     },
