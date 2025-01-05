@@ -100,10 +100,8 @@ class SetupController extends AbstractController
 
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $version = json_decode(html_entity_decode($installedVersion));
-
         $update = new Update(new System(), $this->configuration);
-        $update->setVersion($version->version);
+        $update->setVersion($installedVersion);
 
         try {
             if ($update->applyUpdates()) {
