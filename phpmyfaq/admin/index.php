@@ -55,6 +55,7 @@ require PMF_ROOT_DIR . '/src/Bootstrap.php';
 //
 $response = new Response();
 $request = Request::createFromGlobals();
+$csrfLogoutToken = Token::getInstance()->getTokenString('admin-logout');
 
 //
 // Service Containers

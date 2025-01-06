@@ -39,6 +39,8 @@ $templateVars = [
     'error' => $error,
     'requestHost' => $request->getHost(),
     'requestUri' => $request->getRequestUri(),
+    'action' => $action,
+    'userid' => $userid,
     'msgSecureSwitch' => Translation::get('msgSecureSwitch'),
     'systemUri' => $faqConfig->getDefaultUrl()
 ];

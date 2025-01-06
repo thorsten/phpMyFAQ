@@ -26,8 +26,8 @@
                 <div class="card-body">
                   <form action="{{ systemUri }}admin/index.php" method="post"
                         accept-charset="utf-8" role="form" class="pmf-form-login">
-                    <input type="hidden" name="userid" id="userid" value="<?= $userid ?>">
-                    <input type="hidden" name="redirect-action" value="<?= $action ?>">
+                    <input type="hidden" name="userid" id="userid" value="{{ userid }}">
+                    <input type="hidden" name="redirect-action" value="{{ action }}">
                     <div class="form-group">
                       <label for="token">{{ msgEnterTwofactorToken }}</label>
                       <div class="col-4 mx-auto my-2">
