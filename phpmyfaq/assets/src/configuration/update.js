@@ -108,7 +108,7 @@ export const handleDatabaseUpdate = async () => {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ version: installedVersion.value }),
+        body: installedVersion.value,
       });
 
       const result = await response.json();
