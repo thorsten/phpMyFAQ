@@ -36,9 +36,13 @@ if (!is_null($error)) {
     $loginMessage = '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 }
 
+$templateFile = './login.twig';
+if ($action == 'twofactor') {
+    $templateFile = './twofactor.twig';
+}
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twigTemplate = $twig->loadTemplate('./login.twig');
+$twigTemplate = $twig->loadTemplate($templateFile);
 
 $templateVars = [
     ... $templateVars,
