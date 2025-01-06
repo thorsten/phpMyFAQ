@@ -190,6 +190,11 @@ $routesConfig = [
         'controller' => [TitleController::class, 'index'],
         'methods' => 'GET'
     ],
+    'api.update' => [
+        'path' => "v{$apiVersion}/update",
+        'controller' => [UpdateController::class, 'index'],
+        'methods' => 'POST'
+    ],
     'api.version' => [
         'path' => "v{$apiVersion}/version",
         'controller' => [VersionController::class, 'index'],
