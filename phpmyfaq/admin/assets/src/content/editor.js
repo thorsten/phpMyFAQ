@@ -42,6 +42,7 @@ import 'jodit/esm/modules/uploader/uploader.js';
 import 'jodit/esm/plugins/video/video.js';
 import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
+import hljs from 'highlight.js';
 
 export const renderEditor = () => {
   const editor = document.getElementById('editor');
@@ -52,6 +53,8 @@ export const renderEditor = () => {
   const joditEditor = Jodit.make(editor, {
     zIndex: 0,
     readonly: false,
+    beautifyHTML: false,
+    sourceEditor: 'area',
     activeButtonsInReadOnly: ['source', 'fullsize', 'print', 'about', 'dots'],
     toolbarButtonSize: 'middle',
     theme: 'default',
@@ -61,10 +64,10 @@ export const renderEditor = () => {
     triggerChangeEvent: true,
     width: 'auto',
     height: 'auto',
-    minHeight: 100,
+    minHeight: 400,
     direction: '',
     language: 'auto',
-    debugLanguage: true,
+    debugLanguage: false,
     i18n: 'en',
     tabIndex: -1,
     toolbar: true,
@@ -245,5 +248,17 @@ export const renderEditor = () => {
       showFileSize: true,
       showFileName: true,
     },
+  });
+
+  joditEditor.events.on('afterSetValue', () => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  });
+
+  joditEditor.events.on('change', () => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
   });
 };
