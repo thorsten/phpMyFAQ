@@ -30,13 +30,13 @@
   {% if userHasAccessPermission %}
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
             name="sidebar-toggle" href="#">
-      <i class="bi bi-list h6"></i>
+      <i class="bi bi-chevron-left h6"></i>
     </button>
 
     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
       <li class="px-2">
-        <div class="text-white small">
-          {{ version }}
+        <div class="text-white">
+          <span class="badge text-bg-primary">{{ version }}</span>
         </div>
       </li>
       <li class="px-2">
@@ -287,7 +287,7 @@
               #StandWithUkraine
             </a>
           </div>
-          <div>
+          <div class="pmf-admin-footer-links">
             <a target="_blank" rel="noopener" href="{{ documentationUrl }}">
               {{ 'msgDocumentation' | translate }}
             </a>
@@ -296,8 +296,8 @@
               Buy us a coffee
             </a>
             &middot;
-            <a target="_blank" rel="noopener" href="https://facebook.com/phpMyFAQ">
-              <i aria-hidden="true" class="bi bi-facebook"></i>
+            <a target="_blank" rel="noopener" href="https://bsky.app/profile/phpmyfaq.de" style="text-decoration: none;">
+              <i aria-hidden="true" class="bi bi-bluesky"></i>
             </a>
             &middot;
             &copy; 2001 - {{ currentYear }}
