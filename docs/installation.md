@@ -16,6 +16,7 @@ To install it, you will need a web server that meets the following requirements:
 - Filter support
 - SPL support
 - FileInfo support
+- Sodium support
 
 ### Web server requirements
 
@@ -28,6 +29,7 @@ You can use phpMyFAQ with the following web servers:
 
 - mod_rewrite
 - mod_ssl (if you wish to run phpMyFAQ under SSL)
+- mod_headers
 
 You should also ensure you have `AllowOverride All` set in the `<Directory>` and/or `<VirtualHost>` blocks so
 that the `.htaccess` file processes correctly, and rewrite rules take effect. Please check, if your path in
