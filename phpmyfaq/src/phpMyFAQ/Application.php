@@ -54,7 +54,10 @@ readonly class Application
         if (!is_null($this->container)) {
             $configuration = $this->container->get('phpmyfaq.configuration');
             $language = $this->container->get('phpmyfaq.language');
-            $currentLanguage = $language->setLanguageByAcceptLanguage();
+            $currentLanguage = $language->setLanguage(
+                $configuration->get('main.languageDetection'),
+                $configuration->get('main.language')
+            );
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
             if (Language::isASupportedLanguage($currentLanguage)) {
