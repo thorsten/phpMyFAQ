@@ -250,7 +250,7 @@ class Utils
     /**
      * Moves given key of an array to the top
      *
-     * @param array<int> $array
+     * @param array<string, array<string, string>> $array
      */
     public static function moveToTop(array &$array, string $key): void
     {

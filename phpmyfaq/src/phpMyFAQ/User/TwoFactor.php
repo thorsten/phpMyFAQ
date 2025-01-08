@@ -85,9 +85,9 @@ class TwoFactor
     /**
      * Validates a given token. Returns true if the token is correct.
      */
-    public function validateToken(int $token, int $userId): bool
+    public function validateToken(string $token, int $userId): bool
     {
-        if (strlen((string)$token) !== 6) {
+        if (strlen($token) !== 6) {
             return false;
         }
 

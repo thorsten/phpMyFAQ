@@ -88,7 +88,7 @@ class TwoFactorTest extends TestCase
         $property->setAccessible(true);
         $property->setValue($this->twoFactor, $twoFactorAuth);
 
-        $result = $this->twoFactor->validateToken(123456, 1);
+        $result = $this->twoFactor->validateToken('123456', 1);
         $this->assertTrue($result);
     }
 

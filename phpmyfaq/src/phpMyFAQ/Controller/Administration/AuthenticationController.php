@@ -186,7 +186,7 @@ class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse('./');
         }
 
-        $token = Filter::filterVar($request->get('token'), FILTER_VALIDATE_INT);
+        $token = Filter::filterVar($request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
         $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
 
         $user = $this->container->get('phpmyfaq.user.current_user');

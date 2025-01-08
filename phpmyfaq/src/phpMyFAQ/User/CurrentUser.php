@@ -486,7 +486,7 @@ class CurrentUser extends User
                 $currentGroups = [-1];
             }
 
-            if (0 === (is_countable($currentGroups) ? count($currentGroups) : 0)) {
+            if (count($currentGroups)) {
                 $currentGroups = [-1];
             }
         } else {

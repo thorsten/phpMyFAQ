@@ -167,7 +167,7 @@ if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyT
 // Validating token from 2FA if given; else: returns error message
 //
 if ($token !== '' && !is_null($userId)) {
-    if (strlen((string)$token) === 6 && is_numeric((string)$token)) {
+    if (strlen($token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig, $user);
