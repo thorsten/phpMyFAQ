@@ -53,6 +53,8 @@ use phpMyFAQ\Seo;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
+use phpMyFAQ\Setup\Update;
+use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Sitemap;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
@@ -283,6 +285,18 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.setup.environment_configurator', EnvironmentConfigurator::class)
         ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.setup.update', Update::class)
+        ->args([
+            new Reference('phpmyfaq.system'),
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.setup.upgrade', Upgrade::class)
+        ->args([
+            new Reference('phpmyfaq.system'),
             new Reference('phpmyfaq.configuration')
         ]);
 

@@ -67,6 +67,8 @@ require __DIR__ . '/src/Bootstrap.php';
 $request = Request::createFromGlobals();
 $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
+$csrfLogoutToken = Token::getInstance()->getTokenString('logout');
+
 
 //
 // Service Containers
@@ -638,7 +640,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         'msgBookmarks' => Translation::get('msgBookmarks'),
         'msgUserRemoval' => Translation::get('ad_menu_RequestRemove'),
         'msgLogoutUser' => Translation::get('ad_menu_logout'),
-        'csrfLogout' => Token::getInstance($container->get('session'))->getTokenString('logout'),
+        'csrfLogout' => $csrfLogoutToken,
     ];
 }
 

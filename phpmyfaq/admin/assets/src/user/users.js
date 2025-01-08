@@ -57,6 +57,7 @@ const setUserData = async (userId) => {
       element.removeAttribute('disabled');
     });
     document.getElementById('checkAll').removeAttribute('disabled');
+    document.getElementById('uncheckAll').setAttribute('disabled', '');
   } else {
     const superAdmin = document.getElementById('is_superadmin');
     superAdmin.removeAttribute('checked');
@@ -151,6 +152,7 @@ export const handleUsers = async () => {
           element.removeAttribute('disabled');
         });
         document.getElementById('checkAll').setAttribute('disabled', '');
+        document.getElementById('uncheckAll').setAttribute('disabled', '');
       } else {
         document.querySelectorAll('.permission').forEach((checkbox) => {
           checkbox.removeAttribute('disabled');
@@ -159,6 +161,7 @@ export const handleUsers = async () => {
           element.removeAttribute('disabled');
         });
         document.getElementById('checkAll').removeAttribute('disabled');
+        document.getElementById('uncheckAll').removeAttribute('disabled');
       }
     });
   }

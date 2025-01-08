@@ -1,0 +1,39 @@
+{% extends 'index.twig' %}
+
+{% block content %}
+  <div class="col-12">
+    {{ loginMessage }}
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-5 mx-auto">
+              <div class="card rounded-0" id="login-form">
+                <div class="card-header">
+                  <h3 class="mb-0">{{ msgTwofactorEnabled }}</h3>
+                </div>
+                <div class="card-body">
+                  <form action="{{ writeLoginPath }}" method="post" accept-charset="utf-8" role="form" class="form">
+                    <input type="hidden" id="userid" name="userid" value="{{ userid }}">
+                    <div class="row mb-2">
+                      <label for="token">{{ msgEnterTwofactorToken }}</label>
+                      <div class="col-4 mx-auto my-2">
+                        <input type="text" class="form-control form-control-lg text-center rounded-0" name="token"
+                               id="token" autocomplete="off" maxlength="6" autofocus required>
+                      </div>
+                    </div>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                      <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin">
+                        {{ msgTwofactorCheck }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

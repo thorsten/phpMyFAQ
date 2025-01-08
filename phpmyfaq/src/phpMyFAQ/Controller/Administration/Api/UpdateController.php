@@ -24,8 +24,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Setup\Update;
-use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpClient\HttpClient;
@@ -43,7 +41,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class UpdateController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/health-check')]
     public function healthCheck(): JsonResponse
@@ -52,7 +50,7 @@ class UpdateController extends AbstractController
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
 
         if (!$upgrade->isMaintenanceEnabled()) {
             return $this->json(
@@ -84,9 +82,6 @@ class UpdateController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/versions')]
     public function versions(): JsonResponse
     {
@@ -109,7 +104,7 @@ class UpdateController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/update-check')]
     public function updateCheck(): JsonResponse
@@ -155,7 +150,7 @@ class UpdateController extends AbstractController
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      * @throws \JsonException
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
@@ -164,7 +159,7 @@ class UpdateController extends AbstractController
 
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $pathToPackage = $upgrade->downloadPackage($versionNumber);
 
         if ($pathToPackage === false) {
@@ -188,7 +183,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $pathToPackage = urldecode((string) $this->configuration->get('upgrade.lastDownloadedPackage'));
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
@@ -210,7 +205,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $backupHash = md5(uniqid());
 
         return new StreamedResponse(static function () use ($upgrade, $backupHash) {
@@ -232,7 +227,7 @@ class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
         return new StreamedResponse(static function () use ($upgrade, $configurator) {
             $progressCallback = static function ($progress) {
@@ -249,39 +244,40 @@ class UpdateController extends AbstractController
     }
 
     #[Route('admin/api/update-database')]
-    public function updateDatabase(): StreamedResponse
+    public function updateDatabase(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $update = new Update(new System(), $this->configuration);
+        $update = $this->container->get('phpmyfaq.setup.update');
         $update->setVersion(System::getVersion());
 
-        return new StreamedResponse(static function () use ($update) {
-            $progressCallback = static function ($progress) {
-                echo json_encode(['progress' => $progress]) . "\n";
-                ob_flush();
-                flush();
-            };
-            try {
-                if ($update->applyUpdates($progressCallback)) {
-                    $this->configuration->set('main.maintenanceMode', 'false');
-                    echo json_encode(['message' => '✅ Database successfully updated.']);
-                }
-            } catch (Exception $exception) {
-                echo json_encode(['message' => 'Update database failed: ' . $exception->getMessage()]);
+        try {
+            if ($update->applyUpdates()) {
+                $this->configuration->set('main.maintenanceMode', 'false');
+                return new JsonResponse(
+                    ['success' => '✅ Database successfully updated.'],
+                    Response::HTTP_OK
+                );
             }
-        });
+
+            return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
+        } catch (Exception $exception) {
+            return new JsonResponse(
+                ['error' => 'Update database failed: ' . $exception->getMessage()],
+                Response::HTTP_BAD_GATEWAY
+            );
+        }
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = new Upgrade(new System(), $this->configuration);
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $upgrade->cleanUp();
 
         return $this->json(['message' => '✅ Cleanup successful.'], Response::HTTP_OK);

@@ -111,51 +111,25 @@ export const handleDatabaseUpdate = async () => {
         body: installedVersion.value,
       });
 
+      const result = await response.json();
       const progressBarInstallation = document.getElementById('result-update');
-      const reader = response.body.getReader();
 
-      async function pump() {
-        const { done, value } = await reader.read();
-        const decodedValue = new TextDecoder().decode(value);
-        if (done) {
-          progressBarInstallation.style.width = '100%';
-          progressBarInstallation.innerText = '100%';
-          progressBarInstallation.classList.remove('progress-bar-animated');
-          const alert = document.getElementById('phpmyfaq-update-database-success');
-          alert.classList.remove('d-none');
-          return;
-        } else {
-          let value;
-          try {
-            value = JSON.parse(decodedValue);
-          } catch (error) {
-            console.error('Failed to parse JSON:', error);
-            const alert = document.getElementById('phpmyfaq-update-database-error');
-            const errorMessage = document.getElementById('error-messages');
-            alert.classList.remove('d-none');
-            errorMessage.innerText = `Error: ${error.message}\nFull Error: ${decodedValue}`;
-            return;
-          }
-          if (value.progress) {
-            progressBarInstallation.style.width = value.progress;
-            progressBarInstallation.innerText = value.progress;
-          }
-          if (value.error) {
-            progressBarInstallation.style.width = '100%';
-            progressBarInstallation.innerText = '100%';
-            progressBarInstallation.classList.remove('progress-bar-animated');
-            const alert = document.getElementById('phpmyfaq-update-database-error');
-            const errorMessage = document.getElementById('error-messages');
-            alert.classList.remove('d-none');
-            errorMessage.innerHTML = value.error;
-            return;
-          }
-        }
-
-        await pump();
+      if (response.ok) {
+        progressBarInstallation.style.width = '100%';
+        progressBarInstallation.innerText = '100%';
+        progressBarInstallation.classList.remove('progress-bar-animated');
+        const alert = document.getElementById('phpmyfaq-update-database-success');
+        alert.classList.remove('d-none');
+        alert.innerText = result.success;
+      } else {
+        progressBarInstallation.style.width = '100%';
+        progressBarInstallation.innerText = '100%';
+        progressBarInstallation.classList.remove('progress-bar-animated');
+        const alert = document.getElementById('phpmyfaq-update-database-error');
+        const errorMessage = document.getElementById('error-messages');
+        alert.classList.remove('d-none');
+        errorMessage.innerHTML = result.error;
       }
-
-      await pump();
     } catch (error) {
       console.error('Error details:', error);
       const alert = document.getElementById('phpmyfaq-update-database-error');

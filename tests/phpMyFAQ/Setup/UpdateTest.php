@@ -53,25 +53,17 @@ class UpdateTest extends TestCase
      */
     public function testApplyUpdates(): void
     {
-        $progressCallback = function ($query) {
-            echo $query;
-        };
-
         $this->update->setVersion('4.0.0');
-        $result = $this->update->applyUpdates($progressCallback);
+        $result = $this->update->applyUpdates();
 
         $this->assertTrue($result);
     }
 
     public function testApplyUpdatesWithDryRunForAlpha3(): void
     {
-        $progressCallback = function ($query) {
-            echo $query;
-        };
-
         $this->update->setVersion('4.0.0-alpha.2');
         $this->update->setDryRun(true);
-        $this->update->applyUpdates($progressCallback);
+        $this->update->applyUpdates();
 
         $result = $this->update->getDryRunQueries();
 
