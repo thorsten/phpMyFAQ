@@ -62,15 +62,6 @@ const IS_VALID_PHPMYFAQ = null;
 require __DIR__ . '/src/Bootstrap.php';
 
 //
-// Create Request + Response
-//
-$request = Request::createFromGlobals();
-$response = new Response();
-$response->headers->set('Content-Type', 'text/html');
-$csrfLogoutToken = Token::getInstance()->getTokenString('logout');
-
-
-//
 // Service Containers
 //
 $container = new ContainerBuilder();
@@ -82,6 +73,15 @@ try {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
+
+//
+// Create Request + Response
+//
+$request = Request::createFromGlobals();
+$response = new Response();
+$response->headers->set('Content-Type', 'text/html');
+$csrfLogoutToken = Token::getInstance($container->get('session'))->getTokenString('logout');
+
 
 //
 // Get language (default: english)
