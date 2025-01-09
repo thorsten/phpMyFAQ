@@ -39,6 +39,7 @@ use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
@@ -96,6 +97,8 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
+
+    $services->set('phpmyfaq.admin.helper', Helper::class);
 
     $services->set('phpmyfaq.admin.rating-data', RatingData::class)
         ->args([

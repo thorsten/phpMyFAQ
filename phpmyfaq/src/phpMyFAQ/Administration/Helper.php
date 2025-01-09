@@ -16,7 +16,7 @@
  * @since     2010-01-19
  */
 
-namespace phpMyFAQ\Helper;
+namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Translation;
@@ -28,7 +28,7 @@ use phpMyFAQ\User\CurrentUser;
  *
  * @package phpMyFAQ\Helper
  */
-class AdministrationHelper
+class Helper
 {
     /**
      * Array with permissions.
@@ -40,26 +40,16 @@ class AdministrationHelper
      * ',' stands for 'or', '*' stands for 'and'.
      *
      * @param string $restrictions Restrictions
-     * @param string $action       Action parameter
      * @param string $caption      Caption
      * @param string|null $route   Route, will be used if it's not empty
      * @param bool   $checkPerm    Check permission (default: true)
      */
     public function addMenuEntry(
         string $restrictions = '',
-        string $action = '',
         string $caption = '',
         ?string $route = null,
         bool $checkPerm = true
     ): string {
-
-        if ($action !== '') {
-            $action = '?action=' . $action;
-        }
-
-        if (!is_null($route)) {
-            $action = './' . $route;
-        }
 
         if (Translation::get($caption) !== null) {
             $renderedCaption = Translation::get($caption);
@@ -68,8 +58,8 @@ class AdministrationHelper
         }
 
         $output = sprintf(
-            '<a class="nav-link" href="%s">%s</a>%s',
-            $action,
+            '<a class="nav-link" href="./%s">%s</a>%s',
+            $route,
             $renderedCaption,
             "\n"
         );
@@ -77,6 +67,7 @@ class AdministrationHelper
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
         }
+
         return $output;
     }
 
@@ -175,7 +166,7 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= AdministrationHelper::generateOption(
+            $output .= Helper::generateOption(
                 $current,
                 $option,
                 'ad_conf_order_' . $option
@@ -194,7 +185,7 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= AdministrationHelper::generateOption(
+            $output .= Helper::generateOption(
                 $current,
                 $option,
                 'ad_conf_' . strtolower($option)
@@ -210,7 +201,7 @@ class AdministrationHelper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= AdministrationHelper::generateOption(
+            $output .= Helper::generateOption(
                 $current,
                 $option,
                 'records.orderingPopularFaqs.' . $option
@@ -223,33 +214,33 @@ class AdministrationHelper
     public static function searchRelevanceOptions(string $current): string
     {
         $output = '';
-        $output .= AdministrationHelper::generateOption(
+        $output .= Helper::generateOption(
             $current,
             'thema,content,keywords',
             'search.relevance.thema-content-keywords'
         );
-        $output .= AdministrationHelper::generateOption(
+        $output .= Helper::generateOption(
             $current,
             'thema,keywords,content',
             'search.relevance.thema-keywords-content'
         );
-        $output .= AdministrationHelper::generateOption(
+        $output .= Helper::generateOption(
             $current,
             'content,thema,keywords',
             'search.relevance.content-thema-keywords'
         );
-        $output .= AdministrationHelper::generateOption(
+        $output .= Helper::generateOption(
             $current,
             'content,keywords,thema',
             'search.relevance.content-keywords-thema'
         );
-        $output .= AdministrationHelper::generateOption(
+        $output .= Helper::generateOption(
             $current,
             'keywords,content,thema',
             'search.relevance.keywords-content-thema'
         );
 
-        return $output . AdministrationHelper::generateOption(
+        return $output . Helper::generateOption(
             $current,
             'keywords,thema,content',
             'search.relevance.keywords-thema-content'

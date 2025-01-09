@@ -21,7 +21,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\AdministrationHelper;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\Session\Token;
@@ -229,7 +229,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::sortingKeyOptions($request->get('current'))
+            Helper::sortingKeyOptions($request->get('current'))
         );
     }
 
@@ -242,7 +242,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::sortingOrderOptions($request->get('current'))
+            Helper::sortingOrderOptions($request->get('current'))
         );
     }
 
@@ -255,7 +255,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::sortingPopularFaqsOptions($request->get('current'))
+            Helper::sortingPopularFaqsOptions($request->get('current'))
         );
     }
 
@@ -281,7 +281,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::renderReleaseTypeOptions($request->get('current'))
+            Helper::renderReleaseTypeOptions($request->get('current'))
         );
     }
 
@@ -294,7 +294,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::searchRelevanceOptions($request->get('current'))
+            Helper::searchRelevanceOptions($request->get('current'))
         );
     }
 
@@ -307,7 +307,7 @@ class ConfigurationTabController extends AbstractController
         $this->userIsAuthenticated();
 
         return new Response(
-            AdministrationHelper::renderMetaRobotsDropdown($request->get('current'))
+            Helper::renderMetaRobotsDropdown($request->get('current'))
         );
     }
 }

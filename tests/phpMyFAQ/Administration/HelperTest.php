@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Helper;
+namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
@@ -12,12 +12,12 @@ use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AdministrationTest
+ * Class HelperTest
  */
-class AdministrationHelperTest extends TestCase
+class HelperTest extends TestCase
 {
-    /** @var AdministrationHelper */
-    protected AdministrationHelper $instance;
+    /** @var Helper */
+    protected Helper $instance;
 
     /**
      * @throws Exception
@@ -34,21 +34,13 @@ class AdministrationHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->instance = new AdministrationHelper();
-    }
-
-    public function testAddMenuEntryWithoutPermission(): void
-    {
-        $expected = '<a class="nav-link" href="?action=edit">Categories</a>' . "\n";
-        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', null, false);
-
-        $this->assertEquals($expected, $actual);
+        $this->instance = new Helper();
     }
 
     public function testAddMenuEntryWithRouteWithoutPermission(): void
     {
         $expected = '<a class="nav-link" href="./edit">Categories</a>' . "\n";
-        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview', 'edit', false);
+        $actual = $this->instance->addMenuEntry('', 'msgHeaderCategoryOverview', 'edit', false);
 
         $this->assertEquals($expected, $actual);
     }
@@ -56,7 +48,7 @@ class AdministrationHelperTest extends TestCase
     public function testAddMenuEntryWithProperPermission(): void
     {
         $expected = '';
-        $actual = $this->instance->addMenuEntry('', 'edit', 'msgHeaderCategoryOverview');
+        $actual = $this->instance->addMenuEntry('', 'msgHeaderCategoryOverview');
 
         $this->assertEquals($expected, $actual);
     }
@@ -75,11 +67,11 @@ class AdministrationHelperTest extends TestCase
         $user->setLoggedIn(true);
 
         $this->instance->setUser($user);
-        $expected = '<a class="nav-link" href="?action=editentry">Add new FAQ</a>' . "\n";
+        $expected = '<a class="nav-link" href="./faq/add">Add new FAQ</a>' . "\n";
         $actual = $this->instance->addMenuEntry(
             PermissionType::FAQ_ADD->value,
-            'editentry',
-            'msgAddFAQ'
+            'msgAddFAQ',
+            'faq/add'
         );
 
         $this->assertEquals($expected, $actual);
@@ -98,11 +90,11 @@ class AdministrationHelperTest extends TestCase
         $user->setLoggedIn(true);
 
         $this->instance->setUser($user);
-        $expected = '<a class="nav-link" href="?action=user">Users</a>' . "\n";
+        $expected = '<a class="nav-link" href="./user">Users</a>' . "\n";
         $actual = $this->instance->addMenuEntry(
             'add_user+edit_user+delete_user',
-            'user',
-            'ad_menu_user_administration'
+            'ad_menu_user_administration',
+            'user'
         );
 
         $this->assertEquals($expected, $actual);
@@ -124,7 +116,7 @@ class AdministrationHelperTest extends TestCase
         $expected = '<option value="id" selected>ID (default)</option><option value="thema">Title</option>' .
             '<option value="visits">Number of visitors</option><option value="updated">Date</option>' .
             '<option value="author">Author</option>';
-        $actual = AdministrationHelper::sortingKeyOptions('id');
+        $actual = Helper::sortingKeyOptions('id');
 
         $this->assertEquals($expected, $actual);
     }
@@ -132,7 +124,7 @@ class AdministrationHelperTest extends TestCase
     public function testSortingOrderOptions(): void
     {
         $expected = '<option value="ASC" selected>ascending</option><option value="DESC">descending</option>';
-        $actual = AdministrationHelper::sortingOrderOptions('ASC');
+        $actual = Helper::sortingOrderOptions('ASC');
 
         $this->assertEquals($expected, $actual);
     }
@@ -141,7 +133,7 @@ class AdministrationHelperTest extends TestCase
     {
         $expected = '<option value="visits" selected>list most visited entries</option>' .
             '<option value="voting">list most voted entries</option>';
-        $actual = AdministrationHelper::sortingPopularFaqsOptions('visits');
+        $actual = Helper::sortingPopularFaqsOptions('visits');
 
         $this->assertEquals($expected, $actual);
     }
@@ -154,16 +146,16 @@ class AdministrationHelperTest extends TestCase
             '<option value="content,keywords,thema">Answer - Keywords - Question</option>' .
             '<option value="keywords,content,thema">Keywords - Answer - Question</option>' .
             '<option value="keywords,thema,content">Keywords - Question - Answer</option>';
-        $actual = AdministrationHelper::searchRelevanceOptions(0);
+        $actual = Helper::searchRelevanceOptions(0);
 
         $this->assertEquals($expected, $actual);
     }
 
     public function testRenderReleaseTypeOptions(): void
     {
-        $optionsDevelopment = AdministrationHelper::renderReleaseTypeOptions(ReleaseType::DEVELOPMENT->value);
-        $optionsStable = AdministrationHelper::renderReleaseTypeOptions(ReleaseType::STABLE->value);
-        $optionsNightly = AdministrationHelper::renderReleaseTypeOptions(ReleaseType::NIGHTLY->value);
+        $optionsDevelopment = Helper::renderReleaseTypeOptions(ReleaseType::DEVELOPMENT->value);
+        $optionsStable = Helper::renderReleaseTypeOptions(ReleaseType::STABLE->value);
+        $optionsNightly = Helper::renderReleaseTypeOptions(ReleaseType::NIGHTLY->value);
 
         // Assert the HTML output for each release type
         $expectedDevelopment = '<option value="development" selected>Development</option>' .
