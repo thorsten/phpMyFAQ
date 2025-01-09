@@ -32,6 +32,7 @@ use phpMyFAQ\Controller\Api\SearchController;
 use phpMyFAQ\Controller\Api\SetupController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
+use phpMyFAQ\Controller\Api\UpdateController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
