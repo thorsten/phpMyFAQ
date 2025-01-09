@@ -52,7 +52,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'dev';
+    private const VERSION_PRE_RELEASE = 'alpha';
 
     /**
      * API version.
@@ -62,7 +62,7 @@ class System
     /**
      * Plugin version.
      */
-    private const PLUGIN_VERSION = '0.2.0';
+    private const PLUGIN_VERSION = '0.1.0';
 
     /**
      * Minimum required PHP version.
