@@ -48,7 +48,7 @@
     "@commitlint/config-conventional": "^19.6.0",
     "@mcler/webpack-concat-plugin": "^4.1.6",
     "@testing-library/jest-dom": "^6.6.3",
-    "@types/node": "^20.17.11",
+    "@types/node": "^20.17.12",
     "autoprefixer": "^10.4.20",
     "babel-jest": "^29.7.0",
     "babel-loader": "^9.2.1",
