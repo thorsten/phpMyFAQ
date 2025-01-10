@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-17
@@ -26,8 +26,6 @@ use phpMyFAQ\System;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedJsonResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SetupController extends AbstractController
 {
@@ -108,7 +106,9 @@ class SetupController extends AbstractController
                 $this->configuration->set('main.maintenanceMode', 'false');
                 return new JsonResponse(['success' => '✅ Database successfully updated.'], Response::HTTP_OK);
             }
-        } catch (Exception $exception) {
+
+            return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
+        } catch (Exception | \Exception $exception) {
             return new JsonResponse(
                 ['error' => 'Update database failed: ' . $exception->getMessage()],
                 Response::HTTP_BAD_GATEWAY
