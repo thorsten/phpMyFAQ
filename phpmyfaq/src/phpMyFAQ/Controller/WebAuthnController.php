@@ -22,7 +22,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,7 +40,6 @@ class WebAuthnController extends AbstractController
     public function index(Request $request): Response
     {
         $system = new System();
-        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $topNavigation = [
             [
@@ -98,7 +96,7 @@ class WebAuthnController extends AbstractController
                 'richSnippetsEnabled' => $this->configuration->get('seo.enableRichSnippets'),
                 'tplSetName' => TwigWrapper::getTemplateSetName(),
                 'msgLoginUser' => Translation::get('msgLoginUser'),
-                'isUserLoggedIn' => $user->isLoggedIn(),
+                'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
                 'title' => Translation::get('msgLoginUser'),
                 'baseHref' => $system->getSystemUri($this->configuration),
                 'customCss' => $this->configuration->getCustomCss(),

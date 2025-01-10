@@ -6,6 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.0.5 - unreleased
+
+- updated Hellenic translation (Vasileios Tzimourtos)
+- fixed minor bugs (Thorsten)
+
 ### phpMyFAQ v4.0.4 - 2025-01-09
 
 - improved update from v3 (Thorsten)

@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Twig\Error\LoaderError;
 
 #[OA\Info(
     version: '3.0',
@@ -74,7 +75,7 @@ abstract class AbstractController
      * @param string[]      $templateVars
      * @param Response|null $response
      * @return Response
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
