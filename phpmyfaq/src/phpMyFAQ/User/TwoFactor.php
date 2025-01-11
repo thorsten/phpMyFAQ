@@ -44,7 +44,7 @@ class TwoFactor
         $this->qrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
             $this->qrCodeProvider,
-            $this->configuration->get('main.metaPublisher'),
+            $this->configuration->get('main.titleFAQ'),
             6,
             30,
             Algorithm::Sha1
