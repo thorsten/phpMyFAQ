@@ -152,6 +152,7 @@ class CurrentUser extends User
         }
 
         // Attempt to authenticate user by login and password
+        $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
             if (!$this->checkAuth($auth)) {
                 continue; // Skip invalid Auth objects
@@ -757,5 +758,20 @@ class CurrentUser extends User
 
         $result = $this->configuration->getDb()->query($select);
         return $this->configuration->getDb()->numRows($result) !== 0;
+    }
+
+    protected function sortAuthContainer(array $authContainer): array
+    {
+        uksort($authContainer, function ($a, $b) {
+            if ($a === 'local') {
+                return 1;
+            }
+            if ($b === 'local') {
+                return -1;
+            }
+            return 0;
+        });
+
+        return $authContainer;
     }
 }

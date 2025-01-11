@@ -71,8 +71,14 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function create(string $login, #[SensitiveParameter] string $password, string $domain = ''): bool
     {
+        $result = false;
         $user = new User($this->configuration);
-        $result = $user->createUser($login, '', $domain);
+
+        try {
+            $result = $user->createUser($login, '', $domain);
+        } catch (\Exception $e) {
+            $this->configuration->getLogger()->info($e->getMessage());
+        }
 
         $this->connect($this->activeServer);
 

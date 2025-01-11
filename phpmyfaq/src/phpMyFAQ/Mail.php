@@ -183,7 +183,7 @@ class Mail
     public function __construct(Configuration $configuration)
     {
         // Set default value for public properties
-        $this->agent = $configuration->get('mail.remoteSMTP') ? 'SMTP' : 'built-in';
+        $this->agent = $configuration->get('mail.remoteSMTP') ? 'smtp' : 'built-in';
         $this->boundary = self::createBoundary();
         $this->messageId = '<' . Request::createFromGlobals()->server->get('REQUEST_TIME') . '.' . md5(microtime()) .
             '@' . self::getServerName() . '>';
@@ -366,7 +366,7 @@ class Mail
      */
     public function send(): int
     {
-        // Sanity check
+        // Check
         if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
             throw new Exception(
                 '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!'
@@ -430,7 +430,7 @@ class Mail
         }
 
         return match ($this->agent) {
-            'SMTP', 'built-in' => $mua->send($recipients, $this->headers, $this->body),
+            'smtp', 'built-in' => $mua->send($recipients, $this->headers, $this->body),
             default => throw new Exception('<strong>Mail Class</strong>: ' . $this->agent . ' has no implementation!'),
         };
     }

@@ -82,8 +82,7 @@ abstract class AbstractController
      * @param string[]      $templateVars
      * @param Response|null $response
      * @return Response
-     * @throws Exception
-     * @throws LoaderError
+     * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {

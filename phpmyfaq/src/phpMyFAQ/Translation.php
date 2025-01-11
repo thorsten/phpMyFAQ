@@ -282,6 +282,7 @@ class Translation
     private static function fetchTranslationFile(): array
     {
         $LANG_CONF = [];
+        include self::$translation->filename('en');
         include self::$translation->filename(self::$translation->currentLanguage);
 
         return $LANG_CONF;

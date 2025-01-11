@@ -479,7 +479,7 @@ class User
         $result = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($result) !== 1) {
             if ($raiseError) {
-                throw new Core\Exception(self::ERROR_USER_INCORRECT_LOGIN);
+                $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
 
             return false;

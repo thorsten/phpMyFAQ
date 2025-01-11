@@ -363,3 +363,26 @@ To create a new SSL certificate, you can use the following command:
     $ mkcert -install -cert-file .docker/cert.pem -key-file .docker/cert-key.pem localhost
 
 For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
+
+### 6.7.2 Using a OpenLDAP docker container for testing
+
+To test phpMyFAQ during development with an OpenLDAP docker container, you can use the following test setup:
+
+    $ docker pull rroemhild/test-openldap
+    $ docker run --rm -p 10389:10389 -p 10636:10636 rroemhild/test-openldap
+
+The credentials for the OpenLDAP container are stored in the file content/core/config/ldap.php:
+
+    <?php
+    $PMF_LDAP['ldap_server'] = 'ldap://<your ip address>';
+    $PMF_LDAP['ldap_port'] = 10389;
+    $PMF_LDAP['ldap_user'] = 'cn=admin,dc=planetexpress,dc=com';
+    $PMF_LDAP['ldap_password'] = 'GoodNewsEveryone';
+    $PMF_LDAP['ldap_base'] = 'ou=people,dc=planetexpress,dc=com';
+
+After activating the LDAP authentication in the admin backend, you can use the following credentials to log in:
+
+    Username: professor
+    Password: professor
+
+More information about the OpenLDAP docker container can be found on the [Docker Hub](https://hub.docker.com/r/rroemhild/test-openldap).

@@ -137,16 +137,15 @@ readonly class News
     /**
      * Fetches all news headers.
      *
-     * @return array<mixed>
+     * @return array
      */
     public function getHeader(): array
     {
         $headers = [];
-        $now = date('YmdHis');
 
         $query = sprintf("
             SELECT
-                id, datum, lang, header, active, date_start, date_end
+                id, datum, lang, header, active
             FROM
                 %sfaqnews
             WHERE
@@ -158,14 +157,12 @@ readonly class News
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $expired = ($now > $row->date_end);
                 $headers[] = [
                     'id' => $row->id,
                     'lang' => $row->lang,
                     'header' => $row->header,
                     'date' => Date::createIsoDate($row->datum),
-                    'active' => $row->active,
-                    'expired' => $expired
+                    'active' => $row->active
                 ];
             }
         }

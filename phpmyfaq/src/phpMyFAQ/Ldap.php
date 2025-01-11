@@ -142,6 +142,7 @@ class Ldap
         if ('' === $rdn && '' === $password) {
             return ldap_bind($this->ds);
         }
+
         return ldap_bind($this->ds, $rdn, $password);
     }
 
@@ -163,6 +164,7 @@ class Ldap
      */
     private function getLdapData(string $username, string $data): bool|string
     {
+
         if ($this->ds === false) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
 

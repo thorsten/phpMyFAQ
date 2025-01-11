@@ -83,7 +83,7 @@ download it and unzip the archive on your hard disk.
 
 If you want to use Git, please run the following commands on your shell:
 
-    $ git clone git@github.com:thorsten/phpMyFAQ.git 3.2
+    $ git clone git@github.com:thorsten/phpMyFAQ.git 4.0
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install

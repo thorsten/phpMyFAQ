@@ -76,7 +76,6 @@ class UserAuthentication
         $this->authenticateLdap();
         $this->authenticateSso();
 
-        // Local
         if ($this->currentUser->login($username, $password)) {
             if ($this->currentUser->getUserData('twofactor_enabled')) {
                 $this->setTwoFactorAuth(true);
@@ -94,6 +93,9 @@ class UserAuthentication
         return $this->currentUser;
     }
 
+    /**
+     * @throws UserException
+     */
     private function authenticateLdap(): void
     {
         if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
