@@ -35,6 +35,7 @@ You should also ensure you have `AllowOverride All` set in the `<Directory>` and
 that the `.htaccess` file processes correctly, and rewrite rules take effect. Please check, if your path in
 `RewriteBase` is correct. By default, it's `/`, the root path. If you installed phpMyFAQ in the folder `faq`,
 it has to be `RewriteBase /faq/`.
+Please be aware that modules like `mod_security` can cause problems with the installation and/or update process.
 
 ### Database requirements
 
