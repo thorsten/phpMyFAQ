@@ -366,7 +366,7 @@ class Mail
      */
     public function send(): int
     {
-        // Sanity check
+        // Check
         if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
             throw new Exception(
                 '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!'
