@@ -89,6 +89,7 @@ class System
         'fileinfo',
         'filter',
         'gd',
+        'intl',
         'json',
         'sodium',
         'xml',
