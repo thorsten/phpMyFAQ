@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 'REST API for phpMyFAQ 4.0'
+  title: 'REST API for phpMyFAQ 4.1'
   description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the phpMyFAQ installation.'
   contact:
     name: 'phpMyFAQ Team'
@@ -484,7 +484,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\",\n                \"id\": \"8\",\n                \"order\": \"1\"\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"id\": \"10\",\n                \"order\": \"2\"\n            }\n        ]"
+              example: "[\n            {\n                \"question\": \"How can I survive without phpMyFAQ?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de\",\n                \"id\": 8,\n                \"order\": 1\n            },\n            {\n                \"question\": \"Is there life after death?\",\n                \"url\": \"https://www.example.org/index.php?action=faq&cat=1&id=1&artlang=en\",\n                \"id\": 10,\n                \"order\": 2\n            }\n        ]"
         '404':
           description: "If there's not one sticky FAQ."
           headers:
@@ -1114,7 +1114,31 @@ paths:
           content:
             application/json:
               schema: {}
-              example: 'phpMyFAQ Codename Pontus'
+              example: 'phpMyFAQ Codename Porus'
+  /api/v3.1/update:
+    post:
+      tags:
+        - 'Endpoints with Authentication'
+      operationId: triggerUpdate
+      responses:
+        '200':
+          description: 'Returns the new and updated phpMyFAQ version number as string.'
+          headers:
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+              example: 4.0.0
+        '401':
+          description: 'If the user is not authenticated and/or does not have sufficient permissions.'
+          headers:
+            x-pmf-token:
+              description: 'phpMyFAQ client API Token, generated in admin backend'
+              schema:
+                type: string
   /api/v3.0/version:
     get:
       tags:

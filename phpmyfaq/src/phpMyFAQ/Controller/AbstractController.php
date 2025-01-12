@@ -40,7 +40,7 @@ use Twig\TwigFilter;
     version: '3.0',
     description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ ' .
     'version or doing a search against the phpMyFAQ installation.',
-    title: 'REST API for phpMyFAQ 4.0',
+    title: 'REST API for phpMyFAQ 4.1',
     contact: new OA\Contact(
         name: 'phpMyFAQ Team',
         email: 'support@phpmyfaq.de'

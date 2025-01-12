@@ -116,7 +116,15 @@ readonly class Application
                 Response::HTTP_NOT_FOUND
             );
         } catch (UnauthorizedHttpException) {
-            $response = new RedirectResponse('/login');
+            if (str_contains($urlMatcher->getContext()->getBaseUrl(), '/api')) {
+                $response = new Response(
+                    json_encode(['error' => 'Unauthorized access']),
+                    Response::HTTP_UNAUTHORIZED,
+                    ['Content-Type' => 'application/json']
+                );
+            } else {
+                $response = new RedirectResponse('/login');
+            }
         } catch (BadRequestException $exception) {
             $response = new Response(
                 sprintf(

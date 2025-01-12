@@ -29,7 +29,7 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }
 
