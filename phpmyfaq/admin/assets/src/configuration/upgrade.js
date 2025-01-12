@@ -192,125 +192,125 @@ export const handleCheckForUpdates = () => {
   if (installButton) {
     installButton.addEventListener('click', async (event) => {
       event.preventDefault();
+      const spinner = document.getElementById('spinner-install-package');
+      spinner.classList.remove('d-none');
       await createTemporaryBackup();
+      spinner.classList.add('d-none');
     });
   }
 };
 
 const createTemporaryBackup = async () => {
-  await fetch('./api/create-temporary-backup', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(async (response) => {
-      const progressBarBackup = document.getElementById('result-backup-package');
-      const reader = response.body.getReader();
+  try {
+    const response = await fetch('./api/create-temporary-backup', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
 
-      function pump() {
-        return reader.read().then(({ done, value }) => {
-          const decodedValue = new TextDecoder().decode(value);
+    const progressBarBackup = document.getElementById('result-backup-package');
+    const reader = response.body.getReader();
 
-          if (done) {
-            progressBarBackup.style.width = '100%';
-            progressBarBackup.innerText = '100%';
-            progressBarBackup.classList.remove('progress-bar-animated');
-            return;
-          } else {
-            progressBarBackup.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-            progressBarBackup.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
-          }
+    async function pump() {
+      const { done, value } = await reader.read();
+      const decodedValue = new TextDecoder().decode(value);
 
-          return pump();
-        });
+      if (done) {
+        progressBarBackup.style.width = '100%';
+        progressBarBackup.innerText = '100%';
+        progressBarBackup.classList.remove('progress-bar-animated');
+        return;
+      } else {
+        progressBarBackup.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarBackup.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    }
+
+    await pump();
+  } catch (error) {
+    console.error(error);
+  }
 
   await installPackage();
 };
 
 const installPackage = async () => {
-  await fetch('./api/install-package', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(async (response) => {
-      const progressBarInstallation = document.getElementById('result-install-package');
-      const reader = response.body.getReader();
-      const card = document.getElementById('pmf-update-step-install-package');
+  try {
+    const response = await fetch('./api/install-package', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
 
-      function pump() {
-        return reader.read().then(({ done, value }) => {
-          const decodedValue = new TextDecoder().decode(value);
+    const progressBarInstallation = document.getElementById('result-install-package');
+    const reader = response.body.getReader();
+    const card = document.getElementById('pmf-update-step-install-package');
 
-          if (done) {
-            progressBarInstallation.style.width = '100%';
-            progressBarInstallation.innerText = '100%';
-            progressBarInstallation.classList.remove('progress-bar-animated');
-            return;
-          } else {
-            progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-            progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
-          }
+    async function pump() {
+      const { done, value } = await reader.read();
+      const decodedValue = new TextDecoder().decode(value);
 
-          return pump();
-        });
+      if (done) {
+        progressBarInstallation.style.width = '100%';
+        progressBarInstallation.innerText = '100%';
+        progressBarInstallation.classList.remove('progress-bar-animated');
+        return;
+      } else {
+        progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    }
+
+    await pump();
+  } catch (error) {
+    console.error(error);
+  }
 
   await updateDatabase();
 };
 
 const updateDatabase = async () => {
-  await fetch('./api/update-database', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(async (response) => {
-      const progressBarInstallation = document.getElementById('result-update-database');
-      const reader = response.body.getReader();
-      const card = document.getElementById('pmf-update-step-install-package');
+  try {
+    const response = await fetch('./api/update-database', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    });
 
-      function pump() {
-        return reader.read().then(({ done, value }) => {
-          const decodedValue = new TextDecoder().decode(value);
+    const progressBarInstallation = document.getElementById('result-update-database');
+    const reader = response.body.getReader();
+    const card = document.getElementById('pmf-update-step-install-package');
 
-          if (done) {
-            progressBarInstallation.style.width = '100%';
-            progressBarInstallation.innerText = '100%';
-            progressBarInstallation.classList.remove('progress-bar-animated');
-            card.classList.add('text-bg-success');
-            return;
-          } else {
-            progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-            progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
-          }
+    async function pump() {
+      const { done, value } = await reader.read();
+      const decodedValue = new TextDecoder().decode(value);
 
-          return pump();
-        });
+      if (done) {
+        progressBarInstallation.style.width = '100%';
+        progressBarInstallation.innerText = '100%';
+        progressBarInstallation.classList.remove('progress-bar-animated');
+        card.classList.add('text-bg-success');
+        return;
+      } else {
+        progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    }
+
+    await pump();
+  } catch (error) {
+    console.error(error);
+  }
 };
