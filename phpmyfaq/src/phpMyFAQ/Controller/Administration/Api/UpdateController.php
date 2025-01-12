@@ -116,8 +116,7 @@ class UpdateController extends AbstractController
         $branch = $this->configuration->get('upgrade.releaseEnvironment');
 
         try {
-            $api = new Api($this->configuration, new System());
-            $versions = $api->getVersions();
+            $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
             $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {

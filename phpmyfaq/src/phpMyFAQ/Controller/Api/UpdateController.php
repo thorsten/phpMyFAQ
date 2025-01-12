@@ -19,11 +19,16 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use DateTime;
+use DateTimeInterface;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class UpdateController extends AbstractController
 {
@@ -36,6 +41,9 @@ class UpdateController extends AbstractController
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     #[OA\Post(path: '/api/v3.1/update', operationId: 'triggerUpdate', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'x-pmf-token',
@@ -54,6 +62,44 @@ class UpdateController extends AbstractController
     public function index(): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $branch = $this->configuration->get('upgrade.releaseEnvironment');
+
+        // Check if the maintenance mode is enabled
+        if (!$upgrade->isMaintenanceEnabled()) {
+            return $this->json(['error' => Translation::get('msgNotInMaintenanceMode')], Response::HTTP_CONFLICT);
+        }
+
+        // Fetch latest version
+        try {
+            $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
+
+            if (version_compare($versions['installed'], $versions[$branch], '<')) {
+                $versionNumber = $versions[$branch];
+            }
+        } catch (TransportExceptionInterface | DecodingExceptionInterface $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Fetch a package version
+        $pathToPackage = $upgrade->downloadPackage($versionNumber);
+
+        if ($pathToPackage === false) {
+            return $this->json(['error' => Translation::get('downloadFailure')], Response::HTTP_BAD_GATEWAY);
+        }
+
+        if (!$upgrade->isNightly()) {
+            $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
+            if ($result === false) {
+                return $this->json(['error' => Translation::get('verificationFailure')], Response::HTTP_BAD_GATEWAY);
+            }
+        }
+
+        $this->configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
+
+        // Extract package
+        // WORK IN PROGESS
 
         return $this->json($this->configuration->getVersion());
     }
