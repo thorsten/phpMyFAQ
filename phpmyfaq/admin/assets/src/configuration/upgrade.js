@@ -58,59 +58,59 @@ export const handleCheckForUpdates = () => {
 
   // Check Update
   if (checkUpdateButton) {
-    checkUpdateButton.addEventListener('click', (event) => {
+    checkUpdateButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      fetch('./api/update-check', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          const dateLastChecked = document.getElementById('dateLastChecked');
-          const versionLastChecked = document.getElementById('versionLastChecked');
-          const card = document.getElementById('pmf-update-step-check-versions');
-
-          if (dateLastChecked) {
-            const date = new Date(response.dateLastChecked);
-            dateLastChecked.innerText = `${date.toLocaleString()}`;
-          }
-
-          if (versionLastChecked) {
-            versionLastChecked.innerText = response.version;
-          }
-
-          const result = document.getElementById('result-check-versions');
-          if (result) {
-            card.classList.add('text-bg-success');
-            if (response.version === 'current') {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            } else {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            }
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+      const spinner = document.getElementById('spinner-check-versions');
+      spinner.classList.remove('d-none');
+      try {
+        const response = await fetch('./api/update-check', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
         });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        const dateLastChecked = document.getElementById('dateLastChecked');
+        const versionLastChecked = document.getElementById('versionLastChecked');
+        const card = document.getElementById('pmf-update-step-check-versions');
+
+        if (dateLastChecked) {
+          const date = new Date(responseData.dateLastChecked);
+          dateLastChecked.innerText = `${date.toLocaleString()}`;
+        }
+
+        if (versionLastChecked) {
+          versionLastChecked.innerText = responseData.version;
+        }
+
+        const result = document.getElementById('result-check-versions');
+        if (result) {
+          card.classList.add('text-bg-success');
+          result.replaceWith(addElement('p', { innerText: responseData.message }));
+          spinner.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     });
   }
 
   // Download package
   if (downloadButton) {
-    downloadButton.addEventListener('click', (event) => {
+    downloadButton.addEventListener('click', async (event) => {
       event.preventDefault();
 
       let version;
       const versionLastChecked = document.getElementById('versionLastChecked');
       const releaseEnvironment = document.getElementById('releaseEnvironment');
+      const spinner = document.getElementById('spinner-download-new-version');
+      spinner.classList.remove('d-none');
 
       if (releaseEnvironment.innerText.toLowerCase() === 'nightly') {
         version = 'nightly';
@@ -118,77 +118,73 @@ export const handleCheckForUpdates = () => {
         version = versionLastChecked.innerText;
       }
 
-      fetch(`./api/download-package/${version}`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          const result = document.getElementById('result-download-new-version');
-          const divExtractPackage = document.getElementById('pmf-update-step-extract-package');
-          const card = document.getElementById('pmf-update-step-download');
-
-          if (result) {
-            card.classList.add('text-bg-success');
-            divExtractPackage.classList.remove('d-none');
-            if (response.version === 'current') {
-              result.replaceWith(addElement('p', { innerText: response.success }));
-            } else {
-              result.replaceWith(addElement('p', { innerText: response.success }));
-            }
-          }
-        })
-        .catch(async (error) => {
-          const errorMessage = await error.cause.response.json();
-          const result = document.getElementById('result-download-new-version');
-          result.replaceWith(addElement('p', { innerText: errorMessage.error }));
+      try {
+        const response = await fetch(`./api/download-package/${version}`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
         });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        const result = document.getElementById('result-download-new-version');
+        const divExtractPackage = document.getElementById('pmf-update-step-extract-package');
+        const card = document.getElementById('pmf-update-step-download');
+
+        if (result) {
+          card.classList.add('text-bg-success');
+          divExtractPackage.classList.remove('d-none');
+          result.replaceWith(addElement('p', { innerText: responseData.success }));
+          spinner.classList.add('d-none');
+        }
+      } catch (error) {
+        const errorMessage = await error.cause.response.json();
+        const result = document.getElementById('result-download-new-version');
+        result.replaceWith(addElement('p', { innerText: errorMessage.error }));
+        spinner.classList.add('d-none');
+      }
     });
   }
 
   // Extract package
   if (extractButton) {
-    extractButton.addEventListener('click', (event) => {
+    extractButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      fetch('./api/extract-package', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
-          const result = document.getElementById('result-extract-package');
-          const divInstallPackage = document.getElementById('pmf-update-step-install-package');
-          const card = document.getElementById('pmf-update-step-extract-package');
+      const spinner = document.getElementById('spinner-extract-package');
+      spinner.classList.remove('d-none');
 
-          if (result) {
-            card.classList.add('text-bg-success');
-            divInstallPackage.classList.remove('d-none');
-            if (response.success === 'ok') {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            } else {
-              result.replaceWith(addElement('p', { innerText: response.message }));
-            }
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+      try {
+        const response = await fetch('./api/extract-package', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
         });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        const result = document.getElementById('result-extract-package');
+        const divInstallPackage = document.getElementById('pmf-update-step-install-package');
+        const card = document.getElementById('pmf-update-step-extract-package');
+
+        if (result) {
+          card.classList.add('text-bg-success');
+          divInstallPackage.classList.remove('d-none');
+          result.replaceWith(addElement('p', { innerText: responseData.message }));
+          spinner.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     });
   }
 

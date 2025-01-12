@@ -41,6 +41,9 @@
           <div class="d-grid gap-2 d-md-flex justify-content-between">
             <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-updates">
               {{ 'buttonCheckUpdates' | translate }}
+              <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-check-versions" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </button>
             <output id="result-check-versions"></output>
           </div>
@@ -65,6 +68,10 @@
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
                 {{ 'buttonDownloadPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
+                     role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </button>
               <output id="result-download-new-version"></output>
             </div>
@@ -72,6 +79,10 @@
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
                 {{ 'buttonDownloadPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
+                     role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </button>
               <output id="result-download-new-version"></output>
             </div>
@@ -92,6 +103,9 @@
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
                 {{ 'buttonExtractPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-extract-package" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </button>
               <output id="result-extract-package"></output>
             </div>
@@ -113,6 +127,9 @@
               <div>
                 <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
                   {{ 'msgInstallDownloadedPackage' | translate }}
+                  <div class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
                 </button>
               </div>
               <div>
