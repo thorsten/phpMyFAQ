@@ -31,7 +31,7 @@ class CommentHelper extends AbstractHelper
      * Returns all user comments (HTML formatted) from a record by type.
      *
      * @param Comment[] $comments
-     * @deprecated Rewrite this method to use Twig
+     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
     public function getComments(array $comments): string
     {

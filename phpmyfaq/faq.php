@@ -165,7 +165,7 @@ if (
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqId);
-        $answer .= $attachmentHelper->renderAttachmentList($attList);
+        $attachmentList = $attachmentHelper->getAttachmentList($attList);
     } catch (AttachmentException) {
         // handle exception
     }
@@ -318,6 +318,7 @@ $templateVars = [
     'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
     'question' => $question,
     'answer' => $answer,
+    'attachmentList' => $attachmentList,
     'faqDate' => $date->format($faq->faqRecord['date']),
     'faqAuthor' => Strings::htmlentities($author),
     'msgPdf' => Translation::get('msgPDF'),
