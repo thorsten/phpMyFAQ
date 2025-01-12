@@ -23,6 +23,10 @@ enum PermissionType: string
 
     case ATTACHMENT_DELETE = 'delattachment';
 
+    case ATTACHMENT_DOWNLOAD = 'dlattachment';
+
+    case ATTACHMENT_EDIT = 'editattachment';
+
     case BACKUP = 'backup';
 
     case CATEGORY_ADD = 'addcateg';
@@ -30,6 +34,8 @@ enum PermissionType: string
     case CATEGORY_DELETE = 'delcateg';
 
     case CATEGORY_EDIT = 'editcateg';
+
+    case CATEGORIES_VIEW = 'view_categories';
 
     case COMMENT_ADD = 'addcomment';
     case COMMENT_DELETE = 'delcomment';
@@ -46,6 +52,10 @@ enum PermissionType: string
 
     case FAQ_EDIT = 'edit_faq';
 
+    case FAQS_VIEW = 'view_faqs';
+
+    case FORMS_EDIT = 'forms_edit';
+
     case GLOSSARY_ADD = 'addglossary';
 
     case GLOSSARY_DELETE = 'delglossary';
@@ -53,6 +63,8 @@ enum PermissionType: string
     case GLOSSARY_EDIT = 'editglossary';
 
     case GROUP_ADD = 'addgroup';
+
+    case GROUPS_ADMINISTRATE = 'administrate_groups';
 
     case GROUP_DELETE = 'delgroup';
 
@@ -69,6 +81,8 @@ enum PermissionType: string
     case NEWS_EDIT = 'editnews';
 
     case NEWS_DELETE = 'delnews';
+
+    case NEWS_VIEW = 'view_news';
 
     case PASSWORD_CHANGE = 'passwd';
 
@@ -91,8 +105,6 @@ enum PermissionType: string
     case USER_EDIT = 'edit_user';
 
     case USER_DELETE = 'delete_user';
-
-    case FORMS_EDIT = 'forms_edit';
 
     case VIEW_ADMIN_LINK = 'viewadminlink';
 }

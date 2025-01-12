@@ -57,7 +57,7 @@ class Installer extends Setup
 {
     /**
      * Array with user rights.
-     * @var array<array>
+     * @var array<array<string, string>>
      */
     protected array $mainRights = [
         [
@@ -96,22 +96,18 @@ class Installer extends Setup
             'name' => PermissionType::COMMENT_DELETE->value,
             'description' => 'Right to delete comments',
         ],
-        //10 => "addnews",
         [
             'name' => PermissionType::NEWS_ADD->value,
             'description' => 'Right to add news',
         ],
-        //11 => "editnews",
         [
             'name' => PermissionType::NEWS_EDIT->value,
             'description' => 'Right to edit news',
         ],
-        //12 => "delnews",
         [
             'name' => PermissionType::NEWS_DELETE->value,
             'description' => 'Right to delete news',
         ],
-        //13 => "addcateg",
         [
             'name' => PermissionType::CATEGORY_ADD->value,
             'description' => 'Right to add categories',
@@ -124,168 +120,128 @@ class Installer extends Setup
             'name' => PermissionType::CATEGORY_DELETE->value,
             'description' => 'Right to delete categories',
         ],
-        //16 => "passwd",
         [
             'name' => PermissionType::PASSWORD_CHANGE->value,
             'description' => 'Right to change passwords',
         ],
-        //17 => "editconfig",
         [
             'name' => PermissionType::CONFIGURATION_EDIT->value,
             'description' => 'Right to edit configuration',
         ],
-        //18 => "viewadminlink",
         [
             'name' => PermissionType::VIEW_ADMIN_LINK->value,
             'description' => 'Right to see the link to the admin section'
         ],
-        //20 => "backup",
         [
             'name' => PermissionType::BACKUP->value,
             'description' => 'Right to save backups',
         ],
-        //21 => "restore",
         [
             'name' => PermissionType::RESTORE->value,
             'description' => 'Right to load backups',
         ],
-        //22 => "delquestion",
         [
             'name' => PermissionType::QUESTION_DELETE->value,
             'description' => 'Right to delete questions',
         ],
-        //23 => 'addglossary',
         [
             'name' => PermissionType::GLOSSARY_ADD->value,
             'description' => 'Right to add glossary entries',
         ],
-        //24 => 'editglossary',
         [
             'name' => PermissionType::GLOSSARY_EDIT->value,
             'description' => 'Right to edit glossary entries',
         ],
-        //25 => 'delglossary'
         [
             'name' => PermissionType::GLOSSARY_DELETE->value,
             'description' => 'Right to delete glossary entries',
         ],
-        //26 => 'changebtrevs'
         [
             'name' => PermissionType::REVISION_UPDATE->value,
             'description' => 'Right to edit revisions',
         ],
-        //27 => "addgroup",
         [
             'name' => PermissionType::GROUP_ADD->value,
             'description' => 'Right to add group accounts',
         ],
-        //28 => "editgroup",
         [
             'name' => PermissionType::GROUP_EDIT->value,
             'description' => 'Right to edit group accounts',
         ],
-        //29 => "delgroup",
         [
             'name' => PermissionType::GROUP_DELETE->value,
             'description' => 'Right to delete group accounts',
         ],
-        //30 => "addtranslation", @deprecated will be removed in 4.1
         [
-            'name' => 'addtranslation',
-            'description' => 'Right to add translation',
+            'name' => PermissionType::FAQ_APPROVE->value,
+            'description' => 'Right to approve FAQs',
         ],
-        //31 => "edittranslation", @deprecated will be removed in 4.1
-        [
-            'name' => 'edittranslation',
-            'description' => 'Right to edit translations',
-        ],
-        //32 => "deltranslation", @deprecated will be removed in 4.1
-        [
-            'name' => 'deltranslation',
-            'description' => 'Right to delete translations',
-        ],
-        // 33 => 'approverec'
-        [
-            'name' => 'approverec',
-            'description' => 'Right to approve records',
-        ],
-        // 34 => 'addattachment'
         [
             'name' => PermissionType::ATTACHMENT_ADD->value,
             'description' => 'Right to add attachments',
         ],
-        // 35 => 'editattachment'
         [
-            'name' => 'editattachment',
+            'name' => PermissionType::ATTACHMENT_EDIT->value,
             'description' => 'Right to edit attachments',
         ],
-        // 36 => 'delattachment'
         [
-            'name' => 'delattachment',
+            'name' => PermissionType::ATTACHMENT_DELETE->value,
             'description' => 'Right to delete attachments',
         ],
-        // 37 => 'dlattachment'
         [
-            'name' => 'dlattachment',
+            'name' => PermissionType::ATTACHMENT_DOWNLOAD->value,
             'description' => 'Right to download attachments',
         ],
-        // 38 => 'reports'
         [
-            'name' => 'reports',
+            'name' => PermissionType::REPORTS->value,
             'description' => 'Right to generate reports',
         ],
-        // 39 => 'addfaq'
         [
-            'name' => 'addfaq',
+            'name' => PermissionType::FAQ_ADD->value,
             'description' => 'Right to add FAQs in frontend',
         ],
-        // 40 => 'addquestion'
         [
-            'name' => 'addquestion',
+            'name' => PermissionType::QUESTION_ADD->value,
             'description' => 'Right to add questions in frontend',
         ],
-        // 41 => 'addcomment'
         [
             'name' => PermissionType::COMMENT_ADD->value,
             'description' => 'Right to add comments in frontend',
         ],
-        // 42 => 'editinstances'
         [
-            'name' => 'editinstances',
+            'name' => PermissionType::INSTANCE_EDIT->value,
             'description' => 'Right to edit multi-site instances',
         ],
-        // 43 => 'addinstances'
         [
-            'name' => 'addinstances',
+            'name' => PermissionType::INSTANCE_ADD->value,
             'description' => 'Right to add multi-site instances',
         ],
-        // 44 => 'delinstances'
         [
-            'name' => 'delinstances',
+            'name' => PermissionType::INSTANCE_DELETE->value,
             'description' => 'Right to delete multi-site instances',
         ],
         [
-            'name' => 'export',
+            'name' => PermissionType::EXPORT->value,
             'description' => 'Right to export the complete FAQ',
         ],
         [
-            'name' => 'view_faqs',
+            'name' => PermissionType::FAQS_VIEW->value,
             'description' => 'Right to view FAQs'
         ],
         [
-            'name' => 'view_categories',
+            'name' => PermissionType::CATEGORIES_VIEW->value,
             'description' => 'Right to view categories'
         ],
         [
-            'name' => 'view_news',
+            'name' => PermissionType::NEWS_VIEW->value,
             'description' => 'Right to view news'
         ],
         [
-            'name' => 'administrate_groups',
+            'name' => PermissionType::GROUPS_ADMINISTRATE->value,
             'description' => 'Right to administrate groups'
         ],
         [
-            'name' => 'forms_edit',
+            'name' => PermissionType::FORMS_EDIT->value,
             'description' => 'Right to edit forms'
         ]
     ];
@@ -293,7 +249,7 @@ class Installer extends Setup
     /**
      * Configuration array.
      *
-     * @var array<string, string>
+     * @var array<string, string|null>
      */
     protected array $mainConfig = [
         'main.currentVersion' => null,
@@ -438,7 +394,7 @@ class Installer extends Setup
 
     /**
      * Array with form inputs
-     * @var array<array>
+     * @var array<array<string, int|string>>
      */
     public array $formInputs = [
         // Ask Question inputs
@@ -606,12 +562,10 @@ class Installer extends Setup
      */
     public static function cleanFailedInstallationFiles(): void
     {
-        // Remove './config/database.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/content/core/config/database.php')) {
             unlink(PMF_ROOT_DIR . '/content/core/config/database.php');
         }
 
-        // Remove './config/ldap.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/content/core/config/ldap.php')) {
             unlink(PMF_ROOT_DIR . '/content/core/config/ldap.php');
         }
