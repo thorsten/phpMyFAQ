@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
+use phpMyFAQ\Session\Token;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,6 +40,8 @@ class UpdateController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
+        $session = $this->container->get('session');
+
         $isOnNightlies = $this->configuration->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
 
         return $this->render(
@@ -46,6 +49,8 @@ class UpdateController extends AbstractAdministrationController
             [
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
+                'csrfActivateMaintenanceMode' => Token::getInstance($session)
+                    ->getTokenString('activate-maintenance-mode'),
                 'isOnNightlies' => $isOnNightlies,
                 'releaseEnvironment' => ucfirst((string) $this->configuration->get('upgrade.releaseEnvironment')),
                 'dateLastChecked' => $this->configuration->get('upgrade.dateLastChecked'),

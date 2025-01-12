@@ -19,6 +19,13 @@
           <p class="card-text">
             {{ 'msgHealthCheck' | translate }}
           </p>
+          <!-- Step 0: provide activation of maintenance mode -->
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-secondary mb-2 d-none" id="pmf-button-activate-maintenance-mode"
+                    data-pmf-csrf="{{ csrfActivateMaintenanceMode }}">
+              {{ 'msgActivateMaintenanceMode' | translate }}
+            </button>
+          </div>
           <!-- Step 1: Check for system health -->
           <div class="d-grid gap-2 d-md-flex justify-content-between">
             <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-health">

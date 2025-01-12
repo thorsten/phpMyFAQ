@@ -90,6 +90,11 @@ $routesConfig = [
         'methods' => 'DELETE'
     ],
     // Configuration API
+    'admin.api.configuration.activate-maintenance-mode' => [
+        'path' => '/configuration/activate-maintenance-mode',
+        'controller' => [ConfigurationController::class, 'activateMaintenanceMode'],
+        'methods' => 'POST'
+    ],
     'admin.api.configuration.faqs-sorting-key' => [
         'path' => '/configuration/faqs-sorting-key/{current}',
         'controller' => [ConfigurationTabController::class, 'faqsSortingKey'],

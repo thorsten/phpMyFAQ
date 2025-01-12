@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConfigurationController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/configuration/send-test-mail')]
     public function sendTestMail(Request $request): JsonResponse
@@ -57,5 +57,26 @@ class ConfigurationController extends AbstractController
         } catch (Exception | TransportExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('admin/api/configuration/activate-maintenance-mode')]
+    public function activateMaintenanceMode(Request $request): JsonResponse
+    {
+        $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
+
+        $session = $this->container->get('session');
+
+        $data = json_decode($request->getContent());
+
+        if (!Token::getInstance($session)->verifyToken('activate-maintenance-mode', $data->csrf)) {
+            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $this->configuration->set('main.maintenanceMode', 'true');
+
+        return $this->json(['success' => Translation::get('healthCheckOkay')], Response::HTTP_OK);
     }
 }

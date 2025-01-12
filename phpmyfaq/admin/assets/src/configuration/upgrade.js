@@ -23,6 +23,7 @@ export const handleCheckForUpdates = () => {
   const downloadButton = document.getElementById('pmf-button-download-now');
   const extractButton = document.getElementById('pmf-button-extract-package');
   const installButton = document.getElementById('pmf-button-install-package');
+  const buttonActivate = document.getElementById('pmf-button-activate-maintenance-mode');
 
   // Health Check
   if (checkHealthButton) {
@@ -35,15 +36,16 @@ export const handleCheckForUpdates = () => {
 
         if (responseData.success) {
           card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { innerText: responseData.success }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.success }));
         }
         if (responseData.warning) {
           card.classList.add('text-bg-warning');
-          result.replaceWith(addElement('p', { innerText: responseData.warning }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.warning }));
+          buttonActivate.classList.remove('d-none');
         }
         if (responseData.error) {
           card.classList.add('text-bg-danger');
-          result.replaceWith(addElement('p', { innerText: responseData.error }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.error }));
         }
       } catch (error) {
         if (error.cause && error.cause.response) {
@@ -52,6 +54,40 @@ export const handleCheckForUpdates = () => {
         } else {
           console.error(error.message);
         }
+      }
+    });
+  }
+
+  // Activate Maintenance Mode
+  if (buttonActivate) {
+    buttonActivate.addEventListener('click', async (event) => {
+      event.preventDefault();
+      try {
+        const response = await fetch('./api/configuration/activate-maintenance-mode', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ csrf: buttonActivate.getAttribute('data-pmf-csrf') }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        const result = document.getElementById('result-check-health');
+        const card = document.getElementById('pmf-update-step-health-check');
+
+        if (responseData.success) {
+          card.classList.remove('text-bg-warning');
+          card.classList.add('text-bg-success');
+          result.replaceWith(addElement('p', { innerText: responseData.success }));
+          buttonActivate.classList.add('d-none');
+        }
+      } catch (error) {
+        console.error(error);
       }
     });
   }
