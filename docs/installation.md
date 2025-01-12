@@ -17,6 +17,7 @@ To install it, you will need a web server that meets the following requirements:
 - SPL support
 - FileInfo support
 - Sodium support
+- intl support
 
 ### Web server requirements
 
