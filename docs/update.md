@@ -12,7 +12,7 @@ versions:
 If you're running an older version of phpMyFAQ than listed above, we recommend a new and fresh installation. If you need
 support for updating an old FAQ from the 1.x or 2.x series, [please email us](mailto:thorsten_AT_phpmyfaq_DOT_de).
 
-Please note, that the requirements of phpMyFAQ have to fulfilled.
+Please note that the requirements of phpMyFAQ have to be fulfilled.
 
 ## Before you upgrade
 
@@ -21,7 +21,7 @@ Please make sure that you're running at least PHP 8.2, otherwise the upgrade won
 ## Upgrading from phpMyFAQ 3.0.x
 
 Upgrading from 3.0.x is a major upgrade.
-Your existing templates will not work with phpMyFAQ 4.0.
+Your existing templates will not work with phpMyFAQ 4.1.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 Second, you have to delete all files **except**:
@@ -43,7 +43,7 @@ Click the button of the update script, your version will automatically be update
 ## Upgrading from phpMyFAQ 3.1.x
 
 Upgrading from 3.1.x is a major upgrade.
-Your existing templates will not work with phpMyFAQ 4.0.
+Your existing templates will not work with phpMyFAQ 4.1.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
@@ -66,7 +66,7 @@ Click the button of the update script, your version will automatically be update
 ## Upgrading from phpMyFAQ 3.2.x
 
 Upgrading from 3.2.x is a major upgrade.
-Your existing templates will not work with phpMyFAQ 4.0.
+Your existing templates will not work with phpMyFAQ 4.1.
 Please make a full backup before you run the upgrade!
 First, log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
@@ -139,8 +139,6 @@ Then go to the "phpMyFAQ Update" page in the configuration section click through
 
 Note:
 The online update feature is experimental and might not work in all environments.
-For example, if you're running phpMyFAQ in a subdirectory, the online update will break your RewriteBase path in the
-.htaccess file.
 
 ## Modifying templates for phpMyFAQ 4.1
 
