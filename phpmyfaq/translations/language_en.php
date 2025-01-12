@@ -1473,6 +1473,6 @@ $PMF_LANG['msgErrorEnterLoginName'] = 'Please enter your login name!';
 $PMF_LANG['msgErrorEnterValidMail'] = 'Please provide a valid email address!';
 $PMF_LANG['msgErrorEnterMessage'] = 'Please enter a message!';
 $PMF_LANG['msgLinkCopied'] = 'Link copied to clipboard';
-$PMF_LANG['msgDocumentation'] = 'Dokumentation';
+$PMF_LANG['msgDocumentation'] = 'Documentation';
 
 return $PMF_LANG;
