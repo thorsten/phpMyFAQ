@@ -149,7 +149,7 @@ class CategoryController extends AbstractAdministrationController
                 ... $this->getBaseTemplateVars(),
                 'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
                 'parentId' => $parentId,
-                'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang']),
+                'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
                 'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
                 'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
                 'categoryName' => $category->categoryName[$parentId]['name'],
