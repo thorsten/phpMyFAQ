@@ -108,7 +108,7 @@ $PMF_LANG["msg2answer"] = "atbilde";
 $PMF_LANG["msgQuestionText"] = "&ETH;eit var redz&ccedil;t citu cilv&ccedil;ku uzdotos jaut&acirc;jumus. Ja v&ccedil;lies atbild&ccedil;t uz k&acirc;du no tiem, dari to un tava atbilde, visticam&acirc;k, tiks public&ccedil;ta.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "BUJ (<strong>B</strong>ie&thorn;i <strong>U</strong>zdoto <strong>J</strong>ut&acirc;jumu) ideja ir &iuml;oti vienk&acirc;r&eth;a. Vari mekl&ccedil;t pa <strong><a href=\"?action=show\">sada&iuml;&acirc;m</a></strong> vai ar&icirc; izmantot <strong><a href=\"?action=search\">mekl&ccedil;t&acirc;ju</a></strong> un samekl&ccedil;t inform&acirc;ciju p&ccedil;c atsl&ccedil;gv&acirc;rdiem.Sada&iuml;as <strong>Jaut&acirc;t</strong> un <strong>Atbild&ccedil;t</strong> nepiecie&eth;amas dinamiskai jaut&acirc;jumu uzdo&eth;anai un atbild&ccedil;&eth;anai (pat, ja atbilde uz jaut&acirc;jumu nav zin&acirc;ma), savuk&acirc;rt sada&iuml;a <strong>Pievienot BUJ</strong> dom&acirc;ta bie&thorn;i uzdodama jaut&acirc;juma un atbilsto&eth;as atbildes public&ccedil;&eth;anai.";
+$PMF_LANG["msgHelpText"] = "BUJ (Bie&thorn;i Uzdoto Jut&acirc;jumu) ideja ir &iuml;oti vienk&acirc;r&eth;a. Vari mekl&ccedil;t pa <a href=\"?action=show\">sada&iuml;&acirc;m</a> vai ar&icirc; izmantot <a href=\"?action=search\">mekl&ccedil;t&acirc;ju</a> un samekl&ccedil;t inform&acirc;ciju p&ccedil;c atsl&ccedil;gv&acirc;rdiem.Sada&iuml;as Jaut&acirc;t un Atbild&ccedil;t nepiecie&eth;amas dinamiskai jaut&acirc;jumu uzdo&eth;anai un atbild&ccedil;&eth;anai (pat, ja atbilde uz jaut&acirc;jumu nav zin&acirc;ma), savuk&acirc;rt sada&iuml;a Pievienot BUJ dom&acirc;ta bie&thorn;i uzdodama jaut&acirc;juma un atbilsto&eth;as atbildes public&ccedil;&eth;anai.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Zi&ograve;a administratoram";
@@ -134,15 +134,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Nekas nav atrasts.<br/><br/><a href=\"javascri
 $PMF_LANG["err_badID"] = "Nepareizs ID.";
 $PMF_LANG["err_noTopTen"] = "Pa&eth;laik TOP 10 nav pieejams.";
 $PMF_LANG["err_nothingFound"] = "Ieraksts netika atrasts.";
-$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br><br><a href=\"javascript:history.back();\">Atgriezties</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br><br><a href=\"javascript:history.back();\">atgriezties</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt savu v&acirc;rdu, savu e-pasta adresi, sada&iuml;u, virsrakstu un tekstu!<br><br><a href=\"javascript:history.back();\">Atgriezties</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt savu v&acirc;rdu, savu e-pasta adresi un koment&acirc;rus!<br><br><a href=\"javascript:history.back();\">atgriezties</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts.";
-$PMF_LANG["err_noVote"] = "<strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a>";
+$PMF_LANG["err_noVote"] = "Sniedz savu nov&ccedil;rt&ccedil;jumu! <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a>";
 $PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br><a href=\"javascript:history.back();\">Atgriezties</a>";
-$PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!";
+$PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt savu v&acirc;rdu, savu e-pasta adresi un jaut&acirc;jumu par t&ccedil;mu!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Ierakstu mekl&ccedil;&eth;ana:</strong><br/><br/>\"+\" z&icirc;me noz&icirc;m&ccedil;, ka mekl&ccedil;jamie v&acirc;rdi tiks lo&igrave;iski apvienoti ar UN<br/>\"-\" z&icirc;me &iuml;auj izsl&ccedil;gt no mekl&ccedil;&eth;anas z&icirc;mei pievienoto atsl&ccedil;gv&acirc;rdu<br/>\"|\" z&icirc;me &iuml;auj atdal&icirc;t atsl&ccedil;gv&acirc;rdus ar lo&igrave;isko VAI<br/><br/><strong>Piem&ccedil;ri:</strong><br/><br/>Rakstot <strong>+PERL+PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur gan PERL, gan PHP<br/>Rakstot <strong>+PERL -PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur PERL, bet, kuros nav PHP<br/>Rakstot <strong>PERL | PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur vai nu PERL, vai ar&icirc; PHP<br/>";
+$PMF_LANG["help_search"] = "Ierakstu mekl&ccedil;&eth;ana:<br/><br/>\"+\" z&icirc;me noz&icirc;m&ccedil;, ka mekl&ccedil;jamie v&acirc;rdi tiks lo&igrave;iski apvienoti ar UN<br/>\"-\" z&icirc;me &iuml;auj izsl&ccedil;gt no mekl&ccedil;&eth;anas z&icirc;mei pievienoto atsl&ccedil;gv&acirc;rdu<br/>\"|\" z&icirc;me &iuml;auj atdal&icirc;t atsl&ccedil;gv&acirc;rdus ar lo&igrave;isko VAI<br/><br/>Piem&ccedil;ri:<br/><br/>Rakstot +PERL+PHP, tiks mekl&ccedil;ti visi ieraksti, kas satur gan PERL, gan PHP<br/>Rakstot +PERL -PHP, tiks mekl&ccedil;ti visi ieraksti, kas satur PERL, bet, kuros nav PHP<br/>Rakstot PERL | PHP, tiks mekl&ccedil;ti visi ieraksti, kas satur vai nu PERL, vai ar&icirc; PHP<br/>";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTR&Ccedil;&ETH;ANA";
@@ -164,10 +164,10 @@ $PMF_LANG["ad_menu_startpage"] = "Galven&acirc; sada&iuml;a";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Kas esi?";
-$PMF_LANG["ad_msg_passmatch"] = "Ab&acirc;m parol&ccedil;m <strong>j&acirc;sakr&icirc;t</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Ab&acirc;m parol&ccedil;m j&acirc;sakr&icirc;t!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profails ";
 $PMF_LANG["ad_msg_savedsuc_2"] = "veiksm&icirc;gi saglab&acirc;ts.";
-$PMF_LANG["ad_msg_mysqlerr"] = "<strong>K&iuml;&ucirc;da datub&acirc;z&ccedil;.</strong> Profails netika saglab&acirc;ts.";
+$PMF_LANG["ad_msg_mysqlerr"] = "K&iuml;&ucirc;da datub&acirc;z&ccedil;. Profails netika saglab&acirc;ts.";
 $PMF_LANG["ad_msg_noauth"] = "Neautoriz&ccedil;ta piek&iuml;uve.";
 
 // Allgemein
@@ -223,22 +223,22 @@ $PMF_LANG["ad_entry_save"] = "Saglab&acirc;t";
 $PMF_LANG["msgDelete"] = "Dz&ccedil;st";
 $PMF_LANG["ad_entry_delcom_1"] = "Vai tie&eth;&acirc;m dal&icirc;bnieka";
 $PMF_LANG["ad_entry_delcom_2"] = "koment&acirc;rs ir j&acirc;dz&ccedil;&eth;?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Dal&icirc;bnieka koment&acirc;rs <strong>veiksm&icirc;gi</strong> tika izdz&ccedil;sts.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Dal&icirc;bnieka koment&acirc;rs veiksm&icirc;gi tika izdz&ccedil;sts.";
 $PMF_LANG["ad_entry_back"] = "Atgriezties";
-$PMF_LANG["ad_entry_commentdelfail"] = "Koment&acirc;rs <strong>netika</strong> izdz&ccedil;sts.";
-$PMF_LANG["ad_entry_savedsuc"] = "Izmai&ograve;as tika <strong>veiksm&icirc;gi</strong> saglab&acirc;tas.";
-$PMF_LANG["ad_entry_savedfail"] = "Diem&thorn;&ccedil;l notikusi <strong>datub&acirc;zes k&iuml;&ucirc;da</strong>.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Koment&acirc;rs netika izdz&ccedil;sts.";
+$PMF_LANG["ad_entry_savedsuc"] = "Izmai&ograve;as tika veiksm&icirc;gi saglab&acirc;tas.";
+$PMF_LANG["ad_entry_savedfail"] = "Diem&thorn;&ccedil;l notikusi datub&acirc;zes k&iuml;&ucirc;da.";
 $PMF_LANG["ad_entry_del_1"] = "Vai tie&eth;&acirc;m";
 $PMF_LANG["ad_entry_del_2"] = "dal&icirc;bnieka";
 $PMF_LANG["ad_entry_del_3"] = "rakst&icirc;tais j&acirc;izdz&ccedil;&eth;?";
-$PMF_LANG["ad_entry_delsuc"] = "Dal&icirc;bnieka rakst&icirc;tais <strong>veiksm&icirc;gi</strong> izdz&ccedil;sts.";
-$PMF_LANG["ad_entry_delfail"] = "Ieraksts <strong>netika izdz&ccedil;sts</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Dal&icirc;bnieka rakst&icirc;tais veiksm&icirc;gi izdz&ccedil;sts.";
+$PMF_LANG["ad_entry_delfail"] = "Ieraksts netika izdz&ccedil;sts!";
 $PMF_LANG["ad_entry_back"] = "Atgriezties";
 
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Ieraksta ievads";
 $PMF_LANG["ad_news_text"] = "Ieraksta teksts";
-$PMF_LANG["ad_news_link_url"] = "Saite: (<strong>bez https://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Saite: (bez https://)!";
 $PMF_LANG["ad_news_link_title"] = "Saites teksts";
 $PMF_LANG["ad_news_link_target"] = "Saites veids";
 $PMF_LANG["ad_news_link_window"] = "Atver&acirc;s jaun&acirc; log&acirc;";
@@ -262,7 +262,7 @@ $PMF_LANG["ad_news_updatenews"] = "Jaunums izmain&icirc;ts";
 $PMF_LANG["msgNewCategory"] = "Pievienot sada&iuml;u";
 $PMF_LANG["ad_categ_catnum"] = "Sada&iuml;a numur";
 $PMF_LANG["ad_categ_subcatnum"] = "Apak&eth;sada&iuml;a numur";
-$PMF_LANG["ad_categ_nya"] = "<em>pa&eth;laik nav pieejama!</em>";
+$PMF_LANG["ad_categ_nya"] = "pa&eth;laik nav pieejama!";
 $PMF_LANG["categoryNameLabel"] = "Sada&iuml;as virsraksts";
 $PMF_LANG["ad_categ_add"] = "Pievienot sada&iuml;u";
 $PMF_LANG["ad_categ_existing"] = "Eso&eth;&acirc;s sada&iuml;as";
@@ -286,13 +286,13 @@ $PMF_LANG["ad_categ_deletesure"] = "Vai tie&eth;&acirc;m dz&ccedil;st &eth;o sad
 $PMF_LANG["ad_categ_deleted"] = "Sada&iuml;a tika izdz&ccedil;sta.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "S&icirc;kdatne (<em>cookie</em>) <strong>veiksm&icirc;gi</strong> uzst&acirc;d&icirc;ta.";
-$PMF_LANG["ad_cookie_already"] = "S&icirc;kdatne (<em>cookie</em>) jau ir uzst&acirc;d&icirc;ta. Ko dar&icirc;t?";
+$PMF_LANG["ad_cookie_cookiesuc"] = "S&icirc;kdatne (cookie) veiksm&icirc;gi uzst&acirc;d&icirc;ta.";
+$PMF_LANG["ad_cookie_already"] = "S&icirc;kdatne (cookie) jau ir uzst&acirc;d&icirc;ta. Ko dar&icirc;t?";
 $PMF_LANG["ad_cookie_again"] = "uzst&acirc;d&icirc;t v&ccedil;lreiz";
 $PMF_LANG["ad_cookie_delete"] = "Dz&ccedil;st";
-$PMF_LANG["ad_cookie_no"] = "Nav uzst&acirc;d&icirc;ta s&icirc;kdatne (<em>cookie</em>). Ar t&acirc;s pal&icirc;dz&icirc;bu ir iesp&ccedil;jams uzst&acirc;d&icirc;tos parametrus izmantot ar&icirc; turpm&acirc;k. Ko dar&icirc;t?";
+$PMF_LANG["ad_cookie_no"] = "Nav uzst&acirc;d&icirc;ta s&icirc;kdatne (cookie). Ar t&acirc;s pal&icirc;dz&icirc;bu ir iesp&ccedil;jams uzst&acirc;d&icirc;tos parametrus izmantot ar&icirc; turpm&acirc;k. Ko dar&icirc;t?";
 $PMF_LANG["ad_cookie_set"] = "Uzst&acirc;d&icirc;t";
-$PMF_LANG["ad_cookie_deleted"] = "S&icirc;kdatne (<em>cookie</em>) tika izdz&ccedil;sta.";
+$PMF_LANG["ad_cookie_deleted"] = "S&icirc;kdatne (cookie) tika izdz&ccedil;sta.";
 
 // Adminlog
 $PMF_LANG["ad_adminlog"] = "Logfaili";
@@ -303,19 +303,19 @@ $PMF_LANG["ad_passwd_old"] = "Vec&acirc;";
 $PMF_LANG["ad_passwd_new"] = "Jaun&acirc;";
 $PMF_LANG["ad_passwd_con"] = "Apstiprin&acirc;t";
 $PMF_LANG["ad_passwd_change"] = "Main&icirc;t paroli";
-$PMF_LANG["ad_passwd_suc"] = "Parole <strong>veiksm&icirc;gi</strong> nomain&icirc;ta.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>UZMAN&Icirc;BU:</strong><br>S&icirc;kdatne (<em>cookie</em>) j&acirc;uzst&acirc;da no jauna!";
-$PMF_LANG["ad_passwd_fail"] = "Vec&acirc; parole ir uzrakst&icirc;ta <strong>nepareizi</strong> vai ar&icirc; jaun&acirc; nesakr&icirc;t ar apstiprin&acirc;jumu.";
+$PMF_LANG["ad_passwd_suc"] = "Parole veiksm&icirc;gi nomain&icirc;ta.";
+$PMF_LANG["ad_passwd_remark"] = "UZMAN&Icirc;BU:<br>S&icirc;kdatne (cookie) j&acirc;uzst&acirc;da no jauna!";
+$PMF_LANG["ad_passwd_fail"] = "Vec&acirc; parole ir uzrakst&icirc;ta nepareizi vai ar&icirc; jaun&acirc; nesakr&icirc;t ar apstiprin&acirc;jumu.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Pievienot dal&icirc;bnieku";
 $PMF_LANG["ad_adus_name"] = "V&acirc;rds";
 $PMF_LANG["ad_adus_password"] = "Parole";
 $PMF_LANG["ad_adus_add"] = "Pievienot";
-$PMF_LANG["ad_adus_suc"] = "Dal&icirc;bnieks <strong>veiksm&icirc;gi</strong> pievienots.";
+$PMF_LANG["ad_adus_suc"] = "Dal&icirc;bnieks veiksm&icirc;gi pievienots.";
 $PMF_LANG["ad_adus_edit"] = "Modific&ccedil;t profailu";
-$PMF_LANG["ad_adus_dberr"] = "<strong>datu b&acirc;zes k&iuml;&ucirc;da!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Dal&icirc;bnieks ar t&acirc;du v&acirc;rdu <strong>jau eksist&ccedil;</strong>!";
+$PMF_LANG["ad_adus_dberr"] = "datu b&acirc;zes k&iuml;&ucirc;da!";
+$PMF_LANG["ad_adus_exerr"] = "Dal&icirc;bnieks ar t&acirc;du v&acirc;rdu jau eksist&ccedil;!";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -409,7 +409,7 @@ $PMF_LANG["ad_menu_backup"] = "Rezerves kopija";
 $PMF_LANG["ad_logout"] = "Sesija veiksm&icirc;gi pabeigta.";
 $PMF_LANG["ad_news_add"] = "Pievienot jaunumus";
 $PMF_LANG["ad_news_edit"] = "Modific&ccedil;t jaunumus";
-$PMF_LANG["ad_cookie"] = "S&icirc;kdatnes (<em>cookies</em>)";
+$PMF_LANG["ad_cookie"] = "S&icirc;kdatnes (cookies)";
 $PMF_LANG["ad_sess_head"] = "Sesijas";
 
 // Added v1.1 - 06.01.2002 - Bastian
@@ -455,7 +455,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Sada&iuml;u apstr&acirc;de...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["msgNoPermission"] = "<strong>Neuatoriz&ccedil;ta piek&iuml;uve.</strong>";
+$PMF_LANG["msgNoPermission"] = "Neuatoriz&ccedil;ta piek&iuml;uve.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "&laquo;";
@@ -513,7 +513,7 @@ $PMF_LANG["msgRealname"] = "Pilnais v&acirc;rds (piem., Osvalds Zemesgrauzis)";
 $PMF_LANG["ad_export_generate_pdf"] = "&igrave;ener&ccedil;t k&acirc; PDF failu";
 $PMF_LANG["ad_export_full_faq"] = "BUJ k&acirc; PDF fails: ";
 $PMF_LANG["err_bannedIP"] = "Tava IP adrese &eth;eit nav at&iuml;auta.";
-$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir <strong>V&acirc;rds</strong>, <strong>E-pasta adrese</strong> un <strong>Jaut&acirc;jums</strong>.<br><br><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir V&acirc;rds, E-pasta adrese un Jaut&acirc;jums.<br><br><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

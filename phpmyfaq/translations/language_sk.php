@@ -105,7 +105,7 @@ $PMF_LANG["msg2answer"] = "odpoveď";
 $PMF_LANG["msgQuestionText"] = "Tu môžete vidieť otázky od ostatných užívateľov. Keď otázku zodpoviete, odpoveď bude vložená do FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "Štruktúra FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) je jednoduchá. Ďalej môžete hľadať <strong><a href=\"?action=show\">categories</a></strong> alebo nechať <strong><a href=\"?action=search\">vyhľadávať FAQ</a></strong> kľúčové slová.";
+$PMF_LANG["msgHelpText"] = "Štruktúra FAQ (Frequently Asked Questions) je jednoduchá. Ďalej môžete hľadať <a href=\"?action=show\">categories</a> alebo nechať <a href=\"?action=search\">vyhľadávať FAQ</a> kľúčové slová.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-mail webmasterovi";
@@ -131,15 +131,15 @@ $PMF_LANG["msgErrorNoRecords"] = "FAQ nedostupná.";
 $PMF_LANG["err_badID"] = "Chybné ID.";
 $PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
 $PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
-$PMF_LANG["err_SaveEntries"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>názov</strong>, <strong>Váš záznam</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>, <strong>Váš e-mail</strong>, <strong>Vaše komentáre</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Povinné polia sú Vaše meno, Váš e-mail, category, názov, Váš záznam a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Povinné polia sú Vaše meno , Váš e-mail, Vaše komentáre a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Dvojité hlasovania nebudú započítané.";
-$PMF_LANG["err_noVote"] = "<strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
+$PMF_LANG["err_noVote"] = "Neohodnotili ste otázku! <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
 $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br><a href=\"javascript:history.back();\">späť</a>";
-$PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Povinné polia sú Vaše meno, Váš e-mail, your question a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Hľadanie záznamu:</strong><br>So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.<strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
+$PMF_LANG["help_search"] = "Hľadanie záznamu:<br>So vstupnými údajmi slovo1 slovo2 môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.Poznámka: Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
 
 // Menï¿½
 $PMF_LANG["ad"] = "SEKCIA PRE ADMINISTRÁTORA";
@@ -161,10 +161,10 @@ $PMF_LANG["ad_menu_startpage"] = "Úvodná stránka";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Prosím identifikujte sa.";
-$PMF_LANG["ad_msg_passmatch"] = "Obe heslá sa musia <strong>zhodovať</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Obe heslá sa musia zhodovať!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profil";
 $PMF_LANG["ad_msg_savedsuc_2"] = "bol úspešne uložený.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Vzhľadom k <strong>chybe databázy</strong>, profil nemôže byť uložený.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Vzhľadom k chybe databázy, profil nemôže byť uložený.";
 $PMF_LANG["ad_msg_noauth"] = "Nie ste poverený.";
 
 // Allgemein
@@ -221,16 +221,16 @@ $PMF_LANG["ad_entry_save"] = "Ulož";
 $PMF_LANG["msgDelete"] = "vymaž";
 $PMF_LANG["ad_entry_delcom_1"] = "Ste si istý, že komentár užívateľa";
 $PMF_LANG["ad_entry_delcom_2"] = "môže byť vymazaný?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Komentár bol <strong>úspešne</strong> vymazaný.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Komentár bol úspešne vymazaný.";
 $PMF_LANG["ad_entry_back"] = "Späť na článok";
-$PMF_LANG["ad_entry_commentdelfail"] = "Komentár <strong>nebol</strong> vymazaný.";
-$PMF_LANG["ad_entry_savedsuc"] = "Zmeny boli uložené <strong>úspešne</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Žiaľ, <strong>vyskytla sa chyba</strong> v databáze.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Komentár nebol vymazaný.";
+$PMF_LANG["ad_entry_savedsuc"] = "Zmeny boli uložené úspešne.";
+$PMF_LANG["ad_entry_savedfail"] = "Žiaľ, vyskytla sa chyba v databáze.";
 $PMF_LANG["ad_entry_del_1"] = "Ste si istý, že téma";
 $PMF_LANG["ad_entry_del_2"] = "z";
 $PMF_LANG["ad_entry_del_3"] = "môže byť vymazaná?";
-$PMF_LANG["ad_entry_delsuc"] = "Otázka <strong>úspešne</strong> vymazaná.";
-$PMF_LANG["ad_entry_delfail"] = "Otázka <strong>nebola vymazaná</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Otázka úspešne vymazaná.";
+$PMF_LANG["ad_entry_delfail"] = "Otázka nebola vymazaná!";
 $PMF_LANG["ad_entry_back"] = "Späť";
 
 
@@ -261,7 +261,7 @@ $PMF_LANG["ad_news_updatenews"] = "Novinka aktualizovaná.";
 $PMF_LANG["msgNewCategory"] = "Pridať novú kategóriu";
 $PMF_LANG["ad_categ_catnum"] = "Číslo kategórie";
 $PMF_LANG["ad_categ_subcatnum"] = "Číslo podkategórie";
-$PMF_LANG["ad_categ_nya"] = "<em>nie je prístupné!</em>";
+$PMF_LANG["ad_categ_nya"] = "nie je prístupné!";
 $PMF_LANG["categoryNameLabel"] = "Názov kategórie";
 $PMF_LANG["ad_categ_add"] = "Pridať kategóriu";
 $PMF_LANG["ad_categ_existing"] = "Existujúce kategórie";
@@ -285,7 +285,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Ste si istý, že chcete túto kategóriu vy
 $PMF_LANG["ad_categ_deleted"] = "Kategória vymazaná.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Cookie boli <strong>úspešne</strong> nastavené.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Cookie boli úspešne nastavené.";
 $PMF_LANG["ad_cookie_already"] = "Cookie boli už nastavené. Teraz máte nasledovné možnosti";
 $PMF_LANG["ad_cookie_again"] = "Nastaviť cookie znovu";
 $PMF_LANG["ad_cookie_delete"] = "Vymazať cookie";
@@ -303,18 +303,18 @@ $PMF_LANG["ad_passwd_new"] = "Nové heslo";
 $PMF_LANG["ad_passwd_con"] = "Potvrdiť";
 $PMF_LANG["ad_passwd_change"] = "Zmeniť heslo";
 $PMF_LANG["ad_passwd_suc"] = "Heslo úspešne zmenené.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>UPOZORNENIE:</strong><br>Cookie boli znovu nastavené!";
-$PMF_LANG["ad_passwd_fail"] = "Staré heslo <strong>musí</strong> byť vložené správne a obe nové heslá sa musia <strong>zhodovať</strong>.";
+$PMF_LANG["ad_passwd_remark"] = "UPOZORNENIE:<br>Cookie boli znovu nastavené!";
+$PMF_LANG["ad_passwd_fail"] = "Staré heslo musí byť vložené správne a obe nové heslá sa musia zhodovať.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Pridať užívateľa";
 $PMF_LANG["ad_adus_name"] = "Meno";
 $PMF_LANG["ad_adus_password"] = "Heslo";
 $PMF_LANG["ad_adus_add"] = "Pridať užívateľa";
-$PMF_LANG["ad_adus_suc"] = "Užívateľ <strong>úspešne</strong> pridaný.";
+$PMF_LANG["ad_adus_suc"] = "Užívateľ úspešne pridaný.";
 $PMF_LANG["ad_adus_edit"] = "Upraviť profil";
-$PMF_LANG["ad_adus_dberr"] = "<strong>chyba v databáze!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Užívateľské meno <strong>už</strong> existuje.";
+$PMF_LANG["ad_adus_dberr"] = "chyba v databáze!";
+$PMF_LANG["ad_adus_exerr"] = "Užívateľské meno už existuje.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -459,7 +459,7 @@ $PMF_LANG["msgCopy"] = "kopírovať";
 $PMF_LANG["ad_categ_process"] = "Spracovanie kategórií...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["msgNoPermission"] = "<strong>Nemáte oprávnenie.</strong>";
+$PMF_LANG["msgNoPermission"] = "Nemáte oprávnenie.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "predchádzajúca stránka";
@@ -523,7 +523,7 @@ $PMF_LANG["msgRealname"] = "skutočné meno";
 $PMF_LANG["ad_export_generate_pdf"] = "generovať PDF súbor";
 $PMF_LANG["ad_export_full_faq"] = "Vaša FAQ ako PDF súbor: ";
 $PMF_LANG["err_bannedIP"] = "Vaša IP adresa bola odmietnutá.";
-$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>Vaša otázka</strong> a, na požiadanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú Vaše meno, Váš e-mail, Vaša otázka a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
@@ -649,7 +649,7 @@ $PMF_LANG['ad_group_add_link'] = "Pridať skupinu";
 $PMF_LANG['ad_group_name'] = "Meno";
 $PMF_LANG['ad_group_description'] = "Popis";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-spájanie";
-$PMF_LANG['ad_group_suc'] = "Skupina <strong>successfully</strong> pridaná.";
+$PMF_LANG['ad_group_suc'] = "Skupina successfully pridaná.";
 $PMF_LANG['ad_group_error_noName'] = "Prosím zadajte meno skupiny. ";
 $PMF_LANG['ad_group_error_delete'] = "Skupina nemôže byť vymazaná. ";
 $PMF_LANG['ad_group_deleted'] = "Skupina bola uspešne vymazaná.";
@@ -761,7 +761,7 @@ $PMF_LANG['ad_quick_group'] = 'Pridať novú skupinu';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Návrh prekladu';
-$PMF_LANG['msgNewTranslationAddon'] = 'Váš návrh nebude publikovaný ihneď, po obdržaní bude schválený administrátorom. Povinné položky sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>Názov prekladu</strong> a <strong>Váš FAQ preklad</strong>. Kľúčové slová prosím oddeľte iba medzerou.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Váš návrh nebude publikovaný ihneď, po obdržaní bude schválený administrátorom. Povinné položky sú Vaše meno, Váš e-mail, Názov prekladu a Váš FAQ preklad. Kľúčové slová prosím oddeľte iba medzerou.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Zdroj';
 $PMF_LANG['msgNewTranslationPane'] = 'Preklad';
 $PMF_LANG['msgNewTranslationName'] = "Vaše meno";

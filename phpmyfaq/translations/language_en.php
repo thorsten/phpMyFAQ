@@ -129,15 +129,15 @@ $PMF_LANG["msgErrorNoRecords"] = "No FAQs available.";
 $PMF_LANG["err_badID"] = "Wrong ID.";
 $PMF_LANG["err_noTopTen"] = "No popular FAQs available yet.";
 $PMF_LANG["err_nothingFound"] = "No entry found.";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Required fields are your name, your email address, category, question, your Record and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
+$PMF_LANG["err_SaveComment"] = "Required fields are your name, your email address, your comments and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 $PMF_LANG["err_VoteTooMuch"] = "We do not count multiple votes.";
 $PMF_LANG["err_noVote"] = "You did not rate the question!";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
-$PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Required fields are your name, your email address, your question and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "<strong>Search for records:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.<strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.";
+$PMF_LANG["help_search"] = "Search for records:<br>With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.Notice: Your search criterion has to be at least four letters long otherwise your request will be rejected.";
 
 // Menu
 $PMF_LANG["ad"] = "Administration";
@@ -162,7 +162,7 @@ $PMF_LANG["ad_msg_identify"] = "Please identify yourself.";
 $PMF_LANG["ad_msg_passmatch"] = "Both passwords must match!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "The profile of";
 $PMF_LANG["ad_msg_savedsuc_2"] = "was saved successfully.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Due to a <strong>database error</strong>, the profile could not be saved.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Due to a database error, the profile could not be saved.";
 $PMF_LANG["ad_msg_noauth"] = "You are not authorized.";
 
 // General
@@ -219,16 +219,16 @@ $PMF_LANG["ad_entry_save"] = "Save";
 $PMF_LANG["msgDelete"] = "delete";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure ";
 $PMF_LANG["ad_entry_delcom_2"] = "'s comment should be deleted?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was successfully deleted.";
 $PMF_LANG["ad_entry_back"] = "Back to the FAQ";
-$PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
-$PMF_LANG["ad_entry_savedsuc"] = "The changes were saved <strong>successfully</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occurred.";
+$PMF_LANG["ad_entry_commentdelfail"] = "The comment was not deleted.";
+$PMF_LANG["ad_entry_savedsuc"] = "The changes were saved successfully.";
+$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a database error occurred.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
-$PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
-$PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Issue successfully deleted.";
+$PMF_LANG["ad_entry_delfail"] = "Issue was not deleted!";
 
 // News management
 $PMF_LANG["ad_news_header"] = "Article header";
@@ -257,7 +257,7 @@ $PMF_LANG["ad_news_updatenews"] = "News entry updated.";
 $PMF_LANG["msgNewCategory"] = "Add new category";
 $PMF_LANG["ad_categ_catnum"] = "Category number";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory number";
-$PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
+$PMF_LANG["ad_categ_nya"] = "not yet available!";
 $PMF_LANG["categoryNameLabel"] = "Category title";
 $PMF_LANG["ad_categ_add"] = "Add category";
 $PMF_LANG["ad_categ_existing"] = "Existing categories";
@@ -280,7 +280,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Are you sure you want to delete this categor
 $PMF_LANG["ad_categ_deleted"] = "Category deleted.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was <strong>successfully</strong> set.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was successfully set.";
 $PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
 $PMF_LANG["ad_cookie_delete"] = "Delete cookie";
@@ -298,7 +298,7 @@ $PMF_LANG["ad_passwd_new"] = "New password";
 $PMF_LANG["ad_passwd_con"] = "Retype password";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie has to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION:<br>Cookie has to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
@@ -306,10 +306,10 @@ $PMF_LANG["ad_adus_adduser"] = "Add new user account";
 $PMF_LANG["ad_adus_name"] = "Username";
 $PMF_LANG["ad_adus_password"] = "Password";
 $PMF_LANG["ad_adus_add"] = "Add user";
-$PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
+$PMF_LANG["ad_adus_suc"] = "User successfully added.";
 $PMF_LANG["ad_adus_edit"] = "Edit profile";
 $PMF_LANG["ad_adus_dberr"] = "Database error";
-$PMF_LANG["ad_adus_exerr"] = "Username <strong>already exists</strong>.";
+$PMF_LANG["ad_adus_exerr"] = "Username already exists.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -452,7 +452,7 @@ $PMF_LANG["msgCopy"] = "Copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["msgNoPermission"] = "<strong>You are not authorized.</strong>";
+$PMF_LANG["msgNoPermission"] = "You are not authorized.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "previous page";
@@ -507,7 +507,7 @@ $PMF_LANG["msgRealname"] = "Real name";
 $PMF_LANG["ad_export_generate_pdf"] = "Create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
-$PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
+$PMF_LANG["err_SaveQuestion"] = "Required fields are your name, your email address, your question and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = ["select", "Standard language"];
@@ -629,7 +629,7 @@ $PMF_LANG['ad_group_add_link'] = "Add group";
 $PMF_LANG['ad_group_name'] = "Name";
 $PMF_LANG['ad_group_description'] = "Description";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-join";
-$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
+$PMF_LANG['ad_group_suc'] = "Group successfully added.";
 $PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
 $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
 $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
@@ -740,7 +740,7 @@ $PMF_LANG['ad_quick_group'] = 'Add new group';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
-$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate any keywords with commas only.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but may be posted by an administrator upon review. Required fields are your name, your email address, your question translation and your answer translation. Please separate any keywords with commas only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
 $PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
 $PMF_LANG['msgNewTranslationName'] = "Your name";
@@ -863,7 +863,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending th
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = ["input", "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>"];
+$LANG_CONF['records.attachmentsPath'] = ["input", "Path where attachments will be saved.", "Relative path means a folder within web root"];
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you are trying to download was not found on this server";
@@ -903,8 +903,8 @@ $PMF_LANG['permission::deltranslation'] = "delete translation";
 $PMF_LANG['permission::approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span></small>'];
+$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption", "Ignored when attachments is disabled"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key", "Ignored if attachment encryption is disabled<br><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';
@@ -961,7 +961,7 @@ $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
 $PMF_LANG['msgAttachmentsFilesize'] = 'File size';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
-$PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Attachment successfully deleted.';
 
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
@@ -1215,7 +1215,7 @@ $PMF_LANG['ad_section_deleteSection'] = "Delete Section";
 $PMF_LANG['ad_section_deleteQuestion'] = "Are you sure you want to delete this section?";
 $PMF_LANG['ad_section_error_delete'] = "The section could not be deleted. ";
 $PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
-$PMF_LANG['ad_section_suc'] = "The section was <strong>successfully</strong> added.";
+$PMF_LANG['ad_section_suc'] = "The section was successfully added.";
 $PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
 $PMF_LANG['permission::viewadminlink'] = 'View admin link';
 
@@ -1344,7 +1344,7 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Seperate with comm
 $PMF_LANG['msgGravatar'] = 'Gravatar image';
 
 // added v4.0.0-alpha - 2023-12-27 by Jan
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky records is deactivated in the main configuration. If you would like to use it, please activate it in the <a href="./?action=config">main configuration</a> -> records.';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky records is deactivated in the main configuration. If you would like to use it, please activate it in the <a href="././configuration">main configuration</a> -> records.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of sticky records'];
 $PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can mark records as stick in the <a href="./faqs" class="alert-link">FAQ Overview</a>.';
 
@@ -1386,7 +1386,7 @@ $PMF_LANG['msgFormsAddTranslationSuccessful'] = 'The new translation was success
 $PMF_LANG['msgSelectLanguage'] = 'Select language';
 $PMF_LANG['msgTranslationText'] = 'Translation text';
 $PMF_LANG['msgAddTranslation'] = 'Add translation';
-$PMF_LANG['msgHintDeactivateForms'] = 'The forms can be deactivated completely in the <a class="alert-link" href="?action=config">administration</a>.';
+$PMF_LANG['msgHintDeactivateForms'] = 'The forms can be deactivated completely in the <a class="alert-link" href="./configuration">administration</a>.';
 
 // added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
 $PMF_LANG['msgOnlyInactiveFAQs'] = 'Only inactive FAQs';

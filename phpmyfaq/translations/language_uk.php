@@ -106,7 +106,7 @@ $PMF_LANG["msg2answer"] = "Відповісти";
 $PMF_LANG["msgQuestionText"] = "Тут знаходяться питання задані користувачами і що ще не отримали свою відповідь. Якщо ви відповісте на яке нібудь з питань, то він після перевірки адміністратором буде перенесений до основного розділу Mac F.A.Q";
 
 // Help
-$PMF_LANG["msgHelpText"] = "Структура нашої Mac F.A.Q. системи (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) системи проста і зручна і я думаю у вас не виникне питань: як і що?. Ви можете проглянути список <strong><a href=\"?aktion=anzeigen\">розділів</a></strong> або скористатися функцією <strong><a href=\"?aktion=search\">пошуку по всій базі</a></strong>.";
+$PMF_LANG["msgHelpText"] = "Структура нашої Mac F.A.Q. системи (Frequently Asked Questions) системи проста і зручна і я думаю у вас не виникне питань: як і що?. Ви можете проглянути список <a href=\"?aktion=anzeigen\">розділів</a> або скористатися функцією <a href=\"?aktion=search\">пошуку по всій базі</a>.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Тут ви можете написати лист веб-серверу-майстрові";
@@ -132,15 +132,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Нічого не знайдено";
 $PMF_LANG["err_badID"] = "Wrong ID.";
 $PMF_LANG["err_noTopTen"] = "Нічого поки не немає.";
 $PMF_LANG["err_nothingFound"] = "No entry found.";
-$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br><br>\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br><br>\n<a href=\"javascript:history.back();\">Вернуться назад</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля ваше ім'я, адрес email, категорія, заголовок і текст питання!<br><br>\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля ім'я, арес email i ваш коментар!<br><br>\n<a href=\"javascript:history.back();\">Вернуться назад</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "We do not count double votings. ";
-$PMF_LANG["err_noVote"] = "<strong>Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно!</strong> <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.";
+$PMF_LANG["err_noVote"] = "Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно! <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!";
+$PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля ваше ім'я, адрес email і текст повідомлення!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Поиск по базе Mac F.A.Q.:</strong><br>";
+$PMF_LANG["help_search"] = "Поиск по базе Mac F.A.Q.:<br>";
 
 // Menь
 $PMF_LANG["ad"] = "Адмінка";
@@ -162,10 +162,10 @@ $PMF_LANG["ad_menu_startpage"] = "Головна";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Авторизація.";
-$PMF_LANG["ad_msg_passmatch"] = "Обидва паролі повинні <strong>співпасти</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Обидва паролі повинні співпасти!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Обліковий запис користувача: ";
 $PMF_LANG["ad_msg_savedsuc_2"] = "успішно збережена.";
-$PMF_LANG["ad_msg_mysqlerr"] = "В результаті помилки <strong>бази даних</strong>, збереження профайла неможливе.";
+$PMF_LANG["ad_msg_mysqlerr"] = "В результаті помилки бази даних, збереження профайла неможливе.";
 $PMF_LANG["ad_msg_noauth"] = "Ви не авторизовані.";
 
 // Allgemein
@@ -221,22 +221,22 @@ $PMF_LANG["ad_entry_save"] = "Зберегти";
 $PMF_LANG["msgDelete"] = "видалити";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure that the comment of the user";
 $PMF_LANG["ad_entry_delcom_2"] = "should be deleted?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was successfully deleted.";
 $PMF_LANG["ad_entry_back"] = "Back to the article";
-$PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
-$PMF_LANG["ad_entry_savedsuc"] = "Зміни <strong>збережені</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occurred.";
+$PMF_LANG["ad_entry_commentdelfail"] = "The comment was not deleted.";
+$PMF_LANG["ad_entry_savedsuc"] = "Зміни збережені.";
+$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a database error occurred.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
-$PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
-$PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Issue successfully deleted.";
+$PMF_LANG["ad_entry_delfail"] = "Issue was not deleted!";
 $PMF_LANG["ad_entry_back"] = "Back";
 
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Заголовок";
 $PMF_LANG["ad_news_text"] = "Текст новини";
-$PMF_LANG["ad_news_link_url"] = "Посилання: (<strong>без https://</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "Посилання: (без https://)!";
 $PMF_LANG["ad_news_link_title"] = "Текст посилання";
 $PMF_LANG["ad_news_link_target"] = "По кліку на посилання";
 $PMF_LANG["ad_news_link_window"] = "відкрити в новому вікні";
@@ -260,7 +260,7 @@ $PMF_LANG["ad_news_updatenews"] = "Зберегти";
 $PMF_LANG["msgNewCategory"] = "Створення нової категорії";
 $PMF_LANG["ad_categ_catnum"] = "Номер категорії";
 $PMF_LANG["ad_categ_subcatnum"] = "Номер підкатегорії";
-$PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
+$PMF_LANG["ad_categ_nya"] = "not yet available!";
 $PMF_LANG["categoryNameLabel"] = "Назва категорії";
 $PMF_LANG["ad_categ_add"] = "Додати категорію";
 $PMF_LANG["ad_categ_existing"] = "Категорії";
@@ -285,7 +285,7 @@ $PMF_LANG["ad_categ_deleted"] = "Категорія видалена.";
 
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Інформація про сесію <strong>збережена у вашому комьютере</strong>.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Інформація про сесію збережена у вашому комьютере.";
 $PMF_LANG["ad_cookie_already"] = "Сесія збережена на вашому комп'ютері. Ви можете виконати наступні операції";
 $PMF_LANG["ad_cookie_again"] = "Зберегти наново";
 $PMF_LANG["ad_cookie_delete"] = "Видалити всю інформацію";
@@ -304,18 +304,18 @@ $PMF_LANG["ad_passwd_new"] = "Новий пароль";
 $PMF_LANG["ad_passwd_con"] = "Підтвердження";
 $PMF_LANG["ad_passwd_change"] = "Змінити пароль";
 $PMF_LANG["ad_passwd_suc"] = "Пароль успішно змінений.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>УВАГА:</strong><br> інформація про сесію збережена у вашому комп'ютері";
-$PMF_LANG["ad_passwd_fail"] = "Старий пароль <strong>повинен бути</strong> введений правильно, а новий підтверджений теж <strong>правильно</strong>.";
+$PMF_LANG["ad_passwd_remark"] = "УВАГА:<br> інформація про сесію збережена у вашому комп'ютері";
+$PMF_LANG["ad_passwd_fail"] = "Старий пароль повинен бути введений правильно, а новий підтверджений теж правильно.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Новий користувач";
 $PMF_LANG["ad_adus_name"] = "Логін";
 $PMF_LANG["ad_adus_password"] = "Пароль";
 $PMF_LANG["ad_adus_add"] = "Додати користувача";
-$PMF_LANG["ad_adus_suc"] = "Користувач <strong>успішно</strong> доданий.";
+$PMF_LANG["ad_adus_suc"] = "Користувач успішно доданий.";
 $PMF_LANG["ad_adus_edit"] = "Редагувати профайл";
-$PMF_LANG["ad_adus_dberr"] = "<strong>Помилка в базі даних!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "<strong>Користувач</strong> вже існує.";
+$PMF_LANG["ad_adus_dberr"] = "Помилка в базі даних!";
+$PMF_LANG["ad_adus_exerr"] = "Користувач вже існує.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -523,7 +523,7 @@ $PMF_LANG["msgRealname"] = "Справжнє ім'я";
 $PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл";
 $PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: ";
 $PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";
-$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br><br><a href=\"javascript:history.back();\">Вернутсья назад</a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля ваше ім'я, ваше ім'я email і текст питання.<br><br><a href=\"javascript:history.back();\">Вернутсья назад</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: ";
@@ -642,7 +642,7 @@ $PMF_LANG['ad_group_add_link'] = "Add Group";
 $PMF_LANG['ad_group_name'] = "Name";
 $PMF_LANG['ad_group_description'] = "Description";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-join";
-$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
+$PMF_LANG['ad_group_suc'] = "Group successfully added.";
 $PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
 $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
 $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";

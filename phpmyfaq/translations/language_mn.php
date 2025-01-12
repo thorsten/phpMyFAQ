@@ -128,15 +128,15 @@ $PMF_LANG["msgErrorNoRecords"] = "<p>Ямар нэг FAQs алга.</p>";
 $PMF_LANG["err_badID"] = "<p>Буруу ID.</p>";
 $PMF_LANG["err_noTopTen"] = "<p>Онцлох FAQs алга.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Өгөгдөл алга.</p>";
-$PMF_LANG["err_SaveEntries"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong>, <strong>your Record</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
-$PMF_LANG["err_SaveComment"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your comments</strong> and, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Required fields are your name, your email address, category, question, your Record and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
+$PMF_LANG["err_SaveComment"] = "Required fields are your name, your email address, your comments and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 $PMF_LANG["err_VoteTooMuch"] = "Үнэлгээ дахин өгөхийг тоолохгүй.";
 $PMF_LANG["err_noVote"] = "Та энэ асуултыг үнэлээгүй байна!";
 $PMF_LANG["err_noMailAdress"] = "Таны имэйл хаяг алдаатай байна.";
-$PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong> email хаяг</strong>, <strong>таны асуулт</strong> болон, when requested, the <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд таны нэр,  email хаяг, таны асуулт болон, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Хайлт хийхдээ:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
+$PMF_LANG["help_search"] = "<p>Хайлт хийхдээ:<br>With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.</p><p>Notice: Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
 
 // Menu
 $PMF_LANG["ad"] = "Удирдлага";
@@ -161,7 +161,7 @@ $PMF_LANG["ad_msg_identify"] = "Please identify yourself.";
 $PMF_LANG["ad_msg_passmatch"] = "Both passwords must match!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "The profile of";
 $PMF_LANG["ad_msg_savedsuc_2"] = "хадгалагдсан байна.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Due to a <strong>database error</strong>, the profile could not be saved.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Due to a database error, the profile could not be saved.";
 $PMF_LANG["ad_msg_noauth"] = "Та зөвшөөрөлгүй байна.";
 
 // Allgemein
@@ -218,16 +218,16 @@ $PMF_LANG["ad_entry_save"] = "хадгалах";
 $PMF_LANG["msgDelete"] = "устгах";
 $PMF_LANG["ad_entry_delcom_1"] = "Хэрэглэгчийн сэтгэгдлийг";
 $PMF_LANG["ad_entry_delcom_2"] = "устгах уу?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Сэтгэгдэл <strong>устгагдлаа</strong>.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Сэтгэгдэл устгагдлаа.";
 $PMF_LANG["ad_entry_back"] = "Нийтлэлд буцах";
-$PMF_LANG["ad_entry_commentdelfail"] = "Сэтгэгдэл <strong>устгагдсангүй</strong>.";
-$PMF_LANG["ad_entry_savedsuc"] = "Өөрчлөлт <strong>хадгалагдлаа</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Мэдээллийн сан <strong>алдаатай</strong>.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Сэтгэгдэл устгагдсангүй.";
+$PMF_LANG["ad_entry_savedsuc"] = "Өөрчлөлт хадгалагдлаа.";
+$PMF_LANG["ad_entry_savedfail"] = "Мэдээллийн сан алдаатай.";
 $PMF_LANG["ad_entry_del_1"] = "Та сэдвийг ";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "устгах уу?";
-$PMF_LANG["ad_entry_delsuc"] = "Асуудал <strong>устгагдлаа</strong>.";
-$PMF_LANG["ad_entry_delfail"] = "Асуудал <strong>устгагдсангүй</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Асуудал устгагдлаа.";
+$PMF_LANG["ad_entry_delfail"] = "Асуудал устгагдсангүй!";
 $PMF_LANG["ad_entry_back"] = "Буцах";
 
 
@@ -258,7 +258,7 @@ $PMF_LANG["ad_news_updatenews"] = "Мэдээний өгөгдөл шинэчл�
 $PMF_LANG["msgNewCategory"] = "Шинэ ангилал нэмэх";
 $PMF_LANG["ad_categ_catnum"] = "Ангиллын дугаар:";
 $PMF_LANG["ad_categ_subcatnum"] = "Дэд ангиллын дугаар:";
-$PMF_LANG["ad_categ_nya"] = "<em>бэлэн биш!</em>";
+$PMF_LANG["ad_categ_nya"] = "бэлэн биш!";
 $PMF_LANG["categoryNameLabel"] = "Ангиллын нэр:";
 $PMF_LANG["ad_categ_add"] = "Ангилал нэмэх";
 $PMF_LANG["ad_categ_existing"] = "Бэлэн байгаа ангиллууд";
@@ -281,7 +281,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Энэ ангиллыг устгах уу?";
 $PMF_LANG["ad_categ_deleted"] = "Ангилал устгагдлаа.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was <strong>successfully</strong> set.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was successfully set.";
 $PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options:";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
 $PMF_LANG["ad_cookie_delete"] = "Cookie устгах";
@@ -299,7 +299,7 @@ $PMF_LANG["ad_passwd_new"] = "Шинэ нуууц үг:";
 $PMF_LANG["ad_passwd_con"] = "Нууц үгийг дахин оруул:";
 $PMF_LANG["ad_passwd_change"] = "Нууц үг өөрчлөх";
 $PMF_LANG["ad_passwd_suc"] = "Нууц үг өөрчлөгдлөө.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION:<br>Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
@@ -307,10 +307,10 @@ $PMF_LANG["ad_adus_adduser"] = "Шинэ хэрэглэгч үүсгэх";
 $PMF_LANG["ad_adus_name"] = "ХэрэглэгчийнНэр:";
 $PMF_LANG["ad_adus_password"] = "Нууц үг:";
 $PMF_LANG["ad_adus_add"] = "хэрэглэгч нэмэх";
-$PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
+$PMF_LANG["ad_adus_suc"] = "User successfully added.";
 $PMF_LANG["ad_adus_edit"] = "Edit profile";
-$PMF_LANG["ad_adus_dberr"] = "<strong>мэдээллийн сангийн алдаа!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Энэ хэрэглэгчийн нэр <strong>ашиглагдаж байна</strong>.";
+$PMF_LANG["ad_adus_dberr"] = "мэдээллийн сангийн алдаа!";
+$PMF_LANG["ad_adus_exerr"] = "Энэ хэрэглэгчийн нэр ашиглагдаж байна.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -455,7 +455,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Ангилал боловсруулж байна...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["msgNoPermission"] = "<strong>Та зөвшөөрөлгүй байна.</strong>";
+$PMF_LANG["msgNoPermission"] = "Та зөвшөөрөлгүй байна.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "өмнөх хуудас";
@@ -510,7 +510,7 @@ $PMF_LANG["msgRealname"] = "Жинхэнэ нэр:";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF файл үүсгэх";
 $PMF_LANG["ad_export_full_faq"] = "Таны FAQ PDF файлаар: ";
 $PMF_LANG["err_bannedIP"] = "Таны IP хаяг блоклогдсон байна.";
-$PMF_LANG["err_SaveQuestion"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong>email  хаяг</strong>, <strong>таны асуулт</strong> болон, шаардлагатай <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Хамгаалалтын Captcha </a> коод</strong>.";
+$PMF_LANG["err_SaveQuestion"] = "Шаардлагатай талбарууд таны нэр, email  хаяг, таны асуулт болон, шаардлагатай <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Хамгаалалтын Captcha </a> коод.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Хэл");
@@ -638,7 +638,7 @@ $PMF_LANG['ad_group_add_link'] = "Бүлэг нэмэх";
 $PMF_LANG['ad_group_name'] = "Нэр:";
 $PMF_LANG['ad_group_description'] = "Тодорхойлолт:";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
-$PMF_LANG['ad_group_suc'] = "Бүлэг <strong>амжилттай</strong> нэмэгдлээ.";
+$PMF_LANG['ad_group_suc'] = "Бүлэг амжилттай нэмэгдлээ.";
 $PMF_LANG['ad_group_error_noName'] = "Бүлгийн нэрийг оруулна уу. ";
 $PMF_LANG['ad_group_error_delete'] = "Бүлгийг устгаж болохгүй байна. ";
 $PMF_LANG['ad_group_deleted'] = "Бүлэг устгагдлаа.";
@@ -749,7 +749,7 @@ $PMF_LANG['ad_quick_group'] = 'Шинэ бүлэг үүсгэх';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Орчуулах санал';
-$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate the keywords with commas only.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are your Name, your email address, your question translation and your answer translation. Please separate the keywords with commas only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Эх сурвалжийн хэсэг';
 $PMF_LANG['msgNewTranslationPane'] = 'Орчуулах хэсэг';
 $PMF_LANG['msgNewTranslationName'] = "Таны нэр:";
@@ -992,7 +992,7 @@ $PMF_LANG['msgAttachmentsFilename'] = 'Файлын нэр';
 $PMF_LANG['msgAttachmentsFilesize'] = 'Файлын хэмжээ';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Энэ хавсралтыг устгахыг хүсч байна уу?';
-$PMF_LANG['msgAttachmentsDeleted'] = 'Хавсралт <strong>устгагдлаа</strong>.';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Хавсралт устгагдлаа.';
 
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Тайлангууд';

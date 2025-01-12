@@ -131,15 +131,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Brak dostępnych pytań i odpowiedzi.";
 $PMF_LANG["err_badID"] = "Zły ID.";
 $PMF_LANG["err_noTopTen"] = "Brak dostępnych FAQs.";
 $PMF_LANG["err_nothingFound"] = "Nie znaleziono wpisu.";
-$PMF_LANG["err_SaveEntries"] = "Wymagane pola to <strong>Twoje imię</strong>, <strong>Twój adres email</strong>, <strong>kategoria</strong>, <strong>pytanie</strong>, <strong>Twój wpis</strong> oraz, na żądanie <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code</strong>!";
-$PMF_LANG["err_SaveComment"] = "Wymagane pola to <strong>Twoje imię</strong>, <strong>Twój adres email</strong>, <strong>Twój komentarz</strong> oraz, na żądanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Wymagane pola to Twoje imię, Twój adres email, kategoria, pytanie, Twój wpis oraz, na żądanie <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code!";
+$PMF_LANG["err_SaveComment"] = "Wymagane pola to Twoje imię, Twój adres email, Twój komentarz oraz, na żądanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code!";
 $PMF_LANG["err_VoteTooMuch"] = "Nie liczymy głosów wielokrotnych.";
 $PMF_LANG["err_noVote"] = "Nie oceniłeś pytania!";
 $PMF_LANG["err_noMailAdress"] = "Twój adres e-mail jest nieprawidłowy.";
-$PMF_LANG["err_sendMail"] = "Wymagane pola to <strong>Twoje imię</strong>, <strong>Twój adres email</strong>, <strong>Twoje pytanie</strong> oraz, na żądanie, <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code</strong>!";
+$PMF_LANG["err_sendMail"] = "Wymagane pola to Twoje imię, Twój adres email, Twoje pytanie oraz, na żądanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "<strong>Szukaj wpisów:</strong><br>Z wpisem typu <strong style=\"color: Red;\">word1 word2</strong> możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.<strong>Uwaga</strong> Twoje kryterium wyszukiwania musi składać się z co najmniej 4 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
+$PMF_LANG["help_search"] = "Szukaj wpisów:<br>Z wpisem typu word1 word2 możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.Uwaga Twoje kryterium wyszukiwania musi składać się z co najmniej 4 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
 
 // Menu
 $PMF_LANG["ad"] = "Administracja";
@@ -161,10 +161,10 @@ $PMF_LANG["ad_menu_startpage"] = "Strona główna";
 
 // Messages
 $PMF_LANG["ad_msg_identify"] = "Proszę o identyfikację.";
-$PMF_LANG["ad_msg_passmatch"] = "Oba hasła muszą być <strong>identyczne</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Oba hasła muszą być identyczne!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profil ";
 $PMF_LANG["ad_msg_savedsuc_2"] = "został pomyślnie zapisany.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Z powodu <strong>błędu bazy danych</strong>, nie można zapisać profilu.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Z powodu błędu bazy danych, nie można zapisać profilu.";
 $PMF_LANG["ad_msg_noauth"] = "Nie jesteś autoryzowany.";
 
 // General
@@ -221,16 +221,16 @@ $PMF_LANG["ad_entry_save"] = "Zapisz";
 $PMF_LANG["msgDelete"] = "usuń";
 $PMF_LANG["ad_entry_delcom_1"] = "Jesteś pewny ";
 $PMF_LANG["ad_entry_delcom_2"] = "komentarz powinien zostać usunięty?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Komentarz został <strong>pomyślnie</strong> usunięty.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Komentarz został pomyślnie usunięty.";
 $PMF_LANG["ad_entry_back"] = "Wróć do artykułu";
-$PMF_LANG["ad_entry_commentdelfail"] = "Komentarz <strong>nie</strong> został usunięty.";
-$PMF_LANG["ad_entry_savedsuc"] = "Zmiany zostały <strong>pomyślnie</strong> zapisane.";
-$PMF_LANG["ad_entry_savedfail"] = "Niestety wystąpił <strong>błąd bazy danych</strong>.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Komentarz nie został usunięty.";
+$PMF_LANG["ad_entry_savedsuc"] = "Zmiany zostały pomyślnie zapisane.";
+$PMF_LANG["ad_entry_savedfail"] = "Niestety wystąpił błąd bazy danych.";
 $PMF_LANG["ad_entry_del_1"] = "Czy na pewno temat";
 $PMF_LANG["ad_entry_del_2"] = "z";
 $PMF_LANG["ad_entry_del_3"] = "powinien zostać usunięty?";
-$PMF_LANG["ad_entry_delsuc"] = "Problem <strong>został</strong> usunięty.";
-$PMF_LANG["ad_entry_delfail"] = "Problem <strong>nie został usunięty</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Problem został usunięty.";
+$PMF_LANG["ad_entry_delfail"] = "Problem nie został usunięty!";
 $PMF_LANG["ad_entry_back"] = "Wróć";
 
 // News management
@@ -260,7 +260,7 @@ $PMF_LANG["ad_news_updatenews"] = "Wpis aktualności został zaktualizowany.";
 $PMF_LANG["msgNewCategory"] = "Dodaj nową kategorię";
 $PMF_LANG["ad_categ_catnum"] = "Numer kategorii";
 $PMF_LANG["ad_categ_subcatnum"] = "Numer podkategorii";
-$PMF_LANG["ad_categ_nya"] = "<em>jeszcze nie dostępne!</em>";
+$PMF_LANG["ad_categ_nya"] = "jeszcze nie dostępne!";
 $PMF_LANG["categoryNameLabel"] = "Tytuł kategorii";
 $PMF_LANG["ad_categ_add"] = "Dodaj kategorię";
 $PMF_LANG["ad_categ_existing"] = "Istniejące kategorie";
@@ -283,7 +283,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Czy na pewno chcesz usunąć tę kategorię?
 $PMF_LANG["ad_categ_deleted"] = "Kategoria usunięta.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Plik cookie został <strong>pomyślnie</strong> ustawiony.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Plik cookie został pomyślnie ustawiony.";
 $PMF_LANG["ad_cookie_already"] = "Plik cookie został już ustawiony. Masz teraz następujące opcje ";
 $PMF_LANG["ad_cookie_again"] = "Ustaw ponownie plik cookie";
 $PMF_LANG["ad_cookie_delete"] = "Usuń plik cookie";
@@ -301,18 +301,18 @@ $PMF_LANG["ad_passwd_new"] = "Nowe hasło";
 $PMF_LANG["ad_passwd_con"] = "Wpisz ponownie hasło";
 $PMF_LANG["ad_passwd_change"] = "Zmień hasło";
 $PMF_LANG["ad_passwd_suc"] = "Hasło zostało pomyślnie zmienione.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>UWAGA:</strong><br>Plik cookie musi być ponownie ustawiony!";
-$PMF_LANG["ad_passwd_fail"] = "Stare hasło <strong>musi</strong> być wpisane poprawnie i oba nowe muszą <strong>muszą się zgadzać</strong>.";
+$PMF_LANG["ad_passwd_remark"] = "UWAGA:<br>Plik cookie musi być ponownie ustawiony!";
+$PMF_LANG["ad_passwd_fail"] = "Stare hasło musi być wpisane poprawnie i oba nowe muszą muszą się zgadzać.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Dodaj nowe konto użytkownika";
 $PMF_LANG["ad_adus_name"] = "Nazwa użytkownika";
 $PMF_LANG["ad_adus_password"] = "Hasło";
 $PMF_LANG["ad_adus_add"] = "Dodaj użytkownika";
-$PMF_LANG["ad_adus_suc"] = "Użytkownik <strong>pomyślnie</strong> dodany.";
+$PMF_LANG["ad_adus_suc"] = "Użytkownik pomyślnie dodany.";
 $PMF_LANG["ad_adus_edit"] = "Edycja profilu";
 $PMF_LANG["ad_adus_dberr"] = "Błąd bazy danych";
-$PMF_LANG["ad_adus_exerr"] = "Użytkownik <strong>już istnieje</strong>.";
+$PMF_LANG["ad_adus_exerr"] = "Użytkownik już istnieje.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -455,7 +455,7 @@ $PMF_LANG["msgCopy"] = "kopiuj";
 $PMF_LANG["ad_categ_process"] = "Przetwarzanie kategorii...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["msgNoPermission"] = "<strong>Nie masz uprawnień.</strong>";
+$PMF_LANG["msgNoPermission"] = "Nie masz uprawnień.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "poprzednia strona";
@@ -510,7 +510,7 @@ $PMF_LANG["msgRealname"] = "Prawdziwe imię";
 $PMF_LANG["ad_export_generate_pdf"] = "Utwórz plik PDF";
 $PMF_LANG["ad_export_full_faq"] = "Twoje FAQ w formacie PDF: ";
 $PMF_LANG["err_bannedIP"] = "Twój adres IP został zablokowany.";
-$PMF_LANG["err_SaveQuestion"] = "Wymagane pola to <strong>Twoje imię</strong>, <strong>Twój adres e-mail</strong>, <strong>Twoje pytanie</strong> i, jeśli jest to wymagane, <strong><a href=\"https://pl.wikipedia.org/wiki/CAPTCHA\" title=\"Przeczytaj więcej o Captcha na Wikipedii\" target=\"_blank\">Captcha</a> code</strong>.";
+$PMF_LANG["err_SaveQuestion"] = "Wymagane pola to Twoje imię, Twój adres e-mail, Twoje pytanie i, jeśli jest to wymagane, <a href=\"https://pl.wikipedia.org/wiki/CAPTCHA\" title=\"Przeczytaj więcej o Captcha na Wikipedii\" target=\"_blank\">Captcha</a> code.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = ["select", "Język"];
@@ -633,7 +633,7 @@ $PMF_LANG['ad_group_add_link'] = "Dodaj grupę";
 $PMF_LANG['ad_group_name'] = "Nazwa";
 $PMF_LANG['ad_group_description'] = "Opis";
 $PMF_LANG['ad_group_autoJoin'] = "Automatyczne dołączenie";
-$PMF_LANG['ad_group_suc'] = "Grupa <strong>pomyślnie</strong> została dodana.";
+$PMF_LANG['ad_group_suc'] = "Grupa pomyślnie została dodana.";
 $PMF_LANG['ad_group_error_noName'] = "Wpisz nazwę grupy. ";
 $PMF_LANG['ad_group_error_delete'] = "Nie można usunąć grupy. ";
 $PMF_LANG['ad_group_deleted'] = "Grupa została pomyślnie usunięta.";
@@ -745,7 +745,7 @@ $PMF_LANG['ad_quick_group'] = 'Dodaj nową grupę';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Propozycja tłumaczenia';
-$PMF_LANG['msgNewTranslationAddon'] = 'Twoja propozycja nie zostanie od razu opublikowana, ale może zostać opublikowana przez administratora po sprawdzeniu. Wymagane pola to <strong>Twoje imię</strong>, <strong>Twój adres e-mail</strong>, <strong>Tłumaczenie Twojego pytania</strong> i <strong>Tłumaczenie Twojej odpowiedzi</strong>. Wszelkie słowa kluczowe proszę oddzielać wyłącznie przecinkami.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Twoja propozycja nie zostanie od razu opublikowana, ale może zostać opublikowana przez administratora po sprawdzeniu. Wymagane pola to Twoje imię, Twój adres e-mail, Tłumaczenie Twojego pytania i Tłumaczenie Twojej odpowiedzi. Wszelkie słowa kluczowe proszę oddzielać wyłącznie przecinkami.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Panel źródłowy';
 $PMF_LANG['msgNewTranslationPane'] = 'Panel tłumaczeń';
 $PMF_LANG['msgNewTranslationName'] = "Twoje imię";
@@ -834,7 +834,7 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Czy poszukiwana odpowiedź znajduje 
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Proszę wybrać język tłumaczenia';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Folder <strong>/lang</strong> , w którym znajdują się pliki tłumaczeń, nie jest zapisywalny.';
+$PMF_LANG['msgLangDirIsntWritable'] = 'Folder /lang , w którym znajdują się pliki tłumaczeń, nie jest zapisywalny.';
 $PMF_LANG['ad_menu_translations'] = 'Tłumaczenie Interfejsu';
 $PMF_LANG['ad_start_notactive'] = 'Oczekiwanie na aktywację';
 
@@ -976,7 +976,7 @@ $PMF_LANG['msgAttachmentsFilename'] = 'Nazwa pliku';
 $PMF_LANG['msgAttachmentsFilesize'] = 'Rozmiar pliku';
 $PMF_LANG['msgAttachmentsMimeType'] = 'Typ MIME';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Czy na pewno chcesz usunąć ten załącznik?';
-$PMF_LANG['msgAttachmentsDeleted'] = 'Załącznik <strong>pomyślnie</strong> został usunięty.';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Załącznik pomyślnie został usunięty.';
 
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Raporty';
@@ -1237,7 +1237,7 @@ $PMF_LANG['ad_section_deleteSection'] = "Usuń Sekcję";
 $PMF_LANG['ad_section_deleteQuestion'] = "Czy na pewno chcesz usunąć tę sekcję?";
 $PMF_LANG['ad_section_error_delete'] = "Sekcja nie mogła zostać usunięta. ";
 $PMF_LANG['ad_section_error_noName'] = "Proszę wprowadzić nazwę sekcji. ";
-$PMF_LANG['ad_section_suc'] = "Sekcja została <strong>pomyślnie</strong> dodana.";
+$PMF_LANG['ad_section_suc'] = "Sekcja została pomyślnie dodana.";
 $PMF_LANG['ad_section_deleted'] = "Sekcja została pomyślnie usunięta.";
 $PMF_LANG['rightsLanguage::viewadminlink'] = 'Zobacz link administratora';
 
@@ -1363,7 +1363,7 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Lista ignorowanych botów (oddzielo
 $PMF_LANG['msgGravatar'] = 'Obraz Gravatara';
 
 // added v4.0.0-alpha - 2023-12-27 by Jan
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Niestandardow kolejność przyklejonych wpisów jest wyłączona w głównej konfiguracji. Jeśli chcesz z niego skorzystać, aktywuj go w <a href="./?action=config">main configuration</a> -> rekordów.';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Niestandardow kolejność przyklejonych wpisów jest wyłączona w głównej konfiguracji. Jeśli chcesz z niego skorzystać, aktywuj go w <a href="././configuration">main configuration</a> -> rekordów.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Niestandardowa kolejność przyklejonych wpisów'];
 $PMF_LANG['msgNoStickyFaqs'] = 'Nie masz jeszcze żadnych przyklejonych wpisów. Możesz oznaczyć rekordy jako przyklejone w pliku <a href="./faqs" class="alert-link">FAQ Przegląd</a>.';
 

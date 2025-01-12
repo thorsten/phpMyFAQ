@@ -1324,7 +1324,7 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren
 $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
 
 // added v4.0.0-alpha - 2023-12-27 by Jan
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="./?action=config">Konfiguration</a> -> FAQs.';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="././configuration">Konfiguration</a> -> FAQs.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
 $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./faqs" class="alert-link">FAQ-Verwaltung</a>, um FAQs als wichtig zu markieren.';
 
@@ -1366,7 +1366,7 @@ $PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Die neue Übersetzung wurde erf
 $PMF_LANG['msgSelectLanguage'] = 'Sprache auswählen';
 $PMF_LANG['msgTranslationText'] = 'Übersetzungstext';
 $PMF_LANG['msgAddTranslation'] = 'Übersetzung hinzufügen';
-$PMF_LANG['msgHintDeactivateForms'] = 'Die gesamte Nutzung der jeweiligen Formulare lässt sich in der <a class="alert-link" href="?action=config">Administration</a> deaktivieren.';
+$PMF_LANG['msgHintDeactivateForms'] = 'Die gesamte Nutzung der jeweiligen Formulare lässt sich in der <a class="alert-link" href="./configuration">Administration</a> deaktivieren.';
 
 // added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
 $PMF_LANG['msgOnlyInactiveFAQs'] = 'Nur inaktive FAQs';
