@@ -276,7 +276,7 @@
             <div class="row mb-2">
               <label class="col-lg-4 col-form-label" for="webauthn">{{ msgEmail }}: *</label>
               <div class="col-lg-8 controls">
-                <input type="text" name="webauthn" id="webauthn" class="form-control" required>
+                <input type="text" name="webauthn" id="webauthn" class="form-control" value="{{ email | raw }}" required>
               </div>
             </div>
 
