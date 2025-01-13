@@ -12,6 +12,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2022-07-22
  */
+
 import { deleteAttachments } from '../api/attachment';
 import { pushNotification } from '../utils';
 
@@ -59,8 +60,7 @@ export const handleFaqForm = () => {
   const categoryOptions = document.querySelector('#phpmyfaq-categories');
 
   if (categoryOptions) {
-    let categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
-
+    Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
     // Override FAQ permissions with Category permission to avoid confused users
     categoryOptions.addEventListener('click', (event) => {
       event.preventDefault();
@@ -101,31 +101,29 @@ const setPermissions = (permissions) => {
   }
 
   // Groups
-  if (-1 === parseInt(perms.group[0])) {
-    document.getElementById('restrictedgroups').checked = false;
-    document.getElementById('restrictedgroups').disabled = false;
-    document.getElementById('allgroups').checked = true;
-    document.getElementById('allgroups').disabled = false;
-  } else {
-    document.getElementById('allgroups').checked = false;
-    document.getElementById('allgroups').disabled = true;
-    document.getElementById('restrictedgroups').checked = true;
-    document.getElementById('restrictedgroups').disabled = false;
-    perms.group.forEach((value) => {
-      document.querySelector(`#selected-groups option[value='${value}']`).selected = true;
+  const restrictedGroups = document.getElementById('restrictedgroups');
+  if (restrictedGroups) {
+    const options = document.querySelectorAll('#restrictedgroups option');
+    const allGroups = document.getElementById('allgroups');
+    options.forEach((option) => {
+      option.removeAttribute('selected');
     });
+    if (-1 === parseInt(perms.group[0])) {
+      restrictedGroups.checked = false;
+      restrictedGroups.disabled = false;
+      allGroups.checked = true;
+      allGroups.disabled = false;
+    } else {
+      allGroups.checked = false;
+      allGroups.disabled = true;
+      restrictedGroups.checked = true;
+      restrictedGroups.disabled = false;
+      perms.group.forEach((value) => {
+        const optionSelected = document.querySelector(`#restrictedgroups option[value='${value}']`);
+        optionSelected.setAttribute('selected', 'selected');
+      });
+    }
   }
-};
-
-const getFaqPermissions = (faqId) => {
-  const csrfToken = document.getElementById('csrf').value;
-  fetch(`./api/faq/permissions/${faqId}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((permissions) => {
-      setPermissions(permissions);
-    });
 };
 
 const checkForHash = () => {
