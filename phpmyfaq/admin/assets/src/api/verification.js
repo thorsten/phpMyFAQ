@@ -37,7 +37,7 @@ export const getRemoteHashes = async (version) => {
 export const verifyHashes = async (remoteHashes) => {
   try {
     const response = await fetch('./api/dashboard/verify', {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
