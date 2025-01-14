@@ -253,6 +253,7 @@
         </div>
       </form>
 
+      {% if webauthnSupportEnabled %}
       <!-- Passkey -->
       <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -290,6 +291,7 @@
           </form>
         </div>
       </div>
+      {% endif %}
 
 
     </div>
