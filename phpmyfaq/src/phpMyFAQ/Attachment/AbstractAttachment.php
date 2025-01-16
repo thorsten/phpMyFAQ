@@ -96,14 +96,14 @@ abstract class AbstractAttachment
     /**
      * Constructor.
      *
-     * @param mixed $id attachment id
+     * @param mixed $attachmentId attachment id
      */
-    public function __construct(mixed $id = null)
+    public function __construct(mixed $attachmentId = null)
     {
         $this->db = Database::getInstance();
 
-        if (null !== $id) {
-            $this->id = $id;
+        if (null !== $attachmentId) {
+            $this->id = $attachmentId;
             $this->getMeta();
         }
     }
@@ -173,7 +173,7 @@ abstract class AbstractAttachment
         $this->key = $key;
         $this->encrypted = null !== $key;
         // Not default means the key was set explicitly
-        // for this attachment, so lets hash it
+        // for this attachment, so let's hash it
         if (!$this->encrypted) {
             return;
         }
@@ -204,9 +204,9 @@ abstract class AbstractAttachment
     /**
      * Sets attachment id.
      */
-    public function setId(int $id): void
+    public function setId(int $attachmentId): void
     {
-        $this->id = $id;
+        $this->id = $attachmentId;
     }
 
     /**
@@ -220,11 +220,11 @@ abstract class AbstractAttachment
     /**
      * Set record id.
      *
-     * @param int $id record id
+     * @param int $recordId record id
      */
-    public function setRecordId(int $id): void
+    public function setRecordId(int $recordId): void
     {
-        $this->recordId = $id;
+        $this->recordId = $recordId;
     }
 
     /**
@@ -268,20 +268,24 @@ abstract class AbstractAttachment
         return $this->id;
     }
 
-    /**
-     * Returns filename.
-     */
     public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * Returns the MIME type
-     */
     public function getMimeType(): string
     {
         return $this->mimeType;
+    }
+
+    public function getFilesize(): int
+    {
+        return $this->filesize;
+    }
+
+    public function getRealHash(): string
+    {
+        return $this->realHash;
     }
 
     /**
@@ -290,12 +294,7 @@ abstract class AbstractAttachment
     protected function postUpdateMeta(): void
     {
         $sql = sprintf(
-            "
-            UPDATE
-                %sfaqattachment
-            SET virtual_hash = '%s',
-                mime_type = '%s'
-            WHERE id = %d",
+            "UPDATE %sfaqattachment SET virtual_hash = '%s', mime_type = '%s' WHERE id = %d",
             Database::getTablePrefix(),
             $this->db->escape($this->virtualHash),
             $this->readMimeType(),
@@ -320,14 +319,11 @@ abstract class AbstractAttachment
     /**
      * Generate hash based on current conditions.
      *
-     * @return string
-     *
+     * @return string|null NOTE The way a file is saved in the filesystem
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
-     * it's md5 hash is used directly, otherwise a
+     *  it md5 hash is used directly, otherwise a
      * hash based on several tokens gets generated.
-     *
-     * @return string|null
      * @throws AttachmentException
      */
     protected function mkVirtualHash(): ?string
