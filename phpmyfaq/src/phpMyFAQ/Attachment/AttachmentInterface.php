@@ -28,30 +28,27 @@ interface AttachmentInterface
      * Save current attachment to the appropriate storage.
      *
      * @param string $filePath full path to the attachment file
-     *
      * @return bool
      */
-    public function save($filePath);
+    public function save(string $filePath): bool;
 
     /**
      * Delete attachment.
      *
      * @return bool
      */
-    public function delete();
+    public function delete(): bool;
 
     /**
      * Retrieve file contents into a variable.
      *
      * @return string
      */
-    public function get();
+    public function get(): string;
 
     /**
      * Output current file to stdout.
      *
-     * @param bool   $headers     if headers must be sent
-     * @param string $disposition disposition type (ignored if $headers false)
      */
-    public function rawOut($headers = true, $disposition = 'attachment');
+    public function rawOut(): void;
 }

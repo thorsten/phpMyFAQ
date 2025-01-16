@@ -87,8 +87,7 @@ class File extends AbstractAttachment implements AttachmentInterface
      * Save current attachment to the appropriate storage.
      * The filepath given will be processed and moved to the appropriate location.
      *
-     * @param string      $filePath full path to the attachment file
-     * @param string|null $filename filename to force
+     * @param string $filePath full path to the attachment file
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
@@ -159,22 +158,11 @@ class File extends AbstractAttachment implements AttachmentInterface
     /**
      * Output current file to stdout.
      *
-     * @param bool   $headers if headers must be sent
-     * @param string $disposition disposition type (ignored if $headers false)
      * @throws AttachmentException
      */
-    public function rawOut($headers = true, $disposition = 'attachment'): void
+    public function rawOut(): void
     {
         $file = $this->getFile();
-
-        if ($headers) {
-            $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
-            header('Content-Type: ' . $this->mimeType);
-            header('Content-Length: ' . $this->filesize);
-            header(sprintf('Content-Disposition: %s; filename="', $disposition) . rawurlencode($this->filename) . '"');
-            header('Content-MD5: ' . $this->realHash);
-        }
-
         while (!$file->eof()) {
             echo $file->getChunk();
         }

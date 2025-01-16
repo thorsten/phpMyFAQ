@@ -26,6 +26,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -113,11 +114,27 @@ if (
     $attachment && $attachment->getRecordId() > 0 && ($faqConfig->get('records.allowDownloadsForGuests') ||
         (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))
 ) {
-    try {
+    $response = new StreamedResponse(function () use ($attachment) {
         $attachment->rawOut();
-    } catch (AttachmentException|ErrorException $e) {
-        $attachmentErrors[] = $e->getMessage();
+    });
+
+    $response->headers->set('Content-Type', $attachment->getMimeType());
+    $response->headers->set('Content-Length', $attachment->getFilesize());
+
+    if ($attachment->getMimeType() === 'application/pdf') {
+        $response->headers->set(
+            'Content-Disposition',
+            'inline; filename="' . rawurlencode($attachment->getFilename()) . '"'
+        );
+    } else {
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"'
+        );
     }
+
+    $response->headers->set('Content-MD5', $attachment->getRealHash());
+    $response->send();
 } else {
     $attachmentErrors[] = Translation::get('msgAttachmentInvalid');
 }

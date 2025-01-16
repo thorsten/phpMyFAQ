@@ -72,6 +72,7 @@ abstract class AbstractController
         $this->container = $this->createContainer();
         $this->configuration = $this->container->get('phpmyfaq.configuration');
         $this->currentUser = $this->container->get('phpmyfaq.user.current_user');
+        TwigWrapper::setTemplateSetName($this->configuration->get('layout.templateSet'));
         $this->isSecured();
     }
 

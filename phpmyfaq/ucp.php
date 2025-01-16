@@ -102,7 +102,8 @@ if ($user->isLoggedIn()) {
         'ad_gen_no' => Translation::get('ad_gen_no'),
         'msgConfirmTwofactorConfig' => Translation::get('msgConfirmTwofactorConfig'),
         'csrfTokenRemoveTwofactor' => Token::getInstance($container->get('session'))->getTokenString('remove-twofactor'),
-        'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected')
+        'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected'),
+        'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport')
     ];
 
     return $templateVars;
