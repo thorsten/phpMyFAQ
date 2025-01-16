@@ -120,12 +120,20 @@ if (
 
     $response->headers->set('Content-Type', $attachment->getMimeType());
     $response->headers->set('Content-Length', $attachment->getFilesize());
-    $response->headers->set(
-        'Content-Disposition',
-        'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"'
-    );
-    $response->headers->set('Content-MD5', $attachment->getRealHash());
 
+    if ($attachment->getMimeType() === 'application/pdf') {
+        $response->headers->set(
+            'Content-Disposition',
+            'inline; filename="' . rawurlencode($attachment->getFilename()) . '"'
+        );
+    } else {
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"'
+        );
+    }
+
+    $response->headers->set('Content-MD5', $attachment->getRealHash());
     $response->send();
 } else {
     $attachmentErrors[] = Translation::get('msgAttachmentInvalid');
