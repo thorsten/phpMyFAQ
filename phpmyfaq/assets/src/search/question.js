@@ -47,6 +47,10 @@ export const handleQuestion = () => {
           message.insertAdjacentElement('afterend', addElement('div', { classList: '', innerHTML: resultMessage }));
           // Add hidden input
           form.insertAdjacentElement('afterbegin', addElement('input', { type: 'hidden', name: 'save', value: 1 }));
+          form.insertAdjacentElement(
+            'afterbegin',
+            addElement('input', { type: 'hidden', name: 'store', value: 'now' })
+          );
         }
 
         // Final result
