@@ -87,14 +87,15 @@ readonly class AdminLog
     public function log(User $user, string $logText = ''): bool
     {
         if ($this->configuration->get('main.enableAdminLog')) {
+            $request = Request::createFromGlobals();
             $query = sprintf(
                 "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
                 $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                Request::createFromGlobals()->server->get('REQUEST_TIME'),
+                $request->server->get('REQUEST_TIME'),
                 $user->getUserId(),
                 $this->configuration->getDb()->escape(nl2br($logText)),
-                $this->configuration->getDb()->escape(Request::createFromGlobals()->getClientIp())
+                $this->configuration->getDb()->escape($request->getClientIp())
             );
 
             return (bool) $this->configuration->getDb()->query($query);

@@ -243,7 +243,7 @@ class BuiltinCaptcha implements CaptchaInterface
      * because these data could be used as a database for collecting ip addresses,
      * eventually organizing them in subnetwork addresses, in order to use
      * them as an input for PMF IP banning.
-     * This because we always perform these 3 checks on the public forms
+     * This is because we always perform these three checks on the public forms
      * in which captcha code feature is attached:
      *   1. Check against IP/Network address
      *   2. Check against banned words

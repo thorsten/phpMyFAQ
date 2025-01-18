@@ -51,7 +51,7 @@ class AuthWebAuthn extends Auth
      *
      * @param string $username
      * @param string $userId
-     * @return array<string, string>
+     * @return array<string, array<string, array|int|null>|string>
      * @throws RandomException
      */
     public function prepareChallengeForRegistration(string $username, string $userId): array

@@ -112,7 +112,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
     /**
      * @inheritDoc
-     * @throws AuthException
+     * @throws AuthException|Exception
      */
     public function delete(string $login): bool
     {
