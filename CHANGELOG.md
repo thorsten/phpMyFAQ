@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added configuration to edit robots.txt (Thorsten)
 - added Symfony Routing for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
+- added plugin administration backend (Thorsten)
 - improved online update feature (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
 - migrated from Webpack to Vite v6 (Thorsten)

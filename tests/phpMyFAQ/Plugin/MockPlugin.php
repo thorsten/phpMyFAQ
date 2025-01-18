@@ -23,6 +23,16 @@ class MockPlugin implements PluginInterface
         return '1.0.0';
     }
 
+    public function getDescription(): string
+    {
+        return 'A simple mock plugin';
+    }
+
+    public function getAuthor(): string
+    {
+        return 'phpMyFAQ Team';
+    }
+
     public function getDependencies(): array
     {
         return [];

@@ -1477,5 +1477,11 @@ $PMF_LANG['msgDocumentation'] = 'Documentation';
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Content for robots.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Activate maintenance mode';
+$PMF_LANG['msgPlugins'] = 'Plugins';
+$PMF_LANG['msgPluginListing'] = 'List of the installed plugins and their versions';
+$PMF_LANG['msgPluginName'] = 'Plugin name';
+$PMF_LANG['msgPluginVersion'] = 'Version';
+$PMF_LANG['msgPluginAuthor'] = 'Author';
+$PMF_LANG['msgPluginDescription'] = 'Description';
 
 return $PMF_LANG;

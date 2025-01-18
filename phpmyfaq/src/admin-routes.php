@@ -34,6 +34,7 @@ use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\OpenQuestionsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
+use phpMyFAQ\Controller\Administration\PluginController;
 use phpMyFAQ\Controller\Administration\RatingController;
 use phpMyFAQ\Controller\Administration\ReportController;
 use phpMyFAQ\Controller\Administration\SessionKeepAliveController;
@@ -150,6 +151,11 @@ $routesConfig = [
     'admin.configuration' => [
         'path' => '/configuration',
         'controller' => [ConfigurationController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.configuration.plugins' => [
+        'path' => '/plugins',
+        'controller' => [PluginController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.dashboard' => [

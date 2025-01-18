@@ -32,7 +32,17 @@ class HelloWorldPlugin implements PluginInterface
 
     public function getVersion(): string
     {
-        return '0.1.0';
+        return '0.2.0';
+    }
+
+    public function getDescription(): string
+    {
+        return 'A simple Hello World plugin';
+    }
+
+    public function getAuthor(): string
+    {
+        return 'phpMyFAQ Team';
     }
 
     public function getDependencies(): array

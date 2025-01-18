@@ -222,6 +222,11 @@ class AbstractAdministrationController extends AbstractController
             'msgAdminHeaderUpdate',
             'update'
         );
+        $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+            PermissionType::CONFIGURATION_EDIT->value,
+            'msgPlugins',
+            'plugins'
+        );
         if ($this->configuration->get('search.enableElasticsearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
@@ -314,6 +319,7 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.instances':
             case 'admin.stopwords':
             case 'admin.system':
+            case 'admin.configuration.plugins':
             case 'admin.update':
                 $configurationPage = true;
                 break;

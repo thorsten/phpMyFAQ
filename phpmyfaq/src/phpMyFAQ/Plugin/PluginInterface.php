@@ -36,6 +36,20 @@ interface PluginInterface
     public function getVersion(): string;
 
     /**
+     * Returns the description of the plugin
+     *
+     * @return string
+     */
+    public function getDescription(): string;
+
+    /**
+     * Returns the author of the plugin
+     *
+     * @return string
+     */
+    public function getAuthor(): string;
+
+    /**
      * Returns the dependencies of the plugin
      *
      * @return array

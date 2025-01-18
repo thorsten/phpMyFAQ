@@ -1,0 +1,43 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1 class="h2">
+    <i aria-hidden="true" class="bi bi-wrench"></i>
+    {{ 'msgPlugins' | translate }}
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <p>
+      {{ 'msgPluginListing' | translate }}
+    </p>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>{{ 'msgPluginName' | translate }}</th>
+          <th>{{ 'msgPluginVersion' | translate }}</th>
+          <th>{{ 'msgPluginAuthor' | translate }}</th>
+          <th>{{ 'msgPluginDescription' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for plugin in pluginList %}
+        <tr>
+          <td>{{ plugin.name }}</td>
+          <td>{{ plugin.version }}</td>
+          <td>{{ plugin.author }}</td>
+          <td>{{ plugin.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+{% endblock %}
+

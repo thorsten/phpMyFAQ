@@ -47,6 +47,8 @@ use phpMyFAQ\Instance;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Plugin\PluginManager;
+use phpMyFAQ\Plugins;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
@@ -247,6 +249,8 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
+
+    $services->set('phpmyfaq.plugin.plugin-manager', PluginManager::class);
 
     $services->set('phpmyfaq.question', Question::class)
         ->args([
