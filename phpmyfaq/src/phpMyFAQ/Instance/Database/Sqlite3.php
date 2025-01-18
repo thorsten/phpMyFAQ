@@ -204,7 +204,7 @@ class Sqlite3 extends Database implements Driver
             form_id INTEGER NOT NULL,
             input_id INTEGER NOT NULL,
             input_type VARCHAR(1000) NOT NULL,
-            input_label VARCHAR(100) NOT NULL,
+            input_label VARCHAR(500) NOT NULL,
             input_active INTEGER NOT NULL,
             input_required INTEGER NOT NULL,
             input_lang VARCHAR(11) NOT NULL)',

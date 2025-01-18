@@ -165,6 +165,7 @@ class Update extends Setup
         $this->applyUpdates400Alpha2();
         $this->applyUpdates400Alpha3();
         $this->applyUpdates400Beta2();
+        $this->applyUpdates405();
 
         // 4.1 updates
         $this->applyUpdates410Alpha();
@@ -859,6 +860,90 @@ class Update extends Setup
                     'ALTER TABLE %sfaquser ADD webauthnkeys TEXT NULL DEFAULT NULL;',
                     Database::getTablePrefix()
                 );
+            }
+        }
+    }
+
+    private function applyUpdates405(): void
+    {
+        if (version_compare($this->version, '4.0.5', '<')) {
+            // Delete old permissions
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'view_sections\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'add_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'edit_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'delete_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'delete_section\'',
+                Database::getTablePrefix()
+            );
+
+            // Update faqforms table
+            switch (Database::getType()) {
+                case 'mysqli':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqforms CHANGE input_label input_label VARCHAR(500) NOT NULL',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'pgsql':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET NOT NULL',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlite3':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqforms RENAME TO %sfaqforms_old',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'CREATE TABLE %sfaqforms (
+                            form_id INTEGER NOT NULL,
+                            input_id INTEGER NOT NULL,
+                            input_type VARCHAR(1000) NOT NULL,
+                            input_label VARCHAR(500) NOT NULL,
+                            input_active INTEGER NOT NULL,
+                            input_required INTEGER NOT NULL,
+                            input_lang VARCHAR(11) NOT NULL
+                        )',
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'INSERT INTO %sfaqforms 
+                            SELECT 
+                                form_id, input_id, input_type, input_label, input_active, input_required, input_lang 
+                            FROM %sfaqforms_old',
+                        Database::getTablePrefix(),
+                        Database::getTablePrefix()
+                    );
+                    $this->queries[] = sprintf(
+                        'DROP TABLE %sfaqforms_old;',
+                        Database::getTablePrefix()
+                    );
+                    break;
+                case 'sqlsrv':
+                    $this->queries[] = sprintf(
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label NVARCHAR(500) NOT NULL',
+                        Database::getTablePrefix()
+                    );
+                    break;
             }
         }
     }

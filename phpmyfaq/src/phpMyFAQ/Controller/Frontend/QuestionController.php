@@ -46,9 +46,7 @@ class QuestionController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        if (!$this->isAddingQuestionsAllowed($user)) {
+        if (!$this->isAddingQuestionsAllowed()) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
@@ -69,14 +67,15 @@ class QuestionController extends AbstractController
         $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
+        $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If smart answering is disabled, save the question immediately
         if (false === $this->configuration->get('main.enableSmartAnswering')) {
             $save = true;
         }
 
-        // Validate captcha
-        if (!$this->captchaCodeIsValid($request)) {
+        // Validate captcha if we can store the question after displaying the smart answer
+        if ($storeNow !== 'now' && !$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -108,7 +107,7 @@ class QuestionController extends AbstractController
                 $faqSearch->setCategoryId((int) $selectedCategory);
 
                 $faqPermission = new Permission($this->configuration);
-                $faqSearchResult = new SearchResultSet($user, $faqPermission, $this->configuration);
+                $faqSearchResult = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
                 $searchResult = array_merge(...array_map(
                     fn($word) => $faqSearch->search($word, false),
@@ -134,16 +133,16 @@ class QuestionController extends AbstractController
         }
     }
 
-    private function isAddingQuestionsAllowed(CurrentUser $user): bool
+    /**
+     * @throws \Exception
+     */
+    private function isAddingQuestionsAllowed(): bool
     {
-        if (
-            !$this->configuration->get('records.allowQuestionsForGuests') &&
-            !$this->configuration->get('main.enableAskQuestions') &&
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::QUESTION_ADD->value)
-        ) {
-            return false;
-        }
-
-        return true;
+        return $this->configuration->get('records.allowQuestionsForGuests') ||
+            $this->configuration->get('main.enableAskQuestions') ||
+            $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::QUESTION_ADD->value
+            );
     }
 }

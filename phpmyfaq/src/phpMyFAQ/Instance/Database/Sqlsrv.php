@@ -204,7 +204,7 @@ class Sqlsrv extends Database implements Driver
             form_id INTEGER NOT NULL,
             input_id INTEGER NOT NULL,
             input_type NVARCHAR(1000) NOT NULL,
-            input_label NVARCHAR(100) NOT NULL,
+            input_label NVARCHAR(500) NOT NULL,
             input_active INTEGER NOT NULL,
             input_required INTEGER NOT NULL,
             input_lang NVARCHAR(11) NOT NULL)',

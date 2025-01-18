@@ -517,7 +517,7 @@ class Configuration
      */
     public function getAllowedMediaHosts(): array
     {
-        return explode(',', $this->get('records.allowedMediaHosts'));
+        return explode(',', trim($this->get('records.allowedMediaHosts')));
     }
 
     public function getCustomCss(): string
