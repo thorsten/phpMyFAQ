@@ -864,6 +864,29 @@ class Update extends Setup
     private function applyUpdates405(): void
     {
         if (version_compare($this->version, '4.0.5', '<')) {
+            // Delete old permissions
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'view_sections\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'add_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'edit_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'delete_section\'',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'DELETE FROM %sfaqright WHERE name = \'delete_section\'',
+                Database::getTablePrefix()
+            );
+
+            // Update faqforms table
             switch (Database::getType()) {
                 case 'mysqli':
                     $this->queries[] = sprintf(
