@@ -270,7 +270,7 @@ class Session
      */
     private function getBotIgnoreList(): array
     {
-        return explode(',', (string) $this->configuration->get('main.botIgnoreList'));
+        return explode(',', trim((string) $this->configuration->get('main.botIgnoreList')));
     }
 
     /**
