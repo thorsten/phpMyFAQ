@@ -286,7 +286,7 @@ class System
     {
         $mainUrl = $configuration->getDefaultUrl();
 
-        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME'] && !str_contains($mainUrl, 'https')) {
+        if (Request::createFromGlobals()->isSecure() && !str_contains($mainUrl, 'https')) {
             $mainUrl = str_replace('http://', 'https://', $mainUrl);
         }
 
