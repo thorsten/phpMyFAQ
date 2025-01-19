@@ -9,5 +9,5 @@ indent_style = space
 indent_size = 4
 
 # HTML, SCSS, JS, YAML and JSON files
-[{*.html,*.twig,*.scss,*.js,*.json,*.yml}]
+[{*.html,*.twig,*.scss,*.js,*.ts,*.json,*.yml}]
 indent_size = 2

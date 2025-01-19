@@ -32,12 +32,14 @@
         <div class="row g-4">
           <div class="col-sm-6 mb-2">
             <label for="name" class="form-label">{{ 'msgNewContentName' | translate }}</label>
-            <input type="text" class="form-control form-control-lg" id="name" value="{{ defaultContentName }}" required>
+            <input type="text" class="form-control form-control-lg" id="name" name="name"
+                   value="{{ defaultContentName }}" required>
             <div class="invalid-feedback">{{ 'msgErrorEnterFullName' | translate }}</div>
           </div>
           <div class="col-sm-6 mb-2">
             <label for="email" class="form-label">{{ 'msgNewContentMail' | translate }}</label>
-            <input type="email" class="form-control form-control-lg" id="email" value="{{ defaultContentMail }}" required>
+            <input type="email" class="form-control form-control-lg" id="email" name="email"
+                   value="{{ defaultContentMail }}" required>
             <div class="invalid-feedback">{{ 'msgErrorEnterValidMail' | translate }}</div>
           </div>
           <div class="col-12 mb-2">

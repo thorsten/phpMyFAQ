@@ -14,6 +14,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added plugin administration backend (Thorsten)
 - improved online update feature (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
+- WIP: migrated from JavaScript to TypeScript (Thorsten) 
 - migrated from Webpack to Vite v6 (Thorsten)
 - migrated from Jest to Vitest v3 (Thorsten)
 
