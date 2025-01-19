@@ -6,10 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.5 - unreleased
+### phpMyFAQ v4.0.5 - 2025-01-19
 
 - updated Hellenic translation (Vasileios Tzimourtos)
-- fixed bugs (Thorsten)
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten, Jan)
 
 ### phpMyFAQ v4.0.4 - 2025-01-09
 
@@ -1941,4 +1942,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-Copyright © 2001-2024 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001-2025 Thorsten Rinne and the phpMyFAQ Team
