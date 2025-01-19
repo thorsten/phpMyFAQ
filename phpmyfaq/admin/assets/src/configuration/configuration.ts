@@ -14,19 +14,19 @@
  */
 
 import { Tab } from 'bootstrap';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
-export const handleConfiguration = async () => {
-  const configTabList = [].slice.call(document.querySelectorAll('#configuration-list a'));
-  const result = document.getElementById('pmf-configuration-result');
-  const language = document.getElementById('pmf-language');
+export const handleConfiguration = async (): Promise<void> => {
+  const configTabList: HTMLElement[] = [].slice.call(document.querySelectorAll('#configuration-list a'));
+  const result = document.getElementById('pmf-configuration-result') as HTMLElement;
+  const language = document.getElementById('pmf-language') as HTMLInputElement;
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
       const configTabTrigger = new Tab(element);
       element.addEventListener('shown.bs.tab', async (event) => {
         event.preventDefault();
-        let target = event.target.getAttribute('href');
+        const target = (event.target as HTMLAnchorElement).getAttribute('href') as string;
         await fetchConfiguration(target);
 
         switch (target) {
@@ -71,13 +71,13 @@ export const handleConfiguration = async () => {
   }
 };
 
-export const handleSaveConfiguration = async () => {
+export const handleSaveConfiguration = async (): Promise<void> => {
   const saveConfigurationButton = document.getElementById('save-configuration');
 
   if (saveConfigurationButton) {
     saveConfigurationButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const form = document.getElementById('configuration-list');
+      const form = document.getElementById('configuration-list') as HTMLFormElement;
       const formData = new FormData(form);
 
       const response = await fetch('./api/configuration', {
@@ -101,8 +101,8 @@ export const handleSaveConfiguration = async () => {
   }
 };
 
-const handleSMTPPasswordToggle = async () => {
-  const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]');
+const handleSMTPPasswordToggle = async (): Promise<void> => {
+  const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]') as NodeListOf<HTMLInputElement>;
   const toggleHTML =
     '<span class="input-group-text" id="SMTPtogglePassword"><i class="bi bi-eye-slash" id="SMTPtogglePassword_icon"></i></span>';
   const containerDiv = document.createElement('div');
@@ -113,18 +113,18 @@ const handleSMTPPasswordToggle = async () => {
     `;
   passwordField[0].insertAdjacentElement('afterend', containerDiv);
   passwordField[0].remove();
-  var toggle = document.getElementById('SMTPtogglePassword');
+  const toggle = document.getElementById('SMTPtogglePassword') as HTMLElement;
   toggle.addEventListener('click', () => {
-    var type = passwordField[0].getAttribute('type') === 'password' ? 'text' : 'password';
+    const type = passwordField[0].getAttribute('type') === 'password' ? 'text' : 'password';
     passwordField[0].setAttribute('type', type);
-    var icon = document.getElementById('SMTPtogglePassword_icon');
+    const icon = document.getElementById('SMTPtogglePassword_icon') as HTMLElement;
     icon.classList.toggle('bi-eye');
     icon.classList.toggle('bi-eye-slash');
   });
 };
 
-const handleTranslation = async () => {
-  const translationSelectBox = document.getElementsByName('edit[main.language]');
+const handleTranslation = async (): Promise<void> => {
+  const translationSelectBox = document.getElementsByName('edit[main.language]') as NodeListOf<HTMLSelectElement>;
 
   if (translationSelectBox !== null) {
     const options = await fetchTranslations();
@@ -132,85 +132,93 @@ const handleTranslation = async () => {
   }
 };
 
-const handleTemplates = async () => {
-  const templateSelectBox = document.getElementsByName('edit[layout.templateSet]');
+const handleTemplates = async (): Promise<void> => {
+  const templateSelectBox = document.getElementsByName('edit[layout.templateSet]') as NodeListOf<HTMLSelectElement>;
   if (templateSelectBox !== null) {
     const options = await fetchTemplates();
     templateSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleFaqsSortingKeys = async () => {
-  const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]');
+const handleFaqsSortingKeys = async (): Promise<void> => {
+  const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]') as NodeListOf<HTMLSelectElement>;
   if (faqsOrderSelectBox !== null) {
-    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchFaqsSortingKeys(currentValue);
     faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleFaqsSortingOrder = async () => {
-  const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]');
+const handleFaqsSortingOrder = async (): Promise<void> => {
+  const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]') as NodeListOf<HTMLSelectElement>;
   if (faqsOrderSelectBox !== null) {
-    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchFaqsSortingOrder(currentValue);
     faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleFaqsSortingPopular = async () => {
-  const faqsPopularSelectBox = document.getElementsByName('edit[records.orderingPopularFaqs]');
+const handleFaqsSortingPopular = async (): Promise<void> => {
+  const faqsPopularSelectBox = document.getElementsByName(
+    'edit[records.orderingPopularFaqs]'
+  ) as NodeListOf<HTMLSelectElement>;
   if (faqsPopularSelectBox !== null) {
-    const currentValue = faqsPopularSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = faqsPopularSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchFaqsSortingPopular(currentValue);
     faqsPopularSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handlePermLevel = async () => {
-  const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]');
+const handlePermLevel = async (): Promise<void> => {
+  const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]') as NodeListOf<HTMLSelectElement>;
   if (permLevelSelectBox !== null) {
-    const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchPermLevel(currentValue);
     permLevelSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleReleaseEnvironment = async () => {
-  const releaseEnvironmentSelectBox = document.getElementsByName('edit[upgrade.releaseEnvironment]');
+const handleReleaseEnvironment = async (): Promise<void> => {
+  const releaseEnvironmentSelectBox = document.getElementsByName(
+    'edit[upgrade.releaseEnvironment]'
+  ) as NodeListOf<HTMLSelectElement>;
   if (releaseEnvironmentSelectBox !== null) {
-    const currentValue = releaseEnvironmentSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = releaseEnvironmentSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchReleaseEnvironment(currentValue);
     releaseEnvironmentSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleSearchRelevance = async () => {
-  const searchRelevanceSelectBox = document.getElementsByName('edit[search.relevance]');
+const handleSearchRelevance = async (): Promise<void> => {
+  const searchRelevanceSelectBox = document.getElementsByName(
+    'edit[search.relevance]'
+  ) as NodeListOf<HTMLSelectElement>;
   if (searchRelevanceSelectBox !== null) {
-    const currentValue = searchRelevanceSelectBox[0].dataset.pmfConfigurationCurrentValue;
+    const currentValue = searchRelevanceSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchSearchRelevance(currentValue);
     searchRelevanceSelectBox[0].insertAdjacentHTML('beforeend', options);
   }
 };
 
-const handleSeoMetaTags = async () => {
-  const seoMetaTagsSelectBoxes = document.querySelectorAll('select[name^="edit[seo.metaTags"]');
+const handleSeoMetaTags = async (): Promise<void> => {
+  const seoMetaTagsSelectBoxes = document.querySelectorAll(
+    'select[name^="edit[seo.metaTags"]'
+  ) as NodeListOf<HTMLSelectElement>;
 
   if (seoMetaTagsSelectBoxes) {
     for (const seoMetaTagsSelectBox of seoMetaTagsSelectBoxes) {
-      const currentValue = seoMetaTagsSelectBox.dataset.pmfConfigurationCurrentValue;
+      const currentValue = seoMetaTagsSelectBox.dataset.pmfConfigurationCurrentValue as string;
       const options = await fetchSeoMetaTags(currentValue);
       seoMetaTagsSelectBox.insertAdjacentHTML('beforeend', options);
     }
   }
 };
 
-const fetchConfiguration = async (target) => {
+const fetchConfiguration = async (target: string): Promise<void> => {
   try {
     const response = await fetch(`./api/configuration/list/${target.substring(1)}`, {
       headers: {
-        'Accept-Language': language.value,
+        'Accept-Language': (document.getElementById('pmf-language') as HTMLInputElement).value,
       },
     });
 
@@ -220,7 +228,7 @@ const fetchConfiguration = async (target) => {
     }
 
     const html = await response.text();
-    const tabContent = document.querySelector(target);
+    const tabContent = document.querySelector(target) as HTMLElement;
 
     while (tabContent.firstChild) {
       tabContent.removeChild(tabContent.firstChild);
@@ -229,7 +237,7 @@ const fetchConfiguration = async (target) => {
     tabContent.innerHTML = html.toString();
 
     // Special cases
-    const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]');
+    const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]') as HTMLInputElement;
     if (dateLastChecked) {
       dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
     }
@@ -238,137 +246,146 @@ const fetchConfiguration = async (target) => {
   }
 };
 
-const fetchTranslations = async () => {
+const fetchTranslations = async (): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/translations`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchTemplates = async () => {
+const fetchTemplates = async (): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/templates`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchFaqsSortingKeys = async (currentValue) => {
+const fetchFaqsSortingKeys = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchFaqsSortingOrder = async (currentValue) => {
+const fetchFaqsSortingOrder = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/faqs-sorting-order/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchFaqsSortingPopular = async (currentValue) => {
+const fetchFaqsSortingPopular = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/faqs-sorting-popular/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchPermLevel = async (currentValue) => {
+const fetchPermLevel = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchReleaseEnvironment = async (currentValue) => {
+const fetchReleaseEnvironment = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/release-environment/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchSearchRelevance = async (currentValue) => {
+const fetchSearchRelevance = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/search-relevance/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };
 
-const fetchSeoMetaTags = async (currentValue) => {
+const fetchSeoMetaTags = async (currentValue: string): Promise<string> => {
   try {
     const response = await fetch(`./api/configuration/seo-metatags/${currentValue}`);
 
     if (!response.ok) {
       console.error('Request failed!');
-      return;
+      return '';
     }
 
     return await response.text();
   } catch (error) {
     console.error(error.message);
+    return '';
   }
 };

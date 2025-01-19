@@ -12,9 +12,17 @@
  * @link      https://www.phpmyfaq.de
  * @since     2024-05-30
  */
-import { Response } from '../interfaces';
 
-export const fetchHealthCheck = async (): Promise<Response | undefined> => {
+interface ResponseData {
+  success?: string;
+  warning?: string;
+  error?: string;
+  dateLastChecked?: string;
+  version?: string;
+  message?: string;
+}
+
+export const fetchHealthCheck = async (): Promise<ResponseData | undefined> => {
   try {
     const response = await fetch(`./api/health-check`, {
       method: 'GET',

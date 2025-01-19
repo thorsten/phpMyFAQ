@@ -17,22 +17,31 @@
 import { addElement } from '../../../../assets/src/utils';
 import { fetchHealthCheck } from '../api';
 
-export const handleCheckForUpdates = () => {
-  const checkHealthButton = document.getElementById('pmf-button-check-health');
-  const checkUpdateButton = document.getElementById('pmf-button-check-updates');
-  const downloadButton = document.getElementById('pmf-button-download-now');
-  const extractButton = document.getElementById('pmf-button-extract-package');
-  const installButton = document.getElementById('pmf-button-install-package');
-  const buttonActivate = document.getElementById('pmf-button-activate-maintenance-mode');
+interface ResponseData {
+  success?: string;
+  warning?: string;
+  error?: string;
+  dateLastChecked?: string;
+  version?: string;
+  message?: string;
+}
+
+export const handleCheckForUpdates = (): void => {
+  const checkHealthButton = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
+  const checkUpdateButton = document.getElementById('pmf-button-check-updates') as HTMLButtonElement;
+  const downloadButton = document.getElementById('pmf-button-download-now') as HTMLButtonElement;
+  const extractButton = document.getElementById('pmf-button-extract-package') as HTMLButtonElement;
+  const installButton = document.getElementById('pmf-button-install-package') as HTMLButtonElement;
+  const buttonActivate = document.getElementById('pmf-button-activate-maintenance-mode') as HTMLButtonElement;
 
   // Health Check
   if (checkHealthButton) {
     checkHealthButton.addEventListener('click', async (event) => {
       event.preventDefault();
       try {
-        const responseData = await fetchHealthCheck();
-        const result = document.getElementById('result-check-health');
-        const card = document.getElementById('pmf-update-step-health-check');
+        const responseData = (await fetchHealthCheck()) as ResponseData;
+        const result = document.getElementById('result-check-health') as HTMLElement;
+        const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
         if (responseData.success) {
           card.classList.add('text-bg-success');
@@ -76,9 +85,9 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok');
         }
 
-        const responseData = await response.json();
-        const result = document.getElementById('result-check-health');
-        const card = document.getElementById('pmf-update-step-health-check');
+        const responseData: ResponseData = await response.json();
+        const result = document.getElementById('result-check-health') as HTMLElement;
+        const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
         if (responseData.success) {
           card.classList.remove('text-bg-warning');
@@ -96,7 +105,7 @@ export const handleCheckForUpdates = () => {
   if (checkUpdateButton) {
     checkUpdateButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const spinner = document.getElementById('spinner-check-versions');
+      const spinner = document.getElementById('spinner-check-versions') as HTMLElement;
       spinner.classList.remove('d-none');
       try {
         const response = await fetch('./api/update-check', {
@@ -111,24 +120,24 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok');
         }
 
-        const responseData = await response.json();
-        const dateLastChecked = document.getElementById('dateLastChecked');
-        const versionLastChecked = document.getElementById('versionLastChecked');
-        const card = document.getElementById('pmf-update-step-check-versions');
+        const responseData: ResponseData = await response.json();
+        const dateLastChecked = document.getElementById('dateLastChecked') as HTMLElement;
+        const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
+        const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
 
         if (dateLastChecked) {
-          const date = new Date(responseData.dateLastChecked);
+          const date = new Date(responseData.dateLastChecked!);
           dateLastChecked.innerText = `${date.toLocaleString()}`;
         }
 
         if (versionLastChecked) {
-          versionLastChecked.innerText = responseData.version;
+          versionLastChecked.innerText = responseData.version!;
         }
 
         const result = document.getElementById('result-check-versions');
         if (result) {
           card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { innerText: responseData.message }));
+          result.replaceWith(addElement('p', { innerText: responseData.message! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
@@ -142,16 +151,16 @@ export const handleCheckForUpdates = () => {
     downloadButton.addEventListener('click', async (event) => {
       event.preventDefault();
 
-      let version;
-      const versionLastChecked = document.getElementById('versionLastChecked');
-      const releaseEnvironment = document.getElementById('releaseEnvironment');
-      const spinner = document.getElementById('spinner-download-new-version');
+      let version: string;
+      const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
+      const releaseEnvironment = document.getElementById('releaseEnvironment') as HTMLElement;
+      const spinner = document.getElementById('spinner-download-new-version') as HTMLElement;
       spinner.classList.remove('d-none');
 
-      if (releaseEnvironment.innerText.toLowerCase() === 'nightly') {
+      if (releaseEnvironment!.innerText.toLowerCase() === 'nightly') {
         version = 'nightly';
       } else {
-        version = versionLastChecked.innerText;
+        version = versionLastChecked!.innerText;
       }
 
       try {
@@ -167,20 +176,20 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok');
         }
 
-        const responseData = await response.json();
-        const result = document.getElementById('result-download-new-version');
-        const divExtractPackage = document.getElementById('pmf-update-step-extract-package');
-        const card = document.getElementById('pmf-update-step-download');
+        const responseData: ResponseData = await response.json();
+        const result = document.getElementById('result-download-new-version') as HTMLElement;
+        const divExtractPackage = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
+        const card = document.getElementById('pmf-update-step-download') as HTMLElement;
 
         if (result) {
           card.classList.add('text-bg-success');
-          divExtractPackage.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: responseData.success }));
+          divExtractPackage!.classList.remove('d-none');
+          result.replaceWith(addElement('p', { innerText: responseData.success! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
         const errorMessage = await error.cause.response.json();
-        const result = document.getElementById('result-download-new-version');
+        const result = document.getElementById('result-download-new-version') as HTMLElement;
         result.replaceWith(addElement('p', { innerText: errorMessage.error }));
         spinner.classList.add('d-none');
       }
@@ -191,7 +200,7 @@ export const handleCheckForUpdates = () => {
   if (extractButton) {
     extractButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const spinner = document.getElementById('spinner-extract-package');
+      const spinner = document.getElementById('spinner-extract-package') as HTMLElement;
       spinner.classList.remove('d-none');
 
       try {
@@ -207,15 +216,15 @@ export const handleCheckForUpdates = () => {
           throw new Error('Network response was not ok');
         }
 
-        const responseData = await response.json();
-        const result = document.getElementById('result-extract-package');
-        const divInstallPackage = document.getElementById('pmf-update-step-install-package');
-        const card = document.getElementById('pmf-update-step-extract-package');
+        const responseData: ResponseData = await response.json();
+        const result = document.getElementById('result-extract-package') as HTMLElement;
+        const divInstallPackage = document.getElementById('pmf-update-step-install-package') as HTMLElement;
+        const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
 
         if (result) {
           card.classList.add('text-bg-success');
-          divInstallPackage.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: responseData.message }));
+          divInstallPackage!.classList.remove('d-none');
+          result.replaceWith(addElement('p', { innerText: responseData.message! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
@@ -228,7 +237,7 @@ export const handleCheckForUpdates = () => {
   if (installButton) {
     installButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const spinner = document.getElementById('spinner-install-package');
+      const spinner = document.getElementById('spinner-install-package') as HTMLElement;
       spinner.classList.remove('d-none');
       await createTemporaryBackup();
       spinner.classList.add('d-none');
@@ -236,7 +245,7 @@ export const handleCheckForUpdates = () => {
   }
 };
 
-const createTemporaryBackup = async () => {
+const createTemporaryBackup = async (): Promise<void> => {
   try {
     const response = await fetch('./api/create-temporary-backup', {
       method: 'POST',
@@ -247,20 +256,20 @@ const createTemporaryBackup = async () => {
     });
 
     const progressBarBackup = document.getElementById('result-backup-package');
-    const reader = response.body.getReader();
+    const reader = response.body!.getReader();
 
-    async function pump() {
+    async function pump(): Promise<void> {
       const { done, value } = await reader.read();
       const decodedValue = new TextDecoder().decode(value);
 
       if (done) {
-        progressBarBackup.style.width = '100%';
-        progressBarBackup.innerText = '100%';
-        progressBarBackup.classList.remove('progress-bar-animated');
+        progressBarBackup!.style.width = '100%';
+        progressBarBackup!.innerText = '100%';
+        progressBarBackup!.classList.remove('progress-bar-animated');
         return;
       } else {
-        progressBarBackup.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarBackup.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarBackup!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarBackup!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();
@@ -274,7 +283,7 @@ const createTemporaryBackup = async () => {
   await installPackage();
 };
 
-const installPackage = async () => {
+const installPackage = async (): Promise<void> => {
   try {
     const response = await fetch('./api/install-package', {
       method: 'POST',
@@ -285,21 +294,20 @@ const installPackage = async () => {
     });
 
     const progressBarInstallation = document.getElementById('result-install-package');
-    const reader = response.body.getReader();
-    const card = document.getElementById('pmf-update-step-install-package');
+    const reader = response.body!.getReader();
 
-    async function pump() {
+    async function pump(): Promise<void> {
       const { done, value } = await reader.read();
       const decodedValue = new TextDecoder().decode(value);
 
       if (done) {
-        progressBarInstallation.style.width = '100%';
-        progressBarInstallation.innerText = '100%';
-        progressBarInstallation.classList.remove('progress-bar-animated');
+        progressBarInstallation!.style.width = '100%';
+        progressBarInstallation!.innerText = '100%';
+        progressBarInstallation!.classList.remove('progress-bar-animated');
         return;
       } else {
-        progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();
@@ -313,7 +321,7 @@ const installPackage = async () => {
   await updateDatabase();
 };
 
-const updateDatabase = async () => {
+const updateDatabase = async (): Promise<void> => {
   try {
     const response = await fetch('./api/update-database', {
       method: 'POST',
@@ -324,22 +332,22 @@ const updateDatabase = async () => {
     });
 
     const progressBarInstallation = document.getElementById('result-update-database');
-    const reader = response.body.getReader();
-    const card = document.getElementById('pmf-update-step-install-package');
+    const reader = response.body!.getReader();
+    const card = document.getElementById('pmf-update-step-install-package') as HTMLElement;
 
-    async function pump() {
+    async function pump(): Promise<void> {
       const { done, value } = await reader.read();
       const decodedValue = new TextDecoder().decode(value);
 
       if (done) {
-        progressBarInstallation.style.width = '100%';
-        progressBarInstallation.innerText = '100%';
-        progressBarInstallation.classList.remove('progress-bar-animated');
+        progressBarInstallation!.style.width = '100%';
+        progressBarInstallation!.innerText = '100%';
+        progressBarInstallation!.classList.remove('progress-bar-animated');
         card.classList.add('text-bg-success');
         return;
       } else {
-        progressBarInstallation.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarInstallation.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
+        progressBarInstallation!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
       }
 
       return pump();

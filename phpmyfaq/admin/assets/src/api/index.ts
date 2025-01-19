@@ -1,5 +1,6 @@
 export * from './category';
 export * from './faqs';
+export * from './forms';
 export * from './glossary';
 export * from './group';
 export * from './news';

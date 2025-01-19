@@ -13,9 +13,30 @@
  * @since     2022-03-20
  */
 
-import { formatBytes, pushErrorNotification, pushNotification } from '../utils';
+import { fomatBytes } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
-export const handleElasticsearch = async () => {
+interface ElasticsearchStats {
+  indices: {
+    [indexName: string]: {
+      total: {
+        docs: {
+          count: number;
+        };
+        store: {
+          size_in_bytes: number;
+        };
+      };
+    };
+  };
+}
+
+interface ElasticsearchResponse {
+  index: string;
+  stats: ElasticsearchStats;
+}
+
+export const handleElasticsearch = async (): Promise<void> => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
 
   if (buttons) {
@@ -23,7 +44,7 @@ export const handleElasticsearch = async () => {
       element.addEventListener('click', async (event) => {
         event.preventDefault();
 
-        const action = event.target.getAttribute('data-action');
+        const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
 
         try {
           const response = await fetch(`./api/elasticsearch/${action}`);
@@ -43,8 +64,8 @@ export const handleElasticsearch = async () => {
         }
       });
 
-      const elasticsearchStats = async () => {
-        const div = document.getElementById('pmf-elasticsearch-stats');
+      const elasticsearchStats = async (): Promise<void> => {
+        const div = document.getElementById('pmf-elasticsearch-stats') as HTMLElement;
         if (div) {
           div.innerHTML = '';
 
@@ -52,16 +73,14 @@ export const handleElasticsearch = async () => {
             const response = await fetch('./api/elasticsearch/statistics');
 
             if (response.ok) {
-              const result = await response.json();
+              const result: ElasticsearchResponse = await response.json();
               const indexName = result.index;
               const stats = result.stats;
-              const count = stats['indices'][indexName]['total']['docs'].count;
-              const sizeInBytes = stats['indices'][indexName]['total']['store'].size_in_bytes;
+              const count = stats.indices[indexName].total.docs.count;
+              const sizeInBytes = stats.indices[indexName].total.store.size_in_bytes;
               let html = '<dl class="row">';
               html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
-              html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(
-                sizeInBytes ?? 0
-              )}</dd>`;
+              html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
               html += '</dl>';
               div.innerHTML = html;
             } else {
