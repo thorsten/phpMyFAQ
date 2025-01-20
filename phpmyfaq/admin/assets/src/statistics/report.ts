@@ -1,22 +1,21 @@
 import { createReport } from '../api/export';
-import { serialize } from '../../../../assets/src/utils';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, serialize } from '../../../../assets/src/utils';
 
-export const handleCreateReport = () => {
-  const createReportButton = document.getElementById('pmf-admin-create-report');
+export const handleCreateReport = (): void => {
+  const createReportButton = document.getElementById('pmf-admin-create-report') as HTMLButtonElement | null;
 
   if (createReportButton) {
-    createReportButton.addEventListener('click', async (event) => {
+    createReportButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
-      const form = document.getElementById('pmf-admin-report-form');
+      const form = document.getElementById('pmf-admin-report-form') as HTMLFormElement;
       const formData = new FormData(form);
 
       const serializedData = serialize(formData);
 
       const response = await createReport(serializedData);
 
-      if (response.error) {
+      if ('error' in response) {
         pushErrorNotification(response.error);
       } else {
         // Create a download link

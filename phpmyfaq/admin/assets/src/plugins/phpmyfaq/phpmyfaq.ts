@@ -14,21 +14,21 @@
  */
 
 import { Jodit } from 'jodit';
-import { fetchFaqsByAutocomplete } from '../../api/index.js';
+import { fetchFaqsByAutocomplete } from '../../api';
+import { Response } from '../../interfaces';
 import phpmyfaq from './phpmyfaq.svg.js';
 
 Jodit.modules.Icon.set('phpmyfaq', phpmyfaq);
 
-Jodit.plugins.add('phpMyFAQ', (editor) => {
+Jodit.plugins.add('phpMyFAQ', (editor: Jodit): void => {
   // Register the button
   editor.registerButton({
     name: 'phpMyFAQ',
     group: 'insert',
-    icon: 'phpmyfaq',
   });
 
   // Register the command
-  editor.registerCommand('phpMyFAQ', () => {
+  editor.registerCommand('phpMyFAQ', (): void => {
     const dialog = editor.dlg({ closeOnClickOverlay: true });
 
     const content = `<form class="row row-cols-lg-auto g-3 align-items-center m-4">
@@ -50,16 +50,16 @@ Jodit.plugins.add('phpMyFAQ', (editor) => {
 
     dialog.open();
 
-    const searchInput = document.getElementById('pmf-search-internal-links');
-    const resultsContainer = document.getElementById('pmf-search-results');
-    const csrfToken = document.getElementById('pmf-csrf-token').value;
-    const selectLink = document.getElementById('select-faq-button');
+    const searchInput = document.getElementById('pmf-search-internal-links') as HTMLInputElement;
+    const resultsContainer = document.getElementById('pmf-search-results') as HTMLDivElement;
+    const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
+    const selectLink = document.getElementById('select-faq-button') as HTMLButtonElement;
 
-    searchInput.addEventListener('keyup', async () => {
+    searchInput.addEventListener('keyup', async (): Promise<void> => {
       const query = searchInput.value;
       if (query.length > 0) {
         try {
-          const response = await fetchFaqsByAutocomplete(query, csrfToken);
+          const response: Response = await fetchFaqsByAutocomplete(query, csrfToken);
 
           resultsContainer.innerHTML = '';
           response.success.forEach((result) => {
@@ -69,18 +69,18 @@ Jodit.plugins.add('phpMyFAQ', (editor) => {
           </label><br>`;
           });
         } catch (error) {
-          console.error('Error:', error);
+          console.error('Error:', (error as Error).message);
         }
       } else {
         resultsContainer.innerHTML = '';
       }
     });
 
-    selectLink.addEventListener('click', () => {
-      const selected = document.querySelector('input[name=faqURL]:checked');
+    selectLink.addEventListener('click', (): void => {
+      const selected = document.querySelector('input[name=faqURL]:checked') as HTMLInputElement;
       if (selected) {
         const url = selected.value;
-        const question = selected.parentNode.textContent.trim();
+        const question = selected.parentNode?.textContent?.trim() || '';
         const anchor = `<a href="${url}">${question}</a>`;
         editor.selection.insertHTML(anchor);
         dialog.close();

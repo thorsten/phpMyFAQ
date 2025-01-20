@@ -14,22 +14,26 @@
  */
 
 import { truncateSearchTerms } from '../api';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
-export const handleTruncateSearchTerms = () => {
-  const buttonTruncateSearchTerms = document.getElementById('pmf-button-truncate-search-terms');
+export const handleTruncateSearchTerms = (): void => {
+  const buttonTruncateSearchTerms = document.getElementById(
+    'pmf-button-truncate-search-terms'
+  ) as HTMLButtonElement | null;
 
   if (buttonTruncateSearchTerms) {
-    buttonTruncateSearchTerms.addEventListener('click', async (event) => {
+    buttonTruncateSearchTerms.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
-      const csrf = event.target.getAttribute('data-pmf-csrf-token');
+      const target = event.target as HTMLElement;
+      const csrf = target.getAttribute('data-pmf-csrf-token')!;
 
       if (confirm('Are you sure?')) {
-        const response = await truncateSearchTerms(csrf);
+        const response = (await truncateSearchTerms(csrf)) as Response;
 
         if (response.success) {
-          const tableToDelete = document.getElementById('pmf-table-search-terms');
+          const tableToDelete = document.getElementById('pmf-table-search-terms') as HTMLElement;
           tableToDelete.remove();
           pushNotification(response.success);
         } else {

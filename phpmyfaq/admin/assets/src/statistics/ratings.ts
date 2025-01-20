@@ -13,17 +13,19 @@
  * @since     2024-11-14
  */
 
-import { pushErrorNotification, pushNotification } from '../utils/index.js';
-import { clearRatings } from '../api/index.js';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { clearRatings } from '../api';
+import { Response } from '../interfaces';
 
-export const handleClearRatings = () => {
-  const buttonClearRatings = document.getElementById('pmf-admin-clear-ratings');
+export const handleClearRatings = (): void => {
+  const buttonClearRatings = document.getElementById('pmf-admin-clear-ratings') as HTMLButtonElement | null;
 
   if (buttonClearRatings) {
-    buttonClearRatings.addEventListener('click', async (event) => {
+    buttonClearRatings.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const csrf = event.target.getAttribute('data-pmf-csrf');
-      const response = await clearRatings(csrf);
+      const target = event.target as HTMLElement;
+      const csrf = target.getAttribute('data-pmf-csrf')!;
+      const response = (await clearRatings(csrf)) as Response;
 
       if (response.success) {
         pushNotification(response.success);

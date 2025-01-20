@@ -18,19 +18,18 @@ import codeSnippet from '../code-snippet/code-snippet.svg.js';
 
 Jodit.modules.Icon.set('codeSnippet', codeSnippet);
 
-Jodit.plugins.add('codeSnippet', (editor) => {
+Jodit.plugins.add('codeSnippet', (editor: Jodit): void => {
   // Register the button
   editor.registerButton({
     name: 'codeSnippet',
     group: 'insert',
-    icon: 'codeSnippet',
     options: {
       tooltip: 'Insert Source Code Snippet',
     },
   });
 
   // Register the command
-  editor.registerCommand('codeSnippet', () => {
+  editor.registerCommand('codeSnippet', (): void => {
     const dialog = editor.dlg({ closeOnClickOverlay: true });
 
     const content = `<form class="row m-4">
@@ -73,11 +72,11 @@ Jodit.plugins.add('codeSnippet', (editor) => {
 
     dialog.open();
 
-    const addCodeSnippetButton = document.getElementById('add-code-snippet-button');
-    const language = document.getElementById('programming-language');
-    const code = document.getElementById('code');
+    const addCodeSnippetButton = document.getElementById('add-code-snippet-button') as HTMLButtonElement;
+    const language = document.getElementById('programming-language') as HTMLSelectElement;
+    const code = document.getElementById('code') as HTMLTextAreaElement;
 
-    const encodeHTML = (str) => {
+    const encodeHTML = (str: string): string => {
       return str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -86,7 +85,7 @@ Jodit.plugins.add('codeSnippet', (editor) => {
         .replace(/'/g, '&#039;');
     };
 
-    addCodeSnippetButton.addEventListener('click', () => {
+    addCodeSnippetButton.addEventListener('click', (): void => {
       const selectedLanguage = language.value;
       const selectedCode = code.value;
       const codeSnippet = `<pre><code class="language-${selectedLanguage}">${encodeHTML(selectedCode)}</code></pre>`;

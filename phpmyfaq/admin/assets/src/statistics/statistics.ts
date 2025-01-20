@@ -13,16 +13,17 @@
  * @since     2022-03-21
  */
 
-export const handleStatistics = () => {
+export const handleStatistics = (): void => {
   const buttonsDeleteSearchTerm = document.querySelectorAll('.pmf-delete-search-term');
 
   if (buttonsDeleteSearchTerm) {
     buttonsDeleteSearchTerm.forEach((element) => {
-      element.addEventListener('click', async (event) => {
+      element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
-        const searchTermId = event.target.getAttribute('data-delete-search-term-id');
-        const csrf = event.target.getAttribute('data-csrf-token');
+        const target = event.target as HTMLElement;
+        const searchTermId = target.getAttribute('data-delete-search-term-id');
+        const csrf = target.getAttribute('data-csrf-token');
 
         if (confirm('Are you sure?')) {
           try {
@@ -40,7 +41,7 @@ export const handleStatistics = () => {
 
             if (response.ok) {
               const jsonResponse = await response.json();
-              const row = document.getElementById(`row-search-id-${jsonResponse.deleted}`);
+              const row = document.getElementById(`row-search-id-${jsonResponse.deleted}`) as HTMLElement;
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             } else {
@@ -48,7 +49,7 @@ export const handleStatistics = () => {
               throw new Error(`Network response was not ok: ${errorMessage.error}`);
             }
           } catch (error) {
-            console.error(error.message);
+            console.error((error as Error).message);
           }
         }
       });

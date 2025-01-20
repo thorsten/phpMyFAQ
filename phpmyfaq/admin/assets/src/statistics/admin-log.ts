@@ -14,16 +14,18 @@
  */
 
 import { deleteAdminLog } from '../api';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
-export const handleDeleteAdminLog = () => {
-  const buttonDeleteAdminLog = document.getElementById('pmf-delete-admin-log');
+export const handleDeleteAdminLog = (): void => {
+  const buttonDeleteAdminLog = document.getElementById('pmf-delete-admin-log') as HTMLButtonElement | null;
 
   if (buttonDeleteAdminLog) {
-    buttonDeleteAdminLog.addEventListener('click', async (event) => {
+    buttonDeleteAdminLog.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const csrf = event.target.getAttribute('data-pmf-csrf');
-      const response = await deleteAdminLog(csrf);
+      const target = event.target as HTMLElement;
+      const csrf = target.getAttribute('data-pmf-csrf')!;
+      const response = (await deleteAdminLog(csrf)) as Response;
 
       if (response.success) {
         pushNotification(response.success);
