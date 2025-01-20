@@ -13,39 +13,44 @@
  * @since     2022-03-23
  */
 
-import autocomplete from 'autocompleter';
+import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { updateUser } from './users';
 import { fetchUsers } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
+interface User {
+  label: string;
+  value: string;
+}
+
+type UserSuggestion = User & AutocompleteItem;
+
 document.addEventListener('DOMContentLoaded', () => {
-  const autoComplete = document.getElementById('pmf-user-list-autocomplete');
+  const autoComplete = document.getElementById('pmf-user-list-autocomplete') as HTMLInputElement;
 
   if (autoComplete) {
-    autocomplete({
+    autocomplete<UserSuggestion>({
       input: autoComplete,
       minLength: 1,
-      onSelect: async (item, input) => {
+      onSelect: async (item: UserSuggestion, input: HTMLInputElement | HTMLTextAreaElement) => {
         input.value = item.label;
         await updateUser(item.value);
       },
-      fetch: async (text, callback) => {
+      fetch: async (text: string, callback: (items: UserSuggestion[]) => void) => {
         const match = text.toLowerCase();
         const users = await fetchUsers(match);
         callback(
-          users.filter((n) => {
+          users?.filter((n: UserSuggestion) => {
             return n.label.toLowerCase().indexOf(match) !== -1;
           })
         );
       },
-      render: (item, value) => {
-        const regex = new RegExp(value, 'gi');
+      render: (item: UserSuggestion, currentValue: string): HTMLDivElement => {
+        const regex = new RegExp(currentValue, 'gi');
         return addElement('div', {
           classList: 'pmf-user-list-result border',
-          innerHTML: item.label.replace(regex, function (match) {
-            return `<strong>${match}</strong>`;
-          }),
-        });
+          innerHTML: item.label.replace(regex, (match) => `<strong>${match}</strong>`),
+        }) as HTMLDivElement;
       },
       emptyMsg: 'No users found',
     });

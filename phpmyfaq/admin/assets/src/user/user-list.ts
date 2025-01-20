@@ -1,7 +1,7 @@
 /**
  * Functions for handling user management
  *
- * @todo move fetch() functionality to api.js
+ * @todo move fetch() functionality to api functions
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,12 +15,11 @@
  * @since     2022-03-23
  */
 
-import { addElement } from '../../../../assets/src/utils';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 import { deleteUser } from '../api';
 import { Modal } from 'bootstrap';
 
-const activateUser = async (userId, csrfToken) => {
+const activateUser = async (userId: string, csrfToken: string): Promise<void> => {
   try {
     const response = await fetch('./api/user/activate', {
       method: 'POST',
@@ -36,24 +35,24 @@ const activateUser = async (userId, csrfToken) => {
 
     if (response.status === 200) {
       await response.json();
-      const icon = document.querySelector(`.icon_user_id_${userId}`);
+      const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement;
       icon.classList.remove('bi-ban');
       icon.classList.add('bi-check-circle-o');
-      const button = document.getElementById(`btn_activate_user_id_${userId}`);
+      const button = document.getElementById(`btn_activate_user_id_${userId}`) as HTMLElement;
       button.remove();
     } else {
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    const message = document.getElementById('pmf-user-message');
+    const message = document.getElementById('pmf-user-message') as HTMLElement;
     message.insertAdjacentElement(
       'afterend',
-      addElement('div', { classList: 'alert alert-danger', innerText: error.message })
+      addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
     );
   }
 };
 
-export const handleUserList = () => {
+export const handleUserList = (): void => {
   const activateButtons = document.querySelectorAll('.btn-activate-user');
   const deleteButtons = document.querySelectorAll('.btn-delete-user');
 
@@ -62,8 +61,9 @@ export const handleUserList = () => {
       button.addEventListener('click', async (event) => {
         event.preventDefault();
 
-        const csrfToken = event.target.getAttribute('data-csrf-token');
-        const userId = event.target.getAttribute('data-user-id');
+        const target = event.target as HTMLElement;
+        const csrfToken = target.getAttribute('data-csrf-token')!;
+        const userId = target.getAttribute('data-user-id')!;
 
         await activateUser(userId, csrfToken);
       });
@@ -75,11 +75,14 @@ export const handleUserList = () => {
       button.addEventListener('click', (event) => {
         event.preventDefault();
 
-        const deleteModal = new Modal(document.getElementById('pmf-modal-user-confirm-delete'));
+        const deleteModal = new Modal(document.getElementById('pmf-modal-user-confirm-delete') as HTMLElement);
         deleteModal.show();
-        document.getElementById('pmf-username-delete').innerText = button.getAttribute('data-username');
-        document.getElementById('pmf-user-id-delete').value = button.getAttribute('data-user-id');
-        document.getElementById('source_page').value = 'user-list';
+        const usernameDelete = document.getElementById('pmf-username-delete') as HTMLElement;
+        usernameDelete.innerText = button.getAttribute('data-username')!;
+        const userIdDelete = document.getElementById('pmf-user-id-delete') as HTMLInputElement;
+        userIdDelete.value = button.getAttribute('data-user-id')!;
+        const sourcePage = document.getElementById('source_page') as HTMLInputElement;
+        sourcePage.value = 'user-list';
       });
     });
 
@@ -87,15 +90,15 @@ export const handleUserList = () => {
     if (deleteUserConfirm) {
       deleteUserConfirm.addEventListener('click', async (event) => {
         event.preventDefault();
-        const source = document.getElementById('source_page');
+        const source = document.getElementById('source_page') as HTMLInputElement;
         if (source.value === 'user-list') {
-          const userId = document.getElementById('pmf-user-id-delete').value;
-          const csrfToken = document.getElementById('csrf-token-delete-user').value;
+          const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
+          const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
           const response = await deleteUser(userId, csrfToken);
           const json = await response.json();
           if (json.success) {
             pushNotification(json.success);
-            const row = document.getElementById('row_user_id_' + userId);
+            const row = document.getElementById('row_user_id_' + userId) as HTMLElement;
             row.remove();
           }
           if (json.error) {

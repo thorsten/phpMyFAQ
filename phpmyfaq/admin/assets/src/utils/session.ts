@@ -14,9 +14,9 @@
  */
 import { Modal } from 'bootstrap';
 
-export const handleSessionTimeout = () => {
-  const showWarning = top.document.getElementById('pmf-show-session-warning');
-  const config = { attributes: true };
+export const handleSessionTimeout = (): void => {
+  const showWarning = top?.document.getElementById('pmf-show-session-warning');
+  const config: MutationObserverInit = { attributes: true };
   if (showWarning) {
     const observer = new MutationObserver(onAttributeChange);
     observer.observe(showWarning, config);
@@ -24,24 +24,25 @@ export const handleSessionTimeout = () => {
   }
 };
 
-const onAttributeChange = (mutationsList) => {
-  for (let mutation of mutationsList) {
+const onAttributeChange = (mutationsList: MutationRecord[]): void => {
+  for (const mutation of mutationsList) {
     if (mutation.type === 'attributes' && mutation.attributeName === 'data-value') {
-      const value = mutation.target.getAttribute('data-value');
-      toggleSessionWarnungModal(value);
+      const value = (mutation.target as HTMLElement).getAttribute('data-value');
+      toggleSessionWarningModal(value);
     }
   }
 };
-const toggleSessionWarnungModal = (toggle) => {
-  const sessionWarnungModal = new Modal(top.document.getElementById('sessionWarningModal'));
+
+const toggleSessionWarningModal = (toggle: string | null): void => {
+  const sessionWarningModal = new Modal(top?.document.getElementById('sessionWarningModal') as HTMLElement);
   if (toggle === 'show') {
-    sessionWarnungModal.show();
+    sessionWarningModal.show();
   } else {
-    sessionWarnungModal.hide();
+    sessionWarningModal.hide();
   }
 };
 
-const reloadCurrentPage = () => {
+const reloadCurrentPage = (): void => {
   const reloadButton = document.getElementById('pmf-button-reload-page');
   if (reloadButton) {
     reloadButton.addEventListener('click', () => {

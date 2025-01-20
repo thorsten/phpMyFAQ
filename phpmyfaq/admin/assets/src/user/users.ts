@@ -1,7 +1,7 @@
 /**
  * JavaScript functions for user frontend
  *
- * @todo move fetch() functionality to api.js
+ * @todo move fetch() functionality to api functions
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,15 +16,14 @@
  */
 
 import { Modal } from 'bootstrap';
-import { fetchAllUsers, fetchUserData, fetchUserRights, deleteUser, postUserData } from '../api';
-import { addElement, capitalize } from '../../../../assets/src/utils';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { fetchUserData, fetchUserRights, deleteUser, postUserData } from '../api';
+import { capitalize, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 /**
  * Updates the current loaded user
  * @param userId
  */
-export const updateUser = async (userId) => {
+export const updateUser = async (userId: string): Promise<void> => {
   await setUserData(userId);
   await setUserRights(userId);
 };
@@ -33,7 +32,7 @@ export const updateUser = async (userId) => {
  * Sets the user data
  * @param {string} userId
  */
-const setUserData = async (userId) => {
+const setUserData = async (userId: string): Promise<void> => {
   const userData = await fetchUserData(userId);
 
   updateInput('current_user_id', userData.user_id);
@@ -48,49 +47,49 @@ const setUserData = async (userId) => {
   updateInput('overwrite_twofactor', userData.twofactor_enabled);
 
   if (userData.is_superadmin) {
-    const superAdmin = document.getElementById('is_superadmin');
+    const superAdmin = document.getElementById('is_superadmin') as HTMLInputElement;
     superAdmin.setAttribute('checked', 'checked');
     document.querySelectorAll('.permission').forEach((checkbox) => {
-      checkbox.removeAttribute('disabled');
+      (checkbox as HTMLInputElement).removeAttribute('disabled');
     });
     document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-      element.removeAttribute('disabled');
+      (element as HTMLButtonElement).removeAttribute('disabled');
     });
-    document.getElementById('checkAll').removeAttribute('disabled');
-    document.getElementById('uncheckAll').setAttribute('disabled', '');
+    (document.getElementById('checkAll') as HTMLInputElement).removeAttribute('disabled');
+    (document.getElementById('uncheckAll') as HTMLInputElement).setAttribute('disabled', '');
   } else {
-    const superAdmin = document.getElementById('is_superadmin');
+    const superAdmin = document.getElementById('is_superadmin') as HTMLInputElement;
     superAdmin.removeAttribute('checked');
   }
 
   if (userData.twofactor_enabled === '1') {
-    const twoFactorEnabled = document.getElementById('overwrite_twofactor');
+    const twoFactorEnabled = document.getElementById('overwrite_twofactor') as HTMLInputElement;
     twoFactorEnabled.setAttribute('checked', 'checked');
     twoFactorEnabled.removeAttribute('disabled');
   }
 
   if (userData.status !== 'protected') {
-    const deleteUser = document.getElementById('pmf-delete-user');
+    const deleteUser = document.getElementById('pmf-delete-user') as HTMLButtonElement;
     deleteUser.classList.remove('disabled');
   }
-  const saveUser = document.getElementById('pmf-user-save');
+  const saveUser = document.getElementById('pmf-user-save') as HTMLButtonElement;
   saveUser.classList.remove('disabled');
 
   window.history.pushState({}, '', `./user/edit/${userId}`);
 };
 
-const setUserRights = async (userId) => {
+const setUserRights = async (userId: string): Promise<void> => {
   clearUserRights();
   const userRights = await fetchUserRights(userId);
   userRights.forEach((right) => {
-    const checkbox = document.getElementById(`user_right_${right}`);
+    const checkbox = document.getElementById(`user_right_${right}`) as HTMLInputElement;
     checkbox.setAttribute('checked', 'checked');
   });
 
-  document.getElementById('rights_user_id').value = userId;
+  (document.getElementById('rights_user_id') as HTMLInputElement).value = userId;
 };
 
-const clearUserForm = async () => {
+const clearUserForm = async (): Promise<void> => {
   updateInput('current_user_id', '');
   updateInput('pmf-user-list-autocomplete', '');
   updateInput('last_modified', '');
@@ -104,64 +103,64 @@ const clearUserForm = async () => {
 
   clearUserRights();
 
-  document.getElementById('pmf-user-save').classList.add('disabled');
-  document.getElementById('pmf-delete-user').classList.add('disabled');
+  (document.getElementById('pmf-user-save') as HTMLButtonElement).classList.add('disabled');
+  (document.getElementById('pmf-delete-user') as HTMLButtonElement).classList.add('disabled');
 };
 
-const clearUserRights = () => {
+const clearUserRights = (): void => {
   document.querySelectorAll('.permission').forEach((item) => {
-    if (item.checked) {
-      item.removeAttribute('checked');
+    if ((item as HTMLInputElement).checked) {
+      (item as HTMLInputElement).removeAttribute('checked');
     }
   });
 };
 
-const updateInput = (id, value) => {
-  const input = document.getElementById(id);
+const updateInput = (id: string, value: string): void => {
+  const input = document.getElementById(id) as HTMLInputElement;
   if (input) {
     input.value = value;
     input.removeAttribute('disabled');
   }
 };
 
-export const handleUsers = async () => {
-  const currentUserId = document.getElementById('current_user_id');
+export const handleUsers = async (): Promise<void> => {
+  const currentUserId = document.getElementById('current_user_id') as HTMLInputElement;
 
   if (currentUserId?.value) {
     await updateUser(currentUserId.value);
   }
 
-  const toggleCheckAll = document.getElementById('checkAll');
-  const toggleUncheckAll = document.getElementById('uncheckAll');
-  const modal = document.getElementById('addUserModal');
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
-  const addUser = document.getElementById('pmf-add-user-action');
-  const addUserForm = document.getElementById('pmf-add-user-form');
-  const addUserError = document.getElementById('pmf-add-user-error-message');
-  const passwordToggle = document.getElementById('add_user_automatic_password');
-  const passwordInputs = document.getElementById('add_user_show_password_inputs');
-  const isSuperAdmin = document.getElementById('is_superadmin');
+  const toggleCheckAll = document.getElementById('checkAll') as HTMLInputElement;
+  const toggleUncheckAll = document.getElementById('uncheckAll') as HTMLInputElement;
+  const modal = document.getElementById('addUserModal') as HTMLElement;
+  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show') as HTMLCollectionOf<HTMLElement>;
+  const addUser = document.getElementById('pmf-add-user-action') as HTMLButtonElement;
+  const addUserForm = document.getElementById('pmf-add-user-form') as HTMLFormElement;
+  const addUserError = document.getElementById('pmf-add-user-error-message') as HTMLElement;
+  const passwordToggle = document.getElementById('add_user_automatic_password') as HTMLInputElement;
+  const passwordInputs = document.getElementById('add_user_show_password_inputs') as HTMLElement;
+  const isSuperAdmin = document.getElementById('is_superadmin') as HTMLInputElement;
 
   if (isSuperAdmin) {
     isSuperAdmin.addEventListener('click', () => {
       if (isSuperAdmin.checked) {
         document.querySelectorAll('.permission').forEach((checkbox) => {
-          checkbox.removeAttribute('disabled');
+          (checkbox as HTMLInputElement).removeAttribute('disabled');
         });
         document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-          element.removeAttribute('disabled');
+          (element as HTMLButtonElement).removeAttribute('disabled');
         });
-        document.getElementById('checkAll').setAttribute('disabled', '');
-        document.getElementById('uncheckAll').setAttribute('disabled', '');
+        (document.getElementById('checkAll') as HTMLInputElement).setAttribute('disabled', '');
+        (document.getElementById('uncheckAll') as HTMLInputElement).setAttribute('disabled', '');
       } else {
         document.querySelectorAll('.permission').forEach((checkbox) => {
-          checkbox.removeAttribute('disabled');
+          (checkbox as HTMLInputElement).removeAttribute('disabled');
         });
         document.querySelectorAll('#pmf-user-rights-save').forEach((element) => {
-          element.removeAttribute('disabled');
+          (element as HTMLButtonElement).removeAttribute('disabled');
         });
-        document.getElementById('checkAll').removeAttribute('disabled');
-        document.getElementById('uncheckAll').removeAttribute('disabled');
+        (document.getElementById('checkAll') as HTMLInputElement).removeAttribute('disabled');
+        (document.getElementById('uncheckAll') as HTMLInputElement).removeAttribute('disabled');
       }
     });
   }
@@ -175,12 +174,12 @@ export const handleUsers = async () => {
   if (toggleCheckAll && toggleUncheckAll) {
     toggleCheckAll.addEventListener('click', () => {
       document.querySelectorAll('.permission').forEach((checkbox) => {
-        checkbox.checked = true;
+        (checkbox as HTMLInputElement).checked = true;
       });
     });
     toggleUncheckAll.addEventListener('click', () => {
       document.querySelectorAll('.permission').forEach((checkbox) => {
-        checkbox.checked = false;
+        (checkbox as HTMLInputElement).checked = false;
       });
     });
   }
@@ -188,14 +187,14 @@ export const handleUsers = async () => {
   if (addUser) {
     addUser.addEventListener('click', (event) => {
       event.preventDefault();
-      const csrf = document.getElementById('add_user_csrf').value;
-      const userName = document.getElementById('add_user_name').value;
-      const realName = document.getElementById('add_user_realname').value;
-      const automaticPassword = document.getElementById('add_user_automatic_password')?.checked;
-      const email = document.getElementById('add_user_email').value;
-      const password = document.getElementById('add_user_password').value;
-      const passwordConfirm = document.getElementById('add_user_password_confirm').value;
-      let isSuperAdmin = document.querySelector('#add_user_is_superadmin');
+      const csrf = (document.getElementById('add_user_csrf') as HTMLInputElement).value;
+      const userName = (document.getElementById('add_user_name') as HTMLInputElement).value;
+      const realName = (document.getElementById('add_user_realname') as HTMLInputElement).value;
+      const automaticPassword = (document.getElementById('add_user_automatic_password') as HTMLInputElement)?.checked;
+      const email = (document.getElementById('add_user_email') as HTMLInputElement).value;
+      const password = (document.getElementById('add_user_password') as HTMLInputElement).value;
+      const passwordConfirm = (document.getElementById('add_user_password_confirm') as HTMLInputElement).value;
+      let isSuperAdmin = document.querySelector('#add_user_is_superadmin') as HTMLInputElement;
 
       if (isSuperAdmin) {
         isSuperAdmin = isSuperAdmin.checked;
@@ -223,7 +222,7 @@ export const handleUsers = async () => {
           }
           if (response.status === 400) {
             const json = await response.json();
-            json.forEach((item) => {
+            json.forEach((item: string) => {
               pushErrorNotification(item);
             });
           }
@@ -245,7 +244,7 @@ export const handleUsers = async () => {
     });
   }
 
-  const buttonExportAllUsers = document.getElementById('pmf-button-export-users');
+  const buttonExportAllUsers = document.getElementById('pmf-button-export-users') as HTMLButtonElement;
 
   if (buttonExportAllUsers) {
     buttonExportAllUsers.addEventListener('click', (event) => {
@@ -254,8 +253,8 @@ export const handleUsers = async () => {
     });
   }
 
-  const buttonOverwritePassword = document.getElementById('pmf-user-password-overwrite-action');
-  const container = document.getElementById('pmf-modal-user-password-overwrite');
+  const buttonOverwritePassword = document.getElementById('pmf-user-password-overwrite-action') as HTMLButtonElement;
+  const container = document.getElementById('pmf-modal-user-password-overwrite') as HTMLElement;
 
   if (buttonOverwritePassword) {
     const modal = new Modal(container);
@@ -263,10 +262,10 @@ export const handleUsers = async () => {
     buttonOverwritePassword.addEventListener('click', async (event) => {
       event.preventDefault();
 
-      const csrf = document.getElementById('modal_csrf').value;
-      const userId = document.getElementById('modal_user_id').value;
-      const newPassword = document.getElementById('npass').value;
-      const passwordRepeat = document.getElementById('bpass').value;
+      const csrf = (document.getElementById('modal_csrf') as HTMLInputElement).value;
+      const userId = (document.getElementById('modal_user_id') as HTMLInputElement).value;
+      const newPassword = (document.getElementById('npass') as HTMLInputElement).value;
+      const passwordRepeat = (document.getElementById('bpass') as HTMLInputElement).value;
 
       const response = await overwritePassword(csrf, userId, newPassword, passwordRepeat);
       if (response.success) {
@@ -280,26 +279,28 @@ export const handleUsers = async () => {
   }
 
   // Delete user
-  const deleteUserButton = document.getElementById('pmf-delete-user');
-  const deleteUserConfirmed = document.getElementById('pmf-delete-user-yes');
+  const deleteUserButton = document.getElementById('pmf-delete-user') as HTMLButtonElement;
+  const deleteUserConfirmed = document.getElementById('pmf-delete-user-yes') as HTMLButtonElement;
 
   if (deleteUserButton) {
     deleteUserButton.addEventListener('click', (event) => {
       event.preventDefault();
-      const modalDeleteConfirmation = new Modal(document.getElementById('pmf-modal-user-confirm-delete'));
+      const modalDeleteConfirmation = new Modal(
+        document.getElementById('pmf-modal-user-confirm-delete') as HTMLElement
+      );
       modalDeleteConfirmation.show();
-      const username = document.getElementById('pmf-username-delete');
-      const userid = document.getElementById('pmf-user-id-delete');
-      username.innerText = document.getElementById('display_name').value;
-      userid.value = document.getElementById('current_user_id').value;
-      document.getElementById('source_page').value = 'users';
+      const username = document.getElementById('pmf-username-delete') as HTMLElement;
+      const userid = document.getElementById('pmf-user-id-delete') as HTMLInputElement;
+      username.innerText = (document.getElementById('display_name') as HTMLInputElement).value;
+      userid.value = (document.getElementById('current_user_id') as HTMLInputElement).value;
+      (document.getElementById('source_page') as HTMLInputElement).value = 'users';
     });
     deleteUserConfirmed.addEventListener('click', async (event) => {
       event.preventDefault();
-      const source = document.getElementById('source_page');
+      const source = document.getElementById('source_page') as HTMLInputElement;
       if (source.value === 'users') {
-        const userId = document.getElementById('pmf-user-id-delete').value;
-        const csrfToken = document.getElementById('csrf-token-delete-user').value;
+        const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
+        const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
         const response = await deleteUser(userId, csrfToken);
         const json = await response.json();
         if (json.success) {
@@ -314,19 +315,19 @@ export const handleUsers = async () => {
   }
 
   // Edit user
-  const editUserButton = document.getElementById('pmf-user-save');
+  const editUserButton = document.getElementById('pmf-user-save') as HTMLButtonElement;
   if (editUserButton) {
     editUserButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      const userId = document.getElementById('update_user_id').value;
+      const userId = (document.getElementById('update_user_id') as HTMLInputElement).value;
       let userData = {
-        csrfToken: document.getElementById('pmf-csrf-token').value,
-        display_name: document.getElementById('display_name').value,
-        email: document.getElementById('email').value,
-        last_modified: document.getElementById('last_modified').value,
-        user_status: document.getElementById('user_status').value,
-        is_superadmin: document.getElementById('is_superadmin').checked,
-        overwrite_twofactor: document.getElementById('overwrite_twofactor').checked,
+        csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
+        display_name: (document.getElementById('display_name') as HTMLInputElement).value,
+        email: (document.getElementById('email') as HTMLInputElement).value,
+        last_modified: (document.getElementById('last_modified') as HTMLInputElement).value,
+        user_status: (document.getElementById('user_status') as HTMLInputElement).value,
+        is_superadmin: (document.getElementById('is_superadmin') as HTMLInputElement).checked,
+        overwrite_twofactor: (document.getElementById('overwrite_twofactor') as HTMLInputElement).checked,
         userId: userId,
       };
 
@@ -346,15 +347,15 @@ export const handleUsers = async () => {
   document.querySelectorAll('#pmf-user-rights-save').forEach((item) => {
     item.addEventListener('click', async (event) => {
       event.preventDefault();
-      let rightData = [];
+      let rightData: string[] = [];
       document.querySelectorAll('.permission').forEach(async (checkbox) => {
-        if (checkbox.checked) {
-          rightData.push(checkbox.value);
+        if ((checkbox as HTMLInputElement).checked) {
+          rightData.push((checkbox as HTMLInputElement).value);
         }
       });
-      const userId = document.getElementById('rights_user_id').value;
+      const userId = (document.getElementById('rights_user_id') as HTMLInputElement).value;
       let data = {
-        csrfToken: document.getElementById('pmf-csrf-token-rights').value,
+        csrfToken: (document.getElementById('pmf-csrf-token-rights') as HTMLInputElement).value,
         userId: userId,
         userRights: rightData,
       };

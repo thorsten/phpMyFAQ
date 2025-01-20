@@ -15,20 +15,26 @@
 
 import { Tooltip } from 'bootstrap';
 
-export const selectAll = (selectId) => {
-  for (const options of [...document.querySelector(`#${selectId}`).options]) {
-    options.selected = true;
+export const selectAll = (selectId: string): void => {
+  const selectElement = document.querySelector(`#${selectId}`) as HTMLSelectElement;
+  if (selectElement) {
+    for (const option of selectElement.options) {
+      option.selected = true;
+    }
   }
 };
 
-export const unSelectAll = (selectId) => {
-  for (const options of [...document.querySelector(`#${selectId}`).options]) {
-    options.selected = false;
+export const unSelectAll = (selectId: string): void => {
+  const selectElement = document.querySelector(`#${selectId}`) as HTMLSelectElement;
+  if (selectElement) {
+    for (const option of selectElement.options) {
+      option.selected = false;
+    }
   }
 };
 
-export const formatBytes = (bytes, decimals = 2) => {
-  if (!+bytes) {
+export const formatBytes = (bytes: number, decimals: number = 2): string => {
+  if (bytes === 0) {
     return '0 Bytes';
   }
 
@@ -41,9 +47,9 @@ export const formatBytes = (bytes, decimals = 2) => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
-export const initializeTooltips = () => {
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl);
+export const initializeTooltips = (): void => {
+  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.forEach((tooltipTriggerEl) => {
+    new Tooltip(tooltipTriggerEl);
   });
 };
