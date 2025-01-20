@@ -14,18 +14,28 @@
  */
 
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
-import { pushErrorNotification, pushNotification } from '../utils';
-import { addElement } from '../../../../assets/src/utils';
+import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
-export const handleFaqOverview = async () => {
+interface Faq {
+  id: string;
+  language: string;
+  solution_id: string;
+  question: string;
+  created: string;
+  category_id: string;
+  sticky: string;
+  active: string;
+}
+
+export const handleFaqOverview = async (): Promise<void> => {
   const collapsedCategories = document.querySelectorAll('.accordion-collapse');
 
   if (collapsedCategories) {
     initializeCheckboxState();
 
     collapsedCategories.forEach((category) => {
-      const categoryId = category.getAttribute('data-pmf-categoryId');
-      const language = category.getAttribute('data-pmf-language');
+      const categoryId = category.getAttribute('data-pmf-categoryId') as string;
+      const language = category.getAttribute('data-pmf-language') as string;
 
       category.addEventListener('hidden.bs.collapse', () => {
         clearCategoryTable(categoryId);
@@ -46,15 +56,16 @@ export const handleFaqOverview = async () => {
           element.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            const faqId = event.target.getAttribute('data-pmf-id');
-            const faqLanguage = event.target.getAttribute('data-pmf-language');
-            const token = event.target.getAttribute('data-pmf-token');
+            const target = event.target as HTMLElement;
+            const faqId = target.getAttribute('data-pmf-id') as string;
+            const faqLanguage = target.getAttribute('data-pmf-language') as string;
+            const token = target.getAttribute('data-pmf-token') as string;
 
             if (confirm('Are you sure?')) {
               try {
                 const result = await deleteFaq(faqId, faqLanguage, token);
                 if (result.success) {
-                  const faqTableRow = document.getElementById(`faq_${faqId}_${faqLanguage}`);
+                  const faqTableRow = document.getElementById(`faq_${faqId}_${faqLanguage}`) as HTMLElement;
                   faqTableRow.remove();
                 }
               } catch (error) {
@@ -69,10 +80,10 @@ export const handleFaqOverview = async () => {
             event.preventDefault();
 
             const translations = await fetchCategoryTranslations(categoryId);
-            const existingLink = element.nextElementSibling.childNodes[0];
+            const existingLink = element.nextElementSibling?.childNodes[0] as HTMLElement;
             const regionNames = new Intl.DisplayNames([language], { type: 'language' });
-            const faqId = element.getAttribute('data-pmf-faq-id');
-            let options = [];
+            const faqId = element.getAttribute('data-pmf-faq-id') as string;
+            const options: string[] = [];
 
             for (const [languageCode, languageName] of Object.entries(translations)) {
               if (languageCode !== language) {
@@ -97,11 +108,12 @@ export const handleFaqOverview = async () => {
           element.addEventListener('change', async (event) => {
             event.preventDefault();
 
-            const categoryId = event.target.getAttribute('data-pmf-category-id-sticky');
-            const faqId = event.target.getAttribute('data-pmf-faq-id');
-            const token = event.target.getAttribute('data-pmf-csrf');
+            const target = event.target as HTMLInputElement;
+            const categoryId = target.getAttribute('data-pmf-category-id-sticky') as string;
+            const faqId = target.getAttribute('data-pmf-faq-id') as string;
+            const token = target.getAttribute('data-pmf-csrf') as string;
 
-            await saveStatus(categoryId, [faqId], token, event.target.checked, 'sticky');
+            await saveStatus(categoryId, [faqId], token, target.checked, 'sticky');
           });
         });
 
@@ -109,11 +121,12 @@ export const handleFaqOverview = async () => {
           element.addEventListener('change', async (event) => {
             event.preventDefault();
 
-            const categoryId = event.target.getAttribute('data-pmf-category-id-active');
-            const faqId = event.target.getAttribute('data-pmf-faq-id');
-            const token = event.target.getAttribute('data-pmf-csrf');
+            const target = event.target as HTMLInputElement;
+            const categoryId = target.getAttribute('data-pmf-category-id-active') as string;
+            const faqId = target.getAttribute('data-pmf-faq-id') as string;
+            const token = target.getAttribute('data-pmf-csrf') as string;
 
-            await saveStatus(categoryId, [faqId], token, event.target.checked, 'active');
+            await saveStatus(categoryId, [faqId], token, target.checked, 'active');
           });
         });
       });
@@ -121,10 +134,16 @@ export const handleFaqOverview = async () => {
   }
 };
 
-const saveStatus = async (categoryId, faqIds, token, checked, type) => {
+const saveStatus = async (
+  categoryId: string,
+  faqIds: string[],
+  token: string,
+  checked: boolean,
+  type: 'active' | 'sticky'
+): Promise<void> => {
   let url;
-  const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`);
-  const faqLanguage = languageElement.getAttribute('lang');
+  const languageElement = document.getElementById(`${type}_record_${categoryId}_${faqIds[0]}`) as HTMLElement;
+  const faqLanguage = languageElement.getAttribute('lang') as string;
 
   if ('active' === type) {
     url = './api/faq/activate';
@@ -156,16 +175,16 @@ const saveStatus = async (categoryId, faqIds, token, checked, type) => {
         pushErrorNotification(result.error);
       }
     } else {
-      throw new Error('Network response was not ok: ', response.text());
+      throw new Error('Network response was not ok: ' + (await response.text()));
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(await error.cause.response.json());
   }
 };
 
-const populateCategoryTable = async (catgoryId, faqs) => {
-  const tableBody = document.getElementById(`tbody-category-id-${catgoryId}`);
-  const csrfToken = tableBody.getAttribute('data-pmf-csrf');
+const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<void> => {
+  const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
+  const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
 
   faqs.forEach((faq) => {
     const row = document.createElement('tr');
@@ -210,7 +229,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
           'data-pmfCsrf': csrfToken,
           lang: faq.language,
           id: `sticky_record_${faq.category_id}_${faq.id}`,
-          checked: faq.sticky === 'yes' ? 'checked' : '',
+          checked: faq.sticky === 'yes',
         }),
       ])
     );
@@ -224,7 +243,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
           'data-pmfCsrf': csrfToken,
           lang: faq.language,
           id: `active_record_${faq.category_id}_${faq.id}`,
-          checked: faq.active === 'yes' ? 'checked' : '',
+          checked: faq.active === 'yes',
         }),
       ])
     );
@@ -293,14 +312,14 @@ const populateCategoryTable = async (catgoryId, faqs) => {
   });
 };
 
-const clearCategoryTable = (categoryId) => {
-  const tableBody = document.getElementById(`tbody-category-id-${categoryId}`);
+const clearCategoryTable = (categoryId: string): void => {
+  const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   tableBody.innerHTML = '';
 };
 
-const initializeCheckboxState = () => {
-  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive');
-  const filterForNew = document.getElementById('pmf-checkbox-filter-new');
+const initializeCheckboxState = (): void => {
+  const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement | null;
+  const filterForNew = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement | null;
 
   const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
   const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
@@ -315,25 +334,25 @@ const initializeCheckboxState = () => {
 
   if (filterForInactive) {
     filterForInactive.addEventListener('change', () => {
-      localStorage.setItem('pmfCheckboxFilterInactive', filterForInactive.checked);
+      localStorage.setItem('pmfCheckboxFilterInactive', JSON.stringify(filterForInactive.checked));
     });
   }
 
   if (filterForNew) {
     filterForNew.addEventListener('change', () => {
-      localStorage.setItem('pmfCheckboxFilterNew', filterForNew.checked);
+      localStorage.setItem('pmfCheckboxFilterNew', JSON.stringify(filterForNew.checked));
     });
   }
 };
 
 // Getter for the inactive checkbox state
-const getInactiveCheckboxState = () => {
+const getInactiveCheckboxState = (): boolean => {
   const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
-  return storedInactiveState !== null ? JSON.parse(storedInactiveState) : null;
+  return storedInactiveState !== null ? JSON.parse(storedInactiveState) : false;
 };
 
 // Getter for the new checkbox state
-const getNewCheckboxState = () => {
+const getNewCheckboxState = (): boolean => {
   const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
-  return storedNewState !== null ? JSON.parse(storedNewState) : null;
+  return storedNewState !== null ? JSON.parse(storedNewState) : false;
 };

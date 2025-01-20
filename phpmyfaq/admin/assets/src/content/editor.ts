@@ -45,7 +45,7 @@ import '../plugins/code-snippet/code-snippet.js';
 import hljs from 'highlight.js';
 
 export const renderEditor = () => {
-  const editor = document.getElementById('editor');
+  const editor = document.getElementById('editor') as HTMLElement | null;
   if (!editor) {
     return;
   }
@@ -227,12 +227,12 @@ export const renderEditor = () => {
     events: {},
     textIcons: false,
     uploader: {
-      url: '/admin/api/content/images?csrf=' + document.getElementById('pmf-csrf-token').value,
+      url: '/admin/api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       format: 'json',
-      isSuccess: (response) => {
+      isSuccess: (response: any) => {
         return !response.error;
       },
-      getMessage: (response) => {
+      getMessage: (response: any) => {
         return response.msg;
       },
     },
@@ -252,13 +252,13 @@ export const renderEditor = () => {
 
   joditEditor.events.on('afterSetValue', () => {
     joditEditor.container.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightElement(block);
+      hljs.highlightElement(block as HTMLElement);
     });
   });
 
   joditEditor.events.on('change', () => {
     joditEditor.container.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightElement(block);
+      hljs.highlightElement(block as HTMLElement);
     });
   });
 };

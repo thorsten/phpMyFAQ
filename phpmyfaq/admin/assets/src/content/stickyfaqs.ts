@@ -14,11 +14,10 @@
  */
 
 import Sortable from 'sortablejs';
-import { addElement } from '../../../../assets/src/utils';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
-export const handleStickyFaqs = () => {
-  const stickyFAQs = document.getElementById('stickyFAQs');
+export const handleStickyFaqs = (): void => {
+  const stickyFAQs = document.getElementById('stickyFAQs') as HTMLElement | null;
   if (stickyFAQs) {
     Sortable.create(stickyFAQs, {
       animation: 100,
@@ -27,24 +26,25 @@ export const handleStickyFaqs = () => {
       sort: true,
       filter: '.sortable-disabled',
       dataIdAttr: 'data-pmf-faqid',
-      onEnd: async (event) => {
-        const currentOrder = Array.from(event.from.children).map(function (item) {
+      onEnd: async (event: Sortable.SortableEvent) => {
+        const currentOrder = Array.from(event.from.children).map((item) => {
           return item.getAttribute('data-pmf-faqid');
-        });
+        }) as string[];
         await saveStatus(currentOrder);
       },
     });
   }
 };
 
-const saveStatus = async (currentOrder) => {
-  const stickyFAQs = document.getElementById('stickyFAQs');
-  const card = document.getElementById('mainCardStickyFAQs');
-  const successAlert = document.getElementById('successAlert');
-  const csrf = stickyFAQs.getAttribute('data-csrf');
+const saveStatus = async (currentOrder: string[]): Promise<void> => {
+  const stickyFAQs = document.getElementById('stickyFAQs') as HTMLElement;
+  const successAlert = document.getElementById('successAlert') as HTMLElement | null;
+  const csrf = stickyFAQs.getAttribute('data-csrf') as string;
+
   if (successAlert) {
     successAlert.remove();
   }
+
   try {
     const response = await fetch('./api/faqs/sticky/order', {
       method: 'POST',
@@ -66,6 +66,10 @@ const saveStatus = async (currentOrder) => {
       throw new Error('Network response was not ok: ' + JSON.stringify(errorResponse));
     }
   } catch (error) {
-    pushErrorNotification(error.message);
+    if (error instanceof Error) {
+      pushErrorNotification(error.message);
+    } else {
+      console.error('Unknown error:', error);
+    }
   }
 };

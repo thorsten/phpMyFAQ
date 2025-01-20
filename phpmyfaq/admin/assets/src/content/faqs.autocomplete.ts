@@ -13,38 +13,43 @@
  * @since     2023-12-27
  */
 
-import autocomplete from 'autocompleter';
+import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { fetchFaqsByAutocomplete } from '../api';
 import { addElement } from '../../../../assets/src/utils';
 
+interface Faq {
+  question: string;
+  adminUrl: string;
+}
+
+type FaqItem = Faq & AutocompleteItem;
+
 document.addEventListener('DOMContentLoaded', () => {
-  const autoComplete = document.getElementById('pmf-faq-overview-search-input');
+  const autoComplete = document.getElementById('pmf-faq-overview-search-input') as HTMLInputElement | null;
 
   if (autoComplete) {
-    const csrfToken = document.getElementById('pmf-csrf-token').value;
-    autocomplete({
+    const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
+    autocomplete<FaqItem>({
       input: autoComplete,
       minLength: 1,
-      onSelect: (event) => {
-        window.location.href = event.adminUrl;
+      onSelect: (item: FaqItem) => {
+        window.location.href = item.adminUrl;
       },
-      fetch: async (text, callback) => {
+      fetch: async (text: string, update: (items: FaqItem[]) => void) => {
         const match = text.toLowerCase();
         const faqs = await fetchFaqsByAutocomplete(match, csrfToken);
-        callback(
-          faqs.success.filter((n) => {
+        update(
+          faqs.success.filter((n: FaqItem) => {
             return n.question.toLowerCase().indexOf(match) !== -1;
           })
         );
       },
-      render: (item, value) => {
-        const regex = new RegExp(value, 'gi');
+      render: (item: FaqItem, currentValue: string): HTMLDivElement => {
+        const regex = new RegExp(currentValue, 'gi');
         return addElement('div', {
           classList: 'pmf-faq-list-result border',
-          innerHTML: item.question.replace(regex, function (match) {
-            return `<strong>${match}</strong>`;
-          }),
-        });
+          innerHTML: item.question.replace(regex, (match) => `<strong>${match}</strong>`),
+        }) as HTMLDivElement;
       },
       emptyMsg: 'No users found',
     });

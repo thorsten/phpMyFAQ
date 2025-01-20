@@ -14,21 +14,25 @@
  */
 
 import autocomplete from 'autocompleter';
-import { addElement } from '../../../../assets/src/utils';
+import { addElement, pushNotification } from '../../../../assets/src/utils';
 import { deleteTag, fetchTags } from '../api';
-import { pushNotification } from '../utils/index.js';
 
-export const handleTags = () => {
-  const editTagButtons = document.querySelectorAll('.btn-edit');
-  const deleteButtons = document.querySelectorAll('.btn-delete');
-  const tagForm = document.getElementById('tag-form');
-  const tagsAutocomplete = document.querySelector('.pmf-tags-autocomplete');
+interface Tag {
+  tagName: string;
+}
+
+export const handleTags = (): void => {
+  const editTagButtons = document.querySelectorAll<HTMLButtonElement>('.btn-edit');
+  const deleteButtons = document.querySelectorAll<HTMLButtonElement>('.btn-delete');
+  const tagForm = document.getElementById('tag-form') as HTMLFormElement | null;
+  const tagsAutocomplete = document.querySelector('.pmf-tags-autocomplete') as HTMLInputElement | null;
 
   if (editTagButtons) {
     editTagButtons.forEach((element) => {
-      element.addEventListener('click', (event) => {
-        const tagId = event.target.getAttribute('data-btn-id');
-        const span = document.querySelector(`span[id="tag-id-${tagId}"]`);
+      element.addEventListener('click', (event: Event) => {
+        const target = event.target as HTMLElement;
+        const tagId = target.getAttribute('data-btn-id') as string;
+        const span = document.querySelector(`span[id="tag-id-${tagId}"]`) as HTMLSpanElement | null;
 
         if (span) {
           span.replaceWith(
@@ -41,7 +45,7 @@ export const handleTags = () => {
             })
           );
         } else {
-          const input = document.querySelector(`input[id="tag-id-${tagId}"]`);
+          const input = document.querySelector(`input[id="tag-id-${tagId}"]`) as HTMLInputElement;
           input.replaceWith(
             addElement('span', {
               innerHTML: input.value.replace(/\//g, '&#x2F;'),
@@ -55,13 +59,14 @@ export const handleTags = () => {
 
   if (deleteButtons) {
     deleteButtons.forEach((element) => {
-      element.addEventListener('click', async (event) => {
-        const tagId = event.target.getAttribute('data-pmf-id');
+      element.addEventListener('click', async (event: Event) => {
+        const target = event.target as HTMLElement;
+        const tagId = target.getAttribute('data-pmf-id') as string;
 
         const response = await deleteTag(tagId);
         if (response.success) {
           pushNotification(response.success);
-          const row = document.getElementById(`pmf-row-tag-id-${tagId}`);
+          const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;
           row.remove();
         } else {
           throw new Error('Network response was not ok: ' + JSON.stringify(response.error));
@@ -71,13 +76,13 @@ export const handleTags = () => {
   }
 
   if (tagForm) {
-    tagForm.addEventListener('submit', (event) => {
+    tagForm.addEventListener('submit', (event: Event) => {
       event.preventDefault();
 
-      const input = document.querySelector('input:focus');
-      const tagId = input.getAttribute('id').replace('tag-id-', '');
+      const input = document.querySelector('input:focus') as HTMLInputElement;
+      const tagId = input.getAttribute('id')!.replace('tag-id-', '');
       const tag = input.value;
-      const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
+      const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
       fetch('./api/content/tag', {
         method: 'PUT',
@@ -116,7 +121,7 @@ export const handleTags = () => {
         })
         .catch(async (error) => {
           const errorMessage = await error.cause.response.json();
-          const table = document.querySelector('.table');
+          const table = document.querySelector('.table') as HTMLElement;
           table.insertAdjacentElement(
             'beforebegin',
             addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
@@ -126,7 +131,7 @@ export const handleTags = () => {
   }
 
   if (tagsAutocomplete) {
-    autocomplete({
+    autocomplete<Tag>({
       input: tagsAutocomplete,
       minLength: 1,
       onSelect: async (item, input) => {

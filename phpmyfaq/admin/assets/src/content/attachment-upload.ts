@@ -15,25 +15,25 @@
 
 import { addElement } from '../../../../assets/src/utils';
 
-export const handleAttachmentUploads = () => {
-  const filesToUpload = document.getElementById('filesToUpload');
-  const fileUploadButton = document.getElementById('pmf-attachment-modal-upload');
+export const handleAttachmentUploads = (): void => {
+  const filesToUpload = document.getElementById('filesToUpload') as HTMLInputElement | null;
+  const fileUploadButton = document.getElementById('pmf-attachment-modal-upload') as HTMLButtonElement | null;
 
   // Calculate upload size and show file to upload
   if (filesToUpload) {
     filesToUpload.addEventListener('change', function () {
       const files = filesToUpload.files;
-      const fileSize = document.getElementById('filesize');
-      const fileList = document.querySelector('.pmf-attachment-upload-files');
+      const fileSize = document.getElementById('filesize') as HTMLElement;
+      const fileList = document.querySelector('.pmf-attachment-upload-files') as HTMLElement;
 
       fileList.classList.remove('invisible');
 
       let bytes = 0;
-      let numFiles = files.length;
-      let fileItems = [];
+      const numFiles = files?.length || 0;
+      const fileItems: HTMLElement[] = [];
       for (let fileId = 0; fileId < numFiles; fileId++) {
-        bytes += files[fileId].size;
-        fileItems.push(addElement('li', { innerText: files[fileId].name }));
+        bytes += files![fileId].size;
+        fileItems.push(addElement('li', { innerText: files![fileId].name }));
       }
 
       let output = bytes + ' bytes';
@@ -50,18 +50,18 @@ export const handleAttachmentUploads = () => {
     });
 
     // handle upload button
-    fileUploadButton.addEventListener('click', async (event) => {
+    fileUploadButton?.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
       event.stopImmediatePropagation();
 
       const files = filesToUpload.files;
       const formData = new FormData();
 
-      for (let i = 0; i < files.length; i++) {
-        formData.append('filesToUpload[]', files[i]);
+      for (let i = 0; i < (files?.length || 0); i++) {
+        formData.append('filesToUpload[]', files![i]);
       }
-      formData.append('record_id', document.getElementById('attachment_record_id').value);
-      formData.append('record_lang', document.getElementById('attachment_record_lang').value);
+      formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
+      formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
 
       try {
         const response = await fetch('./api/content/attachments/upload', {
@@ -72,18 +72,18 @@ export const handleAttachmentUploads = () => {
 
         if (!response.ok) {
           const error = new Error('Network response was not ok');
-          error.cause = { response };
+          (error as any).cause = { response };
           throw error;
         }
 
         const attachments = await response.json();
-        const modal = document.getElementById('attachmentModal');
-        const modalBackdrop = document.querySelector('.modal-backdrop.fade.show');
-        const attachmentList = document.querySelector('.adminAttachments');
-        const fileSize = document.getElementById('filesize');
+        const modal = document.getElementById('attachmentModal') as HTMLElement;
+        const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement;
+        const attachmentList = document.querySelector('.adminAttachments') as HTMLElement;
+        const fileSize = document.getElementById('filesize') as HTMLElement;
         const fileList = document.querySelectorAll('.pmf-attachment-upload-files li');
 
-        attachments.forEach((attachment) => {
+        attachments.forEach((attachment: { attachmentId: string; fileName: string }) => {
           const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token');
           attachmentList.insertAdjacentElement(
             'beforeend',
@@ -122,8 +122,8 @@ export const handleAttachmentUploads = () => {
         modal.classList.remove('show');
         modalBackdrop.remove();
       } catch (error) {
-        if (error.cause && error.cause.response) {
-          const errors = await error.cause.response.json();
+        if ((error as any).cause && (error as any).cause.response) {
+          const errors = await (error as any).cause.response.json();
           console.log(errors);
         } else {
           console.log('An error occurred:', error);

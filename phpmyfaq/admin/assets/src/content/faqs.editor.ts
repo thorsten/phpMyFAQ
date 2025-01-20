@@ -14,19 +14,23 @@
  */
 
 import { create, update } from '../api';
-import { serialize } from '../../../../assets/src/utils';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
 
-export const handleSaveFaqData = () => {
-  const submitButton = document.getElementById('faqEditorSubmit');
+interface SerializedData {
+  faqId: string;
+  [key: string]: any;
+}
+
+export const handleSaveFaqData = (): void => {
+  const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement | null;
 
   if (submitButton) {
-    submitButton.addEventListener('click', async (event) => {
+    submitButton.addEventListener('click', async (event: Event) => {
       event.preventDefault();
-      const form = document.getElementById('faqEditor');
+      const form = document.getElementById('faqEditor') as HTMLFormElement;
       const formData = new FormData(form);
 
-      const serializedData = serialize(formData);
+      const serializedData = serialize(formData) as SerializedData;
 
       let response;
       if (serializedData.faqId === '0') {
@@ -37,8 +41,8 @@ export const handleSaveFaqData = () => {
 
       if (response.success) {
         const data = JSON.parse(response.data);
-        const faqId = document.getElementById('faqId');
-        const revisionId = document.getElementById('revisionId');
+        const faqId = document.getElementById('faqId') as HTMLInputElement;
+        const revisionId = document.getElementById('revisionId') as HTMLInputElement;
 
         faqId.value = data.id;
         revisionId.value = data.revisionId;
@@ -51,11 +55,12 @@ export const handleSaveFaqData = () => {
   }
 };
 
-export const handleUpdateQuestion = () => {
-  const input = document.getElementById('question');
+export const handleUpdateQuestion = (): void => {
+  const input = document.getElementById('question') as HTMLInputElement | null;
   if (input) {
     input.addEventListener('input', () => {
-      document.getElementById('pmf-admin-question-output').innerText = `: ${input.value}`;
+      const output = document.getElementById('pmf-admin-question-output') as HTMLElement;
+      output.innerText = `: ${input.value}`;
     });
   }
 };

@@ -13,19 +13,18 @@
  * @since     2023-03-04
  */
 
-import { addElement, serialize } from '../../../../assets/src/utils';
-import { toggleQuestionVisibility } from '../api/index.js';
-import { pushErrorNotification } from '../utils/index.js';
+import { addElement, pushErrorNotification, serialize } from '../../../../assets/src/utils';
+import { toggleQuestionVisibility } from '../api';
 
-export const handleOpenQuestions = () => {
-  const deleteButton = document.getElementById('pmf-delete-questions');
+export const handleOpenQuestions = (): void => {
+  const deleteButton = document.getElementById('pmf-delete-questions') as HTMLButtonElement | null;
 
   if (deleteButton) {
-    deleteButton.addEventListener('click', (event) => {
+    deleteButton.addEventListener('click', (event: Event) => {
       event.preventDefault();
 
-      const responseMessage = document.getElementById('returnMessage');
-      const form = document.querySelector('#phpmyfaq-open-questions');
+      const responseMessage = document.getElementById('returnMessage') as HTMLElement;
+      const form = document.querySelector('#phpmyfaq-open-questions') as HTMLFormElement;
       const questions = new FormData(form);
 
       responseMessage.innerHTML = '';
@@ -50,9 +49,9 @@ export const handleOpenQuestions = () => {
             responseMessage.append(
               addElement('div', { classList: 'alert alert-success', innerText: response.success })
             );
-            const questionsToDelete = document.querySelectorAll('tr td input:checked');
+            const questionsToDelete = document.querySelectorAll('tr td input:checked') as NodeListOf<HTMLInputElement>;
             questionsToDelete.forEach((toDelete) => {
-              toDelete.parentNode.parentNode.parentNode.remove();
+              toDelete.parentNode?.parentNode?.parentNode?.remove();
             });
           } else {
             responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: response.error }));
@@ -66,17 +65,17 @@ export const handleOpenQuestions = () => {
   }
 };
 
-export const handleToggleVisibility = () => {
-  const toggleVisibility = document.querySelectorAll('.pmf-toggle-visibility');
+export const handleToggleVisibility = (): void => {
+  const toggleVisibility = document.querySelectorAll('.pmf-toggle-visibility') as NodeListOf<HTMLElement>;
 
   if (toggleVisibility) {
     toggleVisibility.forEach((element) => {
-      element.addEventListener('click', async (event) => {
+      element.addEventListener('click', async (event: Event) => {
         event.preventDefault();
 
-        const questionId = element.getAttribute('data-pmf-question-id');
-        const visibility = element.getAttribute('data-pmf-visibility');
-        const csrfToken = element.getAttribute('data-pmf-csrf');
+        const questionId = element.getAttribute('data-pmf-question-id') as string;
+        const visibility = element.getAttribute('data-pmf-visibility') as string;
+        const csrfToken = element.getAttribute('data-pmf-csrf') as string;
 
         const response = await toggleQuestionVisibility(questionId, visibility, csrfToken);
 

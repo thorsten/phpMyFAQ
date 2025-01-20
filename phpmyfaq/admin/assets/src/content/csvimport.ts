@@ -14,18 +14,21 @@
  * @since     2024-01-13
  */
 
-import { addElement } from '../../../../assets/src/utils';
-import { pushNotification, pushErrorNotification } from '../utils';
+import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 
-export const handleUploadCSVForm = async () => {
-  const submitButton = document.getElementById('submitButton');
+export const handleUploadCSVForm = async (): Promise<void> => {
+  const submitButton = document.getElementById('submitButton') as HTMLButtonElement | null;
   if (submitButton) {
-    submitButton.addEventListener('click', async (event) => {
-      const fileInput = document.getElementById('fileInputCSVUpload');
-      const form = document.getElementById('uploadCSVFileForm');
-      const csrf = form.getAttribute('data-pmf-csrf');
-      const file = fileInput.files[0];
+    submitButton.addEventListener('click', async (event: Event) => {
       event.preventDefault();
+      const fileInput = document.getElementById('fileInputCSVUpload') as HTMLInputElement;
+      const form = document.getElementById('uploadCSVFileForm') as HTMLFormElement;
+      const csrf = form.getAttribute('data-pmf-csrf') as string;
+      const file = fileInput.files?.[0];
+      if (!file) {
+        pushErrorNotification('No file selected.');
+        return;
+      }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('csrf', csrf);
@@ -37,21 +40,22 @@ export const handleUploadCSVForm = async () => {
         if (response.ok) {
           const jsonResponse = await response.json();
           pushNotification(jsonResponse.success);
-          fileInput.value = null;
-        }
-        if (response.status === 400) {
+          fileInput.value = '';
+        } else if (response.status === 400) {
           const jsonResponse = await response.json();
           pushErrorNotification(jsonResponse.error);
-          fileInput.value = null;
+          fileInput.value = '';
         } else {
           const errorResponse = await response.json();
           throw new Error('Network response was not ok: ' + JSON.stringify(errorResponse));
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.storedAll === false) {
-          error.messages.forEach((message) => {
+          error.messages.forEach((message: string) => {
             pushErrorNotification(message);
           });
+        } else {
+          console.error('An error occurred:', error);
         }
       }
     });

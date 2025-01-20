@@ -1,3 +1,4 @@
+export * from './attachment';
 export * from './category';
 export * from './faqs';
 export * from './forms';

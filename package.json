@@ -53,6 +53,7 @@
     "@types/highlightjs": "^9.12.6",
     "@types/masonry-layout": "^4.2.8",
     "@types/node": "^20.17.14",
+    "@types/sortablejs": "^1.15.8",
     "@vitest/coverage-v8": "2.1.5",
     "autoprefixer": "^10.4.20",
     "babel-preset-env": "^1.7.0",

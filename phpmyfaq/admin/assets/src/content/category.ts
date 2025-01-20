@@ -13,16 +13,21 @@
  * @since     2014-06-02
  */
 
-import Sortable from 'sortablejs';
+import Sortable, { SortableEvent } from 'sortablejs';
 import { deleteCategory, setCategoryTree } from '../api';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
 
-export const handleCategories = () => {
-  const root = document.getElementById('pmf-category-tree');
-  const nestedSortables = document.querySelectorAll(nestedQuery);
+interface SerializedTree {
+  id: string;
+  children: SerializedTree[];
+}
+
+export const handleCategories = (): void => {
+  const root = document.getElementById('pmf-category-tree') as HTMLElement;
+  const nestedSortables = document.querySelectorAll<HTMLElement>(nestedQuery);
   for (let i = 0; i < nestedSortables.length; i++) {
     new Sortable(nestedSortables[i], {
       group: 'Categories',
@@ -30,9 +35,9 @@ export const handleCategories = () => {
       fallbackOnBody: true,
       swapThreshold: 0.65,
       dataIdAttr: identifier,
-      onEnd: async (event) => {
-        const categoryId = event.item.getAttribute('data-pmf-catid');
-        const csrf = document.querySelector('input[name=pmf-csrf-token]').value;
+      onEnd: async (event: SortableEvent) => {
+        const categoryId = event.item.getAttribute('data-pmf-catid') as string;
+        const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
         const data = serializedTree(root);
         const response = await setCategoryTree(data, categoryId, csrf);
         if (response.success) {
@@ -44,33 +49,34 @@ export const handleCategories = () => {
     });
   }
 
-  const serializedTree = (sortable) => {
+  const serializedTree = (sortable: HTMLElement): SerializedTree[] => {
     return Array.from(sortable.children).map((child) => {
-      const nested = child.querySelector(nestedQuery);
+      const nested = child.querySelector(nestedQuery) as HTMLElement;
       return {
-        id: child.dataset[identifier],
+        id: child.dataset[identifier] as string,
         children: nested ? serializedTree(nested) : [],
       };
     });
   };
 };
 
-export const handleCategoryDelete = async () => {
+export const handleCategoryDelete = async (): Promise<void> => {
   const buttonDelete = document.getElementsByName('pmf-category-delete-button');
 
   if (buttonDelete) {
     buttonDelete.forEach((button) => {
-      button.addEventListener('click', async (event) => {
+      button.addEventListener('click', async (event: Event) => {
         event.preventDefault();
-        const categoryId = event.target.getAttribute('data-pmf-category-id');
-        const language = event.target.getAttribute('data-pmf-language');
-        const csrfToken = document.querySelector('input[name=pmf-csrf-token]').value;
+        const target = event.target as HTMLElement;
+        const categoryId = target.getAttribute('data-pmf-category-id') as string;
+        const language = target.getAttribute('data-pmf-language') as string;
+        const csrfToken = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
         const response = await deleteCategory(categoryId, language, csrfToken);
         if (response.success) {
           pushNotification(response.success);
         }
-        document.getElementById(`pmf-category-${categoryId}`).remove();
+        document.getElementById(`pmf-category-${categoryId}`)?.remove();
       });
     });
   }

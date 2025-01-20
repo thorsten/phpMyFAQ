@@ -13,20 +13,20 @@
  * @since     2022-07-22
  */
 
-import { deleteAttachments } from '../api/attachment';
-import { pushNotification } from '../utils';
+import { deleteAttachments } from '../api';
+import { pushNotification } from '../../../../assets/src/utils';
 
-const showHelp = (option) => {
-  const optionHelp = document.getElementById(`${option}Help`);
+const showHelp = (option: string): void => {
+  const optionHelp = document.getElementById(`${option}Help`) as HTMLElement;
   optionHelp.classList.remove('visually-hidden');
   optionHelp.addEventListener('click', () => (optionHelp.style.opacity = '0'));
   optionHelp.addEventListener('transitionend', () => optionHelp.remove());
 };
 
-export const handleFaqForm = () => {
+export const handleFaqForm = (): void => {
   const deleteAttachmentButtons = document.querySelectorAll('.pmf-delete-attachment-button');
-  const inputTags = document.getElementById('tags');
-  const inputSearchKeywords = document.getElementById('keywords');
+  const inputTags = document.getElementById('tags') as HTMLInputElement | null;
+  const inputSearchKeywords = document.getElementById('keywords') as HTMLInputElement | null;
 
   if (inputTags) {
     inputTags.addEventListener('focus', () => showHelp('tags'));
@@ -36,16 +36,17 @@ export const handleFaqForm = () => {
   }
   if (deleteAttachmentButtons) {
     deleteAttachmentButtons.forEach((button) => {
-      button.addEventListener('click', async (event) => {
+      button.addEventListener('click', async (event: Event) => {
         event.preventDefault();
 
-        const attachmentId = event.target.getAttribute('data-pmf-attachment-id');
-        const csrfToken = event.target.getAttribute('data-pmf-csrf-token');
+        const target = event.target as HTMLElement;
+        const attachmentId = target.getAttribute('data-pmf-attachment-id') as string;
+        const csrfToken = target.getAttribute('data-pmf-csrf-token') as string;
 
         const response = await deleteAttachments(attachmentId, csrfToken);
 
         if (response.success) {
-          const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`);
+          const listItemToDelete = document.getElementById(`attachment-id-${attachmentId}`) as HTMLElement;
           listItemToDelete.addEventListener('click', () => (listItemToDelete.style.opacity = '0'));
           listItemToDelete.addEventListener('transitionend', () => listItemToDelete.remove());
           pushNotification(response.success);
@@ -57,79 +58,83 @@ export const handleFaqForm = () => {
     });
   }
 
-  const categoryOptions = document.querySelector('#phpmyfaq-categories');
+  const categoryOptions = document.querySelector('#phpmyfaq-categories') as HTMLSelectElement | null;
 
   if (categoryOptions) {
     Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
     // Override FAQ permissions with Category permission to avoid confused users
     categoryOptions.addEventListener('click', (event) => {
       event.preventDefault();
-      let categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
+      const categories = Array.from(categoryOptions.selectedOptions).map(({ value }) => value);
       getCategoryPermissions(categories);
     });
   }
 
-  const questionInput = document.getElementById('question');
+  const questionInput = document.getElementById('question') as HTMLInputElement | null;
   if (questionInput) {
     questionInput.addEventListener('input', checkForHash);
   }
 };
 
-const getCategoryPermissions = (categories) => {
+const getCategoryPermissions = (categories: string[]): void => {
   fetch(`./api/category/permissions/${categories}`)
-    .then((response) => {
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((permissions) => {
       setPermissions(permissions);
     });
 };
 
-const setPermissions = (permissions) => {
+const setPermissions = (permissions: { user: string[]; group: string[] }): void => {
   const perms = permissions;
 
   // Users
   if (-1 === parseInt(perms.user[0])) {
-    document.getElementById('restrictedusers').checked = false;
-    document.getElementById('allusers').checked = true;
+    (document.getElementById('restrictedusers') as HTMLInputElement).checked = false;
+    (document.getElementById('allusers') as HTMLInputElement).checked = true;
   } else {
-    document.getElementById('allusers').checked = false;
-    document.getElementById('restrictedusers').checked = true;
+    (document.getElementById('allusers') as HTMLInputElement).checked = false;
+    (document.getElementById('restrictedusers') as HTMLInputElement).checked = true;
     perms.user.forEach((value) => {
-      document.querySelector(`#selected-user option[value='${value}']`).selected = true;
+      (document.querySelector(`#selected-user option[value='${value}']`) as HTMLOptionElement).selected = true;
     });
   }
 
   // Groups
-  const restrictedGroups = document.getElementById('restrictedgroups');
+  const restrictedGroups = document.getElementById('restrictedgroups') as HTMLInputElement | null;
   if (restrictedGroups) {
-    const options = document.querySelectorAll('#restrictedgroups option');
-    const allGroups = document.getElementById('allgroups');
+    const options = document.querySelectorAll('#restrictedgroups option') as NodeListOf<HTMLOptionElement>;
+    const allGroups = document.getElementById('allgroups') as HTMLInputElement | null;
     options.forEach((option) => {
       option.removeAttribute('selected');
     });
     if (-1 === parseInt(perms.group[0])) {
       restrictedGroups.checked = false;
       restrictedGroups.disabled = false;
-      allGroups.checked = true;
-      allGroups.disabled = false;
+      if (allGroups) {
+        allGroups.checked = true;
+        allGroups.disabled = false;
+      }
     } else {
-      allGroups.checked = false;
-      allGroups.disabled = true;
+      if (allGroups) {
+        allGroups.checked = false;
+        allGroups.disabled = true;
+      }
       restrictedGroups.checked = true;
       restrictedGroups.disabled = false;
       perms.group.forEach((value) => {
-        const optionSelected = document.querySelector(`#restrictedgroups option[value='${value}']`);
+        const optionSelected = document.querySelector(
+          `#restrictedgroups option[value='${value}']`
+        ) as HTMLOptionElement;
         optionSelected.setAttribute('selected', 'selected');
       });
     }
   }
 };
 
-const checkForHash = () => {
-  const questionInputValue = document.getElementById('question').value;
-  const questionHelp = document.getElementById('questionHelp');
-  const submitButton = document.getElementById('faqEditorSubmit');
+const checkForHash = (): void => {
+  const questionInputValue = (document.getElementById('question') as HTMLInputElement).value;
+  const questionHelp = document.getElementById('questionHelp') as HTMLElement;
+  const submitButton = document.getElementById('faqEditorSubmit') as HTMLButtonElement;
   if (questionInputValue.includes('#')) {
     questionHelp.classList.remove('visually-hidden');
     submitButton.setAttribute('disabled', 'true');

@@ -15,7 +15,7 @@
 
 import { addElement, serialize } from '../../../../assets/src/utils';
 
-export const handleDeleteComments = () => {
+export const handleDeleteComments = (): void => {
   const deleteFaqComments = document.getElementById('pmf-button-delete-faq-comments');
   const deleteNewsComments = document.getElementById('pmf-button-delete-news-comments');
 
@@ -32,12 +32,12 @@ export const handleDeleteComments = () => {
   }
 };
 
-const deleteComments = (type) => {
-  const responseMessage = document.getElementById('returnMessage');
-  const form = document.getElementById(`pmf-comments-selected-${type}`);
+const deleteComments = (type: 'faq' | 'news'): void => {
+  const responseMessage = document.getElementById('returnMessage') as HTMLElement;
+  const form = document.getElementById(`pmf-comments-selected-${type}`) as HTMLFormElement;
   const comments = new FormData(form);
 
-  fetch(window.location.pathname + 'api/content/comments', {
+  fetch(`${window.location.pathname}api/content/comments`, {
     method: 'DELETE',
     headers: {
       Accept: 'application/json, text/plain, */*',
@@ -52,20 +52,20 @@ const deleteComments = (type) => {
       if (response.ok) {
         return response.json();
       }
-      throw new Error('Network response was not ok: ', { cause: { response } });
+      throw new Error('Network response was not ok.');
     })
     .then((response) => {
       if (response.success) {
         const commentsToDelete = document.querySelectorAll('tr td input:checked');
         commentsToDelete.forEach((toDelete) => {
-          toDelete.parentNode.parentNode.parentNode.remove();
+          toDelete.parentNode?.parentNode?.parentNode?.remove();
         });
       } else {
-        responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: response.error }));
+        responseMessage.append(addElement('div', { className: 'alert alert-danger', innerText: response.error }));
       }
     })
     .catch(async (error) => {
-      const errorMessage = await error.cause.response.json();
-      responseMessage.append(addElement('div', { classList: 'alert alert-danger', innerText: errorMessage }));
+      const errorMessage = await (error as any).cause.response.json();
+      responseMessage.append(addElement('div', { className: 'alert alert-danger', innerText: errorMessage }));
     });
 };
