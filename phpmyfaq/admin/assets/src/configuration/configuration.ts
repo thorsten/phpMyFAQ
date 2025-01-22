@@ -15,11 +15,12 @@
 
 import { Tab } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { saveConfiguration } from '../api';
+import { Response } from '../interfaces';
 
 export const handleConfiguration = async (): Promise<void> => {
   const configTabList: HTMLElement[] = [].slice.call(document.querySelectorAll('#configuration-list a'));
   const result = document.getElementById('pmf-configuration-result') as HTMLElement;
-  const language = document.getElementById('pmf-language') as HTMLInputElement;
   if (configTabList.length) {
     let tabLoaded = false;
     configTabList.forEach((element) => {
@@ -80,22 +81,12 @@ export const handleSaveConfiguration = async (): Promise<void> => {
       const form = document.getElementById('configuration-list') as HTMLFormElement;
       const formData = new FormData(form);
 
-      const response = await fetch('./api/configuration', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = (await saveConfiguration(formData)) as unknown as Response;
 
-      if (!response.ok) {
-        console.error('Request failed!');
-        return;
-      }
-
-      const json = await response.json();
-
-      if (json.success) {
-        pushNotification(json.success);
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
       } else {
-        pushErrorNotification(json.error);
+        pushErrorNotification(response.error as string);
       }
     });
   }
