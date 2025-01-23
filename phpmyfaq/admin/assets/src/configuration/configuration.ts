@@ -15,7 +15,19 @@
 
 import { Tab } from 'bootstrap';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { saveConfiguration } from '../api';
+import {
+  fetchConfiguration,
+  fetchFaqsSortingKeys,
+  fetchFaqsSortingOrder,
+  fetchFaqsSortingPopular,
+  fetchPermLevel,
+  fetchReleaseEnvironment,
+  fetchSearchRelevance,
+  fetchSeoMetaTags,
+  fetchTemplates,
+  fetchTranslations,
+  saveConfiguration,
+} from '../api';
 import { Response } from '../interfaces';
 
 export const handleConfiguration = async (): Promise<void> => {
@@ -28,7 +40,7 @@ export const handleConfiguration = async (): Promise<void> => {
       element.addEventListener('shown.bs.tab', async (event) => {
         event.preventDefault();
         const target = (event.target as HTMLAnchorElement).getAttribute('href') as string;
-        await fetchConfiguration(target);
+        await handleConfigurationTab(target);
 
         switch (target) {
           case '#main':
@@ -66,7 +78,7 @@ export const handleConfiguration = async (): Promise<void> => {
     });
 
     if (!tabLoaded) {
-      await fetchConfiguration('#main');
+      await handleConfigurationTab('#main');
       await handleTranslation();
     }
   }
@@ -205,178 +217,21 @@ const handleSeoMetaTags = async (): Promise<void> => {
   }
 };
 
-const fetchConfiguration = async (target: string): Promise<void> => {
-  try {
-    const response = await fetch(`./api/configuration/list/${target.substring(1)}`, {
-      headers: {
-        'Accept-Language': (document.getElementById('pmf-language') as HTMLInputElement).value,
-      },
-    });
+const handleConfigurationTab = async (target: string): Promise<void> => {
+  const language = (document.getElementById('pmf-language') as HTMLInputElement).value;
+  const response = await fetchConfiguration(target, language);
 
-    if (!response.ok) {
-      console.error('Request failed!');
-      return;
-    }
+  const tabContent = document.querySelector(target) as HTMLElement;
 
-    const html = await response.text();
-    const tabContent = document.querySelector(target) as HTMLElement;
-
-    while (tabContent.firstChild) {
-      tabContent.removeChild(tabContent.firstChild);
-    }
-
-    tabContent.innerHTML = html.toString();
-
-    // Special cases
-    const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]') as HTMLInputElement;
-    if (dateLastChecked) {
-      dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
-    }
-  } catch (error) {
-    console.error(error.message);
+  while (tabContent.firstChild) {
+    tabContent.removeChild(tabContent.firstChild);
   }
-};
 
-const fetchTranslations = async (): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/translations`);
+  tabContent.innerHTML = response.toString();
 
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchTemplates = async (): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/templates`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchFaqsSortingKeys = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/faqs-sorting-key/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchFaqsSortingOrder = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/faqs-sorting-order/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchFaqsSortingPopular = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/faqs-sorting-popular/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchPermLevel = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/perm-level/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchReleaseEnvironment = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/release-environment/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchSearchRelevance = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/search-relevance/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
-  }
-};
-
-const fetchSeoMetaTags = async (currentValue: string): Promise<string> => {
-  try {
-    const response = await fetch(`./api/configuration/seo-metatags/${currentValue}`);
-
-    if (!response.ok) {
-      console.error('Request failed!');
-      return '';
-    }
-
-    return await response.text();
-  } catch (error) {
-    console.error(error.message);
-    return '';
+  // Special cases
+  const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]') as HTMLInputElement;
+  if (dateLastChecked) {
+    dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
   }
 };

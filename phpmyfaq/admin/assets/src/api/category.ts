@@ -28,7 +28,7 @@ export const fetchCategoryTranslations = async (categoryId: string): Promise<Res
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -55,7 +55,7 @@ export const deleteCategory = async (
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -82,6 +82,6 @@ export const setCategoryTree = async (
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

@@ -28,7 +28,7 @@ export const deleteAttachments = async (attachmentId: string, csrfToken: string)
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -45,6 +45,6 @@ export const refreshAttachments = async (attachmentId: string, csrfToken: string
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
