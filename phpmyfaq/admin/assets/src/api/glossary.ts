@@ -42,7 +42,6 @@ export const createGlossary = async (
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error creating glossary: ', error);
     throw error;
   }
 };
@@ -72,7 +71,6 @@ export const deleteGlossary = async (
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error deleting glossary: ', error);
     throw error;
   }
 };
@@ -93,7 +91,6 @@ export const getGlossary = async (glossaryId: string, glossaryLanguage: string):
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error getting glossary: ', error);
     throw error;
   }
 };
@@ -124,11 +121,9 @@ export const updateGlossary = async (
     if (response.status === 200) {
       return await response.json();
     } else {
-      console.error('Error updating glossary: ', response);
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error updating glossary: ', error);
     throw error;
   }
 };

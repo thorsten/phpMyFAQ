@@ -53,7 +53,6 @@ export const fetchAllFaqsByCategory = async (
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching FAQs from category:', error);
     throw error;
   }
 };
@@ -78,7 +77,6 @@ export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: str
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching FAQs by autocomplete: ', error);
     throw error;
   }
 };
@@ -104,7 +102,6 @@ export const deleteFaq = async (faqId: string, faqLanguage: string, token: strin
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error deleting FAQ: ', error);
     throw error;
   }
 };
@@ -124,7 +121,7 @@ export const create = async (formData: any): Promise<Response | undefined> => {
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -143,6 +140,6 @@ export const update = async (formData: any): Promise<Response | undefined> => {
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };

@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { createReport } from './export';
 
 describe('createReport', () => {
-  it('should create a report and return a Blob if successful', async () => {
+  test('should create a report and return a Blob if successful', async () => {
     const mockBlob = new Blob(['Report data'], { type: 'application/pdf' });
     global.fetch = vi.fn(() =>
       Promise.resolve({
@@ -31,7 +31,7 @@ describe('createReport', () => {
     });
   });
 
-  it('should return JSON response if the network response is not ok', async () => {
+  test('should return JSON response if the network response is not ok', async () => {
     const mockResponse = { success: false, message: 'Error' };
     global.fetch = vi.fn(() =>
       Promise.resolve({
@@ -47,7 +47,7 @@ describe('createReport', () => {
     expect(result).toEqual(mockResponse);
   });
 
-  it('should log an error if fetch fails', async () => {
+  test('should log an error if fetch fails', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const mockError = new Error('Fetch failed');
     global.fetch = vi.fn(() => Promise.reject(mockError));
