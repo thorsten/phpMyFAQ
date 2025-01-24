@@ -21,6 +21,8 @@ import {
   fetchEditTranslation,
   fetchSetInputAsRequired,
 } from '../api';
+import { pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 export const handleFormEdit = (): void => {
   const forms = document.getElementById('forms');
@@ -32,7 +34,12 @@ export const handleFormEdit = (): void => {
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
-        await fetchActivateInput(csrf, formId, inputId, checked);
+        const response = (await fetchActivateInput(csrf, formId, inputId, checked)) as unknown as Response;
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+        } else {
+          console.error(response.error);
+        }
       });
     });
     // Handle required checkboxes
@@ -42,7 +49,12 @@ export const handleFormEdit = (): void => {
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
-        await fetchSetInputAsRequired(csrf, formId, inputId, checked);
+        const response = (await fetchSetInputAsRequired(csrf, formId, inputId, checked)) as unknown as Response;
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+        } else {
+          console.error(response.error);
+        }
       });
     });
 
@@ -93,7 +105,18 @@ export const handleFormTranslations = (): void => {
           const csrf = element.getAttribute('data-pmf-csrf') as string;
           const formId = element.getAttribute('data-pmf-formId') as string;
           const inputId = element.getAttribute('data-pmf-inputId') as string;
-          await fetchEditTranslation(csrf, formId, inputId, lang, input.value);
+          const response = (await fetchEditTranslation(
+            csrf,
+            formId,
+            inputId,
+            lang,
+            input.value
+          )) as unknown as Response;
+          if (typeof response.success === 'string') {
+            pushNotification(response.success);
+          } else {
+            console.error(response.error);
+          }
         }
       });
     });
@@ -105,7 +128,16 @@ export const handleFormTranslations = (): void => {
         const inputId = element.getAttribute('data-pmf-inputId') as string;
         const formId = element.getAttribute('data-pmf-formId') as string;
         const lang = element.getAttribute('data-pmf-lang') as string;
-        await fetchDeleteTranslation(csrf, formId, inputId, lang, element);
+        const response = (await fetchDeleteTranslation(csrf, formId, inputId, lang)) as unknown as Response;
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+          document.getElementById('item_' + lang)?.remove();
+          const option = document.createElement('option');
+          option.innerText = element.getAttribute('data-pmf-langname')!;
+          document.getElementById('languageSelect')?.appendChild(option);
+        } else {
+          console.error(response.error);
+        }
       });
     });
     // Add Translation
@@ -117,7 +149,21 @@ export const handleFormTranslations = (): void => {
       const csrf = addTranslationButton.getAttribute('data-pmf-csrf') as string;
       const inputId = addTranslationButton.getAttribute('data-pmf-inputId') as string;
       const formId = addTranslationButton.getAttribute('data-pmf-formId') as string;
-      await fetchAddTranslation(csrf, formId, inputId, languageSelect.value, translationInput.value);
+      const response = (await fetchAddTranslation(
+        csrf,
+        formId,
+        inputId,
+        languageSelect.value,
+        translationInput.value
+      )) as unknown as Response;
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+        setTimeout(function () {
+          window.location.reload();
+        }, 3000);
+      } else {
+        console.error(response.error);
+      }
     });
   }
 };

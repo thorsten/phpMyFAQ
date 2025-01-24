@@ -14,9 +14,6 @@
  * @since     2014-03-21
  */
 
-import { pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
-
 export const fetchActivateInput = async (
   csrf: string,
   formId: string,
@@ -38,18 +35,12 @@ export const fetchActivateInput = async (
       }),
     });
 
-    if (response.ok) {
-      const result: Response = await response.json();
-      if (result.success) {
-        pushNotification(result.success); // @todo move that to the forms.ts file in the content folder
-      } else {
-        console.error(result.error);
-      }
+    if (response.status === 200) {
+      return await response.json();
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error activating/deactivating input:', error);
     throw error;
   }
 };
@@ -75,18 +66,12 @@ export const fetchSetInputAsRequired = async (
       }),
     });
 
-    if (response.ok) {
-      const result: Response = await response.json();
-      if (result.success) {
-        pushNotification(result.success); // @todo move that to the forms.ts file in the content folder
-      } else {
-        console.error(result.error);
-      }
+    if (response.status === 200) {
+      return await response.json();
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error setting input as required:', error);
     throw error;
   }
 };
@@ -114,18 +99,12 @@ export const fetchEditTranslation = async (
       }),
     });
 
-    if (response.ok) {
-      const result: Response = await response.json();
-      if (result.success) {
-        pushNotification(result.success); // @todo move that to the forms.ts file in the content folder
-      } else {
-        console.error(result.error);
-      }
+    if (response.status === 200) {
+      return await response.json();
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error editing translation:', error);
     throw error;
   }
 };
@@ -134,8 +113,7 @@ export const fetchDeleteTranslation = async (
   csrf: string,
   formId: string,
   inputId: string,
-  lang: string,
-  element: HTMLElement
+  lang: string
 ): Promise<void> => {
   try {
     const response = await fetch('api/forms/translation-delete', {
@@ -152,23 +130,12 @@ export const fetchDeleteTranslation = async (
       }),
     });
 
-    if (response.ok) {
-      const result: Response = await response.json();
-      if (result.success) {
-        // @todo move that to the forms.ts file in the content folder
-        pushNotification(result.success);
-        document.getElementById('item_' + element.getAttribute('data-pmf-lang'))?.remove();
-        const option = document.createElement('option');
-        option.innerText = element.getAttribute('data-pmf-langname')!;
-        document.getElementById('languageSelect')?.appendChild(option);
-      } else {
-        console.error(result.error);
-      }
+    if (response.status === 200) {
+      return await response.json();
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error deleting translation:', error);
     throw error;
   }
 };
@@ -196,22 +163,12 @@ export const fetchAddTranslation = async (
       }),
     });
 
-    if (response.ok) {
-      const result: Response = await response.json();
-      if (result.success) {
-        // @todo move that to the forms.ts file in the content folder
-        pushNotification(result.success);
-        setTimeout(function () {
-          window.location.reload();
-        }, 3000);
-      } else {
-        console.error(result.error);
-      }
+    if (response.status === 200) {
+      return await response.json();
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error adding translation:', error);
     throw error;
   }
 };

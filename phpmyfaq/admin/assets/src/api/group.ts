@@ -33,7 +33,6 @@ export const fetchAllGroups = async (): Promise<Response | undefined> => {
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching groups:', error);
     throw error;
   }
 };
@@ -56,7 +55,6 @@ export const fetchAllUsersForGroups = async (): Promise<Response | undefined> =>
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error('Error fetching users for groups:', error);
     throw error;
   }
 };
@@ -79,7 +77,6 @@ export const fetchAllMembers = async (groupId: string): Promise<Response | undef
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error(`Error fetching members for group ${groupId}:`, error);
     throw error;
   }
 };
@@ -102,7 +99,6 @@ export const fetchGroup = async (groupId: string): Promise<Response | undefined>
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error(`Error fetching data for group ${groupId}:`, error);
     throw error;
   }
 };
@@ -125,7 +121,6 @@ export const fetchGroupRights = async (groupId: string): Promise<Response | unde
       throw new Error('Network response was not ok.');
     }
   } catch (error) {
-    console.error(`Error fetching permissions for group ${groupId}:`, error);
     throw error;
   }
 };

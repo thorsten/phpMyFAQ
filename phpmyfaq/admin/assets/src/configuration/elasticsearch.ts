@@ -13,8 +13,8 @@
  * @since     2022-03-20
  */
 
-import { fomatBytes } from '../utils';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 interface ElasticsearchStats {
   indices: {
