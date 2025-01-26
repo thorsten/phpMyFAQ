@@ -31,55 +31,42 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ElasticsearchController extends AbstractController
 {
-    /**
-     * @throws Exception
-     */
     #[Route('./admin/api/elasticsearch/create')]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
-
         try {
-            $elasticsearch->createIndex();
+            $this->container->get('phpmyfaq.instance.elasticsearch')->createIndex();
             return $this->json(['success' => Translation::get('ad_es_create_index_success')], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('./admin/api/elasticsearch/drop')]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
-
         try {
-            $elasticsearch->dropIndex();
+            $this->container->get('phpmyfaq.instance.elasticsearch')->dropIndex();
             return $this->json(['success' => Translation::get('ad_es_drop_index_success')], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('./admin/api/elasticsearch/import')]
     public function import(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
         $faq = new Faq($this->configuration);
         $faq->getAllFaqs();
 
-        $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
+        $bulkIndexResult = $this->container->get('phpmyfaq.instance.elasticsearch')->bulkIndex($faq->faqRecords);
+
         if (isset($bulkIndexResult['success'])) {
             return $this->json(['success' => Translation::get('ad_es_create_import_success')], Response::HTTP_OK);
         } else {

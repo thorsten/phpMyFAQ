@@ -25,6 +25,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Faq\Statistics;
 use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session;
@@ -92,6 +93,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.instance', Instance::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.instance.elasticsearch', Elasticsearch::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
