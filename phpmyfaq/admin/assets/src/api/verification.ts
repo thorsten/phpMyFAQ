@@ -27,13 +27,8 @@ export const getRemoteHashes = async (version: string): Promise<RemoteHashes | u
       },
     });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error getting verification data from api.phpmyfaq.de: ', error);
     throw error;
   }
 };
@@ -51,7 +46,6 @@ export const verifyHashes = async (remoteHashes: RemoteHashes): Promise<any> => 
 
     return await response.json();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };

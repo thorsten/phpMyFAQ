@@ -27,13 +27,9 @@ export const fetchUsers = async (userName: string): Promise<Response | undefined
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching users:', error);
+    throw error;
   }
 };
 
@@ -49,13 +45,8 @@ export const fetchUserData = async (userId: string): Promise<Response | undefine
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error(`Error fetching data for user ${userId}:`, error);
     throw error;
   }
 };
@@ -72,13 +63,8 @@ export const fetchUserRights = async (userId: string): Promise<Response | undefi
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error(`Error fetching permissions for user ${userId}:`, error);
     throw error;
   }
 };
@@ -95,13 +81,8 @@ export const fetchAllUsers = async (): Promise<Response | undefined> => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching all users:', error);
     throw error;
   }
 };
@@ -127,13 +108,8 @@ export const overwritePassword = async (
       }),
     });
 
-    if (response.status === 200 || response.status === 400 || response.status === 401) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error overwriting user password:', error);
     throw error;
   }
 };
@@ -153,7 +129,6 @@ export const postUserData = async (url: string = '', data: Record<string, any> =
 
     return await response.json();
   } catch (error) {
-    console.error('Error posting user data:', error);
     throw error;
   }
 };
@@ -176,7 +151,6 @@ export const deleteUser = async (userId: string, csrfToken: string): Promise<Res
 
     return await response.json();
   } catch (error) {
-    console.error('Error deleting user:', error);
     throw error;
   }
 };

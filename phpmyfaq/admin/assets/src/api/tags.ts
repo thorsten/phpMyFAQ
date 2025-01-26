@@ -30,13 +30,8 @@ export const fetchTags = async (searchString: string): Promise<TagResponse[]> =>
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok: ' + response.statusText);
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching tags:', error);
     throw error;
   }
 };
@@ -53,13 +48,8 @@ export const deleteTag = async (tagId: string): Promise<void> => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      await response.json();
-    } else {
-      throw new Error('Network response was not ok: ' + response.statusText);
-    }
+    await response.json();
   } catch (error) {
-    console.error('Error deleting tag:', error);
     throw error;
   }
 };

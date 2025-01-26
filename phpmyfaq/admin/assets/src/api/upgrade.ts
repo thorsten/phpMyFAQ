@@ -34,13 +34,8 @@ export const fetchHealthCheck = async (): Promise<ResponseData | undefined> => {
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching health check:', error);
     throw error;
   }
 };
