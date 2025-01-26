@@ -14,14 +14,9 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
+import { StopWord } from '../interfaces';
 
 const maxCols = 4;
-
-interface StopWord {
-  id: number;
-  lang: string;
-  stopword: string;
-}
 
 export const handleStopWords = (): void => {
   const stopWordsLanguageSelector = document.getElementById('pmf-stop-words-language-selector') as HTMLSelectElement;

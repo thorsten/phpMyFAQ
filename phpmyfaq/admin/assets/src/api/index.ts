@@ -5,6 +5,7 @@ export * from './faqs';
 export * from './forms';
 export * from './glossary';
 export * from './group';
+export * from './instance';
 export * from './news';
 export * from './question';
 export * from './statistics';

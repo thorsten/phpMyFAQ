@@ -1,6 +1,6 @@
 export interface Response {
   json(): void | PromiseLike<void>;
-  success: boolean;
+  success: string;
   message?: string;
   error?: string;
   status?: string;

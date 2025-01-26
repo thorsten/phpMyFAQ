@@ -14,27 +14,9 @@
  */
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
-
-interface ElasticsearchStats {
-  indices: {
-    [indexName: string]: {
-      total: {
-        docs: {
-          count: number;
-        };
-        store: {
-          size_in_bytes: number;
-        };
-      };
-    };
-  };
-}
-
-interface ElasticsearchResponse {
-  index: string;
-  stats: ElasticsearchStats;
-}
+import { fetchElasticsearchAction, fetchElasticsearchStatistics } from '../api/elasticsearch';
+import { ElasticsearchResponse, Response } from '../interfaces';
+import { formatBytes } from '../utils';
 
 export const handleElasticsearch = async (): Promise<void> => {
   const buttons = document.querySelectorAll('button.pmf-elasticsearch');
@@ -47,20 +29,16 @@ export const handleElasticsearch = async (): Promise<void> => {
         const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
 
         try {
-          const response = await fetch(`./api/elasticsearch/${action}`);
+          const response = (await fetchElasticsearchAction(action)) as unknown as Response;
 
-          if (response.ok) {
-            const result = await response.json();
-            pushNotification(result.success);
-
+          if (typeof response.success !== 'undefined') {
+            pushNotification(response.success);
             setInterval(elasticsearchStats, 5000);
           } else {
-            const errorMessage = await response.json();
-            pushErrorNotification(errorMessage.error);
+            pushErrorNotification(response.error as string);
           }
         } catch (error) {
-          const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
-          pushErrorNotification(errorMessage?.error || error.message);
+          pushErrorNotification(error as string);
         }
       });
 
@@ -70,12 +48,11 @@ export const handleElasticsearch = async (): Promise<void> => {
           div.innerHTML = '';
 
           try {
-            const response = await fetch('./api/elasticsearch/statistics');
+            const response = (await fetchElasticsearchStatistics()) as unknown as ElasticsearchResponse;
 
-            if (response.ok) {
-              const result: ElasticsearchResponse = await response.json();
-              const indexName = result.index;
-              const stats = result.stats;
+            if (response.index) {
+              const indexName = response.index;
+              const stats = response.stats;
               const count = stats.indices[indexName].total.docs.count;
               const sizeInBytes = stats.indices[indexName].total.store.size_in_bytes;
               let html = '<dl class="row">';
@@ -83,13 +60,9 @@ export const handleElasticsearch = async (): Promise<void> => {
               html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
               html += '</dl>';
               div.innerHTML = html;
-            } else {
-              const errorMessage = await response.json();
-              pushErrorNotification(errorMessage.error);
             }
           } catch (error) {
-            const errorMessage = error.cause && error.cause.response ? await error.cause.response.json() : null;
-            pushErrorNotification(errorMessage?.error || error.message);
+            pushErrorNotification(error as string);
           }
         }
       };

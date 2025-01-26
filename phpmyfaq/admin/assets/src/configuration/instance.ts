@@ -15,21 +15,17 @@
 
 import { Modal } from 'bootstrap';
 import { addElement } from '../../../../assets/src/utils';
-
-interface InstanceResponse {
-  added: string;
-  url: string;
-  deleted: string;
-}
+import { InstanceResponse } from '../interfaces';
+import { addInstance, deleteInstance } from '../api';
 
 export const handleInstances = (): void => {
-  const addInstance = document.querySelector('.pmf-instance-add') as HTMLElement;
-  const deleteInstance = document.querySelectorAll('.pmf-instance-delete') as NodeListOf<HTMLElement>;
+  const addInstanceButton = document.querySelector('.pmf-instance-add') as HTMLElement;
+  const deleteInstanceButton = document.querySelectorAll('.pmf-instance-delete') as NodeListOf<HTMLElement>;
   const container = document.getElementById('pmf-modal-add-instance') as HTMLElement;
 
-  if (addInstance) {
+  if (addInstanceButton) {
     const modal = new Modal(container);
-    addInstance.addEventListener('click', async (event) => {
+    addInstanceButton.addEventListener('click', async (event) => {
       event.preventDefault();
       const csrf = (document.querySelector('#pmf-csrf-token') as HTMLInputElement).value;
       const url = (document.querySelector('#url') as HTMLInputElement).value;
@@ -40,33 +36,25 @@ export const handleInstances = (): void => {
       const password = (document.querySelector('#password') as HTMLInputElement).value;
 
       try {
-        const response = await fetch('./api/instance/add', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            csrf: csrf,
-            url: url,
-            instance: instance,
-            comment: comment,
-            email: email,
-            admin: admin,
-            password: password,
-          }),
-        });
+        const response = (await addInstance(
+          csrf,
+          url,
+          instance,
+          comment,
+          email,
+          admin,
+          password
+        )) as unknown as InstanceResponse;
 
-        if (response.status === 200) {
-          const responseData: InstanceResponse = await response.json();
+        if (response.added) {
           const table = document.querySelector('.table tbody') as HTMLElement;
-          const row = addElement('tr', { id: `row-instance-${responseData.added}` }, [
-            addElement('td', { innerText: responseData.added }),
+          const row = addElement('tr', { id: `row-instance-${response.added}` }, [
+            addElement('td', { innerText: response.added }),
             addElement('td', {}, [
               addElement('a', {
-                href: responseData.url,
+                href: response.url,
                 target: '_blank',
-                innerText: responseData.url,
+                innerText: response.url,
               }),
             ]),
             addElement('td', { innerText: instance }),
@@ -75,7 +63,7 @@ export const handleInstances = (): void => {
               addElement(
                 'a',
                 {
-                  href: `./instance/edit/${responseData.added}`,
+                  href: `./instance/edit/${response.added}`,
                   classList: 'btn btn-info',
                 },
                 [addElement('i', { classList: 'bi bi-pencil', ariaHidden: true })]
@@ -86,14 +74,14 @@ export const handleInstances = (): void => {
                 'button',
                 {
                   classList: 'btn btn-danger',
-                  'data-delete-instance-id': `${responseData.added}`,
+                  'data-delete-instance-id': `${response.added}`,
                   type: 'button',
                 },
                 [
                   addElement('i', {
                     ariaHidden: true,
                     classList: 'bi bi-trash',
-                    'data-delete-instance-id': `${responseData.added}`,
+                    'data-delete-instance-id': `${response.added}`,
                   }),
                 ]
               ),
@@ -115,8 +103,8 @@ export const handleInstances = (): void => {
     });
   }
 
-  if (deleteInstance) {
-    deleteInstance.forEach((element) => {
+  if (deleteInstanceButton) {
+    deleteInstanceButton.forEach((element) => {
       element.addEventListener('click', async (event) => {
         event.preventDefault();
 
@@ -125,21 +113,10 @@ export const handleInstances = (): void => {
 
         if (confirm('Are you sure?')) {
           try {
-            const response = await fetch('./api/instance/delete', {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                csrf: csrf,
-                instanceId: instanceId,
-              }),
-            });
+            const response = (await deleteInstance(csrf, instanceId)) as unknown as InstanceResponse;
 
-            if (response.status === 200) {
-              const responseData: InstanceResponse = await response.json();
-              const row = document.getElementById(`row-instance-${responseData.deleted}`) as HTMLElement;
+            if (response.deleted) {
+              const row = document.getElementById(`row-instance-${response.deleted}`) as HTMLElement;
               row.addEventListener('click', () => (row.style.opacity = '0'));
               row.addEventListener('transitionend', () => row.remove());
             } else {
