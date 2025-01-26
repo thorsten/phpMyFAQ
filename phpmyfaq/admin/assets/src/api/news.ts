@@ -14,10 +14,7 @@
  * @since     2024-04-21
  */
 
-import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { Response } from '../interfaces';
-
-export const addNews = async (data: Record<string, any> = {}): Promise<Response | undefined> => {
+export const addNews = async (data: Record<string, any> = {}): Promise<void> => {
   try {
     const response = await fetch('api/news/create', {
       method: 'POST',
@@ -30,22 +27,13 @@ export const addNews = async (data: Record<string, any> = {}): Promise<Response 
       body: JSON.stringify(data),
     });
 
-    const result: Response = await response.json();
-    if (result.success) {
-      pushNotification(result.success); // @todo move that to the news.ts file in the content folder
-      setTimeout(() => {
-        window.location.href = './news';
-      }, 3000);
-    } else {
-      pushErrorNotification(result.error);
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error posting news data:', error);
     throw error;
   }
 };
 
-export const deleteNews = async (csrfToken: string, id: string): Promise<Response | undefined> => {
+export const deleteNews = async (csrfToken: string, id: string): Promise<void> => {
   try {
     const response = await fetch('api/news/delete', {
       method: 'DELETE',
@@ -61,22 +49,13 @@ export const deleteNews = async (csrfToken: string, id: string): Promise<Respons
       }),
     });
 
-    const result: Response = await response.json();
-    if (result.success) {
-      pushNotification(result.success); // @todo move that to the news.ts file in the content folder
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
-    } else {
-      pushErrorNotification(result.error); // @todo move that to the news.ts file in the content folder
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error deleting news data:', error);
     throw error;
   }
 };
 
-export const updateNews = async (data: Record<string, any> = {}): Promise<Response | undefined> => {
+export const updateNews = async (data: Record<string, any> = {}): Promise<void> => {
   try {
     const response = await fetch('api/news/update', {
       method: 'PUT',
@@ -89,22 +68,13 @@ export const updateNews = async (data: Record<string, any> = {}): Promise<Respon
       body: JSON.stringify(data),
     });
 
-    const result: Response = await response.json();
-    if (result.success) {
-      pushNotification(result.success); // @todo move that to the news.ts file in the content folder
-      setTimeout(() => {
-        window.location.href = './news';
-      }, 3000);
-    } else {
-      pushErrorNotification(result.error); // @todo move that to the news.ts file in the content folder
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error posting news data:', error);
     throw error;
   }
 };
 
-export const activateNews = async (id: string, status: string, csrfToken: string): Promise<Response | undefined> => {
+export const activateNews = async (id: string, status: string, csrfToken: string): Promise<void> => {
   try {
     const response = await fetch('api/news/activate', {
       method: 'POST',
@@ -121,14 +91,8 @@ export const activateNews = async (id: string, status: string, csrfToken: string
       }),
     });
 
-    const result: Response = await response.json();
-    if (result.success) {
-      pushNotification(result.success); // @todo move that to the news.ts file in the content folder
-    } else {
-      pushErrorNotification(result.error); // @todo move that to the news.ts file in the content folder
-    }
+    return await response.json();
   } catch (error) {
-    console.error('Error posting news data:', error);
     throw error;
   }
 };

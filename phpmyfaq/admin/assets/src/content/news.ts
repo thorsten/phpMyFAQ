@@ -16,6 +16,8 @@
 
 import { activateNews, addNews, deleteNews, updateNews } from '../api';
 import { Modal } from 'bootstrap';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 interface NewsData {
   news: string;
@@ -57,7 +59,15 @@ export const handleAddNews = (): void => {
         target: target,
         csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       };
-      await addNews(data);
+      const response = (await addNews(data)) as unknown as Response;
+      if (typeof response.success === 'string') {
+        pushNotification(response.success);
+        setTimeout(() => {
+          window.location.href = './news';
+        }, 3000);
+      } else {
+        pushErrorNotification(response.error);
+      }
     });
   }
 };
@@ -79,16 +89,30 @@ export const handleNews = (): void => {
         event.preventDefault();
         const csrfToken = (document.getElementById('pmf-csrf-token-delete') as HTMLInputElement).value;
         const id = (document.getElementById('newsId') as HTMLInputElement).value;
-        await deleteNews(csrfToken, id);
+        const response = (await deleteNews(csrfToken, id)) as unknown as Response;
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        } else {
+          pushErrorNotification(response.error);
+        }
       }
     );
     document.querySelectorAll<HTMLInputElement>('#activate').forEach((item) => {
       item.addEventListener('click', async () => {
-        await activateNews(
+        const response = await activateNews(
           item.getAttribute('data-pmf-id') as string,
           item.checked,
           item.getAttribute('data-pmf-csrf-token') as string
         );
+
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+        } else {
+          pushErrorNotification(response.error);
+        }
       });
     });
   }
@@ -121,7 +145,15 @@ export const handleEditNews = (): void => {
         target: target,
       };
 
-      await updateNews(data);
+      const reponse = (await updateNews(data)) as unknown as Response;
+      if (typeof reponse.success === 'string') {
+        pushNotification(reponse.success);
+        setTimeout(() => {
+          window.location.href = './news';
+        }, 3000);
+      } else {
+        pushErrorNotification(reponse.error);
+      }
     });
   }
 };
