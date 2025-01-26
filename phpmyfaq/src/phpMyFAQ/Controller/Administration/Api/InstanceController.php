@@ -65,7 +65,7 @@ class InstanceController extends AbstractController
             return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
         }
 
-        $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
+        $url = 'https://' . $url . '.' . $request->getHost();
         if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
             return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
         }

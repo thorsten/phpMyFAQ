@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class Filter
  *
@@ -100,11 +102,14 @@ class Filter
         $urlData = [];
         $cleanUrlData = [];
 
-        if (!isset($_SERVER['QUERY_STRING'])) {
+        $request = Request::createFromGlobals();
+        $queryString = $request->getQueryString();
+
+        if ($queryString === null) {
             return '';
         }
 
-        parse_str((string) $_SERVER['QUERY_STRING'], $urlData);
+        parse_str($queryString, $urlData);
 
         foreach ($urlData as $key => $urlPart) {
             $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);

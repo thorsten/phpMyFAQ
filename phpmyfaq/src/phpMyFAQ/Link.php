@@ -249,31 +249,13 @@ class Link
      */
     public function getSystemScheme(): string
     {
+        $request = Request::createFromGlobals();
+
         if ($this->configuration->get('security.useSslOnly')) {
             return 'https://';
         }
-        if (!self::isIISServer()) {
-            // Apache, nginx, lighttpd
-            if (isset($_SERVER['HTTPS']) && 'on' === strtolower((string) $_SERVER['HTTPS'])) {
-                return 'https://';
-            }
-            return 'http://';
-        }
 
-        if ('on' === strtolower((string) $_SERVER['HTTPS'])) {
-            // IIS Server
-            return 'https://';
-        } else {
-            return 'http://';
-        }
-    }
-
-    /**
-     * Checks if webserver is an IIS Server.
-     */
-    public static function isIISServer(): bool
-    {
-        return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
+        return $request->isSecure() ? 'https://' : 'http://';
     }
 
     /**
@@ -284,11 +266,14 @@ class Link
      */
     public static function getSystemRelativeUri(string|null $path = null): string
     {
+        $request = Request::createFromGlobals();
+        $scriptName = $request->getScriptName();
+
         if (isset($path)) {
-            return str_replace($path, '', (string) $_SERVER['SCRIPT_NAME']);
+            return str_replace($path, '', $scriptName);
         }
 
-        return str_replace('/src/Link.php', '', (string) $_SERVER['SCRIPT_NAME']);
+        return str_replace('/src/Link.php', '', $scriptName);
     }
 
     /**
