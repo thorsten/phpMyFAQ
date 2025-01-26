@@ -173,18 +173,16 @@ readonly class Backup
         }
 
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(PMF_CONTENT_DIR)
+            new RecursiveDirectoryIterator(PMF_CONTENT_DIR),
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         foreach ($files as $file) {
-            $filePath = $file->getRealPath();
-            $relativePath = substr($filePath, strlen(PMF_CONTENT_DIR) + 1);
-
-            if ($file->isDir()) {
-                $zipArchive->addEmptyDir($relativePath);
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen(PMF_CONTENT_DIR) + 1);
+                $zipArchive->addFile($filePath, $relativePath);
             }
-
-            $zipArchive->addFile($filePath, $relativePath);
         }
 
         $zipArchive->close();

@@ -44,6 +44,7 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
@@ -230,6 +231,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.instance.client', Instance\Client::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.instance.elasticsearch', Elasticsearch::class)
         ->args([
             new Reference('phpmyfaq.configuration')
         ]);
