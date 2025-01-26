@@ -32,7 +32,7 @@ export const deleteAdminLog = async (csrfToken: string): Promise<Response | unde
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -53,7 +53,7 @@ export const truncateSearchTerms = async (csrfToken: string): Promise<Response |
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -74,7 +74,7 @@ export const clearRatings = async (csrfToken: string): Promise<Response | undefi
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 export const clearVisits = async (csrfToken: string): Promise<Response | undefined> => {
@@ -94,7 +94,7 @@ export const clearVisits = async (csrfToken: string): Promise<Response | undefin
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
 
@@ -116,6 +116,6 @@ export const deleteSessions = async (csrfToken: string, month: string): Promise<
 
     return await response.json();
   } catch (error) {
-    console.error(error);
+    throw error;
   }
 };
