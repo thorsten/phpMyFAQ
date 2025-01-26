@@ -96,6 +96,7 @@ class Permission
      * Returns the record permissions for users and groups.
      *
      * @param string $mode 'group' or 'user'
+     * @return array<int>
      */
     public function get(string $mode, int $faqId): array
     {
@@ -128,6 +129,11 @@ class Permission
         return $permissions;
     }
 
+    /**
+     * Creates the permission array.
+     *
+     * @return array<string, array<int>>
+     */
     public function createPermissionArray(): array
     {
         $permissions = [];
@@ -141,15 +147,11 @@ class Permission
         } else {
             if (is_string($data->restricted_users)) {
                 $permissions += [
-                    'restricted_user' => [
-                        Filter::filterVar(array($data->restricted_users), FILTER_VALIDATE_INT),
-                    ],
+                    'restricted_user' => [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)],
                 ];
             } else {
                 $permissions += [
-                    'restricted_user' => [
-                        Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT),
-                    ],
+                    'restricted_user' => Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT),
                 ];
             }
         }
@@ -161,15 +163,11 @@ class Permission
         } else {
             if (is_string($data->restricted_groups)) {
                 $permissions += [
-                    'restricted_groups' => [
-                        Filter::filterVar(array($data->restricted_groups), FILTER_VALIDATE_INT),
-                    ]
+                    'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)]
                 ];
             } else {
                 $permissions += [
-                    'restricted_groups' => [
-                        Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT),
-                    ]
+                    'restricted_groups' => Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
                 ];
             }
         }
