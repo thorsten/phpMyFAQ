@@ -14,8 +14,9 @@
  */
 
 import { Response } from '../interfaces';
+import { UserData } from '../interfaces/userData';
 
-export const fetchUsers = async (userName: string): Promise<Response | undefined> => {
+export const fetchUsers = async (userName: string): Promise<Response> => {
   try {
     const response = await fetch(`./api/user/users?filter=${userName}`, {
       method: 'GET',
@@ -33,7 +34,7 @@ export const fetchUsers = async (userName: string): Promise<Response | undefined
   }
 };
 
-export const fetchUserData = async (userId: string): Promise<Response | undefined> => {
+export const fetchUserData = async (userId: string): Promise<UserData> => {
   try {
     const response = await fetch(`./api/user/data/${userId}`, {
       method: 'GET',
@@ -51,7 +52,7 @@ export const fetchUserData = async (userId: string): Promise<Response | undefine
   }
 };
 
-export const fetchUserRights = async (userId: string): Promise<Response | undefined> => {
+export const fetchUserRights = async (userId: string): Promise<number[]> => {
   try {
     const response = await fetch(`./api/user/permissions/${userId}`, {
       method: 'GET',
@@ -69,7 +70,7 @@ export const fetchUserRights = async (userId: string): Promise<Response | undefi
   }
 };
 
-export const fetchAllUsers = async (): Promise<Response | undefined> => {
+export const fetchAllUsers = async (): Promise<Response> => {
   try {
     const response = await fetch('./api/user/users', {
       method: 'GET',
@@ -114,7 +115,7 @@ export const overwritePassword = async (
   }
 };
 
-export const postUserData = async (url: string = '', data: Record<string, any> = {}): Promise<Response | undefined> => {
+export const postUserData = async (url: string = '', data: Record<string, any> = {}): Promise<Response> => {
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -133,7 +134,27 @@ export const postUserData = async (url: string = '', data: Record<string, any> =
   }
 };
 
-export const deleteUser = async (userId: string, csrfToken: string): Promise<Response | undefined> => {
+export const activateUser = async (userId: string, csrfToken: string): Promise<Response> => {
+  try {
+    const response = await fetch('./api/user/activate', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        csrfToken: csrfToken,
+        userId: userId,
+      }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteUser = async (userId: string, csrfToken: string): Promise<Response> => {
   try {
     const response = await fetch('./api/user/delete', {
       method: 'DELETE',

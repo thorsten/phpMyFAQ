@@ -1,8 +1,6 @@
 /**
  * JavaScript functions for user frontend
  *
- * @todo move fetch() functionality to api functions
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -16,8 +14,9 @@
  */
 
 import { Modal } from 'bootstrap';
-import { fetchUserData, fetchUserRights, deleteUser, postUserData } from '../api';
+import { fetchUserData, fetchUserRights, deleteUser, postUserData, overwritePassword } from '../api';
 import { capitalize, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response, UserData } from '../interfaces';
 
 /**
  * Updates the current loaded user
@@ -33,20 +32,20 @@ export const updateUser = async (userId: string): Promise<void> => {
  * @param {string} userId
  */
 const setUserData = async (userId: string): Promise<void> => {
-  const userData = await fetchUserData(userId);
+  const userData = (await fetchUserData(userId)) as unknown as UserData;
 
-  updateInput('current_user_id', userData.user_id);
+  updateInput('current_user_id', userData.userId);
   updateInput('pmf-user-list-autocomplete', userData.login);
-  updateInput('last_modified', userData.last_modified);
-  updateInput('update_user_id', userData.user_id);
-  updateInput('modal_user_id', userData.user_id);
-  updateInput('auth_source', capitalize(userData.auth_source));
+  updateInput('last_modified', userData.lastModified);
+  updateInput('update_user_id', userData.userId);
+  updateInput('modal_user_id', userData.userId);
+  updateInput('auth_source', capitalize(userData.authSource));
   updateInput('user_status', userData.status);
-  updateInput('display_name', userData.display_name);
+  updateInput('display_name', userData.displayName);
   updateInput('email', userData.email);
-  updateInput('overwrite_twofactor', userData.twofactor_enabled);
+  updateInput('overwrite_twofactor', userData.twoFactorEnabled);
 
-  if (userData.is_superadmin) {
+  if (userData.isSuperadmin) {
     const superAdmin = document.getElementById('is_superadmin') as HTMLInputElement;
     superAdmin.setAttribute('checked', 'checked');
     document.querySelectorAll('.permission').forEach((checkbox) => {
@@ -62,7 +61,7 @@ const setUserData = async (userId: string): Promise<void> => {
     superAdmin.removeAttribute('checked');
   }
 
-  if (userData.twofactor_enabled === '1') {
+  if (userData.twoFactorEnabled) {
     const twoFactorEnabled = document.getElementById('overwrite_twofactor') as HTMLInputElement;
     twoFactorEnabled.setAttribute('checked', 'checked');
     twoFactorEnabled.removeAttribute('disabled');
@@ -136,7 +135,6 @@ export const handleUsers = async (): Promise<void> => {
   const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show') as HTMLCollectionOf<HTMLElement>;
   const addUser = document.getElementById('pmf-add-user-action') as HTMLButtonElement;
   const addUserForm = document.getElementById('pmf-add-user-form') as HTMLFormElement;
-  const addUserError = document.getElementById('pmf-add-user-error-message') as HTMLElement;
   const passwordToggle = document.getElementById('add_user_automatic_password') as HTMLInputElement;
   const passwordInputs = document.getElementById('add_user_show_password_inputs') as HTMLElement;
   const isSuperAdmin = document.getElementById('is_superadmin') as HTMLInputElement;
@@ -185,7 +183,7 @@ export const handleUsers = async (): Promise<void> => {
   }
 
   if (addUser) {
-    addUser.addEventListener('click', (event) => {
+    addUser.addEventListener('click', async (event) => {
       event.preventDefault();
       const csrf = (document.getElementById('add_user_csrf') as HTMLInputElement).value;
       const userName = (document.getElementById('add_user_name') as HTMLInputElement).value;
@@ -194,12 +192,11 @@ export const handleUsers = async (): Promise<void> => {
       const email = (document.getElementById('add_user_email') as HTMLInputElement).value;
       const password = (document.getElementById('add_user_password') as HTMLInputElement).value;
       const passwordConfirm = (document.getElementById('add_user_password_confirm') as HTMLInputElement).value;
-      let isSuperAdmin = document.querySelector('#add_user_is_superadmin') as HTMLInputElement;
+      const superAdmin = document.querySelector('#add_user_is_superadmin') as HTMLInputElement;
 
-      if (isSuperAdmin) {
-        isSuperAdmin = isSuperAdmin.checked;
-      } else {
-        isSuperAdmin = false;
+      let isSuperAdmin: boolean = false;
+      if (superAdmin) {
+        isSuperAdmin = superAdmin.checked as boolean;
       }
 
       addUserForm.classList.add('was-validated');
@@ -215,32 +212,23 @@ export const handleUsers = async (): Promise<void> => {
         isSuperAdmin,
       };
 
-      postUserData('./api/user/add', userData)
-        .then(async (response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          if (response.status === 400) {
-            const json = await response.json();
-            json.forEach((item: string) => {
-              pushErrorNotification(item);
-            });
-          }
-          throw new Error('Network response was not ok: ', { cause: { response } });
-        })
-        .then((response) => {
+      try {
+        const response = (await postUserData('./api/user/add', userData)) as unknown as Response;
+        if (typeof response.success === 'string') {
           modal.style.display = 'none';
           modal.classList.remove('show');
-          modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+          modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
           pushNotification(response.success);
           setTimeout(() => {
             location.reload();
           }, 1500);
-        })
-        .catch(async (error) => {
-          console.error('Error adding user: ' + error);
-          throw error;
-        });
+        } else {
+          pushErrorNotification(response.error as string);
+        }
+      } catch (error) {
+        console.error('Error adding user: ', error);
+        throw error;
+      }
     });
   }
 
@@ -267,7 +255,7 @@ export const handleUsers = async (): Promise<void> => {
       const newPassword = (document.getElementById('npass') as HTMLInputElement).value;
       const passwordRepeat = (document.getElementById('bpass') as HTMLInputElement).value;
 
-      const response = await overwritePassword(csrf, userId, newPassword, passwordRepeat);
+      const response = (await overwritePassword(csrf, userId, newPassword, passwordRepeat)) as unknown as Response;
       if (response.success) {
         pushNotification(response.success);
         modal.hide();
@@ -301,14 +289,13 @@ export const handleUsers = async (): Promise<void> => {
       if (source.value === 'users') {
         const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
         const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
-        const response = await deleteUser(userId, csrfToken);
-        const json = await response.json();
-        if (json.success) {
-          pushNotification(json.success);
+        const response = (await deleteUser(userId, csrfToken)) as unknown as Response;
+        if (response.success) {
+          pushNotification(response.success);
           await clearUserForm();
         }
-        if (json.error) {
-          pushErrorNotification(json.error);
+        if (response.error) {
+          pushErrorNotification(response.error);
         }
       }
     });
@@ -331,13 +318,12 @@ export const handleUsers = async (): Promise<void> => {
         userId: userId,
       };
 
-      const response = await postUserData('./api/user/edit', userData);
-      const json = await response.json();
-      if (json.success) {
-        pushNotification(json.success);
+      const response = (await postUserData('./api/user/edit', userData)) as unknown as Response;
+      if (response.success) {
+        pushNotification(response.success);
       }
-      if (json.error) {
-        pushErrorNotification(json.error);
+      if (response.error) {
+        pushErrorNotification(response.error);
       }
       await updateUser(userId);
     });
@@ -359,13 +345,12 @@ export const handleUsers = async (): Promise<void> => {
         userId: userId,
         userRights: rightData,
       };
-      const response = await postUserData('./api/user/update-rights', data);
-      const json = await response.json();
-      if (json.success) {
-        pushNotification(json.success);
+      const response = (await postUserData('./api/user/update-rights', data)) as unknown as Response;
+      if (response.success) {
+        pushNotification(response.success);
       }
-      if (json.error) {
-        pushErrorNotification(json.error);
+      if (response.error) {
+        pushErrorNotification(response.error);
       }
       await updateUser(userId);
     });

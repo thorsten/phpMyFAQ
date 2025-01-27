@@ -1,8 +1,6 @@
 /**
  * Functions for handling user management
  *
- * @todo move fetch() functionality to api functions
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -16,41 +14,9 @@
  */
 
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { deleteUser } from '../api';
+import { activateUser, deleteUser } from '../api';
 import { Modal } from 'bootstrap';
-
-const activateUser = async (userId: string, csrfToken: string): Promise<void> => {
-  try {
-    const response = await fetch('./api/user/activate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-        userId: userId,
-      }),
-    });
-
-    if (response.status === 200) {
-      await response.json();
-      const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement;
-      icon.classList.remove('bi-ban');
-      icon.classList.add('bi-check-circle-o');
-      const button = document.getElementById(`btn_activate_user_id_${userId}`) as HTMLElement;
-      button.remove();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    const message = document.getElementById('pmf-user-message') as HTMLElement;
-    message.insertAdjacentElement(
-      'afterend',
-      addElement('div', { classList: 'alert alert-danger', innerText: (error as Error).message })
-    );
-  }
-};
+import { Response } from '../interfaces';
 
 export const handleUserList = (): void => {
   const activateButtons = document.querySelectorAll('.btn-activate-user');
@@ -65,7 +31,21 @@ export const handleUserList = (): void => {
         const csrfToken = target.getAttribute('data-csrf-token')!;
         const userId = target.getAttribute('data-user-id')!;
 
-        await activateUser(userId, csrfToken);
+        const response = (await activateUser(userId, csrfToken)) as unknown as Response;
+
+        if (typeof response.success === 'string') {
+          const icon = document.querySelector(`.icon_user_id_${userId}`) as HTMLElement;
+          icon.classList.remove('bi-ban');
+          icon.classList.add('bi-check-circle-o');
+          const button = document.getElementById(`btn_activate_user_id_${userId}`) as HTMLElement;
+          button.remove();
+        } else {
+          const message = document.getElementById('pmf-user-message') as HTMLElement;
+          message.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
+          );
+        }
       });
     });
   }
@@ -94,15 +74,14 @@ export const handleUserList = (): void => {
         if (source.value === 'user-list') {
           const userId = (document.getElementById('pmf-user-id-delete') as HTMLInputElement).value;
           const csrfToken = (document.getElementById('csrf-token-delete-user') as HTMLInputElement).value;
-          const response = await deleteUser(userId, csrfToken);
-          const json = await response.json();
-          if (json.success) {
-            pushNotification(json.success);
+          const response = (await deleteUser(userId, csrfToken)) as unknown as Response;
+          if (response.success) {
+            pushNotification(response.success);
             const row = document.getElementById('row_user_id_' + userId) as HTMLElement;
             row.remove();
           }
-          if (json.error) {
-            pushErrorNotification(json.error);
+          if (response.error) {
+            pushErrorNotification(response.error);
           }
         }
       });

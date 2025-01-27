@@ -139,30 +139,33 @@ class UserController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/user/data')]
     public function userData(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $user = $this->container->get('phpmyfaq.user.current_user');
 
         $user->getUserById($request->get('userId'), true);
 
-        $userdata = $user->userdata->get('*');
-
-        if (is_array($userdata)) {
-            $userdata['status'] = $user->getStatus();
-            $userdata['login'] = Strings::htmlentities($user->getLogin(), ENT_COMPAT);
-            $userdata['display_name'] = Strings::htmlentities($userdata['display_name'], ENT_COMPAT);
-            $userdata['is_superadmin'] = $user->isSuperAdmin();
-            $userdata['auth_source'] = $user->getUserAuthSource();
+        $userData = $user->userdata->get('*');
+        if (is_array($userData)) {
+            $userData['userId'] = $user->getUserId();
+            $userData['status'] = $user->getStatus();
+            $userData['login'] = $user->getLogin();
+            $userData['displayName'] = $userData['display_name'];
+            $userData['isSuperadmin'] = $user->isSuperAdmin();
+            $userData['authSource'] = $user->getUserAuthSource();
+            $userData['isVisible'] = $userData['is_visible'];
+            $userData['twoFactorEnabled'] = $userData['twofactor_enabled'];
+            $userData['lastModified'] = $userData['last_modified'];
         } else {
-            $userdata = [];
+            $userData = [];
         }
 
-        return $this->json($userdata, Response::HTTP_OK);
+        return $this->json($userData, Response::HTTP_OK);
     }
 
     /**

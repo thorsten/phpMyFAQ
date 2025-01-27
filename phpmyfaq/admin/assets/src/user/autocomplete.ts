@@ -17,13 +17,9 @@ import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { updateUser } from './users';
 import { fetchUsers } from '../api';
 import { addElement } from '../../../../assets/src/utils';
+import { UserAutocomplete } from '../interfaces';
 
-interface User {
-  label: string;
-  value: string;
-}
-
-type UserSuggestion = User & AutocompleteItem;
+type UserSuggestion = UserAutocomplete & AutocompleteItem;
 
 document.addEventListener('DOMContentLoaded', () => {
   const autoComplete = document.getElementById('pmf-user-list-autocomplete') as HTMLInputElement;
