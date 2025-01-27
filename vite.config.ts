@@ -70,12 +70,20 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['text', 'html'],
+      exclude: [
+        '**/node_modules/**',
+        '**/html-coverage/**',
+        '**/libs/**',
+        '**/bootstrap*.min.js',
+        '**/popper*.min.js',
+        '**/babel.config.cjs',
+        '**/commitlint.config.cjs',
+      ],
+    },
     globals: true,
-    include: [
-      '**/phpmyfaq/assets/**/*.test.js',
-      '**/phpmyfaq/assets/**/*.test.ts',
-      '**/phpmyfaq/admin/assets/**/*.test.js',
-      '**/phpmyfaq/admin/assets/**/*.test.ts',
-    ],
+    include: ['**/phpmyfaq/assets/**/*.test.ts', '**/phpmyfaq/admin/assets/**/*.test.ts'],
   },
 });
