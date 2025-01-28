@@ -5414,16 +5414,16 @@
         },
         {
             "name": "cyclonedx/cyclonedx-library",
-            "version": "v3.5.1",
+            "version": "v3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CycloneDX/cyclonedx-php-library.git",
-                "reference": "c079276c96691fe92fa4d8f757f7eecf774e835a"
+                "reference": "267414a34d3ac26f75cce6f341414ed6215d6bc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CycloneDX/cyclonedx-php-library/zipball/c079276c96691fe92fa4d8f757f7eecf774e835a",
-                "reference": "c079276c96691fe92fa4d8f757f7eecf774e835a",
+                "url": "https://api.github.com/repos/CycloneDX/cyclonedx-php-library/zipball/267414a34d3ac26f75cce6f341414ed6215d6bc6",
+                "reference": "267414a34d3ac26f75cce6f341414ed6215d6bc6",
                 "shasum": ""
             },
             "require": {
@@ -5498,20 +5498,20 @@
                     "type": "other"
                 }
             ],
-            "time": "2024-12-01T12:09:58+00:00"
+            "time": "2025-01-27T10:06:06+00:00"
         },
         {
             "name": "cyclonedx/cyclonedx-php-composer",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CycloneDX/cyclonedx-php-composer.git",
-                "reference": "f3a3cdc1a9e34bf1d5748e4279a24569cbf31fed"
+                "reference": "3d950d4d360cbfe9498f7b90c53766e572d6a951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CycloneDX/cyclonedx-php-composer/zipball/f3a3cdc1a9e34bf1d5748e4279a24569cbf31fed",
-                "reference": "f3a3cdc1a9e34bf1d5748e4279a24569cbf31fed",
+                "url": "https://api.github.com/repos/CycloneDX/cyclonedx-php-composer/zipball/3d950d4d360cbfe9498f7b90c53766e572d6a951",
+                "reference": "3d950d4d360cbfe9498f7b90c53766e572d6a951",
                 "shasum": ""
             },
             "require": {
@@ -5528,7 +5528,7 @@
             "extra": {
                 "class": "CycloneDX\\Composer\\Plugin",
                 "branch-alias": {
-                    "dev-master": "4.x-dev"
+                    "dev-master": "5.x-dev"
                 },
                 "composer-normalize": {
                     "indent-size": 4,
@@ -5574,7 +5574,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2024-04-30T10:47:47+00:00"
+            "time": "2025-01-27T10:05:43+00:00"
         },
         {
             "name": "doctrine/deprecations",
