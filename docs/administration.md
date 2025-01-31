@@ -96,6 +96,8 @@ time with all the relevant data of the specific entry. The meaning of the fields
   The content is an answer to the question or a solution for a problem. The content can be edited with the included
   WYSIWYG (**W**hat **Y**ou **S**ee **I**s **W**hat **Y**ou **G**et) editor when JavaScript is enabled. You can place
   images where you want with the integrated image manager. The Editor can be disabled in the configuration if you want.
+  One important thing to remember is that you need to allow external hosts for images or videos in the configuration if 
+  you want to use images from external sources.
 
 - **Language**
   You can select the language of your FAQ. By default, the selected language saved in the configuration will be chosen.
