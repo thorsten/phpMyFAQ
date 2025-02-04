@@ -96,6 +96,7 @@ class ImageController extends AbstractController
 
                 // Accept upload if there was no origin, or if it is an accepted origin
                 $fileName = $timestamp . '_' . $file->getClientOriginalName();
+                $fileName = str_replace(' ', '_', $fileName);
                 $file->move($uploadDir, $fileName);
 
                 // Add to the list of uploaded files

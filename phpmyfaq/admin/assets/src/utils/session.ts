@@ -43,9 +43,9 @@ const toggleSessionWarningModal = (toggle: string | null): void => {
 };
 
 const reloadCurrentPage = (): void => {
-  const reloadButton = document.getElementById('pmf-button-reload-page');
+  const reloadButton = document.getElementById('pmf-button-reload-page') as HTMLButtonElement;
   if (reloadButton) {
-    reloadButton.addEventListener('click', () => {
+    reloadButton.addEventListener('click', (): void => {
       location.reload();
     });
   }
