@@ -28,7 +28,10 @@ const toggleSessionWarnungModal = (toggle) => {
 };
 
 const reloadCurrentPage = () => {
-  document.getElementById('pmf-button-reload-page').addEventListener('click', () => {
-    location.reload();
-  });
+  const reloadButton = document.getElementById('pmf-button-reload-page');
+  if (reloadButton) {
+    reloadButton.addEventListener('click', () => {
+      location.reload();
+    });
+  }
 };
