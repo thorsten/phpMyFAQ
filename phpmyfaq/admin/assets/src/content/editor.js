@@ -211,7 +211,6 @@ export const renderEditor = () => {
             })
             .then((json) => {
               if (!json || typeof json.location != 'string') {
-                console.log(JSON.stringify(json));
                 throw new Error('Invalid JSON: ' + JSON.stringify(json));
               }
               resolve(json.location);
