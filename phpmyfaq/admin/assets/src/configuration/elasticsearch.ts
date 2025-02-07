@@ -19,11 +19,11 @@ import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
 export const handleElasticsearch = async (): Promise<void> => {
-  const buttons = document.querySelectorAll('button.pmf-elasticsearch');
+  const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-elasticsearch');
 
   if (buttons) {
-    buttons.forEach((element) => {
-      element.addEventListener('click', async (event) => {
+    buttons.forEach((element: HTMLButtonElement) => {
+      element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
         const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;

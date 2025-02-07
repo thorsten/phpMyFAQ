@@ -15,7 +15,7 @@
 
 import { Modal } from 'bootstrap';
 import { addElement } from '../../../../assets/src/utils';
-import { InstanceResponse } from '../interfaces';
+import { InstanceResponse, Response } from '../interfaces';
 import { addInstance, deleteInstance } from '../api';
 
 export const handleInstances = (): void => {
@@ -25,15 +25,15 @@ export const handleInstances = (): void => {
 
   if (addInstanceButton) {
     const modal = new Modal(container);
-    addInstanceButton.addEventListener('click', async (event) => {
+    addInstanceButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
-      const csrf = (document.querySelector('#pmf-csrf-token') as HTMLInputElement).value;
-      const url = (document.querySelector('#url') as HTMLInputElement).value;
-      const instance = (document.querySelector('#instance') as HTMLInputElement).value;
-      const comment = (document.querySelector('#comment') as HTMLInputElement).value;
-      const email = (document.querySelector('#email') as HTMLInputElement).value;
-      const admin = (document.querySelector('#admin') as HTMLInputElement).value;
-      const password = (document.querySelector('#password') as HTMLInputElement).value;
+      const csrf = (document.querySelector('#pmf-csrf-token') as HTMLInputElement).value as string;
+      const url = (document.querySelector('#url') as HTMLInputElement).value as string;
+      const instance = (document.querySelector('#instance') as HTMLInputElement).value as string;
+      const comment = (document.querySelector('#comment') as HTMLInputElement).value as string;
+      const email = (document.querySelector('#email') as HTMLInputElement).value as string;
+      const admin = (document.querySelector('#admin') as HTMLInputElement).value as string;
+      const password = (document.querySelector('#password') as HTMLInputElement).value as string;
 
       try {
         const response = (await addInstance(
@@ -48,7 +48,7 @@ export const handleInstances = (): void => {
 
         if (response.added) {
           const table = document.querySelector('.table tbody') as HTMLElement;
-          const row = addElement('tr', { id: `row-instance-${response.added}` }, [
+          const row: HTMLElement = addElement('tr', { id: `row-instance-${response.added}` }, [
             addElement('td', { innerText: response.added }),
             addElement('td', {}, [
               addElement('a', {
@@ -94,7 +94,7 @@ export const handleInstances = (): void => {
         }
       } catch (error) {
         const table = document.querySelector('.table') as HTMLElement;
-        const errorMessage = await (error as any).cause.response.json();
+        const errorMessage = (await (error as any).cause.response.json()) as Response;
         table.insertAdjacentElement(
           'afterend',
           addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
@@ -104,8 +104,8 @@ export const handleInstances = (): void => {
   }
 
   if (deleteInstanceButton) {
-    deleteInstanceButton.forEach((element) => {
-      element.addEventListener('click', async (event) => {
+    deleteInstanceButton.forEach((element: HTMLElement): void => {
+      element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
         const instanceId = (event.target as HTMLElement).getAttribute('data-delete-instance-id') as string;
@@ -117,14 +117,14 @@ export const handleInstances = (): void => {
 
             if (response.deleted) {
               const row = document.getElementById(`row-instance-${response.deleted}`) as HTMLElement;
-              row.addEventListener('click', () => (row.style.opacity = '0'));
-              row.addEventListener('transitionend', () => row.remove());
+              row.addEventListener('click', (): string => (row.style.opacity = '0'));
+              row.addEventListener('transitionend', (): void => row.remove());
             } else {
               throw new Error('Network response was not ok');
             }
           } catch (error) {
             const table = document.querySelector('.table') as HTMLElement;
-            const errorMessage = await (error as any).cause.response.json();
+            const errorMessage = (await (error as any).cause.response.json()) as Response;
             table.insertAdjacentElement(
               'afterend',
               addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })

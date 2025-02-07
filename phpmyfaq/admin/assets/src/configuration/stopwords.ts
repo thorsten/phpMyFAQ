@@ -24,7 +24,7 @@ export const handleStopWords = (): void => {
 
   if (stopWordsLanguageSelector) {
     stopWordsLanguageSelector.addEventListener('change', async (event) => {
-      const selectedLanguage = (event.target as HTMLSelectElement).value;
+      const selectedLanguage = (event.target as HTMLSelectElement).value as string;
       if ('none' !== selectedLanguage) {
         startLoadingIndicator();
         await fetchStopWordsByLanguage(selectedLanguage);
@@ -33,7 +33,7 @@ export const handleStopWords = (): void => {
       }
     });
     addStopWordInput.addEventListener('click', () => {
-      const language = stopWordsLanguageSelector.value;
+      const language = stopWordsLanguageSelector.value as string;
       setContentAndHandler([{ id: -1, lang: language, stopword: '' }]);
     });
   }
@@ -62,20 +62,20 @@ const fetchStopWordsByLanguage = async (language: string): Promise<void> => {
 };
 
 const setContentAndHandler = (data: StopWord[]): void => {
-  const stopWordsHtml = buildStopWordsHTML(data);
+  const stopWordsHtml = buildStopWordsHTML(data) as string;
   const stopWordsContainer = document.getElementById('pmf-stopwords-content') as HTMLElement;
   stopWordsContainer.innerHTML = stopWordsHtml;
 
   const stopWordInputs = document.querySelectorAll('.pmf-stop-word-input') as NodeListOf<HTMLInputElement>;
   if (stopWordInputs) {
-    stopWordInputs.forEach((element) => {
-      element.addEventListener('keydown', (event) => {
+    stopWordInputs.forEach((element: HTMLInputElement) => {
+      element.addEventListener('keydown', (event: KeyboardEvent): void => {
         saveStopWordHandleOnEnter(element.id, event);
       });
-      element.addEventListener('blur', () => {
-        saveStopWord(element.id);
+      element.addEventListener('blur', async (): Promise<void> => {
+        await saveStopWord(element.id);
       });
-      element.addEventListener('focus', () => {
+      element.addEventListener('focus', (): void => {
         saveOldValue(element.id);
       });
     });
@@ -101,7 +101,7 @@ const buildStopWordsHTML = (stopWordData: StopWord[]): string => {
   }
   const table = addElement('table', { classList: 'table table-hover align-middle' });
   let tr: HTMLElement;
-  for (let i = 0; i < stopWordData.length; i++) {
+  for (let i: number = 0; i < stopWordData.length; i++) {
     if (i % maxCols === 0) {
       tr = addElement('tr', { id: `stopwords_group_${i}` });
       table.appendChild(tr);
@@ -120,7 +120,7 @@ const buildStopWordsHTML = (stopWordData: StopWord[]): string => {
 };
 
 const buildStopWordInputElement = (elementId: string, stopWord: string): HTMLElement => {
-  const input = addElement('input', {
+  const input: HTMLElement = addElement('input', {
     id: elementId || buildStopWordInputElementId(),
     classList: 'form-control form-control-sm pmf-stop-word-input',
     type: 'text',
@@ -141,12 +141,12 @@ const parseStopWordInputElemId = (elementId: string): { id: number; lang: string
   return { id: parseInt(info[1]), lang: info[2] };
 };
 
-const saveStopWordHandleOnEnter = (elementId: string, event: KeyboardEvent): void => {
+const saveStopWordHandleOnEnter = async (elementId: string, event: KeyboardEvent): Promise<void> => {
   const element = document.getElementById(elementId) as HTMLInputElement;
   const key = event.charCode || event.keyCode || 0;
   if (key === 13) {
     if (element.value === '') {
-      deleteStopWord(elementId);
+      await deleteStopWord(elementId);
     } else {
       element.blur();
     }

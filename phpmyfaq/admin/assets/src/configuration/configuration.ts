@@ -35,7 +35,7 @@ export const handleConfiguration = async (): Promise<void> => {
   const result = document.getElementById('pmf-configuration-result') as HTMLElement;
   if (configTabList.length) {
     let tabLoaded = false;
-    configTabList.forEach((element) => {
+    configTabList.forEach((element: HTMLElement): void => {
       const configTabTrigger = new Tab(element);
       element.addEventListener('shown.bs.tab', async (event) => {
         event.preventDefault();

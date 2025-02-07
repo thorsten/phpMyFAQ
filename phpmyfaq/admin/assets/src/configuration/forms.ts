@@ -25,12 +25,12 @@ import { pushNotification } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
 
 export const handleFormEdit = (): void => {
-  const forms = document.getElementById('forms');
+  const forms = document.getElementById('forms') as HTMLElement;
   if (forms) {
     // Handle activate checkboxes
-    document.querySelectorAll<HTMLInputElement>('#active').forEach((element) => {
-      element.addEventListener('change', async () => {
-        const checked = element.checked;
+    document.querySelectorAll<HTMLInputElement>('#active').forEach((element: HTMLInputElement): void => {
+      element.addEventListener('change', async (): Promise<void> => {
+        const checked: boolean = element.checked;
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
@@ -42,10 +42,11 @@ export const handleFormEdit = (): void => {
         }
       });
     });
+
     // Handle required checkboxes
-    document.querySelectorAll<HTMLInputElement>('#required').forEach((element) => {
-      element.addEventListener('change', async () => {
-        const checked = element.checked;
+    document.querySelectorAll<HTMLInputElement>('#required').forEach((element: HTMLInputElement): void => {
+      element.addEventListener('change', async (): Promise<void> => {
+        const checked: boolean = element.checked;
         const csrf = element.getAttribute('data-pmf-csrf-token') as string;
         const inputId = element.getAttribute('data-pmf-inputid') as string;
         const formId = element.getAttribute('data-pmf-formid') as string;
@@ -64,14 +65,15 @@ export const handleFormEdit = (): void => {
     const tabContentAskQuestion = document.getElementById('ask-question') as HTMLElement;
     const tabContentAddContent = document.getElementById('add-content') as HTMLElement;
 
-    tabAskQuestion.addEventListener('click', (event) => {
+    tabAskQuestion.addEventListener('click', (event: Event): void => {
       event.preventDefault();
       tabAskQuestion.classList.add('active');
       tabAddContent.classList.remove('active');
       tabContentAskQuestion.classList.add('active');
       tabContentAddContent.classList.remove('active');
     });
-    tabAddContent.addEventListener('click', (event) => {
+
+    tabAddContent.addEventListener('click', (event: Event): void => {
       event.preventDefault();
       tabAddContent.classList.add('active');
       tabAskQuestion.classList.remove('active');
@@ -82,12 +84,12 @@ export const handleFormEdit = (): void => {
 };
 
 export const handleFormTranslations = (): void => {
-  const table = document.getElementById('formTranslations');
+  const table = document.getElementById('formTranslations') as HTMLElement;
   if (table) {
     // Edit translation
-    const editButtons = document.querySelectorAll<HTMLElement>('#editTranslation');
-    editButtons.forEach((element) => {
-      element.addEventListener('click', async () => {
+    const editButtons: NodeListOf<HTMLElement> = document.querySelectorAll<HTMLElement>('#editTranslation');
+    editButtons.forEach((element: HTMLElement): void => {
+      element.addEventListener('click', async (): Promise<void> => {
         const lang = element.getAttribute('data-pmf-lang') as string;
         const input = document.getElementById('labelInput_' + lang) as HTMLInputElement;
         if (input.disabled) {
@@ -121,9 +123,9 @@ export const handleFormTranslations = (): void => {
       });
     });
     // Delete translation
-    const deleteButtons = document.querySelectorAll<HTMLElement>('#deleteTranslation');
-    deleteButtons.forEach((element) => {
-      element.addEventListener('click', async () => {
+    const deleteButtons: NodeListOf<HTMLElement> = document.querySelectorAll<HTMLElement>('#deleteTranslation');
+    deleteButtons.forEach((element: HTMLElement) => {
+      element.addEventListener('click', async (): Promise<void> => {
         const csrf = element.getAttribute('data-pmf-csrf') as string;
         const inputId = element.getAttribute('data-pmf-inputId') as string;
         const formId = element.getAttribute('data-pmf-formId') as string;
@@ -132,7 +134,7 @@ export const handleFormTranslations = (): void => {
         if (typeof response.success === 'string') {
           pushNotification(response.success);
           document.getElementById('item_' + lang)?.remove();
-          const option = document.createElement('option');
+          const option = document.createElement('option') as HTMLOptionElement;
           option.innerText = element.getAttribute('data-pmf-langname')!;
           document.getElementById('languageSelect')?.appendChild(option);
         } else {
@@ -144,7 +146,7 @@ export const handleFormTranslations = (): void => {
     const addTranslationButton = document.getElementById('addTranslation') as HTMLElement;
     const languageSelect = document.getElementById('languageSelect') as HTMLSelectElement;
     const translationInput = document.getElementById('translationText') as HTMLInputElement;
-    addTranslationButton.addEventListener('click', async (event) => {
+    addTranslationButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const csrf = addTranslationButton.getAttribute('data-pmf-csrf') as string;
       const inputId = addTranslationButton.getAttribute('data-pmf-inputId') as string;
@@ -158,7 +160,7 @@ export const handleFormTranslations = (): void => {
       )) as unknown as Response;
       if (typeof response.success === 'string') {
         pushNotification(response.success);
-        setTimeout(function () {
+        setTimeout((): void => {
           window.location.reload();
         }, 3000);
       } else {
