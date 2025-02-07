@@ -233,9 +233,9 @@ To set the default language in your browser, you have to set a variable that get
 How this is done depends on the browser you are using.
 
 - Mozilla Firefox: Tools -> Options -> Content -> Languages
-- Google Chrome / Microsoft Edge / Opera: Settings -> Details -> Language settings
-- Safari uses the macOS system preferences to determine your preferred language: System preferences -> International
-  -> Language
+- Google Chrome / Microsoft Edge / Opera: Settings → Details → Language settings
+- Safari uses the macOS system preferences to determine your preferred language: System preferences → International
+  → Language
 
 ## 2.10 Enabling LDAP or Microsoft Active Directory support
 
@@ -249,6 +249,13 @@ configuration panel.
 If you want to add LDAP support later, you can use the file **content/core/config/ldap.php.original** as template, and
 if you rename it to **content/core/config/ldap.php** you can use the LDAP features as well after you enabled it in the
 administration backend.
+
+Please note that you have to use the correct LDAP attributes for your LDAP server. 
+The LDAP server address must be in the format "ldap://ldap.example.com"
+or "ldaps://ldap.example.com" for secure connections.
+
+The "samAccountName" attribute is used for the user's login name,
+and the "mail" attribute is used for the email address.
 
 ## 2.11 PDF export
 
