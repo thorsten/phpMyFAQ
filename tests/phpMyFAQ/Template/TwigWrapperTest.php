@@ -105,7 +105,6 @@ class TwigWrapperTest extends TestCase
     {
         TwigWrapper::setTemplateSetName('newTemplateSet');
         $this->assertEquals('newTemplateSet', TwigWrapper::getTemplateSetName());
-        TwigWrapper::setTemplateSetName('default');
-
+        TwigWrapper::setTemplateSetName();
     }
 }

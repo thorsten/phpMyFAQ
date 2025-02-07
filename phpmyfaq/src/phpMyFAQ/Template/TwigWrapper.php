@@ -120,7 +120,7 @@ class TwigWrapper
     /**
      * Set the template set name to use.
      */
-    public static function setTemplateSetName(string $tplSetName): void
+    public static function setTemplateSetName(string $tplSetName = 'default'): void
     {
         self::$templateSetName = $tplSetName;
     }
