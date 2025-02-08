@@ -176,6 +176,11 @@ class Configuration
         return $this->config['main.administrationMail'];
     }
 
+    public function getTemplateSet(): string
+    {
+        return $this->config['layout.templateSet'] ?? 'default';
+    }
+
     /**
      * Returns the email address of the no-reply sender
      */
@@ -371,9 +376,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      */
-    public function setElasticsearchConfig(ElasticsearchConfiguration $elasticsearchConfiguration): void
+    public function setElasticsearchConfig(ElasticsearchConfiguration $esConfiguration): void
     {
-        $this->config['core.elasticsearchConfig'] = $elasticsearchConfiguration;
+        $this->config['core.elasticsearchConfig'] = $esConfiguration;
     }
 
     /**
@@ -542,7 +547,7 @@ class Configuration
         return $this->config['core.pluginManager'];
     }
 
-    public function triggerEvent(string $eventName, $data = null): void
+    public function triggerEvent(string $eventName, mixed $data = null): void
     {
         $this->pluginManager->triggerEvent($eventName, $data);
     }

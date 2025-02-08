@@ -115,7 +115,7 @@ Strings::init($faqLangCode);
 //
 // Set actual template set name
 //
-TwigWrapper::setTemplateSetName($faqConfig->get('layout.templateSet'));
+TwigWrapper::setTemplateSetName($faqConfig->getTemplateSet());
 
 /*
  * Initialize attachment factory
