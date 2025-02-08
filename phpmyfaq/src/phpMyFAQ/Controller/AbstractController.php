@@ -65,7 +65,7 @@ abstract class AbstractController
         $this->container = $this->createContainer();
         $this->configuration = $this->container->get('phpmyfaq.configuration');
         $this->currentUser = $this->container->get('phpmyfaq.user.current_user');
-        TwigWrapper::setTemplateSetName($this->configuration->get('layout.templateSet'));
+        TwigWrapper::setTemplateSetName($this->configuration->getTemplateSet());
         $this->isSecured();
     }
 
@@ -95,7 +95,7 @@ abstract class AbstractController
      * @param string                                                  $pathToTwigFile
      * @param array<string, array<int<0, max>, array<string, mixed>>> $templateVars
      * @return string
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
     {
@@ -141,7 +141,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userIsAuthenticated(): void
     {
@@ -152,7 +151,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userIsSuperAdmin(): void
     {
@@ -163,7 +161,6 @@ abstract class AbstractController
 
     /**
      * @throws UnauthorizedHttpException
-     * @throws Exception
      */
     protected function userHasGroupPermission(): void
     {
