@@ -17,7 +17,7 @@ import { insertAfter } from '../utils';
 
 export const selectDatabaseSetup = (event: Event): void => {
   const form = document.getElementById('phpmyfaq-setup-form') as HTMLFormElement;
-  const inputs = form.getElementsByTagName('input');
+  const inputs = form.getElementsByTagName('input') as HTMLCollectionOf<HTMLInputElement>;
   const database = document.getElementById('dbdatafull') as HTMLElement;
   const databasePort = document.getElementById('sql_port') as HTMLInputElement;
   const sqlite = document.getElementById('dbsqlite') as HTMLElement;
@@ -25,7 +25,7 @@ export const selectDatabaseSetup = (event: Event): void => {
   const target = event.target as HTMLSelectElement;
 
   if (target.value === 'sqlite3') {
-    for (let i = 0; i < inputs.length; i++) {
+    for (let i: number = 0; i < inputs.length; i++) {
       inputs[i].removeAttribute('required');
     }
   } else {
@@ -65,7 +65,7 @@ export const selectDatabaseSetup = (event: Event): void => {
 
 export const addElasticsearchServerInput = (): void => {
   const wrapper = document.getElementById('elasticsearch-server-wrapper') as HTMLElement;
-  const input = document.createElement('input');
+  const input = document.createElement('input') as HTMLInputElement;
 
   // Set attributes for input
   input.className = 'form-control mt-1';
@@ -78,8 +78,8 @@ export const addElasticsearchServerInput = (): void => {
 
 export const stepIndicator = (step: number): void => {
   // This function removes the "active" class of all steps...
-  const steps = document.getElementsByClassName('stepIndicator');
-  for (let i = 0; i < steps.length; i++) {
+  const steps = document.getElementsByClassName('stepIndicator') as HTMLCollectionOf<HTMLElement>;
+  for (let i: number = 0; i < steps.length; i++) {
     steps[i].className = steps[i].className.replace(' active', '');
   }
   //... and adds the "active" class on the current step:

@@ -18,7 +18,7 @@ export const handleUpdateNextStepButton = (): void => {
   const nextStep = document.getElementById('phpmyfaq-update-next-step') as HTMLInputElement | null;
 
   if (nextStepButton && nextStep) {
-    nextStepButton.addEventListener('click', (event: MouseEvent) => {
+    nextStepButton.addEventListener('click', (event: MouseEvent): void => {
       event.preventDefault();
       window.location.replace(`?step=${nextStep.value}`);
     });
@@ -59,7 +59,8 @@ export const handleUpdateInformation = async (): Promise<void> => {
       if (error instanceof SyntaxError) {
         errorMessage =
           'The requested resource was not found on the server. ' +
-          'Please check your server configuration, especially the RewriteBase in your .htaccess configuration.';
+          "Please check your server configuration, in case you're using Apache, " +
+          'the RewriteBase in your .htaccess configuration.';
       } else {
         errorMessage = error.message;
       }

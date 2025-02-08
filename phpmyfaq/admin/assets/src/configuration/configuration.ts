@@ -34,10 +34,10 @@ export const handleConfiguration = async (): Promise<void> => {
   const configTabList: HTMLElement[] = [].slice.call(document.querySelectorAll('#configuration-list a'));
   const result = document.getElementById('pmf-configuration-result') as HTMLElement;
   if (configTabList.length) {
-    let tabLoaded = false;
+    let tabLoaded: boolean = false;
     configTabList.forEach((element: HTMLElement): void => {
       const configTabTrigger = new Tab(element);
-      element.addEventListener('shown.bs.tab', async (event) => {
+      element.addEventListener('shown.bs.tab', async (event: Event): Promise<void> => {
         event.preventDefault();
         const target = (event.target as HTMLAnchorElement).getAttribute('href') as string;
         await handleConfigurationTab(target);
@@ -85,10 +85,10 @@ export const handleConfiguration = async (): Promise<void> => {
 };
 
 export const handleSaveConfiguration = async (): Promise<void> => {
-  const saveConfigurationButton = document.getElementById('save-configuration');
+  const saveConfigurationButton = document.getElementById('save-configuration') as HTMLButtonElement;
 
   if (saveConfigurationButton) {
-    saveConfigurationButton.addEventListener('click', async (event) => {
+    saveConfigurationButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const form = document.getElementById('configuration-list') as HTMLFormElement;
       const formData = new FormData(form);

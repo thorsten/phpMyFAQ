@@ -22,7 +22,7 @@ interface ResponseData {
   message?: string;
 }
 
-export const fetchHealthCheck = async (): Promise<ResponseData | undefined> => {
+export const fetchHealthCheck = async (): Promise<ResponseData> => {
   try {
     const response = await fetch(`./api/health-check`, {
       method: 'GET',

@@ -22,7 +22,7 @@ export const handleElasticsearch = async (): Promise<void> => {
   const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-elasticsearch');
 
   if (buttons) {
-    buttons.forEach((element: HTMLButtonElement) => {
+    buttons.forEach((element: HTMLButtonElement): void => {
       element.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
@@ -51,11 +51,11 @@ export const handleElasticsearch = async (): Promise<void> => {
             const response = (await fetchElasticsearchStatistics()) as unknown as ElasticsearchResponse;
 
             if (response.index) {
-              const indexName = response.index;
+              const indexName = response.index as string;
               const stats = response.stats;
-              const count = stats.indices[indexName].total.docs.count;
-              const sizeInBytes = stats.indices[indexName].total.store.size_in_bytes;
-              let html = '<dl class="row">';
+              const count: number = stats.indices[indexName].total.docs.count ?? 0;
+              const sizeInBytes: number = stats.indices[indexName].total.store.size_in_bytes ?? 0;
+              let html: string = '<dl class="row">';
               html += `<dt class="col-sm-3">Documents</dt><dd class="col-sm-9">${count ?? 0}</dd>`;
               html += `<dt class="col-sm-3">Storage size</dt><dd class="col-sm-9">${formatBytes(sizeInBytes ?? 0)}</dd>`;
               html += '</dl>';

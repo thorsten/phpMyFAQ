@@ -166,11 +166,7 @@ export const saveConfiguration = async (data: FormData): Promise<void> => {
       body: data,
     })) as unknown as Response;
 
-    if (response.success) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
     throw error;
   }

@@ -45,8 +45,8 @@
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.7",
-    "@babel/preset-env": "^7.26.7",
+    "@babel/core": "^7.26.8",
+    "@babel/preset-env": "^7.26.8",
     "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
     "@types/bootstrap": "^5.2.10",
@@ -64,10 +64,10 @@
     "prettier": "^3.4.2",
     "pretty-quick": "^4.0.0",
     "rollup-plugin-sbom": "^1.1.1",
-    "sass": "^1.83.4",
+    "sass": "^1.84.0",
     "sigmund": "^1.0.1",
     "typescript": "^5.7.3",
-    "vite": "^6.0.11",
+    "vite": "^6.1.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-minify": "^2.1.0",

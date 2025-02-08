@@ -313,17 +313,4 @@ describe('saveConfiguration', () => {
       body: formData,
     });
   });
-
-  it('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        success: false,
-      } as unknown as Response)
-    );
-
-    const formData = new FormData();
-    formData.append('key', 'value');
-
-    await expect(saveConfiguration(formData)).rejects.toThrow('Network response was not ok.');
-  });
 });

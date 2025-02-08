@@ -36,7 +36,7 @@ export const handleCheckForUpdates = (): void => {
 
   // Health Check
   if (checkHealthButton) {
-    checkHealthButton.addEventListener('click', async (event) => {
+    checkHealthButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       try {
         const responseData = (await fetchHealthCheck()) as ResponseData;
@@ -57,19 +57,14 @@ export const handleCheckForUpdates = (): void => {
           result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.error }));
         }
       } catch (error) {
-        if (error.cause && error.cause.response) {
-          const errorMessage = await error.cause.response.json();
-          console.error(errorMessage);
-        } else {
-          console.error(error.message);
-        }
+        console.error(error.message);
       }
     });
   }
 
   // Activate Maintenance Mode
   if (buttonActivate) {
-    buttonActivate.addEventListener('click', async (event) => {
+    buttonActivate.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       try {
         const response = await fetch('./api/configuration/activate-maintenance-mode', {
