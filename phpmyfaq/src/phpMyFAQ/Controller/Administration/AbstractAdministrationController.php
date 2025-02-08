@@ -177,7 +177,7 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::REPORTS->value,
             'ad_menu_reports',
-            'reports'
+            'statistics/report'
         );
 
         $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
