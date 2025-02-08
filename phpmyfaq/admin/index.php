@@ -242,13 +242,6 @@ if (
 //
 [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($user);
 
-// are we running a PMF export file request?
-switch ($action) {
-    case 'reportexport':
-        require 'report.export.php';
-        exit();
-}
-
 // Header of the admin page including the navigation
 require 'header.php';
 

@@ -166,7 +166,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         );
 
         $res = $this->configuration->getDb()->query($select);
-        return $this->configuration->getDb()->numRows($res) === 1;
+        return $this->configuration->getDb()->numRows($res) !== 0;
     }
 
     /**
@@ -545,7 +545,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     /**
      * Returns an array that contains the right-IDs of all rights
      * the user $userId owns. User-rights and the rights the user
-     * owns because of a group-membership are taken into account.
+     * owns because of a group-membership is taken into account.
      *
      * @param int $userId User ID
      *
@@ -561,6 +561,19 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $groupRights = $this->getUserGroupRights($userId);
 
         return array_unique(array_merge($userRights, $groupRights));
+    }
+
+    /**
+     * Returns the number of user- and group-rights the user specified by
+     * user_id owns.
+     *
+     * @param CurrentUser $currentUser User object
+     */
+    public function getUserRightsCount(CurrentUser $currentUser): int
+    {
+        $userRights = $this->getAllUserRights($currentUser->getUserId());
+
+        return is_countable($userRights) ? count($userRights) : 0;
     }
 
     /**
