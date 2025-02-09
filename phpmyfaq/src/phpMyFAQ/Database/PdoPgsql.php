@@ -1,8 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ\Database\PdoMysql class provides methods and functions for MySQL and
- * MariaDB databases with PDO.
+ * The phpMyFAQ\Database\PdoPgsql class provides methods and functions for PostgreSQL with PDO.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,11 +24,11 @@ use phpMyFAQ\Core\Exception;
 use SensitiveParameter;
 
 /**
- * Class PdoDatabase
+ * Class PdoPgsql
  *
  * @package phpMyFAQ\Database
  */
-class PdoMysql implements DatabaseDriver
+class PdoPgsql implements DatabaseDriver
 {
     /**
      * @var string[] Tables.
@@ -66,7 +65,7 @@ class PdoMysql implements DatabaseDriver
         string $database = '',
         int|null $port = null
     ): ?bool {
-        $dsn = "mysql:host=$host;dbname=$database;port=$port;charset=utf8mb4";
+        $dsn = "pgsql:host=$host;dbname=$database;port=$port";
         try {
             $this->conn = new PDO($dsn, $user, $password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -90,13 +89,13 @@ class PdoMysql implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return $string;
+        return $this->conn->quote($string);
     }
 
     /**
      * Fetch a result row as an associative array.
      */
-    public function fetchArray(mixed $result): array|false|null
+    public function fetchArray(mixed $result): ?array
     {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
@@ -246,7 +245,7 @@ class PdoMysql implements DatabaseDriver
     public function nextId(string $table, string $columnId): int
     {
         $query = sprintf(
-            'SELECT MAX(%s) AS current_id FROM %s',
+            'SELECT MAX(%s) AS current_id FROM  %s',
             $columnId,
             $table
         );

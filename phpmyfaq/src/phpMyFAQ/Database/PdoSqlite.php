@@ -1,8 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ\Database\PdoMysql class provides methods and functions for MySQL and
- * MariaDB databases with PDO.
+ * The phpMyFAQ\Database\PdoSqlite class provides methods and functions for SQLite3 with PDO.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -22,14 +21,13 @@ use PDO;
 use PDOException;
 use PDOStatement;
 use phpMyFAQ\Core\Exception;
-use SensitiveParameter;
 
 /**
- * Class PdoDatabase
+ * Class PdoSqlite
  *
  * @package phpMyFAQ\Database
  */
-class PdoMysql implements DatabaseDriver
+class PdoSqlite implements DatabaseDriver
 {
     /**
      * @var string[] Tables.
@@ -51,24 +49,24 @@ class PdoMysql implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host Hostname or path to socket
-     * @param string $user Username
-     * @param string $password Password
-     * @param string $database Database name
+     * @param string   $host
+     * @param string   $user
+     * @param string   $password
+     * @param string   $database
      * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
     public function connect(
         string $host,
-        #[\SensitiveParameter] string $user,
-        #[SensitiveParameter] string $password,
+        string $user,
+        #[\SensitiveParameter] string $password,
         string $database = '',
         int|null $port = null
     ): ?bool {
-        $dsn = "mysql:host=$host;dbname=$database;port=$port;charset=utf8mb4";
+        $dsn = "sqlite:$host";
         try {
-            $this->conn = new PDO($dsn, $user, $password);
+            $this->conn = new PDO($dsn);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             throw new Exception($e->getMessage());
@@ -90,13 +88,13 @@ class PdoMysql implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return $string;
+        return $this->conn->quote($string);
     }
 
     /**
      * Fetch a result row as an associative array.
      */
-    public function fetchArray(mixed $result): array|false|null
+    public function fetchArray(mixed $result): ?array
     {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
@@ -338,6 +336,6 @@ class PdoMysql implements DatabaseDriver
 
     public function now(): string
     {
-        return 'NOW()';
+        return 'CURRENT_TIMESTAMP';
     }
 }
