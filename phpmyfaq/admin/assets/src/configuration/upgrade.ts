@@ -15,7 +15,16 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
-import { fetchHealthCheck } from '../api';
+import {
+  activateMaintenanceMode,
+  checkForUpdates,
+  downloadPackage,
+  extractPackage,
+  fetchHealthCheck,
+  startDatabaseUpdate,
+  startInstallation,
+  startTemporaryBackup,
+} from '../api';
 
 interface ResponseData {
   success?: string;
@@ -39,25 +48,25 @@ export const handleCheckForUpdates = (): void => {
     checkHealthButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       try {
-        const responseData = (await fetchHealthCheck()) as ResponseData;
+        const response = (await fetchHealthCheck()) as ResponseData;
         const result = document.getElementById('result-check-health') as HTMLElement;
         const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
-        if (responseData.success) {
+        if (response.success) {
           card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.success }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: response.success }));
         }
-        if (responseData.warning) {
+        if (response.warning) {
           card.classList.add('text-bg-warning');
-          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.warning }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: response.warning }));
           buttonActivate.classList.remove('d-none');
         }
-        if (responseData.error) {
+        if (response.error) {
           card.classList.add('text-bg-danger');
-          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: responseData.error }));
+          result.replaceWith(addElement('p', { id: 'result-check-health', innerText: response.error }));
         }
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
       }
     });
   }
@@ -67,27 +76,15 @@ export const handleCheckForUpdates = (): void => {
     buttonActivate.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       try {
-        const response = await fetch('./api/configuration/activate-maintenance-mode', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ csrf: buttonActivate.getAttribute('data-pmf-csrf') }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData: ResponseData = await response.json();
+        const csrfToken = buttonActivate.getAttribute('data-pmf-csrf') as string;
+        const response = (await activateMaintenanceMode(csrfToken)) as ResponseData;
         const result = document.getElementById('result-check-health') as HTMLElement;
         const card = document.getElementById('pmf-update-step-health-check') as HTMLElement;
 
-        if (responseData.success) {
+        if (response.success) {
           card.classList.remove('text-bg-warning');
           card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { innerText: responseData.success }));
+          result.replaceWith(addElement('p', { innerText: response.success }));
           buttonActivate.classList.add('d-none');
         }
       } catch (error) {
@@ -98,41 +95,29 @@ export const handleCheckForUpdates = (): void => {
 
   // Check Update
   if (checkUpdateButton) {
-    checkUpdateButton.addEventListener('click', async (event) => {
+    checkUpdateButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const spinner = document.getElementById('spinner-check-versions') as HTMLElement;
       spinner.classList.remove('d-none');
       try {
-        const response = await fetch('./api/update-check', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData: ResponseData = await response.json();
+        const response = (await checkForUpdates()) as ResponseData;
         const dateLastChecked = document.getElementById('dateLastChecked') as HTMLElement;
         const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
         const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
 
         if (dateLastChecked) {
-          const date = new Date(responseData.dateLastChecked!);
+          const date = new Date(response.dateLastChecked!);
           dateLastChecked.innerText = `${date.toLocaleString()}`;
         }
 
         if (versionLastChecked) {
-          versionLastChecked.innerText = responseData.version!;
+          versionLastChecked.innerText = response.version!;
         }
 
-        const result = document.getElementById('result-check-versions');
+        const result = document.getElementById('result-check-versions') as HTMLElement;
         if (result) {
           card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { innerText: responseData.message! }));
+          result.replaceWith(addElement('p', { innerText: response.message! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
@@ -143,7 +128,7 @@ export const handleCheckForUpdates = (): void => {
 
   // Download package
   if (downloadButton) {
-    downloadButton.addEventListener('click', async (event) => {
+    downloadButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
       let version: string;
@@ -159,19 +144,7 @@ export const handleCheckForUpdates = (): void => {
       }
 
       try {
-        const response = await fetch(`./api/download-package/${version}`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData: ResponseData = await response.json();
+        const response = (await downloadPackage(version)) as ResponseData;
         const result = document.getElementById('result-download-new-version') as HTMLElement;
         const divExtractPackage = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-download') as HTMLElement;
@@ -179,11 +152,11 @@ export const handleCheckForUpdates = (): void => {
         if (result) {
           card.classList.add('text-bg-success');
           divExtractPackage!.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: responseData.success! }));
+          result.replaceWith(addElement('p', { innerText: response.success! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
-        const errorMessage = await error.cause.response.json();
+        const errorMessage = error as ResponseData;
         const result = document.getElementById('result-download-new-version') as HTMLElement;
         result.replaceWith(addElement('p', { innerText: errorMessage.error }));
         spinner.classList.add('d-none');
@@ -193,25 +166,13 @@ export const handleCheckForUpdates = (): void => {
 
   // Extract package
   if (extractButton) {
-    extractButton.addEventListener('click', async (event) => {
+    extractButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const spinner = document.getElementById('spinner-extract-package') as HTMLElement;
       spinner.classList.remove('d-none');
 
       try {
-        const response = await fetch('./api/extract-package', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const responseData: ResponseData = await response.json();
+        const response = (await extractPackage()) as ResponseData;
         const result = document.getElementById('result-extract-package') as HTMLElement;
         const divInstallPackage = document.getElementById('pmf-update-step-install-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
@@ -219,7 +180,7 @@ export const handleCheckForUpdates = (): void => {
         if (result) {
           card.classList.add('text-bg-success');
           divInstallPackage!.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: responseData.message! }));
+          result.replaceWith(addElement('p', { innerText: response.message! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
@@ -242,20 +203,14 @@ export const handleCheckForUpdates = (): void => {
 
 const createTemporaryBackup = async (): Promise<void> => {
   try {
-    const response = await fetch('./api/create-temporary-backup', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = (await startTemporaryBackup()) as unknown as Response;
 
-    const progressBarBackup = document.getElementById('result-backup-package');
-    const reader = response.body!.getReader();
+    const progressBarBackup = document.getElementById('result-backup-package') as HTMLElement;
+    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue = new TextDecoder().decode(value);
+      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarBackup!.style.width = '100%';
@@ -280,20 +235,14 @@ const createTemporaryBackup = async (): Promise<void> => {
 
 const installPackage = async (): Promise<void> => {
   try {
-    const response = await fetch('./api/install-package', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = (await startInstallation()) as unknown as Response;
 
-    const progressBarInstallation = document.getElementById('result-install-package');
-    const reader = response.body!.getReader();
+    const progressBarInstallation = document.getElementById('result-install-package') as HTMLElement;
+    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue = new TextDecoder().decode(value);
+      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarInstallation!.style.width = '100%';
@@ -318,21 +267,15 @@ const installPackage = async (): Promise<void> => {
 
 const updateDatabase = async (): Promise<void> => {
   try {
-    const response = await fetch('./api/update-database', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = (await startDatabaseUpdate()) as unknown as Response;
 
-    const progressBarInstallation = document.getElementById('result-update-database');
-    const reader = response.body!.getReader();
+    const progressBarInstallation = document.getElementById('result-update-database') as HTMLElement;
+    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
     const card = document.getElementById('pmf-update-step-install-package') as HTMLElement;
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue = new TextDecoder().decode(value);
+      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarInstallation!.style.width = '100%';

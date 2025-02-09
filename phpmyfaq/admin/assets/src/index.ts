@@ -23,6 +23,7 @@ import {
   handleSessions,
   handleSessionsFilter,
   handleStatistics,
+  handleTruncateSearchTerms,
 } from './statistics';
 import {
   handleConfiguration,
@@ -65,9 +66,8 @@ import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
-import { handleTruncateSearchTerms } from './statistics/search';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   'use strict';
 
   // Session timeout
@@ -160,16 +160,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   await handleUploadCSVForm();
 
   // Statistics → User-tracking
-  await handleSessions();
+  handleSessions();
 
-  await handleFormEdit();
-  await handleFormTranslations();
+  handleFormEdit();
+  handleFormTranslations();
 
   // News
-  await handleAddNews();
-  await handleNews();
-  await handleEditNews();
+  handleAddNews();
+  handleNews();
+  handleEditNews();
 
   // Initialize tooltips everywhere
-  await initializeTooltips();
+  initializeTooltips();
 });

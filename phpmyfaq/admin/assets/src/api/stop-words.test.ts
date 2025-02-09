@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, Mock } from 'vitest';
 import { fetchByLanguage, postStopWord, removeStopWord } from './stop-words';
 
 global.fetch = vi.fn();
@@ -10,7 +10,7 @@ describe('Stop Words API', () => {
 
   it('fetchByLanguage should fetch stop words by language', async () => {
     const mockResponse = [{ id: 1, lang: 'en', stopword: 'example' }];
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -28,7 +28,7 @@ describe('Stop Words API', () => {
 
   it('postStopWord should post a new stop word', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
@@ -52,7 +52,7 @@ describe('Stop Words API', () => {
 
   it('removeStopWord should delete a stop word', async () => {
     const mockResponse = { success: true };
-    (fetch as vi.Mock).mockResolvedValue({
+    (fetch as Mock).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
     });
