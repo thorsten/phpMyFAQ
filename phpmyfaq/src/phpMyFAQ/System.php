@@ -111,7 +111,7 @@ class System
     private array $supportedDatabases = [
         'mysqli' => [
             self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 for MySQL',
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (ext/mysqli)',
         ],
         'pgsql' => [
             self::VERSION_MINIMUM_PHP,
@@ -124,6 +124,10 @@ class System
         'sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
             'MS SQL Server 2016 or later',
+        ],
+        'pdo_mysql' => [
+            self::VERSION_MINIMUM_PHP,
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, experimental)',
         ],
     ];
 

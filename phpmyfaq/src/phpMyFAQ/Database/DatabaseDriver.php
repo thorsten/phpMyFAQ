@@ -65,10 +65,10 @@ interface DatabaseDriver
     /**
      * Fetch a result row as an array.
      *
-     *
-     * @return array
+     * @param mixed $result
+     * @return array|false|null
      */
-    public function fetchArray(mixed $result): ?array;
+    public function fetchArray(mixed $result): array|false|null;
 
     /**
      * Fetch a result row.

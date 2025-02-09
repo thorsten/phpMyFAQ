@@ -172,11 +172,8 @@ class Category
         }
 
         if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where .= $where === '' || $where === '0' ? '
-            WHERE' : '
-            AND';
-            $where .= "
-                fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
+            $where .= $where === '' || $where === '0' ? ' WHERE' : ' AND';
+            $where .= sprintf(' fc.lang = \'%s\'', $this->configuration->getDb()->escape($this->language));
         }
 
         $query = sprintf(

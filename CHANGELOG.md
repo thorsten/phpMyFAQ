@@ -12,6 +12,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added Symfony Routing for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
 - added plugin administration backend (Thorsten)
+- added experimental support for PDO_MYSQL (Thorsten)
 - improved online update feature (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
 - migrated from JavaScript to TypeScript (Thorsten) 

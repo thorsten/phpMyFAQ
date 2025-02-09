@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Sqlite3 class provides methods and functions for a SQLite v3 database.
+ * The phpMyFAQ\Database\Sqlite3 class provides methods and functions for a SQLite v3 database.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Utils;
 
 /**
  * Class Sqlite3

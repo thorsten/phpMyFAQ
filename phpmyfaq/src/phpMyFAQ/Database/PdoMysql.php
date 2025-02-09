@@ -1,8 +1,8 @@
 <?php
 
 /**
- * The phpMyFAQ\Database\Mysqli class provides methods and functions for MySQL and
- * MariaDB databases.
+ * The phpMyFAQ\Database\PdoMysql class provides methods and functions for MySQL and
+ * MariaDB databases with PDO.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,27 +10,26 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2025 phpMyFAQ Team
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2005-12-13
+ * @since     2025-02-09
  */
 
 namespace phpMyFAQ\Database;
 
-use mysqli_result;
-use mysqli_sql_exception;
-use phpMyFAQ\Database;
+use PDO;
+use PDOException;
+use PDOStatement;
 use phpMyFAQ\Core\Exception;
 use SensitiveParameter;
 
 /**
- * Class Mysqli
+ * Class PdoDatabase
  *
  * @package phpMyFAQ\Database
  */
-class Mysqli implements DatabaseDriver
+class PdoMysql implements DatabaseDriver
 {
     /**
      * @var string[] Tables.
@@ -40,9 +39,9 @@ class Mysqli implements DatabaseDriver
     /**
      * The connection object.
      *
-     * @var \mysqli|bool
+     * @var PDO|null
      */
-    private \mysqli|bool $conn = false;
+    private ?PDO $conn = null;
 
     /**
      * The query log string.
@@ -67,34 +66,12 @@ class Mysqli implements DatabaseDriver
         string $database = '',
         int|null $port = null
     ): ?bool {
+        $dsn = "mysql:host=$host;dbname=$database;port=$port;charset=utf8mb4";
         try {
-            if (str_starts_with($host, '/')) {
-                // Connect to MySQL via socket
-                $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
-            } else {
-                // Connect to MySQL via network
-                $this->conn = new \mysqli($host, $user, $password, null, $port);
-            }
-        } catch (mysqli_sql_exception $mysqlisqlexception) {
-            throw new Exception($mysqlisqlexception->getMessage());
-        }
-
-        if ($this->conn->connect_error) {
-            Database::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
-            die();
-        }
-
-        // change character set to UTF-8
-        if (!$this->conn->set_charset('utf8mb4')) {
-            Database::errorPage($this->error());
-        }
-
-        if ('' !== $database) {
-            try {
-                $this->conn->select_db($database);
-            } catch (mysqli_sql_exception) {
-                throw new Exception('Cannot connect to database ' . $database);
-            }
+            $this->conn = new PDO($dsn, $user, $password);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            throw new Exception($e->getMessage());
         }
 
         return true;
@@ -105,7 +82,7 @@ class Mysqli implements DatabaseDriver
      */
     public function error(): string
     {
-        return $this->conn->error;
+        return $this->conn->errorInfo()[2] ?? '';
     }
 
     /**
@@ -113,15 +90,15 @@ class Mysqli implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return $this->conn->real_escape_string($string);
+        return $string;
     }
 
     /**
      * Fetch a result row as an associative array.
      */
-    public function fetchArray(mixed $result): ?array
+    public function fetchArray(mixed $result): array|false|null
     {
-        return $result->fetch_assoc();
+        return $result->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -129,7 +106,7 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchRow(mixed $result): mixed
     {
-        return $result->fetch_row()[0] ?? false;
+        return $result->fetch(PDO::FETCH_NUM)[0] ?? false;
     }
 
     /**
@@ -140,16 +117,11 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchAll(mixed $result): ?array
     {
-        $ret = [];
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
 
-        while ($row = $this->fetchObject($result)) {
-            $ret[] = $row;
-        }
-
-        return $ret;
+        return $result->fetchAll(PDO::FETCH_OBJ);
     }
 
     /**
@@ -160,7 +132,7 @@ class Mysqli implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
-        return $result->fetch_object();
+        return $result->fetch(PDO::FETCH_OBJ);
     }
 
     /**
@@ -168,11 +140,7 @@ class Mysqli implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        if ($result instanceof mysqli_result) {
-            return $result->num_rows;
-        }
-
-        return 0;
+        return $result->rowCount();
     }
 
     /**
@@ -260,7 +228,8 @@ class Mysqli implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $row = $this->conn->query($query)->fetch_row();
+        $stmt = $this->conn->query($query);
+        $row = $stmt->fetch(PDO::FETCH_NUM);
 
         return $row[0];
     }
@@ -285,9 +254,8 @@ class Mysqli implements DatabaseDriver
             $table
         );
 
-        $mysqliresult = $this->query($select);
-
-        $current = $mysqliresult instanceof mysqli_result ? $mysqliresult->fetch_row() : [0];
+        $stmt = $this->query($select);
+        $current = $stmt->fetch(PDO::FETCH_NUM);
 
         return $current[0] + 1;
     }
@@ -295,7 +263,7 @@ class Mysqli implements DatabaseDriver
     /**
      * This function sends a query to the database.
      *
-     * @return mysqli_result $result
+     * @return PDOStatement|false $result
      * @throws Exception
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
@@ -308,12 +276,12 @@ class Mysqli implements DatabaseDriver
 
         try {
             $result = $this->conn->query($query);
-        } catch (mysqli_sql_exception $mysqlisqlexception) {
-            throw new Exception($mysqlisqlexception->getMessage());
+        } catch (PDOException $e) {
+            throw new Exception($e->getMessage());
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->conn->errno . ': ' . $this->error();
+            $this->sqlLog .= $this->conn->errorCode() . ': ' . $this->error();
         }
 
         return $result;
@@ -324,7 +292,7 @@ class Mysqli implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return mysqli_get_client_info();
+        return $this->conn->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -332,7 +300,7 @@ class Mysqli implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->conn->server_info;
+        return $this->conn->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -340,16 +308,12 @@ class Mysqli implements DatabaseDriver
      */
     public function close(): void
     {
-        if ($this->conn) {
-            $this->conn->close();
-        }
+        $this->conn = null;
     }
 
     public function __destruct()
     {
-        if ($this->conn) {
-            $this->conn->close();
-        }
+        $this->close();
     }
 
     public function now(): string

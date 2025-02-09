@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ\Db_Pgsql class provides methods and functions for a PostgreSQL
+ * The phpMyFAQ\Database\Pgsql class provides methods and functions for a PostgreSQL
  * database.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -11,9 +11,10 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2025 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
+ * @since     2005-12-13
  */
 
 namespace phpMyFAQ\Database;
@@ -22,7 +23,6 @@ use Exception;
 use PgSql\Connection;
 use PgSql\Result;
 use phpMyFAQ\Database;
-use phpMyFAQ\Utils;
 
 /**
  * Class Pgsql

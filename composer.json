@@ -65,6 +65,7 @@
   "suggest": {
     "ext-ldap": "*",
     "ext-openssl": "*",
+    "ext-pdo": "*",
     "ext-pgsql": "*",
     "ext-sqlite3": "*",
     "ext-sqlsrv": "*"

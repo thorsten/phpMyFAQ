@@ -74,8 +74,7 @@ class SystemInformationController extends AbstractAdministrationController
                     'Web server Interface' => strtoupper(PHP_SAPI),
                     'PHP Version' => PHP_VERSION,
                     'PHP Extensions' => implode(', ', get_loaded_extensions()),
-                    'PHP Session path' => session_save_path(),
-                    'Database Server' => Database::getType(),
+                    'Database Driver' => Database::getType(),
                     'Database Server Version' => $this->configuration->getDb()->serverVersion(),
                     'Database Client Version' => $this->configuration->getDb()->clientVersion(),
                     'Elasticsearch Version' => $esInformation

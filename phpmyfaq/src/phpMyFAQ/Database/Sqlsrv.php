@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ\Db_Sqlsrv class provides methods and functions for SQL Server Driver
+ * The phpMyFAQ\Database\Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -20,7 +20,6 @@ namespace phpMyFAQ\Database;
 
 use Exception;
 use phpMyFAQ\Database;
-use phpMyFAQ\Utils;
 
 /**
  * Class Sqlsrv
