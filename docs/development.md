@@ -111,7 +111,7 @@ The default CSS theme is located in the **assets/templates/default** directory a
 You can create your own CSS theme by copying the default theme and modifying it to suit your needs.
 The CSS theme is based on Bootstrap’s CSS custom properties for fast and forward-looking design and development.
 We support a light and a dark mode in our default theme.
-For more information check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
+For more information, check out the documentation on [Bootstrap](https://getbootstrap.com/docs/5.3/customize/css-variables/).
 
 ## 6.4 Custom CSS
 
@@ -138,7 +138,7 @@ However, there are a few rules and limitations when doing so and this page lists
 2. Copyright notices will be changed to phpMyFAQ Team. But contributors will get credit for their work!
 3. All third party code will be reviewed, tested and possible modified before being released.
 
-These basic rules makes it possible for us to earn a living of the phpMyFAQ project, but it also ensures that the code
+These basic rules make it possible for us to earn a living of the phpMyFAQ project, but it also ensures that the code
 remains Open Source and under the MPL 2.0 license.
 All contributions will be added to the changelog and on the phpMyFAQ website.
 
@@ -152,10 +152,11 @@ work on your copy and send pull requests.
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP 8.2+
-- PHPUnit 10.x
+- PHP v8.2+
+- PHPUnit v11.x
 - Composer
-- Node.js v20+
+- Node.js v22+
+- TypeScript v5.x
 - PNPM
 - Docker
 
@@ -185,13 +186,13 @@ Every PR on GitHub will check the coding standards and tests as well.
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purpose.
-It does not contain any code as the phpmyfaq folder is meant to be mount as the /var/www/html folder in the container.
+It does not contain any code as the phpmyfaq folder is meant to be mounted as the /var/www/html folder in the container.
 
 For development purposes, you can start a full stack to run your current phpMyFAQ source code from your local repository.
 
     $ docker-compose up
 
-The command above starts 9 containers for multi database development as following.
+The command above starts nine containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
@@ -217,7 +218,7 @@ Then services will be available at the following addresses:
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
-### 6.5.6 Fetch 3rd party libraries and install phpMyFAQ
+### 6.5.6 Fetch third party libraries and install phpMyFAQ
 
 After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
 
@@ -227,15 +228,19 @@ After cloning your forked repository, you have to fetch the 3rd party libraries 
     $ pnpm install
     $ pnpm build
 
-Then just start a normal, local phpMyFAQ installation.
+Then start a normal, local phpMyFAQ installation.
 
-If you change some JavaScript code, you have to re-build the .js files into one with the following PNPM task:
+If you change some TypeScript code, you have to re-build the .ts files into one with the following PNPM task:
 
     $ pnpm build
 
 During development, you can use the watch mode:
 
     $ pnpm build:watch
+
+For a production build, you can use the following command:
+
+    $ pnpm build:prod
 
 To run the PHPUnit-based tests, you can use the following command:
 
