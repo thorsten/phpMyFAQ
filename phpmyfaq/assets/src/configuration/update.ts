@@ -38,7 +38,7 @@ export const handleUpdateInformation = async (): Promise<void> => {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ version: installedVersion.value }),
+        body: installedVersion.value,
       });
 
       if (!response.ok) {
@@ -88,7 +88,7 @@ export const handleConfigBackup = async (): Promise<void> => {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ version: installedVersion.value }),
+        body: installedVersion.value,
       });
 
       if (!response.ok) {
@@ -121,7 +121,7 @@ export const handleDatabaseUpdate = async (): Promise<void> => {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ version: installedVersion.value }),
+        body: installedVersion.value,
       });
 
       const result = await response.json();
