@@ -550,7 +550,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "समाचा
 $LANG_CONF['security.bannedIPs'] = array("area", "इन IPs को प्रतिबंधित करें");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "क्या आप LDAP को सक्रिय करना चाहते हैं? (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF["main.referenceURL"] = array("input", "कड़ी सत्यापन के लिए आधार URL (e.g.: https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX कड़ी सत्यापन के मध्य समय अवधि (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "नए सवाल न दिखायें?");
 $LANG_CONF['security.permLevel'] = array("input", "आज्ञा समतल");
 

@@ -533,7 +533,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "新聞文章數
 $LANG_CONF['security.bannedIPs'] = array("area", "禁止訪問 IPs 位置 Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "啟用 LDAP 支援? (預設: 關閉) <br> Enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL 網址確認 (舉例: https://www.example.org/faq/) <br>URL for link verification (e.g.: https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "AJAX 連結確認時間(以秒計時) <br>Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "新問題不可被顯示? Disable visibility of new questions?");
 $LANG_CONF["security.permLevel"] = array("select", "權限等級 Permission level");
 

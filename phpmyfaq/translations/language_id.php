@@ -550,7 +550,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Jumlah artikel 
 $LANG_CONF['security.bannedIPs'] = array("area", "Blokir IP ini");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL dasar untuk verifikasi link (mis.: https://www.situsanda.com/faq)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Nonaktifkan link untuk membuat Pertanyaan Baru?");
 $LANG_CONF['security.permLevel'] = array("select", "Level Hak Akses");
 

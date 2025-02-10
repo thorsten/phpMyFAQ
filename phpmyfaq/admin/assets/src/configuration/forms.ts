@@ -65,21 +65,25 @@ export const handleFormEdit = (): void => {
     const tabContentAskQuestion = document.getElementById('ask-question') as HTMLElement;
     const tabContentAddContent = document.getElementById('add-content') as HTMLElement;
 
-    tabAskQuestion.addEventListener('click', (event: Event): void => {
-      event.preventDefault();
-      tabAskQuestion.classList.add('active');
-      tabAddContent.classList.remove('active');
-      tabContentAskQuestion.classList.add('active');
-      tabContentAddContent.classList.remove('active');
-    });
+    if (tabAskQuestion) {
+      tabAskQuestion.addEventListener('click', (event: Event): void => {
+        event.preventDefault();
+        tabAskQuestion.classList.add('active');
+        tabAddContent.classList.remove('active');
+        tabContentAskQuestion.classList.add('active');
+        tabContentAddContent.classList.remove('active');
+      });
+    }
 
-    tabAddContent.addEventListener('click', (event: Event): void => {
-      event.preventDefault();
-      tabAddContent.classList.add('active');
-      tabAskQuestion.classList.remove('active');
-      tabContentAddContent.classList.add('active');
-      tabContentAskQuestion.classList.remove('active');
-    });
+    if (tabAddContent) {
+      tabAddContent.addEventListener('click', (event: Event): void => {
+        event.preventDefault();
+        tabAddContent.classList.add('active');
+        tabAskQuestion.classList.remove('active');
+        tabContentAddContent.classList.add('active');
+        tabContentAskQuestion.classList.remove('active');
+      });
+    }
   }
 };
 
@@ -96,14 +100,18 @@ export const handleFormTranslations = (): void => {
           input.disabled = false;
           element.classList.remove('bg-primary');
           element.classList.add('bg-success');
-          element.children[0].classList.remove('bi-pencil');
-          element.children[0].classList.add('bi-check');
+          if (element.children[0]) {
+            element.children[0].classList.remove('bi-check');
+            element.children[0].classList.add('bi-pencil');
+          }
         } else {
           input.disabled = true;
           element.classList.add('bg-primary');
           element.classList.remove('bg-success');
-          element.children[0].classList.add('bi-pencil');
-          element.children[0].classList.remove('bi-check');
+          if (element.children[0]) {
+            element.children[0].classList.add('bi-pencil');
+            element.children[0].classList.remove('bi-check');
+          }
           const csrf = element.getAttribute('data-pmf-csrf') as string;
           const formId = element.getAttribute('data-pmf-formId') as string;
           const inputId = element.getAttribute('data-pmf-inputId') as string;
@@ -146,26 +154,29 @@ export const handleFormTranslations = (): void => {
     const addTranslationButton = document.getElementById('addTranslation') as HTMLElement;
     const languageSelect = document.getElementById('languageSelect') as HTMLSelectElement;
     const translationInput = document.getElementById('translationText') as HTMLInputElement;
-    addTranslationButton.addEventListener('click', async (event: Event): Promise<void> => {
-      event.preventDefault();
-      const csrf = addTranslationButton.getAttribute('data-pmf-csrf') as string;
-      const inputId = addTranslationButton.getAttribute('data-pmf-inputId') as string;
-      const formId = addTranslationButton.getAttribute('data-pmf-formId') as string;
-      const response = (await fetchAddTranslation(
-        csrf,
-        formId,
-        inputId,
-        languageSelect.value,
-        translationInput.value
-      )) as unknown as Response;
-      if (typeof response.success === 'string') {
-        pushNotification(response.success);
-        setTimeout((): void => {
-          window.location.reload();
-        }, 3000);
-      } else {
-        console.error(response.error);
-      }
-    });
+
+    if (addTranslationButton) {
+      addTranslationButton.addEventListener('click', async (event: Event): Promise<void> => {
+        event.preventDefault();
+        const csrf = addTranslationButton.getAttribute('data-pmf-csrf') as string;
+        const inputId = addTranslationButton.getAttribute('data-pmf-inputId') as string;
+        const formId = addTranslationButton.getAttribute('data-pmf-formId') as string;
+        const response = (await fetchAddTranslation(
+          csrf,
+          formId,
+          inputId,
+          languageSelect.value,
+          translationInput.value
+        )) as unknown as Response;
+        if (typeof response.success === 'string') {
+          pushNotification(response.success);
+          setTimeout((): void => {
+            window.location.reload();
+          }, 3000);
+        } else {
+          console.error(response.error);
+        }
+      });
+    }
   }
 };

@@ -546,7 +546,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Số lượng b
 $LANG_CONF['security.bannedIPs'] = array("area", "Loại bỏ các IP này");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
 $LANG_CONF["main.referenceURL"] = array("input", "Tham chiếu URL để kiểm tra đường dẫn (vd.: https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Không chọn chức năng cho xem các câu hỏi mới?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 

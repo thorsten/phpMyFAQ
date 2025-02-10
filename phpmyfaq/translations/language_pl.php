@@ -534,7 +534,6 @@ $LANG_CONF['security.bannedIPs'] = ["area", "Zablokuj te adresy IP"];
 $LANG_CONF["main.enableRewriteRules"] = ["checkbox", "Włączyć obsługę rewrite adresów URL? (domyślnie: wyłączone)"];
 $LANG_CONF["ldap.ldapSupport"] = ["checkbox", "Włączyć obsługę LDAP? (domyślnie: wyłączone)"];
 $LANG_CONF["main.referenceURL"] = ["input", "Adres URL FAQ (np.:: https://www.example.org/faq/)"];
-$LANG_CONF["main.urlValidateInterval"] = ["input", "Odstęp między weryfikacją łącza AJAX (w sekundach)"];
 $LANG_CONF["records.enableVisibilityQuestions"] = ["checkbox", "Wyłączyć widoczność nowych pytań?"];
 $LANG_CONF['security.permLevel'] = ["select", "Poziom uprawnień"];
 

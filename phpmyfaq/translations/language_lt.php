@@ -555,7 +555,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Naujienų strai
 $LANG_CONF['security.bannedIPs'] = array("area", "Drausti šiuos IP adresus");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["main.referenceURL"] = array("input", "Bazinis URL saitų tikrinimui (pvz., https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Išjungti naujų klausimų matomumą?");
 $LANG_CONF['security.permLevel'] = array("select", "Leidimų lygis");
 

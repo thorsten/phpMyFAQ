@@ -82,6 +82,7 @@ export default defineConfig({
         '**/babel.config.cjs',
         '**/commitlint.config.cjs',
       ],
+      include: ['**/phpmyfaq/assets/**/*.ts', '**/phpmyfaq/admin/assets/**/*.ts'],
     },
     globals: true,
     include: ['**/phpmyfaq/assets/**/*.test.ts', '**/phpmyfaq/admin/assets/**/*.test.ts'],

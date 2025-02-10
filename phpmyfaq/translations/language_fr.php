@@ -532,7 +532,6 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = ["input", "Nombre de nouveaux a
 $LANG_CONF["security.bannedIPs"] = ["area", "Bannir ces adresses IP"];
 $LANG_CONF["ldap.ldapSupport"] = ["checkbox", "Activer le support de LDAP (défaut : désactivé)"];
 $LANG_CONF["main.referenceURL"] = ["input", "URL de votre FAQ (e.g. : http://www.example.org/faq/)"];
-$LANG_CONF["main.urlValidateInterval"] = ["input", "Intervalle entre la vérification des liens AJAX (en secondes)"];
 $LANG_CONF["records.enableVisibilityQuestions"] = ["checkbox", "Désactiver la visibilité de nouvelles questions ?"];
 $LANG_CONF["security.permLevel"] = ["select", "Niveau d'autorisation"];
 

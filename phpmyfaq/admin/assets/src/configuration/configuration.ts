@@ -72,7 +72,9 @@ export const handleConfiguration = async (): Promise<void> => {
         }
 
         tabLoaded = true;
-        configTabTrigger.show();
+        if (configTabTrigger instanceof Element) {
+          configTabTrigger.show();
+        }
         result.innerHTML = '';
       });
     });
@@ -104,7 +106,7 @@ export const handleSaveConfiguration = async (): Promise<void> => {
   }
 };
 
-const handleSMTPPasswordToggle = async (): Promise<void> => {
+export const handleSMTPPasswordToggle = async (): Promise<void> => {
   const passwordField = document.getElementsByName('edit[mail.remoteSMTPPassword]') as NodeListOf<HTMLInputElement>;
   const toggleHTML =
     '<span class="input-group-text" id="SMTPtogglePassword"><i class="bi bi-eye-slash" id="SMTPtogglePassword_icon"></i></span>';
@@ -126,16 +128,18 @@ const handleSMTPPasswordToggle = async (): Promise<void> => {
   });
 };
 
-const handleTranslation = async (): Promise<void> => {
+export const handleTranslation = async (): Promise<void> => {
   const translationSelectBox = document.getElementsByName('edit[main.language]') as NodeListOf<HTMLSelectElement>;
 
   if (translationSelectBox !== null) {
     const options = await fetchTranslations();
-    translationSelectBox[0].insertAdjacentHTML('beforeend', options);
+    if (translationSelectBox[0]) {
+      translationSelectBox[0].insertAdjacentHTML('beforeend', options);
+    }
   }
 };
 
-const handleTemplates = async (): Promise<void> => {
+export const handleTemplates = async (): Promise<void> => {
   const templateSelectBox = document.getElementsByName('edit[layout.templateSet]') as NodeListOf<HTMLSelectElement>;
   if (templateSelectBox !== null) {
     const options = await fetchTemplates();
@@ -143,16 +147,18 @@ const handleTemplates = async (): Promise<void> => {
   }
 };
 
-const handleFaqsSortingKeys = async (): Promise<void> => {
+export const handleFaqsSortingKeys = async (): Promise<void> => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.orderby]') as NodeListOf<HTMLSelectElement>;
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
     const options = await fetchFaqsSortingKeys(currentValue);
-    faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
+    if (faqsOrderSelectBox[0]) {
+      faqsOrderSelectBox[0].insertAdjacentHTML('beforeend', options);
+    }
   }
 };
 
-const handleFaqsSortingOrder = async (): Promise<void> => {
+export const handleFaqsSortingOrder = async (): Promise<void> => {
   const faqsOrderSelectBox = document.getElementsByName('edit[records.sortby]') as NodeListOf<HTMLSelectElement>;
   if (faqsOrderSelectBox !== null) {
     const currentValue = faqsOrderSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
@@ -161,7 +167,7 @@ const handleFaqsSortingOrder = async (): Promise<void> => {
   }
 };
 
-const handleFaqsSortingPopular = async (): Promise<void> => {
+export const handleFaqsSortingPopular = async (): Promise<void> => {
   const faqsPopularSelectBox = document.getElementsByName(
     'edit[records.orderingPopularFaqs]'
   ) as NodeListOf<HTMLSelectElement>;
@@ -172,7 +178,7 @@ const handleFaqsSortingPopular = async (): Promise<void> => {
   }
 };
 
-const handlePermLevel = async (): Promise<void> => {
+export const handlePermLevel = async (): Promise<void> => {
   const permLevelSelectBox = document.getElementsByName('edit[security.permLevel]') as NodeListOf<HTMLSelectElement>;
   if (permLevelSelectBox !== null) {
     const currentValue = permLevelSelectBox[0].dataset.pmfConfigurationCurrentValue as string;
@@ -181,7 +187,7 @@ const handlePermLevel = async (): Promise<void> => {
   }
 };
 
-const handleReleaseEnvironment = async (): Promise<void> => {
+export const handleReleaseEnvironment = async (): Promise<void> => {
   const releaseEnvironmentSelectBox = document.getElementsByName(
     'edit[upgrade.releaseEnvironment]'
   ) as NodeListOf<HTMLSelectElement>;
@@ -192,7 +198,7 @@ const handleReleaseEnvironment = async (): Promise<void> => {
   }
 };
 
-const handleSearchRelevance = async (): Promise<void> => {
+export const handleSearchRelevance = async (): Promise<void> => {
   const searchRelevanceSelectBox = document.getElementsByName(
     'edit[search.relevance]'
   ) as NodeListOf<HTMLSelectElement>;
@@ -203,7 +209,7 @@ const handleSearchRelevance = async (): Promise<void> => {
   }
 };
 
-const handleSeoMetaTags = async (): Promise<void> => {
+export const handleSeoMetaTags = async (): Promise<void> => {
   const seoMetaTagsSelectBoxes = document.querySelectorAll(
     'select[name^="edit[seo.metaTags"]'
   ) as NodeListOf<HTMLSelectElement>;
@@ -217,11 +223,18 @@ const handleSeoMetaTags = async (): Promise<void> => {
   }
 };
 
-const handleConfigurationTab = async (target: string): Promise<void> => {
-  const language = (document.getElementById('pmf-language') as HTMLInputElement).value;
-  const response = await fetchConfiguration(target, language);
+export const handleConfigurationTab = async (target: string): Promise<void> => {
+  const languageElement = document.getElementById('pmf-language') as HTMLInputElement;
+  if (!languageElement) {
+    throw new Error('Language element not found');
+  }
+  const language: string = languageElement.value;
+  const response: string = await fetchConfiguration(target, language);
 
   const tabContent = document.querySelector(target) as HTMLElement;
+  if (!tabContent) {
+    throw new Error(`Tab content for target ${target} not found`);
+  }
 
   while (tabContent.firstChild) {
     tabContent.removeChild(tabContent.firstChild);

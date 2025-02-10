@@ -14,6 +14,8 @@
  */
 
 import { addElement } from '../../../../assets/src/utils';
+import { uploadAttachments } from '../api';
+import { Attachment } from '../interfaces';
 
 export const handleAttachmentUploads = (): void => {
   const filesToUpload = document.getElementById('filesToUpload') as HTMLInputElement | null;
@@ -21,24 +23,24 @@ export const handleAttachmentUploads = (): void => {
 
   // Calculate upload size and show file to upload
   if (filesToUpload) {
-    filesToUpload.addEventListener('change', function () {
-      const files = filesToUpload.files;
+    filesToUpload.addEventListener('change', (): void => {
+      const files: FileList | null = filesToUpload.files;
       const fileSize = document.getElementById('filesize') as HTMLElement;
       const fileList = document.querySelector('.pmf-attachment-upload-files') as HTMLElement;
 
       fileList.classList.remove('invisible');
 
-      let bytes = 0;
-      const numFiles = files?.length || 0;
+      let bytes: number = 0;
+      const numFiles: number = files?.length || 0;
       const fileItems: HTMLElement[] = [];
-      for (let fileId = 0; fileId < numFiles; fileId++) {
+      for (let fileId: number = 0; fileId < numFiles; fileId++) {
         bytes += files![fileId].size;
         fileItems.push(addElement('li', { innerText: files![fileId].name }));
       }
 
-      let output = bytes + ' bytes';
+      let output: string = bytes + ' bytes';
       for (
-        let multiples = ['KiB', 'MiB', 'GiB', 'TiB'], multiple = 0, approx = bytes / 1024;
+        let multiples: string[] = ['KiB', 'MiB', 'GiB', 'TiB'], multiple: number = 0, approx: number = bytes / 1024;
         approx > 1;
         approx /= 1024, multiple++
       ) {
@@ -50,41 +52,29 @@ export const handleAttachmentUploads = (): void => {
     });
 
     // handle upload button
-    fileUploadButton?.addEventListener('click', async (event: MouseEvent) => {
+    fileUploadButton?.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       event.stopImmediatePropagation();
 
-      const files = filesToUpload.files;
+      const files: FileList | null = filesToUpload.files;
       const formData = new FormData();
 
-      for (let i = 0; i < (files?.length || 0); i++) {
+      for (let i: number = 0; i < (files?.length || 0); i++) {
         formData.append('filesToUpload[]', files![i]);
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);
 
       try {
-        const response = await fetch('./api/content/attachments/upload', {
-          method: 'POST',
-          cache: 'no-cache',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const error = new Error('Network response was not ok');
-          (error as any).cause = { response };
-          throw error;
-        }
-
-        const attachments = await response.json();
+        const response = (await uploadAttachments(formData)) as unknown as Attachment[];
         const modal = document.getElementById('attachmentModal') as HTMLElement;
         const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement;
         const attachmentList = document.querySelector('.adminAttachments') as HTMLElement;
         const fileSize = document.getElementById('filesize') as HTMLElement;
-        const fileList = document.querySelectorAll('.pmf-attachment-upload-files li');
+        const fileList: NodeListOf<Element> = document.querySelectorAll('.pmf-attachment-upload-files li');
 
-        attachments.forEach((attachment: { attachmentId: string; fileName: string }) => {
-          const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token');
+        response.forEach((attachment: Attachment): void => {
+          const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
           attachmentList.insertAdjacentElement(
             'beforeend',
             addElement('li', {}, [
@@ -114,7 +104,7 @@ export const handleAttachmentUploads = (): void => {
         });
 
         fileSize.innerHTML = '';
-        fileList.forEach((li) => {
+        fileList.forEach((li: Element): void => {
           li.remove();
         });
 
@@ -122,12 +112,7 @@ export const handleAttachmentUploads = (): void => {
         modal.classList.remove('show');
         modalBackdrop.remove();
       } catch (error) {
-        if ((error as any).cause && (error as any).cause.response) {
-          const errors = await (error as any).cause.response.json();
-          console.log(errors);
-        } else {
-          console.log('An error occurred:', error);
-        }
+        console.error('An error occurred:', error);
       }
     });
   }

@@ -15,7 +15,7 @@
 
 import { Response } from '../interfaces';
 
-export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<Response | undefined> => {
+export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
   try {
     const response = await fetch('./api/content/attachments', {
       method: 'DELETE',
@@ -32,7 +32,7 @@ export const deleteAttachments = async (attachmentId: string, csrfToken: string)
   }
 };
 
-export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<Response | undefined> => {
+export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
   try {
     const response = await fetch('./api/content/attachments/refresh', {
       method: 'POST',
@@ -41,6 +41,24 @@ export const refreshAttachments = async (attachmentId: string, csrfToken: string
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const uploadAttachments = async (formData: FormData): Promise<Response> => {
+  try {
+    const response = await fetch('./api/content/attachments/upload', {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+      body: formData,
     });
 
     return await response.json();

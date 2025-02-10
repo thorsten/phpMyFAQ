@@ -48,7 +48,7 @@ export const handleInstances = (): void => {
 
         if (response.added) {
           const table = document.querySelector('.table tbody') as HTMLElement;
-          const row: HTMLElement = addElement('tr', { id: `row-instance-${response.added}` }, [
+          const row: Element = addElement('tr', { id: `row-instance-${response.added}` }, [
             addElement('td', { innerText: response.added }),
             addElement('td', {}, [
               addElement('a', {
@@ -93,11 +93,10 @@ export const handleInstances = (): void => {
           throw new Error('Network response was not ok');
         }
       } catch (error) {
-        const table = document.querySelector('.table') as HTMLElement;
-        const errorMessage = (await (error as any).cause.response.json()) as Response;
+        const table = document.querySelector('.table') as Element;
         table.insertAdjacentElement(
           'afterend',
-          addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+          addElement('div', { classList: 'alert alert-danger', innerText: error })
         );
       }
     });

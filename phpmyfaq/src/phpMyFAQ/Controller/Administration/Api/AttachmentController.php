@@ -109,6 +109,9 @@ class AttachmentController extends AbstractController
         }
 
         $uploadedFiles = [];
+
+        var_dump($files);
+
         foreach ($files as $file) {
             if (
                 $file->isValid() &&
