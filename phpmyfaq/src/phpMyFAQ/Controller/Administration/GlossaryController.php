@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
@@ -31,9 +30,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GlossaryController extends AbstractController
 {
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/glossary')]
     public function fetch(Request $request): JsonResponse
     {
@@ -48,9 +44,6 @@ class GlossaryController extends AbstractController
         return $this->json($glossary->fetch($glossaryId), Response::HTTP_OK);
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/glossary/delete')]
     public function delete(Request $request): JsonResponse
     {
@@ -75,9 +68,6 @@ class GlossaryController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/glossary/create')]
     public function create(Request $request): JsonResponse
     {
@@ -103,9 +93,6 @@ class GlossaryController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/glossary/update')]
     public function update(Request $request): JsonResponse
     {

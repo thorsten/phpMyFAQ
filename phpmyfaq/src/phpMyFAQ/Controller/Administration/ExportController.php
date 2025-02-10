@@ -21,7 +21,6 @@ use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Administration\HttpStreamer;
 use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Category;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
