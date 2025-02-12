@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-alpha - unreleased
+### phpMyFAQ v4.1.0-alpha - 2025-02-12
 
 - added configuration to edit robots.txt (Thorsten)
 - added Symfony Routing for administration backend (Thorsten)
