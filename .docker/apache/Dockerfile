@@ -76,10 +76,10 @@ RUN a2enmod ssl && a2enmod rewrite
 RUN mkdir -p /etc/apache2/ssl
 
 COPY ./.docker/*.pem /etc/apache2/ssl/
-COPY ./.docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./.docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 #=== Set custom entrypoint ===
-COPY docker-entrypoint.sh /entrypoint
+COPY ./.docker/apache/docker-entrypoint.sh /entrypoint
 RUN chmod +x /entrypoint
 ENTRYPOINT [ "/entrypoint" ]
 

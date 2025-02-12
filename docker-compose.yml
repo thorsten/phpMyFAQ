@@ -37,7 +37,10 @@ services:
   #    ACCEPT_EULA: 'Y'
 
   phpmyfaq:
-    build: .
+    build:
+      context: .
+      #dockerfile: .docker/nginx/Dockerfile
+      dockerfile: .docker/apache/Dockerfile
     container_name: phpmyfaq-41
     restart: always
     stdin_open: true
