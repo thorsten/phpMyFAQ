@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Interface for phpMyFAQ database dependent search classes.
+ * Interface for phpMyFAQ database-dependent search classes.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

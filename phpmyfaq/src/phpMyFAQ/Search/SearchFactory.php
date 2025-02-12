@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Search\Database\DatabaseInterface;
 
 /**
  * Class SearchFactory
@@ -34,11 +33,13 @@ class SearchFactory
      */
     public static function create(Configuration $configuration, array $searchHandler): SearchDatabase
     {
-        $searchClass = sprintf(
-            '\phpMyFAQ\Search\%s\%s',
-            ucfirst((string) key($searchHandler)),
-            ucfirst(current($searchHandler))
-        );
+        $type = current($searchHandler);
+        $connector = ucfirst((string) key($searchHandler));
+        if (str_starts_with(current($searchHandler), 'pdo_')) {
+            $searchClass = sprintf('\phpMyFAQ\Search\%s\Pdo%s', $connector, ucfirst(substr($type, 4)));
+        } else {
+            $searchClass = sprintf('\phpMyFAQ\Search\%s\%s', $connector, ucfirst($type));
+        }
 
         return new $searchClass($configuration);
     }
