@@ -122,12 +122,7 @@ export const handleAttachmentUploads = () => {
         modal.classList.remove('show');
         modalBackdrop.remove();
       } catch (error) {
-        if (error.cause && error.cause.response) {
-          const errors = await error.cause.response.json();
-          console.log(errors);
-        } else {
-          console.log('An error occurred:', error);
-        }
+        console.log('An error occurred:', error);
       }
     });
   }

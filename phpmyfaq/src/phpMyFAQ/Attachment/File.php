@@ -53,7 +53,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Create subdirectories to save file to.
+     * Create subdirectories to save a file to.
      *
      * @param string $filepath filepath to create subdirectories for
      * @return bool success
@@ -85,27 +85,27 @@ class File extends AbstractAttachment implements AttachmentInterface
 
     /**
      * Save current attachment to the appropriate storage. The
-     * filepath given will be processed and moved to appropriate
+     * filepath given will be processed and moved to the appropriate
      * location.
      *
      * @param string $filePath full path to the attachment file
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
-    public function save(string $filePath): bool
+    public function save(string $filePath, ?string $filename = null): bool
     {
         $success = false;
 
         if (file_exists($filePath)) {
             $this->realHash = md5_file($filePath);
             $this->filesize = filesize($filePath);
-            $this->filename = null == $filename ? basename($filePath) : $filename;
+            $this->filename = null === $filename ? basename($filePath) : $filename;
 
             $this->saveMeta();
 
             $targetFile = $this->buildFilePath();
 
-            if (null !== $this->id && $this->createSubDirs($targetFile)) {
+            if ($this->createSubDirs($targetFile)) {
                 // Doing this check, we're sure not to unnecessarily
                 // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
@@ -133,7 +133,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     /**
      * Delete attachment.
      *
-     * @throws FileException
+     * @throws FileException|AttachmentException
      */
     public function delete(): bool
     {
@@ -176,7 +176,7 @@ class File extends AbstractAttachment implements AttachmentInterface
      * @return VanillaFile|EncryptedFile
      * @throws AttachmentException
      */
-    private function getFile($mode = FilesystemFile::MODE_READ)
+    private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
     {
         if ($this->encrypted) {
             return new EncryptedFile(
