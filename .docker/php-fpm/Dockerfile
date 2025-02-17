@@ -58,7 +58,7 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-RUN pecl install xdebug-3.4.0  \
+RUN pecl install xdebug-3.4.1  \
 && docker-php-ext-enable xdebug
 
 #=== php default ===
@@ -71,17 +71,14 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
     PHP_POST_MAX_SIZE=64M \
     PHP_UPLOAD_MAX_FILESIZE=64M
 
-#=== Install nginx ===
-RUN apt-get update && apt-get install -y nginx
-
-#=== Configure nginx ===
-COPY ./.docker/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./.docker/nginx/default.conf /etc/nginx/conf.d/default.conf
-
 #=== Set custom entrypoint ===
-COPY ./.docker/nginx/docker-entrypoint.sh /entrypoint
-RUN chmod +x /entrypoint
-ENTRYPOINT [ "/entrypoint" ]
+COPY ./docker-entrypoint.sh /entrypoint
+#RUN chmod +x /entrypoint
+#ENTRYPOINT [ "/entrypoint" ]
 
 #=== Re-Set CMD as we changed the default entrypoint ===
 CMD [ "php-fpm" ]
+
+# Cleanup
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*

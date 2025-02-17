@@ -36,12 +36,22 @@ services:
   #    SA_PASSWORD: 'phpMyFAQ-4.0'
   #    ACCEPT_EULA: 'Y'
 
-  phpmyfaq:
-    build:
-      context: .
-      #dockerfile: .docker/nginx/Dockerfile
-      dockerfile: .docker/apache/Dockerfile
-    container_name: phpmyfaq-41
+  nginx:
+    image: nginx:latest
+    restart: always
+    links:
+      - php-fpm
+    volumes:
+      - ./phpmyfaq:/var/www/html
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./.docker/cert.pem:/etc/ssl/cert.pem
+      - ./.docker/cert-key.pem:/etc/ssl/cert-key.pem
+    ports:
+      - '80:80'
+      - '443:443'
+
+  php-fpm:
+    build: .docker/php-fpm
     restart: always
     stdin_open: true
     environment:
@@ -55,13 +65,11 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
+      - XDEBUG_MODE="coverage"
     links:
       - mariadb:db
       - postgres
       - elasticsearch
-    ports:
-      - '8080:80'
-      - '443:443'
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
