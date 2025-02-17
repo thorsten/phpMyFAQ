@@ -36,19 +36,48 @@ services:
   #    SA_PASSWORD: 'phpMyFAQ-4.0'
   #    ACCEPT_EULA: 'Y'
 
-  nginx:
-    image: nginx:latest
+  apache:
+    build:
+      context: .
+      dockerfile: .docker/apache/Dockerfile
     restart: always
+    stdin_open: true
+    environment:
+      - PMF_DB_HOST=db
+      - PMF_DB_NAME=phpmyfaq
+      - PMF_DB_USER=phpmyfaq
+      - PMF_DB_PASS=phpmyfaq
+      - PMF_DISABLE_HTACCESS=""
+      - PMF_TIMEZONE="Europe/Berlin"
+      - PMF_ENABLE_UPLOADS="On"
+      - PMF_MEMORY_LIMIT="2048M" # only for development
+      - PHP_LOG_ERRORS="On"
+      - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
     links:
-      - php-fpm
+      - mariadb:db
+      - postgres
+      - elasticsearch
+    ports:
+      - '8080:80'
+      - '443:443'
     volumes:
       - ./phpmyfaq:/var/www/html
-      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./.docker/cert.pem:/etc/ssl/cert.pem
-      - ./.docker/cert-key.pem:/etc/ssl/cert-key.pem
-    ports:
-      - '80:80'
-      - '443:443'
+    depends_on:
+      - pnpm
+
+#  nginx:
+#    image: nginx:latest
+#    restart: always
+#    links:
+#      - php-fpm
+#    volumes:
+#      - ./phpmyfaq:/var/www/html
+#      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+#      - ./.docker/cert.pem:/etc/ssl/cert.pem
+#      - ./.docker/cert-key.pem:/etc/ssl/cert-key.pem
+#    ports:
+#      - '80:80'
+#      - '443:443'
 
   php-fpm:
     build: .docker/php-fpm
