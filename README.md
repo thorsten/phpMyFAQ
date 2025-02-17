@@ -62,7 +62,12 @@ _Running using named volumes:_
 
 _Running apache web server with PHP 8.4 support:_
 
-- **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+
+_Running nginx web server with PHP 8.4 support:_
+
+- **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **php-fpm**: PHP-FPM image with PHP 8.4 support
 
 Then services will be available at the following addresses:
 

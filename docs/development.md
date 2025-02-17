@@ -208,13 +208,18 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.3 support:_
+_Running apache web server with PHP 8.4 support:_
 
-- **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+
+_Running nginx web server with PHP 8.4 support:_
+
+- **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **php-fpm**: PHP-FPM image with PHP 8.4 support
 
 Then services will be available at the following addresses:
 
-- phpMyFAQ: (http://localhost:8080 or https://localhost:443)
+- phpMyFAQ: (https://localhost:443 by default or http://localhost:8080)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
@@ -260,11 +265,11 @@ The following coding standards are used in phpMyFAQ:
 
 Before submitting your patch, please update your local branch:
 
-    $ git checkout 4.0
+    $ git checkout main
     $ git fetch upstream
-    $ git merge upstream/4.0
+    $ git merge upstream/main
     $ git checkout YOUR_BRANCH_NAME
-    $ git rebase 4.0
+    $ git rebase main
 
 ### 6.5.9 Make a Pull Request
 
