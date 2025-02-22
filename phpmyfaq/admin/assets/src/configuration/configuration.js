@@ -231,7 +231,12 @@ const fetchConfiguration = async (target) => {
     // Special cases
     const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]');
     if (dateLastChecked) {
-      dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
+      const date = new Date(dateLastChecked.value).toLocaleString();
+      if (date !== 'Invalid Date') {
+        dateLastChecked.value = date;
+      } else {
+        dateLastChecked.value = 'n/a';
+      }
     }
   } catch (error) {
     console.error(error.message);
