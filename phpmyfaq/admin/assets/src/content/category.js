@@ -75,3 +75,18 @@ export const handleCategoryDelete = async () => {
     });
   }
 };
+
+export const handleResetCategoryImage = () => {
+  const resetButton = document.getElementById('button-reset-category-image');
+
+  if (resetButton) {
+    const categoryExistingImage = document.getElementById('pmf-category-existing-image');
+    const categoryImageInput = document.getElementById('pmf-category-image-upload');
+    const categoryImageLabel = document.getElementById('pmf-category-image-label');
+    resetButton.addEventListener('click', () => {
+      categoryImageInput.value = '';
+      categoryExistingImage.value = '';
+      categoryImageLabel.innerHTML = '';
+    });
+  }
+};
