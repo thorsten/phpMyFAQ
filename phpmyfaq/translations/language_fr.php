@@ -993,7 +993,7 @@ $PMF_LANG["ad_entry_changelog_history"] = "Historique des changements";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
 $LANG_CONF["security.ssoSupport"] = ["checkbox", "Support de l'authentification unique (SSO)"];
-$LANG_CONF["security.ssoLogoutRedirect"] = ["input", "URL de retour après déconnexion avec l'authentificatin unique"];
+$LANG_CONF["security.ssoLogoutRedirect"] = ["input", "URL de retour après déconnexion avec l'authentification unique"];
 $LANG_CONF["main.dateFormat"] = ["input", "Format de date (défaut: Y-m-d H:i)"];
 $LANG_CONF["security.enableLoginOnly"] = ["checkbox", "FAQ complètement sécurisée"];
 
