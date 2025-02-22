@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-folder"></i> {{ header }}
+    <i aria-hidden="true" class="bi bi-folder"></i> {{ header | raw }}
   </h1>
 </div>
 
@@ -18,7 +18,7 @@
           {{ categoryNameLabel }}
         </label>
         <div class="col-lg-4">
-          <input type="text" id="name" name="name" value="{{ categoryName }}" class="form-control">
+          <input type="text" id="name" name="name" value="{{ categoryName | raw }}" class="form-control">
         </div>
       </div>
 
@@ -28,7 +28,7 @@
         </label>
         <div class="col-lg-4">
           <textarea id="description" name="description" rows="3" class="form-control"
-          >{{ categoryDescription }}</textarea>
+          >{{ categoryDescription | raw }}</textarea>
         </div>
       </div>
 
