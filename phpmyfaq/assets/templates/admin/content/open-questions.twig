@@ -42,7 +42,7 @@
                 {{ question.categoryId | categoryName }}
               </strong>
               <br>
-              {{ question.question }}
+              {{ question.question | raw }}
             </td>
             <td>
               <a href="?action=question&id={{ question.id }}&is_visible=toggle&csrf={{ csrfTokenToggleVisibility }}"
