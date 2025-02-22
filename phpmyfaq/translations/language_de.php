@@ -1455,4 +1455,7 @@ $PMF_LANG['msgErrorEnterMessage'] = 'Bitte geben Sie eine Nachricht ein.';
 $PMF_LANG['msgLinkCopied'] = 'Link in die Zwischenablage kopiert.';
 $PMF_LANG['msgDocumentation'] = 'Dokumentation';
 
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Kategoriebild zurücksetzen';
+
 return $PMF_LANG;

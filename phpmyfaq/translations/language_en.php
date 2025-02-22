@@ -1475,4 +1475,7 @@ $PMF_LANG['msgErrorEnterMessage'] = 'Please enter a message!';
 $PMF_LANG['msgLinkCopied'] = 'Link copied to clipboard';
 $PMF_LANG['msgDocumentation'] = 'Documentation';
 
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Reset category image';
+
 return $PMF_LANG;

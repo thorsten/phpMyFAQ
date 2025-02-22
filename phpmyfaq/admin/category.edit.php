@@ -105,7 +105,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
         'categoryShowHomeLabel' => Translation::get('ad_user_show_home'),
         'categoryShowHome' => 1 === (int)$categoryData->getShowHome() ? 'checked' : '',
         'categoryImageLabel' => Translation::get('ad_category_image'),
-        'categoryImageReset' => 'Reset category image',
+        'categoryImageReset' => Translation::get('msgCategoryImageReset'),
         'categoryOwnerLabel' => Translation::get('ad_categ_owner'),
         'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
         'isMediumPermission' => $faqConfig->get('security.permLevel') !== 'basic',

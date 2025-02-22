@@ -1434,4 +1434,35 @@ $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activer le lien vers la p
 $LANG_CONF['seo.glossary.title'] = ['input', 'Titre SERP pour le glossaire'];
 $LANG_CONF['seo.glossary.description'] = ['area', 'Description SERP pour le glossaire'];
 
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Statistiques supprimées avec succès.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'Une erreur est survenue lors de la suppression des statistiques.';
+$PMF_LANG['msgPasswordTooShort'] = 'Le nouveau mot de passe doit contenir au moins 8 caractères.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Les deux mots de passe ne correspondent pas.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Il y a des notes privées d’autres éditeurs :';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Nettoyage des pièces jointes manquantes';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'La pièce jointe a été rafraîchie avec succès';
+$PMF_LANG['msgRemoveAll'] = 'Tout supprimer';
+$PMF_LANG['msgError404'] = 'Erreur 404';
+$PMF_LANG['msgError404Description'] = 'La page que vous recherchez a été déplacée, supprimée ou n’a peut-être jamais existé.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Vous avez déjà un compte ?';
+$PMF_LANG['msgSignInHere'] = 'Connectez-vous ici.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Lors de l’inscription avec des Passkeys, les utilisateurs doivent uniquement entrer un nom ou une adresse e-mail, tandis que l’authentification est effectuée de manière sécurisée via des données biométriques ou un mot de passe basé sur l’appareil.';
+$PMF_LANG['msgContinue'] = 'Continuer';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Activer la prise en charge de WebAuthn (Expérimental)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Se connecter avec une Passkey';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'L’inscription a été réussie. Vous pouvez maintenant vous connecter avec votre Passkey.';
+$PMF_LANG['msgSupportUs'] = 'Soutenir phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'Veuillez entrer votre nom complet !';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Veuillez entrer votre nom d’utilisateur !';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Veuillez fournir une adresse e-mail valide !';
+$PMF_LANG['msgErrorEnterMessage'] = 'Veuillez entrer un message !';
+$PMF_LANG['msgLinkCopied'] = 'Lien copié dans le presse-papiers';
+$PMF_LANG['msgDocumentation'] = 'Documentation';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Supprimer l’image';
+
 return $PMF_LANG;
