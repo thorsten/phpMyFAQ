@@ -1430,8 +1430,20 @@ $PMF_LANG['msgLinkToFAQ'] = 'Lien vers la FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activer le lien vers la politique de confidentialité'];
-$LANG_CONF['seo.glossary.title'] = ['input', 'Titre SERP pour le glossaire'];
-$LANG_CONF['seo.glossary.description'] = ['area', 'Description SERP pour le glossaire'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ est actuellement en mode débogage. Le mode débogage peut exposer des informations sensibles et est destiné uniquement à des fins de développement. Nous vous recommandons fortement de désactiver le mode débogage pour des raisons de sécurité. Vous pouvez désactiver le mode débogage dans le fichier <code>src/Bootstrap.php</code>.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ est actuellement en développement (%s). Par conséquent, il n\'est pas encore prêt pour une utilisation en production. Veuillez <a target="_blank" href="%s" class="alert-link">signaler tous les problèmes sur GitHub</a>. Merci beaucoup !';
+$PMF_LANG['layoutControlCenter'] = 'Mise en page';
+$LANG_CONF['layout.customCss'] = ['area', 'CSS personnalisé', 'Veuillez utiliser uniquement du CSS.'];
+$PMF_LANG['msgSitemap'] = 'Plan du site';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Trouvez les FAQs que vous recherchez dans la vue d\'ensemble de toutes les entrées | Plan du site - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'Dans le glossaire de %s, vous trouverez des explications sur tous les termes techniques importants relatifs au sujet';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Consultez une vue d\'ensemble de tous les sujets importants | Vue d\'ensemble des FAQs de %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Vue d\'ensemble de toutes les catégories et sujets | Vue d\'ensemble des catégories de %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Ajoutez une nouvelle question | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Questions ouvertes en attente de réponses | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Partager via';
+$PMF_LANG['msgCopyLink'] = 'ou copier le lien';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Activer les extraits enrichis'];
 
 // added v4.0.0-alpha.4 - 2024-07-29 by Jan
 $PMF_LANG['msgDeleteAllVotings'] = 'Statistiques supprimées avec succès.';
@@ -1463,5 +1475,18 @@ $PMF_LANG['msgDocumentation'] = 'Documentation';
 
 // added v4.0.6 - 2025-02-22 by Thorsten
 $PMF_LANG['msgCategoryImageReset'] = 'Supprimer l’image';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Contenu pour robots.txt', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Activer le mode maintenance';
+$PMF_LANG['msgPlugins'] = 'Plugins';
+$PMF_LANG['msgPluginListing'] = 'Liste des plugins installés et de leurs versions';
+$PMF_LANG['msgPluginName'] = 'Nom du plugin';
+$PMF_LANG['msgPluginVersion'] = 'Version';
+$PMF_LANG['msgPluginAuthor'] = 'Auteur';
+$PMF_LANG['msgPluginDescription'] = 'Description';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Rapporter un bug';
 
 return $PMF_LANG;

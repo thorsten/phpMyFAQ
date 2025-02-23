@@ -1454,6 +1454,9 @@ $PMF_LANG['msgErrorEnterMessage'] = 'Bitte geben Sie eine Nachricht ein.';
 $PMF_LANG['msgLinkCopied'] = 'Link in die Zwischenablage kopiert.';
 $PMF_LANG['msgDocumentation'] = 'Dokumentation';
 
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Katgeoriebild zurücksetzen';
+
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Inhalt für die robots.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Wartungs-Modus aktivieren';
@@ -1463,5 +1466,8 @@ $PMF_LANG['msgPluginName'] = 'Plugin-Name';
 $PMF_LANG['msgPluginVersion'] = 'Version';
 $PMF_LANG['msgPluginAuthor'] = 'Autor';
 $PMF_LANG['msgPluginDescription'] = 'Beschreibung';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
 
 return $PMF_LANG;
