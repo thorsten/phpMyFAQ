@@ -84,16 +84,15 @@ abstract class AbstractFile extends AbstractEntry
      *
      * @return string
      */
-    abstract public function getChunk();
+    abstract public function getChunk(): string;
 
     /**
      * Put chunk into file.
      *
      * @param string $chunk chunk to write
-     *
-     * @return int bytes written or false
+     * @return int|bool bytes written or false
      */
-    abstract public function putChunk($chunk);
+    abstract public function putChunk(string $chunk): int|bool;
 
     /**
      * Deletes the file.

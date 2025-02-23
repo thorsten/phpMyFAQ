@@ -21,7 +21,7 @@
             {{ 'categoryNameLabel' | translate }}
           </label>
           <div class="col-lg-4">
-            <input type="text" id="name" name="name" value="{{ categoryName }}" class="form-control">
+            <input type="text" id="name" name="name" value="{{ categoryName | raw }}" class="form-control">
           </div>
         </div>
 
@@ -31,7 +31,7 @@
           </label>
           <div class="col-lg-4">
             <textarea id="description" name="description" rows="3" class="form-control"
-            >{{ categoryDescription }}</textarea>
+            >{{ categoryDescription | raw }}</textarea>
           </div>
         </div>
 

@@ -245,6 +245,11 @@ export const handleConfigurationTab = async (target: string): Promise<void> => {
   // Special cases
   const dateLastChecked = tabContent.querySelector('input[name="edit[upgrade.dateLastChecked]"]') as HTMLInputElement;
   if (dateLastChecked) {
-    dateLastChecked.value = new Date(dateLastChecked.value).toLocaleString();
+    const date: string = new Date(dateLastChecked.value).toLocaleString();
+    if (date !== 'Invalid Date') {
+      dateLastChecked.value = date;
+    } else {
+      dateLastChecked.value = 'n/a';
+    }
   }
 };

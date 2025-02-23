@@ -16,6 +16,7 @@
 import Sortable, { SortableEvent } from 'sortablejs';
 import { deleteCategory, setCategoryTree } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 const nestedQuery = '.nested-sortable';
 const identifier = 'pmfCatid';
@@ -39,11 +40,11 @@ export const handleCategories = (): void => {
         const categoryId = event.item.getAttribute('data-pmf-catid') as string;
         const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
         const data = serializedTree(root);
-        const response = await setCategoryTree(data, categoryId, csrf);
+        const response = (await setCategoryTree(data, categoryId, csrf)) as unknown as Response;
         if (response.success) {
           pushNotification(response.success);
         } else {
-          pushErrorNotification(response.error);
+          pushErrorNotification(response.error as string);
         }
       },
     });
@@ -72,12 +73,27 @@ export const handleCategoryDelete = async (): Promise<void> => {
         const language = target.getAttribute('data-pmf-language') as string;
         const csrfToken = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 
-        const response = await deleteCategory(categoryId, language, csrfToken);
+        const response = (await deleteCategory(categoryId, language, csrfToken)) as unknown as Response;
         if (response.success) {
           pushNotification(response.success);
         }
         document.getElementById(`pmf-category-${categoryId}`)?.remove();
       });
+    });
+  }
+};
+
+export const handleResetCategoryImage = (): void => {
+  const resetButton = document.getElementById('button-reset-category-image') as HTMLButtonElement;
+
+  if (resetButton) {
+    const categoryExistingImage = document.getElementById('pmf-category-existing-image') as HTMLInputElement;
+    const categoryImageInput = document.getElementById('pmf-category-image-upload') as HTMLInputElement;
+    const categoryImageLabel = document.getElementById('pmf-category-image-label') as HTMLLabelElement;
+    resetButton.addEventListener('click', (): void => {
+      categoryImageInput.value = '';
+      categoryExistingImage.value = '';
+      categoryImageLabel.innerHTML = '';
     });
   }
 };

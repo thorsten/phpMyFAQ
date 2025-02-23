@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Controller\Administration\Route;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -28,11 +27,12 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class FormController extends AbstractController
 {
     #[Route('admin/api/forms/activate')]
-    public function activateInput(Request $request)
+    public function activateInput(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
@@ -54,7 +54,7 @@ class FormController extends AbstractController
     }
 
     #[Route('admin/api/forms/required')]
-    public function setInputAsRequired(Request $request)
+    public function setInputAsRequired(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
@@ -76,7 +76,7 @@ class FormController extends AbstractController
     }
 
     #[Route('admin/api/forms/translation-edit')]
-    public function editTranslation(Request $request)
+    public function editTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
@@ -99,7 +99,7 @@ class FormController extends AbstractController
     }
 
     #[Route('admin/api/forms/translation-delete')]
-    public function deleteTranslation(Request $request)
+    public function deleteTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
         $data = json_decode($request->getContent());
@@ -123,9 +123,6 @@ class FormController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/forms/translation-add')]
     public function addTranslation(Request $request): JsonResponse
     {

@@ -25,6 +25,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -110,8 +111,6 @@ class AttachmentController extends AbstractController
 
         $uploadedFiles = [];
 
-        var_dump($files);
-
         foreach ($files as $file) {
             if (
                 $file->isValid() &&
@@ -123,10 +122,9 @@ class AttachmentController extends AbstractController
                 $attachment->setRecordLang($request->request->get('record_lang'));
                 try {
                     if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
-                        throw new AttachmentException();
+                        return $this->json(['error' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                } catch (AttachmentException) {
-                    $attachment->delete();
+                } catch (AttachmentException | FileException | FileNotFoundException) {
                 }
 
                 $uploadedFiles[] = [

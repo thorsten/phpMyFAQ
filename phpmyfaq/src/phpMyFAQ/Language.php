@@ -216,7 +216,7 @@ class Language
      * Gets the accepted language from the user agent.
      *
      * HTTP_ACCEPT_LANGUAGE could be like the text below:
-     * it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
+     * it,pt_BR;q=0.8,en_US;q=0.5,en;q=0.3
      */
     private function getUserAgentLanguage(): void
     {
@@ -229,7 +229,7 @@ class Language
             }
         }
 
-        // If the browser e.g., sends "en-us", we want to get "en" only.
+        // If the browser, e.g., sends "en_us", we want to get "en" only.
         if ('' === $this->acceptLanguage) {
             foreach ($languages as $language) {
                 $language = substr($language, 0, 2);

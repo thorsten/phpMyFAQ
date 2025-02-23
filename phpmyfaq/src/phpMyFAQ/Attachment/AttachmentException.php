@@ -17,11 +17,13 @@
 
 namespace phpMyFAQ\Attachment;
 
+use Exception;
+
 /**
  * Class AttachmentException
  *
  * @package phpMyFAQ\Attachment
  */
-class AttachmentException extends \Exception
+class AttachmentException extends Exception
 {
 }

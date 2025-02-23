@@ -628,7 +628,7 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         ];
     }
 
-    if (!$faqConfig->isLdapActive()) {
+    if ($user->getUserAuthSource() === 'local') {
         $templateVars = [
             ... $templateVars,
             'msgUserControlDropDown' => Translation::get('headerUserControlPanel'),

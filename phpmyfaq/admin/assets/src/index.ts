@@ -61,6 +61,7 @@ import {
   handleUpdateQuestion,
   handleRefreshAttachments,
   handleToggleVisibility,
+  handleResetCategoryImage,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
 
   // Content → Categories
   handleCategories();
+  handleResetCategoryImage();
   await handleCategoryDelete();
 
   // Content → add/edit FAQs

@@ -53,7 +53,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Create subdirectories to save file to.
+     * Create subdirectories to save a file to.
      *
      * @param string $filepath filepath to create subdirectories for
      * @return bool success
@@ -91,14 +91,14 @@ class File extends AbstractAttachment implements AttachmentInterface
      * @throws FileException|AttachmentException
      * @todo rollback if something went wrong
      */
-    public function save($filePath, ?string $filename = null): bool
+    public function save(string $filePath, ?string $filename = null): bool
     {
         $success = false;
 
         if (file_exists($filePath)) {
             $this->realHash = md5_file($filePath);
             $this->filesize = filesize($filePath);
-            $this->filename = null == $filename ? basename($filePath) : $filename;
+            $this->filename = null === $filename ? basename($filePath) : $filename;
 
             $this->saveMeta();
 

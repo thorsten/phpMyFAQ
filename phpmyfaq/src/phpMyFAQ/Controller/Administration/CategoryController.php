@@ -391,7 +391,7 @@ class CategoryController extends AbstractAdministrationController
                 'categoryDescription' => $categoryData->getDescription(),
                 'categoryActive' => 1 === (int)$categoryData->getActive() ? 'checked' : '',
                 'categoryShowHome' => 1 === (int)$categoryData->getShowHome() ? 'checked' : '',
-                'categoryImageReset' => 'Reset category image', // @todo needs translation
+                'categoryImageReset' => Translation::get('msgCategoryImageReset'),
                 'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
                 'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
                 'allGroupsOptions' => $allGroupsOptions,

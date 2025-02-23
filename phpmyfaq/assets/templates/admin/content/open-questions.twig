@@ -42,7 +42,7 @@
               </td>
               <td>
                 <h6>{{ question.categoryId | categoryName }}</h6>
-                {{ question.question }}
+                {{ question.question | raw }}
               </td>
               <td>
                 <button type="button" class="btn btn-info pmf-toggle-visibility"
