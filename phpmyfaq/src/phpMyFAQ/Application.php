@@ -55,7 +55,7 @@ readonly class Application
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
             if (Language::isASupportedLanguage($currentLanguage)) {
-                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, $currentLanguage);
+                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, Strings::strtolower($currentLanguage));
             }
 
             $this->configuration->setLanguage($language);

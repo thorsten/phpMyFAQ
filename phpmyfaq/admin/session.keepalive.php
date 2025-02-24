@@ -49,7 +49,7 @@ $faqConfig = Configuration::getConfigurationInstance();
 //
 $language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
 if (!is_null($language) && Language::isASupportedLanguage($language)) {
-    require PMF_ROOT_DIR . '/translations/language_' . $language . '.php';
+    require PMF_ROOT_DIR . '/translations/language_' . strtolower($language) . '.php';
 }
 
 //

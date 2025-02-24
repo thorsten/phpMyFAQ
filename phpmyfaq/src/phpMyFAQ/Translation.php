@@ -272,7 +272,7 @@ class Translation
      */
     protected function filename(string $language): string
     {
-        return self::$translation->languagesDir . DIRECTORY_SEPARATOR . 'language_' . $language . '.php';
+        return self::$translation->languagesDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php';
     }
 
     /**

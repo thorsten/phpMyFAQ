@@ -155,7 +155,7 @@ class Language
             self::$language = 'en'; // just a last fallback
         }
 
-        return $_SESSION['lang'] = self::$language;
+        return $_SESSION['lang'] = strtolower(self::$language);
     }
 
     public function setLanguageByAcceptLanguage(): string
@@ -180,7 +180,7 @@ class Language
      */
     public function getLanguage(): string
     {
-        return self::$language;
+        return strtolower(self::$language);
     }
 
     /**
@@ -195,7 +195,7 @@ class Language
 
         foreach ($languages as $language) {
             if (self::isASupportedLanguage(strtoupper($language))) {
-                $this->acceptLanguage = $language;
+                $this->acceptLanguage = strtolower($language);
                 break;
             }
         }
@@ -205,7 +205,7 @@ class Language
             foreach ($languages as $language) {
                 $language = substr($language, 0, 2);
                 if (self::isASupportedLanguage(strtoupper($language))) {
-                    $this->acceptLanguage = $language;
+                    $this->acceptLanguage = strtolower($language);
                     break;
                 }
             }
