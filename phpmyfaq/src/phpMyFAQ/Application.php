@@ -61,7 +61,7 @@ readonly class Application
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
             if (Language::isASupportedLanguage($currentLanguage)) {
-                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, Strings::strtolower($currentLanguage));
+                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, strtolower($currentLanguage));
             }
 
             $configuration->setLanguage($language);
@@ -84,7 +84,7 @@ readonly class Application
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
         } catch (Exception $exception) {
-            throw new Exception('x' . $exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 
