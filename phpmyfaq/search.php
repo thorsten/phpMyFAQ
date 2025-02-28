@@ -145,7 +145,8 @@ if ('' !== $inputTag) {
             }
         }
 
-        $searchResult = $faq->renderFaqsByFaqIds($recordIds);
+        $searchResults = $faq->renderFaqsByFaqIds($recordIds);
+        $numOfResults = count($recordIds);
     }
 } else {
     $searchResult = '';
@@ -198,7 +199,9 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 $faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
 // Number of results
-$numOfResults = $faqSearchResult->getNumberOfResults();
+if ($numOfResults === 0) {
+    $numOfResults = $faqSearchResult->getNumberOfResults();
+}
 
 if (
     is_numeric($inputSearchTerm) &&
@@ -246,9 +249,7 @@ $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
-$searchResults = [];
-
-if ('' == $searchResult && !is_null($inputSearchTerm)) {
+if (empty($searchResults) && !is_null($inputSearchTerm)) {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception) {

@@ -30,6 +30,7 @@ use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
+use stdClass;
 
 /*
  * Query type definitions
@@ -454,18 +455,15 @@ class Faq
     /**
      * This function returns all not expired records from the given record ids.
      *
-     * @param int[]  $faqIds  Array of record ids
+     * @param int[]  $faqIds Array of record ids
      * @param string $orderBy Order by
-     * @param string $sortBy  Sort by
+     * @param string $sortBy Sort by
+     * @throws CommonMarkException
      */
-    public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): string
+    public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): array
     {
-        global $sids;
-
         $records = implode(', ', $faqIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $taggingId = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
-        $output = '';
 
         $now = date('YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -474,7 +472,8 @@ class Faq
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
-                fd.thema AS thema,
+                fd.thema AS question,
+                fd.content AS answer,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
@@ -530,7 +529,6 @@ class Faq
 
         $num = $this->configuration->getDb()->numRows($result);
         $numberPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
-        $pages = ceil($num / $numberPerPage);
 
         if ($page == 1) {
             $first = 0;
@@ -538,21 +536,12 @@ class Faq
             $first = ($page * $numberPerPage) - $numberPerPage;
         }
 
+        $searchResults = [];
         if ($num > 0) {
-            if ($pages > 1) {
-                $output .= sprintf(
-                    '<p><strong>%s %s %s</strong></p>',
-                    Translation::get('msgPage') . $page,
-                    Translation::get('msgVoteFrom'),
-                    $pages . Translation::get('msgPages')
-                );
-            }
-
-            $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
             $displayedCounter = 0;
-
             $lastFaqId = 0;
+            $faqHelper = new FaqHelper($this->configuration);
             while (($row = $this->configuration->getDb()->fetchObject($result)) && $displayedCounter < $numberPerPage) {
                 ++$counter;
                 if ($counter <= $first) {
@@ -565,68 +554,34 @@ class Faq
                     continue; // Don't show multiple FAQs
                 }
 
-                $visits = empty($row->visits) ? 0 : $row->visits;
+                $rowResult = new stdClass();
 
-                $title = $row->thema;
+                $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
-                    $sids,
                     $row->category_id,
                     $row->id,
                     $row->lang
                 );
+
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->thema;
+                $oLink->itemTitle = $row->question;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = sprintf(
-                    '<li>%s<br><small>(%s)</small></li>',
-                    $oLink->toHtmlAnchor(),
-                    $this->plurals->GetMsg('plmsgViews', $visits)
-                );
 
-                $output .= $listItem;
+                $rowResult->renderedScore = 0;
+                $rowResult->question = Utils::chopString($title, 15);
+                $rowResult->path = '';
+                $rowResult->url = $oLink->toString();
+                $rowResult->answerPreview = $faqHelper->renderAnswerPreview($row->answer, 20);
 
                 $lastFaqId = $row->id;
+                $searchResults[] = $rowResult;
             }
-
-            $output .= '</ul><span id="totFaqRecords" style="display: none;">' . $num . '</span>';
-        } else {
-            return '';
         }
 
-        if ($num > $this->configuration->get('records.numberOfRecordsPerPage')) {
-            $output .= '<p class="text-center"><strong>';
-            if (!isset($page)) {
-                $page = 1;
-            }
-
-            $vor = $page - 1;
-            $next = $page + 1;
-            if ($vor != 0) {
-                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
-                $oLink = new Link($this->configuration->getDefaultUrl() . '?' . $url, $this->configuration);
-                $oLink->itemTitle = 'tag';
-                $oLink->text = Translation::get('msgPrevious');
-                $oLink->tooltip = Translation::get('msgPrevious');
-                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
-            }
-
-            $output .= ' ';
-            if ($next <= $pages) {
-                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
-                $oLink = new Link($this->configuration->getDefaultUrl() . '?' . $url, $this->configuration);
-                $oLink->itemTitle = 'tag';
-                $oLink->text = Translation::get('msgNext');
-                $oLink->tooltip = Translation::get('msgNext');
-                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
-            }
-
-            $output .= '</strong></p>';
-        }
-
-        return $output;
+        return $searchResults;
     }
 
     /**
