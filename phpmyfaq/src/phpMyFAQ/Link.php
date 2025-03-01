@@ -575,7 +575,7 @@ class Link
             return true;
         }
 
-        // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
+        // HTTP_HOST is the name of the website or virtual host name
         return str_contains($this->url, Request::createFromGlobals()->getHost());
     }
 
@@ -739,27 +739,5 @@ class Link
             self::LINK_SEARCHPART_SEPARATOR;
 
         return $url . $separator . self::LINK_GET_SIDS . self::LINK_EQUAL . $sids;
-    }
-
-    /**
-     * Returns the current URL.
-     */
-    public function getCurrentUrl(): string
-    {
-        $defaultUrl = $this->configuration->getDefaultUrl();
-        $url = Filter::filterVar($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-        $parsedUrl = parse_url((string) $url);
-
-        if (isset($parsedUrl['query'])) {
-            parse_str($parsedUrl['query'], $parameters);
-
-            if (isset($parameters['action']) && !isset(self::$allowedActionParameters[$parameters['action']])) {
-                return $defaultUrl;
-            }
-
-            return $defaultUrl . Strings::htmlspecialchars(substr((string) $url, 1));
-        }
-
-        return $defaultUrl;
     }
 }
