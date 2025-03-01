@@ -32,9 +32,12 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
-readonly class Application
+class Application
 {
-    public function __construct(private ?ContainerInterface $container = null)
+    private UrlMatcher $urlMatcher;
+    private ControllerResolver $controllerResolver;
+
+    public function __construct(private readonly ?ContainerInterface $container = null)
     {
     }
 
@@ -46,7 +49,20 @@ readonly class Application
         $currentLanguage = $this->setLanguage();
         $this->initializeTranslation($currentLanguage);
         Strings::init($currentLanguage);
-        $this->handleRequest($routeCollection);
+        $request = Request::createFromGlobals();
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $this->handleRequest($routeCollection, $request, $requestContext);
+    }
+
+    public function setUrlMatcher($urlMatcher): void
+    {
+        $this->urlMatcher = $urlMatcher;
+    }
+
+    public function setControllerResolver(ControllerResolver $controllerResolver): void
+    {
+        $this->controllerResolver = $controllerResolver;
     }
 
     private function setLanguage(): string
@@ -88,20 +104,19 @@ readonly class Application
         }
     }
 
-    private function handleRequest(RouteCollection $routeCollection): void
+    private function handleRequest(RouteCollection $routeCollection, Request $request, RequestContext $context): void
     {
-        $request = Request::createFromGlobals();
-        $requestContext = new RequestContext();
-        $requestContext->fromRequest($request);
-
-        $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
+        $urlMatcher = new UrlMatcher($routeCollection, $context);
+        $this->setUrlMatcher($urlMatcher);
         $controllerResolver = new ControllerResolver();
+        $this->setControllerResolver($controllerResolver);
         $argumentResolver = new ArgumentResolver();
         $response = new Response();
 
         try {
-            $request->attributes->add($urlMatcher->match($request->getPathInfo()));
-            $controller = $controllerResolver->getController($request);
+            $this->urlMatcher->setContext($context);
+            $request->attributes->add($this->urlMatcher->match($request->getPathInfo()));
+            $controller = $this->controllerResolver->getController($request);
             $arguments = $argumentResolver->getArguments($request, $controller);
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);

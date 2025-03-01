@@ -225,7 +225,7 @@ class Link
 
     /**
      * Returns the system URI.
-     * $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
+     * HTTP_HOST is the name of the website or virtual host name (HTTP/1.1)
      * Precisely, it contains what the user has written in the Host request-header, see below.
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
@@ -235,11 +235,10 @@ class Link
      */
     public function getSystemUri(string|null $path = null): string
     {
-        $pattern = [];
-        // Remove any ref to standard ports 80 and 443.
-        $pattern[0] = '/:80$/'; // HTTP: port 80
-        $pattern[1] = '/:443$/'; // HTTPS: port 443
-        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', (string) $_SERVER['HTTP_HOST']);
+        $request = Request::createFromGlobals();
+        $host = $request->getHost();
+        $host = preg_replace(['/:80$/', '/:443$/'], '', $host);
+        $sysUri = $this->getSystemScheme() . $host;
 
         return $sysUri . self::getSystemRelativeUri($path);
     }

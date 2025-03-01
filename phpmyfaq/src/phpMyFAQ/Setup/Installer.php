@@ -1109,7 +1109,7 @@ class Installer extends Setup
         // Add primary instance
         $instanceEntity = new InstanceEntity();
         $instanceEntity
-            ->setUrl($link->getSystemUri($_SERVER['SCRIPT_NAME']))
+            ->setUrl($link->getSystemUri(Request::createFromGlobals()->getScriptName()))
             ->setInstance($link->getSystemRelativeUri('setup/index.php'))
             ->setComment('phpMyFAQ ' . System::getVersion());
         $faqInstance = new Instance($configuration);

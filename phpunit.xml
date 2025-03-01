@@ -36,6 +36,7 @@
         </exclude>
     </source>
     <php>
+        <server name="HTTP_HOST" value="localhost" />
         <server name="PHP_AUTH_USER" value="testUser"/>
         <server name="PHP_AUTH_PW" value="testPassword"/>
     </php>

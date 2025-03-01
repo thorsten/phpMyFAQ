@@ -94,7 +94,6 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
-      - XDEBUG_MODE="coverage"
     links:
       - mariadb:db
       - postgres
