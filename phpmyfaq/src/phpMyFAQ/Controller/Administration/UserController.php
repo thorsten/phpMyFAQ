@@ -92,20 +92,15 @@ class UserController extends AbstractAdministrationController
         $user = $this->container->get('phpmyfaq.user');
         $allUsers = $user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
+
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT, 0);
         $perPage = 10;
         $lastPage = $page * $perPage;
         $firstPage = $lastPage - $perPage;
 
-        $baseUrl = sprintf(
-            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
-            $this->configuration->getDefaultUrl(),
-            $page
-        );
-
         // Pagination options
         $options = [
-            'baseUrl' => $baseUrl,
+            'baseUrl' => sprintf('%sadmin/user/list?page=%d', $this->configuration->getDefaultUrl(), $page),
             'total' => $numUsers,
             'perPage' => $perPage,
             'pageParamName' => 'page',
@@ -144,6 +139,7 @@ class UserController extends AbstractAdministrationController
             [
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
                 'perPage' => $perPage,
                 'numUsers' => $numUsers,
                 'pagination' => $pagination->render(),
