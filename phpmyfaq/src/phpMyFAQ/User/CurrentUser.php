@@ -22,6 +22,7 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -61,7 +62,7 @@ class CurrentUser extends User
     /**
      * The Session class object
      */
-    private readonly UserSession $session;
+    private readonly UserSession $userSession;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -95,7 +96,7 @@ class CurrentUser extends User
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
-        $this->session = new UserSession($configuration);
+        $this->userSession = new UserSession($configuration);
     }
 
     /**
@@ -154,10 +155,6 @@ class CurrentUser extends User
         // Attempt to authenticate user by login and password
         $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
-            if (!$this->checkAuth($auth)) {
-                continue; // Skip invalid Auth objects
-            }
-
             if ($auth->isValidLogin($login, $optData ?? []) === 0) {
                 continue; // Login does not exist, try next auth method
             }
@@ -177,7 +174,7 @@ class CurrentUser extends User
             if ($this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
-                $this->session->setCookie(
+                $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
                     $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
@@ -440,7 +437,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            $this->session->setCookie(UserSession::COOKIE_NAME_REMEMBER_ME, '');
+            $this->userSession->setCookie(UserSession::COOKIE_NAME_REMEMBER_ME, '');
         }
 
         session_destroy();
@@ -760,13 +757,18 @@ class CurrentUser extends User
         return $this->configuration->getDb()->numRows($result) !== 0;
     }
 
+    /**
+     * Sorts the auth container array.
+     * @param AuthDriverInterface[] $authContainer
+     * @return AuthDriverInterface[]
+     */
     protected function sortAuthContainer(array $authContainer): array
     {
-        uksort($authContainer, function ($a, $b) {
-            if ($a === 'local') {
+        uksort($authContainer, function ($first, $second) {
+            if ($first === 'local') {
                 return 1;
             }
-            if ($b === 'local') {
+            if ($second === 'local') {
                 return -1;
             }
             return 0;

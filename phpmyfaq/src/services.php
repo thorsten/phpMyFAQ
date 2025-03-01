@@ -49,7 +49,6 @@ use phpMyFAQ\Language;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Plugin\PluginManager;
-use phpMyFAQ\Plugins;
 use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;

@@ -1,11 +1,7 @@
 <?php
 
 /**
- * Creates a new user object.
- *
- * A user are recognized by the session-id using getUserBySessionId(), by his
- * using getUserById() or by his nickname (login) using getUserByLogin(). New
- * are created using createNewUser().
+ * The main User class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,7 +21,6 @@ namespace phpMyFAQ;
 
 use Exception;
 use phpMyFAQ\Auth\AuthDriverInterface;
-use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Permission\PermissionInterface;
 use phpMyFAQ\User\UserData;
@@ -222,28 +217,13 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param Auth   $authDriver Driver object
-     * @param string $name       Auth name
+     * @param Auth|AuthDriverInterface $authDriver Driver object
+     * @param string              $name       Auth name
      */
-    public function addAuth(Auth $authDriver, string $name): bool
+    public function addAuth(Auth|AuthDriverInterface $authDriver, string $name): bool
     {
-        if ($this->checkAuth($authDriver)) {
-            $this->authContainer[$name] = $authDriver;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if auth is a valid authentication object.
-     *
-     * @param Auth $auth Auth object
-     */
-    protected function checkAuth(Auth $auth): bool
-    {
-        return method_exists($auth, 'checkCredentials');
+        $this->authContainer[$name] = $authDriver;
+        return true;
     }
 
     /**
@@ -368,12 +348,6 @@ class User
      */
     public function createUser(string $login, string $pass = '', string $domain = '', int $userId = 0): bool
     {
-        foreach ($this->authContainer as $auth) {
-            if (!$this->checkAuth($auth)) {
-                return false;
-            }
-        }
-
         // is $login valid?
         if (!$this->isValidLogin($login)) {
             throw new Exception(self::ERROR_USER_LOGINNAME_TOO_SHORT);
@@ -692,17 +666,14 @@ class User
         $select = sprintf(
             '
             SELECT
-                user_id,
-                login,
-                account_status,
-                is_superadmin,
-                auth_source
+                user_id, login, account_status, is_superadmin, auth_source
             FROM
                 %sfaquser
             WHERE
-                user_id = %d ' . ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
+                user_id = %d %s',
             Database::getTablePrefix(),
             $userId,
+            $allowBlockedUsers ? '' : "AND account_status != 'blocked'"
         );
 
         $result = $this->configuration->getDb()->query($select);
@@ -907,12 +878,6 @@ class User
      */
     public function changePassword(string $pass = ''): bool
     {
-        foreach ($this->authContainer as $auth) {
-            if (!$this->checkAuth($auth)) {
-                return false;
-            }
-        }
-
         $login = $this->getLogin();
         if ($pass == '') {
             $pass = $this->createPassword();
