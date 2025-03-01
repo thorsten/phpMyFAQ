@@ -17,7 +17,7 @@
  */
 
 $PMF_LANG['metaCharset'] = 'utf-8';
-$PMF_LANG['metaLanguage'] = 'pt-BR';
+$PMF_LANG['metaLanguage'] = 'pt_br';
 $PMF_LANG['language'] = 'Brazilian Portuguese';
 $PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
