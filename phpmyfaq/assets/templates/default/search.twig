@@ -56,7 +56,9 @@
         <ul class="phpmyfaq-search-results list-unstyled">
         {% for result in searchResults %}
           <li class="my-2">
+            {% if result.renderedScore > 0 %}
             {{ result.renderedScore | raw }}
+            {% endif %}
             <strong>{{ result.path }}</strong><br>
             <i class="bi bi-question-circle-o"></i>
             <a title="Test" href="{{ result.url }}">{{ result.question | raw }}</a>

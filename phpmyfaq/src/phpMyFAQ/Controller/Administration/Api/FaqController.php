@@ -320,7 +320,7 @@ class FaqController extends AbstractController
             $logging->log($this->currentUser, 'admin-publish-existing-faq ' . $faqId);
         }
 
-        if ('yes' === $revision || $this->configuration->get('records.enableAutoRevisions')) {
+        if ('yes' === $revision && $this->configuration->get('records.enableAutoRevisions')) {
             $faqRevision = new Revision($this->configuration);
             $faqRevision->create($faqId, $faqLang);
             ++$revisionId;
