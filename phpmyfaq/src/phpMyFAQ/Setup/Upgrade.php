@@ -2,6 +2,7 @@
 
 /**
  * The Upgrade class used for upgrading/installing phpMyFAQ from a ZIP file.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -113,7 +114,7 @@ class Upgrade extends Setup
     }
 
     /**
-     * Method to download a phpMyFAQ package, returns false if it doesn't work
+     * Method to download a phpMyFAQ package, throws an exception if it doesn't work
      *
      * @throws Exception
      * @todo handle possible proxy servers
@@ -122,7 +123,7 @@ class Upgrade extends Setup
     {
         $url = $this->getDownloadHost() . $this->getPath() . $this->getFilename($version);
 
-        $client = HttpClient::create(['timeout' => 30]);
+        $client = HttpClient::create(['timeout' => 60]);
 
         try {
             $response = $client->request('GET', $url);
