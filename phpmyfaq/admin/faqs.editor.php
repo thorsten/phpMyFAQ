@@ -394,7 +394,7 @@ if (
         'isInActive' => $isInActive,
         'ad_entry_visibility' => Translation::get('ad_entry_visibility'),
         'ad_entry_not_visibility' => Translation::get('ad_entry_not_visibility'),
-        'canBeNewRevision' => $queryString !== 'insertentry' && !$faqConfig->get('records.enableAutoRevisions'),
+        'canBeNewRevision' => 0 !== $faqData['id'] && $faqConfig->get('records.enableAutoRevisions'),
         'ad_entry_new_revision' => Translation::get('ad_entry_new_revision'),
         'ad_gen_yes' => Translation::get('ad_gen_yes'),
         'ad_gen_no' => Translation::get('ad_gen_no'),
