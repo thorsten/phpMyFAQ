@@ -8,7 +8,7 @@
   {% for faq in faqOverview %}
 
     {% if (faq['category_id'] != null and faq['category_id'] != lastCategory) %}
-      <header class="d-flex align-items-center justify-content-between my-4">
+      <header class="d-flex align-items-center justify-content-between mt-5 mb-2">
         <h3>
           <span class="badge bg-info shadow-info">{{ faq['category_id'] | categoryName }}</span>
         </h3>
@@ -19,6 +19,7 @@
       </header>
     {% endif %}
 
+    {% if (faq['category_id'] != null) %}
     <article class="card mb-4">
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
@@ -35,7 +36,7 @@
         <p class="mb-4">
           {{ faq['content'] | raw }}
         </p>
-        <div class="d-flex align-items-center text-muted">
+        <div class="d-flex align-items-center text-muted border-top pt-2">
           <div class="border-end pe-3 me-3">
             <i class="bi bi-calendar-date"></i>
             {{ faq['updated'] | date('Y-m-d H:i') }}
@@ -47,6 +48,7 @@
         </div>
       </div>
     </article>
+    {% endif %}
 
     {% set lastCategory = faq['category_id'] %}
   {% endfor %}
