@@ -50,9 +50,7 @@ $PMF_LANG["msgNext"] = "berikutnya";
 $PMF_LANG["msgCategoryUp"] = "naik satu kategori";
 $PMF_LANG["msgLastUpdateArticle"] = "Update terakhir: ";
 $PMF_LANG["msgAuthor"] = "Penulis: ";
-$PMF_LANG["msgPrinterFriendly"] = "versi ramah-cetak";
 $PMF_LANG["msgPrintArticle"] = "Cetak artikel ini";
-$PMF_LANG["msgMakeXMLExport"] = "Ekspor sbg Berkas XML";
 $PMF_LANG["msgAverageVote"] = "Nilai rata-rata";
 $PMF_LANG["msgVoteUsability"] = "Beri nilai materi ini";
 $PMF_LANG["msgVoteFrom"] = "dari";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentHeader"] = "Komentar pada materi ini";
 $PMF_LANG["msgYourComment"] = "Komentar anda";
 $PMF_LANG["msgCommentThanks"] = "Terima kasih atas komentar anda!";
 $PMF_LANG["msgSeeXMLFile"] = "buka Berkas XML";
-$PMF_LANG["msgSend2Friend"] = "Kirim materi ke e-mail";
+$PMF_LANG["msgShareFAQ"] = "Kirim materi ke e-mail";
 $PMF_LANG["msgS2FButton"] = "kirim e-mail";
 
 // Search

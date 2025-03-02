@@ -50,9 +50,7 @@ $PMF_LANG["msgNext"] = "tolesnis";
 $PMF_LANG["msgCategoryUp"] = "viena grupe aukštyn";
 $PMF_LANG["msgLastUpdateArticle"] = "Paskutinis atnaujinimas: ";
 $PMF_LANG["msgAuthor"] = "Autorius: ";
-$PMF_LANG["msgPrinterFriendly"] = "Versija spausdinimui";
 $PMF_LANG["msgPrintArticle"] = "Spausdinti šį įrašą";
-$PMF_LANG["msgMakeXMLExport"] = "Eksportuoti kaip XML failą";
 $PMF_LANG["msgAverageVote"] = "Vidutinis įvertis";
 $PMF_LANG["msgVoteUsability"] = "Įvertinti šį DUK";
 $PMF_LANG["msgVoteFrom"] = "iš";
@@ -68,7 +66,7 @@ $PMF_LANG["msgCommentBy"] = "Komentavo ";
 $PMF_LANG["msgCommentHeader"] = "Komentuoti šį DUK";
 $PMF_LANG["msgYourComment"] = "Jūsų komentaras";
 $PMF_LANG["msgCommentThanks"] = "Labai ačiū už jūsų komentarą!";
-$PMF_LANG["msgSend2Friend"] = "Siųsti DUK draugui";
+$PMF_LANG["msgShareFAQ"] = "Siųsti DUK draugui";
 $PMF_LANG["msgS2FButton"] = "siųsti el. laišką";
 
 // Search

@@ -50,9 +50,7 @@ $PMF_LANG["msgNext"] = "дараах";
 $PMF_LANG["msgCategoryUp"] = "нэг ангилал дээш";
 $PMF_LANG["msgLastUpdateArticle"] = "Сүүлд шинэчилсэн: ";
 $PMF_LANG["msgAuthor"] = "Зохиогч: ";
-$PMF_LANG["msgPrinterFriendly"] = "хэвлэхэд тохиромжтой хувилбар";
 $PMF_LANG["msgPrintArticle"] = "Энэ бичлэгийг хэвлэх";
-$PMF_LANG["msgMakeXMLExport"] = " XML-File экспорт хийх";
 $PMF_LANG["msgAverageVote"] = "Дундаж үнэлгээ:";
 $PMF_LANG["msgVoteUsability"] = "Энэ FAQ -г үнэлэх";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentHeader"] = " FAQ -д сэтгэгдэл үлдээх";
 $PMF_LANG["msgYourComment"] = "Таны сэтгэгдэл:";
 $PMF_LANG["msgCommentThanks"] = "Сэтгэгдэл үлдээсэнд баярлалаа!";
 $PMF_LANG["msgSeeXMLFile"] = " XML-File нээх";
-$PMF_LANG["msgSend2Friend"] = "Найздаа FAQ илгээх";
+$PMF_LANG["msgShareFAQ"] = "Найздаа FAQ илгээх";
 $PMF_LANG["msgS2FButton"] = " e-mail илгээх";
 
 // Search

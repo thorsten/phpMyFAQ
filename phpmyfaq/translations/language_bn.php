@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "পরে";
 $PMF_LANG["msgCategoryUp"] = "এক বিভাগ উপরে";
 $PMF_LANG["msgLastUpdateArticle"] = "শেষ হালনাগাদ: ";
 $PMF_LANG["msgAuthor"] = "লেখক: ";
-$PMF_LANG["msgPrinterFriendly"] = "মুদ্রণ উপযোগি";
 $PMF_LANG["msgPrintArticle"] = "প্রশ্নটি মুদ্রণ করুন";
-$PMF_LANG["msgMakeXMLExport"] = "এক্স এম এল হিসাবে সংরক্ষন করুন";
 $PMF_LANG["msgAverageVote"] = "মোট নম্বর";
 $PMF_LANG["msgVoteUsability"] = "নম্বর দিন";
 $PMF_LANG["msgVoteFrom"] = "মধ্যে";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "মতামত প্রদানকারি ";
 $PMF_LANG["msgCommentHeader"] = "মতামত দিন";
 $PMF_LANG["msgYourComment"] = "আপনার মতামত";
 $PMF_LANG["msgCommentThanks"] = "মতামত দেয়ার জন্য ধন্যবাদ!";
-$PMF_LANG["msgSend2Friend"] = "বন্ধুকে পাঠান";
+$PMF_LANG["msgShareFAQ"] = "বন্ধুকে পাঠান";
 $PMF_LANG["msgS2FButton"] = "ই-মেইল পাঠান";
 
 // Search

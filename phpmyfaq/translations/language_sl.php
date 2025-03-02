@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "naprej";
 $PMF_LANG["msgCategoryUp"] = "eno kategorijo gor";
 $PMF_LANG["msgLastUpdateArticle"] = "Zadnja sprememba: ";
 $PMF_LANG["msgAuthor"] = "Avtor: ";
-$PMF_LANG["msgPrinterFriendly"] = "predogled tiskanja";
 $PMF_LANG["msgPrintArticle"] = "Natisni ta zapis";
-$PMF_LANG["msgMakeXMLExport"] = "exportiraj kot XML-datoteko";
 $PMF_LANG["msgAverageVote"] = "Povpre&egrave;na ocena";
 $PMF_LANG["msgVoteUsability"] = "Prosim oceni ta vnos";
 $PMF_LANG["msgVoteFrom"] = "od";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "Komentar za ";
 $PMF_LANG["msgCommentHeader"] = "Komentar na ta vnos";
 $PMF_LANG["msgYourComment"] = "Tvoji komentarji";
 $PMF_LANG["msgCommentThanks"] = "Hvala za tvoje komentarje!";
-$PMF_LANG["msgSend2Friend"] = "Povej prijatelju";
+$PMF_LANG["msgShareFAQ"] = "Povej prijatelju";
 $PMF_LANG["msgS2FButton"] = "pošlji e-mail";
 
 // Search

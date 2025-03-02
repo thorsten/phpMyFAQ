@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "nesaf";
 $PMF_LANG["msgCategoryUp"] = "un categori yn uwch";
 $PMF_LANG["msgLastUpdateArticle"] = "Diweddariad diwethaf: ";
 $PMF_LANG["msgAuthor"] = "Awdur: ";
-$PMF_LANG["msgPrinterFriendly"] = "fersiwn y gellir ei hargraffu";
 $PMF_LANG["msgPrintArticle"] = "Argraffu'r cofnod hwn";
-$PMF_LANG["msgMakeXMLExport"] = "Allforio fel ffeil-XML";
 $PMF_LANG["msgAverageVote"] = "Cyfradd gyfartalog";
 $PMF_LANG["msgVoteUsability"] = "Graddiwch y cofnod hwn";
 $PMF_LANG["msgVoteFrom"] = "oddi wrth";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "Sylw ";
 $PMF_LANG["msgCommentHeader"] = "Cyflwyno sylw ar y cofnod hwn";
 $PMF_LANG["msgYourComment"] = "Eich sylwadau";
 $PMF_LANG["msgCommentThanks"] = "Diolch yn fawr am eich sylwadau!";
-$PMF_LANG["msgSend2Friend"] = "Anfon at ffrind";
+$PMF_LANG["msgShareFAQ"] = "Anfon at ffrind";
 $PMF_LANG["msgS2FButton"] = "anfon e-bost";
 
 // Search

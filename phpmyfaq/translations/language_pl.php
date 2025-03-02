@@ -53,9 +53,7 @@ $PMF_LANG["msgNext"] = "następna";
 $PMF_LANG["msgCategoryUp"] = "jedną kategorię w górę";
 $PMF_LANG["msgLastUpdateArticle"] = "Ostatnio aktualizowane: ";
 $PMF_LANG["msgAuthor"] = "Autor: ";
-$PMF_LANG["msgPrinterFriendly"] = "Wersja do wydruku";
 $PMF_LANG["msgPrintArticle"] = "Wydrukuj ten wpis";
-$PMF_LANG["msgMakeXMLExport"] = "Eksportuj jako plik XML";
 $PMF_LANG["msgAverageVote"] = "Średnia ocena";
 $PMF_LANG["msgVoteUsability"] = "Oceń to pytanie";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -72,7 +70,7 @@ $PMF_LANG["msgCommentHeader"] = "Skomentuj ten FAQ";
 $PMF_LANG["msgYourComment"] = "Twój komentarz";
 $PMF_LANG["msgCommentThanks"] = "Dziękujemy za komentarz!";
 $PMF_LANG["msgSeeXMLFile"] = "otwórz plik XML";
-$PMF_LANG["msgSend2Friend"] = "Wyślij FAQ do znajomego";
+$PMF_LANG["msgShareFAQ"] = "Wyślij FAQ do znajomego";
 $PMF_LANG["msgS2FButton"] = "Wyślij wiadomość";
 
 // Search

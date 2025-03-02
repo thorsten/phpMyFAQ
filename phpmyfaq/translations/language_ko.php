@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "다음";
 $PMF_LANG["msgCategoryUp"] = "상위 카테고리로";
 $PMF_LANG["msgLastUpdateArticle"] = "마지막 수정: ";
 $PMF_LANG["msgAuthor"] = "작성자: ";
-$PMF_LANG["msgPrinterFriendly"] = "인쇄용 페이지";
 $PMF_LANG["msgPrintArticle"] = "이 내용을 인쇄";
-$PMF_LANG["msgMakeXMLExport"] = "XML형식으로 내보내기";
 $PMF_LANG["msgAverageVote"] = "평점";
 $PMF_LANG["msgVoteUsability"] = "이 내용을 평가해 주세요";
 $PMF_LANG["msgVoteFrom"] = " - ";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "작성자 -  ";
 $PMF_LANG["msgCommentHeader"] = "이 내용에 대해 코멘트 달기";
 $PMF_LANG["msgYourComment "] = "당신의 코멘트";
 $PMF_LANG["msgCommentThanks"] = "코멘트를 해 주셔서 감사합니다.";
-$PMF_LANG["msgSend2Friend"] = "친구에게 보내기";
+$PMF_LANG["msgShareFAQ"] = "친구에게 보내기";
 $PMF_LANG["msgS2FButton"] = "메일 보내기";
 
 // Search

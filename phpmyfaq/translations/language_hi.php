@@ -34,7 +34,6 @@ $PMF_LANG["msgContact"] = "संपर्क करें";
 $PMF_LANG["msgHome"] = "घर";
 $PMF_LANG["msgNews"] = "समाचार";
 $PMF_LANG["msgUserOnline"] = " ऑनलाइन सदस्य";
-$PMF_LANG["msgXMLExport"] = "XML-File";
 $PMF_LANG["msgBack2Home"] = "प्रथम पृष्ठ पर जाएं";
 
 // Contentpages
@@ -51,9 +50,7 @@ $PMF_LANG["msgNext"] = "अगला";
 $PMF_LANG["msgCategoryUp"] = "एक वर्ग आगे";
 $PMF_LANG["msgLastUpdateArticle"] = "अंतिम अभीतकका: ";
 $PMF_LANG["msgAuthor"] = "लेखक: ";
-$PMF_LANG["msgPrinterFriendly"] = "छापने योग्य आवृत्ति";
 $PMF_LANG["msgPrintArticle"] = "इसे छापें";
-$PMF_LANG["msgMakeXMLExport"] = "XML-File में निर्यात";
 $PMF_LANG["msgAverageVote"] = "औसत श्रेणीनर्धारण";
 $PMF_LANG["msgVoteUsability"] = "इसका श्रेणीनर्धारण करें";
 $PMF_LANG["msgVoteFrom"] = "में से";
@@ -69,7 +66,7 @@ $PMF_LANG["msgCommentBy"] = "टीका-टिप्पणी ";
 $PMF_LANG["msgCommentHeader"] = "इस पर टीका-टिप्पणी";
 $PMF_LANG["msgYourComment"] = "आपकी टीका-टिप्पणी";
 $PMF_LANG["msgCommentThanks"] = "आपके मत के लिए बहुत ही शुक्रिया!";
-$PMF_LANG["msgSend2Friend"] = "अपनी मित्र को भेजें";
+$PMF_LANG["msgShareFAQ"] = "अपनी मित्र को भेजें";
 $PMF_LANG["msgS2FButton"] = "ईमेल भेजें";
 
 // Search

@@ -51,7 +51,6 @@ $PMF_LANG["msgNext"] = "sau";
 $PMF_LANG["msgCategoryUp"] = "mục ở ngay phía trên";
 $PMF_LANG["msgLastUpdateArticle"] = "Cập nhật lần cuối: ";
 $PMF_LANG["msgAuthor"] = "Tác giả: ";
-$PMF_LANG["msgPrinterFriendly"] = "bản in được";
 $PMF_LANG["msgPrintArticle"] = "In nội dung này";
 $PMF_LANG["msgMakeXMLExport"] = "xuất ra tập tin XML";
 $PMF_LANG["msgAverageVote"] = "Điểm trung bình";
@@ -70,7 +69,7 @@ $PMF_LANG["msgCommentHeader"] = "Bình luận về bài này ";
 $PMF_LANG["msgYourComment"] = "Bình luận của bạn";
 $PMF_LANG["msgCommentThanks"] = "Cảm ơn bạn đã bình luận!";
 $PMF_LANG["msgSeeXMLFile"] = "mở tập tin XML ";
-$PMF_LANG["msgSend2Friend"] = "Gửi cho một người bạn ";
+$PMF_LANG["msgShareFAQ"] = "Gửi cho một người bạn ";
 $PMF_LANG["msgS2FButton"] = "Gửi";
 
 // Search

@@ -52,9 +52,7 @@ $PMF_LANG["msgNext"] = "sonraki";
 $PMF_LANG["msgCategoryUp"] = "bir kategori yukarı";
 $PMF_LANG["msgLastUpdateArticle"] = "Son güncelleme: ";
 $PMF_LANG["msgAuthor"] = "Oluşturan: ";
-$PMF_LANG["msgPrinterFriendly"] = "yazıcı uyumlu sürüm";
 $PMF_LANG["msgPrintArticle"] = "İçeriği yazdır";
-$PMF_LANG["msgMakeXMLExport"] = "XML dosyası olarak dışa aktar";
 $PMF_LANG["msgAverageVote"] = "Oy ortalaması";
 $PMF_LANG["msgVoteUsability"] = "Bu içeriği oyla";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -70,7 +68,7 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Yorumunuz";
 $PMF_LANG["msgCommentThanks"] = "Yorumunuz için teşekkürler!";
-$PMF_LANG["msgSend2Friend"] = "Arkadaşınıza önerin";
+$PMF_LANG["msgShareFAQ"] = "Arkadaşınıza önerin";
 $PMF_LANG["msgS2FButton"] = "e-mail gönder";
 
 // Search

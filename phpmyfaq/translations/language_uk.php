@@ -51,7 +51,6 @@ $PMF_LANG["msgNext"] = "наступна";
 $PMF_LANG["msgCategoryUp"] = "на рівень вище";
 $PMF_LANG["msgLastUpdateArticle"] = "Останні оновлення: ";
 $PMF_LANG["msgAuthor"] = "Опублікував: ";
-$PMF_LANG["msgPrinterFriendly"] = "Версія для друку";
 $PMF_LANG["msgPrintArticle"] = "Відправити на друк";
 $PMF_LANG["msgAverageVote"] = "Рейтинг відповіді";
 $PMF_LANG["msgVoteUsability"] = "Будь ласка оціните цю відповідь";
@@ -68,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "можете залишити коментар";
 $PMF_LANG["msgYourComment"] = "Ваші коментарі";
 $PMF_LANG["msgCommentThanks"] = "Спасибі за коментар!";
-$PMF_LANG["msgSend2Friend"] = "Відправити другу";
+$PMF_LANG["msgShareFAQ"] = "Відправити другу";
 $PMF_LANG["msgS2FButton"] = "Відправити лист";
 
 // Search

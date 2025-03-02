@@ -290,6 +290,7 @@ class LanguageCodes
         'tr' => 'Turkish',
         'tw' => 'Twi',
         'uk' => 'Ukrainian',
+        'ur' => 'Urdu',
         'vi' => 'Vietnamese',
         'cy' => 'Welsh',
     ];

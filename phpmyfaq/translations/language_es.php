@@ -53,7 +53,6 @@ $PMF_LANG['msgNext'] = 'Siguiente';
 $PMF_LANG['msgCategoryUp'] = 'subir una categoría';
 $PMF_LANG['msgLastUpdateArticle'] = 'Última modificación: ';
 $PMF_LANG['msgAuthor'] = 'Autor: ';
-$PMF_LANG['msgPrinterFriendly'] = 'Versión para imprimir';
 $PMF_LANG['msgPrintArticle'] = 'Imprimir este registro';
 $PMF_LANG['msgAverageVote'] = 'Valoración media:';
 $PMF_LANG['msgVoteUsability'] = 'Valora esta FAQ';
@@ -70,7 +69,7 @@ $PMF_LANG['msgCommentBy'] = 'Comentario de ';
 $PMF_LANG['msgCommentHeader'] = 'Comenta esta FAQ';
 $PMF_LANG['msgYourComment'] = 'Comentario';
 $PMF_LANG['msgCommentThanks'] = '¡Muchas gracias por tu comentario!';
-$PMF_LANG['msgSend2Friend'] = 'Enviar FAQ a un amigo';
+$PMF_LANG['msgShareFAQ'] = 'Enviar FAQ a un amigo';
 $PMF_LANG['msgS2FButton'] = 'enviar correo';
 
 // Buscar

@@ -50,9 +50,7 @@ $PMF_LANG["msgNext"] = "nasledujúca";
 $PMF_LANG["msgCategoryUp"] = "o kategóriu vyššie";
 $PMF_LANG["msgLastUpdateArticle"] = "Posledná aktualizácia: ";
 $PMF_LANG["msgAuthor"] = "Autor: ";
-$PMF_LANG["msgPrinterFriendly"] = "verzia pre tlač";
 $PMF_LANG["msgPrintArticle"] = "Vytlačiť tento záznam";
-$PMF_LANG["msgMakeXMLExport"] = "Exportovať ako XML-súbor";
 $PMF_LANG["msgAverageVote"] = "Priemerné hodnotenie";
 $PMF_LANG["msgVoteUsability"] = "Ohodnoťte tento FAQ";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -68,7 +66,7 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Váš komentár";
 $PMF_LANG["msgCommentThanks"] = "Ďakujeme veľmi pekne za váš komentár!";
-$PMF_LANG["msgSend2Friend"] = "Poslať FAQ známemu";
+$PMF_LANG["msgShareFAQ"] = "Poslať FAQ známemu";
 $PMF_LANG["msgS2FButton"] = "odoslať e-mail";
 
 // Search

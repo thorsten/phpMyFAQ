@@ -53,7 +53,6 @@ $PMF_LANG["msgNext"] = "n&acirc;kamie";
 $PMF_LANG["msgCategoryUp"] = "sada&iuml;u augst&acirc;k";
 $PMF_LANG["msgLastUpdateArticle"] = "Atjaunots: ";
 $PMF_LANG["msgAuthor"] = "Autors: ";
-$PMF_LANG["msgPrinterFriendly"] = "Drukas versija";
 $PMF_LANG["msgPrintArticle"] = "Izdruk&acirc;t lapu";
 $PMF_LANG["msgAverageVote"] = "Vid&ccedil;jais reitings";
 $PMF_LANG["msgVoteUsability"] = "Nov&ccedil;rt&ccedil; &eth;o ierakstu";
@@ -70,7 +69,7 @@ $PMF_LANG["msgCommentBy"] = "Koment&ccedil; ";
 $PMF_LANG["msgCommentHeader"] = "Ieraksta koment&acirc;rs";
 $PMF_LANG["msgYourComment"] = "Tavs koment&acirc;rs";
 $PMF_LANG["msgCommentThanks"] = "Paldies par koment&acirc;ru!";
-$PMF_LANG["msgSend2Friend"] = "Nos&ucirc;t&icirc;t draugam";
+$PMF_LANG["msgShareFAQ"] = "Nos&ucirc;t&icirc;t draugam";
 $PMF_LANG["msgS2FButton"] = "Nos&ucirc;t&icirc;t";
 
 // Search

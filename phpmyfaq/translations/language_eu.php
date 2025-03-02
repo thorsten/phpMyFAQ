@@ -52,9 +52,7 @@ $PMF_LANG["msgNext"] = "hurrengoa";
 $PMF_LANG["msgCategoryUp"] = "atal bat igo";
 $PMF_LANG["msgLastUpdateArticle"] = "Azken eguneratzea: ";
 $PMF_LANG["msgAuthor"] = "Egilea: ";
-$PMF_LANG["msgPrinterFriendly"] = "Bertsio inprimagarria";
 $PMF_LANG["msgPrintArticle"] = "Erregistro hau inprimatu";
-$PMF_LANG["msgMakeXMLExport"] = "XML-fitxategi gisa esportatu";
 $PMF_LANG["msgAverageVote"] = "Batez besteko balorazioa";
 $PMF_LANG["msgVoteUsability"] = "Erregistro hau balora ezazu, mesedez";
 $PMF_LANG["msgVoteFrom"] = "/";
@@ -71,7 +69,7 @@ $PMF_LANG["msgCommentHeader"] = "iruzkinak erregistrora";
 $PMF_LANG["msgYourComment"] = "Zure iruzkina";
 $PMF_LANG["msgCommentThanks"] = "Eskerrik asko zure iruzkinarengatik!";
 $PMF_LANG["msgSeeXMLFile"] = "XML-Fitxategia ireki";
-$PMF_LANG["msgSend2Friend"] = "Lagun bati bidali";
+$PMF_LANG["msgShareFAQ"] = "Lagun bati bidali";
 $PMF_LANG["msgS2FButton"] = "posta bidali";
 
 // Search

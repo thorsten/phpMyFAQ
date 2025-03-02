@@ -52,9 +52,7 @@ $PMF_LANG["msgNext"] = "next";
 $PMF_LANG["msgCategoryUp"] = "one category up";
 $PMF_LANG["msgLastUpdateArticle"] = "Last update: ";
 $PMF_LANG["msgAuthor"] = "Author: ";
-$PMF_LANG["msgPrinterFriendly"] = "printer-friendly version";
 $PMF_LANG["msgPrintArticle"] = "Print this record";
-$PMF_LANG["msgMakeXMLExport"] = "Export as XML file";
 $PMF_LANG["msgAverageVote"] = "Average rating";
 $PMF_LANG["msgVoteUsability"] = "Rate this FAQ";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -70,7 +68,7 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment on this FAQ";
 $PMF_LANG["msgYourComment"] = "Your comment";
 $PMF_LANG["msgCommentThanks"] = "Thank you for commenting!";
-$PMF_LANG["msgSend2Friend"] = "Share this FAQ";
+$PMF_LANG["msgShareFAQ"] = "Share this FAQ";
 $PMF_LANG["msgS2FButton"] = "send email";
 
 // Search
@@ -511,7 +509,7 @@ $PMF_LANG["err_SaveQuestion"] = "Required fields are your name, your email addre
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = ["select", "Standard language"];
-$LANG_CONF["main.languageDetection"] = ["checkbox", "Enable automatic language detection"];
+$LANG_CONF["main.languageDetection"] = ["checkbox", "Enable automatic language detection via web browser"];
 $LANG_CONF['main.titleFAQ'] = ["input", "Title of your FAQ"];
 $LANG_CONF['main.currentVersion'] = ["print", "phpMyFAQ Version"];
 $LANG_CONF["main.metaDescription"] = ["input", "Description"];

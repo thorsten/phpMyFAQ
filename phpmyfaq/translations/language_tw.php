@@ -51,7 +51,6 @@ $PMF_LANG["msgNext"] = "下一頁(next)";
 $PMF_LANG["msgCategoryUp"] = "上一層分類 (one category up)";
 $PMF_LANG["msgLastUpdateArticle"] = "最後更新(Last update): ";
 $PMF_LANG["msgAuthor"] = "作者: ";
-$PMF_LANG["msgPrinterFriendly"] = "友善列印版本";
 $PMF_LANG["msgPrintArticle"] = "列印此記錄";
 $PMF_LANG["msgMakeXMLExport"] = "輸出為 XML 檔案格式";
 $PMF_LANG["msgAverageVote"] = "平均評分";
@@ -70,7 +69,7 @@ $PMF_LANG["msgCommentHeader"] = "評論此 FAQ";
 $PMF_LANG["msgYourComment"] = "您的評論";
 $PMF_LANG["msgCommentThanks"] = "非常感謝您的評論!";
 $PMF_LANG["msgSeeXMLFile"] = "開啟 XML 檔案";
-$PMF_LANG["msgSend2Friend"] = "寄送 FAQ 給一個朋友";
+$PMF_LANG["msgShareFAQ"] = "寄送 FAQ 給一個朋友";
 $PMF_LANG["msgS2FButton"] = "寄送 e-mail";
 
 // Search 搜尋
