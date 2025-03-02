@@ -1467,5 +1467,6 @@ $PMF_LANG['msgPluginDescription'] = 'Beschreibung';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
+$PMF_LANG['msgDashboard'] = 'Dashboard';
 
 return $PMF_LANG;

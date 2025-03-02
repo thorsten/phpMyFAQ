@@ -1438,5 +1438,6 @@ $PMF_LANG['msgDocumentation'] = 'دستاویزات';
 
 // شامل کیا گیا v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'ایک مسئلہ رپورٹ کریں';
+$PMF_LANG['msgDashboard'] = 'ڈیش بورڈ';
 
 return $PMF_LANG;

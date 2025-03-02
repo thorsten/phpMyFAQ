@@ -581,7 +581,7 @@ $PMF_LANG['spamControlCenter'] = "惡意與垃圾活動-控制台 (Spam control 
 $LANG_CONF["spam.enableSafeEmail"] = array("checkbox", "使用安全的方式列印使用者的 email (預設: 開啟)。 <br>Print user email in a safe way (default: enabled).");
 $LANG_CONF["spam.checkBannedWords"] = array("checkbox", "Check public form content against banned words (default: enabled).");
 $LANG_CONF["spam.enableCaptchaCode"] = array("checkbox", "使用 captcha 驗證碼來允許開放式的回覆 (預設: 開啟) <br>Use a captcha code to allow public form submission (default: enabled).");
-$PMF_LANG['ad_session_expiring'] = "您的連線 session 時間將於 %d 分鐘結束: 您想要延長繼續使用嘛? (Your session will expire in %d minutes: would you like to go on working?)";
+$PMF_LANG['ad_session_expiring'] = "您的連線 session 時間將於 %d 分鐘結束: 您想要延長繼續使用嘛?";
 
 // added v1.6.2 - 2006-06-13 by Matteo 開發者
 $PMF_LANG['ad_stat_management'] = "連線 Sessions 管理";
