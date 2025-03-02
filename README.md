@@ -178,7 +178,7 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v3.0 documentation
+## REST API v3.1 documentation
 
 The REST API documentation is available as OpenAPI 3.0 specification:
 

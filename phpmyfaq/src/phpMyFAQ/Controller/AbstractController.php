@@ -37,7 +37,7 @@ use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
 
 #[OA\Info(
-    version: '3.0',
+    version: '3.1',
     description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ ' .
     'version or doing a search against the phpMyFAQ installation.',
     title: 'REST API for phpMyFAQ 4.1',

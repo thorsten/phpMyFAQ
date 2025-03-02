@@ -41,11 +41,13 @@ use phpMyFAQ\Forms;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
+use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Plugin\PluginManager;
@@ -59,6 +61,7 @@ use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\Sitemap;
+use phpMyFAQ\StopWords;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User;
@@ -212,6 +215,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.helper.category-helper', CategoryHelper::class);
 
+    $services->set('phpmyfaq.helper.faq', FaqHelper::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.helper.statistics', StatisticsHelper::class)
         ->args([
             new Reference('phpmyfaq.admin.session'),
@@ -243,6 +251,11 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             new Reference('phpmyfaq.configuration'),
             new Reference('session')
+        ]);
+
+    $services->set('phpmyfaq.mail', Mail::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
         ]);
 
     $services->set('phpmyfaq.news', News::class)
@@ -309,6 +322,11 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.setup.upgrade', Upgrade::class)
         ->args([
             new Reference('phpmyfaq.system'),
+            new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.stop-words', StopWords::class)
+        ->args([
             new Reference('phpmyfaq.configuration')
         ]);
 

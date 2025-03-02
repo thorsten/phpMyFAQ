@@ -43,8 +43,7 @@ class AutoCompleteController extends AbstractController
     {
         $searchString = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups);
         $category->setUser($currentUser);
@@ -54,7 +53,7 @@ class AutoCompleteController extends AbstractController
 
         $faqPermission = new Permission($this->configuration);
         $faqSearch = new Search($this->configuration);
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
+        $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         if (!is_null($searchString)) {
             $faqSearch->setCategory($category);

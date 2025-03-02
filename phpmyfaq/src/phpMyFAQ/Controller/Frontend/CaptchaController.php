@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,17 +27,13 @@ class CaptchaController extends AbstractController
      */
     public function renderImage(): Response
     {
-        $captcha = Captcha::getInstance($this->configuration);
-
-        // Set headers
         $response = new Response();
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->set('Content-Type', 'image/jpeg');
 
         // Set image content
-        $response->setContent($captcha->getCaptchaImage());
+        $response->setContent($this->container->get('phpmyfaq.captcha')->getCaptchaImage());
 
-        // Return the response
         return $response;
     }
 }

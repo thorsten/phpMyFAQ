@@ -32,7 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookmarkController extends AbstractController
 {
     /**
-     * @throws Exception|\JsonException
+     * @throws \JsonException
+     * @throws \Exception
      */
     #[Route('api/bookmark/create')]
     public function create(Request $request): JsonResponse
@@ -40,18 +41,16 @@ class BookmarkController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $bookmarkId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('add-bookmark', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
-        $bookmark = new Bookmark($this->configuration, $currentUser);
-
-        if ($bookmark->add($id)) {
+        if ($bookmark->add($bookmarkId)) {
             return $this->json([
                 'success' => Translation::get('msgBookmarkAdded'),
                 'linkText' => Translation::get('removeBookmark'),
@@ -63,7 +62,8 @@ class BookmarkController extends AbstractController
     }
 
     /**
-     * @throws Exception|\JsonException
+     * @throws \JsonException
+     * @throws \Exception
      */
     #[Route('api/bookmark/delete')]
     public function delete(Request $request): JsonResponse
@@ -71,18 +71,16 @@ class BookmarkController extends AbstractController
         $this->userIsAuthenticated();
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        $id = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
+        $bookmarkId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-bookmark', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
+        $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
-        $bookmark = new Bookmark($this->configuration, $currentUser);
-
-        if ($bookmark->remove($id)) {
+        if ($bookmark->remove($bookmarkId)) {
             return $this->json([
                 'success' => Translation::get('msgBookmarkRemoved'),
                 'linkText' => Translation::get('msgAddBookmark'),
@@ -94,7 +92,8 @@ class BookmarkController extends AbstractController
     }
 
     /**
-     * @throws Exception|\JsonException
+     * @throws \JsonException
+     * @throws \Exception
      */
     #[Route('api/bookmark/delete-all')]
     public function deleteAll(Request $request): JsonResponse
@@ -108,9 +107,7 @@ class BookmarkController extends AbstractController
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
-
-        $bookmark = new Bookmark($this->configuration, $currentUser);
+        $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
         if ($bookmark->removeAll()) {
             return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);

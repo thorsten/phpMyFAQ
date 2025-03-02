@@ -24,15 +24,10 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Notification;
-use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,10 +45,10 @@ class QuestionController extends AbstractController
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
-        $stopWords = new StopWords($this->configuration);
+        $stopWords = $this->container->get('phpmyfaq.stop-words');
         $category = new Category($this->configuration);
 
-        $questionHelper = new QuestionHelper();
+        $questionHelper = $this->container->get('phpmyfaq.helper.question');
         $questionHelper
             ->setConfiguration($this->configuration)
             ->setCategory($category);
@@ -122,9 +117,9 @@ class QuestionController extends AbstractController
                 }
             }
 
-            $question = new Question($this->configuration);
+            $question = $this->container->get('phpmyfaq.question');
             $question->add($questionEntity);
-            $notification = new Notification($this->configuration);
+            $notification = $this->container->get('phpmyfaq.notification');
             $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
             return $this->json(['success' => Translation::get('msgAskThx4Mail')], Response::HTTP_OK);
