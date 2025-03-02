@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\OpenQuestionsController;
+use phpMyFAQ\Controller\Administration\OrphanedFaqsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\PluginController;
 use phpMyFAQ\Controller\Administration\RatingController;
@@ -137,6 +138,11 @@ $routesConfig = [
         'path' => '/category/update',
         'controller' => [CategoryController::class, 'update'],
         'methods' => 'POST'
+    ],
+    'admin.content.orphaned-faqs' => [
+        'path' => '/orphaned-faqs',
+        'controller' => [OrphanedFaqsController::class, 'index'],
+        'methods' => 'GET'
     ],
     'admin.content.sticky-faqs' => [
         'path' => '/sticky-faqs',

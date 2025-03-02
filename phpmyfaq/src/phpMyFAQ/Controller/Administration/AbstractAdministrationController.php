@@ -124,6 +124,11 @@ class AbstractAdministrationController extends AbstractController
             'sticky-faqs'
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+            PermissionType::FAQ_EDIT->value,
+            'msgOrphanedFAQs',
+            'orphaned-faqs'
+        );
+        $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::QUESTION_DELETE->value,
             'ad_menu_open',
             'questions'
@@ -277,6 +282,7 @@ class AbstractAdministrationController extends AbstractController
             case 'admin.category.hierarchy':
             case 'admin.category.translate':
             case 'admin.category.update':
+            case 'admin.content.orphaned-faqs':
             case 'admin.content.sticky-faqs':
             case 'admin.comments':
             case 'admin.faq.add':

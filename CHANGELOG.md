@@ -11,6 +11,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added configuration to edit robots.txt (Thorsten)
 - added Symfony Routing for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
+- added administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)
 - added experimental support for PDO (Thorsten)
 - added Urdu translation (Thorsten)

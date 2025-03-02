@@ -1668,4 +1668,67 @@ class Faq
     {
         return strpos($title, '#');
     }
+
+    /**
+     * Returns the orphaned records with admin URL to edit the FAQ and title.
+     *
+     * @return stdClass[]
+     */
+    public function getOrphanedFaqs(): array
+    {
+            $query = sprintf(
+                "
+                SELECT
+                    fd.id AS id,
+                    fd.lang AS lang,
+                    fd.thema AS question
+                FROM
+                    %sfaqdata fd
+                WHERE
+                    fd.lang = '%s'
+                AND 
+                    fd.active = 'yes'
+                AND
+                    fd.id NOT IN (
+                        SELECT
+                            record_id
+                        FROM
+                            %sfaqcategoryrelations
+                        WHERE
+                            record_lang = fd.lang
+                    )
+                GROUP BY
+                    fd.id, fd.lang, fd.thema
+                ORDER BY
+                    fd.id DESC",
+                Database::getTablePrefix(),
+                $this->configuration->getLanguage()->getLanguage(),
+                Database::getTablePrefix()
+            );
+
+        $result = $this->configuration->getDb()->query($query);
+        $orphaned = [];
+        $data = [];
+
+        $oldId = 0;
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            if ($oldId != $row->id) {
+                $data = new stdClass();
+                $data->faqId = $row->id;
+                $data->language = $row->lang;
+                $data->question = $row->question;
+                $data->url = sprintf(
+                    '%sadmin/faq/edit/%d/%s',
+                    $this->configuration->getDefaultUrl(),
+                    $row->id,
+                    $row->lang
+                );
+                $orphaned[] = $data;
+            }
+
+            $oldId = $row->id;
+        }
+
+        return $orphaned;
+    }
 }

@@ -1468,5 +1468,7 @@ $PMF_LANG['msgPluginDescription'] = 'Beschreibung';
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
 $PMF_LANG['msgDashboard'] = 'Dashboard';
+$PMF_LANG['msgOrphanedFAQs'] = 'Verwaiste FAQs';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Verwaiste FAQs sind FAQs, die keiner Kategorie zugeordnet sind. Ihr könnt sie hier bearbeiten und einer Kategorie zuweisen.';
 
 return $PMF_LANG;

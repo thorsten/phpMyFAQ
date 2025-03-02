@@ -1486,5 +1486,8 @@ $PMF_LANG['msgPluginDescription'] = 'Description';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Rapporter un bug';
+$PMF_LANG['msgDashboard'] = 'Tableau de bord';
+$PMF_LANG['msgOrphanedFAQs'] = 'FAQs orphelines';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Les FAQ orphelines sont des FAQ qui n\'ont pas été attribuées à une catégorie. Vous pouvez les modifier ici et les attribuer à une catégorie.';
 
 return $PMF_LANG;
