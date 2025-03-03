@@ -13,10 +13,16 @@
  * @since     2023-03-05
  */
 
+import { Modal } from 'bootstrap';
+import { fetchMarkdownContent, fetchMediaBrowserContent } from '../api';
+import { MediaBrowserApiResponse, Response } from '../interfaces';
+
 export const handleMarkdownForm = (): void => {
   const answerHeight = localStorage.getItem('phpmyfaq.answer.height');
-  const answer = document.getElementById('answer-markdown') as HTMLTextAreaElement | null;
-  const markdownTabs = document.getElementById('markdown-tabs');
+  const answer = document.getElementById('answer-markdown') as HTMLTextAreaElement;
+  const markdownTabs = document.getElementById('markdown-tabs') as HTMLElement;
+  const insertImage = document.getElementById('pmf-markdown-insert-image') as HTMLElement;
+  const insertImageButton = document.getElementById('pmf-markdown-insert-image-button') as HTMLElement;
 
   // Store the height of the textarea
   if (answer) {
@@ -29,34 +35,18 @@ export const handleMarkdownForm = (): void => {
     });
   }
 
-  // handle the Markdown preview
+  // Handle the Markdown preview
   if (markdownTabs) {
-    const tab = document.querySelector('a[data-markdown-tab="preview"]') as HTMLElement | null;
+    const tab = document.querySelector('a[data-markdown-tab="preview"]') as HTMLElement;
 
     if (tab) {
       tab.addEventListener('shown.bs.tab', async () => {
-        const preview = document.getElementById('markdown-preview') as HTMLElement | null;
+        const preview = document.getElementById('markdown-preview') as HTMLElement;
         if (preview && answer) {
           preview.style.height = answer.style.height;
-
           try {
-            const response = await fetch(window.location.pathname + 'api/content/markdown', {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                text: answer.value,
-              }),
-            });
-
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-
-            const responseData = await response.json();
-            preview.innerHTML = responseData.success;
+            const response = (await fetchMarkdownContent(answer.value)) as unknown as Response;
+            preview.innerHTML = response.success;
           } catch (error) {
             if (error instanceof Error) {
               console.error(error);
@@ -67,5 +57,59 @@ export const handleMarkdownForm = (): void => {
         }
       });
     }
+  }
+
+  // Handle inserting images from Modal
+  if (insertImage) {
+    const container = document.getElementById('pmf-markdown-insert-image-modal') as HTMLElement;
+    const modal = new Modal(container);
+    insertImage.addEventListener('click', async (event: Event): Promise<void> => {
+      event.preventDefault();
+      modal.show();
+
+      const response = (await fetchMediaBrowserContent()) as MediaBrowserApiResponse;
+
+      if (response.success) {
+        const list = document.getElementById('pmf-markdown-insert-image-list') as HTMLElement;
+        list.innerHTML = ''; // Clear previous content
+
+        response.data.sources.forEach((source): void => {
+          source.files.forEach((file) => {
+            const listItem = document.createElement('div') as HTMLElement;
+            listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
+            listItem.innerHTML = `
+              <div class="form-check me-2">
+                <input type="checkbox" class="form-check-input" id="checkbox-${file.file}" data-image-url="${source.baseurl}/${source.path}/${file.file}">
+                <label class="form-check-label d-none" for="checkbox-${file.file}" aria-hidden="true">Select</label>
+              </div>
+              <img src="${source.baseurl}/${source.path}/${file.file}" class="img-thumbnail" alt="${file.file}" style="height: 100px;">
+            `;
+            list.appendChild(listItem);
+          });
+        });
+      }
+    });
+
+    // Add event listener to the insert image button
+    insertImageButton.addEventListener('click', () => {
+      const checkboxes = document.querySelectorAll('.form-check-input:checked') as NodeListOf<HTMLInputElement>;
+      let markdownImages: string = '';
+
+      checkboxes.forEach((checkbox: HTMLInputElement): void => {
+        const imageUrl = (checkbox as HTMLInputElement).dataset.imageUrl as string;
+        if (imageUrl) {
+          markdownImages += `![Image](${imageUrl})\n`;
+        }
+      });
+
+      // Insert the Markdown images at the cursor position
+      const startPos: number = answer.selectionStart;
+      const endPos: number = answer.selectionEnd;
+      answer.value = answer.value.substring(0, startPos) + markdownImages + answer.value.substring(endPos);
+      answer.setSelectionRange(startPos + markdownImages.length, startPos + markdownImages.length);
+      answer.focus();
+
+      modal.hide();
+    });
   }
 };

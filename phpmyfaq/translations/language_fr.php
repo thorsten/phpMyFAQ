@@ -1489,5 +1489,8 @@ $PMF_LANG['msgReportABug'] = 'Rapporter un bug';
 $PMF_LANG['msgDashboard'] = 'Tableau de bord';
 $PMF_LANG['msgOrphanedFAQs'] = 'FAQs orphelines';
 $PMF_LANG['msgOrphanedFAQsDescription'] = 'Les FAQ orphelines sont des FAQ qui n\'ont pas été attribuées à une catégorie. Vous pouvez les modifier ici et les attribuer à une catégorie.';
+$PMF_LANG['msgPreview'] = 'Aperçu';
+$PMF_LANG['msgInsertImage'] = 'Insérer une image';
+$PMF_LANG['msgImageUpload'] = 'Télécharger une image';
 
 return $PMF_LANG;

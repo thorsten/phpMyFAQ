@@ -125,11 +125,24 @@
                     <div class="col-lg-12">
                       <ul class="nav nav-tabs mb-2" id="markdown-tabs">
                         <li class="nav-item">
-                          <a class="nav-link active" data-bs-toggle="tab" href="#text">Text</a>
+                          <a class="nav-link active" data-bs-toggle="tab" href="#text">
+                            {{ 'msgNewContentArticle' | translate }}
+                          </a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" data-bs-toggle="tab" href="#preview"
-                             data-markdown-tab="preview">Preview</a>
+                          <a class="nav-link" data-bs-toggle="tab" href="#preview" data-markdown-tab="preview">
+                            {{ 'msgPreview' | translate }}
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" href="#text" id="pmf-markdown-insert-image">
+                            {{ 'msgInsertImage' | translate }}
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" href="#text" id="pmf-markdown-upload-image">
+                            {{ 'msgImageUpload' | translate }}
+                          </a>
                         </li>
                       </ul>
                       <div class="tab-content">
@@ -540,6 +553,7 @@
     </div>
   </div>
 
+  <!-- Attachment Modal -->
   <div class="modal modal-lg fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel"
        aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -585,6 +599,32 @@
       </div>
     </div>
   </div>
+
+  {% if isMarkdownEditorEnabled %}
+    <!-- Markdown Image Modal -->
+    <div class="modal modal-lg fade " id="pmf-markdown-insert-image-modal" tabindex="-1" role="dialog"
+         aria-labelledby="pmf-markdown-insert-image-modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pmf-markdown-insert-image-modalLabel">
+              {{ 'msgInsertImage' | translate }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="pmf-markdown-insert-image-list"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="pmf-markdown-insert-image-button">
+              {{ 'ad_categ_paste' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
 
   <script>
     function setRecordDate(how) {

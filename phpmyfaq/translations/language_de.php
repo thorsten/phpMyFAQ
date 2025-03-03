@@ -1470,5 +1470,8 @@ $PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
 $PMF_LANG['msgDashboard'] = 'Dashboard';
 $PMF_LANG['msgOrphanedFAQs'] = 'Verwaiste FAQs';
 $PMF_LANG['msgOrphanedFAQsDescription'] = 'Verwaiste FAQs sind FAQs, die keiner Kategorie zugeordnet sind. Ihr könnt sie hier bearbeiten und einer Kategorie zuweisen.';
+$PMF_LANG['msgPreview'] = 'Vorschau';
+$PMF_LANG['msgInsertImage'] = 'Bild einfügen';
+$PMF_LANG['msgImageUpload'] = 'Bild hochladen';
 
 return $PMF_LANG;

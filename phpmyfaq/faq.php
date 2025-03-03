@@ -16,7 +16,11 @@
  * @since     2002-08-27
  */
 
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Exception\CommonMarkException;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
@@ -71,10 +75,16 @@ $attachmentHelper = new AttachmentHelper();
 $faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
-$converter = new CommonMarkConverter([
+$config = [
     'html_input' => 'strip',
     'allow_unsafe_links' => false,
-]);
+];
+
+$environment = new Environment($config);
+$environment->addExtension(new CommonMarkCoreExtension());
+$environment->addExtension(new GithubFlavoredMarkdownExtension());
+
+$converter = new MarkdownConverter($environment);
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);

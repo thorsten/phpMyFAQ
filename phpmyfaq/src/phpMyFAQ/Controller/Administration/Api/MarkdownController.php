@@ -17,8 +17,11 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,10 +41,16 @@ class MarkdownController extends AbstractController
 
         $answer = Filter::filterVar($data->text, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $converter = new CommonMarkConverter([
+        $config = [
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
-        ]);
+        ];
+
+        $environment = new Environment($config);
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new GithubFlavoredMarkdownExtension());
+
+        $converter = new MarkdownConverter($environment);
 
         return $this->json(['success' => $converter->convert($answer)->getContent()], Response::HTTP_OK);
     }

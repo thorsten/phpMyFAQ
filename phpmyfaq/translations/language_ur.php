@@ -1440,5 +1440,8 @@ $PMF_LANG['msgDocumentation'] = 'دستاویزات';
 $PMF_LANG['msgReportABug'] = 'ایک مسئلہ رپورٹ کریں';
 $PMF_LANG['msgDashboard'] = 'ڈیش بورڈ';
 $PMF_LANG['msgOrphanedFAQs'] = ' یتیم FAQs';
+$PMF_LANG['msgPreview'] = 'پیش نظارہ';
+$PMF_LANG['msgInsertImage'] = 'تصویر شامل کریں';
+$PMF_LANG['msgImageUpload'] = 'تصویر اپ لوڈ کریں';
 
 return $PMF_LANG;

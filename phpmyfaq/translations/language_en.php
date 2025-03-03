@@ -1489,5 +1489,8 @@ $PMF_LANG['msgReportABug'] = 'Report a bug';
 $PMF_LANG['msgDashboard'] = 'Dashboard';
 $PMF_LANG['msgOrphanedFAQs'] = 'Orphaned FAQs';
 $PMF_LANG['msgOrphanedFAQsDescription'] = 'These FAQs are not assigned to any category. You can assign them to a category here.';
+$PMF_LANG['msgPreview'] = 'Preview';
+$PMF_LANG['msgInsertImage'] = 'Insert image';
+$PMF_LANG['msgImageUpload'] = 'Image upload';
 
 return $PMF_LANG;

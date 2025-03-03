@@ -15,6 +15,7 @@
 
 import { deleteAttachments, refreshAttachments } from '../api';
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 export const handleDeleteAttachments = (): void => {
   const deleteButtons = document.querySelectorAll<HTMLButtonElement>('.btn-delete-attachment');
@@ -49,21 +50,23 @@ export const handleDeleteAttachments = (): void => {
 };
 
 export const handleRefreshAttachments = (): void => {
-  const refreshButtons = document.querySelectorAll<HTMLButtonElement>('.btn-refresh-attachment');
+  const refreshButtons = document.querySelectorAll<HTMLButtonElement>(
+    '.btn-refresh-attachment'
+  ) as NodeListOf<HTMLButtonElement>;
 
   if (refreshButtons.length > 0) {
-    refreshButtons.forEach((button) => {
+    refreshButtons.forEach((button: HTMLButtonElement): void => {
       const newButton = button.cloneNode(true) as HTMLButtonElement;
       button.replaceWith(newButton);
 
-      newButton.addEventListener('click', async (event: MouseEvent) => {
+      newButton.addEventListener('click', async (event: MouseEvent): Promise<void> => {
         event.preventDefault();
 
-        const attachmentId = newButton.getAttribute('data-attachment-id');
-        const csrf = newButton.getAttribute('data-csrf');
+        const attachmentId = newButton.getAttribute('data-attachment-id') as string;
+        const csrf = newButton.getAttribute('data-csrf') as string;
 
         if (attachmentId && csrf) {
-          const response = await refreshAttachments(attachmentId, csrf);
+          const response = (await refreshAttachments(attachmentId, csrf)) as unknown as Response;
 
           if (response.success) {
             pushNotification(response.success);
