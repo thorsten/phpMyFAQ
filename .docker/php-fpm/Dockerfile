@@ -6,7 +6,7 @@
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:8.4-fpm
+FROM php:8.4.5RC1-fpm
 
 #=== Install gd PHP dependencies ===
 RUN set -x \
