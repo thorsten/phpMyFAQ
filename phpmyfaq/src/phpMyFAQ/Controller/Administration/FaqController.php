@@ -59,7 +59,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FaqController extends AbstractController
 {
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     #[Route('admin/api/faq/create')]
     public function create(Request $request): JsonResponse
@@ -106,7 +106,7 @@ class FaqController extends AbstractController
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
-        $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -136,7 +136,7 @@ class FaqController extends AbstractController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setComment(!is_null($comment))
+            ->setComment($comment === 'y')
             ->setCreatedDate(new DateTime())
             ->setNotes(Filter::removeAttributes($notes));
 
@@ -254,7 +254,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @throws \phpMyFAQ\Core\Exception
+     * @throws Exception
      */
     #[Route('admin/api/faq/update')]
     public function update(Request $request): JsonResponse
@@ -300,7 +300,7 @@ class FaqController extends AbstractController
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
-        $comment = Filter::filterVar($data->comment ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -345,7 +345,7 @@ class FaqController extends AbstractController
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
-            ->setComment(!is_null($comment))
+            ->setComment($comment === 'y')
             ->setNotes(Filter::removeAttributes($notes));
 
         switch ($recordDateHandling) {
