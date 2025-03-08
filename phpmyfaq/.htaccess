@@ -116,15 +116,15 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # the bookmarks page
     RewriteRule ^bookmarks\.html$ index.php?action=bookmarks [L,QSA]
     # phpMyFAQ faq record page
-    RewriteRule ^content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
+    RewriteRule ^content/([0-9]+)/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
     # phpMyFAQ category page with page count
     RewriteRule ^category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1&seite=$2 [L,QSA]
     # phpMyFAQ category page
     RewriteRule ^category/([0-9]+)/(.+)\.htm(l?)$ index.php?action=show&cat=$1 [L,QSA]
     # phpMyFAQ news page
-    RewriteRule ^news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
+    RewriteRule ^news/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
     # phpMyFAQ sitemap
-    RewriteRule ^sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+    RewriteRule ^sitemap/([^\/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
     RewriteRule ^sitemap.xml$ sitemap.xml.php [L,QSA]
     RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L,QSA]
