@@ -30,7 +30,7 @@
       <form id="pmf-comments-selected-faq" name="pmf-comments-selected-faq" method="post" accept-charset="utf-8">
         <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
 
-        <table class="table table-striped border align-middle">
+        <table class="table table-striped table-hover align-middle border shadow">
           {% for comment in faqComments %}
             <tr id="comments_{{ comment.id }}">
               <td>
@@ -76,7 +76,7 @@
       <form id="pmf-comments-selected-news" name="pmf-comments-selected-news" method="post" accept-charset="utf-8">
         <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
 
-        <table class="table table-striped border align-middle">
+        <table class="table table-striped table-hover align-middle border shadow">
           {% for comment in newsComments %}
             <tr id="comments_{{ comment.id }}">
               <td>
