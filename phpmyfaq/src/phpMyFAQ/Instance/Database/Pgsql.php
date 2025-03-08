@@ -187,6 +187,7 @@ class Pgsql extends Database implements Driver
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes text DEFAULT NULL,
+            sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang, solution_id, revision_id))',
 
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (
