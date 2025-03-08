@@ -72,9 +72,8 @@ fi
   echo "opcache.memory_consumption=192"
   echo "opcache.max_wasted_percentage=10"
   echo "opcache.interned_strings_buffer=16"
-  echo "opcache.fast_shutdown=1"
+  echo "opcache.fast_shutdown=0"
 } | tee $PHP_INI_DIR/conf.d/opcache-recommended.ini
 
-#=== Start nginx and php-fpm ===
-nginx
-docker-php-entrypoint "$@"
+#=== Start php-fpm ===
+exec docker-php-entrypoint php-fpm

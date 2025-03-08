@@ -64,7 +64,7 @@ RUN pecl install xdebug-3.4.1  \
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_ENABLE_UPLOADS=On \
-    PMF_MEMORY_LIMIT=2048M \
+    PMF_MEMORY_LIMIT=4096M \
     PMF_DISABLE_HTACCESS="" \
     PHP_LOG_ERRORS=On \
     PHP_ERROR_REPORTING=E_ALL \
@@ -73,8 +73,8 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
 
 #=== Set custom entrypoint ===
 COPY ./docker-entrypoint.sh /entrypoint
-#RUN chmod +x /entrypoint
-#ENTRYPOINT [ "/entrypoint" ]
+RUN chmod +x /entrypoint
+ENTRYPOINT [ "/entrypoint" ]
 
 #=== Re-Set CMD as we changed the default entrypoint ===
 CMD [ "php-fpm" ]
