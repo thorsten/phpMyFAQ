@@ -39,7 +39,7 @@ class CommentController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/comments/{faqId}',
+        path: '/api/v3.1/comments/{faqId}',
         operationId: 'getComments',
         description: 'Returns a list of comments for a given FAQ record ID.',
         tags: ['Public Endpoints']

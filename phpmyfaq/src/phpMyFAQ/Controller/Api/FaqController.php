@@ -46,7 +46,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/{categoryId}',
+        path: '/api/v3.1/faqs/{categoryId}',
         operationId: 'getByCategoryId',
         description: 'This endpoint returns all the FAQs with a preview of the answer for the given category ID and ' .
             'the language provided by "Accept-Language".',
@@ -110,7 +110,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faq/{categoryId}/{faqId}',
+        path: '/api/v3.1/faq/{categoryId}/{faqId}',
         operationId: 'getFaqById',
         description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by ' .
             '"Accept-Language".',
@@ -187,7 +187,7 @@ class FaqController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/tags/{tagId}',
+        path: '/api/v3.1/faqs/tags/{tagId}',
         operationId: 'getByTagId',
         description: 'This endpoint returns all the FAQs for the given tag ID and the language provided by ' . '
         "Accept-Language"',
@@ -252,7 +252,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/popular',
+        path: '/api/v3.1/faqs/popular',
         operationId: 'getPopular',
         description: 'This endpoint returns the popular FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints']
@@ -302,7 +302,7 @@ class FaqController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/latest',
+        path: '/api/v3.1/faqs/latest',
         operationId: 'getLatest',
         description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints']
@@ -351,7 +351,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/trending',
+        path: '/api/v3.1/faqs/trending',
         operationId: 'getTrending',
         description: 'This endpoint returns the trending FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints']
@@ -400,7 +400,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs/sticky',
+        path: '/api/v3.1/faqs/sticky',
         operationId: 'getSticky',
         description: 'This endpoint returns the sticky FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints']
@@ -454,7 +454,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/faqs',
+        path: '/api/v3.1/faqs',
         operationId: 'getAll',
         description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".',
         tags: ['Public Endpoints']
@@ -518,7 +518,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
     #[OA\Post(
-        path: '/api/v3.0/faq/create',
+        path: '/api/v3.1/faq/create',
         operationId: 'createFaq',
         tags: ['Endpoints with Authentication'],
     )]
@@ -694,7 +694,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
     #[OA\Put(
-        path: '/api/v3.0/faq/update',
+        path: '/api/v3.1/faq/update',
         operationId: 'updateFaq',
         description: 'Used to update a FAQ in one existing category.',
         tags: ['Endpoints with Authentication']

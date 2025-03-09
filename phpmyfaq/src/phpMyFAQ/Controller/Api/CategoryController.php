@@ -47,7 +47,7 @@ class CategoryController extends AbstractController
      * @throws \Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/categories',
+        path: '/api/v3.1/categories',
         operationId: 'getCategories',
         tags: ['Public Endpoints']
     )]
@@ -106,7 +106,7 @@ class CategoryController extends AbstractController
      * @throws Exception|\JsonException
      */
     #[OA\Post(
-        path: '/api/v3.0/category',
+        path: '/api/v3.1/category',
         operationId: 'createCategory',
         tags: ['Endpoints with Authentication'],
     )]

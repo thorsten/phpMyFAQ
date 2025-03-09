@@ -46,7 +46,7 @@ class QuestionController extends AbstractController
      * @throws \JsonException
      */
     #[OA\Post(
-        path: '/api/v3.0/question',
+        path: '/api/v3.1/question',
         operationId: 'createQuestion',
         tags: ['Endpoints with Authentication'],
     )]

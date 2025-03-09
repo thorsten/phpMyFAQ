@@ -39,7 +39,7 @@ class AttachmentController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/attachments/{faqId}',
+        path: '/api/v3.1/attachments/{faqId}',
         operationId: 'getAttachments',
         description: 'Returns a list of attachments for a given FAQ record ID.',
         tags: ['Public Endpoints']

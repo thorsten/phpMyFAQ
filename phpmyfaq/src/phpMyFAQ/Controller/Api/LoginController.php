@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use JsonException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -41,10 +42,10 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @throws \JsonException|Exception
+     * @throws JsonException|Exception
      */
     #[OA\Post(
-        path: '/api/v3.0/login',
+        path: '/api/v3.1/login',
         operationId: 'login',
         tags: ['Public Endpoints'],
     )]

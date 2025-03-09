@@ -34,7 +34,7 @@ class LanguageController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/language',
+        path: '/api/v3.1/language',
         operationId: 'getLanguage',
         tags: ['Public Endpoints']
     )]

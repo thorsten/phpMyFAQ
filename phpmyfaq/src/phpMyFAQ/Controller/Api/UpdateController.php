@@ -53,7 +53,7 @@ class UpdateController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'Returns the new and updated phpMyFAQ version number as string.',
-        content: new OA\JsonContent(example: '4.0.0'),
+        content: new OA\JsonContent(example: '4.1.0'),
     )]
     #[OA\Response(
         response: 401,

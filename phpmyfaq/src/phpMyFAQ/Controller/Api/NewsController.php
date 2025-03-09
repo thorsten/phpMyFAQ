@@ -36,7 +36,7 @@ class NewsController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/news',
+        path: '/api/v3.1/news',
         operationId: 'getNews',
         tags: ['Public Endpoints']
     )]

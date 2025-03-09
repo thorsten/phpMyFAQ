@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
      * @throws \JsonException
      */
     #[OA\Post(
-        path: '/api/v3.0/register',
+        path: '/api/v3.1/register',
         operationId: 'createUser',
         tags: ['Endpoints with Authentication'],
     )]

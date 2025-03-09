@@ -46,7 +46,7 @@ class SearchController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/search',
+        path: '/api/v3.1/search',
         operationId: 'getSearch',
         tags: ['Public Endpoints']
     )]
@@ -106,7 +106,7 @@ class SearchController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/searches/popular',
+        path: '/api/v3.1/searches/popular',
         operationId: 'getPopularSearch',
         tags: ['Public Endpoints']
     )]

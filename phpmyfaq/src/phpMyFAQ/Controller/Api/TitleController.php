@@ -34,7 +34,7 @@ class TitleController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/title',
+        path: '/api/v3.1/title',
         operationId: 'getTitle',
         tags: ['Public Endpoints']
     )]

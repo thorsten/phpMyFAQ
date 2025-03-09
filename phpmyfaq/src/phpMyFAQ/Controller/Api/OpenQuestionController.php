@@ -36,7 +36,7 @@ class OpenQuestionController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/open-questions',
+        path: '/api/v3.1/open-questions',
         operationId: 'getOpenQuestions',
         tags: ['Public Endpoints']
     )]

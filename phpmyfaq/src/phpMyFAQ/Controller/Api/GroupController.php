@@ -36,11 +36,8 @@ class GroupController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
     #[OA\Get(
-        path: '/api/v3.0/groups',
+        path: '/api/v3.1/groups',
         operationId: 'getGroups',
         description: 'Used to fetch all group IDs.',
         tags: ['Endpoints with Authentication']

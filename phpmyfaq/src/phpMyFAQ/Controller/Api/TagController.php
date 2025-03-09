@@ -38,7 +38,7 @@ class TagController extends AbstractController
      * @throws \Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/tags',
+        path: '/api/v3.1/tags',
         operationId: 'getTags',
         tags: ['Public Endpoints']
     )]

@@ -11,7 +11,7 @@
       "name": "Mozilla Public Licence 2.0",
       "url": "https://www.mozilla.org/MPL/2.0/"
     },
-    "version": "3.0"
+    "version": "3.1"
   },
   "servers": [
     {
@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/api/v3.0/attachments/{faqId}": {
+    "/api/v3.1/attachments/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns a list of attachments for a given FAQ record ID.",
@@ -74,7 +74,7 @@
         }
       }
     },
-    "/api/v3.0/backup/{type}": {
+    "/api/v3.1/backup/{type}": {
       "get": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createBackup",
@@ -158,7 +158,7 @@
         }
       }
     },
-    "/api/v3.0/categories": {
+    "/api/v3.1/categories": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getCategories",
@@ -200,7 +200,7 @@
         }
       }
     },
-    "/api/v3.0/category": {
+    "/api/v3.1/category": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createCategory",
@@ -346,7 +346,7 @@
         }
       }
     },
-    "/api/v3.0/comments/{faqId}": {
+    "/api/v3.1/comments/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "Returns a list of comments for a given FAQ record ID.",
@@ -400,7 +400,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/{categoryId}": {
+    "/api/v3.1/faqs/{categoryId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns all the FAQs with a preview of the answer for the given category ID and the language provided by \"Accept-Language\".",
@@ -454,7 +454,7 @@
         }
       }
     },
-    "/api/v3.0/faq/{categoryId}/{faqId}": {
+    "/api/v3.1/faq/{categoryId}/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the FAQ for the given FAQ ID and the language provided by \"Accept-Language\".",
@@ -517,7 +517,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/tags/{tagId}": {
+    "/api/v3.1/faqs/tags/{tagId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns all the FAQs for the given tag ID and the language provided by \n        \"Accept-Language\"",
@@ -571,7 +571,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/popular": {
+    "/api/v3.1/faqs/popular": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the popular FAQs for the given language provided by \"Accept-Language\".",
@@ -614,7 +614,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/latest": {
+    "/api/v3.1/faqs/latest": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the latest FAQs for the given language provided by \"Accept-Language\".",
@@ -657,7 +657,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/trending": {
+    "/api/v3.1/faqs/trending": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the trending FAQs for the given language provided by \"Accept-Language\".",
@@ -700,7 +700,7 @@
         }
       }
     },
-    "/api/v3.0/faqs/sticky": {
+    "/api/v3.1/faqs/sticky": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the sticky FAQs for the given language provided by \"Accept-Language\".",
@@ -743,7 +743,7 @@
         }
       }
     },
-    "/api/v3.0/faqs": {
+    "/api/v3.1/faqs": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns all the FAQs for the given language provided by \"Accept-Language\".",
@@ -786,7 +786,7 @@
         }
       }
     },
-    "/api/v3.0/faq/create": {
+    "/api/v3.1/faq/create": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createFaq",
@@ -936,7 +936,7 @@
         }
       }
     },
-    "/api/v3.0/faq/update": {
+    "/api/v3.1/faq/update": {
       "put": {
         "tags": ["Endpoints with Authentication"],
         "description": "Used to update a FAQ in one existing category.",
@@ -1063,7 +1063,7 @@
         }
       }
     },
-    "/api/v3.0/groups": {
+    "/api/v3.1/groups": {
       "get": {
         "tags": ["Endpoints with Authentication"],
         "description": "Used to fetch all group IDs.",
@@ -1100,7 +1100,7 @@
         }
       }
     },
-    "/api/v3.0/language": {
+    "/api/v3.1/language": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getLanguage",
@@ -1117,7 +1117,7 @@
         }
       }
     },
-    "/api/v3.0/login": {
+    "/api/v3.1/login": {
       "post": {
         "tags": ["Public Endpoints"],
         "operationId": "login",
@@ -1179,7 +1179,7 @@
         }
       }
     },
-    "/api/v3.0/news": {
+    "/api/v3.1/news": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getNews",
@@ -1221,7 +1221,7 @@
         }
       }
     },
-    "/api/v3.0/open-questions": {
+    "/api/v3.1/open-questions": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getOpenQuestions",
@@ -1263,7 +1263,7 @@
         }
       }
     },
-    "/api/v3.0/pdf/{categoryId}/{faqId}": {
+    "/api/v3.1/pdf/{categoryId}/{faqId}": {
       "get": {
         "tags": ["Public Endpoints"],
         "description": "This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided by \"Accept-Language\".",
@@ -1326,7 +1326,7 @@
         }
       }
     },
-    "/api/v3.0/question": {
+    "/api/v3.1/question": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createQuestion",
@@ -1400,7 +1400,7 @@
         }
       }
     },
-    "/api/v3.0/register": {
+    "/api/v3.1/register": {
       "post": {
         "tags": ["Endpoints with Authentication"],
         "operationId": "createUser",
@@ -1526,7 +1526,7 @@
         }
       }
     },
-    "/api/v3.0/search": {
+    "/api/v3.1/search": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getSearch",
@@ -1563,7 +1563,7 @@
         }
       }
     },
-    "/api/v3.0/searches/popular": {
+    "/api/v3.1/searches/popular": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getPopularSearch",
@@ -1605,7 +1605,7 @@
         }
       }
     },
-    "/api/v3.0/tags": {
+    "/api/v3.1/tags": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getTags",
@@ -1631,7 +1631,7 @@
         }
       }
     },
-    "/api/v3.0/title": {
+    "/api/v3.1/title": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getTitle",
@@ -1684,7 +1684,7 @@
         }
       }
     },
-    "/api/v3.0/version": {
+    "/api/v3.1/version": {
       "get": {
         "tags": ["Public Endpoints"],
         "operationId": "getVersion",

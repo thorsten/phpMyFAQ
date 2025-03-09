@@ -45,7 +45,7 @@ class PdfController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/pdf/{categoryId}/{faqId}',
+        path: '/api/v3.1/pdf/{categoryId}/{faqId}',
         operationId: 'getPdfById',
         description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided ' .
             'by "Accept-Language".',
