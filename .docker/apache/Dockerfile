@@ -58,8 +58,8 @@ RUN set -ex \
  && rm -rf /var/lib/apt/lists/*
 
 #=== Install xdebug PHP dependencies ===
-#RUN pecl install xdebug-3.4.1  \
-#&& docker-php-ext-enable xdebug
+RUN pecl install xdebug-3.4.2  \
+&& docker-php-ext-enable xdebug
 
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \

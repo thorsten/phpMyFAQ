@@ -19,7 +19,7 @@ import { addElement } from '../utils';
 import { Suggestion } from '../interfaces';
 
 export const handleAutoComplete = (): void => {
-  const autoCompleteInput = document.getElementById('pmf-search-autocomplete') as HTMLInputElement | null;
+  const autoCompleteInput = document.getElementById('pmf-search-autocomplete') as HTMLInputElement;
 
   if (autoCompleteInput) {
     autocomplete<Suggestion>({
@@ -28,16 +28,15 @@ export const handleAutoComplete = (): void => {
       disableAutoSelect: false,
       input: autoCompleteInput,
       container: addElement('ul', { classList: 'list-group bg-dark' }) as HTMLDivElement,
-      fetch: async (searchString: string, update: (items: Suggestion[]) => void) => {
+      fetch: async (searchString: string, update: (items: Suggestion[]) => void): Promise<void> => {
         searchString = searchString.toLowerCase();
-        const fetchedData = await fetchAutoCompleteData(searchString);
-        const suggestions = fetchedData.filter((item: Suggestion) => item.question.includes(searchString));
-        update(suggestions);
+        const fetchedData: Suggestion[] = await fetchAutoCompleteData(searchString);
+        update(fetchedData);
       },
-      onSelect: (item: Suggestion) => {
+      onSelect: (item: Suggestion): void => {
         window.location.href = item.url;
       },
-      render: (item: Suggestion) => {
+      render: (item: Suggestion): HTMLDivElement => {
         return addElement('li', { classList: 'list-group-item d-flex justify-content-between align-items-start' }, [
           addElement('div', { classList: 'ms-2 me-auto' }, [
             addElement('div', { classList: 'fw-bold', innerText: item.category }),

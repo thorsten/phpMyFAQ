@@ -106,7 +106,7 @@ class SearchHelper extends AbstractHelper
                 $link = new Link($currentUrl, $this->configuration);
                 $link->itemTitle = $result->question;
                 $faq = new stdClass();
-                $faq->category = $this->Category->getPath($result->category_id);
+                $faq->category = $this->Category->getPath($result->category_id ?? 0);
                 $faq->question = Utils::chopString($question, 15);
                 $faq->url = $link->toString();
 
