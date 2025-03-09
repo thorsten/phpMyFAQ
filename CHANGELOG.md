@@ -13,6 +13,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
 - added administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)
+- added image upload and image manager in Markdown editor (Thorsten)
 - added experimental support for PDO (Thorsten)
 - added Urdu translation (Thorsten)
 - updated Spanish translation (Thorsten)

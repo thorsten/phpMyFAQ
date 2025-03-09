@@ -16,13 +16,16 @@
 import { Modal } from 'bootstrap';
 import { fetchMarkdownContent, fetchMediaBrowserContent } from '../api';
 import { MediaBrowserApiResponse, Response } from '../interfaces';
+import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
 
 export const handleMarkdownForm = (): void => {
-  const answerHeight = localStorage.getItem('phpmyfaq.answer.height');
+  const answerHeight = localStorage.getItem('phpmyfaq.answer.height') as string;
   const answer = document.getElementById('answer-markdown') as HTMLTextAreaElement;
   const markdownTabs = document.getElementById('markdown-tabs') as HTMLElement;
   const insertImage = document.getElementById('pmf-markdown-insert-image') as HTMLElement;
   const insertImageButton = document.getElementById('pmf-markdown-insert-image-button') as HTMLElement;
+  const imageUpload = document.getElementById('pmf-markdown-upload-image') as HTMLElement;
+  const imageUploadInput = document.getElementById('pmf-markdown-upload-image-input') as HTMLElement;
 
   // Store the height of the textarea
   if (answer) {
@@ -40,7 +43,7 @@ export const handleMarkdownForm = (): void => {
     const tab = document.querySelector('a[data-markdown-tab="preview"]') as HTMLElement;
 
     if (tab) {
-      tab.addEventListener('shown.bs.tab', async () => {
+      tab.addEventListener('shown.bs.tab', async (): Promise<void> => {
         const preview = document.getElementById('markdown-preview') as HTMLElement;
         if (preview && answer) {
           preview.style.height = answer.style.height;
@@ -74,7 +77,7 @@ export const handleMarkdownForm = (): void => {
         list.innerHTML = ''; // Clear previous content
 
         response.data.sources.forEach((source): void => {
-          source.files.forEach((file) => {
+          source.files.forEach((file): void => {
             const listItem = document.createElement('div') as HTMLElement;
             listItem.classList.add('list-group-item', 'd-flex', 'align-items-center');
             listItem.innerHTML = `
@@ -91,7 +94,7 @@ export const handleMarkdownForm = (): void => {
     });
 
     // Add event listener to the insert image button
-    insertImageButton.addEventListener('click', () => {
+    insertImageButton.addEventListener('click', (): void => {
       const checkboxes = document.querySelectorAll('.form-check-input:checked') as NodeListOf<HTMLInputElement>;
       let markdownImages: string = '';
 
@@ -110,6 +113,46 @@ export const handleMarkdownForm = (): void => {
       answer.focus();
 
       modal.hide();
+    });
+  }
+
+  // Handle image upload
+  if (imageUpload) {
+    imageUpload.addEventListener('click', (event: Event): void => {
+      event.preventDefault();
+      imageUploadInput.click();
+    });
+
+    imageUploadInput.addEventListener('change', async (event: Event): Promise<void> => {
+      const input = event.target as HTMLInputElement;
+      const csrfToken = (document.getElementById('pmf-markdown-upload-image-csrf-token') as HTMLInputElement)
+        .value as string;
+      if (input.files) {
+        const formData = new FormData();
+        for (const file of input.files) {
+          formData.append('files[]', file);
+        }
+
+        try {
+          const response = await fetch('./api/content/images?csrf=' + csrfToken, {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const responseData = await response.json();
+          if (responseData.success) {
+            pushNotification('Files uploaded successfully');
+          } else {
+            pushErrorNotification('Upload failed:' + responseData.messages);
+          }
+        } catch (error) {
+          pushErrorNotification('Error uploading files: ' + error);
+        }
+      }
     });
   }
 };

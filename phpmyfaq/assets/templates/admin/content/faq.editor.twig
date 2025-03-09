@@ -143,14 +143,16 @@
                           <a class="nav-link" data-bs-toggle="tab" href="#text" id="pmf-markdown-upload-image">
                             {{ 'msgImageUpload' | translate }}
                           </a>
+                          <input type="file" id="pmf-markdown-upload-image-input" class="d-none" multiple>
+                          <input type="hidden" id="pmf-markdown-upload-image-csrf-token" value="{{ csrfToken }}">
                         </li>
                       </ul>
                       <div class="tab-content">
                         <div class="tab-pane active" id="text">
                           <div class="row">
                             <div class="col-lg-12">
-                          <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
-                                    placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                              <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
+                                        placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
                             </div>
                           </div>
                         </div>
