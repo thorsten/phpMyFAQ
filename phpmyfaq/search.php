@@ -187,6 +187,8 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
     $faqSearchResult->reviewResultSet($searchResults);
 
     $inputSearchTerm = stripslashes($inputSearchTerm);
+    $numOfResults = $faqSearchResult->getNumberOfResults();
+
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
     } catch (Exception $exception) {
@@ -250,7 +252,7 @@ $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
-if (empty($searchResults) && !is_null($inputSearchTerm)) {
+if ($numOfResults > 0 && $inputSearchTerm !== '') {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception) {
