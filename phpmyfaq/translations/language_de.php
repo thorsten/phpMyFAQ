@@ -443,7 +443,7 @@ $PMF_LANG['ad_start_articles'] = "FAQs";
 $PMF_LANG['msgComments'] = "Kommentare";
 
 // Added v1.1 - 30.01.2002 - Bastian
-$PMF_LANG['ad_categ_paste'] = "einfügen";
+$PMF_LANG['ad_categ_paste'] = "Einfügen";
 $PMF_LANG['ad_categ_cut'] = "ausschneiden";
 $PMF_LANG['msgCopy'] = "Kopieren";
 $PMF_LANG['ad_categ_process'] = "Bearbeite Kategorien...";

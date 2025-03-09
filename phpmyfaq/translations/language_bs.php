@@ -451,7 +451,7 @@ $PMF_LANG["msgComments"] = "Komentara";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
-$PMF_LANG["ad_categ_paste"] = "paste";
+$PMF_LANG["ad_categ_paste"] = "Paste";
 $PMF_LANG["ad_categ_cut"] = "cut";
 $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Procesiram kategorije...";

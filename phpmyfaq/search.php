@@ -90,6 +90,7 @@ $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
+$numOfResults = 0;
 
 //
 // Handle the Tagging ID
