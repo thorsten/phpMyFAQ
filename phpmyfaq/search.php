@@ -186,6 +186,8 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
     $faqSearchResult->reviewResultSet($searchResults);
 
     $inputSearchTerm = stripslashes($inputSearchTerm);
+    $numOfResults = $faqSearchResult->getNumberOfResults();
+
     try {
         $faqSearch->logSearchTerm($inputSearchTerm);
     } catch (Exception $exception) {
@@ -249,7 +251,7 @@ $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
-if (empty($searchResults) && !is_null($inputSearchTerm)) {
+if ($numOfResults > 0 && !is_null($inputSearchTerm)) {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception) {
@@ -280,7 +282,7 @@ $templateVars = [
     'msgPage' => Translation::get('msgPage'),
     'currentPage' => $page,
     'from' => Translation::get('msgVoteFrom'),
-    'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults ?? 0),
+    'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults),
     'searchTerm' => $searchTerm,
     'searchTags' =>  ($tagSearch ? $tagHelper->renderTagList($tags) : ''),
     'msgSearchWord' => Translation::get('msgSearchWord'),
