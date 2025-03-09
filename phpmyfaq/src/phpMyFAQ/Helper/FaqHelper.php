@@ -17,8 +17,11 @@
 
 namespace phpMyFAQ\Helper;
 
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Entity\FaqEntity;
@@ -103,11 +106,18 @@ class FaqHelper extends AbstractHelper
     public function renderAnswerPreview(string $answer, int $wordCount): string
     {
         if ($this->configuration->get('main.enableMarkdownEditor')) {
-            $markdownConverter = new CommonMarkConverter([
+            $config = [
                 'html_input' => 'strip',
                 'allow_unsafe_links' => false,
-            ]);
-            $cleanedAnswer = $markdownConverter->convert($answer)->getContent();
+            ];
+
+            $environment = new Environment($config);
+            $environment->addExtension(new CommonMarkCoreExtension());
+            $environment->addExtension(new GithubFlavoredMarkdownExtension());
+
+            $converter = new MarkdownConverter($environment);
+
+            $cleanedAnswer = $converter->convert($answer)->getContent();
             return Utils::chopString(strip_tags($cleanedAnswer), $wordCount);
         }
 

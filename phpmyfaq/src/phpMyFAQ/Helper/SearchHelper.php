@@ -177,6 +177,7 @@ class SearchHelper extends AbstractHelper
             $counter = 0;
             $displayedCounter = 0;
             $faqHelper = new FaqHelper($this->configuration);
+
             foreach ($searchResultSet->getResultSet() as $resultSet) {
                 $result = new stdClass();
 
