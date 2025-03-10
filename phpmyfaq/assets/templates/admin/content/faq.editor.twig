@@ -84,8 +84,8 @@
               </div>
             {% endif %}
 
-            <form id="faqEditor" method="post" data-pmf-enable-editor="{{ isEditorEnabled }}"
-                  data-pmf-editor-language="en" data-pmf-default-url="{{ defaultUrl }}">
+            <form id="faqEditor" method="post" data-pmf-enable-editor="{{ isEditorEnabled }}" class="needs-validation"
+                  data-pmf-editor-language="en" data-pmf-default-url="{{ defaultUrl }}" novalidate>
 
               <input type="hidden" name="revisionId" id="revisionId" value="{{ faqRevisionId }}">
               <input type="hidden" name="faqId" id="faqId" value="{{ faqData['id'] }}">
@@ -97,8 +97,9 @@
 
               <!-- Question -->
               <div class="form-group mb-2">
+                <label for="question" class="form-label d-none" aria-hidden="true">{{ ad_entry_theme }}</label>
                 <input type="text" name="question" id="question" class="form-control form-control-lg"
-                       placeholder="{{ ad_entry_theme }}" value="{{ faqData['title'] }}">
+                       placeholder="{{ ad_entry_theme }}" value="{{ faqData['title'] }}" required>
                 <small id="questionHelp" class="form-text visually-hidden">
                   {{ msgNoHashAllowed }}
                 </small>
@@ -159,7 +160,7 @@
             <div class="row mb-2">
               <label class="col-2 col-form-label" for="phpmyfaq-categories">{{ ad_entry_category }}</label>
               <div class="col-6">
-                <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple>
+                <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple required>
                   {{ categoryOptions | raw }}
                 </select>
               </div>
@@ -230,7 +231,8 @@
             <div class="row mb-2">
               <label class="col-lg-2 col-form-label" for="author">{{ ad_entry_author }}</label>
               <div class="col-lg-10">
-                <input type="text" name="author" id="author" value="{{ faqData['author'] }}" class="form-control">
+                <input type="text" name="author" id="author" value="{{ faqData['author'] }}" class="form-control"
+                       required>
               </div>
             </div>
 
@@ -238,7 +240,8 @@
             <div class="row mb-2">
               <label class="col-lg-2 col-form-label" for="email">{{ msgEmail }}</label>
               <div class="col-lg-10">
-                <input type="email" name="email" id="email" value="{{ faqData['email']|raw }}" class="form-control">
+                <input type="email" name="email" id="email" value="{{ faqData['email']|raw }}" class="form-control"
+                       required>
               </div>
             </div>
             
