@@ -261,6 +261,12 @@ or "ldaps://ldap.example.com" for secure connections.
 The "samAccountName" attribute is used for the user's login name,
 and the "mail" attribute is used for the email address.
 
+If you want to use LDAP with a self-signed certificate,
+you have to add the following configuration to /etc/ldap/ldap.conf:
+
+    TLS_REQCERT never.
+
+
 ## 2.11 PDF export
 
 Main features of the PDF export:
