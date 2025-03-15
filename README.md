@@ -79,9 +79,7 @@ Then services will be available at the following addresses:
 
 To run the test using Docker, you have to install the Composer development dependencies
 
-    $ curl -s https://getcomposer.org/installer | php
-    $ php composer.phar install
-    $ php composeer.phar test
+    $ docker build -t phpmyfaq-test . && docker run --rm -it docker.io/library/phpmyfaq-test:latest 
 
 #### Quote from Elasticsearch documentation
 

@@ -4,6 +4,13 @@
 # For more help, visit the .dockerignore file reference guide at
 # https://docs.docker.com/engine/reference/builder/#dockerignore-file
 
+# explicitly include essential files
+!composer.json
+!composer.lock
+!src
+!tests
+
+# ignore unneeded files
 **/.DS_Store
 **/.venv
 **/.classpath
@@ -20,7 +27,6 @@
 **/bin
 **/charts
 **/docker-compose*
-**/compose*
 .docker/apache/Dockerfile
 **/node_modules
 **/npm-debug.log
