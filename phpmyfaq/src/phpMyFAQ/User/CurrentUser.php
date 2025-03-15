@@ -29,6 +29,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
+use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 
 /* user defined constants */
@@ -112,7 +113,7 @@ class CurrentUser extends User
      * @throws Exception
      * @throws \Exception
      */
-    public function login(string $login, string $password): bool
+    public function login(string $login, #[SensitiveParameter] string $password): bool
     {
         $request = Request::createFromGlobals();
 
