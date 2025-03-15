@@ -116,6 +116,7 @@ services:
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
+      - _JAVA_OPTIONS=-XX:UseSVE=0
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
