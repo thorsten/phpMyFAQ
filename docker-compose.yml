@@ -156,6 +156,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-XX:UseSVE=0
       - cluster.name=phpmyfaq-cluster
+      - _JAVA_OPTIONS=-XX:UseSVE=0
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - ES_JAVA_OPTS=-Xint
