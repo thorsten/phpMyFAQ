@@ -154,6 +154,7 @@ services:
     container_name: phpmyfaq-41_elasticsearch-v8
     restart: always
     environment:
+      - _JAVA_OPTIONS=-XX:UseSVE=0
       - cluster.name=phpmyfaq-cluster
       - discovery.type=single-node
       - bootstrap.memory_lock=true
