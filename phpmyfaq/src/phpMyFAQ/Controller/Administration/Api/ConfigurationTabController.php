@@ -34,12 +34,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
 
 class ConfigurationTabController extends AbstractController
 {
     /**
      * @throws TemplateException
      * @throws Exception
+     * @throws LoaderError
      */
     #[Route('admin/api/configuration/list/{mode}')]
     public function list(Request $request): Response
@@ -80,7 +82,7 @@ class ConfigurationTabController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/configuration')]
     public function save(Request $request): JsonResponse
@@ -131,33 +133,22 @@ class ConfigurationTabController extends AbstractController
                 unset($configurationData['main.referenceURL']);
             }
 
-            $newConfigClass = [];
-
             foreach ($configurationData as $key => $value) {
                 $newConfigValues[$key] = (string) $value;
                 // Escape some values
                 if (isset($escapeValues[$key])) {
                     $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
                 }
-
-                $keyArray = array_values(explode('.', (string) $key));
-                $newConfigClass = array_shift($keyArray);
             }
 
             foreach ($oldConfigurationData as $key => $value) {
-                $keyArray = array_values(explode('.', (string) $key));
-                $oldConfigClass = array_shift($keyArray);
-                if (isset($newConfigValues[$key])) {
-                    continue;
-                }
-                if ($oldConfigClass === $newConfigClass && $value === 'true') {
-                    $newConfigValues[$key] = 'false';
-                } else {
-                    $newConfigValues[$key] = $value;
+                $newValueExists = array_key_exists($key, $newConfigValues);
+                if (!$newValueExists) {
+                    $newConfigValues[$key] = ($value === 'true') ? 'false' : $value;
                 }
             }
 
-            // Replace main.referenceUrl in faqs
+            // Replace main.referenceUrl in FAQs
             if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
                 $this->configuration->replaceMainReferenceUrl(
                     $oldConfigurationData['main.referenceURL'],
@@ -172,9 +163,9 @@ class ConfigurationTabController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    #[Route('admin/api/configuration/translations')]
+    #[Route('admin/api/configuration/translations', name: 'admin.api.configuration.translations', methods: ['GET'])]
     public function translations(): Response
     {
         $this->userIsAuthenticated();
@@ -196,10 +187,7 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent('<option value="language_en.php">English</option>');
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/templates')]
+    #[Route('admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
         $this->userIsAuthenticated();
@@ -220,10 +208,11 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent($htmlString);
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/faqs-sorting-key')]
+    #[Route(
+        'admin/api/configuration/faqs-sorting-key',
+        name: 'admin.api.configuration.faqs-sorting-key',
+        methods: ['GET']
+    )]
     public function faqsSortingKey(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -233,10 +222,11 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/faqs-sorting-order')]
+    #[Route(
+        'admin/api/configuration/faqs-sorting-order',
+        name: 'admin.api.configuration.faqs-sorting-order',
+        methods: ['GET']
+    )]
     public function faqsSortingOrder(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -246,10 +236,11 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/faqs-sorting-popular')]
+    #[Route(
+        'admin/api/configuration/faqs-sorting-popular',
+        name: 'admin.api.configuration.faqs-sorting-popular',
+        methods: ['GET']
+    )]
     public function faqsSortingPopular(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -259,10 +250,7 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/perm-level')]
+    #[Route('admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
     public function permLevel(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -272,10 +260,11 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/release-environment')]
+    #[Route(
+        'admin/api/configuration/release-environment',
+        name: 'admin.api.configuration.release-environment',
+        methods: ['GET']
+    )]
     public function releaseEnvironment(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -285,10 +274,11 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/search-relevance')]
+    #[Route(
+        'admin/api/configuration/search-relevance',
+        name: 'admin.api.configuration.search-relevance',
+        methods: ['GET']
+    )]
     public function searchRelevance(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -298,10 +288,7 @@ class ConfigurationTabController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/configuration/seo-metatags')]
+    #[Route('admin/api/configuration/seo-metatags', name: 'admin.api.configuration.seo-metatags', methods: ['GET'])]
     public function seoMetaTags(Request $request): Response
     {
         $this->userIsAuthenticated();
