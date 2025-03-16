@@ -36,7 +36,7 @@ class AttachmentController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/content/attachments')]
+    #[Route('./admin/api/content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
@@ -65,7 +65,11 @@ class AttachmentController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/content/attachments/refresh')]
+    #[Route(
+        './admin/api/content/attachments/refresh',
+        name: 'admin.api.content.attachments.refresh',
+        methods: ['POST']
+    )]
     public function refresh(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
@@ -97,8 +101,9 @@ class AttachmentController extends AbstractController
      * @throws AttachmentException
      * @throws FileException
      * @throws Exception
+     * @throws \Exception
      */
-    #[Route('./admin/api/content/attachments/upload')]
+    #[Route('./admin/api/content/attachments/upload', name: 'admin.api.content.attachments.upload', methods: ['POST'])]
     public function upload(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
@@ -106,7 +111,7 @@ class AttachmentController extends AbstractController
         $files = $request->files->get('filesToUpload');
 
         if (!$files) {
-            return $this->json(['error' => 'No files to upload.'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get('msgNoImagesForUpload')], Response::HTTP_BAD_REQUEST);
         }
 
         $uploadedFiles = [];
@@ -122,9 +127,13 @@ class AttachmentController extends AbstractController
                 $attachment->setRecordLang($request->request->get('record_lang'));
                 try {
                     if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
-                        return $this->json(['error' => 'something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
+                        return $this->json(
+                            ['error' => Translation::get('msgImageCouldNotBeUploaded')],
+                            Response::HTTP_INTERNAL_SERVER_ERROR
+                        );
                     }
-                } catch (AttachmentException | FileException | FileNotFoundException) {
+                } catch (AttachmentException | FileException | FileNotFoundException $exception) {
+                    return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
                 $uploadedFiles[] = [
@@ -134,7 +143,7 @@ class AttachmentController extends AbstractController
                     'faqLanguage' => $request->request->get('record_lang')
                 ];
             } else {
-                return $this->json(['error' => 'The image is too large.'], Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => Translation::get('msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
         }
 

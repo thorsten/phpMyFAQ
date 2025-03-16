@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use JsonException;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Administration\HttpStreamer;
 use phpMyFAQ\Administration\Report;
@@ -25,7 +26,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language\LanguageCodes;
 use phpMyFAQ\Session\Token;
@@ -39,8 +39,9 @@ class ExportController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \Exception
      */
-    #[Route('admin/api/export/file')]
+    #[Route('admin/api/export/file', name: 'admin.api.export.file', methods: ['GET'])]
     public function exportFile(Request $request): void
     {
         $this->userHasPermission(PermissionType::EXPORT);
@@ -50,7 +51,7 @@ class ExportController extends AbstractController
         $inlineDisposition = Filter::filterVar($request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
         $type = Filter::filterVar($request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $category = new Category($this->configuration, [], false);
         $category->buildCategoryTree($categoryId);
 
@@ -65,15 +66,15 @@ class ExportController extends AbstractController
             } else {
                 $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
             }
-        } catch (Exception | \JsonException | CommonMarkException $e) {
+        } catch (Exception | JsonException | CommonMarkException $e) {
             echo $e->getMessage();
         }
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
-    #[Route('admin/api/export/report')]
+    #[Route('admin/api/export/report', name: 'admin.api.export.report', methods: ['POST'])]
     public function exportReport(Request $request): Response
     {
         $this->userHasPermission(PermissionType::REPORTS);

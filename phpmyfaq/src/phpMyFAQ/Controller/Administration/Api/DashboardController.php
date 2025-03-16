@@ -17,9 +17,10 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use Exception;
+use JsonException;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -33,10 +34,9 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class DashboardController extends AbstractController
 {
     /**
-     * @throws Exception
-     * @throws \JsonException
+     * @throws JsonException
      */
-    #[Route('admin/api/dashboard/verify')]
+    #[Route('admin/api/dashboard/verify', name: 'admin.api.dashboard.verify', methods: ['POST'])]
     public function verify(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -50,7 +50,7 @@ class DashboardController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/dashboard/versions')]
+    #[Route('admin/api/dashboard/versions', name: 'admin.api.dashboard.versions', methods: ['GET'])]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -69,15 +69,15 @@ class DashboardController extends AbstractController
             return $this->json($info);
         } catch (DecodingExceptionInterface | TransportExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    #[Route('admin/api/dashboard/visits')]
+    #[Route('admin/api/dashboard/visits', name: 'admin.api.dashboard.visits', methods: ['GET'])]
     public function visits(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -94,7 +94,7 @@ class DashboardController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/dashboard/topten')]
+    #[Route('admin/api/dashboard/topten', name: 'admin.api.dashboard.topten', methods: ['GET'])]
     public function topTen(): JsonResponse
     {
         $this->userIsAuthenticated();

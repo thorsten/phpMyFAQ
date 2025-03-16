@@ -26,7 +26,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\System;
 use phpMyFAQ\Template\TemplateException;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -187,13 +186,16 @@ class ConfigurationTabController extends AbstractController
         return $response->setContent('<option value="language_en.php">English</option>');
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
         $this->userIsAuthenticated();
 
         $response = new Response();
-        $faqSystem = new System();
+        $faqSystem = $this->container->get('phpmyfaq.system');
         $templates = $faqSystem->getAvailableTemplates();
         $htmlString = '';
 

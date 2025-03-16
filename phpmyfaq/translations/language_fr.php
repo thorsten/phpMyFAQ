@@ -1492,5 +1492,8 @@ $PMF_LANG['msgOrphanedFAQsDescription'] = 'Les FAQ orphelines sont des FAQ qui n
 $PMF_LANG['msgPreview'] = 'Aperçu';
 $PMF_LANG['msgInsertImage'] = 'Insérer une image';
 $PMF_LANG['msgImageUpload'] = 'Télécharger une image';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'L’image n’a pas pu être téléchargée.';
+$PMF_LANG['msgImageTooLarge'] = 'L’image est trop grande.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Les images ne peuvent pas être téléchargées.';
 
 return $PMF_LANG;

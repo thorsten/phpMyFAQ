@@ -1473,5 +1473,8 @@ $PMF_LANG['msgOrphanedFAQsDescription'] = 'Verwaiste FAQs sind FAQs, die keiner 
 $PMF_LANG['msgPreview'] = 'Vorschau';
 $PMF_LANG['msgInsertImage'] = 'Bild einfügen';
 $PMF_LANG['msgImageUpload'] = 'Bild hochladen';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'Das Bild konnte nicht hochgeladen werden.';
+$PMF_LANG['msgImageTooLarge'] = 'Das Bild ist zu groß.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Es gibt keine Bilder zum Hochladen.';
 
 return $PMF_LANG;

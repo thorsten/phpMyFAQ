@@ -20,7 +20,6 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -34,7 +33,11 @@ class ConfigurationController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/configuration/send-test-mail')]
+    #[Route(
+        'admin/api/configuration/send-test-mail',
+        name: 'admin.api.configuration.send-test-mail',
+        methods: ['POST']
+    )]
     public function sendTestMail(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -46,7 +49,7 @@ class ConfigurationController extends AbstractController
         }
 
         try {
-            $mail = new Mail($this->configuration);
+            $mail = $this->container->get('phpmyfaq.mail');
             $mail->addTo($this->configuration->getAdminEmail());
             $mail->setReplyTo($this->configuration->getNoReplyEmail());
             $mail->subject = $this->configuration->getTitle() . ': Mail test successful.';
@@ -62,7 +65,11 @@ class ConfigurationController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/configuration/activate-maintenance-mode')]
+    #[Route(
+        'admin/api/configuration/activate-maintenance-mode',
+        name: 'admin.api.configuration.activate-maintenance-mode',
+        methods: ['POST']
+    )]
     public function activateMaintenanceMode(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

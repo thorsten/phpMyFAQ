@@ -55,7 +55,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
-    #[Route('admin/api/faq/create')]
+    #[Route('admin/api/faq/create', name: 'admin.api.faq.create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -255,7 +255,7 @@ class FaqController extends AbstractController
      * @throws \phpMyFAQ\Core\Exception
      * @throws Exception
      */
-    #[Route('admin/api/faq/update')]
+    #[Route('admin/api/faq/update', name: 'admin.api.faq.update', methods: ['POST'])]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -451,7 +451,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/permissions')]
+    #[Route('admin/api/faq/permissions', name: 'admin.api.faq.permissions', methods: ['GET'])]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -472,7 +472,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faqs/:categoryId/:language')]
+    #[Route('admin/api/faqs/:categoryId/:language', name: 'admin.api.faqs', methods: ['GET'])]
     public function listByCategory(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -497,7 +497,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/activate')]
+    #[Route('admin/api/faq/activate', name: 'admin.api.faq.activate', methods: ['POST'])]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_APPROVE);
@@ -535,7 +535,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/sticky')]
+    #[Route('admin/api/faq/sticky', name: 'admin.api.faq.sticky', methods: ['POST'])]
     public function sticky(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -573,7 +573,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/delete')]
+    #[Route('admin/api/faq/delete', name: 'admin.api.faq.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_DELETE);
@@ -604,7 +604,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/search')]
+    #[Route('admin/api/faq/search', name: 'admin.api.faq.search', methods: ['POST'])]
     public function search(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -642,7 +642,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faqs/sticky/order')]
+    #[Route('admin/api/faqs/sticky/order', name: 'admin.api.faqs.sticky.order', methods: ['POST'])]
     public function saveOrderOfStickyFaqs(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -662,7 +662,7 @@ class FaqController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/faq/import')]
+    #[Route('admin/api/faq/import', name: 'admin.api.faq.import', methods: ['POST'])]
     public function import(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);

@@ -22,7 +22,6 @@ use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,10 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ElasticsearchController extends AbstractController
 {
-    /**
-     * @throws Exception
-     */
-    #[Route('./admin/api/elasticsearch/create')]
+    #[Route('./admin/api/elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -55,7 +51,7 @@ class ElasticsearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('./admin/api/elasticsearch/drop')]
+    #[Route('./admin/api/elasticsearch/drop', name: 'admin.api.elasticsearch.drop', methods: ['DELETE'])]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -74,15 +70,15 @@ class ElasticsearchController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    #[Route('./admin/api/elasticsearch/import')]
+    #[Route('./admin/api/elasticsearch/import', name: 'admin.api.elasticsearch.import', methods: ['POST'])]
     public function import(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $elasticsearch = new Elasticsearch($this->configuration);
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.faq');
         $faq->getAllFaqs();
 
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
@@ -96,14 +92,14 @@ class ElasticsearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('./admin/api/elasticsearch/statistics')]
+    #[Route('./admin/api/elasticsearch/statistics', name: 'admin.api.elasticsearch.statistics', methods: ['GET'])]
     public function statistics(): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
+        $elasticsearchConfig = $this->configuration->getElasticsearchConfig();
 
-        $indexName = $elasticsearchConfiguration->getIndex();
+        $indexName = $elasticsearchConfig->getIndex();
         try {
             return $this->json(
                 [

@@ -18,8 +18,6 @@
 namespace phpMyFAQ\Controller\Administration\Api;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Image;
-use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Controller\AbstractController;
@@ -38,13 +36,12 @@ class CategoryController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \Exception
      */
-    #[Route('admin/api/category/delete')]
+    #[Route('admin/api/category/delete', name: 'admin.api.category.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_DELETE);
-
-        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
@@ -52,7 +49,7 @@ class CategoryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($currentUser);
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -60,13 +57,13 @@ class CategoryController extends AbstractController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $categoryImage = new Image($this->configuration);
+        $categoryImage = $this->container->get('phpmyfaq.category.image');
         $categoryImage->setFileName($category->getCategoryData($data->categoryId)->getImage());
 
-        $categoryOrder = new Order($this->configuration);
+        $categoryOrder = $this->container->get('phpmyfaq.category.order');
         $categoryOrder->remove($data->categoryId);
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
 
         if (
             (
@@ -92,15 +89,12 @@ class CategoryController extends AbstractController
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/category/permissions', methods: ['GET'])]
+    #[Route('admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
     public function permissions(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
 
         $categoryData = $request->get('categories');
 
@@ -123,10 +117,7 @@ class CategoryController extends AbstractController
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/category/translations')]
+    #[Route('admin/api/category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -141,9 +132,9 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    #[Route('admin/api/category/update-order')]
+    #[Route('admin/api/category/update-order', name: 'admin.api.category.update-order', methods: ['POST'])]
     public function updateOrder(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
@@ -154,11 +145,9 @@ class CategoryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($user);
-
-        $categoryOrder = new Order($this->configuration);
+        $categoryOrder = $this->container->get('phpmyfaq.category.order');
         $categoryOrder->setCategoryTree($data->categoryTree);
 
         $parentId = $categoryOrder->getParentId($data->categoryTree, (int)$data->categoryId);

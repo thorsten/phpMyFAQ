@@ -1492,5 +1492,8 @@ $PMF_LANG['msgOrphanedFAQsDescription'] = 'These FAQs are not assigned to any ca
 $PMF_LANG['msgPreview'] = 'Preview';
 $PMF_LANG['msgInsertImage'] = 'Insert image';
 $PMF_LANG['msgImageUpload'] = 'Image upload';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'The image could not be uploaded.';
+$PMF_LANG['msgImageTooLarge'] = 'The image is too large.';
+$PMF_LANG['msgNoImagesForUpload'] = 'No images for upload.';
 
 return $PMF_LANG;

@@ -17,9 +17,7 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
-use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
@@ -31,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/content/comments')]
     public function delete(Request $request): JsonResponse
@@ -47,7 +45,7 @@ class CommentController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $comments = new Comments($this->configuration);
+        $comments = $this->container->get('phpmyfaq.comments');
         $commentIds = $data->data->{'comments[]'} ?? [];
 
         $result = false;
