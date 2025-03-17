@@ -19,10 +19,13 @@
  * @since     2003-02-12
  */
 
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Export\Pdf;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\AttachmentHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -100,7 +103,7 @@ $user = $container->get('phpmyfaq.user.current_user');
 
 $request = Request::createFromGlobals();
 $currentCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
-$id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
+$faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT);
 $getAll = Filter::filterVar($request->query->get('getAll'), FILTER_VALIDATE_BOOLEAN, false);
 
 $faq = $container->get('phpmyfaq.faq');
@@ -130,16 +133,26 @@ if (true === $getAll && $user->perm->hasPermission($user->getUserId(), Permissio
     $filename = 'FAQs.pdf';
     $pdfFile = $pdf->generate(0, true, $lang);
 } else {
-    if (is_null($currentCategory) || is_null($id)) {
+    if (is_null($currentCategory) || is_null($faqId)) {
         $response->isRedirect($faqConfig->getDefaultUrl());
         $response->send();
         exit();
     }
 
-    $faq->getFaq($id);
+    $faq->getFaq($faqId);
     $faq->faqRecord['category_id'] = $currentCategory;
 
-    $filename = 'FAQ-' . $id . '-' . $lang . '.pdf';
+    if ($faqConfig->get('records.disableAttachments') && 'yes' === $faq->faqRecord['active']) {
+        try {
+            $attachmentHelper = new AttachmentHelper();
+            $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqId);
+            $faq->faqRecord['attachmentList'] = $attachmentHelper->getAttachmentList($attList);
+        } catch (AttachmentException) {
+            // handle exception
+        }
+    }
+
+    $filename = 'FAQ-' . $faqId . '-' . $lang . '.pdf';
     $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
 }
 

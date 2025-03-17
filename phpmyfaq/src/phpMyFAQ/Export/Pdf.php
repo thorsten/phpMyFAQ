@@ -217,6 +217,20 @@ class Pdf extends Export
             $this->pdf->WriteHTML((string) $faqData['content']);
         }
 
+        if (isset($faqData['attachmentList'])) {
+            $this->pdf->Ln(10);
+            $this->pdf->Ln();
+            $this->pdf->Write(5, Translation::get('msgAttachedFiles') . ':');
+            $this->pdf->Ln(5);
+            $this->pdf->Ln();
+            $listItems = '<ul class="pb-4 mb-4 border-bottom">';
+            foreach ($faqData['attachmentList'] as $attachment) {
+                $listItems .= sprintf('<li><a href="%s">%s</a></li>', $attachment['url'], $attachment['filename']);
+            }
+            $listItems .= '</ul>';
+            $this->pdf->WriteHTML($listItems);
+        }
+
         $this->pdf->Ln(10);
         $this->pdf->Ln();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 9);

@@ -295,9 +295,9 @@ $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 // We need some Links from social networks
 $faqServices = new Services($faqConfig);
 $faqServices->setCategoryId($cat);
-$faqServices->setFaqId($id);
+$faqServices->setFaqId($faqId);
 $faqServices->setLanguage($lang);
-$faqServices->setQuestion($faq->getQuestion($id));
+$faqServices->setQuestion($faq->getQuestion($faqId));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
