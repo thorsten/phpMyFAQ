@@ -13,64 +13,69 @@
  * @since     2023-09-19
  */
 
-export const createBookmark = async (faqId: string, csrf: string) => {
-  try {
-    const response: Response = await fetch(`api/bookmark/create`, {
-      method: 'POST',
-      cache: 'no-cache',
-      body: JSON.stringify({
-        id: faqId,
-        csrfToken: csrf,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding bookmark:', error);
+import { BookmarkResponse } from '../interfaces';
+
+export const createBookmark = async (faqId: string, csrf: string): Promise<BookmarkResponse> => {
+  const response: Response = await fetch(`api/bookmark/create`, {
+    method: 'POST',
+    cache: 'no-cache',
+    body: JSON.stringify({
+      id: faqId,
+      csrfToken: csrf,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const deleteBookmark = async (faqId: string, csrf: string) => {
-  try {
-    const response = await fetch(`api/bookmark/delete`, {
-      method: 'DELETE',
-      cache: 'no-cache',
-      body: JSON.stringify({
-        id: faqId,
-        csrfToken: csrf,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error removing bookmark:', error);
+export const deleteBookmark = async (faqId: string, csrf: string): Promise<BookmarkResponse> => {
+  const response: Response = await fetch(`api/bookmark/delete`, {
+    method: 'DELETE',
+    cache: 'no-cache',
+    body: JSON.stringify({
+      id: faqId,
+      csrfToken: csrf,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };
 
-export const deleteAllBookmarks = async (csrf: string) => {
-  try {
-    const response = await fetch(`api/bookmark/delete-all`, {
-      method: 'DELETE',
-      cache: 'no-cache',
-      body: JSON.stringify({
-        csrfToken: csrf,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error removing all bookmarks:', error);
+export const deleteAllBookmarks = async (csrf: string): Promise<BookmarkResponse> => {
+  const response: Response = await fetch(`api/bookmark/delete-all`, {
+    method: 'DELETE',
+    cache: 'no-cache',
+    body: JSON.stringify({
+      csrfToken: csrf,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+
+  return await response.json();
 };

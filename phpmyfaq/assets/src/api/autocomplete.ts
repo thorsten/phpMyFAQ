@@ -13,24 +13,22 @@
  * @since     2014-11-23
  */
 
-export const fetchAutoCompleteData = async (searchString: string) => {
-  try {
-    const response: Response = await fetch(`api/autocomplete?search=${searchString}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+import { AutocompleteSearchResponse } from '../interfaces';
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok.');
-    }
+export const fetchAutoCompleteData = async (searchString: string): Promise<AutocompleteSearchResponse> => {
+  const response: Response = await fetch(`api/autocomplete?search=${searchString}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
+  if (!response.ok) {
+    throw new Error('Network response was not ok.');
   }
+
+  return await response.json();
 };
