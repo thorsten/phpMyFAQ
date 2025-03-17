@@ -4,3 +4,4 @@ export * from './notifications';
 export * from './password';
 export * from './reading-time';
 export * from './tooltip';
+export * from './TranslationService';

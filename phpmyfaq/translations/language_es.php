@@ -1428,5 +1428,7 @@ $PMF_LANG['msgImageUpload'] = 'Subir imagen';
 $PMF_LANG['msgImageCouldNotBeUploaded'] = 'No se pudo subir la imagen.';
 $PMF_LANG['msgImageTooLarge'] = 'La imagen es demasiado grande.';
 $PMF_LANG['msgNoImagesForUpload'] = 'No hay imágenes para subir.';
+$PMF_LANG['msgFetchingHashes'] = 'Obteniendo hashes de verificación de api.phpmyfaq.de...';
+$PMF_LANG['msgCheckHashes'] = 'Verificando hashes con los archivos de instalación...';
 
 return $PMF_LANG;
