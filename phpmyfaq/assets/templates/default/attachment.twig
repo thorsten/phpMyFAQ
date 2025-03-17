@@ -2,10 +2,22 @@
 
 {% block content %}
 {% if attachmentErrors %}
-<section>
-  {% for item in attachmentErrors %}
-    <li>{{ item }}</li>
-  {% endfor %}
-</section>
+
+<div class="row g-5">
+  <div class="col justify-content-start">
+    <h2 class="border-bottom">{{ 'msgReportABug' | translate }}</h2>
+  </div>
+
+  <div class="col-12 mt-4">
+    <p>
+      {{ 'msgErrorOccurred' | translate }}
+    </p>
+    <ul>
+      {% for item in attachmentErrors %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 {% endif %}
 {% endblock %}

@@ -919,7 +919,7 @@ $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Aufzeichnungsseite %d Puffer';
 $PMF_LANG['ad_record_active'] = "aktiviert";
 
 // added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
-$PMF_LANG['msgAttachmentInvalid'] = 'Der Anhang ist ungültig, bitte informieren Sie den Admin';
+$PMF_LANG['msgAttachmentInvalid'] = 'Der Anhang ist ungültig, bitte informieren Sie den Administrator.';
 
 // added 2.6.0-alpha - 2009-11-02 by max
 $LANG_CONF['search.numberSearchTerms'] = ["input", "Anzahl der beliebtesten Suchbegriffe"];

@@ -145,6 +145,7 @@ $twigTemplate = $twig->loadTemplate('./attachment.twig');
 
 // Twig template variables
 $templateVars = [
+    ... $templateVars,
     'attachmentErrors' => $attachmentErrors,
 ];
 
