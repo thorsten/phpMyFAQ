@@ -150,16 +150,9 @@ abstract class AbstractAttachment
         return $hasMeta;
     }
 
-    /**
-     * Build attachment url.
-     *
-     * @param bool $forHTML either to use ampersands directly
-     */
-    public function buildUrl(bool $forHTML = true): string
+    public function buildUrl(): string
     {
-        $amp = $forHTML ? '&amp;' : '&';
-
-        return sprintf('index.php?action=attachment%sid=%d', $amp, $this->id);
+        return sprintf('index.php?action=attachment&id=%d', $this->id);
     }
 
     /**

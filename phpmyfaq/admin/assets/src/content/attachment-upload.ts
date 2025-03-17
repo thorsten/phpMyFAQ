@@ -12,7 +12,6 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-04-11
  */
-
 import { addElement } from '../../../../assets/src/utils';
 import { uploadAttachments } from '../api';
 import { Attachment } from '../interfaces';
@@ -21,7 +20,6 @@ export const handleAttachmentUploads = (): void => {
   const filesToUpload = document.getElementById('filesToUpload') as HTMLInputElement | null;
   const fileUploadButton = document.getElementById('pmf-attachment-modal-upload') as HTMLButtonElement | null;
 
-  // Calculate upload size and show file to upload
   if (filesToUpload) {
     filesToUpload.addEventListener('change', (): void => {
       const files: FileList | null = filesToUpload.files;
@@ -51,16 +49,19 @@ export const handleAttachmentUploads = (): void => {
       fileList.append(addElement('ul', { className: 'mt-2' }, fileItems));
     });
 
-    // handle upload button
     fileUploadButton?.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       event.stopImmediatePropagation();
 
       const files: FileList | null = filesToUpload.files;
-      const formData = new FormData();
+      if (!files || files.length === 0) {
+        console.error('No files selected for upload.');
+        return;
+      }
 
-      for (let i: number = 0; i < (files?.length || 0); i++) {
-        formData.append('filesToUpload[]', files![i]);
+      const formData = new FormData();
+      for (let i: number = 0; i < files.length; i++) {
+        formData.append('filesToUpload[]', files[i]);
       }
       formData.append('record_id', (document.getElementById('attachment_record_id') as HTMLInputElement).value);
       formData.append('record_lang', (document.getElementById('attachment_record_lang') as HTMLInputElement).value);

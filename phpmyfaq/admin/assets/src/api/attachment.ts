@@ -54,10 +54,6 @@ export const uploadAttachments = async (formData: FormData): Promise<Response> =
     const response = await fetch('./api/content/attachments/upload', {
       method: 'POST',
       cache: 'no-cache',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
       body: formData,
     });
 
