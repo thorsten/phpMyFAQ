@@ -76,6 +76,19 @@ class Translation
     }
 
     /**
+     * Returns all translations from the current language.
+     * @throws Exception
+     * @return array<string, string>
+     */
+    public static function getAll(): array
+    {
+        self::$translation->checkInit();
+        self::$translation->checkLanguageLoaded();
+
+        return self::$translation->loadedLanguages[self::$translation->currentLanguage];
+    }
+
+    /**
      * @throws Exception
      */
     public function setLanguagesDir(string $languagesDir): Translation

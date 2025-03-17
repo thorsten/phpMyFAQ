@@ -42,6 +42,7 @@ use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\FaqController as FaqFrontendController;
 use phpMyFAQ\Controller\Frontend\QuestionController as QuestionFrontendController;
 use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
+use phpMyFAQ\Controller\Frontend\TranslationController;
 use phpMyFAQ\Controller\Frontend\UnauthorizedUserController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
@@ -250,6 +251,11 @@ $routesConfig = [
     'api.private.register' => [
         'path' => 'register',
         'controller' => [RegistrationFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.translations' => [
+        'path' => 'translations/{language}',
+        'controller' => [TranslationController::class, 'translations'],
         'methods' => 'POST'
     ],
     'api.private.user.password' => [

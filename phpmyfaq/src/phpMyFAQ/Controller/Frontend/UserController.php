@@ -22,7 +22,6 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +35,7 @@ class UserController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('api/user/data/update', methods: ['PUT'])]
+    #[Route('api/user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
     public function updateData(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
