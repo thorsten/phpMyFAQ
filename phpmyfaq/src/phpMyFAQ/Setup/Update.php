@@ -166,6 +166,7 @@ class Update extends Setup
         $this->applyUpdates400Alpha3();
         $this->applyUpdates400Beta2();
         $this->applyUpdates405();
+        $this->applyUpdates407();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -944,6 +945,126 @@ class Update extends Setup
             }
         }
     }
+
+    private function applyUpdates407(): void
+    {
+        if (version_compare($this->version, '4.0.7', '<')) {
+            // Update language codes for fr_CA and pt_BR
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqattachment SET record_lang='fr_ca' WHERE record_lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcaptcha SET language='fr_ca' WHERE language='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategories SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqdata SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategoryrelations SET category_lang='fr_ca' WHERE category_lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategoryrelations SET record_lang='fr_ca' WHERE record_lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqchanges SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqdata_revisions SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqglossary SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqnews SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqquestions SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqsearches SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqvisits SET lang='fr_ca' WHERE lang='fr-ca'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqconfig SET config_value='language_fr_ca.php' WHERE config_value='language_fr-ca.php'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqattachment SET record_lang='pt_br' WHERE record_lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcaptcha SET language='pt_br' WHERE language='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategories SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqdata SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategoryrelations SET category_lang='pt_br' WHERE category_lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqcategoryrelations SET record_lang='pt_br' WHERE record_lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqchanges SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqdata_revisions SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqglossary SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqnews SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqquestions SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqsearches SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqvisits SET lang='pt_br' WHERE lang='pt-br'",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "UPDATE %sfaqconfig SET config_value='language_pt_br.php' WHERE config_value='language_pt-br.php'",
+                Database::getTablePrefix()
+            );
+        }
+    }
+
 
     private function updateVersion(): void
     {
