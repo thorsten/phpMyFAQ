@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
@@ -46,7 +46,7 @@ class SearchController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/search',
+        path: '/api/v3.1/search',
         operationId: 'getSearch',
         tags: ['Public Endpoints']
     )]
@@ -106,7 +106,7 @@ class SearchController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/searches/popular',
+        path: '/api/v3.1/searches/popular',
         operationId: 'getPopularSearch',
         tags: ['Public Endpoints']
     )]

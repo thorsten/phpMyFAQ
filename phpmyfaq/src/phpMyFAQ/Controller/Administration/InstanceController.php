@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Admin Instance Controller
+ * The Administration Instances Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,180 +9,182 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-10-28
+ * @since     2024-11-22
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration\DatabaseConfiguration;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database;
 use phpMyFAQ\Entity\InstanceEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Instance\Client;
-use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 
-class InstanceController extends AbstractController
+class InstanceController extends AbstractAdministrationController
 {
     /**
+     * @throws LoaderError
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/instance/add')]
-    public function add(Request $request): JsonResponse
+    #[Route('/instances', name: 'admin.instances', methods: ['GET'])]
+    public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $configuration = $this->container->get('phpmyfaq.configuration');
-
-        $data = json_decode($request->getContent());
-
-        if (!Token::getInstance()->verifyToken('add-instance', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $url = Filter::filterVar($data->url, FILTER_SANITIZE_SPECIAL_CHARS);
-        $instance = Filter::filterVar($data->instance, FILTER_SANITIZE_SPECIAL_CHARS);
-        $comment = Filter::filterVar($data->comment, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
-        $admin = Filter::filterVar($data->admin, FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
-            return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $url = 'https://' . $url . '.' . $_SERVER['SERVER_NAME'];
-        if (!Filter::filterVar($url, FILTER_VALIDATE_URL)) {
-            return $this->json(['error' => 'Cannot create instance: wrong URL'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $data = new InstanceEntity();
-        $data
-            ->setUrl($url)
-            ->setInstance($instance)
-            ->setComment($comment);
-
-        $faqInstance = $this->container->get('phpmyfaq.instance');
-        $instanceId = $faqInstance->create($data);
-
-        $faqInstanceClient = new Client($configuration);
-        $faqInstanceClient->createClient($faqInstance);
-        $faqInstanceClient->setFileSystem(new Filesystem());
-
-        $urlParts = parse_url($data->getUrl());
-        $hostname = $urlParts['host'];
-
-        if ($faqInstanceClient->createClientFolder($hostname)) {
-            $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
-            $clientSetup = new Setup();
-            $clientSetup->setRootDir($clientDir);
-
-            try {
-                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-            } catch (Exception $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-
-            $databaseConfiguration = new DatabaseConfiguration(PMF_CONFIG_DIR . '/database.php');
-            $dbSetup = [
-                'dbServer' => $databaseConfiguration->getServer(),
-                'dbPort' => $databaseConfiguration->getPort(),
-                'dbUser' => $databaseConfiguration->getUser(),
-                'dbPassword' => $databaseConfiguration->getPassword(),
-                'dbDatabaseName' => $databaseConfiguration->getDatabase(),
-                'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType' => $databaseConfiguration->getType()
-            ];
-            $clientSetup->createDatabaseFile($dbSetup, '');
-
-            $faqInstanceClient->setClientUrl('https://' . $hostname);
-            $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
-
-            Database::setTablePrefix($dbSetup['dbPrefix']);
-
-            // add an admin account and rights
-            $user = new User($configuration);
-            $user->createUser($admin, $password, '', 1);
-            $user->setStatus('protected');
-            $instanceAdminData = [
-                'display_name' => '',
-                'email' => $email,
-            ];
-            $user->setUserData($instanceAdminData);
-
-            // Add an anonymous user account
-            try {
-                $clientSetup->createAnonymousUser($configuration);
-            } catch (Exception $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-
-            Database::setTablePrefix($databaseConfiguration->getPrefix());
-        } else {
-            $faqInstance->delete($instanceId);
-            return $this->json(['error' => 'Cannot create instance.'], Response::HTTP_BAD_REQUEST);
-        }
-
-        if (0 !== $instanceId) {
-            $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
-            return $this->json($payload, Response::HTTP_OK);
-        } else {
-            $payload = ['error' => $instanceId];
-            return $this->json($payload, Response::HTTP_BAD_REQUEST);
-        }
+        return $this->render(
+            '@admin/configuration/instances.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars()
+            ]
+        );
     }
 
     /**
      * @throws Exception
+     * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('admin/api/instance/delete')]
-    public function delete(Request $request): JsonResponse
+    #[Route('/instance/edit/:id', name: 'admin.instance.edit', methods: ['GET'])]
+    public function edit(Request $request): Response
     {
-        $this->userHasPermission(PermissionType::INSTANCE_DELETE);
+        $this->userHasPermission(PermissionType::INSTANCE_EDIT);
 
-        $configuration = $this->container->get('phpmyfaq.configuration');
+        $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
 
-        $data = json_decode($request->getContent());
+        $instance = $this->container->get('phpmyfaq.instance');
+        $instanceData = $instance->getById($instanceId, 'array');
 
-        if (!Token::getInstance()->verifyToken('delete-instance', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
+        return $this->render(
+            '@admin/configuration/instances.edit.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'ad_menu_instances' => Translation::get('ad_menu_instances'),
+                'instanceConfig' => $instance->getInstanceConfig((int) $instanceData->id),
+                'ad_instance_url' => Translation::get('ad_instance_url'),
+                'ad_instance_button' => Translation::get('ad_instance_button'),
+                'ad_instance_path' => Translation::get('ad_instance_path'),
+                'ad_instance_name' => Translation::get('ad_instance_name'),
+                'ad_instance_config' => Translation::get('ad_instance_config'),
+                'ad_entry_back' => Translation::get('ad_entry_back'),
+                'instance' => $instanceData
+            ]
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws Exception
+     * @throws \Exception
+     */
+    #[Route('/instance/update', name: 'admin.instance.update', methods: ['POST'])]
+    public function update(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::INSTANCE_EDIT);
+
+        $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
+
+        $fileSystem = new Filesystem(PMF_ROOT_DIR);
+        $currentClient = $this->container->get('phpmyfaq.instance.client');
+        $currentClient->setFileSystem($fileSystem);
+
+        $instance = $this->container->get('phpmyfaq.instance');
+        $updatedClient = $this->container->get('phpmyfaq.instance.client');
+
+        $moveInstance = false;
+        $instance->setId($instanceId);
+
+        // Collect updated data for database
+        $updatedData = new InstanceEntity();
+        $updatedData->setUrl(Filter::filterVar($request->get('url'), FILTER_VALIDATE_URL));
+        $updatedData->setInstance(Filter::filterVar($request->get('instance'), FILTER_SANITIZE_SPECIAL_CHARS));
+        $updatedData->setComment(Filter::filterVar($request->get('comment'), FILTER_SANITIZE_SPECIAL_CHARS));
+
+        // Original data
+        $originalData = $currentClient->getById($instanceId);
+
+        if ($originalData->url !== $updatedData->getUrl() && !$instance->getConfig('isMaster')) {
+            $moveInstance = true;
         }
 
-        $instanceId = Filter::filterVar($data->instanceId, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (null !== $instanceId) {
-            $client = new Client($configuration);
-            $client->setFileSystem(new Filesystem());
-            $clientData = $client->getById($instanceId);
-            if (
-                1 !== $instanceId &&
-                $client->deleteClientFolder($clientData->url) &&
-                $client->delete($instanceId)
-            ) {
-                $payload = ['deleted' => $instanceId];
-                return $this->json($payload, Response::HTTP_OK);
-            } else {
-                $payload = ['error' => $instanceId];
-                return $this->json($payload, Response::HTTP_BAD_REQUEST);
-            }
+        if (is_null($updatedData->getUrl())) {
+            $result = ['updateError' => $this->configuration->getDb()->error()];
         } else {
-            $payload = ['error' => $instanceId];
-            return $this->json($payload, Response::HTTP_BAD_REQUEST);
+            if ($updatedClient->update($instanceId, $updatedData)) {
+                if ($moveInstance) {
+                    $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
+                    $updatedClient->deleteClientFolder($originalData->url);
+                }
+                $result = ['updateSuccess' => Translation::get('ad_config_saved')];
+            } else {
+                $result = ['updateError' => $this->configuration->getDb()->error()];
+            }
         }
+
+        return $this->render(
+            '@admin/configuration/instances.twig',
+            [
+                ... $result,
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+            ]
+        );
+    }
+
+    /**
+     * @return array<string, string>
+     * @throws \Exception
+     * @throws LoaderError
+     * @throws Exception
+     */
+    private function getBaseTemplateVars(): array
+    {
+        $userPermInstanceAdd = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::INSTANCE_ADD->value
+        );
+
+        $instance = $this->container->get('phpmyfaq.instance');
+        $session = $this->container->get('session');
+        $mainConfig = [];
+        foreach ($instance->getAll() as $site) {
+            $mainConfig[$site->id] = $instance->getInstanceConfig((int) $site->id)['isMaster'];
+        }
+
+        return [
+            'userPermInstanceAdd' => $userPermInstanceAdd,
+            'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
+            'ad_instance_add' => Translation::get('ad_instance_add'),
+            'allInstances' => $instance->getAll(),
+            'csrfTokenDeleteInstance' => Token::getInstance($session)->getTokenString('delete-instance'),
+            'csrfTokenAddInstance' => Token::getInstance($session)->getTokenString('add-instance'),
+            'mainConfig' => $mainConfig,
+            'requestHost' => Request::createFromGlobals()->getHost(),
+            'ad_instance_button' => Translation::get('ad_instance_button'),
+            'ad_instance_hint' => Translation::get('ad_instance_hint'),
+            'ad_instance_admin' => Translation::get('ad_instance_admin'),
+            'ad_instance_password' => Translation::get('ad_instance_password'),
+            'ad_instance_email' => Translation::get('ad_instance_email'),
+            'ad_instance_name' => Translation::get('ad_instance_name'),
+            'ad_instance_path' => Translation::get('ad_instance_path'),
+            'ad_instance_url' => Translation::get('ad_instance_url'),
+            'ad_instance_error_notwritable' => Translation::get('ad_instance_error_notwritable'),
+            'ad_menu_instances' => Translation::get('ad_menu_instances')
+        ];
     }
 }

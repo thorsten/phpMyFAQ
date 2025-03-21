@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla protected License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-24
@@ -33,12 +33,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Error\LoaderError;
+use Twig\Extension\ExtensionInterface;
+use Twig\TwigFilter;
 
 #[OA\Info(
-    version: '3.0',
+    version: '3.1',
     description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ ' .
     'version or doing a search against the phpMyFAQ installation.',
-    title: 'REST API for phpMyFAQ 4.0',
+    title: 'REST API for phpMyFAQ 4.1',
     contact: new OA\Contact(
         name: 'phpMyFAQ Team',
         email: 'support@phpmyfaq.de'
@@ -53,6 +55,11 @@ abstract class AbstractController
     protected ?Configuration $configuration = null;
     /** @var CurrentUser|null */
     protected ?CurrentUser $currentUser = null;
+    /** @var ExtensionInterface[] */
+    private array $twigExtensions = [];
+
+    /** @var TwigFilter[] */
+    private array $twigFilters = [];
 
     /**
      * Check if the FAQ should be secured.
@@ -81,7 +88,7 @@ abstract class AbstractController
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = $this->getTwigWrapper();
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         $response->setContent($template->render($templateVars));
@@ -99,7 +106,7 @@ abstract class AbstractController
      */
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
     {
-        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+        $twigWrapper = $this->getTwigWrapper();
         $template = $twigWrapper->loadTemplate($pathToTwigFile);
 
         return $template->render($templateVars);
@@ -119,6 +126,29 @@ abstract class AbstractController
     }
 
     /**
+     * @return TwigWrapper
+     * @throws LoaderError
+     */
+    public function getTwigWrapper(): TwigWrapper
+    {
+        $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
+
+        if (!empty($this->twigExtensions)) {
+            foreach ($this->twigExtensions as $extension) {
+                $twigWrapper->addExtension($extension);
+            }
+        }
+
+        if (!empty($this->twigFilters)) {
+            foreach ($this->twigFilters as $filter) {
+                $twigWrapper->addFilter($filter);
+            }
+        }
+
+        return $twigWrapper;
+    }
+
+    /**
      * @throws UnauthorizedHttpException|\Exception
      */
     protected function hasValidToken(): void
@@ -130,7 +160,7 @@ abstract class AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     protected function isSecured(): void
     {
@@ -203,6 +233,7 @@ abstract class AbstractController
 
     /**
      * @throws \JsonException
+     * @throws \Exception
      */
     protected function captchaCodeIsValid(Request $request): bool
     {
@@ -227,6 +258,16 @@ abstract class AbstractController
     public function isApiEnabled(): bool
     {
         return (bool) $this->configuration->get('api.enableAccess');
+    }
+
+    public function addExtension(ExtensionInterface $extension): void
+    {
+        $this->twigExtensions[] = $extension;
+    }
+
+    public function addFilter(TwigFilter $filter): void
+    {
+        $this->twigFilters[] = $filter;
     }
 
     protected function createContainer(): ContainerBuilder

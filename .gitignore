@@ -60,7 +60,7 @@ phpmyfaq/src/libs
 phpmyfaq/admin/assets/css
 phpmyfaq/admin/assets/fonts
 phpmyfaq/admin/assets/js/editor/*
-phpmyfaq/assets/dist
+phpmyfaq/assets/public
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/svg/*.svg
 !phpmyfaq/assets/templates/admin
@@ -89,7 +89,7 @@ tests/content/core/config/ldap.php
 tests/content/upgrades
 tests/fixtures/path-to-delete/foo.bar.baz
 
-# Jest related stuff
+# Vitest related stuff
 coverage/*
 
 # PHPMD

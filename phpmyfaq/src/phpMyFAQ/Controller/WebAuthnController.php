@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-11
@@ -25,6 +25,7 @@ use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
 
 class WebAuthnController extends AbstractController
 {
@@ -34,7 +35,7 @@ class WebAuthnController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|LoaderError
      */
     #[Route('/', name: 'public.webauthn.index')]
     public function index(Request $request): Response

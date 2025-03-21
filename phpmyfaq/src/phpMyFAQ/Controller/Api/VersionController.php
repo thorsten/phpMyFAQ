@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
@@ -33,7 +33,7 @@ class VersionController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.0/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
+    #[OA\Get(path: '/api/v3.1/version', operationId: 'getVersion', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the phpMyFAQ version number as string.',

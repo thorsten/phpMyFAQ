@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-07
@@ -51,7 +51,7 @@ class AuthWebAuthn extends Auth
      *
      * @param string $username
      * @param string $userId
-     * @return array<string, string>
+     * @return array<string, array<string, array|int|null>|string>
      * @throws RandomException
      */
     public function prepareChallengeForRegistration(string $username, string $userId): array

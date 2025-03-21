@@ -1,72 +1,80 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i class="bi bi-translate"></i> {{ msgFormsEditTranslations }}
-  </h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <a class="btn btn-outline-primary" href="?action=forms">
-        <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ msgEditForms }}
-      </a>
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i class="bi bi-translate"></i> {{ 'msgFormsEditTranslations' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-outline-primary" href="./forms">
+          <i aria-hidden="true" class="bi bi-textarea-resize"></i> {{ 'msgEditForms' | translate }}
+        </a>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="row mb-2">
-  <div class="col">
-    <table id="formTranslations" class="table">
-      <thead>
-      <tr>
-        <th scope="col">{{ ad_entry_locale }}</th>
-        <th scope="col">{{ msgInputLabel }}</th>
-        <th scope="col">{{ ad_sess_pageviews }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for translation in translations %}
-        <tr id="item_{{ translation.input_lang }}">
-          <th>{{ translation.input_lang|languageCode }}</th>
-          <td>
-            <input class="form-control" type="text" id="labelInput_{{ translation.input_lang }}"
-                   value="{{ translation.input_label }}" disabled />
-          </td>
-          <td>
-            {% if translation.input_lang != 'default' %}
-              <button class="btn btn-primary" id="editTranslation" data-pmf-lang="{{ translation.input_lang }}"
-                      data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                      data-pmf-csrf="{{ csrfTokenEditTranslation }}">
-                <i aria-hidden="true" class="bi bi-pencil bi-white"></i></button>
-              <button class="btn btn-danger" id="deleteTranslation" data-pmf-lang="{{ translation.input_lang }}"
-                      data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
-                      data-pmf-csrf="{{ csrfTokenDeleteTranslation }}"
-                      data-pmf-langname="{{ translation.input_lang|languageCode }}">
-                <i aria-hidden="true" class="bi bi-trash3 bi-white"></i></button>
-            {% endif %}
-          </td>
+  <div class="row mb-2">
+    <div class="col">
+      <table id="formTranslations" class="table">
+        <thead>
+        <tr>
+          <th scope="col">{{ 'msgLanguage' | translate }}</th>
+          <th scope="col">{{ 'msgInputLabel' | translate }}</th>
+          <th scope="col">{{ ad_sess_pageviews }}</th>
         </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {% for translation in translations %}
+          <tr id="item_{{ translation.input_lang }}">
+            <th>{{ translation.input_lang|languageCode }}</th>
+            <td>
+              <input class="form-control" type="text" id="labelInput_{{ translation.input_lang }}"
+                     value="{{ translation.input_label }}" disabled />
+            </td>
+            <td>
+              {% if translation.input_lang != 'default' %}
+                <button class="btn btn-primary" id="editTranslation" data-pmf-lang="{{ translation.input_lang }}"
+                        data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
+                        data-pmf-csrf="{{ csrfTokenEditTranslation }}">
+                  <i aria-hidden="true" class="bi bi-pencil bi-white"></i></button>
+                <button class="btn btn-danger" id="deleteTranslation" data-pmf-lang="{{ translation.input_lang }}"
+                        data-pmf-inputId="{{ inputId }}" data-pmf-formId="{{ formId }}"
+                        data-pmf-csrf="{{ csrfTokenDeleteTranslation }}"
+                        data-pmf-langname="{{ translation.input_lang|languageCode }}">
+                  <i aria-hidden="true" class="bi bi-trash3 bi-white"></i></button>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-<div class="row pt-3 w-25">
-  <div class="col">
-    <form>
-      <div class="form-group">
-        <label class="mb-1" for="languageSelect">{{ msgSelectLanguage }}:</label>
-        <select class="form-select mb-2" id="languageSelect">
-          {% for language in languages %}
-            <option>{{ language }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="mb-1" for="translationText">{{ msgTranslationText }}:</label>
-        <input type="text" class="mb-4 form-control" id="translationText" />
-      </div>
-      <button type="submit" id="addTranslation" class="btn btn-primary" data-pmf-csrf="{{ csrfTokenAddTranslation }}"
-              data-pmf-formid="{{ formId }}" data-pmf-inputid="{{ inputId }}">
-        {{ msgAddTranslation }}
-      </button>
-    </form>
+  <div class="row pt-3 w-25">
+    <div class="col">
+      <form>
+        <div class="form-group">
+          <label class="mb-1" for="languageSelect">
+            {{ 'msgSelectLanguage' | translate }}:
+          </label>
+          <select class="form-select mb-2" id="languageSelect">
+            {% for language in languages %}
+              <option>{{ language }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="mb-1" for="translationText">
+            {{ 'msgTranslationText' | translate }}:
+          </label>
+          <input type="text" class="mb-4 form-control" id="translationText">
+        </div>
+        <button type="submit" id="addTranslation" class="btn btn-primary" data-pmf-csrf="{{ csrfTokenAddTranslation }}"
+                data-pmf-formid="{{ formId }}" data-pmf-inputid="{{ inputId }}">
+          {{ 'msgAddTranslation' | translate }}
+        </button>
+      </form>
+    </div>
   </div>
-</div>
+{% endblock %}

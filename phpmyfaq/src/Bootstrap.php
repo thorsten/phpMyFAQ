@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2024 phpMyFAQ Team
+ * @copyright 2012-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-07
@@ -23,15 +23,16 @@ use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Init;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 //
 // Debug mode:
 // - false debug mode disabled
 // - true  debug mode enabled
-const DEBUG = false;
+const DEBUG = true;
 if (DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
@@ -174,11 +175,13 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     //
     // Start the PHP session
     //
-    Init::cleanRequest();
     if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
         session_save_path(PMF_SESSION_SAVE_PATH);
     }
+
     session_start();
+    $session = new Session(new PhpBridgeSessionStorage());
+    $session->start();
 }
 
 //
@@ -190,6 +193,7 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 } else {
     $ldap = null;
 }
+
 //
 // Connect to Elasticsearch if enabled
 //
@@ -227,10 +231,10 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
 //
 // Fix if phpMyFAQ is running behind a proxy server
 //
-if (!isset($_SERVER['HTTP_HOST'])) {
-    if (isset($_SERVER['HTTP_X_FORWARDED_SERVER'])) {
-        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_SERVER'];
+if (!$request->server->has('HTTP_HOST')) {
+    if ($request->server->has('HTTP_X_FORWARDED_SERVER')) {
+        $request->server->set('HTTP_HOST', $request->server->get('HTTP_X_FORWARDED_SERVER'));
     } else {
-        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+        $request->server->set('HTTP_HOST', $request->server->get('HTTP_X_FORWARDED_HOST'));
     }
 }

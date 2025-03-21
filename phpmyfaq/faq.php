@@ -10,13 +10,16 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2024 phpMyFAQ Team
+ * @copyright 2002-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-27
  */
 
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha\Helper\CaptchaHelper;
@@ -68,13 +71,19 @@ $faqPermission = new Permission($faqConfig);
 $seo = new Seo($faqConfig);
 $attachmentHelper = new AttachmentHelper();
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
-$converter = new CommonMarkConverter([
+$config = [
     'html_input' => 'strip',
     'allow_unsafe_links' => false,
-]);
+];
+
+$environment = new Environment($config);
+$environment->addExtension(new CommonMarkCoreExtension());
+$environment->addExtension(new GithubFlavoredMarkdownExtension());
+
+$converter = new MarkdownConverter($environment);
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
@@ -127,7 +136,7 @@ $question = $faq->getQuestion($faqId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $converter->convert($faq->faqRecord['content'])->getContent();
 } else {
-    $answer = $faqHelper->rewriteLanguageMarkupClass($faq->faqRecord['content']);
+    $answer = $faq->faqRecord['content'];
 }
 
 // Cleanup answer content first
@@ -165,7 +174,7 @@ if (
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqId);
-        $answer .= $attachmentHelper->renderAttachmentList($attList);
+        $attachmentList = $attachmentHelper->getAttachmentList($attList);
     } catch (AttachmentException) {
         // handle exception
     }
@@ -220,7 +229,7 @@ if (
     );
     $templateVars = [
         ... $templateVars,
-        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('ad_start_comments')),
+        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get('msgComments')),
         'writeCommentMsg' => $commentMessage
     ];
 }
@@ -286,9 +295,9 @@ $captchaHelper = CaptchaHelper::getInstance($faqConfig);
 // We need some Links from social networks
 $faqServices = new Services($faqConfig);
 $faqServices->setCategoryId($cat);
-$faqServices->setFaqId($id);
+$faqServices->setFaqId($faqId);
 $faqServices->setLanguage($lang);
-$faqServices->setQuestion($faq->getQuestion($id));
+$faqServices->setQuestion($faq->getQuestion($faqId));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($faqId, $currentCategory)) {
@@ -318,6 +327,7 @@ $templateVars = [
     'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
     'question' => $question,
     'answer' => $answer,
+    'attachmentList' => $attachmentList,
     'faqDate' => $date->format($faq->faqRecord['date']),
     'faqAuthor' => Strings::htmlentities($author),
     'msgPdf' => Translation::get('msgPDF'),
@@ -325,7 +335,7 @@ $templateVars = [
     'enableSendToFriend' => $faqConfig->get('main.enableSendToFriend'),
     'msgShareText' => Translation::get('msgShareText'),
     'msgShareViaWhatsapp' => Translation::get('msgShareViaWhatsapp'),
-    'msgSend2Friend' => Translation::get('msgSend2Friend'),
+    'msgShareFAQ' => Translation::get('msgShareFAQ'),
     'linkToPdf' => $faqServices->getPdfLink(),
     'msgAverageVote' => Translation::get('msgAverageVote'),
     'renderVotingResult' => $rating->get($faqId),
@@ -344,7 +354,7 @@ $templateVars = [
     'msgYourComment' => Translation::get('msgYourComment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    'csrfTokenAddComment' => Token::getInstance()->getTokenString('add-comment'),
+    'csrfTokenAddComment' => Token::getInstance($container->get('session'))->getTokenString('add-comment'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
@@ -360,8 +370,8 @@ $templateVars = [
     'bookmarkAction' => $bookmarkAction ?? '',
     'msgBookmarkAdded' => Translation::get('msgBookmarkAdded'),
     'msgBookmarkRemoved' => Translation::get('msgBookmarkRemoved'),
-    'csrfTokenRemoveBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
-    'csrfTokenAddBookmark' => Token::getInstance()->getTokenString('add-bookmark')
+    'csrfTokenRemoveBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
+    'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark')
 ];
 
 return $templateVars;

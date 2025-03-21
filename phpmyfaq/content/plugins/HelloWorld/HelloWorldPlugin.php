@@ -11,7 +11,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-07-10
@@ -32,7 +32,17 @@ class HelloWorldPlugin implements PluginInterface
 
     public function getVersion(): string
     {
-        return '0.1.0';
+        return '0.2.0';
+    }
+
+    public function getDescription(): string
+    {
+        return 'A simple Hello World plugin';
+    }
+
+    public function getAuthor(): string
+    {
+        return 'phpMyFAQ Team';
     }
 
     public function getDependencies(): array

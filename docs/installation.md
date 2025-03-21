@@ -44,12 +44,13 @@ Please be aware that modules like `mod_security` can cause problems with the ins
 
 ### Database requirements
 
-- [MySQL](http://www.mysql.com) (via MySQLi extension)
-- [PostgreSQL](http://www.postgresql.org)
-- [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
-- [SQLite](http://www.sqlite.org)
-- [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension)
-- [Percona Server](http://www.percona.com) (via MySQLi extension)
+- [MySQL](http://www.mysql.com) (via MySQLi extension or PDO)
+- [PostgreSQL](http://www.postgresql.org) (via pgsql extension or PDO)
+- [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later (via sqlsrv extension or PDO)
+- [SQLite](http://www.sqlite.org) (via sqlite3 extension or PDO)
+- [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension or PDO)
+- [Percona Server](http://www.percona.com) (via MySQLi extension or PDO)
+- [Azure SQL Database](https://azure.microsoft.com/en-us/products/azure-sql/database) (via PDO, experimental)
 
 ### Optional Search engine
 

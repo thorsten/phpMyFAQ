@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The File Export Controller
+ * The Administration Export Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,169 +9,73 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-12-23
+ * @since     2024-11-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use League\CommonMark\Exception\CommonMarkException;
-use phpMyFAQ\Administration\HttpStreamer;
-use phpMyFAQ\Administration\Report;
 use phpMyFAQ\Category;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Export;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Filter;
-use phpMyFAQ\Language\LanguageCodes;
-use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 
-class ExportController extends AbstractController
+class ExportController extends AbstractAdministrationController
 {
     /**
      * @throws Exception
+     * @throws LoaderError
      */
-    #[Route('admin/api/export/file')]
-    public function exportFile(Request $request): void
+    #[Route('/export', name: 'admin.export', methods: ['GET'])]
+    public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::EXPORT);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $downwards = Filter::filterVar($request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
-        $inlineDisposition = Filter::filterVar($request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $type = Filter::filterVar($request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = new Faq($this->configuration);
         $category = new Category($this->configuration, [], false);
-        $category->buildCategoryTree($categoryId);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $category->buildCategoryTree();
 
-        try {
-            $export = Export::create($faq, $category, $this->configuration, $type);
-            $content = $export->generate($categoryId, $downwards, $this->configuration->getLanguage()->getLanguage());
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
 
-            // Stream the file content
-            $httpStreamer = new HttpStreamer($type, $content);
-            if ('inline' === $inlineDisposition) {
-                $httpStreamer->send(HeaderUtils::DISPOSITION_INLINE);
-            } else {
-                $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
-            }
-        } catch (Exception | \JsonException | CommonMarkException $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/export/report')]
-    public function exportReport(Request $request): Response
-    {
-        $this->userHasPermission(PermissionType::REPORTS);
-
-        $data = json_decode($request->getContent())->data;
-        if (!Token::getInstance()->verifyToken('create-report', $data->{'pmf-csrf-token'})) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $text = [];
-        $text[0] = [];
-        isset($data->category) ? $text[0][] = Translation::get('ad_stat_report_category') : '';
-        isset($data->sub_category) ? $text[0][] = Translation::get('ad_stat_report_sub_category') : '';
-        isset($data->translations) ? $text[0][] = Translation::get('ad_stat_report_translations') : '';
-        isset($data->language) ? $text[0][] = Translation::get('ad_stat_report_language') : '';
-        isset($data->id) ? $text[0][] = Translation::get('ad_stat_report_id') : '';
-        isset($data->sticky) ? $text[0][] = Translation::get('ad_stat_report_sticky') : '';
-        isset($data->title) ? $text[0][] = Translation::get('ad_stat_report_title') : '';
-        isset($data->creation_date) ? $text[0][] = Translation::get('ad_stat_report_creation_date') : '';
-        isset($data->owner) ? $text[0][] = Translation::get('ad_stat_report_owner') : '';
-        isset($data->last_modified_person) ? $text[0][] = Translation::get('ad_stat_report_last_modified_person') : '';
-        isset($data->url) ? $text[0][] = Translation::get('ad_stat_report_url') : '';
-        isset($data->visits) ? $text[0][] = Translation::get('ad_stat_report_visits') : '';
-
-        $report = new Report($this->configuration);
-        foreach ($report->getReportingData() as $reportData) {
-            $i = $reportData['faq_id'];
-            if (isset($data->category) && isset($reportData['category_name'])) {
-                if (0 !== $reportData['category_parent']) {
-                    $text[$i][] = Report::sanitize($reportData['category_parent']);
-                } else {
-                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
-                }
-            }
-            if (isset($data->sub_category)) {
-                if (0 != $reportData['category_parent']) {
-                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
-                } else {
-                    $text[$i][] = 'n/a';
-                }
-            }
-            if (isset($data->translations)) {
-                $text[$i][] = $reportData['faq_translations'];
-            }
-            if (isset($data->language) && LanguageCodes::get($reportData['faq_language'])) {
-                $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']));
-            }
-            if (isset($data->id)) {
-                $text[$i][] = $reportData['faq_id'];
-            }
-            if (isset($data->sticky)) {
-                $text[$i][] = $reportData['faq_sticky'];
-            }
-            if (isset($data->title)) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_question']));
-            }
-            if (isset($data->creation_date)) {
-                $text[$i][] = $reportData['faq_updated'];
-            }
-            if (isset($data->owner)) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
-            }
-            if (isset($data->last_modified_person) && isset($reportData['faq_last_author'])) {
-                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
-            } else {
-                $text[$i][] = '';
-            }
-            if (isset($data->url)) {
-                $text[$i][] = Report::sanitize($report->convertEncoding(
-                    sprintf(
-                        '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $reportData['category_id'],
-                        $reportData['faq_id'],
-                        $reportData['faq_language']
-                    )
-                ));
-            }
-            if (isset($data->visits)) {
-                $text[$i][] = $reportData['faq_visits'];
-            }
-        }
-
-        $handle = fopen('php://temp', 'r+');
-        foreach ($text as $row) {
-            fputcsv($handle, $row);
-        }
-
-        rewind($handle);
-
-        $content = stream_get_contents($handle);
-
-        fclose($handle);
-
-        $response = new Response($content);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="report.csv"');
-
-        return $response;
+        return $this->render(
+            '@admin/import-export/export.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'adminHeaderExport' => Translation::get('ad_menu_export'),
+                'hasNoFaqs' => Database::checkOnEmptyTable('faqdata'),
+                'errorMessageNoFaqs' => Translation::get('msgErrorNoRecords'),
+                'hasCategories' => !Database::checkOnEmptyTable('faqcategories'),
+                'headerCategories' => Translation::get('ad_export_which_cat'),
+                'msgCategory' => Translation::get('msgCategory'),
+                'msgAllCategories' => Translation::get('msgShowAllCategories'),
+                'categoryOptions' => $categoryHelper->renderOptions(0),
+                'msgWithSubCategories' => Translation::get('ad_export_cat_downwards'),
+                'headerExportType' => Translation::get('ad_export_type'),
+                'msgChooseExportType' => Translation::get('ad_export_type_choose'),
+                'msgViewType' => Translation::get('ad_export_download_view'),
+                'msgDownloadType' => HeaderUtils::DISPOSITION_ATTACHMENT,
+                'msgDownload' => Translation::get('ad_export_download'),
+                'msgInlineType' => HeaderUtils::DISPOSITION_INLINE,
+                'msgInline' => Translation::get('ad_export_view'),
+                'buttonReset' => Translation::get('ad_config_reset'),
+                'buttonExport' => Translation::get('ad_menu_export'),
+            ]
+        );
     }
 }

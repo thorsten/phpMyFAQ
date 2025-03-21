@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Helper class for phpMyFAQ categories.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024-2025 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-04-01
+ */
+
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Date;
@@ -16,7 +31,7 @@ class CommentHelper extends AbstractHelper
      * Returns all user comments (HTML formatted) from a record by type.
      *
      * @param Comment[] $comments
-     * @deprecated Rewrite this method to use Twig
+     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
     public function getComments(array $comments): string
     {

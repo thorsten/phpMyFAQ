@@ -12,7 +12,7 @@
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2024 phpMyFAQ Team
+ * @copyright 2004-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2004-02-16
@@ -172,11 +172,8 @@ class Category
         }
 
         if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $where .= $where === '' || $where === '0' ? '
-            WHERE' : '
-            AND';
-            $where .= "
-                fc.lang = '" . $this->configuration->getDb()->escape($this->language) . "'";
+            $where .= $where === '' || $where === '0' ? ' WHERE' : ' AND';
+            $where .= sprintf(' fc.lang = \'%s\'', $this->configuration->getDb()->escape($this->language));
         }
 
         $query = sprintf(

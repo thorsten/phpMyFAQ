@@ -9,16 +9,16 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022-2024 phpMyFAQ Team
+ * @copyright 2022-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-09-09
  */
 
 use phpMyFAQ\Auth\AuthEntraId;
-use phpMyFAQ\Auth\Azure\OAuth;
+use phpMyFAQ\Auth\EntraId\OAuth;
+use phpMyFAQ\Auth\EntraId\Session as EntraIdSession;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Session;
 
 //
 // Prepend and start the PHP session
@@ -34,8 +34,8 @@ require PMF_CONFIG_DIR . '/azure.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-$session = new Session($faqConfig);
-$oAuth = new OAuth($faqConfig, $session);
+$enraIdSession = new EntraIdSession($faqConfig, $session);
+$oAuth = new OAuth($faqConfig, $enraIdSession);
 $auth = new AuthEntraId($faqConfig, $oAuth);
 
 $auth->logout();

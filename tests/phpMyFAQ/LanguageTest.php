@@ -4,7 +4,10 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class LanguageTest extends TestCase
 {
@@ -12,8 +15,10 @@ class LanguageTest extends TestCase
 
     private Sqlite3 $dbHandle;
 
+    private Session $session;
+
     /**
-     * @throws PluginException
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -21,11 +26,12 @@ class LanguageTest extends TestCase
 
         Strings::init();
 
+        $this->session = $this->createMock(Session::class);
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($this->dbHandle);
-        $this->language = new Language($configuration);
+        $this->language = new Language($configuration, $this->session);
     }
 
     public function testIsLanguageAvailableWithId(): void
@@ -86,10 +92,9 @@ class LanguageTest extends TestCase
 
     public function testSetLanguageReturnsCorrectLanguageForValidSessionLanguage(): void
     {
-        $_SESSION['lang'] = 'fr';
+        $this->session->method('get')->willReturn('en');
         $language = $this->language->setLanguage(true, 'language_en.php');
-        $this->assertEquals('fr', $language);
-        unset($_SESSION['lang']);
+        $this->assertEquals('en', $language);
     }
 
     public function testSetLanguageReturnsFallbackLanguageForInvalidConfigLanguageAndNoOtherDetectedLanguages(): void

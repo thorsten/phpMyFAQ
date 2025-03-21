@@ -3,12 +3,18 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class QuestionTest extends TestCase
 {
     private Sqlite3 $dbHandle;
     private Question $question;
+
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -16,7 +22,7 @@ class QuestionTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($this->dbHandle);
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 

@@ -15,7 +15,7 @@ package.json
 pnpm-lock.yaml
 
 # Ignore artifacts
-phpmyfaq/assets/dist/
+phpmyfaq/assets/public/
 
 # Ignore PNPM Cache
 .pnpm-store

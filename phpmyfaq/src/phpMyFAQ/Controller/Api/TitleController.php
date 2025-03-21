@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
@@ -34,14 +34,14 @@ class TitleController extends AbstractController
     }
 
     #[OA\Get(
-        path: '/api/v3.0/title',
+        path: '/api/v3.1/title',
         operationId: 'getTitle',
         tags: ['Public Endpoints']
     )]
     #[OA\Response(
         response: 200,
         description: 'Returns the title of the phpMyFAQ instance as a string.',
-        content: new OA\JsonContent(example: 'phpMyFAQ Codename Pallas'),
+        content: new OA\JsonContent(example: 'phpMyFAQ Codename Porus'),
     )]
     public function index(): JsonResponse
     {

@@ -1,14 +1,14 @@
 {% extends 'index.twig' %}
 
 {% block richSnippets %}
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "{{ question }}",
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "{{ question }}",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "{{ answer | striptags }}"
@@ -16,7 +16,7 @@
       }
     ]
   }
-</script>
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -25,6 +25,18 @@
       <h2 class="mb-4 border-bottom">{{ question | raw }}</h2>
 
       <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer|raw }}</article>
+
+      {% if attachmentList is not empty %}
+        <p>{{ 'msgAttachedFiles' | translate }}:</p>
+        <ul class="pb-4 mb-4 border-bottom">
+          {% for attachment in attachmentList %}
+            <li>
+              <i class="bi bi-{{ attachment.icon }}" aria-hidden="true"></i>
+              <a href="{{ attachment.url }}">{{ attachment.filename|e }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       <p class="d-print-none">{{ writeCommentMsg|raw }}</p>
       <div id="pmf-comment-add-success"></div>
@@ -67,19 +79,19 @@
                   {{ msgAddBookmark }}
                 </a>
               </li>
-            <li class="list-group-item bg-transparent">
-              <i aria-hidden="true" class="bi bi-file-pdf"></i>
-              <a target="_blank" href="{{ linkToPdf }}" rel="noopener" class="text-decoration-none">
-                {{ msgPdf }}
-              </a>
-            </li>
+              <li class="list-group-item bg-transparent">
+                <i aria-hidden="true" class="bi bi-file-pdf"></i>
+                <a target="_blank" href="{{ linkToPdf }}" rel="noopener" class="text-decoration-none">
+                  {{ msgPdf }}
+                </a>
+              </li>
             {% endif %}
             {% if enableSendToFriend == true %}
               <li class="list-group-item bg-transparent">
                 <i aria-hidden="true" class="bi bi-share"></i>
                 <a rel="nofollow" href="#" class="text-decoration-none" data-bs-toggle="modal"
                    data-bs-target="#shareModel"
-                   id="shareButton" data-bs-placement="top"> {{ msgSend2Friend }}</a>
+                   id="shareButton" data-bs-placement="top"> {{ msgShareFAQ }}</a>
               </li>
             {% endif %}
             {% if msgChangeLanguage is defined %}
@@ -88,7 +100,7 @@
             {% if permissionEditFaq == true %}
               <li class="list-group-item bg-transparent">
                 <i aria-hidden="true" class="bi bi-pencil"></i>
-                <a class="text-decoration-none" href="./admin/index.php?action=editentry&id={{ id }}&lang={{ lang }}">
+                <a class="text-decoration-none" href="./admin/faq/edit/{{ id }}/{{ lang }}">
                   {{ ad_entry_edit_1 }} {{ ad_entry_edit_2 }}
                 </a>
               </li>
@@ -229,7 +241,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="ShareLabel">{{ 'msgSend2Friend' | translate }}</h5>
+          <h5 class="modal-title" id="ShareLabel">{{ 'msgShareFAQ' | translate }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body share-modal-body">

@@ -1,333 +1,337 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-speedometer"></i>
-    {{ 'adminHeaderDashboard' | translate }}
-  </h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <a href="?action=config">
-        {% if isMaintenanceMode %}
-          <button class="btn btn-outline-danger">{{ 'msgMaintenanceMode' | translate }}</button>
-        {% else %}
-          <button class="btn btn-outline-success">{{ 'msgOnlineMode' | translate }}</button>
-        {% endif %}
-      </a>
-    </div>
-  </div>
-</div>
+{% extends '@admin/index.twig' %}
 
-{% if isDebugMode %}
-  <section class="row">
-    <div class="col-12">
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ 'msgAdminWarningDebugMode' | translate | raw }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-speedometer"></i>
+      {{ 'adminHeaderDashboard' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a href="./configuration">
+          {% if isMaintenanceMode %}
+            <button class="btn btn-outline-danger">{{ 'msgMaintenanceMode' | translate }}</button>
+          {% else %}
+            <button class="btn btn-outline-success">{{ 'msgOnlineMode' | translate }}</button>
+          {% endif %}
+        </a>
       </div>
     </div>
-  </section>
-{% endif %}
+  </div>
 
-{% if hasVersionConflict %}
-  <section class="row mb-3">
-    <div class="col-12">
-      <div class="card bg-danger text-white shadow h-100 py-2">
+  {% if isDebugMode %}
+    <section class="row">
+      <div class="col-12">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ 'msgAdminWarningDebugMode' | translate | raw }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if hasVersionConflict %}
+    <section class="row mb-3">
+      <div class="col-12">
+        <div class="card bg-danger text-white shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="mb-0 font-weight-bold text-gray-800">
+                  The phpMyFAQ version number stored in your database ({{ currentVersionDatabase }}) is lower than the
+                  version number of the installed application ({{ currentVersionApp }}), please update
+                  <a href="../update" class="text-white-50">your installation here</a> to avoid an unintended
+                  behavior.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if isDevelopmentVersion %}
+    <section class="row">
+      <div class="col">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ msgAdminWarningDevelopmentVersion | raw }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="row">
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card text-bg-primary bg-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
-              <div class="mb-0 font-weight-bold text-gray-800">
-                The phpMyFAQ version number stored in your database ({{ currentVersionDatabase }}) is lower than the
-                version number of the installed application ({{ currentVersionApp }}), please update
-                <a href="../update" class="text-white-50">your installation here</a> to avoid an unintended
-                behavior.
+              <div class="text-xs font-weight-bold mb-1">
+                <a class="text-white" href="./statistics/sessions">
+                  {{ 'msgVisits' | translate }}
+                </a>
               </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-bar-chart h1 text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card text-bg-success bg-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold mb-1">
+                <a class="text-white" href="./faqs">
+                  {{ 'ad_start_articles' | translate }}
+                </a>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-list-check h1 text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card text-bg-info bg-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold mb-1">
+                <a class="text-white" href="./comments">
+                  {{ 'msgComments' | translate }}
+                </a>
+              </div>
+              <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ adminDashboardInfoNumComments }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-chat-left-text h1 text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card text-bg-warning bg-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold mb-1">
+                <a class="text-white" href="./questions">
+                  {{ 'msgOpenQuestions' | translate }}
+                </a>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumQuestions }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-question-circle h1 text-gray-300"></i>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-{% endif %}
 
-{% if isDevelopmentVersion %}
-  <section class="row">
-    <div class="col">
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ msgAdminWarningDevelopmentVersion | raw }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    </div>
-  </section>
-{% endif %}
-
-<section class="row">
-
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card text-bg-primary bg-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold mb-1">
-              <a class="text-white" href="?action=viewsessions">
-                {{ 'msgVisits' | translate }}
-              </a>
+  {% if hasUserTracking %}
+    <section class="row">
+      <div class="col-8 mb-4">
+        <div class="card shadow h-100 mb-4">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}
+          </h5>
+          <div class="card-body">
+            <div class="pmf-charts">
+              <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
             </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumVisits }}</div>
-          </div>
-          <div class="col-auto">
-            <i class="bi bi-bar-chart h1 text-gray-300"></i>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card text-bg-success bg-success shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold mb-1">
-              <a class="text-white" href="?action=faqs-overview">
-                {{ 'ad_start_articles' | translate }}
-              </a>
+      <div class="col-4 mb-4">
+        <div class="card shadow h-100 mb-4">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ 'msgTopTen' | translate }}
+          </h5>
+          <div class="card-body">
+            <div class="pmf-charts">
+              <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
             </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumFaqs }}</div>
-          </div>
-          <div class="col-auto">
-            <i class="bi bi-list-check h1 text-gray-300"></i>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+  {% endif %}
 
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card text-bg-info bg-info shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold mb-1">
-              <a class="text-white" href="?action=comments">
-                {{ 'ad_start_comments' | translate }}
-              </a>
-            </div>
-            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ adminDashboardInfoNumComments }}</div>
-          </div>
-          <div class="col-auto">
-            <i class="bi bi-chat-left-text h1 text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card text-bg-warning bg-warning shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold mb-1">
-              <a class="text-white" href="?action=question">
-                {{ 'msgOpenQuestions' | translate }}
-              </a>
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumQuestions }}</div>
-          </div>
-          <div class="col-auto">
-            <i class="bi bi-question-circle h1 text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-{% if hasUserTracking %}
-  <section class="row">
-    <div class="col-8 mb-4">
-      <div class="card shadow h-100 mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ adminDashboardHeaderVisits }}
-        </h5>
-        <div class="card-body">
-          <div class="pmf-charts">
-            <canvas id="pmf-chart-visits" width="200" height="150"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-4 mb-4">
-      <div class="card shadow h-100 mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-bar-chart"></i> {{ 'msgTopTen' | translate }}
-        </h5>
-        <div class="card-body">
-          <div class="pmf-charts">
-            <canvas id="pmf-chart-topten" width="400" height="300"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-{% endif %}
-
-<section class="row masonry-grid">
-
-  <div class="col-3 mb-4">
-    <div class="card shadow mb-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
-      </h5>
-      <div class="card-body">
-        <ul class="list-unstyled">
-          {% if adminDashboardInactiveFaqs|length > 0 %}
-            {% for inactiveFaqs in adminDashboardInactiveFaqs %}
-              <li>
-                <i class="bi bi-question-circle"></i>
-                <a href="{{ inactiveFaqs.url }}">{{ inactiveFaqs.question }}</a>
-              </li>
-            {% endfor %}
-          {% else %}
-            <li>n/a</li>
-          {% endif %}
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  {% if hasPermissionEditConfig %}
-    <div class="col-3 mb-4">
-      <div class="card shadow mb-4">
-        <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-check"></i> {{ 'msgOnlineVersionCheck' | translate }}
-        </h5>
-        <div class="card-body">
-          {% if showVersion %}
-            <div id="phpmyfaq-latest-version">
-              <div class="spinner-border text-secondary d-none" id="version-loader" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-          {% else %}
-            <form action="./index.php"
-                  method="post" accept-charset="utf-8">
-              <input type="hidden" name="param" value="version" />
-              <button class="btn btn-info" type="submit">
-                {{ 'msgButtonFetchLatestVersion' | translate }}
-              </button>
-            </form>
-            {% if adminDashboardShouldUpdateMessage %}
-              <div class="alert alert-danger">
-                {{ adminDashboardLatestVersionMessage }}:
-                <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
-                <hr>
-                {{ adminDashboardShouldUpdateMessage }}
-              </div>
-            {% endif %}
-
-            {% if adminDashboardErrorMessage %}
-              <div class="alert alert-danger">
-                {{ adminDashboardErrorMessage }}
-              </div>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
-    </div>
+  <section class="row masonry-grid">
 
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
-          <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ 'msgOnlineVerificationCheck' | translate }}
+          <i aria-hidden="true" class="bi bi-ban"></i> {{ adminDashboardHeaderInactiveFaqs }}
         </h5>
         <div class="card-body">
-          <button type="button" class="btn btn-primary mb-2 w-100" data-bs-toggle="modal"
-                  data-bs-target="#verificationModal">
-            {{ 'msgOnlineVerificationCheckButton' | translate }}
+          <ul class="list-unstyled">
+            {% if adminDashboardInactiveFaqs|length > 0 %}
+              {% for inactiveFaqs in adminDashboardInactiveFaqs %}
+                <li>
+                  <i class="bi bi-question-circle"></i>
+                  <a href="{{ inactiveFaqs.url }}">{{ inactiveFaqs.question }}</a>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li>n/a</li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {% if hasPermissionEditConfig %}
+      <div class="col-3 mb-4">
+        <div class="card shadow mb-4">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-check"></i> {{ 'msgOnlineVersionCheck' | translate }}
+          </h5>
+          <div class="card-body">
+            {% if showVersion %}
+              <div id="phpmyfaq-latest-version">
+                <div class="spinner-border text-secondary d-none" id="version-loader" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            {% else %}
+              <form action="./index.php"
+                    method="post" accept-charset="utf-8">
+                <input type="hidden" name="param" value="version" />
+                <button class="btn btn-info" type="submit">
+                  {{ 'msgButtonFetchLatestVersion' | translate }}
+                </button>
+              </form>
+              {% if adminDashboardShouldUpdateMessage %}
+                <div class="alert alert-danger">
+                  {{ adminDashboardLatestVersionMessage }}:
+                  <strong>phpMyFAQ {{ adminDashboardVersions.stable }}</strong>
+                  <hr>
+                  {{ adminDashboardShouldUpdateMessage }}
+                </div>
+              {% endif %}
+
+              {% if adminDashboardErrorMessage %}
+                <div class="alert alert-danger">
+                  {{ adminDashboardErrorMessage }}
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3 mb-4">
+        <div class="card shadow mb-4">
+          <h5 class="card-header py-3">
+            <i aria-hidden="true" class="bi bi-check bi-fw"></i> {{ 'msgOnlineVerificationCheck' | translate }}
+          </h5>
+          <div class="card-body">
+            <button type="button" class="btn btn-primary mb-2 w-100" data-bs-toggle="modal"
+                    data-bs-target="#verificationModal">
+              {{ 'msgOnlineVerificationCheckButton' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="col-3 mb-4">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-heart-fill"></i> {{ 'msgSupportUs' | translate }}
+        </h5>
+        <div class="card-body">
+          <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/UQQJEX7BCHPZ">
+            Thorsten's wishlist on amazon.de
+          </a>
+          <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/3AZCSL908ACN9">
+            Jan's wishlist on amazon.de
+          </a>
+          <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/FGS7DWAJIRLD">
+            Florian's wishlist on amazon.de
+          </a>
+          <a target="_blank" class="btn btn-info mb-2 w-100" href="https://github.com/sponsors/thorsten">
+            Become a sponsor to Thorsten on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3 mt-4">
+      <div class="card shadow mt-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-info-circle-fill"></i> Support
+        </h5>
+        <div class="card-body">
+          <a target="_blank" class="btn btn-secondary mb-2 w-100" href="{{ documentationUrl }}">
+            {{ 'msgDocumentation' | translate }}
+          </a>
+          <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://api-docs.phpmyfaq.de/">
+            API {{ 'msgDocumentation' | translate }}
+          </a>
+          <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://forum.phpmyfaq.de/">
+            phpMyFAQ Forum
+          </a>
+          <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://github.com/thorsten/phpMyFAQ/issues">
+            {{ 'msgReportABug' | translate }}
+          </a>
+          <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://github.com/thorsten/phpMyFAQ">
+            GitHub Repository
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Verification Modal -->
+  <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
+       data-pmf-current-version="{{ currentVersionApp }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="verificationModalLabel">{{ 'msgOnlineVerificationCheck' | translate }}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-2">
+                <div class="spinner-border d-none" role="status" id="pmf-verification-spinner">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <div class="col-10">
+                <span id="pmf-verification-updates"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ 'ad_att_close' | translate }}
           </button>
         </div>
       </div>
     </div>
-  {% endif %}
-
-  <div class="col-3 mb-4">
-    <div class="card shadow mb-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-heart-fill"></i> {{ 'msgSupportUs' | translate }}
-      </h5>
-      <div class="card-body">
-        <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/UQQJEX7BCHPZ">
-          Thorsten's wishlist on amazon.de
-        </a>
-        <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/3AZCSL908ACN9">
-          Jan's wishlist on amazon.de
-        </a>
-        <a target="_blank" class="btn btn-info mb-2 w-100" href="https://www.amazon.de/hz/wishlist/ls/FGS7DWAJIRLD">
-          Florian's wishlist on amazon.de
-        </a>
-        <a target="_blank" class="btn btn-info mb-2 w-100" href="https://github.com/sponsors/thorsten">
-          Become a sponsor to Thorsten on GitHub
-        </a>
-      </div>
-    </div>
   </div>
-
-  <div class="col-3 mt-4">
-    <div class="card shadow mt-4">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-info-circle-fill"></i> Support
-      </h5>
-      <div class="card-body">
-        <a target="_blank" class="btn btn-secondary mb-2 w-100" href="{{ documentationUrl }}">
-          {{ 'msgDocumentation' | translate }}
-        </a>
-        <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://api-docs.phpmyfaq.de/">
-          API {{ 'msgDocumentation' | translate }}
-        </a>
-        <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://forum.phpmyfaq.de/">
-          phpMyFAQ Forum
-        </a>
-        <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://github.com/thorsten/phpMyFAQ/issues">
-          Report a bug
-        </a>
-        <a target="_blank" class="btn btn-secondary mb-2 w-100" href="https://github.com/thorsten/phpMyFAQ">
-          GitHub Repository
-        </a>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-<!-- Verification Modal -->
-<div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel"
-     data-pmf-current-version="{{ currentVersionApp }}" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="verificationModalLabel">{{ 'msgOnlineVerificationCheck' | translate }}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-2">
-              <div class="spinner-border d-none" role="status" id="pmf-verification-spinner">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-            <div class="col-10">
-              <span id="pmf-verification-updates"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          {{ 'ad_att_close' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+{% endblock %}

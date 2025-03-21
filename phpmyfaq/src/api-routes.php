@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
@@ -32,6 +32,7 @@ use phpMyFAQ\Controller\Api\SearchController;
 use phpMyFAQ\Controller\Api\SetupController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
+use phpMyFAQ\Controller\Api\UpdateController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
@@ -41,6 +42,7 @@ use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\FaqController as FaqFrontendController;
 use phpMyFAQ\Controller\Frontend\QuestionController as QuestionFrontendController;
 use phpMyFAQ\Controller\Frontend\RegistrationController as RegistrationFrontendController;
+use phpMyFAQ\Controller\Frontend\TranslationController;
 use phpMyFAQ\Controller\Frontend\UnauthorizedUserController;
 use phpMyFAQ\Controller\Frontend\UserController;
 use phpMyFAQ\Controller\Frontend\VotingController;
@@ -190,6 +192,11 @@ $routesConfig = [
         'controller' => [TitleController::class, 'index'],
         'methods' => 'GET'
     ],
+    'api.update' => [
+        'path' => "v{$apiVersion}/update",
+        'controller' => [UpdateController::class, 'index'],
+        'methods' => 'POST'
+    ],
     'api.version' => [
         'path' => "v{$apiVersion}/version",
         'controller' => [VersionController::class, 'index'],
@@ -244,6 +251,11 @@ $routesConfig = [
     'api.private.register' => [
         'path' => 'register',
         'controller' => [RegistrationFrontendController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'api.private.translations' => [
+        'path' => 'translations/{language}',
+        'controller' => [TranslationController::class, 'translations'],
         'methods' => 'POST'
     ],
     'api.private.user.password' => [

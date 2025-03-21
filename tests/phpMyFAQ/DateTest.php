@@ -44,12 +44,12 @@ class DateTest extends TestCase
     {
         $date = new Date($this->configuration);
         $file = 'tracking01042022';
-        $expected = 1648764000;
+        $expected = 1648771200;
 
         $result = $date->getTrackingFileDate($file);
         $this->assertEquals($expected, $result);
 
-        $expected = 1648850399;
+        $expected = 1648857599;
 
         $result = $date->getTrackingFileDate($file, true);
         $this->assertEquals($expected, $result);

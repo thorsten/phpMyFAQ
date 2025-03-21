@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-10-07
@@ -155,7 +155,7 @@ class Pdf extends Export
 
             if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->pdf->Ln();
-                $this->pdf->Write(5, Translation::get('ad_entry_tags') . ': ' . implode(', ', $tags));
+                $this->pdf->Write(5, Translation::get('msgTags') . ': ' . implode(', ', $tags));
             }
 
             $this->pdf->Ln();
@@ -215,6 +215,20 @@ class Pdf extends Export
             $this->pdf->WriteHTML($this->converter->convert($faqData['content'])->getContent());
         } else {
             $this->pdf->WriteHTML((string) $faqData['content']);
+        }
+
+        if (isset($faqData['attachmentList'])) {
+            $this->pdf->Ln(10);
+            $this->pdf->Ln();
+            $this->pdf->Write(5, Translation::get('msgAttachedFiles') . ':');
+            $this->pdf->Ln(5);
+            $this->pdf->Ln();
+            $listItems = '<ul class="pb-4 mb-4 border-bottom">';
+            foreach ($faqData['attachmentList'] as $attachment) {
+                $listItems .= sprintf('<li><a href="%s">%s</a></li>', $attachment['url'], $attachment['filename']);
+            }
+            $listItems .= '</ul>';
+            $this->pdf->WriteHTML($listItems);
         }
 
         $this->pdf->Ln(10);

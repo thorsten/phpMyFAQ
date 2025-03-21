@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2024 phpMyFAQ Team
+ * @copyright 2010-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
@@ -42,27 +42,27 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 0;
+    private const VERSION_MINOR = 1;
 
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 7;
+    private const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = '';
+    private const VERSION_PRE_RELEASE = 'alpha';
 
     /**
      * API version.
      */
-    private const VERSION_API = '3.0';
+    private const VERSION_API = '3.1';
 
     /**
      * Plugin version.
      */
-    private const PLUGIN_VERSION = '0.1.0';
+    private const PLUGIN_VERSION = '0.2.0';
 
     /**
      * Minimum required PHP version.
@@ -111,7 +111,7 @@ class System
     private array $supportedDatabases = [
         'mysqli' => [
             self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 for MySQL',
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (ext/mysqli)',
         ],
         'pgsql' => [
             self::VERSION_MINIMUM_PHP,
@@ -124,6 +124,22 @@ class System
         'sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
             'MS SQL Server 2016 or later',
+        ],
+        'pdo_mysql' => [
+            self::VERSION_MINIMUM_PHP,
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, experimental)',
+        ],
+        'pdo_pgsql' => [
+            self::VERSION_MINIMUM_PHP,
+            'PostgreSQL v10 or later (PDO_PGSQL, experimental)',
+        ],
+        'pdo_sqlite' => [
+            self::VERSION_MINIMUM_PHP,
+            'SQLite 3 (PDO_SQLITE, experimental)',
+        ],
+        'pdo_sqlsrv' => [
+            self::VERSION_MINIMUM_PHP,
+            'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, experimental)',
         ],
     ];
 
@@ -286,7 +302,7 @@ class System
     {
         $mainUrl = $configuration->getDefaultUrl();
 
-        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME'] && !str_contains($mainUrl, 'https')) {
+        if (Request::createFromGlobals()->isSecure() && !str_contains($mainUrl, 'https')) {
             $mainUrl = str_replace('http://', 'https://', $mainUrl);
         }
 

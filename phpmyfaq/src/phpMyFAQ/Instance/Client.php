@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2024 phpMyFAQ Team
+ * @copyright 2012-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-31
@@ -18,9 +18,9 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Database;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 

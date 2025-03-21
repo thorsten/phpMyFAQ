@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de
- * @copyright 2022-2024 phpMyFAQ Team
+ * @copyright 2022-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-22
@@ -290,8 +290,9 @@ class LanguageCodes
         'tr' => 'Turkish',
         'tw' => 'Twi',
         'uk' => 'Ukrainian',
+        'ur' => 'Urdu',
         'vi' => 'Vietnamese',
-        'cy' => 'Welsh'
+        'cy' => 'Welsh',
     ];
 
     /**
@@ -302,6 +303,13 @@ class LanguageCodes
     public static function getAll(): array
     {
         return static::$languageCodes;
+    }
+
+    public static function getAllSorted(): array
+    {
+        $sortedLanguageCodes = static::$languageCodes;
+        asort($sortedLanguageCodes);
+        return $sortedLanguageCodes;
     }
 
     /**

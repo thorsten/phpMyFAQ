@@ -1,10 +1,27 @@
-# phpMyFAQ 4.0
+# phpMyFAQ 4.1
 
-**Codename "Pallas"**
+**Codename "Porus"**
 
 ## CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+### phpMyFAQ v4.1.0-alpha - 2025-02-12
+
+- added configuration to edit robots.txt (Thorsten)
+- added Symfony Routing for administration backend (Thorsten)
+- added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
+- added administration view for orphaned FAQs (Thorsten)
+- added plugin administration backend (Thorsten)
+- added image upload and image manager in Markdown editor (Thorsten)
+- added experimental support for PDO (Thorsten)
+- added Urdu translation (Thorsten)
+- updated Spanish translation (Thorsten)
+- improved online update feature (Thorsten)
+- migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
+- migrated from JavaScript to TypeScript (Thorsten) 
+- migrated from Webpack to Vite v6 (Thorsten)
+- migrated from Jest to Vitest v3 (Thorsten)
 
 ### phpMyFAQ v4.0.7 - unreleased
 
@@ -93,6 +110,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.2.10 - 2024-11-09
 
 - fixed minor bugs (Thorsten)
+- updated bundled dependencies (Thorsten)
 
 ### phpMyFAQ v3.2.9 - 2024-07-23
 

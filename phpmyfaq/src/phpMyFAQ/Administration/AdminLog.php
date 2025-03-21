@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2006-08-15
@@ -87,14 +87,15 @@ readonly class AdminLog
     public function log(User $user, string $logText = ''): bool
     {
         if ($this->configuration->get('main.enableAdminLog')) {
+            $request = Request::createFromGlobals();
             $query = sprintf(
                 "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
                 $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                Request::createFromGlobals()->server->get('REQUEST_TIME'),
+                $request->server->get('REQUEST_TIME'),
                 $user->getUserId(),
                 $this->configuration->getDb()->escape(nl2br($logText)),
-                $this->configuration->getDb()->escape(Request::createFromGlobals()->getClientIp())
+                $this->configuration->getDb()->escape($request->getClientIp())
             );
 
             return (bool) $this->configuration->getDb()->query($query);

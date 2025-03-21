@@ -1,4 +1,4 @@
-# phpMyFAQ 4.0
+# phpMyFAQ 4.1-dev
 
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/thorsten/phpMyFAQ)
 ![GitHub](https://img.shields.io/github/license/thorsten/phpMyFAQ)
@@ -60,9 +60,14 @@ _Running using named volumes:_
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.3 support:_
+_Running apache web server with PHP 8.4 support:_
 
-- **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+
+_Running nginx web server with PHP 8.4 support:_
+
+- **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
+- **php-fpm**: PHP-FPM image with PHP 8.4 support
 
 Then services will be available at the following addresses:
 
@@ -74,9 +79,7 @@ Then services will be available at the following addresses:
 
 To run the test using Docker, you have to install the Composer development dependencies
 
-    $ curl -s https://getcomposer.org/installer | php
-    $ php composer.phar install
-    $ php composeer.phar test
+    $ docker build -t phpmyfaq-test . && docker run --rm -it docker.io/library/phpmyfaq-test:latest 
 
 #### Quote from Elasticsearch documentation
 
@@ -173,7 +176,7 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can read the complete documentation on [here](https://phpmyfaq.readthedocs.io/en/latest/).
 
-## REST API v3.0 documentation
+## REST API v3.1 documentation
 
 The REST API documentation is available as OpenAPI 3.0 specification:
 

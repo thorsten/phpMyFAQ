@@ -1,13 +1,16 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
     <i aria-hidden="true" class="bi bi-folder"></i> {{ 'msgHeaderCategoryOverview' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-outline-success" href="?action=addcategory" id="addCategoryModal">
+      <a class="btn btn-outline-success" href="./category/add" id="addCategoryModal">
         <i aria-hidden="true" class="bi bi-plus"></i> {{ 'msgAddCategory' | translate }}
       </a>
-      <a class="btn btn-outline-info" href="?action=showcategory">
+      <a class="btn btn-outline-info" href="./category/hierarchy">
         <i aria-hidden="true" class="bi bi-list"></i> {{ 'msgCategoryMatrix' | translate }}
       </a>
     </div>
@@ -53,28 +56,28 @@
         <div class="pmf-category-actions">
           <!-- Add FAQ to category (always) -->
           <a class="btn btn-info mb-1 mt-1"
-             href="?action=editentry&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}"
+             href="./faq/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
              title="{{ 'ad_quick_entry'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-indent"></i>
           </a>
 
           <!-- Add subcategory (if current language) -->
           <a class="btn btn-info"
-             href="?action=addcategory&cat={{ categoryInfo[key]['id'] }}&lang={{ categoryInfo[key]['lang'] }}"
+             href="./category/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
              title="{{ 'ad_quick_category'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-plus-square"></i>
           </a>
 
           <!-- Edit category (if current language) -->
           <a class="btn btn-info"
-             href="?action=editcategory&cat={{ categoryInfo[key]['id'] }}"
-             title="{{ 'ad_kateg_rename'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
+             href="./category/edit/{{ categoryInfo[key]['id'] }}" title="{{ 'ad_kateg_rename'|translate }}"
+             data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-pencil"></i>
           </a>
 
           <!-- Translate category -->
           <a class="btn btn-info"
-             href="?action=translatecategory&cat={{ categoryInfo[key]['id'] }}"
+             href="./category/translate/{{ categoryInfo[key]['id'] }}"
              title="{{ 'ad_categ_translate'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-globe"></i>
           </a>
@@ -105,3 +108,4 @@
     </div>
   {% endfor %}
 {% endmacro %}
+{% endblock %}

@@ -14,7 +14,7 @@
  *
  * @package   phpMyFAQ
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-11
@@ -101,7 +101,7 @@ class TwoFactor
      */
     public function getQrCode(string $secret): string
     {
-        $label = $this->configuration->getTitle() . ':' . $this->currentUser->getUserData('email');
+        $label = $this->configuration->getTitle() . 'XXXXX:' . $this->currentUser->getUserData('email');
         $qrCodeText = sprintf(
             '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),

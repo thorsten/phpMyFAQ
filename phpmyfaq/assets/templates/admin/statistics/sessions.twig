@@ -1,134 +1,131 @@
-<div
-  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-list-ol"></i> {{ adminHeaderSessions }}
-  </h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <a class="btn btn-outline-danger" href="?action=clear-visits&csrf={{ csrfTokenClearVisits }}">
-        <i aria-hidden="true" class="bi bi-trash"></i> {{ msgClearVisits }}
-      </a>
-    </div>
-  </div>
-</div>
+{% extends '@admin/index.twig' %}
 
-{% if hasMessage %}
-  <div class="alert alert-success" role="alert">
-    {{ message }}
-  </div>
-{% endif %}
-
-<div class="row mb-3">
-  <div class="col-6">
-    <div class="card shadow">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-list-ol"></i> {{ adminHeaderSessions }}
-      </h5>
-      <div class="card-body">
-        <table class="table table-striped align-middle">
-          <tr>
-            <th class="w-50">{{ msgDays }}</th>
-            <td class="w-50">{{ numberOfDays }}</td>
-          </tr>
-          <tr>
-            <th>{{ msgVisits }}</th>
-            <td>{{ numberOfVisits }}</td>
-          </tr>
-          <tr>
-            <th>{{ msgVisitsPerDay }}</th>
-            <td>{{ visitsPerDay }}</td>
-          </tr>
-          <tr>
-            <th>{{ msgFirstDate }}</th>
-            <td>{{ firstDate }}</td>
-          </tr>
-          <tr>
-            <th>{{ msgLastDate }}</th>
-            <td>{{ lastDate }}</td>
-          </tr>
-          <tr>
-            <th>{{ msgSessionBrowse }}</th>
-            <td class="col-lg-10">
-              <form action="?action=sessionbrowse" method="post" accept-charset="utf-8"
-                    class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="mr-2">
-                  <label for="day" class="d-none">
-                    {{ msgSessionBrowse }}
-                  </label>
-                  <select name="day" id="day" class="form-select">
-                    {{ renderedDaySelector | raw }}
-                  </select>
-                </div>
-                <button class="btn btn-primary" type="submit" name="statbrowse">
-                  {{ buttonOkay }}
-                </button>
-              </form>
-            </td>
-          </tr>
-        </table>
+{% block content %}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-list-ol"></i> {{ adminHeaderSessions }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button type="button" class="btn btn-outline-danger" data-pmf-csrf="{{ csrfTokenClearVisits }}"
+                id="pmf-admin-clear-visits">
+          <i aria-hidden="true" class="bi bi-trash"></i> {{ msgClearVisits }}
+        </button>
       </div>
     </div>
   </div>
-  <div class="col-6">
-    <!-- Chart has to be implemented :-) -->
-  </div>
-</div>
 
-<div class="row mb-3">
-  <div class="col-6">
-    <div class="card shadow">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-trash"></i> {{ msgSessionManagement }}
-      </h5>
-      <div class="card-body">
-        <form action="?action=viewsessions" method="post"
-              class="row row-cols-lg-auto g-3 align-items-center">
-          <input type="hidden" name="statdelete" value="delete">
-          {{ csrfTokenSessions | raw }}
-          <div class="col-12">
-            <label  class="visually-hidden" for="month">
-              {{ msgChooseMonth }}
-            </label>
-            <select name="month" id="month" class="form-select">
-              {{ renderedMonthSelector | raw }}
-            </select>
+  <div class="row mb-3">
+    <div class="col-6">
+      <div class="card shadow">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-list-ol"></i> {{ adminHeaderSessions }}
+        </h5>
+        <div class="card-body">
+          <table class="table table-striped align-middle">
+            <tr>
+              <th class="w-50">{{ msgDays }}</th>
+              <td class="w-50">{{ numberOfDays }}</td>
+            </tr>
+            <tr>
+              <th>{{ msgVisits }}</th>
+              <td>{{ numberOfVisits }}</td>
+            </tr>
+            <tr>
+              <th>{{ msgVisitsPerDay }}</th>
+              <td>{{ visitsPerDay }}</td>
+            </tr>
+            <tr>
+              <th>{{ msgFirstDate }}</th>
+              <td>{{ firstDate }}</td>
+            </tr>
+            <tr>
+              <th>{{ msgLastDate }}</th>
+              <td>{{ lastDate }}</td>
+            </tr>
+            <tr>
+              <th>{{ msgSessionBrowse }}</th>
+              <td class="col-lg-10">
+                <form class="row row-cols-lg-auto g-3 align-items-center" method="post" id="pmf-admin-form-session"
+                      action="">
+                  <div class="mr-2">
+                    <label for="day" class="d-none">
+                      {{ msgSessionBrowse }}
+                    </label>
+                    <select name="day" id="day" class="form-select">
+                      {{ renderedDaySelector | raw }}
+                    </select>
+                  </div>
+                  <button class="btn btn-primary" type="button" id="pmf-admin-session-day">
+                    {{ buttonOkay }}
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <!-- Chart has to be implemented :-) -->
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-6">
+      <div class="card shadow">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-trash"></i> {{ msgSessionManagement }}
+        </h5>
+        <div class="card-body">
+          <form class="row row-cols-lg-auto g-3 align-items-center">
+            <input type="hidden" name="statdelete" id="statdelete" value="delete">
+            {{ csrfTokenSessions | raw }}
+            <div class="col-12">
+              <label class="visually-hidden" for="month">
+                {{ msgChooseMonth }}
+              </label>
+              <select name="month" id="month" class="form-select">
+                {{ renderedMonthSelector | raw }}
+              </select>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary" type="button" id="pmf-admin-delete-sessions">
+                {{ buttonDeleteMonth }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-6">
+      <div class="card shadow">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-file-earmark-arrow-down"></i> {{ 'msgExportSessionsAsCSV' | translate }}
+        </h5>
+        <div class="card-body">
+          <form class="row">
+          <input type="hidden" id="csrf" value="{{ csrfTokenExport }}"/>
+          <label for="firstHour" class="col-1 col-form-label">{{ 'msgExportSessionsFrom' | translate }}</label>
+          <div class="col-5">
+              <input type="date" class="form-control" min="{{ datePickerMinDate }}" max="{{ dateToday }}" id="firstHour"/>
           </div>
-          <div class="col-12">
-            <button class="btn btn-primary" type="submit">
-              {{ buttonDeleteMonth }}
-            </button>
+          <label for="lastHour" class="col-1 col-form-label">{{ 'msgExportSessionsTo' | translate }}</label>
+          <div class="col-5">
+              <input type="date" class="form-control" id="lastHour" min="{{ datePickerMinDate }}" max="{{ dateToday }}"/>
+          </div>
+          <div class="mt-3 d-flex justify-content-end">
+              <button class="btn btn-primary" type="submit" id="exportSessions">
+                <i class="bi bi-file-earmark-arrow-down"></i> {{ 'msgExportSessions' | translate }}
+              </button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="row mb-3">
-  <div class="col-6">
-    <div class="card shadow">
-      <h5 class="card-header py-3">
-        <i aria-hidden="true" class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessionsAsCSV }}
-      </h5>
-      <div class="card-body">
-        <form class="row">
-        <input type="hidden" id="csrf" value="{{ csrfTokenExport }}"/>
-        <label for="firstHour" class="col-1 col-form-label">{{ msgExportSessionsFrom }}</label>
-        <div class="col-5">
-            <input type="date" class="form-control" min="{{ datePickerMinDate }}" max="{{ dateToday }}" id="firstHour"/>
-        </div>
-        <label for="lastHour" class="col-1 col-form-label">{{ msgExportSessionsTo }}</label>
-        <div class="col-5">
-            <input type="date" class="form-control" id="lastHour" min="{{ datePickerMinDate }}" max="{{ dateToday }}"/>
-        </div>
-        <div class="mt-3 d-flex justify-content-end">
-            <button class="btn btn-primary" type="submit" id="exportSessions">
-              <i class="bi bi-file-earmark-arrow-down"></i> {{ msgExportSessions }}
-            </button>
-        </div>
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
-            
+{% endblock %}

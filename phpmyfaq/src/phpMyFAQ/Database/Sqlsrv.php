@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The phpMyFAQ\Db_Sqlsrv class provides methods and functions for SQL Server Driver
+ * The phpMyFAQ\Database\Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -10,7 +10,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-02-18
@@ -20,7 +20,6 @@ namespace phpMyFAQ\Database;
 
 use Exception;
 use phpMyFAQ\Database;
-use phpMyFAQ\Utils;
 
 /**
  * Class Sqlsrv
@@ -201,7 +200,7 @@ class Sqlsrv implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         $options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 

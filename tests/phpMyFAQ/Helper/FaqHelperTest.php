@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
@@ -26,16 +27,9 @@ class FaqHelperTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.referenceURL', 'https://localhost:443/');
+        $this->configuration->set('main.enableMarkdownEditor', true);
 
         $this->faqHelper = new FaqHelper($this->configuration);
-    }
-
-    public function testRewriteLanguageMarkupClass(): void
-    {
-        $this->assertEquals(
-            '<div class="language-html">Foobar</div>',
-            $this->faqHelper->rewriteLanguageMarkupClass('<div class="language-markup">Foobar</div>')
-        );
     }
 
     public function testRewriteUrlFragments(): void
@@ -119,5 +113,32 @@ class FaqHelperTest extends TestCase
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
         $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    /**
+     * @throws CommonMarkException
+     */
+    public function testRenderAnswerPreviewWithMarkdown(): void
+    {
+        $answer = '# Hello, World!';
+        $wordCount = 2;
+
+        $result = $this->faqHelper->renderAnswerPreview($answer, $wordCount);
+
+        $this->assertEquals('Hello, World!', trim($result));
+    }
+
+    /**
+     * @throws CommonMarkException
+     */
+    public function testRenderAnswerPreviewWithoutMarkdown(): void
+    {
+        $this->configuration->set('main.enableMarkdownEditor', false);
+        $answer = '<p>Hello, <strong>World!</strong></p>';
+        $wordCount = 2;
+
+        $result = $this->faqHelper->renderAnswerPreview($answer, $wordCount);
+
+        $this->assertEquals('Hello, World!', trim($result));
     }
 }

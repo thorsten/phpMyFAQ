@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-04-03
@@ -22,7 +22,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Enums\ReleaseType;
-use phpMyFAQ\Filesystem;
+use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
@@ -167,6 +167,9 @@ class Update extends Setup
         $this->applyUpdates400Beta2();
         $this->applyUpdates405();
         $this->applyUpdates407();
+
+        // 4.1 updates
+        $this->applyUpdates410Alpha();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1065,6 +1068,54 @@ class Update extends Setup
         }
     }
 
+
+    private function applyUpdates410Alpha(): void
+    {
+        if (version_compare($this->version, '4.1.0-alpha', '<')) {
+            $text = <<<EOT
+User-agent: Amazonbot
+User-agent: anthropic-ai
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: CCBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: cohere-ai
+User-agent: Diffbot
+User-agent: FacebookBot
+User-agent: facebookexternalhit
+User-agent: FriendlyCrawler
+User-agent: Google-Extended
+User-agent: GoogleOther
+User-agent: GoogleOther-Image
+User-agent: GoogleOther-Video
+User-agent: GPTBot
+User-agent: ICC-Crawler
+User-agent: ImagesiftBot
+User-agent: img2dataset
+User-agent: Meta-ExternalAgent
+User-agent: OAI-SearchBot
+User-agent: omgili
+User-agent: omgilibot
+User-agent: PerplexityBot
+User-agent: PetalBot
+User-agent: Scrapy
+User-agent: Timpibot
+User-agent: VelenPublicWebCrawler
+User-agent: YouBot
+User-agent: Meta-ExternalFetcher
+User-agent: Applebot
+Disallow: /
+
+User-agent: *
+Disallow: /admin/
+
+Sitemap: /sitemap.xml
+EOT;
+            $this->configuration->add('seo.contentRobotsText', $text);
+        }
+    }
 
     private function updateVersion(): void
     {

@@ -11,7 +11,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2006-07-23
@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
 $captcha = $container->get('phpmyfaq.captcha');
@@ -149,7 +149,7 @@ $templateVars = [
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'msgYourComment' => Translation::get('msgYourComment'),
-    'csrfInput' => Token::getInstance()->getTokenInput('add-comment'),
+    'csrfInput' => Token::getInstance($container->get('session'))->getTokenInput('add-comment'),
     'msgCancel' => Translation::get('ad_gen_cancel'),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(

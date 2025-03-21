@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
@@ -47,7 +47,7 @@ class CategoryController extends AbstractController
      * @throws \Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/categories',
+        path: '/api/v3.1/categories',
         operationId: 'getCategories',
         tags: ['Public Endpoints']
     )]
@@ -106,7 +106,7 @@ class CategoryController extends AbstractController
      * @throws Exception|\JsonException
      */
     #[OA\Post(
-        path: '/api/v3.0/category',
+        path: '/api/v3.1/category',
         operationId: 'createCategory',
         tags: ['Endpoints with Authentication'],
     )]

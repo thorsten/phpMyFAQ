@@ -14,7 +14,7 @@
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-12-20
@@ -1568,8 +1568,8 @@ class Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
-                $data['id'] = $row->id;
-                $data['order'] = $row->sticky_order;
+                $data['id'] = (int) $row->id;
+                $data['order'] = (int) $row->sticky_order;
 
                 $sticky[] = $data;
             }
@@ -1650,7 +1650,7 @@ class Faq
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
-                    '%sadmin/?action=editentry&id=%d&lang=%s',
+                    '%sadmin/faq/edit/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
                     $row->id,
                     $row->lang
@@ -1667,5 +1667,68 @@ class Faq
     public function hasTitleAHash(string $title): bool
     {
         return strpos($title, '#');
+    }
+
+    /**
+     * Returns the orphaned records with admin URL to edit the FAQ and title.
+     *
+     * @return stdClass[]
+     */
+    public function getOrphanedFaqs(): array
+    {
+            $query = sprintf(
+                "
+                SELECT
+                    fd.id AS id,
+                    fd.lang AS lang,
+                    fd.thema AS question
+                FROM
+                    %sfaqdata fd
+                WHERE
+                    fd.lang = '%s'
+                AND 
+                    fd.active = 'yes'
+                AND
+                    fd.id NOT IN (
+                        SELECT
+                            record_id
+                        FROM
+                            %sfaqcategoryrelations
+                        WHERE
+                            record_lang = fd.lang
+                    )
+                GROUP BY
+                    fd.id, fd.lang, fd.thema
+                ORDER BY
+                    fd.id DESC",
+                Database::getTablePrefix(),
+                $this->configuration->getLanguage()->getLanguage(),
+                Database::getTablePrefix()
+            );
+
+        $result = $this->configuration->getDb()->query($query);
+        $orphaned = [];
+        $data = [];
+
+        $oldId = 0;
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            if ($oldId != $row->id) {
+                $data = new stdClass();
+                $data->faqId = $row->id;
+                $data->language = $row->lang;
+                $data->question = $row->question;
+                $data->url = sprintf(
+                    '%sadmin/faq/edit/%d/%s',
+                    $this->configuration->getDefaultUrl(),
+                    $row->id,
+                    $row->lang
+                );
+                $orphaned[] = $data;
+            }
+
+            $oldId = $row->id;
+        }
+
+        return $orphaned;
     }
 }

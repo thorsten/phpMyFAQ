@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
  * @author Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2005-02-19
@@ -52,9 +52,7 @@ $PMF_LANG["msgNext"] = "hurrengoa";
 $PMF_LANG["msgCategoryUp"] = "atal bat igo";
 $PMF_LANG["msgLastUpdateArticle"] = "Azken eguneratzea: ";
 $PMF_LANG["msgAuthor"] = "Egilea: ";
-$PMF_LANG["msgPrinterFriendly"] = "Bertsio inprimagarria";
 $PMF_LANG["msgPrintArticle"] = "Erregistro hau inprimatu";
-$PMF_LANG["msgMakeXMLExport"] = "XML-fitxategi gisa esportatu";
 $PMF_LANG["msgAverageVote"] = "Batez besteko balorazioa";
 $PMF_LANG["msgVoteUsability"] = "Erregistro hau balora ezazu, mesedez";
 $PMF_LANG["msgVoteFrom"] = "/";
@@ -71,7 +69,7 @@ $PMF_LANG["msgCommentHeader"] = "iruzkinak erregistrora";
 $PMF_LANG["msgYourComment"] = "Zure iruzkina";
 $PMF_LANG["msgCommentThanks"] = "Eskerrik asko zure iruzkinarengatik!";
 $PMF_LANG["msgSeeXMLFile"] = "XML-Fitxategia ireki";
-$PMF_LANG["msgSend2Friend"] = "Lagun bati bidali";
+$PMF_LANG["msgShareFAQ"] = "Lagun bati bidali";
 $PMF_LANG["msgS2FButton"] = "posta bidali";
 
 // Search
@@ -106,10 +104,10 @@ $PMF_LANG["msgAskThx4Mail"] = "Mila esker gurekin harremanetan jartzeagatik!";
 $PMF_LANG["msgDate_User"] = "Data / Erabiltzailea";
 $PMF_LANG["msgQuestion2"] = "Galdera";
 $PMF_LANG["msg2answer"] = "Erantzuna";
-$PMF_LANG["msgQuestionText"] = "Hemen beste erabiltzaileen galderak <strong>ikus</strong> eta <strong>erantzun</strong> ditzakezu. FAQean erantsiko dira.";
+$PMF_LANG["msgQuestionText"] = "Hemen beste erabiltzaileen galderak ikus eta erantzun ditzakezu. FAQean erantsiko dira.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.";
+$PMF_LANG["msgHelpText"] = "FAQaren egitura(Frequently Asked Questions)nahiko sinplea da. <a href=\"?action=show\">Atal</a> ezberdinen artean bilatzea hauta dezakezu edota <a href=\"?action=search\">bilatzaileak</a> hitz klabeak erakusteko hautatu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Administratzaileari idatzi";
@@ -135,15 +133,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Ez dago sarrerarik.";
 $PMF_LANG["err_badID"] = "ID okerra!";
 $PMF_LANG["err_noTopTen"] = "Oraindik ez dago TOP Ten-ik.";
 $PMF_LANG["err_nothingFound"] = "Ez da sarrerarik aurkitu.";
-$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br><br>\n<a href=\"javascript:history.back();\">atzera itzuli</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br><br>\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: zure izena, zure posta elektronikoaren helbidea, kategoria, goiburua eta zure erregistroa !<br><br>\n<a href=\"javascript:history.back();\">atzera itzuli</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira zure izena , zure posta elektronikoaren helbidea eta zure iruzkinak!<br><br>\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "Bi aldiz bozkatzen baduzu, ez da zenbatuko Klikatu hemen, itzultzeko.";
-$PMF_LANG["err_noVote"] = "<strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.";
+$PMF_LANG["err_noVote"] = "Ez da ebaluatu! <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.";
 $PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br><a href=\"javascript:history.back();\">itzuli</a>";
-$PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea<strong> eta <strong>zure galdera</strong>!";
+$PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira zure izena, zure posta elektronikoaren helbidea eta zure galdera!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Erregistro bilaketa:</strong><br>";
+$PMF_LANG["help_search"] = "Erregistro bilaketa:<br>";
 
 // Menú
 $PMF_LANG["ad"] = "ADMINSTRATZAILEAREN ATALA";
@@ -165,10 +163,10 @@ $PMF_LANG["ad_menu_startpage"] = "Hasiera";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Identifikatu, mesedez.";
-$PMF_LANG["ad_msg_passmatch"] = "Bi pasahitzek <strong>berdinak</strong> izan behar dute!";
+$PMF_LANG["ad_msg_passmatch"] = "Bi pasahitzek berdinak izan behar dute!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profila: ";
 $PMF_LANG["ad_msg_savedsuc_2"] = "ondo gorde da.";
-$PMF_LANG["ad_msg_mysqlerr"] = "<strong>Datu-basearen errore bat</strong> dela medio, profila ez da gorde.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Datu-basearen errore bat dela medio, profila ez da gorde.";
 $PMF_LANG["ad_msg_noauth"] = "Ez duzu baimenik, barkatu eragozpenak.";
 
 // Allgemein
@@ -209,13 +207,13 @@ $PMF_LANG["ad_entry_topic"] = "Gaia";
 $PMF_LANG["ad_entry_action"] = "Ekintza";
 $PMF_LANG["ad_entry_edit_1"] = "";
 $PMF_LANG["ad_entry_edit_2"] = ". erregistroa editatu";
-$PMF_LANG["ad_entry_theme"] = "Galdera";
-$PMF_LANG["ad_entry_content"] = "Edukia";
-$PMF_LANG["ad_entry_keywords"] = "Hitz gakoak";
-$PMF_LANG["ad_entry_author"] = "Egilea";
-$PMF_LANG["ad_entry_category"] = "Atala";
+$PMF_LANG["msgQuestion"] = "Galdera";
+$PMF_LANG["msgAnswer"] = "Edukia";
+$PMF_LANG["msgKeywords"] = "Hitz gakoak";
+$PMF_LANG["msgAuthor"] = "Egilea";
+$PMF_LANG["msgCategory"] = "Atala";
 $PMF_LANG["ad_entry_active"] = "Aktibatu?";
-$PMF_LANG["ad_entry_date"] = "Eguna";
+$PMF_LANG["msgDate"] = "Eguna";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Aldatu?";
 $PMF_LANG["ad_entry_changelog"] = "Aldaketen log-a";
@@ -225,23 +223,23 @@ $PMF_LANG["ad_entry_save"] = "Gorde";
 $PMF_LANG["msgDelete"] = "Ezabatu";
 $PMF_LANG["ad_entry_delcom_1"] = "Ziur zaude ";
 $PMF_LANG["ad_entry_delcom_2"] = "-(r)en iruzkin hau ezabatzekoa dela?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Iruzkina <strong>betiko</strong> ezabatu da.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Iruzkina betiko ezabatu da.";
 $PMF_LANG["ad_entry_back"] = "Artikulura itzuli";
-$PMF_LANG["ad_entry_commentdelfail"] = "Iruzkina <strong>ez</strong> da ezabatu.";
-$PMF_LANG["ad_entry_savedsuc"] = "Aldaketak <strong>ondo</strong> gorde dira.";
-$PMF_LANG["ad_entry_savedfail"] = "Zoritxarrez <strong>datu-basean</strong> akats bat egon.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Iruzkina ez da ezabatu.";
+$PMF_LANG["ad_entry_savedsuc"] = "Aldaketak ondo gorde dira.";
+$PMF_LANG["ad_entry_savedfail"] = "Zoritxarrez datu-basean akats bat egon.";
 $PMF_LANG["ad_entry_del_1"] = "";
 $PMF_LANG["ad_entry_del_2"] = " - ";
 $PMF_LANG["ad_entry_del_3"] = " galdera ezabatu nahi duzula ziur zaude?";
-$PMF_LANG["ad_entry_delsuc"] = "Galdera <strong>ondo</strong> ezabatu da.";
-$PMF_LANG["ad_entry_delfail"] = "Galdera ez da <strong>ezabatu</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Galdera ondo ezabatu da.";
+$PMF_LANG["ad_entry_delfail"] = "Galdera ez da ezabatu!";
 $PMF_LANG["ad_entry_back"] = "Itzuli";
 
 
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Artikuluaren goiburua";
 $PMF_LANG["ad_news_text"] = "Erregistroaren  testua";
-$PMF_LANG["ad_news_link_url"] = "Esteka: (<strong>https:// gabe</strong>)";
+$PMF_LANG["ad_news_link_url"] = "Esteka: (https:// gabe)";
 $PMF_LANG["ad_news_link_title"] = "Estekaren izenburua";
 $PMF_LANG["ad_news_link_target"] = "Estekaren jomuga";
 $PMF_LANG["ad_news_link_window"] = "Esteka beste leiho batean irekiko da";
@@ -262,17 +260,16 @@ $PMF_LANG["ad_news_delsuc"] = " Albisteak ezabatu dira.";
 $PMF_LANG["ad_news_updatenews"] = "Albisteak eguneratu";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Atal berria gehitu";
+$PMF_LANG["msgNewCategory"] = "Atal berria gehitu";
 $PMF_LANG["ad_categ_catnum"] = "Atalaren zenbakia";
 $PMF_LANG["ad_categ_subcatnum"] = "Azpiatalaren zenbakia";
-$PMF_LANG["ad_categ_nya"] = "<em>oraindik ezin da erabili!</em>";
-$PMF_LANG["ad_categ_titel"] = "Atalen izenburua";
+$PMF_LANG["ad_categ_nya"] = "oraindik ezin da erabili!";
+$PMF_LANG["categoryNameLabel"] = "Atalen izenburua";
 $PMF_LANG["ad_categ_add"] = "Atala gehitu";
 $PMF_LANG["ad_categ_existing"] = "Dauden atalak";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Atala";
 $PMF_LANG["ad_categ_subcateg"] = "Azpiatala";
-$PMF_LANG["ad_categ_titel"] = "Atalaren izenburua";
 $PMF_LANG["ad_categ_action"] = "Ekintza";
 $PMF_LANG["ad_categ_update"] = "eguneratu";
 $PMF_LANG["ad_categ_delete"] = "ezabatu";
@@ -290,7 +287,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Ziur al zaude atal hau ezabatu nahi duzula?"
 $PMF_LANG["ad_categ_deleted"] = "Atala ezabatu da.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Cookie-a <strong>ondo</strong> ezarri da.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Cookie-a ondo ezarri da.";
 $PMF_LANG["ad_cookie_already"] = "Cookie bat ezarrita zegoen jadanik. Ondorengo aukerak dituzu";
 $PMF_LANG["ad_cookie_again"] = "Cookie-a berrezarri";
 $PMF_LANG["ad_cookie_delete"] = "Cookie-a ezabatu";
@@ -308,18 +305,18 @@ $PMF_LANG["ad_passwd_new"] = "Pasahitz berria";
 $PMF_LANG["ad_passwd_con"] = "Berretsi";
 $PMF_LANG["ad_passwd_change"] = "Pasahitza aldatu";
 $PMF_LANG["ad_passwd_suc"] = "Pasahitza ondo aldatu da.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ADI:</strong><br> Ez da oraindik Cookie-rik ezarri!";
-$PMF_LANG["ad_passwd_fail"] = "Pasahitz zaharra <strong>zuzen </strong>idatzi behar da eta biek <strong>koinziditu</strong> behar dute.";
+$PMF_LANG["ad_passwd_remark"] = "ADI:<br> Ez da oraindik Cookie-rik ezarri!";
+$PMF_LANG["ad_passwd_fail"] = "Pasahitz zaharra zuzen idatzi behar da eta biek koinziditu behar dute.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Erabiltzailea gehitu";
 $PMF_LANG["ad_adus_name"] = "Izena";
 $PMF_LANG["ad_adus_password"] = "Pasahitza";
 $PMF_LANG["ad_adus_add"] = "Erabiltzailea gehitu";
-$PMF_LANG["ad_adus_suc"] = "Erabiltzailea <strong>ondo</strong> gehitu da.";
+$PMF_LANG["ad_adus_suc"] = "Erabiltzailea ondo gehitu da.";
 $PMF_LANG["ad_adus_edit"] = "Profila editatu";
-$PMF_LANG["ad_adus_dberr"] = "<strong>Datu-basearen errorea!</strong>";
-$PMF_LANG["ad_adus_exerr"] = " Erabiltzaile izen hau jada<strong>hartua</strong> dago.";
+$PMF_LANG["ad_adus_dberr"] = "Datu-basearen errorea!";
+$PMF_LANG["ad_adus_exerr"] = " Erabiltzaile izen hau jadahartua dago.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -372,14 +369,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigurazioa ondo gorde da.";
 $PMF_LANG["ad_menu_editconfig"] = "Konfigurazioa editatu";
 $PMF_LANG["ad_att_none"] = "Ez dago fitxategi erantsirik";
 $PMF_LANG["ad_att_att"] = "Fitxategi erantsiak";
-$PMF_LANG["ad_att_add"] = "Fitxategia erantsi";
+$PMF_LANG["msgAddAttachment"] = "Fitxategia erantsi";
 $PMF_LANG["ad_entryins_suc"] = "Erregistroa ondo gorde da.";
-$PMF_LANG["ad_entryins_fail"] = "Akats bat egon da.";
+$PMF_LANG["msgErrorOccurred"] = "Akats bat egon da.";
 $PMF_LANG["ad_att_del"] = "Ezabatu";
 $PMF_LANG["ad_att_nope"] = "Eranskinak editatzean soilik dago erabilgarri.";
 $PMF_LANG["ad_att_delsuc"] = "Eranskina ondo ezabatu da.";
 $PMF_LANG["ad_att_delfail"] = "Fitxategi erantsia ezabatzean errore bat egon da.";
-$PMF_LANG["ad_entry_add"] = "Erregistroa sortu";
+$PMF_LANG["msgAddFAQ"] = "Erregistroa sortu";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Backup bat datu-basearen irudi oso bat da. Lan hau gutxienez hilabetean behin egin beharko litzateke. Backup-aren formatua MySQL transakziozko fitxategi bat da, eta inportatu daiteke phpMyAdmin moduko erremintekin edo mysql bezero baten komandoekin.";
@@ -394,7 +391,7 @@ $PMF_LANG["ad_att_fail"] = "Fitxategia eranstean errore bat egon da.";
 $PMF_LANG["ad_att_close"] = "Leiho hau itxi";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "Honen bitartez, datu-baseko edukiak berrezar ditzakezu, phpMyFAQ-arekin eginiko backup bat erabiliz. Mesedez, <strong>kontuz ibili</strong> dauden erregistroak ordezkatuak izango baitira.";
+$PMF_LANG["ad_csv_restore"] = "Honen bitartez, datu-baseko edukiak berrezar ditzakezu, phpMyFAQ-arekin eginiko backup bat erabiliz. Mesedez, kontuz ibili dauden erregistroak ordezkatuak izango baitira.";
 $PMF_LANG["ad_csv_file"] = "Fitxategia";
 $PMF_LANG["ad_csv_ok"] = "OK";
 $PMF_LANG["ad_csv_linklog"] = "LOGak gorde";
@@ -454,7 +451,7 @@ $PMF_LANG["ad_log_bede"] = "Hurrengo sarrera ezabatua: ";
 
 $PMF_LANG["msgVisits"] = "Bisitak";
 $PMF_LANG["ad_start_articles"] = "Artikuluak";
-$PMF_LANG["ad_start_comments"] = "iruzkin";
+$PMF_LANG["msgComments"] = "iruzkin";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -464,7 +461,7 @@ $PMF_LANG["msgCopy"] = "kopiatu";
 $PMF_LANG["ad_categ_process"] = "Kategoriak prozesatzen...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Ez duzu baimenik, barkatu eragozpenak.</strong>";
+$PMF_LANG["msgNoPermission"] = "Ez duzu baimenik, barkatu eragozpenak.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "aurreko orria";
@@ -480,7 +477,7 @@ $PMF_LANG["msgPDF"] = "PDF fitxategi gisa erakutsi";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Zure FAQeko erregistro guztiak XML fitxategi batean gorde.";
 $PMF_LANG["ad_xml_gen"] = "XML fitxategia sortu";
-$PMF_LANG["ad_entry_locale"] = "Hizkuntza";
+$PMF_LANG["msgLanguage"] = "Hizkuntza";
 $PMF_LANG["msgLanguageSubmit"] = "Hizkuntza aldatu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -528,7 +525,7 @@ $PMF_LANG["msgRealname"] = "Benetako izena";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF fitxategia sortu";
 $PMF_LANG["ad_export_full_faq"] = "Zure FAQa PDF fitxategi gisa: ";
 $PMF_LANG["err_bannedIP"] = "Zure IPa blokeatu egin da.";
-$PMF_LANG["err_SaveQuestion"] = "Beharrezko eremuak dira <strong>Zure izena</strong>, <strong>Posta elektronikoa</strong> eta  <strong>zure galdera </strong>!<br><br><a href=\"javascript:history.back();\">itzuli</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Beharrezko eremuak dira Zure izena, Posta elektronikoa eta  zure galdera !<br><br><a href=\"javascript:history.back();\">itzuli</a><br><br>";
 
 // added v1.3.4 - 23.07.2003  Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Letraren kolorea: ";
@@ -543,7 +540,7 @@ $LANG_CONF["main.metaDescription"] = array("input", "Orriaren deskribapena");
 $LANG_CONF["main.metaPublisher"] = array("input", "Administratzailearen izena");
 $LANG_CONF['main.administrationMail'] = array("input", "Administratzailearen posta elektronikoa");
 $LANG_CONF["main.contactInformation"] = array("area", "Harremanetarako informazioa");
-$LANG_CONF["main.send2friendText"] = array("area", "<em>Lagun bati bidali</em> orrirako testua");
+$LANG_CONF["main.send2friendText"] = array("area", "Lagun bati bidali orrirako testua");
 $LANG_CONF['records.maxAttachmentSize'] = array("input", "Eranskinetako gehieneko tamaina byte-etan (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array("checkbox", "Sarrera azpian eranskinei estekaren bat ipini?");
 $LANG_CONF["main.enableUserTracking"] = array("checkbox", "Monitorizazioa erabili?");
@@ -554,11 +551,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Artikulu berrie
 $LANG_CONF['security.bannedIPs'] = array("area", "IP hauek blokeatu");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";
+$PMF_LANG["msgNewCategory_main_cat"] = "Atal nagusi berri gisa";
 $PMF_LANG["ad_categ_paste_error"] = "Ezinezkoa da atal hau mugitzea.";
 $PMF_LANG["ad_categ_move"] = "Atala mugitu.";
 $PMF_LANG["ad_categ_lang"] = "Hizkuntza";
-$PMF_LANG["ad_categ_desc"] = "Deskribapena";
+$PMF_LANG["categoryDescriptionLabel"] = "Deskribapena";
 $PMF_LANG["ad_categ_change"] = "Honekin aldatu: ";
 
 $PMF_LANG["lostPassword"] = "Zure pasahitza ahaztu al duzu? Hemen klikatu.";

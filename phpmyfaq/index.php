@@ -14,7 +14,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2001-2024 phpMyFAQ Team
+ * @copyright 2001-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2001-02-12
@@ -34,7 +34,6 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -44,6 +43,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
+use phpMyFAQ\User\UserSession;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -62,15 +62,6 @@ const IS_VALID_PHPMYFAQ = null;
 require __DIR__ . '/src/Bootstrap.php';
 
 //
-// Create Request + Response
-//
-$request = Request::createFromGlobals();
-$response = new Response();
-$response->headers->set('Content-Type', 'text/html');
-$csrfLogoutToken = Token::getInstance()->getTokenString('logout');
-
-
-//
 // Service Containers
 //
 $container = new ContainerBuilder();
@@ -82,6 +73,15 @@ try {
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
+
+//
+// Create Request + Response
+//
+$request = Request::createFromGlobals();
+$response = new Response();
+$response->headers->set('Content-Type', 'text/html');
+$csrfLogoutToken = Token::getInstance($container->get('session'))->getTokenString('logout');
+
 
 //
 // Get language (default: english)
@@ -159,7 +159,7 @@ if ($faqConfig->get('security.ssoSupport') && $request->server->get('REMOTE_USER
 // Get CSRF Token
 //
 $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
-if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)) {
+if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyToken('logout', $csrfToken)) {
     $csrfChecked = true;
 } else {
     $csrfChecked = false;
@@ -169,7 +169,7 @@ if ($csrfToken !== '' && Token::getInstance()->verifyToken('logout', $csrfToken)
 // Validating token from 2FA if given; else: returns error message
 //
 if ($token !== '' && !is_null($userId)) {
-    if (strlen((string)$token) === 6 && is_numeric((string)$token)) {
+    if (strlen($token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig, $user);
@@ -250,9 +250,9 @@ if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sidGet = Filter::filterVar($request->query->get(Session::PMF_GET_KEY_NAME_SESSIONID), FILTER_VALIDATE_INT);
-$sidCookie = Filter::filterVar($request->cookies->get(Session::PMF_COOKIE_NAME_SESSIONID), FILTER_VALIDATE_INT);
-$faqSession = new Session($faqConfig);
+$sidGet = Filter::filterVar($request->query->get(UserSession::KEY_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterVar($request->cookies->get(UserSession::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
+$faqSession = new UserSession($faqConfig);
 $faqSession->setCurrentUser($user);
 
 // Note: do not track internal calls
@@ -279,22 +279,21 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
-        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId());
+        $faqSession->setCookie(UserSession::COOKIE_NAME_SESSION_ID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie) && !is_null($sidGet)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $sidGet, $faqLangCode);
         }
     }
-} elseif (
-    !$faqSession->setCookie(
-        Session::PMF_COOKIE_NAME_SESSIONID,
+} else {
+    $faqSession->setCookie(
+        UserSession::COOKIE_NAME_SESSION_ID,
         $faqSession->getCurrentSessionId(),
         $request->server->get('REQUEST_TIME') + 3600
-    )
-) {
+    );
     $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
 
@@ -658,7 +657,7 @@ require $includePhp;
 // Check for 404 HTTP status code
 //
 if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404') {
-    // @todo handle 404 :-)
+    $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 
 $response->setContent($twigTemplate->render($templateVars));

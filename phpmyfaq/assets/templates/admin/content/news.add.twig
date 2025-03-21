@@ -1,0 +1,135 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-pencil"></i>
+      {{ ad_news_add }}
+    </h1>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <form id="faqEditor" name="faqEditor" novalidate
+            data-pmf-enable-editor="{{ enableWysiwyg }}"
+            data-pmf-editor-language="en"
+            data-pmf-default-url="{{ defaultUrl }}">
+        <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken_saveNews }}" />
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="newsheader">
+            {{ ad_news_header }}
+          </label>
+          <div class="col-9">
+            <input class="form-control" type="text" name="newsheader" id="newsheader">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="news">{{ ad_news_text }}:</label>
+          <div class="col-9">
+            <textarea rows="5" class="form-control" id="editor"></textarea>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="authorName">
+            {{ ad_news_author_name }}
+          </label>
+          <div class="col-9">
+            <input class="form-control" type="text" name="authorName" id="authorName"
+                   value="{{ userName }}">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="authorEmail">
+            {{ ad_news_author_email }}
+          </label>
+          <div class="col-9">
+            <input class="form-control" type="email" name="authorEmail" id="authorEmail"
+                   value="{{ userEmail }}">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="offset-3 col-9">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="y" id="active" name="active">
+              <label class="form-check-label" for="active">
+                {{ ad_news_set_active }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="y" id="comment" name="comment">
+              <label class="form-check-label" for="comment">
+                {{ ad_news_allowComments }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="link">
+            {{ ad_news_link_url }}
+          </label>
+          <div class="col-9">
+            <input class="form-control" type="text" name="link" id="link"
+                   placeholder="https://www.example.com/">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="linkTitle">
+            {{ ad_news_link_title }}
+          </label>
+          <div class="col-9">
+            <input type="text" name="linkTitle" id="linkTitle" class="form-control">
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label">{{ ad_news_link_target }}</label>
+          <div class="col-9 radio">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="target" value="blank">
+              <label class="form-check-label" for="blank">
+                {{ ad_news_link_window }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="target" value="self">
+              <label class="form-check-label" for="self">
+                {{ ad_news_link_faq }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="target" value="parent">
+              <label class="form-check-label" for="parent">
+                {{ ad_news_link_parent }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label class="col-3 col-form-label" for="langTo">{{ msgLanguage }}:</label>
+          <div class="col-9">
+            {{ selectLanguage|raw }}
+          </div>
+        </div>
+
+        <div class="row my-4">
+          <div class="col-12 text-end">
+            <a class="btn btn-secondary" href="./news">
+              {{ ad_entry_back }}
+            </a>
+            <a class="btn btn-primary" id="submitAddNews">
+              {{ ad_news_add }}
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
@@ -17,20 +17,13 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\News;
-use phpMyFAQ\Notification;
-use phpMyFAQ\Session;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,13 +39,11 @@ class CommentController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
-        $faq = new Faq($this->configuration);
-        $comment = new Comments($this->configuration);
-        $stopWords = new StopWords($this->configuration);
-        $session = new Session($this->configuration);
-        $session->setCurrentUser($user);
+        $faq = $this->container->get('phpmyfaq.faq');
+        $comment = $this->container->get('phpmyfaq.comments');
+        $stopWords = $this->container->get('phpmyfaq.stop-words');
+        $session = $this->container->get('phpmyfaq.user.session');
+        $session->setCurrentUser($this->currentUser);
 
         $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
@@ -60,7 +51,7 @@ class CommentController extends AbstractController
             $this->configuration->get('main.language')
         );
 
-        if (!$this->isCommentAllowed($user)) {
+        if (!$this->isCommentAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
@@ -70,7 +61,10 @@ class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance()->verifyToken('add-comment', $data->{'pmf-csrf-token'})) {
+        if (
+            !Token::getInstance($this->container->get('session'))
+                ->verifyToken('add-comment', $data->{'pmf-csrf-token'})
+        ) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -83,20 +77,20 @@ class CommentController extends AbstractController
 
         switch ($type) {
             case 'news':
-                $id = $newsId;
+                $commentId = $newsId;
                 break;
             case 'faq':
-                $id = $faqId;
+                $commentId = $faqId;
                 break;
         }
 
-        if (empty($id)) {
+        if (empty($commentId)) {
             return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 
         // Check display name and e-mail address for not logged-in users
-        if (!$user->isLoggedIn()) {
-            $user = new User($this->configuration);
+        if (!$this->currentUser->isLoggedIn()) {
+            $user = $this->container->get('phpmyfaq.user');
             if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
                 $this->configuration->getLogger()->error('Name and email already used by registered user.');
                 return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_CONFLICT);
@@ -104,13 +98,15 @@ class CommentController extends AbstractController
         }
 
         if (
-            !empty($username) && !empty($email) && !empty($commentText) && $stopWords->checkBannedWord($commentText) &&
-            $comment->isCommentAllowed($id, $languageCode, $type) && $faq->isActive($id, $languageCode, $type)
+            !empty($username) && !empty($email) && !empty($commentText) &&
+            $stopWords->checkBannedWord($commentText) &&
+            $comment->isCommentAllowed($commentId, $languageCode, $type) &&
+            $faq->isActive($commentId, $languageCode, $type)
         ) {
-            $session->userTracking('save_comment', $id);
+            $session->userTracking('save_comment', $commentId);
             $commentEntity = new Comment();
             $commentEntity
-                ->setRecordId($id)
+                ->setRecordId($commentId)
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($email)
@@ -118,19 +114,19 @@ class CommentController extends AbstractController
                 ->setDate($request->server->get('REQUEST_TIME'));
 
             if ($comment->create($commentEntity)) {
-                $notification = new Notification($this->configuration);
+                $notification = $this->container->get('phpmyfaq.notification');
                 if ('faq' == $type) {
-                    $faq->getFaq($id);
+                    $faq->getFaq($commentId);
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
-                    $news = new News($this->configuration);
-                    $newsData = $news->get($id);
+                    $news = $this->container->get('phpmyfaq.news');
+                    $newsData = $news->get($commentId);
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
                 return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
             } else {
-                $session->userTracking('error_save_comment', $id);
+                $session->userTracking('error_save_comment', $commentId);
                 return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
             }
         } else {
@@ -141,6 +137,9 @@ class CommentController extends AbstractController
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     private function isCommentAllowed(CurrentUser $user): bool
     {
         if (

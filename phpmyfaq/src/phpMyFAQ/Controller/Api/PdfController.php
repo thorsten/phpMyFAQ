@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-02
@@ -45,7 +45,7 @@ class PdfController extends AbstractController
      * @throws Exception
      */
     #[OA\Get(
-        path: '/api/v3.0/pdf/{categoryId}/{faqId}',
+        path: '/api/v3.1/pdf/{categoryId}/{faqId}',
         operationId: 'getPdfById',
         description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided ' .
             'by "Accept-Language".',

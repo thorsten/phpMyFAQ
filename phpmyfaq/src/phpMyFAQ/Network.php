@@ -12,7 +12,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Kenneth Shaw <ken@expitrans.com>
  * @author    David Soria Parra <dsp@php.net>
- * @copyright 2011-2024 phpMyFAQ Team
+ * @copyright 2011-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
@@ -39,13 +39,12 @@ readonly class Network
     /**
      * Performs a check if an IPv4 or IPv6 address is banned.
      *
-     * @param string $ip IPv4 or IPv6 address
-     *
+     * @param string $ipAddress IPv4 or IPv6 address
      * @return bool false, if not banned
      */
-    public function isBanned(string $ip): bool
+    public function isBanned(string $ipAddress): bool
     {
         $bannedIps = explode(' ', (string) $this->configuration->get('security.bannedIPs'));
-        return IpUtils::checkIp($ip, $bannedIps);
+        return IpUtils::checkIp($ipAddress, $bannedIps);
     }
 }

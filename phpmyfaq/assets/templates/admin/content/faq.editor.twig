@@ -1,374 +1,410 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-pencil"></i>
-    {{ adminFaqEditorHeader }}<span class="truncate-question" id="pmf-admin-question-output">{% if editExistingFaq %}: {{ faqData['title'] | raw }}{% endif %}</span>
-  </h1>
+{% extends '@admin/index.twig' %}
 
-  {% if editExistingFaq %}
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-pencil"></i>
+      {{ header }}<span class="truncate-question" id="pmf-admin-question-output">
+        {% if editExistingFaq %}: {{ faqData['title'] | raw }}{% endif %}
+      </span>
+    </h1>
+
+    {% if editExistingFaq %}
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
         <span class="btn btn-outline-info">
           <i class="bi bi-hashtag" aria-hidden="true"></i>
             {{ currentRevision }}
         </span>
-        <a href="{{ faqUrl }}" class="btn btn-outline-success">
-          <i class="bi bi-arrow-alt-circle-right" aria-hidden="true"></i>
-          {{ ad_view_faq }}
-        </a>
+          <a href="{{ faqUrl }}" class="btn btn-outline-success">
+            <i class="bi bi-arrow-alt-circle-right" aria-hidden="true"></i>
+            {{ ad_view_faq }}
+          </a>
+        </div>
       </div>
+    {% endif %}
+  </div>
+
+  {% if faqData['notes'] != '' %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <h4 class="alert-heading">{{ 'ad_admin_notes' | translate }}</h4>
+      <p>{{ 'msgPrivateNotesOfEditor' | translate }} {{ faqData['notes'] }}</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endif %}
-</div>
 
-{% if faqData['notes'] != '' %}
-  <div class="alert alert-info alert-dismissible fade show" role="alert">
-    <h4 class="alert-heading">{{ 'ad_admin_notes' | translate }}</h4>
-    <p>{{ 'msgPrivateNotesOfEditor' | translate }} {{ faqData['notes'] }}</p>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-{% endif %}
+  <div class="row">
+    <div class="col-9">
+      <div class="card shadow mb-4">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
+                <i class="bi bi-pencil"></i> {{ 'msgQuestionAnswer' | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
+                <i class="bi bi-database"></i> {{ 'msgFAQMetaData' | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-seo" role="tab">
+                <i class="bi bi-graph-up"></i> {{ 'msgSeoCenter' | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
+                <i class="bi bi-unlock"></i> {{ 'msgPermissions' | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
+                <i class="bi bi-stickies"></i>
+                {{ ad_admin_notes }} / {{ ad_entry_changelog }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-question-answer">
 
-<div class="row">
-  <div class="col-9">
-    <div class="card shadow mb-4">
-      <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#tab-question-answer" role="tab">
-              <i class="bi bi-pencil"></i> {{ ad_record_faq }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab-meta-data" role="tab">
-              <i class="bi bi-database"></i> {{ ad_menu_faq_meta }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab-seo" role="tab">
-              <i class="bi bi-graph-up"></i> {{ msgSeoCenter }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab-permissions" role="tab">
-              <i class="bi bi-unlock"></i> {{ ad_record_permissions }}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#tab-notes-changelog" role="tab">
-              <i class="bi bi-stickies"></i>
-              {{ ad_admin_notes }} / {{ ad_entry_changelog }}
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="card-body">
-        <div class="tab-content">
-          <div class="tab-pane active" id="tab-question-answer">
-
-            {% if numberOfRevisions > 0 %}
-              <!-- Revision -->
-              <div class="form-group mb-2">
-                <form id="selectRevision" name="selectRevision" method="post"
-                      action="?action=editentry&id={{ faqData['id'] }}&lang={{ faqLang }}">
-                  <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
-                    <option value="0">{{ ad_changerev }}</option>
-                    {% for currentRevision in revisions %}
-                      {% set selected = selectedRevisionId == faqData['revision_id'] %}
-                    <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
-                      {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
-                      {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
-                    </option>
-                    {% endfor %}
-                  </select>
-                </form>
-              </div>
-            {% endif %}
-
-            <form id="faqEditor" method="post" data-pmf-enable-editor="{{ isEditorEnabled }}" class="needs-validation"
-                  data-pmf-editor-language="en" data-pmf-default-url="{{ defaultUrl }}" novalidate>
-
-              <input type="hidden" name="revisionId" id="revisionId" value="{{ faqRevisionId }}">
-              <input type="hidden" name="faqId" id="faqId" value="{{ faqData['id'] }}">
-              <input type="hidden" name="openQuestionId" id="openQuestionId" value="{{ openQuestionId }}">
-              <input type="hidden" name="notifyUser" id="notifyUser" value="{{ notifyUser }}">
-              <input type="hidden" name="notifyEmail" id="notifyEmail"
-                     value="{{ notifyEmail }}">
-              <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfToken }}">
-
-              <!-- Question -->
-              <div class="form-group mb-2">
-                <label for="question" class="form-label d-none" aria-hidden="true">{{ ad_entry_theme }}</label>
-                <input type="text" name="question" id="question" class="form-control form-control-lg"
-                       placeholder="{{ ad_entry_theme }}" value="{{ faqData['title'] }}" required>
-                <small id="questionHelp" class="form-text visually-hidden">
-                  {{ msgNoHashAllowed }}
-                </small>
-              </div>
-
-              <!-- Answer -->
-              {% if isEditorEnabled %}
-              <div class="row">
-                <div class="col-lg-12">
-                  <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                  <textarea id="editor" name="answer" class="form-control" rows="7" placeholder="{{ ad_entry_content }}"
-                    >{{ faqData['content'] | raw }}</textarea>
+              {% if numberOfRevisions > 0 %}
+                <!-- Revision -->
+                <div class="form-group mb-2">
+                  <form id="selectRevision" name="selectRevision" method="post"
+                        action="./faq/edit/{{ faqData['id'] }}/{{ faqLang }}">
+                    <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
+                      <option value="0">{{ ad_changerev }}</option>
+                      {% for currentRevision in revisions %}
+                        {% set selected = selectedRevisionId == faqData['revision_id'] %}
+                        <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
+                          {{ 'msgRevision' | translate }} 1.{{ currentRevision['revision_id'] }}:
+                          {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </form>
                 </div>
-              </div>
               {% endif %}
 
-              {% if isMarkdownEditorEnabled %}
-              <div class="row">
-                <div class="col-lg-12">
-                  <ul class="nav nav-tabs mb-2" id="markdown-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-bs-toggle="tab" href="#text">Text</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
-                    </li>
-                  </ul>
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="text">
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
-                                    placeholder="{{ ad_entry_content }}">{{ faqData['content'] | raw }}</textarea>
+              <form id="faqEditor" method="post" data-pmf-enable-editor="{{ isEditorEnabled }}" class="needs-validation"
+                  data-pmf-editor-language="en" data-pmf-default-url="{{ defaultUrl }}" novalidate>
+
+                <input type="hidden" name="revisionId" id="revisionId" value="{{ faqRevisionId }}">
+                <input type="hidden" name="faqId" id="faqId" value="{{ faqData['id'] }}">
+                <input type="hidden" name="openQuestionId" id="openQuestionId" value="{{ openQuestionId }}">
+                <input type="hidden" name="notifyUser" id="notifyUser" value="{{ notifyUser }}">
+                <input type="hidden" name="notifyEmail" id="notifyEmail" value="{{ notifyEmail }}">
+                <input type="hidden" name="pmf-csrf-token" id="pmf-csrf-token" value="{{ csrfToken }}">
+
+                <!-- Question -->
+                <div class="form-group mb-2">
+                  <input type="text" name="question" id="question" class="form-control form-control-lg"
+                         placeholder="{{ 'msgQuestion' | translate }}" value="{{ faqData['title'] }}" required>
+                  <small id="questionHelp" class="form-text visually-hidden">
+                    {{ 'msgNoHashAllowed' | translate }}
+                  </small>
+                </div>
+
+                <!-- Answer -->
+                {% if isEditorEnabled %}
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                      <textarea id="editor" name="answer" class="form-control" rows="7" required
+                                placeholder="{{ 'msgAnswer' | translate }}"
+                      >{{ faqData['content'] | raw }}</textarea>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if isMarkdownEditorEnabled %}
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <ul class="nav nav-tabs mb-2" id="markdown-tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" data-bs-toggle="tab" href="#text">
+                            {{ 'msgNewContentArticle' | translate }}
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" href="#preview" data-markdown-tab="preview">
+                            {{ 'msgPreview' | translate }}
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" href="#text" id="pmf-markdown-insert-image">
+                            {{ 'msgInsertImage' | translate }}
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" href="#text" id="pmf-markdown-upload-image">
+                            {{ 'msgImageUpload' | translate }}
+                          </a>
+                          <input type="file" id="pmf-markdown-upload-image-input" class="d-none" multiple>
+                          <input type="hidden" id="pmf-markdown-upload-image-csrf-token" value="{{ csrfToken }}">
+                        </li>
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="text">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <textarea id="answer-markdown" name="answer" class="form-control" rows="7"
+                                        placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="preview">
+                          <article id="markdown-preview"></article>
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane" id="preview">
-                      <article id="markdown-preview"></article>
+                  </div>
+                {% endif %}
+
+                {% if not isEditorEnabled and not isMarkdownEditorEnabled %}
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <textarea id="editor" name="answer" class="form-control" rows="7"
+                                placeholder="{{ 'msgAnswer' | translate }}">{{ faqData['content'] | raw }}</textarea>
+                    </div>
+                  </div>
+                {% endif %}
+
+            </div>
+
+            <div class="tab-pane" id="tab-meta-data">
+              <!-- Categories -->
+              <div class="row mb-2">
+                <label class="col-2 col-form-label" for="phpmyfaq-categories">
+                  {{ 'msgCategory' | translate }}
+                </label>
+                <div class="col-6">
+                  <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple required>
+                    {{ categoryOptions | raw }}
+                  </select>
+                </div>
+              </div>
+
+              <!-- Language -->
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="lang">
+                  {{ 'msgLanguage' | translate }}
+                </label>
+                <div class="col-lg-10">
+                  {{ languageOptions | raw }}
+                </div>
+              </div>
+
+              <!-- Attachments -->
+              {% if hasPermissionForAddAttachments %}
+                <div class="row mb-2">
+                  <label class="col-lg-2 col-form-label">
+                    {{ 'msgAttachments' | translate }}
+                  </label>
+                  <div class="col-lg-10">
+                    <ul class="list adminAttachments" data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
+                      {% for attachment in attachments %}
+                        <li id="attachment-id-{{ attachment.id }}">
+                          <a href="../index.php?action=attachment&id={{ attachment.id }}">{{ attachment.filename }}</a>
+                          {% if hasPermissionForDeleteAttachments %}
+                            <button type="button" class="btn btn-sm btn-danger pmf-delete-attachment-button"
+                                    data-pmf-attachment-id="{{ attachment.id }}"
+                                    data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
+                              <i aria-hidden="true" class="bi bi-trash"
+                                 data-pmf-attachment-id="{{ attachment.id }}"
+                                 data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
+                              </i>
+                            </button>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+
+                    <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
+                            data-bs-target="#attachmentModal">
+                      {{ 'msgAddAttachment' | translate }}
+                    </button>
+                  </div>
+                </div>
+              {% endif %}
+
+              <!-- Tags -->
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="tags">
+                  {{ 'msgTags' | translate }}
+                </label>
+                <div class="col-lg-10">
+                  <input type="text" name="tags" id="tags" value="{{ faqData['tags'] }}" autocomplete="off"
+                         class="form-control pmf-tags-autocomplete">
+                  <small id="tagsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
+                </div>
+              </div>
+
+              <!-- Keywords -->
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="keywords">
+                  {{ 'msgKeywords' | translate }}
+                </label>
+                <div class="col-lg-10">
+                  <input type="text" name="keywords" id="keywords" maxlength="255" class="form-control"
+                         autocomplete="off" value="{{ faqData['keywords'] }}">
+                  <small id="keywordsHelp" class="form-text visually-hidden">{{ 'msgShowHelp' | translate }}</small>
+                </div>
+              </div>
+
+              <!-- Author -->
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="author">
+                  {{ 'msgAuthor' | translate }}
+                </label>
+                <div class="col-lg-10">
+                  <input type="text" name="author" id="author" value="{{ faqData['author'] }}" class="form-control" 
+                         required>
+                </div>
+              </div>
+
+              <!-- E-Mail -->
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="email">{{ 'msgEmail' | translate }}</label>
+                <div class="col-lg-10">
+                  <input type="email" name="email" id="email" value="{{ faqData['email'] | raw }}" class="form-control"
+                         required>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="tab-pane" id="tab-seo">
+
+              <div class="row mb-2">
+                <p>{{ 'msgSerp' | translate }}</p>
+              </div>
+
+              <!-- SERP Title -->
+              <div class="row mb-2">
+                <label class="col-lg-3 col-form-label" for="serpTitle">{{ 'msgSerpTitle' | translate }}</label>
+                <div class="col-lg-9">
+                  <input type="text" name="serpTitle" id="serpTitle" value="{{ faqData['serp-title'] }}"
+                         class="form-control">
+                </div>
+              </div>
+
+              <!-- SERP Description -->
+              <div class="row mb-2">
+                <label class="col-lg-3 col-form-label" for="serpDescription">
+                  {{ 'msgSerpDescription' | translate }}
+                </label>
+                <div class="col-lg-9">
+                <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
+                >{{ faqData['serp-description'] }}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane" id="tab-permissions">
+              <!-- Permissions -->
+              {% if not isBasicPermission %}
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-3 col-form-label pt-0">
+                      {{ 'msgGroupPermissions' | translate }}
+                    </div>
+                    <div class="col-6">
+                      <div class="form-check">
+                        <input type="radio" id="allgroups" name="grouppermission" value="all" class="form-check-input"
+                          {{ allGroups ? 'checked' : '' }}>
+                        <label class="form-check-label" for="allgroups">
+                          {{ 'msgAccessAllGroups' | translate }}
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input type="radio" id="restrictedgroups" name="grouppermission" class="form-check-input"
+                               value="restricted" {{ restrictedGroups ? 'checked' : '' }}>
+                        <label class="form-check-label mb-1" for="restrictedgroups">
+                          {{ ad_entry_restricted_groups }}
+                        </label>
+                        <select id="restrictedgroups" name="restricted_groups" size="3" class="form-control" multiple>
+                          {{ groupPermissionOptions | raw }}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              {% else %}
+                <input type="hidden" name="grouppermission" value="all">
               {% endif %}
 
-              {% if not isEditorEnabled and not isMarkdownEditorEnabled %}
-              <div class="row">
-                <div class="col-lg-12">
-                  <textarea id="editor" name="answer" class="form-control" rows="7"
-                            placeholder="{{ ad_entry_content }}">{{ faqData['content'] | raw }}</textarea>
-                </div>
-              </div>
-              {% endif %}
-
-          </div>
-
-          <div class="tab-pane" id="tab-meta-data">
-            <!-- Categories -->
-            <div class="row mb-2">
-              <label class="col-2 col-form-label" for="phpmyfaq-categories">{{ ad_entry_category }}</label>
-              <div class="col-6">
-                <select class="form-control" name="categories[]" id="phpmyfaq-categories" size="5" multiple required>
-                  {{ categoryOptions | raw }}
-                </select>
-              </div>
-            </div>
-
-            <!-- Language -->
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="lang">
-                {{ ad_entry_locale }}
-              </label>
-              <div class="col-lg-10">
-                {{ languageOptions | raw }}
-              </div>
-            </div>
-
-            <!-- Attachments -->
-            {% if hasPermissionForAddAttachments %}
-              <div class="row mb-2">
-                <label class="col-lg-2 col-form-label">{{ ad_menu_attachments }}</label>
-                <div class="col-lg-10">
-                  <ul class="list adminAttachments" data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
-                    {% for attachment in attachments %}
-                    <li id="attachment-id-{{ attachment.id }}">
-                      <a href="../index.php?action=attachment&id={{ attachment.id }}">{{ attachment.filename }}</a>
-                      {% if hasPermissionForDeleteAttachments %}
-                      <button type="button" class="btn btn-sm btn-danger pmf-delete-attachment-button"
-                              data-pmf-attachment-id="{{ attachment.id }}"
-                              data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
-                        <i aria-hidden="true" class="bi bi-trash"
-                           data-pmf-attachment-id="{{ attachment.id }}"
-                           data-pmf-csrf-token="{{ csrfTokenDeleteAttachment }}">
-                        </i>
-                      </button>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-                  </ul>
-
-                  <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
-                          data-bs-target="#attachmentModal">
-                    {{ ad_att_add }}
-                  </button>
-                </div>
-              </div>
-            {% endif %}
-
-            <!-- Tags -->
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="tags">{{ ad_entry_tags }}</label>
-              <div class="col-lg-10">
-                <input type="text" name="tags" id="tags" value="{{ faqData['tags'] }}" autocomplete="off"
-                       class="form-control pmf-tags-autocomplete">
-                <small id="tagsHelp" class="form-text visually-hidden">{{ msgShowHelp }}</small>
-              </div>
-            </div>
-
-            <!-- Keywords -->
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="keywords">{{ ad_entry_keywords }}</label>
-              <div class="col-lg-10">
-                <input type="text" name="keywords" id="keywords" maxlength="255" class="form-control" autocomplete="off"
-                       value="{{ faqData['keywords'] }}">
-                <small id="keywordsHelp" class="form-text visually-hidden">{{ msgShowHelp }}</small>
-              </div>
-            </div>
-
-            <!-- Author -->
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="author">{{ ad_entry_author }}</label>
-              <div class="col-lg-10">
-                <input type="text" name="author" id="author" value="{{ faqData['author'] }}" class="form-control"
-                       required>
-              </div>
-            </div>
-
-            <!-- E-Mail -->
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="email">{{ msgEmail }}</label>
-              <div class="col-lg-10">
-                <input type="email" name="email" id="email" value="{{ faqData['email']|raw }}" class="form-control"
-                       required>
-              </div>
-            </div>
-            
-          </div>
-
-          <div class="tab-pane" id="tab-seo">
-
-            <div class="row mb-2">
-              <p>{{ msgSerp }}</p>
-            </div>
-
-            <!-- SERP Title -->
-            <div class="row mb-2">
-              <label class="col-lg-3 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
-              <div class="col-lg-9">
-                <input type="text" name="serpTitle" id="serpTitle" value="{{ faqData['serp-title'] }}" class="form-control">
-              </div>
-            </div>
-
-            <!-- SERP Description -->
-            <div class="row mb-2">
-              <label class="col-lg-3 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
-              <div class="col-lg-9">
-                <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
-                >{{ faqData['serp-description'] }}</textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="tab-pane" id="tab-permissions">
-            <!-- Permissions -->
-            {% if not isBasicPermission %}
               <div class="form-group">
                 <div class="row">
-                  <div class="col-3 col-form-label pt-0">{{ ad_entry_grouppermission }}</div>
+                  <div class="col-3 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
                   <div class="col-6">
                     <div class="form-check">
-                      <input type="radio" id="allgroups" name="grouppermission" value="all" class="form-check-input"
-                        {{ allGroups ? 'checked' : '' }}>
-                      <label class="form-check-label" for="allgroups">
-                        {{ ad_entry_all_groups }}
+                      <input type="radio" id="allusers" name="userpermission" value="all" class="form-check-input"
+                        {{ allUsers ? 'checked' : '' }}>
+                      <label class="form-check-label" for="allusers">
+                        {{ 'msgAccessAllUsers' | translate }}
                       </label>
                     </div>
                     <div class="form-check">
-                      <input type="radio" id="restrictedgroups" name="grouppermission" class="form-check-input"
-                             value="restricted" {{ restrictedGroups ? 'checked' : '' }}>
-                      <label class="form-check-label mb-1" for="restrictedgroups">
-                        {{ ad_entry_restricted_groups }}
+                      <input type="radio" id="restrictedusers" name="userpermission" class="form-check-input"
+                             value="restricted" {{ restrictedUsers ? 'checked' : '' }}>
+                      <label class="form-check-label mb-1" for="restrictedusers">
+                        {{ ad_entry_restricted_users }}
                       </label>
-                      <select id="restrictedgroups" name="restricted_groups" size="3" class="form-control" multiple>
-                        {{ groupPermissionOptions | raw }}
+                      <select name="restricted_users" id="selected-user" class="form-select">
+                        {{ userPermissionOptions | raw }}
                       </select>
                     </div>
                   </div>
                 </div>
               </div>
-            {% else %}
-              <input type="hidden" name="grouppermission" value="all">
-            {% endif %}
 
-            <div class="form-group">
-              <div class="row">
-                <div class="col-3 col-form-label pt-0">{{ ad_entry_userpermission }}</div>
-                <div class="col-6">
-                  <div class="form-check">
-                    <input type="radio" id="allusers" name="userpermission" value="all" class="form-check-input"
-                      {{ allUsers ? 'checked' : '' }}>
-                    <label class="form-check-label" for="allusers">
-                      {{ ad_entry_all_users }}
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input type="radio" id="restrictedusers" name="userpermission" class="form-check-input"
-                           value="restricted" {{ restrictedUsers ? 'checked' : '' }}>
-                    <label class="form-check-label mb-1" for="restrictedusers">
-                      {{ ad_entry_restricted_users }}
-                    </label>
-                    <select name="restricted_users" id="selected-user" class="form-select">
-                      {{ userPermissionOptions | raw }}
-                    </select>
-                  </div>
+            </div>
+
+            <div class="tab-pane" id="tab-notes-changelog">
+              <h6 class="card-title sr-only">
+                {{ ad_entry_changelog }}
+              </h6>
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="changelog-date">
+                  {{ 'msgDate' | translate }}
+                </label>
+                <div class="col-lg-10">
+                  <input type="text" readonly class="form-control-plaintext" id="changelog-date"
+                         value="{{ faqData['date'] }}">
                 </div>
               </div>
-            </div>
 
-          </div>
-
-          <div class="tab-pane" id="tab-notes-changelog">
-            <h6 class="card-title sr-only">
-              {{ ad_entry_changelog }}
-            </h6>
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="changelog-date">
-                {{ ad_entry_date }}
-              </label>
-              <div class="col-lg-10">
-                <input type="text" readonly class="form-control-plaintext" id="changelog-date"
-                       value="{{ faqData['date'] }}">
-              </div>
-            </div>
-
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="changed">
-                {{ ad_entry_changed }}
-              </label>
-              <div class="col-lg-10">
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="changed">
+                  {{ ad_entry_changed }}
+                </label>
+                <div class="col-lg-10">
                 <textarea name="changed" id="changed" rows="3" class="form-control"
                 >{{ faqData['changed'] }}</textarea>
+                </div>
               </div>
-            </div>
 
-            <h6 class="card-title">
-              <label for="notes">
-                {{ ad_admin_notes }} {{ ad_admin_notes_hint }}
-              </label>
-            </h6>
-            <div class="row mb-2">
-              <div class="col-lg-10 offset-lg-2">
-                <textarea id="notes" name="notes" class="form-control" rows="3">{{ faqData['notes'] ?? '' }}</textarea>
+              <h6 class="card-title">
+                <label for="notes">
+                  {{ ad_admin_notes }} {{ ad_admin_notes_hint }}
+                </label>
+              </h6>
+              <div class="row mb-2">
+                <div class="col-lg-10 offset-lg-2">
+                  <textarea id="notes" name="notes" class="form-control"
+                            rows="3">{{ faqData['notes'] ?? '' }}</textarea>
+                </div>
               </div>
-            </div>
 
-            <h6 class="card-title">
-              {{ ad_entry_changelog_history }}
-            </h6>
-            <div class="row mb-2">
-              <div class="offset-2 col-lg-10">
+              <h6 class="card-title">
+                {{ ad_entry_changelog_history }}
+              </h6>
+              <div class="row mb-2">
+                <div class="offset-2 col-lg-10">
                   {% for changelog in changelogs %}
                     <div class="d-flex align-items-center flex-wrap text-muted mb-md-0 mb-4 small">
                       <div class="border-end pe-3 me-3 mb-2">
@@ -382,7 +418,7 @@
                         </div>
                         <div class="d-flex align-items-center me-3">
                           <i aria-hidden="true" class="bi bi-archive me-1"></i>
-                          {{ ad_entry_revision }} 1.{{ changelog['revision_id'] }}
+                          {{ 'msgRevision' | translate }} 1.{{ changelog['revision_id'] }}
                         </div>
                       </div>
                     </div>
@@ -390,191 +426,219 @@
                       {{ changelog['changelog'] }}
                     </p>
                   {% endfor %}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Sidebar -->
-  <div class="col-3">
-    <div class="card shadow mb-4">
-      <div class="card-header text-end" role="tab" id="pmf-heading-date">
-        {% if selectedRevisionId == faqData['revision_id'] %}
-        <button class="btn btn-info" type="reset">
-          {{ ad_gen_reset }}
-        </button>
-        <button class="btn btn-primary" type="submit" id="faqEditorSubmit">
-          {{ ad_entry_save }}
-        </button>
-        {% endif %}
-      </div>
-      <div class="card-body">
-        <h5 class="mb-0">
-          {{ ad_entry_date }}
-        </h5>
-        <div class="form-group">
-          <div class="form-check">
-            <input type="radio" id="updateDate" checked name="recordDateHandling" class="form-check-input"
-                   onchange="setRecordDate(this.id);" value="updateDate">
-            <label class="form-check-label" for="updateDate">
-              {{ msgUpdateFaqDate }}
-            </label>
-          </div>
-          <div class="form-check">
-            <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input" value="keepDate"
-                   onchange="setRecordDate(this.id);">
-            <label class="form-check-label" for="keepDate">
-              {{ msgKeepFaqDate }}
-            </label>
-          </div>
-          <div class="form-check">
-            <input type="radio" id="manualDate" name="recordDateHandling" class="form-check-input" value="manualDate"
-                   onchange="setRecordDate(this.id);">
-            <label class="form-check-label" for="manualDate">
-              {{ msgEditFaqDat }}
-            </label>
-          </div>
-          <div id="recordDateInputContainer" class="invisible mb-2">
-            <input type="datetime-local" name="date" id="date" class="form-control" placeholder="{{ faqData['date'] }}">
-          </div>
-        </div>
-
-        <h5 class="mb-0">
-          {{ ad_entry_status }}
-        </h5>
-        <div class="form-group">
-          <!-- active or not -->
-          {% if hasPermissionForApprove %}
-          <div class="form-check">
-            <input type="radio" id="active" name="active" value="yes"class="form-check-input" {{ isActive }}>
-            <label class="form-check-label" for="active">
-              {{ ad_entry_visibility }}
-            </label>
-          </div>
-          <div class="form-check">
-            <input type="radio" id="inactive" name="active" value="no" class="form-check-input" {{ isInActive }}>
-            <label class="form-check-label" for="inactive">
-              {{ ad_entry_not_visibility }}
-            </label>
-          </div>
-          {% else %}
-            <div class="form-check">
-              <input type="radio" id="inactive" name="active" value="no"class="form-check-input" checked>
-              <label class="form-check-label" for="inactive">
-                {{ ad_entry_not_visibility }}
-              </label>
-            </div>
+    <!-- Sidebar -->
+    <div class="col-3">
+      <div class="card shadow mb-4">
+        <div class="card-header text-end" role="tab" id="pmf-heading-date">
+          {% if selectedRevisionId == faqData['revision_id'] %}
+            <button class="btn btn-info" type="reset">
+              {{ ad_gen_reset }}
+            </button>
+            <button class="btn btn-primary" type="submit" id="faqEditorSubmit">
+              {{ ad_entry_save }}
+            </button>
           {% endif %}
         </div>
-
-        {% if canBeNewRevision %}
-          <h5 class="mt-2">
-            {{ ad_entry_new_revision }}
+        <div class="card-body">
+          <h5 class="mb-0">
+            {{ 'msgDate' | translate }}
           </h5>
           <div class="form-group">
             <div class="form-check">
-              <input type="radio" name="revision" id="revision" value="yes" class="form-check-input">
-              <label class="form-check-label" for="revision">{{ ad_gen_yes }}</label>
+              <input type="radio" id="updateDate" checked name="recordDateHandling" class="form-check-input"
+                     onchange="setRecordDate(this.id);" value="updateDate">
+              <label class="form-check-label" for="updateDate">
+                {{ 'msgUpdateFaqDate' | translate }}
+              </label>
             </div>
             <div class="form-check">
-              <input type="radio" name="revision" id="no-revision" value="no" checked class="form-check-input">
-              <label class="form-check-label" for="no-revision">{{ ad_gen_no }}</label>
+              <input type="radio" id="keepDate" name="recordDateHandling" class="form-check-input" value="keepDate"
+                     onchange="setRecordDate(this.id);">
+              <label class="form-check-label" for="keepDate">
+                {{ 'msgKeepFaqDate' | translate }}
+              </label>
+            </div>
+            <div class="form-check">
+              <input type="radio" id="manualDate" name="recordDateHandling" class="form-check-input" value="manualDate"
+                     onchange="setRecordDate(this.id);">
+              <label class="form-check-label" for="manualDate">
+                {{ 'msgEditFaqDate' | translate }}
+              </label>
+            </div>
+            <div id="recordDateInputContainer" class="invisible mb-2">
+              <input type="datetime-local" name="date" id="date" class="form-control"
+                     placeholder="{{ faqData['date'] }}">
             </div>
           </div>
-        {% endif %}
 
-        <hr>
-
-        <div class="form-group">
-          <!-- sticky or not -->
-          <div class="form-check">
-            <input type="checkbox" id="sticky" name="sticky" class="form-check-input"
-                   {{ faqData['sticky'] ? 'checked' : '' }}>
-            <label class="form-check-label" for="sticky">{{ ad_entry_sticky }}</label>
+          <h5 class="mb-0">
+            {{ ad_entry_status }}
+          </h5>
+          <div class="form-group">
+            <!-- active or not -->
+            {% if hasPermissionForApprove %}
+              <div class="form-check">
+                <input type="radio" id="active" name="active" value="yes" class="form-check-input" {{ isActive }}>
+                <label class="form-check-label" for="active">
+                  {{ ad_entry_visibility }}
+                </label>
+              </div>
+              <div class="form-check">
+                <input type="radio" id="inactive" name="active" value="no" class="form-check-input" {{ isInActive }}>
+                <label class="form-check-label" for="inactive">
+                  {{ ad_entry_not_visibility }}
+                </label>
+              </div>
+            {% else %}
+              <div class="form-check">
+                <input type="radio" id="inactive" name="active" value="no" class="form-check-input" checked>
+                <label class="form-check-label" for="inactive">
+                  {{ ad_entry_not_visibility }}
+                </label>
+              </div>
+            {% endif %}
           </div>
 
-          <!-- comments allowed or not -->
-          <div class="form-check">
-            <input type="checkbox" name="comment" id="comment" value="y" class="form-check-input"
-              {{ faqData['comment'] ? 'checked' : '' }}>
-            <label class="form-check-label" for="comment">{{ ad_entry_allowComments }}</label>
-          </div>
-        </div>
-
-        <hr>
-
-        <div class="form-group">
-          <!-- solution id -->
-          <label class="col-form-label" for="solutionId">
-            {{ ad_entry_solution_id }}
-          </label>
-          <input type="number" name="solutionId" id="solutionId" size="5" class="form-control"
-                 value="{{ faqData['solution_id'] ?? nextSolutionId }}" readonly>
-        </div>
-      </div>
-    </div>
-    </form>
-  </div>
-</div>
-
-<div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="attachmentModalLabel">
-          {{ ad_att_addto }} {{ ad_att_addto_2 }} (max. {{ maxAttachmentSize | formatBytes }})
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="./api/attachment" enctype="multipart/form-data" method="post" id="attachmentForm" novalidate>
-          <fieldset>
-            <input type="hidden" name="MAX_FILE_SIZE" value="{{ maxAttachmentSize }}">
-            <input type="hidden" name="record_id" id="attachment_record_id" value="{{ faqData['id'] }}">
-            <input type="hidden" name="record_lang" id="attachment_record_lang" value="{{ faqData['lang'] }}">
-            <input type="hidden" name="save" value="true">
-            <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenUploadAttachment }}">
-
-            <div class="mb-2">
-              <label class="form-label" for="filesToUpload">
-                {{ ad_att_att }}
-              </label>
-              <input type="file" class="form-control" name="filesToUpload[]" id="filesToUpload"
-                     multiple>
-              <div class="invalid-feedback">
-                The file is too big.
+          {% if canBeNewRevision %}
+            <h5 class="mt-2">
+              {{ ad_entry_new_revision }}
+            </h5>
+            <div class="form-group">
+              <div class="form-check">
+                <input type="radio" name="revision" id="revision" value="yes" class="form-check-input">
+                <label class="form-check-label" for="revision">{{ ad_gen_yes }}</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" name="revision" id="no-revision" value="no" checked class="form-check-input">
+                <label class="form-check-label" for="no-revision">{{ ad_gen_no }}</label>
               </div>
             </div>
+          {% endif %}
 
-            <div class="pmf-attachment-upload-files invisible mb-2">
-              {{ msgAttachmentsFilesize }}
-              <output id="filesize"></output>
+          <hr>
+
+          <div class="form-group">
+            <!-- sticky or not -->
+            <div class="form-check">
+              <input type="checkbox" id="sticky" name="sticky" class="form-check-input"
+                {{ faqData['sticky'] ? 'checked' : '' }}>
+              <label class="form-check-label" for="sticky">{{ 'msgStickyFAQ' | translate }}</label>
             </div>
-          </fieldset>
-        </form>
+
+            <!-- comments allowed or not -->
+            <div class="form-check">
+              <input type="checkbox" name="comment" id="comment" value="y" class="form-check-input"
+                {{ faqData['comment'] ? 'checked' : '' }}>
+              <label class="form-check-label" for="comment">{{ ad_entry_allowComments }}</label>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="form-group">
+            <!-- solution id -->
+            <label class="col-form-label" for="solutionId">
+              {{ ad_entry_solution_id }}
+            </label>
+            <input type="number" name="solutionId" id="solutionId" size="5" class="form-control"
+                   value="{{ faqData['solution_id'] ?? nextSolutionId }}" readonly>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
-          {{ ad_att_butt }}
-        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Attachment Modal -->
+  <div class="modal modal-lg fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="attachmentModalLabel">
+            {{ ad_att_addto }} {{ ad_att_addto_2 }} (max. {{ maxAttachmentSize | formatBytes }})
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="./api/attachment" enctype="multipart/form-data" method="post" id="attachmentForm" novalidate>
+            <fieldset>
+              <input type="hidden" name="MAX_FILE_SIZE" value="{{ maxAttachmentSize }}">
+              <input type="hidden" name="record_id" id="attachment_record_id" value="{{ faqData['id'] }}">
+              <input type="hidden" name="record_lang" id="attachment_record_lang" value="{{ faqData['lang'] }}">
+              <input type="hidden" name="save" value="true">
+              <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenUploadAttachment }}">
+
+              <div class="mb-2">
+                <label class="form-label" for="filesToUpload">
+                  {{ ad_att_att }}
+                </label>
+                <input type="file" class="form-control" name="filesToUpload[]" id="filesToUpload" multiple>
+                <div class="invalid-feedback">
+                  The file is too big.
+                </div>
+              </div>
+
+              <div class="pmf-attachment-upload-files invisible mb-2">
+                {{ 'msgAttachmentsFilesize' | translate }}
+                <output id="filesize"></output>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
+            {{ ad_att_butt }}
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  function setRecordDate(how) {
-    if ('updateDate' === how) {
-      document.getElementById('date').value = '';
-    } else if ('keepDate' === how) {
-      document.getElementById('date').value = '{{ faqData['isoDate'] }}';
-    } else if ('manualDate' === how) {
-      document.getElementById('recordDateInputContainer').classList.remove('invisible');
-      document.getElementById('date').value = '';
+  {% if isMarkdownEditorEnabled %}
+    <!-- Markdown Image Modal -->
+    <div class="modal modal-lg fade " id="pmf-markdown-insert-image-modal" tabindex="-1" role="dialog"
+         aria-labelledby="pmf-markdown-insert-image-modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pmf-markdown-insert-image-modalLabel">
+              {{ 'msgInsertImage' | translate }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="pmf-markdown-insert-image-list"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="pmf-markdown-insert-image-button">
+              {{ 'ad_categ_paste' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
+  <script>
+    function setRecordDate(how) {
+      if ('updateDate' === how) {
+        document.getElementById('date').value = '';
+      } else if ('keepDate' === how) {
+        document.getElementById('date').value = '{{ faqData['isoDate'] }}';
+      } else if ('manualDate' === how) {
+        document.getElementById('recordDateInputContainer').classList.remove('invisible');
+        document.getElementById('date').value = '';
+      }
     }
-  }
-</script>
+  </script>
+{% endblock %}

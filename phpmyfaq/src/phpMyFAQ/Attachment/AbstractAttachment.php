@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
@@ -150,16 +150,9 @@ abstract class AbstractAttachment
         return $hasMeta;
     }
 
-    /**
-     * Build attachment url.
-     *
-     * @param bool $forHTML either to use ampersands directly
-     */
-    public function buildUrl(bool $forHTML = true): string
+    public function buildUrl(): string
     {
-        $amp = $forHTML ? '&amp;' : '&';
-
-        return sprintf('index.php?action=attachment%sid=%d', $amp, $this->id);
+        return sprintf('index.php?action=attachment&id=%d', $this->id);
     }
 
     /**

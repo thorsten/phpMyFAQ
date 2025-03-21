@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Admin Tag Controller
+ * The Tag Administration Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,105 +9,51 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-10-27
+ * @since     2024-12-01
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Entity\Tag;
-use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
-use stdClass;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 
-class TagController extends AbstractController
+class TagController extends AbstractAdministrationController
 {
     /**
+     * @throws LoaderError
      * @throws Exception
+     * @throws \Exception
      */
-    #[Route('admin/api/content/tag')]
-    public function update(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $tags = new Tags($this->configuration);
-
-        $postData = json_decode($request->getContent());
-
-        if (!Token::getInstance()->verifyToken('tags', $postData->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
-        $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $tagEntity = new Tag();
-        $tagEntity->setId($id);
-        $tagEntity->setName($newTag);
-
-        if ($tags->update($tagEntity)) {
-            return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/content/tags')]
-    public function search(Request $request): JsonResponse
+    #[Route('/tags', name: 'admin.tags', methods: ['GET'])]
+    public function index(Request $request): Response
     {
         $this->userIsAuthenticated();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        $tag = new Tags($this->configuration);
+        $tagData = $this->container->get('phpmyfaq.tags')->getAllTags();
 
-        $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!is_null($autoCompleteValue)) {
-            if (strpos((string) $autoCompleteValue, ',')) {
-                $arrayOfValues = explode(',', (string) $autoCompleteValue);
-                $autoCompleteValue = end($arrayOfValues);
-            }
-
-            $tags = $tag->getAllTags(
-                strtolower(trim((string) $autoCompleteValue)),
-                PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-                true
-            );
-        } else {
-            $tags = $tag->getAllTags();
-        }
-
-        if ($user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT)) {
-            $numTags = 0;
-            $tagNames = [];
-            foreach ($tags as $tag) {
-                ++$numTags;
-                if ($numTags <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-                    $currentTag = new stdClass();
-                    $currentTag->tagName = $tag;
-                    $tagNames[] = $currentTag;
-                }
-            }
-
-            return $this->json($tagNames, Response::HTTP_OK);
-        }
-
-        return $this->json([], Response::HTTP_OK);
+        return $this->render(
+            '@admin/content/tags.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'adminHeaderTags' => Translation::get('msgTags'),
+                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('tags'),
+                'tags' => $tagData,
+                'noTags' => Translation::get('ad_news_nodata'),
+                'buttonEdit' => Translation::get('ad_user_edit'),
+                'msgConfirm' => Translation::get('ad_user_del_3'),
+                'buttonDelete' => Translation::get('msgDelete'),
+            ]
+        );
     }
 }

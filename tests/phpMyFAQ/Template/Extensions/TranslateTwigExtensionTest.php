@@ -47,7 +47,7 @@ class TranslateTwigExtensionTest extends TestCase
     public function testTranslate(): void
     {
         $translationKey = 'msgCategory';
-        $expectedTranslation = 'Categories';
+        $expectedTranslation = 'Category';
 
         $actualTranslation = $this->translateTwigExtension->translate($translationKey);
 

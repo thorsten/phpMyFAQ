@@ -22,28 +22,32 @@ class AttachmentHelperTest extends TestCase
         $this->attachmentHelper = new AttachmentHelper();
     }
 
-    public function testRenderAttachmentListEmpty()
+    public function testGetAttachmentListEmpty()
     {
         $attachmentList = [];
-        $result = $this->attachmentHelper->renderAttachmentList($attachmentList);
-        $this->assertEquals('', $result);
+        $result = $this->attachmentHelper->getAttachmentList($attachmentList);
+        $this->assertEquals([], $result);
     }
 
-    public function testRenderAttachmentListWithAttachments()
+    public function testGetAttachmentListWithAttachments()
     {
         $attachmentMock = $this->createMock(AbstractAttachment::class);
         $attachmentMock->method('getMimeType')->willReturn('application/pdf');
-        $attachmentMock->method('buildUrl')->willReturn('http://example.com/file.pdf');
+        $attachmentMock->method('buildUrl')->willReturn('https://example.com/file.pdf');
         $attachmentMock->method('getFilename')->willReturn('file.pdf');
 
         $attachmentList = [$attachmentMock];
 
-        $result = $this->attachmentHelper->renderAttachmentList($attachmentList);
+        $result = $this->attachmentHelper->getAttachmentList($attachmentList);
 
-        $expectedHtml = '<p>Attached files:</p><ul>';
-        $expectedHtml .= '<li><i class="bi bi-file-pdf-o" aria-hidden="true"></i> <a href="http://example.com/file.pdf">file&period;pdf</a></li>';
-        $expectedHtml .= '</ul>';
+        $expectedResult = [
+            [
+                'icon' => 'file-pdf-o',
+                'url' => 'https://example.com/file.pdf',
+                'filename' => 'file.pdf',
+            ],
+        ];
 
-        $this->assertEquals($expectedHtml, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 }

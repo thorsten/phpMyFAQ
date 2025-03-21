@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
@@ -84,9 +84,8 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Save current attachment to the appropriate storage. The
-     * filepath given will be processed and moved to the appropriate
-     * location.
+     * Save current attachment to the appropriate storage.
+     * The filepath given will be processed and moved to the appropriate location.
      *
      * @param string $filePath full path to the attachment file
      * @throws FileException|AttachmentException
@@ -170,7 +169,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Factory method to initialise the corresponding file object.
+     * Factory method to initialize the corresponding file object.
      *
      * @param string $mode File mode for file open
      * @return VanillaFile|EncryptedFile

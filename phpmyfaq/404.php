@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2019-2024 phpMyFAQ Team
+ * @copyright 2019-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2019-01-25
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking(SessionActionType::NOT_FOUND->value, 0);
 

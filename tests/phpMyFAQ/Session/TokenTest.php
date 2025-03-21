@@ -2,66 +2,95 @@
 
 namespace phpMyFAQ\Session;
 
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class TokenTest extends TestCase
 {
+    private SessionInterface $sessionMock;
+    private Token $token;
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     protected function setUp(): void
     {
-        $_SERVER['SERVER_PORT'] = 443;
+        // Mock the SessionInterface
+        $this->sessionMock = $this->createMock(SessionInterface::class);
+        $this->token = Token::getInstance($this->sessionMock);
     }
 
-    public function testGetInstance(): void
+    public function testGetInstanceReturnsTokenInstance(): void
     {
-        $token1 = Token::getInstance();
-        $token2 = Token::getInstance();
-
-        $this->assertInstanceOf(Token::class, $token1);
-        $this->assertSame($token1, $token2);
+        $this->assertInstanceOf(Token::class, $this->token);
     }
 
-    /**
-     * @throws \Exception
-     */
+    public function testSetAndGetPage(): void
+    {
+        $this->token->setPage('testPage');
+        $this->assertEquals('testPage', $this->token->getPage());
+    }
+
+    public function testSetAndGetExpiry(): void
+    {
+        $this->token->setExpiry(3600);
+        $this->assertEquals(3600, $this->token->getExpiry());
+    }
+
+    public function testSetAndGetSessionToken(): void
+    {
+        $this->token->setSessionToken('testSessionToken');
+        $this->assertEquals('testSessionToken', $this->token->getSessionToken());
+    }
+
+    public function testSetAndGetCookieToken(): void
+    {
+        $this->token->setCookieToken('testCookieToken');
+        $this->assertEquals('testCookieToken', $this->token->getCookieToken());
+    }
+
     public function testGetTokenInput(): void
     {
-        $token = Token::getInstance();
-        $page = 'example_page';
+        $this->sessionMock
+            ->method('get')
+            ->willReturn($this->token->setSessionToken('testToken'));
 
-        $tokenInput = $token->getTokenInput($page);
-
-        $this->assertStringContainsString(
-            '<input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="',
-            $tokenInput
-        );
+        $inputHtml = $this->token->getTokenInput('testPage');
+        $expectedHtml = '<input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token"';
+        $this->assertStringContainsString($expectedHtml, $inputHtml);
     }
 
     /**
      * @throws \Exception
      */
-    public function testVerifyToken(): void
+    public function testGetTokenString(): void
     {
-        $token = Token::getInstance();
-        $page = 'example_page';
+        $this->sessionMock
+            ->method('get')
+            ->willReturn($this->token->setSessionToken('testToken'));
 
-        $_POST['pmf-csrf-token'] = $token->getTokenString($page);
-        $_COOKIE[sprintf('%s-%s', 'pmf-csrf-token', substr(md5($page), 0, 10))] = $token->getTokenString($page);
-
-        $this->assertTrue($token->verifyToken($page, $_POST['pmf-csrf-token']));
+        $tokenString = $this->token->getTokenString('testPage');
+        $this->assertIsString($tokenString);
     }
 
-    /**
-     * @throws \Exception
-     */
+    public function testVerifyTokenReturnsFalseForInvalidToken(): void
+    {
+        $this->token->setSessionToken('testSessionToken');
+        $this->sessionMock
+            ->method('get')
+            ->willReturn($this->token);
+
+        $this->assertFalse($this->token->verifyToken('testPage', 'invalidToken'));
+    }
+
     public function testRemoveToken(): void
     {
-        $token = Token::getInstance();
-        $page = 'example_page';
+        $this->sessionMock
+            ->method('remove')
+            ->with($this->equalTo('pmf-csrf-token.testPage'));
 
-        // Add a token to session and cookie
-        $token->getTokenString($page);
-
-        // Remove the token
-        $this->assertTrue($token->removeToken($page));
+        $this->assertTrue($this->token->removeToken('testPage'));
     }
 }

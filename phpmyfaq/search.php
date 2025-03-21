@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2024 phpMyFAQ Team
+ * @copyright 2002-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-09-16
@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('fulltext_search', 0);
 
@@ -90,6 +90,7 @@ $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
+$numOfResults = 0;
 
 //
 // Handle the Tagging ID

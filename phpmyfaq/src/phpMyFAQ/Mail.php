@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-11
@@ -219,14 +219,8 @@ class Mail
      */
     public static function getServerName(): string
     {
-        $hostname = 'localhost.localdomain';
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $hostname = $_SERVER['HTTP_HOST'];
-        } elseif (isset($_SERVER['SERVER_NAME'])) {
-            $hostname = $_SERVER['SERVER_NAME'];
-        }
-
-        return $hostname;
+        $request = Request::createFromGlobals();
+        return $request->getHost() ?: 'localhost.localdomain';
     }
 
     /**

@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-09
@@ -20,8 +20,6 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Mail;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,8 +37,6 @@ class ContactController extends AbstractController
     #[Route('api/contact', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        $stopWords = new StopWords($this->configuration);
-
         $data = json_decode($request->getContent());
 
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
@@ -50,6 +46,8 @@ class ContactController extends AbstractController
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
+
+        $stopWords = $this->container->get('phpmyfaq.stop-words');
 
         if (
             $author !== '' &&
@@ -68,7 +66,7 @@ class ContactController extends AbstractController
                 $question
             );
 
-            $mailer = new Mail($this->configuration);
+            $mailer = $this->container->get('phpmyfaq.mail');
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());

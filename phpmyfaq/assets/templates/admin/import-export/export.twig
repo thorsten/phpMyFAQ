@@ -1,93 +1,97 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-book bi-fw"></i>
-    {{ adminHeaderExport }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-12">
-    <div class="card shadow">
-      <div class="card-body">
-
-        {% if hasNoFaqs %}
-          <div class="alert alert-warning" role="alert">
-            {{ errorMessageNoFaqs }}
-          </div>
-        {% endif %}
-
-        {% if hasCategories %}
-          <form action="./api/export/file" method="post" accept-charset="utf-8">
-            <h5>{{ headerCategories }}</h5>
-            <div class="row mb-2">
-              <label class="col-lg-2 col-form-label" for="categoryId">
-                {{ msgCategory }}
-              </label>
-              <div class="col-lg-4">
-                <select name="categoryId" id="categoryId" class="form-select">
-                  <option value="0">{{ msgAllCategories }}</option>
-                  {{ categoryOptions | raw }}
-                </select>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="offset-lg-2 col-lg-4">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="1" id="downwards" name="downwards" checked>
-                  <label class="form-check-label" for="downwards">{{ msgWithSubCategories }}</label>
-                </div>
-              </div>
-            </div>
-
-            <h5>{{ headerExportType }}</h5>
-            <div class="row mb-2">
-              <div class="offset-lg-2 col-lg-8">
-                <p>{{ msgChooseExportType }}</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="export-type" id="json" value="json" checked>
-                  <label class="form-check-label" for="json">JSON</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="export-type" id="pdf" value="pdf">
-                  <label class="form-check-label" for="pdf">PDF</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-2">
-              <div class="offset-lg-2 col-lg-4">
-                <p>{{ msgViewType }}</p>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="disposition" id="{{ msgDownloadType }}"
-                         value="{{ msgDownloadType }}" checked>
-                  <label class="form-check-label" for="{{ msgDownloadType }}">{{ msgDownload }}</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="disposition"
-                         id="{{ msgInlineType }}" value="{{ msgInlineType }}">
-                  <label class="form-check-label" for="{{ msgInlineType }}">
-                    {{ msgInline }}
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-2">
-              <div class="offset-lg-2 col-lg-4">
-                <button class="btn btn-secondary" type="reset" name="resetExport">
-                  {{ buttonReset }}
-                </button>
-                <button class="btn btn-primary" type="submit" name="submitExport" formtarget="_blank">
-                  {{ buttonExport }}
-                </button>
-              </div>
-            </div>
-
-          </form>
-        {% endif %}
-
-      </div>
-    </div>
-
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-book bi-fw"></i>
+      {{ adminHeaderExport }}
+    </h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-body">
+
+          {% if hasNoFaqs %}
+            <div class="alert alert-warning" role="alert">
+              {{ errorMessageNoFaqs }}
+            </div>
+          {% endif %}
+
+          {% if hasCategories %}
+            <form action="./api/export/file" method="post" accept-charset="utf-8">
+              <h5>{{ headerCategories }}</h5>
+              <div class="row mb-2">
+                <label class="col-lg-2 col-form-label" for="categoryId">
+                  {{ msgCategory }}
+                </label>
+                <div class="col-lg-4">
+                  <select name="categoryId" id="categoryId" class="form-select">
+                    <option value="0">{{ msgAllCategories }}</option>
+                    {{ categoryOptions | raw }}
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="offset-lg-2 col-lg-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="1" id="downwards" name="downwards" checked>
+                    <label class="form-check-label" for="downwards">{{ msgWithSubCategories }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <h5>{{ headerExportType }}</h5>
+              <div class="row mb-2">
+                <div class="offset-lg-2 col-lg-8">
+                  <p>{{ msgChooseExportType }}</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="export-type" id="json" value="json" checked>
+                    <label class="form-check-label" for="json">JSON</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="export-type" id="pdf" value="pdf">
+                    <label class="form-check-label" for="pdf">PDF</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="offset-lg-2 col-lg-4">
+                  <p>{{ msgViewType }}</p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="disposition" id="{{ msgDownloadType }}"
+                           value="{{ msgDownloadType }}" checked>
+                    <label class="form-check-label" for="{{ msgDownloadType }}">{{ msgDownload }}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="disposition"
+                           id="{{ msgInlineType }}" value="{{ msgInlineType }}">
+                    <label class="form-check-label" for="{{ msgInlineType }}">
+                      {{ msgInline }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="offset-lg-2 col-lg-4">
+                  <button class="btn btn-secondary" type="reset" name="resetExport">
+                    {{ buttonReset }}
+                  </button>
+                  <button class="btn btn-primary" type="submit" name="submitExport" formtarget="_blank">
+                    {{ buttonExport }}
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

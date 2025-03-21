@@ -11,26 +11,37 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-05-31
  */
 
 use phpMyFAQ\Application;
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Controller\Frontend\SetupController;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 require '../src/Bootstrap.php';
 
-$faqConfig = Configuration::getConfigurationInstance();
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../src/services.php');
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
 
 $routes = new RouteCollection();
 $routes->add('public.update.index', new Route('/', ['_controller' => [SetupController::class, 'update']]));
 
-$app = new Application($faqConfig);
+$app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {

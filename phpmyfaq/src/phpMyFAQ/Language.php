@@ -11,7 +11,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-05-14
@@ -21,6 +21,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Language\LanguageCodes;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class Language
@@ -42,28 +43,30 @@ class Language
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly SessionInterface $session
+    ) {
     }
 
     /**
      * Returns an array of country codes for a specific FAQ record ID,
-     * specific category ID or all languages used by FAQ records , categories.
+     * specific category ID or all languages used by FAQ records, categories.
      *
-     * @param int    $id    ID
+     * @param int    $faqId    ID
      * @param string $table Specifies table
      * @return string[]
      */
-    public function isLanguageAvailable(int $id, string $table = 'faqdata'): array
+    public function isLanguageAvailable(int $faqId, string $table = 'faqdata'): array
     {
         $output = [];
 
-        if ($id === 0) {
+        if ($faqId === 0) {
             $distinct = ' DISTINCT ';
             $where = '';
         } else {
             $distinct = '';
-            $where = ' WHERE id = ' . $id;
+            $where = ' WHERE id = ' . $faqId;
         }
 
         $query = sprintf(
@@ -93,69 +96,10 @@ class Language
      */
     public function setLanguage(bool $configDetection, string $configLanguage): string
     {
-        $detectedLang = [];
-        self::getUserAgentLanguage();
-
-        // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
-        $detectedLang['post'] = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!is_null($detectedLang['post']) && !self::isASupportedLanguage($detectedLang['post'])) {
-            $detectedLang['post'] = null;
-        }
-
-        // Get the user language
-        $detectedLang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!is_null($detectedLang['get']) && !self::isASupportedLanguage($detectedLang['get'])) {
-            $detectedLang['get'] = null;
-        }
-
-        // Get the faq record language
-        $detectedLang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!is_null($detectedLang['artget']) && !self::isASupportedLanguage($detectedLang['artget'])) {
-            $detectedLang['artget'] = null;
-        }
-
-        // Get the language from the session
-        if (isset($_SESSION['lang']) && self::isASupportedLanguage($_SESSION['lang'])) {
-            $detectedLang['session'] = trim((string) $_SESSION['lang']);
-        }
-
-        // Get the language from the config
-        $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
-        if (self::isASupportedLanguage($confLangCode)) {
-            $detectedLang['config'] = $confLangCode;
-        }
-
-        // Detect the browser's language
-        if (($configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {
-            $detectedLang['detection'] = strtolower($this->acceptLanguage);
-        }
-
-        // Select the language
-        if (isset($detectedLang['post'])) {
-            self::$language = $detectedLang['post'];
-            $detectedLang = null;
-            unset($detectedLang);
-        } elseif (isset($detectedLang['get'])) {
-            self::$language = $detectedLang['get'];
-        } elseif (isset($detectedLang['artget'])) {
-            self::$language = $detectedLang['artget'];
-        } elseif (isset($detectedLang['session'])) {
-            self::$language = $detectedLang['session'];
-            $detectedLang = null;
-            unset($detectedLang);
-        } elseif (isset($detectedLang['detection'])) {
-            self::$language = $detectedLang['detection'];
-            $detectedLang = null;
-            unset($detectedLang);
-        } elseif (isset($detectedLang['config'])) {
-            self::$language = $detectedLang['config'];
-            $detectedLang = null;
-            unset($detectedLang);
-        } else {
-            self::$language = 'en'; // just a last fallback
-        }
-
-        return $_SESSION['lang'] = strtolower(self::$language);
+        $detectedLang = $this->detectLanguage($configDetection, $configLanguage);
+        self::$language = $this->selectLanguage($detectedLang);
+        $this->session->set('lang', self::$language);
+        return strtolower(self::$language);
     }
 
     public function setLanguageByAcceptLanguage(): string
@@ -184,9 +128,94 @@ class Language
     }
 
     /**
+     * Detects the language.
+     *
+     * @param bool   $configDetection Configuration detection
+     * @param string $configLanguage  Language from configuration
+     * @return string[]
+     */
+    private function detectLanguage(bool $configDetection, string $configLanguage): array
+    {
+        $detectedLang = [];
+        $this->getUserAgentLanguage();
+
+        $detectedLang['post'] = $this->getPostLanguage();
+        $detectedLang['get'] = $this->getGetLanguage();
+        $detectedLang['artget'] = $this->getArtGetLanguage();
+        $detectedLang['session'] = $this->getSessionLanguage();
+        $detectedLang['config'] = $this->getConfigLanguage($configLanguage);
+        $detectedLang['detection'] = $this->getDetectionLanguage($configDetection);
+
+        return $detectedLang;
+    }
+
+    private function getPostLanguage(): ?string
+    {
+        $lang = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS);
+        return $this->isASupportedLanguage($lang) ? $lang : null;
+    }
+
+    private function getGetLanguage(): ?string
+    {
+        $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+        return $this->isASupportedLanguage($lang) ? $lang : null;
+    }
+
+    private function getArtGetLanguage(): ?string
+    {
+        $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
+        return $this->isASupportedLanguage($lang) ? $lang : null;
+    }
+
+    private function getSessionLanguage(): ?string
+    {
+        $lang = $this->session->get('lang');
+        return $this->isASupportedLanguage($lang) ? trim((string) $lang) : null;
+    }
+
+    private function getConfigLanguage(string $configLanguage): ?string
+    {
+        $lang = str_replace(['language_', '.php'], '', $configLanguage);
+        return $this->isASupportedLanguage($lang) ? $lang : null;
+    }
+
+    private function getDetectionLanguage(bool $configDetection): ?string
+    {
+        return ($configDetection && $this->isASupportedLanguage($this->acceptLanguage))
+            ?
+            strtolower($this->acceptLanguage)
+            :
+            null;
+    }
+
+    /**
+     * Selects the language.
+     *
+     * @param string[] $detectedLanguage Detected language
+     */
+    private function selectLanguage(array $detectedLanguage): string
+    {
+        if (isset($detectedLanguage['post'])) {
+            return $detectedLanguage['post'];
+        } elseif (isset($detectedLanguage['get'])) {
+            return $detectedLanguage['get'];
+        } elseif (isset($detectedLanguage['artget'])) {
+            return $detectedLanguage['artget'];
+        } elseif (isset($detectedLanguage['session'])) {
+            return $detectedLanguage['session'];
+        } elseif (isset($detectedLanguage['detection'])) {
+            return $detectedLanguage['detection'];
+        } elseif (isset($detectedLanguage['config'])) {
+            return $detectedLanguage['config'];
+        } else {
+            return 'en';
+        }
+    }
+
+    /**
      * Gets the accepted language from the user agent.
      *
-     * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
+     * HTTP_ACCEPT_LANGUAGE could be like the text below:
      * it,pt_BR;q=0.8,en_US;q=0.5,en;q=0.3
      */
     private function getUserAgentLanguage(): void

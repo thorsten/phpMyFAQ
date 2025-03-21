@@ -39,8 +39,8 @@ const PMF_TEST_DIR = __DIR__;
 const IS_VALID_PHPMYFAQ = true;
 const DEBUG = true;
 
-$_SERVER['HTTP_HOST'] = 'https://localhost/';
-$_SERVER['SERVER_NAME'] = 'https://localhost/';
+$_SERVER['HTTP_HOST'] = 'localhost';
+$_SERVER['SERVER_NAME'] = 'localhost';
 
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 
@@ -84,7 +84,7 @@ $setup = [
 
 Strings::init();
 
-Request::setTrustedHosts(['^localhost$', '^127\.0\.0\.1$', '^example\.com$']);
+Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
 try {
     $installer = new Installer(new System());

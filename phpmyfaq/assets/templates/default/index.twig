@@ -13,9 +13,9 @@
   <meta content="{{ metaRobots }}" name="robots">
   <meta content="7 days" name="revisit-after">
 
-  {% if isDebugEnabled %}<link href="{{ baseHref }}assets/dist/debugMode.css" rel="stylesheet">{% endif %}
+  {% if isDebugEnabled %}<link href="{{ baseHref }}assets/public/debugMode.css" rel="stylesheet">{% endif %}
 
-  <link href="{{ baseHref }}assets/dist/styles.css" rel="stylesheet" media="screen">
+  <link href="{{ baseHref }}assets/public/styles.css" rel="stylesheet" media="screen">
   <link href="{{ baseHref }}assets/templates/{{ tplSetName }}/theme.css" rel="stylesheet" media="screen">
   <style type="text/css" media="screen">
     {{ customCss }}
@@ -206,8 +206,8 @@
 </div>
 
 {% if isCookieConsentEnabled %}
-<script src="./assets/dist/cookieConsent.js"></script>
+<script type="module" src="./assets/public/cookieConsent.js"></script>
 {% endif %}
-<script src="./assets/dist/frontend.js"></script>
+<script type="module" src="./assets/public/frontend.js"></script>
 </body>
 </html>

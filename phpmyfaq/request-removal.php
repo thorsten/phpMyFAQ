@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018-2024 phpMyFAQ Team
+ * @copyright 2018-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-02-03
@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('request_removal', 0);
 
@@ -36,7 +36,7 @@ $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 $templateVars = [
     ... $templateVars,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
-    'csrf' => Token::getInstance()->getTokenInput('request-removal'),
+    'csrf' => Token::getInstance($container->get('session'))->getTokenInput('request-removal'),
     'lang' => $Language->getLanguage(),
     'userId' => $user->getUserId(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',

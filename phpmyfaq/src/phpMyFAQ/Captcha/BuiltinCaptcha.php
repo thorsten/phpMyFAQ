@@ -11,7 +11,7 @@
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2006-02-04
@@ -243,7 +243,7 @@ class BuiltinCaptcha implements CaptchaInterface
      * because these data could be used as a database for collecting ip addresses,
      * eventually organizing them in subnetwork addresses, in order to use
      * them as an input for PMF IP banning.
-     * This because we always perform these 3 checks on the public forms
+     * This is because we always perform these three checks on the public forms
      * in which captcha code feature is attached:
      *   1. Check against IP/Network address
      *   2. Check against banned words

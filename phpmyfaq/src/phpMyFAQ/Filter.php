@@ -9,13 +9,15 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-01-28
  */
 
 namespace phpMyFAQ;
+
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Filter
@@ -100,11 +102,14 @@ class Filter
         $urlData = [];
         $cleanUrlData = [];
 
-        if (!isset($_SERVER['QUERY_STRING'])) {
+        $request = Request::createFromGlobals();
+        $queryString = $request->getQueryString();
+
+        if ($queryString === null) {
             return '';
         }
 
-        parse_str((string) $_SERVER['QUERY_STRING'], $urlData);
+        parse_str($queryString, $urlData);
 
         foreach ($urlData as $key => $urlPart) {
             $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);

@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2024 phpMyFAQ Team
+ * @copyright 2012-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-01-12
@@ -32,7 +32,7 @@ $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
 if ($user->isLoggedIn()) {
-    $faqSession = $container->get('phpmyfaq.session');
+    $faqSession = $container->get('phpmyfaq.user.session');
     $faqSession->setCurrentUser($user);
     $faqSession->userTracking('user_control_panel', $user->getUserId());
 
@@ -76,7 +76,7 @@ if ($user->isLoggedIn()) {
         'ucpGravatarImage' => $gravatarImg,
         'msgHeaderUserData' => Translation::get('headerUserControlPanel'),
         'userid' => $user->getUserId(),
-        'csrf' => Token::getInstance()->getTokenInput('ucp'),
+        'csrf' => Token::getInstance($container->get('session'))->getTokenInput('ucp'),
         'lang' => $faqConfig->getLanguage()->getLanguage(),
         'readonly' => $user->isLocalUser() ? '' : 'readonly disabled',
         'msgRealName' => Translation::get('ad_user_name'),
@@ -101,7 +101,7 @@ if ($user->isLoggedIn()) {
         'ad_gen_yes' => Translation::get('ad_gen_yes'),
         'ad_gen_no' => Translation::get('ad_gen_no'),
         'msgConfirmTwofactorConfig' => Translation::get('msgConfirmTwofactorConfig'),
-        'csrfTokenRemoveTwofactor' => Token::getInstance()->getTokenString('remove-twofactor'),
+        'csrfTokenRemoveTwofactor' => Token::getInstance($container->get('session'))->getTokenString('remove-twofactor'),
         'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected'),
         'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport')
     ];

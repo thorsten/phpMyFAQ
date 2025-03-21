@@ -1,78 +1,80 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-question-circle"></i>
-    {{ msgOpenQuestions }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-lg-12">
-
-    <div id="returnMessage"></div>
-
-    <form id="phpmyfaq-open-questions" name="phpmyfaq-open-questions" method="post" accept-charset="utf-8">
-      <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenDeleteQuestion }}">
-
-      <table class="table table-striped align-middle border shadow">
-        <thead>
-        <tr>
-          <th></th>
-          <th>{{ msgAuthor }}</th>
-          <th>{{ msgQuestion }}</th>
-          <th colspan="2">{{ msgVisibility }}?</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for question in questions %}
-          <tr>
-            <td>
-              <label>
-                <input id="questions[]" name="questions[]" value="{{ question.id }}" type="checkbox">
-              </label>
-            </td>
-            <td>
-              {{ question.created | format_datetime(locale=currentLocale) }}
-              <br>
-              <a href="mailto:{{ question.email }}">
-                {{ question.username }}
-              </a>
-            </td>
-            <td>
-              <strong>
-                {{ question.categoryId | categoryName }}
-              </strong>
-              <br>
-              {{ question.question | raw }}
-            </td>
-            <td>
-              <a href="?action=question&id={{ question.id }}&is_visible=toggle&csrf={{ csrfTokenToggleVisibility }}"
-                 class="btn btn-info">
-                {{ question.isVisible == 'Y' ? yes : no }}
-              </a>
-            </td>
-            <td>
-              {% if enableCloseQuestion and question.answerId %}
-              <a href="?action=editentry&amp;id={{ question.answerId }}&amp;lang={{ currentLocale }}"
-                 class="btn btn-success">
-                {{ msg2answerFAQ }}
-              </a>
-              {% else %}
-              <a href="?action=takequestion&amp;id={{ question.id }}" class="btn btn-success">
-                {{ msgTakeQuestion }}
-              </a>
-              {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-
-      <div class="text-end">
-        <button class="btn btn-danger" id="pmf-delete-questions" type="button">
-          {{ msgDeleteAllOpenQuestions }}
-        </button>
-      </div>
-
-    </form>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-question-circle"></i>
+      {{ msgOpenQuestions }}
+    </h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-lg-12">
+
+      <div id="returnMessage"></div>
+
+      <form id="phpmyfaq-open-questions" name="phpmyfaq-open-questions" method="post" accept-charset="utf-8">
+        <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenDeleteQuestion }}">
+
+        <table class="table table-striped align-middle border shadow">
+          <thead>
+          <tr>
+            <th></th>
+            <th>{{ 'msgAuthor' | translate }}</th>
+            <th>{{ 'msgQuestion' | translate }}</th>
+            <th colspan="2">{{ msgVisibility }}?</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for question in questions %}
+            <tr>
+              <td>
+                <label>
+                  <input id="questions[]" name="questions[]" value="{{ question.id }}" type="checkbox">
+                </label>
+              </td>
+              <td>
+                {{ question.created | format_datetime(locale=currentLocale) }}
+                <br>
+                <a href="mailto:{{ question.email }}">
+                  {{ question.username }}
+                </a>
+              </td>
+              <td>
+                <h6>{{ question.categoryId | categoryName }}</h6>
+                {{ question.question | raw }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-info pmf-toggle-visibility"
+                        data-pmf-visibility="{{ question.isVisible == 'Y' ? 'no' : 'yes' }}"
+                        data-pmf-question-id="{{ question.id }}" data-pmf-csrf="{{ csrfTokenToggleVisibility }}">
+                  {{ question.isVisible == 'Y' ? yes : no }}
+                </button>
+              </td>
+              <td>
+                {% if enableCloseQuestion and question.answerId %}
+                  <a href="./faq/answer/{{ question.answerId }}/{{ currentLocale }}"
+                     class="btn btn-success">
+                    {{ msg2answerFAQ }}
+                  </a>
+                {% else %}
+                  <a href="./faq/answer/{{ question.id }}/{{ currentLocale }}" class="btn btn-success">
+                    {{ msgTakeQuestion }}
+                  </a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="text-end my-4">
+          <button class="btn btn-danger" id="pmf-delete-questions" type="button">
+            {{ msgDeleteAllOpenQuestions }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

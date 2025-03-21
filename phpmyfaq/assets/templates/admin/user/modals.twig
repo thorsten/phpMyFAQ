@@ -1,0 +1,211 @@
+<!-- Modal to overwrite password -->
+<div class="modal fade" id="pmf-modal-user-password-overwrite">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>{{ 'ad_menu_passwd' | translate }}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" accept-charset="utf-8" autocomplete="off">
+          <input type="hidden" name="csrf" id="modal_csrf"
+                 value="{{ csrfToken_overwritePassword }}" />
+          <input type="hidden" name="user_id" id="modal_user_id" value="{{ userId }}" />
+
+          <div class="row mb-2">
+            <label class="col-5 col-form-label" for="npass">
+              {{ 'ad_passwd_new' | translate }}
+            </label>
+            <div class="col-7">
+              <div class="input-group">
+                <input type="password" autocomplete="off" name="npass" id="npass" class="form-control"
+                       data-pmf-toggle="npass_togglePassword" required>
+                <span class="input-group-text" id="npass_togglePassword">
+                  <i class="bi bi-eye-slash" id="npass_togglePassword_icon"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-5 col-form-label" for="bpass">
+              {{ 'ad_passwd_con' | translate }}
+            </label>
+            <div class="col-7">
+              <div class="input-group">
+                <input type="password" autocomplete="off" name="bpass" id="bpass" class="form-control"
+                       data-pmf-toggle="bpass_togglePassword" required>
+                <span class="input-group-text" id="bpass_togglePassword">
+                  <i class="bi bi-eye-slash" id="bpass_togglePassword_icon"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="pmf-user-password-overwrite-action">
+          {{ 'ad_user_overwrite_passwd' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if permissionAddUser == true %}
+  <!-- Modal to add a new user -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">
+          <i aria-hidden="true" class="bi bi-person-plus"></i> {{ 'ad_adus_adduser' | translate }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation" autocomplete="off"
+              novalidate>
+
+          <input type="hidden" id="add_user_csrf" name="add_user_csrf"
+                 value="{{ csrfToken_addUser }}" />
+
+          <div class="alert alert-danger d-none" id="pmf-add-user-error-message"></div>
+
+          <div class="row mb-2">
+            <label class="col-lg-4 col-form-label" for="add_user_name">
+              {{ 'ad_adus_name' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <input type="text" name="add_user_name" id="add_user_name" required tabindex="1" class="form-control">
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-lg-4 col-form-label"
+                   for="add_user_realname">{{ 'msgRealname' | translate }}</label>
+            <div class="col-lg-8">
+              <input type="text" name="add_user_realname" id="add_user_realname" required tabindex="2"
+                     class="form-control">
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="col-lg-4 col-form-label" for="add_user_email">
+              {{ 'msgEmail' | translate }}
+            </label>
+            <div class="col-lg-8">
+              <input type="email" name="user_email" id="add_user_email" required tabindex="3" class="form-control">
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-8">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="add_user_automatic_password"
+                       name="add_user_automatic_password" value="">
+                <label class="form-check-label" for="add_user_automatic_password">
+                  {{ 'ad_add_user_change_password' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div id="add_user_show_password_inputs">
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label"
+                     for="add_user_password">{{ 'ad_adus_password' | translate }}</label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input type="password" name="add_user_password" id="add_user_password" class="form-control"
+                         minlength="8" autocomplete="off" tabindex="4"
+                         data-pmf-toggle="add_user_password_togglePassword">
+                  <span class="input-group-text" id="add_user_password_togglePassword">
+                    <i class="bi bi-eye-slash" id="add_user_password_togglePassword_icon"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <label class="col-lg-4 col-form-label"
+                     for="add_user_password_confirm">{{ 'ad_passwd_con' | translate }}</label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <input type="password" name="add_user_password_confirm" id="add_user_password_confirm" minlength="8"
+                         class="form-control" autocomplete="off" tabindex="5"
+                         data-pmf-toggle="add_user_password_confirm_togglePassword">
+                  <span class="input-group-text" id="add_user_password_confirm_togglePassword">
+                    <i class="bi bi-eye-slash" id="add_user_password_confirm_togglePassword_icon"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% if userIsSuperAdmin == true %}
+            <div class="row mb-2">
+              <div class="col-lg-4"></div>
+              <div class="col-lg-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="add_user_is_superadmin"
+                         name="user_is_superadmin">
+                  <label class="form-check-label" for="add_user_is_superadmin">
+                    {{ 'ad_user_is_superadmin' | translate }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          {{ 'ad_gen_cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" id="pmf-add-user-action">
+          {{ 'ad_gen_save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if permissionDeleteUser == true %}
+<!-- Modal to confirm deleting a user -->
+<div class="modal fade" id="pmf-modal-user-confirm-delete">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4><i class="bi bi-exclamation-triangle"></i> {{ 'msgWarning' | translate }}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" accept-charset="utf-8" autocomplete="off">
+          <input type="hidden" name="csrf" id="csrf-token-delete-user"
+                 value="{{ csrfToken_deleteUser }}" />
+          <input type="hidden" name="user_id" id="pmf-user-id-delete" value="" />
+          <input type="hidden" name="source_page" id="source_page" value="" />
+
+          <div class="row mb-2">
+            <p>{{ 'ad_user_deleteUser' | translate }} '<span id="pmf-username-delete"></span>'?</p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">
+              {{ 'ad_gen_no' | translate }}
+            </button>
+            <button class="btn btn-danger" id="pmf-delete-user-yes" data-bs-dismiss="modal">
+              {{ 'ad_gen_yes' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-07-10
@@ -34,6 +34,20 @@ interface PluginInterface
      * @return string
      */
     public function getVersion(): string;
+
+    /**
+     * Returns the description of the plugin
+     *
+     * @return string
+     */
+    public function getDescription(): string;
+
+    /**
+     * Returns the author of the plugin
+     *
+     * @return string
+     */
+    public function getAuthor(): string;
 
     /**
      * Returns the dependencies of the plugin

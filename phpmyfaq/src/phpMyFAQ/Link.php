@@ -13,7 +13,7 @@
  * @package   phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
@@ -225,7 +225,7 @@ class Link
 
     /**
      * Returns the system URI.
-     * $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
+     * HTTP_HOST is the name of the website or virtual host name (HTTP/1.1)
      * Precisely, it contains what the user has written in the Host request-header, see below.
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
@@ -235,11 +235,10 @@ class Link
      */
     public function getSystemUri(string|null $path = null): string
     {
-        $pattern = [];
-        // Remove any ref to standard ports 80 and 443.
-        $pattern[0] = '/:80$/'; // HTTP: port 80
-        $pattern[1] = '/:443$/'; // HTTPS: port 443
-        $sysUri = $this->getSystemScheme() . preg_replace($pattern, '', (string) $_SERVER['HTTP_HOST']);
+        $request = Request::createFromGlobals();
+        $host = $request->getHost();
+        $host = preg_replace(['/:80$/', '/:443$/'], '', $host);
+        $sysUri = $this->getSystemScheme() . $host;
 
         return $sysUri . self::getSystemRelativeUri($path);
     }
@@ -249,31 +248,13 @@ class Link
      */
     public function getSystemScheme(): string
     {
+        $request = Request::createFromGlobals();
+
         if ($this->configuration->get('security.useSslOnly')) {
             return 'https://';
         }
-        if (!self::isIISServer()) {
-            // Apache, nginx, lighttpd
-            if (isset($_SERVER['HTTPS']) && 'on' === strtolower((string) $_SERVER['HTTPS'])) {
-                return 'https://';
-            }
-            return 'http://';
-        }
 
-        if ('on' === strtolower((string) $_SERVER['HTTPS'])) {
-            // IIS Server
-            return 'https://';
-        } else {
-            return 'http://';
-        }
-    }
-
-    /**
-     * Checks if webserver is an IIS Server.
-     */
-    public static function isIISServer(): bool
-    {
-        return (isset($_SERVER['ALL_HTTP']) || isset($_SERVER['COMPUTERNAME']) || isset($_SERVER['APP_POOL_ID']));
+        return $request->isSecure() ? 'https://' : 'http://';
     }
 
     /**
@@ -284,11 +265,14 @@ class Link
      */
     public static function getSystemRelativeUri(string|null $path = null): string
     {
+        $request = Request::createFromGlobals();
+        $scriptName = $request->getScriptName();
+
         if (isset($path)) {
-            return str_replace($path, '', (string) $_SERVER['SCRIPT_NAME']);
+            return str_replace($path, '', $scriptName);
         }
 
-        return str_replace('/src/Link.php', '', (string) $_SERVER['SCRIPT_NAME']);
+        return str_replace('/src/Link.php', '', $scriptName);
     }
 
     /**
@@ -590,7 +574,7 @@ class Link
             return true;
         }
 
-        // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name
+        // HTTP_HOST is the name of the website or virtual host name
         return str_contains($this->url, Request::createFromGlobals()->getHost());
     }
 
@@ -754,27 +738,5 @@ class Link
             self::LINK_SEARCHPART_SEPARATOR;
 
         return $url . $separator . self::LINK_GET_SIDS . self::LINK_EQUAL . $sids;
-    }
-
-    /**
-     * Returns the current URL.
-     */
-    public function getCurrentUrl(): string
-    {
-        $defaultUrl = $this->configuration->getDefaultUrl();
-        $url = Filter::filterVar($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
-        $parsedUrl = parse_url((string) $url);
-
-        if (isset($parsedUrl['query'])) {
-            parse_str($parsedUrl['query'], $parameters);
-
-            if (isset($parameters['action']) && !isset(self::$allowedActionParameters[$parameters['action']])) {
-                return $defaultUrl;
-            }
-
-            return $defaultUrl . Strings::htmlspecialchars(substr((string) $url, 1));
-        }
-
-        return $defaultUrl;
     }
 }

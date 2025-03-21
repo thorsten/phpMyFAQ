@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author Tri Agus Prayitno <tap@ruangweb.co.id>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2009-12-28
@@ -50,9 +50,7 @@ $PMF_LANG["msgNext"] = "berikutnya";
 $PMF_LANG["msgCategoryUp"] = "naik satu kategori";
 $PMF_LANG["msgLastUpdateArticle"] = "Update terakhir: ";
 $PMF_LANG["msgAuthor"] = "Penulis: ";
-$PMF_LANG["msgPrinterFriendly"] = "versi ramah-cetak";
 $PMF_LANG["msgPrintArticle"] = "Cetak artikel ini";
-$PMF_LANG["msgMakeXMLExport"] = "Ekspor sbg Berkas XML";
 $PMF_LANG["msgAverageVote"] = "Nilai rata-rata";
 $PMF_LANG["msgVoteUsability"] = "Beri nilai materi ini";
 $PMF_LANG["msgVoteFrom"] = "dari";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentHeader"] = "Komentar pada materi ini";
 $PMF_LANG["msgYourComment"] = "Komentar anda";
 $PMF_LANG["msgCommentThanks"] = "Terima kasih atas komentar anda!";
 $PMF_LANG["msgSeeXMLFile"] = "buka Berkas XML";
-$PMF_LANG["msgSend2Friend"] = "Kirim materi ke e-mail";
+$PMF_LANG["msgShareFAQ"] = "Kirim materi ke e-mail";
 $PMF_LANG["msgS2FButton"] = "kirim e-mail";
 
 // Search
@@ -106,7 +104,7 @@ $PMF_LANG["msg2answer"] = "Jawaban";
 $PMF_LANG["msgQuestionText"] = "Di sini anda bisa bertanya pada pengguna lainnya. Jika anda menjawab pertanyaan ini dengan baik, jawaban anda mungkin akan dimasukkan ke dalam materi.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <strong><a href=\"?action=show\">kategori</a></strong> atau gunakan <strong><a href=\"?action=search\">mesin pencari</a></strong> untuk melakukan pencarian atas kata kunci tertentu.";
+$PMF_LANG["msgHelpText"] = "Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <a href=\"?action=show\">kategori</a> atau gunakan <a href=\"?action=search\">mesin pencari</a> untuk melakukan pencarian atas kata kunci tertentu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Kirim pesan ke pengelola";
@@ -132,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Tidak ada materi yang tersedia.";
 $PMF_LANG["err_badID"] = "ID Salah.";
 $PMF_LANG["err_noTopTen"] = "Belum ada materi yang populer.";
 $PMF_LANG["err_nothingFound"] = "Tidak ada materi yang ditemukan.";
-$PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Kategori</strong>, <strong>Pengantar</strong>, <strong>Isi Materi</strong> dan, jika diminta, <strong>kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Isi Komentar</strong> dan, jika diminta, <strong>kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Kategori, Pengantar, Isi Materi dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Isi Komentar dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Anda sudah pernah menilai sebelumnya. Klik di sini, untuk kembali.";
-$PMF_LANG["err_noVote"] = "<strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.";
+$PMF_LANG["err_noVote"] = "Anda belum memasukkan penilaian anda! <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.";
 $PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar.<br><a href=\"javascript:history.back();\">kembali</a>";
-$PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Pertanyaan Anda</strong> dan, jika diminta, <strong>kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!";
+$PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Pertanyaan Anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Pencarian materi:</strong><br>Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.<strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.";
+$PMF_LANG["help_search"] = "Pencarian materi:<br>Dengan entri seperti kata1 kata2 anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.Perhatian: Kriteria pencarian anda minimal berisi 4 huruf.";
 
 // Men?
 $PMF_LANG["ad"] = "BAGIAN ADMIN";
@@ -162,10 +160,10 @@ $PMF_LANG["ad_menu_startpage"] = "Halaman awal";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Silakan masukkan identitas anda.";
-$PMF_LANG["ad_msg_passmatch"] = "Kedua password harus <strong>sama persis</strong>!";
+$PMF_LANG["ad_msg_passmatch"] = "Kedua password harus sama persis!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profil";
 $PMF_LANG["ad_msg_savedsuc_2"] = "berhasil disimpan.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Karena ada <strong>kesalahan database</strong>, profil tidak bisa disimpan.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Karena ada kesalahan database, profil tidak bisa disimpan.";
 $PMF_LANG["ad_msg_noauth"] = "Anda tidak memiliki kewenangan.";
 
 // Allgemein
@@ -206,13 +204,13 @@ $PMF_LANG["ad_entry_topic"] = "Topik";
 $PMF_LANG["ad_entry_action"] = "Perintah";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Materi";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Pertanyaan";
-$PMF_LANG["ad_entry_content"] = "Jawaban";
-$PMF_LANG["ad_entry_keywords"] = "Kata Kunci";
-$PMF_LANG["ad_entry_author"] = "Penulis";
-$PMF_LANG["ad_entry_category"] = "Kategori";
+$PMF_LANG["msgQuestion"] = "Pertanyaan";
+$PMF_LANG["msgAnswer"] = "Jawaban";
+$PMF_LANG["msgKeywords"] = "Kata Kunci";
+$PMF_LANG["msgAuthor"] = "Penulis";
+$PMF_LANG["msgCategory"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Aktif?";
-$PMF_LANG["ad_entry_date"] = "Tanggal";
+$PMF_LANG["msgDate"] = "Tanggal";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Berubah?";
 $PMF_LANG["ad_entry_changelog"] = "Catatan perubahan";
@@ -222,16 +220,16 @@ $PMF_LANG["ad_entry_save"] = "Simpan";
 $PMF_LANG["msgDelete"] = "hapus";
 $PMF_LANG["ad_entry_delcom_1"] = "Anda yakin bahwa komentar pengguna";
 $PMF_LANG["ad_entry_delcom_2"] = "akan dihapus?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Komentar <strong>berhasil</strong> dihapus.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Komentar berhasil dihapus.";
 $PMF_LANG["ad_entry_back"] = "Kembali ke artikel";
-$PMF_LANG["ad_entry_commentdelfail"] = "Komentar <strong>tidak</strong> dihapus.";
-$PMF_LANG["ad_entry_savedsuc"] = "Perubahan <strong>berhasil</strong> disimpan.";
-$PMF_LANG["ad_entry_savedfail"] = "Sayangnya, ada <strong>kesalahan database</strong>.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Komentar tidak dihapus.";
+$PMF_LANG["ad_entry_savedsuc"] = "Perubahan berhasil disimpan.";
+$PMF_LANG["ad_entry_savedfail"] = "Sayangnya, ada kesalahan database.";
 $PMF_LANG["ad_entry_del_1"] = "Anda yakin bahwa topik";
 $PMF_LANG["ad_entry_del_2"] = "dalam";
 $PMF_LANG["ad_entry_del_3"] = "akan dihapus?";
-$PMF_LANG["ad_entry_delsuc"] = "Isu <strong>berhasil</strong> dihapus.";
-$PMF_LANG["ad_entry_delfail"] = "Isu <strong>tidak</strong> dihapus!";
+$PMF_LANG["ad_entry_delsuc"] = "Isu berhasil dihapus.";
+$PMF_LANG["ad_entry_delfail"] = "Isu tidak dihapus!";
 $PMF_LANG["ad_entry_back"] = "Kembali";
 
 
@@ -259,17 +257,16 @@ $PMF_LANG["ad_news_delsuc"] = "Materi berita sudah dihapus.";
 $PMF_LANG["ad_news_updatenews"] = "Materi berita sudah diperbarui.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Tambah kategori baru";
+$PMF_LANG["msgNewCategory"] = "Tambah kategori baru";
 $PMF_LANG["ad_categ_catnum"] = "Nomor Kategori";
 $PMF_LANG["ad_categ_subcatnum"] = "Nomor Subkategori";
-$PMF_LANG["ad_categ_nya"] = "<em>belum tersedia!</em>";
-$PMF_LANG["ad_categ_titel"] = "Judul Kategori";
+$PMF_LANG["ad_categ_nya"] = "belum tersedia!";
+$PMF_LANG["categoryNameLabel"] = "Judul Kategori";
 $PMF_LANG["ad_categ_add"] = "Tambah Kategori";
 $PMF_LANG["ad_categ_existing"] = "Kategori yang Ada";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategori";
 $PMF_LANG["ad_categ_subcateg"] = "Subkategori";
-$PMF_LANG["ad_categ_titel"] = "Judul kategori";
 $PMF_LANG["ad_categ_action"] = "Perintah";
 $PMF_LANG["ad_categ_update"] = "perbarui";
 $PMF_LANG["ad_categ_delete"] = "hapus";
@@ -287,7 +284,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Anda yakin ingin menghapus kategori ini?";
 $PMF_LANG["ad_categ_deleted"] = "Kategori sudah dihapus.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Ccookie <strong>berhasil</strong> disetel.";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Ccookie berhasil disetel.";
 $PMF_LANG["ad_cookie_already"] = "Sebelumnya cookie sudah disetel. Anda punya opsi berikut";
 $PMF_LANG["ad_cookie_again"] = "Setel cookie lagi";
 $PMF_LANG["ad_cookie_delete"] = "Hapus cookie";
@@ -305,18 +302,18 @@ $PMF_LANG["ad_passwd_new"] = "Kata Sandi Baru";
 $PMF_LANG["ad_passwd_con"] = "Ulangi Sandi Baru";
 $PMF_LANG["ad_passwd_change"] = "Ganti Kata Sandi";
 $PMF_LANG["ad_passwd_suc"] = "Kata Sandi Berhasil Diganti.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>PERHATIAN:</strong><br>Cookie harus disetel ulang!";
-$PMF_LANG["ad_passwd_fail"] = "Kata sandi lama yang benar <strong>harus</strong> dimasukkan dan kata sandi baru harus diisi dua kali <strong>sama persis</strong>.";
+$PMF_LANG["ad_passwd_remark"] = "PERHATIAN:<br>Cookie harus disetel ulang!";
+$PMF_LANG["ad_passwd_fail"] = "Kata sandi lama yang benar harus dimasukkan dan kata sandi baru harus diisi dua kali sama persis.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Tambah pengguna";
 $PMF_LANG["ad_adus_name"] = "Nama";
 $PMF_LANG["ad_adus_password"] = "Kata sandi";
 $PMF_LANG["ad_adus_add"] = "Tambah pengguna";
-$PMF_LANG["ad_adus_suc"] = "Pengguna <strong>berhasil</strong> ditambahkan.";
+$PMF_LANG["ad_adus_suc"] = "Pengguna berhasil ditambahkan.";
 $PMF_LANG["ad_adus_edit"] = "Edit profil";
-$PMF_LANG["ad_adus_dberr"] = "<strong>database error!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Nama pengguna <strong>sudah ada</strong>.";
+$PMF_LANG["ad_adus_dberr"] = "database error!";
+$PMF_LANG["ad_adus_exerr"] = "Nama pengguna sudah ada.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -369,14 +366,14 @@ $PMF_LANG["ad_config_saved"] = "Konfigurasi berhasil disimpan.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit konfigurasi";
 $PMF_LANG["ad_att_none"] = "Lampiran tidak tersedia";
 $PMF_LANG["ad_att_att"] = "Lampiran";
-$PMF_LANG["ad_att_add"] = "Lampirkan berkas";
+$PMF_LANG["msgAddAttachment"] = "Lampirkan berkas";
 $PMF_LANG["ad_entryins_suc"] = "Data berhasil disimpan.";
-$PMF_LANG["ad_entryins_fail"] = "Terjadi kesalahan.";
+$PMF_LANG["msgErrorOccurred"] = "Terjadi kesalahan.";
 $PMF_LANG["ad_att_del"] = "Hapus";
 $PMF_LANG["ad_att_nope"] = "Lampiran hanya bisa dimasukkan saat mengedit materi.";
 $PMF_LANG["ad_att_delsuc"] = "Lampiran berhasil dihapus.";
 $PMF_LANG["ad_att_delfail"] = "Terjadi kesalahan saat menghapus lampiran.";
-$PMF_LANG["ad_entry_add"] = "Tambah Materi";
+$PMF_LANG["msgAddFAQ"] = "Tambah Materi";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Backup adalah simpanan cadangan lengkap isi database. Format yang digunakan adalah berkas transaksi SQL, yang bisa diimpor dengan alat bantu seperti phpMyAdmin atau program SQL commandline. Backup sebaiknya dilakukan secara rutin sebulan sekali.";
@@ -451,7 +448,7 @@ $PMF_LANG["ad_log_bede"] = "Entri berikut sudah dihapus: ";
 
 $PMF_LANG["msgVisits"] = "Kunjungan";
 $PMF_LANG["ad_start_articles"] = "Artikel";
-$PMF_LANG["ad_start_comments"] = "Komentar";
+$PMF_LANG["msgComments"] = "Komentar";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -461,7 +458,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Memproses kategori...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Anda tidak memiliki kewenangan.</strong>";
+$PMF_LANG["msgNoPermission"] = "Anda tidak memiliki kewenangan.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "halaman sebelumnya";
@@ -477,7 +474,7 @@ $PMF_LANG["msgPDF"] = "Tampilkan sebagai PDF";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Simpan semua data materi dalam satu berkas.";
 $PMF_LANG["ad_xml_gen"] = "buat berkas XML";
-$PMF_LANG["ad_entry_locale"] = "Bahasa";
+$PMF_LANG["msgLanguage"] = "Bahasa";
 $PMF_LANG["msgLanguageSubmit"] = "Pilih bahasa";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -525,7 +522,7 @@ $PMF_LANG["msgRealname"] = "Nama Lengkap";
 $PMF_LANG["ad_export_generate_pdf"] = "buat berkas PDF";
 $PMF_LANG["ad_export_full_faq"] = "Materi anda dalam format PDF: ";
 $PMF_LANG["err_bannedIP"] = "Alamat IP anda sudah diblokir.";
-$PMF_LANG["err_SaveQuestion"] = "Bagian yang harus diisi adalah <strong>nama anda</strong>, <strong>alamat email</strong>, <strong>pertanyaan anda</strong> dan, jika diminta, <strong>kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"Lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>.<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Bagian yang harus diisi adalah nama anda, alamat email, pertanyaan anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"Lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>.<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";
@@ -551,15 +548,14 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Jumlah artikel 
 $LANG_CONF['security.bannedIPs'] = array("area", "Blokir IP ini");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL dasar untuk verifikasi link (mis.: https://www.situsanda.com/faq)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Nonaktifkan link untuk membuat Pertanyaan Baru?");
 $LANG_CONF['security.permLevel'] = array("select", "Level Hak Akses");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "sebagai kategori utama baru";
+$PMF_LANG["msgNewCategory_main_cat"] = "sebagai kategori utama baru";
 $PMF_LANG["ad_categ_paste_error"] = "Memidahkan kategori ini tidak dimungkinkan.";
 $PMF_LANG["ad_categ_move"] = "pindahkan kategori";
 $PMF_LANG["ad_categ_lang"] = "Bahasa";
-$PMF_LANG["ad_categ_desc"] = "Keterangan";
+$PMF_LANG["categoryDescriptionLabel"] = "Keterangan";
 $PMF_LANG["ad_categ_change"] = "Ganti dengan";
 
 $PMF_LANG["lostPassword"] = "Lupa kata sandi? Klik di sini.";
@@ -588,7 +584,7 @@ $PMF_LANG['ad_entry_faq_record'] = 'Materi';
 $PMF_LANG['ad_entry_new_revision'] = 'Buat revisi baru?';
 $PMF_LANG['ad_entry_record_administration'] = 'Pengelolaan materi';
 $PMF_LANG['ad_entry_changelog'] = 'Changelog';
-$PMF_LANG['ad_entry_revision'] = 'Revisi';
+$PMF_LANG['msgRevision'] = 'Revisi';
 $PMF_LANG['ad_changerev'] = 'Pilih Revisi';
 $PMF_LANG['msgCaptcha'] = "Silakan ketik huruf dan angka yang anda lihat di bawah ini";
 $PMF_LANG['msgSelectCategories'] = 'Cari di ...';
@@ -651,7 +647,7 @@ $PMF_LANG['ad_group_add_link'] = "Tambah Grup";
 $PMF_LANG['ad_group_name'] = "Nama";
 $PMF_LANG['ad_group_description'] = "Keterangan";
 $PMF_LANG['ad_group_autoJoin'] = "Gabung-otomatis";
-$PMF_LANG['ad_group_suc'] = "Grup <strong>berhasil</strong> ditambahkan.";
+$PMF_LANG['ad_group_suc'] = "Grup berhasil ditambahkan.";
 $PMF_LANG['ad_group_error_noName'] = "Silakan masukkan nama grup. ";
 $PMF_LANG['ad_group_error_delete'] = "Grup tidak bisa dihapus. ";
 $PMF_LANG['ad_group_deleted'] = "Grup berhasil dihapus.";
@@ -702,13 +698,13 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Konfigurasi';
 $PMF_LANG['admin_mainmenu_logout'] = 'Keluar';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Pemilik kategori';
+$PMF_LANG["categoryOwnerLabel"] = 'Pemilik kategori';
 $PMF_LANG['adminSection'] = 'Administrasi';
 $PMF_LANG['err_expiredArticle'] = 'Masa berlaku entri ini sudah berakhir sehingga tidak bisa ditampilkan';
 $PMF_LANG['err_expiredNews'] = 'Masa berlaku berita ini sudah berakhir sehingga tidak bisa ditampilkan';
 $PMF_LANG['err_inactiveNews'] = 'Berita ini sedang direvisi sehingga tidak bisa ditampilkan';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cari di semua bahasa:';
-$PMF_LANG['ad_entry_tags'] = 'Tag';
+$PMF_LANG['msgTags'] = 'Tag';
 $PMF_LANG['msg_tags'] = 'Tag';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -731,13 +727,13 @@ $PMF_LANG['ad_menu_categ_structure'] = "Ikhtisar Kategori termasuk bahasanya";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'Hak Akses Pengguna:';
-$PMF_LANG['ad_entry_grouppermission'] = 'Hak Akses Grup:';
-$PMF_LANG['ad_entry_all_users'] = 'Akses untuk semua pengguna';
+$PMF_LANG['msgGroupPermissions'] = 'Hak Akses Grup:';
+$PMF_LANG['msgAccessAllUsers'] = 'Akses untuk semua pengguna';
 $PMF_LANG['ad_entry_restricted_users'] = 'Batasi hanya untuk';
-$PMF_LANG['ad_entry_all_groups'] = 'Akses untuk semua grup';
+$PMF_LANG['msgAccessAllGroups'] = 'Akses untuk semua grup';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Batasi hanya untuk';
 $PMF_LANG['ad_session_expiration'] = 'Sisa waktu sebelum sesi berakhir';
-$PMF_LANG['ad_user_active'] = 'aktif';
+$PMF_LANG['msgActive'] = 'aktif';
 $PMF_LANG['ad_user_blocked'] = 'diblokir';
 $PMF_LANG['ad_user_protected'] = 'diproteksi';
 
@@ -763,7 +759,7 @@ $PMF_LANG['ad_quick_group'] = 'Tambah pengguna baru';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Usulan terjemahan';
-$PMF_LANG['msgNewTranslationAddon'] = 'Usulan anda tidak langsung akan ditampilkan, tetapi perlu ditinjau dulu oleh pengelola. Bagian yang harus diisi adalah: <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Terjemahan Pengantar</strong> dan <strong>Terjemahan Isi Materi</strong>. ';
+$PMF_LANG['msgNewTranslationAddon'] = 'Usulan anda tidak langsung akan ditampilkan, tetapi perlu ditinjau dulu oleh pengelola. Bagian yang harus diisi adalah: Nama Anda, Alamat Email, Terjemahan Pengantar dan Terjemahan Isi Materi. ';
 $PMF_LANG['msgNewTransSourcePane'] = 'Panel Sumber';
 $PMF_LANG['msgNewTranslationPane'] = 'Panel Terjemahan';
 $PMF_LANG['msgNewTranslationName'] = "Nama Anda";
@@ -830,7 +826,7 @@ $PMF_LANG['msgMostPopularSearches'] = 'Pencarian yang paling populer adalah:';
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Aktifkan editor WYSIWYG yang terbundel (default: aktif)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = 'Statistik Pencarian';
+$PMF_LANG['msgAdminElasticsearchStats'] = 'Statistik Pencarian';
 $PMF_LANG['ad_searchstats_search_term'] = 'Kata Kunci';
 $PMF_LANG['ad_searchstats_search_term_count'] = 'Jumlah';
 $PMF_LANG['ad_searchstats_search_term_lang'] = 'Bahasa';
@@ -838,7 +834,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = 'Persentase';
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = 'Sticky';
-$PMF_LANG['ad_entry_sticky'] = 'Sticky';
+$PMF_LANG['msgStickyFAQ'] = 'Sticky';
 $PMF_LANG['stickyRecordsHeader'] = 'Artikel Pilihan';
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy

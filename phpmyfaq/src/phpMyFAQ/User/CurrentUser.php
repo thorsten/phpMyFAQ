@@ -8,13 +8,13 @@
  * manually. login(), getFromSession() and getFromCookie() may be combined.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- * * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * * obtain one at http://mozilla.org/MPL/2.0/.
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
@@ -22,13 +22,14 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
-use phpMyFAQ\Session;
 use phpMyFAQ\User;
+use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
 
 /* user defined constants */
@@ -41,7 +42,7 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  * @package   phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
@@ -62,7 +63,7 @@ class CurrentUser extends User
     /**
      * The Session class object
      */
-    private readonly Session $session;
+    private readonly UserSession $userSession;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -96,7 +97,7 @@ class CurrentUser extends User
     public function __construct(Configuration $configuration)
     {
         parent::__construct($configuration);
-        $this->session = new Session($configuration);
+        $this->userSession = new UserSession($configuration);
     }
 
     /**
@@ -112,8 +113,10 @@ class CurrentUser extends User
      * @throws Exception
      * @throws \Exception
      */
-    public function login(string $login, string $password): bool
+    public function login(string $login, #[SensitiveParameter] string $password): bool
     {
+        $request = Request::createFromGlobals();
+
         // Check if the login is an email address and convert it to a username if needed
         if (
             $this->configuration->get('security.loginWithEmailAddress') &&
@@ -142,17 +145,17 @@ class CurrentUser extends User
         }
 
         // Handle SSO authentication
-        if ($this->configuration->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
+        if (
+            $this->configuration->get('security.ssoSupport') &&
+            $request->server->get('REMOTE_USER') &&
+            '' === $password
+        ) {
             $login = strtok($login, '@\\');
         }
 
         // Attempt to authenticate user by login and password
         $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
-            if (!$this->checkAuth($auth)) {
-                continue; // Skip invalid Auth objects
-            }
-
             if ($auth->isValidLogin($login, $optData ?? []) === 0) {
                 continue; // Login does not exist, try next auth method
             }
@@ -172,10 +175,10 @@ class CurrentUser extends User
             if ($this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
-                $this->session->setCookie(
-                    Session::PMF_COOKIE_NAME_REMEMBERME,
+                $this->userSession->setCookie(
+                    UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
-                    Request::createFromGlobals()->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
+                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
                 );
             }
 
@@ -435,7 +438,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME, '');
+            $this->userSession->setCookie(UserSession::COOKIE_NAME_REMEMBER_ME, '');
         }
 
         session_destroy();
@@ -482,7 +485,7 @@ class CurrentUser extends User
                 $currentGroups = [-1];
             }
 
-            if (0 === (is_countable($currentGroups) ? count($currentGroups) : 0)) {
+            if (count($currentGroups)) {
                 $currentGroups = [-1];
             }
         } else {
@@ -567,13 +570,13 @@ class CurrentUser extends User
     public static function getFromCookie(Configuration $configuration): ?CurrentUser
     {
         $request = Request::createFromGlobals();
-        if ($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME) === null) {
+        if ($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME) === null) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserByCookie($request->cookies->get(Session::PMF_COOKIE_NAME_REMEMBERME));
+        $user->getUserByCookie($request->cookies->get(UserSession::COOKIE_NAME_REMEMBER_ME));
 
         if (-1 === $user->getUserId()) {
             return null;
@@ -755,13 +758,18 @@ class CurrentUser extends User
         return $this->configuration->getDb()->numRows($result) !== 0;
     }
 
+    /**
+     * Sorts the auth container array.
+     * @param AuthDriverInterface[] $authContainer
+     * @return AuthDriverInterface[]
+     */
     protected function sortAuthContainer(array $authContainer): array
     {
-        uksort($authContainer, function ($a, $b) {
-            if ($a === 'local') {
+        uksort($authContainer, function ($first, $second) {
+            if ($first === 'local') {
                 return 1;
             }
-            if ($b === 'local') {
+            if ($second === 'local') {
                 return -1;
             }
             return 0;

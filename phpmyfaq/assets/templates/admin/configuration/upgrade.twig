@@ -1,172 +1,200 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
-    {{ adminHeaderUpgrade }} (beta)
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-6">
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+      {{ 'msgAdminHeaderUpdate' | translate }}
+    </h1>
+  </div>
 
-    <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ headerCheckHealth }}
-        </h5>
-        <p class="card-text">
-          {{ msgHealthCheck }}
-        </p>
-        <!-- Step 1: Check for system health -->
-        <div class="d-grid gap-2 d-md-flex justify-content-between">
-          <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-health">
-            {{ buttonCheckHealth }}
-          </button>
-          <output id="result-check-health"></output>
+  <div class="row">
+    <div class="col-6">
+
+      <div id="pmf-update-step-health-check" class="card shadow w-100 mb-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ 'headerCheckHealth' | translate }}
+          </h5>
+          <p class="card-text">
+            {{ 'msgHealthCheck' | translate }}
+          </p>
+          <!-- Step 0: provide activation of maintenance mode -->
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-secondary mb-2 d-none" id="pmf-button-activate-maintenance-mode"
+                    data-pmf-csrf="{{ csrfActivateMaintenanceMode }}">
+              {{ 'msgActivateMaintenanceMode' | translate }}
+            </button>
+          </div>
+          <!-- Step 1: Check for system health -->
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-health">
+              {{ 'buttonCheckHealth' | translate }}
+            </button>
+            <output id="result-check-health"></output>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ headerCheckUpdates }}
-        </h5>
-        <p class="card-text">
-          {{ msgUpdateCheck }}
-        </p>
-        <!-- Step 2: Check for a new version -->
-        <div class="d-grid gap-2 d-md-flex justify-content-between">
-          <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-updates">
-            {{ buttonCheckUpdates }}
-          </button>
-          <output id="result-check-versions"></output>
+      <div id="pmf-update-step-check-versions" class="card shadow w-100 mb-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ 'headerCheckUpdates' | translate }}
+          </h5>
+          <p class="card-text">
+            {{ 'msgUpdateCheck' | translate }}
+          </p>
+          <!-- Step 2: Check for a new version -->
+          <div class="d-grid gap-2 d-md-flex justify-content-between">
+            <button type="button" class="btn btn-primary mb-2" id="pmf-button-check-updates">
+              {{ 'buttonCheckUpdates' | translate }}
+              <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-check-versions" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+            <output id="result-check-versions"></output>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ 'headerDownloadPackage' | translate }}
-        </h5>
-        <p class="card-text">
-          {{ 'msgDownloadPackage' | translate }}
-        </p>
-        <!-- Nightlies can be downloaded always if activated -->
-        {% if isOnNightlies %}
-          <p class="alert alert-warning">
-            {{ 'alertNightlyBuild' | translate }}
+      <div id="pmf-update-step-download" class="card shadow w-100 mb-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ 'headerDownloadPackage' | translate }}
+          </h5>
+          <p class="card-text">
+            {{ 'msgDownloadPackage' | translate }}
+          </p>
+          <!-- Nightlies can be downloaded always if activated -->
+          {% if isOnNightlies %}
+            <p class="alert alert-warning">
+              {{ 'alertNightlyBuild' | translate }}
             <hr>
             {{ 'noteNightlyBuild' | translate }}
-          </p>
-          <div class="d-grid gap-2 d-md-flex justify-content-between">
-            <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
-              {{ 'buttonDownloadPackage' | translate }}
-            </button>
-            <output id="result-download-new-version"></output>
-          </div>
-        {% else %}
-          <div class="d-grid gap-2 d-md-flex justify-content-between">
-            <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
-              {{ 'buttonDownloadPackage' | translate }}
-            </button>
-            <output id="result-download-new-version"></output>
-          </div>
-        {% endif %}
-      </div>
-    </div>
-
-    <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ headerExtractPackage }}
-        </h5>
-        <p class="card-text">
-          {{ msgExtractPackage }}
-        </p>
-        <!-- Step 4: Extract downloaded package -->
-        <div>
-          <div class="d-grid gap-2 d-md-flex justify-content-between">
-            <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
-              {{ buttonExtractPackage }}
-            </button>
-            <output id="result-extract-package"></output>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ headerInstallDownloadedPackage }}
-        </h5>
-        <p class="card-text">
-          {{ msgExtractToFileSystem }}
-        </p>
-        <!-- Step 5: Install downloaded package -->
-        <div>
-          <div class="d-grid gap-2 d-md-flex justify-content-between">
-            <div>
-              <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
-                {{ 'msgInstallDownloadedPackage' | translate }}
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-between">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+                {{ 'buttonDownloadPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
+                     role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
               </button>
+              <output id="result-download-new-version"></output>
             </div>
-            <div>
-              <ol>
-                <li>{{ 'msgBackupCurrentInstallation' | translate }} <span id="pmf-backup-done"></span></li>
-                <li>{{ 'msgInstallationNewFiles' | translate }} <span id="pmf-installation-done"></span></li>
-                <li>{{ 'msgDatabaseUpdate' | translate }} <span id="pmf-installation-done"></span></li>
-              </ol>
+          {% else %}
+            <div class="d-grid gap-2 d-md-flex justify-content-between">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-download-now">
+                {{ 'buttonDownloadPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-download-new-version"
+                     role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </button>
+              <output id="result-download-new-version"></output>
             </div>
-            <div class="w-25">
-              <div class="progress w-100 mt-1 mb-2" role="progressbar">
-                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                     id="result-backup-package" style="width: 0">
-                  0%
+          {% endif %}
+        </div>
+      </div>
+
+      <div id="pmf-update-step-extract-package" class="card shadow w-100 mb-3 d-none">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ 'headerExtractPackage' | translate }}
+          </h5>
+          <p class="card-text">
+            {{ 'msgExtractPackage' | translate }}
+          </p>
+          <!-- Step 4: Extract downloaded package -->
+          <div>
+            <div class="d-grid gap-2 d-md-flex justify-content-between">
+              <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
+                {{ 'buttonExtractPackage' | translate }}
+                <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-extract-package" role="status">
+                  <span class="visually-hidden">Loading...</span>
                 </div>
+              </button>
+              <output id="result-extract-package"></output>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="pmf-update-step-install-package" class="card shadow w-100 mb-3 d-none">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ 'headerInstallDownloadedPackage' | translate }}
+          </h5>
+          <p class="card-text">
+            {{ 'msgExtractToFileSystem' | translate }}
+          </p>
+          <!-- Step 5: Install downloaded package -->
+          <div>
+            <div class="d-grid gap-2 d-md-flex justify-content-between">
+              <div>
+                <button type="button" class="btn btn-primary mb-2" id="pmf-button-install-package">
+                  {{ 'msgInstallDownloadedPackage' | translate }}
+                  <div class="spinner-border spinner-border-sm ms-2 d-none" id="spinner-install-package" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </button>
               </div>
-              <div class="progress w-100 mt-1 mb-2" role="progressbar">
-                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                     id="result-install-package" style="width: 0">
-                  0%
+              <div>
+                <ol>
+                  <li>{{ 'msgBackupCurrentInstallation' | translate }} <span id="pmf-backup-done"></span></li>
+                  <li>{{ 'msgInstallationNewFiles' | translate }} <span id="pmf-installation-done"></span></li>
+                  <li>{{ 'msgDatabaseUpdate' | translate }} <span id="pmf-installation-done"></span></li>
+                </ol>
+              </div>
+              <div class="w-25">
+                <div class="progress w-100 mt-1 mb-2" role="progressbar">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       id="result-backup-package" style="width: 0">
+                    0%
+                  </div>
                 </div>
-              </div>
-              <div class="progress w-100 mt-1 mb-2" role="progressbar">
-                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                     id="result-update-database" style="width: 0">
-                  0%
+                <div class="progress w-100 mt-1 mb-2" role="progressbar">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       id="result-install-package" style="width: 0">
+                    0%
+                  </div>
+                </div>
+                <div class="progress w-100 mt-1 mb-2" role="progressbar">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       id="result-update-database" style="width: 0">
+                    0%
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
+    </div>
+    <div class="col-6">
+      <div>
+        <p class="alert alert-info">
+          {{ 'msgNoteManualUpdate' | translate | raw }}
+        </p>
+      </div>
+      <div>
+        {{ 'msgLastCheckDate' | translate }}
+        {% set lastCheck = dateLastChecked == 'Invalid Date' ? 'n/a' : dateLastChecked | date('Y-m-d H:i:s') %}
+        <output id="dateLastChecked">{{ lastCheck }}</output>
+      </div>
+      <div>
+        {{ 'msgCurrentVersion' | translate }}
+        <output id="versionCurrent">{{ versionCurrent }}</output>
+      </div>
+      <div>
+        {{ 'msgLastVersionAvailable' | translate }}
+        <output id="versionLastChecked">n/a</output>
+      </div>
+      <div>
+        {{ 'msgReleaseEnvironment' | translate }}
+        <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
+      </div>
+    </div>
   </div>
-  <div class="col-6">
-    <div>
-      <p class="alert alert-info">
-        {{ 'msgNoteManualUpdate' | translate | raw }}
-      </p>
-    </div>
-    <div>
-      {{ 'msgLastCheckDate' | translate }}
-      {% set lastCheck = dateLastChecked == 'Invalid Date' ? 'n/a' : dateLastChecked | date('Y-m-d H:i:s') %}
-      <output id="dateLastChecked">{{ lastCheck }}</output>
-    </div>
-    <div>
-      {{ 'msgCurrentVersion' | translate }}
-      <output id="versionCurrent">{{ versionCurrent }}</output>
-    </div>
-    <div>
-      {{ 'msgLastVersionAvailable' | translate }}
-      <output id="versionLastChecked">n/a</output>
-    </div>
-    <div>
-      {{ 'msgReleaseEnvironment' | translate }}
-      <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
-    </div>
-  </div>
-</div>
+{% endblock %}

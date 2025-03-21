@@ -1,41 +1,45 @@
-<div
-  class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-list-ol"></i> {{ headerAdminLog }}
-  </h1>
-  <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group mr-2">
-      <button class="btn btn-outline-danger" id="pmf-delete-admin-log" data-pmf-csrf="{{ csrfDeleteAdminLogToken }}">
-        <i aria-hidden="true" class="bi bi-trash"></i> {{ buttonDeleteAdminLog }}
-      </button>
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-list-ol"></i> {{ headerAdminLog }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button class="btn btn-outline-danger" id="pmf-delete-admin-log" data-pmf-csrf="{{ csrfDeleteAdminLogToken }}">
+          <i aria-hidden="true" class="bi bi-trash"></i> {{ buttonDeleteAdminLog }}
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<table class="table table-striped align-middle border shadow">
-  <thead>
-  <tr>
-    <th>{{ msgId }}</th>
-    <th>{{ msgDate }}</th>
-    <th>{{ msgUser }}</th>
-    <th colspan="2">{{ msgIp }}</th>
-  </tr>
-  </thead>
-  <tfoot>
-  <tr>
-    <td colspan="5">{{ pagination | raw }}</td>
-  </tr>
-  </tfoot>
-  <tbody>
-  {% for data in loggingData %}
+  <table class="table table-striped align-middle border shadow">
+    <thead>
     <tr>
-      <td>{{ data.id }}</td>
-      <td>{{ data.time | format_datetime(locale=currentLocale) }}</td>
-      <td>{{ data.userId | userName }}</td>
-      <td>{{ data.ip }}</td>
-      <td><small>{{ data.text }}</small>
-      </td>
+      <th>{{ msgId }}</th>
+      <th>{{ msgDate }}</th>
+      <th>{{ msgUser }}</th>
+      <th colspan="2">{{ msgIp }}</th>
     </tr>
-  {% endfor %}
-  </tbody>
- </table>
+    </thead>
+    <tfoot>
+    <tr>
+      <td colspan="5">{{ pagination | raw }}</td>
+    </tr>
+    </tfoot>
+    <tbody>
+    {% for data in loggingData %}
+      <tr>
+        <td>{{ data.id }}</td>
+        <td>{{ data.time | format_datetime(locale=currentLocale) }}</td>
+        <td>{{ data.userId | userName }}</td>
+        <td>{{ data.ip }}</td>
+        <td><small>{{ data.text }}</small>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+   </table>
+{% endblock %}

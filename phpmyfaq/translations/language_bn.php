@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Md. Masum Billah <jewelurp@dhaka.net>
- * @copyright 2008-2024 phpMyFAQ Team
+ * @copyright 2008-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2008-04-01
@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "পরে";
 $PMF_LANG["msgCategoryUp"] = "এক বিভাগ উপরে";
 $PMF_LANG["msgLastUpdateArticle"] = "শেষ হালনাগাদ: ";
 $PMF_LANG["msgAuthor"] = "লেখক: ";
-$PMF_LANG["msgPrinterFriendly"] = "মুদ্রণ উপযোগি";
 $PMF_LANG["msgPrintArticle"] = "প্রশ্নটি মুদ্রণ করুন";
-$PMF_LANG["msgMakeXMLExport"] = "এক্স এম এল হিসাবে সংরক্ষন করুন";
 $PMF_LANG["msgAverageVote"] = "মোট নম্বর";
 $PMF_LANG["msgVoteUsability"] = "নম্বর দিন";
 $PMF_LANG["msgVoteFrom"] = "মধ্যে";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "মতামত প্রদানকারি ";
 $PMF_LANG["msgCommentHeader"] = "মতামত দিন";
 $PMF_LANG["msgYourComment"] = "আপনার মতামত";
 $PMF_LANG["msgCommentThanks"] = "মতামত দেয়ার জন্য ধন্যবাদ!";
-$PMF_LANG["msgSend2Friend"] = "বন্ধুকে পাঠান";
+$PMF_LANG["msgShareFAQ"] = "বন্ধুকে পাঠান";
 $PMF_LANG["msgS2FButton"] = "ই-মেইল পাঠান";
 
 // Search
@@ -106,7 +104,7 @@ $PMF_LANG["msg2answer"] = "উত্তর";
 $PMF_LANG["msgQuestionText"] = "এখানে আপনি অন্য ব্যবহারকারীর প্রশ্ন দেখতে পারেন। আপনি কোন প্রশ্নের উত্তর দিলে তা প্রশ্ন-উত্তর তালিকায় আসার সম্ভাবনা আছে।";
 
 // Help
-$PMF_LANG["msgHelpText"] = "প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।";
+$PMF_LANG["msgHelpText"] = "প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <a href=\"?action=show\">বিভাগ</a> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "ওয়েবমাস্টারকে ই-মেইল করুন";
@@ -132,14 +130,14 @@ $PMF_LANG["msgErrorNoRecords"] = "কোনো লেখা পাওয়া য�
 $PMF_LANG["err_badID"] = "ভুল পরিচয়।";
 $PMF_LANG["err_noTopTen"] = "সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।";
 $PMF_LANG["err_nothingFound"] = "কোনো প্রশ্ন পাওয়া যায়নি।";
-$PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরনাম</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল আপনার নাম, আপনার ই-মেইল ঠিকানা, বিভাগ, শিরনাম, আপনার লেখাআপনার প্রশ্ন<a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "একাধিক ভোট দেয়া যায়না। আগের পাতায় ফেরত যান";
-$PMF_LANG["err_noVote"] = "<strong>আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না!</strong> <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a>";
+$PMF_LANG["err_noVote"] = "আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না! <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
+$PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল আপনার নাম, আপনার ই-মেইল ঠিকানা, আপনার প্রশ্ন<a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>প্রশ্ন-উত্তর তালিকা খুঁজুন:</strong><br>একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।<strong>নোটিশ:</strong> শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।";
+$PMF_LANG["help_search"] = "প্রশ্ন-উত্তর তালিকা খুঁজুন:<br>একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।নোটিশ: শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN SECTION";
@@ -164,7 +162,7 @@ $PMF_LANG["ad_msg_identify"] = "Please identify yourself.";
 $PMF_LANG["ad_msg_passmatch"] = "Both passwords must match!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "The profile of";
 $PMF_LANG["ad_msg_savedsuc_2"] = "was saved successfully.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Due to a <strong>database error</strong>, the profile could not be saved.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Due to a database error, the profile could not be saved.";
 $PMF_LANG["ad_msg_noauth"] = "You are not authorized.";
 
 // Allgemein
@@ -205,13 +203,13 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Question";
-$PMF_LANG["ad_entry_content"] = "Answer";
-$PMF_LANG["ad_entry_keywords"] = "Keywords";
-$PMF_LANG["ad_entry_author"] = "Author";
-$PMF_LANG["ad_entry_category"] = "Entity";
+$PMF_LANG["msgQuestion"] = "Question";
+$PMF_LANG["msgAnswer"] = "Answer";
+$PMF_LANG["msgKeywords"] = "Keywords";
+$PMF_LANG["msgAuthor"] = "Author";
+$PMF_LANG["msgCategory"] = "Entity";
 $PMF_LANG["ad_entry_active"] = "Active?";
-$PMF_LANG["ad_entry_date"] = "Date";
+$PMF_LANG["msgDate"] = "Date";
 $PMF_LANG["ad_entry_status"] = "FAQ Status";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
@@ -221,23 +219,23 @@ $PMF_LANG["ad_entry_save"] = "Save";
 $PMF_LANG["msgDelete"] = "delete";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure that the comment of the user";
 $PMF_LANG["ad_entry_delcom_2"] = "should be deleted?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was <strong>successfully</strong> deleted.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "The comment was successfully deleted.";
 $PMF_LANG["ad_entry_back"] = "Back to the article";
-$PMF_LANG["ad_entry_commentdelfail"] = "The comment was <strong>not</strong> deleted.";
-$PMF_LANG["ad_entry_savedsuc"] = "The changes were saved <strong>successfully</strong>.";
-$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a <strong>database error</strong> occurred.";
+$PMF_LANG["ad_entry_commentdelfail"] = "The comment was not deleted.";
+$PMF_LANG["ad_entry_savedsuc"] = "The changes were saved successfully.";
+$PMF_LANG["ad_entry_savedfail"] = "Unfortunately, a database error occurred.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
-$PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
-$PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Issue successfully deleted.";
+$PMF_LANG["ad_entry_delfail"] = "Issue was not deleted!";
 $PMF_LANG["ad_entry_back"] = "Back";
 
 
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "Article header";
 $PMF_LANG["ad_news_text"] = "Text of the Record";
-$PMF_LANG["ad_news_link_url"] = "Link (<strong>without https://</strong>)";
+$PMF_LANG["ad_news_link_url"] = "Link (without https://)";
 $PMF_LANG["ad_news_link_title"] = "Title of the link";
 $PMF_LANG["ad_news_link_target"] = "Target of the link";
 $PMF_LANG["ad_news_link_window"] = "Link opens new window";
@@ -258,17 +256,16 @@ $PMF_LANG["ad_news_delsuc"] = "News item deleted.";
 $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Add new category";
+$PMF_LANG["msgNewCategory"] = "Add new category";
 $PMF_LANG["ad_categ_catnum"] = "Entity Number";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number";
-$PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Entity Title";
+$PMF_LANG["ad_categ_nya"] = "not yet available!";
+$PMF_LANG["categoryNameLabel"] = "Entity Title";
 $PMF_LANG["ad_categ_add"] = "Add Entity";
 $PMF_LANG["ad_categ_existing"] = "Existing Categories";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Entity";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Entity title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
@@ -286,7 +283,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Are you sure to delete this category?";
 $PMF_LANG["ad_categ_deleted"] = "Entity deleted.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "The Cookie was <strong>successfully</strong> set.";
+$PMF_LANG["ad_cookie_cookiesuc 	"] = "The Cookie was successfully set.";
 $PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
 $PMF_LANG["ad_cookie_delete"] = "delete cookie";
@@ -304,7 +301,7 @@ $PMF_LANG["ad_passwd_new"] = "New password";
 $PMF_LANG["ad_passwd_con"] = "Confirm";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION:<br>Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
@@ -312,10 +309,10 @@ $PMF_LANG["ad_adus_adduser"] = "Add user";
 $PMF_LANG["ad_adus_name"] = "Name";
 $PMF_LANG["ad_adus_password"] = "Password";
 $PMF_LANG["ad_adus_add"] = "Add user";
-$PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
+$PMF_LANG["ad_adus_suc"] = "User successfully added.";
 $PMF_LANG["ad_adus_edit"] = "Edit profile";
-$PMF_LANG["ad_adus_dberr"] = "<strong>database error!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Username <strong>exists</strong> already.";
+$PMF_LANG["ad_adus_dberr"] = "database error!";
+$PMF_LANG["ad_adus_exerr"] = "Username exists already.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -368,14 +365,14 @@ $PMF_LANG["ad_config_saved"] = "The configuration has been saved successfully.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit configuration";
 $PMF_LANG["ad_att_none"] = "No attachments available";
 $PMF_LANG["ad_att_att"] = "Attachments";
-$PMF_LANG["ad_att_add"] = "Attach file";
+$PMF_LANG["msgAddAttachment"] = "Attach file";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
-$PMF_LANG["ad_entryins_fail"] = "An error occurred.";
+$PMF_LANG["msgErrorOccurred"] = "An error occurred.";
 $PMF_LANG["ad_att_del"] = "Delete";
 $PMF_LANG["ad_att_nope"] = "Attachments can be added only while editing.";
 $PMF_LANG["ad_att_delsuc"] = "The attachment has been deleted successfully.";
 $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment.";
-$PMF_LANG["ad_entry_add"] = "Add FAQ";
+$PMF_LANG["msgAddFAQ"] = "Add FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "> A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline sql client. A backup should be performed at least once a month.";
@@ -450,7 +447,7 @@ $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 
 $PMF_LANG["msgVisits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
-$PMF_LANG["ad_start_comments"] = "Comments";
+$PMF_LANG["msgComments"] = "Comments";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -460,7 +457,7 @@ $PMF_LANG["msgCopy"] = "copy";
 $PMF_LANG["ad_categ_process"] = "Processing categories...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>আপনার অনুমতি নেই।</strong>";
+$PMF_LANG["msgNoPermission"] = "আপনার অনুমতি নেই।";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "আগের পাতা";
@@ -476,7 +473,7 @@ $PMF_LANG["msgPDF"] = "পিডিএফ হিসাবে দেখুন";
 $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
-$PMF_LANG["ad_entry_locale"] = "Language";
+$PMF_LANG["msgLanguage"] = "Language";
 $PMF_LANG["msgLanguageSubmit"] = "ভাষা পরির্বতন";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -524,7 +521,7 @@ $PMF_LANG["msgRealname"] = "real name";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "আপনার IP নিষিদ্ধ করা হয়েছে।";
-$PMF_LANG["err_SaveQuestion"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "প্রয়োজনীয় ফিল্ড হল আপনার নাম, আপনার ই-মেইল ঠিকানা, আপনার লেখাআপনার প্রশ্ন<a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";
@@ -550,15 +547,14 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Do you want to enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array("input", "Base URL for link verification (e.g.: https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
+$PMF_LANG["msgNewCategory_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
 $PMF_LANG["ad_categ_move"] = "move category";
 $PMF_LANG["ad_categ_lang"] = "Language";
-$PMF_LANG["ad_categ_desc"] = "Description";
+$PMF_LANG["categoryDescriptionLabel"] = "Description";
 $PMF_LANG["ad_categ_change"] = "Change with";
 
 $PMF_LANG["lostPassword"] = "গোপন সংকেত ভুলে গেছেন?";
@@ -587,7 +583,7 @@ $PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
 $PMF_LANG['ad_entry_new_revision'] = 'Create new revision?';
 $PMF_LANG['ad_entry_record_administration'] = 'Record administration';
 $PMF_LANG['ad_entry_changelog'] = 'Changelog';
-$PMF_LANG['ad_entry_revision'] = 'Revision';
+$PMF_LANG['msgRevision'] = 'Revision';
 $PMF_LANG['ad_changerev'] = 'Select Revision';
 $PMF_LANG['msgCaptcha'] = "ছবিতে দেখা অক্ষরগুলো লিখুন";
 $PMF_LANG['msgSelectCategories'] = 'খুঁজুন ...';
@@ -650,7 +646,7 @@ $PMF_LANG['ad_group_add_link'] = "Add Group";
 $PMF_LANG['ad_group_name'] = "Name";
 $PMF_LANG['ad_group_description'] = "Description";
 $PMF_LANG['ad_group_autoJoin'] = "Auto-join";
-$PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
+$PMF_LANG['ad_group_suc'] = "Group successfully added.";
 $PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
 $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
 $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
@@ -701,13 +697,13 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Entity owner';
+$PMF_LANG["categoryOwnerLabel"] = 'Entity owner';
 $PMF_LANG['adminSection'] = 'প্রশাসক';
 $PMF_LANG['err_expiredArticle'] = 'প্রশ্নটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['err_expiredNews'] = 'খবরটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['err_inactiveNews'] = 'এই লেখাটি সম্পাদনা করা হচ্ছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'সব ভাষায় খুঁজুন:';
-$PMF_LANG['ad_entry_tags'] = 'Tags';
+$PMF_LANG['msgTags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'ট্যাগ সমূহ';
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -730,13 +726,13 @@ $PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages"
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions';
-$PMF_LANG['ad_entry_grouppermission'] = 'Group permissions';
-$PMF_LANG['ad_entry_all_users'] = 'Access for all users';
+$PMF_LANG['msgGroupPermissions'] = 'Group permissions';
+$PMF_LANG['msgAccessAllUsers'] = 'Access for all users';
 $PMF_LANG['ad_entry_restricted_users'] = 'Restricted access to';
-$PMF_LANG['ad_entry_all_groups'] = 'Access for all groups';
+$PMF_LANG['msgAccessAllGroups'] = 'Access for all groups';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Restricted access to';
 $PMF_LANG['ad_session_expiration'] = 'Time to your session expiration';
-$PMF_LANG['ad_user_active'] = 'active';
+$PMF_LANG['msgActive'] = 'active';
 $PMF_LANG['ad_user_blocked'] = 'blocked';
 $PMF_LANG['ad_user_protected'] = 'protected';
 
@@ -762,7 +758,7 @@ $PMF_LANG['ad_quick_group'] = 'নতুন দল যোগ';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'অনুবাদ প্রস্তাবনা';
-$PMF_LANG['msgNewTranslationAddon'] = 'আপনার মতামত প্রশাসকের অনুমোদনের পর প্রকাশিত হবে। বাধ্যতামূলকঃ <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>শিরোনাম অনুবাদ</strong> এবং<strong>আপনার প্রশ্ন-উত্তর অনুবাদ</strong>। চাবি-শব্দগুলো space দিয়ে আলাদা করুন।';
+$PMF_LANG['msgNewTranslationAddon'] = 'আপনার মতামত প্রশাসকের অনুমোদনের পর প্রকাশিত হবে। বাধ্যতামূলকঃ আপনার নাম, আপনার ই-মেইল ঠিকানা, শিরোনাম অনুবাদ এবংআপনার প্রশ্ন-উত্তর অনুবাদ। চাবি-শব্দগুলো space দিয়ে আলাদা করুন।';
 $PMF_LANG['msgNewTransSourcePane'] = 'মূল লেখা';
 $PMF_LANG['msgNewTranslationPane'] = 'অনুবাদ';
 $PMF_LANG['msgNewTranslationName'] = "Your Name";

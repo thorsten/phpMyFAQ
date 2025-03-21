@@ -3,14 +3,20 @@
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class QueryHelperTest extends TestCase
 {
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,7 +28,7 @@ class QueryHelperTest extends TestCase
             ->setMultiByteLanguage();
 
         $configuration = Configuration::getConfigurationInstance();
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(true, 'language_en.php');
 
         $configuration->setLanguage($language);

@@ -12,7 +12,7 @@
  *
  * @package   phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-26
@@ -39,12 +39,10 @@ try {
     echo $e->getMessage();
 }
 
-$faqConfig = $container->get('phpmyfaq.configuration');
-
 $routes = new RouteCollection();
 $routes->add('public.sitemap.xml', new Route('/sitemap.xml', ['_controller' => [SitemapController::class, 'index']]));
 
-$app = new Application($faqConfig);
+$app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {

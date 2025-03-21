@@ -10,7 +10,7 @@
  * @package phpMyFAQ
  * @author Mehdi Hakimi <mehdi@doxdo.com>
  * @author Ali Yousefi Sabzevar <aysabzevar@gmail.com>
- * @copyright 2006-2024 phpMyFAQ Team
+ * @copyright 2006-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2006-11-24
@@ -49,9 +49,7 @@ $PMF_LANG['msgNext'] = 'بعدی';
 $PMF_LANG['msgCategoryUp'] = 'یک موضوع بالاتر';
 $PMF_LANG['msgLastUpdateArticle'] = 'آخرین تغییر:';
 $PMF_LANG['msgAuthor'] = 'نویسنده ';
-$PMF_LANG['msgPrinterFriendly'] = 'نسخه قابل چاپ';
 $PMF_LANG['msgPrintArticle'] = 'چاپ مقاله';
-$PMF_LANG['msgMakeXMLExport'] = 'به صورت فایل اکس‌ام‌ال';
 $PMF_LANG['msgAverageVote'] = 'امتیاز متوسط';
 $PMF_LANG['msgVoteUsability'] = 'لطفا به این مطلب امتیاز بدهید';
 $PMF_LANG['msgVoteFrom'] = 'از';
@@ -67,7 +65,7 @@ $PMF_LANG['msgCommentBy'] = 'نظر توسط ';
 $PMF_LANG['msgCommentHeader'] = 'نظر در مورد';
 $PMF_LANG['msgYourComment'] = 'نظر شما';
 $PMF_LANG['msgCommentThanks'] = 'از درج نظرتان بسیار متشکریم';
-$PMF_LANG['msgSend2Friend'] = 'ارسال به یک دوست';
+$PMF_LANG['msgShareFAQ'] = 'ارسال به یک دوست';
 $PMF_LANG['msgS2FButton'] = 'ارسال کن';
 $PMF_LANG['msgSearchWord'] = 'کلیدواژه';
 $PMF_LANG['msgSearchFind'] = 'نتایج جستجو برای ';
@@ -96,7 +94,7 @@ $PMF_LANG['msgDate_User'] = ' تاریخ / کاربر';
 $PMF_LANG['msgQuestion2'] = 'پرسش';
 $PMF_LANG['msg2answer'] = 'جواب';
 $PMF_LANG['msgQuestionText'] = 'شما در اینجا میتوانید پرسش‌هایی را که توسط کاربران دیگر مطرح شده مشاهده فرمایید. اگر شما به این پرسش‌ها جوابی بنویسید احتمال دارد جواب شما وارد پرسش‌های متداول شود.';
-$PMF_LANG['msgHelpText'] = 'چهار چوب <strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions یعنی پرسش‌های متداول، بسیار ساده است. شما میتوانید در <strong><a href=\"?action=show\">موضوعات </a></strong>جستجو کنید یا میتوانید به <strong><a href=\"?action=search\">موتور جستجوی پرسش‌های متداول </a></strong> اجازه بدهید که به دنبال کلیدواژه‌ها جستجو کند.';
+$PMF_LANG['msgHelpText'] = 'چهار چوب Frequently Asked Questions یعنی پرسش‌های متداول، بسیار ساده است. شما میتوانید در <a href=\"?action=show\">موضوعات </a>جستجو کنید یا میتوانید به <a href=\"?action=search\">موتور جستجوی پرسش‌های متداول </a> اجازه بدهید که به دنبال کلیدواژه‌ها جستجو کند.';
 $PMF_LANG['msgContactEMail'] = 'ایمیل به وب‌مستر:';
 $PMF_LANG['msgMessage'] = 'پیام شما:';
 $PMF_LANG['msgTopTen'] = '10 آموزش برتر';
@@ -113,13 +111,13 @@ $PMF_LANG['msgErrorNoRecords'] = 'مطلبی در دسترس نیست.';
 $PMF_LANG['err_badID'] = 'شناسه اشتباه.';
 $PMF_LANG['err_noTopTen'] = 'هنوز مطالب برتر ایجاد نشده.';
 $PMF_LANG['err_nothingFound'] = 'مطلبی پیدا نشد.';
-$PMF_LANG['err_SaveEntries'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما </strong>, <strong>موضوع </strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong> هستند!<br><br><a href="javascript:history.back();">یک صفحه برگرد </a><br><br>';
-$PMF_LANG['err_SaveComment'] = 'کادرهای اجباری <strong>نام شما </strong>, <strong>ایمیل شما </strong>, <strong>نظر شما </strong> و, اگر خواسته شده باشه, <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong>هستند!<br><br><a href="javascript:history.back();">یک صفحه برگرد</a><br><br>';
+$PMF_LANG['err_SaveEntries'] = 'کادرهای اجباری نام شما, ایمیل شما , موضوع , headline, your Record and, when requested, the <a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد  هستند!<br><br><a href="javascript:history.back();">یک صفحه برگرد </a><br><br>';
+$PMF_LANG['err_SaveComment'] = 'کادرهای اجباری نام شما , ایمیل شما , نظر شما  و, اگر خواسته شده باشه, <a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد هستند!<br><br><a href="javascript:history.back();">یک صفحه برگرد</a><br><br>';
 $PMF_LANG['err_VoteTooMuch'] = 'امتیازات تکراری حساب نمیشوند. کلیک کنید , برای برگشت.';
-$PMF_LANG['err_noVote'] = '<strong>امتیاز ثبت نشد!</strong> <a href="javascript:history.back();">کلید کنید </a>, برای امتیاز دادن.';
+$PMF_LANG['err_noVote'] = 'امتیاز ثبت نشد! <a href="javascript:history.back();">کلید کنید </a>, برای امتیاز دادن.';
 $PMF_LANG['err_noMailAdress'] = 'ایمیل شما صحیح به نظر نمیرسد.<br><a href="javascript:history.back();">برگشت</a>';
-$PMF_LANG['err_sendMail'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>پرسش شما</strong> و, اگر تقاضا شده باشد, <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong>!';
-$PMF_LANG['help_search'] = 'شما متوانید به دنبال مطلبی با کلماتی مانند <strong style="color: Red;">word1 و word2</strong> جستجو کنید، همچنین شما میتوانید برای عباراتی با دو کلمه یا بیشتر جستجو کنید.<strong>توجه:</strong>هر کلمه در جستجوی شما حداقل باید دارای چهار حرف باشد.';
+$PMF_LANG['err_sendMail'] = 'کادرهای اجباری نام شما, ایمیل شما, پرسش شما و, اگر تقاضا شده باشد, <a href="https://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد !';
+$PMF_LANG['help_search'] = 'شما متوانید به دنبال مطلبی با کلماتی مانند <strong style="color: Red;">word1 و word2 جستجو کنید، همچنین شما میتوانید برای عباراتی با دو کلمه یا بیشتر جستجو کنید.توجه:هر کلمه در جستجوی شما حداقل باید دارای چهار حرف باشد.';
 $PMF_LANG['ad'] = 'بخش مدیریت';
 $PMF_LANG['ad_menu_user_administration'] = 'مدیریت کاربران';
 $PMF_LANG['ad_menu_entry_aprove'] = 'رکوردهای تایید شده';
@@ -137,10 +135,10 @@ $PMF_LANG['ad_menu_passwd'] = 'تعویض پسورد';
 $PMF_LANG['ad_menu_logout'] = 'خروج';
 $PMF_LANG['ad_menu_startpage'] = 'صفحه شروع';
 $PMF_LANG['ad_msg_identify'] = 'لطفاً مشخصات شناسایی.';
-$PMF_LANG['ad_msg_passmatch'] = 'هر دو پسورد باید <strong> یکسان باشند</strong>!';
+$PMF_LANG['ad_msg_passmatch'] = 'هر دو پسورد باید  یکسان باشند!';
 $PMF_LANG['ad_msg_savedsuc_1'] = 'نمایه';
 $PMF_LANG['ad_msg_savedsuc_2'] = 'با موفقیت ثبت شد.';
-$PMF_LANG['ad_msg_mysqlerr'] = 'به دلیل <strong>اشکال در پایگاه داده</strong>, نمایه ثبت نشد.';
+$PMF_LANG['ad_msg_mysqlerr'] = 'به دلیل اشکال در پایگاه داده, نمایه ثبت نشد.';
 $PMF_LANG['ad_msg_noauth'] = 'شما مجاز به ورود نیستید.';
 $PMF_LANG['ad_gen_page'] = 'صفحه';
 $PMF_LANG['ad_gen_of'] = 'از';
@@ -174,13 +172,13 @@ $PMF_LANG['ad_entry_topic'] = 'موضوع';
 $PMF_LANG['ad_entry_action'] = 'عمل';
 $PMF_LANG['ad_entry_edit_1'] = 'اصلاح رکورد';
 $PMF_LANG['ad_entry_edit_2'] = 'ویرایش رکورد';
-$PMF_LANG['ad_entry_theme'] = 'تیتر مطلب:';
-$PMF_LANG['ad_entry_content'] = 'محتوا:';
-$PMF_LANG['ad_entry_keywords'] = 'کلیدواژه:';
-$PMF_LANG['ad_entry_author'] = 'نویسنده:';
-$PMF_LANG['ad_entry_category'] = 'موضوع:';
+$PMF_LANG['msgQuestion'] = 'تیتر مطلب:';
+$PMF_LANG['msgAnswer'] = 'محتوا:';
+$PMF_LANG['msgKeywords'] = 'کلیدواژه:';
+$PMF_LANG['msgAuthor'] = 'نویسنده:';
+$PMF_LANG['msgCategory'] = 'موضوع:';
 $PMF_LANG['ad_entry_active'] = 'قابل مشاهده';
-$PMF_LANG['ad_entry_date'] = 'تاریخ';
+$PMF_LANG['msgDate'] = 'تاریخ';
 $PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'تغییر یافته?';
 $PMF_LANG['ad_entry_changelog'] = 'سیاهه تغییرات';
@@ -190,19 +188,19 @@ $PMF_LANG['ad_entry_save'] = 'ذخیره';
 $PMF_LANG['msgDelete'] = 'پاک کن';
 $PMF_LANG['ad_entry_delcom_1'] = 'آیا مطمئن هستید؟ ';
 $PMF_LANG['ad_entry_delcom_2'] = 'باید پاک شود?';
-$PMF_LANG['ad_entry_commentdelsuc'] = 'نظر با <strong>موفقیت</strong> پاک شد.';
+$PMF_LANG['ad_entry_commentdelsuc'] = 'نظر با موفقیت پاک شد.';
 $PMF_LANG['ad_entry_back'] = 'برگرد';
-$PMF_LANG['ad_entry_commentdelfail'] = 'نظر <strong>پاک نشد</strong>.';
-$PMF_LANG['ad_entry_savedsuc'] = 'تغییرات با <strong>موفقیت</strong> ثبت شد.';
-$PMF_LANG['ad_entry_savedfail'] = 'متاسفانه, یک <strong>اشکال در پایگاه داده</strong> رخ داد.';
+$PMF_LANG['ad_entry_commentdelfail'] = 'نظر پاک نشد.';
+$PMF_LANG['ad_entry_savedsuc'] = 'تغییرات با موفقیت ثبت شد.';
+$PMF_LANG['ad_entry_savedfail'] = 'متاسفانه, یک اشکال در پایگاه داده رخ داد.';
 $PMF_LANG['ad_entry_del_1'] = 'آیا مطمئنید؟';
 $PMF_LANG['ad_entry_del_2'] = 'از';
 $PMF_LANG['ad_entry_del_3'] = 'باید پاک شود?';
-$PMF_LANG['ad_entry_delsuc'] = 'مورد با <strong>موفقیت</strong> پاک شد.';
-$PMF_LANG['ad_entry_delfail'] = 'مورد <strong>پاک نشد</strong>!';
+$PMF_LANG['ad_entry_delsuc'] = 'مورد با موفقیت پاک شد.';
+$PMF_LANG['ad_entry_delfail'] = 'مورد پاک نشد!';
 $PMF_LANG['ad_news_header'] = 'سرتیتر مطلب';
 $PMF_LANG['ad_news_text'] = 'متن مطلب';
-$PMF_LANG['ad_news_link_url'] = 'پیوند: (<strong>با https://</strong>)!';
+$PMF_LANG['ad_news_link_url'] = 'پیوند: (با https://)!';
 $PMF_LANG['ad_news_link_title'] = 'تیتر پیوند:';
 $PMF_LANG['ad_news_link_target'] = 'هدف پیوند';
 $PMF_LANG['ad_news_link_window'] = 'پیوند در صفحه جدید';
@@ -221,11 +219,11 @@ $PMF_LANG['ad_news_yesdelete'] = 'بله, پاک شود!';
 $PMF_LANG['ad_news_nodelete'] = 'نخیر!';
 $PMF_LANG['ad_news_delsuc'] = 'خبرها پاک شد.';
 $PMF_LANG['ad_news_updatenews'] = 'به روز کردن خبرها';
-$PMF_LANG['ad_categ_new'] = 'افزودن موضوع';
+$PMF_LANG['msgNewCategory'] = 'افزودن موضوع';
 $PMF_LANG['ad_categ_catnum'] = 'تعداد موضوع:';
 $PMF_LANG['ad_categ_subcatnum'] = 'تعداد زیرشاخه:';
-$PMF_LANG['ad_categ_nya'] = '<em>هنوز آماده نیست!</em>';
-$PMF_LANG['ad_categ_titel'] = 'تیتر موضوع';
+$PMF_LANG['ad_categ_nya'] = 'هنوز آماده نیست!';
+$PMF_LANG['categoryNameLabel'] = 'تیتر موضوع';
 $PMF_LANG['ad_categ_add'] = 'افزودن موضوع';
 $PMF_LANG['ad_categ_existing'] = 'موضوعات موجود';
 $PMF_LANG['ad_categ_id'] = '#';
@@ -245,7 +243,7 @@ $PMF_LANG['ad_categ_del_yes'] = 'بله, پاک شود!';
 $PMF_LANG['ad_categ_del_no'] = 'نخیر!';
 $PMF_LANG['ad_categ_deletesure'] = 'مطمئن هستید که موضوع پاک شود?';
 $PMF_LANG['ad_categ_deleted'] = 'موضوع پاک شد.';
-$PMF_LANG['ad_cookie_cookiesuc 	'] = 'کوکی با <strong>موفقیت</strong> تنظیم شد.';
+$PMF_LANG['ad_cookie_cookiesuc 	'] = 'کوکی با موفقیت تنظیم شد.';
 $PMF_LANG['ad_cookie_already'] = 'یک کوکی الان تنظیم شده‌است. اکنون امکانهای زیر موجود است:';
 $PMF_LANG['ad_cookie_again'] = 'یک کوکی دیگر تنظیم کنید';
 $PMF_LANG['ad_cookie_delete'] = 'کوکی را پاک کنید';
@@ -259,16 +257,16 @@ $PMF_LANG['ad_passwd_new'] = 'رمز عبور جدید:';
 $PMF_LANG['ad_passwd_con'] = 'دوباره وارد کنید:';
 $PMF_LANG['ad_passwd_change'] = 'تغییر رمز عبور';
 $PMF_LANG['ad_passwd_suc'] = 'رمز عبور با موفقیت تغییر یافت.';
-$PMF_LANG['ad_passwd_remark'] = '<strong>توجه:</strong><br>کوکی باید مجدداً تنظیم شود!';
-$PMF_LANG['ad_passwd_fail'] = 'رمز عبور قدیم <strong>باید</strong> صحیح وارد شود و <strong>تطابق کند</strong>.';
+$PMF_LANG['ad_passwd_remark'] = 'توجه:<br>کوکی باید مجدداً تنظیم شود!';
+$PMF_LANG['ad_passwd_fail'] = 'رمز عبور قدیم باید صحیح وارد شود و تطابق کند.';
 $PMF_LANG['ad_adus_adduser'] = 'افزودن کابر';
 $PMF_LANG['ad_adus_name'] = 'نام:';
 $PMF_LANG['ad_adus_password'] = 'رمز عبور:';
 $PMF_LANG['ad_adus_add'] = 'افزودن کاربر';
-$PMF_LANG['ad_adus_suc'] = 'کاربر با <strong>موفقیت</strong> اضافه شد.';
+$PMF_LANG['ad_adus_suc'] = 'کاربر با موفقیت اضافه شد.';
 $PMF_LANG['ad_adus_edit'] = 'اصلاح نمایه';
-$PMF_LANG['ad_adus_dberr'] = '<strong>اشکال در پایگاه داده!</strong>';
-$PMF_LANG['ad_adus_exerr'] = 'نام کاربری <strong>موجود</strong> است.';
+$PMF_LANG['ad_adus_dberr'] = 'اشکال در پایگاه داده!';
+$PMF_LANG['ad_adus_exerr'] = 'نام کاربری موجود است.';
 $PMF_LANG['ad_sess_id'] = 'شماره ';
 $PMF_LANG['ad_sess_sid'] = 'شماره دوره';
 $PMF_LANG['ad_sess_ip'] = 'آدرس آی‌پی';
@@ -313,14 +311,14 @@ $PMF_LANG['ad_config_saved'] = 'تنظیمات با موفقیت ذخیره شد
 $PMF_LANG['ad_menu_editconfig'] = 'اصلاح تنظیمات';
 $PMF_LANG['ad_att_none'] = 'الصاقی موجود نیست';
 $PMF_LANG['ad_att_att'] = 'فایل';
-$PMF_LANG['ad_att_add'] = 'الصاق فایل';
+$PMF_LANG['msgAddAttachment'] = 'الصاق فایل';
 $PMF_LANG['ad_entryins_suc'] = 'مطلب با موفقیت ثبت شد.';
-$PMF_LANG['ad_entryins_fail'] = 'اشکالی به وجود آمد.';
+$PMF_LANG['msgErrorOccurred'] = 'اشکالی به وجود آمد.';
 $PMF_LANG['ad_att_del'] = 'پاک کن';
 $PMF_LANG['ad_att_nope'] = 'الصاقیها فقط در زمان اصلاح میتوانند اضافه شوند.';
 $PMF_LANG['ad_att_delsuc'] = 'الصاقی با موفقیت اضافه شد.';
 $PMF_LANG['ad_att_delfail'] = 'هنگام افزودن الصاقی مشکلی رخ داد.';
-$PMF_LANG['ad_entry_add'] = 'ایجاد مطلب';
+$PMF_LANG['msgAddFAQ'] = 'ایجاد مطلب';
 $PMF_LANG['ad_csv_make'] = '> یک پشتیبان تصویر کاملی از محتویات پایگاه داده است. فرمت پشتیبان SQL transaction است, که با ابزاری مثل phpMyAdmin یا خط فرمان sql متواند دوباره به پایگاه داده وارد شود. ایجاد حداقل یک پشتیبان در ماه توصیه میشود.';
 $PMF_LANG['ad_csv_link'] = 'دانلود پشتیبان';
 $PMF_LANG['ad_csv_head'] = 'ساخت پشتیبان';
@@ -374,12 +372,12 @@ $PMF_LANG['ad_log_beed'] = 'فرم اصلاح برای کاربران زیر: ';
 $PMF_LANG['ad_log_bede'] = 'مطالب زیر پاک شدند: ';
 $PMF_LANG['msgVisits'] = 'مشاهدات';
 $PMF_LANG['ad_start_articles'] = 'مطالب';
-$PMF_LANG['ad_start_comments'] = 'نظرات';
+$PMF_LANG['msgComments'] = 'نظرات';
 $PMF_LANG['ad_categ_paste'] = 'الصاق';
 $PMF_LANG['ad_categ_cut'] = 'برش';
 $PMF_LANG['msgCopy'] = 'رونوشت';
 $PMF_LANG['ad_categ_process'] = 'پردازش موضوعات...';
-$PMF_LANG['err_NotAuth'] = '<strong>شما شناسایی نشدید.</strong>';
+$PMF_LANG['msgNoPermission'] = 'شما شناسایی نشدید.';
 $PMF_LANG['msgPreviusPage'] = 'صفحه قبل';
 $PMF_LANG['msgNextPage'] = 'صفحه بعد';
 $PMF_LANG['msgPageDoublePoint'] = 'صفحه: ';
@@ -389,7 +387,7 @@ $PMF_LANG['msgPDF'] = 'نمایش به صورت فایل پی‌دی‌اف';
 $PMF_LANG['ad_xml_head'] = 'پشتیبان اکس‌ام‌ال';
 $PMF_LANG['ad_xml_hint'] = 'ذخیره تمام پرسش‌های متداول در یک فایل XML.';
 $PMF_LANG['ad_xml_gen'] = 'ساخت فایل XML';
-$PMF_LANG['ad_entry_locale'] = 'زبان';
+$PMF_LANG['msgLanguage'] = 'زبان';
 $PMF_LANG['msgLanguageSubmit'] = 'تغییر زبان';
 $PMF_LANG['ad_entry_preview'] = 'پیش‌نمایش';
 $PMF_LANG['ad_attach_1'] = 'لطفا در تنظیمات یک شاخه برای الصاقی‌ها انتخاب کنید.';
@@ -431,7 +429,7 @@ $PMF_LANG['msgRealname'] = 'نام واقعی:';
 $PMF_LANG['ad_export_generate_pdf'] = 'تولید فایل PDF';
 $PMF_LANG['ad_export_full_پرسش‌های متداول'] = 'پرسش‌های متداول شما بصورت فایل PDF: ';
 $PMF_LANG['err_bannedIP'] = 'آی‌پی شما مسدود شده است.';
-$PMF_LANG['err_SaveQuestion'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>پرسش شما</strong> و, اگر درخواست شده باشد <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"درباره کپچا در ویکی‌پدیا بیشتر بخوانید\" target=\"_blank\">Captcha</a> کد</strong> هستند.<br><br><a href=\"javascript:history.back();\">یک صفحه برگرد</a><br><br>';
+$PMF_LANG['err_SaveQuestion'] = 'کادرهای اجباری نام شما, ایمیل شما, پرسش شما و, اگر درخواست شده باشد <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"درباره کپچا در ویکی‌پدیا بیشتر بخوانید\" target=\"_blank\">Captcha</a> کد هستند.<br><br><a href=\"javascript:history.back();\">یک صفحه برگرد</a><br><br>';
 $PMF_LANG['ad_entry_fontcolor'] = 'رنگ قلم: ';
 $PMF_LANG['ad_entry_fontsize'] = 'اندازه قلم: ';
 $LANG_CONF['main.language'] = array("select", "پرونده زبان");
@@ -452,11 +450,11 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array("input", "تعداد عنا
 $LANG_CONF['records.numberOfShownNewsEntries'] = array("input", "تعداد مقالات جدید");
 $LANG_CONF['security.bannedIPs'] = array("area", "قدغن کردن این آی‌پی‌ها");
 $LANG_CONF['ldap.ldapSupport'] = array("checkbox", "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
-$PMF_LANG['ad_categ_new_main_cat'] = 'به عنوان موضوع اصلی';
+$PMF_LANG['msgNewCategory_main_cat'] = 'به عنوان موضوع اصلی';
 $PMF_LANG['ad_categ_paste_error'] = 'انتقال این موضوع ممکن نیست.';
 $PMF_LANG['ad_categ_move'] = 'انتقال موضوع';
 $PMF_LANG['ad_categ_lang'] = 'زبان';
-$PMF_LANG['ad_categ_desc'] = 'توضیحات';
+$PMF_LANG['categoryDescriptionLabel'] = 'توضیحات';
 $PMF_LANG['ad_categ_change'] = 'تغییر توسط';
 $PMF_LANG['lostPassword'] = 'رمز عبور را فراموش کردید? اینجا را کلیک کنید.';
 $PMF_LANG['lostpwd_err_1'] = 'خطا: نام کاربری و ایمیل پیدا نشد.';
@@ -481,7 +479,7 @@ $PMF_LANG['ad_entry_solution_id'] = 'شماره اختصاصی راه حل';
 $PMF_LANG['ad_entry_FAQ_record'] = 'مطلب پرسش‌های متداول';
 $PMF_LANG['ad_entry_new_revision'] = 'ایجاد تجدیدنظر جدید?';
 $PMF_LANG['ad_entry_record_administration'] = 'مدیریت مطالب';
-$PMF_LANG['ad_entry_revision'] = 'تجدید نظر';
+$PMF_LANG['msgRevision'] = 'تجدید نظر';
 $PMF_LANG['ad_changerev'] = 'انتخاب تجدید نظر';
 $PMF_LANG['msgCaptcha'] = 'حروف داخل تصویر را تایپ کنید';
 $PMF_LANG['msgSelectCategories'] = 'جستجو در ...';
@@ -517,7 +515,7 @@ $PMF_LANG['records.orderingPopularFAQs.voting'] = 'لیست بیشترین ام�
 $PMF_LANG['msgShowHelp'] = 'لطفاكلمات را با كاما جدا كنید..';
 $PMF_LANG['msgUpdateFAQDate'] = 'به روز رسانی';
 $PMF_LANG['msgKeepFAQDate'] = 'نگه داشتن';
-$PMF_LANG['msgEditFAQDat'] = 'ویرایش';
+$PMF_LANG['msgEditFaqDate'] = 'ویرایش';
 $PMF_LANG['searchControlCenter'] = 'جستجو';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'پرسش - پاسخ -كلمه كلیدی';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'پرسش -كلمه كلیدی - پاسخ';
@@ -531,13 +529,13 @@ $LANG_CONF['records.orderingPopularFAQs'] = array('select', 'مرتب‌ کرد�
 $LANG_CONF['search.useAjaxSearchOnStartpage'] = array('checkbox', 'پاسخ سریع در صفحه آغازین (پیش‌فرض: غیرفعال)');
 $LANG_CONF['search.relevance'] = array('select', 'مرتب کردن بر اساس رابطه');
 $LANG_CONF['search.enableRelevance'] = array('checkbox', 'پشتیبانی از رابطه فعال شود؟ (پیش‌فرض: غبرفعال)');
-$PMF_LANG['ad_menu_attachments'] = 'پیوست های آموزش';
+$PMF_LANG['msgAttachments'] = 'پیوست های آموزش';
 $PMF_LANG['ad_menu_attachment_admin'] = 'مدیریت ضمیمه';
 $PMF_LANG['msgAttachmentsFilename'] = 'نام فایل';
 $PMF_LANG['msgAttachmentsFilesize'] = 'سایز فایل';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'برای پاك كردن ضمیمه مطمئن هستید?';
-$PMF_LANG['msgAttachmentsDeleted'] = 'پاك شد<strong>موفقیت</strong>پیوست با';
+$PMF_LANG['msgAttachmentsDeleted'] = 'پاك شدموفقیتپیوست با';
 $PMF_LANG['ad_menu_reports'] = 'گزارش';
 $PMF_LANG['ad_stat_report_fields'] = 'فیلد';
 $PMF_LANG['ad_stat_report_category'] = 'موضوع';

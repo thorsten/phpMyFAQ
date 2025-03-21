@@ -1,92 +1,96 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-list-alt"></i>
-    {{ 'msgHeaderFAQOverview' | translate }}
-  </h1>
-  <div class="pmf-faq-overview-search col-4">
-    <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="?action=faq-overview"
-          method="post" role="form">
-      {{ csrfTokenSearch | raw }}
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="{{ 'msgAdminSearchFaqs' | translate }}"
-               id="pmf-faq-overview-search-input" autocomplete="off">
-        <button class="btn btn-primary" type="button" id="pmf-faq-overview-search-button">
-          <i class="bi bi-search" aria-hidden="true"></i>
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-list-alt"></i>
+      {{ 'msgHeaderFAQOverview' | translate }}
+    </h1>
+    <div class="pmf-faq-overview-search col-4">
+      <form name="pmf-faq-search-autocomplete" id="pmf-faq-search-autocomplete" action="./faqs"
+            method="post" role="form">
+        {{ csrfTokenSearch | raw }}
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="{{ 'msgAdminSearchFaqs' | translate }}"
+                 id="pmf-faq-overview-search-input" autocomplete="off">
+          <button class="btn btn-primary" type="button" id="pmf-faq-overview-search-button">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if categories is empty %}
+    <div class="alert alert-danger" role="alert">
+      {{ 'msgErrorNoRecords' | translate }}
+    </div>
+  {% endif %}
+
+  <div class="accordion shadow" id="pm-admin-faq-overview">
+    <div class="accordion-item d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center p-3 bg-secondary-subtle">
+      <div class="col-2">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
+          <label class="form-check-label" for="pmf-checkbox-filter-inactive">
+            {{ 'msgOnlyInactiveFAQs' | translate }}
+          </label>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-new">
+          <label class="form-check-label" for="pmf-checkbox-filter-new">
+            {{ 'msgOnlyNewFAQs' | translate }}
+          </label>
+        </div>
+      </div>
+    </div>
+    {% for category in categories %}
+    <div class="accordion-item">
+      <div class="accordion-header category-header-indent-{{ category.indent }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#category-id-{{ category.id }}">
+
+          <span class="lead">{{ category.name }}</span>
+          <span class="badge bg-primary mx-1">{{ numberOfRecords[category.id] ?? 0 }} {{ 'msgEntries' | translate }}</span>
+          <span class="badge bg-info mx-1">{{ numberOfComments[category.id] ?? 0 }} {{ msgComments }}</span>
+
         </button>
       </div>
-    </form>
-  </div>
-</div>
+      <div id="category-id-{{ category.id }}" class="accordion-collapse collapse" data-pmf-language="{{ category.lang }}"
+           data-bs-parent="#category-id-{{ category.id }}" data-pmf-categoryId="{{ category.id }}">
+        <div class="accordion-body">
+          <table class="table table-hover table-sm align-middle">
+            <thead class="thead-light">
+            <tr>
+              <th colspan="3" class="align-middle">
+                ID
+              </th>
+              <th class="align-middle">
+                {{ 'msgQuestion' | translate }}
+              </th>
+              <th class="align-middle">
+                {{ 'msgDate' | translate }}
+              </th>
+              <th class="align-middle">
+                {{ 'msgStickyFAQ' | translate }}
+              </th>
+              <th class="align-middle">
+                {{ 'msgActive' | translate }}
+              </th>
+              <th colspan="4" class="align-middle">
+                Actions
+              </th>
+            </tr>
+            </thead>
+            <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}">
 
-{% if categories is empty %}
-  <div class="alert alert-danger" role="alert">
-    {{ 'msgErrorNoRecords' | translate }}
-  </div>
-{% endif %}
-
-<div class="accordion shadow" id="pm-admin-faq-overview">
-  <div class="accordion-item d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center p-3 bg-secondary-subtle">
-    <div class="col-2">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-inactive">
-        <label class="form-check-label" for="pmf-checkbox-filter-inactive">
-          {{ 'msgOnlyInactiveFAQs' | translate }}
-        </label>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <div class="col-2">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="pmf-checkbox-filter-new">
-        <label class="form-check-label" for="pmf-checkbox-filter-new">
-          {{ 'msgOnlyNewFAQs' | translate }}
-        </label>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-  {% for category in categories %}
-  <div class="accordion-item">
-    <div class="accordion-header category-header-indent-{{ category.indent }}">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#category-id-{{ category.id }}">
-
-        <span class="lead">{{ category.name }}</span>
-        <span class="badge bg-primary mx-1">{{ numberOfRecords[category.id] ?? 0 }} {{ 'msgEntries' | translate }}</span>
-        <span class="badge bg-info mx-1">{{ numberOfComments[category.id] ?? 0 }} {{ msgComments }}</span>
-
-      </button>
-    </div>
-    <div id="category-id-{{ category.id }}" class="accordion-collapse collapse" data-pmf-language="{{ category.lang }}"
-         data-bs-parent="#category-id-{{ category.id }}" data-pmf-categoryId="{{ category.id }}">
-      <div class="accordion-body">
-        <table class="table table-hover table-sm align-middle">
-          <thead class="thead-light">
-          <tr>
-            <th colspan="3" class="align-middle">
-              ID
-            </th>
-            <th class="align-middle">
-              {{ msgQuestion }}
-            </th>
-            <th class="align-middle">
-              {{ msgDate }}
-            </th>
-            <th class="align-middle">
-              {{ msgSticky }}
-            </th>
-            <th class="align-middle">
-              {{ msgActive }}
-            </th>
-            <th colspan="4" class="align-middle">
-              Actions
-            </th>
-          </tr>
-          </thead>
-          <tbody id="tbody-category-id-{{ category.id }}" data-pmf-csrf="{{ csrfTokenOverview }}">
-
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+{% endblock %}

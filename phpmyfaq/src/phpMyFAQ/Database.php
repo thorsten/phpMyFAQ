@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2024 phpMyFAQ Team
+ * @copyright 2003-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-24
@@ -50,7 +50,7 @@ class Database
         self::$dbType = $type;
 
         if (str_starts_with($type, 'pdo_')) {
-            $class = 'phpMyFAQ\Database\Pdo_' . ucfirst(substr($type, 4));
+            $class = 'phpMyFAQ\Database\Pdo' . ucfirst(substr($type, 4));
         } else {
             $class = 'phpMyFAQ\Database\\' . ucfirst($type);
         }

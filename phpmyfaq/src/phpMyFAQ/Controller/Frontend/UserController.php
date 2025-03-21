@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-02
@@ -20,11 +20,8 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Mail;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,20 +33,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
-    #[Route('api/user/data/update', methods: ['PUT'])]
+    #[Route('api/user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
     public function updateData(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
-
-        $user = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance()->verifyToken('ucp', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('ucp', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -60,11 +55,12 @@ class UserController extends AbstractController
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
+        $secret = Filter::filterVar($data->secret, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $isAzureAdUser = $user->getUserAuthSource() === 'azure';
-        $isWebAuthnUser = $user->getUserAuthSource() === 'webauthn';
+        $isAzureAdUser = $this->currentUser->getUserAuthSource() === 'azure';
+        $isWebAuthnUser = $this->currentUser->getUserAuthSource() === 'webauthn';
 
-        if ($userId !== $user->getUserId()) {
+        if ($userId !== $this->currentUser->getUserId()) {
             return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -93,14 +89,14 @@ class UserController extends AbstractController
                     ];
                 }
 
-                $success = $user->setUserData($userData);
+                $success = $this->currentUser->setUserData($userData);
 
-                foreach ($user->getAuthContainer() as $auth) {
+                foreach ($this->currentUser->getAuthContainer() as $auth) {
                     if ($auth->setReadOnly()) {
                         continue;
                     }
 
-                    if (!$auth->update($user->getLogin(), $password)) {
+                    if (!$auth->update($this->currentUser->getLogin(), $password)) {
                         return $this->json(['error' => $auth->getErrors()], Response::HTTP_BAD_REQUEST);
                     } else {
                         $success = true;
@@ -114,7 +110,7 @@ class UserController extends AbstractController
                 'secret' => $secret
             ];
 
-            $success = $user->setUserData($userData);
+            $success = $this->currentUser->setUserData($userData);
         }
 
         if ($success) {
@@ -126,18 +122,15 @@ class UserController extends AbstractController
 
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('api/user/request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
-        $stopWords = new StopWords($this->configuration);
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('request-removal', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('request-removal', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -149,14 +142,15 @@ class UserController extends AbstractController
 
         // Validate User ID, Username and email
         if (
-            !$user->getUserById($userId) ||
-            $userId !== $user->getUserId() ||
-            $loginName !== $user->getLogin() ||
-            $email !== $user->getUserData('email')
+            !$this->currentUser->getUserById($userId) ||
+            $userId !== $this->currentUser->getUserId() ||
+            $loginName !== $this->currentUser->getLogin() ||
+            $email !== $this->currentUser->getUserData('email')
         ) {
             return $this->json(['error' => Translation::get('ad_user_error_loginInvalid')], Response::HTTP_BAD_REQUEST);
         }
 
+        $stopWords = $this->container->get('phpmyfaq.stop-words');
         if (
             $author !== '' &&
             $author !== '0' &&
@@ -175,7 +169,7 @@ class UserController extends AbstractController
                 $question
             );
 
-            $mailer = new Mail($this->configuration);
+            $mailer = $this->container->get('phpmyfaq.mail');
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());
@@ -200,26 +194,24 @@ class UserController extends AbstractController
     #[Route('api/user/remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $data = json_decode($request->getContent());
-        $twoFactor = new TwoFactor($this->configuration, $user);
+        $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance()->verifyToken('remove-twofactor', $csrfToken)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('remove-twofactor', $csrfToken)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($user->isLoggedIn()) {
+        if ($this->currentUser->isLoggedIn()) {
             $newSecret = $twoFactor->generateSecret();
 
-            if ($user->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
+            if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
                 return $this->json(
                     ['success' => Translation::get('msgRemoveTwofactorConfigSuccessful')],
                     Response::HTTP_OK
                 );
             } else {
-                return $this->json(['error' => Translation::get('ad_entryins_fail')], Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
             }
         } else {
             throw new Exception('The user is not logged in.');

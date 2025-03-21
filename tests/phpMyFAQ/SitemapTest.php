@@ -4,8 +4,10 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class SitemapTest extends TestCase
 {
@@ -13,6 +15,10 @@ class SitemapTest extends TestCase
 
     private Sqlite3 $db;
 
+    /**
+     * @throws Exception
+     * @throws Core\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,7 +38,7 @@ class SitemapTest extends TestCase
         $configuration = new Configuration($this->db);
         $configuration->set('main.referenceURL', 'https://example.com/');
 
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 

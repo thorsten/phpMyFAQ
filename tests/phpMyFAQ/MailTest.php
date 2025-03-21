@@ -7,6 +7,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\Smtp;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
 
 class MailTest extends TestCase
 {
@@ -15,6 +16,8 @@ class MailTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Request::setTrustedHosts(['^.*$']); // Trust all hosts for testing
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

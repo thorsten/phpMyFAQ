@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-30
@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Api;
 
+use JsonException;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
@@ -41,10 +42,10 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @throws \JsonException|Exception
+     * @throws JsonException|Exception
      */
     #[OA\Post(
-        path: '/api/v3.0/login',
+        path: '/api/v3.1/login',
         operationId: 'login',
         tags: ['Public Endpoints'],
     )]

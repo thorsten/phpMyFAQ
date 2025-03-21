@@ -1,0 +1,79 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-folder"></i> {{ ad_menu_categ_structure }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-outline-success" href="./category/add">
+          <i aria-hidden="true" class="bi bi-folder-plus"></i> {{ msgAddCategory }}
+        </a>
+        <a class="btn btn-outline-info" href="./category">
+          <i aria-hidden="true" class="bi bi-list"></i> {{ msgHeaderCategoryOverview }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% if message_typ is defined %}
+    <div class="alert alert-{{ message_typ }} alert-dismissible fade show">
+      {% if message_heading is defined %}
+        <h4 class="alert-heading">{{ message_heading }}</h4>
+        <p>{{ error }}</p>
+      {% endif %}
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+  <table class="table table-light table-striped align-middle">
+    <thead class="thead-dark">
+    <tr>
+      <th>{{ msgCategory }}</th>
+      <th class="text-center">{{ currentLanguage }}</th>
+      {% for language in allLangs %}
+        {% if language != currentLanguage %}
+          <th class="text-center">{{ language }}</th>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for category in categoryTree %}
+      <tr>
+        {% set indent = category.indent * 2 %}
+        <th>
+          <a href="?action=editcategory&cat={{ category.id }}"><span><i class="bi bi-pencil"></i></span></a>&nbsp;
+          <span class="ps-{{ indent }}">{{ category.name }}</span>
+        </th>
+        {% for code in allLangCodes %}
+          <th class="text-center">
+            {% for catid, category_trans in translations %}
+              {% if catid == category.id %}
+                {% set break = false %}
+                {% for translation_code in category_trans %}
+                  {% if break == false %}
+                    {% if translation_code == code %}
+                      <span class="badge bg-success" title="{{ ad_categ_translated }}"><i class="bi bi-check"></i></span>
+                    {% endif %}
+                    {% if code in category_trans %}
+                    {% else %}
+                      <a href="{{ basePath }}/category/translate/{{ category.id }}?translateTo={{ code }}"
+                         title="{{ ad_categ_translate }}">
+                    <span title="{{ ad_categ_translate }}" class="badge bg-primary">
+                      <i aria-hidden="true" class="bi bi-globe bi-white"></i></span>
+                      </a>
+                      {% set break = true %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </th>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

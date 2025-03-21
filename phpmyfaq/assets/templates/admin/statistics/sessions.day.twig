@@ -1,29 +1,38 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-tasks"></i>
-    {{ adminHeaderSessionsPerDay }} {{ currentDay }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-lg-12">
-    <table class="table table-striped align-middle">
-      <thead>
-        <tr>
-          <th>{{ msgIpAddress }}</th>
-          <th>{{ msgSessionDate }}</th>
-          <th>{{ msgSession }}</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for sid, data in sessionData %}
-        <tr>
-          <td>{{ data.ip }}</td>
-          <td>{{ data.time | date }}</td>
-          <td><a href="?action=viewsession&id={{ sid }}">{{ sid }}</a></td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-tasks"></i>
+      {{ adminHeaderSessionsPerDay }} {{ currentDay }}
+    </h1>
   </div>
-</div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>{{ msgIpAddress }}</th>
+            <th>{{ msgSessionDate }}</th>
+            <th>{{ msgSession }}</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for sid, data in sessionData %}
+          <tr>
+            <td>{{ data.ip }}</td>
+            <td>{{ data.time | date }}</td>
+            <td><a href="./statistics/session/{{ sid }}">{{ sid }}</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3"><a href="./statistics/sessions">{{ 'ad_sess_back' | translate }}</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+{% endblock %}

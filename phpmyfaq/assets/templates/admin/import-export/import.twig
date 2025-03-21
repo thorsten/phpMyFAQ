@@ -1,0 +1,61 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-upload"></i>
+      {{ adminHeaderImport }}
+    </h1>
+  </div>
+
+  <div class="card shadow mb-4" id="divImportColumns">
+    <h5 class="card-header py-3">
+      {{ adminHeaderCSVImportColumns }}
+    </h5>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <p>{{ msgImportRecordsColumnStructure }}</p>
+          <ul>
+            <li>{{ categoryId }} *</li>
+            <li>{{ question }} *</li>
+            <li>{{ answer }} *</li>
+            <li>{{ keywords }} {{ seperateWithCommas }}</li>
+            <li>{{ languageCode }} *</li>
+            <li>{{ author }} *</li>
+            <li>{{ email }} *</li>
+            <li>{{ is_active }} {{ trueFalse }} *</li>
+            <li>{{ is_sticky }} {{ trueFalse }} *</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card shadow mb-4">
+    <form id="uploadCSVFileForm" method="post" action="./api/faqs/import"
+          enctype="multipart/form-data" data-pmf-csrf="{{ csrfToken }}">
+      <h5 class="card-header py-3">
+        {{ adminHeaderCSVImport }}
+      </h5>
+      <div class="card-body">
+        <p>{{ adminBodyCSVImport }}</p>
+        <div class="row">
+          <label class="col-lg-4 col-form-label">{{ adminImportLabel }}:</label>
+          <div class="col-lg-8">
+            <input type="file" id="fileInputCSVUpload" name="userfile">
+          </div>
+        </div>
+        <div class="form-row row">
+          <div class="d-flex justify-content-center">
+            <button class="btn btn-primary btn-lg m-2" type="submit" id="submitButton">
+              <i aria-hidden="true" class="bi bi-upload"></i> {{ adminCSVImport }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

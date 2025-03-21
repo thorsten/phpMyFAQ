@@ -11,7 +11,7 @@
  * @author Can Kirca <cankirca@gmail.com>
  * @author Zafer Gürsoy <zafergursoy@yahoo.com>
  * @author Evren Yurtesen <yurtesen@ispro.net.tr>
- * @copyright 2004-2024 phpMyFAQ Team
+ * @copyright 2004-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-02-19
@@ -52,9 +52,7 @@ $PMF_LANG["msgNext"] = "sonraki";
 $PMF_LANG["msgCategoryUp"] = "bir kategori yukarı";
 $PMF_LANG["msgLastUpdateArticle"] = "Son güncelleme: ";
 $PMF_LANG["msgAuthor"] = "Oluşturan: ";
-$PMF_LANG["msgPrinterFriendly"] = "yazıcı uyumlu sürüm";
 $PMF_LANG["msgPrintArticle"] = "İçeriği yazdır";
-$PMF_LANG["msgMakeXMLExport"] = "XML dosyası olarak dışa aktar";
 $PMF_LANG["msgAverageVote"] = "Oy ortalaması";
 $PMF_LANG["msgVoteUsability"] = "Bu içeriği oyla";
 $PMF_LANG["msgVoteFrom"] = "out of";
@@ -70,7 +68,7 @@ $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Yorumunuz";
 $PMF_LANG["msgCommentThanks"] = "Yorumunuz için teşekkürler!";
-$PMF_LANG["msgSend2Friend"] = "Arkadaşınıza önerin";
+$PMF_LANG["msgShareFAQ"] = "Arkadaşınıza önerin";
 $PMF_LANG["msgS2FButton"] = "e-mail gönder";
 
 // Search
@@ -129,15 +127,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Soru bulunamadı.";
 $PMF_LANG["err_badID"] = "Geçersiz ID.";
 $PMF_LANG["err_noTopTen"] = "Henüz popüler soru bulunmuyor.";
 $PMF_LANG["err_nothingFound"] = "Kayıt bulunamadı.";
-$PMF_LANG["err_SaveEntries"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>soru</strong>, <strong>cevap</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
-$PMF_LANG["err_SaveComment"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>yorumunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_SaveEntries"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, kategori, soru, cevap ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
+$PMF_LANG["err_SaveComment"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, yorumunuz ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
 $PMF_LANG["err_VoteTooMuch"] = "Çoklu oylar sayılmamaktadır.";
 $PMF_LANG["err_noVote"] = "Soru oylanamadı!";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz geçersiz.";
-$PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, sorunuz ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Arama ipuçları:</strong><br>Şunun gibi kelimeler <strong style=\"color: Red;\">kelime1 kelime2</strong> you can do a relevance descending search for two or more search criterion.<strong>Önemli:</strong> aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
+$PMF_LANG["help_search"] = "Arama ipuçları:<br>Şunun gibi kelimeler kelime1 kelime2 you can do a relevance descending search for two or more search criterion.Önemli: aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
 
 // Menu
 $PMF_LANG["ad"] = "Yönetim";
@@ -159,10 +157,10 @@ $PMF_LANG["ad_menu_startpage"] = "Giriş sayfası";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "Lütfen kendinizi tanıtın.";
-$PMF_LANG["ad_msg_passmatch"] = "Girilen parolalar <strong>aynı</strong> olmalıdır!";
+$PMF_LANG["ad_msg_passmatch"] = "Girilen parolalar aynı olmalıdır!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "Profil sahibi";
 $PMF_LANG["ad_msg_savedsuc_2"] = "için yapılan değişiklikler kaydedildi.";
-$PMF_LANG["ad_msg_mysqlerr"] = "Oluşan bir <strong>database</strong> hatası sebebiyle değişiklikler kaydedilemedi.";
+$PMF_LANG["ad_msg_mysqlerr"] = "Oluşan bir database hatası sebebiyle değişiklikler kaydedilemedi.";
 $PMF_LANG["ad_msg_noauth"] = "Yetkiniz bulunmuyor.";
 
 // Allgemein
@@ -203,13 +201,13 @@ $PMF_LANG["ad_entry_topic"] = "Konu";
 $PMF_LANG["ad_entry_action"] = "Eylem";
 $PMF_LANG["ad_entry_edit_1"] = "Düzenle";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Soru";
-$PMF_LANG["ad_entry_content"] = "Cevap";
-$PMF_LANG["ad_entry_keywords"] = "Anahtar sözcükler";
-$PMF_LANG["ad_entry_author"] = "Oluşturan";
-$PMF_LANG["ad_entry_category"] = "Kategori";
+$PMF_LANG["msgQuestion"] = "Soru";
+$PMF_LANG["msgAnswer"] = "Cevap";
+$PMF_LANG["msgKeywords"] = "Anahtar sözcükler";
+$PMF_LANG["msgAuthor"] = "Oluşturan";
+$PMF_LANG["msgCategory"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Görünür";
-$PMF_LANG["ad_entry_date"] = "Tarih";
+$PMF_LANG["msgDate"] = "Tarih";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Değişiklik?";
 $PMF_LANG["ad_entry_changelog"] = "Değişiklik günlüğü";
@@ -219,16 +217,16 @@ $PMF_LANG["ad_entry_save"] = "kaydet";
 $PMF_LANG["msgDelete"] = "Sil";
 $PMF_LANG["ad_entry_delcom_1"] = "Şu kullanıcıya ait yorum silinecek";
 $PMF_LANG["ad_entry_delcom_2"] = "onaylıyor musunuz??";
-$PMF_LANG["ad_entry_commentdelsuc"] = "Yorum <strong>başarıyla</strong> silindi.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "Yorum başarıyla silindi.";
 $PMF_LANG["ad_entry_back"] = "İçeriğe geri dön";
-$PMF_LANG["ad_entry_commentdelfail"] = "Yorum <strong>başarıyla</strong> silinemedi.";
-$PMF_LANG["ad_entry_savedsuc"] = "Değişiklikler <strong>başarıyla</strong> kaydedildi.";
-$PMF_LANG["ad_entry_savedfail"] = "Maalesef, bir <strong>database</strong> hatası oluştu.";
+$PMF_LANG["ad_entry_commentdelfail"] = "Yorum başarıyla silinemedi.";
+$PMF_LANG["ad_entry_savedsuc"] = "Değişiklikler başarıyla kaydedildi.";
+$PMF_LANG["ad_entry_savedfail"] = "Maalesef, bir database hatası oluştu.";
 $PMF_LANG["ad_entry_del_1"] = "Are you sure that the topic";
 $PMF_LANG["ad_entry_del_2"] = "of";
 $PMF_LANG["ad_entry_del_3"] = "should be deleted?";
-$PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
-$PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
+$PMF_LANG["ad_entry_delsuc"] = "Issue successfully deleted.";
+$PMF_LANG["ad_entry_delfail"] = "Issue was not deleted!";
 $PMF_LANG["ad_entry_back"] = "Geri";
 
 
@@ -256,17 +254,16 @@ $PMF_LANG["ad_news_delsuc"] = "Duyuru öğesi başarıyla silindi.";
 $PMF_LANG["ad_news_updatenews"] = "Duyuru öğesi başarıyla güncellendi.";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "Yeni kategori ekle";
+$PMF_LANG["msgNewCategory"] = "Yeni kategori ekle";
 $PMF_LANG["ad_categ_catnum"] = "Kategori no";
 $PMF_LANG["ad_categ_subcatnum"] = "Alt kategori no";
-$PMF_LANG["ad_categ_nya"] = "<em>henüz geçerli değil!</em>";
-$PMF_LANG["ad_categ_titel"] = "Kategori başlığı";
+$PMF_LANG["ad_categ_nya"] = "henüz geçerli değil!";
+$PMF_LANG["categoryNameLabel"] = "Kategori başlığı";
 $PMF_LANG["ad_categ_add"] = "Kategori ekle";
 $PMF_LANG["ad_categ_existing"] = "Mevcut kategoriler";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Kategori";
 $PMF_LANG["ad_categ_subcateg"] = "Alt kategori";
-$PMF_LANG["ad_categ_titel"] = "Kategori başlığı";
 $PMF_LANG["ad_categ_action"] = "Eylem";
 $PMF_LANG["ad_categ_update"] = "güncelle";
 $PMF_LANG["ad_categ_delete"] = "sil";
@@ -283,7 +280,7 @@ $PMF_LANG["ad_categ_deletesure"] = "Bu kategoriyi silmek istediğinizden emin mi
 $PMF_LANG["ad_categ_deleted"] = "Kategori silindi.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc"] = "Çerez başarıyla <strong>ayarlandı.</strong>";
+$PMF_LANG["ad_cookie_cookiesuc"] = "Çerez başarıyla ayarlandı.";
 $PMF_LANG["ad_cookie_already"] = "Çerez daha önceden ayarlanmış. Yapabileceğiniz işlemler şunlar";
 $PMF_LANG["ad_cookie_again"] = "Çerezi yeniden ayarla";
 $PMF_LANG["ad_cookie_delete"] = "Çerez kaydını sil";
@@ -301,18 +298,18 @@ $PMF_LANG["ad_passwd_new"] = "Yeni şifre";
 $PMF_LANG["ad_passwd_con"] = "Yeni şifre tekrar";
 $PMF_LANG["ad_passwd_change"] = "Şifreyi değiştir";
 $PMF_LANG["ad_passwd_suc"] = "Şifre değiştirildi.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>DİKKAT:</strong><br>çerez yeniden ayarlanmalıdır!";
-$PMF_LANG["ad_passwd_fail"] = "Eski şifre <strong>doğru</strong> girilmeli ve yeni şifreler <strong>eşleşmelidir</strong>.";
+$PMF_LANG["ad_passwd_remark"] = "DİKKAT:<br>çerez yeniden ayarlanmalıdır!";
+$PMF_LANG["ad_passwd_fail"] = "Eski şifre doğru girilmeli ve yeni şifreler eşleşmelidir.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Yeni kullanıcı hesabı ekle";
 $PMF_LANG["ad_adus_name"] = "Kullanıcı adı";
 $PMF_LANG["ad_adus_password"] = "Şifre";
 $PMF_LANG["ad_adus_add"] = "Kullanıcı ekle";
-$PMF_LANG["ad_adus_suc"] = "Kullanıcı <strong>başarıyla</strong> eklendi.";
+$PMF_LANG["ad_adus_suc"] = "Kullanıcı başarıyla eklendi.";
 $PMF_LANG["ad_adus_edit"] = "Profili düzenle";
-$PMF_LANG["ad_adus_dberr"] = "<strong>veritabanı hatası!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "Girilen kullanıcı adı sistemde <strong>kayıtlıdır</strong>.";
+$PMF_LANG["ad_adus_dberr"] = "veritabanı hatası!";
+$PMF_LANG["ad_adus_exerr"] = "Girilen kullanıcı adı sistemde kayıtlıdır.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -365,14 +362,14 @@ $PMF_LANG["ad_config_saved"] = "Yapılandırma seçenekleri başarıyla kaydedil
 $PMF_LANG["ad_menu_editconfig"] = "Yapılandırmayı düzenle";
 $PMF_LANG["ad_att_none"] = "Eklenti mevcut değil";
 $PMF_LANG["ad_att_att"] = "Eklentiler";
-$PMF_LANG["ad_att_add"] = "Yeni eklenti ekle";
+$PMF_LANG["msgAddAttachment"] = "Yeni eklenti ekle";
 $PMF_LANG["ad_entryins_suc"] = "Kayıt başarıyla eklendi.";
-$PMF_LANG["ad_entryins_fail"] = "Bir hata oluştu.";
+$PMF_LANG["msgErrorOccurred"] = "Bir hata oluştu.";
 $PMF_LANG["ad_att_del"] = "Sil";
 $PMF_LANG["ad_att_nope"] = "Eklentiler yalnızca düzenleme sırasında eklenebilir.";
 $PMF_LANG["ad_att_delsuc"] = "Seçilen eklenti başarıyla silindi.";
 $PMF_LANG["ad_att_delfail"] = "Eklenti silinirken bir hata oluştu.";
-$PMF_LANG["ad_entry_add"] = "Yeni soru ekle";
+$PMF_LANG["msgAddFAQ"] = "Yeni soru ekle";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "Yedekleme fonksiyonu ile, veritabanınızın tam bir kopyasını oluşturabilirsiniz. Oluşturulan yedek dosyasının formatı SQL olduğundan, phpMyAdmin ya da SQL komut satırı istemcisiyle geri yüklenebilir. Yedekleme işleminin ayda en az bir kez yapılması önerilir.";
@@ -447,7 +444,7 @@ $PMF_LANG["ad_log_bede"] = "Şu kayıt silindi: ";
 
 $PMF_LANG["msgVisits"] = "Ziyaret";
 $PMF_LANG["ad_start_articles"] = "İçerikler";
-$PMF_LANG["ad_start_comments"] = "Yorumlar";
+$PMF_LANG["msgComments"] = "Yorumlar";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -457,7 +454,7 @@ $PMF_LANG["msgCopy"] = "kopyala";
 $PMF_LANG["ad_categ_process"] = "Kategoriler işleniyor...";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>Yetkiniz bulunmuyor.</strong>";
+$PMF_LANG["msgNoPermission"] = "Yetkiniz bulunmuyor.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "Önceki sayfa";
@@ -470,7 +467,7 @@ $PMF_LANG["ad_passwdsuc"] = "Şifreniz değiştirildi.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "XML çıktısı oluştur";
-$PMF_LANG["ad_entry_locale"] = "Dil";
+$PMF_LANG["msgLanguage"] = "Dil";
 $PMF_LANG["msgLanguageSubmit"] = "Dil değiştir";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -512,7 +509,7 @@ $PMF_LANG["msgRealname"] = "Gerçek adınız";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF oluştur";
 $PMF_LANG["ad_export_full_faq"] = "soruların PDf çıktısı: ";
 $PMF_LANG["err_bannedIP"] = "IP adresiniz yasaklandı.";
-$PMF_LANG["err_SaveQuestion"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
+$PMF_LANG["err_SaveQuestion"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, sorunuz ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Language");
@@ -535,15 +532,14 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "Number of news 
 $LANG_CONF['security.bannedIPs'] = array("area", "Ban these IPs");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "Enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array("input", "URL of your FAQ (e.g.: https://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array("input", "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array("checkbox", "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array("select", "Permission level");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "ana kategori olarak";
+$PMF_LANG["msgNewCategory_main_cat"] = "ana kategori olarak";
 $PMF_LANG["ad_categ_paste_error"] = "Bu kategori taşınamaz.";
 $PMF_LANG["ad_categ_move"] = "Kategori taşı";
 $PMF_LANG["ad_categ_lang"] = "Dil";
-$PMF_LANG["ad_categ_desc"] = "Açıklama";
+$PMF_LANG["categoryDescriptionLabel"] = "Açıklama";
 $PMF_LANG["ad_categ_change"] = "Şununla değiştir";
 
 $PMF_LANG["lostPassword"] = "Şifrenizi mi unuttunuz?";
@@ -572,7 +568,7 @@ $PMF_LANG['ad_entry_faq_record'] = "Soru kaydı";
 $PMF_LANG['ad_entry_new_revision'] = "Yeni sürüm oluştur?";
 $PMF_LANG['ad_entry_record_administration'] = "Kayıt yönetimi";
 $PMF_LANG['ad_entry_changelog'] = "Değişiklik günlüğü";
-$PMF_LANG['ad_entry_revision'] = "Sürüm";
+$PMF_LANG['msgRevision'] = "Sürüm";
 $PMF_LANG['ad_changerev'] = "Sürüm seç";
 $PMF_LANG['msgCaptcha'] = "Lütfen güvenlik kodunu girin";
 $PMF_LANG['msgSelectCategories'] = "Şurada ara...";
@@ -634,7 +630,7 @@ $PMF_LANG['ad_group_add_link'] = "Grup Ekle";
 $PMF_LANG['ad_group_name'] = "Grup adı";
 $PMF_LANG['ad_group_description'] = "Grup açıklaması";
 $PMF_LANG['ad_group_autoJoin'] = "Otomatik-katılım";
-$PMF_LANG['ad_group_suc'] = "Grup <strong>başarıyla</strong> eklendi.";
+$PMF_LANG['ad_group_suc'] = "Grup başarıyla eklendi.";
 $PMF_LANG['ad_group_error_noName'] = "Lütfen grup adı girin. ";
 $PMF_LANG['ad_group_error_delete'] = "Grup silinemedi. ";
 $PMF_LANG['ad_group_deleted'] = "Grup başarıyla silindi";
@@ -684,13 +680,13 @@ $PMF_LANG['admin_mainmenu_configuration'] = "Yapılandırma";
 $PMF_LANG['admin_mainmenu_logout'] = "Çıkış";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Kategori sahibi";
+$PMF_LANG["categoryOwnerLabel"] = "Kategori sahibi";
 $PMF_LANG['adminSection'] = "Yönetim";
 $PMF_LANG['err_expiredArticle'] = "Bu girdinin geçerlilik tarihi sona erdi ve görüntülenemez";
 $PMF_LANG['err_expiredNews'] = "Bu duyurunun geçerlilik tarihi sona erdi ve görüntülenemez";
 $PMF_LANG['err_inactiveNews'] = "Bu duyuru taslak halinde olduğundan görüntülenemez";
 $PMF_LANG['msgSearchOnAllLanguages'] = "tüm dillerde ara";
-$PMF_LANG['ad_entry_tags'] = "Etiketler";
+$PMF_LANG['msgTags'] = "Etiketler";
 $PMF_LANG['msg_tags'] = "Etiketler";
 
 // added v2.0.0 - 2006-09-02 by Thomas
@@ -713,13 +709,13 @@ $PMF_LANG['ad_menu_categ_structure'] = "Kategori özeti ilgili dilleri de kapsar
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = "Kullanıcı izinleri";
-$PMF_LANG['ad_entry_grouppermission'] = "Grup izinleri";
-$PMF_LANG['ad_entry_all_users'] = "Tüm kullanıcılara izin ver";
+$PMF_LANG['msgGroupPermissions'] = "Grup izinleri";
+$PMF_LANG['msgAccessAllUsers'] = "Tüm kullanıcılara izin ver";
 $PMF_LANG['ad_entry_restricted_users'] = "Şu kullanıcıyla sınırlandır";
-$PMF_LANG['ad_entry_all_groups'] = "Tüm gruplara izin ver";
+$PMF_LANG['msgAccessAllGroups'] = "Tüm gruplara izin ver";
 $PMF_LANG['ad_entry_restricted_groups'] = "Şu grupla sınırlandır";
 $PMF_LANG['ad_session_expiration'] = "Oturum sonlanma zamanı";
-$PMF_LANG['ad_user_active'] = "Etkin";
+$PMF_LANG['msgActive'] = "Etkin";
 $PMF_LANG['ad_user_blocked'] = "Yasaklı";
 $PMF_LANG['ad_user_protected'] = "Korumalı";
 
@@ -745,7 +741,7 @@ $PMF_LANG['ad_quick_group'] = "Yeni grup ekle";
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = "Çeviri öner";
-$PMF_LANG['msgNewTranslationAddon'] = "Çeviri öneriniz kaydedilecek, ancak yönetici onayından sonra yayınlanacaktır. doldurulması zorunlu alanlar: <strong>isim</strong>, <strong>e-mail adresi</strong>, <strong>soru çevirisi</strong> ve <strong>cevap çevirisi</strong>. lütfen anahtar kelimeleri virgülle ayırın.";
+$PMF_LANG['msgNewTranslationAddon'] = "Çeviri öneriniz kaydedilecek, ancak yönetici onayından sonra yayınlanacaktır. doldurulması zorunlu alanlar: isim, e-mail adresi, soru çevirisi ve cevap çevirisi. lütfen anahtar kelimeleri virgülle ayırın.";
 $PMF_LANG['msgNewTransSourcePane'] = "Kaynak";
 $PMF_LANG['msgNewTranslationPane'] = "Çeviri";
 $PMF_LANG['msgNewTranslationName'] = "Adınız";
@@ -813,7 +809,7 @@ $PMF_LANG['msgMostPopularSearches'] = "En çok aranan içerikler";
 $LANG_CONF['main.enableWysiwygEditor'] = array("checkbox", "Enable bundled WYSIWYG editor");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
-$PMF_LANG['ad_menu_searchstats'] = "Arama İstatistikleri";
+$PMF_LANG['msgAdminElasticsearchStats'] = "Arama İstatistikleri";
 $PMF_LANG['ad_searchstats_search_term'] = "Sözcük";
 $PMF_LANG['ad_searchstats_search_term_count'] = "Aranma";
 $PMF_LANG['ad_searchstats_search_term_lang'] = "Dil";
@@ -821,7 +817,7 @@ $PMF_LANG['ad_searchstats_search_term_percentage'] = "Yüzde";
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG['ad_record_sticky'] = "Sabitlenmiş";
-$PMF_LANG['ad_entry_sticky'] = "Sabitlenmiş";
+$PMF_LANG['msgStickyFAQ'] = "Sabitlenmiş";
 $PMF_LANG['stickyRecordsHeader'] = "Sabitlenmiş içerikler";
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
@@ -913,7 +909,7 @@ $LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable att
 $LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
-$PMF_LANG['ad_menu_upgrade'] = "phpMyFAQ Yükselt";
+$PMF_LANG['msgAdminHeaderUpdate'] = "phpMyFAQ Yükselt";
 $PMF_LANG['ad_you_shouldnt_update'] = "Şu an phpMyFAQ yazılımının son sürümünü kullanıyorsunuz. Yükseltme işlemi gerekli değil.";
 $LANG_CONF['security.useSslForLogins'] = array('checkbox', "Only allow logins over SSL connection?");
 $PMF_LANG['msgSecureSwitch'] = "Giriş yapabilmek için güvenli moda geçin!";
@@ -944,7 +940,7 @@ $PMF_LANG['msgShowHelp'] = "Lütfen kelimeleri virgülle ayırın";
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = "güncelle";
 $PMF_LANG['msgKeepFaqDate'] = "sakla";
-$PMF_LANG['msgEditFaqDat'] = "düzenle";
+$PMF_LANG['msgEditFaqDate'] = "düzenle";
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array('select', 'Sort by relevance');
@@ -961,13 +957,13 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = "Anahtar sözcük - Soru 
 $PMF_LANG['msgLoginUser'] = "Giriş";
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
-$PMF_LANG["ad_menu_attachments"] = "Eklentiler";
+$PMF_LANG["msgAttachments"] = "Eklentiler";
 $PMF_LANG["ad_menu_attachment_admin"] = "Dosya Eklenti yönetimi";
 $PMF_LANG['msgAttachmentsFilename'] = "Dosya adı";
 $PMF_LANG['msgAttachmentsFilesize'] = "Boyut";
 $PMF_LANG['msgAttachmentsMimeType'] = "Tür";
 $PMF_LANG['msgAttachmentsWannaDelete'] = "Bu eklentiyi silmek istediğinizden emin misiniz??";
-$PMF_LANG['msgAttachmentsDeleted'] = "Eklenti <strong>başarıyla</strong> silindi.";
+$PMF_LANG['msgAttachmentsDeleted'] = "Eklenti başarıyla silindi.";
 
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = "Raporlar";
@@ -1095,7 +1091,7 @@ $LANG_CONF["search.searchForSolutionId"] = array("checkbox", "Search for solutio
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Etiket başarıyla silindi.";
 $PMF_LANG["ad_tag_delete_error"] = "Etiket silinirken bir hata oluştu.";
-$PMF_LANG["seoCenter"] = "SEO";
+$PMF_LANG["msgSeoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = array("select", "Meta Tags start page");
 $LANG_CONF["seo.metaTagsFaqs"] = array("select", "Meta Tags FAQs");
 $LANG_CONF["seo.metaTagsCategories"] = array("select", "Meta Tags category pages");
@@ -1119,7 +1115,7 @@ $LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allo
 $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests');
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Dikkat! girdiğiniz şifre kullanıcı şifresinin üzerine yazılacaktır.";
 $PMF_LANG["ad_delete_all_votings"] = "Tüm oylamaları temizle";
-$PMF_LANG["ad_categ_moderator"] = "Moderatörler";
+$PMF_LANG["categoryModeratorLabel"] = "Moderatörler";
 $PMF_LANG['ad_clear_all_visits'] = "Tüm ziyaretleri temizle";
 $PMF_LANG['ad_reset_visits_success'] = "Ziyaretçi kayıtları başarıyla sıfırlandı.";
 $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Markdown editor');
@@ -1131,12 +1127,12 @@ $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answer
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support');
-$PMF_LANG['ad_menu_elasticsearch'] = "Elasticsearch yapılandırması";
-$PMF_LANG['ad_es_create_index'] = "Index oluştur";
-$PMF_LANG['ad_es_drop_index'] = "Index kaldır";
-$PMF_LANG['ad_es_bulk_index'] = "Tam içe aktarma";
-$PMF_LANG['ad_es_create_index_success'] = "Index başarıyla oluşturuldu.";
-$PMF_LANG['ad_es_drop_index_success'] = "Index başarıyla kaldırıldı.";
+$PMF_LANG['msgAdminHeaderElasticsearch'] = "Elasticsearch yapılandırması";
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = "Index oluştur";
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = "Index kaldır";
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = "Tam içe aktarma";
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = "Index başarıyla oluşturuldu.";
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = "Index başarıyla kaldırıldı.";
 $PMF_LANG['ad_export_generate_json'] = "JSON dosyası oluştur";
 $PMF_LANG['ad_media_name_search'] = "Görsel adıyla ara";
 
@@ -1159,8 +1155,8 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymou
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding');
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array('input', 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap');
-$PMF_LANG['ad_category_image'] = "Kategori görseli";
-$PMF_LANG["ad_user_show_home"] = "başlangıç sayfasında göster";
+$PMF_LANG['categoryImageLabel'] = "Kategori görseli";
+$PMF_LANG["categoryShowHomeLabel"] = "başlangıç sayfasında göster";
 
 // added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
 $PMF_LANG['ad_view_faq'] = "Görüntüle";
@@ -1204,7 +1200,7 @@ $PMF_LANG['ad_section_deleteSection'] = "Bölüm sil";
 $PMF_LANG['ad_section_deleteQuestion'] = "Bu bölümü silmek istediğinizden emin misiniz?";
 $PMF_LANG['ad_section_error_delete'] = "Bölüm silinemedi.";
 $PMF_LANG['ad_section_error_noName'] = "Lütfen bir bölüm adı girin.";
-$PMF_LANG['ad_section_suc'] = "Bölüm <strong>başarıyla</strong> eklendi.";
+$PMF_LANG['ad_section_suc'] = "Bölüm başarıyla eklendi.";
 $PMF_LANG['ad_section_deleted'] = "Bölüm başarıyla silindi.";
 $PMF_LANG['permission::viewadminlink'] = "Yönetici bağlantısını görüntüle";
 

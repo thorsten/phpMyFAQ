@@ -1,164 +1,168 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-wrench bi-fw"></i> {{ ad_menu_instances }}
-  </h1>
-  {% if multisiteFolderIsWritable == true and userPermInstanceAdd == true %}
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
-          <i aria-hidden="true" class="bi bi-plus"></i> {{ ad_instance_add }}
-        </a>
-      </div>
-    </div>
-  {% endif %}
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="row">
-  <div class="col-lg-12">
-    {% if multisiteFolderIsWritable == false %}
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-wrench bi-fw"></i> {{ ad_menu_instances }}
+    </h1>
+    {% if multisiteFolderIsWritable == true and userPermInstanceAdd == true %}
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <a class="btn btn-outline-success" data-bs-toggle="modal" href="#pmf-modal-add-instance">
+            <i aria-hidden="true" class="bi bi-plus"></i> {{ ad_instance_add }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      {% if multisiteFolderIsWritable == false %}
+        <div class="alert alert-danger alert-dismissible fade show mt-2">
+          <h4 class="alert-heading">{{ ad_instance_error_notwritable }}</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+      {% if updateError %}
       <div class="alert alert-danger alert-dismissible fade show mt-2">
-        <h4 class="alert-heading">{{ ad_instance_error_notwritable }}</h4>
+        {{ updateError }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
-    {% endif %}
-    {% if updateError %}
-    <div class="alert alert-danger alert-dismissible fade show mt-2">
-      {{ updateError }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    {% if updateSuccess %}
-    <div class="alert alert-success alert-dismissible fade show mt-2">
-      {{ updateSuccess }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endif %}
-    <table class="table border shadow">
-      <thead>
-      <tr>
-        <th>#</th>
-        <th>{{ ad_instance_url }}</th>
-        <th>{{ ad_instance_path }}</th>
-        <th colspan="3">{{ ad_instance_name }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for site in allInstances %}
-        <tr id="row-instance-{{ site.id }}">
-          <td>{{ site.id }}</td>
-          <td>
-            <a target="_blank" href="{{ site.url|escape('html') }}{{ site.instance|escape('html') }}">
-              {{ site.url|escape('html') }}
-            </a>
-          </td>
-          <td>{{ site.instance|escape('html') }}</td>
-          <td>{{ site.comment|escape('html') }}</td>
-          <td>
-            <a href="?action=edit-instance&instance_id={{ site.id }}" class="btn btn-info">
-              <i aria-hidden="true" class="bi bi-pencil"></i>
-            </a>
-          </td>
-          <td>
-            {% for key, config in mainConfig %}
-              {% if key == site.id %}
-                {% if config == false %}
-                  <button data-delete-instance-id="{{ site.id }}" type="button"
-                          class="btn btn-danger pmf-instance-delete"
-                          data-csrf-token="{{ csrfTokenDeleteInstance }}">
-                    <i aria-hidden="true" class="bi bi-trash" data-delete-instance-id="{{ site.id }}"
-                       data-csrf-token="{{ csrfTokenDeleteInstance }}"></i>
-                  </button>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-          </td>
+      {% endif %}
+      {% if updateSuccess %}
+      <div class="alert alert-success alert-dismissible fade show mt-2">
+        {{ updateSuccess }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+      <table class="table border shadow">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ ad_instance_url }}</th>
+          <th>{{ ad_instance_path }}</th>
+          <th colspan="3">{{ ad_instance_name }}</th>
         </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {% for site in allInstances %}
+          <tr id="row-instance-{{ site.id }}">
+            <td>{{ site.id }}</td>
+            <td>
+              <a target="_blank" href="{{ site.url|escape('html') }}{{ site.instance|escape('html') }}">
+                {{ site.url|escape('html') }}
+              </a>
+            </td>
+            <td>{{ site.instance|escape('html') }}</td>
+            <td>{{ site.comment|escape('html') }}</td>
+            <td>
+              <a href="instance/edit/{{ site.id }}" class="btn btn-info">
+                <i aria-hidden="true" class="bi bi-pencil"></i>
+              </a>
+            </td>
+            <td>
+              {% for key, config in mainConfig %}
+                {% if key == site.id %}
+                  {% if config == false %}
+                    <button data-delete-instance-id="{{ site.id }}" type="button"
+                            class="btn btn-danger pmf-instance-delete"
+                            data-csrf-token="{{ csrfTokenDeleteInstance }}">
+                      <i aria-hidden="true" class="bi bi-trash" data-delete-instance-id="{{ site.id }}"
+                         data-csrf-token="{{ csrfTokenDeleteInstance }}"></i>
+                    </button>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
 
-    <div class="modal fade" id="pmf-modal-add-instance">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4>{{ ad_instance_add }}</h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
-              <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenAddInstance }}">
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="url">
-                  {{ ad_instance_url }}:
-                </label>
-                <div class="col-lg-8">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">https://</div>
-                    </div>
-                    <input class="form-control mb-2" type="text" name="url" id="url" required>
-                    <div class="input-group-append">
-                      <div class="input-group-text">.{{ requestHost }}</div>
+      <div class="modal fade" id="pmf-modal-add-instance">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>{{ ad_instance_add }}</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
+                <input type="hidden" id="pmf-csrf-token" name="pmf-csrf-token" value="{{ csrfTokenAddInstance }}">
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="url">
+                    {{ ad_instance_url }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">https://</div>
+                      </div>
+                      <input class="form-control mb-2" type="text" name="url" id="url" required>
+                      <div class="input-group-append">
+                        <div class="input-group-text">.{{ requestHost }}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="instance">
-                  {{ ad_instance_path }}:
-                </label>
-                <div class="col-lg-8">
-                  <input class="form-control mb-2" type="text" name="instance" id="instance" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="comment">
-                  {{ ad_instance_name }}:
-                </label>
-                <div class="col-lg-8">
-                  <input class="form-control mb-2" type="text" name="comment" id="comment" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="email">
-                  {{ ad_instance_email }}:
-                </label>
-                <div class="col-lg-8">
-                  <input class="form-control mb-2" type="email" name="email" id="email" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="admin">
-                  {{ ad_instance_admin }}:
-                </label>
-                <div class="col-lg-8">
-                  <input class="form-control mb-2" type="text" name="admin" id="admin" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-form-label col-lg-4" for="password">
-                  {{ ad_instance_password }}:
-                </label>
-                <div class="col-lg-8">
-                  <div class="input-group mb-2">
-                    <input class="form-control" type="password" autocomplete="off" name="password" id="password"
-                           data-pmf-toggle="instances_password_toggle" required>
-                    <span class="input-group-text" id="instances_password_toggle">
-                            <i class="bi bi-eye-slash" id="instances_password_toggle_icon"></i>
-                        </span>
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="instance">
+                    {{ ad_instance_path }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control mb-2" type="text" name="instance" id="instance" required>
                   </div>
                 </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <p class="text-sm-start">{{ ad_instance_hint }}</p>
-            <button class="btn btn-primary pmf-instance-add" type="submit">
-              {{ ad_instance_button }}
-            </button>
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="comment">
+                    {{ ad_instance_name }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control mb-2" type="text" name="comment" id="comment" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="email">
+                    {{ ad_instance_email }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control mb-2" type="email" name="email" id="email" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="admin">
+                    {{ ad_instance_admin }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control mb-2" type="text" name="admin" id="admin" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-form-label col-lg-4" for="password">
+                    {{ ad_instance_password }}:
+                  </label>
+                  <div class="col-lg-8">
+                    <div class="input-group mb-2">
+                      <input class="form-control" type="password" autocomplete="off" name="password" id="password"
+                             data-pmf-toggle="instances_password_toggle" required>
+                      <span class="input-group-text" id="instances_password_toggle">
+                              <i class="bi bi-eye-slash" id="instances_password_toggle_icon"></i>
+                          </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <p class="text-sm-start">{{ ad_instance_hint }}</p>
+              <button class="btn btn-primary pmf-instance-add" type="submit">
+                {{ ad_instance_button }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+{% endblock %}

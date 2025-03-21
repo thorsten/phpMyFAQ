@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
@@ -21,10 +21,7 @@ use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Rating;
-use phpMyFAQ\Session;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,10 +33,9 @@ class VotingController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        $rating = new Rating($this->configuration);
-        $session = new Session($this->configuration);
-        $session->setCurrentUser($user);
+        $rating = $this->container->get('phpmyfaq.rating');
+        $session = $this->container->get('phpmyfaq.user.session');
+        $session->setCurrentUser($this->currentUser);
 
         $data = json_decode($request->getContent());
 

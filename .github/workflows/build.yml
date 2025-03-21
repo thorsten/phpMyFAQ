@@ -50,7 +50,7 @@ jobs:
       - name: Setup Node.js with pnpm
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -75,5 +75,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run Jest tests
+      - name: Run Vitest tests
         run: pnpm test

@@ -3,13 +3,9 @@
 namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
-use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Filesystem;
-use phpMyFAQ\Strings;
+use phpMyFAQ\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
-use RecursiveIteratorIterator;
 
 /**
  * Class ClientTest

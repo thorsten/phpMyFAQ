@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Harms <model_railroader@gmx-topmail.de>
- * @copyright 2002-2024 phpMyFAQ Team
+ * @copyright 2002-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-20
@@ -41,8 +41,8 @@ if ($user->isLoggedIn()) {
         ... $templateVars,
         'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
         'bookmarksList' => $bookmark->getBookmarkList(),
-        'csrfTokenDeleteBookmark' => Token::getInstance()->getTokenString('delete-bookmark'),
-        'csrfTokenDeleteAllBookmarks' => Token::getInstance()->getTokenString('delete-all-bookmarks')
+        'csrfTokenDeleteBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
+        'csrfTokenDeleteAllBookmarks' => Token::getInstance($container->get('session'))->getTokenString('delete-all-bookmarks')
     ];
 
     return $templateVars;

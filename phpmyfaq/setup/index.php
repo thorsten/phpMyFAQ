@@ -15,7 +15,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2002-2024 phpMyFAQ Team
+ * @copyright 2002-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-20
@@ -52,7 +52,7 @@ if (!defined('DEBUG')) {
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL | E_STRICT);
+    error_reporting(E_ALL);
 }
 
 session_name('phpmyfaq-setup');

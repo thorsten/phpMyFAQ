@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ\Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2019-2024 phpMyFAQ Team
+ * @copyright 2019-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2019-12-30
@@ -18,8 +18,6 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Attachment\AbstractAttachment;
-use phpMyFAQ\Strings;
-use phpMyFAQ\Translation;
 
 /**
  * Class AttachmentHelper
@@ -28,29 +26,23 @@ use phpMyFAQ\Translation;
 class AttachmentHelper
 {
     /**
-     * Returns an HTML list of attached files.
+     * Returns a list of attached files.
      *
      * @param AbstractAttachment[] $attachmentList
-     * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
-    public function renderAttachmentList(array $attachmentList): string
+    public function getAttachmentList(array $attachmentList): array
     {
         if ($attachmentList === []) {
-            return '';
+            return [];
         }
 
-        $html = sprintf('<p>%s:</p><ul>', Translation::get('msgAttachedFiles'));
-
-        foreach ($attachmentList as $attachment) {
-            $html .= sprintf(
-                '<li><i class="bi bi-%s" aria-hidden="true"></i> <a href="%s">%s</a></li>',
-                $this->mapMimeTypeToIcon($attachment->getMimeType()),
-                $attachment->buildUrl(),
-                Strings::htmlentities($attachment->getFilename())
-            );
-        }
-
-        return $html . '</ul>';
+        return array_map(function ($attachment) {
+            return [
+                'icon' => $this->mapMimeTypeToIcon($attachment->getMimeType()),
+                'url' => $attachment->buildUrl(),
+                'filename' => $attachment->getFilename(),
+            ];
+        }, $attachmentList);
     }
 
     private function mapMimeTypeToIcon(string $mimeType): string

@@ -2,13 +2,19 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class FormsTest extends TestCase
 {
     private Forms $forms;
 
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,7 +28,7 @@ class FormsTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
-        $language = new Language($configuration);
+        $language = new Language($configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
         $configuration->setLanguage($language);
 
@@ -106,7 +112,7 @@ class FormsTest extends TestCase
     public function testGetTranslations(): void
     {
         $result = $this->forms->getTranslations(1, 1);
-        $this->assertEquals('Add question', $result[0]->input_label);
+        $this->assertEquals('Question', $result[0]->input_label);
         $this->assertEquals('default', $result[0]->input_lang);
     }
 

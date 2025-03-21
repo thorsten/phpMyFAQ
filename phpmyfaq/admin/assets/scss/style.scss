@@ -7,22 +7,25 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022-2024 phpMyFAQ Team
+ * @copyright 2022-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-01-25
  */
 
 // Import Variables
-@import 'variables.scss';
+@import './variables.scss';
 @import './variables/spacing.scss';
 @import './variables/navigation.scss';
 
 // Import Bootstrap
-@import '~bootstrap/scss/bootstrap.scss';
+@import '../../../../node_modules/bootstrap/scss/bootstrap.scss';
 
 // Bootstrap Icons
-@import '~bootstrap-icons/font/bootstrap-icons.css';
+@import '../../../../node_modules/bootstrap-icons/font/bootstrap-icons';
+
+// Highlight.js
+@import '../../../../node_modules/highlight.js/styles/github-dark.css';
 
 // Import Mixins
 @import 'mixins.scss';

@@ -1,11 +1,14 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
   <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-folder"></i> {{ ad_categ_new }}
+    <i aria-hidden="true" class="bi bi-folder"></i> {{ 'msgNewCategory' | translate }}
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <a class="btn btn-sm btn-info" href="?action=showcategory">
-        <i aria-hidden="true" class="bi bi-list"></i> {{ msgCategoryMatrix }}
+      <a class="btn btn-info" href="./category">
+        <i aria-hidden="true" class="bi bi-list"></i> {{ 'msgCategoryMatrix' | translate }}
       </a>
     </div>
   </div>
@@ -13,7 +16,7 @@
 
 <div class="row mb-2">
   <div class="col-lg-12">
-    <form enctype="multipart/form-data" action="?action=savecategory" method="post">
+    <form enctype="multipart/form-data" action="./category/create" method="post">
       <input type="hidden" id="lang" name="lang" value="{{ faqLangCode }}">
       <input type="hidden" name="parent_id" value="{{ parentId }}">
       {{ csrfTokenInput|raw }}
@@ -31,7 +34,7 @@
       {% endif %}
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="name">
-          {{ ad_categ_title }}
+          {{ 'categoryNameLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <input type="text" id="name" name="name" class="form-control" required>
@@ -40,7 +43,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="description">
-          {{ ad_categ_desc }}
+          {{ 'categoryDescriptionLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <textarea id="description" name="description" rows="3" class="form-control"></textarea>
@@ -52,7 +55,7 @@
           <div class="form-check">
             <input type="checkbox" name="active" id="active" value="1" class="form-check-input" checked>
             <label class="form-check-label" for="active">
-              {{ ad_user_active }}
+              {{ 'msgActive' | translate }}
             </label>
           </div>
         </div>
@@ -63,7 +66,7 @@
           <div class="form-check">
             <input type="checkbox" name="show_home" id="show_home" value="1" class="form-check-input">
             <label class="form-check-label" for="show_home">
-              {{ ad_user_show_home }}
+              {{ 'categoryShowHomeLabel' | translate }}
             </label>
           </div>
         </div>
@@ -71,7 +74,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-          {{ ad_category_image }}:
+          {{ categoryShowHomeLabel }}:
         </label>
         <div class="col-lg-4">
           <input class="form-control" type="file" name="image" id="pmf-category-image-upload">
@@ -80,7 +83,7 @@
 
       <div class="row mb-2">
         <label class="col-lg-2 col-form-label" for="user_id">
-          {{ ad_categ_owner }}
+          {{ 'categoryOwnerLabel' | translate }}
         </label>
         <div class="col-lg-4">
           <select name="user_id" id="user_id" class="form-select">
@@ -91,7 +94,8 @@
       {% if permLevel != 'basic' %}
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="group_id">
-            {{ ad_categ_moderator }}</label>
+            {{ 'categoryModeratorLabel' | translate }}
+          </label>
           <div class="col-lg-4">
             <select name="group_id" id="group_id" class="form-select">
               {{ groupsOptions|raw }}
@@ -105,14 +109,14 @@
         {% if permLevel != 'basic' %}
           <div class="row mb-2">
             <label class="col-lg-2 col-form-label" for="restricted_groups">
-              {{ ad_entry_grouppermission }}
+              {{ 'msgGroupPermissions' | translate }}
             </label>
             <div class="col-lg-4">
               <div class="form-check">
                 <input type="radio" name="grouppermission" id="grouppermission_all" value="all"
                        class="form-check-input" checked>
                 <label class="form-check-label" for="grouppermission_all">
-                  {{ ad_entry_all_groups }}
+                  {{ 'msgAccessAllGroups' | translate }}
                 </label>
               </div>
               <div class="form-check">
@@ -140,7 +144,7 @@
               <input type="radio" name="userpermission" id="userpermission_all" value="all"
                      class="form-check-input" checked>
               <label class="form-check-label" for="userpermission_all">
-                {{ ad_entry_all_users }}
+                {{ 'msgAccessAllUsers' | translate }}
               </label>
             </div>
             <div class="form-check">
@@ -158,7 +162,7 @@
 
       <!-- SERP Title -->
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="serpTitle">{{ msgSerpTitle }}</label>
+        <label class="col-lg-2 col-form-label" for="serpTitle">{{ 'msgSerpTitle' | translate }}</label>
         <div class="col-lg-4">
           <input type="text" name="serpTitle" id="serpTitle" value="" class="form-control">
         </div>
@@ -166,7 +170,9 @@
 
       <!-- SERP Description -->
       <div class="row mb-2">
-        <label class="col-lg-2 col-form-label" for="serpDescription">{{ msgSerpDescription }}</label>
+        <label class="col-lg-2 col-form-label" for="serpDescription">
+          {{ 'msgSerpDescription' | translate }}
+        </label>
         <div class="col-lg-4">
                 <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
                 ></textarea>
@@ -183,4 +189,4 @@
     </form>
   </div>
 </div>
-
+{% endblock %}

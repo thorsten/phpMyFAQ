@@ -11,9 +11,10 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
+ * @since     2005-12-13
  */
 
 namespace phpMyFAQ\Database;
@@ -22,7 +23,6 @@ use mysqli_result;
 use mysqli_sql_exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Utils;
 use SensitiveParameter;
 
 /**
@@ -270,7 +270,8 @@ class Mysqli implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $columnId    The name of the ID column
+     * @param string $columnId The name of the ID column
+     * @throws Exception
      */
     public function nextId(string $table, string $columnId): int
     {
@@ -299,7 +300,7 @@ class Mysqli implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

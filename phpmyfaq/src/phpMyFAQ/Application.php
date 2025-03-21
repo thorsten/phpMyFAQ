@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-24
@@ -19,7 +19,9 @@ namespace phpMyFAQ;
 
 use ErrorException;
 use phpMyFAQ\Core\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -30,9 +32,12 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
-readonly class Application
+class Application
 {
-    public function __construct(private ?Configuration $configuration = null)
+    private UrlMatcher $urlMatcher;
+    private ControllerResolver $controllerResolver;
+
+    public function __construct(private readonly ?ContainerInterface $container = null)
     {
     }
 
@@ -44,21 +49,38 @@ readonly class Application
         $currentLanguage = $this->setLanguage();
         $this->initializeTranslation($currentLanguage);
         Strings::init($currentLanguage);
-        $this->handleRequest($routeCollection);
+        $request = Request::createFromGlobals();
+        $requestContext = new RequestContext();
+        $requestContext->fromRequest($request);
+        $this->handleRequest($routeCollection, $request, $requestContext);
+    }
+
+    public function setUrlMatcher($urlMatcher): void
+    {
+        $this->urlMatcher = $urlMatcher;
+    }
+
+    public function setControllerResolver(ControllerResolver $controllerResolver): void
+    {
+        $this->controllerResolver = $controllerResolver;
     }
 
     private function setLanguage(): string
     {
-        if ($this->configuration) {
-            $language = new Language($this->configuration);
-            $currentLanguage = $language->setLanguageByAcceptLanguage();
+        if (!is_null($this->container)) {
+            $configuration = $this->container->get('phpmyfaq.configuration');
+            $language = $this->container->get('phpmyfaq.language');
+            $currentLanguage = $language->setLanguage(
+                $configuration->get('main.languageDetection'),
+                $configuration->get('main.language')
+            );
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
             if (Language::isASupportedLanguage($currentLanguage)) {
                 require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, strtolower($currentLanguage));
             }
 
-            $this->configuration->setLanguage($language);
+            $configuration->setLanguage($language);
 
             return $currentLanguage;
         }
@@ -82,27 +104,42 @@ readonly class Application
         }
     }
 
-    private function handleRequest(RouteCollection $routeCollection): void
+    private function handleRequest(RouteCollection $routeCollection, Request $request, RequestContext $context): void
     {
-        $request = Request::createFromGlobals();
-        $requestContext = new RequestContext();
-        $requestContext->fromRequest($request);
-
-        $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
+        $urlMatcher = new UrlMatcher($routeCollection, $context);
+        $this->setUrlMatcher($urlMatcher);
         $controllerResolver = new ControllerResolver();
+        $this->setControllerResolver($controllerResolver);
         $argumentResolver = new ArgumentResolver();
         $response = new Response();
 
         try {
-            $request->attributes->add($urlMatcher->match($request->getPathInfo()));
-            $controller = $controllerResolver->getController($request);
+            $this->urlMatcher->setContext($context);
+            $request->attributes->add($this->urlMatcher->match($request->getPathInfo()));
+            $controller = $this->controllerResolver->getController($request);
             $arguments = $argumentResolver->getArguments($request, $controller);
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
-        } catch (ResourceNotFoundException) {
-            $response = new Response('Not Found', Response::HTTP_NOT_FOUND);
+        } catch (ResourceNotFoundException $exception) {
+            $response = new Response(
+                sprintf(
+                    'Not Found: %s at line %d at %s',
+                    $exception->getMessage(),
+                    $exception->getLine(),
+                    $exception->getFile()
+                ),
+                Response::HTTP_NOT_FOUND
+            );
         } catch (UnauthorizedHttpException) {
-            $response = new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
+            if (str_contains($urlMatcher->getContext()->getBaseUrl(), '/api')) {
+                $response = new Response(
+                    json_encode(['error' => 'Unauthorized access']),
+                    Response::HTTP_UNAUTHORIZED,
+                    ['Content-Type' => 'application/json']
+                );
+            } else {
+                $response = new RedirectResponse('/login');
+            }
         } catch (BadRequestException $exception) {
             $response = new Response(
                 sprintf(

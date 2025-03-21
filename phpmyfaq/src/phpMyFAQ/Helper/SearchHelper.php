@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ\Helper
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2024 phpMyFAQ Team
+ * @copyright 2009-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-07
@@ -106,7 +106,7 @@ class SearchHelper extends AbstractHelper
                 $link = new Link($currentUrl, $this->configuration);
                 $link->itemTitle = $result->question;
                 $faq = new stdClass();
-                $faq->category = $this->Category->getPath($result->category_id);
+                $faq->category = $this->Category->getPath($result->category_id ?? 0);
                 $faq->question = Utils::chopString($question, 15);
                 $faq->url = $link->toString();
 
@@ -145,7 +145,7 @@ class SearchHelper extends AbstractHelper
                 // Build the link to the faq record
                 $currentUrl = $this->configuration->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
                 $adminUrl = $this->configuration->getDefaultUrl() . sprintf(
-                    'admin/?action=editentry&id=%d&lang=%s',
+                    'admin/faq/edit/%d/%s',
                     $result->id,
                     $result->lang
                 );
@@ -177,6 +177,7 @@ class SearchHelper extends AbstractHelper
             $counter = 0;
             $displayedCounter = 0;
             $faqHelper = new FaqHelper($this->configuration);
+
             foreach ($searchResultSet->getResultSet() as $resultSet) {
                 $result = new stdClass();
 

@@ -37,32 +37,35 @@
     "symfony/config": "^7.1",
     "symfony/dependency-injection": "^7.1",
     "symfony/event-dispatcher": "^7.1",
-    "symfony/html-sanitizer": "^7.0",
-    "symfony/http-client": "^7.0",
-    "symfony/http-foundation": "^7.0",
-    "symfony/http-kernel": "^7.0",
-    "symfony/mailer": "^7.0",
-    "symfony/routing": "^7.0",
+    "symfony/html-sanitizer": "^7.1",
+    "symfony/http-client": "^7.1",
+    "symfony/http-foundation": "^7.1",
+    "symfony/http-kernel": "^7.1",
+    "symfony/mailer": "^7.1",
+    "symfony/routing": "^7.1",
+    "symfony/uid": "^7.1",
     "tecnickcom/tcpdf": "~6.0",
     "tivie/htaccess-parser": "0.3.0",
     "twig/intl-extra": "^3.10",
     "twig/twig": "^3.10"
   },
   "require-dev": {
+    "cyclonedx/cyclonedx-php-composer": "^5.2",
     "doctrine/instantiator": "2.*",
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
-    "phpmd/phpmd" : "@stable",
-    "phpstan/phpstan": "^1.0.0",
+    "phpmd/phpmd": "@stable",
+    "phpstan/phpstan": "^2",
     "phpunit/phpunit": "11.*",
-    "rector/rector": "^1.0.0",
+    "rector/rector": "^2",
     "squizlabs/php_codesniffer": "3.*",
     "symfony/yaml": "7.*",
-    "zircote/swagger-php": "^4.8"
+    "zircote/swagger-php": "^5.0"
   },
   "suggest": {
     "ext-ldap": "*",
     "ext-openssl": "*",
+    "ext-pdo": "*",
     "ext-pgsql": "*",
     "ext-sqlite3": "*",
     "ext-sqlsrv": "*"
@@ -75,6 +78,7 @@
     "vendor-dir": "phpmyfaq/src/libs",
     "bin-dir": "phpmyfaq/src/libs/bin",
     "allow-plugins": {
+      "cyclonedx/cyclonedx-php-composer": true,
       "php-http/discovery": true
     },
     "sort-packages": true
@@ -95,6 +99,7 @@
     "phpmd": "./phpmyfaq/src/libs/bin/phpmd ./phpmyfaq/src/phpMyFAQ html rulesets.xml > phpmd.html",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
+    "sbom:create": "composer CycloneDX:make-sbom --output-format=JSON --output-file=sbom-php.json",
     "test": "./phpmyfaq/src/libs/bin/phpunit --coverage-text"
   },
   "support": {

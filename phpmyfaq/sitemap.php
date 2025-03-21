@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2024 phpMyFAQ Team
+ * @copyright 2005-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-08-21
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
 
-$faqSession = $container->get('phpmyfaq.session');
+$faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 $faqSession->userTracking('sitemap', 0);
 

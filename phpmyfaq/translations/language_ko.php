@@ -9,7 +9,7 @@
  *
  * @package phpMyFAQ
  * @author YoungJoon Kim <yjkim@terratech.com>
- * @copyright 2004-2024 phpMyFAQ Team
+ * @copyright 2004-2025 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-07-10
@@ -51,9 +51,7 @@ $PMF_LANG["msgNext"] = "다음";
 $PMF_LANG["msgCategoryUp"] = "상위 카테고리로";
 $PMF_LANG["msgLastUpdateArticle"] = "마지막 수정: ";
 $PMF_LANG["msgAuthor"] = "작성자: ";
-$PMF_LANG["msgPrinterFriendly"] = "인쇄용 페이지";
 $PMF_LANG["msgPrintArticle"] = "이 내용을 인쇄";
-$PMF_LANG["msgMakeXMLExport"] = "XML형식으로 내보내기";
 $PMF_LANG["msgAverageVote"] = "평점";
 $PMF_LANG["msgVoteUsability"] = "이 내용을 평가해 주세요";
 $PMF_LANG["msgVoteFrom"] = " - ";
@@ -69,7 +67,7 @@ $PMF_LANG["msgCommentBy"] = "작성자 -  ";
 $PMF_LANG["msgCommentHeader"] = "이 내용에 대해 코멘트 달기";
 $PMF_LANG["msgYourComment "] = "당신의 코멘트";
 $PMF_LANG["msgCommentThanks"] = "코멘트를 해 주셔서 감사합니다.";
-$PMF_LANG["msgSend2Friend"] = "친구에게 보내기";
+$PMF_LANG["msgShareFAQ"] = "친구에게 보내기";
 $PMF_LANG["msgS2FButton"] = "메일 보내기";
 
 // Search
@@ -106,7 +104,7 @@ $PMF_LANG["msg2answer"] = "답변";
 $PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 수 있습니다. 질문에 답변하시면 FAQ에 추가될 수 있습니다.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.";
+$PMF_LANG["msgHelpText"] = "FAQ (Frequently Asked Questions) 의 사용 방법은 간단합니다. <a href=\"?action=show\">카테고리</a> 에서 궁금한 내용을 항목별로 찾거나 <a href=\"?action=search\">검색</a> 에서 검색어를 입력하여 찾으실 수 있습니다.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "관리자에게 메일 보내기";
@@ -132,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "등록된 데이터가 없습니다.";
 $PMF_LANG["err_badID"] = "잘못된 ID";
 $PMF_LANG["err_noTopTen"] = "TOP 10을 이용하실 수 없습니다.";
 $PMF_LANG["err_nothingFound"] = "검색 결과가 없습니다.";
-$PMF_LANG["err_SaveEntries"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>코멘트 내용</strong>은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "이름, 메일주소, 카테고리, 제목, FAQ 내용은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "이름, 메일주소, 코멘트 내용은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "중복 평가 하실 수 없습니다. 되돌아 가시려면여기를 클릭하세요.";
-$PMF_LANG["err_noVote"] = "<strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.";
+$PMF_LANG["err_noVote"] = "평점을 선택하지 않으셨습니다. 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.";
 $PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br><a href=\"javascript:history.back();\">되돌아 가기</a>";
-$PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.";
+$PMF_LANG["err_sendMail"] = "이름, 메일주소, 질문 내용은 필수 입력 항목입니다.";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>내용 검색:</strong><br><strong style=\"color: Red;\">단어1 단어2</strong>로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.<strong>주의:</strong> 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.";
+$PMF_LANG["help_search"] = "내용 검색:<br>단어1 단어2로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.주의: 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.";
 
 // Men
 $PMF_LANG["ad"] = "관리자 페이지";
@@ -162,10 +160,10 @@ $PMF_LANG["ad_menu_startpage"] = "시작 페이지";
 
 // Nachrichten
 $PMF_LANG["ad_msg_identify"] = "로그인을 하십시오.";
-$PMF_LANG["ad_msg_passmatch"] = "비밀번호는 반드시 <strong>일치</strong>하여야 합니다.";
+$PMF_LANG["ad_msg_passmatch"] = "비밀번호는 반드시 일치하여야 합니다.";
 $PMF_LANG["ad_msg_savedsuc_1"] = "";
 $PMF_LANG["ad_msg_savedsuc_2"] = " 의 프로필이 성공적으로 저장되었습니다.";
-$PMF_LANG["ad_msg_mysqlerr"] = "<strong>데이터베이스 에러</strong>로 인하여 프로필을 저장할 수 없습니다.";
+$PMF_LANG["ad_msg_mysqlerr"] = "데이터베이스 에러로 인하여 프로필을 저장할 수 없습니다.";
 $PMF_LANG["ad_msg_noauth"] = "사용 권한이 없습니다.";
 
 // Allgemein
@@ -206,13 +204,13 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "동작";
 $PMF_LANG["ad_entry_edit_1"] = "FAQ 추가(수정)";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "제목";
-$PMF_LANG["ad_entry_content"] = "내용";
-$PMF_LANG["ad_entry_keywords"] = "키워드";
-$PMF_LANG["ad_entry_author"] = "작성자";
-$PMF_LANG["ad_entry_category"] = "카테고리";
+$PMF_LANG["msgQuestion"] = "제목";
+$PMF_LANG["msgAnswer"] = "내용";
+$PMF_LANG["msgKeywords"] = "키워드";
+$PMF_LANG["msgAuthor"] = "작성자";
+$PMF_LANG["msgCategory"] = "카테고리";
 $PMF_LANG["ad_entry_active"] = "사용";
-$PMF_LANG["ad_entry_date"] = "날짜";
+$PMF_LANG["msgDate"] = "날짜";
 $PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "변경?";
 $PMF_LANG["ad_entry_changelog"] = "변경이력";
@@ -222,15 +220,15 @@ $PMF_LANG["ad_entry_save"] = "저장";
 $PMF_LANG["msgDelete"] = "삭제";
 $PMF_LANG["ad_entry_delcom_1"] = " ";
 $PMF_LANG["ad_entry_delcom_2"] = " 님의 코멘트를 삭제하시겠습니까?";
-$PMF_LANG["ad_entry_commentdelsuc"] = "코멘트가 <strong>성공적으로</strong> 삭제되었습니다.";
+$PMF_LANG["ad_entry_commentdelsuc"] = "코멘트가 성공적으로 삭제되었습니다.";
 $PMF_LANG["ad_entry_back"] = "돌아가기";
 $PMF_LANG["ad_entry_commentdelfail"] = "코멘트는 삭제 되지 않았습니다.";
-$PMF_LANG["ad_entry_savedsuc"] = "변경 내용이 <strong>성공적으로</strong> 저장되었습니다.";
-$PMF_LANG["ad_entry_savedfail 	"] = "<strong>데이터베이스 에러</strong> 가 발생하였습니다.";
+$PMF_LANG["ad_entry_savedsuc"] = "변경 내용이 성공적으로 저장되었습니다.";
+$PMF_LANG["ad_entry_savedfail 	"] = "데이터베이스 에러 가 발생하였습니다.";
 $PMF_LANG["ad_entry_del_1"] = "";
 $PMF_LANG["ad_entry_del_2"] = "에 관한";
 $PMF_LANG["ad_entry_del_3"] = " 님의 FAQ를 삭제하시겠습니까?";
-$PMF_LANG["ad_entry_delsuc"] = "<strong>성공적으로</strong> 삭제되었습니다.";
+$PMF_LANG["ad_entry_delsuc"] = "성공적으로 삭제되었습니다.";
 $PMF_LANG["ad_entry_delfail"] = "삭제 되지 않았습니다.";
 $PMF_LANG["ad_entry_back"] = "뒤로";
 
@@ -238,7 +236,7 @@ $PMF_LANG["ad_entry_back"] = "뒤로";
 // Newsverwaltung
 $PMF_LANG["ad_news_header"] = "공지 제목";
 $PMF_LANG["ad_news_text"] = "내용";
-$PMF_LANG["ad_news_link_url"] = "관련 Link: (<strong>https:// 없이 입력</strong>)!";
+$PMF_LANG["ad_news_link_url"] = "관련 Link: (https:// 없이 입력)!";
 $PMF_LANG["ad_news_link_title"] = "Link의 간략 설명(타이틀)";
 $PMF_LANG["ad_news_link_target"] = "Link 보이기";
 $PMF_LANG["ad_news_link_window"] = "새창에서 보이기";
@@ -259,17 +257,16 @@ $PMF_LANG["ad_news_delsuc"] = "삭제되었습니다.";
 $PMF_LANG["ad_news_updatenews"] = "공지 수정";
 
 // Kategorieverwaltung
-$PMF_LANG["ad_categ_new"] = "카테고리 추가";
+$PMF_LANG["msgNewCategory"] = "카테고리 추가";
 $PMF_LANG["ad_categ_catnum"] = "카테고리 번호";
 $PMF_LANG["ad_categ_subcatnum"] = "하위 카테고리 번호";
-$PMF_LANG["ad_categ_nya"] = "<em>사용할 수 없습니다.</em>";
-$PMF_LANG["ad_categ_titel"] = "카테고리명";
+$PMF_LANG["ad_categ_nya"] = "사용할 수 없습니다.";
+$PMF_LANG["categoryNameLabel"] = "카테고리명";
 $PMF_LANG["ad_categ_add"] = "카테고리 추가";
 $PMF_LANG["ad_categ_existing"] = "등록된 카테고리";
 $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "카테고리";
 $PMF_LANG["ad_categ_subcateg"] = "하위 카테고리";
-$PMF_LANG["ad_categ_titel"] = "카테고리명";
 $PMF_LANG["ad_categ_action"] = "동작";
 $PMF_LANG["ad_categ_update"] = "수정";
 $PMF_LANG["ad_categ_delete"] = "삭제";
@@ -287,7 +284,7 @@ $PMF_LANG["ad_categ_deletesure"] = "카테고리를 삭제하시겠습니까?";
 $PMF_LANG["ad_categ_deleted"] = "카테고리가 삭제되었습니다.";
 
 // Cookies
-$PMF_LANG["ad_cookie_cookiesuc 	"] = "쿠키가 <strong>성공적으로</strong> 설정되었습니다.";
+$PMF_LANG["ad_cookie_cookiesuc 	"] = "쿠키가 성공적으로 설정되었습니다.";
 $PMF_LANG["ad_cookie_already"] = "쿠키가 이미 설정되어 있습니다. 다음과 같은 옵션이 있습니다.";
 $PMF_LANG["ad_cookie_again"] = "쿠키 다시 설정";
 $PMF_LANG["ad_cookie_delete"] = "쿠키 삭제";
@@ -305,18 +302,18 @@ $PMF_LANG["ad_passwd_new"] = "새로운 비밀번호";
 $PMF_LANG["ad_passwd_con"] = "새로운 비밀번호 재확인";
 $PMF_LANG["ad_passwd_change"] = "비밀번호 변경";
 $PMF_LANG["ad_passwd_suc"] = "비밀번호가 성공적으로 변경되었습니다.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>주의:</strong><br>쿠키를 다시 설정하여 주십시오.";
-$PMF_LANG["ad_passwd_fail"] = "'현재 비밀번호'를 <strong>정확하게</strong> 입력하시고, '새로운 비밀번호' 와 '새로운 비밀번호 재확인' 은 반드시 <strong>일치</strong>하여야 합니다.";
+$PMF_LANG["ad_passwd_remark"] = "주의:<br>쿠키를 다시 설정하여 주십시오.";
+$PMF_LANG["ad_passwd_fail"] = "'현재 비밀번호'를 정확하게 입력하시고, '새로운 비밀번호' 와 '새로운 비밀번호 재확인' 은 반드시 일치하여야 합니다.";
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "사용자 추가";
 $PMF_LANG["ad_adus_name"] = "ID";
 $PMF_LANG["ad_adus_password"] = "비밀번호";
 $PMF_LANG["ad_adus_add"] = "사용자 추가";
-$PMF_LANG["ad_adus_suc"] = "사용자가 <strong>성공적으로</strong> 추가되었습니다.";
+$PMF_LANG["ad_adus_suc"] = "사용자가 성공적으로 추가되었습니다.";
 $PMF_LANG["ad_adus_edit"] = "프로필 수정";
-$PMF_LANG["ad_adus_dberr"] = "<strong>데이터베이스 에러!</strong>";
-$PMF_LANG["ad_adus_exerr"] = "사용자명이 이미 <strong>존재</strong>합니다.";
+$PMF_LANG["ad_adus_dberr"] = "데이터베이스 에러!";
+$PMF_LANG["ad_adus_exerr"] = "사용자명이 이미 존재합니다.";
 
 // Sessions
 $PMF_LANG["ad_sess_id"] = "ID";
@@ -369,14 +366,14 @@ $PMF_LANG["ad_config_saved"] = "환경설정이 성공적으로 저장되었습�
 $PMF_LANG["ad_menu_editconfig"] = "환경설정";
 $PMF_LANG["ad_att_none"] = "파일을 첨부할 수 없습니다.";
 $PMF_LANG["ad_att_att"] = "첨부";
-$PMF_LANG["ad_att_add"] = "첨부 파일";
+$PMF_LANG["msgAddAttachment"] = "첨부 파일";
 $PMF_LANG["ad_entryins_suc"] = "성공적으로 저장되었습니다.";
-$PMF_LANG["ad_entryins_fail"] = "에러가 발생하였습니다.";
+$PMF_LANG["msgErrorOccurred"] = "에러가 발생하였습니다.";
 $PMF_LANG["ad_att_del"] = "삭제";
 $PMF_LANG["ad_att_nope"] = "첨부파일은 내용 편집중에만 추가될 수 있습니다.";
 $PMF_LANG["ad_att_delsuc"] = "첨부파일을 성공적으로 삭제하였습니다.";
 $PMF_LANG["ad_att_delfail"] = "첨부 삭제시 에러가 발생하였습니다.";
-$PMF_LANG["ad_entry_add"] = "FAQ 내용 추가";
+$PMF_LANG["msgAddFAQ"] = "FAQ 내용 추가";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG["ad_csv_make"] = "데이터베이스의 내용을 그대로 백업합니다. 적어도 1달에 1번은 백업을 하시기 바랍니다. 백업 파일은 MySQL의 트랜잭션 파일 포맷으로 phpMyAdmin이나 MySQL 클라이언트 등에 의해서도 불러올 수 있습니다.";
@@ -451,7 +448,7 @@ $PMF_LANG["ad_log_bede"] = "다음 글이 삭제됨: ";
 
 $PMF_LANG["msgVisits"] = "방문";
 $PMF_LANG["ad_start_articles"] = "글(FAQ)";
-$PMF_LANG["ad_start_comments"] = "코멘트";
+$PMF_LANG["msgComments"] = "코멘트";
 
 
 // Added v1.1 - 30.01.2002 - Bastian
@@ -461,7 +458,7 @@ $PMF_LANG["msgCopy"] = "복사";
 $PMF_LANG["ad_categ_process"] = "카테고리 처리중......";
 
 // Added v1.1.4 - 07.05.2002 - Thorsten
-$PMF_LANG["err_NotAuth"] = "<strong>사용 권한이 없습니다.</strong>";
+$PMF_LANG["msgNoPermission"] = "사용 권한이 없습니다.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 $PMF_LANG["msgPreviusPage"] = "이전 페이지";
@@ -477,7 +474,7 @@ $PMF_LANG["msgPDF"] = "PDF 형식으로 보기";
 $PMF_LANG["ad_xml_head"] = "XML-백업";
 $PMF_LANG["ad_xml_hint"] = "모든 FAQ를 한개의 XML 파일로 저장";
 $PMF_LANG["ad_xml_gen"] = "XML 파일 만들기";
-$PMF_LANG["ad_entry_locale"] = "언어";
+$PMF_LANG["msgLanguage"] = "언어";
 $PMF_LANG["msgLanguageSubmit"] = "언어 변경";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
@@ -524,7 +521,7 @@ $PMF_LANG["msgRealname"] = "성명";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF 파일 생성";
 $PMF_LANG["ad_export_full_faq"] = "PDF 파일로 FAQ 내보내기: ";
 $PMF_LANG["err_bannedIP"] = "당신의 IP는 접근 금지되었습니다.";
-$PMF_LANG["err_SaveQuestion"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.<br><br><a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = "이름, 메일주소, 질문 내용은 필수 입력 항목입니다.<br><br><a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "색상: ";
@@ -550,11 +547,11 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array("input", "공지사항 �
 $LANG_CONF['security.bannedIPs'] = array("area", "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["ldap.ldapSupport"] = array("checkbox", "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
-$PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
+$PMF_LANG["msgNewCategory_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";
 $PMF_LANG["ad_categ_move"] = "카테고리 이동";
 $PMF_LANG["ad_categ_lang"] = "언어";
-$PMF_LANG["ad_categ_desc"] = "설명";
+$PMF_LANG["categoryDescriptionLabel"] = "설명";
 $PMF_LANG["ad_categ_change"] = "선택한 카테고리와 자리 바꿈";
 
 $PMF_LANG["lostPassword"] = "비밀번호를 잊으셨나요? 여기를 클릭하세요.";

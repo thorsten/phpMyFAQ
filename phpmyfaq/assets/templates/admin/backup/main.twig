@@ -1,51 +1,54 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i aria-hidden="true" class="bi bi-download"></i>
-    {{ adminHeaderBackup }}
-  </h1>
-</div>
+{% extends '@admin/index.twig' %}
 
-<div class="card-deck">
-  <div class="card shadow mb-4">
-    <h5 class="card-header py-3">
-      {{ adminBackupCardHeader }}
-    </h5>
-    <div class="card-body">
-      <p>{{ adminBackupCardBody }}</p>
-      <div class="d-flex justify-content-center">
-        <a class="btn btn-primary btn-lg m-2" href="backup.export.php?action=backup_content">
-          <i aria-hidden="true" class="bi bi-download"></i> {{ adminBackupLinkData }}
-        </a>
-        <a class="btn btn-primary btn-lg m-2" href="backup.export.php?action=backup_logs">
-          <i aria-hidden="true" class="bi bi-download"></i> {{ adminBackupLinkLogs }}
-        </a>
-      </div>
-    </div>
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-download"></i>
+      {{ adminHeaderBackup }}
+    </h1>
   </div>
 
-  <div class="card shadow mb-4">
-    <form method="post" action="?action=restore&csrf={{ csrfToken }}"
-          enctype="multipart/form-data">
+  <div class="card-deck">
+    <div class="card shadow mb-4">
       <h5 class="card-header py-3">
-        {{ adminRestoreCardHeader }}
+        {{ adminBackupCardHeader }}
       </h5>
       <div class="card-body">
-        <p>{{ adminRestoreCardBody }}</p>
-        <div class="row">
-          <label class="col-lg-4 col-form-label">{{ adminRestoreLabel }}:</label>
-          <div class="col-lg-8">
-            <input type="file" name="userfile">
-          </div>
-        </div>
-        <div class="form-row row">
-          <div class="d-flex justify-content-center">
-            <button class="btn btn-primary btn-lg m-2" type="submit">
-              <i aria-hidden="true" class="bi bi-upload"></i> {{ adminRestoreButton }}
-            </button>
-          </div>
+        <p>{{ adminBackupCardBody }}</p>
+        <div class="d-flex justify-content-center">
+          <a class="btn btn-primary btn-lg m-2" href="./backup/export/content">
+            <i aria-hidden="true" class="bi bi-download"></i> {{ adminBackupLinkData }}
+          </a>
+          <a class="btn btn-primary btn-lg m-2" href="./backup/export/logs">
+            <i aria-hidden="true" class="bi bi-download"></i> {{ adminBackupLinkLogs }}
+          </a>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+
+    <div class="card shadow mb-4">
+      <form method="post" action="./backup/restore?csrf={{ csrfToken }}" enctype="multipart/form-data">
+        <h5 class="card-header py-3">
+          {{ adminRestoreCardHeader }}
+        </h5>
+        <div class="card-body">
+          <p>{{ adminRestoreCardBody }}</p>
+          <div class="row">
+            <label class="col-lg-4 col-form-label">{{ adminRestoreLabel }}:</label>
+            <div class="col-lg-8">
+              <input type="file" name="userfile">
+            </div>
+          </div>
+          <div class="form-row row">
+            <div class="d-flex justify-content-center">
+              <button class="btn btn-primary btn-lg m-2" type="submit">
+                <i aria-hidden="true" class="bi bi-upload"></i> {{ adminRestoreButton }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
 
   </div>
+{% endblock %}

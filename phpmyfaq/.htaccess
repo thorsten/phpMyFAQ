@@ -98,6 +98,8 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     </IfModule>
     # the path to your phpMyFAQ installation
     RewriteBase /
+    # Exclude assets from being handled by Symfony Router
+    RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
     ErrorDocument 404 /index.php?action=404
     # General pages
@@ -124,9 +126,11 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ sitemap
     RewriteRule ^sitemap/([^\/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
-    RewriteRule ^sitemap.xml$ sitemap.xml.php [L]
-    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L]
-    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L]
+    RewriteRule ^sitemap.xml$ sitemap.xml.php [L,QSA]
+    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L,QSA]
+    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L,QSA]
+    # robots.txt
+    RewriteRule ^robots.txt$ robots.txt.php [L,QSA]
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
@@ -140,11 +144,13 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^update/(.*) update/index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
+    # Administration pages
+    RewriteRule ^admin/(.*) admin/index.php [L,QSA]
     # Private APIs
     RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login) api/index.php [L,QSA]
     # Setup APIs
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
-    # REST API v3.0
-    # * http://[...]/api/v3.0/<ACTION>
-    RewriteRule ^api/v3.0/(.*) api/index.php [L,QSA]
+    # REST API v3.0 and v3.1
+    # * http://[...]/api/v3.x/<ACTION>
+    RewriteRule ^api/v3\.[01]/(.*) api/index.php [L,QSA]
 </IfModule>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Sqlite3 class provides methods and functions for a SQLite v3 database.
+ * The phpMyFAQ\Database\Sqlite3 class provides methods and functions for a SQLite v3 database.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2024 phpMyFAQ Team
+ * @copyright 2012-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-02
@@ -18,7 +18,6 @@
 namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Utils;
 
 /**
  * Class Sqlite3
@@ -180,7 +179,7 @@ class Sqlite3 implements DatabaseDriver
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): \SQLite3Result|bool
     {
-        $this->sqlLog .= Utils::debug($query);
+        $this->sqlLog .= $query;
 
         if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);

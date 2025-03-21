@@ -10,7 +10,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2022-2024 phpMyFAQ Team
+ * @copyright 2022-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-20
@@ -73,6 +73,19 @@ class Translation
         }
 
         return null;
+    }
+
+    /**
+     * Returns all translations from the current language.
+     * @throws Exception
+     * @return array<string, string>
+     */
+    public static function getAll(): array
+    {
+        self::$translation->checkInit();
+        self::$translation->checkLanguageLoaded();
+
+        return self::$translation->loadedLanguages[self::$translation->currentLanguage];
     }
 
     /**

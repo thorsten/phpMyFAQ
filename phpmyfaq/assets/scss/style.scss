@@ -7,26 +7,29 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2024 phpMyFAQ Team
+ * @copyright 2010-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-17
  */
 
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
 
 // Import Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
 
 // Import global styles
 @import 'global';
 
 // Bootstrap Icons
-@import '~bootstrap-icons/font/bootstrap-icons.css';
+@import '../../../node_modules/bootstrap-icons/font/bootstrap-icons';
 
 // Cookie Consent
 @import 'vanilla-cookieconsent/dist/cookieconsent.css';
+
+// Highlight.js
+@import '../../../node_modules/highlight.js/styles/github-dark.css';
 
 // Layouts
 @import 'layout/autocomplete';

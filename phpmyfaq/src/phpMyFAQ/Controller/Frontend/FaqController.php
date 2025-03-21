@@ -9,7 +9,7 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
@@ -22,16 +22,8 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\MetaData;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CategoryHelper;
-use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Language;
-use phpMyFAQ\Notification;
-use phpMyFAQ\Question;
-use phpMyFAQ\Session;
-use phpMyFAQ\StopWords;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,15 +38,12 @@ class FaqController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $faq = $this->container->get('phpmyfaq.faq');
-        $faqHelper = new FaqHelper($this->configuration);
-        $category = new Category($this->configuration);
-        $question = new Question($this->configuration);
-        $stopWords = new StopWords($this->configuration);
-        $session = new Session($this->configuration);
-        $session->setCurrentUser($user);
+        $faqHelper = $this->container->get('phpmyfaq.helper.faq');
+        $question = $this->container->get('phpmyfaq.question');
+        $stopWords = $this->container->get('phpmyfaq.stop-words');
+        $session = $this->container->get('phpmyfaq.user.session');
+        $session->setCurrentUser($this->currentUser);
 
         $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
@@ -62,7 +51,7 @@ class FaqController extends AbstractController
             $this->configuration->get('main.language')
         );
 
-        if (!$this->isAddingFaqsAllowed($user)) {
+        if (!$this->isAddingFaqsAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
@@ -81,6 +70,7 @@ class FaqController extends AbstractController
             $answer = trim(nl2br($answer));
         }
 
+        $category = new Category($this->configuration);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         if (isset($data->{'rubrik[]'})) {
             if (is_string($data->{'rubrik[]'})) {
@@ -143,7 +133,7 @@ class FaqController extends AbstractController
                 ->save();
 
             // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = new CategoryHelper();
+            $categoryHelper = $this->container->get('phpmyfaq.helper.category');
             $categoryHelper
                 ->setCategory($category)
                 ->setConfiguration($this->configuration);
@@ -151,7 +141,7 @@ class FaqController extends AbstractController
             $moderators = $categoryHelper->getModerators($categories);
 
             try {
-                $notification = new Notification($this->configuration);
+                $notification = $this->container->get('phpmyfaq.notification');
                 $notification->sendNewFaqAdded($moderators, $faqEntity);
             } catch (Exception | TransportExceptionInterface $e) {
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [ $e->getMessage() ]);
