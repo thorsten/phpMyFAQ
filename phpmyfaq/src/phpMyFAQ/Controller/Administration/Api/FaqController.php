@@ -111,7 +111,7 @@ class FaqController extends AbstractController
 
         $logging->log($this->currentUser, 'admin-save-new-faq');
 
-        if (empty($question) && empty($answer)) {
+        if (empty($question) && empty($content)) {
             return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
@@ -204,7 +204,9 @@ class FaqController extends AbstractController
                     $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
                     $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception | TransportExceptionInterface $e) {
-                    return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+                    $this->configuration->getLogger()->error(
+                        'Send open question answered notification failed: ' . $e->getMessage()
+                    );
                 }
             }
 
@@ -217,9 +219,8 @@ class FaqController extends AbstractController
                 $moderators = $categoryHelper->getModerators($categories);
                 $notification->sendNewFaqAdded($moderators, $faqData);
             } catch (Exception | TransportExceptionInterface $e) {
-                return $this->json(
-                    ['error' => 'Send moderator notification failed: ' . $e->getMessage()],
-                    Response::HTTP_BAD_REQUEST
+                $this->configuration->getLogger()->error(
+                    'Send moderator notification failed: ' . $e->getMessage()
                 );
             }
 
@@ -308,7 +309,7 @@ class FaqController extends AbstractController
         $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
         $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (empty($question) && empty($answer)) {
+        if (empty($question) && empty($content)) {
             return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
