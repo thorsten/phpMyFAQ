@@ -66,8 +66,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = new Faq($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
@@ -116,9 +115,9 @@ class FaqController extends AbstractController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($user, 'admin-save-new-faq');
+        $logging->log($this->currentUser, 'admin-save-new-faq');
 
-        if (empty($question) && empty($answer)) {
+        if (empty($question) && empty($content)) {
             return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
@@ -145,7 +144,12 @@ class FaqController extends AbstractController
 
         if ($faqData->getId()) {
             // Create ChangeLog entry
-            $changelog->add($faqData->getId(), $user->getUserId(), nl2br((string) $changed), $faqData->getLanguage());
+            $changelog->add(
+                $faqData->getId(),
+                $this->currentUser->getUserId(),
+                nl2br((string) $changed),
+                $faqData->getLanguage()
+            );
 
             // Create the visit entry
             $visits->logViews($faqData->getId());
@@ -206,7 +210,9 @@ class FaqController extends AbstractController
                     $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
                     $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
                 } catch (Exception | TransportExceptionInterface $e) {
-                    return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+                    $this->configuration->getLogger()->error(
+                        'Send open question answered notification failed: ' . $e->getMessage()
+                    );
                 }
             }
 
@@ -219,9 +225,8 @@ class FaqController extends AbstractController
                 $moderators = $categoryHelper->getModerators($categories);
                 $notification->sendNewFaqAdded($moderators, $faqData);
             } catch (Exception | TransportExceptionInterface $e) {
-                return $this->json(
-                    ['error' => 'Send moderator notification failed: ' . $e->getMessage()],
-                    Response::HTTP_BAD_REQUEST
+                $this->configuration->getLogger()->error(
+                    'Send moderator notification failed: ' . $e->getMessage()
                 );
             }
 
@@ -261,8 +266,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = new Faq($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
@@ -310,16 +314,16 @@ class FaqController extends AbstractController
         $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
         $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (empty($question) && empty($answer)) {
+        if (empty($question) && empty($content)) {
             return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($user, 'admin-save-existing-faq ' . $faqId);
+        $logging->log($this->currentUser, 'admin-save-existing-faq ' . $faqId);
         if ($active === 'yes') {
-            $logging->log($user, 'admin-publish-existing-faq ' . $faqId);
+            $logging->log($this->currentUser, 'admin-publish-existing-faq ' . $faqId);
         }
 
         if ('yes' === $revision && $this->configuration->get('records.enableAutoRevisions')) {
@@ -360,7 +364,13 @@ class FaqController extends AbstractController
         }
 
         // Create ChangeLog entry
-        $changelog->add($faqData->getId(), $user->getUserId(), (string) $changed, $faqData->getLanguage(), $revisionId);
+        $changelog->add(
+            $faqData->getId(),
+            $this->currentUser->getUserId(),
+            (string) $changed,
+            $faqData->getLanguage(),
+            $revisionId
+        );
 
         // Create the visit entry
         $visits->logViews($faqData->getId());
@@ -574,7 +584,6 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_DELETE);
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
         $faq = new Faq($this->configuration);
 
         $data = json_decode($request->getContent());
@@ -587,7 +596,7 @@ class FaqController extends AbstractController
         }
 
         $adminLog = new AdminLog($this->configuration);
-        $adminLog->log($user, 'Deleted FAQ ID ' . $faqId);
+        $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId);
 
         try {
             $faq->delete($faqId, $faqLanguage);
@@ -606,8 +615,6 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
-
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance()->verifyToken('edit-faq', $data->csrf)) {
@@ -618,7 +625,7 @@ class FaqController extends AbstractController
         $faqSearch = new Search($this->configuration);
         $faqSearch->setCategory(new Category($this->configuration));
 
-        $searchResultSet = new SearchResultSet($user, $faqPermission, $this->configuration);
+        $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
         $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($searchString)) {
