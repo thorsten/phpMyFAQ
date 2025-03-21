@@ -1068,7 +1068,6 @@ class Update extends Setup
         }
     }
 
-
     private function applyUpdates410Alpha(): void
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
