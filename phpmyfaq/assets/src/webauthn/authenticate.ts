@@ -1,3 +1,5 @@
+import { TranslationService } from '../utils';
+
 /**
  * WebAuthn authentication
  *
@@ -65,10 +67,10 @@ export const webauthnAuthenticate = async (webAuthnKey: WebAuthnKey, callback: C
 
     const clientDataJSON = JSON.parse(new TextDecoder().decode(clientDataJSONBuffer));
 
-    const rawIdArray = arrayBufferToArray(rawId);
-    const clientDataJSONArray = arrayBufferToArray(clientDataJSONBuffer);
-    const authenticatorDataArray = arrayBufferToArray(authenticatorDataBuffer);
-    const signatureArray = arrayBufferToArray(signatureBuffer);
+    const rawIdArray: number[] = arrayBufferToArray(rawId);
+    const clientDataJSONArray: number[] = arrayBufferToArray(clientDataJSONBuffer);
+    const authenticatorDataArray: number[] = arrayBufferToArray(authenticatorDataBuffer);
+    const signatureArray: number[] = arrayBufferToArray(signatureBuffer);
 
     const info: AuthenticatorResponse = {
       type,
@@ -84,9 +86,12 @@ export const webauthnAuthenticate = async (webAuthnKey: WebAuthnKey, callback: C
 
     callback(true, info);
   } catch (error: any) {
-    const abortErrors = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
+    const abortErrors: string[] = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
+    const Translator = new TranslationService();
+    const language: string = document.documentElement.lang;
+    await Translator.loadTranslations(language);
     if (abortErrors.includes(error.name)) {
-      callback(false, 'Authentication aborted by user.');
+      callback(false, Translator.translate('msgAuthenticationAborted'));
     } else {
       callback(false, error.toString());
     }

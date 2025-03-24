@@ -1478,5 +1478,6 @@ $PMF_LANG['msgImageTooLarge'] = 'Das Bild ist zu groß.';
 $PMF_LANG['msgNoImagesForUpload'] = 'Es gibt keine Bilder zum Hochladen.';
 $PMF_LANG['msgFetchingHashes'] = 'Lade Verifikationsdaten von api.phpmyfaq.de ...';
 $PMF_LANG['msgCheckHashes'] = 'Überprüfe Hash-Werte der installierten Dateien ...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Die Authentifizierung wurde abgebrochen.';
 
 return $PMF_LANG;

@@ -1497,5 +1497,6 @@ $PMF_LANG['msgImageTooLarge'] = 'The image is too large.';
 $PMF_LANG['msgNoImagesForUpload'] = 'No images for upload.';
 $PMF_LANG['msgFetchingHashes'] = 'Fetching verification hashes from api.phpmyfaq.de...';
 $PMF_LANG['msgCheckHashes'] = 'Checking hashes with installation files...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Authentication aborted by user.';
 
 return $PMF_LANG;
