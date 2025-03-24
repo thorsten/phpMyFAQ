@@ -628,15 +628,9 @@ if ($user->isLoggedIn() && $user->getUserId() > 0) {
         ];
     }
 
-    if ($user->getUserAuthSource() === 'local') {
-        $templateVars = [
-            ... $templateVars,
-            'msgUserControlDropDown' => Translation::get('headerUserControlPanel'),
-        ];
-    }
-
     $templateVars = [
         ... $templateVars,
+        'msgUserControlDropDown' => Translation::get('headerUserControlPanel'),
         'msgBookmarks' => Translation::get('msgBookmarks'),
         'msgUserRemoval' => Translation::get('ad_menu_RequestRemove'),
         'msgLogoutUser' => Translation::get('ad_menu_logout'),
