@@ -1194,6 +1194,7 @@ $PMF_LANG['permission::view_categories'] = 'View categories';
 $PMF_LANG['permission::view_sections'] = 'View sections';
 $PMF_LANG['permission::view_news'] = 'View news';
 $PMF_LANG['permission::administrate_groups'] = 'Administrate groups';
+$PMF_LANG['permission::administrate_sections'] = 'Administrate sections';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo

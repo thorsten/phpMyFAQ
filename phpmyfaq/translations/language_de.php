@@ -1194,6 +1194,7 @@ $PMF_LANG['permission::view_categories'] = 'Kategorien lesen';
 $PMF_LANG['permission::view_sections'] = 'Bereiche lesen';
 $PMF_LANG['permission::view_news'] = 'Neuigkeiten lesen';
 $PMF_LANG['permission::administrate_groups'] = 'Gruppen administrieren';
+$PMF_LANG['permission::administrate_sections'] = 'Bereiche administrieren';
 $PMF_LANG['ad_group_rights'] = 'Rechte der Gruppe';
 $PMF_LANG['permission::viewadminlink'] = 'Link zur Administration sichtbar';
 
