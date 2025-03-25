@@ -1,0 +1,52 @@
+/**
+ * phpMyFAQ 4.0 default theme
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2024-2025 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2024-09-01
+ */
+
+:root,
+[data-bs-theme='light'] {
+  --bs-light: #eceff9;
+  --bs-dark: #060508;
+  --bs-primary: #083c83;
+  --bs-secondary: #1d646a;
+  --bs-info: #40b0ae;
+  --bs-success: #0aa05c;
+  --bs-warning: #e1ca0a;
+  --bs-danger: #f01704;
+  --bs-pmf-nav: #2f3035;
+  --bs-pmf-footer: #142f48;
+  --bs-pmf-background: #9eb6c9;
+}
+
+[data-bs-theme='dark'] {
+  --bs-light: #eceff9;
+  --bs-dark: #060508;
+  --bs-primary: #083c83;
+  --bs-secondary: #1d646a;
+  --bs-info: #40b0ae;
+  --bs-success: #0aa05c;
+  --bs-warning: #e1ca0a;
+  --bs-danger: #f01704;
+  --bs-pmf-nav: #2f3035;
+  --bs-pmf-footer: #142f48;
+  --bs-pmf-background: #9eb6c9;
+}
+
+nav.navbar {
+  z-index: 100;
+  position: sticky;
+  top: 0;
+}
+body {
+  height: 200vh;
+}
