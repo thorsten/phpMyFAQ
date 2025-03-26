@@ -50,3 +50,72 @@ nav.navbar {
 body {
   height: 200vh;
 }
+
+.search input:focus {
+  /* so search text doesn't touch button or icon */
+  padding-right: 110px;
+  padding-left: 15px;
+}
+
+div.search.searchClosed {
+  display: inline-block;
+}
+
+div#expandaSearch {
+  border-radius: 10px;
+}
+
+div.search.searchClosed form {
+  background: white;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 5px;
+}
+
+div.search.searchClosed .bi-search {
+  display: none;
+}
+div.search.searchClosed input {
+  visibility: hidden;
+  position: absolute;
+  border: none;
+}
+div.search.searchClosed button {
+  position: unset;
+}
+
+div.search.searchClosed small {
+  display:none;
+}
+
+div.searchContainer {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  li.searchNav {
+    display: none !important;
+  }
+  div.searchContainer {
+    display: block;
+  }
+}
+li.searchNav {
+  display: block;
+}
+
+.searchContainer .bi-search{
+  position: absolute;
+  top: -12px;
+  left: 7px;
+  font-size: 45px;
+  color: var(--bs-gray-400);
+  cursor: pointer;
+}
+.searchContainer .bi-search:before{
+  content: "×";
+  font-weight: bold;
+}
