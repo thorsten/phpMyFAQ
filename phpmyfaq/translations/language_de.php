@@ -1191,7 +1191,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = 'Überschreibe Passwort';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Erlaube Versionierung für jede FAQ-Änderung'];
 $PMF_LANG['permission::view_faqs'] = 'FAQs lesen';
 $PMF_LANG['permission::view_categories'] = 'Kategorien lesen';
-$PMF_LANG['permission::view_sections'] = 'Bereiche lesen';
 $PMF_LANG['permission::view_news'] = 'Neuigkeiten lesen';
 $PMF_LANG['permission::administrate_groups'] = 'Gruppen administrieren';
 $PMF_LANG['ad_group_rights'] = 'Rechte der Gruppe';

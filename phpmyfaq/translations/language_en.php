@@ -180,9 +180,9 @@ $PMF_LANG['ad_gen_or'] = "or";
 // User administration
 $PMF_LANG["ad_user"] = "User administration";
 $PMF_LANG["ad_user_username"] = "Registered users";
-$PMF_LANG["ad_user_rights"] = "User rights";
-$PMF_LANG["ad_user_edit"] = "edit";
-$PMF_LANG["ad_user_delete"] = "delete";
+$PMF_LANG["ad_user_rights"] = "Permissions of the user";
+$PMF_LANG["ad_user_edit"] = "Edit";
+$PMF_LANG["ad_user_delete"] = "Delete";
 $PMF_LANG["ad_user_add"] = "Add user";
 $PMF_LANG["ad_user_profou"] = "Profile of the user";
 $PMF_LANG["ad_user_name"] = "Name";
@@ -470,21 +470,21 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
 $PMF_LANG["ad_menu_export"] = "FAQ Export";
 
-$PMF_LANG['permission::add_user'] = "Add user";
-$PMF_LANG['permission::edit_user'] = "Edit user";
-$PMF_LANG['permission::delete_user'] = "Delete user";
-$PMF_LANG['permission::add_faq'] = "Add record";
-$PMF_LANG['permission::edit_faq'] = "Edit record";
-$PMF_LANG['permission::delete_faq'] = "Delete record";
-$PMF_LANG['permission::viewlog'] = "View logs";
-$PMF_LANG['permission::adminlog'] = "View admin log";
+$PMF_LANG['permission::add_user'] = "Add a user";
+$PMF_LANG['permission::edit_user'] = "Edit users";
+$PMF_LANG['permission::delete_user'] = "Delete users";
+$PMF_LANG['permission::add_faq'] = "Add FAQs";
+$PMF_LANG['permission::edit_faq'] = "Edit FAQs";
+$PMF_LANG['permission::delete_faq'] = "Delete FAQs";
+$PMF_LANG['permission::viewlog'] = "View user tracking logs";
+$PMF_LANG['permission::adminlog'] = "View administration logs";
 $PMF_LANG['permission::delcomment'] = "Delete comment";
 $PMF_LANG['permission::addnews'] = "Add news";
 $PMF_LANG['permission::editnews'] = "Edit news";
 $PMF_LANG['permission::delnews'] = "Delete news";
 $PMF_LANG['permission::addcateg'] = "Add category";
-$PMF_LANG['permission::editcateg'] = "Edit category";
-$PMF_LANG['permission::delcateg'] = "Delete category";
+$PMF_LANG['permission::editcateg'] = "Edit categories";
+$PMF_LANG['permission::delcateg'] = "Delete categories";
 $PMF_LANG['permission::passwd'] = "Change passwords";
 $PMF_LANG['permission::editconfig'] = "Edit configuration";
 $PMF_LANG['permission::addatt'] = "Add attachments";
@@ -615,9 +615,9 @@ $PMF_LANG['ad_user_deleteUser'] = "Delete user";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "last modified";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
-$PMF_LANG['permission::addglossary'] = "add glossary item";
-$PMF_LANG['permission::editglossary'] = "edit glossary item";
-$PMF_LANG['permission::delglossary'] = "delete glossary item";
+$PMF_LANG['permission::addglossary'] = "Add glossary item";
+$PMF_LANG['permission::editglossary'] = "Edit glossary item";
+$PMF_LANG['permission::delglossary'] = "Delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'Logged in as ';
 $PMF_LANG['ad_group_details'] = "Group details";
@@ -749,9 +749,9 @@ $PMF_LANG['msgTranslateSubmit'] = 'Start translation...';
 $PMF_LANG['msgNewTranslationThanks'] = "Thank you for your translation proposal!";
 
 // added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['permission::addgroup'] = "add group accounts";
-$PMF_LANG['permission::editgroup'] = "edit group accounts";
-$PMF_LANG['permission::delgroup'] = "delete group accounts";
+$PMF_LANG['permission::addgroup'] = "Add group accounts";
+$PMF_LANG['permission::editgroup'] = "Edit group accounts";
+$PMF_LANG['permission::delgroup'] = "Delete group accounts";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link opens in parent window';
@@ -894,10 +894,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG['permission::addtranslation'] = "add translation";
-$PMF_LANG['permission::edittranslation'] = "edit translation";
-$PMF_LANG['permission::deltranslation'] = "delete translation";
-$PMF_LANG['permission::approverec'] = "approve records";
+$PMF_LANG['permission::addtranslation'] = "Add translation";
+$PMF_LANG['permission::edittranslation'] = "Edit translation";
+$PMF_LANG['permission::deltranslation'] = "Delete translation";
+$PMF_LANG['permission::approverec'] = "Approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption", "Ignored when attachments is disabled"];
@@ -1046,7 +1046,7 @@ $PMF_LANG['permission::addfaq'] = "Add FAQs in the frontend";
 $PMF_LANG['permission::addquestion'] = "Add questions in the frontend";
 $PMF_LANG['permission::addcomment'] = "Add comments in the frontend";
 $PMF_LANG['permission::editinstances'] = "Edit Multisites";
-$PMF_LANG['permission::addinstances'] = "Add Multisites";
+$PMF_LANG['permission::addinstances'] = "Add a new Multisite";
 $PMF_LANG['permission::delinstances'] = "Delete Multisites";
 $PMF_LANG['permission::export'] = "Export FAQs";
 
@@ -1191,7 +1191,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = 'Overwrite password';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Allow versioning of FAQ changes'];
 $PMF_LANG['permission::view_faqs'] = 'View FAQs';
 $PMF_LANG['permission::view_categories'] = 'View categories';
-$PMF_LANG['permission::view_sections'] = 'View sections';
 $PMF_LANG['permission::view_news'] = 'View news';
 $PMF_LANG['permission::administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
