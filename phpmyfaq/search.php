@@ -115,6 +115,7 @@ if ('' !== $inputTag) {
 
     $recordIds = $tagging->getFaqsByIntersectionTags($tags);
 
+    $searchResults = [];
     if (0 === (is_countable($recordIds) ? count($recordIds) : 0)) {
         $searchResult = '';
     } else {
@@ -150,6 +151,7 @@ if ('' !== $inputTag) {
         $numOfResults = count($recordIds);
     }
 } else {
+    $searchResults = [];
     $searchResult = '';
     $relTags = '';
     $tags = [];

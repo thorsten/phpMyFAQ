@@ -1193,7 +1193,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = 'Anular contraseña';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Permitir el versionado de cambios en las preguntas frecuentes.'];
 $PMF_LANG['permission::view_faqs'] = 'Ver FAQs';
 $PMF_LANG['permission::view_categories'] = 'Ver categorías';
-$PMF_LANG['permission::view_sections'] = 'Ver secciones';
 $PMF_LANG['permission::view_news'] = 'Ver noticias';
 $PMF_LANG['permission::administrate_groups'] = 'Administrar grupos';
 $PMF_LANG['ad_group_rights'] = 'Permisos de grupo';
