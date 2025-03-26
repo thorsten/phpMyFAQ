@@ -1,729 +1,595 @@
 <?php
 
 /**
- * The Admin FAQ Controller
+ * The Administration FAQs Controller
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2023-2024 phpMyFAQ Team
+ * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2023-10-28
+ * @since     2024-12-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use DateTime;
-use Exception;
-use phpMyFAQ\Administration\AdminLog;
-use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Revision;
-use phpMyFAQ\Attachment\AttachmentException;
-use phpMyFAQ\Attachment\Filesystem\File\FileException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
-use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Entity\FaqEntity;
+use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
-use phpMyFAQ\Faq;
-use phpMyFAQ\Faq\Permission as FaqPermission;
-use phpMyFAQ\Faq\Import;
+use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CategoryHelper;
-use phpMyFAQ\Helper\SearchHelper;
-use phpMyFAQ\Instance\Elasticsearch;
-use phpMyFAQ\Language;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
-use phpMyFAQ\Notification;
-use phpMyFAQ\Question;
-use phpMyFAQ\Search;
-use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\Seo;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Tags;
+use phpMyFAQ\Template\Extensions\FormatBytesTwigExtension;
+use phpMyFAQ\Template\Extensions\IsoDateTwigExtension;
+use phpMyFAQ\Template\Extensions\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
-use phpMyFAQ\Visits;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Twig\Error\LoaderError;
 
-class FaqController extends AbstractController
+class FaqController extends AbstractAdministrationController
 {
     /**
      * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
      */
-    #[Route('admin/api/faq/create')]
-    public function create(Request $request): JsonResponse
+    #[Route('/faqs', name: 'admin.faqs', methods: ['GET'])]
+    public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
+        $this->userHasPermission(PermissionType::FAQ_APPROVE);
+        $this->userHasPermission(PermissionType::FAQ_EDIT);
+        $this->userHasPermission(PermissionType::FAQ_DELETE);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = new Faq($this->configuration);
-        $faqPermission = new FaqPermission($this->configuration);
-        $categoryPermission = new CategoryPermission($this->configuration);
-        $tagging = new Tags($this->configuration);
-        $notification = new Notification($this->configuration);
-        $logging = new AdminLog($this->configuration);
-        $changelog = new Changelog($this->configuration);
-        $visits = new Visits($this->configuration);
-        $seo = new Seo($this->configuration);
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
 
-        $category = new Category($this->configuration, [], false);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
+        $categoryRelation = new Relation($this->configuration, $category);
+        $categoryRelation->setGroups($currentAdminGroups);
 
-        $data = json_decode($request->getContent())->data;
+        $comments = $this->container->get('phpmyfaq.comments');
+        $sessions = $this->container->get('session');
 
-        if (!Token::getInstance()->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        // Collect FAQ data
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (is_array($data->{'categories[]'})) {
-            $categories = Filter::filterArray($data->{'categories[]'});
-        } else {
-            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
-        }
-
-        $language = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
-        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
-        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        // Permissions
-        $permissions = $faqPermission->createPermissionArray();
-
-        $logging->log($this->currentUser, 'admin-save-new-faq');
-
-        if (empty($question) && empty($content)) {
-            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
-        }
-
-        $faqData = new FaqEntity();
-        $faqData
-            ->setLanguage($language)
-            ->setActive($active === 'yes')
-            ->setSticky(($sticky !== 'no') ? $sticky : false)
-            ->setQuestion(
-                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setAnswer(
-                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setKeywords($keywords)
-            ->setAuthor($author)
-            ->setEmail($email)
-            ->setComment($comment === 'y')
-            ->setCreatedDate(new DateTime())
-            ->setNotes(Filter::removeAttributes($notes));
-
-        // Add new record and get that ID
-        $faqData = $faq->create($faqData);
-
-        if ($faqData->getId()) {
-            // Create ChangeLog entry
-            $changelog->add(
-                $faqData->getId(),
-                $this->currentUser->getUserId(),
-                nl2br((string) $changed),
-                $faqData->getLanguage()
-            );
-
-            // Create the visit entry
-            $visits->logViews($faqData->getId());
-
-            $categoryRelation = new Relation($this->configuration, $category);
-            $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
-
-            // Insert the tags
-            if ($tags !== '') {
-                $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
-            }
-
-            // Add user permissions
-            $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
-            $categoryPermission->add(CategoryPermission::USER, $categories, $permissions['restricted_user']);
-            // Add group permission
-            if ($this->configuration->get('security.permLevel') !== 'basic') {
-                $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
-                $categoryPermission->add(
-                    CategoryPermission::GROUP,
-                    $categories,
-                    $permissions['restricted_groups']
-                );
-            }
-
-            // Add the SEO data
-            $seoEntity = new SeoEntity();
-            $seoEntity
-                ->setType(SeoType::FAQ)
-                ->setReferenceId($faqData->getId())
-                ->setReferenceLanguage($faqData->getLanguage())
-                ->setTitle($serpTitle)
-                ->setDescription($serpDescription);
-            $seo->create($seoEntity);
-
-            // Open question answered
-            $questionObject = new Question($this->configuration);
-            $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
-            if (0 !== $openQuestionId) {
-                if ($this->configuration->get('records.enableDeleteQuestion')) { // deletes question
-                    $questionObject->delete($openQuestionId);
-                } else { // adds this faq record id to the related open question
-                    $questionObject->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
-                }
-
-                $url = sprintf(
-                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
-                    $this->configuration->getDefaultUrl(),
-                    $categories[0],
-                    $faqData->getId(),
-                    $faqData->getLanguage()
-                );
-                $oLink = new Link($url, $this->configuration);
-
-                // notify the user who added the question
-                try {
-                    $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
-                    $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
-                    $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
-                } catch (Exception | TransportExceptionInterface $e) {
-                    $this->configuration->getLogger()->error(
-                        'Send open question answered notification failed: ' . $e->getMessage()
-                    );
-                }
-            }
-
-            // Let the admin and the category owners to be informed by email of this new entry
-            try {
-                $categoryHelper = new CategoryHelper();
-                $categoryHelper
-                    ->setCategory($category)
-                    ->setConfiguration($this->configuration);
-                $moderators = $categoryHelper->getModerators($categories);
-                $notification->sendNewFaqAdded($moderators, $faqData);
-            } catch (Exception | TransportExceptionInterface $e) {
-                $this->configuration->getLogger()->error(
-                    'Send moderator notification failed: ' . $e->getMessage()
-                );
-            }
-
-            // If Elasticsearch is enabled, index new FAQ document
-            if ($this->configuration->get('search.enableElasticsearch')) {
-                $esInstance = new Elasticsearch($this->configuration);
-                $esInstance->index(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
-            }
-
-            return $this->json(
-                [
-                    'success' => Translation::get('ad_entry_savedsuc'),
-                    'data' => $faqData->getJson(),
-                ],
-                Response::HTTP_OK
-            );
-        } else {
-            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
-        }
+        return $this->render(
+            '@admin/content/faq.overview.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('edit-faq'),
+                'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('faq-overview'),
+                'categories' => $category->getCategoryTree(),
+                'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
+                'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
+            ]
+        );
     }
 
     /**
      * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
      */
-    #[Route('admin/api/faq/update')]
-    public function update(Request $request): JsonResponse
+    #[Route('/faq/add', name: 'admin.faq.add', methods: ['GET'])]
+    public function add(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+        $categories = [];
+
+        $faqData = [
+            'id' => 0,
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'revision_id' => 0,
+            'author' => $this->currentUser->getUserData('display_name'),
+            'email' => $this->currentUser->getUserData('email'),
+            'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
+        ];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('msgAddFAQ'),
+                'editExistingFaq' => false,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => '',
+                'notifyEmail' => '',
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
+     */
+    #[Route('/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET'])]
+    public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = new Faq($this->configuration);
-        $faqPermission = new FaqPermission($this->configuration);
-        $tagging = new Tags($this->configuration);
-        $logging = new AdminLog($this->configuration);
-        $changelog = new Changelog($this->configuration);
-        $visits = new Visits($this->configuration);
-        $seo = new Seo($this->configuration);
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
 
-        $category = new Category($this->configuration, [], false);
-        $category->setUser($currentUser);
-        $category->setGroups($currentGroups);
-
-        $data = json_decode($request->getContent())->data;
-
-        if (!Token::getInstance()->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        // Collect FAQ data
-        $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $solutionId = Filter::filterVar($data->solutionId, FILTER_VALIDATE_INT);
-        $revisionId = Filter::filterVar($data->revisionId, FILTER_VALIDATE_INT);
-        $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (is_array($data->{'categories[]'})) {
-            $categories = Filter::filterArray($data->{'categories[]'});
-        } else {
-            $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
-        }
-        $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
-        $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
-        $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);
-        $sticky = Filter::filterVar($data->sticky ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
-        $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
-        $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
-        $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
-        $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);
-        $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
-        $revision = Filter::filterVar($data->revision ?? 'no', FILTER_SANITIZE_SPECIAL_CHARS);
-        $recordDateHandling = Filter::filterVar($data->recordDateHandling, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
-        $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (empty($question) && empty($content)) {
-            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
-        }
-
-        // Permissions
-        $permissions = $faqPermission->createPermissionArray();
-
-        $logging->log($this->currentUser, 'admin-save-existing-faq ' . $faqId);
-        if ($active === 'yes') {
-            $logging->log($this->currentUser, 'admin-publish-existing-faq ' . $faqId);
-        }
-
-        if ('yes' === $revision && $this->configuration->get('records.enableAutoRevisions')) {
-            $faqRevision = new Revision($this->configuration);
-            $faqRevision->create($faqId, $faqLang);
-            ++$revisionId;
-        }
-
-        $faqData = new FaqEntity();
-        $faqData
-            ->setId($faqId)
-            ->setLanguage($faqLang)
-            ->setRevisionId($revisionId)
-            ->setSolutionId($solutionId)
-            ->setActive($active === 'yes')
-            ->setSticky(($sticky !== 'no') ? $sticky : false)
-            ->setQuestion(
-                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setAnswer(
-                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setKeywords($keywords)
-            ->setAuthor($author)
-            ->setEmail($email)
-            ->setComment($comment === 'y')
-            ->setNotes(Filter::removeAttributes($notes));
-
-        switch ($recordDateHandling) {
-            case 'updateDate':
-                $faqData->setUpdatedDate(new DateTime());
-                break;
-            case 'manualDate':
-                $faqData->setUpdatedDate(new DateTime($date));
-                break;
-            case 'keepDate':
-                break;
-        }
-
-        // Create ChangeLog entry
-        $changelog->add(
-            $faqData->getId(),
-            $this->currentUser->getUserId(),
-            (string) $changed,
-            $faqData->getLanguage(),
-            $revisionId
-        );
-
-        // Create the visit entry
-        $visits->logViews($faqData->getId());
-
-        // save or update the FAQ record
-        if ($faq->hasTranslation($faqData->getId(), $faqData->getLanguage())) {
-            $faqData = $faq->update($faqData);
-        } else {
-            $faqData = $faq->create($faqData);
-        }
-
-        if (!isset($categories)) {
-            $categories = [];
-        }
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
 
         $categoryRelation = new Relation($this->configuration, $category);
-        $categoryRelation->deleteByFaq($faqData->getId(), $faqData->getLanguage());
-        $categoryRelation->add($categories, $faqData->getId(), $faqData->getLanguage());
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
 
-        // Insert the tags
-        if ($tags !== '') {
-            $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
-        } else {
-            $tagging->deleteByRecordId($faqData->getId());
-        }
+        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $selectedRevisionId = Filter::filterVar($request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
-        // Update the SEO data
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
+
+        $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
+
+        $faq->getFaq($faqId, null, true);
+        $faqData = $faq->faqRecord;
+
+        // Tags
+        $faqData['tags'] = implode(', ', $this->container->get('phpmyfaq.tags')->getAllTagsById($faqId));
+
+        // SERP
         $seoEntity = new SeoEntity();
         $seoEntity
             ->setType(SeoType::FAQ)
-            ->setReferenceId($faqData->getId())
-            ->setReferenceLanguage($faqData->getLanguage())
-            ->setTitle($serpTitle)
-            ->setDescription($serpDescription);
+            ->setReferenceId($faqId)
+            ->setReferenceLanguage($faqLanguage);
+        $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
+        $faqData['serp-title'] = $seoData->getTitle();
+        $faqData['serp-description'] = $seoData->getDescription();
 
-        if ($seo->get($seoEntity)->getId() === null) {
-            $seoEntity
-                ->setTitle($serpTitle)
-                ->setDescription($serpDescription);
-            $seo->create($seoEntity);
+        $attachmentList = AttachmentFactory::fetchByRecordId($this->configuration, $faqId);
+
+        $faqRevision = new Revision($this->configuration);
+        $revisions = $faqRevision->get($faqId, $faqLanguage, $faqData['author']);
+
+        $faqUrl = sprintf(
+            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
+            $this->configuration->getDefaultUrl(),
+            $category->getCategoryIdFromFaq($faqId),
+            $faqId,
+            $faqLanguage
+        );
+
+        $link = new Link($faqUrl, $this->configuration);
+        $link->itemTitle = $faqData['title'];
+
+        // User permissions
+        $userPermission = $this->container->get('phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
+        if (count($userPermission) == 0 || $userPermission[0] == -1) {
+            $allUsers = true;
+            $restrictedUsers = false;
+            $userPermission[0] = -1;
         } else {
-            $seoEntity
-                ->setTitle($serpTitle)
-                ->setDescription($serpDescription);
-            $seo->update($seoEntity);
+            $allUsers = false;
+            $restrictedUsers = true;
         }
 
-        // Add user permissions
-        $faqPermission->delete(FaqPermission::USER, $faqData->getId());
-        $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
-        // Add group permission
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
-            $faqPermission->delete(FaqPermission::GROUP, $faqData->getId());
-            $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
+        // Group permissions
+        $groupPermission = $this->container->get('phpmyfaq.faq.permission')->get(Permission::GROUP, $faqId);
+        if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
+            $allGroups = true;
+            $restrictedGroups = false;
+            $groupPermission[0] = -1;
+        } else {
+            $allGroups = false;
+            $restrictedGroups = true;
         }
 
-        // If Elasticsearch is enabled, update an active or delete inactive FAQ document
-        if ($this->configuration->get('search.enableElasticsearch')) {
-            $esInstance = new Elasticsearch($this->configuration);
-            if ('yes' === $active) {
-                $esInstance->update(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
-            }
-        }
-
-        return $this->json(
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
             [
-                'success' => Translation::get('ad_entry_savedsuc'),
-                'data' => $faqData->getJson(),
-            ],
-            Response::HTTP_OK
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => true,
+                'currentRevision' => sprintf('%s 1.%d', Translation::get('msgRevision'), $selectedRevisionId),
+                'numberOfRevisions' => count($revisions),
+                'faqId' => $faqId,
+                'faqLang' => $faqLanguage,
+                'revisions' => $revisions,
+                'selectedRevisionId' => $selectedRevisionId ?? $faqData['revision_id'],
+                'faqRevisionId' => $faqData['revision_id'],
+                'faqData' => $faqData,
+                'faqUrl' => $link->toString(),
+                'openQuestionId' => 0,
+                'notifyUser' => '',
+                'notifyEmail' => '',
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => $attachmentList,
+                'allGroups' => $allGroups,
+                'restrictedGroups' => $restrictedGroups,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => $allUsers,
+                'restrictedUsers' => $restrictedUsers,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => $this->container->get('phpmyfaq.admin.changelog')->getByFaqId($faqId),
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
+                'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
         );
     }
 
     /**
      * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
      */
-    #[Route('admin/api/faq/permissions')]
-    public function listPermissions(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
-
-        $faqPermission = new FaqPermission($this->configuration);
-
-        return $this->json(
-            [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
-            ],
-            Response::HTTP_OK
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faqs/:categoryId/:language')]
-    public function listByCategory(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $language = Filter::filterVar($request->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
-        $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
-
-        $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
-        $faq->setLanguage($language);
-
-        return $this->json(
-            [
-                'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
-            ],
-            Response::HTTP_OK
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faq/activate')]
-    public function activate(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_APPROVE);
-
-        $data = json_decode($request->getContent());
-
-        $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
-
-        if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
-            $success = false;
-
-            foreach ($faqIds as $faqId) {
-                if (Language::isASupportedLanguage($faqLanguage)) {
-                    $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
-                }
-            }
-
-            if ($success) {
-                return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
-            }
-        } else {
-            return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faq/sticky')]
-    public function sticky(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $data = json_decode($request->getContent());
-
-        $faqIds = Filter::filterArray($data->faqIds);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
-        $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
-
-        if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
-            $success = false;
-
-            foreach ($faqIds as $faqId) {
-                if (Language::isASupportedLanguage($faqLanguage)) {
-                    $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
-                }
-            }
-
-            if ($success) {
-                return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
-            }
-        } else {
-            return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faq/delete')]
-    public function delete(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_DELETE);
-
-        $faq = new Faq($this->configuration);
-
-        $data = json_decode($request->getContent());
-
-        $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!Token::getInstance()->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $adminLog = new AdminLog($this->configuration);
-        $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId);
-
-        try {
-            $faq->delete($faqId, $faqLanguage);
-        } catch (FileException | AttachmentException $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
-
-        return $this->json(['success' => Translation::get('ad_entry_delsuc')], Response::HTTP_OK);
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faq/search')]
-    public function search(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $data = json_decode($request->getContent());
-
-        if (!Token::getInstance()->verifyToken('edit-faq', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $faqPermission = new FaqPermission($this->configuration);
-        $faqSearch = new Search($this->configuration);
-        $faqSearch->setCategory(new Category($this->configuration));
-
-        $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
-        $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if (!is_null($searchString)) {
-            $searchResult = $faqSearch->search($searchString, false);
-
-            $searchResultSet->reviewResultSet($searchResult);
-
-            $searchHelper = new SearchHelper($this->configuration);
-            $searchHelper->setSearchTerm($searchString);
-
-            return $this->json(
-                ['success' => $searchHelper->renderAdminSuggestionResult($searchResultSet)],
-                Response::HTTP_OK
-            );
-        } else {
-            return $this->json(['error' => 'No search string provided.'], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faqs/sticky/order')]
-    public function saveOrderOfStickyFaqs(Request $request): JsonResponse
-    {
-        $this->userHasPermission(PermissionType::FAQ_EDIT);
-
-        $data = json_decode($request->getContent());
-
-        if (!Token::getInstance()->verifyToken('order-stickyfaqs', $data->csrf)) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $faq = new Faq($this->configuration);
-        $faq->setStickyFaqOrder($data->faqIds);
-
-        return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Route('admin/api/faq/import')]
-    public function import(Request $request): JsonResponse
+    #[Route('/faq/copy/:faqId/:faqLanguage', name: 'admin.faq.copy', methods: ['GET'])]
+    public function copy(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        $file = $request->files->get('file');
-        if (!isset($file)) {
-            return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
-        }
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        if (!Token::getInstance()->verifyToken('importfaqs', $request->request->get('csrf'))) {
-            return $this->json(['error' => Translation::get('err_NotAuth')], Response::HTTP_UNAUTHORIZED);
-        }
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
 
-        $faqImport = new Import($this->configuration);
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
 
-        $errors = [];
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
 
-        if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
-            $handle = fopen($file->getRealPath(), 'r');
-            $csvData = $faqImport->parseCSV($handle);
+        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-            if (!$faqImport->validateCSV($csvData)) {
-                $result = [
-                    'storedAll' => false,
-                    'error' => Translation::get('msgCSVFileNotValidated'),
-                ];
-                return $this->json($result, Response::HTTP_BAD_REQUEST);
-            }
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-copy-faq ' . $faqId);
 
-            foreach ($csvData as $record) {
-                $error = $faqImport->import($record);
-                if (!$error) {
-                    $errors[] = $error;
-                }
-            }
+        $categories = [];
 
-            if ($errors === []) {
-                $result = [
-                    'storedAll' => true,
-                    'success' => Translation::get('msgImportSuccessful'),
-                ];
-                return $this->json($result, Response::HTTP_OK);
-            } else {
-                $result = [
-                    'storedAll' => false,
-                    'messages' => $errors,
-                ];
-                return $this->json($result, Response::HTTP_BAD_REQUEST);
-            }
-        } else {
-            $result = [
-                'storedAll' => false,
-                'error' => 'Bad request: The file is not a CSV file.',
-            ];
-            return $this->json($result, Response::HTTP_BAD_REQUEST);
-        }
+        $faq->getFaq($faqId, null, true);
+        $faqData = $faq->faqRecord;
+        $faqData['title'] = 'Copy of ' . $faqData['title'];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => false,
+                'faqId' => 0,
+                'faqLang' => $faqLanguage,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => '',
+                'notifyEmail' => '',
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
+     */
+    #[Route('/faq/translate/:faqId/:faqLanguage', name: 'admin.faq.translate', methods: ['GET'])]
+    public function translate(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
+
+        $categories = [];
+
+        $faq->getFaq($faqId, null, true);
+        $faqData = $faq->faqRecord;
+        $faqData['title'] = 'Translation of ' . $faqData['title'];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => false,
+                'faqId' => 0,
+                'faqLang' => $faqLanguage,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => '',
+                'notifyEmail' => '',
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     * @todo refactor Twig template variables
+     */
+    #[Route('/faq/answer/:questionId/:faqLanguage', name: 'admin.faq.answer', methods: ['GET'])]
+    public function answer(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $questionId = Filter::filterVar($request->get('questionId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log(
+            $this->currentUser,
+            'admin-answer-question ' . $questionId
+        );
+
+        $question = $this->container->get('phpmyfaq.question')->get($questionId);
+
+        $faqData = [
+            'id' => 0,
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'title' => $question['question'],
+            'revision_id' => 0,
+            'author' => $this->currentUser->getUserData('display_name'),
+            'email' => $this->currentUser->getUserData('email'),
+            'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
+        ];
+
+        $categories = [
+            'category_id' => $question['category_id'],
+            'category_lang' => $faqLanguage,
+        ];
+
+        $this->addExtension(new IsoDateTwigExtension());
+        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new FormatBytesTwigExtension());
+        return $this->render(
+            '@admin/content/faq.editor.twig',
+            [
+                ... $this->getHeader($request),
+                ... $this->getFooter(),
+                ... $this->getBaseTemplateVars(),
+                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+                'editExistingFaq' => false,
+                'faqId' => 0,
+                'faqLang' => $faqLanguage,
+                'faqRevisionId' => 0,
+                'faqData' => $faqData,
+                'openQuestionId' => 0,
+                'notifyUser' => $question['username'],
+                'notifyEmail' => $question['email'],
+                'categoryOptions' => $categoryHelper->renderOptions($categories),
+                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+                'attachments' => [],
+                'allGroups' => true,
+                'restrictedGroups' => false,
+                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
+                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
+                'allUsers' => true,
+                'restrictedUsers' => false,
+                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'changelogs' => [],
+                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_APPROVE->value
+                ),
+                'isActive' => null,
+                'isInActive' => null,
+                'nextSolutionId' => $faq->getNextSolutionId(),
+                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+            ]
+        );
+    }
+
+    /**
+     * @throws \Exception
+     * @return array<string, string>
+     */
+    private function getBaseTemplateVars(): array
+    {
+        $session = $this->container->get('session');
+        $token = Token::getInstance($session);
+
+        $canAddAttachments = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::ATTACHMENT_ADD->value
+        );
+
+        $canDeleteAttachments = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::ATTACHMENT_DELETE->value
+        );
+
+        return [
+            'csrfToken' => $token->getTokenString('edit-faq'),
+            'csrfTokenDeleteAttachment' => $token->getTokenString('delete-attachment'),
+            'csrfTokenUploadAttachment' => $token->getTokenString('upload-attachment'),
+            'isEditorEnabled' => $this->configuration->get('main.enableWysiwygEditor'),
+            'isMarkdownEditorEnabled' => $this->configuration->get('main.enableMarkdownEditor'),
+            'isBasicPermission' => $this->configuration->get('security.permLevel') === 'basic',
+            'defaultUrl' => $this->configuration->getDefaultUrl(),
+            'canBeNewRevision' => !$this->configuration->get('records.enableAutoRevisions'),
+            'maxAttachmentSize' => $this->configuration->get('records.maxAttachmentSize'),
+            'hasPermissionForAddAttachments' => $canAddAttachments,
+            'hasPermissionForDeleteAttachments' => $canDeleteAttachments,
+            'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
+            'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
+            'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),
+            'ad_entry_changelog' => Translation::get('ad_entry_changelog'),
+            'ad_entry_changed' => Translation::get('ad_entry_changed'),
+            'ad_admin_notes_hint' => Translation::get('ad_admin_notes_hint'),
+            'ad_admin_notes' => Translation::get('ad_admin_notes'),
+            'ad_entry_changelog_history' => Translation::get('ad_entry_changelog_history'),
+            'ad_gen_reset' => Translation::get('ad_gen_reset'),
+            'ad_entry_save' => Translation::get('ad_entry_save'),
+            'ad_entry_status' => Translation::get('ad_entry_status'),
+            'ad_entry_visibility' => Translation::get('ad_entry_visibility'),
+            'ad_entry_not_visibility' => Translation::get('ad_entry_not_visibility'),
+            'ad_entry_new_revision' => Translation::get('ad_entry_new_revision'),
+            'ad_gen_yes' => Translation::get('ad_gen_yes'),
+            'ad_gen_no' => Translation::get('ad_gen_no'),
+            'ad_entry_allowComments' => Translation::get('ad_entry_allowComments'),
+            'ad_entry_solution_id' => Translation::get('ad_entry_solution_id'),
+            'ad_att_addto' => Translation::get('ad_att_addto'),
+            'ad_att_addto_2' => Translation::get('ad_att_addto_2'),
+            'ad_att_att' => Translation::get('ad_att_att'),
+            'ad_att_butt' => Translation::get('ad_att_butt'),
+            'ad_changerev' => Translation::get('ad_changerev'),
+            'ad_view_faq' => Translation::get('ad_view_faq'),
+        ];
     }
 }
