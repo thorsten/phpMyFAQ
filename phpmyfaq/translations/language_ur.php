@@ -1176,7 +1176,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = 'پاس ورڈ اوور رائٹ کری�
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'عمومی سوالات میں تبدیلیوں کے ورژن کی اجازت دیں'];
 $PMF_LANG['permission::view_faqs'] = 'عمومی سوالات دیکھیں';
 $PMF_LANG['permission::view_categories'] = 'زمرے دیکھیں';
-$PMF_LANG['permission::view_sections'] = 'حصے دیکھیں';
 $PMF_LANG['permission::view_news'] = 'خبریں دیکھیں';
 $PMF_LANG['permission::administrate_groups'] = 'گروپس کا انتظام کریں';
 $PMF_LANG['ad_group_rights'] = 'گروپ کی اجازتیں';

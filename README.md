@@ -28,7 +28,7 @@ engine, you need Elasticsearch 6.x or later. Check our detailed requirements on
 ### phpMyFAQ installation package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download), unzip the package
-and open http://www.example.org/phpmyfaq/setup/index.php in your preferred browser.
+and open http://www.example.org/phpmyfaq/setup/ in your preferred browser.
 
 ### phpMyFAQ installation with Docker
 
@@ -124,7 +124,7 @@ To run phpMyFAQ locally, you need at least a running web server with PHP support
     $ pnpm install
     $ pnpm build
 
-Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
+Then just open http://www.example.org/phpmyfaq/setup/ in your browser.
 
 ## Testing
 

@@ -1179,7 +1179,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = "Şifrenin üzerine yaz";
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'SSS değişikliklerinin sürümlendirilmesine izin ver'];
 $PMF_LANG['permission::view_faqs'] = "Soruları görüntüle";
 $PMF_LANG['permission::view_categories'] = "Kategorileri görüntüle";
-$PMF_LANG['permission::view_sections'] = "Bölümleri görüntüle";
 $PMF_LANG['permission::view_news'] = "Duyuruları görüntüle";
 $PMF_LANG['permission::administrate_groups'] = "Grupları yönet";
 $PMF_LANG['ad_group_rights'] = "Grup izinleri";

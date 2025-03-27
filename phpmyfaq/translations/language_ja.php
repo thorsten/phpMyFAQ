@@ -955,7 +955,6 @@ $PMF_LANG['ad_user_overwrite_passwd'] = 'パスワードを上書き';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'FAQの変更履歴を有効化'];
 $PMF_LANG['permission::view_faqs'] = 'FAQを表示';
 $PMF_LANG['permission::view_categories'] = 'カテゴリーを表示';
-$PMF_LANG['permission::view_sections'] = 'セクションを表示';
 $PMF_LANG['permission::view_news'] = 'ニュースを表示';
 $PMF_LANG['permission::add_section'] = 'セクションを追加';
 $PMF_LANG['permission::edit_section'] = 'セクションを編集';
