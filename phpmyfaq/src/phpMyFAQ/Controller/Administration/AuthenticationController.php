@@ -70,7 +70,7 @@ class AuthenticationController extends AbstractAdministrationController
                     'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors)
                 );
                 //$error = $e->getMessage();
-                return new RedirectResponse('./login');
+                return new RedirectResponse('../login');
             }
         }
 
