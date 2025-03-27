@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="{{ metaLanguage }}" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}">
+
+  <meta content="{{ metaDescription }}" name="description">
+  <meta content="{{ metaPublisher }}" name="author">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="phpMyFAQ {{ phpmyfaqVersion }}" name="application-name">
+  <meta content="{{ metaRobots }}" name="robots">
+  <meta content="7 days" name="revisit-after">
+
+  {% if isDebugEnabled %}<link href="{{ baseHref }}assets/public/debugMode.css" rel="stylesheet">{% endif %}
+
+  <link href="./assets/public/styles.css" rel="stylesheet" media="screen">
+  <link href="./assets/templates/{{ tplSetName }}/theme.css" rel="stylesheet" media="screen">
+  
+  <style type="text/css" media="screen">
+    {{ customCss }}
+  </style>
+  <link href="./assets/images/favicon.ico" rel="shortcut icon">
+  <link href="{{ currentPageUrl }}" rel="canonical">
+
+  {% if richSnippetsEnabled %}
+  {% block richSnippets %}{% endblock %}
+  {% endif %}
+
+</head>
+<body class="pmf-page-wrapper pmf-template-{{ tplSetName }}" dir="{{ dir }}">
+
+<nav class="navbar navbar-expand-lg navbar-dark p-3 text-bg-pmf-nav border-bottom sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ faqHome }}" id="phpmyfaq-logo" title="{{ header }}">
+      <img width="130" height="40" src="./assets/images/logo-transparent.svg" alt="{{ title }}"
+           title="{{ title }}">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#pmf-top-navbar"
+            aria-controls="pmf-top-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="pmf-top-navbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if not isMaintenanceMode %}
+          {% for item in topNavigation %}
+            <li class="nav-item pmf-nav-link ">
+              <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
+            </li>
+          {% endfor %}
+        {% endif %}
+            <li class="nav-item pmf-nav-link searchNav">
+              <a class="pmf-nav-link {{ item['active'] }}" href="./search.html">{{ searchBox }}</a>
+            </li>
+      </ul>
+<!-- SEARCH -->
+{% if not isMaintenanceMode %}
+<div class="searchContainer">
+  <div class="row height d-flex justify-content-center align-items-center">
+    <div class="">
+      <div id="expandaSearch" class="search searchClosed">
+        <form action="./search.html" id="search" method="post" role="search">
+          <i class="bi bi-search"></i>
+          <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
+                 name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
+          <button disabled=disabled type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+      <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+        <li class="nav-item dropdown">
+          <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
+                  data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+            {{ msgLoginUser }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            {% if not isUserLoggedIn %}
+              {% if isUserRegistrationEnabled %}
+                <li><a class="dropdown-item" href="./user/register">{{ msgRegisterUser }}</a></li>
+              {% endif %}
+              <li><a class="dropdown-item" href="./login">{{ msgLoginUser }}</a></li>
+            {% else %}
+              <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
+              <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
+              {% if isUserHasAdminRights %}
+                <li><a class="dropdown-item" href="./admin">{{ msgAdmin }}</a></li>
+              {% endif %}
+              <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="./user/logout?csrf={{ csrfLogout }}">{{ msgLogoutUser }}</a></li>
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+{% if showBreadcrumb %}
+<section class="pmf-breadcrumbs">
+  <div class="container">{{ breadcrumbHeadline }}</div>
+</section>
+{% endif %}
+
+<!-- MAIN CONTENT -->
+<section class="my-3" id="wrapper">
+  <div class="container">
+  {% if not isMaintenanceMode %}
+    {% block content %}{% endblock %}
+  {% else %}
+    We're currently in maintenance mode. Please come back later.
+  {% endif %}
+  </div>
+</section>
+
+<footer class="footer text-bg-pmf-footer pt-5 pb-4 pb-lg-5">
+  <div class="container pt-lg-4">
+    <div class="row pb-2">
+      <div class="col-lg-4 col-md-6">
+        {% if not isMaintenanceMode %}
+        <label class="form-label" for="language">{{ languageBox }}</label>
+        <form accept-charset="utf-8" action="./" method="post" id="pmf-footer-language-switcher">
+          <div class="form-group d-flex">
+            {{ switchLanguages | raw }}
+            <input name="action" type="hidden" value="">
+          </div>
+        </form>
+        {% endif %}
+      </div>
+      <div class="col-xl-6 col-lg-7 col-md-5 offset-xl-2 offset-md-1 pt-4 pt-md-1 pt-lg-0">
+        <div id="footer-links" class="row">
+          <div class="col-lg-4">
+            <ul class="nav flex-column pb-lg-1 mb-lg-3">
+              {% if not isMaintenanceMode %}
+                {% for item in footerNavigation %}
+                  <li class="nav-item">
+                    <a href="{{ item['link'] }}" class="nav-link d-inline-block px-0 pt-1 pb-2 {{ item['active'] }}">
+                      {{ item['name'] }}
+                    </a>
+                  </li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+          <div class="col-lg-4">
+            <ul class="nav flex-column pb-lg-1 mb-lg-3">
+              {% if not isMaintenanceMode %}
+                {% if isPrivacyLinkEnabled %}
+                  <li class="nav-item">
+                    <a class="nav-link d-inline-block px-0 pt-1 pb-2" target="_blank" href="{{ urlPrivacyLink }}">
+                      {{ msgPrivacyNote }}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if isCookieConsentEnabled %}
+                  <li class="nav-item">
+                    <a id="showCookieConsent" class="nav-link d-inline-block px-0 pt-1 pb-2" href="#">
+                      {{ cookiePreferences }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="nav d-block text-center text-md-start pb-2 pb-lg-0 mb-0">
+      <span class="text-light opacity-75">© {{ currentYear }} All rights reserved. Powered with ❤️ and ☕️ by </span>
+      <a class="nav-link d-inline-block p-0" href="https://www.phpmyfaq.de/" target="_blank" rel="noopener">phpMyFAQ</a>
+      <span class="text-light opacity-75">{{ version }}</span>
+    </p>
+  </div>
+</footer>
+
+<!-- Frontend toasts -->
+<div class="toast-container position-fixed bottom-0 start-0 mt-5 p-3">
+  <div id="pmf-notification" class="toast align-items-center text-bg-success shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+      </button>
+    </div>
+  </div>
+
+  <div id="pmf-notification-error" class="toast align-items-center text-bg-danger shadow border-0" role="alert"
+       aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="pmf-notification-error-message">
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
+
+{% if isCookieConsentEnabled %}
+<script type="module" src="./assets/public/cookieConsent.js"></script>
+{% endif %}
+<script type="module" src="./assets/public/frontend.js"></script>
+<script src="./assets/templates/{{ tplSetName }}/theme.js"></script>
+
+</body>
+</html>
