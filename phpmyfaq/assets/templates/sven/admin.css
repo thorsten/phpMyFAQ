@@ -1,15 +1,5 @@
-.pmf-admin-topnav {
-    z-index: 100;
-    position: sticky;
-    top: 0;
-  }
 
-  #pmf-admin-layout-sidenav {
-    overflow: scroll;
-    height: calc(100vh - 56px);
-  }
 
-#pmf-admin-layout-sidenav_nav{
-  position: sticky;
-  top: 0;
+#sidenavAccordion div.sticky-top {
+  top: 65px;
 }
