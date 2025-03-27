@@ -106,6 +106,9 @@ class Application
 
     private function handleRequest(RouteCollection $routeCollection, Request $request, RequestContext $context): void
     {
+        if ( ! preg_match('/login|authenticate|logout|keep-alive|token|check/', $request->getRequestUri()) ) {
+            $this->container->get('session')->set("lastRequestUri", $request->getRequestUri());
+        }
         $urlMatcher = new UrlMatcher($routeCollection, $context);
         $this->setUrlMatcher($urlMatcher);
         $controllerResolver = new ControllerResolver();
@@ -138,7 +141,7 @@ class Application
                     ['Content-Type' => 'application/json']
                 );
             } else {
-                $response = new RedirectResponse('/login');
+                $response = new RedirectResponse('../login');
             }
         } catch (BadRequestException $exception) {
             $response = new Response(
