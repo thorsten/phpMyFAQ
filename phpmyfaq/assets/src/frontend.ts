@@ -23,7 +23,7 @@ import {
   handleShowFaq,
   handleUserVoting,
 } from './faq';
-import { handleAutoComplete, handleQuestion } from './search';
+import { handleAutoComplete, handleQuestion, handleExpandaSearch } from './search';
 import {
   handleDeleteBookmarks,
   handleRegister,
@@ -98,4 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // AutoComplete
   handleAutoComplete();
+
+  // set up expandaSearch
+  handleExpandaSearch();
 });

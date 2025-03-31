@@ -11,3 +11,12 @@
   @extend .px-2;
   @extend .link-light;
 }
+
+@media (min-width: 992px) {
+  li.searchNav {
+    display: none !important;
+  }
+  div.searchContainer {
+    display: block;
+  }
+}

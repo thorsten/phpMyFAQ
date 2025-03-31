@@ -1,34 +1,84 @@
+.searchContainer {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  display: none;
+  padding: 3px 0px; 
+
+  #expandaSearch {
+    border-radius: 10px;
+  }
+  
+  .bi-close{
+    position: absolute;
+    top: -16px;
+    left: 7px;
+    font-size: 45px;
+    color: var(--bs-gray-400);
+    cursor: pointer;
+  }
+
+  .bi-close:before{
+    content: "×";
+    font-weight: bold;
+  }
+}
+
 .search {
   position: relative;
   box-shadow: 0 0 40px rgba(51, 51, 51, 0.1);
   background-color: transparent;
 
   input {
-    height: 60px;
+    height: 50px;
     text-indent: 25px;
 
     &:focus {
       box-shadow: none;
       border: 2px solid var(--bs-primary);
+      padding-right: 110px;
+      padding-left: 15px;
     }
   }
 
-  .bi-search {
-    position: absolute;
-    top: 18px;
-    left: 18px;
+  &.searchClosed {
+    display: inline-block;
+
+    form {
+      background: white;
+      border-radius: 10px;
+      width: fit-content;
+      padding: 5px;
+    }
+
+    .bi-close {
+      display: none;
+    }
+
+    input {
+      visibility: hidden;
+      position: absolute;
+      border: none;
+    }
+
+    button {
+      position: unset;
+    }
+
   }
 
   button {
     position: absolute;
     top: 5px;
     right: 5px;
-    height: 50px;
+    height: 40px;
+    padding-top: 0.25rem;
   }
 }
 
 .autocomplete {
   @extend .list-group;
+  z-index: 1200;
 }
 
 .autocomplete > div {
@@ -42,3 +92,5 @@
   @extend .list-group-item-info;
   cursor: pointer;
 }
+
+
