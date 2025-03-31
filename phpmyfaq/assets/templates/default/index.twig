@@ -49,10 +49,31 @@
               <a class="pmf-nav-link {{ item['active'] }}" href="{{ item['link'] }}">{{ item['name'] }}</a>
             </li>
           {% endfor %}
-        {% endif %}
+            <li class="nav-item pmf-nav-link searchNav">
+              <a class="pmf-nav-link {{ item['active'] }}" href="./search.html">{{ searchBox }}</a>
+            </li>
+          {% endif %}
       </ul>
-
-      <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+      <!-- SEARCH -->
+      {% if not isMaintenanceMode %}
+      <div class="searchContainer ms-auto">
+      {% if not searchTerm %}
+        <div class="row height d-flex justify-content-center align-items-center">
+          <div class="">
+            <div id="expandaSearch" class="search searchClosed">
+              <form action="./search.html" id="search" method="post" role="search">
+                <i class="bi bi-close"></i>
+                <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
+                      name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
+                <button disabled=disabled type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      </div>
+      {% endif %}
+      <ul class="navbar-nav flex-row flex-wrap  ms-md-3">
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
@@ -80,29 +101,6 @@
     </div>
   </div>
 </nav>
-
-<!-- SEARCH -->
-{% if not isMaintenanceMode %}
-<div class="container my-5">
-  <div class="row height d-flex justify-content-center align-items-center">
-    <div class="col-md-8">
-      <div class="search">
-        <form action="./search.html" id="search" method="post" role="search">
-          <i class="bi bi-search"></i>
-          <input autocomplete="off" type="text" class="form-control form-control-lg" id="pmf-search-autocomplete"
-                 name="search" placeholder="{{ searchBox }} ..." maxlength="255" value="{{ searchTerm }}">
-          <button type="submit" class="btn btn-primary btn-lg">{{ searchBox }}</button>
-        </form>
-      </div>
-      <div>
-        <small class="form-text text-muted">
-          <a class="help" href="./search.html">{{ msgAdvancedSearch }}</a>
-        </small>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
 
 <!-- BREADCRUMB -->
 {% if showBreadcrumb %}
