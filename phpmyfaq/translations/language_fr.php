@@ -1195,7 +1195,6 @@ $PMF_LANG["ad_user_overwrite_passwd"] = "Écraser le mot de passe";
 $LANG_CONF["records.enableAutoRevisions"] = ["checkbox", "Autoriser la gestion des versions des modifications de la FAQ"];
 $PMF_LANG["permission::view_faqs"] = "Voir les FAQs";
 $PMF_LANG["permission::view_categories"] = "Voir les catégories";
-$PMF_LANG["permission::view_sections"] = "Voir les sections";
 $PMF_LANG["permission::view_news"] = "Voir les actualités";
 $PMF_LANG["permission::administrate_groups"] = "Administrer les groupes";
 $PMF_LANG["ad_group_rights"] = "Permissions de groupe";
