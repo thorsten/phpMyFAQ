@@ -15,45 +15,46 @@
 
 export const handleExpandaSearch = (): void => {
 
-    let s: HTMLElement | null = document.getElementById('expandaSearch');
-    let n: HTMLElement | null = document.querySelector('#pmf-top-navbar ul');
-    let c: HTMLElement | null = document.querySelector('.searchContainer .bi-close');
-    let t: int | null; 
+    let searchContainer: HTMLElement | null = document.getElementById('expandaSearch');
+    let menuList: HTMLElement | null = document.querySelector('#pmf-top-navbar ul');
+    let closeBtn: HTMLElement | null = document.querySelector('.searchContainer .bi-close');
+    let timeOut: int | null; 
 
-    function showSearch(e: MouseEvent): void {
-        if (s && s.querySelector('button') && !s.querySelector('button').disabled) return;
-        e.stopPropagation();
-        if (n) n.style.display = "none";
-        if (s && s.querySelector('input')) s.querySelector('input').value = "";
-        if (s) s.classList.remove('searchClosed'); 
-        if (s && s.querySelector('button')) s.querySelector('button').disabled = false;
-        if (s && s.querySelector('input')) s.querySelector('input').focus();
+    function showSearch(event: MouseEvent): void {
+        if (searchContainer && searchContainer.querySelector('button') && !searchContainer.querySelector('button').disabled) return;
+        event.stopPropagation();
+        if (menuList) menuList.style.display = "none";
+        if (searchContainer && searchContainer.querySelector('input')) searchContainer.querySelector('input').value = "";
+        if (searchContainer) searchContainer.classList.remove('searchClosed'); 
+        if (searchContainer && searchContainer.querySelector('button')) searchContainer.querySelector('button').disabled = false;
+        if (searchContainer && searchContainer.querySelector('input')) searchContainer.querySelector('input').focus();
         document.querySelector('div.searchContainer')!.style.width = "90%";
         redoTimeout();
     }
 
-    function hideSearch(e?: MouseEvent): void {
+    function hideSearch(event?: MouseEvent): void {
         if (document.querySelector('ul.autocomplete')) return;
-        if (s && s.querySelector('button') && s.querySelector('button').disabled) return;
-        if (e) e.stopPropagation();
-        if (s) s.classList.add('searchClosed'); 
-        if (s && s.querySelector('button')) s.querySelector('button').disabled = true;    
-        if (n) n.style.display = "";
+        if (searchContainer && searchContainer.querySelector('button') && searchContainer.querySelector('button').disabled) return;
+        if (event) event.stopPropagation();
+        if (searchContainer) searchContainer.classList.add('searchClosed'); 
+        if (searchContainer && searchContainer.querySelector('button')) searchContainer.querySelector('button').disabled = true;    
+        if (menuList) menuList.style.display = "";
         document.querySelector('div.searchContainer')!.style.width = "";
     }
 
-    function checkEsc(e: KeyboardEvent): void {
-        if (e.key === "Escape") { 
-        if (s && !s.classList.contains('searchClosed')) hideSearch();
+    function checkEsc(event: KeyboardEvent): void {
+        if (event.key === "Escape") { 
+        if (searchContainer && !searchContainer.classList.contains('searchClosed')) hideSearch();
         }
     }
 
-    if (s) s.addEventListener('click', showSearch);
-    if (c) c.addEventListener('click', hideSearch);
     function redoTimeout() {
-        clearTimeout(t);
-        t = setTimeout(hideSearch, 3000);
+        clearTimeout(timeOut);
+        timeOut = setTimeout(hideSearch, 3000);
     }
+
+    if (searchContainer) searchContainer.addEventListener('click', showSearch);
+    if (closeBtn) closeBtn.addEventListener('click', hideSearch);
 
     document.querySelector('.search input').addEventListener("keyup", redoTimeout);
     document.addEventListener('keydown', checkEsc);
