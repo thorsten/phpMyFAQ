@@ -14,7 +14,7 @@
  */
 
 export const handleExpandaSearch = (): void => {
-    console.log("expandasearch");
+
     let s: HTMLElement | null = document.getElementById('expandaSearch');
     let n: HTMLElement | null = document.querySelector('#pmf-top-navbar ul');
     let c: HTMLElement | null = document.querySelector('.searchContainer .bi-close');
@@ -29,9 +29,11 @@ export const handleExpandaSearch = (): void => {
         if (s && s.querySelector('button')) s.querySelector('button').disabled = false;
         if (s && s.querySelector('input')) s.querySelector('input').focus();
         document.querySelector('div.searchContainer')!.style.width = "90%";
+        redoTimeout();
     }
 
     function hideSearch(e?: MouseEvent): void {
+        if (document.querySelector('ul.autocomplete')) return;
         if (s && s.querySelector('button') && s.querySelector('button').disabled) return;
         if (e) e.stopPropagation();
         if (s) s.classList.add('searchClosed'); 
@@ -48,6 +50,11 @@ export const handleExpandaSearch = (): void => {
 
     if (s) s.addEventListener('click', showSearch);
     if (c) c.addEventListener('click', hideSearch);
-    if (s) s.addEventListener('click', showSearch);
+    function redoTimeout() {
+        clearTimeout(t);
+        t = setTimeout(hideSearch, 3000);
+    }
+
+    document.querySelector('.search input').addEventListener("keyup", redoTimeout);
     document.addEventListener('keydown', checkEsc);
 };
