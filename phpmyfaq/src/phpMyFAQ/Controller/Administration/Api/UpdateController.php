@@ -19,7 +19,6 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use DateTimeInterface;
-use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
