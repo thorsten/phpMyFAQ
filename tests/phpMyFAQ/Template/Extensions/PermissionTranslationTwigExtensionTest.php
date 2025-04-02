@@ -14,7 +14,7 @@ class PermissionTranslationTwigExtensionTest extends TestCase
         $this->extension = new PermissionTranslationTwigExtension();
     }
 
-    public function testGetFilters()
+    public function testGetFilters(): void
     {
         $filters = $this->extension->getFilters();
 
