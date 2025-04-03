@@ -59,8 +59,9 @@ class CategoryController extends AbstractAdministrationController
 
         $session = $this->container->get('session');
         $categoryOrder = $this->container->get('phpmyfaq.category.order');
-        $orderedCategories = $categoryOrder->getAllCategories();
-        $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
+        $orderedCategories = $categoryOrder->getAllCategories(); 
+        $categoryTree = $categoryOrder->getCategoryTree($categoryInfo);
+       
 
         if (empty($categoryTree)) {
             // Fallback if no category order is available
