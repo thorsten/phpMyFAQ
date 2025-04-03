@@ -28,7 +28,7 @@ export const handleExpandaSearch = (): void => {
         if (searchContainer) searchContainer.classList.remove('searchClosed'); 
         if (searchContainer && searchContainer.querySelector('button')) searchContainer.querySelector('button').disabled = false;
         if (searchContainer && searchContainer.querySelector('input')) searchContainer.querySelector('input').focus();
-        document.querySelector('div.searchContainer')!.style.width = "90%";
+        document.querySelector('div.searchContainer')!.style.width = "75%";
         redoTimeout();
     }
 

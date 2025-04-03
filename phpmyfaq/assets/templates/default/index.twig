@@ -74,18 +74,20 @@
       </div>
       {% endif %}
       <ul class="navbar-nav flex-row flex-wrap  ms-md-3">
+        {% if not isUserLoggedIn %}
+          {% if isUserRegistrationEnabled and action != "register" %}
+          <li class="nav-item pmf-nav-link"><a class="pmf-nav-link" href="./user/register">{{ msgRegisterUser }}</a></li>
+          {% endif %}
+          {% if action != "login" %}
+          <li class="nav-item pmf-nav-link "><a class="pmf-nav-link" href="./login">{{ msgLoginUser }}</a></li>
+          {% endif %}
+        {% else %}
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
             {{ msgLoginUser }}
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            {% if not isUserLoggedIn %}
-              {% if isUserRegistrationEnabled %}
-                <li><a class="dropdown-item" href="./user/register">{{ msgRegisterUser }}</a></li>
-              {% endif %}
-              <li><a class="dropdown-item" href="./login">{{ msgLoginUser }}</a></li>
-            {% else %}
               <li><a class="dropdown-item" href="./user/ucp">{{ msgUserControlDropDown }}</a></li>
               <li><a class="dropdown-item" href="./user/bookmarks">{{ msgBookmarks }}</a></li>
               {% if isUserHasAdminRights %}
@@ -94,9 +96,9 @@
               <li><a class="dropdown-item" href="./user/request-removal">{{ msgUserRemoval }}</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="./user/logout?csrf={{ csrfLogout }}">{{ msgLogoutUser }}</a></li>
-            {% endif %}
           </ul>
         </li>
+        {% endif %}
       </ul>
     </div>
   </div>
