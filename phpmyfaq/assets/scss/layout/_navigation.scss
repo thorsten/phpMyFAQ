@@ -11,3 +11,16 @@
   @extend .px-2;
   @extend .link-light;
 }
+
+@media (min-width: 992px) {
+  li.searchNav {
+    display: none !important;
+  }
+  div.searchContainer {
+    display: block;
+  }
+}
+.pmf-nav-link.active {
+  border-radius: 5px;
+  background-color: var(--bs-primary);
+}
