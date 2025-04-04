@@ -171,6 +171,7 @@ if (
 }
 
 // List all faq attachments
+$attachmentList = [];
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqId);
