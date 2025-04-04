@@ -129,6 +129,11 @@ AttachmentFactory::init(
 // Get user action
 //
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
+$redirectAction = Filter::filterVar($request->get('redirect-action', "POST"), FILTER_SANITIZE_SPECIAL_CHARS);
+if ( $action != 'logout' && $action != 'login' && $redirectAction != 'login') {
+    $container->get('session')->set("lastRequestUri", $request->getRequestUri());
+}
+
 
 //
 // Authenticate current user
@@ -220,10 +225,30 @@ if (isset($userAuth) && $userAuth instanceof UserAuthentication) {
     }
 }
 
+if ($user->isLoggedIn() && ( $redirectAction == 'login' ||  $action == 'login' ) && $user->getUserId() > 0) {
+    $goTo = $container->get('session')->get("lastRequestUri") ? $container->get('session')->get("lastRequestUri") : $faqConfig->getDefaultUrl();
+    $redirect = new RedirectResponse($goTo);
+    $redirect->send();
+}
+
+$faqSystem = new System(); // moved higher to support security check
+
+//
+// Check if the FAQ should be secured (moved higher so we don't do work we don't need to do)
+//
+if ($faqConfig->get('security.enableLoginOnly')) {
+    if (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')) {
+        $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
+        $redirect->send();
+    }
+}
+
+
 //
 // Logout
 //
 if ($csrfChecked && 'logout' === $action && $user->isLoggedIn()) {
+    $container->get('session')->set("lastRequestUri", "");
     $user->deleteFromSession(true);
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
@@ -469,16 +494,6 @@ if ($action !== 'main') {
     } else {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
-    }
-}
-
-//
-// Check if the FAQ should be secured
-//
-if ($faqConfig->get('security.enableLoginOnly')) {
-    if (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')) {
-        $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
-        $redirect->send();
     }
 }
 
