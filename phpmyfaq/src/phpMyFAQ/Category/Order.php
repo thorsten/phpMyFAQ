@@ -127,11 +127,11 @@ readonly class Order
 
         foreach ($categories as $category) {
             if ((int) $category['parent_id'] === $parentId) {
-                $children = $this->getCategoryTree($categories, $category['category_id']);
-                $result[$category['category_id']] = $children;
+                $children = $this->getCategoryTree($categories, $category['id']);
+                $result[$category['id']] = $children;
             }
         }
-
+        
         return $result;
     }
 
