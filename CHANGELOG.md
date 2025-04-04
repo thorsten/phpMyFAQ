@@ -6,6 +6,11 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.0.8 - unreleased
+
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
+
 ### phpMyFAQ v4.0.7 - 2025-03-24
 
 - updated third party dependencies (Thorsten)
