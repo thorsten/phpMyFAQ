@@ -36,6 +36,26 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmModalLabel">{{ 'ad_categ_delete' | translate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+      </div>
+      <div class="modal-body">
+        {{ 'ad_categ_deletesure' | translate }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'msgCancel' | translate }}</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteButton">{{ 'msgDelete' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% macro renderCategories(categories, categoryInfo, depth = 1) %}
   {% for key, children in categories %}
     <div class="list-group-item nested-{{ depth }}" id="pmf-category-{{ categoryInfo[key]['id'] }}"
@@ -108,4 +128,5 @@
     </div>
   {% endfor %}
 {% endmacro %}
+
 {% endblock %}
