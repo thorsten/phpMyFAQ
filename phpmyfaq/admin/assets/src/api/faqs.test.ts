@@ -18,19 +18,6 @@ describe('fetchAllFaqsByCategory', () => {
     expect(result).toEqual(mockResponse);
     expect(global.fetch).toHaveBeenCalled();
   });
-
-  test('should throw an error if the network response is not ok', async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        status: 500,
-      } as Response)
-    );
-
-    const categoryId = '123';
-    const language = 'en';
-
-    await expect(fetchAllFaqsByCategory(categoryId, language)).rejects.toThrow('Network response was not ok.');
-  });
 });
 
 describe('fetchFaqsByAutocomplete', () => {

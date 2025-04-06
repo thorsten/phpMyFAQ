@@ -12,9 +12,9 @@
  * @link      https://www.phpmyfaq.de
  * @since     2023-12-28
  */
-import { Response } from '../interfaces';
+import { CategoryTranslations, Response } from '../interfaces';
 
-export const fetchCategoryTranslations = async (categoryId: string): Promise<Response | undefined> => {
+export const fetchCategoryTranslations = async (categoryId: string): Promise<CategoryTranslations> => {
   try {
     const response = await fetch(`./api/category/translations/${categoryId}`, {
       method: 'GET',

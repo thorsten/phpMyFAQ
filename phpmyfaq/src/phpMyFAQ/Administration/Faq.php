@@ -102,15 +102,15 @@ class Faq
                 $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $faqData[] = [
-                    'id' => $row->id,
+                    'id' => (int) $row->id,
                     'language' => $row->lang,
-                    'solution_id' => $row->solution_id,
+                    'solution_id' => (int) $row->solution_id,
                     'active' => $row->active,
                     'sticky' => $row->sticky ? 'yes' : 'no',
-                    'category_id' => $row->category_id,
+                    'category_id' => (int) $row->category_id,
                     'question' => $row->question,
                     'updated' => $row->updated,
-                    'visits' => $visits,
+                    'visits' => (int) $visits,
                     'created' => $row->created,
                 ];
             }

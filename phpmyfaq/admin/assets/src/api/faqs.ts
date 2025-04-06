@@ -14,16 +14,17 @@
  */
 
 import { Response } from '../interfaces';
+import { FaqResponse } from '../interfaces';
 
 export const fetchAllFaqsByCategory = async (
   categoryId: string,
   language: string,
-  onlyInactive?: string,
-  onlyNew?: string
-): Promise<Response | undefined> => {
+  onlyInactive?: boolean,
+  onlyNew?: boolean
+): Promise<FaqResponse> => {
   try {
-    let currentUrl = window.location.protocol + '//' + window.location.host;
-    let pathname = window.location.pathname;
+    let currentUrl: string = window.location.protocol + '//' + window.location.host;
+    let pathname: string = window.location.pathname;
 
     if (pathname.endsWith('/faqs')) {
       pathname = pathname.slice(0, -5);
@@ -32,10 +33,10 @@ export const fetchAllFaqsByCategory = async (
     currentUrl += pathname;
     const url = new URL(`${currentUrl}/api/faqs/${categoryId}/${language}`);
     if (onlyInactive) {
-      url.searchParams.set('only-inactive', onlyInactive);
+      url.searchParams.set('only-inactive', onlyInactive as unknown as string);
     }
     if (onlyNew) {
-      url.searchParams.set('only-new', onlyNew);
+      url.searchParams.set('only-new', onlyNew as unknown as string);
     }
     const response = await fetch(url.toString(), {
       method: 'GET',
@@ -47,11 +48,7 @@ export const fetchAllFaqsByCategory = async (
       referrerPolicy: 'no-referrer',
     });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
+    return await response.json();
   } catch (error) {
     throw error;
   }

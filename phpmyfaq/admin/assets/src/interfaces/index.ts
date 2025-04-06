@@ -1,5 +1,7 @@
 export * from './attachment';
+export * from './categoryTranslations';
 export * from './elasticsearch';
+export * from './faqResponse';
 export * from './instance';
 export * from './mediaBrowserApiResponse';
 export * from './response';

@@ -13,8 +13,10 @@
  * @since     2023-02-26
  */
 
+import { Modal } from 'bootstrap';
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
+import { CategoryTranslations, FaqResponse, Response } from '../interfaces';
 
 interface Faq {
   id: string;
@@ -28,70 +30,46 @@ interface Faq {
 }
 
 export const handleFaqOverview = async (): Promise<void> => {
-  const collapsedCategories = document.querySelectorAll('.accordion-collapse');
+  const collapsedCategories: NodeListOf<Element> = document.querySelectorAll('.accordion-collapse');
 
   if (collapsedCategories) {
     initializeCheckboxState();
 
-    collapsedCategories.forEach((category) => {
+    collapsedCategories.forEach((category: Element): void => {
       const categoryId = category.getAttribute('data-pmf-categoryId') as string;
       const language = category.getAttribute('data-pmf-language') as string;
 
-      category.addEventListener('hidden.bs.collapse', () => {
+      category.addEventListener('hidden.bs.collapse', (): void => {
         clearCategoryTable(categoryId);
       });
 
-      category.addEventListener('shown.bs.collapse', async () => {
-        const onlyInactive = getInactiveCheckboxState();
-        const onlyNew = getNewCheckboxState();
+      category.addEventListener('shown.bs.collapse', async (): Promise<void> => {
+        const onlyInactive: boolean = getInactiveCheckboxState();
+        const onlyNew: boolean = getNewCheckboxState();
 
-        const faqs = await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew);
+        const faqs = (await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew)) as FaqResponse;
         await populateCategoryTable(categoryId, faqs.faqs);
-        const deleteFaqButtons = document.querySelectorAll('.pmf-button-delete-faq');
-        const toggleStickyFaq = document.querySelectorAll('.pmf-admin-sticky-faq');
-        const toggleActiveFaq = document.querySelectorAll('.pmf-admin-active-faq');
-        const translationDropdown = document.querySelectorAll('#dropdownAddNewTranslation');
+        const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
+        const toggleActiveFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-active-faq');
+        const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
 
-        deleteFaqButtons.forEach((element) => {
-          element.addEventListener('click', async (event) => {
+        translationDropdown.forEach((element: Element): void => {
+          element.addEventListener('click', async (event: Event): Promise<void> => {
             event.preventDefault();
 
-            const target = event.target as HTMLElement;
-            const faqId = target.getAttribute('data-pmf-id') as string;
-            const faqLanguage = target.getAttribute('data-pmf-language') as string;
-            const token = target.getAttribute('data-pmf-token') as string;
-
-            if (confirm('Are you sure?')) {
-              try {
-                const result = await deleteFaq(faqId, faqLanguage, token);
-                if (result.success) {
-                  const faqTableRow = document.getElementById(`faq_${faqId}_${faqLanguage}`) as HTMLElement;
-                  faqTableRow.remove();
-                }
-              } catch (error) {
-                console.error(error);
-              }
-            }
-          });
-        });
-
-        translationDropdown.forEach((element) => {
-          element.addEventListener('click', async (event) => {
-            event.preventDefault();
-
-            const translations = await fetchCategoryTranslations(categoryId);
+            const translations = (await fetchCategoryTranslations(categoryId)) as CategoryTranslations;
             const existingLink = element.nextElementSibling?.childNodes[0] as HTMLElement;
             const regionNames = new Intl.DisplayNames([language], { type: 'language' });
             const faqId = element.getAttribute('data-pmf-faq-id') as string;
             const options: string[] = [];
 
-            for (const [languageCode, languageName] of Object.entries(translations)) {
+            for (const [languageCode] of Object.entries(translations as Record<string, unknown>)) {
               if (languageCode !== language) {
-                document.querySelectorAll('#dropdownTranslation').forEach((link) => {
-                  options.push(link.innerText);
+                document.querySelectorAll('#dropdownTranslation').forEach((link: Element): void => {
+                  options.push((link as HTMLElement).innerText);
                 });
                 if (!options.includes(`→ ${regionNames.of(languageCode)}`)) {
-                  const newTranslationLink = addElement('a', {
+                  const newTranslationLink: HTMLElement = addElement('a', {
                     classList: 'dropdown-item',
                     id: 'dropdownTranslation',
                     href: `./faq/translate/${faqId}/${languageCode}`,
@@ -104,8 +82,8 @@ export const handleFaqOverview = async (): Promise<void> => {
           });
         });
 
-        toggleStickyFaq.forEach((element) => {
-          element.addEventListener('change', async (event) => {
+        toggleStickyFaq.forEach((element: Element): void => {
+          element.addEventListener('change', async (event: Event): Promise<void> => {
             event.preventDefault();
 
             const target = event.target as HTMLInputElement;
@@ -117,8 +95,8 @@ export const handleFaqOverview = async (): Promise<void> => {
           });
         });
 
-        toggleActiveFaq.forEach((element) => {
-          element.addEventListener('change', async (event) => {
+        toggleActiveFaq.forEach((element: Element): void => {
+          element.addEventListener('change', async (event: Event): Promise<void> => {
             event.preventDefault();
 
             const target = event.target as HTMLInputElement;
@@ -132,6 +110,53 @@ export const handleFaqOverview = async (): Promise<void> => {
       });
     });
   }
+};
+
+export const handleDeleteFaqModal = (): void => {
+  const deleteFaqModal = new Modal(document.getElementById('deleteFaqConfirmModal') as HTMLElement);
+  const confirmDeleteFaqButton = document.getElementById('confirmDeleteFaqButton') as HTMLButtonElement;
+  let currentFaqId: string = '';
+  let currentFaqLanguage: string = '';
+  let currentToken: string = '';
+
+  document.addEventListener('click', (event: Event): void => {
+    const target = event.target as HTMLElement;
+    if (target.closest('.pmf-button-delete-faq')) {
+      event.preventDefault();
+      const deleteButton = target.closest('.pmf-button-delete-faq') as HTMLElement;
+
+      currentFaqId = deleteButton.getAttribute('data-pmf-id') || '';
+      currentFaqLanguage = deleteButton.getAttribute('data-pmf-language') || '';
+      currentToken = deleteButton.getAttribute('data-pmf-token') || '';
+
+      deleteFaqModal.show();
+    }
+  });
+
+  confirmDeleteFaqButton.addEventListener('click', async (): Promise<void> => {
+    if (!currentFaqId || !currentFaqLanguage || !currentToken) {
+      return;
+    }
+
+    try {
+      const result = (await deleteFaq(currentFaqId, currentFaqLanguage, currentToken)) as Response;
+      if (result.success) {
+        const faqTableRow = document.getElementById(`faq_${currentFaqId}_${currentFaqLanguage}`) as HTMLElement;
+        if (faqTableRow) {
+          faqTableRow.remove();
+        }
+        pushNotification(result.success);
+      }
+    } catch (error) {
+      console.error(error);
+      pushErrorNotification('Fehler beim Löschen der FAQ');
+    }
+
+    deleteFaqModal.hide();
+    currentFaqId = '';
+    currentFaqLanguage = '';
+    currentToken = '';
+  });
 };
 
 const saveStatus = async (
@@ -186,8 +211,8 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
 
-  faqs.forEach((faq) => {
-    const row = document.createElement('tr');
+  faqs.forEach((faq: Faq): void => {
+    const row: HTMLTableRowElement = document.createElement('tr');
     row.setAttribute('id', `faq_${faq.id}_${faq.language}`);
 
     row.append(
@@ -321,8 +346,8 @@ const initializeCheckboxState = (): void => {
   const filterForInactive = document.getElementById('pmf-checkbox-filter-inactive') as HTMLInputElement | null;
   const filterForNew = document.getElementById('pmf-checkbox-filter-new') as HTMLInputElement | null;
 
-  const storedInactiveState = localStorage.getItem('pmfCheckboxFilterInactive');
-  const storedNewState = localStorage.getItem('pmfCheckboxFilterNew');
+  const storedInactiveState: string | null = localStorage.getItem('pmfCheckboxFilterInactive');
+  const storedNewState: string | null = localStorage.getItem('pmfCheckboxFilterNew');
 
   if (filterForInactive && storedInactiveState !== null) {
     filterForInactive.checked = JSON.parse(storedInactiveState);
@@ -333,13 +358,13 @@ const initializeCheckboxState = (): void => {
   }
 
   if (filterForInactive) {
-    filterForInactive.addEventListener('change', () => {
+    filterForInactive.addEventListener('change', (): void => {
       localStorage.setItem('pmfCheckboxFilterInactive', JSON.stringify(filterForInactive.checked));
     });
   }
 
   if (filterForNew) {
-    filterForNew.addEventListener('change', () => {
+    filterForNew.addEventListener('change', (): void => {
       localStorage.setItem('pmfCheckboxFilterNew', JSON.stringify(filterForNew.checked));
     });
   }
