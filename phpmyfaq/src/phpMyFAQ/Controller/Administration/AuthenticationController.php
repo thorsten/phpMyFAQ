@@ -70,7 +70,7 @@ class AuthenticationController extends AbstractAdministrationController
                     'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors)
                 );
                 //$error = $e->getMessage();
-                return new RedirectResponse('./login');
+                return new RedirectResponse('../login');
             }
         }
 
@@ -85,6 +85,7 @@ class AuthenticationController extends AbstractAdministrationController
     #[Route('/login', name: 'admin.auth.logout', methods: ['GET'])]
     public function login(Request $request): Response
     {
+        return new RedirectResponse('../login');
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
         if ($this->configuration->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
             return new RedirectResponse('./authenticate');
