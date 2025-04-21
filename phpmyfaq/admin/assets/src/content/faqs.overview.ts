@@ -113,50 +113,54 @@ export const handleFaqOverview = async (): Promise<void> => {
 };
 
 export const handleDeleteFaqModal = (): void => {
-  const deleteFaqModal = new Modal(document.getElementById('deleteFaqConfirmModal') as HTMLElement);
-  const confirmDeleteFaqButton = document.getElementById('confirmDeleteFaqButton') as HTMLButtonElement;
-  let currentFaqId: string = '';
-  let currentFaqLanguage: string = '';
-  let currentToken: string = '';
+  const deleteFaqModalElement = document.getElementById('deleteFaqConfirmModal') as HTMLElement | null;
 
-  document.addEventListener('click', (event: Event): void => {
-    const target = event.target as HTMLElement;
-    if (target.closest('.pmf-button-delete-faq')) {
-      event.preventDefault();
-      const deleteButton = target.closest('.pmf-button-delete-faq') as HTMLElement;
+  if (deleteFaqModalElement) {
+    const deleteFaqModal = new Modal(deleteFaqModalElement);
+    const confirmDeleteFaqButton = document.getElementById('confirmDeleteFaqButton') as HTMLButtonElement;
+    let currentFaqId: string = '';
+    let currentFaqLanguage: string = '';
+    let currentToken: string = '';
 
-      currentFaqId = deleteButton.getAttribute('data-pmf-id') || '';
-      currentFaqLanguage = deleteButton.getAttribute('data-pmf-language') || '';
-      currentToken = deleteButton.getAttribute('data-pmf-token') || '';
+    document.addEventListener('click', (event: Event): void => {
+      const target = event.target as HTMLElement;
+      if (target.closest('.pmf-button-delete-faq')) {
+        event.preventDefault();
+        const deleteButton = target.closest('.pmf-button-delete-faq') as HTMLElement;
 
-      deleteFaqModal.show();
-    }
-  });
+        currentFaqId = deleteButton.getAttribute('data-pmf-id') || '';
+        currentFaqLanguage = deleteButton.getAttribute('data-pmf-language') || '';
+        currentToken = deleteButton.getAttribute('data-pmf-token') || '';
 
-  confirmDeleteFaqButton.addEventListener('click', async (): Promise<void> => {
-    if (!currentFaqId || !currentFaqLanguage || !currentToken) {
-      return;
-    }
-
-    try {
-      const result = (await deleteFaq(currentFaqId, currentFaqLanguage, currentToken)) as Response;
-      if (result.success) {
-        const faqTableRow = document.getElementById(`faq_${currentFaqId}_${currentFaqLanguage}`) as HTMLElement;
-        if (faqTableRow) {
-          faqTableRow.remove();
-        }
-        pushNotification(result.success);
+        deleteFaqModal.show();
       }
-    } catch (error) {
-      console.error(error);
-      pushErrorNotification('Fehler beim Löschen der FAQ');
-    }
+    });
 
-    deleteFaqModal.hide();
-    currentFaqId = '';
-    currentFaqLanguage = '';
-    currentToken = '';
-  });
+    confirmDeleteFaqButton.addEventListener('click', async (): Promise<void> => {
+      if (!currentFaqId || !currentFaqLanguage || !currentToken) {
+        return;
+      }
+
+      try {
+        const result = (await deleteFaq(currentFaqId, currentFaqLanguage, currentToken)) as Response;
+        if (result.success) {
+          const faqTableRow = document.getElementById(`faq_${currentFaqId}_${currentFaqLanguage}`) as HTMLElement;
+          if (faqTableRow) {
+            faqTableRow.remove();
+          }
+          pushNotification(result.success);
+        }
+      } catch (error) {
+        console.error(error);
+        pushErrorNotification('Fehler beim Löschen der FAQ');
+      }
+
+      deleteFaqModal.hide();
+      currentFaqId = '';
+      currentFaqLanguage = '';
+      currentToken = '';
+    });
+  }
 };
 
 const saveStatus = async (
