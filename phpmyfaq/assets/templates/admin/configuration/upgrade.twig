@@ -180,8 +180,11 @@
       </div>
       <div>
         {{ 'msgLastCheckDate' | translate }}
-        {% set lastCheck = dateLastChecked == 'Invalid Date' ? 'n/a' : dateLastChecked | date('Y-m-d H:i:s') %}
-        <output id="dateLastChecked">{{ lastCheck }}</output>
+        {% if dateLastChecked == 'Invalid Date' %}
+          {% set lastCheck = 'n/a' %}
+        {% else %}
+          {% set lastCheck = dateLastChecked | date('Y-m-d H:i:s') %}
+        {% endif %}        <output id="dateLastChecked">{{ lastCheck }}</output>
       </div>
       <div>
         {{ 'msgCurrentVersion' | translate }}

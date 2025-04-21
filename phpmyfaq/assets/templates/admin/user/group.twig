@@ -190,7 +190,7 @@
                        name="group_rights[]" value="{{ right.right_id }}"
                        class="form-check-input permission" disabled>
                 <label class="form-check-label" for="group_right_{{ right.right_id }}">
-                  {{ right.name|permission }}
+                  {{ right.name | default('') | permission }}
                 </label>
               </div>
             {% endfor %}
