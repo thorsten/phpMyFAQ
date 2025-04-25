@@ -32,7 +32,6 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\StopWords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +64,7 @@ class QuestionController extends AbstractController
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $selectedCategory = isset($data->category) ? Filter::filterVar($data->category, FILTER_VALIDATE_INT) : false;
+        $language = trim((string) Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS));
         $userQuestion = trim(strip_tags((string) $data->question));
         $save = Filter::filterVar($data->save ?? 0, FILTER_VALIDATE_INT);
         $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -95,6 +95,7 @@ class QuestionController extends AbstractController
                 ->setUsername($author)
                 ->setEmail($email)
                 ->setCategoryId($selectedCategory)
+                ->setLanguage($language)
                 ->setQuestion(Strings::htmlentities($userQuestion))
                 ->setIsVisible($visibility === 'Y');
 
