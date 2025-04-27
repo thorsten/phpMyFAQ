@@ -14,7 +14,7 @@
       </button>
       {% endif %}
       {% if permissionEditUser == true %}
-      <a class="btn btn-outline-info" href="?action=user&amp;user_action=listallusers">
+      <a class="btn btn-outline-info" href="?action=user&user_action=listallusers">
         <i class="bi bi-people" aria-label="true"></i> {{ list_all_users }}
       </a>
       {% endif %}
@@ -24,8 +24,8 @@
 
 <div class="row mb-2">
   <div class="col-6 offset-3">
-    <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-          method="post" role="form" class="form_inline">
+    <form name="user_select" id="user_select" action="?action=user"
+          method="post" role="form" class="form_inline" onsubmit="return false;">
       <input type="hidden" id="current_user_id" value="{{ userId }}">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
@@ -35,7 +35,8 @@
           <div class="form-floating">
             <input type="text" class="form-control" id="pmf-user-list-autocomplete" aria-controls=""
                    name="user_list_search" placeholder="{{ ad_auth_user }}"
-                   spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="2048">
+                   spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="2048"
+                   onkeydown="if(event.key === 'Enter') { event.preventDefault(); return false; }">
             <label for="pmf-user-list-autocomplete">{{ ad_auth_user }}</label>
           </div>
         </div>
