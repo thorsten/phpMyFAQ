@@ -50,7 +50,7 @@ readonly class Question
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
-            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($questionData->getLanguage()),
             $this->configuration->getDb()->escape($questionData->getUsername()),
             $this->configuration->getDb()->escape($questionData->getEmail()),
             $questionData->getCategoryId(),

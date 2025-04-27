@@ -55,11 +55,11 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
 
         if (true === $this->configuration->get('spam.enableCaptchaCode') && !$auth) {
             $html .= '<div class="row g-4">';
-            $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
-            $html .= '    <div class="col-sm-4">';
+            $html .= sprintf('<label class="col-md-3 col-sm-12 col-form-label">%s</label>', $label);
+            $html .= '    <div class="col-md-4 col-sm-6 col-7">';
             $html .= sprintf('<p class="form-control-static">%s</p>', $captcha->renderCaptchaImage());
             $html .= '    </div>';
-            $html .= '    <div class="col-sm-5">';
+            $html .= '    <div class="col-md-5 col-sm-6 col-5">';
             $html .= '        <div class="input-group">';
             $html .= sprintf(
                 '<input type="text" class="form-control" name="%s" id="%s" size="%d" autocomplete="off" required>',

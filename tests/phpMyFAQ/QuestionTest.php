@@ -42,6 +42,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->assertTrue($this->question->add($questionData));
@@ -55,6 +56,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->question->add($questionData);
@@ -69,6 +71,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->question->add($questionData);
@@ -86,6 +89,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->question->add($questionData);
@@ -96,6 +100,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->question->add($questionData);
@@ -114,6 +119,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(false);
 
         $this->question->add($questionData);
@@ -129,6 +135,7 @@ class QuestionTest extends TestCase
             ->setEmail('test@example.org')
             ->setCategoryId(1)
             ->setQuestion('Test question')
+            ->setLanguage('en')
             ->setIsVisible(true);
 
         $this->question->add($questionData);

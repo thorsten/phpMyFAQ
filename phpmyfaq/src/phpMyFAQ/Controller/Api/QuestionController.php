@@ -114,6 +114,7 @@ class QuestionController extends AbstractController
             ->setEmail($email)
             ->setCategoryId($categoryId)
             ->setQuestion($question)
+            ->setLanguage($this->configuration->getLanguage()->getLanguage())
             ->setIsVisible($visibility === 'Y');
 
         $questionObject = new Question($this->configuration);
