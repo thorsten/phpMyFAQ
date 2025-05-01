@@ -109,7 +109,7 @@ class CategoryEntity
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     public function setName(string $name): CategoryEntity
