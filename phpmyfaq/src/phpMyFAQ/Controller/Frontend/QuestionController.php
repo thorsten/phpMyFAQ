@@ -92,7 +92,7 @@ class QuestionController extends AbstractController
                 ->setEmail($email)
                 ->setCategoryId($selectedCategory)
                 ->setLanguage($language)
-                ->setQuestion(Strings::htmlentities($userQuestion))
+                ->setQuestion($userQuestion)
                 ->setIsVisible($visibility === 'Y');
 
             // Save the question immediately if smart answering is disabled
