@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
@@ -51,6 +52,7 @@ $templateVars = [
     'msgQuestion2' => Translation::get('msgQuestion2'),
     'openQuestions' => $questionHelper->getOpenQuestions(),
     'isCloseQuestionEnabled' => $faqConfig->get('records.enableCloseQuestion'),
+    'userHasPermissionToAnswer' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value),
     'msgQuestionsWaiting' => Translation::get('msgQuestionsWaiting'),
     'msgNoQuestionsAvailable' => Translation::get('msgNoQuestionsAvailable'),
     'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
