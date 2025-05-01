@@ -25,18 +25,17 @@
                 {{ msg2answerFAQ }}
               </a>
             </td>
-          {% else %}
+          {% elseif userHasPermissionToAnswer %}
             <td class="text-end">
               <a class="btn btn-primary" href="?action=add&question={{ question.id }}&cat={{ question.categoryId }}">
                 {{ msg2answer }}
               </a>
             </td>
+          {% else %}
+            <td class="text-end"></td>
           {% endif %}
         </tr>
       {% endfor %}
-      <tr class="pmf-open-questions">
-
-      </tr>
     {% else %}
       <tr>
         <td colspan="3">{{ msgNoQuestionsAvailable }}</td>
