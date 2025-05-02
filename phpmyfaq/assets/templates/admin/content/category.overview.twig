@@ -74,33 +74,41 @@
           {% endif %}
 
         <div class="pmf-category-actions">
-          <!-- Add FAQ to category (always) -->
+          <!-- Add FAQ to category -->
+          {% if categoryInfo[key]['id'] is not empty %}
           <a class="btn btn-info mb-1 mt-1"
              href="./faq/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
              title="{{ 'ad_quick_entry'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-indent"></i>
           </a>
+          {% endif %}
 
           <!-- Add subcategory (if current language) -->
+          {% if categoryInfo[key]['id'] is not empty %}
           <a class="btn btn-info"
              href="./category/add/{{ categoryInfo[key]['id'] }}/{{ categoryInfo[key]['lang'] }}"
              title="{{ 'ad_quick_category'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-plus-square"></i>
           </a>
+          {% endif %}
 
           <!-- Edit category (if current language) -->
+          {% if categoryInfo[key]['id'] is not empty %}
           <a class="btn btn-info"
              href="./category/edit/{{ categoryInfo[key]['id'] }}" title="{{ 'ad_kateg_rename'|translate }}"
              data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-pencil"></i>
           </a>
+          {% endif %}
 
           <!-- Translate category -->
+          {% if categoryInfo[key]['id'] is not empty %}
           <a class="btn btn-info"
              href="./category/translate/{{ categoryInfo[key]['id'] }}"
              title="{{ 'ad_categ_translate'|translate }}" data-bs-toggle="tooltip" data-bs-placement="top">
             <i aria-hidden="true" class="bi bi-globe"></i>
           </a>
+          {% endif %}
 
           <!-- Delete category (if no subcategories) -->
           {% if children is empty %}
