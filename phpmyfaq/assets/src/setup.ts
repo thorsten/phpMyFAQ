@@ -23,21 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
   handlePasswordToggle();
 
   // Switch between database selection
-  const setupType = document.getElementById('sql_type');
+  const setupType: HTMLElement | null = document.getElementById('sql_type');
   if (setupType) {
     setupType.addEventListener('change', selectDatabaseSetup);
   }
 
   // Add more Elasticsearch server inputs
-  const addElasticsearch = document.getElementById('pmf-add-elasticsearch-host');
+  const addElasticsearch: HTMLElement | null = document.getElementById('pmf-add-elasticsearch-host');
   if (addElasticsearch) {
     addElasticsearch.addEventListener('click', addElasticsearchServerInput);
   }
 
   // Wizard
-  let currentTab = 0;
-  const nextButton = document.getElementById('nextBtn');
-  const prevButton = document.getElementById('prevBtn');
+  let currentTab: number = 0;
+  const nextButton: HTMLElement | null = document.getElementById('nextBtn');
+  const prevButton: HTMLElement | null = document.getElementById('prevBtn');
   if (nextButton) {
     nextButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -52,15 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   showTab(currentTab);
 
-  function showTab(number) {
-    const currentStep = document.getElementsByClassName('step');
+  function showTab(number: number): void {
+    const currentStep: HTMLCollectionOf<Element> = document.getElementsByClassName('step');
 
     if (currentStep.length > 0) {
-      currentStep[number].style.display = 'block';
+      (currentStep[number] as HTMLElement).style.display = 'block';
     }
 
-    const prevButton = document.getElementById('prevBtn');
-    const nextButton = document.getElementById('nextBtn');
+    const prevButton: HTMLElement | null = document.getElementById('prevBtn');
+    const nextButton: HTMLElement | null = document.getElementById('nextBtn');
 
     if (prevButton && nextButton) {
       if (number === 0) {
@@ -77,39 +77,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const nextPrev = (n) => {
-    const currentStep = document.getElementsByClassName('step');
-    const prevButton = document.getElementById('prevBtn');
-    const nextButton = document.getElementById('nextBtn');
-    const installButton = document.getElementById('installingBtn');
+  const nextPrev = (n: number) => {
+    const currentStep: HTMLCollectionOf<Element> = document.getElementsByClassName('step');
+    const prevButton = document.getElementById('prevBtn') as HTMLElement;
+    const nextButton = document.getElementById('nextBtn') as HTMLElement;
+    const installButton = document.getElementById('installingBtn') as HTMLElement;
 
     if (n === 1 && !validateForm()) {
       return false;
     }
 
-    currentStep[currentTab].style.display = 'none';
+    (currentStep[currentTab] as HTMLElement).style.display = 'none';
     currentTab = currentTab + n;
     if (currentTab >= currentStep.length) {
       prevButton.classList.add('d-none');
       nextButton.classList.add('d-none');
       installButton.classList.remove('d-none');
-      document.getElementById('phpmyfaq-setup-form').submit();
+      (document.getElementById('phpmyfaq-setup-form') as HTMLFormElement).submit();
       return false;
     }
 
     showTab(currentTab);
   };
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     let currentStep,
       y,
       i,
       valid = true;
-    currentStep = document.getElementsByClassName('step');
+    currentStep = document.getElementsByClassName('step') as HTMLCollectionOf<HTMLElement>;
     y = currentStep[currentTab].querySelectorAll('input,select');
 
     for (i = 0; i < y.length; i++) {
-      if (y[i].value === '' && y[i].hasAttribute('required')) {
+      if ((y[i] as HTMLInputElement).value === '' && y[i].hasAttribute('required')) {
         y[i].className += ' is-invalid';
         // and set the current valid status to false
         valid = false;
@@ -121,17 +121,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return valid; // return the valid status
-  };
-
-  const resetValidateForm = () => {
-    let currentStep, y, i;
-    currentStep = document.getElementsByClassName('step');
-    y = currentStep[currentTab].getElementsByTagName('input');
-
-    for (i = 0; i < y.length; i++) {
-      if (y[i].value === '' && y[i].hasAttribute('required')) {
-        y[i].className -= ' is-invalid';
-      }
-    }
   };
 });
