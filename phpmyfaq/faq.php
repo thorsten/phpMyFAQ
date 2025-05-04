@@ -137,6 +137,9 @@ $answer = $faqHelper->cleanUpContent($answer);
 $currentUrl = sprintf('//%s%s', $request->getHost(), $request->getRequestUri());
 $answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
 
+// Rewrite old internal links
+$answer = $faqHelper->convertOldInternalLinks($question, $answer);
+
 // Add Glossary entries for answers only
 $answer = $glossary->insertItemsIntoContent($answer);
 

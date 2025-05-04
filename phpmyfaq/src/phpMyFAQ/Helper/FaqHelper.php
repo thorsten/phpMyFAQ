@@ -196,37 +196,68 @@ class FaqHelper extends AbstractHelper
 
     /**
      * Converts old internal links to the current format
-     *
      * Formats from:
      * - http://<url>/index.php?action=artikel&cat=<category id>&id=<id>
      * - http://<url>/index.php?action=artikel&cat=<category id>&id=<id>&artlang=<language>
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>&artlang=<language>
+     * - supports also HTML encoded parameter (&#61; instead of =, &amp; instead of &)
      *
-     * to current URL structure
+     * to new URL structure:
+     * https://<url>/content/<category id>/<id>/<language>/<the question with underscores as spaces>.html
      */
-    public function convertOldInternalLinks(string $answer): string
+    public function convertOldInternalLinks(string $question, string $answer): string
     {
-        // Regex pattern for both variants (artikel/faq) with optional "artlang" parameter
+        $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
         $pattern = '/(https?:\/\/[^\/]+)\/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(&artlang=([a-z]{2}))?/i';
 
-        return preg_replace_callback(
+        $decodedAnswer = html_entity_decode($answer);
+
+        $result = preg_replace_callback(
             $pattern,
-            function ($matches) {
+            function ($matches) use ($question, $link) {
                 $baseUrl = $this->configuration->getDefaultUrl();
                 $categoryId = $matches[3];
                 $faqId = $matches[4];
                 $language = $matches[6] ?? $this->configuration->getLanguage()->getLanguage();
 
                 return sprintf(
-                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
-                    $baseUrl . 'index.php',
+                    '%scontent/%d/%d/%s/%s.html',
+                    $baseUrl,
                     $categoryId,
                     $faqId,
-                    $language
+                    $language,
+                    $link->getSEOItemTitle($question)
                 );
             },
-            $answer
+            $decodedAnswer
         );
+
+        if ($result === $decodedAnswer && $decodedAnswer !== $answer) {
+            $htmlEncodedPattern = '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&amp;|&)cat' .
+                '(&#61;|=)(\d+)(&amp;|&)id(&#61;|=)(\d+)((&amp;|&)artlang(&#61;|=)([a-z]{2}))?/i';
+
+            return preg_replace_callback(
+                $htmlEncodedPattern,
+                function ($matches) use ($question, $link) {
+                    $baseUrl = $this->configuration->getDefaultUrl();
+                    $categoryId = $matches[6];
+                    $faqId = $matches[9];
+                    $language = $matches[13] ?? $this->configuration->getLanguage()->getLanguage();
+
+                    return sprintf(
+                        '%scontent/%d/%d/%s/%s.html',
+                        $baseUrl,
+                        $categoryId,
+                        $faqId,
+                        $language,
+                        $link->getSEOItemTitle($question)
+                    );
+                },
+                $answer
+            );
+        }
+
+        return $result;
     }
 }
