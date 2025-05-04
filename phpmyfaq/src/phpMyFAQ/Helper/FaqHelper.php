@@ -193,4 +193,40 @@ class FaqHelper extends AbstractHelper
             $sanitizedContent
         );
     }
+
+    /**
+     * Converts old internal links to the current format
+     *
+     * Formats from:
+     * - http://<url>/index.php?action=artikel&cat=<category id>&id=<id>
+     * - http://<url>/index.php?action=artikel&cat=<category id>&id=<id>&artlang=<language>
+     * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>
+     * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>&artlang=<language>
+     *
+     * to current URL structure
+     */
+    public function convertOldInternalLinks(string $answer): string
+    {
+        // Regex pattern for both variants (artikel/faq) with optional "artlang" parameter
+        $pattern = '/(https?:\/\/[^\/]+)\/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(&artlang=([a-z]{2}))?/i';
+
+        return preg_replace_callback(
+            $pattern,
+            function ($matches) {
+                $baseUrl = $this->configuration->getDefaultUrl();
+                $categoryId = $matches[3];
+                $faqId = $matches[4];
+                $language = $matches[6] ?? $this->configuration->getLanguage()->getLanguage();
+
+                return sprintf(
+                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
+                    $baseUrl . 'index.php',
+                    $categoryId,
+                    $faqId,
+                    $language
+                );
+            },
+            $answer
+        );
+    }
 }
