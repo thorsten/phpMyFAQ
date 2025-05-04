@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { sidebarToggle } from './sidebar';
 
-describe('Sidebar Utils', () => {
-  afterEach(() => {
+describe('Sidebar Utils', (): void => {
+  afterEach((): void => {
     vi.restoreAllMocks();
   });
 
-  describe('sidebarToggle', () => {
-    it('should toggle sidebar class and update localStorage on button click', () => {
+  describe('sidebarToggle', (): void => {
+    it('should toggle sidebar class and update localStorage on button click', (): void => {
       document.body.innerHTML = `
         <button id="sidebarToggle"></button>
       `;
@@ -22,22 +22,22 @@ describe('Sidebar Utils', () => {
 
       sidebarToggle();
 
-      const toggleButton = document.getElementById('sidebarToggle');
+      const toggleButton: HTMLElement | null = document.getElementById('sidebarToggle');
       toggleButton?.click();
 
       expect(document.body.classList.contains('pmf-admin-sidenav-toggled')).toBe(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sb|sidebar-toggle', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('pmf-admin|sidebar-toggle', 'true');
 
       toggleButton?.click();
 
       expect(document.body.classList.contains('pmf-admin-sidenav-toggled')).toBe(false);
-      expect(mockSetItem).toHaveBeenCalledWith('sb|sidebar-toggle', 'false');
+      expect(mockSetItem).toHaveBeenCalledWith('pmf-admin|sidebar-toggle', 'false');
     });
 
-    it('should not throw an error if sidebarToggle button is not found', () => {
+    it('should not throw an error if sidebarToggle button is not found', (): void => {
       document.body.innerHTML = ``;
 
-      expect(() => sidebarToggle()).not.toThrow();
+      expect((): void => sidebarToggle()).not.toThrow();
     });
   });
 });

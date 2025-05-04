@@ -1,13 +1,265 @@
-// Top header navigation links
+// Variables
+$sidenav-width: 225px;
+$topnav-height: 56px;
+$transition-speed: 0.15s;
+
+// Mixins
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Navigation Links
 .pmf-nav-link {
   @extend .nav-link;
   @extend .px-2;
   @extend .text-white;
 }
 
-// Footer navigation links
 .pmf-nav-link-footer {
   @extend .nav-link;
   @extend .px-2;
   @extend .link-light;
+}
+
+// Side Navigation Layout
+#pmf-admin-layout-sidenav {
+  display: flex;
+
+  &_nav {
+    flex-basis: $sidenav-width;
+    flex-shrink: 0;
+    transition: transform $transition-speed ease-in-out;
+    z-index: 1038;
+    transform: translateX(-$sidenav-width);
+  }
+
+  &_content {
+    position: relative;
+    @include flex-column;
+    justify-content: space-between;
+    min-width: 0;
+    flex-grow: 1;
+    min-height: calc(100vh - #{$topnav-height});
+    margin-left: -$sidenav-width;
+  }
+}
+
+// Toggle for sSide navigation
+.pmf-admin-sidenav-toggled {
+  #pmf-admin-layout-sidenav {
+    #pmf-admin-layout-sidenav_nav {
+      transform: translateX(0);
+    }
+
+    #pmf-admin-layout-sidenav_content:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 1037;
+      opacity: 0.5;
+      transition: opacity 0.3s ease-in-out;
+    }
+  }
+}
+
+// Media Query for desktop view
+@media (min-width: 992px) {
+  #pmf-admin-layout-sidenav {
+    &_nav {
+      transform: translateX(0);
+    }
+
+    &_content {
+      margin-left: 0;
+      transition: margin $transition-speed ease-in-out;
+    }
+  }
+
+  .pmf-admin-sidenav-toggled {
+    #pmf-admin-layout-sidenav {
+      &_nav {
+        transform: translateX(-$sidenav-width);
+      }
+
+      &_content {
+        margin-left: -$sidenav-width;
+
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Fixed navigation
+.pmf-admin-nav-fixed {
+  .pmf-admin-topnav {
+    z-index: 1039;
+  }
+
+  #pmf-admin-layout-sidenav {
+    #pmf-admin-layout-sidenav_nav {
+      width: $sidenav-width;
+      height: 100vh;
+      z-index: 1038;
+
+      .pmf-admin-sidenav {
+        padding-top: $topnav-height;
+
+        &-menu {
+          overflow-y: auto;
+        }
+      }
+    }
+
+    #pmf-admin-layout-sidenav_content {
+      padding-left: $sidenav-width;
+      top: $topnav-height;
+    }
+  }
+}
+
+// Admin Top Navigation
+.pmf-admin-topnav {
+  padding-left: 0;
+  height: $topnav-height;
+  z-index: 1039;
+
+  .navbar-brand {
+    width: $sidenav-width;
+    margin: 0;
+  }
+
+  &.navbar-dark #sidebarToggle {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &.navbar-light #sidebarToggle {
+    color: #212529;
+  }
+}
+
+// Admin Side Navigation
+.pmf-admin-sidenav {
+  @include flex-column;
+  height: 100%;
+  flex-wrap: nowrap;
+
+  &-menu {
+    flex-grow: 1;
+
+    .nav {
+      @include flex-column;
+      flex-wrap: nowrap;
+
+      &-link {
+        display: flex;
+        align-items: center;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        position: relative;
+
+        .pmf-admin-nav-link-icon {
+          font-size: 0.9rem;
+        }
+
+        .pmf-admin-sidenav-collapse-arrow {
+          display: inline-block;
+          margin-left: auto;
+          transition: transform $transition-speed ease;
+        }
+
+        &.collapsed .pmf-admin-sidenav-collapse-arrow {
+          transform: rotate(-90deg);
+        }
+      }
+
+      .pmf-admin-sidenav-menu-heading {
+        padding: 1.75rem 1rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .pmf-admin-sidenav-menu-nested {
+        margin-left: 1.5rem;
+        flex-direction: column;
+      }
+    }
+  }
+
+  &-footer {
+    padding: 0.75rem;
+    flex-shrink: 0;
+  }
+}
+
+// Theming für Side Navigation
+@mixin sidenav-theme($bg-color, $text-color, $heading-color, $icon-color, $active-color) {
+  background-color: $bg-color;
+  color: $text-color;
+
+  .pmf-admin-sidenav-menu {
+    .pmf-admin-sidenav-menu-heading {
+      color: $heading-color;
+    }
+
+    .nav-link {
+      color: $text-color;
+
+      .pmf-admin-nav-link-icon,
+      .pmf-admin-sidenav-collapse-arrow {
+        color: $icon-color;
+      }
+
+      &:hover {
+        color: $active-color;
+      }
+
+      &.active {
+        color: $active-color;
+
+        .pmf-admin-nav-link-icon {
+          color: $active-color;
+        }
+      }
+    }
+  }
+}
+
+// Dark Theme
+.pmf-admin-sidenav-dark {
+  @include sidenav-theme(
+    $bg-color: #212529,
+    $text-color: rgba(255, 255, 255, 0.5),
+    $heading-color: rgba(255, 255, 255, 0.25),
+    $icon-color: rgba(255, 255, 255, 0.25),
+    $active-color: #fff
+  );
+
+  .pmf-admin-sidenav-footer {
+    background-color: #343a40;
+  }
+}
+
+// Light Theme
+.pmf-admin-sidenav-light {
+  @include sidenav-theme(
+    $bg-color: #f8f9fa,
+    $text-color: #212529,
+    $heading-color: #adb5bd,
+    $icon-color: #adb5bd,
+    $active-color: #0d6efd
+  );
+
+  .pmf-admin-sidenav-footer {
+    background-color: #e9ecef;
+  }
 }

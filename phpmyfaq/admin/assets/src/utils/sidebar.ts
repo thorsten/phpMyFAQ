@@ -22,7 +22,7 @@ export const sidebarToggle = (): void => {
       event.preventDefault();
       document.body.classList.toggle('pmf-admin-sidenav-toggled');
       localStorage.setItem(
-        'sb|sidebar-toggle',
+        'pmf-admin|sidebar-toggle',
         document.body.classList.contains('pmf-admin-sidenav-toggled').toString()
       );
     });

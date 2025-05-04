@@ -19,72 +19,42 @@
   <script src="./assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/images/favicon.ico">
 </head>
-<body dir="{{ pageDirection }}" id="page-top">
+<body class="pmf-admin-nav-fixed" dir="{{ pageDirection }}" id="page-top">
 
 <!-- phpMyFAQ Admin Top Bar -->
-<nav class="pmf-admin-topnav navbar navbar-expand text-bg-dark sticky-top">
-  <a class="navbar-brand text-white text-center ps-3" href="../" title="phpMyFAQ {{ version }}">
+<nav class="pmf-admin-topnav navbar navbar-expand navbar-dark bg-dark">
+  <a class="navbar-brand text-white text-center  ps-3" href="../" title="phpMyFAQ {{ version }}">
     <img height="50" src="../assets/images/logo-transparent.svg" alt="phpMyFAQ Logo">
   </a>
 
   {% if userHasAccessPermission %}
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" role="button"
-            name="sidebar-toggle" href="#">
-      <i class="bi bi-chevron-left h6"></i>
-    </button>
-
-    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-      <li class="px-2">
-        <div class="text-white">
-          <span class="badge text-bg-primary">{{ version }}</span>
-        </div>
-      </li>
-      <li class="px-2">
-        <div class="text-white small">
-          <i class="bi bi-clock-o bi-fw"></i> {{ msgSessionExpiration }}:
-          <span id="pmf-session-counter" class="pl-2">
-          <span class="spinner-border spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </span>
-        </span>
-          <div id="pmf-show-session-warning" data-value="hide"></div>
-        </div>
-      </li>
-    </ul>
+  <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+    <i class="bi bi-list h6"></i>
+  </button>
   {% endif %}
 
-  <!-- Language Switcher -->
-  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0 navbar-search"
-        action="index.php" method="post">
+  <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" action="./" method="post">
     {{ renderedLanguageSelection | raw }}
   </form>
 
   {% if userHasAccessPermission %}
-    <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-           aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline small">
-          {{ userName }}
-        </span>
-          {% if hasGravatarSupport %}
-            {{ gravatarImage | raw }}
-          {% else %}
-            <i aria-hidden="true" class="bi bi-person"></i>
-          {% endif %}
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" href="./password/change">{{ msgChangePassword }}</a>
-          </li>
-          <li><hr class="dropdown-divider"></li>
-          <li>
-            <a class="dropdown-item" href="./logout?csrf={{ csrfTokenLogout }}">{{ msgLogout }}</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
+  <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+         aria-expanded="false">
+        {% if hasGravatarSupport %}
+          {{ gravatarImage | raw }}
+        {% else %}
+          <i aria-hidden="true" class="bi bi-person"></i>
+        {% endif %}
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="./password/change">{{ msgChangePassword }}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="./logout?csrf={{ csrfTokenLogout }}">{{ msgLogout }}</a></li>
+      </ul>
+    </li>
+  </ul>
   {% endif %}
 </nav>
 <!-- /phpMyFAQ Admin Top Bar -->
@@ -206,6 +176,15 @@
             {% endif %}
 
           </div>
+        </div>
+        <div class="pmf-admin-sidenav-footer">
+          <div class="small">{{ msgSessionExpiration }}:</div>
+          <span id="pmf-session-counter" class="pl-2">
+            <span class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </span>
+          </span>
+          <div id="pmf-show-session-warning" data-value="hide"></div>
         </div>
       </nav>
     </div>
