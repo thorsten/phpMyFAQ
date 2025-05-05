@@ -170,6 +170,7 @@ class Update extends Setup
 
         // 4.1 updates
         $this->applyUpdates410Alpha();
+        $this->applyUpdates410Alpha2();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1113,6 +1114,13 @@ Disallow: /admin/
 Sitemap: /sitemap.xml
 EOT;
             $this->configuration->add('seo.contentRobotsText', $text);
+        }
+    }
+
+    private function applyUpdates410Alpha2(): void
+    {
+        if (version_compare($this->version, '4.1.0-alpha.2', '<')) {
+            $this->configuration->add('security.enableAdminSessionTimeoutCounter', true);
         }
     }
 

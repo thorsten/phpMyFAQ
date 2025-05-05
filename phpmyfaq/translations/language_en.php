@@ -1497,5 +1497,6 @@ $PMF_LANG['msgNoImagesForUpload'] = 'No images for upload.';
 $PMF_LANG['msgFetchingHashes'] = 'Fetching verification hashes from api.phpmyfaq.de...';
 $PMF_LANG['msgCheckHashes'] = 'Checking hashes with installation files...';
 $PMF_LANG['msgAuthenticationAborted'] = 'Authentication aborted by user.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activate admin session timeout counter', 'Default: enabled'];
 
 return $PMF_LANG;

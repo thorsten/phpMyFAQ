@@ -15,6 +15,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added plugin administration backend (Thorsten)
 - added image upload and image manager in Markdown editor (Thorsten)
 - added experimental support for PDO (Thorsten)
+- added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
 - updated Spanish translation (Thorsten)
 - improved online update feature (Thorsten)

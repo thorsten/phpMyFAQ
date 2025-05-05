@@ -49,36 +49,37 @@ class AbstractAdministrationController extends AbstractController
         $gravatarImage = $this->getGravatarImage();
 
         return [
-                'metaLanguage' => Translation::get('metaLanguage'),
-                'layoutMode' => 'light',
-                'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByString(),
-                'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
-                'version' => System::getVersion(),
-                'currentYear' => date('Y'),
-                'metaRobots' => $this->configuration->get('seo.metaTagsAdmin'),
-                'templateSetName' => TwigWrapper::getTemplateSetName(),
-                'pageDirection' => Translation::get('direction'),
-                'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
-                'msgSessionExpiration' => Translation::get('ad_session_expiration'),
-                'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
-                'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
-                    $this->configuration->getLanguage()->getLanguage(),
-                    true
-                ),
-                'userName' => $this->currentUser->getUserData('display_name'),
-                'hasGravatarSupport' => $this->configuration->get('main.enableGravatarSupport'),
-                'gravatarImage' => $gravatarImage,
-                'msgChangePassword' => Translation::get('ad_menu_passwd'),
-                'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
-                'msgLogout' => Translation::get('admin_mainmenu_logout'),
-                'secondLevelEntries' => $secLevelEntries,
-                'menuUsers' => Translation::get('admin_mainmenu_users'),
-                'menuContent' => Translation::get('admin_mainmenu_content'),
-                'menuStatistics' => Translation::get('admin_mainmenu_statistics'),
-                'menuImportsExports' => Translation::get('admin_mainmenu_imports_exports'),
-                'menuBackup' => Translation::get('admin_mainmenu_backup'),
-                'menuConfiguration' => Translation::get('admin_mainmenu_configuration'),
-            ] + $pageFlags;
+            'metaLanguage' => Translation::get('metaLanguage'),
+            'layoutMode' => 'light',
+            'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByString(),
+            'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
+            'version' => System::getVersion(),
+            'currentYear' => date('Y'),
+            'metaRobots' => $this->configuration->get('seo.metaTagsAdmin'),
+            'templateSetName' => TwigWrapper::getTemplateSetName(),
+            'pageDirection' => Translation::get('direction'),
+            'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
+            'msgSessionExpiration' => Translation::get('ad_session_expiration'),
+            'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
+            'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
+                $this->configuration->getLanguage()->getLanguage(),
+                true
+            ),
+            'userName' => $this->currentUser->getUserData('display_name'),
+            'hasGravatarSupport' => $this->configuration->get('main.enableGravatarSupport'),
+            'gravatarImage' => $gravatarImage,
+            'msgChangePassword' => Translation::get('ad_menu_passwd'),
+            'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
+            'msgLogout' => Translation::get('admin_mainmenu_logout'),
+            'secondLevelEntries' => $secLevelEntries,
+            'menuUsers' => Translation::get('admin_mainmenu_users'),
+            'menuContent' => Translation::get('admin_mainmenu_content'),
+            'menuStatistics' => Translation::get('admin_mainmenu_statistics'),
+            'menuImportsExports' => Translation::get('admin_mainmenu_imports_exports'),
+            'menuBackup' => Translation::get('admin_mainmenu_backup'),
+            'menuConfiguration' => Translation::get('admin_mainmenu_configuration'),
+            'isSessionTimeoutCounterEnabled' => $this->configuration->get('security.enableAdminSessionTimeoutCounter'),
+        ] + $pageFlags;
     }
 
     private function getSecondLevelEntries(Helper $adminHelper): array

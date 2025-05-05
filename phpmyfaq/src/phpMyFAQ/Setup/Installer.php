@@ -336,6 +336,7 @@ class Installer extends Setup
         'security.googleReCaptchaV2SecretKey' => '',
         'security.loginWithEmailAddress' => 'false',
         'security.enableWebAuthnSupport' => 'false',
+        'security.enableAdminSessionTimeoutCounter' => 'true',
 
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,

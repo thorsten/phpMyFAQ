@@ -177,6 +177,7 @@
 
           </div>
         </div>
+        {% if isSessionTimeoutCounterEnabled %}
         <div class="pmf-admin-sidenav-footer">
           <div class="small">{{ msgSessionExpiration }}:</div>
           <span id="pmf-session-counter" class="pl-2">
@@ -186,6 +187,7 @@
           </span>
           <div id="pmf-show-session-warning" data-value="hide"></div>
         </div>
+        {% endif %}
       </nav>
     </div>
   {% endif %}
