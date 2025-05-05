@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "4.1.0-alpha",
+  "version": "4.1.0-alpha.2",
   "description": "phpMyFAQ",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
