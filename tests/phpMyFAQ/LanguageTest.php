@@ -3,8 +3,6 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Plugin\PluginException;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
