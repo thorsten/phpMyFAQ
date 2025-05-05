@@ -50,7 +50,7 @@ $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$category = new Category($faqConfig);
+$category = new Category($faqConfig, $currentGroups);
 
 $plurals = new Plurals();
 
