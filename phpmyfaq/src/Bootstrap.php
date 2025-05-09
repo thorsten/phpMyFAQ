@@ -223,8 +223,6 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
     ]);
     $faqConfig->setOpenSearch($client);
     $faqConfig->setOpenSearchConfig($openSearchConfig);
-
-    var_dump($client);
 }
 
 //
