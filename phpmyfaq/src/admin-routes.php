@@ -33,6 +33,7 @@ use phpMyFAQ\Controller\Administration\ImportController;
 use phpMyFAQ\Controller\Administration\InstanceController;
 use phpMyFAQ\Controller\Administration\NewsController;
 use phpMyFAQ\Controller\Administration\OpenQuestionsController;
+use phpMyFAQ\Controller\Administration\OpenSearchController;
 use phpMyFAQ\Controller\Administration\OrphanedFaqsController;
 use phpMyFAQ\Controller\Administration\PasswordChangeController;
 use phpMyFAQ\Controller\Administration\PluginController;
@@ -212,6 +213,11 @@ $routesConfig = [
     'admin.elasticsearch' => [
         'path' => '/elasticsearch',
         'controller' => [ElasticsearchController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'admin.opensearch' => [
+        'path' => '/opensearch',
+        'controller' => [OpenSearchController::class, 'index'],
         'methods' => 'GET'
     ],
     'admin.export' => [

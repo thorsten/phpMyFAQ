@@ -240,6 +240,13 @@ class AbstractAdministrationController extends AbstractController
                 'elasticsearch'
             );
         }
+        if ($this->configuration->get('search.enableOpenSearch')) {
+            $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+                PermissionType::CONFIGURATION_EDIT->value,
+                'msgAdminHeaderOpenSearch',
+                'opensearch'
+            );
+        }
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_system_info',

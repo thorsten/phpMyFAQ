@@ -1499,5 +1499,12 @@ $PMF_LANG['msgCheckHashes'] = 'Checking hashes with installation files...';
 $PMF_LANG['msgAuthenticationAborted'] = 'Authentication aborted by user.';
 $LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activate admin session timeout counter', 'Default: enabled'];
 $LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Enable OpenSearch support', 'Standard: disabled'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch Configuration';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Create Search Index';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Delete Search Index';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Complete Import';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'The OpenSearch search index was successfully created.';
+$PMF_LANG['ad_os_create_import_success'] = 'The OpenSearch import was successful.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'The OpenSearch search index was successfully deleted.';
 
 return $PMF_LANG;

@@ -1,0 +1,45 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-wrench"></i>
+      {{ 'msgAdminHeaderOpenSearch' | translate }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <button class="btn btn-outline-primary pmf-opensearch" data-action="create">
+          <i aria-hidden="true" class="bi bi-database-fill-add"></i>
+          {{ 'msgAdminOpenSearchCreateIndex' | translate }}
+        </button>
+
+        <button class="btn btn-outline-success pmf-opensearch" data-action="import">
+          <i aria-hidden="true" class="bi bi-database-fill-gear"></i> {{ 'msgAdminOpenSearchImportIndex' | translate }}
+        </button>
+
+        <button class="btn btn-outline-danger pmf-opensearch" data-action="drop">
+          <i aria-hidden="true" class="bi bi-database-slash"></i> {{ 'msgAdminOpenSearchDropIndex' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-12">
+      <div id="pmf-opensearch-result"></div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-6">
+      <div class="card shadow">
+        <h5 class="card-header">
+          {{ 'msgAdminElasticsearchStats' | translate }}
+        </h5>
+        <div class="card-body">
+          <div id="pmf-opensearch-stats"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

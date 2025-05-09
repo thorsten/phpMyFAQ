@@ -32,6 +32,7 @@ use phpMyFAQ\Controller\Administration\Api\InstanceController;
 use phpMyFAQ\Controller\Administration\Api\MarkdownController;
 use phpMyFAQ\Controller\Administration\Api\MediaBrowserController;
 use phpMyFAQ\Controller\Administration\Api\NewsController;
+use phpMyFAQ\Controller\Administration\Api\OpenSearchController;
 use phpMyFAQ\Controller\Administration\Api\QuestionController;
 use phpMyFAQ\Controller\Administration\Api\SearchController;
 use phpMyFAQ\Controller\Administration\Api\SessionController;
@@ -245,6 +246,27 @@ $routesConfig = [
     'admin.api.elasticsearch.statistics' => [
         'path' => '/elasticsearch/statistics',
         'controller' => [ElasticsearchController::class, 'statistics'],
+        'methods' => 'GET'
+    ],
+    // OpenSearch API
+    'admin.api.opensearch.create' => [
+        'path' => '/opensearch/create',
+        'controller' => [OpenSearchController::class, 'create'],
+        'methods' => 'POST'
+    ],
+    'admin.api.opensearch.drop' => [
+        'path' => '/opensearch/drop',
+        'controller' => [OpenSearchController::class, 'drop'],
+        'methods' => 'POST'
+    ],
+    'admin.api.opensearch.import' => [
+        'path' => '/opensearch/import',
+        'controller' => [OpenSearchController::class, 'import'],
+        'methods' => 'POST'
+    ],
+    'admin.api.opensearch.statistics' => [
+        'path' => '/opensearch/statistics',
+        'controller' => [OpenSearchController::class, 'statistics'],
         'methods' => 'GET'
     ],
     // Export API
