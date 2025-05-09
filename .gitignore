@@ -24,6 +24,8 @@ phpmyfaq/content/core/config/ldap.php
 phpmyfaq/content/core/config/ldap.bak.php
 phpmyfaq/content/core/config/elasticsearch.php
 phpmyfaq/content/core/config/elasticsearch.bak.php
+phpmyfaq/content/core/config/opensearch.php
+phpmyfaq/content/core/config/opensearch.bak.php
 phpmyfaq/content/core/config/azure.php
 phpmyfaq/content/core/config/azure.bak.php
 phpmyfaq/content/core/config/index.html

@@ -59,6 +59,7 @@ _Running using named volumes:_
 - **pgadmin**: a PHP tool to have a look at your PostgreSQL database.
 - **sqlserver**: image with Microsoft SQL Server for Linux
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
+- **opensearch**: OpenSearch image (it means it does not have XPack installed)
 
 _Running apache web server with PHP 8.4 support:_
 

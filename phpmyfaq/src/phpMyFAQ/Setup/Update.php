@@ -1121,6 +1121,7 @@ EOT;
     {
         if (version_compare($this->version, '4.1.0-alpha.2', '<')) {
             $this->configuration->add('security.enableAdminSessionTimeoutCounter', true);
+            $this->configuration->add('search.enableOpenSearch', false);
         }
     }
 

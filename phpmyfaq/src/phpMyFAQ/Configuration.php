@@ -25,6 +25,7 @@ use Monolog\Level;
 use Monolog\Logger;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
+use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
@@ -373,6 +374,16 @@ class Configuration
         return $this->config['core.elasticsearch'];
     }
 
+    public function setOpenSearch(\OpenSearch\Client $osClient): void
+    {
+        $this->config['core.opensearch'] = $osClient;
+    }
+
+    public function getOpenSearch(): \OpenSearch\Client
+    {
+        return $this->config['core.opensearch'];
+    }
+
     /**
      * Sets the Elasticsearch configuration.
      */
@@ -387,6 +398,16 @@ class Configuration
     public function getElasticsearchConfig(): ElasticsearchConfiguration
     {
         return $this->config['core.elasticsearchConfig'];
+    }
+
+    public function setOpenSearchConfig(OpenSearchConfiguration $osConfiguration): void
+    {
+        $this->config['core.openSearchConfig'] = $osConfiguration;
+    }
+
+    public function getOpenSearchConfig(): OpenSearchConfiguration
+    {
+        return $this->config['core.openSearchConfig'];
     }
 
     /**

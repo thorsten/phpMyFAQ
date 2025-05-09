@@ -17,10 +17,12 @@
 
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
+use OpenSearch\SymfonyClientFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
+use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -207,6 +209,22 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR 
     } catch (AuthenticationException $e) {
         // @handle AuthenticationException
     }
+}
+
+//
+// Connect to OpenSearch if enabled
+//
+if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '/opensearch.php')) {
+    require PMF_CONFIG_DIR . '/constants_opensearch.php';
+    $openSearchConfig = new OpenSearchConfiguration(PMF_CONFIG_DIR . '/opensearch.php');
+    $client = (new SymfonyClientFactory())->create([
+        'base_uri' => $openSearchConfig->getHosts(),
+        'verify_peer' => false,
+    ]);
+    $faqConfig->setOpenSearch($client);
+    $faqConfig->setOpenSearchConfig($openSearchConfig);
+
+    var_dump($client);
 }
 
 //

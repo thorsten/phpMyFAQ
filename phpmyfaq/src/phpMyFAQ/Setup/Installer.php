@@ -318,6 +318,7 @@ class Installer extends Setup
         'search.enableHighlighting' => 'true',
         'search.searchForSolutionId' => 'true',
         'search.enableElasticsearch' => 'false',
+        'search.enableOpenSearch' => 'false',
 
         'security.permLevel' => 'basic',
         'security.ipCheck' => 'false',

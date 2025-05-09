@@ -1135,7 +1135,7 @@ $PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
 $LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Enable smart answering for user questions'];
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
-$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Enable Elasticsearch support'];
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Enable Elasticsearch support', 'Standard: disabled'];
 $PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch configuration';
 $PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Create Index';
 $PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Drop Index';
@@ -1498,5 +1498,6 @@ $PMF_LANG['msgFetchingHashes'] = 'Fetching verification hashes from api.phpmyfaq
 $PMF_LANG['msgCheckHashes'] = 'Checking hashes with installation files...';
 $PMF_LANG['msgAuthenticationAborted'] = 'Authentication aborted by user.';
 $LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activate admin session timeout counter', 'Default: enabled'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Enable OpenSearch support', 'Standard: disabled'];
 
 return $PMF_LANG;

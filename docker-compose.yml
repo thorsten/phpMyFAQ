@@ -154,13 +154,12 @@ services:
     container_name: phpmyfaq-41_elasticsearch-v8
     restart: always
     environment:
-      - _JAVA_OPTIONS=-XX:UseSVE=0
       - cluster.name=phpmyfaq-cluster
-      - _JAVA_OPTIONS=-XX:UseSVE=0
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xint
       - xpack.security.enabled=false
+      - "_JAVA_OPTIONS=-XX:UseSVE=0"
+      - "ES_JAVA_OPTS=-Xint"
     ulimits:
       memlock:
         soft: -1
@@ -180,3 +179,27 @@ services:
     ports:
       - '9200:9200'
       - '9300:9300'
+
+  opensearch:
+    image: opensearchproject/opensearch:2.19.2
+    container_name: opensearch
+    environment:
+      - cluster.name=phpmyfaq-cluster
+      - node.name=phpmyfaq
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - http.port=9201
+      - "_JAVA_OPTIONS=-XX:UseSVE=0"
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "DISABLE_PERFORMANCE_ANALYZER_AGENT=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./volumes/opensearchdata:/usr/share/opensearch/data
+    ports:
+      - '9201:9201'
+      - '9600:9600'

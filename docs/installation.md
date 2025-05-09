@@ -54,7 +54,8 @@ Please be aware that modules like `mod_security` can cause problems with the ins
 
 ### Optional Search engine
 
-- [Elasticsearch](https://www.elastic.co/products/elasticsearch) 6.x or later
+- [Elasticsearch](https://www.elastic.co/products/elasticsearch) 7.x or 8.x
+- [OpenSearch](https://opensearch.org/) 2.x
 
 ### Additional requirements
 
