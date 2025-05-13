@@ -17,7 +17,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
-- WIP: added support for OpenSearch (Thorsten)
+- added experimental support for OpenSearch (Thorsten)
 - updated Spanish translation (Thorsten)
 - improved online update feature (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)

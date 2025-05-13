@@ -22,6 +22,7 @@ namespace phpMyFAQ;
 use DateTime;
 use Exception;
 use phpMyFAQ\Search\Elasticsearch;
+use phpMyFAQ\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
 use stdClass;
 
@@ -82,6 +83,11 @@ class Search
         if ($this->configuration->get('search.enableElasticsearch')) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         }
+
+        if ($this->configuration->get('search.enableOpenSearch')) {
+            return $this->searchOpenSearch($searchTerm, $allLanguages);
+        }
+
         return $this->searchDatabase($searchTerm, $allLanguages);
     }
 
@@ -103,6 +109,17 @@ class Search
 
             return $elasticsearch->autoComplete($searchTerm);
         }
+
+        if ($this->configuration->get('search.enableOpenSearch')) {
+            $opensearch = new OpenSearch($this->configuration);
+            $allCategories = $this->getCategory()->getAllCategoryIds();
+
+            $opensearch->setCategoryIds($allCategories);
+            $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
+
+            return $opensearch->autoComplete($searchTerm);
+        }
+
         return $this->searchDatabase($searchTerm, false);
     }
 
@@ -199,6 +216,25 @@ class Search
         }
 
         return $elasticsearch->search($searchTerm);
+    }
+
+    public function searchOpenSearch(string $searchTerm, bool $allLanguages = true): array
+    {
+        $opensearch = new OpenSearch($this->configuration);
+
+        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
+            $children = $this->getCategory()->getChildNodes($this->getCategoryId());
+            $opensearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
+        } else {
+            $allCategories = $this->getCategory()->getAllCategoryIds();
+            $opensearch->setCategoryIds($allCategories);
+        }
+
+        if (!$allLanguages) {
+            $opensearch->setLanguage($this->configuration->getLanguage()->getLanguage());
+        }
+
+        return $opensearch->search($searchTerm);
     }
 
     /**

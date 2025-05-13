@@ -1,5 +1,5 @@
 /**
- * Admin Elasticsearch configuration
+ * Admin OpenSearch configuration
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -7,19 +7,19 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne
- * @copyright 2022-2025 phpMyFAQ Team
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2022-03-20
+ * @since     2025-05-12
  */
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { fetchElasticsearchAction, fetchElasticsearchStatistics } from '../api';
+import { fetchOpenSearchAction, fetchOpenSearchStatistics } from '../api';
 import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
-export const handleElasticsearch = async (): Promise<void> => {
-  const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-elasticsearch');
+export const handleOpenSearch = async (): Promise<void> => {
+  const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-opensearch');
 
   if (buttons) {
     buttons.forEach((element: HTMLButtonElement): void => {
@@ -29,11 +29,11 @@ export const handleElasticsearch = async (): Promise<void> => {
         const action = (event.target as HTMLButtonElement).getAttribute('data-action') as string;
 
         try {
-          const response = (await fetchElasticsearchAction(action)) as unknown as Response;
+          const response = (await fetchOpenSearchAction(action)) as unknown as Response;
 
           if (typeof response.success !== 'undefined') {
             pushNotification(response.success);
-            setInterval(elasticsearchStats, 5000);
+            setInterval(openSearchStats, 5000);
           } else {
             pushErrorNotification(response.error as string);
           }
@@ -42,13 +42,13 @@ export const handleElasticsearch = async (): Promise<void> => {
         }
       });
 
-      const elasticsearchStats = async (): Promise<void> => {
-        const div = document.getElementById('pmf-elasticsearch-stats') as HTMLElement;
+      const openSearchStats = async (): Promise<void> => {
+        const div = document.getElementById('pmf-opensearch-stats') as HTMLElement;
         if (div) {
           div.innerHTML = '';
 
           try {
-            const response = (await fetchElasticsearchStatistics()) as unknown as ElasticsearchResponse;
+            const response = (await fetchOpenSearchStatistics()) as unknown as ElasticsearchResponse;
 
             if (response.index) {
               const indexName = response.index as string;
@@ -67,7 +67,7 @@ export const handleElasticsearch = async (): Promise<void> => {
         }
       };
 
-      elasticsearchStats();
+      openSearchStats();
     });
   }
 };

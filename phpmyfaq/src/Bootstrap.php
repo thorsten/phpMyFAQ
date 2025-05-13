@@ -218,7 +218,7 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
     require PMF_CONFIG_DIR . '/constants_opensearch.php';
     $openSearchConfig = new OpenSearchConfiguration(PMF_CONFIG_DIR . '/opensearch.php');
     $client = (new SymfonyClientFactory())->create([
-        'base_uri' => $openSearchConfig->getHosts(),
+        'base_uri' => $openSearchConfig->getHosts()[0],
         'verify_peer' => false,
     ]);
     $faqConfig->setOpenSearch($client);

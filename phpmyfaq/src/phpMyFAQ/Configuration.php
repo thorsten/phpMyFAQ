@@ -475,7 +475,9 @@ class Configuration
             'core.ldapServer', // Ldap
             'core.ldapConfig', // $LDAP
             'core.elasticsearch', // Elasticsearch\Client
+            'core.opensearch', // OpenSearch\Client
             'core.elasticsearchConfig', // $ES
+            'core.openSearchConfig', // $OS
             'core.pluginManager', // PluginManager
         ];
 

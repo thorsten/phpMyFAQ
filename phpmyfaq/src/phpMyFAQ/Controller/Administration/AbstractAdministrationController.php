@@ -327,6 +327,7 @@ class AbstractAdministrationController extends AbstractController
                 break;
             case 'admin.configuration':
             case 'admin.elasticsearch':
+            case 'admin.opensearch':
             case 'admin.forms':
             case 'admin.instance.edit':
             case 'admin.instance.update':

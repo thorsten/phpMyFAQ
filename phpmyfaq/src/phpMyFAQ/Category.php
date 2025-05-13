@@ -622,6 +622,7 @@ class Category
         $description = [];
         $breadcrumb = [];
 
+
         for ($i = 0; $i < $num; ++$i) {
             $lineCategory = $this->getLineCategory($ids[$i]);
             if (array_key_exists($lineCategory, $this->treeTab)) {

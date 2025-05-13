@@ -11,6 +11,7 @@ export * from './instance';
 export * from './markdown';
 export * from './media-browser';
 export * from './news';
+export * from './opensearch';
 export * from './question';
 export * from './statistics';
 export * from './stop-words';
