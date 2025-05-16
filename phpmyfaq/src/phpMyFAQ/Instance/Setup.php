@@ -168,4 +168,21 @@ $PMF_ES[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
             LOCK_EX
         );
     }
+
+    /**
+     * Creates the file /content/core/config/opensearch.php
+     *
+     * @param  int[]|string[] $data   Array with OpenSearch credentials
+     * @param  string         $folder Folder
+     */
+    public function createOpenSearchFile(array $data, string $folder = '/content/core/config'): int|bool
+    {
+        return file_put_contents(
+            $this->rootDir . $folder . '/config/opensearch.php',
+            '<?php
+$PMF_OS[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
+            "\$PMF_OS['index'] = '" . $data['index'] . "';\n",
+            LOCK_EX
+        );
+    }
 }

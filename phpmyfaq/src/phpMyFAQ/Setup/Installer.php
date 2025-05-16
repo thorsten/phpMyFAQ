@@ -20,9 +20,11 @@ namespace phpMyFAQ\Setup;
 use Composer\Autoload\ClassLoader;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
+use OpenSearch\SymfonyClientFactory;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -36,6 +38,7 @@ use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Instance\Main;
+use phpMyFAQ\Instance\OpenSearch;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Ldap;
 use phpMyFAQ\Link;
@@ -729,6 +732,7 @@ class Installer extends Setup
      *
      * @param array|null $setup
      * @throws Exception|AuthenticationException
+     * @throws \Exception
      */
     public function startInstall(array|null $setup = null): void
     {
@@ -907,7 +911,7 @@ class Installer extends Setup
             $classLoader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
             $classLoader->register();
 
-            // check LDAP connection
+            // check Elasticsearch connection
             $esHosts = array_values($esHosts['elasticsearch_server']);
             $esClient = ClientBuilder::create()->setHosts($esHosts)->build();
 
@@ -917,6 +921,48 @@ class Installer extends Setup
         } else {
             $esSetup = [];
         }
+
+        //
+        // Check OpenSearch if enabled
+        //
+        $openSearchEnabled = Filter::filterInput(INPUT_POST, 'opensearch_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!is_null($openSearchEnabled)) {
+            $osSetup = [];
+            $osHostFilter = [
+                'opensearch_server' => [
+                    'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
+                    'flags' => FILTER_REQUIRE_ARRAY
+                ]
+            ];
+
+            // OS hosts
+            $osHosts = Filter::filterInputArray(INPUT_POST, $osHostFilter);
+            if (is_null($osHosts)) {
+                throw new Exception('OpenSearch Installation Error: Please add at least one OpenSearch host.');
+            }
+
+            $osSetup['hosts'] = $osHosts['opensearch_server'];
+
+            // OS Index name
+            $osSetup['index'] = Filter::filterInput(INPUT_POST, 'opensearch_index', FILTER_SANITIZE_SPECIAL_CHARS);
+            if (is_null($osSetup['index'])) {
+                throw new Exception('OpenSearch Installation Error: Please add an OpenSearch index name.');
+            }
+
+            // check OpenSearch connection
+            $osHosts = array_values($osHosts['opensearch_server']);
+            $osClient = (new SymfonyClientFactory())->create([
+                'base_uri' => $osHosts[0],
+                'verify_peer' => false,
+            ]);
+
+            if (!$osClient) {
+                throw new Exception('OpenSearch Installation Error: No connection to OpenSearch.');
+            }
+        } else {
+            $osSetup = [];
+        }
+
 
         // check the login name
         if (!isset($setup['loginname'])) {
@@ -996,6 +1042,14 @@ class Installer extends Setup
             self::cleanFailedInstallationFiles();
             throw new Exception(
                 'Elasticsearch Installation Error: Setup cannot write to ./content/core/config/elasticsearch.php.'
+            );
+        }
+
+        // check if OpenSearch is enabled
+        if (!is_null($openSearchEnabled) && count($osSetup) && !$instanceSetup->createOpenSearchFile($osSetup, '')) {
+            self::cleanFailedInstallationFiles();
+            throw new Exception(
+                'OpenSearch Installation Error: Setup cannot write to ./content/core/config/opensearch.php.'
             );
         }
 
@@ -1132,6 +1186,23 @@ class Installer extends Setup
 
             $esInstance = new Elasticsearch($configuration);
             $esInstance->createIndex();
+        }
+
+        // connect to OpenSearch if enabled
+        if (!is_null($openSearchEnabled) && is_file($rootDir . '/config/opensearch.php')) {
+            $osConfiguration = new OpenSearchConfiguration($rootDir . '/config/opensearch.php');
+
+            $configuration->setOpenSearchConfig($osConfiguration);
+
+            $osClient = (new SymfonyClientFactory())->create([
+                'base_uri' => $osConfiguration->getHosts()[0],
+                'verify_peer' => false,
+            ]);
+
+            $configuration->setOpenSearch($osClient);
+
+            $osInstance = new OpenSearch($configuration);
+            $osInstance->createIndex();
         }
 
         // adjust RewriteBase in .htaccess

@@ -450,10 +450,18 @@ You can click through the update wizard:
 ### 5.6.5 Elasticsearch configuration
 
 Here you can create and drop the Elasticsearch index, and you can run a full import of all data from your database
-into the Elasticsearch index. You can also see some Elasticsearch relevant usage data. This page is only available if
-Elasticsearch is enabled.
+into the Elasticsearch index. 
+You can also see some Elasticsearch relevant usage data. 
+This page is only available if Elasticsearch is enabled.
 
-### 5.6.6 System information
+### 5.6.6 OpenSearch configuration
+
+Here you can create and drop the OpenSearch index, and you can run a full import of all data from your database
+into the OpenSearch index.
+You can also see some OpenSearch relevant usage data.
+This page is only available if OpenSearch is enabled.
+
+### 5.6.7 System information
 
 On this page, phpMyFAQ displays some relevant system information like PHP version, database version or session path.
 Please use this information when reporting bugs.

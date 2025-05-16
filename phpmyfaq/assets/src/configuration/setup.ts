@@ -24,7 +24,7 @@ export const selectDatabaseSetup = (event: Event): void => {
 
   const target = event.target as HTMLSelectElement;
 
-  if (target.value === 'sqlite3') {
+  if (target.value === 'sqlite3' || target.value === 'pdo_sqlite') {
     for (let i: number = 0; i < inputs.length; i++) {
       inputs[i].removeAttribute('required');
     }
@@ -38,21 +38,25 @@ export const selectDatabaseSetup = (event: Event): void => {
 
   switch (target.value) {
     case 'mysqli':
+    case 'pdo_mysql':
       databasePort.value = '3306';
       sqlite.className = 'd-none';
       database.className = 'd-block';
       break;
     case 'pgsql':
+    case 'pdo_pgsql':
       databasePort.value = '5432';
       sqlite.className = 'd-none';
       database.className = 'd-block';
       break;
     case 'sqlsrv':
+    case 'pdo_sqlsrv':
       databasePort.value = '1433';
       sqlite.className = 'd-none';
       database.className = 'd-block';
       break;
     case 'sqlite3':
+    case 'pdo_sqlite':
       sqlite.className = 'd-block';
       database.className = 'd-none';
       break;

@@ -196,15 +196,28 @@
             </div>
 
             <div class="step">
-              <h3 class="mb-3"> Step 3/4: Elasticsearch setup</h3>
+              <h3 class="mb-3"> Step 3/4: Elasticsearch / OpenSearch setup</h3>
               {% if isElasticsearchEnabled %}
-                <div class="form-group">
-                  <div class="form-check">
-                    <input id="elasticsearch_enabled" class="form-check-input" type="checkbox"
-                           name="elasticsearch_enabled" value="yes">
-                    <label class="form-check-label" for="elasticsearch_enabled">
-                      Enable Elasticsearch support?
-                    </label>
+                <div class="row mb-2">
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input id="elasticsearch_enabled" class="form-check-input" type="checkbox"
+                             name="elasticsearch_enabled" value="yes">
+                      <label class="form-check-label" for="elasticsearch_enabled">
+                        Enable Elasticsearch support?
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input id="opensearch_enabled" class="form-check-input" type="checkbox"
+                             name="opensearch_enabled" value="yes">
+                      <label class="form-check-label" for="opensearch_enabled">
+                        Enable OpenSearch support?
+                      </label>
+                    </div>
                   </div>
                 </div>
                 <div class="row mb-2">
@@ -214,11 +227,12 @@
                       <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
                              class="form-control" placeholder="127.0.0.1:9200">
                       <span class="input-group-text" id="pmf-add-elasticsearch-host" style="cursor: pointer;">
-                        Add another Elasticsearch Host
+                        Add another host
                       </span>
                     </div>
                     <small class="form-text text-muted">
-                      Please enter the host (domain or IP) with port number of your Elasticsearch server.
+                      Please enter the host (domain or IP) with port number of your Elasticsearch/OpenSearch server.
+                      The format for OpenSearch is <code>https://<em>domain</em>:<em>port</em></code>.
                     </small>
                   </div>
                 </div>

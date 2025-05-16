@@ -185,10 +185,10 @@ of SQLite.
 If PHP was compiled with the LDAP extension, you can add your LDAP or Microsoft Active Directory information, too.
 Then you can insert your LDAP or Microsoft Active Directory information as well.
 
-### Step 3: Elasticsearch support
+### Step 3: Elasticsearch and OpenSearch support
 
-If you want to use Elasticsearch, you can activate this in the third step. You have to add at least one Elasticsearch
-node and the index name.
+If you want to use Elasticsearch or OpenSearch, you can activate this in the third step.
+You have to add at least one Elasticsearch or OpenSearch node and the index name.
 
 ### Step 4: Admin user setup
 
@@ -231,7 +231,7 @@ You can change
   The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be
   excluded from search. This is not a bug, but rather a feature of MySQL.
 - The search on other databases is using the LIKE operator currently.
-- To improve the search functionality, you should consider using Elasticsearch.
+- To improve the search functionality, you should consider using Elasticsearch or OpenSearch.
 
 ## 2.9 Automatic user language detection
 
@@ -353,7 +353,17 @@ If you choose to add this during installation, the file will be automatically wr
 If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import and delete your
 index with a user-friendly interface.
 
-## 2.17 SSO (Single Sign-On) Support
+## 2.17 OpenSearch Support
+
+To improve the search performance and quality of search results, it's possible to use OpenSearch.
+You need a running OpenSearch instance accessible by phpMyFAQ via HTTP/REST.
+You can add the IP(s)/Domain(s) and port(s) of your OpenSearch cluster during installation or later by renaming the
+OpenSearch file located in the folder config/.
+If you choose to add this during installation, the file will be automatically written and the index will be built.
+If you enabled OpenSearch support in the admin configuration panel, you can create, re-import and delete your
+index with a user-friendly interface.
+
+## 2.18 SSO (Single Sign-On) Support
 
 phpMyFAQ supports SSO (Single Sign-On)
 with the REMOTE_USER server variable is populated by the web server or application server
