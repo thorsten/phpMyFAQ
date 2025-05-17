@@ -7,7 +7,7 @@ To install it, you will need a web server that meets the following requirements:
 
 ### PHP requirements
 
-- version 8.2 or later
+- version 8.3 or later
 - memory_limit = 128M (the more the better)
 - cURL support
 - GD support
@@ -72,7 +72,7 @@ content: `<?php phpinfo();`
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you're running PHP before 8.2, you cannot use phpMyFAQ.
+In case you're running PHP before 8.3, you cannot use phpMyFAQ 4.1.
 
 ### Browser requirements
 

@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.0-alpha.2 - unreleased
 
+- changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added Symfony Routing for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
