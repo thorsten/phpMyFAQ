@@ -39,10 +39,10 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     private string $oAuthChallenge;
 
     /** @var string */
-    private const ENTRAID_CHALLENGE_METHOD = 'S256';
+    private const string ENTRAID_CHALLENGE_METHOD = 'S256';
 
     /** @var string URL to logout */
-    private const ENTRAID_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
+    private const string ENTRAID_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
 
     /**
      * @inheritDoc

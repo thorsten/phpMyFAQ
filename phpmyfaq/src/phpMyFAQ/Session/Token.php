@@ -24,9 +24,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Token
 {
-    final public const PMF_SESSION_NAME = 'pmf-csrf-token';
+    final public const string PMF_SESSION_NAME = 'pmf-csrf-token';
 
-    private const PMF_SESSION_EXPIRY = 1800;
+    private const int PMF_SESSION_EXPIRY = 1800;
 
     private string $page;
 

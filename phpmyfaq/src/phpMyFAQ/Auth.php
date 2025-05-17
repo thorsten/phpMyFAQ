@@ -37,7 +37,7 @@ class Auth
     /**
      * @var string
      */
-    private const PMF_ERROR_USER_NO_AUTH_TYPE = 'Specified authentication access class could not be found.';
+    private const string PMF_ERROR_USER_NO_AUTH_TYPE = 'Specified authentication access class could not be found.';
 
     /**
      * public array that contains error messages.

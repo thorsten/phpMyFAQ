@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Image
 {
     /** @var string */
-    private const UPLOAD_DIR = PMF_CONTENT_DIR . '/user/images/';
+    private const string UPLOAD_DIR = PMF_CONTENT_DIR . '/user/images/';
 
     private bool $isUpload = false;
 

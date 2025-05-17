@@ -29,7 +29,7 @@ abstract class AbstractMimeType
      *
      * @var array
      */
-    protected static $list = [
+    protected static array $list = [
         'ez' => 'application/andrew-inset',
         'hqx' => 'application/mac-binhex40',
         'cpt' => 'application/mac-compactpro',
@@ -188,7 +188,7 @@ abstract class AbstractMimeType
      *
      * @param string $ext file extension
      */
-    public static function guessByExt($ext): string
+    public static function guessByExt(string $ext): string
     {
         return self::$list[$ext] ?? 'application/octet-stream';
     }

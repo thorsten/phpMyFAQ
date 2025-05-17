@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Helper;
 
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Language\Plurals;
@@ -32,16 +33,19 @@ use stdClass;
  */
 class QuestionHelper extends AbstractHelper
 {
-    public function generateSmartAnswer(SearchResultSet $faqSearchResult): string
+    /**
+     * @throws CommonMarkException
+     */
+    public function generateSmartAnswer(SearchResultSet $searchResultSet): string
     {
-        $plr = new Plurals();
+        $plurals = new Plurals();
         $smartAnswer = sprintf(
             '<h5>%s</h5>',
-            $plr->getMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults())
+            $plurals->getMsg('plmsgSearchAmount', $searchResultSet->getNumberOfResults())
         );
 
         $smartAnswer .= '<ul>';
-        foreach ($faqSearchResult->getResultSet() as $result) {
+        foreach ($searchResultSet->getResultSet() as $result) {
             $url = sprintf(
                 '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                 $this->configuration->getDefaultUrl(),
@@ -60,9 +64,8 @@ class QuestionHelper extends AbstractHelper
                 $faqHelper->renderAnswerPreview($result->answer, 10)
             );
         }
-        $smartAnswer .= '</ul>';
 
-        return $smartAnswer;
+        return $smartAnswer . '</ul>';
     }
 
     public function getOpenQuestions(): stdClass

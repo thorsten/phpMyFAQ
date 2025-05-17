@@ -158,7 +158,7 @@ class Filter
         preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
 
         foreach ($attributes[0] as $attribute) {
-            $attributeName = stristr((string) $attribute, '=', true);
+            $attributeName = stristr($attribute, '=', true);
             if (!self::isAttribute($attributeName)) {
                 continue;
             }

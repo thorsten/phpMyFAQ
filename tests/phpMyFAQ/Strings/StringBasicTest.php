@@ -10,7 +10,7 @@ class StringBasicTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stringBasic = StringBasic::getInstance();
+        $this->stringBasic = StringBasic::getStringBasic();
     }
 
     public function testStrlen(): void

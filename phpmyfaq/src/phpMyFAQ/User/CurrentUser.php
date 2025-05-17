@@ -49,7 +49,7 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
  */
 class CurrentUser extends User
 {
-    private const PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
+    private const int PMF_REMEMBER_ME_EXPIRED_TIME = 1209600; // 2 weeks
 
     private bool $loggedIn = false;
 

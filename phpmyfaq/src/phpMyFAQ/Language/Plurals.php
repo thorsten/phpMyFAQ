@@ -24,24 +24,24 @@ use phpMyFAQ\Translation;
  *
  * @package phpMyFAQ\Language
  */
-class Plurals
+readonly class Plurals
 {
     /**
      * The number of plural forms for current language $lang.
      */
-    private readonly int $nPlurals;
+    private int $nPlurals;
 
     /**
      * The language code of the current language.
      *
      * @var string
      */
-    private readonly mixed $lang;
+    private mixed $lang;
 
     /**
      * True when there is no support for plural forms in current language $lang.
      */
-    private readonly bool $useDefaultPluralForm;
+    private bool $useDefaultPluralForm;
 
     public function __construct()
     {

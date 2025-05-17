@@ -34,13 +34,13 @@ use Symfony\Component\HttpFoundation\Request;
 class UserSession
 {
     /** @var string Name of the "remember me" cookie */
-    final public const COOKIE_NAME_REMEMBER_ME = 'pmf-remember-me';
+    final public const string COOKIE_NAME_REMEMBER_ME = 'pmf-remember-me';
 
     /** @var string Name of the session cookie */
-    final public const COOKIE_NAME_SESSION_ID = 'pmf-sid';
+    final public const string COOKIE_NAME_SESSION_ID = 'pmf-sid';
 
     /** @var string Name of the session GET parameter */
-    final public const KEY_NAME_SESSION_ID = 'sid';
+    final public const string KEY_NAME_SESSION_ID = 'sid';
 
     private ?int $currentSessionId = null;
 

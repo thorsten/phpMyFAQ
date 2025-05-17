@@ -38,49 +38,49 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
  */
 class User
 {
-    final public const ERROR_USER_ADD = 'Account could not be created. ';
+    final public const string ERROR_USER_ADD = 'Account could not be created. ';
 
-    final public const ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
+    final public const string ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
 
-    final public const ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
+    final public const string ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
 
-    final public const ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
+    final public const string ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
 
-    final public const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
+    final public const string ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
 
-    final public const ERROR_USER_CHANGE = 'Account could not be updated. ';
+    final public const string ERROR_USER_CHANGE = 'Account could not be updated. ';
 
-    final public const ERROR_USER_DELETE = 'Account could not be deleted. ';
+    final public const string ERROR_USER_DELETE = 'Account could not be deleted. ';
 
-    final public const ERROR_USER_INCORRECT_LOGIN = 'The login name could not be found. ';
+    final public const string ERROR_USER_INCORRECT_LOGIN = 'The login name could not be found. ';
 
-    final public const ERROR_USER_INCORRECT_PASSWORD = 'The password is not correct.';
+    final public const string ERROR_USER_INCORRECT_PASSWORD = 'The password is not correct.';
 
-    final public const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
+    final public const string ERROR_USER_INVALID_STATUS = 'Undefined user status.';
 
-    final public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen login name is too short.';
+    final public const string ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen login name is too short.';
 
-    final public const ERROR_USER_LOGIN_NOT_UNIQUE = 'The Login name already exists.';
+    final public const string ERROR_USER_LOGIN_NOT_UNIQUE = 'The Login name already exists.';
 
-    final public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
-        'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    final public const string ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least ' .
+        'four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
 
-    final public const ERROR_USER_NO_USERID = 'No user-ID found. ';
+    final public const string ERROR_USER_NO_USERID = 'No user-ID found. ';
 
-    final public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
+    final public const string ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
 
-    final public const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
+    final public const string ERROR_USER_NOT_FOUND = 'User account could not be found. ';
 
-    final public const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
+    final public const string ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
 
-    final public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and ' .
-        'are temporarily blocked. Please try again later.';
+    final public const string ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts' .
+        ' and are temporarily blocked. Please try again later.';
 
-    final public const STATUS_USER_PROTECTED = 'User account is protected. ';
+    final public const string STATUS_USER_PROTECTED = 'User account is protected. ';
 
-    final public const STATUS_USER_BLOCKED = 'User account is blocked. ';
+    final public const string STATUS_USER_BLOCKED = 'User account is blocked. ';
 
-    final public const STATUS_USER_ACTIVE = 'User account is active. ';
+    final public const string STATUS_USER_ACTIVE = 'User account is active. ';
 
     public PermissionInterface $perm;
 

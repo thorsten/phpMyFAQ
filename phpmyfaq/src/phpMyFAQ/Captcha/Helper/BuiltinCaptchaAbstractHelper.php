@@ -29,9 +29,9 @@ use phpMyFAQ\Helper\AbstractHelper;
  */
 class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelperInterface
 {
-    private const FORM_ID = 'captcha';
+    private const string FORM_ID = 'captcha';
 
-    private const FORM_BUTTON = 'captcha-button';
+    private const string FORM_BUTTON = 'captcha-button';
 
     /**
      * Constructor.

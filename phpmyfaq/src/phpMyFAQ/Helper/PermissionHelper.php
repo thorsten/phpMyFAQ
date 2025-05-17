@@ -38,7 +38,7 @@ class PermissionHelper
             $output .= sprintf(
                 '<option value="%s" %s>%s</option>',
                 $option,
-                ($option == $current) ? 'selected' : '',
+                ($option === $current) ? 'selected' : '',
                 $option
             );
         }

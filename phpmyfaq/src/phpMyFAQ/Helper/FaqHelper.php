@@ -59,9 +59,6 @@ class FaqHelper extends AbstractHelper
     /**
      * Renders a select box with all translations of a FAQ.
      *
-     * @param Faq $faq
-     * @param int $categoryId
-     * @return string
      * @todo This method should be moved to a Twig macro.
      * @deprecated Rewrite this method to use Twig, will be removed in v4.1
      */
@@ -115,9 +112,9 @@ class FaqHelper extends AbstractHelper
             $environment->addExtension(new CommonMarkCoreExtension());
             $environment->addExtension(new GithubFlavoredMarkdownExtension());
 
-            $converter = new MarkdownConverter($environment);
+            $markdownConverter = new MarkdownConverter($environment);
 
-            $cleanedAnswer = $converter->convert($answer)->getContent();
+            $cleanedAnswer = $markdownConverter->convert($answer)->getContent();
             return Utils::chopString(strip_tags($cleanedAnswer), $wordCount);
         }
 

@@ -67,7 +67,7 @@ class Filesystem
             $this->createDirectory($dest . '/' . $directoryName, 0750, true);
 
             while ($file = readdir($directoryHandle)) {
-                if ('.' != $file && '..' != $file) {
+                if ('.' !== $file && '..' !== $file) {
                     if (!is_dir($source . '/' . $file)) {
                         $this->copy(
                             $source . '/' . $file,
@@ -127,7 +127,7 @@ class Filesystem
 
         $directory = opendir($pathname);
         while (false !== ( $file = readdir($directory))) {
-            if (( $file != '.' ) && ( $file != '..' )) {
+            if (( $file !== '.' ) && ( $file !== '..' )) {
                 $full = $pathname . '/' . $file;
                 if (is_dir($full)) {
                     $this->deleteDirectory($full);

@@ -36,13 +36,11 @@ class AttachmentHelper
             return [];
         }
 
-        return array_map(function ($attachment) {
-            return [
-                'icon' => $this->mapMimeTypeToIcon($attachment->getMimeType()),
-                'url' => $attachment->buildUrl(),
-                'filename' => $attachment->getFilename(),
-            ];
-        }, $attachmentList);
+        return array_map(fn($attachment) => [
+            'icon' => $this->mapMimeTypeToIcon($attachment->getMimeType()),
+            'url' => $attachment->buildUrl(),
+            'filename' => $attachment->getFilename(),
+        ], $attachmentList);
     }
 
     private function mapMimeTypeToIcon(string $mimeType): string

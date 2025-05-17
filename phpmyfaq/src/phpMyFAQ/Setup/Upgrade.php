@@ -37,11 +37,11 @@ use ZipArchive;
 
 class Upgrade extends Setup
 {
-    final public const GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
+    final public const string GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
 
-    private const GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
+    private const string GITHUB_FILENAME = 'phpMyFAQ-nightly-%s.zip';
 
-    private const PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
+    private const string PHPMYFAQ_FILENAME = 'phpMyFAQ-%s.zip';
 
     public string $upgradeDirectory = PMF_CONTENT_DIR . '/upgrades';
 
@@ -123,10 +123,10 @@ class Upgrade extends Setup
     {
         $url = $this->getDownloadHost() . $this->getPath() . $this->getFilename($version);
 
-        $client = HttpClient::create(['timeout' => 60]);
+        $httpClient = HttpClient::create(['timeout' => 60]);
 
         try {
-            $response = $client->request('GET', $url);
+            $response = $httpClient->request('GET', $url);
 
             if ($response->getStatusCode() !== 200) {
                 throw new Exception('Cannot download package.');

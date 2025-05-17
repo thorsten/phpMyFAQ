@@ -27,12 +27,11 @@ use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 class VanillaFile extends AbstractFile
 {
     /**
-     * Chunk size read/write operations will deal with
-     * (in bytes).
+     * Chunk size read/write operations will deal with (in bytes).
      *
      * @var int
      */
-    private const CHUNK_SIZE = 512;
+    private const int CHUNK_SIZE = 512;
 
     /**
      * @inheritdoc

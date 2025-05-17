@@ -19,7 +19,7 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Entity\Tag as Tag;
+use phpMyFAQ\Entity\Tag;
 
 /**
  * Class Tags
@@ -214,7 +214,7 @@ readonly class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             ($showInactive ? '' : "AND d.active = 'yes'"),
-            (isset($search) && ($search != '') ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '')
+            (isset($search) && ($search !== '') ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '')
         );
 
         $result = $this->configuration->getDb()->query($query);

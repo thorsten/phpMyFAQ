@@ -18,8 +18,6 @@
 
 namespace phpMyFAQ;
 
-use function _PHPStan_5f1729e44\React\Async\waterfall;
-
 /**
  * Class StopWords
  *

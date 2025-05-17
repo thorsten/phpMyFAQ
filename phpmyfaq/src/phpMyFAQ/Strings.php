@@ -56,7 +56,7 @@ class Strings
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
                 self::$instance = Mbstring::getInstance($language);
             } else {
-                self::$instance = StringBasic::getInstance($language);
+                self::$instance = StringBasic::getStringBasic($language);
             }
         }
     }

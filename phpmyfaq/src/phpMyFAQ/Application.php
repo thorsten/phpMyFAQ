@@ -150,16 +150,6 @@ class Application
                 ),
                 Response::HTTP_BAD_REQUEST
             );
-        } catch (ErrorException | Exception $exception) {
-            $response = new Response(
-                sprintf(
-                    'An error occurred: %s at line %d at %s',
-                    $exception->getMessage(),
-                    $exception->getLine(),
-                    $exception->getFile()
-                ),
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
         }
 
         $response->send();

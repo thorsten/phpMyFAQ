@@ -31,12 +31,12 @@ class StringBasic extends StringsAbstract
      *
      * @var string
      */
-    final public const DEFAULT_ENCODING = 'UTF-8';
+    final public const string DEFAULT_ENCODING = 'UTF-8';
 
     /**
      * Instance.
      */
-    private static ?StringBasic $instance = null;
+    private static ?StringBasic $stringBasic = null;
 
     /**
      * Constructor.
@@ -51,15 +51,16 @@ class StringBasic extends StringsAbstract
      * @param string $language
      * @return StringBasic
      */
-    public static function getInstance(string $language = 'en'): StringBasic
+    public static function getStringBasic(string $language = 'en'): StringBasic
     {
-        if (!(self::$instance instanceof StringBasic)) {
-            self::$instance = new self();
-            self::$instance->encoding = self::DEFAULT_ENCODING;
-            self::$instance->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
+        if (!(self::$stringBasic instanceof StringBasic)) {
+            self::$stringBasic = new self();
+            self::$stringBasic->encoding = self::DEFAULT_ENCODING;
+            self::$stringBasic->language =
+                Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
         }
 
-        return self::$instance;
+        return self::$stringBasic;
     }
 
     /**

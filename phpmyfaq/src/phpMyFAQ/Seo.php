@@ -34,87 +34,87 @@ readonly class Seo
     }
 
     /**
-     * @param SeoEntity $seo
+     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was created
      */
-    public function create(SeoEntity $seo): bool
+    public function create(SeoEntity $seoEntity): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqseo (id, type, reference_id, reference_language, title, description) 
                 VALUES (%d, '%s', %d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
-            $seo->getType()->value,
-            $seo->getReferenceId(),
-            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
-            $this->configuration->getDb()->escape($seo->getTitle()),
-            $this->configuration->getDb()->escape($seo->getDescription()),
+            $seoEntity->getType()->value,
+            $seoEntity->getReferenceId(),
+            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
+            $this->configuration->getDb()->escape($seoEntity->getTitle()),
+            $this->configuration->getDb()->escape($seoEntity->getDescription()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
-     * @param SeoEntity $seo
+     * @param SeoEntity $seoEntity
      * @return SeoEntity
      * @throws Exception
      */
-    public function get(SeoEntity $seo): SeoEntity
+    public function get(SeoEntity $seoEntity): SeoEntity
     {
         $query = sprintf(
             "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seo->getType()->value,
-            $seo->getReferenceId(),
-            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
+            $seoEntity->getType()->value,
+            $seoEntity->getReferenceId(),
+            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $seo->setId($row->id)
+                $seoEntity->setId($row->id)
                     ->setTitle($row->title)
                     ->setDescription($row->description)
                     ->setCreated(new DateTime($row->created));
             }
         }
 
-        return $seo;
+        return $seoEntity;
     }
 
     /**
-     * @param SeoEntity $seo
+     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was updated
      */
-    public function update(SeoEntity $seo): bool
+    public function update(SeoEntity $seoEntity): bool
     {
         $query = sprintf(
             "UPDATE %sfaqseo SET title = '%s', description = '%s' 
                 WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($seo->getTitle()),
-            $this->configuration->getDb()->escape($seo->getDescription()),
-            $seo->getType()->value,
-            $seo->getReferenceId(),
-            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
+            $this->configuration->getDb()->escape($seoEntity->getTitle()),
+            $this->configuration->getDb()->escape($seoEntity->getDescription()),
+            $seoEntity->getType()->value,
+            $seoEntity->getReferenceId(),
+            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
-     * @param SeoEntity $seo
+     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was deleted
      */
-    public function delete(SeoEntity $seo): bool
+    public function delete(SeoEntity $seoEntity): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seo->getType()->value,
-            $seo->getReferenceId(),
-            $this->configuration->getDb()->escape($seo->getReferenceLanguage()),
+            $seoEntity->getType()->value,
+            $seoEntity->getReferenceId(),
+            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

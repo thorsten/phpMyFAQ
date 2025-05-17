@@ -90,15 +90,13 @@ class Statistics
         $result = $this->getLatestData(PMF_NUMBER_RECORDS_LATEST, $this->configuration->getLanguage()->getLanguage());
         $output = [];
 
-        if ($result !== []) {
-            foreach ($result as $row) {
-                $entry = new stdClass();
-                $entry->url = $row['url'];
-                $entry->title = Utils::makeShorterText($row['question'], 8);
-                $entry->preview = $row['question'];
-                $entry->date = $date->format($row['date']);
-                $output[] = $entry;
-            }
+        foreach ($result as $row) {
+            $entry = new stdClass();
+            $entry->url = $row['url'];
+            $entry->title = Utils::makeShorterText($row['question'], 8);
+            $entry->preview = $row['question'];
+            $entry->date = $date->format($row['date']);
+            $output[] = $entry;
         }
 
         return $output;
@@ -126,25 +124,23 @@ class Statistics
 
         $output = [];
 
-        if ($result !== []) {
-            foreach ($result as $row) {
-                $entry = new stdClass();
-                $entry->title = Utils::makeShorterText($row['question'], 8);
-                $entry->preview = $row['question'];
-                $entry->url = $row['url'];
-                if ('visits' == $type) {
-                    $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
-                } else {
-                    $entry->voted = sprintf(
-                        '%s %s 5 - %s',
-                        round($row['avg'], 2),
-                        Translation::get('msgVoteFrom'),
-                        $this->plurals->GetMsg('plmsgVotes', $row['user'])
-                    );
-                }
-
-                $output[] = $entry;
+        foreach ($result as $row) {
+            $entry = new stdClass();
+            $entry->title = Utils::makeShorterText($row['question'], 8);
+            $entry->preview = $row['question'];
+            $entry->url = $row['url'];
+            if ('visits' == $type) {
+                $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+            } else {
+                $entry->voted = sprintf(
+                    '%s %s 5 - %s',
+                    round($row['avg'], 2),
+                    Translation::get('msgVoteFrom'),
+                    $this->plurals->GetMsg('plmsgVotes', $row['user'])
+                );
             }
+
+            $output[] = $entry;
         }
 
         return $output;
@@ -164,16 +160,14 @@ class Statistics
         );
         $output = [];
 
-        if ($result !== []) {
-            foreach ($result as $row) {
-                $entry = new stdClass();
-                $entry->url = $row['url'];
-                $entry->title = Utils::makeShorterText($row['question'], 8);
-                $entry->preview = $row['question'];
-                $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
-                $entry->date = $date->format($row['date']);
-                $output[] = $entry;
-            }
+        foreach ($result as $row) {
+            $entry = new stdClass();
+            $entry->url = $row['url'];
+            $entry->title = Utils::makeShorterText($row['question'], 8);
+            $entry->preview = $row['question'];
+            $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
+            $entry->date = $date->format($row['date']);
+            $output[] = $entry;
         }
 
         return $output;
@@ -183,8 +177,9 @@ class Statistics
      * This function generates an array with a specified number of most recent
      * published records.
      *
-     * @param int    $count    Number of records
-     * @param string $language Language
+     * @param int         $count Number of records
+     * @param string|null $language Language
+     * @return array
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {

@@ -36,7 +36,7 @@ abstract class StringsAbstract
      *
      * @var string
      */
-    public const DEFAULT_LANGUAGE = 'en';
+    public const string DEFAULT_LANGUAGE = 'en';
 
     /**
      * Encoding.

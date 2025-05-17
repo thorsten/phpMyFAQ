@@ -28,11 +28,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Permission
 {
-    /** @var string */
-    final public const USER = 'user';
+    final public const string USER = 'user';
 
-    /** @var string */
-    final public const GROUP = 'group';
+    final public const string GROUP = 'group';
 
     /**
      * FaqPermission constructor.

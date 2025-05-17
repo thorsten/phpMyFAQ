@@ -19,10 +19,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\DatabaseDriver;
-use phpMyFAQ\Database\Mysqli;
-use phpMyFAQ\Database\Pgsql;
-use phpMyFAQ\Database\Sqlite3;
-use phpMyFAQ\Database\Sqlsrv;
 
 /**
  * Class Database

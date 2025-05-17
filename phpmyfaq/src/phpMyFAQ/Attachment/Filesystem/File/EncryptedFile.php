@@ -33,7 +33,7 @@ class EncryptedFile extends File
      *
      * @var string
      */
-    private const CHUNK_DELIMITER = 'ฒૐᥤ';
+    private const string CHUNK_DELIMITER = 'ฒૐᥤ';
 
     /**
      * AES instance.

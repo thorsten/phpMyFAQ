@@ -37,47 +37,47 @@ class System
     /**
      * Major version.
      */
-    private const VERSION_MAJOR = 4;
+    private const int VERSION_MAJOR = 4;
 
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 1;
+    private const int VERSION_MINOR = 1;
 
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 0;
+    private const int VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'alpha.2';
+    private const string VERSION_PRE_RELEASE = 'alpha.2';
 
     /**
      * API version.
      */
-    private const VERSION_API = '3.1';
+    private const string VERSION_API = '3.1';
 
     /**
      * Plugin version.
      */
-    private const PLUGIN_VERSION = '0.2.0';
+    private const string PLUGIN_VERSION = '0.2.0';
 
     /**
      * Minimum required PHP version.
      */
-    final public const VERSION_MINIMUM_PHP = '8.3.0';
+    final public const string VERSION_MINIMUM_PHP = '8.3.0';
 
     /**
      * phpMyFAQ homepage URL
      */
-    final public const PHPMYFAQ_URL = 'https://www.phpmyfaq.de/';
+    final public const string PHPMYFAQ_URL = 'https://www.phpmyfaq.de/';
 
     /**
      * GitHub Issues URL
      */
-    final public const GITHUB_ISSUES_URL = 'https://github.com/thorsten/phpMyFAQ/issues';
+    final public const string GITHUB_ISSUES_URL = 'https://github.com/thorsten/phpMyFAQ/issues';
 
     /**
      * Array of required PHP extensions.
@@ -146,7 +146,7 @@ class System
     /**
      * Database handle.
      */
-    private ?DatabaseDriver $database = null;
+    private ?DatabaseDriver $databaseDriver = null;
 
     /**
      * Returns the current version of phpMyFAQ for installation and
@@ -228,12 +228,12 @@ class System
 
     public function getDatabase(): ?DatabaseDriver
     {
-        return $this->database;
+        return $this->databaseDriver;
     }
 
     public function setDatabase(DatabaseDriver $databaseDriver): System
     {
-        $this->database = $databaseDriver;
+        $this->databaseDriver = $databaseDriver;
         return $this;
     }
 
@@ -410,8 +410,8 @@ class System
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
             }
-        } catch (UnexpectedValueException $exception) {
-            $hashes[$current . ' failed'] = $exception->getMessage();
+        } catch (UnexpectedValueException $unexpectedValueException) {
+            $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();
         }
 
         return json_encode($hashes, JSON_THROW_ON_ERROR);
@@ -424,9 +424,9 @@ class System
      */
     public function dropTables(array $queries): void
     {
-        if ($this->database instanceof DatabaseDriver) {
+        if ($this->databaseDriver instanceof DatabaseDriver) {
             foreach ($queries as $query) {
-                $this->database->query($query);
+                $this->databaseDriver->query($query);
             }
         }
     }

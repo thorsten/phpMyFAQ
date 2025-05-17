@@ -217,7 +217,7 @@ class Sitemap
 
         $result = $this->configuration->getDb()->query($query);
         $oldId = 0;
-        $converter = new CommonMarkConverter([
+        $commonMarkConverter = new CommonMarkConverter([
             'html_input' => 'strip',
             'allow_unsafe_links' => false,
         ]);
@@ -239,10 +239,13 @@ class Sitemap
                 $faq->url = $link->toString();
 
                 if ($this->configuration->get('main.enableMarkdownEditor')) {
-                    $faq->answer = Utils::chopString(strip_tags($converter->convert($row->snap)->getContent()), 25);
+                    $answer = strip_tags($commonMarkConverter->convert($row->snap)->getContent());
                 } else {
-                    $faq->answer = Utils::chopString(strip_tags((string) $row->snap), 25);
+                    $answer = strip_tags((string) $row->snap);
                 }
+
+                $faq->answer = Utils::chopString($answer, 25);
+
                 $faqs[] = $faq;
             }
 

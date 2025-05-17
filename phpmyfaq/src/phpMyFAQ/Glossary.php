@@ -44,7 +44,7 @@ class Glossary
      */
     public function insertItemsIntoContent(string $content = ''): string
     {
-        if ('' == $content) {
+        if ('' === $content) {
             return '';
         }
 

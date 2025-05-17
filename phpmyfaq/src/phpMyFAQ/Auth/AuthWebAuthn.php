@@ -32,8 +32,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class AuthWebAuthn extends Auth
 {
     private string $appId;
-    private const ES256 = -7;
-    private const RS256 = -257;
+    private const int ES256 = -7;
+    private const int RS256 = -257;
 
     /**
      * AuthWebAuthn constructor.

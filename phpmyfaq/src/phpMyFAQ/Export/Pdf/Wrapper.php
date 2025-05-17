@@ -326,6 +326,7 @@ class Wrapper extends TCPDF
     /**
      * The header of the PDF file.
      */
+    #[\Override]
     public function Header(): void // phpcs:ignore
     {
         // Set custom header and footer
@@ -373,6 +374,7 @@ class Wrapper extends TCPDF
      * The footer of the PDF file.
      * @throws Exception
      */
+    #[\Override]
     public function Footer(): void // phpcs:ignore
     {
         // Set custom footer
@@ -474,7 +476,7 @@ class Wrapper extends TCPDF
     /**
      * Sets the FAQ array.
      */
-    public function setFaq(array $faq)
+    public function setFaq(array $faq): void
     {
         $this->faq = $faq;
     }
@@ -518,6 +520,7 @@ class Wrapper extends TCPDF
      *                               an integer representing the image ID (the value returned by the Image method) and a
      *                               boolean value to indicate if the image is the default for printing.
      */
+    #[\Override]
     public function Image(// phpcs:ignore
         $file,
         $x = null,

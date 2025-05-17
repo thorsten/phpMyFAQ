@@ -30,107 +30,107 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Link
 {
-    private const LINK_AMPERSAND = '&amp;';
+    private const string LINK_AMPERSAND = '&amp;';
 
-    private const LINK_CATEGORY = 'category/';
+    private const string LINK_CATEGORY = 'category/';
 
-    private const LINK_CONTENT = 'content/';
+    private const string LINK_CONTENT = 'content/';
 
-    private const LINK_EQUAL = '=';
+    private const string LINK_EQUAL = '=';
 
-    private const LINK_FRAGMENT_SEPARATOR = '#';
+    private const string LINK_FRAGMENT_SEPARATOR = '#';
 
-    private const LINK_HTML_SLASH = '/';
+    private const string LINK_HTML_SLASH = '/';
 
-    private const LINK_NEWS = 'news/';
+    private const string LINK_NEWS = 'news/';
 
-    private const LINK_SITEMAP = 'sitemap/';
+    private const string LINK_SITEMAP = 'sitemap/';
 
-    private const LINK_SLASH = '/';
+    private const string LINK_SLASH = '/';
 
-    private const LINK_SEARCHPART_SEPARATOR = '?';
+    private const string LINK_SEARCHPART_SEPARATOR = '?';
 
-    private const LINK_TAGS = 'tags/';
+    private const string LINK_TAGS = 'tags/';
 
-    private const LINK_INDEX_HOME = '/index.php';
+    private const string LINK_INDEX_HOME = '/index.php';
 
-    private const LINK_GET_ACTION = 'action';
+    private const string LINK_GET_ACTION = 'action';
 
-    private const LINK_GET_ARTLANG = 'artlang';
+    private const string LINK_GET_ARTLANG = 'artlang';
 
-    private const LINK_GET_CATEGORY = 'cat';
+    private const string LINK_GET_CATEGORY = 'cat';
 
-    private const LINK_GET_HIGHLIGHT = 'highlight';
+    private const string LINK_GET_HIGHLIGHT = 'highlight';
 
-    private const LINK_GET_ID = 'id';
+    private const string LINK_GET_ID = 'id';
 
-    private const LINK_GET_LANG = 'lang';
+    private const string LINK_GET_LANG = 'lang';
 
-    private const LINK_GET_LETTER = 'letter';
+    private const string LINK_GET_LETTER = 'letter';
 
-    private const LINK_GET_NEWS_ID = 'newsid';
+    private const string LINK_GET_NEWS_ID = 'newsid';
 
-    private const LINK_GET_NEWS_LANG = 'newslang';
+    private const string LINK_GET_NEWS_LANG = 'newslang';
 
-    private const LINK_GET_PAGE = 'seite';
+    private const string LINK_GET_PAGE = 'seite';
 
-    private const LINK_GET_SIDS = 'sid';
+    private const string LINK_GET_SIDS = 'sid';
 
-    private const LINK_GET_TAGGING_ID = 'tagging_id';
+    private const string LINK_GET_TAGGING_ID = 'tagging_id';
 
-    private const LINK_GET_LANGS = 'langs';
+    private const string LINK_GET_LANGS = 'langs';
 
-    private const LINK_GET_ACTION_ADD = 'add';
+    private const string LINK_GET_ACTION_ADD = 'add';
 
-    private const LINK_GET_ACTION_FAQ = 'faq';
+    private const string LINK_GET_ACTION_FAQ = 'faq';
 
-    private const LINK_GET_ACTION_ASK = 'ask';
+    private const string LINK_GET_ACTION_ASK = 'ask';
 
-    private const LINK_GET_ACTION_CONTACT = 'contact';
+    private const string LINK_GET_ACTION_CONTACT = 'contact';
 
-    private const LINK_GET_ACTION_GLOSSARY = 'glossary';
+    private const string LINK_GET_ACTION_GLOSSARY = 'glossary';
 
-    private const LINK_GET_ACTION_HELP = 'help';
+    private const string LINK_GET_ACTION_HELP = 'help';
 
-    private const LINK_GET_ACTION_LOGIN = 'login';
+    private const string LINK_GET_ACTION_LOGIN = 'login';
 
-    private const LINK_GET_ACTION_NEWS = 'news';
+    private const string LINK_GET_ACTION_NEWS = 'news';
 
-    private const LINK_GET_ACTION_OPEN = 'open-questions';
+    private const string LINK_GET_ACTION_OPEN = 'open-questions';
 
-    private const LINK_GET_ACTION_SEARCH = 'search';
+    private const string LINK_GET_ACTION_SEARCH = 'search';
 
-    private const LINK_GET_ACTION_SITEMAP = 'sitemap';
+    private const string LINK_GET_ACTION_SITEMAP = 'sitemap';
 
-    private const LINK_GET_ACTION_SHOW = 'show';
+    private const string LINK_GET_ACTION_SHOW = 'show';
 
-    private const LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
+    private const string LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
 
-    private const LINK_GET_ACTION_REGISTER = 'register';
+    private const string LINK_GET_ACTION_REGISTER = 'register';
 
-    private const LINK_HTML_EXTENSION = '.html';
+    private const string LINK_HTML_EXTENSION = '.html';
 
-    private const LINK_HTML_ADDCONTENT = 'add-faq.html';
+    private const string LINK_HTML_ADDCONTENT = 'add-faq.html';
 
-    private const LINK_HTML_ASK = 'add-question.html';
+    private const string LINK_HTML_ASK = 'add-question.html';
 
-    private const LINK_HTML_CONTACT = 'contact.html';
+    private const string LINK_HTML_CONTACT = 'contact.html';
 
-    private const LINK_HTML_GLOSSARY = 'glossary.html';
+    private const string LINK_HTML_GLOSSARY = 'glossary.html';
 
-    private const LINK_HTML_HELP = 'help.html';
+    private const string LINK_HTML_HELP = 'help.html';
 
-    private const LINK_HTML_LOGIN = 'login';
+    private const string LINK_HTML_LOGIN = 'login';
 
-    private const LINK_HTML_OPEN = 'open-questions.html';
+    private const string LINK_HTML_OPEN = 'open-questions.html';
 
-    private const LINK_HTML_SEARCH = 'search.html';
+    private const string LINK_HTML_SEARCH = 'search.html';
 
-    private const LINK_HTML_SHOW_CATEGORIES = 'show-categories.html';
+    private const string LINK_HTML_SHOW_CATEGORIES = 'show-categories.html';
 
-    private const LINK_HTML_BOOKMARKS = 'user/bookmarks';
+    private const string LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
-    private const LINK_HTML_REGISTER = 'user/register';
+    private const string LINK_HTML_REGISTER = 'user/register';
 
     /**
      * @var int[] List of allowed action parameters

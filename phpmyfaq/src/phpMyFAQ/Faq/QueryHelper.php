@@ -24,11 +24,16 @@ use phpMyFAQ\Utils;
 
 readonly class QueryHelper
 {
-    public const FAQ_SQL_ACTIVE_YES = 'yes';
-    public const FAQ_SQL_ACTIVE_NO = 'no';
-    public const FAQ_QUERY_TYPE_APPROVAL = 'faq_approval';
-    public const FAQ_QUERY_TYPE_EXPORT_PDF = 'faq_export_pdf';
-    public const FAQ_QUERY_TYPE_EXPORT_JSON = 'faq_export_json';
+    public const string FAQ_SQL_ACTIVE_YES = 'yes';
+
+    public const string FAQ_SQL_ACTIVE_NO = 'no';
+
+    public const string FAQ_QUERY_TYPE_APPROVAL = 'faq_approval';
+
+    public const string FAQ_QUERY_TYPE_EXPORT_PDF = 'faq_export_pdf';
+
+    public const string FAQ_QUERY_TYPE_EXPORT_JSON = 'faq_export_json';
+
 
     private Configuration $configuration;
 
@@ -181,7 +186,7 @@ readonly class QueryHelper
         $aChildren = array_values($category->getChildren($categoryId));
 
         foreach ($aChildren as $aChild) {
-            $sqlWhereFilter .= ' ' . 'OR' . ' fcr.category_id = ' . $aChild;
+            $sqlWhereFilter .= ' OR fcr.category_id = ' . $aChild;
             $sqlWhereFilter .= $this->getCategoryIdWhereSequence($aChild, $category);
         }
 
