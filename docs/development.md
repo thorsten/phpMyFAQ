@@ -152,8 +152,8 @@ work on your copy and send pull requests.
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP v8.2+
-- PHPUnit v11.x
+- PHP v8.3+
+- PHPUnit v12.x
 - Composer
 - Node.js v22+
 - TypeScript v5.x
