@@ -127,12 +127,6 @@ class Token
         return $token->sessionToken;
     }
 
-    /**
-     * @param string      $page
-     * @param string|null $requestToken
-     * @param bool        $removeToken
-     * @return bool
-     */
     public function verifyToken(string $page, ?string $requestToken = null, bool $removeToken = false): bool
     {
         $requestToken ??= Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME) ?? null;
@@ -200,7 +194,7 @@ class Token
             (string) $token->getCookieToken(),
             [
                 'expires' => $token->getExpiry(),
-                'path' => dirname($request->server->get('SCRIPT_NAME')),
+                'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
                 'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
                 'samesite' => 'strict',
                 'secure' => $request->isSecure(),

@@ -123,9 +123,6 @@ class UserSession
 
     /**
      * Tracks the user and log what he did.
-     *
-     * @param string          $action Action string
-     * @param int|string|null $data
      */
     public function userTracking(string $action, int|string|null $data = null): void
     {
@@ -190,7 +187,7 @@ class UserSession
                     "INSERT INTO %sfaqsessions (sid, user_id, ip, time) VALUES (%d, %d, '%s', %d)",
                     Database::getTablePrefix(),
                     $this->getCurrentSessionId(),
-                    isset($this->currentUser) ? $this->currentUser->getUserId() : 0,
+                    $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
                     $remoteAddress,
                     $request->server->get('REQUEST_TIME')
                 );
@@ -235,7 +232,7 @@ class UserSession
 
         setcookie($name, $sessionId ?? '', [
             'expires' => $request->server->get('REQUEST_TIME') + $timeout,
-            'path' => dirname($request->server->get('SCRIPT_NAME')),
+            'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
             'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),
             'secure' => $request->isSecure(),
             'httponly' => true,

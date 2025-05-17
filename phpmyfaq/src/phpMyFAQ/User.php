@@ -150,11 +150,11 @@ class User
 */
     public function __construct(protected ?Configuration $configuration)
     {
-        $permission = Permission::createPermission(
+        $basicPermission = Permission::createPermission(
             $this->configuration->get('security.permLevel'),
             $this->configuration
         );
-        if (!$this->addPerm($permission)) {
+        if (!$this->addPerm($basicPermission)) {
             return;
         }
 
@@ -398,9 +398,9 @@ class User
 
             if (!$auth->create($login, $pass, $domain)) {
                 throw new Exception(self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name);
-            } else {
-                $success = true;
             }
+
+            $success = true;
         }
 
         if (!$success) {
@@ -588,6 +588,7 @@ class User
         if ($readOnly === $authCount) {
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
+
         return in_array(true, $delete);
     }
 
@@ -790,7 +791,7 @@ class User
      */
     public function activateUser(): bool
     {
-        if ($this->getStatus() == 'blocked') {
+        if ($this->getStatus() === 'blocked') {
             // Generate and change user password.
             $newPassword = $this->createPassword();
             $this->changePassword($newPassword);
@@ -821,9 +822,11 @@ class User
         if (!isset($this->status)) {
             return '';
         }
+
         if (strlen($this->status) <= 0) {
             return '';
         }
+
         return $this->status;
     }
 
@@ -879,7 +882,7 @@ class User
     public function changePassword(string $pass = ''): bool
     {
         $login = $this->getLogin();
-        if ($pass == '') {
+        if ($pass === '') {
             $pass = $this->createPassword();
         }
 
@@ -892,6 +895,7 @@ class User
             if (!$auth->update($login, $pass)) {
                 continue;
             }
+
             $success = true;
         }
 
@@ -910,6 +914,7 @@ class User
 
         $mail->subject = $subject;
         $mail->message = $message;
+
         $result = $mail->send();
         unset($mail);
 
@@ -955,10 +960,6 @@ class User
         return (bool) $this->configuration->getDb()->query($update);
     }
 
-    /**
-     * @param mixed $result
-     * @return void
-     */
     public function extractUserFromResult(mixed $result): void
     {
         $user = $this->configuration->getDb()->fetchArray($result);

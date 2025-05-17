@@ -204,7 +204,9 @@ class CurrentUser extends User
             !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
             throw new Exception(parent::ERROR_USER_INCORRECT_LOGIN);
-        } elseif (!$this->isFailedLastLoginAttempt()) {
+        }
+
+        if (!$this->isFailedLastLoginAttempt()) {
             throw new Exception(parent::ERROR_USER_INCORRECT_PASSWORD);
         }
 
@@ -242,7 +244,6 @@ class CurrentUser extends User
 
     /**
      * Returns true if the user is a local user, otherwise false.
-     * @return bool
      */
     public function isLocalUser(): bool
     {
@@ -472,7 +473,6 @@ class CurrentUser extends User
     /**
      * Returns the current user ID and group IDs as an array, default values are -1
      *
-     * @param CurrentUser|null $user
      * @return array{0: int, 1: int[]}
      */
     public static function getCurrentUserGroupId(?CurrentUser $user = null): array
@@ -485,7 +485,7 @@ class CurrentUser extends User
                 $currentGroups = [-1];
             }
 
-            if (count($currentGroups) === 0) {
+            if ($currentGroups === []) {
                 $currentGroups = [-1];
             }
         } else {
@@ -614,6 +614,7 @@ class CurrentUser extends User
     /**
      * Sets the auth container
      */
+    #[\Override]
     public function setAuthSource(string $authSource): bool
     {
         $update = sprintf(
@@ -769,9 +770,11 @@ class CurrentUser extends User
             if ($first === 'local') {
                 return 1;
             }
+
             if ($second === 'local') {
                 return -1;
             }
+
             return 0;
         });
 

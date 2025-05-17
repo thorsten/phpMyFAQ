@@ -36,7 +36,7 @@ readonly class OpenSearch
 
     private Client $client;
 
-    private OpenSearchConfiguration $osConfig;
+    private OpenSearchConfiguration $openSearchConfig;
 
     /**
      * Constructor.
@@ -46,7 +46,7 @@ readonly class OpenSearch
     public function __construct(private Configuration $configuration)
     {
         $this->client = $this->configuration->getOpenSearch();
-        $this->osConfig = $this->configuration->getOpenSearchConfig();
+        $this->openSearchConfig = $this->configuration->getOpenSearchConfig();
 
         $this->mappings = [
             'properties' => [
@@ -77,7 +77,7 @@ readonly class OpenSearch
      */
     public function createIndex(): bool
     {
-        $result = $this->client->indices()->exists(['index' => $this->osConfig->getIndex()]);
+        $result = $this->client->indices()->exists(['index' => $this->openSearchConfig->getIndex()]);
 
         if (!$result) {
             $this->client->indices()->create($this->getParams());
@@ -94,7 +94,7 @@ readonly class OpenSearch
     private function getParams(): array
     {
         return [
-            'index' => $this->osConfig->getIndex(),
+            'index' => $this->openSearchConfig->getIndex(),
             'body' => [
                 'settings' => [
                     'number_of_shards' => PMF_OPENSEARCH_NUMBER_SHARDS,
@@ -141,15 +141,15 @@ readonly class OpenSearch
 
         if (
             0 === (
-            is_countable($response[$this->osConfig->getIndex()]['mappings'])
+            is_countable($response[$this->openSearchConfig->getIndex()]['mappings'])
                 ?
-                count($response[$this->osConfig->getIndex()]['mappings'])
+                count($response[$this->openSearchConfig->getIndex()]['mappings'])
                 :
                 0
             )
         ) {
             $params = [
-                'index' => $this->osConfig->getIndex(),
+                'index' => $this->openSearchConfig->getIndex(),
                 'body' => $this->mappings
             ];
 
@@ -180,7 +180,7 @@ readonly class OpenSearch
      */
     public function dropIndex(): array
     {
-        return $this->client->indices()->delete(['index' => $this->osConfig->getIndex()]);
+        return $this->client->indices()->delete(['index' => $this->openSearchConfig->getIndex()]);
     }
 
     /**
@@ -191,7 +191,7 @@ readonly class OpenSearch
     public function index(array $faq): array
     {
         $params = [
-            'index' => $this->osConfig->getIndex(),
+            'index' => $this->openSearchConfig->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'id' => $faq['id'],
@@ -224,7 +224,7 @@ readonly class OpenSearch
 
             $params['body'][] = [
                 'index' => [
-                    '_index' => $this->osConfig->getIndex(),
+                    '_index' => $this->openSearchConfig->getIndex(),
                     '_id' => $faq['solution_id'],
                 ]
             ];
@@ -267,7 +267,7 @@ readonly class OpenSearch
     public function update(array $faq): array
     {
         $params = [
-            'index' => $this->osConfig->getIndex(),
+            'index' => $this->openSearchConfig->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'doc' => [
@@ -292,7 +292,7 @@ readonly class OpenSearch
     public function delete(int $solutionId): array
     {
         $params = [
-            'index' => $this->osConfig->getIndex(),
+            'index' => $this->openSearchConfig->getIndex(),
             'id' => $solutionId
         ];
 

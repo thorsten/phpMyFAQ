@@ -33,10 +33,10 @@ use stdClass;
 class Statistics
 {
     /** User */
-    private int $user;
+    private int $user = -1;
 
     /** @var int[] Groups */
-    private array $groups;
+    private array $groups = [-1];
 
     /** Flag for Group support. */
     private bool $groupSupport = false;
@@ -46,8 +46,6 @@ class Statistics
 
     public function __construct(private readonly Configuration $configuration)
     {
-        $this->user = -1;
-        $this->groups = [-1];
         $this->plurals = new Plurals();
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
@@ -78,6 +76,7 @@ class Statistics
         if ($num > 0) {
             return $num;
         }
+
         return 0;
     }
 
@@ -129,7 +128,7 @@ class Statistics
             $entry->title = Utils::makeShorterText($row['question'], 8);
             $entry->preview = $row['question'];
             $entry->url = $row['url'];
-            if ('visits' == $type) {
+            if ('visits' === $type) {
                 $entry->visits = $this->plurals->GetMsg('plmsgViews', $row['visits']);
             } else {
                 $entry->voted = sprintf(
@@ -179,7 +178,6 @@ class Statistics
      *
      * @param int         $count Number of records
      * @param string|null $language Language
-     * @return array
      */
     public function getLatestData(int $count = PMF_NUMBER_RECORDS_LATEST, ?string $language = null): array
     {
@@ -246,6 +244,7 @@ class Statistics
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
+
                     if (!in_array($row->group_id, $this->groups)) {
                         continue;
                     }
@@ -288,7 +287,6 @@ class Statistics
      *
      * @param int         $count Number of records
      * @param string|null $language Language
-     * @return array
      */
     public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, ?string $language = null): array
     {
@@ -353,6 +351,7 @@ class Statistics
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
+
                     if (!in_array($row->group_id, $this->groups)) {
                         continue;
                     }
@@ -441,7 +440,7 @@ class Statistics
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
 
-        if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
+        if ($categoryId != 0) {
             $query .= '
             AND
                 fcr.category_id = \'' . $categoryId . "'";
@@ -471,6 +470,7 @@ class Statistics
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
+
                     if (!in_array($row->group_id, $this->groups)) {
                         continue;
                     }

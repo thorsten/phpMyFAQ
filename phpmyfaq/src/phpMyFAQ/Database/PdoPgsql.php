@@ -40,7 +40,7 @@ class PdoPgsql implements DatabaseDriver
      *
      * @var PDO|null
      */
-    private ?PDO $conn = null;
+    private ?PDO $pdo = null;
 
     /**
      * The query log string.
@@ -67,8 +67,8 @@ class PdoPgsql implements DatabaseDriver
     ): ?bool {
         $dsn = "pgsql:host=$host;dbname=$database;port=$port";
         try {
-            $this->conn = new PDO($dsn, $user, $password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = new PDO($dsn, $user, $password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             throw new Exception($e->getMessage());
         }
@@ -81,7 +81,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function error(): string
     {
-        return $this->conn->errorInfo()[2] ?? '';
+        return $this->pdo->errorInfo()[2] ?? '';
     }
 
     /**
@@ -89,7 +89,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function escape(string $string): string
     {
-        return $this->conn->quote($string);
+        return $this->pdo->quote($string);
     }
 
     /**
@@ -227,7 +227,7 @@ class PdoPgsql implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_NUM);
 
@@ -250,7 +250,7 @@ class PdoPgsql implements DatabaseDriver
             $table
         );
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $current = $stmt->fetch(PDO::FETCH_NUM);
 
@@ -272,13 +272,13 @@ class PdoPgsql implements DatabaseDriver
         }
 
         try {
-            $result = $this->conn->query($query);
+            $result = $this->pdo->query($query);
         } catch (PDOException $e) {
             throw new Exception($e->getMessage());
         }
 
         if (false === $result) {
-            $this->sqlLog .= $this->conn->errorCode() . ': ' . $this->error();
+            $this->sqlLog .= $this->pdo->errorCode() . ': ' . $this->error();
         }
 
         return $result;
@@ -292,7 +292,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function prepare(string $query, array $options = []): PDOStatement|false
     {
-        return $this->conn->prepare($query, $options);
+        return $this->pdo->prepare($query, $options);
     }
 
     /**
@@ -311,7 +311,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function clientVersion(): string
     {
-        return $this->conn->getAttribute(PDO::ATTR_CLIENT_VERSION);
+        return $this->pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
     }
 
     /**
@@ -319,7 +319,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function serverVersion(): string
     {
-        return $this->conn->getAttribute(PDO::ATTR_SERVER_VERSION);
+        return $this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
     /**
@@ -327,7 +327,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function close(): void
     {
-        $this->conn = null;
+        $this->pdo = null;
     }
 
     public function __destruct()

@@ -37,24 +37,29 @@ class Vote
     {
         return $this->id;
     }
+
     public function setId(int $id): Vote
     {
         $this->id = $id;
         return $this;
     }
+
     public function getFaqId(): int
     {
         return $this->faqId;
     }
+
     public function setFaqId(int $faqId): Vote
     {
         $this->faqId = $faqId;
         return $this;
     }
+
     public function getVote(): int
     {
         return $this->vote;
     }
+
     public function setVote(int $vote): Vote
     {
         $this->vote = $vote;
@@ -64,6 +69,7 @@ class Vote
     {
         return $this->users;
     }
+
     public function setUsers(int $users): Vote
     {
         $this->users = $users;
@@ -73,15 +79,18 @@ class Vote
     {
         return $this->createdAt;
     }
+
     public function setCreatedAt(DateTime $createdAt): Vote
     {
         $this->createdAt = $createdAt;
         return $this;
     }
+
     public function getIp(): string
     {
         return $this->ip;
     }
+
     public function setIp(string $ip): Vote
     {
         $this->ip = $ip;

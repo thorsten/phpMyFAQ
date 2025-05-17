@@ -152,36 +152,36 @@ class Language
     private function getPostLanguage(): ?string
     {
         $lang = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS);
-        return $this->isASupportedLanguage($lang) ? $lang : null;
+        return static::isASupportedLanguage($lang) ? $lang : null;
     }
 
     private function getGetLanguage(): ?string
     {
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-        return $this->isASupportedLanguage($lang) ? $lang : null;
+        return static::isASupportedLanguage($lang) ? $lang : null;
     }
 
     private function getArtGetLanguage(): ?string
     {
         $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_SPECIAL_CHARS);
-        return $this->isASupportedLanguage($lang) ? $lang : null;
+        return static::isASupportedLanguage($lang) ? $lang : null;
     }
 
     private function getSessionLanguage(): ?string
     {
         $lang = $this->session->get('lang');
-        return $this->isASupportedLanguage($lang) ? trim((string) $lang) : null;
+        return static::isASupportedLanguage($lang) ? trim((string) $lang) : null;
     }
 
     private function getConfigLanguage(string $configLanguage): ?string
     {
         $lang = str_replace(['language_', '.php'], '', $configLanguage);
-        return $this->isASupportedLanguage($lang) ? $lang : null;
+        return static::isASupportedLanguage($lang) ? $lang : null;
     }
 
     private function getDetectionLanguage(bool $configDetection): ?string
     {
-        return ($configDetection && $this->isASupportedLanguage($this->acceptLanguage))
+        return ($configDetection && static::isASupportedLanguage($this->acceptLanguage))
             ?
             strtolower($this->acceptLanguage)
             :
@@ -197,19 +197,24 @@ class Language
     {
         if (isset($detectedLanguage['post'])) {
             return $detectedLanguage['post'];
-        } elseif (isset($detectedLanguage['get'])) {
-            return $detectedLanguage['get'];
-        } elseif (isset($detectedLanguage['artget'])) {
-            return $detectedLanguage['artget'];
-        } elseif (isset($detectedLanguage['session'])) {
-            return $detectedLanguage['session'];
-        } elseif (isset($detectedLanguage['detection'])) {
-            return $detectedLanguage['detection'];
-        } elseif (isset($detectedLanguage['config'])) {
-            return $detectedLanguage['config'];
-        } else {
-            return 'en';
         }
+        if (isset($detectedLanguage['get'])) {
+            return $detectedLanguage['get'];
+        }
+        if (isset($detectedLanguage['artget'])) {
+            return $detectedLanguage['artget'];
+        }
+        if (isset($detectedLanguage['session'])) {
+            return $detectedLanguage['session'];
+        }
+        if (isset($detectedLanguage['detection'])) {
+            return $detectedLanguage['detection'];
+        }
+        if (isset($detectedLanguage['config'])) {
+            return $detectedLanguage['config'];
+        }
+
+        return 'en';
     }
 
     /**

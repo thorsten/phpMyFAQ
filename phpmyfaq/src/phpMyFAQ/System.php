@@ -252,12 +252,15 @@ class System
             if ($item->isDot()) {
                 continue;
             }
+
             if (!$item->isDir()) {
                 continue;
             }
+
             if (in_array($basename, $systemFolder)) {
                 continue;
             }
+
             $templates[$basename] = TwigWrapper::getTemplateSetName() === $basename;
         }
 
@@ -276,9 +279,11 @@ class System
             if (!extension_loaded($extension)) {
                 continue;
             }
+
             if (version_compare(PHP_VERSION, $database[0]) < 0) {
                 continue;
             }
+
             $databases[$extension] = $database[1];
         }
 
@@ -346,6 +351,7 @@ class System
                 $this->missingExtensions[] = $requiredExtension;
             }
         }
+
         return count($this->missingExtensions) <= 0;
     }
 

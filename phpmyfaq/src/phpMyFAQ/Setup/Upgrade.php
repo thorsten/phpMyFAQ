@@ -203,6 +203,7 @@ class Upgrade extends Setup
             $zipArchive->extractTo($this->upgradeDirectory . '/new/');
             return $zipArchive->close();
         }
+
         throw new Exception('Cannot open zipped download package.');
     }
 

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class AbstractSession
 {
-    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
+    public function __construct(private readonly Session $session)
     {
     }
 

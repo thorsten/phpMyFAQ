@@ -229,9 +229,6 @@ class Link
      * Precisely, it contains what the user has written in the Host request-header, see below.
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
-     *
-     * @param string|null $path
-     * @return string
      */
     public function getSystemUri(string|null $path = null): string
     {
@@ -259,9 +256,6 @@ class Link
 
     /**
      * Returns the relative URI.
-     *
-     * @param string|null $path
-     * @return string
      */
     public static function getSystemRelativeUri(string|null $path = null): string
     {
@@ -507,9 +501,10 @@ class Link
      */
     public function toUri(): string
     {
-        if (!($this->url === '' || $this->url === '0') && ((!$this->hasScheme()) && (!$this->isInternalReference()))) {
+        if ($this->url !== '' && $this->url !== '0' && ((!$this->hasScheme()) && (!$this->isInternalReference()))) {
             return $this->getDefaultScheme() . $this->url;
         }
+
         return $this->url;
     }
 
@@ -560,6 +555,7 @@ class Link
         if ($this->isSystemLink()) {
             return $this->getSystemScheme();
         }
+
         return 'https://';
     }
 

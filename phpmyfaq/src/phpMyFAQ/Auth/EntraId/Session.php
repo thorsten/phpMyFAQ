@@ -40,7 +40,7 @@ class Session extends AbstractSession
 
     public function __construct(private readonly Configuration $configuration, private readonly SymfonySession $session)
     {
-        parent::__construct($configuration, $session);
+        parent::__construct($session);
 
         $this->createCurrentSessionKey();
     }

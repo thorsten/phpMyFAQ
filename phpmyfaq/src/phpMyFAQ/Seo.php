@@ -34,7 +34,6 @@ readonly class Seo
     }
 
     /**
-     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was created
      */
     public function create(SeoEntity $seoEntity): bool
@@ -55,7 +54,6 @@ readonly class Seo
     }
 
     /**
-     * @param SeoEntity $seoEntity
      * @return SeoEntity
      * @throws Exception
      */
@@ -84,7 +82,6 @@ readonly class Seo
     }
 
     /**
-     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was updated
      */
     public function update(SeoEntity $seoEntity): bool
@@ -104,7 +101,6 @@ readonly class Seo
     }
 
     /**
-     * @param SeoEntity $seoEntity
      * @return bool True if the SEO entity was deleted
      */
     public function delete(SeoEntity $seoEntity): bool

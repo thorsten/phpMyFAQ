@@ -98,6 +98,7 @@ class UserData
         if (0 === $this->configuration->getDb()->numRows($res)) {
             return null;
         }
+
         return $this->configuration->getDb()->fetchObject($res)->$key;
     }
 

@@ -61,13 +61,10 @@ class TwoFactor
 
     /**
      * Saves a given secret to the current user from the session.
-     *
-     * @param string $secret
-     * @return bool
      */
     public function saveSecret(string $secret): bool
     {
-        if (strlen($secret) === 0) {
+        if ($secret === '') {
             return false;
         }
 

@@ -639,13 +639,11 @@ class Installer extends Setup
                 $hints .= "<li>{$failedDir}</li>\n";
             }
 
-            $hints .= sprintf(
+            return $hints . sprintf(
                 '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
                 'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
-
-            return $hints;
         }
 
         return null;
@@ -711,6 +709,7 @@ class Installer extends Setup
 
         $file = new SplFileObject($htaccessPath);
         $parser = new Parser();
+
         try {
             $htaccess = $parser->parse($file);
         } catch (SyntaxException $e) {
@@ -718,6 +717,7 @@ class Installer extends Setup
         } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
             throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
         }
+
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
         $rewriteBase->removeArgument($rewriteBase->getArguments()[0]);
@@ -730,7 +730,6 @@ class Installer extends Setup
     /**
      * Starts the installation.
      *
-     * @param array|null $setup
      * @throws Exception|AuthenticationException
      * @throws \Exception
      */
@@ -1155,8 +1154,8 @@ class Installer extends Setup
 
         // add inputs in table "faqforms"
         $forms = new Forms($configuration);
-        foreach ($this->formInputs as $input) {
-            $forms->insertInputIntoDatabase($input);
+        foreach ($this->formInputs as $formInput) {
+            $forms->insertInputIntoDatabase($formInput);
         }
 
         // Add an anonymous user account
@@ -1171,43 +1170,43 @@ class Installer extends Setup
         $faqInstance = new Instance($configuration);
         $faqInstance->create($instanceEntity);
 
-        $faqMainInstance = new Main($configuration);
-        $faqMainInstance->createMain($faqInstance);
+        $main = new Main($configuration);
+        $main->createMain($faqInstance);
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {
-            $esConfiguration = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
+            $elasticsearchConfiguration = new ElasticsearchConfiguration($rootDir . '/config/elasticsearch.php');
 
-            $configuration->setElasticsearchConfig($esConfiguration);
+            $configuration->setElasticsearchConfig($elasticsearchConfiguration);
 
-            $esClient = ClientBuilder::create()->setHosts($esConfiguration->getHosts())->build();
+            $esClient = ClientBuilder::create()->setHosts($elasticsearchConfiguration->getHosts())->build();
 
             $configuration->setElasticsearch($esClient);
 
-            $esInstance = new Elasticsearch($configuration);
-            $esInstance->createIndex();
+            $elasticsearch = new Elasticsearch($configuration);
+            $elasticsearch->createIndex();
         }
 
         // connect to OpenSearch if enabled
         if (!is_null($openSearchEnabled) && is_file($rootDir . '/config/opensearch.php')) {
-            $osConfiguration = new OpenSearchConfiguration($rootDir . '/config/opensearch.php');
+            $openSearchConfiguration = new OpenSearchConfiguration($rootDir . '/config/opensearch.php');
 
-            $configuration->setOpenSearchConfig($osConfiguration);
+            $configuration->setOpenSearchConfig($openSearchConfiguration);
 
             $osClient = (new SymfonyClientFactory())->create([
-                'base_uri' => $osConfiguration->getHosts()[0],
+                'base_uri' => $openSearchConfiguration->getHosts()[0],
                 'verify_peer' => false,
             ]);
 
             $configuration->setOpenSearch($osClient);
 
-            $osInstance = new OpenSearch($configuration);
-            $osInstance->createIndex();
+            $openSearch = new OpenSearch($configuration);
+            $openSearch->createIndex();
         }
 
         // adjust RewriteBase in .htaccess
-        $configurator = new EnvironmentConfigurator($configuration);
-        $configurator->adjustRewriteBaseHtaccess();
+        $environmentConfigurator = new EnvironmentConfigurator($configuration);
+        $environmentConfigurator->adjustRewriteBaseHtaccess();
     }
 
     /**

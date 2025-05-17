@@ -253,7 +253,7 @@ class Mail
             $keys = array_keys($target);
             throw new Exception(
                 sprintf('<strong>Mail Class</strong>: too many e-mail addresses, %s, ', $keys[0]) .
-                sprintf('have been already added as \'%s\'!', $targetAlias)
+                sprintf("have been already added as '%s'!", $targetAlias)
             );
         }
 
@@ -300,10 +300,13 @@ class Mail
         if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) {
             return true;
         }
-        if ('built-in' != $this->agent) {
+
+        if ('built-in' !== $this->agent) {
             return true;
         }
+
         $target[$address] = null;
+
         return true;
     }
 
@@ -324,6 +327,7 @@ class Mail
         if ($address !== str_replace($unsafe, '', $address)) {
             return false;
         }
+
         return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
     }
 
@@ -736,6 +740,7 @@ class Mail
         if ($this->configuration->get('spam.enableSafeEmail')) {
             return str_replace(['@', '.'], ['_AT_', '_DOT_'], $email);
         }
+
         return $email;
     }
 }

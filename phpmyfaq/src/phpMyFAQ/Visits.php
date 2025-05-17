@@ -49,7 +49,7 @@ readonly class Visits
         );
 
         $result = $this->configuration->getDb()->query($query);
-        if ($this->configuration->getDb()->numRows($result)) {
+        if ($this->configuration->getDb()->numRows($result) !== 0) {
             $row = $this->configuration->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }

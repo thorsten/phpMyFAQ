@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Tracking
 {
-    private static ?Tracking $instance = null;
+    private static ?Tracking $tracking = null;
 
     private ?int $currentSessionId = null;
 
@@ -51,11 +51,11 @@ class Tracking
         Request $request,
         UserSession $userSession
     ): Tracking {
-        if (null === self::$instance) {
-            self::$instance = new self($configuration, $request, $userSession);
+        if (!self::$tracking instanceof Tracking) {
+            self::$tracking = new self($configuration, $request, $userSession);
         }
 
-        return self::$instance;
+        return self::$tracking;
     }
 
     /**
@@ -113,6 +113,7 @@ class Tracking
                 ++$bots;
             }
         }
+
         return $bots;
     }
 

@@ -41,7 +41,7 @@ class Translation
 
     public static function create(): Translation
     {
-        if (self::$translation === null) {
+        if (!self::$translation instanceof Translation) {
             self::$translation = new self();
         }
 

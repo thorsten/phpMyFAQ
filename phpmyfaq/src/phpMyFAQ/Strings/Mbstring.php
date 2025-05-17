@@ -29,7 +29,7 @@ class Mbstring extends StringsAbstract
     /**
      * Instance.
      */
-    private static ?Mbstring $instance = null;
+    private static ?Mbstring $mbstring = null;
 
     /**
      * Constructor.
@@ -43,14 +43,14 @@ class Mbstring extends StringsAbstract
      */
     public static function getInstance(string $language = 'en'): Mbstring
     {
-        if (!(self::$instance instanceof Mbstring)) {
-            self::$instance = new self();
-            self::$instance->encoding = self::DEFAULT_ENCODING;
-            self::$instance->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
-            mb_regex_encoding(self::$instance->encoding);
+        if (!(self::$mbstring instanceof Mbstring)) {
+            self::$mbstring = new self();
+            self::$mbstring->encoding = self::DEFAULT_ENCODING;
+            self::$mbstring->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
+            mb_regex_encoding(self::$mbstring->encoding);
         }
 
-        return self::$instance;
+        return self::$mbstring;
     }
 
     /**
@@ -111,13 +111,6 @@ class Mbstring extends StringsAbstract
 
     /**
      * Match a regexp.
-     *
-     * @param string $pattern
-     * @param string $subject
-     * @param null   $matches
-     * @param int    $flags
-     * @param int    $offset
-     * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0): int
     {

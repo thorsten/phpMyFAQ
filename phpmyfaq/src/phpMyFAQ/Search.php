@@ -59,8 +59,6 @@ class Search
 
     /**
      * Getter for category.
-     *
-     * @return int|null
      */
     public function getCategoryId(): ?int
     {
@@ -96,7 +94,6 @@ class Search
      *
      * @param string $searchTerm Text to auto complete
      * @throws Exception
-     * @return array
      */
     public function autoComplete(string $searchTerm): array
     {
@@ -128,15 +125,14 @@ class Search
      *
      * @param string $searchTerm Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     * @return array
-     *@throws Exception
+     * @throws Exception
      */
     public function searchDatabase(string $searchTerm, bool $allLanguages = true): array
     {
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
-        $search = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+        $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
@@ -158,7 +154,7 @@ class Search
             $condition        = [...$selectedLanguage, ...$condition];
         }
 
-        $search->setTable($fdTable)
+        $searchDatabase->setTable($fdTable)
             ->setResultColumns(
                 [
                 'fd.id AS id',
@@ -179,14 +175,14 @@ class Search
             ->setConditions($condition);
 
         if (is_numeric($searchTerm)) {
-            $search->setMatchingColumns(['fd.solution_id']);
+            $searchDatabase->setMatchingColumns(['fd.solution_id']);
         } else {
-            $search->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
+            $searchDatabase->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
         }
 
-        $result = $search->search($searchTerm);
+        $result = $searchDatabase->search($searchTerm);
 
-        if (!$this->configuration->getDb()->numRows($result)) {
+        if ($this->configuration->getDb()->numRows($result) === 0) {
             return [];
         }
         return $this->configuration->getDb()->fetchAll($result);

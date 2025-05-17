@@ -48,8 +48,8 @@ class FormController extends AbstractController
         try {
             $forms->saveActivateInputStatus($formId, $inputId, $checked);
             return $this->json(['success' => Translation::get('msgEditFormsSuccessful')], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -70,8 +70,8 @@ class FormController extends AbstractController
         try {
             $forms->saveRequiredInputStatus($formId, $inputId, $checked);
             return $this->json(['success' => Translation::get('msgEditFormsSuccessful')], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -93,11 +93,14 @@ class FormController extends AbstractController
         try {
             $forms->editTranslation($label, $formId, $inputId, $lang);
             return $this->json(['success' => Translation::get('msgFormsEditTranslationSuccessful')], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('admin/api/forms/translation-delete')]
     public function deleteTranslation(Request $request): JsonResponse
     {
@@ -118,8 +121,8 @@ class FormController extends AbstractController
                 ['success' => Translation::get('msgFormsDeleteTranslationSuccessful')],
                 Response::HTTP_OK
             );
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -143,8 +146,8 @@ class FormController extends AbstractController
         try {
             $forms->addTranslation($formId, $inputId, $lang, $translation);
             return $this->json(['success' => Translation::get('msgFormsAddTranslationSuccessful')], Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 }

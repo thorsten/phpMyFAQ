@@ -25,11 +25,11 @@ use Tivie\HtaccessParser\Parser;
 
 use const Tivie\HtaccessParser\Token\TOKEN_DIRECTIVE;
 
-class EnvironmentConfigurator
+readonly class EnvironmentConfigurator
 {
     private string $htaccessPath;
 
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct(private Configuration $configuration)
     {
         $this->htaccessPath = $this->configuration->getRootPath() . '/.htaccess';
     }
@@ -58,6 +58,7 @@ class EnvironmentConfigurator
         } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
             throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
         }
+
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
         return $rewriteBase->getArguments()[0];
@@ -84,6 +85,7 @@ class EnvironmentConfigurator
         } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
             throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
         }
+
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
         $rewriteBase->removeArgument($this->getRewriteBase());

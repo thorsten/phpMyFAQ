@@ -34,9 +34,7 @@ use Twig\TwigFunction;
 
 class TwigWrapper
 {
-    private Environment $twigEnvironment;
-
-    private bool $isSetup;
+    private readonly Environment $twigEnvironment;
 
     /** @var string Name of an active template set. */
     private static string $templateSetName = 'default';
@@ -44,9 +42,8 @@ class TwigWrapper
     /**
      * @throws LoaderError
      */
-    public function __construct(string $templatePath, bool $isSetup = false)
+    public function __construct(string $templatePath, private bool $isSetup = false)
     {
-        $this->isSetup = $isSetup;
         $filesystemLoader = new FilesystemLoader();
         $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
         $filesystemLoader->addPath($templatePath . '/admin', 'admin');
@@ -104,9 +101,9 @@ class TwigWrapper
         return $this->twigEnvironment->getExtension($class); /** @phpstan-ignore-line */
     }
 
-    public function addFilter(TwigFilter $filter): void
+    public function addFilter(TwigFilter $twigFilter): void
     {
-        $this->twigEnvironment->addFilter($filter);
+        $this->twigEnvironment->addFilter($twigFilter);
     }
 
     /**

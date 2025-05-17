@@ -123,6 +123,7 @@ readonly class Plurals
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;
         }
+
         return $plural;
     }
 }

@@ -28,8 +28,6 @@ class StringBasic extends StringsAbstract
 {
     /**
      * Default encoding.
-     *
-     * @var string
      */
     final public const string DEFAULT_ENCODING = 'UTF-8';
 
@@ -47,9 +45,6 @@ class StringBasic extends StringsAbstract
 
     /**
      * Create and return an instance.
-     *
-     * @param string $language
-     * @return StringBasic
      */
     public static function getStringBasic(string $language = 'en'): StringBasic
     {
@@ -134,7 +129,6 @@ class StringBasic extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @param null $matches
      * @return int
      */
     public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0) // phpcs:ignore

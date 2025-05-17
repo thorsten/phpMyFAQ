@@ -36,6 +36,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Instance\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Search;
@@ -226,8 +227,24 @@ class FaqController extends AbstractController
 
             // If Elasticsearch is enabled, index new FAQ document
             if ($this->configuration->get('search.enableElasticsearch')) {
-                $esInstance = new Elasticsearch($this->configuration);
-                $esInstance->index(
+                $elasticsearch = new Elasticsearch($this->configuration);
+                $elasticsearch->index(
+                    [
+                        'id' => $faqData->getId(),
+                        'lang' => $faqData->getLanguage(),
+                        'solution_id' => $faqData->getSolutionId(),
+                        'question' => $faqData->getQuestion(),
+                        'answer' => $faqData->getAnswer(),
+                        'keywords' => $faqData->getKeywords(),
+                        'category_id' => $categories[0]
+                    ]
+                );
+            }
+
+            // If OpenSearch is enabled, index new FAQ document
+            if ($this->configuration->get('search.enableOpenSearch')) {
+                $openSearch = new OpenSearch($this->configuration);
+                $openSearch->index(
                     [
                         'id' => $faqData->getId(),
                         'lang' => $faqData->getLanguage(),
@@ -424,9 +441,27 @@ class FaqController extends AbstractController
 
         // If Elasticsearch is enabled, update an active or delete inactive FAQ document
         if ($this->configuration->get('search.enableElasticsearch')) {
-            $esInstance = new Elasticsearch($this->configuration);
+            $elasticsearch = new Elasticsearch($this->configuration);
             if ('yes' === $active) {
-                $esInstance->update(
+                $elasticsearch->update(
+                    [
+                        'id' => $faqData->getId(),
+                        'lang' => $faqData->getLanguage(),
+                        'solution_id' => $faqData->getSolutionId(),
+                        'question' => $faqData->getQuestion(),
+                        'answer' => $faqData->getAnswer(),
+                        'keywords' => $faqData->getKeywords(),
+                        'category_id' => $categories[0]
+                    ]
+                );
+            }
+        }
+
+        // If OpenSearch is enabled, update an active or delete inactive FAQ document
+        if ($this->configuration->get('search.enableOpenSearch')) {
+            $openSearch = new OpenSearch($this->configuration);
+            if ('yes' === $active) {
+                $openSearch->update(
                     [
                         'id' => $faqData->getId(),
                         'lang' => $faqData->getLanguage(),
@@ -525,12 +560,12 @@ class FaqController extends AbstractController
 
             if ($success) {
                 return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
+
+            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -563,12 +598,12 @@ class FaqController extends AbstractController
 
             if ($success) {
                 return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
+
+            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -635,9 +670,9 @@ class FaqController extends AbstractController
                 ['success' => $searchHelper->renderAdminSuggestionResult($searchResultSet)],
                 Response::HTTP_OK
             );
-        } else {
-            return $this->json(['error' => 'No search string provided.'], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'No search string provided.'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -708,19 +743,21 @@ class FaqController extends AbstractController
                     'success' => Translation::get('msgImportSuccessful'),
                 ];
                 return $this->json($result, Response::HTTP_OK);
-            } else {
-                $result = [
-                    'storedAll' => false,
-                    'messages' => $errors,
-                ];
-                return $this->json($result, Response::HTTP_BAD_REQUEST);
             }
-        } else {
+
             $result = [
                 'storedAll' => false,
-                'error' => 'Bad request: The file is not a CSV file.',
+                'messages' => $errors,
             ];
+
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
+
+        $result = [
+            'storedAll' => false,
+            'error' => 'Bad request: The file is not a CSV file.',
+        ];
+
+        return $this->json($result, Response::HTTP_BAD_REQUEST);
     }
 }

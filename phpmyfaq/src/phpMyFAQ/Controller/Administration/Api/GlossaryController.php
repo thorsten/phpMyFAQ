@@ -69,9 +69,9 @@ class GlossaryController extends AbstractController
 
         if ($glossary->delete($glossaryId)) {
             return $this->json(['success' => Translation::get('ad_glossary_delete_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_glossary_delete_error')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_glossary_delete_error')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -97,9 +97,9 @@ class GlossaryController extends AbstractController
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
             return $this->json(['success' => Translation::get('ad_glossary_save_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_glossary_save_error')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_glossary_save_error')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -126,8 +126,8 @@ class GlossaryController extends AbstractController
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {
             return $this->json(['success' => Translation::get('ad_glossary_update_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_glossary_update_error')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_glossary_update_error')], Response::HTTP_BAD_REQUEST);
     }
 }
