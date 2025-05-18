@@ -33,8 +33,6 @@ class Pgsql implements DatabaseDriver
 {
     /**
      * The query log string.
-     *
-     * @var string
      */
     private string $sqlLog = '';
 
@@ -85,8 +83,8 @@ class Pgsql implements DatabaseDriver
             if ($database === '') {
                 throw new Exception('Database name is empty');
             }
-        } catch (Exception $e) {
-            Database::errorPage($e->getMessage());
+        } catch (Exception $exception) {
+            Database::errorPage($exception->getMessage());
             die();
         }
 

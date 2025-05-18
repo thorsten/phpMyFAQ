@@ -35,11 +35,8 @@ readonly class Question
 
     /**
      * Adds a new question.
-     *
-     * @param QuestionEntity $questionData
-     * @return bool
      */
-    public function add(QuestionEntity $questionData): bool
+    public function add(QuestionEntity $questionEntity): bool
     {
         $query = sprintf(
             "
@@ -50,13 +47,13 @@ readonly class Question
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
-            $this->configuration->getDb()->escape($questionData->getLanguage()),
-            $this->configuration->getDb()->escape($questionData->getUsername()),
-            $this->configuration->getDb()->escape($questionData->getEmail()),
-            $questionData->getCategoryId(),
-            $this->configuration->getDb()->escape($questionData->getQuestion()),
+            $this->configuration->getDb()->escape($questionEntity->getLanguage()),
+            $this->configuration->getDb()->escape($questionEntity->getUsername()),
+            $this->configuration->getDb()->escape($questionEntity->getEmail()),
+            $questionEntity->getCategoryId(),
+            $this->configuration->getDb()->escape($questionEntity->getQuestion()),
             date('YmdHis'),
-            $questionData->isVisible() ? 'Y' : 'N',
+            $questionEntity->isVisible() ? 'Y' : 'N',
             0
         );
 

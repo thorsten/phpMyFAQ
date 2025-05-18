@@ -110,7 +110,7 @@ class Pdf extends Export
             if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
                 $this->wrapper->Bookmark(
                     html_entity_decode(
-                        $this->category->categoryName[$faq['category_id']]['name'],
+                        (string) $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8'
                     ),
@@ -225,6 +225,7 @@ class Pdf extends Export
             foreach ($faqData['attachmentList'] as $attachment) {
                 $listItems .= sprintf('<li><a href="%s">%s</a></li>', $attachment['url'], $attachment['filename']);
             }
+
             $listItems .= '</ul>';
             $this->wrapper->WriteHTML($listItems);
         }

@@ -23,7 +23,7 @@ namespace phpMyFAQ\Entity;
  */
 class CommentType
 {
-    final public const FAQ = 'faq';
+    final public const string FAQ = 'faq';
 
-    final public const NEWS = 'news';
+    final public const string NEWS = 'news';
 }

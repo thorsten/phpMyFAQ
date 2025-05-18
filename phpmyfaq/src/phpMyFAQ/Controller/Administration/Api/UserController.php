@@ -384,49 +384,45 @@ class UserController extends AbstractController
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
         if ($userId === 0) {
             return $this->json(['error' => Translation::get('ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
-        } else {
-            $userData = [];
-            $userData['display_name'] = Filter::filterVar($data->display_name, FILTER_SANITIZE_SPECIAL_CHARS);
-            $userData['email'] = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
-            $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
-            $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
-            $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
-            $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
-            $deleteTwoFactor = $deleteTwoFactor === 'on';
+        }
 
-            $user = new User($this->configuration);
-            $user->getUserById($userId, true);
+        $userData = [];
+        $userData['display_name'] = Filter::filterVar($data->display_name, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userData['email'] = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
+        $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
+        $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
+        $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
+        $deleteTwoFactor = $deleteTwoFactor === 'on';
 
-            $stats = $user->getStatus();
+        $user = new User($this->configuration);
+        $user->getUserById($userId, true);
 
-            // reset two-factor authentication if required
-            if ($deleteTwoFactor) {
-                $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
-            }
+        $stats = $user->getStatus();
 
-            // set new password and sent email if a user is switched to active
-            if ($stats == 'blocked' && $userStatus == 'active') {
-                if (!$user->activateUser()) {
-                    $userStatus = 'invalid_status';
-                }
-            }
+        // reset two-factor authentication if required
+        if ($deleteTwoFactor) {
+            $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
+        }
 
-            // Set super-admin flag
-            $user->setSuperAdmin($isSuperAdmin);
-
-            if (
-                !$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus(
-                    $userStatus
-                )
-            ) {
-                return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
-            } else {
-                $success = Translation::get('ad_msg_savedsuc_1') . ' ' .
-                    Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
-                    Translation::get('ad_msg_savedsuc_2');
-                return $this->json(['success' => $success], Response::HTTP_OK);
+        // set new password and sent email if a user is switched to active
+        if ($stats == 'blocked' && $userStatus == 'active') {
+            if (!$user->activateUser()) {
+                $userStatus = 'invalid_status';
             }
         }
+
+        // Set super-admin flag
+        $user->setSuperAdmin($isSuperAdmin);
+
+        if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
+            return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $success = Translation::get('ad_msg_savedsuc_1') . ' ' .
+            Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
+            Translation::get('ad_msg_savedsuc_2');
+        return $this->json(['success' => $success], Response::HTTP_OK);
     }
 
     /**
@@ -460,8 +456,8 @@ class UserController extends AbstractController
             return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
 
-        foreach ($userRights as $rightId) {
-            $user->perm->grantUserRight($userId, $rightId);
+        foreach ($userRights as $userRight) {
+            $user->perm->grantUserRight($userId, $userRight);
         }
 
         $user->terminateSessionId();

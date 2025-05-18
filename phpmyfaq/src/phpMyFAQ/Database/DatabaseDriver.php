@@ -32,7 +32,6 @@ interface DatabaseDriver
      * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
-     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      */
     public function connect(
@@ -45,8 +44,6 @@ interface DatabaseDriver
 
     /**
      * This function sends a query to the database.
-     *
-     * @return mixed $result
      */
     public function query(string $query, int $offset = 0, int $rowcount = 0): mixed;
 
@@ -57,15 +54,12 @@ interface DatabaseDriver
 
     /**
      * Fetch a result row as an object.
-     *
-     *
      */
     public function fetchObject(mixed $result): mixed;
 
     /**
      * Fetch a result row as an array.
      *
-     * @param mixed $result
      * @return array|false|null
      */
     public function fetchArray(mixed $result): array|false|null;
@@ -77,10 +71,6 @@ interface DatabaseDriver
 
     /**
      * Fetches a complete result as an object.
-     *
-     * @param mixed $result Result
-     *
-     * @return array
      */
     public function fetchAll(mixed $result): ?array;
 

@@ -34,8 +34,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WebAuthnController extends AbstractController
 {
-    private AuthWebAuthn $authWebAuthn;
-    private User $user;
+    private readonly AuthWebAuthn $authWebAuthn;
+
+    private readonly User $user;
 
     public function __construct()
     {

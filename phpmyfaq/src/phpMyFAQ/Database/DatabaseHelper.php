@@ -102,7 +102,7 @@ readonly class DatabaseHelper
                 }
 
                 $columns[] = $key;
-                if ('rights' != $key && is_numeric($val)) {
+                if ('rights' !== $key && is_numeric($val)) {
                     $values[] = $val;
                 } elseif (is_null($val)) {
                     $values[] = 'NULL';

@@ -36,8 +36,6 @@ class PdoSqlite implements DatabaseDriver
 
     /**
      * The connection object.
-     *
-     * @var PDO|null
      */
     private ?PDO $pdo = null;
 
@@ -49,11 +47,6 @@ class PdoSqlite implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string   $host
-     * @param string   $user
-     * @param string   $password
-     * @param string   $database
-     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
@@ -64,12 +57,12 @@ class PdoSqlite implements DatabaseDriver
         string $database = '',
         int|null $port = null
     ): ?bool {
-        $dsn = "sqlite:$host";
+        $dsn = 'sqlite:' . $host;
         try {
             $this->pdo = new PDO($dsn);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage());
         }
 
         return true;
@@ -226,9 +219,10 @@ class PdoSqlite implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $row = $statement->fetch(PDO::FETCH_NUM);
 
         return $row[0];
     }
@@ -249,9 +243,10 @@ class PdoSqlite implements DatabaseDriver
             $table
         );
 
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $current = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $current = $statement->fetch(PDO::FETCH_NUM);
 
         return $current[0] + 1;
     }
@@ -272,8 +267,8 @@ class PdoSqlite implements DatabaseDriver
 
         try {
             $result = $this->pdo->query($query);
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage());
         }
 
         if (false === $result) {
@@ -297,12 +292,12 @@ class PdoSqlite implements DatabaseDriver
     /**
      * Executes a prepared statement.
      *
-     * @param PDOStatement $stmt The prepared statement
+     * @param PDOStatement $pdoStatement The prepared statement
      * @param array $params The parameters
      */
-    public function execute(PDOStatement $stmt, array $params = []): bool
+    public function execute(PDOStatement $pdoStatement, array $params = []): bool
     {
-        return $stmt->execute($params);
+        return $pdoStatement->execute($params);
     }
 
     /**

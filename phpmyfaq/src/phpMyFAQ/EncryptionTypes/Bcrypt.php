@@ -31,6 +31,7 @@ class Bcrypt extends Encryption
      *
      * @param string $password String
      */
+    #[\Override]
     public function encrypt(string $password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);

@@ -49,9 +49,6 @@ class CategoryEntity
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     */
     public function setActive(bool $active): CategoryEntity
     {
         $this->active = $active;
@@ -124,9 +121,6 @@ class CategoryEntity
         return (int)$this->parentId;
     }
 
-    /**
-     * @param int $parentId
-     */
     public function setParentId(int $parentId): CategoryEntity
     {
         $this->parentId = $parentId;
@@ -139,9 +133,6 @@ class CategoryEntity
         return (int)$this->userId;
     }
 
-    /**
-     * @param int $userId
-     */
     public function setUserId(int $userId): CategoryEntity
     {
         $this->userId = $userId;

@@ -38,8 +38,6 @@ class PdoMysql implements DatabaseDriver
 
     /**
      * The connection object.
-     *
-     * @var PDO|null
      */
     private ?PDO $pdo = null;
 
@@ -55,7 +53,6 @@ class PdoMysql implements DatabaseDriver
      * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
-     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
@@ -66,12 +63,12 @@ class PdoMysql implements DatabaseDriver
         string $database = '',
         int|null $port = null
     ): ?bool {
-        $dsn = "mysql:host=$host;dbname=$database;port=$port;charset=utf8mb4";
+        $dsn = sprintf('mysql:host=%s;dbname=%s;port=%s;charset=utf8mb4', $host, $database, $port);
         try {
             $this->pdo = new PDO($dsn, $user, $password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage());
         }
 
         return true;
@@ -228,9 +225,10 @@ class PdoMysql implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $row = $statement->fetch(PDO::FETCH_NUM);
 
         return $row[0];
     }
@@ -251,9 +249,10 @@ class PdoMysql implements DatabaseDriver
             $table
         );
 
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $current = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $current = $statement->fetch(PDO::FETCH_NUM);
 
         return $current[0] + 1;
     }
@@ -274,8 +273,8 @@ class PdoMysql implements DatabaseDriver
 
         try {
             $result = $this->pdo->query($query);
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+        } catch (PDOException $pdoException) {
+            throw new Exception($pdoException->getMessage());
         }
 
         if (false === $result) {
@@ -299,12 +298,12 @@ class PdoMysql implements DatabaseDriver
     /**
      * Executes a prepared statement.
      *
-     * @param PDOStatement $stmt The prepared statement
-     * @param array $params The parameters
+     * @param PDOStatement $pdoStatement The prepared statement
+     * @param array        $params The parameters
      */
-    public function execute(PDOStatement $stmt, array $params = []): bool
+    public function execute(PDOStatement $pdoStatement, array $params = []): bool
     {
-        return $stmt->execute($params);
+        return $pdoStatement->execute($params);
     }
 
     /**

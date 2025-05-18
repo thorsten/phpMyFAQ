@@ -214,6 +214,7 @@ class BackupController extends AbstractAdministrationController
                     if (Strings::substr($backupData, 0, $backupPrefixPatternLength) === $backupPrefixPattern) {
                         $tablePrefix = trim(Strings::substr($backupData, $backupPrefixPatternLength));
                     }
+
                     if ((Strings::substr($backupData, 0, 2) !== '--') && ($backupData !== '')) {
                         $queries[] = trim(Strings::substr($backupData, 0, -1));
                     }

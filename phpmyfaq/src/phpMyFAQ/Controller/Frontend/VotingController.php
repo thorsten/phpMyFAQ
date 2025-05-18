@@ -65,12 +65,14 @@ class VotingController extends AbstractController
                 ],
                 Response::HTTP_OK
             );
-        } elseif (!$rating->check($faqId, $userIp)) {
+        }
+
+        if (!$rating->check($faqId, $userIp)) {
             $session->userTracking('error_save_voting', $faqId);
             return $this->json(['error' => Translation::get('err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
-        } else {
-            $session->userTracking('error_save_voting', $faqId);
-            return $this->json(['error' => Translation::get('err_noVote')], Response::HTTP_BAD_REQUEST);
         }
+
+        $session->userTracking('error_save_voting', $faqId);
+        return $this->json(['error' => Translation::get('err_noVote')], Response::HTTP_BAD_REQUEST);
     }
 }

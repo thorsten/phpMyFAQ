@@ -33,6 +33,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class UnauthorizedUserController
 {
     protected ?Configuration $configuration = null;
+
     /**
      * Check if the FAQ should be secured.
      */
@@ -74,42 +75,39 @@ class UnauthorizedUserController
                     sprintf('<br>New Password: %s<br><br>', $newPassword) .
                     Translation::get('lostpwd_text_2');
 
-                $mailer = new Mail($this->configuration);
+                $mail = new Mail($this->configuration);
                 try {
-                    $mailer->addTo($email);
+                    $mail->addTo($email);
                 } catch (Exception $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
-                $mailer->subject = Utils::resolveMarkers(
+                $mail->subject = Utils::resolveMarkers(
                     '[%sitename%] Username / password request',
                     $this->configuration
                 );
-                $mailer->message = $text;
+                $mail->message = $text;
                 try {
-                    $mailer->send();
+                    $mail->send();
                 } catch (Exception | TransportExceptionInterface $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
-                unset($mailer);
+                unset($mail);
                 // Trust that the email has been sent
                 return $this->json(['success' => Translation::get('lostpwd_mail_okay')], Response::HTTP_OK);
-            } else {
-                return $this->json(['error' => Translation::get('lostpwd_err_1')], Response::HTTP_CONFLICT);
             }
-        } else {
-            return $this->json(['error' => Translation::get('lostpwd_err_2')], Response::HTTP_CONFLICT);
+
+            return $this->json(['error' => Translation::get('lostpwd_err_1')], Response::HTTP_CONFLICT);
         }
+
+        return $this->json(['error' => Translation::get('lostpwd_err_2')], Response::HTTP_CONFLICT);
     }
 
     /**
      * Returns a JsonResponse that uses json_encode().
      *
-     * @param mixed $data
-     * @param int $status
      * @param string[] $headers
-     * @return JsonResponse
      */
     public function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {

@@ -46,12 +46,11 @@ class Sqlsrv implements DatabaseDriver
      * Connects to the database.
      * This function connects to a MySQL database
      *
-     * @param string   $host A string specifying the name of the server to which a connection is being established
-     * @param string   $user Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string   $password Specifies the password associated with the User ID to be used when connecting with
+     * @param string $host A string specifying the name of the server to which a connection is being established
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
-     * @param string   $database Specifies the name of the database in use for the connection being established
-     * @param int|null $port
+     * @param string $database Specifies the name of the database in use for the connection being established
      * @return bool|null true, if connected, otherwise false
      */
     public function connect(

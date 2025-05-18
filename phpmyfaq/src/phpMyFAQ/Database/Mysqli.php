@@ -39,8 +39,6 @@ class Mysqli implements DatabaseDriver
 
     /**
      * The connection object.
-     *
-     * @var \mysqli|bool
      */
     private \mysqli|bool $conn = false;
 
@@ -56,7 +54,6 @@ class Mysqli implements DatabaseDriver
      * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
-     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */

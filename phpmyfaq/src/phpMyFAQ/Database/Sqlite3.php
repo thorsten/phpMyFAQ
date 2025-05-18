@@ -33,33 +33,21 @@ class Sqlite3 implements DatabaseDriver
 
     /**
      * The connection object.
-     *
-     * @var \SQLite3|bool
      */
     private \Sqlite3|bool $conn = false;
 
     /**
      * The query log string.
-     *
-     *
      * @see query()
      */
     private string $sqlLog = '';
 
-    /** @var string */
-    private const ERROR_MESSAGE =
+    private const string ERROR_MESSAGE =
         "Do not call numRows() after you've fetched one or more result records, because " .
         (Sqlite3::class . '::numRows() has to reset the results at its end.');
 
     /**
      * Connects to the database.
-     *
-     * @param string   $host
-     * @param string   $user
-     * @param string   $password
-     * @param string   $database
-     * @param int|null $port
-     * @return bool|null
      */
     public function connect(
         string $host,

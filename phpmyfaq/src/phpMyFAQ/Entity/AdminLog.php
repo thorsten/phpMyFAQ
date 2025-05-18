@@ -28,6 +28,7 @@ class AdminLog
     private string $text;
 
     private string $ip;
+
     public function getId(): int
     {
         return $this->id;

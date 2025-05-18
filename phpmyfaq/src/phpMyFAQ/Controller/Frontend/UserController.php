@@ -74,34 +74,34 @@ class UserController extends AbstractController
 
             if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
                 return $this->json(['error' => Translation::get('ad_passwd_fail')], Response::HTTP_CONFLICT);
+            }
+
+            if ($isWebAuthnUser) {
+                $userData = [
+                    'display_name' => $userName,
+                    'is_visible' => $isVisible === 'on' ? 1 : 0,
+                ];
             } else {
-                if ($isWebAuthnUser) {
-                    $userData = [
-                        'display_name' => $userName,
-                        'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    ];
-                } else {
-                    $userData = [
-                        'display_name' => $userName,
-                        'email' => $email,
-                        'is_visible' => $isVisible === 'on' ? 1 : 0,
-                        'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
-                    ];
+                $userData = [
+                    'display_name' => $userName,
+                    'email' => $email,
+                    'is_visible' => $isVisible === 'on' ? 1 : 0,
+                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
+                ];
+            }
+
+            $success = $this->currentUser->setUserData($userData);
+
+            foreach ($this->currentUser->getAuthContainer() as $authDriver) {
+                if ($authDriver->setReadOnly()) {
+                    continue;
                 }
 
-                $success = $this->currentUser->setUserData($userData);
-
-                foreach ($this->currentUser->getAuthContainer() as $auth) {
-                    if ($auth->setReadOnly()) {
-                        continue;
-                    }
-
-                    if (!$auth->update($this->currentUser->getLogin(), $password)) {
-                        return $this->json(['error' => $auth->getErrors()], Response::HTTP_BAD_REQUEST);
-                    } else {
-                        $success = true;
-                    }
+                if (!$authDriver->update($this->currentUser->getLogin(), $password)) {
+                    return $this->json(['error' => $authDriver->getErrors()], Response::HTTP_BAD_REQUEST);
                 }
+
+                $success = true;
             }
         } else {
             $userData = [
@@ -115,9 +115,9 @@ class UserController extends AbstractController
 
         if ($success) {
             return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
     }
 
 
@@ -183,13 +183,13 @@ class UserController extends AbstractController
             } catch (Exception | TransportExceptionInterface $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @throws Exception|TwoFactorAuthException
+     * @throws \Exception|Exception|TwoFactorAuthException
      */
     #[Route('api/user/remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
@@ -210,11 +210,11 @@ class UserController extends AbstractController
                     ['success' => Translation::get('msgRemoveTwofactorConfigSuccessful')],
                     Response::HTTP_OK
                 );
-            } else {
-                return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            throw new Exception('The user is not logged in.');
+
+            return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
         }
+
+        throw new Exception('The user is not logged in.');
     }
 }

@@ -29,8 +29,6 @@ class Encryption
 {
     /**
      * Error constant.
-     *
-     * @var string
      */
     private const string PMF_ERROR_USER_NO_ENCTYPE = 'EncryptionTypes method could not be found.';
 

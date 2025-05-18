@@ -102,10 +102,12 @@ class NewsMessage
         $this->created = $created;
         return $this;
     }
+
     public function getAuthor(): string
     {
         return $this->author;
     }
+
     public function setAuthor(string $author): NewsMessage
     {
         $this->author = $author;

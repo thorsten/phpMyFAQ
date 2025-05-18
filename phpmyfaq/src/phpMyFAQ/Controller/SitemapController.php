@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SitemapController extends AbstractController
 {
-    private const PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
+    private const int PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
 
     /**
      * @throws TemplateException|Exception|\Exception

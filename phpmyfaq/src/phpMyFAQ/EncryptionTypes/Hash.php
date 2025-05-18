@@ -31,6 +31,7 @@ class Hash extends Encryption
      *
      * @param string $password String
      */
+    #[\Override]
     public function encrypt(string $password): string
     {
         return hash('sha256', $password . $this->salt);

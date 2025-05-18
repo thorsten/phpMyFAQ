@@ -37,8 +37,6 @@ class PdoSqlsrv implements DatabaseDriver
 
     /**
      * The connection object.
-     *
-     * @var PDO|null
      */
     private ?PDO $pdo = null;
 
@@ -54,7 +52,6 @@ class PdoSqlsrv implements DatabaseDriver
      * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
-     * @param int|null $port
      * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
@@ -227,9 +224,10 @@ class PdoSqlsrv implements DatabaseDriver
      */
     private function getOne(string $query): string
     {
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $row = $statement->fetch(PDO::FETCH_NUM);
 
         return $row[0];
     }
@@ -250,9 +248,10 @@ class PdoSqlsrv implements DatabaseDriver
             $table
         );
 
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute();
-        $current = $stmt->fetch(PDO::FETCH_NUM);
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+
+        $current = $statement->fetch(PDO::FETCH_NUM);
 
         return $current[0] + 1;
     }
@@ -298,12 +297,12 @@ class PdoSqlsrv implements DatabaseDriver
     /**
      * Executes a prepared statement.
      *
-     * @param PDOStatement $stmt The prepared statement
-     * @param array $params The parameters
+     * @param PDOStatement $pdoStatement The prepared statement
+     * @param array        $params The parameters
      */
-    public function execute(PDOStatement $stmt, array $params = []): bool
+    public function execute(PDOStatement $pdoStatement, array $params = []): bool
     {
-        return $stmt->execute($params);
+        return $pdoStatement->execute($params);
     }
 
     /**
