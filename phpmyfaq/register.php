@@ -48,7 +48,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./register.twig');
 
 // Twig template variables
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
     'lang' => $faqLangCode,
@@ -60,5 +60,3 @@ $templateVars = [
         $user->isLoggedIn()
     ),
 ];
-
-return $templateVars;

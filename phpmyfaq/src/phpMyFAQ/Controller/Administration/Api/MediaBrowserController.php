@@ -82,7 +82,7 @@ class MediaBrowserController extends AbstractController
                 continue;
             }
 
-            if (!in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+            if (!in_array(strtolower((string) $file->getExtension()), $allowedExtensions)) {
                 continue;
             }
 

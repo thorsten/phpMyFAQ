@@ -370,6 +370,9 @@ class UserController extends AbstractController
         return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * @throws Exception|\Exception|TransportExceptionInterface
+     */
     #[Route('admin/api/user/edit')]
     public function editUser(Request $request): JsonResponse
     {
@@ -406,10 +409,8 @@ class UserController extends AbstractController
         }
 
         // set new password and sent email if a user is switched to active
-        if ($stats == 'blocked' && $userStatus == 'active') {
-            if (!$user->activateUser()) {
-                $userStatus = 'invalid_status';
-            }
+        if ($stats === 'blocked' && $userStatus == 'active' && !$user->activateUser()) {
+            $userStatus = 'invalid_status';
         }
 
         // Set super-admin flag
@@ -451,6 +452,7 @@ class UserController extends AbstractController
 
         $user = new User($this->configuration);
         $user->getUserById($userId);
+
         $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
         if (!$user->perm->refuseAllUserRights($userId)) {
             return $this->json(['error' => Translation::get('ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);

@@ -105,10 +105,6 @@ readonly class Revision
 
     /**
      * Deletes all revisions for a given FAQ ID and FAQ language
-     *
-     * @param int    $faqId
-     * @param string $faqLanguage
-     * @return bool
      */
     public function delete(int $faqId, string $faqLanguage): bool
     {

@@ -45,7 +45,7 @@ $twig->addExtension(new CreateLinkTwigExtension());
 $twig->addExtension(new FaqTwigExtension());
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('faqOverview'), $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgOverviewMetaDesc'), $faqConfig->getTitle()),
@@ -54,5 +54,3 @@ $templateVars = [
     'msgAuthor' => Translation::get('msgAuthor'),
     'msgLastUpdateArticle' => Translation::get('msgLastUpdateArticle')
 ];
-
-return $templateVars;

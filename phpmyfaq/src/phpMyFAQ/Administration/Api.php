@@ -79,9 +79,13 @@ class Api
                 ClientExceptionInterface |
                 RedirectionExceptionInterface |
                 ServerExceptionInterface |
-                TransportExceptionInterface $e
+                TransportExceptionInterface $exception
             ) {
-                throw new Core\Exception('phpMyFAQ Version API is not available: ' .  $e->getMessage());
+                throw new Exception(
+                    'phpMyFAQ Verification API is not available: ' .  $exception->getMessage(),
+                    $exception->getCode(),
+                    $exception
+                );
             }
         }
 
@@ -107,16 +111,20 @@ class Api
 
         try {
             $this->remoteHashes = $response->getContent();
-            if (json_decode((string) $this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
-                return is_array(json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
+            if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
+                return is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
             }
         } catch (
             ClientExceptionInterface |
             RedirectionExceptionInterface |
             ServerExceptionInterface |
-            TransportExceptionInterface $e
+            TransportExceptionInterface $exception
         ) {
-            throw new Exception('phpMyFAQ Verification API is not available: ' .  $e->getMessage());
+            throw new Exception(
+                'phpMyFAQ Verification API is not available: ' .  $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
 
         return false;

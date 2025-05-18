@@ -144,9 +144,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./attachment.twig');
 
 // Twig template variables
-$templateVars = [
+return [
     ... $templateVars,
     'attachmentErrors' => $attachmentErrors,
 ];
-
-return $templateVars;

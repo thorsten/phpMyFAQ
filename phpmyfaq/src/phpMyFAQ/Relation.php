@@ -44,9 +44,9 @@ readonly class Relation
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
         $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
-        $search = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+        $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
 
-        $search
+        $searchDatabase
             ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
             ->setResultColumns(
                 [
@@ -74,7 +74,7 @@ readonly class Relation
             ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
             ->disableRelevance();
 
-        $result = $search->search($terms);
+        $result = $searchDatabase->search($terms);
 
         return $this->configuration->getDb()->fetchAll($result);
     }

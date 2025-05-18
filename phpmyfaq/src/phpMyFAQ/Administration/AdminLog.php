@@ -100,6 +100,7 @@ readonly class AdminLog
 
             return (bool) $this->configuration->getDb()->query($query);
         }
+
         return false;
     }
 

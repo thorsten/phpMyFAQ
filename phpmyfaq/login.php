@@ -44,7 +44,7 @@ if ($action == 'twofactor') {
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate($templateFile);
 
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgLoginUser'), $faqConfig->getTitle()),
     'loginHeader' => Translation::get('msgLoginUser'),
@@ -66,5 +66,3 @@ $templateVars = [
     'useSignInWithMicrosoft' => $faqConfig->isSignInWithMicrosoftActive(),
     'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
 ];
-
-return $templateVars;

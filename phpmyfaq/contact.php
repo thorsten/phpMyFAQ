@@ -46,7 +46,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./contact.twig');
 
 // Twig template variables
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgContact'), $faqConfig->getTitle()),
     'msgContactOwnText' => $contactText,
@@ -58,5 +58,3 @@ $templateVars = [
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
 ];
-
-return $templateVars;

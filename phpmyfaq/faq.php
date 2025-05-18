@@ -323,7 +323,7 @@ $seoData = $seo->get($seoEntity);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./faq.twig');
 
-$templateVars = [
+return [
     ...$templateVars,
     'title' => sprintf('%s - %s', $seoData->getTitle() ?? $question, $faqConfig->getTitle()),
     'metaDescription' => $seoData->getDescription(),
@@ -377,5 +377,3 @@ $templateVars = [
     'csrfTokenRemoveBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
     'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark')
 ];
-
-return $templateVars;

@@ -51,8 +51,8 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
+} catch (\Exception $exception) {
+    echo $exception->getMessage();
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
@@ -72,7 +72,7 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 }
 
 if (isset($lang) && Language::isASupportedLanguage($lang)) {
-    require_once 'translations/language_' . strtolower($lang) . '.php';
+    require_once 'translations/language_' . strtolower((string) $lang) . '.php';
 } else {
     $lang = 'en';
     require_once __DIR__ . '/translations/language_en.php';

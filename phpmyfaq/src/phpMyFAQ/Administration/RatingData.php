@@ -30,8 +30,6 @@ readonly class RatingData
 
     /**
      * Returns all ratings of FAQ records.
-     *
-     * @return array
      */
     public function getAll(): array
     {

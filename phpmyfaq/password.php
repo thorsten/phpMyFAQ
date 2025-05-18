@@ -30,9 +30,7 @@ $faqSession->userTracking('forgot_password', 0);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./password.twig');
 
-$templateVars = [
+return [
     ... $templateVars,
     'lang' => $faqConfig->getLanguage()->getLanguage(),
 ];
-
-return $templateVars;

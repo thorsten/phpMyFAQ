@@ -31,14 +31,14 @@ readonly class Rating
     /**
      * Plural form support.
      */
-    private Plurals $plr;
+    private Plurals $plurals;
 
     /**
      * Constructor.
      */
     public function __construct(private Configuration $configuration)
     {
-        $this->plr = new Plurals();
+        $this->plurals = new Plurals();
     }
 
     /**
@@ -56,12 +56,12 @@ readonly class Rating
             $row = $this->configuration->getDb()->fetchObject($result);
 
             return sprintf(
-                ' <span data-rating="%s">%s</span> (' . $this->plr->GetMsg('plmsgVotes', $row->usr) . ')',
+                ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', $row->usr) . ')',
                 round($row->voting, 2),
                 round($row->voting, 2)
             );
         }
-        return ' <span data-rating="0">0</span> (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
+        return ' <span data-rating="0">0</span> (' . $this->plurals->GetMsg('plmsgVotes', 0) . ')';
     }
 
     /**
@@ -96,6 +96,7 @@ readonly class Rating
         if (!($result = $this->configuration->getDb()->query($query))) {
             return 0;
         }
+
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
             return $row->usr;
         }
@@ -106,19 +107,19 @@ readonly class Rating
     /**
      * Adds a new voting record.
      *
-     * @param Vote $votingData
+     * @param Vote $vote
      * @return bool
      */
-    public function create(Vote $votingData): bool
+    public function create(Vote $vote): bool
     {
         $query = sprintf(
             "INSERT INTO %sfaqvoting VALUES (%d, %d, %d, 1, %d, '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
-            $votingData->getFaqId(),
-            $votingData->getVote(),
+            $vote->getFaqId(),
+            $vote->getVote(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $this->configuration->getDb()->escape($votingData->getIp())
+            $this->configuration->getDb()->escape($vote->getIp())
         );
 
         return (bool)$this->configuration->getDb()->query($query);
@@ -127,18 +128,18 @@ readonly class Rating
     /**
      * Updates an existing voting record.
      *
-     * @param Vote $votingData
+     * @param Vote $vote
      * @return bool
      */
-    public function update(Vote $votingData): bool
+    public function update(Vote $vote): bool
     {
         $query = sprintf(
             "UPDATE %sfaqvoting SET vote = vote + %d, usr = usr + 1, datum = %d, ip = '%s' WHERE artikel = %d",
             Database::getTablePrefix(),
-            $votingData->getVote(),
+            $vote->getVote(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $this->configuration->getDb()->escape($votingData->getIp()),
-            $votingData->getFaqId()
+            $this->configuration->getDb()->escape($vote->getIp()),
+            $vote->getFaqId()
         );
 
         return (bool) $this->configuration->getDb()->query($query);

@@ -22,7 +22,6 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -146,11 +145,9 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     ];
 }
 
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgCategoryMetaDesc'), $faqConfig->getTitle()),
     'categoryHeader' => $categoryHeader,
 ];
-
-return $templateVars;

@@ -185,6 +185,7 @@ class Search
         if ($this->configuration->getDb()->numRows($result) === 0) {
             return [];
         }
+
         return $this->configuration->getDb()->fetchAll($result);
     }
 

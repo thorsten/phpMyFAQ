@@ -30,11 +30,6 @@ class Faq
 
     /**
      * Get all FAQs by category
-     *
-     * @param int $categoryId
-     * @param bool $onlyInactive
-     * @param bool $onlyNew
-     * @return array
      */
     public function getAllFaqsByCategory(int $categoryId, bool $onlyInactive = false, bool $onlyNew = false): array
     {

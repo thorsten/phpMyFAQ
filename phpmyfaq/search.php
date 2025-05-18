@@ -270,7 +270,7 @@ $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));
 
-$templateVars = [
+return [
     ... $templateVars,
     'title' => sprintf('%s - %s', $pageHeader, $faqConfig->getTitle()),
     'pageHeader' => $pageHeader,
@@ -304,5 +304,3 @@ $templateVars = [
     'msgTags' => Translation::get('msgPopularTags'),
     'tagList' => $tagging->getPopularTags(),
 ];
-
-return $templateVars;

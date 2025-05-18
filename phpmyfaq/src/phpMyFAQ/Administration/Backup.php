@@ -111,22 +111,25 @@ readonly class Backup
         return $backup;
     }
 
-    public function getBackupTableNames(BackupType $type): string
+    public function getBackupTableNames(BackupType $backupType): string
     {
         $tables = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
         $tableNames = '';
 
-        switch ($type) {
+        switch ($backupType) {
             case BackupType::BACKUP_TYPE_DATA:
                 foreach ($tables as $table) {
-                    if (
-                        (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) ||
-                        (Database::getTablePrefix() . 'faqsessions' === trim((string) $table))
-                    ) {
+                    if (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) {
                         continue;
                     }
+
+                    if (Database::getTablePrefix() . 'faqsessions' === trim((string) $table)) {
+                        continue;
+                    }
+
                     $tableNames .= $table . ' ';
                 }
+
                 break;
             case BackupType::BACKUP_TYPE_LOGS:
                 foreach ($tables as $table) {
@@ -137,6 +140,7 @@ readonly class Backup
                         $tableNames .= $table . ' ';
                     }
                 }
+
                 break;
         }
 
@@ -180,7 +184,7 @@ readonly class Backup
         foreach ($files as $file) {
             if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen(PMF_CONTENT_DIR) + 1);
+                $relativePath = substr((string) $filePath, strlen(PMF_CONTENT_DIR) + 1);
                 $zipArchive->addFile($filePath, $relativePath);
             }
         }

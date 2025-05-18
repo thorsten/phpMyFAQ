@@ -59,10 +59,12 @@ if ($user->isLoggedIn()) {
             } catch (TwoFactorAuthException $e) {
                 $faqConfig->getLogger()->error('Cannot generate 2FA secret: ' . $e->getMessage());
             }
+
             $twoFactor->saveSecret($secret);
         }
+
         $qrCode = $twoFactor->getQrCode($secret);
-    } catch (TwoFactorAuthException | Exception $e) {
+    } catch (TwoFactorAuthException | Exception) {
         // handle exception
     }
 
@@ -70,7 +72,7 @@ if ($user->isLoggedIn()) {
     $twigTemplate = $twig->loadTemplate('./ucp.twig');
 
     // Twig template variables
-    $templateVars = [
+    return [
         ... $templateVars,
         'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
         'ucpGravatarImage' => $gravatarImg,
@@ -105,10 +107,8 @@ if ($user->isLoggedIn()) {
         'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected'),
         'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport')
     ];
-
-    return $templateVars;
-} else {
-    // Redirect to log in
-    $response = new RedirectResponse($faqConfig->getDefaultUrl());
-    $response->send();
 }
+
+// Redirect to log in
+$response = new RedirectResponse($faqConfig->getDefaultUrl());
+$response->send();

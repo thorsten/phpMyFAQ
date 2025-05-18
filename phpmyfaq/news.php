@@ -130,7 +130,7 @@ $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./news.twig');
 
-$templateVars = [
+return [
     ... $templateVars,
     'writeNewsHeader' => $newsMainHeader,
     'newsHeader' => $newsHeader,
@@ -160,5 +160,3 @@ $templateVars = [
     ),
     'renderComments' => $commentHelper->getComments($comments),
 ];
-
-return $templateVars;
