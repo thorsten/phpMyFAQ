@@ -89,18 +89,53 @@ class ExportController extends AbstractController
 
         $text = [];
         $text[0] = [];
-        isset($data->category) ? $text[0][] = Translation::get('ad_stat_report_category') : '';
-        isset($data->sub_category) ? $text[0][] = Translation::get('ad_stat_report_sub_category') : '';
-        isset($data->translations) ? $text[0][] = Translation::get('ad_stat_report_translations') : '';
-        isset($data->language) ? $text[0][] = Translation::get('ad_stat_report_language') : '';
-        isset($data->id) ? $text[0][] = Translation::get('ad_stat_report_id') : '';
-        isset($data->sticky) ? $text[0][] = Translation::get('ad_stat_report_sticky') : '';
-        isset($data->title) ? $text[0][] = Translation::get('ad_stat_report_title') : '';
-        isset($data->creation_date) ? $text[0][] = Translation::get('ad_stat_report_creation_date') : '';
-        isset($data->owner) ? $text[0][] = Translation::get('ad_stat_report_owner') : '';
-        isset($data->last_modified_person) ? $text[0][] = Translation::get('ad_stat_report_last_modified_person') : '';
-        isset($data->url) ? $text[0][] = Translation::get('ad_stat_report_url') : '';
-        isset($data->visits) ? $text[0][] = Translation::get('ad_stat_report_visits') : '';
+        if (isset($data->category)) {
+            $text[0][] = Translation::get('ad_stat_report_category');
+        }
+
+        if (isset($data->sub_category)) {
+            $text[0][] = Translation::get('ad_stat_report_sub_category');
+        }
+
+        if (isset($data->translations)) {
+            $text[0][] = Translation::get('ad_stat_report_translations');
+        }
+
+        if (isset($data->language)) {
+            $text[0][] = Translation::get('ad_stat_report_language');
+        }
+
+        if (isset($data->id)) {
+            $text[0][] = Translation::get('ad_stat_report_id');
+        }
+
+        if (isset($data->sticky)) {
+            $text[0][] = Translation::get('ad_stat_report_sticky');
+        }
+
+        if (isset($data->title)) {
+            $text[0][] = Translation::get('ad_stat_report_title');
+        }
+
+        if (isset($data->creation_date)) {
+            $text[0][] = Translation::get('ad_stat_report_creation_date');
+        }
+
+        if (isset($data->owner)) {
+            $text[0][] = Translation::get('ad_stat_report_owner');
+        }
+
+        if (isset($data->last_modified_person)) {
+            $text[0][] = Translation::get('ad_stat_report_last_modified_person');
+        }
+
+        if (isset($data->url)) {
+            $text[0][] = Translation::get('ad_stat_report_url');
+        }
+
+        if (isset($data->visits)) {
+            $text[0][] = Translation::get('ad_stat_report_visits');
+        }
 
         $report = new Report($this->configuration);
         foreach ($report->getReportingData() as $reportData) {
@@ -112,6 +147,7 @@ class ExportController extends AbstractController
                     $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 }
             }
+
             if (isset($data->sub_category)) {
                 if (0 != $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
@@ -119,32 +155,41 @@ class ExportController extends AbstractController
                     $text[$i][] = 'n/a';
                 }
             }
+
             if (isset($data->translations)) {
                 $text[$i][] = $reportData['faq_translations'];
             }
+
             if (isset($data->language) && LanguageCodes::get($reportData['faq_language'])) {
                 $text[$i][] = $report->convertEncoding(LanguageCodes::get($reportData['faq_language']));
             }
+
             if (isset($data->id)) {
                 $text[$i][] = $reportData['faq_id'];
             }
+
             if (isset($data->sticky)) {
                 $text[$i][] = $reportData['faq_sticky'];
             }
+
             if (isset($data->title)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_question']));
             }
+
             if (isset($data->creation_date)) {
                 $text[$i][] = $reportData['faq_updated'];
             }
+
             if (isset($data->owner)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
             }
+
             if (isset($data->last_modified_person) && isset($reportData['faq_last_author'])) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
             } else {
                 $text[$i][] = '';
             }
+
             if (isset($data->url)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(
                     sprintf(
@@ -156,6 +201,7 @@ class ExportController extends AbstractController
                     )
                 ));
             }
+
             if (isset($data->visits)) {
                 $text[$i][] = $reportData['faq_visits'];
             }

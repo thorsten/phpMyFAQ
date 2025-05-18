@@ -81,12 +81,12 @@ class CategoryController extends AbstractController
             $categoryRelation->delete($data->categoryId, $data->language)
         ) {
             return $this->json(['success' => Translation::get('ad_categ_deleted')], Response::HTTP_OK);
-        } else {
-            return $this->json(
-                ['error' => Translation::get('ad_adus_dberr') . $this->configuration->getDb()->error()],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
         }
+
+        return $this->json(
+            ['error' => Translation::get('ad_adus_dberr') . $this->configuration->getDb()->error()],
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
     }
 
     #[Route('admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]

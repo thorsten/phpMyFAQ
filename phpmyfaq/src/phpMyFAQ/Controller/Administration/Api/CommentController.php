@@ -59,8 +59,8 @@ class CommentController extends AbstractController
             }
 
             return $this->json(['success' => $result], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => false], Response::HTTP_BAD_REQUEST);
     }
 }

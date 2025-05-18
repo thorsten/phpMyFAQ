@@ -198,23 +198,20 @@ class Language
         if (isset($detectedLanguage['post'])) {
             return $detectedLanguage['post'];
         }
+
         if (isset($detectedLanguage['get'])) {
             return $detectedLanguage['get'];
         }
+
         if (isset($detectedLanguage['artget'])) {
             return $detectedLanguage['artget'];
         }
+
         if (isset($detectedLanguage['session'])) {
             return $detectedLanguage['session'];
         }
-        if (isset($detectedLanguage['detection'])) {
-            return $detectedLanguage['detection'];
-        }
-        if (isset($detectedLanguage['config'])) {
-            return $detectedLanguage['config'];
-        }
 
-        return 'en';
+        return $detectedLanguage['detection'] ?? $detectedLanguage['config'] ?? 'en';
     }
 
     /**

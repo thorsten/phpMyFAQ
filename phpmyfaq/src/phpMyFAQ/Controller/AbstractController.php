@@ -51,10 +51,11 @@ use Twig\TwigFilter;
 abstract class AbstractController
 {
     protected ?ContainerBuilder $container = null;
-    /** @var Configuration|null */
+
     protected ?Configuration $configuration = null;
-    /** @var CurrentUser|null */
+
     protected ?CurrentUser $currentUser = null;
+
     /** @var ExtensionInterface[] */
     private array $twigExtensions = [];
 
@@ -79,19 +80,16 @@ abstract class AbstractController
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string        $pathToTwigFile
-     * @param string[]      $templateVars
-     * @param Response|null $response
-     * @return Response
+     * @param string[] $templateVars
      * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = $this->getTwigWrapper();
-        $template = $twigWrapper->loadTemplate($pathToTwigFile);
+        $templateWrapper = $twigWrapper->loadTemplate($pathToTwigFile);
 
-        $response->setContent($template->render($templateVars));
+        $response->setContent($templateWrapper->render($templateVars));
 
         return $response;
     }
@@ -99,9 +97,7 @@ abstract class AbstractController
     /**
      * Returns a Twig rendered template as string.
      *
-     * @param string                                                  $pathToTwigFile
      * @param array<string, array<int<0, max>, array<string, mixed>>> $templateVars
-     * @return string
      * @throws Exception|LoaderError
      */
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
@@ -115,10 +111,7 @@ abstract class AbstractController
     /**
      * Returns a JsonResponse that uses json_encode().
      *
-     * @param mixed $data
-     * @param int $status
      * @param string[] $headers
-     * @return JsonResponse
      */
     public function json(mixed $data, int $status = 200, array $headers = []): JsonResponse
     {
@@ -126,7 +119,6 @@ abstract class AbstractController
     }
 
     /**
-     * @return TwigWrapper
      * @throws LoaderError
      */
     public function getTwigWrapper(): TwigWrapper
@@ -248,11 +240,7 @@ abstract class AbstractController
             $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
-        if ($captcha->checkCaptchaCode($code)) {
-            return true;
-        }
-
-        return false;
+        return $captcha->checkCaptchaCode($code);
     }
 
     public function isApiEnabled(): bool
@@ -265,21 +253,21 @@ abstract class AbstractController
         $this->twigExtensions[] = $extension;
     }
 
-    public function addFilter(TwigFilter $filter): void
+    public function addFilter(TwigFilter $twigFilter): void
     {
-        $this->twigFilters[] = $filter;
+        $this->twigFilters[] = $twigFilter;
     }
 
     protected function createContainer(): ContainerBuilder
     {
-        $container = new ContainerBuilder();
-        $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+        $containerBuilder = new ContainerBuilder();
+        $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__));
         try {
-            $loader->load('../../services.php');
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+            $phpFileLoader->load('../../services.php');
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
         }
 
-        return $container;
+        return $containerBuilder;
     }
 }

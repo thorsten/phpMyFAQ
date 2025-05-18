@@ -36,11 +36,6 @@ use stdClass;
 class SearchHelper extends AbstractHelper
 {
     /**
-     * Pagination object.
-     */
-    private ?Pagination $pagination = null;
-
-    /**
      * Search term.
      */
     private string $searchTerm = '';
@@ -51,16 +46,6 @@ class SearchHelper extends AbstractHelper
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-    }
-
-    /**
-     * PMF_Pagination setter.
-     *
-     * @param Pagination $pagination Pagination
-     */
-    public function setPagination(Pagination $pagination): void
-    {
-        $this->pagination = $pagination;
     }
 
     /**

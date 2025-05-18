@@ -93,13 +93,13 @@ readonly class News
         );
 
         $result = $this->configuration->getDb()->query($query);
-        $numberOfShownNewsEntries = $this->configuration->get('records.numberOfShownNewsEntries');
-        if ($numberOfShownNewsEntries > 0 && $this->configuration->getDb()->numRows($result) > 0) {
+        $numberOfShownNews = $this->configuration->get('records.numberOfShownNewsEntries');
+        if ($numberOfShownNews > 0 && $this->configuration->getDb()->numRows($result) > 0) {
             while (($row = $this->configuration->getDb()->fetchObject($result))) {
                 ++$counter;
                 if (
-                    ($showArchive && ($counter > $numberOfShownNewsEntries)) ||
-                    ((!$showArchive) && (!$forceConfLimit) && ($counter <= $numberOfShownNewsEntries)) ||
+                    ($showArchive && ($counter > $numberOfShownNews)) ||
+                    ((!$showArchive) && (!$forceConfLimit) && ($counter <= $numberOfShownNews)) ||
                     ((!$showArchive) && $forceConfLimit)
                 ) {
                     $url = sprintf(
@@ -136,8 +136,6 @@ readonly class News
 
     /**
      * Fetches all news headers.
-     *
-     * @return array
      */
     public function getHeader(): array
     {
@@ -173,18 +171,18 @@ readonly class News
     /**
      * Fetches a news entry identified by its ID.
      *
-     * @param int  $id ID of news
+     * @param int  $newsId ID of news
      * @param bool $admin Is admin
      * @return array<mixed>
      */
-    public function get(int $id, bool $admin = false): array
+    public function get(int $newsId, bool $admin = false): array
     {
         $news = [];
 
         $query = sprintf(
             "SELECT * FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $id,
+            $newsId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
         );
 
@@ -197,11 +195,10 @@ readonly class News
             $content = $row->artikel;
             $active = ('y' == $row->active);
             $allowComments = ('y' == $row->comment);
-            if (!$admin) {
-                if (!$active) {
-                    $content = Translation::get('err_inactiveNews');
-                }
+            if (!$admin && !$active) {
+                $content = Translation::get('err_inactiveNews');
             }
+
             $news = [
                 'id' => $row->id,
                 'lang' => $row->lang,
@@ -224,9 +221,9 @@ readonly class News
     /**
      * Adds a new news entry.
      *
-     * @param NewsMessage $data NewsMessage object with news data
+     * @param NewsMessage $newsMessage NewsMessage object with news data
      */
-    public function create(NewsMessage $data): bool
+    public function create(NewsMessage $newsMessage): bool
     {
         $query = sprintf(
             "
@@ -237,17 +234,17 @@ readonly class News
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
-            $data->getCreated()->format('YmdHis'),
-            $this->configuration->getDb()->escape($data->getLanguage()),
-            $this->configuration->getDb()->escape($data->getHeader()),
-            $this->configuration->getDb()->escape($data->getMessage()),
-            $this->configuration->getDb()->escape($data->getAuthor()),
-            $this->configuration->getDb()->escape($data->getEmail()),
-            $data->isActive() ? 'y' : 'n',
-            $data->isComment() ? 'y' : 'n',
-            $this->configuration->getDb()->escape($data->getLink() ?? ''),
-            $this->configuration->getDb()->escape($data->getLinkTitle() ?? ''),
-            $this->configuration->getDb()->escape($data->getLinkTarget() ?? '')
+            $newsMessage->getCreated()->format('YmdHis'),
+            $this->configuration->getDb()->escape($newsMessage->getLanguage()),
+            $this->configuration->getDb()->escape($newsMessage->getHeader()),
+            $this->configuration->getDb()->escape($newsMessage->getMessage()),
+            $this->configuration->getDb()->escape($newsMessage->getAuthor()),
+            $this->configuration->getDb()->escape($newsMessage->getEmail()),
+            $newsMessage->isActive() ? 'y' : 'n',
+            $newsMessage->isComment() ? 'y' : 'n',
+            $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? '')
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -256,9 +253,9 @@ readonly class News
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param NewsMessage $data NewsMessage object with news data
+     * @param NewsMessage $newsMessage NewsMessage object with news data
      */
-    public function update(NewsMessage $data): bool
+    public function update(NewsMessage $newsMessage): bool
     {
         $query = sprintf(
             "
@@ -279,18 +276,18 @@ readonly class News
             WHERE
                 id = %d",
             Database::getTablePrefix(),
-            $data->getCreated()->format('YmdHis'),
-            $this->configuration->getDb()->escape($data->getLanguage()),
-            $this->configuration->getDb()->escape($data->getHeader()),
-            $this->configuration->getDb()->escape($data->getMessage()),
-            $this->configuration->getDb()->escape($data->getAuthor()),
-            $this->configuration->getDb()->escape($data->getEmail()),
-            $data->isActive() ? 'y' : 'n',
-            $data->isComment() ? 'y' : 'n',
-            $this->configuration->getDb()->escape($data->getLink() ?? ''),
-            $this->configuration->getDb()->escape($data->getLinkTitle() ?? ''),
-            $this->configuration->getDb()->escape($data->getLinkTarget() ?? ''),
-            $data->getId()
+            $newsMessage->getCreated()->format('YmdHis'),
+            $this->configuration->getDb()->escape($newsMessage->getLanguage()),
+            $this->configuration->getDb()->escape($newsMessage->getHeader()),
+            $this->configuration->getDb()->escape($newsMessage->getMessage()),
+            $this->configuration->getDb()->escape($newsMessage->getAuthor()),
+            $this->configuration->getDb()->escape($newsMessage->getEmail()),
+            $newsMessage->isActive() ? 'y' : 'n',
+            $newsMessage->isComment() ? 'y' : 'n',
+            $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
+            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? ''),
+            $newsMessage->getId()
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -298,15 +295,15 @@ readonly class News
     /**
      * Deletes a news entry identified by its ID.
      *
-     * @param int $id News ID
+     * @param int $newsId News ID
      * @todo   check if there are comments attached to the deleted news
      */
-    public function delete(int $id): bool
+    public function delete(int $newsId): bool
     {
         $query = sprintf(
             "DELETE FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
-            $id,
+            $newsId,
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
         );
 
@@ -316,16 +313,16 @@ readonly class News
     /**
      * Activates/Deactivates a news message
      *
-     * @param int $id News ID
+     * @param int  $newsId News ID
      * @param bool $status Status of activation
      */
-    public function activate(int $id, bool $status): bool
+    public function activate(int $newsId, bool $status): bool
     {
         $query = sprintf(
             "UPDATE %sfaqnews SET active = '%s' WHERE id = %d",
             Database::getTablePrefix(),
             $status ? 'y' : 'n',
-            $id
+            $newsId
         );
 
         return (bool) $this->configuration->getDb()->query($query);

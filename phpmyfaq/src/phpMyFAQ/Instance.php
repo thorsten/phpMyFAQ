@@ -51,7 +51,7 @@ class Instance
      *
      * @return int $id
      */
-    public function create(InstanceEntity $instance): int
+    public function create(InstanceEntity $instanceEntity): int
     {
         $this->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
@@ -59,9 +59,9 @@ class Instance
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             Database::getTablePrefix(),
             $this->getId(),
-            $this->configuration->getDb()->escape($instance->getUrl()),
-            $this->configuration->getDb()->escape($instance->getInstance()),
-            $this->configuration->getDb()->escape($instance->getComment()),
+            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
+            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
+            $this->configuration->getDb()->escape($instanceEntity->getComment()),
             $this->configuration->getDb()->now(),
             $this->configuration->getDb()->now()
         );
@@ -125,14 +125,14 @@ class Instance
     /**
      * Updates the instance data.
      */
-    public function update(int $id, InstanceEntity $instance): bool
+    public function update(int $id, InstanceEntity $instanceEntity): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($instance->getInstance()),
-            $this->configuration->getDb()->escape($instance->getComment()),
-            $this->configuration->getDb()->escape($instance->getUrl()),
+            $this->configuration->getDb()->escape($instanceEntity->getInstance()),
+            $this->configuration->getDb()->escape($instanceEntity->getComment()),
+            $this->configuration->getDb()->escape($instanceEntity->getUrl()),
             $id
         );
 

@@ -90,6 +90,7 @@ class AttachmentController extends AbstractController
             } else {
                 $result = ['success' => Translation::get('msgAdminAttachmentRefreshed'), 'delete' => false];
             }
+
             return $this->json($result, Response::HTTP_OK);
         } catch (AttachmentException $attachmentException) {
             $result = ['error' => $attachmentException->getMessage()];

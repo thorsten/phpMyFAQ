@@ -264,9 +264,9 @@ class FaqController extends AbstractController
                 ],
                 Response::HTTP_OK
             );
-        } else {
-            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -308,6 +308,7 @@ class FaqController extends AbstractController
         } else {
             $categories = [Filter::filterVar($data->{'categories[]'}, FILTER_VALIDATE_INT)];
         }
+
         $faqLang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
         $tags = Filter::filterVar($data->tags, FILTER_SANITIZE_SPECIAL_CHARS);
         $active = Filter::filterVar($data->active, FILTER_SANITIZE_SPECIAL_CHARS);

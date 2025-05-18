@@ -84,9 +84,9 @@ class ElasticsearchController extends AbstractController
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);
         if (isset($bulkIndexResult['success'])) {
             return $this->json(['success' => Translation::get('ad_es_create_import_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
     }
 
     /**

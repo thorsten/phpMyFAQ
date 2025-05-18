@@ -22,6 +22,7 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
 use Exception;
 use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -132,7 +133,7 @@ class Faq
 
         $faqData = [];
 
-        $currentTable = $orderBy == 'visits' ? 'fv' : 'fd';
+        $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
 
         $now = date('YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
@@ -267,7 +268,7 @@ class Faq
         $output = '';
         $title = '';
 
-        $currentTable = $orderBy == 'visits' ? 'fv' : 'fd';
+        $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
 
         // If random FAQs are activated, we don't need an order
         if (true === $this->configuration->get('records.randomSort')) {
@@ -658,12 +659,6 @@ class Faq
 
     /**
      * Executes a query to retrieve a single FAQ.
-     *
-     * @param int      $faqId
-     * @param string   $faqLanguage
-     * @param int|null $faqRevisionId
-     * @param bool     $isAdmin
-     * @return mixed
      */
     public function getFaqResult(
         int $faqId,
@@ -895,7 +890,7 @@ class Faq
         );
 
         // Conditionally add the updated field
-        if ($faqEntity->getUpdatedDate() !== null) {
+        if ($faqEntity->getUpdatedDate() instanceof DateTime) {
             $query .= sprintf(", updated = '%s'", $faqEntity->getUpdatedDate()->format('YmdHis'));
         }
 
@@ -1408,6 +1403,7 @@ class Faq
 
             return Strings::htmlspecialchars($row->keywords, ENT_QUOTES);
         }
+
         return '';
     }
 

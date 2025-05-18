@@ -235,6 +235,7 @@ class Link
         $request = Request::createFromGlobals();
         $host = $request->getHost();
         $host = preg_replace(['/:80$/', '/:443$/'], '', $host);
+
         $sysUri = $this->getSystemScheme() . $host;
 
         return $sysUri . self::getSystemRelativeUri($path);

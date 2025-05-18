@@ -67,10 +67,8 @@ class DashboardController extends AbstractController
             }
 
             return $this->json($info);
-        } catch (DecodingExceptionInterface | TransportExceptionInterface $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 

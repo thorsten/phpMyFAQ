@@ -25,7 +25,6 @@ use Http\Promise\Promise;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Core\Exception;
-use stdClass;
 
 /**
  * Class Elasticsearch
@@ -34,7 +33,6 @@ use stdClass;
  */
 class Elasticsearch
 {
-    /** @var Client */
     protected Client $client;
 
     protected ElasticsearchConfiguration $esConfig;

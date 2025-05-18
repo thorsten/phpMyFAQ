@@ -78,7 +78,7 @@ readonly class Notification
      * @param array<string> $emails
      * @throws Core\Exception|TransportExceptionInterface
      */
-    public function sendNewFaqAdded(array $emails, FaqEntity $faq): void
+    public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
         if ($this->configuration->get('main.enableNotifications')) {
             $this->mail->addTo($this->configuration->getAdminEmail());
@@ -89,20 +89,20 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq($faq->getId(), null, true);
+            $this->faq->getFaq($faqEntity->getId(), null, true);
 
             $url = sprintf(
                 '%sadmin/faq/edit/%d/%s',
                 $this->configuration->getDefaultUrl(),
-                $faq->getId(),
-                $faq->getLanguage()
+                $faqEntity->getId(),
+                $faqEntity->getLanguage()
             );
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $this->faq->getQuestion($faq->getId());
+            $link->itemTitle = $this->faq->getQuestion($faqEntity->getId());
 
             $this->mail->message = html_entity_decode((string) Translation::get('msgMailCheck')) .
                 "<p><strong>" . Translation::get('msgAskYourQuestion') . ":</strong> " .
-                $this->faq->getQuestion($faq->getId()) . "</p>" .
+                $this->faq->getQuestion($faqEntity->getId()) . "</p>" .
                 "<p><strong>" . Translation::get('msgNewContentArticle') . ":</strong> " .
                 $this->faq->faqRecord['content'] . "</p>" .
                 "<hr>" .
@@ -117,8 +117,7 @@ readonly class Notification
 
     /**
      * Sends mail to user who added a comment.
-     * @param Faq $faq
-     * @param Comment $comment
+     *
      * @throws TransportExceptionInterface
      * @throws Exception
      */
@@ -155,7 +154,7 @@ readonly class Notification
             ) .
             sprintf('%s: %s<br>', Translation::get('msgYourComment'), $title) .
             sprintf('%s: %s<br><br>', Translation::get('ad_news_link_url'), $urlToContent) .
-            sprintf('%s', strip_tags(wordwrap($comment->getComment(), 72)));
+            strip_tags(wordwrap($comment->getComment(), 72));
 
         $send = [];
 
@@ -187,9 +186,6 @@ readonly class Notification
     }
 
     /**
-     * @param array $newsData
-     * @param Comment $comment
-     * @return void
      * @throws Exception
      * @throws TransportExceptionInterface
      */
@@ -209,6 +205,7 @@ readonly class Notification
         );
         $link = new Link($newsUrl, $this->configuration);
         $link->itemTitle = $newsData['header'];
+
         $urlToContent = $link->toString();
 
         $commentMail =
@@ -221,7 +218,7 @@ readonly class Notification
             ) .
             sprintf('%s: %s<br>', Translation::get('msgYourComment'), $title) .
             sprintf('%s: %s<br><br>', Translation::get('ad_news_link_url'), $urlToContent) .
-            sprintf('%s', strip_tags(wordwrap($comment->getComment(), 72)));
+            strip_tags(wordwrap($comment->getComment(), 72));
 
         $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
 
@@ -234,27 +231,27 @@ readonly class Notification
         $this->mail->send();
     }
 
-    public function sendQuestionSuccessMail(QuestionEntity $questionData, array $categories): void
+    public function sendQuestionSuccessMail(QuestionEntity $questionEntity, array $categories): void
     {
         $questionMail = sprintf(
             "%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s",
             Translation::get('msgNewQuestionAdded'),
-            $questionData->getUsername(),
-            $questionData->getEmail(),
+            $questionEntity->getUsername(),
+            $questionEntity->getEmail(),
             Translation::get('msgCategory'),
-            $categories[$questionData->getCategoryId()]['name'],
+            $categories[$questionEntity->getCategoryId()]['name'],
             Translation::get('msgAskYourQuestion'),
-            wordwrap($questionData->getQuestion(), 72),
+            wordwrap($questionEntity->getQuestion(), 72),
             $this->configuration->getDefaultUrl() . 'admin/'
         );
 
-        $userId = $this->category->getOwner($questionData->getCategoryId());
+        $userId = $this->category->getOwner($questionEntity->getCategoryId());
         try {
             $oUser = new User($this->configuration);
             $oUser->getUserById($userId);
             $userEmail = $oUser->getUserData('email');
-        } catch (Exception $e) {
-            $this->configuration->getLogger()->error('Error getting user data: ' . $e->getMessage());
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error('Error getting user data: ' . $exception->getMessage());
             $userEmail = null;
         }
 
@@ -262,7 +259,7 @@ readonly class Notification
 
         try {
             $mail = new Mail($this->configuration);
-            $mail->setReplyTo($questionData->getEmail(), $questionData->getUsername());
+            $mail->setReplyTo($questionEntity->getEmail(), $questionEntity->getUsername());
             $mail->addTo($mainAdminEmail);
 
             // Let the category owner get a copy of the message

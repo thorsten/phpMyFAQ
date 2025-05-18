@@ -36,13 +36,15 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user) : [];
+        $groupList = ($currentUser->perm instanceof MediumPermission) ? $currentUser->perm->getAllGroups(
+            $currentUser,
+        ) : [];
 
         $groups = [];
         foreach ($groupList as $groupId) {
-            $data = $user->perm->getGroupData($groupId);
+            $data = $currentUser->perm->getGroupData($groupId);
             $groups[] = [
                 'group_id' => $data['group_id'],
                 'name' => $data['name'],
@@ -60,14 +62,14 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $users = [];
-        foreach ($user->getAllUsers(true, false) as $singleUser) {
-            $user->getUserById($singleUser, true);
+        foreach ($currentUser->getAllUsers(true, false) as $singleUser) {
+            $currentUser->getUserById($singleUser, true);
             $users[] = [
-                'user_id' => $user->getUserId(),
-                'login' => $user->getLogin(),
+                'user_id' => $currentUser->getUserId(),
+                'login' => $currentUser->getLogin(),
             ];
         }
 
@@ -82,11 +84,11 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 
-        return $this->json($user->perm->getGroupData($groupId), Response::HTTP_OK);
+        return $this->json($currentUser->perm->getGroupData($groupId), Response::HTTP_OK);
     }
 
     /**
@@ -97,16 +99,16 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 
         $members = [];
-        foreach ($user->perm->getGroupMembers($groupId) as $groupMember) {
-            $user->getUserById($groupMember, true);
+        foreach ($currentUser->perm->getGroupMembers($groupId) as $groupMember) {
+            $currentUser->getUserById($groupMember, true);
             $members[] = [
-                'user_id' => $user->getUserId(),
-                'login' => $user->getLogin(),
+                'user_id' => $currentUser->getUserId(),
+                'login' => $currentUser->getLogin(),
             ];
         }
 
@@ -121,10 +123,10 @@ class GroupController extends AbstractController
     {
         $this->userHasGroupPermission();
 
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $groupId = $request->get('groupId');
 
-        return $this->json($user->perm->getGroupRights($groupId), Response::HTTP_OK);
+        return $this->json($currentUser->perm->getGroupRights($groupId), Response::HTTP_OK);
     }
 }

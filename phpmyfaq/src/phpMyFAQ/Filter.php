@@ -162,9 +162,11 @@ class Filter
             if (!self::isAttribute($attributeName)) {
                 continue;
             }
+
             if (in_array($attributeName, $keep)) {
                 continue;
             }
+
             $html = str_replace(' ' . $attribute, '', $html);
         }
 

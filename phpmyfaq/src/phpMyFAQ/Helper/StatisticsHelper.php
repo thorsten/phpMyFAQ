@@ -37,7 +37,7 @@ readonly class StatisticsHelper
         $last = 0;
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         while ($dat = readdir($dir)) {
-            if ($dat != '.' && $dat != '..') {
+            if ($dat !== '.' && $dat !== '..') {
                 ++$numberOfDays;
             }
 
@@ -69,12 +69,13 @@ readonly class StatisticsHelper
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate))) {
             $fp = @fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $firstDate), 'r');
             while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
-                $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
+                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
             fclose($fp);
             return $this->date->format(date('Y-m-d H:i', $date));
         }
+
         return Translation::get('ad_sess_noentry');
     }
 
@@ -87,7 +88,7 @@ readonly class StatisticsHelper
             $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY', $lastDate), 'r');
 
             while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
-                $date = isset($data[7]) && 10 === strlen((string) $data[7]) ? $data[7] : $requestTime;
+                $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
             fclose($fp);
@@ -98,6 +99,7 @@ readonly class StatisticsHelper
 
             return $this->date->format(date('Y-m-d H:i', $date));
         }
+
         return Translation::get('ad_sess_noentry');
     }
 
@@ -111,7 +113,7 @@ readonly class StatisticsHelper
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         $trackingDates = [];
         while (false !== ($dat = readdir($dir))) {
-            if ($dat != '.' && $dat != '..' && strlen($dat) == 16 && !is_dir($dat)) {
+            if ($dat !== '.' && $dat !== '..' && strlen($dat) === 16 && !is_dir($dat)) {
                 $trackingDates[] = $this->date->getTrackingFileDate($dat);
             }
         }
@@ -130,7 +132,7 @@ readonly class StatisticsHelper
         while ($trackingFile = readdir($dir)) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
-            if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
+            if (($trackingFile !== '.') && ($trackingFile !== '..') && (10 === strpos($trackingFile, $month))) {
                 $candidateFirst = $this->date->getTrackingFileDate($trackingFile);
                 $candidateLast = $this->date->getTrackingFileDate($trackingFile, true);
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
@@ -154,7 +156,6 @@ readonly class StatisticsHelper
     {
         $this->visits->resetAll();
 
-        // Delete logfiles
         $files = glob(PMF_CONTENT_DIR . '/core/data/*');
         foreach ($files as $file) {
             if (is_file($file)) {
@@ -162,7 +163,6 @@ readonly class StatisticsHelper
             }
         }
 
-        // Delete sessions
         return $this->session->deleteAllSessions();
     }
 

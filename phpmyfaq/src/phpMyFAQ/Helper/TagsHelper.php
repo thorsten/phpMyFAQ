@@ -59,7 +59,7 @@ class TagsHelper extends AbstractHelper
         $taggingIds = str_replace(',,', ',', $taggingIds);
         $taggingIds = trim(implode(',', $taggingIds), ',');
 
-        return ($taggingIds != '') ? sprintf(
+        return ($taggingIds !== '') ? sprintf(
             '<a class="btn btn-outline-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
             '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
             $taggingIds,

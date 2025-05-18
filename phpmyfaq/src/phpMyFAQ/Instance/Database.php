@@ -31,7 +31,7 @@ class Database
     /**
      * Instance.
      */
-    private static ?Driver $instance = null;
+    private static ?Driver $driver = null;
 
     /**
      * DROP TABLE statements.
@@ -93,9 +93,9 @@ class Database
         $class = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
 
         if (class_exists($class)) {
-            self::$instance = new $class($configuration);
+            self::$driver = new $class($configuration);
 
-            return self::$instance;
+            return self::$driver;
         }
         throw new Exception('Invalid Database Type: ' . $type);
     }
@@ -105,12 +105,12 @@ class Database
      */
     public static function getInstance(): ?Driver
     {
-        if (!self::$instance instanceof Driver) {
+        if (!self::$driver instanceof Driver) {
             $className = self::class;
-            self::$instance = new $className();
+            self::$driver = new $className();
         }
 
-        return self::$instance;
+        return self::$driver;
     }
 
     /**

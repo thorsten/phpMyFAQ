@@ -98,6 +98,7 @@ class AbstractAdministrationController extends AbstractController
                 'group'
             );
         }
+
         $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
             PermissionType::PASSWORD_CHANGE->value,
             'ad_menu_passwd',
@@ -240,6 +241,7 @@ class AbstractAdministrationController extends AbstractController
                 'elasticsearch'
             );
         }
+
         if ($this->configuration->get('search.enableOpenSearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
@@ -247,6 +249,7 @@ class AbstractAdministrationController extends AbstractController
                 'opensearch'
             );
         }
+
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_system_info',
@@ -353,8 +356,8 @@ class AbstractAdministrationController extends AbstractController
     private function getGravatarImage(): string
     {
         if ($this->currentUser->isLoggedIn() && $this->configuration->get('main.enableGravatarSupport')) {
-            $avatar = new Gravatar();
-            return $avatar->getImage(
+            $gravatar = new Gravatar();
+            return $gravatar->getImage(
                 $this->currentUser->getUserData('email'),
                 ['size' => '24', 'class' => 'img-profile rounded-circle']
             );

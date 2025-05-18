@@ -69,7 +69,7 @@ class ImageController extends AbstractController
                 }
 
                 // Sanitize input
-                if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $file->getClientOriginalName())) {
+                if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", (string) $file->getClientOriginalName())) {
                     return $this->json(
                         [
                             'success' => false,
@@ -82,7 +82,7 @@ class ImageController extends AbstractController
                 }
 
                 // Verify extension
-                if (!in_array(strtolower($file->getClientOriginalExtension()), $validFileExtensions)) {
+                if (!in_array(strtolower((string) $file->getClientOriginalExtension()), $validFileExtensions)) {
                     return $this->json(
                         [
                             'success' => false,

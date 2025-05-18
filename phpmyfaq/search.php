@@ -250,7 +250,6 @@ $categoryHelper->setCategory($category);
 $searchHelper = new SearchHelper($faqConfig);
 $searchHelper->setSearchTerm($inputSearchTerm);
 $searchHelper->setCategory($category);
-$searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
