@@ -18,7 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

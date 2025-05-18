@@ -15,7 +15,7 @@
  * @since     2012-03-26
  */
 
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);

@@ -26,7 +26,7 @@ use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TemplateException;
+use phpMyFAQ\Twig\TemplateException;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;

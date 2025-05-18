@@ -17,35 +17,21 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
+use Twig\Attribute\AsTwigFilter;
+use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class CreateLinkTwigExtension extends AbstractExtension
 {
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('categoryLink', $this->categoryLink(...)),
-            new TwigFunction('faqLink', $this->faqLink(...)),
-        ];
-    }
-
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('categoryLink', $this->categoryLink(...)),
-            new TwigFilter('faqLink', $this->faqLink(...)),
-        ];
-    }
-
-    private function categoryLink(int $categoryId): string
+    #[asTwigFilter('categoryLink')]
+    #[asTwigFunction('categoryLink')]
+    public static function categoryLink(int $categoryId): string
     {
         $configuration = Configuration::getConfigurationInstance();
         $url = sprintf(
@@ -63,7 +49,9 @@ class CreateLinkTwigExtension extends AbstractExtension
         return $link->toString();
     }
 
-    private function faqLink(int $categoryId, int $faqId, string $faqLanguage): string
+    #[asTwigFilter('faqLink')]
+    #[asTwigFunction('faqLink')]
+    public static function faqLink(int $categoryId, int $faqId, string $faqLanguage): string
     {
         $configuration = Configuration::getConfigurationInstance();
         $url = sprintf(

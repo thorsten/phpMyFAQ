@@ -29,7 +29,7 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 

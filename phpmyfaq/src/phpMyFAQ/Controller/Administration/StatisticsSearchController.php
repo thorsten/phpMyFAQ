@@ -24,12 +24,13 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\LanguageCodeTwigExtension;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class StatisticsSearchController extends AbstractAdministrationController
 {
@@ -60,7 +61,7 @@ class StatisticsSearchController extends AbstractAdministrationController
         ];
         $pagination = new Pagination($options);
 
-        $this->addExtension(new LanguageCodeTwigExtension());
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render(
             '@admin/statistics/search.twig',
             [

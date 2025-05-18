@@ -15,7 +15,7 @@
  * @since     2012-02-12
  */
 
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Twig extension to format the date
+ * Twig extension to create an ISO date.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,26 +15,17 @@
  * @since     2024-04-27
  */
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
-class FormatDateTwigExtension extends AbstractExtension
+class IsoDateTwigExtension extends AbstractExtension
 {
-    public function getFilters(): array
+    #[asTwigFilter('createIsoDate')]
+    public static function createIsoDate(string $string): string
     {
-        return [
-            new TwigFilter('formatDate', $this->formatDate(...)),
-        ];
-    }
-
-    private function formatDate(string $string): string
-    {
-        $faqConfig = Configuration::getConfigurationInstance();
-        $date = new Date($faqConfig);
-        return $date->format($string);
+        return Date::createIsoDate($string);
     }
 }

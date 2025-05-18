@@ -18,7 +18,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -15,30 +15,19 @@
  * @since     2024-04-26
  */
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use Twig\Attribute\AsTwigFilter;
+use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class CategoryNameTwigExtension extends AbstractExtension
 {
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('categoryName', $this->getCategoryName(...)),
-        ];
-    }
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('categoryName', $this->getCategoryName(...)),
-        ];
-    }
-
-    private function getCategoryName(int $categoryId): string
+    #[AsTwigFilter('categoryName')]
+    #[AsTwigFunction('categoryName')]
+    public static function getCategoryName(int $categoryId): string
     {
         $category = new Category(Configuration::getConfigurationInstance());
 

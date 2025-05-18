@@ -16,11 +16,12 @@
  */
 
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Template\Extensions\CategoryNameTwigExtension;
-use phpMyFAQ\Template\Extensions\CreateLinkTwigExtension;
-use phpMyFAQ\Template\Extensions\FaqTwigExtension;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
+use phpMyFAQ\Twig\Extensions\CreateLinkTwigExtension;
+use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use Twig\Extension\AttributeExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -40,9 +41,9 @@ $faq->setUser($user->getUserId());
 $faq->setGroups($currentGroups);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addExtension(new CategoryNameTwigExtension());
-$twig->addExtension(new CreateLinkTwigExtension());
-$twig->addExtension(new FaqTwigExtension());
+$twig->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));
+$twig->addExtension(new AttributeExtension(CreateLinkTwigExtension::class));
+$twig->addExtension(new AttributeExtension(FaqTwigExtension::class));
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [

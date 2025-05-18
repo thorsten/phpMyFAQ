@@ -20,7 +20,7 @@ namespace phpMyFAQ\Controller;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\System;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

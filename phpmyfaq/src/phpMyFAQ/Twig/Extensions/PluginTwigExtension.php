@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Twig extension to return the FAQ question by FAQ ID.
+ * Twig extension to trigger plugin events.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,28 +12,22 @@
  * @copyright 2024-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2024-05-01
+ * @since     2024-04-26
  */
 
-namespace phpMyFAQ\Template\Extensions;
+declare(strict_types=1);
+
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Faq;
+use Twig\Attribute\AsTwigFunction;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
-class FaqTwigExtension extends AbstractExtension
+class PluginTwigExtension extends AbstractExtension
 {
-    public function getFilters(): array
+    #[AsTwigFunction('phpMyFAQPlugin')]
+    public static function triggerPluginEvent(string $eventName, mixed $data = null): string
     {
-        return [
-            new TwigFilter('faqQuestion', $this->getFaqQuestion(...)),
-        ];
-    }
-
-    private function getFaqQuestion(int $faqId): string
-    {
-        $faq = new Faq(Configuration::getConfigurationInstance());
-        return $faq->getQuestion($faqId);
+        return Configuration::getConfigurationInstance()->getPluginManager()->triggerEvent($eventName, $data);
     }
 }

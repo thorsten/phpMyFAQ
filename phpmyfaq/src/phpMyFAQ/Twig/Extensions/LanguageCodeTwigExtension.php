@@ -17,30 +17,16 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Language\LanguageCodes;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class LanguageCodeTwigExtension extends AbstractExtension
 {
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('getFromLanguageCode', $this->getFromLanguageCode(...)),
-        ];
-    }
-
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('getFromLanguageCode', $this->getFromLanguageCode(...)),
-        ];
-    }
-
-    public function getFromLanguageCode(string $languageCode): string
+    #[asTwigFilter('getFromLanguageCode')]
+    public static function getFromLanguageCode(string $languageCode): string
     {
         return LanguageCodes::get($languageCode);
     }

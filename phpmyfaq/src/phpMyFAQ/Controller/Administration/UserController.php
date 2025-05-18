@@ -24,11 +24,12 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\PermissionTranslationTwigExtension;
+use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class UserController extends AbstractAdministrationController
 {
@@ -44,7 +45,7 @@ class UserController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::USER_DELETE);
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/user.twig',
             [
@@ -69,7 +70,7 @@ class UserController extends AbstractAdministrationController
 
         $userId = Filter::filterVar($request->get('userId'), FILTER_VALIDATE_INT);
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/user.twig',
             [

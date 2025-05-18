@@ -21,7 +21,7 @@ use DateTime;
 use DirectoryIterator;
 use Exception;
 use phpMyFAQ\Database\DatabaseDriver;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\Request;

@@ -22,12 +22,13 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\CategoryNameTwigExtension;
+use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 class OpenQuestionsController extends AbstractAdministrationController
@@ -45,7 +46,7 @@ class OpenQuestionsController extends AbstractAdministrationController
         $question = $this->container->get('phpmyfaq.question');
 
         $this->addExtension(new IntlExtension());
-        $this->addExtension(new CategoryNameTwigExtension());
+        $this->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));
         return $this->render(
             '@admin/content/open-questions.twig',
             [

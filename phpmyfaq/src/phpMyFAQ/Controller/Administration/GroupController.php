@@ -23,13 +23,14 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\PermissionTranslationTwigExtension;
+use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class GroupController extends AbstractAdministrationController
 {
@@ -45,7 +46,7 @@ class GroupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GROUP_EDIT);
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [
@@ -66,7 +67,7 @@ class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.add.twig',
             [
@@ -115,7 +116,7 @@ class GroupController extends AbstractAdministrationController
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get('ad_group_suc'));
         }
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [
@@ -142,7 +143,7 @@ class GroupController extends AbstractAdministrationController
         $groupId = Filter::filterVar($request->get('group_list_select'), FILTER_VALIDATE_INT);
         $groupData = $this->currentUser->perm->getGroupData($groupId);
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.confirm.twig',
             [
@@ -177,7 +178,7 @@ class GroupController extends AbstractAdministrationController
             $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get('ad_group_deleted'));
         }
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [
@@ -224,7 +225,7 @@ class GroupController extends AbstractAdministrationController
             );
         }
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [
@@ -265,7 +266,7 @@ class GroupController extends AbstractAdministrationController
             );
         }
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [
@@ -306,7 +307,7 @@ class GroupController extends AbstractAdministrationController
             );
         }
 
-        $this->addExtension(new PermissionTranslationTwigExtension());
+        $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render(
             '@admin/user/group.twig',
             [

@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;

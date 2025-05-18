@@ -16,7 +16,7 @@
  * @since     2023-07-20
  */
 
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Session\Token;

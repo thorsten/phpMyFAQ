@@ -24,12 +24,13 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\UserNameTwigExtension;
+use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 class AdminLogController extends AbstractAdministrationController
@@ -65,7 +66,7 @@ class AdminLogController extends AbstractAdministrationController
         $currentItems = array_slice($loggingData, $offset, $itemsPerPage);
 
         $this->addExtension(new IntlExtension());
-        $this->addExtension(new UserNameTwigExtension());
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         return $this->render(
             '@admin/statistics/admin-log.twig',
             [

@@ -15,48 +15,35 @@
  * @since     2024-04-21
  */
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
 class UserNameTwigExtension extends AbstractExtension
 {
-    private User $user;
-
     /**
      * @throws Exception
      */
-    public function __construct()
+    #[asTwigFilter('userName')]
+    public static function getUserName(int $userId): string
     {
-        $this->user = new User(Configuration::getConfigurationInstance());
-    }
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('userName', $this->getUserName(...)),
-            new TwigFilter('realName', $this->getRealName(...))
-        ];
+        $user = new User(Configuration::getConfigurationInstance());
+        $user->getUserById($userId);
+        return $user->getLogin();
     }
 
     /**
      * @throws Exception
      */
-    private function getUserName(int $userId): string
+    #[asTwigFilter('realName')]
+    public static function getRealName(int $userId): string
     {
-        $this->user->getUserById($userId);
-        return $this->user->getLogin();
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getRealName(int $userId): string
-    {
-        $this->user->getUserById($userId);
-        return $this->user->getUserData('display_name');
+        $user = new User(Configuration::getConfigurationInstance());
+        $user->getUserById($userId);
+        return $user->getUserData('display_name');
     }
 }

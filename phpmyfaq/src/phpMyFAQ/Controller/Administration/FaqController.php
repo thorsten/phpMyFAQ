@@ -33,15 +33,16 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\FormatBytesTwigExtension;
-use phpMyFAQ\Template\Extensions\IsoDateTwigExtension;
-use phpMyFAQ\Template\Extensions\UserNameTwigExtension;
+use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
+use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
+use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class FaqController extends AbstractAdministrationController
 {
@@ -121,9 +122,9 @@ class FaqController extends AbstractAdministrationController
             'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
         ];
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new UserNameTwigExtension());
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/faq.editor.twig',
             [
@@ -247,9 +248,9 @@ class FaqController extends AbstractAdministrationController
             $restrictedGroups = true;
         }
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new UserNameTwigExtension());
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/faq.editor.twig',
             [
@@ -328,9 +329,9 @@ class FaqController extends AbstractAdministrationController
         $faqData = $faq->faqRecord;
         $faqData['title'] = 'Copy of ' . $faqData['title'];
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new UserNameTwigExtension());
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/faq.editor.twig',
             [
@@ -404,9 +405,9 @@ class FaqController extends AbstractAdministrationController
         $faqData = $faq->faqRecord;
         $faqData['title'] = 'Translation of ' . $faqData['title'];
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new UserNameTwigExtension());
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/faq.editor.twig',
             [
@@ -494,9 +495,9 @@ class FaqController extends AbstractAdministrationController
             'category_lang' => $faqLanguage,
         ];
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new UserNameTwigExtension());
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/faq.editor.twig',
             [

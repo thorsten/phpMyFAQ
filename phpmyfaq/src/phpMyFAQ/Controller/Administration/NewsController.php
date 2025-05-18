@@ -25,13 +25,14 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\FormatDateTwigExtension;
-use phpMyFAQ\Template\Extensions\IsoDateTwigExtension;
+use phpMyFAQ\Twig\Extensions\FormatDateTwigExtension;
+use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class NewsController extends AbstractAdministrationController
 {
@@ -49,8 +50,8 @@ class NewsController extends AbstractAdministrationController
 
         $news = $this->container->get('phpmyfaq.news');
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new FormatDateTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render(
             '@admin/content/news.twig',
             [
@@ -72,8 +73,8 @@ class NewsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new FormatDateTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render(
             '@admin/content/news.add.twig',
             [
@@ -104,8 +105,8 @@ class NewsController extends AbstractAdministrationController
 
         $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
 
-        $this->addExtension(new IsoDateTwigExtension());
-        $this->addExtension(new FormatDateTwigExtension());
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
         return $this->render(
             '@admin/content/news.edit.twig',
             [

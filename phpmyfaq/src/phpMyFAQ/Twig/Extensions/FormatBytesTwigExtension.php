@@ -15,22 +15,16 @@
  * @since     2023-05-21
  */
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Utils;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
 class FormatBytesTwigExtension extends AbstractExtension
 {
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('formatBytes', $this->formatBytes(...)),
-        ];
-    }
-
-    public function formatBytes(int $bytes, int $precision = 2): string
+    #[asTwigFilter('formatBytes')]
+    public static function formatBytes(int $bytes, int $precision = 2): string
     {
         return Utils::formatBytes($bytes, $precision);
     }

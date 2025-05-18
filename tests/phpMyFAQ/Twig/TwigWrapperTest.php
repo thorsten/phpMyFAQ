@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Twig;
 
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;

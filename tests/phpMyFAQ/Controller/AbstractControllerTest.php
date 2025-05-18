@@ -2,7 +2,7 @@
 
 namespace phpMyFAQ\Controller;
 
-use phpMyFAQ\Template\TemplateException;
+use phpMyFAQ\Twig\TemplateException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;

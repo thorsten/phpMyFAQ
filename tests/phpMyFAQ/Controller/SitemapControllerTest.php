@@ -3,7 +3,7 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Strings;
-use phpMyFAQ\Template\TemplateException;
+use phpMyFAQ\Twig\TemplateException;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;

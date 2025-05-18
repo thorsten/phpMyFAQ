@@ -15,7 +15,7 @@
  * @since     2020-10-25
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Twig;
 
 use phpMyFAQ\Core\Exception;
 

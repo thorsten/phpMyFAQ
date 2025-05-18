@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);

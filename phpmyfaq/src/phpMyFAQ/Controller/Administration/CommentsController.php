@@ -23,11 +23,12 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\FaqTwigExtension;
+use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 class CommentsController extends AbstractAdministrationController
@@ -48,7 +49,7 @@ class CommentsController extends AbstractAdministrationController
         $newsComments = $comment->getAllComments(CommentType::NEWS);
 
         $this->addExtension(new IntlExtension());
-        $this->addExtension(new FaqTwigExtension());
+        $this->addExtension(new AttributeExtension(FaqTwigExtension::class));
         return $this->render(
             '@admin/content/comments.twig',
             [

@@ -15,16 +15,17 @@
  * @since     2023-05-27
  */
 
-namespace phpMyFAQ\Template;
+namespace phpMyFAQ\Twig;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
-use phpMyFAQ\Template\Extensions\PluginTwigExtension;
-use phpMyFAQ\Template\Extensions\TranslateTwigExtension;
+use phpMyFAQ\Twig\Extensions\PluginTwigExtension;
+use phpMyFAQ\Twig\Extensions\TranslateTwigExtension;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig\Extension\AttributeExtension;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
@@ -57,11 +58,11 @@ class TwigWrapper
         );
 
         // Always add the translation extension
-        $this->twigEnvironment->addExtension(new TranslateTwigExtension());
+        $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
 
         // Add the plugin extension if it's not in the setup phase
         if (!$this->isSetup) {
-            $this->twigEnvironment->addExtension(new PluginTwigExtension());
+            $this->twigEnvironment->addExtension(new AttributeExtension(PluginTwigExtension::class));
         }
 
         // If we're on a development version or debug is enabled, add the debug extension

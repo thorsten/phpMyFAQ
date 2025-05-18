@@ -22,12 +22,13 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Template\Extensions\FormatBytesTwigExtension;
+use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
+use Twig\Extension\AttributeExtension;
 
 class AttachmentsController extends AbstractAdministrationController
 {
@@ -62,7 +63,7 @@ class AttachmentsController extends AbstractAdministrationController
             ]
         );
 
-        $this->addExtension(new FormatBytesTwigExtension());
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
         return $this->render(
             '@admin/content/attachments.twig',
             [

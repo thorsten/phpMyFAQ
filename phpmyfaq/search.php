@@ -28,11 +28,12 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Template\Extensions\TagNameTwigExtension;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Extension\AttributeExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -267,7 +268,7 @@ $confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
 $totalPages = (int)ceil($numOfResults / $confPerPage);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addExtension(new TagNameTwigExtension());
+$twig->addExtension(new AttributeExtension(TagNameTwigExtension::class));
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));

@@ -19,7 +19,7 @@ use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-use phpMyFAQ\Template\TwigWrapper;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

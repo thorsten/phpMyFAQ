@@ -17,30 +17,16 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Template\Extensions;
+namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Translation;
+use Twig\Attribute\AsTwigFilter;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 class TranslateTwigExtension extends AbstractExtension
 {
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('translate', $this->translate(...)),
-        ];
-    }
-
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('translate', $this->translate(...)),
-        ];
-    }
-
-    public function translate(string $translationKey): string
+    #[AsTwigFilter('translate')]
+    public static function translate(string $translationKey): string
     {
         return Translation::get($translationKey) ?? $translationKey;
     }
