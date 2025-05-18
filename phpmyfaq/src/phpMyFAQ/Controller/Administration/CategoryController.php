@@ -55,6 +55,7 @@ class CategoryController extends AbstractAdministrationController
 
         $category = new Category($this->configuration, [], false);
         $category->buildCategoryTree();
+
         $categoryInfo = $category->getAllCategories();
 
         $session = $this->container->get('session');
@@ -334,12 +335,12 @@ class CategoryController extends AbstractAdministrationController
             ->setGroups($currentAdminGroups)
             ->setLanguage($this->configuration->getLanguage()->getLanguage());
 
-        $categoryData = $category->getCategoryData($categoryId);
+        $categoryEntity = $category->getCategoryData($categoryId);
 
         $seoEntity = new SeoEntity();
         $seoEntity->setType(SeoType::CATEGORY);
         $seoEntity->setReferenceId($categoryId);
-        $seoEntity->setReferenceLanguage($categoryData->getLang());
+        $seoEntity->setReferenceLanguage($categoryEntity->getLang());
         $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
 
         $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
@@ -360,14 +361,14 @@ class CategoryController extends AbstractAdministrationController
             $restrictedGroups = true;
         }
 
-        $header = Translation::get('ad_categ_edit_1') . ' "' . $categoryData->getName() . '" ' .
+        $header = Translation::get('ad_categ_edit_1') . ' "' . $categoryEntity->getName() . '" ' .
             Translation::get('ad_categ_edit_2');
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $allGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
-                [$categoryData->getGroupId()],
+                [$categoryEntity->getGroupId()],
                 $this->currentUser
             );
             $restrictedGroupOptions = $this->currentUser->perm->getAllGroupsOptions(
@@ -383,16 +384,16 @@ class CategoryController extends AbstractAdministrationController
                 ... $this->getFooter(),
                 'header' => $header,
                 'categoryId' => $categoryId,
-                'categoryLanguage' => $categoryData->getLang(),
-                'parentId' => $categoryData->getParentId(),
+                'categoryLanguage' => $categoryEntity->getLang(),
+                'parentId' => $categoryEntity->getParentId(),
                 'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
-                'categoryImage' => $categoryData->getImage(),
-                'categoryName' => $categoryData->getName(),
-                'categoryDescription' => $categoryData->getDescription(),
-                'categoryActive' => 1 === (int)$categoryData->getActive() ? 'checked' : '',
-                'categoryShowHome' => 1 === (int)$categoryData->getShowHome() ? 'checked' : '',
+                'categoryImage' => $categoryEntity->getImage(),
+                'categoryName' => $categoryEntity->getName(),
+                'categoryDescription' => $categoryEntity->getDescription(),
+                'categoryActive' => 1 === (int)$categoryEntity->getActive() ? 'checked' : '',
+                'categoryShowHome' => 1 === (int)$categoryEntity->getShowHome() ? 'checked' : '',
                 'categoryImageReset' => Translation::get('msgCategoryImageReset'),
-                'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
+                'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryEntity->getUserId()),
                 'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
                 'allGroupsOptions' => $allGroupsOptions,
                 'allGroups' => $allGroups ? 'checked' : '',
@@ -403,7 +404,7 @@ class CategoryController extends AbstractAdministrationController
                 'allUsers' => $allUsers ? 'checked' : '',
                 'restrictedUsers' => $restrictedUsers ? 'checked' : '',
                 'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
-                'allUsersOptions' => $userHelper->getAllUserOptions($categoryData->getUserId()),
+                'allUsersOptions' => $userHelper->getAllUserOptions($categoryEntity->getUserId()),
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
@@ -436,8 +437,8 @@ class CategoryController extends AbstractAdministrationController
         // get languages in use for all categories
         $allLanguages = $this->configuration->getLanguage()->isLanguageAvailable(0, 'faqcategories');
         $languages = [];
-        foreach ($allLanguages as $lang) {
-            $languages[$lang] = LanguageCodes::get($lang);
+        foreach ($allLanguages as $language) {
+            $languages[$language] = LanguageCodes::get($language);
         }
         asort($languages);
 
@@ -445,10 +446,8 @@ class CategoryController extends AbstractAdministrationController
 
         foreach ($category->getCategoryTree() as $cat) {
             $languageIds = $category->getCategoryLanguagesTranslated((int) $cat['id']);
-            $translationArray = [];
-            foreach ($languageIds as $lang => $title) {
-                $translationArray[] = $lang;
-            }
+            $translationArray = array_keys($languageIds);
+
             $translations[$cat['id']] = $translationArray;
         }
 
@@ -574,7 +573,7 @@ class CategoryController extends AbstractAdministrationController
         }
 
         $existingImage = is_null($existingImage) ? '' : $existingImage;
-        $image = count($uploadedFile) ? $categoryImage->getFileName(
+        $image = count($uploadedFile) > 0 ? $categoryImage->getFileName(
             $categoryId,
             $categoryLang
         ) : $existingImage;

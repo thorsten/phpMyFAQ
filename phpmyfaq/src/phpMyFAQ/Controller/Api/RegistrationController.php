@@ -111,7 +111,7 @@ class RegistrationController extends AbstractController
     {
         $this->hasValidToken();
 
-        $registration = new RegistrationHelper($this->configuration);
+        $registrationHelper = new RegistrationHelper($this->configuration);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -121,7 +121,7 @@ class RegistrationController extends AbstractController
         $isVisible = Filter::filterVar($data->{'is-visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $isVisible = $isVisible === 'true';
 
-        if (!$registration->isDomainAllowed($email)) {
+        if (!$registrationHelper->isDomainAllowed($email)) {
             $result = [
                 'registered' => false,
                 'error' => 'The domain is not allowed.'
@@ -129,15 +129,23 @@ class RegistrationController extends AbstractController
             return $this->json($result, Response::HTTP_CONFLICT);
         }
 
-        if (!empty($userName) && !empty($fullName) && !empty($email)) {
-            $result = $registration->createUser($userName, $fullName, $email, $isVisible);
+        if (
+            $userName !== '' &&
+            $userName !== '0' &&
+            ($fullName !== '' && $fullName !== '0') &&
+            ($email !== '' && $email !== '0')
+        ) {
+            $result = $registrationHelper->createUser($userName, $fullName, $email, $isVisible);
+
             return $this->json($result, Response::HTTP_CREATED);
-        } else {
-            $result = [
+        }
+
+        return $this->json(
+            [
                 'registered' => false,
                 'error' => Translation::get('err_sendMail')
-            ];
-            return $this->json($result, Response::HTTP_BAD_REQUEST);
-        }
+            ],
+            Response::HTTP_BAD_REQUEST
+        );
     }
 }

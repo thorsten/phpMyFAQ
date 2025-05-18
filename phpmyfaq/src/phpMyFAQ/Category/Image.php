@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Image
 {
-    /** @var string */
     private const string UPLOAD_DIR = PMF_CONTENT_DIR . '/user/images/';
 
     private bool $isUpload = false;
@@ -136,6 +135,7 @@ class Image
 
             return true;
         }
+
         throw new Exception('Uploaded image is too big');
     }
 

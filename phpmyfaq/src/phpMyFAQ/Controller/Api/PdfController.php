@@ -78,7 +78,7 @@ class PdfController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s no FAQ and PDF for the given FAQ ID.',
+        description: "If there's no FAQ and PDF for the given FAQ ID.",
         content: new OA\JsonContent(example: []),
     )]
     public function getById(Request $request): JsonResponse
@@ -98,14 +98,14 @@ class PdfController extends AbstractController
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
             return $this->json($result, Response::HTTP_NOT_FOUND);
-        } else {
-            $service = new Services($this->configuration);
-            $service->setFaqId($faqId);
-            $service->setLanguage($this->configuration->getLanguage()->getLanguage());
-            $service->setCategoryId($categoryId);
-
-            $result = $service->getPdfApiLink();
-            return $this->json($result, Response::HTTP_OK);
         }
+
+        $services = new Services($this->configuration);
+        $services->setFaqId($faqId);
+        $services->setLanguage($this->configuration->getLanguage()->getLanguage());
+        $services->setCategoryId($categoryId);
+
+        $result = $services->getPdfApiLink();
+        return $this->json($result, Response::HTTP_OK);
     }
 }

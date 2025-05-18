@@ -57,7 +57,7 @@ class OAuthTest extends TestCase
             ->willReturn($mockResponse);
 
         $reflection = new \ReflectionClass($this->oAuth);
-        $clientProperty = $reflection->getProperty('client');
+        $clientProperty = $reflection->getProperty('httpClient');
         $clientProperty->setAccessible(true);
         $clientProperty->setValue($this->oAuth, $this->mockClient);
 
@@ -89,7 +89,7 @@ class OAuthTest extends TestCase
             ->willReturn($mockResponse);
 
         $reflection = new \ReflectionClass($this->oAuth);
-        $clientProperty = $reflection->getProperty('client');
+        $clientProperty = $reflection->getProperty('httpClient');
         $clientProperty->setAccessible(true);
         $clientProperty->setValue($this->oAuth, $this->mockClient);
 

@@ -61,7 +61,7 @@ class Permission
                     $id
                 );
 
-                if ($this->configuration->getDb()->numRows($this->configuration->getDb()->query($query))) {
+                if ($this->configuration->getDb()->numRows($this->configuration->getDb()->query($query)) !== 0) {
                     continue;
                 }
 

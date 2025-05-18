@@ -173,7 +173,7 @@ class Category
 
         if ($this->language !== null && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $where .= $where === '' || $where === '0' ? ' WHERE' : ' AND';
-            $where .= sprintf(' fc.lang = \'%s\'', $this->configuration->getDb()->escape($this->language));
+            $where .= sprintf(" fc.lang = '%s'", $this->configuration->getDb()->escape($this->language));
         }
 
         $query = sprintf(
@@ -353,12 +353,15 @@ class Category
             if (!isset($n['parent_id'])) {
                 continue;
             }
+
             if ($n['parent_id'] != $parentId) {
                 continue;
             }
+
             if ($categoryId <= 0) {
                 continue;
             }
+
             $temporaryTree[$xLevel++] = $categoryId;
         }
 
@@ -431,6 +434,7 @@ class Category
             if ($ascendantId == 0) {
                 break;
             }
+
             $brothers = $this->getBrothers($ascendantId);
             $tree[$i] = ($ascendantId == end($brothers)) ? 'space' : 'vertical';
         }
@@ -669,6 +673,7 @@ class Category
                 implode('', $tempName)
             );
         }
+
         return implode($separator, $tempName);
     }
 
@@ -799,10 +804,15 @@ class Category
     /**
      * Creates a new category
      */
-    public function create(CategoryEntity $category): ?int
+    public function create(CategoryEntity $categoryEntity): ?int
     {
-        if ($category->getId() === 0) {
-            $category->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id'));
+        if ($categoryEntity->getId() === 0) {
+            $categoryEntity->setId(
+                $this->configuration->getDb()->nextId(
+                    Database::getTablePrefix() . 'faqcategories',
+                    'id'
+                )
+            );
         }
 
         $query = sprintf(
@@ -813,36 +823,36 @@ class Category
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
-            $category->getId(),
-            $this->configuration->getDb()->escape($category->getLang()),
-            $category->getParentId(),
-            $this->configuration->getDb()->escape($category->getName()),
-            $this->configuration->getDb()->escape($category->getDescription()),
-            $category->getUserId(),
-            $category->getGroupId(),
-            $category->getActive(),
-            $this->configuration->getDb()->escape($category->getImage()),
-            $category->getShowHome()
+            $categoryEntity->getId(),
+            $this->configuration->getDb()->escape($categoryEntity->getLang()),
+            $categoryEntity->getParentId(),
+            $this->configuration->getDb()->escape($categoryEntity->getName()),
+            $this->configuration->getDb()->escape($categoryEntity->getDescription()),
+            $categoryEntity->getUserId(),
+            $categoryEntity->getGroupId(),
+            $categoryEntity->getActive(),
+            $this->configuration->getDb()->escape($categoryEntity->getImage()),
+            $categoryEntity->getShowHome()
         );
 
         $this->configuration->getDb()->query($query);
 
-        return $category->getId();
+        return $categoryEntity->getId();
     }
 
     /**
      * Check if category already exists.
      *
-     * @param CategoryEntity $category Array of category data
+     * @param CategoryEntity $categoryEntity Array of category data
      */
-    public function checkIfCategoryExists(CategoryEntity $category): int
+    public function checkIfCategoryExists(CategoryEntity $categoryEntity): int
     {
         $query = sprintf(
             "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s' AND parent_id = %d",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($category->getName()),
-            $this->configuration->getDb()->escape($category->getLang()),
-            $category->getParentId()
+            $this->configuration->getDb()->escape($categoryEntity->getName()),
+            $this->configuration->getDb()->escape($categoryEntity->getLang()),
+            $categoryEntity->getParentId()
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -853,9 +863,9 @@ class Category
     /**
      * Updates an existent category entry.
      *
-     * @param CategoryEntity $category CategoryEntity object
+     * @param CategoryEntity $categoryEntity CategoryEntity object
      */
-    public function update(CategoryEntity $category): bool
+    public function update(CategoryEntity $categoryEntity): bool
     {
         $query = sprintf(
             "
@@ -874,15 +884,15 @@ class Category
             AND
                 lang = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($category->getName()),
-            $this->configuration->getDb()->escape($category->getDescription()),
-            $category->getUserId(),
-            $category->getGroupId(),
-            $category->getActive(),
-            $category->getShowHome(),
-            $this->configuration->getDb()->escape($category->getImage()),
-            $category->getId(),
-            $this->configuration->getDb()->escape($category->getLang())
+            $this->configuration->getDb()->escape($categoryEntity->getName()),
+            $this->configuration->getDb()->escape($categoryEntity->getDescription()),
+            $categoryEntity->getUserId(),
+            $categoryEntity->getGroupId(),
+            $categoryEntity->getActive(),
+            $categoryEntity->getShowHome(),
+            $this->configuration->getDb()->escape($categoryEntity->getImage()),
+            $categoryEntity->getId(),
+            $this->configuration->getDb()->escape($categoryEntity->getLang())
         );
 
         return (bool)$this->configuration->getDb()->query($query);

@@ -94,6 +94,7 @@ class CategoryHelper extends AbstractHelper
                 $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
             );
         }
+
         $languagesAvailable = $this->getCategory()->getCategoryLanguagesTranslated($parentId);
         return sprintf(
             '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
@@ -250,9 +251,11 @@ class CategoryHelper extends AbstractHelper
                     if (empty($moderatorEmail)) {
                         continue;
                     }
+
                     if (isset($send[$moderatorEmail])) {
                         continue;
                     }
+
                     $recipients[] = $moderatorEmail;
                 }
             }

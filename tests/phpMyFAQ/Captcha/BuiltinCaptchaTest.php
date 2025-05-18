@@ -60,12 +60,6 @@ class BuiltinCaptchaTest extends TestCase
         $this->assertTrue($this->captcha->isUserIsLoggedIn());
     }
 
-    public function testSetSessionId(): void
-    {
-        $captcha = $this->captcha->setSessionId('sid=4711');
-        $this->assertInstanceOf('phpMyFAQ\Captcha\BuiltinCaptcha', $captcha);
-    }
-
     public function testCheckCaptchaCode(): void
     {
         $this->captcha->setUserIsLoggedIn(true);

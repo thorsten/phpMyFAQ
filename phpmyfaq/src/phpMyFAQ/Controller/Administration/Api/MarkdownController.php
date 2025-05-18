@@ -50,8 +50,8 @@ class MarkdownController extends AbstractController
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new GithubFlavoredMarkdownExtension());
 
-        $converter = new MarkdownConverter($environment);
+        $markdownConverter = new MarkdownConverter($environment);
 
-        return $this->json(['success' => $converter->convert($answer)->getContent()], Response::HTTP_OK);
+        return $this->json(['success' => $markdownConverter->convert($answer)->getContent()], Response::HTTP_OK);
     }
 }

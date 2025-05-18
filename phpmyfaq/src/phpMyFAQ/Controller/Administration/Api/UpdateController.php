@@ -127,16 +127,16 @@ class UpdateController extends AbstractController
                     ],
                     Response::HTTP_OK
                 );
-            } else {
-                return $this->json(
-                    [
-                        'version' => $versions['installed'],
-                        'message' => Translation::get('versionIsUpToDate'),
-                        'dateLastChecked' => $dateLastChecked,
-                    ],
-                    Response::HTTP_OK
-                );
             }
+
+            return $this->json(
+                [
+                    'version' => $versions['installed'],
+                    'message' => Translation::get('versionIsUpToDate'),
+                    'dateLastChecked' => $dateLastChecked,
+                ],
+                Response::HTTP_OK
+            );
         } catch (TransportExceptionInterface | DecodingExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }

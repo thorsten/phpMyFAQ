@@ -43,6 +43,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
      * @param  string $searchTerm Search term
      * @throws Exception
      */
+    #[\Override]
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
@@ -120,7 +121,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     /**
      * Returns the part of the SQL query with the order by.
      *
-     * The order is calculate by weight depend on the search.relevance order
+     * Weight calculates the order depend on the search.relevance order
      */
     public function getMatchingOrder(): string
     {
@@ -145,6 +146,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     /**
      * Returns the part of the SQL query with the matching columns.
      */
+    #[\Override]
     public function getMatchingColumns(): string
     {
         $enableRelevance = $this->configuration->get('search.enableRelevance');

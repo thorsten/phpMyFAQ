@@ -29,34 +29,32 @@ class PluginManager
     /** @var PluginInterface[] */
     private array $plugins = [];
 
-    private EventDispatcher $dispatcher;
+    private EventDispatcher $eventDispatcher;
 
     private array $config = [];
 
     /** @var string[] */
     private array $loadedPlugins = [];
 
-    private ContainerBuilder $container;
+    private ContainerBuilder $containerBuilder;
 
     public function __construct()
     {
-        $this->dispatcher = new EventDispatcher();
-        $this->container = new ContainerBuilder();
+        $this->eventDispatcher = new EventDispatcher();
+        $this->containerBuilder = new ContainerBuilder();
     }
 
     /**
      * Registers a plugin
      *
-     * @param string $pluginClass
      * @throws PluginException
-     * @return void
      */
     public function registerPlugin(string $pluginClass): void
     {
         $plugin = new $pluginClass($this);
         if ($this->isCompatible($plugin)) {
             $this->plugins[$plugin->getName()] = $plugin;
-            $this->container
+            $this->containerBuilder
                 ->register($plugin->getName(), $pluginClass)
                 ->setArguments([$this]);
         } else {
@@ -66,6 +64,7 @@ class PluginManager
 
     /**
      * Loads and registers all plugins
+     *
      * @throws PluginException
      */
     public function loadPlugins(): void
@@ -84,7 +83,7 @@ class PluginManager
         foreach ($this->plugins as $plugin) {
             if ($this->areDependenciesMet($plugin)) {
                 $this->loadedPlugins[] = $plugin->getName();
-                $plugin->registerEvents($this->dispatcher);
+                $plugin->registerEvents($this->eventDispatcher);
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
                 }
@@ -96,21 +95,20 @@ class PluginManager
 
     /**
      * Handles the triggered event
-     * @param string     $eventName
+     *
      * @param mixed|null $data
-     * @return string
      */
     public function triggerEvent(string $eventName, mixed $data = null): string
     {
         $event = new PluginEvent($data);
-        $this->dispatcher->dispatch($event, $eventName);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         return $event->getOutput();
     }
 
     /**
      * Loads the configuration for a plugin
-     * @param string   $pluginName
+     *
      * @param string[] $config
      */
     public function loadPluginConfig(string $pluginName, array $config): void
@@ -120,8 +118,6 @@ class PluginManager
 
     /**
      * Returns the configuration for a plugin
-     * @param string $pluginName
-     * @return array
      */
     public function getPluginConfig(string $pluginName): array
     {
@@ -135,8 +131,6 @@ class PluginManager
 
     /**
      * Returns the namespace from a file
-     * @param string $file
-     * @return string|null
      */
     private function getNamespaceFromFile(string $file): ?string
     {
@@ -149,8 +143,6 @@ class PluginManager
 
     /**
      * Checks if a plugin is compatible with the current version
-     * @param PluginInterface $plugin
-     * @return bool
      */
     private function isCompatible(PluginInterface $plugin): bool
     {
@@ -159,12 +151,10 @@ class PluginManager
 
     /**
      * Checks if a plugin's dependencies are met
-     * @param PluginInterface $plugin
-     * @return bool
      */
     private function areDependenciesMet(PluginInterface $plugin): bool
     {
-        if (empty($plugin->getDependencies())) {
+        if ($plugin->getDependencies() === []) {
             return true;
         }
 
@@ -173,6 +163,7 @@ class PluginManager
                 return false;
             }
         }
+
         return true;
     }
 }

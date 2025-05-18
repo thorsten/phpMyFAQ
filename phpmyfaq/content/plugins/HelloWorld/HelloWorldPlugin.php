@@ -55,9 +55,9 @@ class HelloWorldPlugin implements PluginInterface
         return [];
     }
 
-    public function registerEvents(EventDispatcherInterface $dispatcher): void
+    public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
-        $dispatcher->addListener('content.loaded', [$this, 'onContentLoaded']);
+        $eventDispatcher->addListener('content.loaded', [$this, 'onContentLoaded']);
     }
 
     public function onContentLoaded(PluginEvent $event): void

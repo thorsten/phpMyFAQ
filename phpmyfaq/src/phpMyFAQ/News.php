@@ -46,10 +46,10 @@ readonly class News
     public function getAll(bool $showArchive = false, bool $active = true): array
     {
         $output = [];
-        $newsData = $this->getLatestData($showArchive, $active);
+        $latestData = $this->getLatestData($showArchive, $active);
         $date = new Date($this->configuration);
 
-        foreach ($newsData as $news) {
+        foreach ($latestData as $news) {
             $entry = new stdClass();
             $url = sprintf(
                 '%sindex.php?action=news&newsid=%d&newslang=%s',

@@ -79,7 +79,8 @@ class PasswordChangeController extends AbstractAdministrationController
             FILTER_SANITIZE_SPECIAL_CHARS
         );
 
-        $successMessage = $errorMessage = '';
+        $successMessage = '';
+        $errorMessage = '';
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             $errorMessage = Translation::get('ad_passwd_fail');
         } else {

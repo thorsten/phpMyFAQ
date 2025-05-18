@@ -85,9 +85,9 @@ class OpenSearchController extends AbstractController
         $bulkIndexResult = $openSearch->bulkIndex($faq->faqRecords);
         if (isset($bulkIndexResult['success'])) {
             return $this->json(['success' => Translation::get('ad_os_create_import_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => $bulkIndexResult], Response::HTTP_BAD_REQUEST);
     }
 
     /**

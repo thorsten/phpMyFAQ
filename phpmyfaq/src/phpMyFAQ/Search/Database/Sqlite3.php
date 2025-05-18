@@ -35,6 +35,7 @@ class Sqlite3 extends SearchDatabase implements DatabaseInterface
      * @param  string $searchTerm Search ter
      * @throws Exception
      */
+    #[\Override]
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {

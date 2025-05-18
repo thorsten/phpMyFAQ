@@ -30,10 +30,8 @@ class Session extends AbstractSession
     /** @var string EntraID session key */
     final public const string ENTRA_ID_SESSION_KEY = 'pmf-entra-id-session-key';
 
-    /** @var string */
     final public const string ENTRA_ID_OAUTH_VERIFIER = 'pmf-entra-id-oauth-verifier';
 
-    /** @var string */
     final public const string ENTRA_ID_JWT = 'pmf-entra-id-jwt';
 
     private string $currentSessionKey;

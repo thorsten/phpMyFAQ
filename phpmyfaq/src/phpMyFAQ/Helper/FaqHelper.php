@@ -73,6 +73,7 @@ class FaqHelper extends AbstractHelper
 
         $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
         $oLink->itemTitle = $faq->faqRecord['title'];
+
         $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
 
         if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
@@ -123,11 +124,6 @@ class FaqHelper extends AbstractHelper
 
     /**
      * Creates an overview with all categories with their FAQs.
-     *
-     * @param Category $category
-     * @param Faq      $faq
-     * @param string   $language
-     * @return array
      */
     public function createOverview(Category $category, Faq $faq, string $language = ''): array
     {
@@ -187,9 +183,10 @@ class FaqHelper extends AbstractHelper
                     return stripos(trim($style), 'overflow:') !== 0; // Exclude 'overflow' properties
                 });
                 $newStyle = implode('; ', $filteredStyles);
-                return $newStyle ? 'style="' . $newStyle . '"' : ''; // Remove style attribute if empty
+                // Remove style attribute if empty
+                return $newStyle !== '' && $newStyle !== '0' ? 'style="' . $newStyle . '"' : '';
             },
-            $sanitizedContent
+            (string) $sanitizedContent
         );
     }
 

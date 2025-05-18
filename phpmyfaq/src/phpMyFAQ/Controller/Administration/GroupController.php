@@ -203,8 +203,8 @@ class GroupController extends AbstractAdministrationController
 
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
-        foreach ($dataFields as $field) {
-            $groupData[$field] = Filter::filterVar($request->get($field), FILTER_SANITIZE_SPECIAL_CHARS, '');
+        foreach ($dataFields as $dataField) {
+            $groupData[$dataField] = Filter::filterVar($request->get($dataField), FILTER_SANITIZE_SPECIAL_CHARS, '');
         }
 
         $user = $this->container->get('phpmyfaq.user');
@@ -253,8 +253,8 @@ class GroupController extends AbstractAdministrationController
         if (!$user->perm->removeAllUsersFromGroup($groupId)) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
         } else {
-            foreach ($groupMembers as $memberId) {
-                $user->perm->addToGroup((int)$memberId, $groupId);
+            foreach ($groupMembers as $groupMember) {
+                $user->perm->addToGroup((int) $groupMember, $groupId);
             }
 
             $message = sprintf(
@@ -294,9 +294,10 @@ class GroupController extends AbstractAdministrationController
         if (!$user->perm->refuseAllGroupRights($groupId)) {
             $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
         } else {
-            foreach ($groupPermissions as $rightId) {
-                $user->perm->grantGroupRight($groupId, (int)$rightId);
+            foreach ($groupPermissions as $groupPermission) {
+                $user->perm->grantGroupRight($groupId, (int) $groupPermission);
             }
+
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get('ad_msg_savedsuc_1'),

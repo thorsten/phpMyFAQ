@@ -30,7 +30,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class OAuth
 {
-    private HttpClientInterface $client;
+    private HttpClientInterface $httpClient;
 
     /** @var stdClass|null JWT */
     private ?stdClass $token = null;
@@ -44,7 +44,7 @@ class OAuth
      */
     public function __construct(private readonly Configuration $configuration, private readonly Session $session)
     {
-        $this->client = HttpClient::create();
+        $this->httpClient = HttpClient::create();
     }
 
     /**
@@ -71,7 +71,7 @@ class OAuth
             $codeVerifier = $this->session->getCookie(Session::ENTRA_ID_OAUTH_VERIFIER);
         }
 
-        $response = $this->client->request('POST', $url, [
+        $response = $this->httpClient->request('POST', $url, [
             'body' => [
                 'grant_type' => 'authorization_code',
                 'client_id' => AAD_OAUTH_CLIENTID,
@@ -93,7 +93,7 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        $response = $this->client->request('POST', $url, [
+        $response = $this->httpClient->request('POST', $url, [
             'body' => [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $this->getRefreshToken(),

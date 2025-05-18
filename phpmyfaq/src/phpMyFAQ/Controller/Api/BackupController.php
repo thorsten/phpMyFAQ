@@ -107,34 +107,27 @@ class BackupController extends AbstractController
                 return new Response('Invalid backup type.', Response::HTTP_BAD_REQUEST);
         }
 
-        $dbHelper = new DatabaseHelper($this->configuration);
-        $backup = new Backup($this->configuration, $dbHelper);
+        $databaseHelper = new DatabaseHelper($this->configuration);
+        $backup = new Backup($this->configuration, $databaseHelper);
 
         // Create ZipArchive of content-folder
         if ($backupType === BackupType::BACKUP_TYPE_CONTENT) {
             $backupFile = $backup->createContentFolderBackup();
-            if ($backupFile !== false) {
-                $response = new Response(file_get_contents($backupFile));
+            $response = new Response(file_get_contents($backupFile));
 
-                $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
+            $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
 
-                $disposition = HeaderUtils::makeDisposition(
-                    HeaderUtils::DISPOSITION_ATTACHMENT,
-                    urlencode($backupFileName)
-                );
+            $disposition = HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                urlencode($backupFileName)
+            );
 
-                $response->headers->set('Content-Type', 'application/zip');
-                $response->headers->set('Content-Disposition', $disposition);
-                $response->setStatusCode(Response::HTTP_OK);
-                // Remove temporary ZipArchive
-                unlink($backupFile);
-                return $response->send();
-            } else {
-                return new Response(
-                    'An error occurred while creating the zip-file.',
-                    Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+            $response->headers->set('Content-Type', 'application/zip');
+            $response->headers->set('Content-Disposition', $disposition);
+            $response->setStatusCode(Response::HTTP_OK);
+            // Remove temporary ZipArchive
+            unlink($backupFile);
+            return $response->send();
         }
 
         $tableNames = $backup->getBackupTableNames($backupType);

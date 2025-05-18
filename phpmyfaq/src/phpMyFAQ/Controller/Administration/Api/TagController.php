@@ -35,6 +35,7 @@ class TagController extends AbstractController
 {
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/content/tag')]
     public function update(Request $request): JsonResponse
@@ -56,13 +57,13 @@ class TagController extends AbstractController
 
         if ($this->container->get('phpmyfaq.tags')->update($tagEntity)) {
             return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route('admin/api/content/tags')]
     public function search(Request $request): JsonResponse
@@ -118,8 +119,8 @@ class TagController extends AbstractController
 
         if ($this->container->get('phpmyfaq.tags')->delete($tagId)) {
             return $this->json(['success' => Translation::get('ad_tag_delete_success')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('ad_tag_delete_error')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('ad_tag_delete_error')], Response::HTTP_BAD_REQUEST);
     }
 }

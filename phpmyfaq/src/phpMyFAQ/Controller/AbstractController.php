@@ -103,9 +103,9 @@ abstract class AbstractController
     public function renderView(string $pathToTwigFile, array $templateVars = []): string
     {
         $twigWrapper = $this->getTwigWrapper();
-        $template = $twigWrapper->loadTemplate($pathToTwigFile);
+        $templateWrapper = $twigWrapper->loadTemplate($pathToTwigFile);
 
-        return $template->render($templateVars);
+        return $templateWrapper->render($templateVars);
     }
 
     /**
@@ -125,16 +125,12 @@ abstract class AbstractController
     {
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates');
 
-        if (!empty($this->twigExtensions)) {
-            foreach ($this->twigExtensions as $extension) {
-                $twigWrapper->addExtension($extension);
-            }
+        foreach ($this->twigExtensions as $twigExtension) {
+            $twigWrapper->addExtension($twigExtension);
         }
 
-        if (!empty($this->twigFilters)) {
-            foreach ($this->twigFilters as $filter) {
-                $twigWrapper->addFilter($filter);
-            }
+        foreach ($this->twigFilters as $twigFilter) {
+            $twigWrapper->addFilter($twigFilter);
         }
 
         return $twigWrapper;

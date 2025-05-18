@@ -23,12 +23,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class PluginEvent extends Event
 {
-    private mixed $data;
     private string $output = '';
 
-    public function __construct(mixed $data)
+    public function __construct(private readonly mixed $data)
     {
-        $this->data = $data;
     }
 
     public function getData(): mixed

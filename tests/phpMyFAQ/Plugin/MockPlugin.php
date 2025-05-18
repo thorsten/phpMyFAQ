@@ -45,9 +45,9 @@ class MockPlugin implements PluginInterface
         ];
     }
 
-    public function registerEvents(EventDispatcherInterface $dispatcher): void
+    public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
-        $dispatcher->addListener('mock.event', [$this, 'onMockEvent']);
+        $eventDispatcher->addListener('mock.event', [$this, 'onMockEvent']);
     }
 
     public function onMockEvent($event): void

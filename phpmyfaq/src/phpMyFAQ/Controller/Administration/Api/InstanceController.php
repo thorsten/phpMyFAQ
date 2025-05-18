@@ -138,16 +138,13 @@ class InstanceController extends AbstractController
         }
 
         if (0 !== $instanceId) {
-            $payload = ['added' => $instanceId, 'url' => $data->getUrl()];
-            return $this->json($payload, Response::HTTP_OK);
-        } else {
-            $payload = ['error' => $instanceId];
-            return $this->json($payload, Response::HTTP_BAD_REQUEST);
+            return $this->json(['added' => $instanceId, 'url' => $data->getUrl()], Response::HTTP_OK);
         }
+
+        return $this->json(['error' => $instanceId], Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     #[Route('admin/api/instance/delete')]
@@ -174,15 +171,12 @@ class InstanceController extends AbstractController
                 $client->deleteClientFolder($clientData->url) &&
                 $client->delete($instanceId)
             ) {
-                $payload = ['deleted' => $instanceId];
-                return $this->json($payload, Response::HTTP_OK);
-            } else {
-                $payload = ['error' => $instanceId];
-                return $this->json($payload, Response::HTTP_BAD_REQUEST);
+                return $this->json(['deleted' => $instanceId], Response::HTTP_OK);
             }
-        } else {
-            $payload = ['error' => $instanceId];
-            return $this->json($payload, Response::HTTP_BAD_REQUEST);
+
+            return $this->json(['error' => $instanceId], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => $instanceId], Response::HTTP_BAD_REQUEST);
     }
 }

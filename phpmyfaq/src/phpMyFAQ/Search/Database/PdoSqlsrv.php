@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Search\Database;
 
+use Exception;
 use phpMyFAQ\Search\SearchDatabase;
 
 /**
@@ -30,8 +31,9 @@ class PdoSqlsrv extends SearchDatabase implements DatabaseInterface
      * Prepares the search and executes it.
      *
      * @param  string $searchTerm Search term
-     * @throws \Exception
+     * @throws Exception
      */
+    #[\Override]
     public function search(string $searchTerm): mixed
     {
         if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {

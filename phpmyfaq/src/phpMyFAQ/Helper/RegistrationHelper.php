@@ -59,11 +59,13 @@ class RegistrationHelper extends AbstractHelper
                 'error' => $user->error()
             ];
         }
+
         $user->userdata->set(
             ['display_name', 'email', 'is_visible'],
             [$fullName, $email, $isVisible === 'on' ? 1 : 0]
         );
         $user->setStatus('blocked');
+
         $isNowActive = !$this->configuration->get('spam.manualActivation') && $user->activateUser();
         if ($isNowActive) {
             // @todo add translation strings
@@ -72,6 +74,7 @@ class RegistrationHelper extends AbstractHelper
         } else {
             $adminMessage = 'To activate this user please use';
         }
+
         $text = sprintf(
             'A new user has been registered:<br><br>Name: %s<br>Login name: %s<br><br>%s the administration at %s.',
             $fullName,
@@ -87,6 +90,7 @@ class RegistrationHelper extends AbstractHelper
         $mail->message = $text;
         $mail->send();
         unset($mail);
+
         return [
             'registered' => true,
             'success' => trim((string) Translation::get('successMessage')) . ' ' .

@@ -76,21 +76,19 @@ class MediaBrowserController extends AbstractController
         }
 
         $files = [];
-        if (is_dir(PMF_CONTENT_DIR . '/user/images')) {
-            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
-            foreach ($iterator as $file) {
-                if ($file->isDir() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
-                    continue;
-                }
-
-                $files[] = [
-                    'file' => $file->getFilename(),
-                    'size' => Utils::formatBytes($file->getSize()),
-                    'isImage' => true,
-                    'thumb' => $file->getFilename(),
-                    'changed' => date('Y-m-d H:i:s', $file->getMTime()),
-                ];
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
+        foreach ($iterator as $file) {
+            if ($file->isDir() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+                continue;
             }
+
+            $files[] = [
+                'file' => $file->getFilename(),
+                'size' => Utils::formatBytes($file->getSize()),
+                'isImage' => true,
+                'thumb' => $file->getFilename(),
+                'changed' => date('Y-m-d H:i:s', $file->getMTime()),
+            ];
         }
 
         $response = [

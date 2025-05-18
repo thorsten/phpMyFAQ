@@ -107,18 +107,21 @@ class UserController extends AbstractAdministrationController
         ];
         $pagination = new Pagination($options);
 
-        $counter = $displayedCounter = 0;
+        $counter = 0;
+        $displayedCounter = 0;
         $users = [];
-        foreach ($allUsers as $listedUserId) {
-            $user->getUserById($listedUserId, true);
+        foreach ($allUsers as $allUser) {
+            $user->getUserById($allUser, true);
 
             if ($displayedCounter >= $perPage) {
                 continue;
             }
+
             ++$counter;
             if ($counter <= $firstPage) {
                 continue;
             }
+
             ++$displayedCounter;
 
             $tempUser = [

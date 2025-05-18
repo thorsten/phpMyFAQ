@@ -54,8 +54,8 @@ class Configuration
         $this->setLogger();
         try {
             $this->setPluginManager();
-        } catch (PluginException $e) {
-            $this->getLogger()->error($e->getMessage());
+        } catch (PluginException $pluginException) {
+            $this->getLogger()->error($pluginException->getMessage());
         }
 
         if (is_null(self::$configuration)) {
@@ -204,6 +204,7 @@ class Configuration
         if (!str_ends_with((string) $defaultUrl, '/')) {
             return $defaultUrl . '/';
         }
+
         return $defaultUrl;
     }
 
@@ -387,9 +388,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      */
-    public function setElasticsearchConfig(ElasticsearchConfiguration $esConfiguration): void
+    public function setElasticsearchConfig(ElasticsearchConfiguration $configuration): void
     {
-        $this->config['core.elasticsearchConfig'] = $esConfiguration;
+        $this->config['core.elasticsearchConfig'] = $configuration;
     }
 
     /**
@@ -400,9 +401,9 @@ class Configuration
         return $this->config['core.elasticsearchConfig'];
     }
 
-    public function setOpenSearchConfig(OpenSearchConfiguration $osConfiguration): void
+    public function setOpenSearchConfig(OpenSearchConfiguration $configuration): void
     {
-        $this->config['core.openSearchConfig'] = $osConfiguration;
+        $this->config['core.openSearchConfig'] = $configuration;
     }
 
     public function getOpenSearchConfig(): OpenSearchConfiguration
@@ -515,20 +516,20 @@ class Configuration
         $contentItems = $this->getDb()->fetchAll($response);
         $newContentItems = [];
 
-        foreach ($contentItems as $item) {
-            if (str_contains($item->content, $oldUrl)) {
-                $newContentItems[] = str_replace($oldUrl, $newUrl, $item->content);
+        foreach ($contentItems as $contentItem) {
+            if (str_contains($contentItem->content, $oldUrl)) {
+                $newContentItems[] = str_replace($oldUrl, $newUrl, $contentItem->content);
             } else {
-                $newContentItems[] = $item->content;
+                $newContentItems[] = $contentItem->content;
             }
         }
 
         $count = 0;
-        foreach ($newContentItems as $newItem) {
+        foreach ($newContentItems as $newContentItem) {
             $query = sprintf(
                 "UPDATE %sfaqdata SET content='%s' WHERE content='%s'",
                 Database::getTablePrefix(),
-                $this->getDb()->escape($newItem),
+                $this->getDb()->escape($newContentItem),
                 $this->getDb()->escape($contentItems[$count]->content)
             );
             $count++;
@@ -545,7 +546,7 @@ class Configuration
      */
     public function getAllowedMediaHosts(): array
     {
-        return explode(',', trim($this->get('records.allowedMediaHosts')));
+        return explode(',', trim((string) $this->get('records.allowedMediaHosts')));
     }
 
     public function getCustomCss(): string

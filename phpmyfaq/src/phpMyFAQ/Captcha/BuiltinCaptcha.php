@@ -35,8 +35,6 @@ class BuiltinCaptcha implements CaptchaInterface
 {
     public int $captchaLength = 6;
 
-    private string $sessionId;
-
     private bool $userIsLoggedIn = false;
 
     private readonly string $font;
@@ -122,15 +120,6 @@ class BuiltinCaptcha implements CaptchaInterface
         return PMF_ROOT_DIR . '/assets/fonts/captcha.ttf';
     }
 
-    /**
-     * Setter for session id.
-     */
-    public function setSessionId(string $sessionId): BuiltinCaptcha
-    {
-        $this->sessionId = $sessionId;
-        return $this;
-    }
-
     public function isUserIsLoggedIn(): bool
     {
         return $this->userIsLoggedIn;
@@ -144,8 +133,6 @@ class BuiltinCaptcha implements CaptchaInterface
 
     /**
      * Gives the HTML output code for the Captcha.
-     *
-     * @return string
      */
     public function renderCaptchaImage(): string
     {
@@ -238,11 +225,13 @@ class BuiltinCaptcha implements CaptchaInterface
 
     /**
      * Generate a Captcha Code.
+     *
      * Start garbage collector for removing old (==unresolved) captcha codes
      * Note that we would like to avoid performing any garbaging of old records
      * because these data could be used as a database for collecting ip addresses,
      * eventually organizing them in subnetwork addresses, in order to use
-     * them as an input for PMF IP banning.
+     * them as an input for phpMyFAQ IP banning.
+     *
      * This is because we always perform these three checks on the public forms
      * in which captcha code feature is attached:
      *   1. Check against IP/Network address
@@ -339,6 +328,7 @@ class BuiltinCaptcha implements CaptchaInterface
             if ($num > 0) {
                 return false;
             }
+
             $insert = sprintf(
                 "
                     INSERT INTO 
@@ -425,6 +415,7 @@ class BuiltinCaptcha implements CaptchaInterface
         if ($this->configuration->get('spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
         }
+
         return true;
     }
 
@@ -435,7 +426,7 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     public function validateCaptchaCode(string $captchaCode): bool
     {
-        // Sanity check
+        // Check
         if (Strings::strlen($captchaCode) !== $this->captchaLength) {
             return false;
         }
@@ -447,7 +438,7 @@ class BuiltinCaptcha implements CaptchaInterface
             $captchaCode = str_replace('0', 'O', $captchaCode);
         }
 
-        // Sanity check
+        // Check
         for ($i = 0; $i < Strings::strlen($captchaCode); ++$i) {
             if (!in_array($captchaCode[$i], $this->letters)) {
                 return false;

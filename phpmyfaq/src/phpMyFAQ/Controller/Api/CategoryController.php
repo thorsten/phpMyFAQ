@@ -97,9 +97,9 @@ class CategoryController extends AbstractController
 
         if ($result === []) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
-        } else {
-            return $this->json($result, Response::HTTP_OK);
         }
+
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -172,7 +172,7 @@ class CategoryController extends AbstractController
     )]
     #[OA\Response(
         response: 400,
-        description: 'If something didn\'t worked out.',
+        description: "If something didn't worked out.",
         content: new OA\JsonContent(example: '{ "stored": false, "error": "Cannot add category" }')
     )]
     #[OA\Response(
@@ -232,8 +232,8 @@ class CategoryController extends AbstractController
             $parentId = $parentCategoryIdFound;
         }
 
-        $categoryData = new CategoryEntity();
-        $categoryData
+        $categoryEntity = new CategoryEntity();
+        $categoryEntity
             ->setLang($languageCode)
             ->setParentId($parentId)
             ->setName($name)
@@ -244,7 +244,7 @@ class CategoryController extends AbstractController
             ->setImage('')
             ->setShowHome($showOnHome);
 
-        $categoryId = $category->create($categoryData);
+        $categoryId = $category->create($categoryEntity);
 
         // Category Order entry
         $categoryOrder = new Order($this->configuration);
@@ -258,12 +258,12 @@ class CategoryController extends AbstractController
                 'stored' => true
             ];
             return $this->json($result, Response::HTTP_CREATED);
-        } else {
-            $result = [
-                'stored' => false,
-                'error' => 'Cannot add category'
-            ];
-            return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
+
+        $result = [
+            'stored' => false,
+            'error' => 'Cannot add category'
+        ];
+        return $this->json($result, Response::HTTP_BAD_REQUEST);
     }
 }

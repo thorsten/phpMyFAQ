@@ -109,30 +109,29 @@ class InstanceController extends AbstractAdministrationController
         $instance->setId($instanceId);
 
         // Collect updated data for database
-        $updatedData = new InstanceEntity();
-        $updatedData->setUrl(Filter::filterVar($request->get('url'), FILTER_VALIDATE_URL));
-        $updatedData->setInstance(Filter::filterVar($request->get('instance'), FILTER_SANITIZE_SPECIAL_CHARS));
-        $updatedData->setComment(Filter::filterVar($request->get('comment'), FILTER_SANITIZE_SPECIAL_CHARS));
+        $instanceEntity = new InstanceEntity();
+        $instanceEntity->setUrl(Filter::filterVar($request->get('url'), FILTER_VALIDATE_URL));
+        $instanceEntity->setInstance(Filter::filterVar($request->get('instance'), FILTER_SANITIZE_SPECIAL_CHARS));
+        $instanceEntity->setComment(Filter::filterVar($request->get('comment'), FILTER_SANITIZE_SPECIAL_CHARS));
 
         // Original data
         $originalData = $currentClient->getById($instanceId);
 
-        if ($originalData->url !== $updatedData->getUrl() && !$instance->getConfig('isMaster')) {
+        if ($originalData->url !== $instanceEntity->getUrl() && !$instance->getConfig('isMaster')) {
             $moveInstance = true;
         }
 
-        if (is_null($updatedData->getUrl())) {
+        if (is_null($instanceEntity->getUrl())) {
             $result = ['updateError' => $this->configuration->getDb()->error()];
-        } else {
-            if ($updatedClient->update($instanceId, $updatedData)) {
-                if ($moveInstance) {
-                    $updatedClient->moveClientFolder($originalData->url, $updatedData->getUrl());
-                    $updatedClient->deleteClientFolder($originalData->url);
-                }
-                $result = ['updateSuccess' => Translation::get('ad_config_saved')];
-            } else {
-                $result = ['updateError' => $this->configuration->getDb()->error()];
+        } elseif ($updatedClient->update($instanceId, $instanceEntity)) {
+            if ($moveInstance) {
+                $updatedClient->moveClientFolder($originalData->url, $instanceEntity->getUrl());
+                $updatedClient->deleteClientFolder($originalData->url);
             }
+
+            $result = ['updateSuccess' => Translation::get('ad_config_saved')];
+        } else {
+            $result = ['updateError' => $this->configuration->getDb()->error()];
         }
 
         return $this->render(

@@ -125,29 +125,26 @@ class CommentController extends AbstractController
                 }
 
                 return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
-            } else {
-                $session->userTracking('error_save_comment', $commentId);
-                return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(
-                ['error' => 'Please add your name, your e-mail address and a comment!'],
-                Response::HTTP_BAD_REQUEST
-            );
+
+            $session->userTracking('error_save_comment', $commentId);
+            return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(
+            ['error' => 'Please add your name, your e-mail address and a comment!'],
+            Response::HTTP_BAD_REQUEST
+        );
     }
 
     /**
      * @throws \Exception
      */
-    private function isCommentAllowed(CurrentUser $user): bool
+    private function isCommentAllowed(CurrentUser $currentUser): bool
     {
-        if (
-            !$this->configuration->get('records.allowCommentsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::COMMENT_ADD->value)
-        ) {
-            return false;
-        }
-        return true;
+        return !(!$this->configuration->get('records.allowCommentsForGuests') && !$currentUser->perm->hasPermission(
+            $currentUser->getUserId(),
+            PermissionType::COMMENT_ADD->value
+        ));
     }
 }

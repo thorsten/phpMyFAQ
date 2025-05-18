@@ -20,7 +20,9 @@ namespace phpMyFAQ\Auth\WebAuthn;
 class WebAuthnUser
 {
     private string $id;
+
     private string $name;
+
     private string $webAuthnKeys;
 
     public function getId(): string

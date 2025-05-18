@@ -99,6 +99,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      * @param mixed $right  Rights
      * @throws Exception
      */
+    #[\Override]
     public function hasPermission(int $userId, mixed $right): bool
     {
         $currentUser = new CurrentUser($this->configuration);
@@ -551,6 +552,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @return array<int>
      */
+    #[\Override]
     public function getAllUserRights(int $userId): array
     {
         if ($userId <= 0) {
@@ -569,6 +571,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      *
      * @param CurrentUser $currentUser User object
      */
+    #[\Override]
     public function getUserRightsCount(CurrentUser $currentUser): int
     {
         $userRights = $this->getAllUserRights($currentUser->getUserId());

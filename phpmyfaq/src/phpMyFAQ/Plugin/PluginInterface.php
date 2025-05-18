@@ -23,50 +23,38 @@ interface PluginInterface
 {
     /**
      * Returns the name of the plugin
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Returns the version of the plugin
-     *
-     * @return string
      */
     public function getVersion(): string;
 
     /**
      * Returns the description of the plugin
-     *
-     * @return string
      */
     public function getDescription(): string;
 
     /**
      * Returns the author of the plugin
-     *
-     * @return string
      */
     public function getAuthor(): string;
 
     /**
      * Returns the dependencies of the plugin
-     *
-     * @return array
      */
     public function getDependencies(): array;
 
     /**
      * Returns the configuration of the plugin
-     *
-     * @return array
      */
     public function getConfig(): array;
 
     /**
      * Register the events
      *
-     * @param EventDispatcherInterface $dispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function registerEvents(EventDispatcherInterface $dispatcher): void;
+    public function registerEvents(EventDispatcherInterface $eventDispatcher): void;
 }

@@ -54,6 +54,7 @@ readonly class QueryHelper
                     implode(', ', $this->groups)
                 );
             }
+
             return sprintf(
                 'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
                 $this->user,
@@ -67,6 +68,7 @@ readonly class QueryHelper
                 $this->user
             );
         }
+
         return 'AND fdu.user_id = -1';
     }
 

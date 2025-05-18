@@ -133,7 +133,7 @@ class Relation
             }
         }
 
-        if (strlen((string) $this->configuration->getLanguage()->getLanguage()) > 0) {
+        if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s'",
                 $this->configuration->getLanguage()->getLanguage()
@@ -217,7 +217,7 @@ class Relation
             );
         }
 
-        if (strlen((string) $this->configuration->getLanguage()->getLanguage()) > 0) {
+        if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
             $query .= sprintf(
                 " AND fd.lang = '%s' AND fc.lang = '%s'",
                 $this->configuration->getLanguage()->getLanguage(),

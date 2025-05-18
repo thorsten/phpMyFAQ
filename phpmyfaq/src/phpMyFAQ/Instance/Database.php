@@ -97,6 +97,7 @@ class Database
 
             return self::$driver;
         }
+
         throw new Exception('Invalid Database Type: ' . $type);
     }
 

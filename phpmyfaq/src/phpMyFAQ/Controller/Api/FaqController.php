@@ -99,10 +99,8 @@ class FaqController extends AbstractController
         try {
             $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
             return $this->json($result, Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (CommonMarkException $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception | CommonMarkException $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -178,9 +176,9 @@ class FaqController extends AbstractController
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
             return $this->json($result, Response::HTTP_NOT_FOUND);
-        } else {
-            return $this->json($result, Response::HTTP_OK);
         }
+
+        return $this->json($result, Response::HTTP_OK);
     }
 
     /**
@@ -243,8 +241,8 @@ class FaqController extends AbstractController
         try {
             $result = $faq->getFaqsByIds($recordIds);
             return $this->json($result, Response::HTTP_OK);
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -264,7 +262,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'If there\'s at least one popular FAQ.',
+        description: "If there's at least one popular FAQ.",
         content: new OA\JsonContent(example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
@@ -277,7 +275,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s not a single popular FAQ.',
+        description: "If there's not a single popular FAQ.",
         content: new OA\JsonContent(example: []),
     )]
     public function getPopular(): JsonResponse
@@ -314,7 +312,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'If there\'s at least one latest FAQ.',
+        description: "If there's at least one latest FAQ.",
         content: new OA\JsonContent(example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
@@ -327,7 +325,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s not one latest FAQ.',
+        description: "If there's not one latest FAQ.",
         content: new OA\JsonContent(example: []),
     )]
     public function getLatest(): JsonResponse
@@ -363,7 +361,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'If there\'s at least one trending FAQ.',
+        description: "If there's at least one trending FAQ.",
         content: new OA\JsonContent(example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
@@ -376,7 +374,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s not a single trending FAQ.',
+        description: "If there's not a single trending FAQ.",
         content: new OA\JsonContent(example: []),
     )]
     public function getTrending(): JsonResponse
@@ -412,7 +410,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'If there\'s at least one sticky FAQ.',
+        description: "If there's at least one sticky FAQ.",
         content: new OA\JsonContent(example: '[
             {
                 "question": "How can I survive without phpMyFAQ?",
@@ -430,7 +428,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s not one sticky FAQ.',
+        description: "If there's not one sticky FAQ.",
         content: new OA\JsonContent(example: []),
     )]
     public function getSticky(): JsonResponse
@@ -466,7 +464,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: 'If there\'s at least one FAQ.',
+        description: "If there's at least one FAQ.",
         content: new OA\JsonContent(example: '[
             {
                 "id": "1",
@@ -491,7 +489,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 404,
-        description: 'If there\'s not one single FAQ.',
+        description: "If there's not one single FAQ.",
         content: new OA\JsonContent(example: []),
     )]
     public function list(): JsonResponse
@@ -588,7 +586,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 400,
-        description: 'If something didn\'t worked out.',
+        description: "If something didn't worked out.",
         content: new OA\JsonContent(
             example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
         )
@@ -665,8 +663,8 @@ class FaqController extends AbstractController
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
-        $faqData = new FaqEntity();
-        $faqData
+        $faqEntity = new FaqEntity();
+        $faqEntity
             ->setLanguage($languageCode)
             ->setQuestion($question)
             ->setAnswer($answer)
@@ -678,7 +676,7 @@ class FaqController extends AbstractController
             ->setComment(false)
             ->setNotes('');
 
-        $faqId = $faq->create($faqData);
+        $faqId = $faq->create($faqEntity);
 
         $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
         $faqMetaData
@@ -745,8 +743,8 @@ class FaqController extends AbstractController
                 "language": "de",
                 "category-id": 1,
                 "question": "Is this the world we updated?",
-                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the ' .
-                    'end, is this what we\'re all living for today",
+                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the " .
+                    "end, is this what we\'re all living for today",
                 "keywords": "phpMyFAQ, FAQ, Foo, Bar",
                 "author": "Freddie Mercury",
                 "email": "freddie.mercury@example.org",
@@ -762,7 +760,7 @@ class FaqController extends AbstractController
     )]
     #[OA\Response(
         response: 400,
-        description: 'If something didn\'t worked out.',
+        description: "If something didn't worked out.",
         content: new OA\JsonContent(
             example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
         )
@@ -811,8 +809,8 @@ class FaqController extends AbstractController
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
-        $faqData = new FaqEntity();
-        $faqData
+        $faqEntity = new FaqEntity();
+        $faqEntity
             ->setId($faqId)
             ->setRevisionId(0)
             ->setLanguage($languageCode)
@@ -826,7 +824,7 @@ class FaqController extends AbstractController
             ->setComment(false)
             ->setNotes('');
 
-        $faq->update($faqData);
+        $faq->update($faqEntity);
 
         return $this->json(['stored' => true], Response::HTTP_OK);
     }

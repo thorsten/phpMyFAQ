@@ -228,9 +228,9 @@ readonly class Comments
             %s
             WHERE
                 type = '%s'",
-            ($type == CommentType::FAQ) ? "fcg.category_id,\n" : '',
+            ($type === CommentType::FAQ) ? "fcg.category_id,\n" : '',
             Database::getTablePrefix(),
-            ($type == CommentType::FAQ) ? 'LEFT JOIN
+            ($type === CommentType::FAQ) ? 'LEFT JOIN
                 ' . Database::getTablePrefix() . "faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
@@ -260,6 +260,7 @@ readonly class Comments
 
         return $comments;
     }
+
     /**
      * Checks, if comments are disabled for the FAQ record.
      *

@@ -40,11 +40,7 @@ use phpMyFAQ\Permission\MediumPermission;
 class Permission
 {
     /**
-     * Permission::selectPerm() returns an instance of an implementation of the Permission interface.
-     *
-     * @param  string        $permLevel
-     * @param  Configuration $configuration
-     * @return BasicPermission|MediumPermission
+     * Permission::createPermission() returns an instance of an implementation of the Permission interface.
      */
     public static function createPermission(
         string $permLevel,

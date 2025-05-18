@@ -122,10 +122,11 @@ class QuestionController extends AbstractController
 
         $category = new Category($this->configuration);
         $category->getCategoryData($categoryId);
+
         $categories = $category->getAllCategories();
 
-        $questionHelper = new Notification($this->configuration);
-        $questionHelper->sendQuestionSuccessMail($questionEntity, $categories);
+        $notification = new Notification($this->configuration);
+        $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
     }

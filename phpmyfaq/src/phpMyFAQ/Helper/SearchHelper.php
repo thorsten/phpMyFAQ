@@ -229,6 +229,7 @@ class SearchHelper extends AbstractHelper
 
         return $results;
     }
+
     /**
      * Renders the scoring stars
      */

@@ -87,15 +87,20 @@ class FaqController extends AbstractController
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
+
         if (
-            !empty($author) && !empty($email) && ($questionText !== '' && $questionText !== '0') &&
+            $author !== '' &&
+            $author !== '0' &&
+            ($email !== '' && $email !== '0') &&
+            ($questionText !== '' && $questionText !== '0') &&
             $stopWords->checkBannedWord(strip_tags($questionText))
         ) {
-            if (!empty($answer)) {
+            if ($answer !== '' && $answer !== '0') {
                 $stopWords->checkBannedWord(strip_tags($answer));
             } else {
                 $answer = '';
             }
+
             $session->userTracking('save_new_entry', 0);
 
             $autoActivate = $this->configuration->get('records.defaultActivation');
@@ -163,19 +168,19 @@ class FaqController extends AbstractController
                 ],
                 Response::HTTP_OK
             );
-        } else {
-            return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
     }
 
-    private function isAddingFaqsAllowed(CurrentUser $user): bool
+    /**
+     * @throws \Exception
+     */
+    private function isAddingFaqsAllowed(CurrentUser $currentUser): bool
     {
-        if (
-            !$this->configuration->get('records.allowNewFaqsForGuests') &&
-            !$user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value)
-        ) {
-            return false;
-        }
-        return true;
+        return !(!$this->configuration->get('records.allowNewFaqsForGuests') && !$currentUser->perm->hasPermission(
+            $currentUser->getUserId(),
+            PermissionType::FAQ_ADD->value,
+        ));
     }
 }
