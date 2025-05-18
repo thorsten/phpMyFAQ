@@ -32,7 +32,7 @@ class TwoFactor
 {
     private TwoFactorAuth $twoFactorAuth;
 
-    private EndroidQrCodeProvider $qrCodeProvider;
+    private EndroidQrCodeProvider $endroidQrCodeProvider;
 
     /**
      * @throws TwoFactorAuthException
@@ -41,9 +41,9 @@ class TwoFactor
         private readonly Configuration $configuration,
         private readonly CurrentUser $currentUser
     ) {
-        $this->qrCodeProvider = new EndroidQrCodeProvider();
+        $this->endroidQrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
-            $this->qrCodeProvider,
+            $this->endroidQrCodeProvider,
             $this->configuration->get('main.titleFAQ'),
             6,
             30,
@@ -107,8 +107,8 @@ class TwoFactor
 
         return sprintf(
             'data:%s;base64,%s',
-            $this->qrCodeProvider->getMimeType(),
-            base64_encode($this->qrCodeProvider->getQRCodeImage($qrCodeText, 200))
+            $this->endroidQrCodeProvider->getMimeType(),
+            base64_encode($this->endroidQrCodeProvider->getQRCodeImage($qrCodeText, 200))
         );
     }
 }

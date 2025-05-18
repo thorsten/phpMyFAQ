@@ -388,9 +388,9 @@ class Configuration
     /**
      * Sets the Elasticsearch configuration.
      */
-    public function setElasticsearchConfig(ElasticsearchConfiguration $configuration): void
+    public function setElasticsearchConfig(ElasticsearchConfiguration $elasticsearchConfiguration): void
     {
-        $this->config['core.elasticsearchConfig'] = $configuration;
+        $this->config['core.elasticsearchConfig'] = $elasticsearchConfiguration;
     }
 
     /**
@@ -401,9 +401,9 @@ class Configuration
         return $this->config['core.elasticsearchConfig'];
     }
 
-    public function setOpenSearchConfig(OpenSearchConfiguration $configuration): void
+    public function setOpenSearchConfig(OpenSearchConfiguration $openSearchConfiguration): void
     {
-        $this->config['core.openSearchConfig'] = $configuration;
+        $this->config['core.openSearchConfig'] = $openSearchConfiguration;
     }
 
     public function getOpenSearchConfig(): OpenSearchConfiguration

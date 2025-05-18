@@ -26,8 +26,6 @@ abstract class AbstractEntry implements \Stringable
 {
     /**
      * Path to the entry in the filesystem.
-     *
-     * @var string
      */
     protected string $path;
 
@@ -57,8 +55,6 @@ abstract class AbstractEntry implements \Stringable
 
     /**
      * Delete this file.
-     *
-     * @return bool
      */
     abstract public function delete(): bool;
 

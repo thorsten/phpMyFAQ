@@ -41,10 +41,10 @@ class CreateLinkTwigExtension extends AbstractExtension
         );
 
         $category = new Category($configuration);
-        $categoryData = $category->getCategoryData($categoryId);
+        $categoryEntity = $category->getCategoryData($categoryId);
 
         $link = new Link($url, $configuration);
-        $link->itemTitle = $categoryData->getName();
+        $link->itemTitle = $categoryEntity->getName();
 
         return $link->toString();
     }

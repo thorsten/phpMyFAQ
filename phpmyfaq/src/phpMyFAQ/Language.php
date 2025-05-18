@@ -207,11 +207,7 @@ class Language
             return $detectedLanguage['artget'];
         }
 
-        if (isset($detectedLanguage['session'])) {
-            return $detectedLanguage['session'];
-        }
-
-        return $detectedLanguage['detection'] ?? $detectedLanguage['config'] ?? 'en';
+        return $detectedLanguage['session'] ?? $detectedLanguage['detection'] ?? $detectedLanguage['config'] ?? 'en';
     }
 
     /**

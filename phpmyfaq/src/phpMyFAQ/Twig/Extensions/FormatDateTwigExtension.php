@@ -27,8 +27,8 @@ class FormatDateTwigExtension extends AbstractExtension
     #[asTwigFilter('formatDate')]
     public static function formatDate(string $string): string
     {
-        $faqConfig = Configuration::getConfigurationInstance();
-        $date = new Date($faqConfig);
+        $configuration = Configuration::getConfigurationInstance();
+        $date = new Date($configuration);
         return $date->format($string);
     }
 }

@@ -341,6 +341,7 @@ class CategoryController extends AbstractAdministrationController
         $seoEntity->setSeoType(SeoType::CATEGORY);
         $seoEntity->setReferenceId($categoryId);
         $seoEntity->setReferenceLanguage($categoryEntity->getLang());
+
         $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
 
         $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
@@ -440,6 +441,7 @@ class CategoryController extends AbstractAdministrationController
         foreach ($allLanguages as $language) {
             $languages[$language] = LanguageCodes::get($language);
         }
+
         asort($languages);
 
         $translations = [];
@@ -667,62 +669,59 @@ class CategoryController extends AbstractAdministrationController
                     'errorMessage' => $this->configuration->getDb()->error(),
                 ];
             }
-        } else {
-            if ($category->update($categoryEntity)) {
-                $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
-                $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
-                $categoryPermission->add(
-                    Permission::USER,
-                    [$categoryEntity->getId()],
-                    $permissions['restricted_user']
-                );
-                $categoryPermission->add(
-                    Permission::GROUP,
-                    [$categoryEntity->getId()],
-                    $permissions['restricted_groups']
-                );
+        } elseif ($category->update($categoryEntity)) {
+            $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
+            $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
+            $categoryPermission->add(
+                Permission::USER,
+                [$categoryEntity->getId()],
+                $permissions['restricted_user']
+            );
+            $categoryPermission->add(
+                Permission::GROUP,
+                [$categoryEntity->getId()],
+                $permissions['restricted_groups']
+            );
 
-                if ($categoryImage->getFileName($categoryId, $categoryLang)) {
-                    try {
-                        $categoryImage->upload();
-                    } catch (Exception $exception) {
-                        $templateVars = [
-                            ...$templateVars,
-                            'isWarning' => true,
-                            'warningMessage' => $exception->getMessage(),
-                        ];
-                    }
+            if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+                try {
+                    $categoryImage->upload();
+                } catch (Exception $exception) {
+                    $templateVars = [
+                        ...$templateVars,
+                        'isWarning' => true,
+                        'warningMessage' => $exception->getMessage(),
+                    ];
                 }
-
-                // SEO data
-                $seoEntity = new SeoEntity();
-                $seoEntity
-                    ->setSeoType(SeoType::CATEGORY)
-                    ->setReferenceId($categoryId)
-                    ->setReferenceLanguage($categoryLang)
-                    ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
-                    ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
-
-                if ($seo->get(clone $seoEntity)->getId() === null) {
-                    $seo->create($seoEntity);
-                } else {
-                    $seo->update($seoEntity);
-                }
-
-                $templateVars = [
-                    ...$templateVars,
-                    'isSuccess' => true,
-                    'successMessage' => Translation::get('ad_categ_updated')
-                ];
-            } else {
-                $templateVars = [
-                    ...$templateVars,
-                    'isError' => true,
-                    'errorMessage' => $this->configuration->getDb()->error(),
-                ];
             }
-        }
 
+            // SEO data
+            $seoEntity = new SeoEntity();
+            $seoEntity
+                ->setSeoType(SeoType::CATEGORY)
+                ->setReferenceId($categoryId)
+                ->setReferenceLanguage($categoryLang)
+                ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
+
+            if ($seo->get(clone $seoEntity)->getId() === null) {
+                $seo->create($seoEntity);
+            } else {
+                $seo->update($seoEntity);
+            }
+
+            $templateVars = [
+                ...$templateVars,
+                'isSuccess' => true,
+                'successMessage' => Translation::get('ad_categ_updated')
+            ];
+        } else {
+            $templateVars = [
+                ...$templateVars,
+                'isError' => true,
+                'errorMessage' => $this->configuration->getDb()->error(),
+            ];
+        }
 
         return $this->render(
             '@admin/content/category.main.twig',

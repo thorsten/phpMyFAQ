@@ -81,6 +81,7 @@ class NewsMessage
         $this->header = $header;
         return $this;
     }
+
     public function getMessage(): string
     {
         return $this->message;
@@ -118,6 +119,7 @@ class NewsMessage
     {
         return $this->email;
     }
+
     public function setEmail(string $email): NewsMessage
     {
         $this->email = $email;

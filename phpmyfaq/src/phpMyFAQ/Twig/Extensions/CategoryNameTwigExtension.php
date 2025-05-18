@@ -31,7 +31,7 @@ class CategoryNameTwigExtension extends AbstractExtension
     {
         $category = new Category(Configuration::getConfigurationInstance());
 
-        $categoryData = $category->getCategoryData($categoryId);
-        return $categoryData->getName();
+        $categoryEntity = $category->getCategoryData($categoryId);
+        return $categoryEntity->getName();
     }
 }

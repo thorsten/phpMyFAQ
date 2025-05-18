@@ -98,7 +98,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         if (file_exists($filePath)) {
             $this->realHash = md5_file($filePath);
             $this->filesize = filesize($filePath);
-            $this->filename = null === $filename ? basename($filePath) : $filename;
+            $this->filename = $filename ?? basename($filePath);
 
             $this->saveMeta();
 
@@ -172,7 +172,6 @@ class File extends AbstractAttachment implements AttachmentInterface
      * Factory method to initialize the corresponding file object.
      *
      * @param string $mode File mode for file open
-     * @return VanillaFile|EncryptedFile
      * @throws AttachmentException
      */
     private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile

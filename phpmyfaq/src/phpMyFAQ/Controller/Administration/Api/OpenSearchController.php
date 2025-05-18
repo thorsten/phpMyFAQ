@@ -99,9 +99,9 @@ class OpenSearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $openSearchConfig = $this->configuration->getOpenSearchConfig();
+        $openSearchConfiguration = $this->configuration->getOpenSearchConfig();
 
-        $indexName = $openSearchConfig->getIndex();
+        $indexName = $openSearchConfiguration->getIndex();
 
         return $this->json(
             [

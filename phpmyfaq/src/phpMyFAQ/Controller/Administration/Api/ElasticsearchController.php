@@ -97,9 +97,9 @@ class ElasticsearchController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $elasticsearchConfig = $this->configuration->getElasticsearchConfig();
+        $elasticsearchConfiguration = $this->configuration->getElasticsearchConfig();
 
-        $indexName = $elasticsearchConfig->getIndex();
+        $indexName = $elasticsearchConfiguration->getIndex();
         try {
             return $this->json(
                 [

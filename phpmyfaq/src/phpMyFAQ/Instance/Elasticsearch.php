@@ -35,7 +35,7 @@ class Elasticsearch
 {
     protected Client $client;
 
-    protected ElasticsearchConfiguration $esConfig;
+    protected ElasticsearchConfiguration $elasticsearchConfiguration;
 
     /**
      * Elasticsearch mapping
@@ -75,7 +75,7 @@ class Elasticsearch
     public function __construct(protected Configuration $configuration)
     {
         $this->client = $configuration->getElasticsearch();
-        $this->esConfig = $configuration->getElasticsearchConfig();
+        $this->elasticsearchConfiguration = $configuration->getElasticsearchConfig();
     }
 
     /**
@@ -101,7 +101,7 @@ class Elasticsearch
     private function getParams(): array
     {
         return [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'body' => [
                 'settings' => [
                     'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
@@ -146,15 +146,15 @@ class Elasticsearch
 
         if (
             0 === (
-            is_countable($response[$this->esConfig->getIndex()]['mappings'])
+            is_countable($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
                 ?
-                count($response[$this->esConfig->getIndex()]['mappings'])
+                count($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
                 :
                 0
             )
         ) {
             $params = [
-                'index' => $this->esConfig->getIndex(),
+                'index' => $this->elasticsearchConfiguration->getIndex(),
                 'body' => $this->mappings
             ];
 
@@ -190,9 +190,13 @@ class Elasticsearch
     public function dropIndex(): object
     {
         try {
-            return $this->client->indices()->delete(['index' => $this->esConfig->getIndex()])->asObject();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
-            throw new Exception($e->getMessage());
+            return $this->client->indices()->delete(
+                [
+                    'index' => $this->elasticsearchConfiguration->getIndex()
+                ]
+            )->asObject();
+        } catch (ClientResponseException | MissingParameterException | ServerResponseException $exception) {
+            throw new Exception($exception->getMessage());
         }
     }
 
@@ -204,7 +208,7 @@ class Elasticsearch
     public function index(array $faq): ?object
     {
         $params = [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'id' => $faq['id'],
@@ -242,7 +246,7 @@ class Elasticsearch
 
             $params['body'][] = [
                 'index' => [
-                    '_index' => $this->esConfig->getIndex(),
+                    '_index' => $this->elasticsearchConfiguration->getIndex(),
                     '_id' => $faq['solution_id'],
                 ]
             ];
@@ -293,7 +297,7 @@ class Elasticsearch
     public function update(array $faq): array
     {
         $params = [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'id' => $faq['solution_id'],
             'body' => [
                 'doc' => [
@@ -322,7 +326,7 @@ class Elasticsearch
     public function delete(int $solutionId): array
     {
         $params = [
-            'index' => $this->esConfig->getIndex(),
+            'index' => $this->elasticsearchConfiguration->getIndex(),
             'id' => $solutionId
         ];
 

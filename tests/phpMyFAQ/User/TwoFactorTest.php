@@ -115,7 +115,7 @@ class TwoFactorTest extends TestCase
             ->willReturn('fakeimage');
 
         $reflection = new \ReflectionClass($this->twoFactor);
-        $property = $reflection->getProperty('qrCodeProvider');
+        $property = $reflection->getProperty('endroidQrCodeProvider');
         $property->setAccessible(true);
         $property->setValue($this->twoFactor, $qrCodeProvider);
 

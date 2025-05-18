@@ -142,32 +142,28 @@ class Permission
             $permissions += [
                 'restricted_user' => [-1],
             ];
+        } elseif (is_string($data->restricted_users)) {
+            $permissions += [
+                'restricted_user' => [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)],
+            ];
         } else {
-            if (is_string($data->restricted_users)) {
-                $permissions += [
-                    'restricted_user' => [Filter::filterVar($data->restricted_users, FILTER_VALIDATE_INT)],
-                ];
-            } else {
-                $permissions += [
-                    'restricted_user' => Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT),
-                ];
-            }
+            $permissions += [
+                'restricted_user' => Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT),
+            ];
         }
 
         if ('all' === Filter::filterVar($data->grouppermission, FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_groups' => [-1],
             ];
+        } elseif (is_string($data->restricted_groups)) {
+            $permissions += [
+                'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)]
+            ];
         } else {
-            if (is_string($data->restricted_groups)) {
-                $permissions += [
-                    'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)]
-                ];
-            } else {
-                $permissions += [
-                    'restricted_groups' => Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
-                ];
-            }
+            $permissions += [
+                'restricted_groups' => Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
+            ];
         }
 
         return $permissions;

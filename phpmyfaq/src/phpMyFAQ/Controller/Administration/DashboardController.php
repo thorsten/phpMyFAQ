@@ -87,33 +87,31 @@ class DashboardController extends AbstractAdministrationController
 
         if ($this->currentUser->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
             $version = Filter::filterVar($request->get('param'), FILTER_SANITIZE_SPECIAL_CHARS);
-            if (!$this->configuration->get('main.enableAutoUpdateHint')) {
-                if ($version === 'version') {
-                    try {
-                        $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
-                        if (-1 === version_compare($versions['installed'], $versions['stable'])) {
-                            $templateVars = [
-                                ...$templateVars,
-                                'adminDashboardShouldUpdateMessage' => true,
-                                'adminDashboardLatestVersionMessage' => Translation::get('ad_you_should_update'),
-                                'adminDashboardVersions' => $versions,
-
-                            ];
-                        } else {
-                            $templateVars = [
-                                ...$templateVars,
-                                'adminDashboardShouldUpdateMessage' => false,
-                                'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
-                                'adminDashboardVersions' => $versions,
-
-                            ];
-                        }
-                    } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+            if (!$this->configuration->get('main.enableAutoUpdateHint') && $version === 'version') {
+                try {
+                    $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
+                    if (-1 === version_compare($versions['installed'], $versions['stable'])) {
                         $templateVars = [
                             ...$templateVars,
-                            'adminDashboardErrorMessage' => $e->getMessage()
+                            'adminDashboardShouldUpdateMessage' => true,
+                            'adminDashboardLatestVersionMessage' => Translation::get('ad_you_should_update'),
+                            'adminDashboardVersions' => $versions,
+
+                        ];
+                    } else {
+                        $templateVars = [
+                            ...$templateVars,
+                            'adminDashboardShouldUpdateMessage' => false,
+                            'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
+                            'adminDashboardVersions' => $versions,
+
                         ];
                     }
+                } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+                    $templateVars = [
+                        ...$templateVars,
+                        'adminDashboardErrorMessage' => $e->getMessage()
+                    ];
                 }
             }
 

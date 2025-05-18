@@ -94,71 +94,71 @@ class ConfigurationTabController extends AbstractController
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $csrfToken)) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
-        } else {
-            // Set the new values
-            $newConfigValues = [];
-            $escapeValues = [
-                'main.contactInformation',
-                'main.customPdfHeader',
-                'main.customPdfFooter',
-                'main.titleFAQ',
-            ];
-
-            // Special checks
-            if (isset($configurationData['main.enableMarkdownEditor'])) {
-                $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
-            }
-
-            if (isset($configurationData['main.currentVersion'])) {
-                unset($configurationData['main.currentVersion']); // don't update the version number
-            }
-
-            if (isset($configurationData['records.attachmentsPath'])) {
-                if (false !== realpath($configurationData['records.attachmentsPath'])) {
-                    $configurationData['records.attachmentsPath'] = str_replace(
-                        Request::createFromGlobals()->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
-                        '',
-                        realpath($configurationData['records.attachmentsPath'])
-                    );
-                } else {
-                    unset($configurationData['records.attachmentsPath']);
-                }
-            }
-
-            if (
-                isset($configurationData['main.referenceURL']) &&
-                is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
-            ) {
-                unset($configurationData['main.referenceURL']);
-            }
-
-            foreach ($configurationData as $key => $value) {
-                $newConfigValues[$key] = (string) $value;
-                // Escape some values
-                if (isset($escapeValues[$key])) {
-                    $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
-                }
-            }
-
-            foreach ($oldConfigurationData as $key => $value) {
-                $newValueExists = array_key_exists($key, $newConfigValues);
-                if (!$newValueExists) {
-                    $newConfigValues[$key] = ($value === 'true') ? 'false' : $value;
-                }
-            }
-
-            // Replace main.referenceUrl in FAQs
-            if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
-                $this->configuration->replaceMainReferenceUrl(
-                    $oldConfigurationData['main.referenceURL'],
-                    $newConfigValues['main.referenceURL']
-                );
-            }
-
-            $this->configuration->update($newConfigValues);
-
-            return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
         }
+
+        // Set the new values
+        $newConfigValues = [];
+        $escapeValues = [
+            'main.contactInformation',
+            'main.customPdfHeader',
+            'main.customPdfFooter',
+            'main.titleFAQ',
+        ];
+
+        // Special checks
+        if (isset($configurationData['main.enableMarkdownEditor'])) {
+            $configurationData['main.enableWysiwygEditor'] = false; // Disable WYSIWYG editor if Markdown is enabled
+        }
+
+        if (isset($configurationData['main.currentVersion'])) {
+            unset($configurationData['main.currentVersion']); // don't update the version number
+        }
+
+        if (isset($configurationData['records.attachmentsPath'])) {
+            if (false !== realpath($configurationData['records.attachmentsPath'])) {
+                $configurationData['records.attachmentsPath'] = str_replace(
+                    Request::createFromGlobals()->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
+                    '',
+                    realpath($configurationData['records.attachmentsPath'])
+                );
+            } else {
+                unset($configurationData['records.attachmentsPath']);
+            }
+        }
+
+        if (
+            isset($configurationData['main.referenceURL']) &&
+            is_null(Filter::filterVar($configurationData['main.referenceURL'], FILTER_VALIDATE_URL))
+        ) {
+            unset($configurationData['main.referenceURL']);
+        }
+
+        foreach ($configurationData as $key => $value) {
+            $newConfigValues[$key] = (string) $value;
+            // Escape some values
+            if (isset($escapeValues[$key])) {
+                $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
+            }
+        }
+
+        foreach ($oldConfigurationData as $key => $value) {
+            $newValueExists = array_key_exists($key, $newConfigValues);
+            if (!$newValueExists) {
+                $newConfigValues[$key] = ($value === 'true') ? 'false' : $value;
+            }
+        }
+
+        // Replace main.referenceUrl in FAQs
+        if ($oldConfigurationData['main.referenceURL'] !== $newConfigValues['main.referenceURL']) {
+            $this->configuration->replaceMainReferenceUrl(
+                $oldConfigurationData['main.referenceURL'],
+                $newConfigValues['main.referenceURL']
+            );
+        }
+
+        $this->configuration->update($newConfigValues);
+
+        return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
     }
 
     /**
@@ -183,6 +183,7 @@ class ConfigurationTabController extends AbstractController
                 true
             ));
         }
+
         return $response->setContent('<option value="language_en.php">English</option>');
     }
 

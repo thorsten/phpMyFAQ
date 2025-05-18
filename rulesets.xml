@@ -15,5 +15,11 @@
     <rule ref="rulesets/controversial.xml" />
     <rule ref="rulesets/design.xml" />
     <rule ref="rulesets/naming.xml" />
+    <rule ref="rulesets/naming.xml/LongVariable">
+        <properties>
+            <property name="subtract-suffixes" value="Elasticsearch" />
+            <property name="subtract-suffixes" value="OpenSearch" />
+        </properties>
+    </rule>
     <rule ref="rulesets/unusedcode.xml" />
 </ruleset>
