@@ -103,6 +103,7 @@ class BackupController extends AbstractAdministrationController
                 } catch (SodiumException) {
                     // Handle exception
                 }
+
                 break;
             case 'logs':
                 $backupQueries = $backup->generateBackupQueries($tableNames);
@@ -123,6 +124,7 @@ class BackupController extends AbstractAdministrationController
                 } catch (SodiumException) {
                     // Handle exception
                 }
+
                 break;
         }
     }
@@ -195,6 +197,7 @@ class BackupController extends AbstractAdministrationController
                 for ($h = 0; $h < $numTables; ++$h) {
                     $queries[] = sprintf('DELETE FROM %s', $tables[$h]);
                 }
+
                 $ok = 1;
             }
 
@@ -211,7 +214,7 @@ class BackupController extends AbstractAdministrationController
                     if (Strings::substr($backupData, 0, $backupPrefixPatternLength) === $backupPrefixPattern) {
                         $tablePrefix = trim(Strings::substr($backupData, $backupPrefixPatternLength));
                     }
-                    if ((Strings::substr($backupData, 0, 2) != '--') && ($backupData != '')) {
+                    if ((Strings::substr($backupData, 0, 2) !== '--') && ($backupData !== '')) {
                         $queries[] = trim(Strings::substr($backupData, 0, -1));
                     }
                 }
@@ -271,7 +274,7 @@ class BackupController extends AbstractAdministrationController
         } else {
             $errorMessage = match ($file->getError()) {
                 1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-                2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' . 'HTML form.',
+                2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
                 3 => 'The uploaded file was only partially uploaded.',
                 4 => 'No file was uploaded.',
                 6 => 'Missing a temporary folder.',

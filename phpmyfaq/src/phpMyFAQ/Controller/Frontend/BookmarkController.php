@@ -19,11 +19,9 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
-use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,9 +54,9 @@ class BookmarkController extends AbstractController
                 'linkText' => Translation::get('removeBookmark'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-bookmark')
             ], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -86,9 +84,9 @@ class BookmarkController extends AbstractController
                 'linkText' => Translation::get('msgAddBookmark'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('add-bookmark')
             ], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -111,8 +109,8 @@ class BookmarkController extends AbstractController
 
         if ($bookmark->removeAll()) {
             return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
     }
 }

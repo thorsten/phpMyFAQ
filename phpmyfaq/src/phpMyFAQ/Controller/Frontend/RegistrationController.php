@@ -31,11 +31,10 @@ class RegistrationController extends AbstractController
 {
     /**
      * @throws \JsonException
-     * @throws Exception
      */
     public function create(Request $request): JsonResponse
     {
-        $registration = new RegistrationHelper($this->configuration);
+        $registrationHelper = new RegistrationHelper($this->configuration);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -48,21 +47,26 @@ class RegistrationController extends AbstractController
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$registration->isDomainAllowed($email)) {
+        if (!$registrationHelper->isDomainAllowed($email)) {
             return $this->json(['error' => 'The domain is not allowed.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!empty($userName) && !empty($email) && !empty($fullName)) {
+        if (
+            $userName !== '' &&
+            $userName !== '0' &&
+            ($email !== '' && $email !== '0') &&
+            ($fullName !== '' && $fullName !== '0')
+        ) {
             try {
                 return $this->json(
-                    $registration->createUser($userName, $fullName, $email, $isVisible),
+                    $registrationHelper->createUser($userName, $fullName, $email, $isVisible),
                     Response::HTTP_CREATED
                 );
             } catch (Exception | TransportExceptionInterface $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
     }
 }

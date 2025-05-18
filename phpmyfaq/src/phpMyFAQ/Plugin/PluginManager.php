@@ -29,14 +29,14 @@ class PluginManager
     /** @var PluginInterface[] */
     private array $plugins = [];
 
-    private EventDispatcher $eventDispatcher;
+    private readonly EventDispatcher $eventDispatcher;
 
     private array $config = [];
 
     /** @var string[] */
     private array $loadedPlugins = [];
 
-    private ContainerBuilder $containerBuilder;
+    private readonly ContainerBuilder $containerBuilder;
 
     public function __construct()
     {
@@ -100,10 +100,10 @@ class PluginManager
      */
     public function triggerEvent(string $eventName, mixed $data = null): string
     {
-        $event = new PluginEvent($data);
-        $this->eventDispatcher->dispatch($event, $eventName);
+        $pluginEvent = new PluginEvent($data);
+        $this->eventDispatcher->dispatch($pluginEvent, $eventName);
 
-        return $event->getOutput();
+        return $pluginEvent->getOutput();
     }
 
     /**
@@ -138,6 +138,7 @@ class PluginManager
         if (preg_match('/^namespace\s+(.+?);/m', $src, $matches)) {
             return $matches[1];
         }
+
         return null;
     }
 

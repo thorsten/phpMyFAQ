@@ -22,19 +22,19 @@ use phpMyFAQ\Enums\SeoType;
 
 class SeoEntity
 {
-    private ?int $id;
+    private ?int $id = null;
 
-    private SeoType $type;
+    private SeoType $seoType;
 
     private int $referenceId;
 
     private string $referenceLanguage;
 
-    private ?string $title;
+    private ?string $title = null;
 
-    private ?string $description;
+    private ?string $description = null;
 
-    private ?string $slug;
+    private ?string $slug = null;
 
     private DateTime $created;
 
@@ -49,14 +49,14 @@ class SeoEntity
         return $this;
     }
 
-    public function getType(): SeoType
+    public function getSeoType(): SeoType
     {
-        return $this->type;
+        return $this->seoType;
     }
 
-    public function setType(SeoType $seoType): SeoEntity
+    public function setSeoType(SeoType $seoType): SeoEntity
     {
-        $this->type = $seoType;
+        $this->seoType = $seoType;
         return $this;
     }
 

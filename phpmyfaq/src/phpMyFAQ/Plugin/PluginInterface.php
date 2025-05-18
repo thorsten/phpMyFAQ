@@ -53,8 +53,6 @@ interface PluginInterface
 
     /**
      * Register the events
-     *
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void;
 }

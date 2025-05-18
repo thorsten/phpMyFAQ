@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AuthHttp extends Auth implements AuthDriverInterface
 {
-    private Request $request;
+    private readonly Request $request;
 
     /**
      * @inheritDoc

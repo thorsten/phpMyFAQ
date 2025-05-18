@@ -51,11 +51,11 @@ class TagController extends AbstractController
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
         $newTag = Filter::filterVar($postData->tag, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $tagEntity = new Tag();
-        $tagEntity->setId($id);
-        $tagEntity->setName($newTag);
+        $tag = new Tag();
+        $tag->setId($id);
+        $tag->setName($newTag);
 
-        if ($this->container->get('phpmyfaq.tags')->update($tagEntity)) {
+        if ($this->container->get('phpmyfaq.tags')->update($tag)) {
             return $this->json(['updated' => Translation::get('ad_entryins_suc')], Response::HTTP_OK);
         }
 

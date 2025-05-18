@@ -76,8 +76,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         try {
             $result = $user->createUser($login, '', $domain);
-        } catch (\Exception $e) {
-            $this->configuration->getLogger()->info($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->configuration->getLogger()->info($exception->getMessage());
         }
 
         $this->connect($this->activeServer);

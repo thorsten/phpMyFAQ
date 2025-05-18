@@ -30,7 +30,7 @@ class SeoTest extends TestCase
     public function testCreate(): void
     {
         $seo = new SeoEntity();
-        $seo->setType(SeoType::FAQ)
+        $seo->setSeoType(SeoType::FAQ)
             ->setReferenceId(1)
             ->setReferenceLanguage('en')
             ->setTitle('Test Title')
@@ -44,7 +44,7 @@ class SeoTest extends TestCase
     public function testGet(): void
     {
         $seo = new SeoEntity();
-        $seo->setType(SeoType::FAQ)
+        $seo->setSeoType(SeoType::FAQ)
             ->setReferenceId(1)
             ->setReferenceLanguage('en')
             ->setTitle('Test Title')
@@ -60,14 +60,14 @@ class SeoTest extends TestCase
     public function testUpdate(): void
     {
         $seo = new SeoEntity();
-        $seo->setType(SeoType::FAQ)
+        $seo->setSeoType(SeoType::FAQ)
             ->setReferenceId(1)
             ->setReferenceLanguage('en')
             ->setTitle('Test Title')
             ->setDescription('Test Description');
         $this->seo->create($seo);
 
-        $seo->setType(SeoType::FAQ)
+        $seo->setSeoType(SeoType::FAQ)
             ->setReferenceId(1)
             ->setReferenceLanguage('en')
             ->setTitle('Updated Title')
@@ -82,7 +82,7 @@ class SeoTest extends TestCase
     public function testDelete(): void
     {
         $seo = new SeoEntity();
-        $seo->setType(SeoType::FAQ)
+        $seo->setSeoType(SeoType::FAQ)
             ->setReferenceId(1)
             ->setReferenceLanguage('en')
             ->setTitle('Test Title')

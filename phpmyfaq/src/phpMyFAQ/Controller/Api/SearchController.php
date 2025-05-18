@@ -100,9 +100,9 @@ class SearchController extends AbstractController
             }
 
             return $this->json($result, Response::HTTP_OK);
-        } else {
-            return $this->json([], Response::HTTP_NOT_FOUND);
         }
+
+        return $this->json([], Response::HTTP_NOT_FOUND);
     }
 
     #[OA\Get(
@@ -146,8 +146,8 @@ class SearchController extends AbstractController
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
-        } else {
-            return $this->json($result, Response::HTTP_OK);
         }
+
+        return $this->json($result, Response::HTTP_OK);
     }
 }

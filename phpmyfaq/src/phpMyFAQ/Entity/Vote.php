@@ -65,6 +65,7 @@ class Vote
         $this->vote = $vote;
         return $this;
     }
+
     public function getUsers(): int
     {
         return $this->users;
@@ -75,6 +76,7 @@ class Vote
         $this->users = $users;
         return $this;
     }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

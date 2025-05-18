@@ -34,9 +34,6 @@ use phpMyFAQ\Core\Exception;
  */
 class Auth
 {
-    /**
-     * @var string
-     */
     private const string PMF_ERROR_USER_NO_AUTH_TYPE = 'Specified authentication access class could not be found.';
 
     /**
@@ -47,7 +44,7 @@ class Auth
     public array $errors = [];
 
     /**
-     * p container that stores the encryption object.
+     * Container that stores the encryption object.
      */
     protected ?Encryption $encContainer = null;
 

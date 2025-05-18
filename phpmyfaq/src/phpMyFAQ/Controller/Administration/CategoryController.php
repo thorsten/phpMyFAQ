@@ -280,7 +280,7 @@ class CategoryController extends AbstractAdministrationController
             // SEO data
             $seoEntity = new SeoEntity();
             $seoEntity
-                ->setType(SeoType::CATEGORY)
+                ->setSeoType(SeoType::CATEGORY)
                 ->setReferenceId($categoryId)
                 ->setReferenceLanguage($categoryLang)
                 ->setTitle(Filter::filterVar($request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
@@ -338,7 +338,7 @@ class CategoryController extends AbstractAdministrationController
         $categoryEntity = $category->getCategoryData($categoryId);
 
         $seoEntity = new SeoEntity();
-        $seoEntity->setType(SeoType::CATEGORY);
+        $seoEntity->setSeoType(SeoType::CATEGORY);
         $seoEntity->setReferenceId($categoryId);
         $seoEntity->setReferenceLanguage($categoryEntity->getLang());
         $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
@@ -643,7 +643,7 @@ class CategoryController extends AbstractAdministrationController
                 // Add SERP-Title and Description to translated category
                 $seoEntity = new SeoEntity();
                 $seoEntity
-                    ->setType(SeoType::CATEGORY)
+                    ->setSeoType(SeoType::CATEGORY)
                     ->setReferenceId($categoryEntity->getId())
                     ->setReferenceLanguage($categoryEntity->getLang())
                     ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
@@ -697,7 +697,7 @@ class CategoryController extends AbstractAdministrationController
                 // SEO data
                 $seoEntity = new SeoEntity();
                 $seoEntity
-                    ->setType(SeoType::CATEGORY)
+                    ->setSeoType(SeoType::CATEGORY)
                     ->setReferenceId($categoryId)
                     ->setReferenceLanguage($categoryLang)
                     ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))

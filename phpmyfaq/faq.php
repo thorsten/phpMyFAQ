@@ -315,7 +315,7 @@ $author = $user->getUserVisibilityByEmail($faq->faqRecord['email']) ? $faq->faqR
 // SEO
 $seoEntity = new SeoEntity();
 $seoEntity
-    ->setType(SeoType::FAQ)
+    ->setSeoType(SeoType::FAQ)
     ->setReferenceId($faq->faqRecord['id'])
     ->setReferenceLanguage($faq->faqRecord['lang']);
 $seoData = $seo->get($seoEntity);

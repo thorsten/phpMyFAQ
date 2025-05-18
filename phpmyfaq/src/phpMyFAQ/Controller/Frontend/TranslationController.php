@@ -41,8 +41,8 @@ class TranslationController extends AbstractController
         try {
             Translation::getInstance()->setCurrentLanguage($language);
             return $this->json(Translation::getAll());
-        } catch (Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

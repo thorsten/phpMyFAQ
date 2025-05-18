@@ -61,8 +61,8 @@ class TagController extends AbstractController
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
-        } else {
-            return $this->json($result, Response::HTTP_OK);
         }
+
+        return $this->json($result, Response::HTTP_OK);
     }
 }

@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/search/term')]
     public function deleteTerm(Request $request): JsonResponse
@@ -54,8 +54,8 @@ class SearchController extends AbstractController
 
         if ($search->deleteSearchTermById($searchId)) {
             return $this->json(['deleted' => $searchId], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => $searchId], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => $searchId], Response::HTTP_BAD_REQUEST);
     }
 }

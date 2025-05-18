@@ -89,6 +89,7 @@ class Pdf extends Export
         // Set PDF options
         $this->wrapper->enableBookmarks = true;
         $this->wrapper->isFullExport = true;
+
         $filename = 'FAQs.pdf';
 
         // Initialize categories
@@ -176,11 +177,8 @@ class Pdf extends Export
     }
 
     /**
-     * Builds the PDF delivery for the given faq.
+     * Builds the PDF delivery for the given FAQ.
      *
-     * @param array       $faqData
-     * @param string|null $filename
-     * @return string
      * @throws CommonMarkException
      * @throws Exception
      */

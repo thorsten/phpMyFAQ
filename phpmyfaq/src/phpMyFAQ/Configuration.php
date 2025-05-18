@@ -517,7 +517,7 @@ class Configuration
         $newContentItems = [];
 
         foreach ($contentItems as $contentItem) {
-            if (str_contains($contentItem->content, $oldUrl)) {
+            if (str_contains((string) $contentItem->content, $oldUrl)) {
                 $newContentItems[] = str_replace($oldUrl, $newUrl, $contentItem->content);
             } else {
                 $newContentItems[] = $contentItem->content;

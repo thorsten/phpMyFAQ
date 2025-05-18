@@ -202,7 +202,7 @@ class FaqController extends AbstractAdministrationController
         // SERP
         $seoEntity = new SeoEntity();
         $seoEntity
-            ->setType(SeoType::FAQ)
+            ->setSeoType(SeoType::FAQ)
             ->setReferenceId($faqId)
             ->setReferenceLanguage($faqLanguage);
         $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);

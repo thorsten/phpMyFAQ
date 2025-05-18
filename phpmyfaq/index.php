@@ -362,7 +362,7 @@ if ($id !== 0) {
     $faq->getFaq($id);
 
     $seoEntity
-        ->setType(SeoType::FAQ)
+        ->setSeoType(SeoType::FAQ)
         ->setReferenceId($id);
     $seoData = $seo->get($seoEntity);
 
@@ -393,7 +393,7 @@ if ($solutionId) {
     $lang = $faqData['lang'];
 
     $seoEntity
-        ->setType(SeoType::FAQ)
+        ->setSeoType(SeoType::FAQ)
         ->setReferenceId($id)
         ->setReferenceLanguage($lang);
     $seoData = $seo->get($seoEntity);
@@ -441,7 +441,7 @@ if ($cat != 0) {
 
 if (isset($cat) && ($cat !== 0) && ($id === 0) && isset($category->categoryName[$cat]['name'])) {
     $seoEntity
-        ->setType(SeoType::CATEGORY)
+        ->setSeoType(SeoType::CATEGORY)
         ->setReferenceId($cat);
     $seoData = $seo->get($seoEntity);
     $title = $seoData->getTitle() ?? $category->categoryName[$cat]['name'];

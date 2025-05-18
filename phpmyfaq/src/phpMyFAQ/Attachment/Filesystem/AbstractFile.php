@@ -34,9 +34,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class AbstractFile extends AbstractEntry
 {
-    /**
-     * Enums.
-     */
     public const string MODE_READ = 'rb';
 
     public const string MODE_APPEND = 'ab';
@@ -80,9 +77,7 @@ abstract class AbstractFile extends AbstractEntry
     }
 
     /**
-     * Get next file chunk.
-     *
-     * @return string
+     * Get the next file chunk.
      */
     abstract public function getChunk(): string;
 
@@ -123,7 +118,7 @@ abstract class AbstractFile extends AbstractEntry
     }
 
     /**
-     * Reopen file in given mode.
+     * Reopen a file in given mode.
      *
      * @param string $mode file mode
      */
@@ -157,8 +152,6 @@ abstract class AbstractFile extends AbstractEntry
 
     /**
      * Self check.
-     *
-     * @return bool
      */
     public function isOk(): bool
     {
@@ -175,7 +168,7 @@ abstract class AbstractFile extends AbstractEntry
     public function deleteDir($path): bool
     {
         if (!file_exists($path)) {
-            throw new FileException(sprintf('Directory %s doesn\'t exist.', $path));
+            throw new FileException(sprintf("Directory %s doesn't exist.", $path));
         }
 
         $it = new RecursiveIteratorIterator(
@@ -187,6 +180,7 @@ abstract class AbstractFile extends AbstractEntry
             if (in_array($file->getBasename(), ['.', '..'])) {
                 continue;
             }
+
             if ($file->isDir()) {
                 rmdir($file->getPathname());
             } elseif ($file->isFile() || $file->isLink()) {

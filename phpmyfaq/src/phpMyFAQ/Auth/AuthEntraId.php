@@ -38,10 +38,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
 
     private string $oAuthChallenge;
 
-    /** @var string */
     private const string ENTRAID_CHALLENGE_METHOD = 'S256';
 
-    /** @var string URL to logout */
     private const string ENTRAID_LOGOUT_URL = 'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0';
 
     /**
@@ -67,8 +65,8 @@ class AuthEntraId extends Auth implements AuthDriverInterface
 
         try {
             $result = $user->createUser($login, '', $domain);
-        } catch (\Exception $e) {
-            $this->configuration->getLogger()->info($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->configuration->getLogger()->info($exception->getMessage());
         }
 
         $user->setStatus('active');

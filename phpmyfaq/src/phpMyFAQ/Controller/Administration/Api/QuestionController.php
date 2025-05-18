@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
+use Exception;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Question;
@@ -30,7 +31,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route('admin/api/question/delete')]
     public function delete(Request $request): JsonResponse
@@ -59,9 +60,9 @@ class QuestionController extends AbstractController
             }
 
             return $this->json(['success' => Translation::get('ad_open_question_deleted')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
+
+        return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
     }
 
     #[Route('admin/api/question/toggle')]
@@ -85,8 +86,8 @@ class QuestionController extends AbstractController
             $question->setVisibility($questionId, ($isVisible === 'N' ? 'Y' : 'N'));
             $translation = $isVisible === 'N' ? Translation::get('ad_gen_yes') : Translation::get('ad_gen_no');
             return $this->json(['success' => $translation], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => 'toggle not successful'], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'toggle not successful'], Response::HTTP_BAD_REQUEST);
     }
 }

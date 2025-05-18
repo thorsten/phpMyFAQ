@@ -28,8 +28,6 @@ class VanillaFile extends AbstractFile
 {
     /**
      * Chunk size read/write operations will deal with (in bytes).
-     *
-     * @var int
      */
     private const int CHUNK_SIZE = 512;
 
@@ -52,6 +50,7 @@ class VanillaFile extends AbstractFile
             // it the simplest way we can.
             return $this->copyToSimple((string)$entry);
         }
+
         $entry->setMode(self::MODE_WRITE);
         while (!$this->eof()) {
             $entry->putChunk($this->getChunk());

@@ -30,15 +30,11 @@ class EncryptedFile extends File
 {
     /**
      * Chunk delimiter.
-     *
-     * @var string
      */
     private const string CHUNK_DELIMITER = 'ฒૐᥤ';
 
     /**
      * AES instance.
-     *
-     * @var AES
      */
     protected AES $aes;
 
@@ -95,7 +91,7 @@ class EncryptedFile extends File
 
         while (!$readEnd && !$this->eof()) {
             $chunk .= fread($this->handle, 1);
-            $readEnd = self::CHUNK_DELIMITER == substr($chunk, -$chunkDelimLen);
+            $readEnd = self::CHUNK_DELIMITER === substr($chunk, -$chunkDelimLen);
         }
 
         $chunk = substr($chunk, 0, -$chunkDelimLen);

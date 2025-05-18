@@ -155,9 +155,11 @@ class AuthWebAuthn extends Auth
         if (empty($info)) {
             throw new Exception('info is not properly JSON encoded');
         }
+
         if (empty($info->response->attestationObject)) {
             throw new Exception('no attestationObject in info');
         }
+
         if (empty($info->rawId)) {
             throw new Exception('no rawId in info');
         }
@@ -168,6 +170,7 @@ class AuthWebAuthn extends Auth
         if (empty($attestationObject->fmt)) {
             throw new Exception('Cannot decode key for format');
         }
+
         if (empty($attestationObject->authData)) {
             throw new Exception('Cannot decode key for authentication data');
         }
@@ -200,7 +203,7 @@ class AuthWebAuthn extends Auth
         $attestationObject->attData->credIdLen = (ord($byteString[53]) << 8) + ord($byteString[54]);
         $attestationObject->attData->credId = substr((string) $byteString, 55, $attestationObject->attData->credIdLen);
 
-        $cborPubKey = substr($byteString, 55 + $attestationObject->attData->credIdLen);
+        $cborPubKey = substr((string) $byteString, 55 + $attestationObject->attData->credIdLen);
 
         $attestationObject->attData->keyBytes = self::COSEECDHAtoPKCS($cborPubKey);
 

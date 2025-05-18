@@ -43,7 +43,7 @@ readonly class Seo
                 VALUES (%d, '%s', %d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
-            $seoEntity->getType()->value,
+            $seoEntity->getSeoType()->value,
             $seoEntity->getReferenceId(),
             $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
             $this->configuration->getDb()->escape($seoEntity->getTitle()),
@@ -62,7 +62,7 @@ readonly class Seo
         $query = sprintf(
             "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getType()->value,
+            $seoEntity->getSeoType()->value,
             $seoEntity->getReferenceId(),
             $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );
@@ -92,7 +92,7 @@ readonly class Seo
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($seoEntity->getTitle()),
             $this->configuration->getDb()->escape($seoEntity->getDescription()),
-            $seoEntity->getType()->value,
+            $seoEntity->getSeoType()->value,
             $seoEntity->getReferenceId(),
             $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );
@@ -108,7 +108,7 @@ readonly class Seo
         $query = sprintf(
             "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
             Database::getTablePrefix(),
-            $seoEntity->getType()->value,
+            $seoEntity->getSeoType()->value,
             $seoEntity->getReferenceId(),
             $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
         );

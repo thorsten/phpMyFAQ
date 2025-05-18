@@ -57,14 +57,14 @@ class AuthenticationController extends AbstractAdministrationController
 
         // Login via local DB or LDAP or SSO
         if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
-            $userAuth = new UserAuthentication($this->configuration, $this->currentUser);
-            $userAuth->setRememberMe($rememberMe ?? false);
+            $userAuthentication = new UserAuthentication($this->configuration, $this->currentUser);
+            $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
-                $this->currentUser = $userAuth->authenticate($username, $password);
-                if ($userAuth->hasTwoFactorAuthentication()) {
+                $this->currentUser = $userAuthentication->authenticate($username, $password);
+                if ($userAuthentication->hasTwoFactorAuthentication()) {
                     return new RedirectResponse('./token?user-id=' . $this->currentUser->getUserId());
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $logging->log(
                     $this->currentUser,
                     'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors)
@@ -127,22 +127,22 @@ class AuthenticationController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $redirect = new RedirectResponse('./');
+        $redirectResponse = new RedirectResponse('./');
 
         $csrfToken = Filter::filterVar($request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('admin-logout', $csrfToken)) {
-            // add an error message
-            return $redirect->send();
+            // @todo add an error message
+            return $redirectResponse->send();
         }
 
         $this->currentUser->deleteFromSession(true);
         $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
         if ($this->configuration->get('security.ssoSupport') && !empty($ssoLogout)) {
-            $redirect->isRedirect($ssoLogout);
-            $redirect->send();
+            $redirectResponse->isRedirect($ssoLogout);
+            $redirectResponse->send();
         }
 
-        return $redirect->send();
+        return $redirectResponse->send();
     }
 
     /**
@@ -199,13 +199,9 @@ class AuthenticationController extends AbstractAdministrationController
             if ($result) {
                 $user->twoFactorSuccess();
                 return new RedirectResponse('./');
-            } else {
-                // add an error message
-                return new RedirectResponse('./token?user-id=' . $userId);
             }
-        } else {
-            // add an error message
-            return new RedirectResponse('./token?user-id=' . $userId);
         }
+
+        return new RedirectResponse('./token?user-id=' . $userId);
     }
 }

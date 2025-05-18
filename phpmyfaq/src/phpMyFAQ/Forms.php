@@ -145,18 +145,14 @@ class Forms
 
     /**
      * Get translation strings of a given input
-     *
-     * @param int $formid
-     * @param int $inputid
-     * @return array
      */
-    public function getTranslations(int $formid, int $inputid): array
+    public function getTranslations(int $formId, int $inputId): array
     {
         $query = sprintf(
             'SELECT input_lang, input_label FROM %sfaqforms WHERE form_id = %d AND input_id = %d',
             Database::getTablePrefix(),
-            $formid,
-            $inputid
+            $formId,
+            $inputId
         );
 
         $result = $this->configuration->getDb()->query($query);

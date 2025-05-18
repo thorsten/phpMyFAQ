@@ -24,9 +24,7 @@ use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,22 +97,22 @@ class QuestionController extends AbstractController
             if (false === (bool)$save) {
                 $cleanQuestion = $stopWords->clean($userQuestion);
 
-                $faqSearch = new Search($this->configuration);
+                $faqSearch = $this->container->get('phpmyfaq.search');
                 $faqSearch->setCategory(new Category($this->configuration));
                 $faqSearch->setCategoryId((int) $selectedCategory);
 
                 $faqPermission = new Permission($this->configuration);
-                $faqSearchResult = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
+                $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
                 $searchResult = array_merge(...array_map(
                     fn($word) => $faqSearch->search($word, false),
                     array_filter($cleanQuestion)
                 ));
 
-                $faqSearchResult->reviewResultSet($searchResult);
+                $searchResultSet->reviewResultSet($searchResult);
 
-                if ($faqSearchResult->getNumberOfResults() > 0) {
-                    $smartAnswer = $questionHelper->generateSmartAnswer($faqSearchResult);
+                if ($searchResultSet->getNumberOfResults() > 0) {
+                    $smartAnswer = $questionHelper->generateSmartAnswer($searchResultSet);
                     return $this->json(['result' => $smartAnswer], Response::HTTP_OK);
                 }
             }
@@ -125,9 +123,9 @@ class QuestionController extends AbstractController
             $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
             return $this->json(['success' => Translation::get('msgAskThx4Mail')], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -135,11 +133,17 @@ class QuestionController extends AbstractController
      */
     private function isAddingQuestionsAllowed(): bool
     {
-        return $this->configuration->get('records.allowQuestionsForGuests') ||
-            $this->configuration->get('main.enableAskQuestions') ||
-            $this->currentUser->perm->hasPermission(
-                $this->currentUser->getUserId(),
-                PermissionType::QUESTION_ADD->value
-            );
+        if ($this->configuration->get('records.allowQuestionsForGuests')) {
+            return true;
+        }
+
+        if ($this->configuration->get('main.enableAskQuestions')) {
+            return true;
+        }
+
+        return $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::QUESTION_ADD->value
+        );
     }
 }

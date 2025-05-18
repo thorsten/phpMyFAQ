@@ -66,13 +66,13 @@ class SessionController extends AbstractController
             }
 
             fclose($file);
-            $response = new BinaryFileResponse($filePath);
-            $response->setContentDisposition(
+            $binaryFileResponse = new BinaryFileResponse($filePath);
+            $binaryFileResponse->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_INLINE,
                 'sessions_' . $requestData->firstHour . '-' . $requestData->lastHour . '.csv'
             );
-            $response->headers->set('Content-Type', 'text/csv');
-            return $response;
+            $binaryFileResponse->headers->set('Content-Type', 'text/csv');
+            return $binaryFileResponse;
         }
 
         return $this->json(['error' => 'Unable to open file.'], Response::HTTP_BAD_REQUEST);

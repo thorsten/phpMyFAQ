@@ -47,14 +47,14 @@ class SetupController
         $checkBasicError = '';
         try {
             $installer->checkBasicStuff();
-        } catch (Exception $e) {
-            $checkBasicError = $e->getMessage();
+        } catch (Exception $exception) {
+            $checkBasicError = $exception->getMessage();
         }
 
         try {
             $installer->checkInitialRewriteBasePath($request);
-        } catch (Exception $e) {
-            $checkBasicError = $e->getMessage();
+        } catch (Exception $exception) {
+            $checkBasicError = $exception->getMessage();
         }
 
         return $this->render(
@@ -91,8 +91,8 @@ class SetupController
 
         try {
             $installer->startInstall();
-        } catch (Exception | AuthenticationException $e) {
-            $installationError = $e->getMessage();
+        } catch (Exception | AuthenticationException $exception) {
+            $installationError = $exception->getMessage();
         }
 
         return $this->render(
@@ -124,8 +124,8 @@ class SetupController
         $checkBasicError = '';
         try {
             $update->checkInitialRewriteBasePath($request);
-        } catch (Exception $e) {
-            $checkBasicError = $e->getMessage();
+        } catch (Exception $exception) {
+            $checkBasicError = $exception->getMessage();
         }
 
         return $this->render(
@@ -145,19 +145,16 @@ class SetupController
     /**
      * Returns a Twig rendered template as response.
      *
-     * @param string        $pathToTwigFile
-     * @param string[]      $templateVars
-     * @param Response|null $response
-     * @return Response
+     * @param string[] $templateVars
      * @throws Exception|LoaderError
      */
     public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates', true);
-        $template = $twigWrapper->loadTemplate($pathToTwigFile);
+        $templateWrapper = $twigWrapper->loadTemplate($pathToTwigFile);
 
-        $response->setContent($template->render($templateVars));
+        $response->setContent($templateWrapper->render($templateVars));
 
         return $response;
     }

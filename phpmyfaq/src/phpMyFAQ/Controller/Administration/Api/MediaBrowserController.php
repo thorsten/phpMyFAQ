@@ -78,7 +78,11 @@ class MediaBrowserController extends AbstractController
         $files = [];
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_CONTENT_DIR . '/user/images'));
         foreach ($iterator as $file) {
-            if ($file->isDir() || !in_array(strtolower($file->getExtension()), $allowedExtensions)) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            if (!in_array(strtolower($file->getExtension()), $allowedExtensions)) {
                 continue;
             }
 

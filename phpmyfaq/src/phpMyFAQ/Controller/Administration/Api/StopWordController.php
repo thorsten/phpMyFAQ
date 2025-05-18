@@ -32,9 +32,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StopWordController extends AbstractController
 {
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/stopwords')]
     public function list(Request $request): JsonResponse
     {
@@ -46,14 +43,11 @@ class StopWordController extends AbstractController
         if (Language::isASupportedLanguage($language)) {
             $stopWordsList = $stopWords->getByLang($language);
             return $this->json($stopWordsList, Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @throws Exception
-     */
     #[Route('admin/api/stopword/delete')]
     public function delete(Request $request): JsonResponse
     {
@@ -74,13 +68,13 @@ class StopWordController extends AbstractController
                 ->setLanguage($stopWordsLang)
                 ->remove((int)$stopWordId);
             return $this->json(['deleted' => $stopWordId], Response::HTTP_OK);
-        } else {
-            return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route('admin/api/stopword/save')]
     public function save(Request $request): JsonResponse
@@ -104,14 +98,16 @@ class StopWordController extends AbstractController
             if (null !== $stopWordId && -1 < $stopWordId) {
                 $stopWords->update((int)$stopWordId, $stopWord);
                 return $this->json(['updated' => $stopWordId], Response::HTTP_OK);
-            } elseif (!$stopWords->match($stopWord)) {
+            }
+
+            if (!$stopWords->match($stopWord)) {
                 $stopWordId = $stopWords->add($stopWord);
                 return $this->json(['added' => $stopWordId], Response::HTTP_CREATED);
-            } else {
-                return $this->json(['error' => 'Stop word already exists'], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
+
+            return $this->json(['error' => 'Stop word already exists'], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
     }
 }
