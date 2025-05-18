@@ -61,7 +61,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./glossary.twig');
 
 // Twig template variables
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('ad_menu_glossary'), $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgGlossaryMetaDesc'), $faqConfig->getTitle()),
@@ -69,3 +69,5 @@ return [
     'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
     'pagination' => $pagination->render(),
 ];
+
+return $templateVars;

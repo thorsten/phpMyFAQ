@@ -145,9 +145,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     ];
 }
 
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgCategoryMetaDesc'), $faqConfig->getTitle()),
     'categoryHeader' => $categoryHeader,
 ];
+
+return $templateVars;

@@ -117,13 +117,6 @@ class Strings
 
     /**
      * Match a regexp.
-     *
-     * @param string $pattern
-     * @param string $subject
-     * @param null   $matches
-     * @param int    $flags
-     * @param int    $offset
-     * @return int
      */
     public static function preg_match(
         string $pattern,
@@ -138,13 +131,6 @@ class Strings
 
     /**
      * Match a regexp globally.
-     *
-     * @param string $pattern
-     * @param string $subject
-     * @param null   $matches
-     * @param int    $flags
-     * @param int    $offset
-     * @return int
      */
     public static function preg_match_all(
         string $pattern,
@@ -159,12 +145,6 @@ class Strings
 
     /**
      * Split string by a regexp.
-     *
-     * @param string $pattern
-     * @param string $subject
-     * @param int    $limit
-     * @param int    $flags
-     * @return array|bool
      */
     public static function preg_split(string $pattern, string $subject, int $limit = -1, int $flags = 0): array|bool // phpcs:ignore
     {
@@ -174,11 +154,6 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string          $pattern
-     * @param callable        $callback
-     * @param string|string[] $subject
-     * @param int             $limit
-     * @param int             $count
      * @return string|string[]
      */
     public static function preg_replace_callback(
@@ -197,8 +172,6 @@ class Strings
      * @param string|string[] $pattern
      * @param string|string[] $replacement
      * @param string|string[] $subject
-     * @param int $limit
-     * @param int $count
      * @return string|string[]|null
      */
     public static function preg_replace(

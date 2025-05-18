@@ -58,7 +58,7 @@ $twig->addExtension(new TagNameTwigExtension());
 $twigTemplate = $twig->loadTemplate('./startpage.twig');
 
 // Twig template variables
-return [
+$templateVars = [
     ... $templateVars,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'title' => $faqConfig->getTitle(),
@@ -90,3 +90,5 @@ return [
         Translation::get('msgAdvancedSearch')
     )
 ];
+
+return $templateVars;

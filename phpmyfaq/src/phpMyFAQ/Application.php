@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ;
 
-use ErrorException;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -35,6 +34,7 @@ use Symfony\Component\Routing\RouteCollection;
 class Application
 {
     private UrlMatcher $urlMatcher;
+
     private ControllerResolver $controllerResolver;
 
     public function __construct(private readonly ?ContainerInterface $container = null)
@@ -104,9 +104,12 @@ class Application
         }
     }
 
-    private function handleRequest(RouteCollection $routeCollection, Request $request, RequestContext $context): void
-    {
-        $urlMatcher = new UrlMatcher($routeCollection, $context);
+    private function handleRequest(
+        RouteCollection $routeCollection,
+        Request $request,
+        RequestContext $requestContext
+    ): void {
+        $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
         $this->setUrlMatcher($urlMatcher);
         $controllerResolver = new ControllerResolver();
         $this->setControllerResolver($controllerResolver);
@@ -114,7 +117,7 @@ class Application
         $response = new Response();
 
         try {
-            $this->urlMatcher->setContext($context);
+            $this->urlMatcher->setContext($requestContext);
             $request->attributes->add($this->urlMatcher->match($request->getPathInfo()));
             $controller = $this->controllerResolver->getController($request);
             $arguments = $argumentResolver->getArguments($request, $controller);

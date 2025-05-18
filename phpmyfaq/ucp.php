@@ -72,7 +72,7 @@ if ($user->isLoggedIn()) {
     $twigTemplate = $twig->loadTemplate('./ucp.twig');
 
     // Twig template variables
-    return [
+    $templateVars = [
         ... $templateVars,
         'headerUserControlPanel' => Translation::get('headerUserControlPanel'),
         'ucpGravatarImage' => $gravatarImg,
@@ -107,6 +107,8 @@ if ($user->isLoggedIn()) {
         'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected'),
         'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport')
     ];
+
+    return $templateVars;
 }
 
 // Redirect to log in

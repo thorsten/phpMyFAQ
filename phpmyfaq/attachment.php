@@ -48,8 +48,8 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
+} catch (Exception $exception) {
+    echo $exception->getMessage();
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
@@ -144,7 +144,9 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./attachment.twig');
 
 // Twig template variables
-return [
+$templateVars = [
     ... $templateVars,
     'attachmentErrors' => $attachmentErrors,
 ];
+
+return $templateVars;

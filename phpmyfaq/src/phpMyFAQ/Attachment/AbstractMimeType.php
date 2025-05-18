@@ -26,8 +26,6 @@ abstract class AbstractMimeType
 {
     /**
      * Simple file extension to mime type mapping.
-     *
-     * @var array
      */
     protected static array $list = [
         'ez' => 'application/andrew-inset',

@@ -68,8 +68,8 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
+} catch (\Exception $exception) {
+    echo $exception->getMessage();
 }
 
 $faqConfig = $container->get('phpmyfaq.configuration');
@@ -169,7 +169,7 @@ if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyT
 // Validating token from 2FA if given; else: returns error message
 //
 if ($token !== '' && !is_null($userId)) {
-    if (strlen($token) === 6 && is_numeric((string)$token)) {
+    if (strlen((string) $token) === 6 && is_numeric((string)$token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig, $user);
@@ -214,10 +214,8 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     }
 }
 
-if (isset($userAuth) && $userAuth instanceof UserAuthentication) {
-    if ($userAuth->hasTwoFactorAuthentication()) {
-        $action = 'twofactor';
-    }
+if (isset($userAuth) && $userAuth instanceof UserAuthentication && $userAuth->hasTwoFactorAuthentication()) {
+    $action = 'twofactor';
 }
 
 //
@@ -461,25 +459,24 @@ if (!isset(Link::$allowedActionParameters[$action])) {
 if ($action !== 'main') {
     $includeTemplate = $action . '.html';
     $includePhp = $action . '.php';
+} elseif (isset($solutionId) && is_numeric($solutionId)) {
+    // show the record with the solution ID
+    $includeTemplate = 'faq.html';
+    $includePhp = 'faq.php';
 } else {
-    if (isset($solutionId) && is_numeric($solutionId)) {
-        // show the record with the solution ID
-        $includeTemplate = 'faq.html';
-        $includePhp = 'faq.php';
-    } else {
-        $includeTemplate = 'startpage.html';
-        $includePhp = 'startpage.php';
-    }
+    $includeTemplate = 'startpage.html';
+    $includePhp = 'startpage.php';
 }
 
 //
 // Check if the FAQ should be secured
 //
-if ($faqConfig->get('security.enableLoginOnly')) {
-    if (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')) {
-        $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
-        $redirect->send();
-    }
+if (
+    $faqConfig->get('security.enableLoginOnly') &&
+    (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password'))
+) {
+    $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
+    $redirect->send();
 }
 
 $categoryRelation = new Relation($faqConfig, $category);
@@ -684,6 +681,7 @@ $response->setCache([
 if ($action !== 'attachment') {
     $response->headers->set('Content-Disposition', 'inline');
 }
+
 $response->headers->set('X-Content-Type-Options', 'nosniff');
 
 $response->send();

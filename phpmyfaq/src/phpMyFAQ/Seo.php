@@ -54,7 +54,6 @@ readonly class Seo
     }
 
     /**
-     * @return SeoEntity
      * @throws Exception
      */
     public function get(SeoEntity $seoEntity): SeoEntity

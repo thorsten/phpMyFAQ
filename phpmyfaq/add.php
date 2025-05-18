@@ -56,7 +56,6 @@ if (-1 !== $user->getUserId() && !$user->perm->hasPermission($user->getUserId(),
 }
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $questionObject = new Question($faqConfig);
 
@@ -74,6 +73,7 @@ if (!is_null($selectedQuestion)) {
     if (Strings::strlen($question) !== 0) {
         $readonly = ' readonly';
     }
+
     // Display full form even if user switched off single fields because of use together with answering open questions
     $displayFullForm = true;
 }
@@ -121,7 +121,7 @@ $templateVars = [
     'enableWysiwygEditor' => $faqConfig->get('main.enableWysiwygEditorFrontend'),
     'currentTimestamp' => $request->server->get('REQUEST_TIME'),
     'msgSeparateKeywordsWithCommas' => Translation::get('msgSeparateKeywordsWithCommas'),
-    'noCategories' => empty($categories),
+    'noCategories' => $categories === [],
     'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories'),
     'displayFullForm' => $displayFullForm,
 ];

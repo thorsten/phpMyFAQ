@@ -151,6 +151,7 @@ class Token
         if ($removeToken) {
             $this->removeToken($page);
         }
+
         // both session and cookie match
         return $sessionConfirm && $cookieConfirm;
     }

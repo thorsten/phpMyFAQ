@@ -173,15 +173,19 @@ class StopWords
             if (is_numeric($word)) {
                 continue;
             }
+
             if (1 >= Strings::strlen($word)) {
                 continue;
             }
+
             if (in_array($word, $stopWords)) {
                 continue;
             }
+
             if (in_array($word, $result)) {
                 continue;
             }
+
             $result[] = $word;
         }
 

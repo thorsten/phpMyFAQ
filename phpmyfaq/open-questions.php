@@ -42,7 +42,7 @@ $questionHelper
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgOpenQuestions'), $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
@@ -58,3 +58,5 @@ return [
     'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
     'msg2answer' => Translation::get('msg2answer')
 ];
+
+return $templateVars;

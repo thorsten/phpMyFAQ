@@ -32,21 +32,20 @@ $faqSession->setCurrentUser($user);
 $faqSession->userTracking('contact', 0);
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 if ($faqConfig->get('layout.contactInformationHTML')) {
     $contactText = html_entity_decode((string) $faqConfig->get('main.contactInformation'));
 } else {
-    $contactText = nl2br($faqConfig->get('main.contactInformation'));
+    $contactText = nl2br((string) $faqConfig->get('main.contactInformation'));
 }
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./contact.twig');
 
 // Twig template variables
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgContact'), $faqConfig->getTitle()),
     'msgContactOwnText' => $contactText,
@@ -58,3 +57,5 @@ return [
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
 ];
+
+return $templateVars;#

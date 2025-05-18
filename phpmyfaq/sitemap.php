@@ -50,7 +50,7 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 
 // Twig template variables
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', Translation::get('msgSitemap'), $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get('msgSitemapMetaDesc'), $faqConfig->getTitle()),
@@ -59,3 +59,5 @@ return [
     'faqs' => $siteMap->getFaqsFromLetter($currLetter),
     'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
 ];
+
+return $templateVars;

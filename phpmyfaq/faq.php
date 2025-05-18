@@ -96,7 +96,6 @@ $templateVars = [
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $currentCategory = $cat;
 
@@ -323,7 +322,7 @@ $seoData = $seo->get($seoEntity);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./faq.twig');
 
-return [
+$templateVars = [
     ...$templateVars,
     'title' => sprintf('%s - %s', $seoData->getTitle() ?? $question, $faqConfig->getTitle()),
     'metaDescription' => $seoData->getDescription(),
@@ -377,3 +376,5 @@ return [
     'csrfTokenRemoveBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
     'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark')
 ];
+
+return $templateVars;

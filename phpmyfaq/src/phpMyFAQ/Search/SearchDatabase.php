@@ -157,6 +157,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         if ($this->joinedTable === '' || $this->joinedTable === '0') {
             return '';
         }
+
         return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
     }
 

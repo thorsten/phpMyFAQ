@@ -81,8 +81,8 @@ try {
         ->setDefaultLanguage('en')
         ->setCurrentLanguage('en')
         ->setMultiByteLanguage();
-} catch (Exception $e) {
-    echo '<strong>Error:</strong> ' . $e->getMessage();
+} catch (Exception $exception) {
+    echo '<strong>Error:</strong> ' . $exception->getMessage();
 }
 
 $routes = new RouteCollection();

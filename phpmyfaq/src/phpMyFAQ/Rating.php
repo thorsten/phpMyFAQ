@@ -61,6 +61,7 @@ readonly class Rating
                 round($row->voting, 2)
             );
         }
+
         return ' <span data-rating="0">0</span> (' . $this->plurals->GetMsg('plmsgVotes', 0) . ')';
     }
 
@@ -106,9 +107,6 @@ readonly class Rating
 
     /**
      * Adds a new voting record.
-     *
-     * @param Vote $vote
-     * @return bool
      */
     public function create(Vote $vote): bool
     {
@@ -127,9 +125,6 @@ readonly class Rating
 
     /**
      * Updates an existing voting record.
-     *
-     * @param Vote $vote
-     * @return bool
      */
     public function update(Vote $vote): bool
     {

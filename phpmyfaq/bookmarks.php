@@ -37,15 +37,17 @@ if ($user->isLoggedIn()) {
     $twigTemplate = $twig->loadTemplate('./bookmarks.twig');
 
     // Twig template variables
-    return [
+    $templateVars = [
         ... $templateVars,
         'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
         'bookmarksList' => $bookmark->getBookmarkList(),
         'csrfTokenDeleteBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
         'csrfTokenDeleteAllBookmarks' => Token::getInstance($container->get('session'))->getTokenString('delete-all-bookmarks')
     ];
-} else {
-    // Redirect to log in
-    $response = new RedirectResponse($faqConfig->getDefaultUrl());
-    $response->send();
+
+    return $templateVars;
 }
+
+// Redirect to log in
+$response = new RedirectResponse($faqConfig->getDefaultUrl());
+$response->send();

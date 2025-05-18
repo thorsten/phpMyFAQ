@@ -44,7 +44,6 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGue
 }
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $faqSession->userTracking('ask_question', 0);
 

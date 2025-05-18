@@ -30,7 +30,6 @@ interface SearchInterface
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
-     * @return mixed
      * @throws Exception
      */
     public function search(string $searchTerm): mixed;

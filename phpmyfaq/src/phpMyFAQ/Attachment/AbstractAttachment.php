@@ -45,7 +45,7 @@ abstract class AbstractAttachment
     /**
      * Database instance.
      */
-    protected DatabaseDriver $db;
+    protected DatabaseDriver $databaseDriver;
 
     /**
      * Record ID.
@@ -100,7 +100,7 @@ abstract class AbstractAttachment
      */
     public function __construct(mixed $attachmentId = null)
     {
-        $this->db = Database::getInstance();
+        $this->databaseDriver = Database::getInstance();
 
         if (null !== $attachmentId) {
             $this->id = $attachmentId;
@@ -125,13 +125,13 @@ abstract class AbstractAttachment
             WHERE 
                 id = %d',
             Database::getTablePrefix(),
-            (int)$this->id
+            $this->id
         );
 
-        $result = $this->db->query($sql);
+        $result = $this->databaseDriver->query($sql);
 
         if ($result) {
-            $assoc = $this->db->fetchArray($result);
+            $assoc = $this->databaseDriver->fetchArray($result);
             if ($assoc !== null && $assoc !== []) {
                 $this->recordId = $assoc['record_id'];
                 $this->recordLang = $assoc['record_lang'];
@@ -170,9 +170,11 @@ abstract class AbstractAttachment
         if (!$this->encrypted) {
             return;
         }
+
         if ($default) {
             return;
         }
+
         $this->passwordHash = sha1((string) $key);
     }
 
@@ -232,7 +234,7 @@ abstract class AbstractAttachment
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
         if (null == $this->id) {
-            $this->id = $this->db->nextId($attachmentTableName, 'id');
+            $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 
             $sql = sprintf(
                 "
@@ -245,17 +247,17 @@ abstract class AbstractAttachment
                 $attachmentTableName,
                 $this->id,
                 $this->recordId,
-                $this->db->escape($this->recordLang),
-                $this->db->escape($this->realHash),
-                $this->db->escape($this->virtualHash),
-                $this->db->escape($this->passwordHash),
-                $this->db->escape($this->filename),
+                $this->databaseDriver->escape($this->recordLang),
+                $this->databaseDriver->escape($this->realHash),
+                $this->databaseDriver->escape($this->virtualHash),
+                $this->databaseDriver->escape($this->passwordHash),
+                $this->databaseDriver->escape($this->filename),
                 $this->filesize,
                 $this->encrypted ? 1 : 0,
-                $this->db->escape($this->mimeType)
+                $this->databaseDriver->escape($this->mimeType)
             );
 
-            $this->db->query($sql);
+            $this->databaseDriver->query($sql);
         }
 
         return $this->id;
@@ -289,12 +291,12 @@ abstract class AbstractAttachment
         $sql = sprintf(
             "UPDATE %sfaqattachment SET virtual_hash = '%s', mime_type = '%s' WHERE id = %d",
             Database::getTablePrefix(),
-            $this->db->escape($this->virtualHash),
+            $this->databaseDriver->escape($this->virtualHash),
             $this->readMimeType(),
             $this->id
         );
 
-        $this->db->query($sql);
+        $this->databaseDriver->query($sql);
     }
 
     /**
@@ -354,13 +356,13 @@ abstract class AbstractAttachment
         $sql = sprintf(
             "SELECT COUNT(1) AS count FROM %sfaqattachment WHERE virtual_hash = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($this->virtualHash),
+            $this->databaseDriver->escape($this->virtualHash),
         );
 
-        $result = $this->db->query($sql);
+        $result = $this->databaseDriver->query($sql);
 
         if ($result) {
-            $assoc = $this->db->fetchArray($result);
+            $assoc = $this->databaseDriver->fetchArray($result);
         }
 
         return $assoc['count'] > 1;
@@ -377,6 +379,6 @@ abstract class AbstractAttachment
             $this->id
         );
 
-        $this->db->query($sql);
+        $this->databaseDriver->query($sql);
     }
 }

@@ -107,9 +107,11 @@ if ('' !== $inputTag) {
         if (isset($tags[$tagId])) {
             continue;
         }
+
         if (!is_numeric($tagId)) {
             continue;
         }
+
         $tags[$tagId] = $tagging->getTagNameById($tagId);
     }
 
@@ -188,7 +190,7 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
 
     $faqSearchResult->reviewResultSet($searchResults);
 
-    $inputSearchTerm = stripslashes($inputSearchTerm);
+    $inputSearchTerm = stripslashes((string) $inputSearchTerm);
     $numOfResults = $faqSearchResult->getNumberOfResults();
 
     try {
@@ -270,7 +272,7 @@ $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));
 
-return [
+$templateVars = [
     ... $templateVars,
     'title' => sprintf('%s - %s', $pageHeader, $faqConfig->getTitle()),
     'pageHeader' => $pageHeader,
@@ -304,3 +306,5 @@ return [
     'msgTags' => Translation::get('msgPopularTags'),
     'tagList' => $tagging->getPopularTags(),
 ];
+
+return $templateVars;

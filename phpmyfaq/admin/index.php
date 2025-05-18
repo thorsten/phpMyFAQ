@@ -24,7 +24,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
-require '../src/Bootstrap.php';
+require dirname(__DIR__) . '/src/Bootstrap.php';
 
 //
 // Service Containers
@@ -33,8 +33,8 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
+} catch (Exception $exception) {
+    echo $exception->getMessage();
 }
 
 $routes = include PMF_SRC_DIR  . '/admin-routes.php';

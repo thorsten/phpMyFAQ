@@ -49,6 +49,7 @@ class PdoMysql extends SearchDatabase implements DatabaseInterface
         if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             return parent::search($searchTerm);
         }
+
         $relevance = $this->configuration->get('search.enableRelevance');
         $columns = $this->getResultColumns();
         if ($this->relevanceSupport && $relevance) {
@@ -57,6 +58,7 @@ class PdoMysql extends SearchDatabase implements DatabaseInterface
         } else {
             $orderBy = '';
         }
+
         $chars = [
             "\xe2\x80\x98",
             "\xe2\x80\x99",
@@ -109,6 +111,7 @@ class PdoMysql extends SearchDatabase implements DatabaseInterface
 
             $this->resultSet = $this->configuration->getDb()->query($query);
         }
+
         return $this->resultSet;
     }
 

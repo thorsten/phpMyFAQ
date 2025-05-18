@@ -33,7 +33,7 @@ $faqSession->userTracking('request_removal', 0);
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./request-removal.twig');
 
-return [
+$templateVars = [
     ... $templateVars,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
     'csrf' => Token::getInstance($container->get('session'))->getTokenInput('request-removal'),
@@ -43,3 +43,5 @@ return [
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'defaultLoginName' => ($user->getUserId() > 0) ? $user->getLogin() : '',
 ];
+
+return $templateVars;

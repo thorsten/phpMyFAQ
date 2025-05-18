@@ -195,6 +195,7 @@ class System
                 self::getVersion()
             );
         }
+
         return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
     }
 
