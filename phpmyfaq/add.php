@@ -70,7 +70,7 @@ $readonly = '';
 $displayFullForm = false;
 if (!is_null($selectedQuestion)) {
     $questionData = $questionObject->get($selectedQuestion);
-    $question = Strings::htmlentities($questionData['question']);
+    $question = $questionData['question'];
     if (Strings::strlen($question) !== 0) {
         $readonly = ' readonly';
     }
