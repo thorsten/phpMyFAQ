@@ -55,8 +55,8 @@ $PMF_LANG["msgPrintArticle"] = "&#352;tampaj ovaj &#269;lanak";
 $PMF_LANG["msgAverageVote"] = "Prose&#269;ni rejting";
 $PMF_LANG["msgVoteUsability"] = "Ocenite ovaj unos";
 $PMF_LANG["msgVoteFrom"] = "od";
-$PMF_LANG["msgVoteBad"] = "apsolutno <br>beskorisno";
-$PMF_LANG["msgVoteGood"] = "veoma<br>korisno";
+$PMF_LANG["msgVoteBad"] = "apsolutno  beskorisno";
+$PMF_LANG["msgVoteGood"] = "veoma korisno";
 $PMF_LANG["msgVotings"] = "Glasova ";
 $PMF_LANG["msgVoteSubmit"] = "Glasaj";
 $PMF_LANG["msgVoteThanks"] = "Hvala vam za va&#353; glas!";
@@ -97,7 +97,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Nema otvorenih pitanja.";
 $PMF_LANG["msgNewQuestion"] = "Postavite va&#353;e pitanje";
 $PMF_LANG["msgAskCategory"] = "Pitanje je u vezi kategorije";
 $PMF_LANG["msgAskYourQuestion"] = "Va&#353;e pitanje";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Hvala za va&#353;e pitanje!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "Hvala za va&#353;e pitanje!";
 $PMF_LANG["msgDate_User"] = "Datum / Korisnik";
 $PMF_LANG["msgQuestion2"] = "Pitanje";
 $PMF_LANG["msg2answer"] = "odgovori";
@@ -130,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Nema unosa.";
 $PMF_LANG["err_badID"] = "Pogre&#353;an ID.";
 $PMF_LANG["err_noTopTen"] = "TOP10 jo&#353; ne postoji.";
 $PMF_LANG["err_nothingFound"] = "Unos nije prona&#273;en.";
-$PMF_LANG["err_SaveEntries"] = "Obavezna polja su va&#353;e ime, email adresa, kategorija, naslov i unos! <br><br><a href=\"javascript:history.back();\">nazad</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Obavezna polja su va&#353;e ime, email adresa i komentar! <br><br><a href=\"javascript:history.back();\">nazad</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Obavezna polja su va&#353;e ime, email adresa, kategorija, naslov i unos!   <a href=\"javascript:history.back();\">nazad</a>  ";
+$PMF_LANG["err_SaveComment"] = "Obavezna polja su va&#353;e ime, email adresa i komentar!   <a href=\"javascript:history.back();\">nazad</a>  ";
 $PMF_LANG["err_VoteTooMuch"] = "Ne ura&#269;unavamo dvostruko glasanje. Kliknite ovde, da se vratite na prethodnu stranicu.";
 $PMF_LANG["err_noVote"] = "Niste vrednovali unos! <a href=\"javascript:history.back();\">Nazad</a>";
-$PMF_LANG["err_noMailAdress"] = "Va&#353;a email adresa nije ispravna.<br><a href=\"javascript:history.back();\">nazad</a>";
+$PMF_LANG["err_noMailAdress"] = "Va&#353;a email adresa nije ispravna. <a href=\"javascript:history.back();\">nazad</a>";
 $PMF_LANG["err_sendMail"] = "Obavezna polja su va&#353;e ime, email adresa i pitanje!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Pretraga:<br>";
+$PMF_LANG["help_search"] = "Pretraga: ";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";
@@ -301,7 +301,7 @@ $PMF_LANG["ad_passwd_new"] = "Nova &#353;ifra";
 $PMF_LANG["ad_passwd_con"] = "Potvrdi";
 $PMF_LANG["ad_passwd_change"] = "Promeni &#353;ifru";
 $PMF_LANG["ad_passwd_suc"] = "&#352;ifra uspe&#353;no izmenjena.";
-$PMF_LANG["ad_passwd_remark"] = "PA&#381;NJA:<br>Cookie mora biti ponovo postavljen!";
+$PMF_LANG["ad_passwd_remark"] = "PA&#381;NJA: Cookie mora biti ponovo postavljen!";
 $PMF_LANG["ad_passwd_fail"] = "Stara &#353;ifra mora biti ispravno une&#353;ena, i oba unosa nove &#353;ifre moraju biti ista.";
 
 // Adduser
@@ -520,7 +520,7 @@ $PMF_LANG["msgRealname"] = "Pravo ime";
 $PMF_LANG["ad_export_generate_pdf"] = "kreiraj PDF fajl";
 $PMF_LANG["ad_export_full_faq"] = "Va&#353; FAQ kao PDF fajl: ";
 $PMF_LANG["err_bannedIP"] = "Va&#353;a IP adresa je blokirana.";
-$PMF_LANG["err_SaveQuestion"] = "Obavezna polja su va&#353;e ime, email adresa i pitanje.<br><br><a href=\"javascript:history.back();\">nazad</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Obavezna polja su va&#353;e ime, email adresa i pitanje.  <a href=\"javascript:history.back();\">nazad</a>  ";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Boja fonta: ";

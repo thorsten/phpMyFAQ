@@ -136,7 +136,7 @@ $PMF_LANG['err_noMailAdress'] = "La dirección de e-mail proporcionada es incorr
 $PMF_LANG['err_sendMail'] = "¡Los campos obligatorios incluyen Nombre y e-mail!";
 
 // Ayuda para la búsqueda
-$PMF_LANG['help_search'] = "Encuentra la respuesta:<br>Buscando Term1 Term2 permite buscar dos o más términos, en orden descendente de relevancia. Nota: el término de búsqueda debe tener al menos 4 caracteres, las consultas más cortas se rechazan automáticamente.";
+$PMF_LANG['help_search'] = "Encuentra la respuesta: Buscando Term1 Term2 permite buscar dos o más términos, en orden descendente de relevancia. Nota: el término de búsqueda debe tener al menos 4 caracteres, las consultas más cortas se rechazan automáticamente.";
 
 // Menú
 $PMF_LANG['ad'] = 'SECCIÓN ADMIN';
@@ -298,7 +298,7 @@ $PMF_LANG['ad_passwd_new'] = 'Nueva contraseña';
 $PMF_LANG['ad_passwd_con'] = 'Confirmar contraseña';
 $PMF_LANG['ad_passwd_change'] = 'Guardar cambio';
 $PMF_LANG['ad_passwd_suc'] = 'Contraseña cambiada con éxito.';
-$PMF_LANG['ad_passwd_remark'] = 'ATENCIÓN:<br>¡La Cookie debe ser reseteada!';
+$PMF_LANG['ad_passwd_remark'] = 'ATENCIÓN: ¡La Cookie debe ser reseteada!';
 $PMF_LANG['ad_passwd_fail'] = 'La contraseña anterior debe ser introducida correctamente y las dos nuevas tienen que coincidir.';
 
 // Adduser
@@ -433,8 +433,8 @@ $PMF_LANG['no_cats'] = '¡No se encontraron categorías!';
 // Añadido v1.1 - 17.01.2002 - Bastian
 $PMF_LANG['ad_log_lger'] = 'Usuario o contraseña inválido.';
 $PMF_LANG['ad_log_sess'] = 'Sesión expirada.';
-$PMF_LANG['ad_log_edit'] = 'Formulario <i>Editar Usuario</i> del usuario: ';
-$PMF_LANG['ad_log_crea'] = 'Formulario <i>Nuevo Artículo</i>.';
+$PMF_LANG['ad_log_edit'] = 'Formulario Editar Usuario del usuario: ';
+$PMF_LANG['ad_log_crea'] = 'Formulario Nuevo Artículo.';
 $PMF_LANG['ad_log_crsa'] = 'Nueva entrada creada.';
 $PMF_LANG['ad_log_ussa'] = 'Datos actualizados del usuario: ';
 $PMF_LANG['ad_log_usde'] = 'Usuario eliminado: ';
@@ -862,7 +862,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Se ha producido un error al enviar 
 $PMF_LANG['msgTransToolPercent'] = 'Porcentaje';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array('input', 'Ruta donde se guardarán los archivos adjuntos.<br><small>La ruta relativa se busca desde Webroot.</small>');
+$LANG_CONF['records.attachmentsPath'] = array('input', 'Ruta donde se guardarán los archivos adjuntos. La ruta relativa se busca desde Webroot.');
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = 'El archivo no se encontró en el servidor';
@@ -903,7 +903,7 @@ $PMF_LANG['permission::approverec'] = 'Aprobar registros';
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF['records.enableAttachmentEncryption'] = array("checkbox", "Encriptación de archivos adjuntos");
-$LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Clave predeterminada para el cifrado<br/><small style=\"color: red\">¡Advertencia: No la cambie después de habilitar la encriptación!</small>');
+$LANG_CONF['records.defaultAttachmentEncKey'] = array("input", 'Clave predeterminada para el cifrado<br/><small style=\"color: red\">¡Advertencia: No la cambie después de habilitar la encriptación!');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Actualizar';

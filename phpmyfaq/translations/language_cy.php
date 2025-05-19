@@ -97,7 +97,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Nid oes cwestiynau i'w hystyried ar hyn 
 $PMF_LANG["msgNewQuestion"] = "Gofynnwch eich cwestiwn isod";
 $PMF_LANG["msgAskCategory"] = "Eich cwestiwn am gategori";
 $PMF_LANG["msgAskYourQuestion"] = "Eich cwestiwn";
-$PMF_LANG["msgAskThx4Mail"] = "<h2> Diolch am eich cwestiwn!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = " Diolch am eich cwestiwn!";
 $PMF_LANG["msgDate_User"] = "Dyddiad / Defnyddiwr";
 $PMF_LANG["msgQuestion2"] = "Cwestiwn";
 $PMF_LANG["msg2answer"] = "Ateb";
@@ -130,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Dim cofnodion ar gael.";
 $PMF_LANG["err_badID"] = "Gwybodaeth adnabod anghywir.";
 $PMF_LANG["err_noTopTen"] = "Does dim Deg Uchaf ar gael eto.";
 $PMF_LANG["err_nothingFound"] = "Ni chafwyd cofnod.";
-$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw eich enw,  eich cyfeiriad e-bost, categori, pennawd,  eich cofnod  a phan ofynnir amdano, Captcha Code!<br><br>\n<a href=\"javascript:history.back();\">un dudalen yn ôl</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw  eich enw ,  eich cyfeiriad e-bost ,  eich sylwadau a phan ofynnir amdano, Captcha Code!<br><br>\n<a href=\"javascript:history.back();\">un dudalen yn ôl </a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw eich enw,  eich cyfeiriad e-bost, categori, pennawd,  eich cofnod  a phan ofynnir amdano, Captcha Code!  \n<a href=\"javascript:history.back();\">un dudalen yn ôl</a>  \n";
+$PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw  eich enw ,  eich cyfeiriad e-bost ,  eich sylwadau a phan ofynnir amdano, Captcha Code!  \n<a href=\"javascript:history.back();\">un dudalen yn ôl </a>  \n";
 $PMF_LANG["err_VoteTooMuch"] = " nid ydym yn cyfrif pleidleisio ddwywaith. Cliciwch yma, i fynd yn ôl.";
 $PMF_LANG["err_noVote"] = " ni wnaethoch ateb y cwestiwn hwn! <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.";
-$PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir.<br><a href=\"javascript:history.back();\">back</a>";
+$PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir. <a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw  eich enw ,  eich cyfeiriad e-bost ,  eich cwestiwn a phan ofynnir amdano, Captcha Code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = " chwilior cofnodion:<br> Gyda chofnod fel  gair1 gair2 gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy. Sylwer: rhaid ich maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.";
+$PMF_LANG["help_search"] = " chwilior cofnodion:  Gyda chofnod fel  gair1 gair2 gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy. Sylwer: rhaid ich maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.";
 
 // Menü
 $PMF_LANG["ad"] = "ADRAN WEINYDDOL";
@@ -303,7 +303,7 @@ $PMF_LANG["ad_passwd_new"] = "Cyfrinair newydd";
 $PMF_LANG["ad_passwd_con"] = "Cadarnhau";
 $PMF_LANG["ad_passwd_change"] = "Newid cyfrinair";
 $PMF_LANG["ad_passwd_suc"] = "Newidiwyd y cyfrinair yn llwyddiannus.";
-$PMF_LANG["ad_passwd_remark"] = "SYLWER:<br>Rhaid gosod cwci eto!";
+$PMF_LANG["ad_passwd_remark"] = "SYLWER: Rhaid gosod cwci eto!";
 $PMF_LANG["ad_passwd_fail"] = "Rhaid cyflwyno'r hen gyfrinair yn gywir a rhaid i'r ddau newydd gyd-fynd.";
 
 // Adduser
@@ -519,7 +519,7 @@ $PMF_LANG["msgRealname"] = "enw cywir";
 $PMF_LANG["ad_export_generate_pdf"] = "cynhyrchu ffeil PDf";
 $PMF_LANG["ad_export_full_faq"] = "Eich Cwestiynau Cyffredin fel ffeil PDF: ";
 $PMF_LANG["err_bannedIP"] = "Mae eich cyfeiriad IP wedi'i wahardd.";
-$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw eich enw,  eich cyfeiriad e-bost ,  eich cwestiwn a phan ofynnir amdano, Captcha Code.<br><br><a href=\"javascript:history.back();\">un dudalen yn ôl </a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = " Y meysydd gofynnol yw eich enw,  eich cyfeiriad e-bost ,  eich cwestiwn a phan ofynnir amdano, Captcha Code.  <a href=\"javascript:history.back();\">un dudalen yn ôl </a>  \n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Lliw'r ffont : ";

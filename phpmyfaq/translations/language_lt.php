@@ -96,7 +96,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Šiuo metu nėra klausimų laukiančių 
 $PMF_LANG["msgNewQuestion"] = "Užduokite savo klausimą žemiau";
 $PMF_LANG["msgAskCategory"] = "Grupė";
 $PMF_LANG["msgAskYourQuestion"] = "Klausimas";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Ačiū už jūsų klausimą!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "Ačiū už jūsų klausimą!";
 $PMF_LANG["msgDate_User"] = "Data / naudotojas";
 $PMF_LANG["msgQuestion2"] = "Klausimas";
 $PMF_LANG["msg2answer"] = "Atsakymas";
@@ -129,15 +129,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Nėra prieinamų DUK.";
 $PMF_LANG["err_badID"] = "Blogas identifikatorius.";
 $PMF_LANG["err_noTopTen"] = "Populiariausi DUK kol kas neprieinami.";
 $PMF_LANG["err_nothingFound"] = "Įrašų nerasta.";
-$PMF_LANG["err_SaveEntries"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, grupė, antraštė, jūsų įrašas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų komentarai ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, grupė, antraštė, jūsų įrašas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!  <a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a>  ";
+$PMF_LANG["err_SaveComment"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų komentarai ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!  <a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a>  ";
 $PMF_LANG["err_VoteTooMuch"] = "Mes neskaičiuojame dvigubų balsų. Į ankstesnį tinklalapį.";
 $PMF_LANG["err_noVote"] = "Jūs neįvertinote klausimo! Norėdami balsuoti <a href=\"javascript:history.back();\">spauskite čia</a>.";
-$PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas.<br><a href=\"javascript:history.back();\">atgal</a>";
+$PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas. <a href=\"javascript:history.back();\">atgal</a>";
 $PMF_LANG["err_sendMail"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų klausimas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Ieškoti įrašų:<br>Su tokia paieška žodis1 žodis2 jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.Pastaba: Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
+$PMF_LANG["help_search"] = "Ieškoti įrašų: Su tokia paieška žodis1 žodis2 jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.Pastaba: Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
 
 // Men�
 $PMF_LANG["ad"] = "ADMINISTRAVIMO SEKCIJA";
@@ -301,7 +301,7 @@ $PMF_LANG["ad_passwd_new"] = "Naujas slaptažodis";
 $PMF_LANG["ad_passwd_con"] = "Patvirtinti";
 $PMF_LANG["ad_passwd_change"] = "Keisti slaptažodį";
 $PMF_LANG["ad_passwd_suc"] = "Slaptažodis sėkmingai pakeistas.";
-$PMF_LANG["ad_passwd_remark"] = "DĖMESIO:<br>Slapukas turi būti nustatytas iš naujo!";
+$PMF_LANG["ad_passwd_remark"] = "DĖMESIO: Slapukas turi būti nustatytas iš naujo!";
 $PMF_LANG["ad_passwd_fail"] = "Senas slaptažodis privalo būti teisingai įvestas, o abu nauji turi sutapti.";
 
 // Adduser
@@ -527,7 +527,7 @@ $PMF_LANG["msgRealname"] = "tikras vardas";
 $PMF_LANG["ad_export_generate_pdf"] = "generuoti PDF failą";
 $PMF_LANG["ad_export_full_faq"] = "Jūsų DUK kaip PDF failas: ";
 $PMF_LANG["err_bannedIP"] = "Jūsų IP adresas buvo uždraustas.";
-$PMF_LANG["err_SaveQuestion"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų klausimas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Būtini laukai yra jūsų vardas, jūsų el. pašto adresas, jūsų klausimas ir, kai prašoma, <a href=\"https://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas!  <a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a>  ";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Šrifto spalva: ";
@@ -887,7 +887,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Įvyko klaida siunčiant kalbos fai
 $PMF_LANG['msgTransToolPercent'] = 'Procentai';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array("input", "Kelias, kur bus saugomi priedai.<br><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Kelias, kur bus saugomi priedai. Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";
@@ -935,8 +935,8 @@ $PMF_LANG['permission::deltranslation'] = "šalinti vertimą";
 $PMF_LANG['permission::approverec'] = "patvirtinti įrašus";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti priedų užšifravimą <br><small>Ignoruojama, kai priedai išjungti</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis priedų užšifravimo raktas <br><small>Ignoruojama, jei priedų užšifravimas išjungtas</small><br><small><font color="red">ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!</font></small>');
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Įjungti priedų užšifravimą  Ignoruojama, kai priedai išjungti");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Numatytasis priedų užšifravimo raktas  Ignoruojama, jei priedų užšifravimas išjungtas ĮSPĖJIMAS: Nekeiskite šio rakto, kai užšifravimas jau įjungtas!!!');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Atnaujinti';

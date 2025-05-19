@@ -135,7 +135,7 @@ $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
 $PMF_LANG["err_sendMail"] = "Required fields are your name, your email address, your question and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "Search for records:<br>With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.Notice: Your search criterion has to be at least four letters long otherwise your request will be rejected.";
+$PMF_LANG["help_search"] = "Search for records: With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.Notice: Your search criterion has to be at least four letters long otherwise your request will be rejected.";
 
 // Menu
 $PMF_LANG["ad"] = "Administration";
@@ -296,7 +296,7 @@ $PMF_LANG["ad_passwd_new"] = "New password";
 $PMF_LANG["ad_passwd_con"] = "Retype password";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "ATTENTION:<br>Cookie has to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION: Cookie has to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
@@ -901,7 +901,7 @@ $PMF_LANG['permission::approverec'] = "Approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption", "Ignored when attachments is disabled"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key", "Ignored if attachment encryption is disabled<br><span class="text-danger">WARNING: Do not change this once set and enabled file encryption!!!</span>'];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Default attachment encryption key", "Ignored if attachment encryption is disabled WARNING: Do not change this once set and enabled file encryption!!!'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';

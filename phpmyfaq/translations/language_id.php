@@ -97,7 +97,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Saat ini tidak ada pertanyaan dalam antr
 $PMF_LANG["msgNewQuestion"] = "Kirim pertanyaan anda di bawah ini";
 $PMF_LANG["msgAskCategory"] = "Kategori";
 $PMF_LANG["msgAskYourQuestion"] = "Pertanyaan";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Terima kasih atas pertanyaan anda!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "Terima kasih atas pertanyaan anda!";
 $PMF_LANG["msgDate_User"] = "Tanggal / Pengguna";
 $PMF_LANG["msgQuestion2"] = "Pertanyaan";
 $PMF_LANG["msg2answer"] = "Jawaban";
@@ -130,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Tidak ada materi yang tersedia.";
 $PMF_LANG["err_badID"] = "ID Salah.";
 $PMF_LANG["err_noTopTen"] = "Belum ada materi yang populer.";
 $PMF_LANG["err_nothingFound"] = "Tidak ada materi yang ditemukan.";
-$PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Kategori, Pengantar, Isi Materi dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Isi Komentar dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Kategori, Pengantar, Isi Materi dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!  <a href=\"javascript:history.back();\">mundur satu halaman</a>  ";
+$PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Isi Komentar dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!  <a href=\"javascript:history.back();\">mundur satu halaman</a>  ";
 $PMF_LANG["err_VoteTooMuch"] = "Anda sudah pernah menilai sebelumnya. Klik di sini, untuk kembali.";
 $PMF_LANG["err_noVote"] = "Anda belum memasukkan penilaian anda! <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.";
-$PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar.<br><a href=\"javascript:history.back();\">kembali</a>";
+$PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar. <a href=\"javascript:history.back();\">kembali</a>";
 $PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah Nama Anda, Alamat Email, Pertanyaan Anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Pencarian materi:<br>Dengan entri seperti kata1 kata2 anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.Perhatian: Kriteria pencarian anda minimal berisi 4 huruf.";
+$PMF_LANG["help_search"] = "Pencarian materi: Dengan entri seperti kata1 kata2 anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.Perhatian: Kriteria pencarian anda minimal berisi 4 huruf.";
 
 // Men?
 $PMF_LANG["ad"] = "BAGIAN ADMIN";
@@ -302,7 +302,7 @@ $PMF_LANG["ad_passwd_new"] = "Kata Sandi Baru";
 $PMF_LANG["ad_passwd_con"] = "Ulangi Sandi Baru";
 $PMF_LANG["ad_passwd_change"] = "Ganti Kata Sandi";
 $PMF_LANG["ad_passwd_suc"] = "Kata Sandi Berhasil Diganti.";
-$PMF_LANG["ad_passwd_remark"] = "PERHATIAN:<br>Cookie harus disetel ulang!";
+$PMF_LANG["ad_passwd_remark"] = "PERHATIAN: Cookie harus disetel ulang!";
 $PMF_LANG["ad_passwd_fail"] = "Kata sandi lama yang benar harus dimasukkan dan kata sandi baru harus diisi dua kali sama persis.";
 
 // Adduser
@@ -522,7 +522,7 @@ $PMF_LANG["msgRealname"] = "Nama Lengkap";
 $PMF_LANG["ad_export_generate_pdf"] = "buat berkas PDF";
 $PMF_LANG["ad_export_full_faq"] = "Materi anda dalam format PDF: ";
 $PMF_LANG["err_bannedIP"] = "Alamat IP anda sudah diblokir.";
-$PMF_LANG["err_SaveQuestion"] = "Bagian yang harus diisi adalah nama anda, alamat email, pertanyaan anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"Lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>.<br><br><a href=\"javascript:history.back();\">mundur satu halaman</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Bagian yang harus diisi adalah nama anda, alamat email, pertanyaan anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"Lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>.  <a href=\"javascript:history.back();\">mundur satu halaman</a>  ";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";
@@ -882,7 +882,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'terjadi kesalahan saat mengirim ber
 $PMF_LANG['msgTransToolPercent'] = 'Persentase';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array("input", "Lokasi dimana lampiran akan disimpan.<br><small>Lokasi relatif berarti folder dalam web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Lokasi dimana lampiran akan disimpan. Lokasi relatif berarti folder dalam web root");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";

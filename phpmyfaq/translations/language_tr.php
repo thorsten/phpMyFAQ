@@ -135,7 +135,7 @@ $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz geçersiz.";
 $PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar adınız, e-mail adresiniz, sorunuz ve, eğer isteniyorsa <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Arama ipuçları:<br>Şunun gibi kelimeler kelime1 kelime2 you can do a relevance descending search for two or more search criterion.Önemli: aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
+$PMF_LANG["help_search"] = "Arama ipuçları: Şunun gibi kelimeler kelime1 kelime2 you can do a relevance descending search for two or more search criterion.Önemli: aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
 
 // Menu
 $PMF_LANG["ad"] = "Yönetim";
@@ -298,7 +298,7 @@ $PMF_LANG["ad_passwd_new"] = "Yeni şifre";
 $PMF_LANG["ad_passwd_con"] = "Yeni şifre tekrar";
 $PMF_LANG["ad_passwd_change"] = "Şifreyi değiştir";
 $PMF_LANG["ad_passwd_suc"] = "Şifre değiştirildi.";
-$PMF_LANG["ad_passwd_remark"] = "DİKKAT:<br>çerez yeniden ayarlanmalıdır!";
+$PMF_LANG["ad_passwd_remark"] = "DİKKAT: çerez yeniden ayarlanmalıdır!";
 $PMF_LANG["ad_passwd_fail"] = "Eski şifre doğru girilmeli ve yeni şifreler eşleşmelidir.";
 
 // Adduser
@@ -783,7 +783,7 @@ $PMF_LANG['recordsControlCenter'] = "Sorular";
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array("checkbox", "Activate new records");
-$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments for new records<br>(default: disallowed)");
+$LANG_CONF['records.defaultAllowComments'] = array("checkbox", "Allow comments for new records (default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = "Bu kategorideki sorular";
@@ -864,7 +864,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = "Dil dosyası gönderilirken hata ol
 $PMF_LANG['msgTransToolPercent'] = "Yüzde";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array("input", "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Path where attachments will be saved. Relative path means a folder within web root");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "İndirmeye çalıştığınız dosya sunucuda mevcut değil";
@@ -905,8 +905,8 @@ $PMF_LANG['permission::deltranslation'] = "çeviri sil";
 $PMF_LANG['permission::approverec'] = "kayıt onayla";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Enable attachment encryption  Ignored when attachments is disabled");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Default attachment encryption key  Ignored if attachment encryption is disabled <^font color="red">WARNING: Do not change this once set and enabled file encryption!!!');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = "phpMyFAQ Yükselt";

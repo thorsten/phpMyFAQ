@@ -96,7 +96,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Momentálne nie sú žiadne nezodpovedan
 $PMF_LANG["msgNewQuestion"] = "Spýtajte sa na otázku nižšie";
 $PMF_LANG["msgAskCategory"] = "Kategória";
 $PMF_LANG["msgAskYourQuestion"] = "Otázka";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Ďakujeme za Vašu otázku!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "Ďakujeme za Vašu otázku!";
 $PMF_LANG["msgDate_User"] = "Dátum / Užívateľ";
 $PMF_LANG["msgQuestion2"] = "Otázka";
 $PMF_LANG["msg2answer"] = "odpoveď";
@@ -129,15 +129,15 @@ $PMF_LANG["msgErrorNoRecords"] = "FAQ nedostupná.";
 $PMF_LANG["err_badID"] = "Chybné ID.";
 $PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
 $PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
-$PMF_LANG["err_SaveEntries"] = "Povinné polia sú Vaše meno, Váš e-mail, category, názov, Váš záznam a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Povinné polia sú Vaše meno , Váš e-mail, Vaše komentáre a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Povinné polia sú Vaše meno, Váš e-mail, category, názov, Váš záznam a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code!  <a href=\"javascript:history.back();\">o jednu stránku späť</a>  ";
+$PMF_LANG["err_SaveComment"] = "Povinné polia sú Vaše meno , Váš e-mail, Vaše komentáre a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!  <a href=\"javascript:history.back();\">o jednu stránku späť</a>  ";
 $PMF_LANG["err_VoteTooMuch"] = "Dvojité hlasovania nebudú započítané.";
 $PMF_LANG["err_noVote"] = "Neohodnotili ste otázku! <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
-$PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br><a href=\"javascript:history.back();\">späť</a>";
+$PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny. <a href=\"javascript:history.back();\">späť</a>";
 $PMF_LANG["err_sendMail"] = "Povinné polia sú Vaše meno, Váš e-mail, your question a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Hľadanie záznamu:<br>So vstupnými údajmi slovo1 slovo2 môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.Poznámka: Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
+$PMF_LANG["help_search"] = "Hľadanie záznamu: So vstupnými údajmi slovo1 slovo2 môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.Poznámka: Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
 
 // Menï¿½
 $PMF_LANG["ad"] = "SEKCIA PRE ADMINISTRÁTORA";
@@ -301,7 +301,7 @@ $PMF_LANG["ad_passwd_new"] = "Nové heslo";
 $PMF_LANG["ad_passwd_con"] = "Potvrdiť";
 $PMF_LANG["ad_passwd_change"] = "Zmeniť heslo";
 $PMF_LANG["ad_passwd_suc"] = "Heslo úspešne zmenené.";
-$PMF_LANG["ad_passwd_remark"] = "UPOZORNENIE:<br>Cookie boli znovu nastavené!";
+$PMF_LANG["ad_passwd_remark"] = "UPOZORNENIE: Cookie boli znovu nastavené!";
 $PMF_LANG["ad_passwd_fail"] = "Staré heslo musí byť vložené správne a obe nové heslá sa musia zhodovať.";
 
 // Adduser
@@ -521,7 +521,7 @@ $PMF_LANG["msgRealname"] = "skutočné meno";
 $PMF_LANG["ad_export_generate_pdf"] = "generovať PDF súbor";
 $PMF_LANG["ad_export_full_faq"] = "Vaša FAQ ako PDF súbor: ";
 $PMF_LANG["err_bannedIP"] = "Vaša IP adresa bola odmietnutá.";
-$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú Vaše meno, Váš e-mail, Vaša otázka a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.<br><br><a href=\"javascript:history.back();\">o jednu stránku späť</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Povinné polia sú Vaše meno, Váš e-mail, Vaša otázka a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.  <a href=\"javascript:history.back();\">o jednu stránku späť</a>  ";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
@@ -881,7 +881,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Počas posielania jazykového súbo
 $PMF_LANG['msgTransToolPercent'] = 'Percento';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array("input", "Cesta k uloženým prílohám.<br><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array("input", "Cesta k uloženým prílohám. Relative path means a folder within web root");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Súbor, ktorý sa pokúšate stiahnuť nebol na tomto serveri nájdený.";
@@ -922,8 +922,8 @@ $PMF_LANG['permission::deltranslation'] = "vymazať preklad";
 $PMF_LANG['permission::approverec'] = "schváliť záznamy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť šifrovanie príloh <br><small>Ignorovať, keď sú prílohy nepovolené</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šifrovací kľúč príloh <br><small>Ignorovať, keď je šifrovanie príloh nepovolené</small><br><small><font color="red">WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!</font></small>');
+$LANG_CONF["records.enableAttachmentEncryption"] = array("checkbox", "Povoliť šifrovanie príloh  Ignorovať, keď sú prílohy nepovolené");
+$LANG_CONF["records.defaultAttachmentEncKey"] = array("input", 'Predvolený šifrovací kľúč príloh  Ignorovať, keď je šifrovanie príloh nepovolené WARNING: Toto nastavenie nemeňte, pokiaľ ste už povolili šifrovanie súborov!!!');
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';

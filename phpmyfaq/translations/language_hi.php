@@ -95,7 +95,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "इस समय कोई भी वि
 $PMF_LANG["msgNewQuestion"] = "अपना प्रश्न निचे पूछें";
 $PMF_LANG["msgAskCategory"] = "वर्ग चुनें";
 $PMF_LANG["msgAskYourQuestion"] = "आपका प्रश्न";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>आपके प्रश्न के लिए धन्यवाद!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "आपके प्रश्न के लिए धन्यवाद!";
 $PMF_LANG["msgDate_User"] = "दिनांक / प्रयोगकर्त्ता";
 $PMF_LANG["msgQuestion2"] = "प्रश्न";
 $PMF_LANG["msg2answer"] = "ऊत्तर";
@@ -128,15 +128,15 @@ $PMF_LANG["msgErrorNoRecords"] = "कोई भी लेख उपलब्ध 
 $PMF_LANG["err_badID"] = "क्षमा करें, गलत ID.";
 $PMF_LANG["err_noTopTen"] = "अभी सर्वोत्तम १० उपलब्ध नहीं है.";
 $PMF_LANG["err_nothingFound"] = "कोई भी लेख उपलब्ध नहीं है.";
-$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी आपका नाम, आपका ईमेल पता, वर्ग, मुख्य वाक्य, आपका रिकॉर्ड और, कब अनुरोध किया, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी आपका नाम, आपका ईमेल पता, आपकी टिप्पणी और, कब अनुरोध किया, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी आपका नाम, आपका ईमेल पता, वर्ग, मुख्य वाक्य, आपका रिकॉर्ड और, कब अनुरोध किया, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!  \n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a>  \n";
+$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी आपका नाम, आपका ईमेल पता, आपकी टिप्पणी और, कब अनुरोध किया, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!  \n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a>  \n";
 $PMF_LANG["err_VoteTooMuch"] = "हम दो बार दिए गए मत की गिनती नहीं करते हैं. पीछे जाने के लिए, क्लिक करें.";
 $PMF_LANG["err_noVote"] = "आपने सवाल को मत नहीं दिया! मत देने के लिए यहाँ पर <a href=\"javascript:history.back();\">क्लिक करें</a>.";
-$PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है.<br><a href=\"javascript:history.back();\">पीछे</a>";
+$PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है. <a href=\"javascript:history.back();\">पीछे</a>";
 $PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ आपका नाम, आपका ईमेल पता, आपका सवाल और, कब अनुरोध किया, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "लेख खोजें:<br>शब्द1 शब्द2 तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.ध्यान दें: आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.";
+$PMF_LANG["help_search"] = "लेख खोजें: शब्द1 शब्द2 तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.ध्यान दें: आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.";
 
 // Menü
 $PMF_LANG["ad"] = "प्रबंधन क्षेत्र";
@@ -300,7 +300,7 @@ $PMF_LANG["ad_passwd_new"] = "नया संकेतक शब्द";
 $PMF_LANG["ad_passwd_con"] = "पुनः डालें";
 $PMF_LANG["ad_passwd_change"] = "संकेतक शब्द बदलें";
 $PMF_LANG["ad_passwd_suc"] = "संकेतक शब्द सफलतापूर्वक बदल दिया गया.";
-$PMF_LANG["ad_passwd_remark"] = "ध्यान दें:<br>कुकी पुनः जोड़नी होगी!";
+$PMF_LANG["ad_passwd_remark"] = "ध्यान दें: कुकी पुनः जोड़नी होगी!";
 $PMF_LANG["ad_passwd_fail"] = "पुराना संकेतक शब्द सही होना चाहिए तथा दोनों नए संकेतक शब्द एक ही होने चाहिए.";
 
 // Adduser
@@ -521,7 +521,7 @@ $PMF_LANG["msgRealname"] = "वास्तविक नाम";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF फाइल बनाएं";
 $PMF_LANG["ad_export_full_faq"] = "आपका FAQ PDF फाइल में: ";
 $PMF_LANG["err_bannedIP"] = "आपके IP पते को प्रतिबंधित कर दिया गया है.";
-$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ आपका नाम, आपका ईमेल पता, आपका सवाल और, कण अनुरोध किया गया,  <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.<br><br><a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ आपका नाम, आपका ईमेल पता, आपका सवाल और, कण अनुरोध किया गया,  <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.  <a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a>  \n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "फॉण्ट का रंग: ";

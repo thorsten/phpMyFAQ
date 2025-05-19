@@ -136,7 +136,7 @@ $PMF_LANG["err_noMailAdress"] = "Votre adresse e-mail est incorecte.";
 $PMF_LANG["err_sendMail"] = "Les champs requis sont  votre nom, votre adresse e-mail, votre question et, si requis, le code <a href=\"https://fr.wikipedia.org/wiki/Captcha\" title=\"En savoir plus sur les Captcha sur Wikipedia\" target=\"_blank\">Captcha</a> !";
 
 // Search help
-$PMF_LANG["help_search"] = "Recherche d'enregistrements :<br>Avec une saisie comme Terme1 Terme2 il est possible de chercher plusieurs termes. Note : Votre critère de recherche doit contenir au moins 4 lettres sinon votre requête sera rejetée.";
+$PMF_LANG["help_search"] = "Recherche d'enregistrements : Avec une saisie comme Terme1 Terme2 il est possible de chercher plusieurs termes. Note : Votre critère de recherche doit contenir au moins 4 lettres sinon votre requête sera rejetée.";
 
 // Menu
 $PMF_LANG["ad"] = "SECTION ADMIN";
@@ -298,7 +298,7 @@ $PMF_LANG["ad_passwd_new"] = "Nouveau mot de passe";
 $PMF_LANG["ad_passwd_con"] = "Confirmer le mot de passe";
 $PMF_LANG["ad_passwd_change"] = "Modifier le mot de passe";
 $PMF_LANG["ad_passwd_suc"] = "Mot de passe modifié.";
-$PMF_LANG["ad_passwd_remark"] = "ATTENTION :<br>Le Cookie a été remplacé!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION : Le Cookie a été remplacé!";
 $PMF_LANG["ad_passwd_fail"] = "L'ancien mot de passe doit être entré correctement et les nouveaux doivent correspondre.";
 
 // Adduser
@@ -863,7 +863,7 @@ $PMF_LANG["msgTransToolErrorSendingFile"] = "Une erreur est apparue lors de l'en
 $PMF_LANG["msgTransToolPercent"] = "Pourcentage";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF["records.attachmentsPath"] = ["input", "Chemin où les pièces-jointes seront enregistrées.<br><small>Un chemin relatif est un dossier sans la racine du site</small>"];
+$LANG_CONF["records.attachmentsPath"] = ["input", "Chemin où les pièces-jointes seront enregistrées. Un chemin relatif est un dossier sans la racine du site"];
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG["msgAttachmentNotFound"] = "Le fichier que vous essayez de télécharger n'a pas été trouvé sur le serveur.";
@@ -902,8 +902,8 @@ $PMF_LANG["permission::deltranslation"] = "Supprimer une traduction";
 $PMF_LANG["permission::approverec"] = "Approuver l'enregistrement";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Activer les pièces-jointes cryptées<br/><small>Ignoré si les pièces-jointes sont désactivés</small>"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", "Clé de cryptage par défaut<br/><small>Ignoré si le cryptage des pièces-jointes est désactivé</small><br/><small><font color='red'>ATTENTION : Ne pas modifier une fois que le cryptage des fichiers a été activé !!!</font></small>"];
+$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Activer les pièces-jointes cryptées<br/>Ignoré si les pièces-jointes sont désactivés"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", "Clé de cryptage par défaut<br/>Ignoré si le cryptage des pièces-jointes est désactivé<br/><font color='red'>ATTENTION : Ne pas modifier une fois que le cryptage des fichiers a été activé !!!"];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG["msgAdminHeaderUpdate"] = "phpMyFAQ Mise à jour";

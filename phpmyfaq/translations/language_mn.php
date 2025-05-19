@@ -122,10 +122,10 @@ $PMF_LANG["msgMailContact"] = "Таны зурвас админд илгээгд
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ямар нэг мэдээллийн сантай холбогдоогүй байна..";
 $PMF_LANG["err_noHeaders"] = "Ангилал алга.";
-$PMF_LANG["msgErrorNoRecords"] = "<p>Ямар нэг FAQs алга.</p>";
-$PMF_LANG["err_badID"] = "<p>Буруу ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Онцлох FAQs алга.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Өгөгдөл алга.</p>";
+$PMF_LANG["msgErrorNoRecords"] = " Ямар нэг FAQs алга. ";
+$PMF_LANG["err_badID"] = " Буруу ID. ";
+$PMF_LANG["err_noTopTen"] = " Онцлох FAQs алга. ";
+$PMF_LANG["err_nothingFound"] = " Өгөгдөл алга. ";
 $PMF_LANG["err_SaveEntries"] = "Required fields are your name, your email address, category, question, your Record and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 $PMF_LANG["err_SaveComment"] = "Required fields are your name, your email address, your comments and, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 $PMF_LANG["err_VoteTooMuch"] = "Үнэлгээ дахин өгөхийг тоолохгүй.";
@@ -134,7 +134,7 @@ $PMF_LANG["err_noMailAdress"] = "Таны имэйл хаяг алдаатай �
 $PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд таны нэр,  email хаяг, таны асуулт болон, when requested, the <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p>Хайлт хийхдээ:<br>With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.</p><p>Notice: Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
+$PMF_LANG["help_search"] = " Хайлт хийхдээ: With an entry like word1 word2 you can do a relevance descending search for two or more search criterion.  Notice: Your search criterion has to be at least 4 letters long otherwise your request will be rejected. ";
 
 // Menu
 $PMF_LANG["ad"] = "Удирдлага";
@@ -297,7 +297,7 @@ $PMF_LANG["ad_passwd_new"] = "Шинэ нуууц үг:";
 $PMF_LANG["ad_passwd_con"] = "Нууц үгийг дахин оруул:";
 $PMF_LANG["ad_passwd_change"] = "Нууц үг өөрчлөх";
 $PMF_LANG["ad_passwd_suc"] = "Нууц үг өөрчлөгдлөө.";
-$PMF_LANG["ad_passwd_remark"] = "ATTENTION:<br>Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "ATTENTION: Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password must be entered correctly and both new ones have to match.";
 
 // Adduser
@@ -879,7 +879,7 @@ $PMF_LANG['msgTransToolPercent'] = 'Хувь';
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
 $LANG_CONF['records.attachmentsPath'] = array(
     "input",
-    "Хавсралтын файл хадгалах зам хадгалагдлаа.<br><small>Файл хадгалах хамааралтай зам нь web root байж болно.</small>"
+    "Хавсралтын файл хадгалах зам хадгалагдлаа. Файл хадгалах хамааралтай зам нь web root байж болно."
 );
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
@@ -923,11 +923,11 @@ $PMF_LANG['permission::approverec'] = "бичлэгийг батлах";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(
     "checkbox",
-    "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>"
+    "Enable attachment encryption  Ignored when attachments is disabled"
 );
 $LANG_CONF["records.defaultAttachmentEncKey"] = array(
     "input",
-    'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>'
+    'Default attachment encryption key  Ignored if attachment encryption is disabled WARNING: Do not change this once set and enabled file encryption!!!'
 );
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
@@ -1044,7 +1044,7 @@ $PMF_LANG["ad_verification_okay"] = "Таны phpMyFAQ хувилбар бата
 $PMF_LANG['cacheControlCenter'] = 'Cache configuration';
 $LANG_CONF['cache.varnishEnable'] = array(
     'checkbox',
-    'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>'
+    'Enable Varnish >=3.0 support You will need varnish PECL extension'
 );
 $LANG_CONF['cache.varnishHost'] = array('input', 'Varnish host');
 $LANG_CONF['cache.varnishPort'] = array('input', 'Varnish port');

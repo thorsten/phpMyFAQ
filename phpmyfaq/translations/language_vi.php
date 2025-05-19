@@ -99,7 +99,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Hiện tại không có câu hỏi mới
 $PMF_LANG["msgNewQuestion"] = "Trong trang này, bạn có thể nêu lên các câu hỏi của bạn.";
 $PMF_LANG["msgAskCategory"] = "Yêu cầu của bạn liên quan đến";
 $PMF_LANG["msgAskYourQuestion"] = "Câu hỏi của bạn";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>Xin cảm ơn câu hỏi của bạn!</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "Xin cảm ơn câu hỏi của bạn!";
 $PMF_LANG["msgDate_User"] = "Ngày / Thành viên";
 $PMF_LANG["msgQuestion2"] = "Câu hỏi";
 $PMF_LANG["msg2answer"] = "trả lời";
@@ -133,15 +133,15 @@ $PMF_LANG["msgErrorNoRecords"] = "Không có kết quả nào.";
 $PMF_LANG["err_badID"] = "Tên đăng nhập sai!";
 $PMF_LANG["err_noTopTen"] = "Hiện không có TOP 10.";
 $PMF_LANG["err_nothingFound"] = "Nội dung không tìm thấy.";
-$PMF_LANG["err_SaveEntries"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, mục, tựa đề, nội dung và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">trở về trang trước</a><br><br>";
-$PMF_LANG["err_SaveComment"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, bình luận của bạn và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">trở về trang trước</a><br><br>";
+$PMF_LANG["err_SaveEntries"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, mục, tựa đề, nội dung và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!  <a href=\"javascript:history.back();\">trở về trang trước</a>  ";
+$PMF_LANG["err_SaveComment"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, bình luận của bạn và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!  <a href=\"javascript:history.back();\">trở về trang trước</a>  ";
 $PMF_LANG["err_VoteTooMuch"] = "Chúng tôi không tính trường hợp bình chọn hai lần.";
 $PMF_LANG["err_noVote"] = "Bạn chưa bình chọn câu hỏi! <a href=\"javascript:history.back();\">Vui lòng nhấp vào đây</a>, để bình chọn.";
-$PMF_LANG["err_noMailAdress"] = "Địa chỉ email của bạn không chính xác.<br><a href=\"javascript:history.back();\">trở về</a>";
-$PMF_LANG["err_sendMail"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, câu hỏi của bạn và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!<br><br><a href=\"javascript:history.back();\">trở về trang trước</a><br><br>";
+$PMF_LANG["err_noMailAdress"] = "Địa chỉ email của bạn không chính xác. <a href=\"javascript:history.back();\">trở về</a>";
+$PMF_LANG["err_sendMail"] = "Những nội dung sau là bắt buộc tên của bạn, email của bạn, câu hỏi của bạn và, khi được yêu cầu, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code!  <a href=\"javascript:history.back();\">trở về trang trước</a>  ";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "Tìm kiếm cho nội dung:<br>Với một nội dung như từ1 từ2 bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.Chú ý: Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.";
+$PMF_LANG["help_search"] = "Tìm kiếm cho nội dung: Với một nội dung như từ1 từ2 bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.Chú ý: Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.";
 
 // Men�
 $PMF_LANG["ad"] = "QUẢN TRỊ";
@@ -305,7 +305,7 @@ $PMF_LANG["ad_passwd_new"] = "Mật khẩu mới";
 $PMF_LANG["ad_passwd_con"] = "Xác nhận";
 $PMF_LANG["ad_passwd_change"] = "Thay đổi mật khẩu";
 $PMF_LANG["ad_passwd_suc"] = "Mật khẩu đã được thay đổi.";
-$PMF_LANG["ad_passwd_remark"] = "Chú ý:<br>Cookie đã được thay thế!";
+$PMF_LANG["ad_passwd_remark"] = "Chú ý: Cookie đã được thay thế!";
 $PMF_LANG["ad_passwd_fail"] = "Mật khẩu cũ cần được nhập chính xác và hai mật khẩu mới cần phải trùng khớp.";
 
 // Adduser
@@ -519,7 +519,7 @@ $PMF_LANG["msgRealname"] = "Tên thực";
 $PMF_LANG["ad_export_generate_pdf"] = "tạo một tập tin PDF";
 $PMF_LANG["ad_export_full_faq"] = "Nội dung Câu hỏi thường gặp dưới dạng PDF: ";
 $PMF_LANG["err_bannedIP"] = "Địa chỉ IP của bạn không hợp lệ.";
-$PMF_LANG["err_SaveQuestion"] = "Những thông tin sau là bắt buộc tên của bạn, email của bạn, câu hỏi của bạn và, khi được yêu cầu <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code.<br><br><a href=\"javascript:history.back();\">trở về trang trước</a><br><br>";
+$PMF_LANG["err_SaveQuestion"] = "Những thông tin sau là bắt buộc tên của bạn, email của bạn, câu hỏi của bạn và, khi được yêu cầu <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code.  <a href=\"javascript:history.back();\">trở về trang trước</a>  ";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Màu chữ: ";

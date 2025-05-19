@@ -137,7 +137,7 @@ $PMF_LANG["err_noMailAdress"] = "Twój adres e-mail jest nieprawidłowy.";
 $PMF_LANG["err_sendMail"] = "Wymagane pola to Twoje imię, Twój adres email, Twoje pytanie oraz, na żądanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Przeczytaj więcej o Captcha w Wikipedii\" target=\"_blank\">Captcha</a> code!";
 
 // Search help
-$PMF_LANG["help_search"] = "Szukaj wpisów:<br>Z wpisem typu word1 word2 możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.Uwaga Twoje kryterium wyszukiwania musi składać się z co najmniej 4 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
+$PMF_LANG["help_search"] = "Szukaj wpisów: Z wpisem typu word1 word2 możesz przeprowadzić wyszukiwanie według trafności malejąco dla dwóch lub więcej kryteriów wyszukiwania.Uwaga Twoje kryterium wyszukiwania musi składać się z co najmniej 4 liter, w przeciwnym razie Twoje zapytanie zostanie odrzucone.";
 
 // Menu
 $PMF_LANG["ad"] = "Administracja";
@@ -299,7 +299,7 @@ $PMF_LANG["ad_passwd_new"] = "Nowe hasło";
 $PMF_LANG["ad_passwd_con"] = "Wpisz ponownie hasło";
 $PMF_LANG["ad_passwd_change"] = "Zmień hasło";
 $PMF_LANG["ad_passwd_suc"] = "Hasło zostało pomyślnie zmienione.";
-$PMF_LANG["ad_passwd_remark"] = "UWAGA:<br>Plik cookie musi być ponownie ustawiony!";
+$PMF_LANG["ad_passwd_remark"] = "UWAGA: Plik cookie musi być ponownie ustawiony!";
 $PMF_LANG["ad_passwd_fail"] = "Stare hasło musi być wpisane poprawnie i oba nowe muszą muszą się zgadzać.";
 
 // Adduser
@@ -784,7 +784,7 @@ $PMF_LANG['recordsControlCenter'] = 'FAQs';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = ["checkbox", "Aktywuj nowe rekordy"];
-$LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Zezwalaj na komentarze nowych rekordów<br>(domyślnie: niedozwolone)"];
+$LANG_CONF['records.defaultAllowComments'] = ["checkbox", "Zezwalaj na komentarze nowych rekordów (domyślnie: niedozwolone)"];
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Rekordy w tej kategorii';
@@ -866,7 +866,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Wystąpił błąd podczas wysyłani
 $PMF_LANG['msgTransToolPercent'] = 'Procentowo';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = ["input", "Ścieżka, w której będą zapisywane załączniki.<br><small>Ścieżka względna oznacza folder w katalogu głównym</small>"];
+$LANG_CONF['records.attachmentsPath'] = ["input", "Ścieżka, w której będą zapisywane załączniki. Ścieżka względna oznacza folder w katalogu głównym"];
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Plik, który próbujesz pobrać, nie został znaleziony na tym serwerze";
@@ -906,8 +906,8 @@ $PMF_LANG['rightsLanguage::deltranslation'] = "Usuń tłumaczenie";
 $PMF_LANG['rightsLanguage::approverec'] = "Zatwierdź wpisy";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Włącz szyfrowanie załączników <br><small>Ignorowane, gdy załączniki są wyłączone</small>"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Domyślny klucz szyfrowania załączników>Ignorowany, jeśli szyfrowanie załączników jest wyłączone</small><br><small><span class="text-danger">OSTRZEŻENIE: Nie zmieniaj tego po ustawieniu i włączeniu szyfrowania plików! !</span></small>'];
+$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Włącz szyfrowanie załączników  Ignorowane, gdy załączniki są wyłączone"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Domyślny klucz szyfrowania załączników>Ignorowany, jeśli szyfrowanie załączników jest wyłączone OSTRZEŻENIE: Nie zmieniaj tego po ustawieniu i włączeniu szyfrowania plików! !'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['msgAdminHeaderUpdate'] = 'Aktualizacja';

@@ -97,7 +97,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "현재 처리해야 할 질문이 없습
 $PMF_LANG["msgNewQuestion"] = "질문하고 싶은 내용을 입력해 주세요";
 $PMF_LANG["msgAskCategory"] = "카테고리 선택";
 $PMF_LANG["msgAskYourQuestion"] = "질문 내용";
-$PMF_LANG["msgAskThx4Mail"] = "<h2>질문해 주셔서 감사합니다.</h2>";
+$PMF_LANG["msgAskThx4Mail"] = "질문해 주셔서 감사합니다.";
 $PMF_LANG["msgDate_User"] = "날짜 / 사용자";
 $PMF_LANG["msgQuestion2"] = "질문";
 $PMF_LANG["msg2answer"] = "답변";
@@ -130,15 +130,15 @@ $PMF_LANG["msgErrorNoRecords"] = "등록된 데이터가 없습니다.";
 $PMF_LANG["err_badID"] = "잘못된 ID";
 $PMF_LANG["err_noTopTen"] = "TOP 10을 이용하실 수 없습니다.";
 $PMF_LANG["err_nothingFound"] = "검색 결과가 없습니다.";
-$PMF_LANG["err_SaveEntries"] = "이름, 메일주소, 카테고리, 제목, FAQ 내용은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
-$PMF_LANG["err_SaveComment"] = "이름, 메일주소, 코멘트 내용은 필수 입력 항목입니다.<br><br>\n<a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
+$PMF_LANG["err_SaveEntries"] = "이름, 메일주소, 카테고리, 제목, FAQ 내용은 필수 입력 항목입니다.  \n<a href=\"javascript:history.back();\">되돌아 가기</a>  \n";
+$PMF_LANG["err_SaveComment"] = "이름, 메일주소, 코멘트 내용은 필수 입력 항목입니다.  \n<a href=\"javascript:history.back();\">되돌아 가기</a>  \n";
 $PMF_LANG["err_VoteTooMuch"] = "중복 평가 하실 수 없습니다. 되돌아 가시려면여기를 클릭하세요.";
 $PMF_LANG["err_noVote"] = "평점을 선택하지 않으셨습니다. 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.";
-$PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br><a href=\"javascript:history.back();\">되돌아 가기</a>";
+$PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다. <a href=\"javascript:history.back();\">되돌아 가기</a>";
 $PMF_LANG["err_sendMail"] = "이름, 메일주소, 질문 내용은 필수 입력 항목입니다.";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "내용 검색:<br>단어1 단어2로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.주의: 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.";
+$PMF_LANG["help_search"] = "내용 검색: 단어1 단어2로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.주의: 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.";
 
 // Men
 $PMF_LANG["ad"] = "관리자 페이지";
@@ -302,7 +302,7 @@ $PMF_LANG["ad_passwd_new"] = "새로운 비밀번호";
 $PMF_LANG["ad_passwd_con"] = "새로운 비밀번호 재확인";
 $PMF_LANG["ad_passwd_change"] = "비밀번호 변경";
 $PMF_LANG["ad_passwd_suc"] = "비밀번호가 성공적으로 변경되었습니다.";
-$PMF_LANG["ad_passwd_remark"] = "주의:<br>쿠키를 다시 설정하여 주십시오.";
+$PMF_LANG["ad_passwd_remark"] = "주의: 쿠키를 다시 설정하여 주십시오.";
 $PMF_LANG["ad_passwd_fail"] = "'현재 비밀번호'를 정확하게 입력하시고, '새로운 비밀번호' 와 '새로운 비밀번호 재확인' 은 반드시 일치하여야 합니다.";
 
 // Adduser
@@ -521,7 +521,7 @@ $PMF_LANG["msgRealname"] = "성명";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF 파일 생성";
 $PMF_LANG["ad_export_full_faq"] = "PDF 파일로 FAQ 내보내기: ";
 $PMF_LANG["err_bannedIP"] = "당신의 IP는 접근 금지되었습니다.";
-$PMF_LANG["err_SaveQuestion"] = "이름, 메일주소, 질문 내용은 필수 입력 항목입니다.<br><br><a href=\"javascript:history.back();\">되돌아 가기</a><br><br>\n";
+$PMF_LANG["err_SaveQuestion"] = "이름, 메일주소, 질문 내용은 필수 입력 항목입니다.  <a href=\"javascript:history.back();\">되돌아 가기</a>  \n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "색상: ";

@@ -295,7 +295,7 @@ $PMF_LANG['ad_passwd_new'] = "Neues Passwort";
 $PMF_LANG['ad_passwd_con'] = "Passwort wiederholen";
 $PMF_LANG['ad_passwd_change'] = "Änderung speichern";
 $PMF_LANG['ad_passwd_suc'] = "Passwort erfolgreich geändert.";
-$PMF_LANG['ad_passwd_remark'] = "ACHTUNG:<br>Das Cookie muß neu gesetzt werden!";
+$PMF_LANG['ad_passwd_remark'] = "ACHTUNG: Das Cookie muß neu gesetzt werden!";
 $PMF_LANG['ad_passwd_fail'] = "Das alte Passwort muss korrekt eingegeben werden und beide neuen müssen übereinstimmen.";
 
 // Adduser
@@ -430,8 +430,8 @@ $PMF_LANG['no_cats'] = "Keine Kategorien gefunden!";
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG['ad_log_lger'] = "Es ist eine ungültige Loginkombination versucht worden.";
 $PMF_LANG['ad_log_sess'] = "Es ist eine Session ausgelaufen.";
-$PMF_LANG['ad_log_edit'] = "Es ist das <i>Benutzer bearbeiten</i>-Formular für den folgenden Benutzer aufgerufen worden: ";
-$PMF_LANG['ad_log_crea'] = "Es ist das <i>neuer Beitrag</i> Formular aufgerufen worden.";
+$PMF_LANG['ad_log_edit'] = "Es ist das Benutzer bearbeiten-Formular für den folgenden Benutzer aufgerufen worden: ";
+$PMF_LANG['ad_log_crea'] = "Es ist das neuer Beitrag Formular aufgerufen worden.";
 $PMF_LANG['ad_log_crsa'] = "Es ist ein neuer Beitrag erstellt worden.";
 $PMF_LANG['ad_log_ussa'] = "Die Daten des folgenden Benutzers sind aktualisiert worden: ";
 $PMF_LANG['ad_log_usde'] = "Der folgende Benutzer ist gelöscht worden: ";
