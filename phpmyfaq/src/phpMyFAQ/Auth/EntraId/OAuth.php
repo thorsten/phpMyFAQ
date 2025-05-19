@@ -42,8 +42,10 @@ class OAuth
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly EntraIdSession $entraIdSession
+    ) {
         $this->httpClient = HttpClient::create();
     }
 
@@ -65,10 +67,10 @@ class OAuth
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
-        if ($this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER) !== '') {
-            $codeVerifier = $this->session->get(Session::ENTRA_ID_OAUTH_VERIFIER);
+        if ($this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER) !== '') {
+            $codeVerifier = $this->entraIdSession->get(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
         } else {
-            $codeVerifier = $this->session->getCookie(Session::ENTRA_ID_OAUTH_VERIFIER);
+            $codeVerifier = $this->entraIdSession->getCookie(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER);
         }
 
         $response = $this->httpClient->request('POST', $url, [
@@ -117,13 +119,13 @@ class OAuth
     {
         $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
         $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
-        $this->session->set(Session::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+        $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
         return $this;
     }
 
-    public function getSession(): Session
+    public function getEntraIdSession(): EntraIdSession
     {
-        return $this->session;
+        return $this->entraIdSession;
     }
 
     public function getRefreshToken(): ?string

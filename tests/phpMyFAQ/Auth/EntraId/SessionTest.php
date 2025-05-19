@@ -10,13 +10,13 @@ class SessionTest extends TestCase
 {
     private Configuration $configurationMock;
     private SymfonySession $sessionMock;
-    private Session $session;
+    private EntraIdSession $session;
 
     protected function setUp(): void
     {
         $this->configurationMock = $this->createMock(Configuration::class);
         $this->sessionMock = $this->createMock(SymfonySession::class);
-        $this->session = new Session($this->configurationMock, $this->sessionMock);
+        $this->session = new EntraIdSession($this->configurationMock, $this->sessionMock);
     }
 
     public function testCreateCurrentSessionKey(): void

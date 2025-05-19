@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\EntraId\OAuth;
-use phpMyFAQ\Auth\EntraId\Session as EntraIdSession;
+use phpMyFAQ\Auth\EntraId\EntraIdSession as EntraIdSession;
 use phpMyFAQ\Configuration;
 
 //
@@ -34,8 +34,8 @@ require PMF_CONFIG_DIR . '/azure.php';
 
 $faqConfig = Configuration::getConfigurationInstance();
 
-$enraIdSession = new EntraIdSession($faqConfig, $session);
-$oAuth = new OAuth($faqConfig, $enraIdSession);
+$entraIdSession = new EntraIdSession($faqConfig, $session);
+$oAuth = new OAuth($faqConfig, $entraIdSession);
 $auth = new AuthEntraId($faqConfig, $oAuth);
 
 try {

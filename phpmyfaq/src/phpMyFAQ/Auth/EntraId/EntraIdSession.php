@@ -22,10 +22,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Session\AbstractSession;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Uid\Uuid;
 
-class Session extends AbstractSession
+class EntraIdSession extends AbstractSession
 {
     /** @var string EntraID session key */
     final public const string ENTRA_ID_SESSION_KEY = 'pmf-entra-id-session-key';
@@ -36,7 +36,7 @@ class Session extends AbstractSession
 
     private string $currentSessionKey;
 
-    public function __construct(private readonly Configuration $configuration, private readonly SymfonySession $session)
+    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
     {
         parent::__construct($session);
 
@@ -64,7 +64,7 @@ class Session extends AbstractSession
      *
      * @throws Exception
      */
-    public function setCurrentSessionKey(): Session
+    public function setCurrentSessionKey(): EntraIdSession
     {
         if (!isset($this->currentSessionKey)) {
             $this->createCurrentSessionKey();
@@ -90,7 +90,7 @@ class Session extends AbstractSession
         Cookie::create($name)
             ->withValue($sessionId ?? '')
             ->withExpires($request->server->get('REQUEST_TIME') + $timeout)
-            ->withPath(dirname($request->server->get('SCRIPT_NAME')))
+            ->withPath(dirname((string) $request->server->get('SCRIPT_NAME')))
             ->withDomain(parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST))
             ->withSameSite($strict ? 'strict' : '')
             ->withSecure($request->isSecure())

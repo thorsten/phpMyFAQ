@@ -195,19 +195,15 @@ class Language
      */
     private function selectLanguage(array $detectedLanguage): string
     {
-        if (isset($detectedLanguage['post'])) {
-            return $detectedLanguage['post'];
+        $priorityOrder = ['post', 'get', 'artget', 'session', 'detection', 'config'];
+
+        foreach ($priorityOrder as $source) {
+            if (!empty($detectedLanguage[$source])) {
+                return $detectedLanguage[$source];
+            }
         }
 
-        if (isset($detectedLanguage['get'])) {
-            return $detectedLanguage['get'];
-        }
-
-        if (isset($detectedLanguage['artget'])) {
-            return $detectedLanguage['artget'];
-        }
-
-        return $detectedLanguage['session'] ?? $detectedLanguage['detection'] ?? $detectedLanguage['config'] ?? 'en';
+        return 'en';
     }
 
     /**

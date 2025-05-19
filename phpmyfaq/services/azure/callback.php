@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Auth\AuthEntraId;
 use phpMyFAQ\Auth\EntraId\OAuth;
-use phpMyFAQ\Auth\EntraId\Session as EntraIdSession;
+use phpMyFAQ\Auth\EntraId\EntraIdSession as EntraIdSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Filter;

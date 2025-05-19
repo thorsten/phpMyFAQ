@@ -19,7 +19,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Auth\EntraId\OAuth;
-use phpMyFAQ\Auth\EntraId\Session;
+use phpMyFAQ\Auth\EntraId\EntraIdSession;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
@@ -132,9 +132,14 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     public function authorize(): void
     {
         $this->createOAuthChallenge();
-        $this->oAuth->getSession()->setCurrentSessionKey();
-        $this->oAuth->getSession()->set(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
-        $this->oAuth->getSession()->setCookie(Session::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier, 7200, false);
+        $this->oAuth->getEntraIdSession()->setCurrentSessionKey();
+        $this->oAuth->getEntraIdSession()->set(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->oAuthVerifier);
+        $this->oAuth->getEntraIdSession()->setCookie(
+            EntraIdSession::ENTRA_ID_OAUTH_VERIFIER,
+            $this->oAuthVerifier,
+            7200,
+            false
+        );
 
         $oAuthURL = sprintf(
             'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .
