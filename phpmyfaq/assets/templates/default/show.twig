@@ -17,8 +17,8 @@
         <img src="{{ categoryImage }}" alt="{{ categoryFaqsHeader }}" width="140" height="140"
              class="rounded img-fluid float-end m-1">
         {% endif %}
-        <h4 class="fst-italic">{{ categoryFaqsHeader }}</h4>
-        <p class="mb-0 small">{{ categoryDescription }}</p>
+        <h4 class="fst-italic">{{ categoryFaqsHeader | raw }}</h4>
+        <p class="mb-0 small">{{ categoryDescription | raw }}</p>
       </div>
 
       {% if subCategoryContent != null %}
