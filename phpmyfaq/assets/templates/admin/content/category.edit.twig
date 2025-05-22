@@ -158,7 +158,7 @@
         <div class="row mb-2">
           <label class="col-lg-2 col-form-label" for="serpTitle">{{ 'msgSerpTitle' | translate }}</label>
           <div class="col-lg-4">
-            <input type="text" name="serpTitle" id="serpTitle" value="{{ serpTitle }}" class="form-control">
+            <input type="text" name="serpTitle" id="serpTitle" value="{{ serpTitle | raw }}" class="form-control">
           </div>
         </div>
 
@@ -169,7 +169,7 @@
           </label>
           <div class="col-lg-4">
                   <textarea type="text" name="serpDescription" id="serpDescription" rows="5" class="form-control"
-                  >{{ serpDescription }}</textarea>
+                  >{{ serpDescription | raw }}</textarea>
           </div>
         </div>
 
