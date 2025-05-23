@@ -63,8 +63,9 @@ It is possible to use various languages per category, too; there's also a fronte
 For accessibility and SEO reasons, you should add a small description for every category.
 You can add an image for every category, which will be shown even on the start page if you flag this category with this
 configuration.
-If you add a new category, you can set the permissions for users and groups, and you can bind an administrator to new
+If you add a new category, you can set the permissions for users and groups, and you can bind a moderator to the new
 category.
+The moderator, e.g., can be responsible for the content of the category and can support the normal administrator.
 This is quite nice if you want to share the work in your FAQ between various admin users.
 
 If you display category images, they are saved as separate files in /content/user/images/ as follows:
