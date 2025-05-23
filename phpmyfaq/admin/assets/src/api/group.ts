@@ -13,9 +13,9 @@
  * @since     2023-01-02
  */
 
-import { Response } from '../interfaces';
+import { Group, Member, User } from '../interfaces';
 
-export const fetchAllGroups = async (): Promise<Response | undefined> => {
+export const fetchAllGroups = async (): Promise<Group[]> => {
   try {
     const response = await fetch('./api/group/groups', {
       method: 'GET',
@@ -37,7 +37,7 @@ export const fetchAllGroups = async (): Promise<Response | undefined> => {
   }
 };
 
-export const fetchAllUsersForGroups = async (): Promise<Response | undefined> => {
+export const fetchAllUsersForGroups = async (): Promise<User[]> => {
   try {
     const response = await fetch('./api/group/users', {
       method: 'GET',
@@ -59,7 +59,7 @@ export const fetchAllUsersForGroups = async (): Promise<Response | undefined> =>
   }
 };
 
-export const fetchAllMembers = async (groupId: string): Promise<Response | undefined> => {
+export const fetchAllMembers = async (groupId: string): Promise<Member[]> => {
   try {
     const response = await fetch(`./api/group/members/${groupId}`, {
       method: 'GET',
@@ -81,7 +81,7 @@ export const fetchAllMembers = async (groupId: string): Promise<Response | undef
   }
 };
 
-export const fetchGroup = async (groupId: string): Promise<Response | undefined> => {
+export const fetchGroup = async (groupId: string): Promise<Group> => {
   try {
     const response = await fetch(`./api/group/data/${groupId}`, {
       method: 'GET',
@@ -103,7 +103,7 @@ export const fetchGroup = async (groupId: string): Promise<Response | undefined>
   }
 };
 
-export const fetchGroupRights = async (groupId: string): Promise<Response | undefined> => {
+export const fetchGroupRights = async (groupId: string): Promise<string[]> => {
   try {
     const response = await fetch(`./api/group/permissions/${groupId}`, {
       method: 'GET',

@@ -15,6 +15,7 @@
 
 import { create, update } from '../api';
 import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
+import { Response } from '../interfaces';
 
 interface SerializedData {
   faqId: string;
@@ -32,14 +33,14 @@ export const handleSaveFaqData = (): void => {
 
       const serializedData = serialize(formData) as SerializedData;
 
-      let response;
+      let response: Response | undefined;
       if (serializedData.faqId === '0') {
         response = await create(serializedData);
       } else {
         response = await update(serializedData);
       }
 
-      if (response.success) {
+      if (response?.success) {
         const data = JSON.parse(response.data);
         const faqId = document.getElementById('faqId') as HTMLInputElement;
         const revisionId = document.getElementById('revisionId') as HTMLInputElement;

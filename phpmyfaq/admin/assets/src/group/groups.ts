@@ -17,28 +17,12 @@
 
 import { fetchAllGroups, fetchAllMembers, fetchAllUsersForGroups, fetchGroup, fetchGroupRights } from '../api';
 import { selectAll, unSelectAll } from '../utils';
-
-interface Group {
-  group_id: string;
-  name: string;
-  description?: string;
-  auto_join?: string;
-}
-
-interface User {
-  user_id: string;
-  login: string;
-}
-
-interface Member {
-  user_id: string;
-  login: string;
-}
+import { Group, Member, User } from '../interfaces';
 
 export const handleGroups = async (): Promise<void> => {
   clearGroupList();
 
-  const groupListSelect = document.querySelector<HTMLSelectElement>('#group_list_select');
+  const groupListSelect = document.querySelector<HTMLSelectElement>('#group_list_select') as HTMLSelectElement;
   if (!groupListSelect) {
     return;
   }
@@ -51,8 +35,8 @@ export const handleGroups = async (): Promise<void> => {
   const unSelectAllMembers = document.getElementById('unselect_all_members') as HTMLButtonElement;
   const groups: Group[] = await fetchAllGroups();
 
-  groups.forEach((group) => {
-    const option = document.createElement('option');
+  groups.forEach((group: Group): void => {
+    const option: HTMLOptionElement = document.createElement('option');
     option.value = group.group_id;
     option.textContent = group.name;
     groupListSelect.appendChild(option);
@@ -61,39 +45,39 @@ export const handleGroups = async (): Promise<void> => {
   await processGroupList();
 
   // Events
-  groupListSelect.addEventListener('change', (event: Event) => {
+  groupListSelect.addEventListener('change', (event: Event): void => {
     handleGroupSelect(event);
   });
 
-  selectAllUsers.addEventListener('click', () => {
+  selectAllUsers.addEventListener('click', (): void => {
     selectAll('group_user_list');
   });
 
-  unSelectAllUsers.addEventListener('click', () => {
+  unSelectAllUsers.addEventListener('click', (): void => {
     unSelectAll('group_user_list');
   });
 
-  addMember.addEventListener('click', () => {
+  addMember.addEventListener('click', (): void => {
     addGroupMembers();
     selectAll('group_member_list');
   });
 
-  removeMember.addEventListener('click', () => {
+  removeMember.addEventListener('click', (): void => {
     removeGroupMembers();
     selectAll('group_member_list');
   });
 
-  selectAllMembers.addEventListener('click', () => {
+  selectAllMembers.addEventListener('click', (): void => {
     selectAll('group_member_list');
   });
 
-  unSelectAllMembers.addEventListener('click', () => {
+  unSelectAllMembers.addEventListener('click', (): void => {
     unSelectAll('group_member_list');
   });
 };
 
 const handleGroupSelect = async (event: Event): Promise<void> => {
-  const groupId = (event.target as HTMLSelectElement)?.value;
+  const groupId: string = (event.target as HTMLSelectElement)?.value;
 
   if (groupId) {
     clearGroupData();
@@ -120,7 +104,7 @@ const handleGroupSelect = async (event: Event): Promise<void> => {
     groupAddMember.disabled = false;
     groupRemoveMember.disabled = false;
 
-    document.querySelectorAll<HTMLInputElement>('.permission').forEach((item) => {
+    document.querySelectorAll<HTMLInputElement>('.permission').forEach((item: HTMLInputElement): void => {
       item.disabled = false;
     });
   }
@@ -172,9 +156,11 @@ const clearGroupData = (): void => {
 };
 
 const clearGroupRights = (): void => {
-  const groupRightsCheckboxes = document.querySelectorAll<HTMLInputElement>('#groupRights input[type=checkbox]');
+  const groupRightsCheckboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll<HTMLInputElement>(
+    '#groupRights input[type=checkbox]'
+  );
   if (groupRightsCheckboxes) {
-    groupRightsCheckboxes.forEach((checkbox) => {
+    groupRightsCheckboxes.forEach((checkbox: HTMLInputElement): void => {
       checkbox.checked = false;
     });
   }
@@ -192,21 +178,22 @@ const getGroupRights = async (groupId: string): Promise<void> => {
 };
 
 const clearUserList = (): void => {
-  const groupUserListOptions = document.querySelectorAll<HTMLSelectElement>('#group_user_list option');
+  const groupUserListOptions: NodeListOf<HTMLSelectElement> =
+    document.querySelectorAll<HTMLSelectElement>('#group_user_list option');
   if (groupUserListOptions) {
-    groupUserListOptions.forEach((option) => {
+    groupUserListOptions.forEach((option: HTMLSelectElement): void => {
       option.value = '';
     });
   }
 };
 
 const getUserList = async (): Promise<void> => {
-  const groupUserList = document.querySelector<HTMLSelectElement>('#group_user_list');
+  const groupUserList = document.querySelector<HTMLSelectElement>('#group_user_list') as HTMLSelectElement;
   const allUsers: User[] = await fetchAllUsersForGroups();
 
   groupUserList.textContent = '';
-  allUsers.forEach((user) => {
-    const option = document.createElement('option');
+  allUsers.forEach((user: User): void => {
+    const option: HTMLOptionElement = document.createElement('option');
     option.value = user.user_id;
     option.textContent = user.login;
     groupUserList.appendChild(option);
@@ -214,17 +201,17 @@ const getUserList = async (): Promise<void> => {
 };
 
 const clearMemberList = (): void => {
-  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list');
+  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list') as HTMLSelectElement;
   groupMemberList.textContent = '';
 };
 
 const getMemberList = async (groupId: string): Promise<void> => {
-  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list');
+  const groupMemberList = document.querySelector<HTMLSelectElement>('#group_member_list') as HTMLSelectElement;
   const members: Member[] = await fetchAllMembers(groupId);
 
   groupMemberList.textContent = '';
-  members.forEach((member) => {
-    const option = document.createElement('option');
+  members.forEach((member: Member) => {
+    const option: HTMLOptionElement = document.createElement('option');
     option.value = member.user_id;
     option.textContent = member.login;
     option.selected = true;
@@ -234,8 +221,9 @@ const getMemberList = async (groupId: string): Promise<void> => {
 };
 
 const addGroupMembers = (): void => {
-  // make sure that a group is selected
-  const selectedGroup = document.querySelector<HTMLSelectElement>('#group_list_select option:checked');
+  const selectedGroup = document.querySelector<HTMLSelectElement>(
+    '#group_list_select option:checked'
+  ) as HTMLSelectElement;
   if (selectedGroup === null) {
     // @todo refactor alert() to something more beautiful.
     alert('Please choose a group.');
@@ -244,18 +232,18 @@ const addGroupMembers = (): void => {
 
   const allUsers = document.getElementById('group_user_list') as HTMLSelectElement;
   const selectedUsers = [...allUsers.options]
-    .filter((option) => option.selected)
-    .map((option) => {
+    .filter((option: HTMLOptionElement): boolean => option.selected)
+    .map((option: HTMLOptionElement) => {
       return { value: option.value, login: option.innerText };
     });
   const allMembers = document.getElementById('group_member_list') as HTMLSelectElement;
-  const members = [...allMembers.options].map((option) => {
+  const members = [...allMembers.options].map((option: HTMLOptionElement) => {
     return { value: option.value, login: option.innerText };
   });
 
   if (selectedUsers) {
     selectedUsers.forEach((user) => {
-      let isMember = false;
+      let isMember: boolean = false;
 
       members.forEach((member) => {
         isMember = user.value === member.value;
@@ -263,7 +251,7 @@ const addGroupMembers = (): void => {
 
       if (isMember === false) {
         const groupMemberList = document.getElementById('group_member_list') as HTMLSelectElement;
-        const option = document.createElement('option');
+        const option: HTMLOptionElement = document.createElement('option');
         option.value = user.value;
         option.textContent = user.login;
         option.selected = true;
@@ -275,7 +263,9 @@ const addGroupMembers = (): void => {
 
 const removeGroupMembers = (): void => {
   const memberList = document.getElementById('group_member_list') as HTMLSelectElement;
-  const selectedMembers = [...memberList.options].filter((option) => option.selected).map((option) => option.value);
+  const selectedMembers: string[] = [...memberList.options]
+    .filter((option: HTMLOptionElement): boolean => option.selected)
+    .map((option: HTMLOptionElement): string => option.value);
 
   if (selectedMembers.length === 0) {
     // @todo refactor alert() to something more beautiful.
