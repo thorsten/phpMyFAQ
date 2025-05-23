@@ -121,11 +121,18 @@ readonly class Order
     public function getCategoryTree(array $categories, int $parentId = 0): array
     {
         $result = [];
+        $stack = [[$parentId, &$result]];
 
-        foreach ($categories as $category) {
-            if ((int)$category['parent_id'] === $parentId) {
-                $childCategories = $this->getCategoryTree($categories, (int)$category['category_id']);
-                $result[$category['category_id']] = $childCategories;
+        while (!empty($stack)) {
+            $popped = array_pop($stack);
+            $currentParentId = $popped[0];
+            $currentResult = &$popped[1];
+
+            foreach ($categories as $category) {
+                if ((int)$category['parent_id'] === $parentId) {
+                    $childCategories = $this->getCategoryTree($categories, (int)$category['category_id']);
+                    $result[$category['category_id']] = $childCategories;
+                }
             }
         }
 
