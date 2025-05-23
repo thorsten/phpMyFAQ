@@ -55,7 +55,8 @@ export const handleUpdateInformation = async () => {
       if (errorMessage instanceof SyntaxError) {
         errorMessage =
           'The requested resource was not found on the server. ' +
-          'Please check your server configuration, especially the RewriteBase in your .htaccess configuration.';
+          'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
+          'configuration. If you use nginx, please check your nginx rewrite configuration.';
       } else {
         errorMessage = errorMessage.message;
       }
