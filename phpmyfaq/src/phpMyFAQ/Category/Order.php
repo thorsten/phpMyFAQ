@@ -127,7 +127,9 @@ readonly class Order
         $stack = [[$parentId, &$result]];
 
         while (!empty($stack)) {
-            list($currentParentId, &$currentResult) = array_pop($stack);
+            $popped = array_pop($stack);
+            $currentParentId = $popped[0];
+            $currentResult = &$popped[1];
 
             foreach ($categories as $category) {
                 if ((int) $category['parent_id'] === $currentParentId) {
