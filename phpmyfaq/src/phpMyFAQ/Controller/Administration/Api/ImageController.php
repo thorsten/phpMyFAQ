@@ -41,7 +41,7 @@ class ImageController extends AbstractController
         $session = $this->container->get('session');
 
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
-        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];
         $timestamp = time();
 
         if (!Token::getInstance($session)->verifyToken('edit-faq', $request->query->get('csrf'))) {
@@ -101,9 +101,9 @@ class ImageController extends AbstractController
 
                 // Add to the list of uploaded files
                 $uploadedFiles[] = $fileName;
-            } else {
-                return $this->json(['success' => false], Response::HTTP_BAD_REQUEST, $headers);
             }
+
+            return $this->json(['success' => false], Response::HTTP_BAD_REQUEST, $headers);
         }
 
         $response = [
