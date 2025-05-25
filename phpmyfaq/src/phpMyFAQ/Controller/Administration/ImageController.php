@@ -38,7 +38,7 @@ class ImageController extends AbstractController
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
-        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];
         $timestamp = time();
 
         if (!Token::getInstance()->verifyToken('edit-faq', $request->query->get('csrf'))) {
