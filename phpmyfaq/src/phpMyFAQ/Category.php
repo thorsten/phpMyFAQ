@@ -389,10 +389,9 @@ class Category
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parent_id'] == $parentId) {
+            if ($category['parent_id'] === $parentId) {
                 $categoryId = $category['id'];
-                $children = $this->buildAdminCategoryTree($categories, $categoryId);
-                $result[$categoryId] = [];
+                $result[$categoryId] = $this->buildAdminCategoryTree($categories, $categoryId);
             }
         }
 

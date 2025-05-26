@@ -36,6 +36,7 @@ $categoryInfo = $category->getAllCategories();
 
 $categoryOrder = new Order($faqConfig);
 $orderedCategories = $categoryOrder->getAllCategories();
+
 $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
 if (empty($categoryTree)) {
