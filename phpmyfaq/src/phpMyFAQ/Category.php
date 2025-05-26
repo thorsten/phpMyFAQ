@@ -454,18 +454,35 @@ class Category
      */
     private function getNodes(int $categoryId): array
     {
-        if (($categoryId > 0) && (isset($this->categoryName[$categoryId]['level']))) {
-            $thisLevel = $this->categoryName[$categoryId]['level'];
-            $temp = [];
-            for ($i = $thisLevel; $i > 0; --$i) {
-                $categoryId = $this->categoryName[$categoryId]['parent_id'];
-                array_unshift($temp, $categoryId);
-            }
+        $nodes = [];
 
-            return $temp;
+        if ($categoryId <= 0) {
+            return $nodes;
         }
 
-        return [];
+        $nodes[] = $categoryId;
+
+        $currentCategoryId = $categoryId;
+        while ($currentCategoryId > 0) {
+            if (!isset($this->categoryName[$currentCategoryId])) {
+                break;
+            }
+
+            $parentId = (int)$this->categoryName[$currentCategoryId]['parent_id'];
+
+            if ($parentId <= 0 || $parentId === $currentCategoryId) {
+                break;
+            }
+
+            if (!isset($this->categoryName[$parentId])) {
+                break;
+            }
+
+            array_unshift($nodes, $parentId);
+            $currentCategoryId = $parentId;
+        }
+
+        return $nodes;
     }
 
     /**
@@ -618,25 +635,21 @@ class Category
 
         $ids = $this->getNodes($catId);
 
-        $num = count($ids);
         $tempName = [];
         $categoryId = [];
         $description = [];
         $breadcrumb = [];
 
-        for ($i = 0; $i < $num; ++$i) {
-            $lineCategory = $this->getLineCategory($ids[$i]);
-            if (array_key_exists($lineCategory, $this->treeTab)) {
-                $tempName[] = $this->treeTab[$this->getLineCategory($ids[$i])]['name'];
-                $categoryId[] = $this->treeTab[$this->getLineCategory($ids[$i])]['id'];
-                $description[] = $this->treeTab[$this->getLineCategory($ids[$i])]['description'];
+        foreach ($ids as $id) {
+            if (isset($this->categoryName[$id])) {
+                $tempName[] = $this->categoryName[$id]['name'];
+                $categoryId[] = $id;
+                $description[] = $this->categoryName[$id]['description'] ?? '';
             }
         }
 
-        if (isset($this->treeTab[$this->getLineCategory($catId)]['name'])) {
-            $tempName[] = $this->treeTab[$this->getLineCategory($catId)]['name'];
-            $categoryId[] = $this->treeTab[$this->getLineCategory($catId)]['id'];
-            $description[] = $this->treeTab[$this->getLineCategory($catId)]['description'];
+        if (empty($tempName)) {
+            return '';
         }
 
         // @todo Maybe this should be done somewhere else ...

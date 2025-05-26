@@ -179,7 +179,7 @@ $renderedCategoryPath = '';
 $multiCategories = $category->getCategoriesFromFaq($faqId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCategory) {
-        $path = $category->getPath($multiCategory['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
+        $path = $category->getPath($multiCategory['id'], ' &raquo; ', true, 'list-unstyled');
         if ('' === trim($path)) {
             continue;
         }
