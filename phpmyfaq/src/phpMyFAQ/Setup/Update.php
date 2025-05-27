@@ -167,6 +167,7 @@ class Update extends Setup
         $this->applyUpdates400Beta2();
         $this->applyUpdates405();
         $this->applyUpdates407();
+        $this->applyUpdates409();
 
         // 4.1 updates
         $this->applyUpdates410Alpha();
@@ -901,7 +902,7 @@ class Update extends Setup
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)',
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET TYPE VARCHAR(500)',
                         Database::getTablePrefix()
                     );
                     $this->queries[] = sprintf(
@@ -1069,6 +1070,29 @@ class Update extends Setup
         }
     }
 
+    private function applyUpdates409(): void
+    {
+        if (version_compare($this->version, '4.0.9', '<')) {
+            if (Database::getType() === 'pgsql') {
+                $this->queries[] = sprintf(
+                    'CREATE SEQUENCE %sfaqseo_id_seq',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval(\'faqseo_id_seq\')',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'SELECT setval(\'faqseo_id_seq\', (SELECT MAX(id) FROM %sfaqseo));',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL',
+                    Database::getTablePrefix()
+                );
+            }
+        }
+    }
     private function applyUpdates410Alpha(): void
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
