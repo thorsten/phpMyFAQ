@@ -167,6 +167,7 @@ class Update extends Setup
         $this->applyUpdates400Beta2();
         $this->applyUpdates405();
         $this->applyUpdates407();
+        $this->applyUpdates409();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -806,7 +807,7 @@ class Update extends Setup
                 case 'pgsql':
                     $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqseo (
-                            id SERIAL NOT NULL,
+                            id INT NOT NULL,
                             type VARCHAR(32) NOT NULL,
                             reference_id INTEGER NOT NULL,
                             reference_language VARCHAR(5) NOT NULL,
@@ -897,7 +898,7 @@ class Update extends Setup
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
-                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label TYPE VARCHAR(500)',
+                        'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET TYPE VARCHAR(500)',
                         Database::getTablePrefix()
                     );
                     $this->queries[] = sprintf(
@@ -1065,6 +1066,29 @@ class Update extends Setup
         }
     }
 
+    private function applyUpdates409(): void
+    {
+        if (version_compare($this->version, '4.0.9', '<')) {
+            if (Database::getType() === 'pgsql') {
+                $this->queries[] = sprintf(
+                    'CREATE SEQUENCE %sfaqseo_id_seq',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval(\'faqseo_id_seq\')',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'SELECT setval(\'faqseo_id_seq\', (SELECT MAX(id) FROM %sfaqseo));',
+                    Database::getTablePrefix()
+                );
+                $this->queries[] = sprintf(
+                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL',
+                    Database::getTablePrefix()
+                );
+            }
+        }
+    }
 
     private function updateVersion(): void
     {
