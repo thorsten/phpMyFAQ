@@ -82,13 +82,13 @@ class FaqController extends AbstractController
         }
 
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (isset($data->{'rubrik[]'})) {
-            if (is_string($data->{'rubrik[]'})) {
-                $data->{'rubrik[]'} = [ $data->{'rubrik[]'} ];
+        if (isset($data->rubrik)) {
+            if (is_string($data->rubrik)) {
+                $data->rubrik = [ $data->rubrik ];
             }
 
             $categories = Filter::filterArray(
-                $data->{'rubrik[]'}
+                $data->rubrik
             );
         } else {
             $categories = [$category->getAllCategoryIds()[0]];
@@ -97,6 +97,7 @@ class FaqController extends AbstractController
         if (!$this->captchaCodeIsValid($request)) {
             return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
+
         if (
             !empty($author) && !empty($email) && ($questionText !== '' && $questionText !== '0') &&
             $stopWords->checkBannedWord(strip_tags($questionText))
