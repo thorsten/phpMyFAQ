@@ -72,13 +72,13 @@ class FaqController extends AbstractController
 
         $category = new Category($this->configuration);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (isset($data->{'rubrik[]'})) {
-            if (is_string($data->{'rubrik[]'})) {
-                $data->{'rubrik[]'} = [ $data->{'rubrik[]'} ];
+        if (isset($data->rubrik)) {
+            if (is_string($data->rubrik)) {
+                $data->rubrik = [ $data->rubrik ];
             }
 
             $categories = Filter::filterArray(
-                $data->{'rubrik[]'}
+                $data->rubrik
             );
         } else {
             $categories = [$category->getAllCategoryIds()[0]];
