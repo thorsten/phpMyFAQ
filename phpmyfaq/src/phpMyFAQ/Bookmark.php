@@ -73,6 +73,8 @@ readonly class Bookmark
 
     /**
      * Gets all bookmarks from the current user.
+     *
+     * @return array<int>
      */
     public function getAll(): array
     {

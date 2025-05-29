@@ -52,6 +52,8 @@ enum PermissionType: string
 
     case FAQ_EDIT = 'edit_faq';
 
+    case FAQ_TRANSLATE = 'translate_faq';
+
     case FAQS_VIEW = 'view_faqs';
 
     case FORMS_EDIT = 'forms_edit';

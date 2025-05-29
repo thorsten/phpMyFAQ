@@ -21,6 +21,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
@@ -1141,11 +1142,22 @@ EOT;
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function applyUpdates410Alpha2(): void
     {
         if (version_compare($this->version, '4.1.0-alpha.2', '<')) {
             $this->configuration->add('security.enableAdminSessionTimeoutCounter', true);
             $this->configuration->add('search.enableOpenSearch', false);
+
+            // Add new permission to translate FAQs
+            $user = new User($this->configuration);
+            $rightData = [
+                'name' => PermissionType::FAQ_TRANSLATE->value,
+                'description' => 'Right to translate FAQs'
+            ];
+            $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
         }
     }
 

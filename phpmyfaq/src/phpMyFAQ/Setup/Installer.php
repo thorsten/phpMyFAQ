@@ -246,6 +246,10 @@ class Installer extends Setup
         [
             'name' => PermissionType::FORMS_EDIT->value,
             'description' => 'Right to edit forms'
+        ],
+        [
+            'name' => PermissionType::FAQ_TRANSLATE->value,
+            'description' => 'Right to translate FAQs'
         ]
     ];
 
