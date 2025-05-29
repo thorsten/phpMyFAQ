@@ -26,17 +26,17 @@ export const insertAfter = (referenceNode: Node, newNode: Node): void => {
 
 /**
  * Creates a new element with the given tag name.
- * @param htmlTag
+ * @param HTMLElement
  * @param properties
  * @param children
  * @returns {*}
  */
 export const addElement = (
-  htmlTag: string,
+  HTMLElement: string,
   properties: Record<string, any> = {},
   children: Node[] = []
 ): HTMLElement => {
-  const element = Object.assign(document.createElement(htmlTag), properties);
+  const element = Object.assign(document.createElement(HTMLElement), properties);
 
   Object.keys(properties).forEach((key) => {
     if (key.startsWith('data-')) {

@@ -1487,5 +1487,5 @@ $PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Komplett-Import';
 $PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'Der OpenSearch Suchindex erfolgreich erstellt.';
 $PMF_LANG['ad_os_create_import_success'] = 'Der OpenSearch Import war erfolgreich.';
 $PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'Der OpenSearch Suchindex erfolgreich gelöscht.';
-
+$PMF_LANG['permission::translate_faq'] = 'FAQs übersetzen';
 return $PMF_LANG;

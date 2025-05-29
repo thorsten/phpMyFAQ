@@ -16,18 +16,7 @@
 import { Modal } from 'bootstrap';
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
 import { addElement, pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { CategoryTranslations, FaqResponse, Response } from '../interfaces';
-
-interface Faq {
-  id: string;
-  language: string;
-  solution_id: string;
-  question: string;
-  created: string;
-  category_id: string;
-  sticky: string;
-  active: string;
-}
+import { CategoryTranslations, Faq, FaqList, Response } from '../interfaces';
 
 export const handleFaqOverview = async (): Promise<void> => {
   const collapsedCategories: NodeListOf<Element> = document.querySelectorAll('.accordion-collapse');
@@ -47,8 +36,8 @@ export const handleFaqOverview = async (): Promise<void> => {
         const onlyInactive: boolean = getInactiveCheckboxState();
         const onlyNew: boolean = getNewCheckboxState();
 
-        const faqs = (await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew)) as FaqResponse;
-        await populateCategoryTable(categoryId, faqs.faqs);
+        const faqs = (await fetchAllFaqsByCategory(categoryId, language, onlyInactive, onlyNew)) as FaqList;
+        await populateCategoryTable(categoryId, faqs.faqs, faqs.isAllowedToTranslate);
         const toggleStickyFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-sticky-faq');
         const toggleActiveFaq: NodeListOf<HTMLInputElement> = document.querySelectorAll('.pmf-admin-active-faq');
         const translationDropdown: NodeListOf<HTMLElement> = document.querySelectorAll('#dropdownAddNewTranslation');
@@ -211,20 +200,20 @@ const saveStatus = async (
   }
 };
 
-const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<void> => {
+const populateCategoryTable = async (categoryId: string, faqs: Faq[], isAllowedToTranslate: boolean): Promise<void> => {
   const tableBody = document.getElementById(`tbody-category-id-${categoryId}`) as HTMLElement;
   const csrfToken = tableBody.getAttribute('data-pmf-csrf') as string;
 
   faqs.forEach((faq: Faq): void => {
     const row: HTMLTableRowElement = document.createElement('tr');
-    row.setAttribute('id', `faq_${faq.id}_${faq.language}`);
+    row.setAttribute('id', `faq_${faq.id.toString()}_${faq.language}`);
 
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `./faq/edit/${faq.id}/${faq.language}`,
-          innerText: faq.id,
+          href: `./faq/edit/${faq.id.toString()}/${faq.language}`,
+          innerText: faq.id.toString(),
         }),
       ])
     );
@@ -233,8 +222,8 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
       addElement('td', { classList: 'align-middle text-center' }, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `./faq/edit/${faq.id}/${faq.language}`,
-          innerText: faq.solution_id,
+          href: `./faq/edit/${faq.id.toString()}/${faq.language}`,
+          innerText: faq.solution_id.toString(),
         }),
       ])
     );
@@ -242,7 +231,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
       addElement('td', {}, [
         addElement('a', {
           classList: 'text-decoration-none',
-          href: `./faq/edit/${faq.id}/${faq.language}`,
+          href: `./faq/edit/${faq.id.toString()}/${faq.language}`,
           innerText: faq.question,
         }),
       ])
@@ -253,11 +242,11 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
         addElement('input', {
           classList: 'form-check-input pmf-admin-sticky-faq',
           type: 'checkbox',
-          'data-pmfCategoryIdSticky': faq.category_id,
-          'data-pmfFaqId': faq.id,
+          'data-pmfCategoryIdSticky': faq.category_id.toString(),
+          'data-pmfFaqId': faq.id.toString(),
           'data-pmfCsrf': csrfToken,
           lang: faq.language,
-          id: `sticky_record_${faq.category_id}_${faq.id}`,
+          id: `sticky_record_${faq.category_id}_${faq.id.toString()}`,
           checked: faq.sticky === 'yes',
         }),
       ])
@@ -267,52 +256,54 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
         addElement('input', {
           classList: 'form-check-input pmf-admin-active-faq',
           type: 'checkbox',
-          'data-pmfCategoryIdActive': faq.category_id,
-          'data-pmfFaqId': faq.id,
+          'data-pmfCategoryIdActive': faq.category_id.toString(),
+          'data-pmfFaqId': faq.id.toString(),
           'data-pmfCsrf': csrfToken,
           lang: faq.language,
-          id: `active_record_${faq.category_id}_${faq.id}`,
+          id: `active_record_${faq.category_id.toString()}_${faq.id.toString()}`,
           checked: faq.active === 'yes',
         }),
       ])
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id}/${faq.language}` }, [
+        addElement('a', { classList: 'btn btn-primary', href: `./faq/edit/${faq.id.toString()}/${faq.language}` }, [
           addElement('i', { classList: 'bi bi-pencil', 'aria-hidden': 'true' }),
         ]),
       ])
     );
     row.append(
       addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('a', { classList: 'btn btn-info', href: `./faq/copy/${faq.id}/${faq.language}` }, [
+        addElement('a', { classList: 'btn btn-info', href: `./faq/copy/${faq.id.toString()}/${faq.language}` }, [
           addElement('i', { classList: 'bi bi-copy', 'aria-hidden': 'true' }),
         ]),
       ])
     );
-    row.append(
-      addElement('td', { classList: 'align-middle text-center' }, [
-        addElement('div', { classList: 'checkbox' }, [
-          addElement(
-            'a',
-            {
-              classList: 'btn btn-secondary dropdown-toggle',
-              href: '#',
-              role: 'button',
-              id: 'dropdownAddNewTranslation',
-              'data-bsToggle': 'dropdown',
-              'aria-haspopup': 'true',
-              'aria-expanded': 'false',
-              'data-pmfFaqId': faq.id,
-            },
-            [addElement('i', { classList: 'bi bi-globe', 'aria-hidden': 'true' })]
-          ),
-          addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
-            addElement('a', { classList: 'dropdown-item', id: 'dropdownTranslation', innerText: 'n/a' }),
+    if (isAllowedToTranslate) {
+      row.append(
+        addElement('td', { classList: 'align-middle text-center' }, [
+          addElement('div', { classList: 'checkbox' }, [
+            addElement(
+              'a',
+              {
+                classList: 'btn btn-secondary dropdown-toggle',
+                href: '#',
+                role: 'button',
+                id: 'dropdownAddNewTranslation',
+                'data-bsToggle': 'dropdown',
+                'aria-haspopup': 'true',
+                'aria-expanded': 'false',
+                'data-pmfFaqId': faq.id.toString(),
+              },
+              [addElement('i', { classList: 'bi bi-globe', 'aria-hidden': 'true' })]
+            ),
+            addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
+              addElement('a', { classList: 'dropdown-item', id: 'dropdownTranslation', innerText: 'n/a' }),
+            ]),
           ]),
-        ]),
-      ])
-    );
+        ])
+      );
+    }
     row.append(
       addElement('td', { classList: 'text-center' }, [
         addElement(
@@ -320,7 +311,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
           {
             classList: 'btn btn-danger pmf-button-delete-faq',
             type: 'button',
-            'data-pmfId': faq.id,
+            'data-pmfId': faq.id.toString(),
             'data-pmfLanguage': faq.language,
             'data-pmfToken': csrfToken,
           },
@@ -328,7 +319,7 @@ const populateCategoryTable = async (categoryId: string, faqs: Faq[]): Promise<v
             addElement('i', {
               classList: 'bi bi-trash',
               'aria-hidden': 'true',
-              'data-pmfId': faq.id,
+              'data-pmfId': faq.id.toString(),
               'data-pmfLanguage': faq.language,
               'data-pmfToken': csrfToken,
             }),

@@ -27,7 +27,7 @@
 
   {% if faqData['notes'] != '' %}
     <div class="alert alert-info alert-dismissible fade show" role="alert">
-      <h4 class="alert-heading">{{ 'ad_admin_notes' | translate }}</h4>
+      <h6 class="alert-heading">{{ 'ad_admin_notes' | translate }}</h6>
       <p>{{ 'msgPrivateNotesOfEditor' | translate }} {{ faqData['notes'] }}</p>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -189,6 +189,7 @@
               </div>
 
               <!-- Language -->
+              {% if hasPermissionForTranslateFaqs %}
               <div class="row mb-2">
                 <label class="col-lg-2 col-form-label" for="lang">
                   {{ 'msgLanguage' | translate }}
@@ -197,6 +198,9 @@
                   {{ languageOptions | raw }}
                 </div>
               </div>
+              {% else %}
+                <input type="hidden" name="lang" id="lang" value="{{ faqData['lang'] }}">
+              {% endif %}
 
               <!-- Attachments -->
               {% if hasPermissionForAddAttachments %}
@@ -223,7 +227,7 @@
                       {% endfor %}
                     </ul>
 
-                    <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#attachmentModal">
                       {{ 'msgAddAttachment' | translate }}
                     </button>

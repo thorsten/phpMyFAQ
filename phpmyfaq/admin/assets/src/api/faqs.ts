@@ -14,14 +14,14 @@
  */
 
 import { Response } from '../interfaces';
-import { FaqResponse } from '../interfaces';
+import { FaqList } from '../interfaces';
 
 export const fetchAllFaqsByCategory = async (
   categoryId: string,
   language: string,
   onlyInactive?: boolean,
   onlyNew?: boolean
-): Promise<FaqResponse> => {
+): Promise<FaqList> => {
   try {
     let currentUrl: string = window.location.protocol + '//' + window.location.host;
     let pathname: string = window.location.pathname;

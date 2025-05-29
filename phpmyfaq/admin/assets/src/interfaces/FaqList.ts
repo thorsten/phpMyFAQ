@@ -1,4 +1,4 @@
-interface Faq {
+export interface Faq {
   id: number;
   language: string;
   solution_id: number;
@@ -11,6 +11,7 @@ interface Faq {
   created: string; // Format: YYYY-MM-DD HH:MM:SS
 }
 
-export interface FaqResponse {
+export interface FaqList {
   faqs: Faq[];
+  isAllowedToTranslate: boolean;
 }

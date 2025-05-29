@@ -555,6 +555,11 @@ class FaqController extends AbstractAdministrationController
             PermissionType::ATTACHMENT_DELETE->value
         );
 
+        $canTranslateFaqs = $this->currentUser->perm->hasPermission(
+            $this->currentUser->getUserId(),
+            PermissionType::FAQ_TRANSLATE->value
+        );
+
         return [
             'csrfToken' => $token->getTokenString('edit-faq'),
             'csrfTokenDeleteAttachment' => $token->getTokenString('delete-attachment'),
@@ -567,6 +572,7 @@ class FaqController extends AbstractAdministrationController
             'maxAttachmentSize' => $this->configuration->get('records.maxAttachmentSize'),
             'hasPermissionForAddAttachments' => $canAddAttachments,
             'hasPermissionForDeleteAttachments' => $canDeleteAttachments,
+            'hasPermissionForTranslateFaqs' => $canTranslateFaqs,
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
             'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
             'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),

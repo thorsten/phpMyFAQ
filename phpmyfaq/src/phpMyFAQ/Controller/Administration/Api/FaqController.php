@@ -18,6 +18,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use Exception;
+use phpMyFAQ\Administration\Faq as FaqAdministration;
 use phpMyFAQ\Administration\Revision;
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
@@ -520,12 +521,16 @@ class FaqController extends AbstractController
         $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
         $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
 
-        $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
+        $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
 
         return $this->json(
             [
                 'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
+                'isAllowedToTranslate' => $this->currentUser->perm->hasPermission(
+                    $this->currentUser->getUserId(),
+                    PermissionType::FAQ_TRANSLATE->value
+                ),
             ],
             Response::HTTP_OK
         );
@@ -550,7 +555,7 @@ class FaqController extends AbstractController
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
+            $faq = new FaqAdministration($this->configuration);
             $success = false;
 
             foreach ($faqIds as $faqId) {
@@ -588,7 +593,7 @@ class FaqController extends AbstractController
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
-            $faq = new \phpMyFAQ\Administration\Faq($this->configuration);
+            $faq = new FaqAdministration($this->configuration);
             $success = false;
 
             foreach ($faqIds as $faqId) {
