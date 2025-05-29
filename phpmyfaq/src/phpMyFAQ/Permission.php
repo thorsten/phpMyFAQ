@@ -2,11 +2,13 @@
 
 /**
  * This class manages user permissions and group memberships.
+ *
  * There are currently two possible extensions of this class: basic and medium by the
  * classes BasicPermission and MediumPermission.
- * The permission type can be selected by calling the static method $perm = Permission::selectPerm(perm_type)
- * where perm_type is 'medium'.
- * Both ways, a BasicPermission or MediumPermission is returned.
+ *
+ * The permission type can be selected by calling the static method $perm = Permission::create($permLevel)
+ * where $permLevel is 'medium'.
+ *
  * Perhaps the most important method is $perm->hasPermission(right_name).
  * This checks whether the user has the user_id set with $perm->setPerm()
  * The permission object is added to a user using the user's addPerm() method.
@@ -29,8 +31,7 @@
 namespace phpMyFAQ;
 
 use InvalidArgumentException;
-use phpMyFAQ\Permission\BasicPermission;
-use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\PermissionInterface;
 
 /**
  * Class Permission
@@ -40,12 +41,10 @@ use phpMyFAQ\Permission\MediumPermission;
 class Permission
 {
     /**
-     * Permission::createPermission() returns an instance of an implementation of the Permission interface.
+     * Permission::create() returns an instance of an implementation of the Permission interface.
      */
-    public static function createPermission(
-        string $permLevel,
-        Configuration $configuration
-    ): BasicPermission|MediumPermission {
+    public static function create(string $permLevel, Configuration $configuration): PermissionInterface
+    {
         $permClass = sprintf('\phpMyFAQ\Permission\%sPermission', ucfirst(strtolower($permLevel)));
 
         if (!class_exists($permClass)) {

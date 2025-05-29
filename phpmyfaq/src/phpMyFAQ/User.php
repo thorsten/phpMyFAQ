@@ -150,7 +150,7 @@ class User
 */
     public function __construct(protected ?Configuration $configuration)
     {
-        $basicPermission = Permission::createPermission(
+        $basicPermission = Permission::create(
             $this->configuration->get('security.permLevel'),
             $this->configuration
         );

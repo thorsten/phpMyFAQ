@@ -292,7 +292,7 @@ class UserController extends AbstractController
 
         // Remove the user from groups
         if ('basic' !== $this->configuration->get('security.permLevel')) {
-            $permissions = Permission::createPermission('medium', $this->configuration);
+            $permissions = Permission::create('medium', $this->configuration);
             $permissions->removeFromAllGroups($userId);
         }
 

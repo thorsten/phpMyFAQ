@@ -17,10 +17,10 @@ class PermissionTest extends TestCase
     {
         $mockConfig = $this->createMock(Configuration::class);
 
-        $basicPermission = Permission::createPermission('basic', $mockConfig);
+        $basicPermission = Permission::create('basic', $mockConfig);
         $this->assertInstanceOf(BasicPermission::class, $basicPermission);
 
-        $mediumPermission = Permission::createPermission('medium', $mockConfig);
+        $mediumPermission = Permission::create('medium', $mockConfig);
         $this->assertInstanceOf(MediumPermission::class, $mediumPermission);
     }
 
@@ -33,6 +33,6 @@ class PermissionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid permission level: nonexistent');
-        Permission::createPermission('nonexistent', $mockConfig);
+        Permission::create('nonexistent', $mockConfig);
     }
 }
