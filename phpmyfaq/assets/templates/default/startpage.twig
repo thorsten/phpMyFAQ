@@ -11,20 +11,24 @@
 
 <!-- Start page -->
 {% if startPageCategories %}
-<div class="row row-cols-1 row-cols-lg-3 align-items-stretch justify-content-center g-4 py-4 mb-4">
-  {% for decks in startPageCategoryDecks %}
-    <div class="col">
-      <div class="card card-cover h-100 overflow-hidden text-bg-light rounded-3 shadow-lg p-1"
-      {% if decks['image'] != '' %}
-        style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
-      {% endif %}
-      >
-        <h3 class="pt-5 mt-5 mb-3 fw-semibold text-center">{{ decks['name'] }}</h3>
-        <a class="btn btn-primary bg-gradient" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
+  <div class="row row-cols-1 row-cols-lg-3 align-items-stretch justify-content-center g-4 py-4 mb-4">
+    {% for decks in startPageCategoryDecks %}
+      <div class="col">
+        <div class="card card-cover h-100 overflow-hidden text-bg-light rounded-3 shadow-lg p-1"
+          {% if decks['image'] != '' %}
+            style="background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url('{{ decks['image'] }}')"
+          {% endif %}
+        >
+          <div class="d-flex flex-column h-100">
+            <h3 class="pt-5 mt-5 mb-3 fw-semibold text-center">{{ decks['name'] }}</h3>
+            <div class="mt-auto px-3 mb-3">
+              <a class="btn btn-primary bg-gradient w-100" href="{{ decks['url'] }}">{{ 'msgGoToCategory' | translate }}</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
 {% endif %}
 
 <!-- Start page content -->
