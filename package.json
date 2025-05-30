@@ -38,17 +38,17 @@
     "highlight.js": "^11.11.1",
     "masonry-layout": "^4.2.2",
     "sortablejs": "^1.15.6",
-    "tinymce": "^6.8.5",
+    "tinymce": "^6.8.6",
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
+    "@babel/core": "^7.27.3",
     "@babel/preset-env": "^7.27.2",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@mcler/webpack-concat-plugin": "^4.1.6",
     "@testing-library/jest-dom": "^6.6.3",
-    "@types/node": "^20.17.46",
+    "@types/node": "^20.17.55",
     "autoprefixer": "^10.4.21",
     "babel-jest": "^29.7.0",
     "babel-loader": "^9.2.1",
@@ -64,7 +64,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-fetch-mock": "^3.0.3",
     "mini-css-extract-plugin": "^2.9.2",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.4",
     "prettier": "^3.5.3",
     "pretty-quick": "^4.1.1",
     "raw-loader": "^4.0.2",
@@ -72,10 +72,10 @@
     "sass-loader": "^16.0.5",
     "sigmund": "^1.0.1",
     "style-loader": "^4.0.0",
-    "webpack": "^5.99.8",
+    "webpack": "^5.99.9",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^6.0.1",
-    "webpack-sources": "^3.2.3"
+    "webpack-sources": "^3.3.0"
   },
   "husky": {
     "hooks": {
