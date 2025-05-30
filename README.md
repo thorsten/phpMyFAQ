@@ -7,8 +7,9 @@
 
 ## What is phpMyFAQ?
 
-phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data; PHP
-8.3+ is needed to access this data. phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG
+phpMyFAQ is a multilingual, completely database-driven FAQ system.
+It supports various databases to store all data; PHP 8.3+ is needed to access this data.
+phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG
 editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
@@ -44,7 +45,7 @@ For development purposes, you can start a full stack to run your current PhpMyFA
 
     $ docker-compose up
 
-The command above starts nine containers for multi database development as following.
+The command above starts nine containers for multi-database development as follows.
 
 _Specific images started once to prepare the project:_
 
