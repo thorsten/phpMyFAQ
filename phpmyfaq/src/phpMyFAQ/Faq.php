@@ -1488,7 +1488,6 @@ class Faq
     {
         global $sids;
 
-        $now = date('YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
@@ -1519,10 +1518,6 @@ class Faq
             WHERE
                 fd.lang = '%s'
             AND 
-                fd.date_start <= '%s'
-            AND 
-                fd.date_end   >= '%s'
-            AND 
                 fd.active = 'yes'
             AND 
                 fd.sticky = 1
@@ -1541,8 +1536,6 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
-            $now,
-            $now,
             $queryHelper->queryPermission($this->groupSupport)
         );
 
