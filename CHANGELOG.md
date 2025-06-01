@@ -6,15 +6,15 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-alpha.2 - unreleased
+### phpMyFAQ v4.1.0-alpha.2 - 2025-06-01
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added Symfony Routing for administration backend (Thorsten)
 - added code snippets plugin with syntax highlighting in WYSIWYG editor (Thorsten)
-- added administration view for orphaned FAQs (Thorsten)
+- added an administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)
-- added image upload and image manager in Markdown editor (Thorsten)
+- added image upload and image manager in the Markdown editor (Thorsten)
 - added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
