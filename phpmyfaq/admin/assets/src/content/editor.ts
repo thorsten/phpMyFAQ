@@ -166,6 +166,7 @@ export const renderEditor = () => {
     },
     colorPickerDefaultTab: 'background',
     imageDefaultWidth: 300,
+    imageProcessor: { replaceDataURIToBlobIdInView: false },
     removeButtons: [],
     disablePlugins: [],
     extraPlugins: ['phpMyFAQ', 'codeSnippet'],
