@@ -1635,7 +1635,7 @@ class Faq
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
-                    '%sadmin/faq/edit/edit/%d/%s',
+                    '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
                     $row->id,
                     $row->lang
