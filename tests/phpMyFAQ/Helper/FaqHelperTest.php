@@ -37,6 +37,7 @@ class FaqHelperTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.referenceURL', 'https://localhost:443/');
+        $this->configuration->set('records.allowedMediaHosts', 'www.youtube.com,example.com,phpmyfaq.de');
 
         $language = new Language($this->configuration);
         $this->configuration->setLanguage($language);
@@ -132,6 +133,21 @@ class FaqHelperTest extends TestCase
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    public function testCleanUpContentWithDifferentImageSource(): void
+    {
+        $content = '<img src="https://example.com/image.jpg" alt="Example Image">';
+        $expectedOutput = '<img src="https://example.com/image.jpg" alt="Example Image" />';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+        $this->assertEquals($expectedOutput, $actualOutput);
+
+        $content = '<img src="https://www.phpmyfaq.de/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
+        $expectedOutput = '<img src="https://www.phpmyfaq.de/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 

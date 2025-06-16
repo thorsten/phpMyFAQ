@@ -161,8 +161,8 @@ class FaqHelper extends AbstractHelper
     public function cleanUpContent(string $content): string
     {
         $contentLength = strlen($content);
-        $allowedMediaHosts = $this->configuration->getAllowedMediaHosts();
-        $allowedMediaHosts[] = Request::createFromGlobals()->getHost();
+        $allowedHosts = $this->configuration->getAllowedMediaHosts();
+        $allowedHosts[] = Request::createFromGlobals()->getHost();
         $htmlSanitizer = new HtmlSanitizer(
             (new HtmlSanitizerConfig())
                 ->withMaxInputLength($contentLength + 1)
@@ -173,7 +173,9 @@ class FaqHelper extends AbstractHelper
                 ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
                 ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-                ->allowMediaHosts($allowedMediaHosts)
+                ->allowMediaHosts($allowedHosts)
+                ->allowLinkSchemes(['https', 'http', 'mailto', 'data'])
+                ->allowLinkHosts($allowedHosts)
         );
 
         $sanitizedContent = $htmlSanitizer->sanitize($content);
