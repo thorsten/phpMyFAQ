@@ -1309,13 +1309,13 @@ $PMF_LANG['buttonCheckHealth'] = 'Check System health now';
 $PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
 $PMF_LANG['buttonDownloadPackage'] = 'Download now';
 $PMF_LANG['buttonExtractPackage'] = 'Extract downloaded package now';
-$PMF_LANG['versionIsUpToDate'] = '✅ Your installed version is up-to-date!';
-$PMF_LANG['healthCheckOkay'] = '✅ Your installed version is healthy!';
-$PMF_LANG['downloadSuccessful'] = '✅ Package successfully downloaded!';
-$PMF_LANG['extractSuccessful'] = '✅ Package successfully extracted!';
-$PMF_LANG['downloadFailure'] = '❌ Could not download download package.';
-$PMF_LANG['verificationFailure'] = '❌ Could not verify downloaded package.';
-$PMF_LANG['extractFailure'] = '❌ Could not extract downloaded package.';
+$PMF_LANG['versionIsUpToDate'] = 'Your installed version is up-to-date!';
+$PMF_LANG['healthCheckOkay'] = 'Your installed version is healthy!';
+$PMF_LANG['downloadSuccessful'] = 'Package successfully downloaded!';
+$PMF_LANG['extractSuccessful'] = 'Package successfully extracted!';
+$PMF_LANG['downloadFailure'] = 'Could not download download package.';
+$PMF_LANG['verificationFailure'] = 'Could not verify downloaded package.';
+$PMF_LANG['extractFailure'] = 'Could not extract downloaded package.';
 $PMF_LANG['msgCurrentVersion'] = 'Current Version: ';
 $PMF_LANG['msgLastCheckDate'] = 'Last check for updates: ';
 $PMF_LANG['msgLastVersionAvailable'] = 'Latest version available: ';
@@ -1396,7 +1396,7 @@ $PMF_LANG['msgUserList'] = 'List of users';
 
 // added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
 $PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
-$PMF_LANG['msgNotInMaintenanceMode'] = '⚠️The FAQ is not in maintenance mode.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'The FAQ is not in maintenance mode.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
 $PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Multiple keywords have to separated with commas.';

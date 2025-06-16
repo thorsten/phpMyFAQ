@@ -62,7 +62,7 @@ class SetupController extends AbstractController
             return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(['message' => '✅ Installation check successful'], Response::HTTP_OK);
+        return $this->json(['message' => 'Installation check successful'], Response::HTTP_OK);
     }
 
     public function backup(Request $request): JsonResponse
@@ -87,7 +87,7 @@ class SetupController extends AbstractController
             return $this->json(['message' => $exception->getMessage()], Response::HTTP_BAD_GATEWAY);
         }
 
-        return $this->json(['message' => '✅ Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
+        return $this->json(['message' => 'Backup successful', 'backupFile' => $pathToBackup], Response::HTTP_OK);
     }
 
     public function updateDatabase(Request $request): JsonResponse
@@ -104,7 +104,7 @@ class SetupController extends AbstractController
         try {
             if ($update->applyUpdates()) {
                 $this->configuration->set('main.maintenanceMode', 'false');
-                return new JsonResponse(['success' => '✅ Database successfully updated.'], Response::HTTP_OK);
+                return new JsonResponse(['success' => 'Database successfully updated.'], Response::HTTP_OK);
             }
 
             return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);

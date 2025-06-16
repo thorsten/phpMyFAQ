@@ -39,6 +39,7 @@ class FaqHelperTest extends TestCase
         $this->configuration->set('main.currentVersion', System::getVersion());
         $this->configuration->set('main.referenceURL', 'https://localhost:443/');
         $this->configuration->set('main.enableMarkdownEditor', true);
+        $this->configuration->set('records.allowedMediaHosts', 'www.youtube.com,example.com,rinne.info');
 
         $session = $this->createMock(Session::class);
         $language = new Language($this->configuration, $session);
@@ -128,6 +129,22 @@ class FaqHelperTest extends TestCase
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
         $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    public function testCleanUpContentWithDifferentImageSource(): void
+    {
+        $content = '<img src="https://example.com/image.jpg" alt="Example Image">';
+        $expectedOutput = '<img src="https://example.com/image.jpg" alt="Example Image" />';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+        $this->assertEquals($expectedOutput, $actualOutput);
+
+        $content = '<img src="https://www.rinne.info/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
+        $expectedOutput = '<img src="https://www.rinne.info/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+        $this->assertEquals($expectedOutput, $actualOutput);
+
     }
 
     /**

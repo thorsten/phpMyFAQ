@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
+require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
+
+use phpMyFAQ\Translation;
+use Symfony\Component\Console\Application;
+use phpMyFAQ\Command\UpdateCommand;
+
+try {
+    Translation::create()
+        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setDefaultLanguage('en')
+        ->setCurrentLanguage('en')
+        ->setMultiByteLanguage();
+} catch (Exception $exception) {
+    echo $exception->getMessage();
+}
+
+$application = new Application();
+$application->add(new UpdateCommand());
+$application->run();

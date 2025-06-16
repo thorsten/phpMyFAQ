@@ -213,7 +213,7 @@ class UpdateController extends AbstractController
                 flush();
             };
             if ($upgrade->createTemporaryBackup($backupHash . '.zip', $progressCallback)) {
-                echo json_encode(['message' => '✅ Backup successful']);
+                echo json_encode(['message' => 'Backup successful']);
             } else {
                 echo json_encode(['message' => 'Backup failed']);
             }
@@ -234,7 +234,7 @@ class UpdateController extends AbstractController
                 flush();
             };
             if ($upgrade->installPackage($progressCallback) && $configurator->adjustRewriteBaseHtaccess()) {
-                echo json_encode(['message' => '✅ Package successfully installed.']);
+                echo json_encode(['message' => 'Package successfully installed.']);
             } else {
                 echo json_encode(['message' => 'Install package failed']);
             }
@@ -253,7 +253,7 @@ class UpdateController extends AbstractController
             if ($update->applyUpdates()) {
                 $this->configuration->set('main.maintenanceMode', 'false');
                 return new JsonResponse(
-                    ['success' => '✅ Database successfully updated.'],
+                    ['success' => 'Database successfully updated.'],
                     Response::HTTP_OK
                 );
             }
@@ -278,6 +278,6 @@ class UpdateController extends AbstractController
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $upgrade->cleanUp();
 
-        return $this->json(['message' => '✅ Cleanup successful.'], Response::HTTP_OK);
+        return $this->json(['message' => 'Cleanup successful.'], Response::HTTP_OK);
     }
 }

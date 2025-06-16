@@ -32,7 +32,6 @@ use phpMyFAQ\Controller\Api\SearchController;
 use phpMyFAQ\Controller\Api\SetupController;
 use phpMyFAQ\Controller\Api\TagController;
 use phpMyFAQ\Controller\Api\TitleController;
-use phpMyFAQ\Controller\Api\UpdateController;
 use phpMyFAQ\Controller\Api\VersionController;
 use phpMyFAQ\Controller\Frontend\AutoCompleteController;
 use phpMyFAQ\Controller\Frontend\BookmarkController;
@@ -191,11 +190,6 @@ $routesConfig = [
         'path' => "v{$apiVersion}/title",
         'controller' => [TitleController::class, 'index'],
         'methods' => 'GET'
-    ],
-    'api.update' => [
-        'path' => "v{$apiVersion}/update",
-        'controller' => [UpdateController::class, 'index'],
-        'methods' => 'POST'
     ],
     'api.version' => [
         'path' => "v{$apiVersion}/version",

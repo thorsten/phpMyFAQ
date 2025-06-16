@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-alpha.2 - 2025-06-01
+### phpMyFAQ v4.1.0-alpha.3 - unreleased
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
@@ -19,6 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
 - added experimental support for OpenSearch (Thorsten)
+- added experimental update via command line (Thorsten)
 - improved online update feature (Thorsten)
 - updated Spanish translation (Thorsten)
 - updated Japanese translation (Kamo Tomoyuki)
