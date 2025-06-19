@@ -5,15 +5,15 @@
  *
  * HowTo:
  *  - Rename this file to <DOCROOT>/multisite/multisite.php
- *      i.e. /srv/www/faq.example.org/multisite/multisite.php
+ *      e.g. /srv/www/faq.example.org/multisite/multisite.php
  *  - create a folder that's called like the SERVER_NAME inside <DOCROOT>/multi/
- *      i.e. /srv/www/faq.example.org/multisite/otherfaq.example.org
+ *      e.g. /srv/www/faq.example.org/multisite/otherfaq.example.org
  *  - that is your config folder with the usual contents like database.php
  *
  * If you don't plan to use multisite support, just delete the multisite directory.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
- * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * v.2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
@@ -24,13 +24,13 @@
  * @since     2012-04-14
  */
 
-$protocol = 'http';
-if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-    $protocol = 'https';
-}
+use phpMyFAQ\Configuration\MultisiteConfigurationLocator;
+use Symfony\Component\HttpFoundation\Request;
 
-$parsed = parse_url($protocol . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME']);
-if (isset($parsed['host']) && strlen($parsed['host']) > 0 && is_dir(__DIR__ . '/' . $parsed['host'])) {
-    define('PMF_MULTI_INSTANCE_CONFIG_DIR', __DIR__ . '/' . $parsed['host']);
-    unset($parsed);
+$request = Request::createFromGlobals();
+$multiSiteDirectory = __DIR__;
+$configurationDirectory = MultisiteConfigurationLocator::locateConfigurationDirectory($request, $multiSiteDirectory);
+
+if ($configurationDirectory !== null) {
+    define('PMF_MULTI_INSTANCE_CONFIG_DIR', $configurationDirectory);
 }
