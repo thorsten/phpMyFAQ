@@ -94,9 +94,6 @@ tests/fixtures/path-to-delete/foo.bar.baz
 # Vitest related stuff
 coverage/*
 
-# PHPMD
-phpmd.html
-
 # Netbeans project folder
 nbproject/
 /test-results/
