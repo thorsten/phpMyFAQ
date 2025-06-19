@@ -29,12 +29,10 @@ class BookmarkTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $_SERVER['HTTP_HOST'] = 'example.com';
-
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
-        $configuration->set('main.referenceURL', 'http://example.com');
+        $configuration->set('main.referenceURL', 'https://example.com');
 
         $user = CurrentUser::getCurrentUser($configuration);
         $language = new Language($configuration, $this->createMock(Session::class));
