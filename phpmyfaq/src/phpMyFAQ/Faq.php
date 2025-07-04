@@ -375,7 +375,7 @@ class Faq
 
                 $title = Strings::htmlentities($row->question);
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -430,7 +430,7 @@ class Faq
             );
 
             $baseUrl = sprintf(
-                '%sindex.php?%saction=show&amp;cat=%d&amp;seite=%d',
+                '%sindex.php?%saction=show&cat=%d&seite=%d',
                 $this->configuration->getDefaultUrl(),
                 (empty($sids) ? '' : $sids),
                 $categoryId,
@@ -1550,7 +1550,7 @@ class Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
