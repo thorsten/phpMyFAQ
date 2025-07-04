@@ -259,7 +259,7 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -366,7 +366,7 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
@@ -486,7 +486,7 @@ class Statistics
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -596,7 +596,7 @@ class Statistics
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $row->category_id,
