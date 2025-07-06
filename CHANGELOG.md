@@ -18,6 +18,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
+- added experimental support for FrankenPHP (Thorsten)
 - added experimental support for OpenSearch (Thorsten)
 - added experimental update via command line (Thorsten)
 - improved online update feature (Thorsten)
