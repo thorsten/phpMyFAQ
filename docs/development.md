@@ -218,9 +218,14 @@ _Running nginx web server with PHP 8.4 support:_
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 - **php-fpm**: PHP-FPM image with PHP 8.4 support
 
+_Running FrankenPHP with PHP 8.4 support:_
+
+- **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`. Modern PHP application server built on Caddy with worker mode for better performance.
+
 Then services will be available at the following addresses:
 
 - phpMyFAQ: (https://localhost:443 by default or http://localhost:8080)
+- phpMyFAQ with FrankenPHP: (http://localhost:8888 or https://localhost:8443)
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 

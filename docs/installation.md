@@ -25,6 +25,7 @@ You can use phpMyFAQ with the following web servers:
 
 - [Apache](http://www.apache.org) 2.4 or later (with mod_rewrite) and mod_ssl (if you wish to run phpMyFAQ under SSL)
 - [Nginx](http://www.nginx.org) 1.0 or later (with URL rewriting) and SSL support
+- [FrankenPHP](https://frankenphp.dev) 1.0 or later (modern PHP application server built on Caddy)
 
 #### Apache requirements
 
@@ -585,3 +586,187 @@ echo 'REMOTE_USER: ' . $_SERVER['REMOTE_USER'];
 ```
 
 Access this PHP file through your browser in the admin area to ensure the `REMOTE_USER` variable is correctly populated.
+
+
+### Configuring FrankenPHP to Pass `REMOTE_USER` to PHP
+
+FrankenPHP is a modern PHP application server built on Caddy that provides excellent performance and features.
+To make the `REMOTE_USER` variable available to PHP through FrankenPHP,
+follow these steps to modify the Caddyfile configuration.
+
+#### Step 1: Install FrankenPHP
+
+Download and install FrankenPHP from the official website:
+
+```bash
+# Download FrankenPHP
+curl -L https://github.com/dunglas/frankenphp/releases/latest/download/frankenphp-linux-x86_64 -o frankenphp
+chmod +x frankenphp
+sudo mv frankenphp /usr/local/bin/
+```
+
+#### Step 2: Create Caddyfile Configuration
+
+Create a Caddyfile in your phpMyFAQ directory with the following configuration:
+
+```caddy
+{
+    # Auto HTTPS
+    auto_https on
+    
+    # FrankenPHP configuration
+    frankenphp {
+        # Enable worker mode for better performance
+        worker /var/www/html/frankenphp-worker.php
+    }
+}
+
+# Your domain configuration
+your-domain.com {
+    # Document root
+    root * /var/www/html
+    
+    # Enable compression
+    encode gzip
+    
+    # Handle PHP files with FrankenPHP
+    php_server
+    
+    # Handle static files
+    file_server
+    
+    # URL rewriting for phpMyFAQ
+    try_files {path} {path}/index.php /index.php
+    
+    # Rewrite rules for phpMyFAQ
+    rewrite /setup /setup/index.php
+    rewrite /update /update/index.php
+    rewrite /admin /admin/index.php
+    rewrite /api/* /api/index.php
+    
+    # Security headers
+    header {
+        X-Frame-Options DENY
+        X-Content-Type-Options nosniff
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+    
+    # Admin area authentication (optional)
+    @admin {
+        path /admin/*
+    }
+    
+    # Pass REMOTE_USER to PHP for SSO
+    handle @admin {
+        header_up Remote-User {http.auth.user.id}
+        php_server
+    }
+}
+```
+
+#### Step 3: Create FrankenPHP Worker Script (Optional)
+
+For better performance, create a worker script at `/var/www/html/frankenphp-worker.php`:
+
+```php
+<?php
+/**
+ * FrankenPHP Worker for phpMyFAQ
+ */
+
+// Set up error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Include phpMyFAQ bootstrap
+require_once __DIR__ . '/src/Bootstrap.php';
+
+// FrankenPHP worker loop
+while ($worker = \frankenphp_handle_request()) {
+    // The worker will handle each request here
+    // phpMyFAQ's routing and processing will be handled by the main application
+    // through the Bootstrap.php inclusion
+}
+```
+
+#### Step 4: Start FrankenPHP
+
+Start the FrankenPHP server:
+
+```bash
+sudo frankenphp run --config /path/to/your/Caddyfile
+```
+
+Or run it as a service by creating a systemd service file at `/etc/systemd/system/frankenphp.service`:
+
+```ini
+[Unit]
+Description=FrankenPHP Server
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html
+ExecStart=/usr/local/bin/frankenphp run --config /path/to/your/Caddyfile
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then enable and start the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable frankenphp
+sudo systemctl start frankenphp
+```
+
+#### Step 5: Test the Configuration
+
+To confirm that FrankenPHP is working correctly, access your phpMyFAQ installation through your browser.
+FrankenPHP will automatically handle HTTPS and provide excellent performance through its worker mode.
+
+## 2.19 FrankenPHP Installation
+
+FrankenPHP is a modern, high-performance PHP application server that can significantly improve phpMyFAQ's performance.
+
+### Benefits of FrankenPHP
+
+- **High Performance**: Worker mode keeps PHP code in memory between requests
+- **Built-in HTTPS**: Automatic SSL certificate management
+- **Real-time Features**: WebSocket and Server-Sent Events support
+- **Modern Architecture**: Built on Caddy web server
+- **Easy Configuration**: Simple Caddyfile syntax
+
+### Docker Installation
+
+The easiest way to run phpMyFAQ with FrankenPHP is using Docker. Use the provided docker-compose.yml:
+
+```bash
+# Start FrankenPHP service
+docker-compose up frankenphp
+
+# Access phpMyFAQ at http://localhost:8888 or https://localhost:8443
+```
+
+### Manual Installation
+
+1. Install FrankenPHP following the steps in section 2.18
+2. Configure your Caddyfile as described above
+3. Start the FrankenPHP service
+4. Access your phpMyFAQ installation
+
+### Performance Optimization
+
+For production use, consider these optimizations:
+
+- Enable worker mode for better performance
+- Configure OPcache settings
+- Use production-ready database connections
+- Enable compression and caching headers

@@ -1,0 +1,92 @@
+{
+    # Enable debug mode for development
+    debug
+    
+    # Auto HTTPS off for development
+    auto_https off
+    
+    # FrankenPHP configuration
+    frankenphp {
+        # Enable worker mode for better performance
+        worker /var/www/html/frankenphp-worker.php
+    }
+}
+
+# HTTP server for development
+:80 {
+    # Document root
+    root * /var/www/html
+    
+    # Enable compression
+    encode gzip
+    
+    # Handle PHP files with FrankenPHP
+    php_server
+    
+    # Handle static files
+    file_server
+    
+    # URL rewriting for phpMyFAQ
+    try_files {path} {path}/index.php /index.php
+    
+    # Rewrite rules for phpMyFAQ
+    rewrite /setup /setup/index.php
+    rewrite /update /update/index.php
+    rewrite /admin /admin/index.php
+    rewrite /api/* /api/index.php
+    
+    # Security headers
+    header {
+        X-Frame-Options DENY
+        X-Content-Type-Options nosniff
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+    
+    # Logging
+    log {
+        output stdout
+        format console
+        level DEBUG
+    }
+}
+
+# HTTPS server for production
+:443 {
+    # Document root
+    root * /var/www/html
+    
+    # Enable compression
+    encode gzip
+    
+    # Handle PHP files with FrankenPHP
+    php_server
+    
+    # Handle static files
+    file_server
+    
+    # URL rewriting for phpMyFAQ
+    try_files {path} {path}/index.php /index.php
+    
+    # Rewrite rules for phpMyFAQ
+    rewrite /setup /setup/index.php
+    rewrite /update /update/index.php
+    rewrite /admin /admin/index.php
+    rewrite /api/* /api/index.php
+    
+    # Security headers
+    header {
+        X-Frame-Options DENY
+        X-Content-Type-Options nosniff
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+    
+    # Logging
+    log {
+        output stdout
+        format console
+        level INFO
+    }
+}
