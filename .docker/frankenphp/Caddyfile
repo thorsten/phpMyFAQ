@@ -1,50 +1,132 @@
 {
     # Enable debug mode for development
     debug
-    
+
     # Auto HTTPS off for development
     auto_https off
-    
-    # FrankenPHP configuration
-    # Uncomment the following block to enable worker mode after composer install
-    # frankenphp {
-    #     # Enable worker mode for better performance
-    #     worker /var/www/html/frankenphp-worker.php
-    # }
+
+    order php_server before file_server
 }
 
-# HTTP server for development
 :80 {
     # Document root
     root * /var/www/html
-    
+
     # Enable compression
     encode gzip
-    
-    # Handle PHP files with FrankenPHP
+
+    # PHP Handler für FrankenPHP
     php_server
-    
-    # Handle static files
+
+    # Exclude assets from being handled by router
+    @assets path /admin/assets*
+    file_server @assets
+
+    # Error pages
+    handle_errors 404 {
+        rewrite * /index.php?action=404
+        php_server
+    }
+
+    # General pages
+    rewrite /add-faq.html /index.php?action=add
+    rewrite /add-question.html /index.php?action=ask
+    rewrite /show-categories.html /index.php?action=show
+    rewrite /search.html /index.php?action=search
+    rewrite /open-questions.html /index.php?action=open-questions
+    rewrite /contact.html /index.php?action=contact
+    rewrite /glossary.html /index.php?action=glossary
+    rewrite /overview.html /index.php?action=overview
+    rewrite /login.html /index.php?action=login
+    rewrite /privacy.html /index.php?action=privacy
+    rewrite /login /index.php?action=login
+    rewrite /index.html /index.php
+    rewrite /bookmarks.html /index.php?action=bookmarks
+
+    # Solution ID pages
+    @solution_id path_regexp solution ^/solution_id_([0-9]+)\.html$
+    rewrite @solution_id /index.php?solution_id={re.solution.1}
+
+    # FAQ record pages
+    @faq path_regexp faq ^/content/([0-9]+)/([0-9]+)/([a-z\-_]+)/(.+)\.html?$
+    rewrite @faq /index.php?action=faq&cat={re.faq.1}&id={re.faq.2}&artlang={re.faq.3}
+
+    # Category pages with page count
+    @category_page path_regexp cat_page ^/category/([0-9]+)/([0-9]+)/(.+)\.html?$
+    rewrite @category_page /index.php?action=show&cat={re.cat_page.1}&seite={re.cat_page.2}
+
+    # Category pages
+    @category path_regexp cat ^/category/([0-9]+)/(.+)\.html?$
+    rewrite @category /index.php?action=show&cat={re.cat.1}
+
+    # News pages
+    @news path_regexp news ^/news/([0-9]+)/([a-z\-_]+)/(.+)\.html?$
+    rewrite @news /index.php?action=news&newsid={re.news.1}&newslang={re.news.2}
+
+    # Sitemap pages
+    @sitemap path_regexp sitemap ^/sitemap/([^/]+)/([a-z\-_]+)\.html?$
+    rewrite @sitemap /index.php?action=sitemap&letter={re.sitemap.1}&lang={re.sitemap.2}
+
+    # Google sitemap
+    rewrite /sitemap.xml /sitemap.xml.php
+    rewrite /sitemap.gz /sitemap.xml.php?gz=1
+    rewrite /sitemap.xml.gz /sitemap.xml.php?gz=1
+
+    # robots.txt
+    rewrite /robots.txt /robots.txt.php
+
+    # Tags pages with page count
+    @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
+    rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}
+
+    # Tags pages
+    @tags path_regexp tags ^/tags/([0-9]+)/([^/]+)\.html?$
+    rewrite @tags /index.php?action=search&tagging_id={re.tags.1}
+
+    # Authentication services
+    @webauthn path /services/webauthn*
+    rewrite @webauthn /services/webauthn/index.php
+
+    # User pages
+    @user path_regexp user ^/user/(ucp|bookmarks|request-removal|logout|register)$
+    rewrite @user /index.php?action={re.user.1}
+
+    # Setup and update pages
+    @setup path /setup*
+    rewrite @setup /setup/index.php
+
+    @update path /update*
+    rewrite @update /update/index.php
+
+    # Administration API
+    @admin_api path /admin/api*
+    rewrite @admin_api /admin/api/index.php
+
+    # Administration pages
+    @admin path /admin*
+    rewrite @admin /admin/index.php
+
+    # Private APIs
+    @api path_regexp api ^/api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login)$
+    rewrite @api /api/index.php
+
+    # Setup APIs
+    @api_setup path_regexp api_setup ^/api/setup/(check|backup|update-database)$
+    rewrite @api_setup /api/index.php
+
+    # REST API v3.0 and v3.1
+    @api_v3 path_regexp api_v3 ^/api/v3\.[01]/(.*)$
+    rewrite @api_v3 /api/index.php
+
     file_server
-    
-    # URL rewriting for phpMyFAQ
-    try_files {path} {path}/index.php /index.php
-    
-    # Rewrite rules for phpMyFAQ
-    rewrite /setup /setup/index.php
-    rewrite /update /update/index.php
-    rewrite /admin /admin/index.php
-    rewrite /api/* /api/index.php
-    
-    # Security headers
+
     header {
         X-Frame-Options DENY
         X-Content-Type-Options nosniff
         X-XSS-Protection "1; mode=block"
         Referrer-Policy strict-origin-when-cross-origin
     }
-    
-    # Logging
+
     log {
         output stdout
         format console
@@ -52,30 +134,99 @@
     }
 }
 
-# HTTPS server for production
 :443 {
     # Document root
     root * /var/www/html
-    
+
     # Enable compression
     encode gzip
-    
-    # Handle PHP files with FrankenPHP
+
+    # TLS configuration with your certificate files
+    tls /etc/ssl/cert.pem /etc/ssl/cert-key.pem
+
     php_server
-    
-    # Handle static files
+
+    # Gleiche Rewrite-Regeln wie für Port 80
+    @assets path /admin/assets*
+    file_server @assets
+
+    handle_errors 404 {
+        rewrite * /index.php?action=404
+        php_server
+    }
+
+    rewrite /add-faq.html /index.php?action=add
+    rewrite /add-question.html /index.php?action=ask
+    rewrite /show-categories.html /index.php?action=show
+    rewrite /search.html /index.php?action=search
+    rewrite /open-questions.html /index.php?action=open-questions
+    rewrite /contact.html /index.php?action=contact
+    rewrite /glossary.html /index.php?action=glossary
+    rewrite /overview.html /index.php?action=overview
+    rewrite /login.html /index.php?action=login
+    rewrite /privacy.html /index.php?action=privacy
+    rewrite /login /index.php?action=login
+    rewrite /index.html /index.php
+    rewrite /bookmarks.html /index.php?action=bookmarks
+
+    @solution_id path_regexp solution ^/solution_id_([0-9]+)\.html$
+    rewrite @solution_id /index.php?solution_id={re.solution.1}
+
+    @faq path_regexp faq ^/content/([0-9]+)/([0-9]+)/([a-z\-_]+)/(.+)\.html?$
+    rewrite @faq /index.php?action=faq&cat={re.faq.1}&id={re.faq.2}&artlang={re.faq.3}
+
+    @category_page path_regexp cat_page ^/category/([0-9]+)/([0-9]+)/(.+)\.html?$
+    rewrite @category_page /index.php?action=show&cat={re.cat_page.1}&seite={re.cat_page.2}
+
+    @category path_regexp cat ^/category/([0-9]+)/(.+)\.html?$
+    rewrite @category /index.php?action=show&cat={re.cat.1}
+
+    @news path_regexp news ^/news/([0-9]+)/([a-z\-_]+)/(.+)\.html?$
+    rewrite @news /index.php?action=news&newsid={re.news.1}&newslang={re.news.2}
+
+    @sitemap path_regexp sitemap ^/sitemap/([^/]+)/([a-z\-_]+)\.html?$
+    rewrite @sitemap /index.php?action=sitemap&letter={re.sitemap.1}&lang={re.sitemap.2}
+
+    rewrite /sitemap.xml /sitemap.xml.php
+    rewrite /sitemap.gz /sitemap.xml.php?gz=1
+    rewrite /sitemap.xml.gz /sitemap.xml.php?gz=1
+    rewrite /robots.txt /robots.txt.php
+
+    @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
+    rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}
+
+    @tags path_regexp tags ^/tags/([0-9]+)/([^/]+)\.html?$
+    rewrite @tags /index.php?action=search&tagging_id={re.tags.1}
+
+    @webauthn path /services/webauthn*
+    rewrite @webauthn /services/webauthn/index.php
+
+    @user path_regexp user ^/user/(ucp|bookmarks|request-removal|logout|register)$
+    rewrite @user /index.php?action={re.user.1}
+
+    @setup path /setup*
+    rewrite @setup /setup/index.php
+
+    @update path /update*
+    rewrite @update /update/index.php
+
+    @admin_api path /admin/api*
+    rewrite @admin_api /admin/api/index.php
+
+    @admin path /admin*
+    rewrite @admin /admin/index.php
+
+    @api path_regexp api ^/api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login)$
+    rewrite @api /api/index.php
+
+    @api_setup path_regexp api_setup ^/api/setup/(check|backup|update-database)$
+    rewrite @api_setup /api/index.php
+
+    @api_v3 path_regexp api_v3 ^/api/v3\.[01]/(.*)$
+    rewrite @api_v3 /api/index.php
+
     file_server
-    
-    # URL rewriting for phpMyFAQ
-    try_files {path} {path}/index.php /index.php
-    
-    # Rewrite rules for phpMyFAQ
-    rewrite /setup /setup/index.php
-    rewrite /update /update/index.php
-    rewrite /admin /admin/index.php
-    rewrite /api/* /api/index.php
-    
-    # Security headers
+
     header {
         X-Frame-Options DENY
         X-Content-Type-Options nosniff
@@ -83,8 +234,7 @@
         Referrer-Policy strict-origin-when-cross-origin
         Strict-Transport-Security "max-age=31536000; includeSubDomains"
     }
-    
-    # Logging
+
     log {
         output stdout
         format console

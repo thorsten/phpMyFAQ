@@ -123,10 +123,15 @@ services:
       - postgres
       - elasticsearch
     ports:
-      - '8888:80'
-      - '8443:443'
+      - '80:80'
+      - '443:443'
+      - '443:443/udp' # HTTP/3
     volumes:
       - ./phpmyfaq:/var/www/html
+      - ./.docker/cert.pem:/etc/ssl/cert.pem
+      - ./.docker/cert-key.pem:/etc/ssl/cert-key.pem
+      - ./volumes/caddy_data:/data
+      - ./volumes/caddy_config:/config
     depends_on:
       - pnpm
 

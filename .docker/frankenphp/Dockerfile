@@ -39,8 +39,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         sodium
 
 #=== Install xdebug for development ===
-# RUN pecl install xdebug \
-#     && docker-php-ext-enable xdebug
+ RUN pecl install xdebug \
+     && docker-php-ext-enable xdebug
 
 #=== Environment variables ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
@@ -53,10 +53,10 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
     PHP_UPLOAD_MAX_FILESIZE=64M
 
 #=== Copy configuration files ===
-COPY ./.docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
+COPY ./Caddyfile /etc/caddy/Caddyfile
 
 #=== Set custom entrypoint ===
-COPY ./.docker/frankenphp/docker-entrypoint.sh /entrypoint
+COPY ./docker-entrypoint.sh /entrypoint
 RUN chmod +x /entrypoint
 ENTRYPOINT [ "/entrypoint" ]
 
