@@ -6,10 +6,11 @@
     auto_https off
     
     # FrankenPHP configuration
-    frankenphp {
-        # Enable worker mode for better performance
-        worker /var/www/html/frankenphp-worker.php
-    }
+    # Uncomment the following block to enable worker mode after composer install
+    # frankenphp {
+    #     # Enable worker mode for better performance
+    #     worker /var/www/html/frankenphp-worker.php
+    # }
 }
 
 # HTTP server for development

@@ -50,8 +50,7 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
     PHP_LOG_ERRORS=On \
     PHP_ERROR_REPORTING=E_ALL \
     PHP_POST_MAX_SIZE=64M \
-    PHP_UPLOAD_MAX_FILESIZE=64M \
-    FRANKENPHP_CONFIG="worker /var/www/html/frankenphp-worker.php"
+    PHP_UPLOAD_MAX_FILESIZE=64M
 
 #=== Copy configuration files ===
 COPY ./.docker/frankenphp/Caddyfile /etc/caddy/Caddyfile

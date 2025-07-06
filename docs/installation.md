@@ -770,3 +770,22 @@ For production use, consider these optimizations:
 - Configure OPcache settings
 - Use production-ready database connections
 - Enable compression and caching headers
+
+
+### Enabling Worker Mode
+
+To enable FrankenPHP worker mode for better performance after composer dependencies are installed:
+
+1. Uncomment the worker configuration in your Caddyfile:
+
+```caddy
+frankenphp {
+    # Enable worker mode for better performance
+    worker /var/www/html/frankenphp-worker.php
+}
+```
+
+2. Make sure the worker script is properly configured
+3. Restart FrankenPHP
+
+Worker mode significantly improves performance by keeping PHP code in memory between requests.
