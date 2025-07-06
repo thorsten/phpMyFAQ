@@ -45,5 +45,10 @@ $app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    echo sprintf(
+        'An error occurred: %s at line %d at %s',
+        $exception->getMessage(),
+        $exception->getLine(),
+        $exception->getFile()
+    );
 }

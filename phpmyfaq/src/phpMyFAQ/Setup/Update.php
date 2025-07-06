@@ -134,7 +134,7 @@ class Update extends Setup
 
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
-        $rewriteBase->removeArgument($rewriteBase->getArguments()[0]);
+        $rewriteBase->removeArgument($rewriteBase->getArguments()[0] ?? '');
         $rewriteBase->setArguments((array)$basePath);
 
         $output = (string) $htaccess;
