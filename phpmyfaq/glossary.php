@@ -43,7 +43,7 @@ $numItems = is_countable($glossaryItems) ? count($glossaryItems) : 0;
 $itemsPerPage = 8;
 
 $baseUrl = sprintf(
-    '%sindex.php?action=glossary&amp;page=%d',
+    '%sindex.php?action=glossary&page=%d',
     $faqConfig->getDefaultUrl(),
     $page
 );

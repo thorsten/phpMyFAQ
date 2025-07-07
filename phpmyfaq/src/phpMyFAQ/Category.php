@@ -657,7 +657,7 @@ class Category
         if ($renderAsHtml) {
             foreach ($tempName as $key => $category) {
                 $url = sprintf(
-                    '%sindex.php?%saction=show&amp;cat=%d',
+                    '%sindex.php?%saction=show&cat=%d',
                     $this->configuration->getDefaultUrl(),
                     $sids,
                     $categoryId[$key]

@@ -272,7 +272,7 @@ class SearchHelper extends AbstractHelper
                 ++$counter;
 
                 $url = sprintf(
-                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                     $this->configuration->getDefaultUrl(),
                     $result->category_id,
                     $result->id,

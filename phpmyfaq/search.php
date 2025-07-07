@@ -31,6 +31,7 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Extension\AttributeExtension;
@@ -75,7 +76,7 @@ $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1)
 // Search only on current language (default)
 if ($inputLanguage !== '') {
     $allLanguages = true;
-    $languages = '&amp;langs=all';
+    $languages = '&langs=all';
 } else {
     $allLanguages = false;
     $languages = '';
@@ -217,8 +218,7 @@ if (
     0 < $numOfResults &&
     $faqConfig->get('search.searchForSolutionId')
 ) {
-    $response = new Response();
-    $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
+    $response = new RedirectResponse($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     $response->send();
     exit();
 }
@@ -229,7 +229,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 
 // Set base URL scheme
 $baseUrl = sprintf(
-    '%ssearch.html?search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
+    '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
     $faqConfig->getDefaultUrl(),
     urlencode($inputSearchTerm),
     $page,

@@ -131,7 +131,7 @@ readonly class Bookmark
             $faqData = $faq->faqRecord;
 
             $url = sprintf(
-                '%sindex.php?action=faq&amp;id=%d&cat=%d&artlang=%s',
+                '%sindex.php?action=faq&id=%d&cat=%d&artlang=%s',
                 $this->configuration->getDefaultUrl(),
                 $faqData['id'],
                 $category->getCategoryIdFromFaq($faqData['id']),

@@ -103,7 +103,7 @@ readonly class News
                     ((!$showArchive) && $forceConfLimit)
                 ) {
                     $url = sprintf(
-                        '%sindex.php?action=news&amp;newsid=%d&amp;newslang=%s',
+                        '%sindex.php?action=news&newsid=%d&newslang=%s',
                         $this->configuration->getDefaultUrl(),
                         $row->id,
                         $row->lang

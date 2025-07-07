@@ -292,7 +292,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         $faqSession->getCurrentSessionId(),
         $request->server->get('REQUEST_TIME') + 3600
     );
-    $sids = sprintf('lang=%s&amp;', $faqLangCode);
+    $sids = sprintf('lang=%s&', $faqLangCode);
 }
 
 //
