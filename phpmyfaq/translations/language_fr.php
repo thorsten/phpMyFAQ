@@ -1475,6 +1475,7 @@ $PMF_LANG['msgCategoryImageReset'] = 'Supprimer l’image';
 
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Contenu pour robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Contenu pour llms.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Activer le mode maintenance';
 $PMF_LANG['msgPlugins'] = 'Plugins';
 $PMF_LANG['msgPluginListing'] = 'Liste des plugins installés et de leurs versions';
