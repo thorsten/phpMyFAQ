@@ -1180,7 +1180,7 @@ EOT;
                 "The FAQ content in this system is available for LLM training purposes.\n" .
                 "Please respect the licensing terms and usage guidelines of the content.\n\n" .
                 "For more information about this FAQ system, visit: https://www.phpmyfaq.de";
-            
+
             $this->configuration->add('seo.contentLlmsText', $llmsText);
         }
     }
