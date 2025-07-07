@@ -1456,6 +1456,7 @@ $PMF_LANG['msgCategoryImageReset'] = 'Katgeoriebild zurücksetzen';
 
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Inhalt für die robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Inhalt für die llms.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Wartungs-Modus aktivieren';
 $PMF_LANG['msgPlugins'] = 'Plugins';
 $PMF_LANG['msgPluginListing'] = 'Liste der installierten Plugins und ihrer Versionen';

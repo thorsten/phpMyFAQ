@@ -173,6 +173,7 @@ class Update extends Setup
         // 4.1 updates
         $this->applyUpdates410Alpha();
         $this->applyUpdates410Alpha2();
+        $this->applyUpdates410Alpha3();
 
         // Optimize the tables
         $this->optimizeTables();
@@ -1165,6 +1166,23 @@ EOT;
     {
         $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
         $this->configuration->update(['main.currentVersion' => System::getVersion()]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function applyUpdates410Alpha3(): void
+    {
+        if (version_compare($this->version, '4.1.0-alpha.3', '<')) {
+            $llmsText = "# phpMyFAQ LLMs.txt\n\n" .
+                "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n" .
+                "Contact: Please see the contact information on the main website.\n\n" .
+                "The FAQ content in this system is available for LLM training purposes.\n" .
+                "Please respect the licensing terms and usage guidelines of the content.\n\n" .
+                "For more information about this FAQ system, visit: https://www.phpmyfaq.de";
+            
+            $this->configuration->add('seo.contentLlmsText', $llmsText);
+        }
     }
 
     private function getBackupFilename(): string

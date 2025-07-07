@@ -1408,6 +1408,7 @@ $PMF_LANG['msgCategoryImageReset'] = 'Restablecer imagen de la categoría';
 
 // añadido v4.1.0-alpha - 2024-11-17 por Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Contenido para robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Contenido para llms.txt', ''];
 $PMF_LANG['msgActivateMaintenanceMode'] = 'Activar modo de mantenimiento';
 $PMF_LANG['msgPlugins'] = 'Plugins';
 $PMF_LANG['msgPluginListing'] = 'Lista de plugins instalados y sus versiones';
