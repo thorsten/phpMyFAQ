@@ -60,12 +60,12 @@ class TagsHelper extends AbstractHelper
         $taggingIds = trim(implode(',', $taggingIds), ',');
 
         return ($taggingIds != '') ? sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
+            '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s ' .
             '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
             $taggingIds,
             Strings::htmlentities($tagName)
         ) : sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&amp;search=%s">%s ' .
+            '<a class="btn btn-outline-primary m-1" href="?action=search&search=%s">%s ' .
             '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
             Strings::htmlentities($tagName),
             Strings::htmlentities($tagName)
@@ -104,7 +104,7 @@ class TagsHelper extends AbstractHelper
     public function renderRelatedTag(int $tagId, string $tagName, int $relevance): string
     {
         return sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&amp;tagging_id=%s">%s %s ' .
+            '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s %s ' .
             '<span class="badge bg-info">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="bi bi-plus-square"></i> ',

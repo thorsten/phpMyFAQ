@@ -144,7 +144,7 @@ class ExportController extends AbstractController
             if (isset($data->url)) {
                 $text[$i][] = Report::sanitize($report->convertEncoding(
                     sprintf(
-                        '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                         $this->configuration->getDefaultUrl(),
                         $reportData['category_id'],
                         $reportData['faq_id'],

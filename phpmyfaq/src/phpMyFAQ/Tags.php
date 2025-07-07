@@ -47,7 +47,7 @@ readonly class Tags
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
             $title = Strings::htmlentities($taggingName);
             $url = sprintf(
-                '%sindex.php?action=search&amp;tagging_id=%d',
+                '%sindex.php?action=search&tagging_id=%d',
                 $this->configuration->getDefaultUrl(),
                 $taggingId
             );

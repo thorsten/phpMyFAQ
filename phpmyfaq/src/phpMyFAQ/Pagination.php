@@ -281,7 +281,7 @@ class Pagination
             return sprintf($this->rewriteUrl, $page);
         }
         $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-        return sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
+        return sprintf('%s&%s=%d', $cleanedUrl, $this->pageParamName, $page);
     }
 
     /**

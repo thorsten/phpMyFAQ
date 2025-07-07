@@ -60,7 +60,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_VI
     $end = $start + $perPage;
 
     $baseUrl = sprintf(
-        '%sadmin/?action=searchstats&amp;page=%d',
+        '%sadmin/?action=searchstats&page=%d',
         $faqConfig->getDefaultUrl(),
         $page
     );

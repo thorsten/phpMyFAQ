@@ -130,7 +130,7 @@ class CategoryHelper extends AbstractHelper
 
                 if ($categoryNumbers[$categoryId]['faqs'] > 0) {
                     $url = sprintf(
-                        '%sindex.php?%saction=show&amp;cat=%d',
+                        '%sindex.php?%saction=show&cat=%d',
                         $this->configuration->getDefaultUrl(),
                         $sids,
                         $node['id']
@@ -174,7 +174,7 @@ class CategoryHelper extends AbstractHelper
 
         foreach ($availableCategoryTranslations as $language => $category) {
             $url = sprintf(
-                '%sindex.php?action=show&amp;lang=%s',
+                '%sindex.php?action=show&lang=%s',
                 $this->configuration->getDefaultUrl(),
                 LanguageCodes::getKey($language)
             );

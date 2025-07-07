@@ -74,7 +74,7 @@ class FaqHelper extends AbstractHelper
     {
         $html = '';
         $faqUrl = sprintf(
-            '?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
+            '?action=faq&cat=%d&id=%d&artlang=%%s',
             $categoryId,
             $faq->faqRecord['id']
         );
@@ -203,7 +203,7 @@ class FaqHelper extends AbstractHelper
      * - http://<url>/index.php?action=artikel&cat=<category id>&id=<id>&artlang=<language>
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>&artlang=<language>
-     * - supports also HTML encoded parameter (&#61; instead of =, &amp; instead of &)
+     * - supports also HTML encoded parameter (&#61; instead of =, & instead of &)
      *
      * to new URL structure:
      * https://<url>/content/<category id>/<id>/<language>/<the question with underscores as spaces>.html
@@ -236,8 +236,8 @@ class FaqHelper extends AbstractHelper
         );
 
         if ($result === $decodedAnswer && $decodedAnswer !== $answer) {
-            $htmlEncodedPattern = '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&amp;|&)cat' .
-                '(&#61;|=)(\d+)(&amp;|&)id(&#61;|=)(\d+)((&amp;|&)artlang(&#61;|=)([a-z]{2}))?/i';
+            $htmlEncodedPattern = '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&|&)cat' .
+                '(&#61;|=)(\d+)(&|&)id(&#61;|=)(\d+)((&|&)artlang(&#61;|=)([a-z]{2}))?/i';
 
             return preg_replace_callback(
                 $htmlEncodedPattern,

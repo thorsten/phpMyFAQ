@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Link
 {
-    private const LINK_AMPERSAND = '&amp;';
+    private const LINK_AMPERSAND = '&';
 
     private const LINK_CATEGORY = 'category/';
 

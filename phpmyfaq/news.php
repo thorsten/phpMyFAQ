@@ -88,7 +88,7 @@ if (strlen((string) $news['link']) > 0) {
 $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT)) {
     $editThisEntry = sprintf(
-        '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
+        '<a href="./admin/index.php?action=news&do=edit&id=%d">%s</a>',
         $newsId,
         Translation::get('ad_menu_news_edit')
     );

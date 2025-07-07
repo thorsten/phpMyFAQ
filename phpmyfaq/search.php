@@ -74,7 +74,7 @@ $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1)
 // Search only on current language (default)
 if ($inputLanguage !== '') {
     $allLanguages = true;
-    $languages = '&amp;langs=all';
+    $languages = '&langs=all';
 } else {
     $allLanguages = false;
     $languages = '';
@@ -224,7 +224,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 
 // Set base URL scheme
 $baseUrl = sprintf(
-    '%ssearch.html?search=%s&amp;seite=%d%s&amp;pmf-search-category=%d',
+    '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
     $faqConfig->getDefaultUrl(),
     urlencode($inputSearchTerm),
     $page,

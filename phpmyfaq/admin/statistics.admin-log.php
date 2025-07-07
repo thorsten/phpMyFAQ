@@ -53,7 +53,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::STATISTICS_AD
         $pages = round(($logging->getNumberOfEntries() + ($itemsPerPage / 3)) / $itemsPerPage, 0);
     }
 
-    $baseUrl = sprintf('%sadmin/?action=adminlog&amp;page=%d', $faqConfig->getDefaultUrl(), $page);
+    $baseUrl = sprintf('%sadmin/?action=adminlog&page=%d', $faqConfig->getDefaultUrl(), $page);
 
     // Pagination options
     $options = [

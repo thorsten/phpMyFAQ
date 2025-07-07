@@ -281,11 +281,11 @@ if ($faqConfig->get('main.enableUserTracking')) {
     if ($faqSession->getCurrentSessionId() > 0) {
         $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $faqSession->getCurrentSessionId());
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $faqSession->getCurrentSessionId(), $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $faqSession->getCurrentSessionId(), $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie) && !is_null($sidGet)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
+            $sids = sprintf('sid=%d&lang=%s&', $sidGet, $faqLangCode);
         }
     }
 } elseif (
@@ -295,7 +295,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         $request->server->get('REQUEST_TIME') + 3600
     )
 ) {
-    $sids = sprintf('lang=%s&amp;', $faqLangCode);
+    $sids = sprintf('lang=%s&', $faqLangCode);
 }
 
 //

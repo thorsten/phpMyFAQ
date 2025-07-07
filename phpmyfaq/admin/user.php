@@ -73,7 +73,7 @@ if ($userAction == 'listallusers') {
     $firstPage = $lastPage - $perPage;
 
     $baseUrl = sprintf(
-        '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
+        '%sadmin/?action=user&user_action=listallusers&page=%d',
         $faqConfig->getDefaultUrl(),
         $page
     );

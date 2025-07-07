@@ -47,7 +47,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::ATTACHMENT_DE
     $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
     $baseUrl = sprintf(
-        '%sadmin/?action=attachments&amp;page=%d',
+        '%sadmin/?action=attachments&page=%d',
         $faqConfig->getDefaultUrl(),
         $page
     );
