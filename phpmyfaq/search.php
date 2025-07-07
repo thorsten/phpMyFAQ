@@ -31,6 +31,7 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Template\Extensions\TagNameTwigExtension;
 use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -212,8 +213,7 @@ if (
     0 < $numOfResults &&
     $faqConfig->get('search.searchForSolutionId')
 ) {
-    $response = new Response();
-    $response->isRedirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
+    $response = new RedirectResponse($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     $response->send();
     exit();
 }
