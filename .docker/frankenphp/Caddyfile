@@ -75,6 +75,9 @@
     # robots.txt
     rewrite /robots.txt /robots.txt.php
 
+    # llms.txt
+    rewrite /llms.txt /llms.txt.php
+
     # Tags pages with page count
     @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
     rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}
@@ -191,6 +194,7 @@
     rewrite /sitemap.gz /sitemap.xml.php?gz=1
     rewrite /sitemap.xml.gz /sitemap.xml.php?gz=1
     rewrite /robots.txt /robots.txt.php
+    rewrite /llms.txt /llms.txt.php
 
     @tags_page path_regexp tags_page ^/tags/([0-9]+)/([0-9]+)/(.+)\.html?$
     rewrite @tags_page /index.php?action=search&tagging_id={re.tags_page.1}&seite={re.tags_page.2}

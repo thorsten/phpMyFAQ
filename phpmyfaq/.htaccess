@@ -131,6 +131,8 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L,QSA]
     # robots.txt
     RewriteRule ^robots.txt$ robots.txt.php [L,QSA]
+    # llms.txt
+    RewriteRule ^llms.txt$ llms.txt.php [L,QSA]
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
