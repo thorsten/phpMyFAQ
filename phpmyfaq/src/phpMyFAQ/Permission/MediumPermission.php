@@ -784,4 +784,29 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
         return (bool) $this->configuration->getDb()->query($delete);
     }
+
+    /**
+     * Finds or creates a group by name.
+     * Returns the group ID on success, 0 on failure.
+     *
+     * @param string $name Group name
+     * @param string $description Optional group description
+     */
+    public function findOrCreateGroupByName(string $name, string $description = ''): int
+    {
+        $groupId = $this->getGroupId($name);
+        
+        if ($groupId > 0) {
+            return $groupId;
+        }
+        
+        // Create new group if it doesn't exist
+        $groupData = [
+            'name' => $name,
+            'description' => $description ?: "Auto-created group for $name",
+            'auto_join' => false,
+        ];
+        
+        return $this->addGroup($groupData);
+    }
 }

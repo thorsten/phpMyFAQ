@@ -391,6 +391,10 @@ class Installer extends Setup
         'ldap.ldap_use_anonymous_login' => 'false',
         'ldap.ldap_use_dynamic_login' => 'false',
         'ldap.ldap_dynamic_login_attribute' => 'uid',
+        'ldap.ldap_use_group_restriction' => 'false',
+        'ldap.ldap_group_allowed_groups' => '',
+        'ldap.ldap_group_auto_assign' => 'false',
+        'ldap.ldap_group_mapping' => '',
 
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
