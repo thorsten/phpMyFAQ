@@ -174,9 +174,9 @@ Open your browser and type in the following URL:
 
 Substitute **www.example.com** with your actual domain name. When the site is loaded, first select the database you want
 to use for phpMyFAQ. The loaded database extensions from PHP are listed in a select box. Then enter the address of your
-database server (e.g. db.provider.com), the database port, your database username and password as well as the database
-name. The database have to be created with UTF-8 character set before running the installation script. You can leave the
-prefix-field empty. If you are planning on using multiple FAQs in one database you will have to use a table prefix,
+database server (e.g., db.provider.com), the database port, your database username and password as well as the database
+name. The database has to be created with UTF-8 character set before running the installation script. You can leave the
+prefix-field empty. If you are planning on using multiple FAQs in one database, you will have to use a table prefix,
 though (i.e. _sport_ for a sports FAQ, _weather_ for a weather FAQ, etc.). Please note that only letters and an
 underline: "\_" can be used as the prefix. If you want to use SQLite, you only have to select a path to the database file
 of SQLite.
@@ -239,7 +239,7 @@ You can change
 To set the default language in your browser, you have to set a variable that gets passed to the web server.
 How this is done depends on the browser you are using.
 
-- Mozilla Firefox: Tools -> Options -> Content -> Languages
+- Mozilla Firefox: Tools → Options → Content → Languages
 - Google Chrome / Microsoft Edge / Opera: Settings → Details → Language settings
 - Safari uses the macOS system preferences to determine your preferred language: System preferences → International
   → Language
@@ -319,8 +319,8 @@ of performance reasons, its availability is checked automatically at the run tim
 
 Please be aware:
 
-- Disabling encryption will cause all files be saved unencrypted. In this case, you'll benefit from sparing disk space,
-  because identical files will be saved only once.
+- Disabling encryption will cause all files to be saved unencrypted.
+  In this case, you'll benefit from sparing disk space because identical files are saved only once.
 - Do not change the default attachment encryption key once files were uploaded.
   Doing so will cause all the previously uploaded files to be wrong decrypted.
   If you need to change the default key, you will have to re-upload all files.
@@ -408,10 +408,12 @@ add the following directives to ensure `REMOTE_USER` is passed to PHP.
 
 In this configuration:
 
-- The `AuthType` and `AuthUserFile` specify the use of Basic Authentication, but this can be adapted for other authentication mechanisms (such as SSO).
+- The `AuthType` and `AuthUserFile` specify the use of Basic Authentication, 
+- but this can be adapted for other authentication mechanisms (such as SSO).
 - The `SetEnvIf` directive ensures that `REMOTE_USER` is passed to PHP correctly.
 
-If using Basic Authentication, create a `.htpasswd` file with usernames and encrypted passwords. You can skip this step if using an SSO system.
+If using Basic Authentication, create a `.htpasswd` file with usernames and encrypted passwords. 
+You can skip this step if using an SSO system.
 
 ```bash
 sudo htpasswd -c /etc/apache2/.htpasswd username
@@ -422,11 +424,11 @@ sudo htpasswd -c /etc/apache2/.htpasswd username
 Ensure that the `mod_php` module is enabled in Apache:
 
 ```bash
-sudo a2enmod php7.4
+sudo a2enmod php8.4
 sudo systemctl restart apache2
 ```
 
-Make sure to replace `php7.4` with your PHP version if it differs.
+Make sure to replace `php8.4` with your PHP version if it differs.
 
 #### Step 3: Restart Apache
 
@@ -752,7 +754,7 @@ The easiest way to run phpMyFAQ with FrankenPHP is using Docker. Use the provide
 # Start FrankenPHP service
 docker-compose up frankenphp
 
-# Access phpMyFAQ at http://localhost:8888 or https://localhost:8443
+# Access phpMyFAQ at https://localhost
 ```
 
 ### Manual Installation
