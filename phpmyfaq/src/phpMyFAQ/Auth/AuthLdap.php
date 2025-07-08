@@ -244,7 +244,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
                 }
 
                 if (!$hasAllowedGroup) {
-                    throw new AuthException('User is not a member of any allowed Active Directory groups');
+                    throw new AuthException('User is not a member of any allowed LDAP/Active Directory groups');
                 }
             }
         }

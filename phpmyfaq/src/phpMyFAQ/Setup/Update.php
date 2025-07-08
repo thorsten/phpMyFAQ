@@ -1182,6 +1182,12 @@ EOT;
                 "For more information about this FAQ system, visit: https://www.phpmyfaq.de";
 
             $this->configuration->add('seo.contentLlmsText', $llmsText);
+            
+            // LDAP group integration
+            $this->configuration->add('ldap.ldap_use_group_restriction', 'false');
+            $this->configuration->add('ldap.ldap_group_allowed_groups', '');
+            $this->configuration->add('ldap.ldap_group_auto_assign', 'false');
+            $this->configuration->add('ldap.ldap_group_mapping', '');
         }
     }
 

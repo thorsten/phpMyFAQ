@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test class for Ldap AD group functionality
  */
-class LdapGroupTest extends TestCase
+class LdapTest extends TestCase
 {
     private Sqlite3 $dbHandle;
     private Configuration $configuration;
