@@ -9,13 +9,13 @@
 
 phpMyFAQ is a multilingual, completely database-driven FAQ system.
 It supports various databases to store all data; PHP 8.3+ is needed to access this data.
-phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG
-editor and a media manager, real time search support with Elasticsearch, flexible multi-user support with user
-and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
-supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
-backup and restore system, a dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection
-systems, Microsoft Entra ID, Microsoft Active Directory and OpenLDAP support, and an easy-to-use installation and update
-script.
+phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG editor and a media manager, real time 
+search support with Elasticsearch an OpenSearch, flexible multi-user support with user and group based permissions on 
+categories and records, a wiki-like revision feature, a news system, user-tracking, 40+ supported languages, enhanced 
+automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a backup and restore system, a 
+dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection systems, Microsoft Entra ID, 
+Microsoft Active Directory and OpenLDAP support, and an easy-to-use installation. 
+It's possible to update your phpMyFAQ installation via the web interface or on the command line.
 
 ## Requirements
 
@@ -70,6 +70,10 @@ _Running nginx web server with PHP 8.4 support:_
 
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 - **php-fpm**: PHP-FPM image with PHP 8.4 support
+
+_Running FrankenPHP web server with PHP 8.4 support:_
+
+- **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
 Then services will be available at the following addresses:
 
@@ -126,7 +130,7 @@ To run phpMyFAQ locally, you need at least a running web server with PHP support
     $ pnpm install
     $ pnpm build
 
-Then just open http://www.example.org/phpmyfaq/setup/ in your browser.
+Then open http://www.example.org/phpmyfaq/setup/ in your browser.
 
 ## Testing
 
@@ -142,7 +146,7 @@ Please note that phpMyFAQ needs to be installed via Composer.
 
 ### Javascript
 
-To run our Javascript tests via Jest, just execute this command on your CLI
+To run our JavaScript tests via Vitest, just execute this command on your CLI
 
     $ curl -fsSL https://get.pnpm.io/install.sh | sh -
     $ pnpm install
