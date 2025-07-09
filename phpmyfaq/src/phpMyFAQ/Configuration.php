@@ -334,7 +334,7 @@ class Configuration
     {
         $allowedGroups = $this->get('ldap.ldap_group_allowed_groups');
         $groupMapping = $this->get('ldap.ldap_group_mapping');
-        
+
         return [
             'use_group_restriction' => $this->get('ldap.ldap_use_group_restriction'),
             'allowed_groups' => $allowedGroups ? explode(',', $allowedGroups) : [],

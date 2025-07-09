@@ -795,18 +795,18 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function findOrCreateGroupByName(string $name, string $description = ''): int
     {
         $groupId = $this->getGroupId($name);
-        
+
         if ($groupId > 0) {
             return $groupId;
         }
-        
+
         // Create new group if it doesn't exist
         $groupData = [
             'name' => $name,
             'description' => $description ?: "Auto-created group for $name",
             'auto_join' => false,
         ];
-        
+
         return $this->addGroup($groupData);
     }
 }

@@ -40,15 +40,15 @@ class LdapTest extends TestCase
     {
         // Test the DN parsing functionality indirectly through reflection
         $reflection = new \ReflectionClass(\phpMyFAQ\Auth\AuthLdap::class);
-        
+
         // Check if the method exists
         $this->assertTrue($reflection->hasMethod('extractGroupNameFromDn'));
-        
+
         // Since it's a private method, we'll test it using reflection
         $authLdap = new \phpMyFAQ\Auth\AuthLdap($this->configuration);
         $method = $reflection->getMethod('extractGroupNameFromDn');
         $method->setAccessible(true);
-        
+
         // Test various DN formats
         $testCases = [
             'CN=Domain Users,CN=Users,DC=example,DC=com' => 'Domain Users',
@@ -56,7 +56,7 @@ class LdapTest extends TestCase
             'CN=Test Group,OU=Groups,DC=example,DC=com' => 'Test Group',
             'InvalidDN' => 'InvalidDN',
         ];
-        
+
         foreach ($testCases as $input => $expected) {
             $result = $method->invoke($authLdap, $input);
             $this->assertEquals($expected, $result, "Failed for input: $input");

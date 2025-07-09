@@ -113,7 +113,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     {
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
         $userGroups = $this->ldapCore->getGroupMemberships($login);
-        
+
         if ($userGroups === false) {
             $this->configuration->getLogger()->warning("Unable to retrieve group memberships for user: {$login}");
             return;
@@ -124,7 +124,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         foreach ($userGroups as $adGroup) {
             $groupName = $this->extractGroupNameFromDn($adGroup);
-            
+
             // Check if there's a specific mapping for this AD group
             if (!empty($groupMapping) && isset($groupMapping[$groupName])) {
                 $faqGroupName = $groupMapping[$groupName];
@@ -135,7 +135,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
             // Find or create the group
             $groupId = $permission->findOrCreateGroupByName($faqGroupName);
-            
+
             if ($groupId > 0) {
                 $permission->addToGroup($userId, $groupId);
                 $this->configuration->getLogger()->info("Added user {$login} to group {$faqGroupName}");
@@ -155,7 +155,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         if (preg_match('/CN=([^,]+)/', $dn, $matches)) {
             return $matches[1];
         }
-        
+
         return $dn;
     }
 
