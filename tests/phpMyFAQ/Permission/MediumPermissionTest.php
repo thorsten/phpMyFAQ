@@ -432,4 +432,28 @@ class MediumPermissionTest extends TestCase
         // Cleanup
         $this->mediumPermission->deleteGroup(1);
     }
+
+    public function testFindOrCreateGroupByName(): void
+    {
+        $groupName = 'TestADGroup';
+        $description = 'Test AD Group Description';
+        
+        // Test creating a new group
+        $groupId = $this->mediumPermission->findOrCreateGroupByName($groupName, $description);
+        $this->assertGreaterThan(0, $groupId);
+        
+        // Test finding an existing group
+        $existingGroupId = $this->mediumPermission->findOrCreateGroupByName($groupName, $description);
+        $this->assertEquals($groupId, $existingGroupId);
+        
+        // Test creating without description
+        $groupName2 = 'TestADGroup2';
+        $groupId2 = $this->mediumPermission->findOrCreateGroupByName($groupName2);
+        $this->assertGreaterThan(0, $groupId2);
+        $this->assertNotEquals($groupId, $groupId2);
+        
+        // Cleanup
+        $this->mediumPermission->deleteGroup($groupId);
+        $this->mediumPermission->deleteGroup($groupId2);
+    }
 }

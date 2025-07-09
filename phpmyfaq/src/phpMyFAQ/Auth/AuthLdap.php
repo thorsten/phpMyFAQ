@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
 use phpMyFAQ\Ldap as LdapCore;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
 use SensitiveParameter;
 
@@ -93,7 +94,69 @@ class AuthLdap extends Auth implements AuthDriverInterface
             ]
         );
 
+        // Handle group assignments if enabled
+        $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
+        if ($ldapGroupConfig['auto_assign'] === 'true' && $this->configuration->get('security.permLevel') === 'medium') {
+            $this->assignUserToGroups($login, $user->getUserId());
+        }
+
         return $result;
+    }
+
+    /**
+     * Assigns user to phpMyFAQ groups based on AD group membership
+     *
+     * @param string $login Username
+     * @param int $userId User ID
+     */
+    private function assignUserToGroups(string $login, int $userId): void
+    {
+        $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
+        $userGroups = $this->ldapCore->getGroupMemberships($login);
+
+        if ($userGroups === false) {
+            $this->configuration->getLogger()->warning("Unable to retrieve group memberships for user: {$login}");
+            return;
+        }
+
+        $permission = new MediumPermission($this->configuration);
+        $groupMapping = $ldapGroupConfig['group_mapping'];
+
+        foreach ($userGroups as $adGroup) {
+            $groupName = $this->extractGroupNameFromDn($adGroup);
+
+            // Check if there's a specific mapping for this AD group
+            if (!empty($groupMapping) && isset($groupMapping[$groupName])) {
+                $faqGroupName = $groupMapping[$groupName];
+            } else {
+                // Default: use the AD group name
+                $faqGroupName = $groupName;
+            }
+
+            // Find or create the group
+            $groupId = $permission->findOrCreateGroupByName($faqGroupName);
+
+            if ($groupId > 0) {
+                $permission->addToGroup($userId, $groupId);
+                $this->configuration->getLogger()->info("Added user {$login} to group {$faqGroupName}");
+            }
+        }
+    }
+
+    /**
+     * Extract group name from DN
+     *
+     * @param string $dn Group DN
+     * @return string Group name
+     */
+    private function extractGroupNameFromDn(string $dn): string
+    {
+        // Extract CN from DN, e.g., "CN=Domain Users,CN=Users,DC=example,DC=com" -> "Domain Users"
+        if (preg_match('/CN=([^,]+)/', $dn, $matches)) {
+            return $matches[1];
+        }
+
+        return $dn;
     }
 
     /**
@@ -158,6 +221,32 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode($password))) {
             throw new AuthException($this->ldapCore->error);
+        }
+
+        // Check AD group membership restrictions if enabled
+        $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
+        if ($ldapGroupConfig['use_group_restriction'] === 'true') {
+            $userGroups = $this->ldapCore->getGroupMemberships($login);
+            if ($userGroups === false) {
+                throw new AuthException('Unable to retrieve user group memberships');
+            }
+
+            $allowedGroups = $ldapGroupConfig['allowed_groups'];
+            if (!empty($allowedGroups)) {
+                $hasAllowedGroup = false;
+                foreach ($userGroups as $userGroup) {
+                    foreach ($allowedGroups as $allowedGroup) {
+                        if (str_contains($userGroup, trim($allowedGroup))) {
+                            $hasAllowedGroup = true;
+                            break 2;
+                        }
+                    }
+                }
+
+                if (!$hasAllowedGroup) {
+                    throw new AuthException('User is not a member of any allowed LDAP/Active Directory groups');
+                }
+            }
         }
 
         $this->create($login, htmlspecialchars_decode($password));

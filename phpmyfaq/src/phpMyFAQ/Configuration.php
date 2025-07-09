@@ -293,6 +293,7 @@ class Configuration
             'ldap_use_memberOf' => $this->get('ldap.ldap_use_memberOf'),
             'ldap_use_sasl' => $this->get('ldap.ldap_use_sasl'),
             'ldap_use_anonymous_login' => $this->get('ldap.ldap_use_anonymous_login'),
+            'ldap_group_config' => $this->getLdapGroupConfig(),
         ];
     }
 
@@ -321,6 +322,24 @@ class Configuration
         return [
             'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
             'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS'),
+        ];
+    }
+
+    /**
+     * Returns the LDAP group configuration.
+     *
+     * @return array<string, string|array>
+     */
+    public function getLdapGroupConfig(): array
+    {
+        $allowedGroups = $this->get('ldap.ldap_group_allowed_groups');
+        $groupMapping = $this->get('ldap.ldap_group_mapping');
+
+        return [
+            'use_group_restriction' => $this->get('ldap.ldap_use_group_restriction'),
+            'allowed_groups' => $allowedGroups ? explode(',', $allowedGroups) : [],
+            'auto_assign' => $this->get('ldap.ldap_group_auto_assign'),
+            'group_mapping' => $groupMapping ? json_decode($groupMapping, true) : [],
         ];
     }
 

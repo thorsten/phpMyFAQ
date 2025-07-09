@@ -307,6 +307,63 @@ class Ldap
     }
 
     /**
+     * Returns the user's AD group memberships.
+     *
+     * @param string $username Username
+     * @return array<string>|false Array of group DNs or false on error
+     */
+    public function getGroupMemberships(string $username): array|false
+    {
+        if ($this->ds === false) {
+            $this->error = 'The LDAP connection handler is not a valid resource.';
+            return false;
+        }
+
+        $filter = sprintf(
+            '(%s=%s)',
+            $this->configuration->get('ldap.ldap_mapping.username'),
+            $this->quote($username)
+        );
+
+        $fields = ['memberOf'];
+
+        $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
+
+        if (!$searchResult) {
+            $this->error = sprintf(
+                'Unable to search for "%s" (Error: %s)',
+                $username,
+                ldap_error($this->ds)
+            );
+
+            return false;
+        }
+
+        $entryId = ldap_first_entry($this->ds, $searchResult);
+
+        if (!$entryId) {
+            $this->errno = ldap_errno($this->ds);
+            $this->error = sprintf(
+                'Cannot get the value(s). Error: %s',
+                ldap_error($this->ds)
+            );
+
+            return false;
+        }
+
+        $entries = ldap_get_entries($this->ds, $searchResult);
+        $groups = [];
+
+        if ($entries['count'] > 0 && isset($entries[0]['memberof'])) {
+            for ($i = 0; $i < $entries[0]['memberof']['count']; $i++) {
+                $groups[] = $entries[0]['memberof'][$i];
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
      * Returns the LDAP error message of the last LDAP command.
      *
      * @param resource $ds LDAP resource
