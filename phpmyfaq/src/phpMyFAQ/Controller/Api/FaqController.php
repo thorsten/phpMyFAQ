@@ -678,11 +678,11 @@ class FaqController extends AbstractController
             ->setComment(false)
             ->setNotes('');
 
-        $faqId = $faq->create($faqData);
+        $faqEntity = $faq->create($faqData);
 
         $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
         $faqMetaData
-            ->setFaqId($faqId)
+            ->setFaqId($faqEntity->getId())
             ->setFaqLanguage($languageCode)
             ->setCategories($categories)
             ->save();
