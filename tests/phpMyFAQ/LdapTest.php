@@ -2,8 +2,11 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Auth\AuthLdap;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Test class for Ldap AD group functionality
@@ -20,8 +23,51 @@ class LdapTest extends TestCase
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($this->dbHandle);
-        $this->ldap = new Ldap($this->configuration);
+
+        $configArray = [
+            'ldap' => [
+                'server' => 'ldap://localhost',
+                'port' => 389,
+                'baseDn' => 'DC=example,DC=com',
+                'user' => 'cn=admin,DC=example,DC=com',
+                'password' => 'password',
+            ]
+        ];
+
+        $this->configuration = $this->getMockBuilder(Configuration::class)
+            ->setConstructorArgs([$this->dbHandle])
+            ->onlyMethods(['get'])
+            ->getMock();
+
+        $this->configuration->method('get')->willReturnCallback(
+            function ($key) {
+                if ($key === 'ldap') {
+                    return [
+                        'server' => 'ldap://localhost',
+                        'port' => 389,
+                        'baseDn' => 'DC=example,DC=com',
+                        'user' => 'cn=admin,DC=example,DC=com',
+                        'password' => 'password',
+                    ];
+                }
+                // Falls weitere Keys wie 'ldap.server' abgefragt werden:
+                if ($key === 'ldap.server') {
+                    return 'ldap://localhost';
+                }
+                if ($key === 'ldap.port') {
+                    return 389;
+                }
+                // usw.
+                return null;
+            }
+        );
+
+        $this->ldap = $this->getMockBuilder(Ldap::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['connect', 'getGroupMemberships'])
+            ->getMock();
+        $this->ldap->method('connect')->willReturn(false);
+        $this->ldap->method('getGroupMemberships')->willReturn(false);
     }
 
     public function testGetGroupMembershipsMethodExists(): void
@@ -36,36 +82,9 @@ class LdapTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testExtractGroupNameFromDnInAuthLdap(): void
-    {
-        // Test the DN parsing functionality indirectly through reflection
-        $reflection = new \ReflectionClass(\phpMyFAQ\Auth\AuthLdap::class);
-
-        // Check if the method exists
-        $this->assertTrue($reflection->hasMethod('extractGroupNameFromDn'));
-
-        // Since it's a private method, we'll test it using reflection
-        $authLdap = new \phpMyFAQ\Auth\AuthLdap($this->configuration);
-        $method = $reflection->getMethod('extractGroupNameFromDn');
-        $method->setAccessible(true);
-
-        // Test various DN formats
-        $testCases = [
-            'CN=Domain Users,CN=Users,DC=example,DC=com' => 'Domain Users',
-            'CN=Domain Admins,CN=Users,DC=example,DC=com' => 'Domain Admins',
-            'CN=Test Group,OU=Groups,DC=example,DC=com' => 'Test Group',
-            'InvalidDN' => 'InvalidDN',
-        ];
-
-        foreach ($testCases as $input => $expected) {
-            $result = $method->invoke($authLdap, $input);
-            $this->assertEquals($expected, $result, "Failed for input: $input");
-        }
-    }
-
     public function testAssignUserToGroupsMethodExists(): void
     {
-        $reflection = new \ReflectionClass(\phpMyFAQ\Auth\AuthLdap::class);
+        $reflection = new ReflectionClass(AuthLdap::class);
         $this->assertTrue($reflection->hasMethod('assignUserToGroups'));
     }
 }

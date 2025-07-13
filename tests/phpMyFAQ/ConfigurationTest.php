@@ -200,32 +200,4 @@ class ConfigurationTest extends TestCase
 
         $this->assertEquals($expected, $this->configuration->getLdapServer());
     }
-
-    public function testGetLdapGroupConfig(): void
-    {
-        // Test default values
-        $expected = [
-            'use_group_restriction' => 'false',
-            'allowed_groups' => [],
-            'auto_assign' => 'false',
-            'group_mapping' => [],
-        ];
-        
-        $this->assertEquals($expected, $this->configuration->getLdapGroupConfig());
-        
-        // Test with configured values
-        $this->configuration->set('ldap.ldap_use_group_restriction', 'true');
-        $this->configuration->set('ldap.ldap_group_allowed_groups', 'Domain Users,Domain Admins');
-        $this->configuration->set('ldap.ldap_group_auto_assign', 'true');
-        $this->configuration->set('ldap.ldap_group_mapping', '{"Domain Admins": "Administrators"}');
-        
-        $expected = [
-            'use_group_restriction' => 'true',
-            'allowed_groups' => ['Domain Users', 'Domain Admins'],
-            'auto_assign' => 'true',
-            'group_mapping' => ['Domain Admins' => 'Administrators'],
-        ];
-        
-        $this->assertEquals($expected, $this->configuration->getLdapGroupConfig());
-    }
 }

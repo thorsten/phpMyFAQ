@@ -1162,15 +1162,6 @@ EOT;
         }
     }
 
-    private function updateVersion(): void
-    {
-        $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
-        $this->configuration->update(['main.currentVersion' => System::getVersion()]);
-    }
-
-    /**
-     * @throws Exception
-     */
     private function applyUpdates410Alpha3(): void
     {
         if (version_compare($this->version, '4.1.0-alpha.3', '<')) {
@@ -1189,6 +1180,12 @@ EOT;
             $this->configuration->add('ldap.ldap_group_auto_assign', 'false');
             $this->configuration->add('ldap.ldap_group_mapping', '');
         }
+    }
+
+    private function updateVersion(): void
+    {
+        $this->configuration->update(['main.currentApiVersion' => System::getApiVersion()]);
+        $this->configuration->update(['main.currentVersion' => System::getVersion()]);
     }
 
     private function getBackupFilename(): string

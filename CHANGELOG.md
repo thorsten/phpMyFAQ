@@ -22,6 +22,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PHP 8.5 (Thorsten)
 - added experimental support for FrankenPHP (Thorsten)
 - added experimental support for OpenSearch (Thorsten)
+- added experimental support for LDAP group support (Thorsten)
 - added experimental update via command line (Thorsten)
 - improved online update feature (Thorsten)
 - updated Spanish translation (Thorsten)

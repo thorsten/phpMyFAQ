@@ -96,7 +96,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Handle group assignments if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
-        if ($ldapGroupConfig['auto_assign'] === 'true' && $this->configuration->get('security.permLevel') === 'medium') {
+        if (
+            $ldapGroupConfig['auto_assign'] === 'true' &&
+            $this->configuration->get('security.permLevel') === 'medium'
+        ) {
             $this->assignUserToGroups($login, $user->getUserId());
         }
 
