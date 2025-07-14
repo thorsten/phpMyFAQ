@@ -491,16 +491,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "6.0.8",
+            "version": "6.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "8102273afbcd5e3d95f1faaab2c5aa31e3637f61"
+                "reference": "21e888e8597440b2205e2e5c484b6c8e556bcd1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/8102273afbcd5e3d95f1faaab2c5aa31e3637f61",
-                "reference": "8102273afbcd5e3d95f1faaab2c5aa31e3637f61",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/21e888e8597440b2205e2e5c484b6c8e556bcd1a",
+                "reference": "21e888e8597440b2205e2e5c484b6c8e556bcd1a",
                 "shasum": ""
             },
             "require": {
@@ -551,7 +551,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/6.0.8"
+                "source": "https://github.com/endroid/qr-code/tree/6.0.9"
             },
             "funding": [
                 {
@@ -559,7 +559,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-10T14:28:45+00:00"
+            "time": "2025-07-13T19:59:45+00:00"
         },
         {
             "name": "ezimuel/guzzlestreams",
@@ -8570,7 +8570,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -8585,9 +8585,9 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.3.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
