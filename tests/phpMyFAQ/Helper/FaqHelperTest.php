@@ -73,7 +73,8 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContent(): void
     {
-        $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
+        $content = '<p>Some text <script>alert("Hello, world!");' .
+            '</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
@@ -143,6 +144,16 @@ class FaqHelperTest extends TestCase
         $expectedOutput = '<img src="https://www.phpmyfaq.de/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    public function testExternalLinks(): void
+    {
+        $content = '<a rel="nofollow" target="_blank" href="https://www.phpmyfaq.de">phpMyFAQ</a>';
+        $expectedOutput = '<a rel="nofollow" target="_blank" href="https://www.phpmyfaq.de">phpMyFAQ</a>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 

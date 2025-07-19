@@ -663,8 +663,8 @@ class FaqController extends AbstractController
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
-        $faqEntity = new FaqEntity();
-        $faqEntity
+        $faqData = new FaqEntity();
+        $faqData
             ->setLanguage($languageCode)
             ->setQuestion($question)
             ->setAnswer($answer)
@@ -676,11 +676,11 @@ class FaqController extends AbstractController
             ->setComment(false)
             ->setNotes('');
 
-        $faqId = $faq->create($faqEntity);
+        $faqEntity = $faq->create($faqData);
 
         $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
         $faqMetaData
-            ->setFaqId($faqId)
+            ->setFaqId($faqEntity->getId())
             ->setFaqLanguage($languageCode)
             ->setCategories($categories)
             ->save();
