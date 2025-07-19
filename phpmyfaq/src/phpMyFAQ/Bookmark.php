@@ -122,7 +122,12 @@ readonly class Bookmark
     public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();
+        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $faq = new Faq($this->configuration);
+        $faq
+            ->setUser($currentUser)
+            ->setGroups($currentGroups);
+
         $category = new Category($this->configuration);
         $list = [];
 
