@@ -70,14 +70,15 @@
               <div class="form-group mb-2">
                 <form id="selectRevision" name="selectRevision" method="post"
                       action="?action=editentry&id={{ faqData['id'] }}&lang={{ faqLang }}">
-                  <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
+                  <select class="form-select" name="selectedRevisionId" id="selectedRevisionId"
+                          onchange="this.form.submit();">
                     <option value="0">{{ ad_changerev }}</option>
                     {% for currentRevision in revisions %}
-                      {% set selected = selectedRevisionId == faqData['revision_id'] %}
-                    <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
-                      {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
-                      {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
-                    </option>
+                      {% set selected = selectedRevisionId == currentRevision['revision_id'] %}
+                      <option value="{{ currentRevision['revision_id'] }}"{{ selected ? ' selected' }}>
+                        {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
+                        {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
+                      </option>
                     {% endfor %}
                   </select>
                 </form>

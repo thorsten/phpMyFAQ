@@ -51,6 +51,7 @@ import {
   handleUpdateQuestion,
   handleRefreshAttachments,
   handleResetCategoryImage,
+  handleResetButton,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -97,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   handleFileFilter();
   handleSaveFaqData();
   handleUpdateQuestion();
+  handleResetButton();
   await handleFaqOverview();
 
   // Content → Comments

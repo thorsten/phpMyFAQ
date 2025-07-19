@@ -44,3 +44,24 @@ export const handleUpdateQuestion = () => {
     });
   }
 };
+
+export const handleResetButton = () => {
+  const resetButton = document.querySelector('button[type="reset"]');
+  if (resetButton) {
+    resetButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      const form = document.getElementById('faqEditor');
+      form.reset();
+      const revisionSelect = document.getElementById('selectedRevisionId');
+
+      console.log(revisionSelect);
+
+      if (revisionSelect && revisionSelect.options.length > 0) {
+        const lastOption = revisionSelect.options[revisionSelect.options.length - 1];
+        revisionSelect.value = lastOption.value;
+        // Optional: Trigger change event, falls weitere Logik daran hängt
+        revisionSelect.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+};
