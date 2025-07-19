@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { selectAll, unSelectAll, formatBytes, initializeTooltips } from './utils';
+import { selectAll, unSelectAll, formatBytes, initializeTooltips, normalizeLanguageCode } from './utils';
 import { Tooltip } from 'bootstrap';
 
 vi.mock('bootstrap', () => ({
@@ -64,6 +64,40 @@ describe('Utils', () => {
       initializeTooltips();
 
       expect(vi.mocked(Tooltip)).toHaveBeenCalled();
+    });
+  });
+
+  describe('normalizeLanguageCode', () => {
+    it('should return the same value for empty input', () => {
+      expect(normalizeLanguageCode('')).toBe('');
+      expect(normalizeLanguageCode(undefined as any)).toBe(undefined);
+      expect(normalizeLanguageCode(null as any)).toBe(null);
+    });
+
+    it('should replace underscores with hyphens', () => {
+      expect(normalizeLanguageCode('pt_br')).toBe('pt-BR');
+      expect(normalizeLanguageCode('en_us')).toBe('en-US');
+    });
+
+    it('should capitalize region part', () => {
+      expect(normalizeLanguageCode('de_at')).toBe('de-AT');
+      expect(normalizeLanguageCode('fr_ca')).toBe('fr-CA');
+    });
+
+    it('should handle already normalized codes', () => {
+      expect(normalizeLanguageCode('pt-BR')).toBe('pt-BR');
+      expect(normalizeLanguageCode('en-US')).toBe('en-US');
+    });
+
+    it('should not change codes without region', () => {
+      expect(normalizeLanguageCode('de')).toBe('de');
+      expect(normalizeLanguageCode('fr')).toBe('fr');
+    });
+
+    it('should handle mixed case input', () => {
+      expect(normalizeLanguageCode('pt_br')).toBe('pt-BR');
+      expect(normalizeLanguageCode('pt_br')).toBe('pt-BR');
+      expect(normalizeLanguageCode('pt_br')).toBe('pt-BR');
     });
   });
 });

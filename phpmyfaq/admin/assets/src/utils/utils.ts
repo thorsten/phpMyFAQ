@@ -53,3 +53,10 @@ export const initializeTooltips = (): void => {
     new Tooltip(tooltipTriggerEl);
   });
 };
+
+export const normalizeLanguageCode = (code: string): string => {
+  if (!code) {
+    return code;
+  }
+  return code.replace(/_/g, '-').replace(/-([a-z]{2})$/i, (_, region) => '-' + region.toUpperCase());
+};
