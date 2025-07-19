@@ -14,7 +14,7 @@
  */
 
 import { deleteFaq, fetchAllFaqsByCategory, fetchCategoryTranslations } from '../api';
-import { pushErrorNotification, pushNotification } from '../utils';
+import { normalizeLanguageCode, pushErrorNotification, pushNotification } from '../utils';
 import { addElement } from '../../../../assets/src/utils';
 
 export const handleFaqOverview = async () => {
@@ -69,24 +69,32 @@ export const handleFaqOverview = async () => {
             event.preventDefault();
 
             const translations = await fetchCategoryTranslations(categoryId);
-            const existingLink = element.nextElementSibling.childNodes[0];
-            const regionNames = new Intl.DisplayNames([language], { type: 'language' });
+            const dropdownMenu = element.parentElement.querySelector('.dropdown-menu');
             const faqId = element.getAttribute('data-pmf-faq-id');
             let options = [];
 
-            for (const [languageCode, languageName] of Object.entries(translations)) {
+            dropdownMenu.querySelectorAll('#dropdownTranslation').forEach((link) => {
+              options.push(link.innerText);
+            });
+
+            for (let [languageCode, categoryName] of Object.entries(translations)) {
               if (languageCode !== language) {
-                document.querySelectorAll('#dropdownTranslation').forEach((link) => {
-                  options.push(link.innerText);
-                });
-                if (!options.includes(`→ ${regionNames.of(languageCode)}`)) {
+                let displayName;
+                try {
+                  const normalizedCode = normalizeLanguageCode(languageCode);
+                  displayName = new Intl.DisplayNames([language], { type: 'language' }).of(normalizedCode);
+                } catch (e) {
+                  displayName = null;
+                }
+
+                if (displayName && !options.includes(`→ ${displayName}`)) {
                   const newTranslationLink = addElement('a', {
                     classList: 'dropdown-item',
                     id: 'dropdownTranslation',
                     href: `?action=editentry&id=${faqId}&cat=${categoryId}&translateTo=${languageCode}`,
-                    innerText: `→ ${regionNames.of(languageCode)}`,
+                    innerText: `→ ${displayName}`,
                   });
-                  existingLink.insertAdjacentElement('afterend', newTranslationLink);
+                  dropdownMenu.appendChild(newTranslationLink);
                 }
               }
             }
@@ -260,7 +268,7 @@ const populateCategoryTable = async (catgoryId, faqs) => {
             [addElement('i', { classList: 'bi bi-globe', 'aria-hidden': 'true' })]
           ),
           addElement('div', { classList: 'dropdown-menu', 'aria-labelledby': 'dropdownAddNewTranslation' }, [
-            addElement('a', { classList: 'dropdown-item', id: 'dropdownTranslation', innerText: 'n/a' }),
+            addElement('a', { classList: 'dropdown-item', id: 'dropdownTranslation', innerText: '' }),
           ]),
         ]),
       ])

@@ -42,8 +42,15 @@ export const formatBytes = (bytes, decimals = 2) => {
 };
 
 export const initializeTooltips = () => {
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new Tooltip(tooltipTriggerEl);
   });
-}
+};
+
+export const normalizeLanguageCode = (code) => {
+  if (!code) {
+    return code;
+  }
+  return code.replace(/_/g, '-').replace(/-([a-z]{2})$/i, (_, region) => '-' + region.toUpperCase());
+};
