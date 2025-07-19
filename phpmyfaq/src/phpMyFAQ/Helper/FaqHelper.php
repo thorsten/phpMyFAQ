@@ -175,7 +175,6 @@ class FaqHelper extends AbstractHelper
                 ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
                 ->allowMediaHosts($allowedHosts)
                 ->allowLinkSchemes(['https', 'http', 'mailto', 'data'])
-                ->allowLinkHosts($allowedHosts)
         );
 
         $sanitizedContent = $htmlSanitizer->sanitize($content);

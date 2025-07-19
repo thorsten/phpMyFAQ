@@ -10,13 +10,9 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 
 class FaqHelperTest extends TestCase
 {
-    /** @var Configuration */
-    private Configuration $configuration;
-
     /** @var FaqHelper*/
     private FaqHelper $faqHelper;
 
@@ -34,15 +30,15 @@ class FaqHelperTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.currentVersion', System::getVersion());
-        $this->configuration->set('main.referenceURL', 'https://localhost:443/');
-        $this->configuration->set('records.allowedMediaHosts', 'www.youtube.com,example.com,phpmyfaq.de');
+        $configuration = new Configuration($dbHandle);
+        $configuration->set('main.currentVersion', System::getVersion());
+        $configuration->set('main.referenceURL', 'https://localhost:443/');
+        $configuration->set('records.allowedMediaHosts', 'www.youtube.com,example.com,phpmyfaq.de');
 
-        $language = new Language($this->configuration);
-        $this->configuration->setLanguage($language);
+        $language = new Language($configuration);
+        $configuration->setLanguage($language);
 
-        $this->faqHelper = new FaqHelper($this->configuration);
+        $this->faqHelper = new FaqHelper($configuration);
     }
 
     public function testRewriteLanguageMarkupClass(): void
@@ -78,7 +74,8 @@ class FaqHelperTest extends TestCase
 
     public function testCleanUpContent(): void
     {
-        $content = '<p>Some text <script>alert("Hello, world!");</script><img src=foo onerror=alert(document.cookie)></p>';
+        $content = '<p>Some text <script>alert("Hello, world!");' .
+            '</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
@@ -148,6 +145,16 @@ class FaqHelperTest extends TestCase
         $expectedOutput = '<img src="https://www.phpmyfaq.de/images/1725540590Erro%20403%20MD-e.png" alt="Example Image" />';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
+        $this->assertEquals($expectedOutput, $actualOutput);
+    }
+
+    public function testExternalLinks(): void
+    {
+        $content = '<a rel="nofollow" target="_blank" href="https://www.phpmyfaq.de">phpMyFAQ</a>';
+        $expectedOutput = '<a rel="nofollow" target="_blank" href="https://www.phpmyfaq.de">phpMyFAQ</a>';
+
+        $actualOutput = $this->faqHelper->cleanUpContent($content);
+
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
