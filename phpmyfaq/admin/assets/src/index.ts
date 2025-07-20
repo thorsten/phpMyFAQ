@@ -63,6 +63,7 @@ import {
   handleRefreshAttachments,
   handleToggleVisibility,
   handleResetCategoryImage,
+  handleResetButton,
   handleDeleteFaqModal,
 } from './content';
 import { handleUserList, handleUsers } from './user';
@@ -110,6 +111,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleSaveFaqData();
   handleUpdateQuestion();
   handleDeleteFaqModal();
+  handleResetButton();
   await handleFaqOverview();
 
   // Content → Comments

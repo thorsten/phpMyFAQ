@@ -70,24 +70,25 @@
           <div class="tab-content">
             <div class="tab-pane active" id="tab-question-answer">
 
-              {% if numberOfRevisions > 0 %}
-                <!-- Revision -->
-                <div class="form-group mb-2">
-                  <form id="selectRevision" name="selectRevision" method="post"
-                        action="./faq/edit/{{ faqData['id'] }}/{{ faqLang }}">
-                    <select class="form-select" name="selectedRevisionId" onchange="this.form.submit();">
-                      <option value="0">{{ ad_changerev }}</option>
-                      {% for currentRevision in revisions %}
-                        {% set selected = selectedRevisionId == faqData['revision_id'] %}
-                        <option value="{{ currentRevision['revision_id'] }}" {{ selected == true ? ' selected' }}>
-                          {{ 'msgRevision' | translate }} 1.{{ currentRevision['revision_id'] }}:
-                          {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                  </form>
-                </div>
-              {% endif %}
+            {% if numberOfRevisions > 0 %}
+              <!-- Revision -->
+              <div class="form-group mb-2">
+                <form id="selectRevision" name="selectRevision" method="post"
+                      action="./faq/edit/{{ faqData['id'] }}/{{ faqLang }}">
+                  <select class="form-select" name="selectedRevisionId" id="selectedRevisionId"
+                          onchange="this.form.submit();">
+                    <option value="0">{{ ad_changerev }}</option>
+                    {% for currentRevision in revisions %}
+                      {% set selected = selectedRevisionId == currentRevision['revision_id'] %}
+                      <option value="{{ currentRevision['revision_id'] }}"{{ selected ? ' selected' }}>
+                        {{ ad_entry_revision }} 1.{{ currentRevision['revision_id'] }}:
+                        {{ currentRevision['updated'] | createIsoDate }} - {{ currentRevision['author'] }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </form>
+              </div>
+            {% endif %}
 
               <form id="faqEditor" method="post" data-pmf-enable-editor="{{ isEditorEnabled }}"
                     data-pmf-editor-language="en" data-pmf-default-url="{{ defaultUrl }}">

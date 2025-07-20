@@ -65,3 +65,21 @@ export const handleUpdateQuestion = (): void => {
     });
   }
 };
+
+export const handleResetButton = (): void => {
+  const resetButton = document.querySelector('button[type="reset"]') as HTMLButtonElement | null;
+  if (resetButton) {
+    resetButton.addEventListener('click', (event: Event): void => {
+      event.preventDefault();
+      const form = document.getElementById('faqEditor') as HTMLFormElement;
+      form.reset();
+      const revisionSelect = document.getElementById('selectedRevisionId') as HTMLSelectElement | null;
+
+      if (revisionSelect && revisionSelect.options.length > 0) {
+        const lastOption = revisionSelect.options[revisionSelect.options.length - 1] as HTMLOptionElement;
+        revisionSelect.value = lastOption.value;
+        revisionSelect.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+};
