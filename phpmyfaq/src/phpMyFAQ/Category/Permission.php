@@ -41,8 +41,8 @@ class Permission
      * Adds the category permissions for users and groups.
      *
      * @param string $mode 'group' or 'user'
-     * @param array  $categories ID of the current category
-     * @param array  $ids Array of group or user IDs
+     * @param int[]  $categories ID of the current category
+     * @param int[]  $ids Array of group or user IDs
      */
     public function add(string $mode, array $categories, array $ids): bool
     {
@@ -85,7 +85,7 @@ class Permission
      * Deletes the category permissions for users and groups.
      *
      * @param string $mode 'group' or 'user'
-     * @param array  $categories ID of the current category
+     * @param int[]  $categories ID of the current category
      */
     public function delete(string $mode, array $categories): bool
     {
@@ -123,10 +123,11 @@ class Permission
     }
 
     /**
-     * Returns the category permissions for users and groups.
+     * Returns the category permissions for users or groups.
      *
      * @param string $mode 'group' or 'user'
-     * @param array  $categories Array of category ids
+     * @param int[]  $categories Array of category ids
+     * @return int[] Array of user or group IDs that have permissions for the given categories
      */
     public function get(string $mode, array $categories): array
     {
@@ -147,6 +148,48 @@ class Permission
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $permissions[] = (int)$row->permission;
+        }
+
+        return $permissions;
+    }
+
+    /**
+     * Returns all category permissions for users and groups.
+     *
+     * @param int[] $categories Array of category ids
+     * @return array Array of permissions with user and group IDs for each category
+     */
+    public function getAll(array $categories): array
+    {
+        $permissions = [];
+
+        foreach ($categories as $category) {
+            $permissions[$category] = [
+                self::USER => [],
+                self::GROUP => [],
+            ];
+        }
+
+        $query = sprintf(
+            'SELECT category_id, user_id AS permission FROM %sfaqcategory_user WHERE category_id IN (%s)',
+            Database::getTablePrefix(),
+            implode(', ', $categories)
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $permissions[$row->category_id][self::USER][] = (int)$row->permission;
+        }
+
+        $query = sprintf(
+            'SELECT category_id, group_id AS permission FROM %sfaqcategory_group WHERE category_id IN (%s)',
+            Database::getTablePrefix(),
+            implode(', ', $categories)
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $permissions[$row->category_id][self::GROUP][] = (int)$row->permission;
         }
 
         return $permissions;

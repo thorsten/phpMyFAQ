@@ -18,11 +18,13 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Faq\MetaData;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
@@ -44,6 +46,8 @@ class FaqController extends AbstractController
         $stopWords = $this->container->get('phpmyfaq.stop-words');
         $session = $this->container->get('phpmyfaq.user.session');
         $session->setCurrentUser($this->currentUser);
+        $categoryPermission = new CategoryPermission($this->configuration);
+        $faqPermission = new FaqPermission($this->configuration);
 
         $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
@@ -138,12 +142,21 @@ class FaqController extends AbstractController
                 ->save();
 
             // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = $this->container->get('phpmyfaq.helper.category');
+            $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
             $categoryHelper
                 ->setCategory($category)
                 ->setConfiguration($this->configuration);
 
             $moderators = $categoryHelper->getModerators($categories);
+
+            // Add user and group permissions
+            $permissions = $categoryPermission->getAll($categories);
+            foreach ($categories as $categoryId) {
+                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$categoryId]['user']);
+                if ($this->configuration->get('security.permLevel') !== 'basic') {
+                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$categoryId]['group']);
+                }
+            }
 
             try {
                 $notification = $this->container->get('phpmyfaq.notification');
