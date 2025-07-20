@@ -52,7 +52,6 @@
     "twig/twig": "^3.10"
   },
   "require-dev": {
-    "cyclonedx/cyclonedx-php-composer": "^5.2",
     "doctrine/instantiator": "2.*",
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
@@ -99,7 +98,6 @@
     "phpstan": "./phpmyfaq/src/libs/bin/phpstan analyze --memory-limit=4G",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
-    "sbom:create": "composer CycloneDX:make-sbom --output-format=JSON --output-file=sbom-php.json",
     "test": "./phpmyfaq/src/libs/bin/phpunit --coverage-text"
   },
   "support": {

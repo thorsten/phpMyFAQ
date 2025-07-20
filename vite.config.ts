@@ -5,7 +5,6 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import viteCompression from 'vite-plugin-compression';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteMinifyPlugin } from 'vite-plugin-minify';
-import sbom from 'rollup-plugin-sbom';
 
 export default defineConfig({
   build: {
@@ -55,11 +54,6 @@ export default defineConfig({
       ],
     }),
     ViteMinifyPlugin(),
-    sbom({
-      includeWellKnown: false,
-      outFilename: 'sbom-node',
-      outFormats: ['json'],
-    }),
   ],
   css: {
     preprocessorOptions: {
