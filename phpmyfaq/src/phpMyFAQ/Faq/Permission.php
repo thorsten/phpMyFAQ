@@ -148,7 +148,9 @@ class Permission
             ];
         } else {
             $permissions += [
-                'restricted_user' => Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT),
+                'restricted_user' => is_array($data->restricted_users)
+                    ? Filter::filterArray($data->restricted_users, FILTER_VALIDATE_INT)
+                    : [],
             ];
         }
 
@@ -162,7 +164,9 @@ class Permission
             ];
         } else {
             $permissions += [
-                'restricted_groups' => Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
+                'restricted_groups' => is_array($data->restricted_groups)
+                    ? Filter::filterArray($data->restricted_groups, FILTER_VALIDATE_INT)
+                    : [],
             ];
         }
 
