@@ -96,10 +96,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Handle group assignments if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
-        if (
-            $ldapGroupConfig['auto_assign'] === 'true' &&
-            $this->configuration->get('security.permLevel') === 'medium'
-        ) {
+        if ($ldapGroupConfig['auto_assign'] && $this->configuration->get('security.permLevel') === 'medium') {
             $this->assignUserToGroups($login, $user->getUserId());
         }
 
@@ -155,7 +152,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     private function extractGroupNameFromDn(string $dn): string
     {
         // Extract CN from DN, e.g., "CN=Domain Users,CN=Users,DC=example,DC=com" -> "Domain Users"
-        if (preg_match('/CN=([^,]+)/', $dn, $matches)) {
+        if (preg_match('/CN=([^,]+)/i', $dn, $matches)) {
             return $matches[1];
         }
 

@@ -800,7 +800,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return $groupId;
         }
 
-        // Create new group if it doesn't exist
+        // Create a new group if it doesn't exist
         $groupData = [
             'name' => $name,
             'description' => $description ?: "Auto-created group for $name",
