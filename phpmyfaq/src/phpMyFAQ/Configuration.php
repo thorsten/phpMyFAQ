@@ -507,7 +507,7 @@ class Configuration
                     "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
                     Database::getTablePrefix(),
                     $this->tableName,
-                    $this->getDb()->escape(trim($value)),
+                    $this->getDb()->escape(trim($value ?? '')),
                     $name
                 );
 

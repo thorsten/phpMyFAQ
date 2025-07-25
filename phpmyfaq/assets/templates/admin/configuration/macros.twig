@@ -34,7 +34,7 @@
   </label>
   <div class="col-6">
     <input class="form-control" type="password" autocomplete="off" name="edit[{{ key }}]"
-           value="{{ value|e('html_attr') }}" data-pmf-toggle="instances_password_toggle">
+           value="{{ value | e('html_attr') }}" data-pmf-toggle="instances_password_toggle">
   </div>
 {% endmacro %}
 
@@ -65,7 +65,7 @@
   <div class="col-6">
     <div class="input-group">
       <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]"
-             value="{{ value|e('html_attr') }}" step="1" min="0">
+             value="{{ value | raw }}" step="1" min="0">
     {% if key == 'api.apiClientToken' %}
       <div class="input-group-append">
         <button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">
