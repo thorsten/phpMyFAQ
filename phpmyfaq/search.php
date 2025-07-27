@@ -15,6 +15,7 @@
  * @since     2002-09-16
  */
 
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
@@ -33,7 +34,6 @@ use phpMyFAQ\Template\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -151,6 +151,7 @@ if ('' !== $inputTag) {
         $numOfResults = count($recordIds);
     }
 } else {
+    $searchResults = [];
     $searchResult = '';
     $relTags = '';
     $tags = [];
@@ -255,7 +256,7 @@ $searchHelper->setSessionId($sids);
 if ($numOfResults > 0 && $inputSearchTerm !== '') {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
-    } catch (Exception) {
+    } catch (Exception | CommonMarkException) {
         // @todo handle exception
     }
 }
