@@ -20,7 +20,6 @@ use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
-use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -28,6 +27,7 @@ use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\TwigFilter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -78,20 +78,21 @@ if (!is_null($selectedQuestion)) {
     $displayFullForm = true;
 }
 
+$category = new Category($faqConfig, $currentGroups);
+$category->transform(0);
 $category->buildCategoryTree();
-
-$categoryHelper = new HelperCategory();
-$categoryHelper->setCategory($category);
 
 $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
 $forms = new Forms($faqConfig);
 $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 
-$category = new Category($faqConfig);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
+$twig->addFilter(new TwigFilter('repeat', function ($string, $times) {
+    return str_repeat($string, $times);
+}));
 $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables
@@ -108,7 +109,8 @@ $templateVars = [
     'msgNewContentName' => Translation::get('msgNewContentName'),
     'msgNewContentMail' => Translation::get('msgNewContentMail'),
     'msgNewContentCategory' => Translation::get('msgNewContentCategory'),
-    'renderCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
+    'selectedCategory' => $selectedCategory,
+    'categories' => $category->getCategoryTree(),
     'msgNewContentTheme' => Translation::get('msgNewContentTheme'),
     'readonly' => $readonly,
     'printQuestion' => $question,

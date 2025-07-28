@@ -23,7 +23,7 @@ import {
   handleShowFaq,
   handleUserVoting,
 } from './faq';
-import { handleAutoComplete, handleQuestion } from './search';
+import { handleAutoComplete, handleCategorySelection, handleQuestion } from './search';
 import {
   handleDeleteBookmarks,
   handleRegister,
@@ -36,9 +36,9 @@ import { calculateReadingTime, handlePasswordStrength, handlePasswordToggle, han
 import './utils/tooltip';
 import { handleWebAuthn } from './webauthn/webauthn';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (): void => {
   // Reload Captchas
-  const reloadButton = document.querySelector('#captcha-button');
+  const reloadButton: HTMLButtonElement | null = document.querySelector('#captcha-button');
   if (reloadButton !== null) {
     handleReloadCaptcha(reloadButton);
   }
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   handlePasswordStrength();
 
   // Calculate reading time
-  const faqBody = document.querySelector('.pmf-faq-body');
+  const faqBody: HTMLElement | null = document.querySelector('.pmf-faq-body');
   if (faqBody !== null) {
     calculateReadingTime();
   }
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   handleDeleteBookmarks();
   handleRemoveAllBookmarks();
 
-  // Handle user control panel
+  // Handle the user control panel
   handleUserControlPanel();
 
   // Handle user password
@@ -91,11 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
   handleWebAuthn();
 
   // Masonry on startpage
-  const masonryElement = document.querySelector('.masonry-grid');
+  const masonryElement: HTMLElement | null = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });
   }
 
   // AutoComplete
   handleAutoComplete();
+  handleCategorySelection();
 });

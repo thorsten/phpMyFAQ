@@ -15,14 +15,15 @@
  * @since     2002-09-17
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Enums\Forms\FormIds;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Forms;
-use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\TwigFilter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -47,12 +48,11 @@ $captcha = $container->get('phpmyfaq.captcha');
 
 $faqSession->userTracking('ask_question', 0);
 
+$category = new Category($faqConfig, $currentGroups);
+$category->transform(0);
 $category->buildCategoryTree();
 
 $categoryId = Filter::filterVar($request->query->get('category_id'), FILTER_VALIDATE_INT, 0);
-
-$categoryHelper = new HelperCategory();
-$categoryHelper->setCategory($category);
 
 $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
@@ -62,6 +62,9 @@ $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
+$twig->addFilter(new TwigFilter('repeat', function ($string, $times) {
+    return str_repeat($string, $times);
+}));
 $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
@@ -73,7 +76,8 @@ $templateVars = [
     'lang' => $Language->getLanguage(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
-    'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
+    'selectedCategory' => $categoryId,
+    'categories' => $category->getCategoryTree(),
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $user->isLoggedIn()),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),

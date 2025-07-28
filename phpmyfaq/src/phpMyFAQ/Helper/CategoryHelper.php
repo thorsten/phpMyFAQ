@@ -36,6 +36,7 @@ class CategoryHelper extends AbstractHelper
      * Get all categories in <option> tags.
      *
      * @param int[]|int $categoryId CategoryHelper ID or array of category IDs
+     * @deprecated will be moved into a Twig macro
      */
     public function renderOptions(array|int $categoryId): string
     {

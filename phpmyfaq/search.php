@@ -19,7 +19,6 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\TagsHelper;
 use phpMyFAQ\Language\Plurals;
@@ -33,7 +32,6 @@ use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Extension\AttributeExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -247,8 +245,6 @@ $options = [
 ];
 
 $faqPagination = new Pagination($options);
-$categoryHelper = new CategoryHelper();
-$categoryHelper->setCategory($category);
 
 $searchHelper = new SearchHelper($faqConfig);
 $searchHelper->setSearchTerm($inputSearchTerm);
@@ -269,6 +265,9 @@ $totalPages = (int)ceil($numOfResults / $confPerPage);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twig->addExtension(new AttributeExtension(TagNameTwigExtension::class));
+$twig->addFilter(new \Twig\TwigFilter('repeat', function ($string, $times) {
+    return str_repeat($string, $times);
+}));
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));
@@ -278,7 +277,8 @@ $templateVars = [
     'title' => sprintf('%s - %s', $pageHeader, $faqConfig->getTitle()),
     'pageHeader' => $pageHeader,
     'isTagSearch' => $tagSearch,
-    'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
+    'selectedCategory' => $inputCategory,
+    'categories' => $category->getCategoryTree(),
     'msgSearch' => Translation::get('msgSearch'),
     'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
     'msgCurrentTags' => Translation::get('msg_tags'),

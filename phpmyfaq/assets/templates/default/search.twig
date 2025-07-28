@@ -19,9 +19,15 @@
 
           <div class="col-4">
             <label class="sr-only" for="pmf-search-category">{{ selectCategories }}</label>
-            <select class="form-select form-select-lg mb-2" name="pmf-search-category" id="pmf-search-category">
+            <select class="form-select form-select-lg mb-2" name="pmf-search-category" id="pmf-search-category"
+                    data-placeholder="This is a placeholder">
               <option value="%" selected>{{ allCategories }}</option>
-              {{ renderCategoryOptions | raw }}
+              {% for cat in categories %}
+                {% set indent = '...' | repeat(cat.indent) %}
+                <option value="{{ cat.id }}" {% if cat.id in categories %}selected{% endif %}>
+                  {{ indent }} {{ cat.name }}
+                </option>
+              {% endfor %}
             </select>
           </div>
 
