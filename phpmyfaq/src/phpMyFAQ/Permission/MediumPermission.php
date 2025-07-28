@@ -724,7 +724,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
     /**
      * Removes the user $userId from all groups.
-     * Returns true on success, otherwise false.
+     * Returns true for success, otherwise false.
      *
      * @param int $userId User ID
      */
@@ -745,7 +745,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
     /**
      * Refuses all group rights.
-     * Returns true on success, otherwise false.
+     * Returns true for success, otherwise false.
      *
      * @param int $groupId Group ID
      */
@@ -766,13 +766,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
 
     /**
      * Removes all users from the group $groupId.
-     * Returns true on success, otherwise false.
+     * Returns true for success, otherwise false.
      *
      * @param int $groupId Group ID
      */
     public function removeAllUsersFromGroup(int $groupId): bool
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
+        if ($groupId <= 0) {
             return false;
         }
 
@@ -803,7 +803,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         // Create a new group if it doesn't exist
         $groupData = [
             'name' => $name,
-            'description' => $description ?: "Auto-created group for $name",
+            'description' => $description ?: 'Auto-created group for ' . $name,
             'auto_join' => false,
         ];
 

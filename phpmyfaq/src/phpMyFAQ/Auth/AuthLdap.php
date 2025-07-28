@@ -115,15 +115,15 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $userGroups = $this->ldapCore->getGroupMemberships($login);
 
         if ($userGroups === false) {
-            $this->configuration->getLogger()->warning("Unable to retrieve group memberships for user: {$login}");
+            $this->configuration->getLogger()->warning('Unable to retrieve group memberships for user: ' . $login);
             return;
         }
 
-        $permission = new MediumPermission($this->configuration);
+        $mediumPermission = new MediumPermission($this->configuration);
         $groupMapping = $ldapGroupConfig['group_mapping'];
 
-        foreach ($userGroups as $adGroup) {
-            $groupName = $this->extractGroupNameFromDn($adGroup);
+        foreach ($userGroups as $userGroup) {
+            $groupName = $this->extractGroupNameFromDn($userGroup);
 
             // Check if there's a specific mapping for this AD group
             if (!empty($groupMapping) && isset($groupMapping[$groupName])) {
@@ -134,11 +134,11 @@ class AuthLdap extends Auth implements AuthDriverInterface
             }
 
             // Find or create the group
-            $groupId = $permission->findOrCreateGroupByName($faqGroupName);
+            $groupId = $mediumPermission->findOrCreateGroupByName($faqGroupName);
 
             if ($groupId > 0) {
-                $permission->addToGroup($userId, $groupId);
-                $this->configuration->getLogger()->info("Added user {$login} to group {$faqGroupName}");
+                $mediumPermission->addToGroup($userId, $groupId);
+                $this->configuration->getLogger()->info(sprintf('Added user %s to group %s', $login, $faqGroupName));
             }
         }
     }
@@ -236,7 +236,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
                 $hasAllowedGroup = false;
                 foreach ($userGroups as $userGroup) {
                     foreach ($allowedGroups as $allowedGroup) {
-                        if (str_contains($userGroup, trim($allowedGroup))) {
+                        if (str_contains($userGroup, trim((string) $allowedGroup))) {
                             $hasAllowedGroup = true;
                             break 2;
                         }

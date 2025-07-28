@@ -649,7 +649,7 @@ class Category
             }
         }
 
-        if (empty($tempName)) {
+        if ($tempName === []) {
             return '';
         }
 

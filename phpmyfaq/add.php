@@ -90,9 +90,7 @@ $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addFilter(new TwigFilter('repeat', function ($string, $times) {
-    return str_repeat($string, $times);
-}));
+$twig->addFilter(new TwigFilter('repeat', fn($string, $times) => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables

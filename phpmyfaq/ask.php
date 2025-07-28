@@ -62,9 +62,7 @@ $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addFilter(new TwigFilter('repeat', function ($string, $times) {
-    return str_repeat($string, $times);
-}));
+$twig->addFilter(new TwigFilter('repeat', fn($string, $times) => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
@@ -81,7 +79,7 @@ $templateVars = [
     'captchaFieldset' =>
         $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get('msgCaptcha'), $user->isLoggedIn()),
     'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
-    'noCategories' => empty($categories),
+    'noCategories' => $categories === [],
     'msgFormDisabledDueToMissingCategories' => Translation::get('msgFormDisabledDueToMissingCategories')
 ];
 

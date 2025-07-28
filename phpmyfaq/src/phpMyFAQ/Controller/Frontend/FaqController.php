@@ -46,6 +46,7 @@ class FaqController extends AbstractController
         $stopWords = $this->container->get('phpmyfaq.stop-words');
         $session = $this->container->get('phpmyfaq.user.session');
         $session->setCurrentUser($this->currentUser);
+
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -65,6 +66,7 @@ class FaqController extends AbstractController
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
+
         if ($this->configuration->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = trim(html_entity_decode((string) $answer));
@@ -151,10 +153,10 @@ class FaqController extends AbstractController
 
             // Add user and group permissions
             $permissions = $categoryPermission->getAll($categories);
-            foreach ($categories as $categoryId) {
-                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$categoryId]['user']);
+            foreach ($categories as $category) {
+                $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user']);
                 if ($this->configuration->get('security.permLevel') !== 'basic') {
-                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$categoryId]['group']);
+                    $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group']);
                 }
             }
 

@@ -38,7 +38,7 @@ readonly class UserHelper
      * Get all users in <option> tags.
      *
      * @param int  $id Selected user ID
-     * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     * @param bool $allowBlockedUsers Allow blocked users as well, e.g., in admin
      */
     public function getAllUserOptions(int $id = 1, bool $allowBlockedUsers = false): string
     {

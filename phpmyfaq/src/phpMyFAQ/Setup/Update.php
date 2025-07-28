@@ -1074,27 +1074,26 @@ class Update extends Setup
 
     private function applyUpdates409(): void
     {
-        if (version_compare($this->version, '4.0.9', '<')) {
-            if (Database::getType() === 'pgsql') {
-                $this->queries[] = sprintf(
-                    'CREATE SEQUENCE %sfaqseo_id_seq',
-                    Database::getTablePrefix()
-                );
-                $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval(\'faqseo_id_seq\')',
-                    Database::getTablePrefix()
-                );
-                $this->queries[] = sprintf(
-                    'SELECT setval(\'faqseo_id_seq\', (SELECT MAX(id) FROM %sfaqseo));',
-                    Database::getTablePrefix()
-                );
-                $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL',
-                    Database::getTablePrefix()
-                );
-            }
+        if (version_compare($this->version, '4.0.9', '<') && Database::getType() === 'pgsql') {
+            $this->queries[] = sprintf(
+                'CREATE SEQUENCE %sfaqseo_id_seq',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('faqseo_id_seq')",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                "SELECT setval('faqseo_id_seq', (SELECT MAX(id) FROM %sfaqseo));",
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL',
+                Database::getTablePrefix()
+            );
         }
     }
+
     private function applyUpdates410Alpha(): void
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
