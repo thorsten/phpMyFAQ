@@ -43,17 +43,18 @@ readonly class UserHelper
     public function getAllUserOptions(int $id = 1, bool $allowBlockedUsers = false): string
     {
         $options = '';
-        $allUsers = $this->user->getAllUsers(true, $allowBlockedUsers);
+        $user = clone $this->user;
+        $allUsers = $user->getAllUsers(true, $allowBlockedUsers);
 
         foreach ($allUsers as $allUser) {
             if (-1 !== $allUser) {
-                $this->user->getUserById($allUser);
+                $user->getUserById($allUser);
                 $options .= sprintf(
                     '<option value="%d" %s>%s (%s)</option>',
                     $allUser,
                     (($allUser === $id) ? 'selected' : ''),
-                    Strings::htmlentities($this->user->getUserData('display_name')),
-                    $this->user->getLogin()
+                    Strings::htmlentities($user->getUserData('display_name')),
+                    $user->getLogin()
                 );
             }
         }

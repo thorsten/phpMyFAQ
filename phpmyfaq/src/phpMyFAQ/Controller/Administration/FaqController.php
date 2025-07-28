@@ -251,6 +251,7 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
+
         return $this->render(
             '@admin/content/faq.editor.twig',
             [
