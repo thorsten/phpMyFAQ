@@ -26,6 +26,7 @@ class PermissionTranslationTwigExtension extends AbstractExtension
     #[asTwigFilter('permission')]
     public static function getPermissionTranslation(string $string): string
     {
-        return $string === '' || $string === '0' ? '' : (Translation::get(sprintf('permission::%s', $string)) ?? '');
+        $key = sprintf('permission::%s', $string);
+        return Translation::has($key) ? Translation::get($key) : '';
     }
 }
