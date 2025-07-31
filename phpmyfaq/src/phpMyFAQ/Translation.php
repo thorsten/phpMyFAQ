@@ -66,13 +66,33 @@ class Translation
 
             return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey];
         } catch (Exception) {
-            // handle exception
             Configuration::getConfigurationInstance()->getLogger()->error(
                 'Error while fetching translation key: ' . $languageKey
             );
         }
 
         return null;
+    }
+
+    /**
+     * Checks if a specific translation key exists in the current or default language.
+     */
+    public static function has(string $languageKey): bool
+    {
+        try {
+            self::$translation->checkInit();
+            self::$translation->checkLanguageLoaded();
+
+            if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey])) {
+                return true;
+            }
+            if (isset(self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey])) {
+                return true;
+            }
+        } catch (Exception) {
+        }
+
+        return false;
     }
 
     /**
