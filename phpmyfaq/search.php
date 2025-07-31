@@ -15,6 +15,7 @@
  * @since     2002-09-16
  */
 
+use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Faq\Permission;
@@ -256,7 +257,7 @@ $searchHelper->setSessionId($sids);
 if ($numOfResults > 0 && $inputSearchTerm !== '') {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
-    } catch (Exception) {
+    } catch (Exception | CommonMarkException) {
         // @todo handle exception
     }
 }
