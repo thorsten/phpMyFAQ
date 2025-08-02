@@ -1481,6 +1481,7 @@ $PMF_LANG['msgCheckHashes'] = 'Überprüfe Hash-Werte der installierten Dateien 
 $PMF_LANG['msgAuthenticationAborted'] = 'Die Authentifizierung wurde abgebrochen.';
 $LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Aktiviere den Session-Timeout-Zähler im Adminbereich', 'Standard: aktiviert'];
 $LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Aktiviere OpenSearch Unterstützung', 'Standard: deaktiviert'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Zeitfenster für beliebte Suchbegriffe (Tage)', 'Standard: 180 Tage'];
 $PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch Konfiguration';
 $PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Erstelle Suchindex';
 $PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Lösche Suchindex';
