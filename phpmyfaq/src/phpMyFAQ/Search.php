@@ -301,23 +301,18 @@ class Search
         // Build time-based condition if timeWindow is specified
         $timeCondition = '';
         if ($timeWindow > 0) {
-            try {
-                $dbType = Database::getType();
-            } catch (\Error $e) {
-                // Database type not initialized, assume MySQL/MariaDB syntax
-                $dbType = 'mysql';
-            }
+            $dbType = Database::getType();
             
             $timeCondition = match ($dbType) {
-                'pgsql' => sprintf(
+                'pgsql', 'pdo_pgsql' => sprintf(
                     ' WHERE searchdate >= NOW() - INTERVAL \'%d days\'',
                     $timeWindow
                 ),
-                'sqlite3' => sprintf(
+                'sqlite3', 'pdo_sqlite' => sprintf(
                     ' WHERE searchdate >= datetime(\'now\', \'-%d days\')',
                     $timeWindow
                 ),
-                'sqlsrv' => sprintf(
+                'sqlsrv', 'pdo_sqlsrv' => sprintf(
                     ' WHERE searchdate >= DATEADD(day, -%d, GETDATE())',
                     $timeWindow
                 ),
@@ -327,6 +322,13 @@ class Search
                 )
             };
         }
+
+        // Build database-specific LIMIT clause
+        $dbType = Database::getType();
+        $limitClause = match ($dbType) {
+            'sqlsrv', 'pdo_sqlsrv' => sprintf('OFFSET 0 ROWS FETCH NEXT %d ROWS ONLY', $numResults),
+            default => sprintf('LIMIT %d', $numResults)
+        };
 
         $query = sprintf(
             '
@@ -338,12 +340,12 @@ class Search
                 searchterm %s
             ORDER BY
                 number DESC
-            LIMIT %d',
+            %s',
             $byLang,
             $this->table,
             $timeCondition,
             $byLang,
-            $numResults
+            $limitClause
         );
 
         $result = $this->configuration->getDb()->query($query);
