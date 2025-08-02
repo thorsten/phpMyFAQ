@@ -1178,6 +1178,23 @@ EOT;
             $this->configuration->add('ldap.ldap_group_allowed_groups', '');
             $this->configuration->add('ldap.ldap_group_auto_assign', 'false');
             $this->configuration->add('ldap.ldap_group_mapping', '');
+
+            // Search optimization configuration
+            $this->configuration->add('search.popularSearchTimeWindow', '180');
+
+            // Performance indexes for faqsearches table
+            $this->queries[] = sprintf(
+                'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
+                Database::getTablePrefix()
+            );
+            $this->queries[] = sprintf(
+                'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches (searchdate, searchterm, lang)',
+                Database::getTablePrefix()
+            );
         }
     }
 
