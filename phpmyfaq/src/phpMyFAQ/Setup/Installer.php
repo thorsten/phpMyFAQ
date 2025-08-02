@@ -324,6 +324,7 @@ class Installer extends Setup
         'search.enableRelevance' => 'false',
         'search.enableHighlighting' => 'true',
         'search.searchForSolutionId' => 'true',
+        'search.popularSearchTimeWindow' => '0',
         'search.enableElasticsearch' => 'false',
         'search.enableOpenSearch' => 'false',
 

@@ -31,63 +31,27 @@ The optimized implementation includes:
 
 ### 4. Database Performance Recommendations
 
-To achieve optimal performance, consider adding these indexes:
+Performance indexes for the `faqsearches` table are automatically created during installation and updates. The following indexes are included:
 
-#### For MySQL/MariaDB:
-```sql
--- Basic index for searchterm grouping
-CREATE INDEX idx_faqsearches_searchterm ON faqsearches (searchterm);
+#### Automatically Created Indexes:
+- **Basic index for searchterm grouping**: Improves performance for search term aggregation
+- **Composite index for time-based filtering**: Optimizes queries with date restrictions and search term grouping  
+- **Composite index including language**: Enhances performance for multilingual setups
 
--- Composite index for time-based filtering with searchterm grouping
-CREATE INDEX idx_faqsearches_date_term ON faqsearches (searchdate, searchterm);
-
--- Composite index including language for multilingual setups
-CREATE INDEX idx_faqsearches_date_term_lang ON faqsearches (searchdate, searchterm, lang);
-```
-
-#### For PostgreSQL:
-```sql
--- Basic index for searchterm grouping
-CREATE INDEX idx_faqsearches_searchterm ON faqsearches (searchterm);
-
--- Composite index for time-based filtering
-CREATE INDEX idx_faqsearches_date_term ON faqsearches (searchdate, searchterm);
-
--- Composite index including language
-CREATE INDEX idx_faqsearches_date_term_lang ON faqsearches (searchdate, searchterm, lang);
-```
-
-#### For SQLite:
-```sql
--- Basic index for searchterm grouping
-CREATE INDEX idx_faqsearches_searchterm ON faqsearches (searchterm);
-
--- Composite index for time-based filtering
-CREATE INDEX idx_faqsearches_date_term ON faqsearches (searchdate, searchterm);
-```
-
-#### For SQL Server:
-```sql
--- Basic index for searchterm grouping
-CREATE INDEX idx_faqsearches_searchterm ON faqsearches (searchterm);
-
--- Composite index for time-based filtering
-CREATE INDEX idx_faqsearches_date_term ON faqsearches (searchdate, searchterm);
-
--- Composite index including language
-CREATE INDEX idx_faqsearches_date_term_lang ON faqsearches (searchdate, searchterm, lang);
-```
-
+These indexes are created automatically for all supported database systems (MySQL/MariaDB, PostgreSQL, SQLite, and SQL Server) and do not require manual intervention.
 ## Configuration Recommendations
 
 ### Time Window Configuration
-For production environments with large datasets, consider adding a configuration option to set a default time window:
+A configuration option for setting a default time window is automatically available in new installations:
 
 ```php
-// Example: Only consider searches from the last 6 months
+// Configuration option added automatically: 'search.popularSearchTimeWindow' => '0'
+// Example: Configure to only consider searches from the last 6 months  
 $timeWindow = $faqConfig->get('search.popularSearchTimeWindow', 180);
 $popularSearches = $search->getMostPopularSearches(10, false, $timeWindow);
 ```
+
+This configuration option is automatically added during installation and can be modified through the admin panel or configuration files.
 
 ### Periodic Cleanup
 Consider implementing a cleanup job to remove very old search entries:
