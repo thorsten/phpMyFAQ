@@ -93,6 +93,7 @@ $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
 $numOfResults = 0;
+$searchResults = [];
 
 //
 // Handle the Tagging ID
@@ -254,7 +255,7 @@ $searchHelper->setCategory($category);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
-if ($numOfResults > 0 && $inputSearchTerm !== '') {
+if ($numOfResults > 0 && ($inputSearchTerm !== '' || $tagSearch)) {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception | CommonMarkException) {
