@@ -288,40 +288,69 @@ class Search
      *
      * @param int  $numResults Number of Results, default: 7
      * @param bool $withLang   Should the language be included in the result?
+     * @param int  $timeWindow Number of days to look back for searches, 0 for all time
      *
      * @return array<string[]>
      */
-    public function getMostPopularSearches(int $numResults = 7, bool $withLang = false): array
+    public function getMostPopularSearches(int $numResults = 7, bool $withLang = false, int $timeWindow = 0): array
     {
         $searchResult = [];
 
         $byLang = $withLang ? ', lang' : '';
+        
+        // Build time-based condition if timeWindow is specified
+        $timeCondition = '';
+        if ($timeWindow > 0) {
+            try {
+                $dbType = Database::getType();
+            } catch (\Error $e) {
+                // Database type not initialized, assume MySQL/MariaDB syntax
+                $dbType = 'mysql';
+            }
+            
+            $timeCondition = match ($dbType) {
+                'pgsql' => sprintf(
+                    ' WHERE searchdate >= NOW() - INTERVAL \'%d days\'',
+                    $timeWindow
+                ),
+                'sqlite3' => sprintf(
+                    ' WHERE searchdate >= datetime(\'now\', \'-%d days\')',
+                    $timeWindow
+                ),
+                'sqlsrv' => sprintf(
+                    ' WHERE searchdate >= DATEADD(day, -%d, GETDATE())',
+                    $timeWindow
+                ),
+                default => sprintf(
+                    ' WHERE searchdate >= DATE_SUB(NOW(), INTERVAL %d DAY)',
+                    $timeWindow
+                )
+            };
+        }
+
         $query = sprintf(
             '
             SELECT 
                 MIN(id) as id, searchterm, COUNT(searchterm) AS number %s
             FROM
-                %s
+                %s%s
             GROUP BY
                 searchterm %s
             ORDER BY
-                number
-            DESC',
+                number DESC
+            LIMIT %d',
             $byLang,
             $this->table,
-            $byLang
+            $timeCondition,
+            $byLang,
+            $numResults
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         if (false !== $result) {
-            $i = 0;
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                if ($i < $numResults) {
-                    $searchResult[] = (array)$row;
-                }
-
-                ++$i;
+                $searchResult[] = (array)$row;
             }
         }
 
