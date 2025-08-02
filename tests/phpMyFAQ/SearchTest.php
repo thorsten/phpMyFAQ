@@ -107,10 +107,37 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearches(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', ''), (2, 'en', 'bar', ''), (3, 'en', 'foo', '')"
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')"
         );
 
         $actualSearches = $this->search->getMostPopularSearches(2);
+
+        $this->assertEquals(2, count($actualSearches));
+        $this->assertEquals('foo', $actualSearches[0]['searchterm']);
+        $this->assertEquals(2, $actualSearches[0]['number']);
+    }
+
+    public function testGetMostPopularSearchesWithLimit(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'baz', '2023-01-01 12:00:00'), (4, 'en', 'foo', '2023-01-01 12:00:00')"
+        );
+
+        $actualSearches = $this->search->getMostPopularSearches(1);
+
+        $this->assertEquals(1, count($actualSearches));
+        $this->assertEquals('foo', $actualSearches[0]['searchterm']);
+        $this->assertEquals(2, $actualSearches[0]['number']);
+    }
+
+    public function testGetMostPopularSearchesBackwardCompatibility(): void
+    {
+        $this->dbHandle->query(
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')"
+        );
+
+        // Test existing signature still works (backward compatibility)
+        $actualSearches = $this->search->getMostPopularSearches(2, false);
 
         $this->assertEquals(2, count($actualSearches));
         $this->assertEquals('foo', $actualSearches[0]['searchterm']);
