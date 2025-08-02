@@ -28,8 +28,19 @@ class UpgradeTest extends TestCase
      */
     public function testDownloadPackage(): void
     {
-        $actual = $this->upgrade->downloadPackage('3.1.15');
-        $this->assertIsString($actual);
+        if (!$this->isNetworkAvailable()) {
+            $this->markTestSkipped('Network not available');
+        }
+
+        try {
+            $actual = $this->upgrade->downloadPackage('3.1.15');
+            $this->assertIsString($actual);
+        } catch (Exception $e) {
+            if (str_contains($e->getMessage(), 'timeout') || str_contains($e->getMessage(), 'connection')) {
+                $this->markTestSkipped('Network timeout: ' . $e->getMessage());
+            }
+            throw $e;
+        }
 
         $this->expectException('phpMyFAQ\Core\Exception');
         $this->upgrade->downloadPackage('1.2.3');
@@ -86,5 +97,14 @@ class UpgradeTest extends TestCase
         $this->upgrade->setIsNightly(false);
 
         $this->assertEquals('', $this->upgrade->getPath());
+    }
+
+    private function isNetworkAvailable(): bool
+    {
+        $context = stream_context_create([
+            'http' => ['timeout' => 5]
+        ]);
+
+        return @file_get_contents('https://download.phpmyfaq.de', false, $context) !== false;
     }
 }
