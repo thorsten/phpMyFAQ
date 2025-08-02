@@ -44,7 +44,7 @@
       <tr>
         {% set indent = category.indent * 2 %}
         <th>
-          <a href="?action=editcategory&cat={{ category.id }}"><span><i class="bi bi-pencil"></i></span></a>&nbsp;
+          <a href="./category/edit/{{ category.id }}"><span><i class="bi bi-pencil"></i></span></a>&nbsp;
           <span class="ps-{{ indent }}">{{ category.name }}</span>
         </th>
         {% for code in allLangCodes %}
