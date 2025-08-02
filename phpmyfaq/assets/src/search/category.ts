@@ -14,9 +14,13 @@
  */
 
 import Choices from 'choices.js';
+import { TranslationService } from '../utils';
 
-export const handleCategorySelection = (): void => {
+export const handleCategorySelection = async (): Promise<void> => {
   const element: HTMLElement | null = document.getElementById('pmf-search-category');
+  const Translator = new TranslationService();
+  const language: string = document.documentElement.lang;
+  await Translator.loadTranslations(language);
   if (element) {
     new Choices(element, {
       silent: false,
@@ -50,22 +54,22 @@ export const handleCategorySelection = (): void => {
       shadowRoot: null,
       placeholder: true,
       placeholderValue: null,
-      searchPlaceholderValue: 'Type to search categories',
+      searchPlaceholderValue: Translator.translate('msgTypeSearchCategories'),
       prependValue: null,
       appendValue: null,
       renderSelectedChoices: 'auto',
-      loadingText: 'Loading...',
-      noResultsText: 'No results found',
-      noChoicesText: 'No choices to choose from',
-      itemSelectText: 'Press to select',
-      uniqueItemText: 'Only unique values can be added',
-      customAddItemText: 'Only values matching specific conditions can be added',
+      loadingText: Translator.translate('msgLoadingText'),
+      noResultsText: Translator.translate('msgNoResultsText'),
+      noChoicesText: Translator.translate('msgNoChoicesText'),
+      itemSelectText: Translator.translate('msgItemSelectText'),
+      uniqueItemText: Translator.translate('msgUniqueItemText'),
+      customAddItemText: Translator.translate('msgCustomAddItemText'),
       valueComparer: (value1: string, value2: string): boolean => {
         return value1 === value2;
       },
       classNames: {
-        containerOuter: ['choices'],
-        containerInner: ['choices__inner'],
+        containerOuter: ['choices', 'rounded', 'border', 'border-1', 'bg-white'],
+        containerInner: ['choices__inner', 'border', 'border-0', 'bg-white'],
         input: ['choices__input'],
         inputCloned: ['choices__input--cloned'],
         list: ['choices__list'],

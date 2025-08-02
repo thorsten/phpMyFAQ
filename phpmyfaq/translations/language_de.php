@@ -1489,4 +1489,14 @@ $PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'Der OpenSearch Suchindex e
 $PMF_LANG['ad_os_create_import_success'] = 'Der OpenSearch Import war erfolgreich.';
 $PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'Der OpenSearch Suchindex erfolgreich gelöscht.';
 $PMF_LANG['permission::translate_faq'] = 'FAQs übersetzen';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Suche in Kategorien';
+$PMF_LANG['msgLoadingText'] = 'Lade ...';
+$PMF_LANG['msgNoResultsText'] = 'Keine Ergebnisse gefunden';
+$PMF_LANG['msgNoChoicesText'] = 'Keine Auswahl getroffen';
+$PMF_LANG['msgItemSelectText'] = 'Klicke zum Auswählen';
+$PMF_LANG['msgUniqueItemText'] = 'Es kann nur ein Eintrag ausgewählt werden.';
+$PMF_LANG['msgCustomAddItemText'] = 'Es kann nur ein Eintrag  hinzugefügt werden.';
+
 return $PMF_LANG;
