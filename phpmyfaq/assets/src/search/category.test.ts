@@ -13,6 +13,7 @@ vi.mock('choices.js', () => {
 // Mock TranslationService
 vi.mock('../utils', () => {
   const mockTranslationService = {
+    translations: new Map(),
     loadTranslations: vi.fn().mockResolvedValue(undefined),
     translate: vi.fn().mockImplementation((key: string) => `translated_${key}`),
   };
@@ -38,7 +39,7 @@ describe('handleCategorySelection', () => {
     document.body.innerHTML = '';
   });
 
-  it('should initialize Choices when element exists', async () => {
+  it('should initialize Choices when element exists', async (): Promise<void> => {
     await handleCategorySelection();
 
     expect(mockTranslationService).toHaveBeenCalled();
@@ -56,7 +57,7 @@ describe('handleCategorySelection', () => {
     );
   });
 
-  it('should not initialize Choices when element does not exist', async () => {
+  it('should not initialize Choices when element does not exist', async (): Promise<void> => {
     document.body.innerHTML = '';
 
     await handleCategorySelection();
@@ -65,8 +66,9 @@ describe('handleCategorySelection', () => {
     expect(mockChoices).not.toHaveBeenCalled();
   });
 
-  it('should load translations with correct language', async () => {
+  it('should load translations with correct language', async (): Promise<void> => {
     const mockInstance = {
+      translations: new Map(),
       loadTranslations: vi.fn().mockResolvedValue(undefined),
       translate: vi.fn().mockReturnValue('translated'),
     };
