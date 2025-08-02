@@ -254,7 +254,7 @@ $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals(new Plurals());
 $searchHelper->setSessionId($sids);
 
-if ($numOfResults > 0 && ($inputSearchTerm !== '' || $tagSearch)) {
+if ($numOfResults > 0 && $inputSearchTerm !== '') {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
     } catch (Exception | CommonMarkException) {
