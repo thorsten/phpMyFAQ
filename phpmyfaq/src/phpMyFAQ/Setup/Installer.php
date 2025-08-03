@@ -44,12 +44,7 @@ use phpMyFAQ\Ldap;
 use phpMyFAQ\Link;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
-use SplFileObject;
 use Symfony\Component\HttpFoundation\Request;
-use Tivie\HtaccessParser\Exception\SyntaxException;
-use Tivie\HtaccessParser\Parser;
-
-use const Tivie\HtaccessParser\Token\TOKEN_DIRECTIVE;
 
 /**
  * Class Installer
@@ -722,24 +717,8 @@ class Installer extends Setup
 
         $htaccessPath = PMF_ROOT_DIR . '/.htaccess';
 
-        $file = new SplFileObject($htaccessPath);
-        $parser = new Parser();
-
-        try {
-            $htaccess = $parser->parse($file);
-        } catch (SyntaxException $e) {
-            throw new Exception('Syntax error in .htaccess file: ' . $e->getMessage());
-        } catch (\Tivie\HtaccessParser\Exception\Exception $e) {
-            throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
-        }
-
-        $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
-
-        $rewriteBase->removeArgument($rewriteBase->getArguments()[0]);
-        $rewriteBase->setArguments((array)$basePath);
-
-        $output = (string) $htaccess;
-        return file_put_contents($htaccessPath, $output);
+        $htaccessUpdater = new HtaccessUpdater();
+        return $htaccessUpdater->updateRewriteBase($htaccessPath, $basePath);
     }
 
     /**
