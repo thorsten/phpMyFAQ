@@ -543,6 +543,9 @@ class Wrapper extends TCPDF
         $alternateImages = []
     ): void {
         $file = parse_url($file, PHP_URL_PATH);
+        
+        // URL-decode the file path to handle filenames with spaces and other special characters
+        $file = urldecode($file);
 
         $type = pathinfo($file, PATHINFO_EXTENSION);
         $data = file_get_contents($this->concatenatePaths(PMF_ROOT_DIR, $file));
