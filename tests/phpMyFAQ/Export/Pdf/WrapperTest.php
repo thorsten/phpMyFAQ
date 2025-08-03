@@ -176,24 +176,19 @@ class WrapperTest extends TestCase
 
     public function testImageFileWithSpacesInPath(): void
     {
-        // Create a test directory and file with spaces
-        $testDir = __DIR__ . '/../../../../content/user/images';
-        if (!is_dir($testDir)) {
-            mkdir($testDir, 0755, true);
-        }
+        // Use test image that exists in tests directory
+        $testDir = __DIR__ . '/../../../content/user/images';
+        $testFile = $testDir . '/image with spaces.jpg';
         
-        $testFile = $testDir . '/test image with spaces.jpg';
-        file_put_contents($testFile, 'fake image content');
+        // Verify test file exists
+        $this->assertTrue(file_exists($testFile), "Test image should exist: " . $testFile);
         
         // Test that we can read the file when the path contains spaces
-        $urlEncodedPath = '/content/user/images/test%20image%20with%20spaces.jpg';
+        $urlEncodedPath = '/content/user/images/image%20with%20spaces.jpg';
         $decodedPath = urldecode($urlEncodedPath);
         
-        $fullPath = $this->wrapper->concatenatePaths(__DIR__ . '/../../../../', $decodedPath);
+        $fullPath = $this->wrapper->concatenatePaths($testDir . '/../../..', $decodedPath);
         
         $this->assertTrue(file_exists($fullPath), "File should exist: " . $fullPath);
-        
-        // Clean up
-        unlink($testFile);
     }
 }
