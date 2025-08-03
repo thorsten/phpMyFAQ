@@ -582,7 +582,6 @@ class Wrapper extends TCPDF
         }
 
         $info = getimagesizefromstring($base64);
-        imagedestroy($img);
 
         return $info && $info[0] > 0 && $info[1] > 0 && isset($info['mime']);
     }

@@ -8,7 +8,7 @@ class FilterTest extends TestCase
 {
     public function testFilterVar(): void
     {
-        $this->assertEquals('test', Filter::filterVar('test', FILTER_DEFAULT));
+        $this->assertEquals('test', Filter::filterVar('test', FILTER_UNSAFE_RAW));
         $this->assertEquals(null, Filter::filterVar('test', FILTER_VALIDATE_INT));
         $this->assertEquals('test@phpmyfaq.de', Filter::filterVar('test@phpmyfaq.de', FILTER_VALIDATE_EMAIL));
         $this->assertEquals(null, Filter::filterVar('test#phpmyfaq.de', FILTER_VALIDATE_EMAIL));

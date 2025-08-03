@@ -88,7 +88,7 @@ class Filter
      */
     public static function filterArray(
         array $array,
-        array|int $options = FILTER_DEFAULT,
+        array|int $options = FILTER_UNSAFE_RAW,
         bool $addEmpty = true
     ): bool|array|null {
         return filter_var_array($array, $options, $addEmpty);

@@ -158,11 +158,8 @@ class BuiltinCaptcha implements CaptchaInterface
 
         ob_start();
         imagejpeg($this->gdImage, null, $this->quality);
-        $image = ob_get_clean();
 
-        imagedestroy($this->gdImage);
-
-        return $image;
+        return ob_get_clean();
     }
 
     /**
