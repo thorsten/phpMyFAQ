@@ -34,7 +34,6 @@ class HtaccessUpdater
         }
 
         $backupPath = $htaccessPath . '.backup-' . date('Y-m-d-H-i-s');
-        
         if (!copy($htaccessPath, $backupPath)) {
             throw new Exception('Failed to create backup of .htaccess file');
         }
@@ -107,7 +106,8 @@ class HtaccessUpdater
         // If RewriteEngine On was not found, add both directives at the beginning of mod_rewrite section
         if ($updatedContent === $content) {
             $pattern = '/^(\s*<IfModule\s+mod_rewrite\.c>\s*)$/mi';
-            $replacement = '$1' . "\n    # This has to be 'On'\n    RewriteEngine On\n    # the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
+            $replacement = '$1' . "\n    # This has to be 'On'\n    RewriteEngine On\n    " .
+                "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
             $updatedContent = preg_replace($pattern, $replacement, $content);
         }
 
