@@ -191,7 +191,8 @@ class UpdateCommandTest extends TestCase
     public function testCommandHasCorrectImports(): void
     {
         // Test that the command file contains necessary imports
-        $commandFile = '/Users/thorsten/htdocs/phpMyFAQ/phpmyfaq/src/phpMyFAQ/Command/UpdateCommand.php';
+        $reflection = new ReflectionClass($this->command);
+        $commandFile = $reflection->getFileName();
         $this->assertFileExists($commandFile);
 
         $content = file_get_contents($commandFile);
