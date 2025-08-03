@@ -165,8 +165,14 @@ class Ldap
     private function getLdapData(string $username, string $data): bool|string
     {
 
-        if ($this->ds === false) {
+        if ($this->ds === false || $this->ds === null) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
+
+            return false;
+        }
+
+        if ($this->base === null || $this->base === '') {
+            $this->error = 'LDAP base DN is not configured.';
 
             return false;
         }
@@ -259,8 +265,14 @@ class Ldap
      */
     private function getLdapDn(string $username): string|false
     {
-        if ($this->ds === false) {
+        if ($this->ds === false || $this->ds === null) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
+
+            return false;
+        }
+
+        if ($this->base === null || $this->base === '') {
+            $this->error = 'LDAP base DN is not configured.';
 
             return false;
         }
@@ -314,8 +326,13 @@ class Ldap
      */
     public function getGroupMemberships(string $username): array|false
     {
-        if ($this->ds === false) {
+        if ($this->ds === false || $this->ds === null) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
+            return false;
+        }
+
+        if ($this->base === null || $this->base === '') {
+            $this->error = 'LDAP base DN is not configured.';
             return false;
         }
 
