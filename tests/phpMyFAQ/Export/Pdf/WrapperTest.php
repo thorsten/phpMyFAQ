@@ -56,4 +56,102 @@ class WrapperTest extends TestCase
         $expected = 'C:/xampp/htdocs/phpmyfaq/content/user/images/test.jpg';
         $this->assertEquals($expected, $this->wrapper->concatenatePaths($path, $file));
     }
+
+    public function testConvertExternalImagesToBase64WithNoConfig(): void
+    {
+        $html = '<img src="https://example.com/image.jpg" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        // Should return original HTML when no config is set
+        $this->assertEquals($html, $result);
+    }
+
+    public function testConvertExternalImagesToBase64WithEmptyAllowedHosts(): void
+    {
+        $config = $this->createMock(\phpMyFAQ\Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="https://example.com/image.jpg" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        // Should return original HTML when allowed hosts is empty
+        $this->assertEquals($html, $result);
+    }
+
+    public function testConvertExternalImagesToBase64WithDisallowedHost(): void
+    {
+        $config = $this->createMock(\phpMyFAQ\Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="https://badsite.com/image.jpg" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        // Should return original HTML when host is not allowed
+        $this->assertEquals($html, $result);
+    }
+
+    public function testConvertExternalImagesToBase64WithLocalImage(): void
+    {
+        $config = $this->createMock(\phpMyFAQ\Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="/local/image.jpg" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        // Should return original HTML for local images (no protocol/host)
+        $this->assertEquals($html, $result);
+    }
+
+    public function testConvertExternalImagesToBase64WithMalformedUrl(): void
+    {
+        $config = $this->createMock(\phpMyFAQ\Configuration::class);
+        $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
+        $this->wrapper->setConfig($config);
+
+        $html = '<img src="not-a-valid-url" alt="test">';
+        $result = $this->wrapper->convertExternalImagesToBase64($html);
+        // Should return original HTML for malformed URLs
+        $this->assertEquals($html, $result);
+    }
+
+    public function testValidateImageDataWithValidJpeg(): void
+    {
+        // JPEG file signature
+        $jpegData = "\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01";
+        $reflection = new \ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+        $method->setAccessible(true);
+        
+        $this->assertTrue($method->invoke($this->wrapper, $jpegData));
+    }
+
+    public function testValidateImageDataWithValidPng(): void
+    {
+        // PNG file signature
+        $pngData = "\x89PNG\r\n\x1A\n\x00\x00\x00\x0DIHDR";
+        $reflection = new \ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+        $method->setAccessible(true);
+        
+        $this->assertTrue($method->invoke($this->wrapper, $pngData));
+    }
+
+    public function testValidateImageDataWithInvalidData(): void
+    {
+        $invalidData = "This is not image data";
+        $reflection = new \ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+        $method->setAccessible(true);
+        
+        $this->assertFalse($method->invoke($this->wrapper, $invalidData));
+    }
+
+    public function testValidateImageDataWithTooShortData(): void
+    {
+        $shortData = "short";
+        $reflection = new \ReflectionClass($this->wrapper);
+        $method = $reflection->getMethod('validateImageData');
+        $method->setAccessible(true);
+        
+        $this->assertFalse($method->invoke($this->wrapper, $shortData));
+    }
 }

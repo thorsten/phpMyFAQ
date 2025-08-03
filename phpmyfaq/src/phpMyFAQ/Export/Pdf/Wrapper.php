@@ -596,4 +596,209 @@ class Wrapper extends TCPDF
 
         return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
     }
+
+    /**
+     * Converts external images from allowed hosts to base64 data URIs in HTML content.
+     * This enables TCPDF to display external images that would otherwise fail due to SSL/certificate issues.
+     *
+     * @param string $html The HTML content to process
+     * @return string The processed HTML content with external images converted to base64
+     */
+    public function convertExternalImagesToBase64(string $html): string
+    {
+        if ($this->config === null) {
+            return $html;
+        }
+
+        $allowedHosts = $this->config->getAllowedMediaHosts();
+        if (empty($allowedHosts) || (count($allowedHosts) === 1 && trim($allowedHosts[0]) === '')) {
+            return $html;
+        }
+
+        // Pattern to match img tags with src attributes
+        $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
+        
+        return preg_replace_callback($pattern, function ($matches) use ($allowedHosts) {
+            $fullMatch = $matches[0];
+            $imageUrl = $matches[1];
+            
+            // Parse the URL to get the host
+            $parsedUrl = parse_url($imageUrl);
+            if (!$parsedUrl || !isset($parsedUrl['host'])) {
+                return $fullMatch; // Return original if URL is malformed
+            }
+            
+            $host = $parsedUrl['host'];
+            
+            // Check if the host is in the allowed list
+            $isAllowed = false;
+            foreach ($allowedHosts as $allowedHost) {
+                $allowedHost = trim($allowedHost);
+                if (empty($allowedHost)) {
+                    continue;
+                }
+                
+                // Allow exact match or subdomain match
+                if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
+                    $isAllowed = true;
+                    break;
+                }
+            }
+            
+            if (!$isAllowed) {
+                return $fullMatch; // Return original if host not allowed
+            }
+            
+            // Try to fetch the image and convert to base64
+            try {
+                $imageData = $this->fetchExternalImage($imageUrl);
+                if ($imageData !== false) {
+                    $base64Image = base64_encode($imageData);
+                    $mimeType = $this->getImageMimeType($imageData);
+                    
+                    if ($mimeType && $base64Image) {
+                        $dataUri = "data:{$mimeType};base64,{$base64Image}";
+                        return str_replace($imageUrl, $dataUri, $fullMatch);
+                    }
+                }
+            } catch (Exception $e) {
+                // If fetching fails, return original
+                return $fullMatch;
+            }
+            
+            return $fullMatch;
+        }, $html);
+    }
+
+    /**
+     * Fetches an external image with appropriate error handling.
+     *
+     * @param string $url The image URL to fetch
+     * @return string|false The image data or false on failure
+     */
+    private function fetchExternalImage(string $url)
+    {
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 10, // 10 second timeout
+                'user_agent' => 'phpMyFAQ PDF Generator/1.0',
+                'follow_location' => true,
+                'max_redirects' => 3,
+            ],
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ]);
+
+        $imageData = @file_get_contents($url, false, $context);
+        
+        // Validate that we actually got image data
+        if ($imageData === false || strlen($imageData) === 0) {
+            return false;
+        }
+        
+        // Quick validation that this looks like image data
+        if (!$this->validateImageData($imageData)) {
+            return false;
+        }
+        
+        return $imageData;
+    }
+
+    /**
+     * Validates that the given data appears to be a valid image.
+     *
+     * @param string $data The image data to validate
+     * @return bool True if data appears to be a valid image
+     */
+    private function validateImageData(string $data): bool
+    {
+        if (strlen($data) < 10) {
+            return false; // Too small to be a real image
+        }
+        
+        // Check for common image file signatures
+        $signatures = [
+            'jpeg' => ["\xFF\xD8\xFF"],
+            'png' => ["\x89PNG\r\n\x1A\n"],
+            'gif' => ["GIF87a", "GIF89a"],
+            'webp' => ["RIFF"],
+            'bmp' => ["BM"],
+        ];
+        
+        foreach ($signatures as $format => $sigs) {
+            foreach ($sigs as $sig) {
+                if (str_starts_with($data, $sig)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Determines the MIME type of image data.
+     *
+     * @param string $data The image data
+     * @return string|false The MIME type or false if not determined
+     */
+    private function getImageMimeType(string $data)
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo === false) {
+            // Fallback to header-based detection
+            if (str_starts_with($data, "\xFF\xD8\xFF")) {
+                return 'image/jpeg';
+            } elseif (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
+                return 'image/png';
+            } elseif (str_starts_with($data, "GIF87a") || str_starts_with($data, "GIF89a")) {
+                return 'image/gif';
+            } elseif (str_starts_with($data, "RIFF")) {
+                return 'image/webp';
+            } elseif (str_starts_with($data, "BM")) {
+                return 'image/bmp';
+            }
+            return false;
+        }
+        
+        $mimeType = finfo_buffer($finfo, $data);
+        finfo_close($finfo);
+        
+        // Ensure it's actually an image MIME type
+        if ($mimeType && str_starts_with($mimeType, 'image/')) {
+            return $mimeType;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Override TCPDF's WriteHTML method to pre-process external images.
+     * This method converts external images from allowed hosts to base64 data URIs
+     * before passing the content to TCPDF for rendering.
+     *
+     * @param string $html HTML content to write
+     * @param bool $ln If true, the position after the call will be moved to the next line
+     * @param bool $fill Indicates if the background must be painted (true) or transparent (false)
+     * @param bool $reseth If true, reset the last cell height
+     * @param bool $cell If true, add the current left/right/top/bottom cell margins to the coordinates
+     * @param string $align Allows to center or align the image on the current line
+     */
+    #[\Override]
+    public function WriteHTML(// phpcs:ignore
+        $html,
+        $ln = true,
+        $fill = false,
+        $reseth = false,
+        $cell = false,
+        $align = ''
+    ): void {
+        // Pre-process HTML content to convert external images to base64
+        $processedHtml = $this->convertExternalImagesToBase64($html);
+        
+        // Call the parent WriteHTML method with processed content
+        parent::WriteHTML($processedHtml, $ln, $fill, $reseth, $cell, $align);
+    }
 }
