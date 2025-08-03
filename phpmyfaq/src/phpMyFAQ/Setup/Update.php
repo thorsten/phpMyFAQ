@@ -1183,7 +1183,7 @@ EOT;
             $this->configuration->add('search.popularSearchTimeWindow', '180');
 
             // Performance indexes for faqsearches table (conditional creation)
-            $dbType = $this->configuration->getDb()->getType();
+            $dbType = Database::getType();
             $tablePrefix = Database::getTablePrefix();
 
             switch ($dbType) {
