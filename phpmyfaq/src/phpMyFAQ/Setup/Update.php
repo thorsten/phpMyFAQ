@@ -1194,8 +1194,10 @@ EOT;
                         "CREATE INDEX idx_faqsearches_searchterm ON {$tablePrefix}faqsearches (searchterm)";
                     $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_faqsearches_date_term') " .
                         "CREATE INDEX idx_faqsearches_date_term ON {$tablePrefix}faqsearches (searchdate, searchterm)";
-                    $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_faqsearches_date_term_lang') " .
-                        "CREATE INDEX idx_faqsearches_date_term_lang ON {$tablePrefix}faqsearches (searchdate, searchterm, lang)";
+                    $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
+                        "WHERE name = 'idx_faqsearches_date_term_lang') " .
+                        "CREATE INDEX idx_faqsearches_date_term_lang ON {$tablePrefix}faqsearches " .
+                        "(searchdate, searchterm, lang)";
                     break;
                 default:
                     // MySQL, PostgreSQL, SQLite: Use IF NOT EXISTS
@@ -1204,11 +1206,13 @@ EOT;
                         $tablePrefix
                     );
                     $this->queries[] = sprintf(
-                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
+                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term ON %sfaqsearches ' .
+                        '(searchdate, searchterm)',
                         $tablePrefix
                     );
                     $this->queries[] = sprintf(
-                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches (searchdate, searchterm, lang)',
+                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches ' .
+                        '(searchdate, searchterm, lang)',
                         $tablePrefix
                     );
                     break;
