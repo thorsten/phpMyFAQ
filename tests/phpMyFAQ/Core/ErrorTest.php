@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Core;
 
 use ErrorException;
+use phpMyFAQ\Environment;
 use PHPUnit\Framework\TestCase;
 
 class ErrorTest extends TestCase
@@ -23,7 +24,7 @@ class ErrorTest extends TestCase
             $this->assertSame($message, $exception->getMessage());
             $this->assertSame(0, $exception->getCode());
             $this->assertSame($level, $exception->getSeverity());
-            $this->assertSame(DEBUG ? $filename : basename($filename), $exception->getFile());
+            $this->assertSame(Environment::isDebugMode() ? $filename : basename($filename), $exception->getFile());
             $this->assertSame($line, $exception->getLine());
         }
     }

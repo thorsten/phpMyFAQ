@@ -23,11 +23,9 @@ use phpMyFAQ\Database;
 
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 
-const DEBUG = false;
-
 require PMF_ROOT_DIR . '/src/constants.php';
 require PMF_ROOT_DIR . '/src/autoload.php';
-require PMF_ROOT_DIR . '/config/database.php';
+require PMF_ROOT_DIR . '/content/core/config/database.php';
 
 try {
     Database::setTablePrefix($DB['prefix']);

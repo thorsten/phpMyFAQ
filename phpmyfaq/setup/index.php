@@ -24,6 +24,7 @@
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Application;
 use phpMyFAQ\Controller\Frontend\SetupController;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use Symfony\Component\Routing\Route;
@@ -45,16 +46,6 @@ if (version_compare(PHP_VERSION, '8.1.0') < 0) {
 
 set_time_limit(0);
 
-if (!defined('DEBUG')) {
-    define('DEBUG', true);
-}
-
-if (DEBUG) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-}
-
 session_name('phpmyfaq-setup');
 session_start();
 
@@ -66,6 +57,11 @@ require PMF_ROOT_DIR . '/content/core/config/constants_elasticsearch.php';
 $loader = new ClassLoader();
 $loader->addPsr4('phpMyFAQ\\', PMF_SRC_DIR . '/phpMyFAQ');
 $loader->register();
+
+//
+// Initialize environment configuration
+//
+Environment::init();
 
 //
 // Initialize static string wrapper

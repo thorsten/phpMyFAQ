@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Core;
 
 use ErrorException;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Strings;
 
 /**
@@ -36,7 +37,7 @@ class Error
     public static function errorHandler(int $level, string $message, string $filename, int $line): void
     {
         if (error_reporting() !== 0) {
-            $filename = (DEBUG ? $filename : basename($filename));
+            $filename = (Environment::isDebugMode() ? $filename : basename($filename));
             throw new ErrorException($message, 0, $level, $filename, $line);
         }
     }

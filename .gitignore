@@ -58,6 +58,11 @@ phpmyfaq/attachments/*
 # Third party PHP libraries
 phpmyfaq/src/libs
 
+# Environment files
+phpmyfaq/.env
+phpmyfaq/.env.local
+phpmyfaq/.env.*.local
+
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css
 phpmyfaq/admin/assets/fonts

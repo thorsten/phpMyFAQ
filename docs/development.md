@@ -20,12 +20,47 @@ Follow these steps to create a custom template set:
 **Note:** There is a magic variable _{{ tplSetName }}_ containing the name of the actual layout available in each
 template file.
 
-### 6.1.2 DEBUG mode
+### 6.1.2 Debug Configuration
 
-If you want to see possible errors, you can enable the hidden DEBUG mode.
-To do so, please set the following code in src/Bootstrap.php:
+phpMyFAQ 4.1 and later uses environment variables for the application configuration.
 
-`const DEBUG = true;`
+#### Available Variables
+
+##### Debug Configuration
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DEBUG` | Enables debug mode | `true` / `false` |
+| `DEBUG_LEVEL` | Debug detail level | `0`, `1`, `2`, `3` |
+| `DEBUG_LOG_QUERIES` | SQL query logging | `true` / `false` |
+
+##### Application
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `APP_ENV` | Application environment | `development`, `production`, `testing` |
+
+#### Configuration Files
+
+##### .env.example
+
+Template for environment variables:
+
+    # Debug Configuration
+    DEBUG=false
+    DEBUG_LEVEL=0
+    DEBUG_LOG_QUERIES=false
+    
+    # Application Configuration
+    APP_ENV=production
+
+#### Configuration
+
+##### .env File
+
+Create a `.env` file in the project root based on `.env.example`:
+
+    cp .env.example .env
 
 ## 6.2 Templating
 

@@ -27,6 +27,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\SeoType;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
@@ -495,7 +496,7 @@ $isUserHasAdminRights = $user->perm->hasPermission($user->getUserId(), Permissio
 $templateVars = [
     'isMaintenanceMode' => $faqConfig->get('main.maintenanceMode'),
     'isCompletelySecured' => $faqConfig->get('security.enableLoginOnly'),
-    'isDebugEnabled' => DEBUG,
+    'isDebugEnabled' => Environment::isDebugMode(),
     'richSnippetsEnabled' => $faqConfig->get('seo.enableRichSnippets'),
     'tplSetName' => TwigWrapper::getTemplateSetName(),
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get('msgLoginUser'),

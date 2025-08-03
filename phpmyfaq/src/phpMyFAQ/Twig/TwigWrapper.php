@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Twig;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Environment as phpMyFAQEnvironment;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\Extensions\PluginTwigExtension;
 use phpMyFAQ\Twig\Extensions\TranslateTwigExtension;
@@ -66,7 +67,7 @@ class TwigWrapper
         }
 
         // If we're on a development version or debug is enabled, add the debug extension
-        if (System::isDevelopmentVersion() || DEBUG) {
+        if (System::isDevelopmentVersion() || phpMyFAQEnvironment::isDebugMode()) {
             $this->twigEnvironment->addExtension(new DebugExtension());
         }
     }

@@ -1392,7 +1392,7 @@ $PMF_LANG['msgLinkToFAQ'] = 'FAQ کا لنک';
 
 // شامل کیا گیا v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'رازداری کی پالیسی کے لنک کو فعال کریں'];
-$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ اس وقت ڈیبگ موڈ میں چل رہا ہے۔ ڈیبگ موڈ حساس معلومات کو ظاہر کر سکتا ہے اور صرف ترقیاتی مقاصد کے لیے ہے۔ سیکیورٹی وجوہات کی بنا پر ہم ڈیبگ موڈ کو غیر فعال کرنے کی سختی سے سفارش کرتے ہیں۔ آپ اسے <code>src/Bootstrap.php</code> فائل میں غیر فعال کر سکتے ہیں۔';
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ اس وقت ڈیبگ موڈ میں چل رہا ہے۔ ڈیبگ موڈ حساس معلومات کو ظاہر کر سکتا ہے اور صرف ترقیاتی مقاصد کے لیے ہے۔ سیکیورٹی وجوہات کی بنا پر ہم ڈیبگ موڈ کو غیر فعال کرنے کی سختی سے سفارش کرتے ہیں۔ آپ اسے <code>.env</code> فائل میں غیر فعال کر سکتے ہیں۔';
 $PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ فی الحال ترقیاتی مرحلے میں ہے (%s)، اور پروڈکشن کے لیے تیار نہیں ہے۔ براہ کرم <a target="_blank" href="%s" class="alert-link">GitHub پر تمام مسائل رپورٹ کریں</a>۔ آپ کا بہت شکریہ!';
 $PMF_LANG['layoutControlCenter'] = 'لے آؤٹ';
 $LANG_CONF['layout.customCss'] = ['area', 'حسب ضرورت CSS', 'براہ کرم صرف CSS استعمال کریں۔'];

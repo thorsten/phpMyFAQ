@@ -1431,7 +1431,7 @@ $PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
 $LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
-$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>src/Bootstrap.php</code> file.';
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>.env</code> file.';
 $PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is currently in development (%s). And therefore not yet ready for production. Please <a target="_blank" href="%s" class="alert-link">report all issues on GitHub</a>. Thank you very much!';
 $PMF_LANG['layoutControlCenter'] = 'Layout';
 $LANG_CONF['layout.customCss'] = ['area', 'Custom CSS', 'Please use CSS only.'];

@@ -25,23 +25,15 @@ use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Environment;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
-//
-// Debug mode:
-// - false debug mode disabled
-// - true  debug mode enabled
-const DEBUG = true;
-if (DEBUG) {
-    ini_set('display_errors', '1');
-    ini_set('display_startup_errors', '1');
-    error_reporting(-1);
-} else {
-    error_reporting(0);
-}
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(-1);
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
@@ -75,6 +67,11 @@ require 'constants.php';
 // Setting up autoloader
 //
 require 'autoload.php';
+
+//
+// Initialize environment configuration
+//
+Environment::init();
 
 //
 // Check if multisite/multisite.php exist for Multisite support

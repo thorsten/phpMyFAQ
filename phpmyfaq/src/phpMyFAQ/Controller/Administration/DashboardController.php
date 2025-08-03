@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Filter;
 use phpMyFAQ\System;
 use phpMyFAQ\Translation;
@@ -50,7 +51,7 @@ class DashboardController extends AbstractAdministrationController
         $userId = $this->currentUser->getUserId();
 
         $templateVars = [
-            'isDebugMode' => DEBUG,
+            'isDebugMode' => Environment::isDebugMode(),
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
             'isDevelopmentVersion' => System::isDevelopmentVersion(),
             'currentVersionApp' => System::getVersion(),

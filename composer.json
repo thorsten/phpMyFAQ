@@ -38,6 +38,7 @@
     "symfony/config": "^7.1",
     "symfony/console": "^7.3",
     "symfony/dependency-injection": "^7.1",
+    "symfony/dotenv": "^7.3",
     "symfony/event-dispatcher": "^7.1",
     "symfony/html-sanitizer": "^7.1",
     "symfony/http-client": "^7.1",

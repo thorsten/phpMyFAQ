@@ -80,7 +80,9 @@ class Configuration
     public function setLogger(): void
     {
         $this->logger = new Logger('phpmyfaq');
-        $this->logger->pushHandler(new StreamHandler(PMF_LOG_DIR, DEBUG ? Level::Debug : Level::Warning));
+        $this->logger->pushHandler(
+            new StreamHandler(PMF_LOG_DIR, Environment::isDebugMode() ? Level::Debug : Level::Warning)
+        );
         $this->logger->pushHandler(new BrowserConsoleHandler());
     }
 
