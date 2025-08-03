@@ -297,12 +297,10 @@ class Search
         $searchResult = [];
 
         $byLang = $withLang ? ', lang' : '';
-        
         // Build time-based condition if timeWindow is specified
         $timeCondition = '';
         if ($timeWindow > 0) {
             $dbType = Database::getType();
-            
             $timeCondition = match ($dbType) {
                 'pgsql', 'pdo_pgsql' => sprintf(
                     ' WHERE searchdate >= NOW() - INTERVAL \'%d days\'',
@@ -332,7 +330,7 @@ class Search
 
         $query = sprintf(
             '
-            SELECT 
+            SELECT
                 MIN(id) as id, searchterm, COUNT(searchterm) AS number %s
             FROM
                 %s%s
