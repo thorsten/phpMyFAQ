@@ -274,12 +274,12 @@ class Update extends Setup
         if (version_compare($this->version, '3.1.0-beta', '<')) {
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
-                    'CREATE TABLE %sfaqcategory_order 
+                    'CREATE TABLE %sfaqcategory_order
                     (category_id int(11) NOT NULL, position int(11) NOT NULL, PRIMARY KEY (category_id))',
                     Database::getTablePrefix()
                 ),
                 'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
-                    'CREATE TABLE %sfaqcategory_order 
+                    'CREATE TABLE %sfaqcategory_order
                     (category_id INTEGER NOT NULL, position INTEGER NOT NULL, PRIMARY KEY (category_id))',
                     Database::getTablePrefix()
                 ),
@@ -303,7 +303,7 @@ class Update extends Setup
 
             if ('sqlite3' === Database::getType()) {
                 $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaquser 
+                    'ALTER TABLE %sfaquser
                         ADD COLUMN refresh_token TEXT NULL DEFAULT NULL,
                         ADD COLUMN access_token TEXT NULL DEFAULT NULL,
                         ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL,
@@ -319,7 +319,7 @@ class Update extends Setup
                 );
             } else {
                 $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaquser 
+                    'ALTER TABLE %sfaquser
                         ADD refresh_token TEXT NULL DEFAULT NULL,
                         ADD access_token TEXT NULL DEFAULT NULL,
                         ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
@@ -408,7 +408,7 @@ class Update extends Setup
                 case 'sqlite3':
                     $this->queries[] = sprintf(
                         'CREATE TABLE %sfaqconfig_new (
-                            config_name VARCHAR(255) NOT NULL default \'\', 
+                            config_name VARCHAR(255) NOT NULL default \'\',
                             config_value TEXT DEFAULT NULL, PRIMARY KEY (config_name)
                          )',
                         Database::getTablePrefix()
@@ -931,9 +931,9 @@ class Update extends Setup
                         Database::getTablePrefix()
                     );
                     $this->queries[] = sprintf(
-                        'INSERT INTO %sfaqforms 
-                            SELECT 
-                                form_id, input_id, input_type, input_label, input_active, input_required, input_lang 
+                        'INSERT INTO %sfaqforms
+                            SELECT
+                                form_id, input_id, input_type, input_label, input_active, input_required, input_lang
                             FROM %sfaqforms_old',
                         Database::getTablePrefix(),
                         Database::getTablePrefix()
