@@ -28,16 +28,16 @@ phpMyFAQ 4.1 and later uses environment variables for the application configurat
 
 ##### Debug Configuration
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DEBUG` | Enables debug mode | `true` / `false` |
-| `DEBUG_LEVEL` | Debug detail level | `0`, `1`, `2`, `3` |
-| `DEBUG_LOG_QUERIES` | SQL query logging | `true` / `false` |
+| Variable            | Description        | Example            |
+|---------------------|--------------------|--------------------|
+| `DEBUG`             | Enables debug mode | `true` / `false`   |
+| `DEBUG_LEVEL`       | Debug detail level | `0`, `1`, `2`, `3` |
+| `DEBUG_LOG_QUERIES` | SQL query logging  | `true` / `false`   |
 
 ##### Application
 
-| Variable | Description | Example |
-|----------|-------------|---------|
+| Variable  | Description             | Example                                |
+|-----------|-------------------------|----------------------------------------|
 | `APP_ENV` | Application environment | `development`, `production`, `testing` |
 
 #### Configuration Files
@@ -123,7 +123,7 @@ The `for` loop iterates over arrays or objects.
 
 #### Debugging
 
-To enable debugging in Twig, set the `DEBUG` option in the file src/Bootstrap.php to `true`.
+To enable debugging in Twig, set the `DEBUG` option in the file .env to `true`.
 You can then use the `dump` function in your templates.
 
 ```twig
