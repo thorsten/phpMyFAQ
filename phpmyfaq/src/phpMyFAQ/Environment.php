@@ -25,6 +25,9 @@ class Environment
     private static int $debugLevel = 0;
     private static bool $debugLogQueries = false;
     private static bool $initialized = false;
+    private static string $environment = 'production';
+
+    private static bool $testMode = false;
     private static ?Dotenv $dotenv = null;
 
     public static function init(): void
@@ -33,9 +36,28 @@ class Environment
             return;
         }
 
-        self::loadEnvironment();
+        if (!self::$testMode) {
+            self::loadEnvironment();
+        }
+
         self::setupDebugMode();
         self::$initialized = true;
+    }
+
+    public static function enableTestMode(): void
+    {
+        self::$testMode = true;
+    }
+
+    public static function reset(): void
+    {
+        self::$debugMode = false;
+        self::$debugLevel = 0;
+        self::$debugLogQueries = false;
+        self::$initialized = false;
+        self::$environment = 'production';
+        self::$testMode = false;
+        self::$dotenv = null;
     }
 
     private static function loadEnvironment(): void
@@ -54,6 +76,7 @@ class Environment
         self::$debugMode = filter_var($_ENV['DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
         self::$debugLevel = (int) ($_ENV['DEBUG_LEVEL'] ?? 0);
         self::$debugLogQueries = filter_var($_ENV['DEBUG_LOG_QUERIES'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        self::$environment = $_ENV['APP_ENV'] ?? 'production';
 
         // Legacy support
         if (!defined('DEBUG')) {
@@ -93,7 +116,7 @@ class Environment
 
     public static function getEnvironment(): string
     {
-        return $_ENV['APP_ENV'] ?? 'production';
+        return self::$environment;
     }
 
     public static function isProduction(): bool
