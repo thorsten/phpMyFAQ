@@ -154,4 +154,41 @@ class WrapperTest extends TestCase
         
         $this->assertFalse($method->invoke($this->wrapper, $shortData));
     }
+
+    public function testConcatenatePathsWithUrlEncodedSpaces(): void
+    {
+        $path = '/var/www/phpmyfaq';
+        
+        // Test with URL-encoded spaces (%20)
+        $file = '/content/user/images/image%20with%20spaces.jpg';
+        $expected = '/var/www/phpmyfaq/content/user/images/image%20with%20spaces.jpg';
+        $this->assertEquals($expected, $this->wrapper->concatenatePaths($path, $file));
+    }
+
+    public function testFilePathDecodingWithSpaces(): void
+    {
+        // Test URL decoding of file paths with spaces
+        $encodedPath = '/content/user/images/image%20with%20spaces.jpg';
+        $decodedPath = '/content/user/images/image with spaces.jpg';
+        
+        $this->assertEquals($decodedPath, urldecode($encodedPath));
+    }
+
+    public function testImageFileWithSpacesInPath(): void
+    {
+        // Use test image that exists in tests directory
+        $testDir = __DIR__ . '/../../../content/user/images';
+        $testFile = $testDir . '/image with spaces.jpg';
+        
+        // Verify test file exists
+        $this->assertTrue(file_exists($testFile), "Test image should exist: " . $testFile);
+        
+        // Test that we can read the file when the path contains spaces
+        $urlEncodedPath = '/content/user/images/image%20with%20spaces.jpg';
+        $decodedPath = urldecode($urlEncodedPath);
+        
+        $fullPath = $this->wrapper->concatenatePaths($testDir . '/../../..', $decodedPath);
+        
+        $this->assertTrue(file_exists($fullPath), "File should exist: " . $fullPath);
+    }
 }
