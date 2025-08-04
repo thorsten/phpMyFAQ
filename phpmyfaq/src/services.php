@@ -58,6 +58,7 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
 use phpMyFAQ\Setup\Update;
 use phpMyFAQ\Setup\Upgrade;
@@ -298,6 +299,11 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('phpmyfaq.session.token', Token::class)
         ->factory([Token::class, 'getInstance'])
+        ->args([
+            new Reference('session')
+        ]);
+
+    $services->set('phpmyfaq.session.wrapper', SessionWrapper::class)
         ->args([
             new Reference('session')
         ]);
