@@ -78,5 +78,3 @@ class SessionWrapper
         return $this->session;
     }
 }
-
-
