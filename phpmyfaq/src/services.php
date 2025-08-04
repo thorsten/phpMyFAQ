@@ -20,6 +20,7 @@ use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
+use phpMyFAQ\Administration\Faq as AdminFaq;
 use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
@@ -104,6 +105,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.admin.helper', Helper::class);
+
+    $services->set('phpmyfaq.admin.faq', AdminFaq::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
 
     $services->set('phpmyfaq.admin.rating-data', RatingData::class)
         ->args([

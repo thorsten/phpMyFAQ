@@ -38,6 +38,7 @@ class DashboardController extends AbstractAdministrationController
     /**
      * @throws LoaderError
      * @throws Exception
+     * @throws \Exception
      */
     #[Route('/', name: 'admin.dashboard', methods: ['GET'])]
     public function index(Request $request): Response
@@ -45,7 +46,7 @@ class DashboardController extends AbstractAdministrationController
         $this->userIsAuthenticated();
 
         $session = $this->container->get('phpmyfaq.admin.session');
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get('phpmyfaq.admin.faq');
 
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();

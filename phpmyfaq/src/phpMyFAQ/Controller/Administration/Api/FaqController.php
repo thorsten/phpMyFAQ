@@ -695,7 +695,7 @@ class FaqController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faq = new Faq($this->configuration);
+        $faq = $this->container->get('phpmyfaq.admin.faq');
         $faq->setStickyFaqOrder($data->faqIds);
 
         return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);

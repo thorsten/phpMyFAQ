@@ -19,6 +19,7 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use stdClass;
 
 class Faq
 {
@@ -153,6 +154,140 @@ class Faq
         }
 
         return false;
+    }
+
+    /**
+     * Returns the inactive records with admin URL to edit the FAQ and title.
+     */
+    public function getInactiveFaqsData(): array
+    {
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema
+            FROM
+                %sfaqdata fd
+            WHERE
+                fd.lang = '%s'
+            AND 
+                fd.active = 'no'
+            GROUP BY
+                fd.id, fd.lang, fd.thema
+            ORDER BY
+                fd.id DESC",
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage()
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $inactive = [];
+        $data = [];
+
+        $oldId = 0;
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            if ($oldId != $row->id) {
+                $data['question'] = $row->thema;
+                $data['url'] = sprintf(
+                    '%sadmin/faq/edit/%d/%s',
+                    $this->configuration->getDefaultUrl(),
+                    $row->id,
+                    $row->lang
+                );
+                $inactive[] = $data;
+            }
+
+            $oldId = $row->id;
+        }
+
+        return $inactive;
+    }
+
+    /**
+     * Returns the orphaned records with admin URL to edit the FAQ and title.
+     *
+     * @return stdClass[]
+     */
+    public function getOrphanedFaqs(): array
+    {
+        $query = sprintf(
+            "
+                SELECT
+                    fd.id AS id,
+                    fd.lang AS lang,
+                    fd.thema AS question
+                FROM
+                    %sfaqdata fd
+                WHERE
+                    fd.lang = '%s'
+                AND 
+                    fd.active = 'yes'
+                AND
+                    fd.id NOT IN (
+                        SELECT
+                            record_id
+                        FROM
+                            %sfaqcategoryrelations
+                        WHERE
+                            record_lang = fd.lang
+                    )
+                GROUP BY
+                    fd.id, fd.lang, fd.thema
+                ORDER BY
+                    fd.id DESC",
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage(),
+            Database::getTablePrefix()
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        $orphaned = [];
+        $data = [];
+
+        $oldId = 0;
+        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            if ($oldId != $row->id) {
+                $data = new stdClass();
+                $data->faqId = $row->id;
+                $data->language = $row->lang;
+                $data->question = $row->question;
+                $data->url = sprintf(
+                    '%sadmin/faq/edit/%d/%s',
+                    $this->configuration->getDefaultUrl(),
+                    $row->id,
+                    $row->lang
+                );
+                $orphaned[] = $data;
+            }
+
+            $oldId = $row->id;
+        }
+
+        return $orphaned;
+    }
+
+    /**
+     * Returns true if saving the order of the sticky faqs was successfully.
+     *
+     * @param array $faqIds Order of record id's
+     */
+    public function setStickyFaqOrder(array $faqIds): bool
+    {
+        $count = 1;
+        $counter = count($faqIds);
+        for ($i = 0; $i < $counter; ++$i) {
+            $query = sprintf(
+                "UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d",
+                Database::getTablePrefix(),
+                $count,
+                $faqIds[$i]
+            );
+            $this->configuration->getDb()->query($query);
+            ++$count;
+        }
+
+        return true;
     }
 
     public function setLanguage(string $language): Faq
