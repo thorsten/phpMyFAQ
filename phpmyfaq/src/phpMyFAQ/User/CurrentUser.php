@@ -305,7 +305,8 @@ class CurrentUser extends User
             return 0;
         }
 
-        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - $this->sessionWrapper->get(SESSION_ID_TIMESTAMP)) / 60;
+        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - 
+                $this->sessionWrapper->get(SESSION_ID_TIMESTAMP)) / 60;
     }
 
     /**
@@ -517,7 +518,6 @@ class CurrentUser extends User
     public static function getFromSession(Configuration $configuration): ?CurrentUser
     {
         $sessionWrapper = new SessionWrapper();
-        
         // there is no valid user object in session
         if (!$sessionWrapper->has(SESSION_CURRENT_USER) || !$sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
             return null;
