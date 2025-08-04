@@ -461,6 +461,7 @@ class Faq
      * @param string $orderBy Order by
      * @param string $sortBy Sort by
      * @throws CommonMarkException
+     * @todo this method needs to be refactored, parts of it should be moved to a Twig template
      */
     public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): array
     {
