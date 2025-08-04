@@ -28,6 +28,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\User;
 use SensitiveParameter;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +67,11 @@ class CurrentUser extends User
     private readonly UserSession $userSession;
 
     /**
+     * The Session wrapper for Symfony Session
+     */
+    private readonly SessionWrapper $sessionWrapper;
+
+    /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
      * was not updated for the last $this->sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
@@ -98,6 +104,7 @@ class CurrentUser extends User
     {
         parent::__construct($configuration);
         $this->userSession = new UserSession($configuration);
+        $this->sessionWrapper = new SessionWrapper();
     }
 
     /**
@@ -294,11 +301,11 @@ class CurrentUser extends User
      */
     public function sessionAge(): float
     {
-        if (!isset($_SESSION[SESSION_ID_TIMESTAMP])) {
+        if (!$this->sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
             return 0;
         }
 
-        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
+        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - $this->sessionWrapper->get(SESSION_ID_TIMESTAMP)) / 60;
     }
 
     /**
@@ -359,7 +366,7 @@ class CurrentUser extends User
         }
 
         // store session-ID age
-        $_SESSION[SESSION_ID_TIMESTAMP] = Request::createFromGlobals()->server->get('REQUEST_TIME');
+        $this->sessionWrapper->set(SESSION_ID_TIMESTAMP, Request::createFromGlobals()->server->get('REQUEST_TIME'));
 
         $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
 
@@ -399,7 +406,7 @@ class CurrentUser extends User
      */
     public function saveToSession(): void
     {
-        $_SESSION[SESSION_CURRENT_USER] = $this->getUserId();
+        $this->sessionWrapper->set(SESSION_CURRENT_USER, $this->getUserId());
     }
 
     /**
@@ -409,8 +416,7 @@ class CurrentUser extends User
     public function deleteFromSession(bool $deleteCookie = false): bool
     {
         // delete CurrentUser object from session
-        $_SESSION[SESSION_CURRENT_USER] = null;
-        unset($_SESSION[SESSION_CURRENT_USER]);
+        $this->sessionWrapper->remove(SESSION_CURRENT_USER);
 
         // log CurrentUser out
         $this->setLoggedIn(false);
@@ -510,14 +516,16 @@ class CurrentUser extends User
      */
     public static function getFromSession(Configuration $configuration): ?CurrentUser
     {
+        $sessionWrapper = new SessionWrapper();
+        
         // there is no valid user object in session
-        if (!isset($_SESSION[SESSION_CURRENT_USER]) || !isset($_SESSION[SESSION_ID_TIMESTAMP])) {
+        if (!$sessionWrapper->has(SESSION_CURRENT_USER) || !$sessionWrapper->has(SESSION_ID_TIMESTAMP)) {
             return null;
         }
 
         // create a new CurrentUser object
         $user = new self($configuration);
-        $user->getUserById($_SESSION[SESSION_CURRENT_USER]);
+        $user->getUserById($sessionWrapper->get(SESSION_CURRENT_USER));
 
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
