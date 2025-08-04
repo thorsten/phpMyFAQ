@@ -180,12 +180,16 @@ class SessionWrapperTest extends TestCase
             ['null_key', null],
         ];
 
-        foreach ($testCases as [$key, $value]) {
-            $this->sessionMock
-                ->expects($this->once())
-                ->method('set')
-                ->with($key, $value);
+        // Use exactly() to specify the exact number of calls expected
+        $this->sessionMock
+            ->expects($this->exactly(count($testCases)))
+            ->method('set')
+            ->willReturnCallback(function ($key, $value) use ($testCases) {
+                // Verify that the key-value pair is one of our expected test cases
+                $this->assertContains([$key, $value], $testCases);
+            });
 
+        foreach ($testCases as [$key, $value]) {
             $this->sessionWrapper->set($key, $value);
         }
     }
