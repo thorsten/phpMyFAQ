@@ -258,6 +258,7 @@ class Faq
      * @param int    $categoryId Entity ID
      * @param string $orderBy    Order by
      * @param string $sortBy     Sort by
+     * @todo this method needs to be refactored, parts of it should be moved to a Twig template
      */
     public function renderFaqsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): string
     {
@@ -1657,6 +1658,7 @@ class Faq
     /**
      * Returns the orphaned records with admin URL to edit the FAQ and title.
      *
+     * @todo move method into Admin FAQ class
      * @return stdClass[]
      */
     public function getOrphanedFaqs(): array

@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 class UtilsTest extends TestCase
 {
     private Configuration $configuration;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -21,6 +22,7 @@ class UtilsTest extends TestCase
         $this->configuration->set('main.titleFAQ', 'phpMyFAQ Test');
         $this->configuration->getAll();
     }
+
     public function testMakeShorterTextWithLongString(): void
     {
         $longString = 'This is a long string that needs to be shortened to fit within a certain number of characters.';
@@ -163,9 +165,6 @@ class UtilsTest extends TestCase
         $this->assertNull($host);
     }
 
-    /**
-     * Test URL without a host part.
-     */
     public function testGetHostFromUrlWithoutHost(): void
     {
         $url = 'ftp://user:password@';
@@ -243,5 +242,24 @@ class UtilsTest extends TestCase
         $this->assertEquals('1 TB', Utils::formatBytes(1024 * 1024 * 1024 * 1024));
         $this->assertEquals('2.5 TB', Utils::formatBytes(2560 * 1024 * 1024 * 1024));
         $this->assertEquals('1023 TB', Utils::formatBytes(1023 * 1024 * 1024 * 1024 * 1024));
+    }
+
+    /**
+     * Test edge cases and error handling
+     */
+    public function testEdgeCases(): void
+    {
+        // Test makeShorterText with empty string
+        $this->assertEquals('', Utils::makeShorterText('', 10));
+
+        // Test isLanguage with various inputs
+        $this->assertTrue(Utils::isLanguage('en'));
+        $this->assertTrue(Utils::isLanguage('en-US'));
+        $this->assertFalse(Utils::isLanguage('en_US'));
+        $this->assertFalse(Utils::isLanguage('123'));
+
+        // Test isLikeOnPMFDate with various inputs
+        $this->assertTrue(Utils::isLikeOnPMFDate('%20220301235959%'));
+        $this->assertFalse(Utils::isLikeOnPMFDate('invalid-date'));
     }
 }
