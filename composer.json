@@ -57,7 +57,7 @@
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
     "phpstan/phpstan": "^2",
-    "phpunit/phpunit": "12.*",
+    "phpunit/phpunit": "^12.3",
     "rector/rector": "^2",
     "squizlabs/php_codesniffer": "*",
     "symfony/yaml": "7.*",
