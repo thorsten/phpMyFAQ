@@ -27,8 +27,8 @@ use phpMyFAQ\Database\DatabaseDriver;
  */
 abstract class AbstractAttachment
 {
-    /** @var int Attachment id. */
-    protected int $id = 0;
+    /** @var mixed Attachment id. */
+    protected mixed $id = 0;
 
     /**
      * The key to encrypt with.

@@ -2,15 +2,14 @@
 
 namespace phpMyFAQ\Attachment\Filesystem\File;
 
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
-
 
 class VanillaFileTest extends TestCase
 {
     private VanillaFile $mockFile;
-    private $mockHandle;
-    private $root;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
@@ -29,7 +28,7 @@ class VanillaFileTest extends TestCase
             ->getMock();
     }
 
-    public function testPutChunkWritesData()
+    public function testPutChunkWritesData(): void
     {
         $data = "test chunk data";
 
@@ -43,7 +42,7 @@ class VanillaFileTest extends TestCase
         $this->assertTrue($this->mockFile->putChunk($data));
     }
 
-    public function testGetChunkReadsData()
+    public function testGetChunkReadsData(): void
     {
         // Mocking the getChunk behavior to return content from the virtual file
         $this->mockFile->expects($this->once())
@@ -53,7 +52,7 @@ class VanillaFileTest extends TestCase
         $this->assertEquals('test file content', $this->mockFile->getChunk());
     }
 
-    public function testDeleteFileSuccessfully()
+    public function testDeleteFileSuccessfully(): void
     {
         // The file should exist in the virtual file system before deletion
         $filePath = vfsStream::url('root/file.txt');
