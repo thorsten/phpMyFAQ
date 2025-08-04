@@ -12,7 +12,7 @@
  * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2025-01-01
+ * @since     2025-08-04
  */
 
 namespace phpMyFAQ\Session;
