@@ -305,8 +305,9 @@ class CurrentUser extends User
             return 0;
         }
 
-        return (Request::createFromGlobals()->server->get('REQUEST_TIME') - 
-                $this->sessionWrapper->get(SESSION_ID_TIMESTAMP)) / 60;
+        $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
+        $sessionTimestamp = $this->sessionWrapper->get(SESSION_ID_TIMESTAMP);
+        return ($requestTime - $sessionTimestamp) / 60;
     }
 
     /**
