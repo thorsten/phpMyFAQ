@@ -365,7 +365,7 @@ abstract class AbstractAttachment
             $assoc = $this->databaseDriver->fetchArray($result);
         }
 
-        return $assoc['count'] > 1;
+        return isset($assoc['count']) && $assoc['count'] > 1;
     }
 
     /**
