@@ -19,12 +19,7 @@ namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\SearchHelper;
-use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,7 +30,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class AutoCompleteController extends AbstractController
 {
     /**
-     * @throws Exception
      * @throws \Exception
      */
     #[Route('api/autocomplete')]
@@ -51,8 +45,8 @@ class AutoCompleteController extends AbstractController
         $category->transform(0);
         $category->buildCategoryTree();
 
-        $faqPermission = new Permission($this->configuration);
-        $faqSearch = new Search($this->configuration);
+        $faqPermission = $this->container->get('phpmyfaq.faq.permission');
+        $faqSearch = $this->container->get('phpmyfaq.search');
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         if (!is_null($searchString)) {
@@ -62,10 +56,10 @@ class AutoCompleteController extends AbstractController
 
             $searchResultSet->reviewResultSet($searchResult);
 
-            $faqSearchHelper = new SearchHelper($this->configuration);
+            $faqSearchHelper = $this->container->get('phpmyfaq.helper.search');
             $faqSearchHelper->setSearchTerm($searchString);
             $faqSearchHelper->setCategory($category);
-            $faqSearchHelper->setPlurals(new Plurals());
+            $faqSearchHelper->setPlurals($this->container->get('phpmyfaq.language.plurals'));
 
             return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
         }

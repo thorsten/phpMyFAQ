@@ -43,11 +43,13 @@ use phpMyFAQ\Glossary;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
@@ -227,6 +229,11 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration')
         ]);
 
+    $services->set('phpmyfaq.helper.search', SearchHelper::class)
+        ->args([
+            new Reference('phpmyfaq.configuration')
+        ]);
+
     $services->set('phpmyfaq.helper.statistics', StatisticsHelper::class)
         ->args([
             new Reference('phpmyfaq.admin.session'),
@@ -259,6 +266,8 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration'),
             new Reference('session')
         ]);
+
+    $services->set('phpmyfaq.language.plurals', Plurals::class);
 
     $services->set('phpmyfaq.mail', Mail::class)
         ->args([
