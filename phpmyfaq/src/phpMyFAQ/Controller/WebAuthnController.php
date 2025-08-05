@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\TwigWrapper;
@@ -93,7 +94,7 @@ class WebAuthnController extends AbstractController
             [
                 'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
                 'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
-                'isDebugEnabled' => DEBUG,
+                'isDebugEnabled' => Environment::isDebugMode(),
                 'richSnippetsEnabled' => $this->configuration->get('seo.enableRichSnippets'),
                 'tplSetName' => TwigWrapper::getTemplateSetName(),
                 'msgLoginUser' => Translation::get('msgLoginUser'),
