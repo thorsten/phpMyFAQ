@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use Exception;
+use JsonException;
 use phpMyFAQ\Bookmark;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Filter;
@@ -30,8 +32,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookmarkController extends AbstractController
 {
     /**
-     * @throws \JsonException
-     * @throws \Exception
+     * @throws JsonException
+     * @throws Exception
      */
     #[Route('api/bookmark/create')]
     public function create(Request $request): JsonResponse
@@ -60,8 +62,8 @@ class BookmarkController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
-     * @throws \Exception
+     * @throws JsonException
+     * @throws Exception
      */
     #[Route('api/bookmark/delete')]
     public function delete(Request $request): JsonResponse
@@ -90,8 +92,8 @@ class BookmarkController extends AbstractController
     }
 
     /**
-     * @throws \JsonException
-     * @throws \Exception
+     * @throws JsonException
+     * @throws Exception
      */
     #[Route('api/bookmark/delete-all')]
     public function deleteAll(Request $request): JsonResponse
