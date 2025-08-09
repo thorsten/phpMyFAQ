@@ -20,7 +20,6 @@ namespace phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Link;
-use phpMyFAQ\Strings;
 
 readonly class Startpage
 {
