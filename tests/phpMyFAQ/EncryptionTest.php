@@ -100,7 +100,7 @@ class EncryptionTest extends TestCase
 
     public function testEncryptWithLongPassword(): void
     {
-        $password = str_repeat('LongPassword123!', 10); // 160 characters
+        $password = str_repeat('a', 1000); // Very long password
 
         $hashedPassword = $this->encryption->encrypt($password);
 
@@ -108,31 +108,10 @@ class EncryptionTest extends TestCase
         $this->assertNotEmpty($hashedPassword);
     }
 
-    public function testEncryptWithVeryShortPassword(): void
-    {
-        $password = 'a';
-
-        $hashedPassword = $this->encryption->encrypt($password);
-
-        $this->assertIsString($hashedPassword);
-        $this->assertNotEmpty($hashedPassword);
-    }
-
-    public function testErrorMethodReturnsString(): void
-    {
-        $errorMessage = $this->encryption->error();
-
-        $this->assertIsString($errorMessage);
-    }
-
-    public function testErrorsArrayIsPublic(): void
-    {
-        $errors = $this->encryption->errors;
-
-        $this->assertIsArray($errors);
-    }
-
-    public function testDifferentEncryptionTypes(): void
+    /**
+     * Test getInstance with different encryption types
+     */
+    public function testGetInstanceWithDifferentTypes(): void
     {
         $types = ['bcrypt', 'hash', 'none'];
 
@@ -140,5 +119,172 @@ class EncryptionTest extends TestCase
             $encryption = Encryption::getInstance($type, $this->config);
             $this->assertInstanceOf(Encryption::class, $encryption);
         }
+    }
+
+    /**
+     * Test getInstance with case variations
+     */
+    public function testGetInstanceWithCaseVariations(): void
+    {
+        $variations = ['BCRYPT', 'Bcrypt', 'bCrYpT', 'bcrypt'];
+
+        foreach ($variations as $variation) {
+            $encryption = Encryption::getInstance($variation, $this->config);
+            $this->assertInstanceOf(Encryption::class, $encryption);
+        }
+    }
+
+    /**
+     * Test error method returns string
+     */
+    public function testErrorMethodReturnsString(): void
+    {
+        $encryption = Encryption::getInstance('invalid', $this->config);
+        $error = $encryption->error();
+
+        $this->assertIsString($error);
+        $this->assertStringContainsString('EncryptionTypes method could not be found', $error);
+    }
+
+    /**
+     * Test error method with no errors
+     */
+    public function testErrorMethodWithNoErrors(): void
+    {
+        $encryption = Encryption::getInstance('bcrypt', $this->config);
+        $error = $encryption->error();
+
+        $this->assertIsString($error);
+        $this->assertEmpty($error);
+    }
+
+    /**
+     * Test multiple invalid encryption types generate multiple errors
+     */
+    public function testMultipleInvalidTypesGenerateMultipleErrors(): void
+    {
+        $invalidTypes = ['invalid1', 'invalid2', 'nonexistent'];
+        $errors = [];
+
+        foreach ($invalidTypes as $type) {
+            $encryption = Encryption::getInstance($type, $this->config);
+            $errors[] = $encryption->error();
+        }
+
+        foreach ($errors as $error) {
+            $this->assertStringContainsString('EncryptionTypes method could not be found', $error);
+        }
+    }
+
+    /**
+     * Test encrypt method with null-like values
+     */
+    public function testEncryptWithNullLikeValues(): void
+    {
+        $values = ['0', 'false', 'null'];
+
+        foreach ($values as $value) {
+            $result = $this->encryption->encrypt($value);
+            $this->assertIsString($result);
+        }
+    }
+
+    /**
+     * Test that different passwords produce different hashes
+     */
+    public function testDifferentPasswordsProduceDifferentHashes(): void
+    {
+        $password1 = 'password123';
+        $password2 = 'password456';
+
+        $hash1 = $this->encryption->encrypt($password1);
+        $hash2 = $this->encryption->encrypt($password2);
+
+        $this->assertNotEquals($hash1, $hash2);
+    }
+
+    /**
+     * Test that same password encrypted twice produces different hashes (salt)
+     */
+    public function testSamePasswordProducesDifferentHashes(): void
+    {
+        $password = 'samePassword123';
+
+        $hash1 = $this->encryption->encrypt($password);
+        $hash2 = $this->encryption->encrypt($password);
+
+        // With proper salting, same password should produce different hashes
+        $this->assertNotEquals($hash1, $hash2);
+    }
+
+    /**
+     * Test constructor is private (factory pattern)
+     */
+    public function testFactoryPatternEnforcement(): void
+    {
+        $reflection = new \ReflectionClass(Encryption::class);
+        $constructor = $reflection->getConstructor();
+
+        $this->assertTrue($constructor->isPrivate());
+    }
+
+    /**
+     * Test getInstance with empty string
+     */
+    public function testGetInstanceWithEmptyString(): void
+    {
+        $encryption = Encryption::getInstance('', $this->config);
+
+        $this->assertInstanceOf(Encryption::class, $encryption);
+        $this->assertNotEmpty($encryption->errors);
+    }
+
+    /**
+     * Test encryption with whitespace-only password
+     */
+    public function testEncryptWithWhitespacePassword(): void
+    {
+        $password = '   ';
+
+        $hashedPassword = $this->encryption->encrypt($password);
+
+        $this->assertIsString($hashedPassword);
+        $this->assertNotEmpty($hashedPassword);
+    }
+
+    /**
+     * Test encryption with newline characters
+     */
+    public function testEncryptWithNewlineCharacters(): void
+    {
+        $password = "password\nwith\nnewlines\r\n";
+
+        $hashedPassword = $this->encryption->encrypt($password);
+
+        $this->assertIsString($hashedPassword);
+        $this->assertNotEmpty($hashedPassword);
+    }
+
+    /**
+     * Test error array is accessible
+     */
+    public function testErrorArrayIsAccessible(): void
+    {
+        $encryption = Encryption::getInstance('invalid', $this->config);
+
+        $this->assertIsArray($encryption->errors);
+        $this->assertNotEmpty($encryption->errors);
+        $this->assertContains('EncryptionTypes method could not be found.', $encryption->errors);
+    }
+
+    /**
+     * Test getInstance with numeric string
+     */
+    public function testGetInstanceWithNumericString(): void
+    {
+        $encryption = Encryption::getInstance('123', $this->config);
+
+        $this->assertInstanceOf(Encryption::class, $encryption);
+        $this->assertNotEmpty($encryption->errors);
     }
 }
