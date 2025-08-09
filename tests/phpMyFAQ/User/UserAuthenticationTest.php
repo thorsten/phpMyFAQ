@@ -57,7 +57,10 @@ class UserAuthenticationTest extends TestCase
      */
     public function testAuthenticateWithLocal(): void
     {
-        session_start();
+        // Only start session if not already active
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         $currentUser = new CurrentUser($this->configuration);
         $userAuth = new UserAuthentication($this->configuration, $currentUser);
