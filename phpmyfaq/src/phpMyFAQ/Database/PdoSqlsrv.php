@@ -22,6 +22,7 @@ use PDO;
 use PDOException;
 use PDOStatement;
 use phpMyFAQ\Core\Exception;
+use SensitiveParameter;
 
 /**
  * Class PdoSqlsrv
@@ -57,7 +58,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function connect(
         string $host,
-        #[\SensitiveParameter] string $user,
+        #[SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
         int|null $port = null
