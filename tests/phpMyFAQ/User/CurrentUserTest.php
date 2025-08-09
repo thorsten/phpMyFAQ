@@ -17,7 +17,10 @@ class CurrentUserTest extends TestCase
      */
     protected function setUp(): void
     {
-        session_start();
+        // Check if session is already started before calling session_start()
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         parent::setUp();
 
