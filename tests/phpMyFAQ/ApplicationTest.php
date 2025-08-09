@@ -5,11 +5,12 @@ namespace phpMyFAQ;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception as PMFException;
+use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -51,7 +52,7 @@ class ApplicationTest extends TestCase
         $this->application->setUrlMatcher($urlMatcher);
 
         // Verwende Reflection um zu prüfen, ob der UrlMatcher gesetzt wurde
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('urlMatcher');
         $property->setAccessible(true);
 
@@ -63,8 +64,7 @@ class ApplicationTest extends TestCase
         $controllerResolver = $this->createMock(ControllerResolver::class);
         $this->application->setControllerResolver($controllerResolver);
 
-        // Verwende Reflection um zu prüfen, ob der ControllerResolver gesetzt wurde
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('controllerResolver');
         $property->setAccessible(true);
 
@@ -72,7 +72,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testSetLanguageWithContainer(): void
     {
@@ -102,7 +102,7 @@ class ApplicationTest extends TestCase
                 ['phpmyfaq.language', $language]
             ]);
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('setLanguage');
         $method->setAccessible(true);
 
@@ -111,13 +111,13 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testSetLanguageWithoutContainer(): void
     {
         $application = new Application();
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('setLanguage');
         $method->setAccessible(true);
 
@@ -126,28 +126,21 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testInitializeTranslationSuccess(): void
     {
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('initializeTranslation');
         $method->setAccessible(true);
 
-        // Mock Translation::create() statisch
         $this->expectNotToPerformAssertions();
 
-        try {
-            $method->invoke($this->application, 'en');
-        } catch (PMFException $e) {
-            // Falls Translation nicht gemockt werden kann, erwarten wir eine Exception
-            $this->assertInstanceOf(PMFException::class, $e);
-        }
+        $method->invoke($this->application, 'en');
     }
 
     /**
-     * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testHandleRequestSuccess(): void
     {
@@ -162,7 +155,7 @@ class ApplicationTest extends TestCase
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
         $method->setAccessible(true);
 
@@ -171,7 +164,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testHandleRequestResourceNotFoundException(): void
     {
@@ -180,7 +173,7 @@ class ApplicationTest extends TestCase
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
         $method->setAccessible(true);
 
@@ -192,7 +185,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testHandleRequestUnauthorizedHttpExceptionForApi(): void
     {
@@ -208,7 +201,7 @@ class ApplicationTest extends TestCase
         $requestContext->fromRequest($request);
         $requestContext->setBaseUrl('/api');
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
         $method->setAccessible(true);
 
@@ -220,7 +213,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testHandleRequestUnauthorizedHttpExceptionForNonApi(): void
     {
@@ -235,7 +228,7 @@ class ApplicationTest extends TestCase
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
         $method->setAccessible(true);
 
@@ -248,7 +241,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testHandleRequestBadRequestException(): void
     {
@@ -263,7 +256,7 @@ class ApplicationTest extends TestCase
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
 
-        $reflection = new \ReflectionClass(Application::class);
+        $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
         $method->setAccessible(true);
 
@@ -276,8 +269,7 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * Test für die run() Methode - Haupteinstiegspunkt der Anwendung
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testRunMethodWithContainer(): void
     {
@@ -314,7 +306,6 @@ class ApplicationTest extends TestCase
             }
         ]));
 
-        // Mock $_SERVER für Request::createFromGlobals()
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['HTTP_HOST'] = 'localhost';
@@ -323,12 +314,10 @@ class ApplicationTest extends TestCase
         try {
             $this->application->run($routeCollection);
         } catch (PMFException $e) {
-            // Falls Translation Initialization fehlschlägt
             $this->assertInstanceOf(PMFException::class, $e);
         }
         $output = ob_get_clean();
 
-        // Verify that the method completed without fatal errors
         $this->assertTrue(true);
     }
 
@@ -340,7 +329,6 @@ class ApplicationTest extends TestCase
         $application = new Application();
         $routeCollection = new RouteCollection();
 
-        // Mock $_SERVER für Request::createFromGlobals()
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/nonexistent';
         $_SERVER['HTTP_HOST'] = 'localhost';
@@ -349,12 +337,10 @@ class ApplicationTest extends TestCase
         try {
             $application->run($routeCollection);
         } catch (PMFException $e) {
-            // Falls Translation Initialization fehlschlägt
             $this->assertInstanceOf(PMFException::class, $e);
         }
         $output = ob_get_clean();
 
-        // Verify that the method completed without fatal errors
         $this->assertTrue(true);
     }
 }
