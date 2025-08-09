@@ -263,16 +263,13 @@ class BuiltinCaptcha implements CaptchaInterface
 
     /**
      * Delete old captcha records.
-     *
      * During normal use the <b>faqcaptcha</b> table would be empty, on average:
-     * each record is created when a captcha image is showed to the user
+     * each record is created when a captcha image is shown to the user
      * and deleted upon a successful matching, so, on average, a record
      * in this table is probably related to a spam attack.
-     *
-     * @param int $time The time (sec) to define a captcha code old and ready
      *                  to be deleted (default: 1 week)
      */
-    private function garbageCollector(int $time = 604800): void
+    private function garbageCollector(): void
     {
         $delete = sprintf(
             '
@@ -281,7 +278,7 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE 
                 captcha_time < %d',
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - $time
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604800
         );
 
         $this->configuration->getDb()->query($delete);
