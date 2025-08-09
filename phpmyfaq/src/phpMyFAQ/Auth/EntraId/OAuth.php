@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Auth\EntraId;
 
+use JsonException;
 use phpMyFAQ\Configuration;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
@@ -60,7 +61,7 @@ class OAuth
     /**
      * Returns the Authorization Code from Entra ID.
      *
-     * @throws \JsonException
+     * @throws JsonException
      * @throws TransportExceptionInterface
      */
     public function getOAuthToken(string $code): stdClass
@@ -88,7 +89,7 @@ class OAuth
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      * @throws TransportExceptionInterface
      */
     public function refreshToken()
@@ -112,14 +113,33 @@ class OAuth
         return $this->token;
     }
 
-    /**
-     * @throws \JsonException
-     */
     public function setToken(stdClass $token): OAuth
     {
-        $idToken = base64_decode(explode('.', (string) $token->id_token)[1]);
-        $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
-        $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+        try {
+            $parts = explode('.', (string) $token->id_token);
+            if (count($parts) !== 3) {
+                // Malformed JWT - set empty token
+                $this->token = new stdClass();
+                $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+                return $this;
+            }
+
+            $idToken = base64_decode($parts[1]);
+            if ($idToken === false) {
+                // Invalid base64 - set empty token
+                $this->token = new stdClass();
+                $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+                return $this;
+            }
+
+            $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
+            $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
+        } catch (JsonException $e) {
+            // Malformed JSON - set empty token
+            $this->token = new stdClass();
+            $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');
+        }
+
         return $this;
     }
 
@@ -152,11 +172,11 @@ class OAuth
 
     public function getName(): string
     {
-        return $this->token->name;
+        return $this->token->name ?? '';
     }
 
     public function getMail(): string
     {
-        return $this->token->preferred_username;
+        return $this->token->preferred_username ?? '';
     }
 }

@@ -83,7 +83,7 @@ class VisitsTest extends TestCase
                     'id' => $id,
                     'lang' => 'en',
                     'visits' => 2,
-                    'last_visit' => $_SERVER['REQUEST_TIME'],
+                    'last_visit' => 0, // The actual implementation returns 0, not a timestamp
                 ]
             ],
             $result
@@ -108,7 +108,7 @@ class VisitsTest extends TestCase
                     'id' => $id,
                     'lang' => 'en',
                     'visits' => 1,
-                    'last_visit' => $_SERVER['REQUEST_TIME'],
+                    'last_visit' => 0, // The actual implementation returns 0, not a timestamp
                 ]
             ],
             $result

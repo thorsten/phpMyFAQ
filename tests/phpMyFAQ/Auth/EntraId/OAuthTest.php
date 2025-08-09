@@ -121,20 +121,163 @@ class OAuthTest extends TestCase
         $this->assertEquals('john@example.com', $this->oAuth->getMail());
     }
 
-    public function testGetRefreshToken(): void
+    public function testSetRefreshToken(): void
     {
-        $this->oAuth->setRefreshToken('test_refresh_token');
-        $this->assertEquals('test_refresh_token', $this->oAuth->getRefreshToken());
+        $refreshToken = 'test_refresh_token';
+        $this->oAuth->setRefreshToken($refreshToken);
+
+        // Use reflection to verify the token was set
+        $reflection = new \ReflectionClass($this->oAuth);
+        $property = $reflection->getProperty('refreshToken');
+        $property->setAccessible(true);
+
+        $this->assertEquals($refreshToken, $property->getValue($this->oAuth));
     }
 
-    public function testGetAccessToken(): void
+    public function testGetName(): void
     {
-        $this->oAuth->setAccessToken('test_access_token');
-        $this->assertEquals('test_access_token', $this->oAuth->getAccessToken());
+        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+        $payload = base64_encode(json_encode(['name' => 'Jane Doe', 'preferred_username' => 'jane@example.com']));
+        $signature = 'dummy_signature';
+        $idToken = $header . '.' . $payload . '.' . $signature;
+
+        $token = new stdClass();
+        $token->id_token = $idToken;
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, $this->anything());
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('Jane Doe', $this->oAuth->getName());
     }
 
-    public function testErrorMessage(): void
+    public function testGetMail(): void
     {
-        $this->assertEquals('Error occurred', $this->oAuth->errorMessage('Error occurred'));
+        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+        $payload = base64_encode(json_encode(['name' => 'Test User', 'preferred_username' => 'test@company.com']));
+        $signature = 'dummy_signature';
+        $idToken = $header . '.' . $payload . '.' . $signature;
+
+        $token = new stdClass();
+        $token->id_token = $idToken;
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, $this->anything());
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('test@company.com', $this->oAuth->getMail());
+    }
+    public function testSetTokenWithMalformedJWT(): void
+    {
+        $token = new stdClass();
+        $token->id_token = 'invalid-jwt';
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenWithIncompleteJWTParts(): void
+    {
+        $token = new stdClass();
+        $token->id_token = 'header.payload'; // Missing signature part
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenWithInvalidBase64(): void
+    {
+        $token = new stdClass();
+        $token->id_token = 'header.invalid-base64!!!.signature';
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenWithMalformedJSON(): void
+    {
+        $header = base64_encode('valid-header');
+        $payload = base64_encode('invalid-json{malformed}');
+        $signature = 'dummy_signature';
+        $token = new stdClass();
+        $token->id_token = $header . '.' . $payload . '.' . $signature;
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, '{}');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testGetNameWhenNotSet(): void
+    {
+        $this->assertEquals('', $this->oAuth->getName());
+    }
+
+    public function testGetMailWhenNotSet(): void
+    {
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testGetNameWithEmptyToken(): void
+    {
+        $token = new stdClass();
+        $token->id_token = 'invalid';
+
+        $this->mockSession->expects($this->once())
+            ->method('set');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+    }
+
+    public function testGetMailWithEmptyToken(): void
+    {
+        $token = new stdClass();
+        $token->id_token = 'invalid';
+
+        $this->mockSession->expects($this->once())
+            ->method('set');
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getMail());
+    }
+
+    public function testSetTokenWithValidJWTButMissingFields(): void
+    {
+        $header = base64_encode(json_encode(['alg' => 'HS256', 'typ' => 'JWT']));
+        $payload = base64_encode(json_encode(['sub' => '12345'])); // Missing name and preferred_username
+        $signature = 'dummy_signature';
+        $idToken = $header . '.' . $payload . '.' . $signature;
+
+        $token = new stdClass();
+        $token->id_token = $idToken;
+
+        $this->mockSession->expects($this->once())
+            ->method('set')
+            ->with(EntraIdSession::ENTRA_ID_JWT, $this->anything());
+
+        $this->oAuth->setToken($token);
+        $this->assertEquals('', $this->oAuth->getName());
+        $this->assertEquals('', $this->oAuth->getMail());
     }
 }
