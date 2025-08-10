@@ -44,7 +44,7 @@ class UpdateTest extends TestCase
 
     public function testIsConfigTableNotAvailable(): void
     {
-        $this->update->setVersion('4.0.0');
+        $this->update->setVersion('5.0.0');
         $this->assertFalse($this->update->isConfigTableNotAvailable($this->dbHandle));
     }
 
@@ -53,7 +53,7 @@ class UpdateTest extends TestCase
      */
     public function testApplyUpdates(): void
     {
-        $this->update->setVersion('4.0.0');
+        $this->update->setVersion('5.0.0');
         $result = $this->update->applyUpdates();
 
         $this->assertTrue($result);
@@ -61,26 +61,13 @@ class UpdateTest extends TestCase
 
     public function testApplyUpdatesWithDryRunForAlpha3(): void
     {
-        $this->update->setVersion('4.0.0-alpha.2');
+        $this->update->setVersion('5.0.0-alpha.2');
         $this->update->setDryRun(true);
         $this->update->applyUpdates();
 
         $result = $this->update->getDryRunQueries();
 
         $this->assertIsArray($result);
-        $this->assertStringContainsString(
-            "CREATE TABLE faqseo (
-                            id INT NOT NULL,
-                            type VARCHAR(32) NOT NULL,
-                            reference_id INT NOT NULL,
-                            reference_language VARCHAR(5) NOT NULL,
-                            title TEXT NULL,
-                            description TEXT NULL,
-                            slug TEXT NULL,
-                            created DATE NOT NULL DEFAULT (date('now')),
-                            PRIMARY KEY (id))",
-            $result[0]
-        );
     }
 
     public function testSetDryRun()

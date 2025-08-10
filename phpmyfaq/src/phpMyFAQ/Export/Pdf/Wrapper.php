@@ -258,9 +258,9 @@ class Wrapper extends TCPDF
      */
     private string $currentFont = 'dejavusans';
 
-    private string $customHeader;
+    private string $customHeader = '';
 
-    private string $customFooter;
+    private string $customFooter = '';
 
     /**
      * Constructor.
@@ -439,7 +439,7 @@ class Wrapper extends TCPDF
      */
     public function setCustomFooter(): void
     {
-        $this->customFooter = $this->config->get('main.customPdfFooter');
+        $this->customFooter = $this->config->get('main.customPdfFooter') ?? '';
     }
 
     /**
