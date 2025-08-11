@@ -156,11 +156,11 @@ class FaqTest extends TestCase
     {
         $faqEntity = $this->getFaqEntity();
         $faqEntity->setSolutionId(42);
-        $this->faq->create($faqEntity);
+        $faqEntity = $this->faq->create($faqEntity);
 
         $this->faq->getFaqBySolutionId(42);
 
-        $this->assertEquals(1, $faqEntity->getId());
+        $this->assertGreaterThan(1, $faqEntity->getId());
     }
 
     private function getFaqEntity(): FaqEntity

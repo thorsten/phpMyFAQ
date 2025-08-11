@@ -283,3 +283,4 @@ class AuthWebAuthnTest extends TestCase
         $this->assertEquals('example.com', $result['publicKey']['rp']['id']);
     }
 }
+

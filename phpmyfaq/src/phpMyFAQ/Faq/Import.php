@@ -89,10 +89,10 @@ readonly class Import
                 ->setComment(false)
                 ->setNotes('');
 
-        $faqId = $faq->create($faqEntity);
+        $faqEntity = $faq->create($faqEntity);
 
         $faqMetaData = new MetaData($this->configuration);
-        $faqMetaData->setFaqId($faqId)->setFaqLanguage($languageCode)->setCategories($categories)->save();
+        $faqMetaData->setFaqId($faqEntity->getId())->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return true;
     }
