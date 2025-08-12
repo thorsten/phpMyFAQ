@@ -39,5 +39,6 @@
         <server name="HTTP_HOST" value="localhost" />
         <server name="PHP_AUTH_USER" value="testUser"/>
         <server name="PHP_AUTH_PW" value="testPassword"/>
+        <ini name="memory_limit" value="512M" />
     </php>
 </phpunit>
