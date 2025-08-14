@@ -22,7 +22,6 @@ class UserHelperTest extends TestCase
 
     public function testGetAllUsersForTemplateWithDefaultParameters(): void
     {
-        // Arrange
         $userIds = [1, 2, 3];
 
         $this->userMock
@@ -51,10 +50,8 @@ class UserHelperTest extends TestCase
             ->method('getLogin')
             ->willReturnOnConsecutiveCalls('user1', 'user2', 'user3');
 
-        // Act
         $result = $this->userHelper->getAllUsersForTemplate();
 
-        // Assert
         $expected = [
             ['id' => 1, 'selected' => true, 'displayName' => 'User One', 'login' => 'user1'],
             ['id' => 2, 'selected' => false, 'displayName' => 'User Two', 'login' => 'user2'],
@@ -66,7 +63,6 @@ class UserHelperTest extends TestCase
 
     public function testGetAllUsersForTemplateWithSelectedUser(): void
     {
-        // Arrange
         $userIds = [1, 2, 3];
         $selectedId = 2;
 
@@ -90,18 +86,15 @@ class UserHelperTest extends TestCase
             ->method('getLogin')
             ->willReturnOnConsecutiveCalls('user1', 'user2', 'user3');
 
-        // Act
         $result = $this->userHelper->getAllUsersForTemplate($selectedId);
 
-        // Assert
-        $this->assertTrue($result[1]['selected']); // User 2 should be selected
-        $this->assertFalse($result[0]['selected']); // User 1 should not be selected
-        $this->assertFalse($result[2]['selected']); // User 3 should not be selected
+        $this->assertTrue($result[1]['selected']);
+        $this->assertFalse($result[0]['selected']);
+        $this->assertFalse($result[2]['selected']);
     }
 
     public function testGetAllUsersForTemplateWithAllowBlockedUsers(): void
     {
-        // Arrange
         $userIds = [1, 2];
 
         $this->userMock
@@ -124,17 +117,14 @@ class UserHelperTest extends TestCase
             ->method('getLogin')
             ->willReturnOnConsecutiveCalls('active', 'blocked');
 
-        // Act
         $result = $this->userHelper->getAllUsersForTemplate(1, true);
 
-        // Assert
         $this->assertCount(2, $result);
     }
 
     public function testGetAllUsersForTemplateSkipsInvalidUserId(): void
     {
-        // Arrange
-        $userIds = [1, -1, 2]; // -1 should be skipped
+        $userIds = [1, -1, 2];
 
         $this->userMock
             ->expects($this->once())
@@ -160,10 +150,8 @@ class UserHelperTest extends TestCase
             ->method('getLogin')
             ->willReturnOnConsecutiveCalls('user1', 'user2');
 
-        // Act
         $result = $this->userHelper->getAllUsersForTemplate();
 
-        // Assert
         $this->assertCount(2, $result);
         $this->assertEquals(1, $result[0]['id']);
         $this->assertEquals(2, $result[1]['id']);
@@ -171,16 +159,13 @@ class UserHelperTest extends TestCase
 
     public function testGetAllUsersForTemplateWithEmptyUserList(): void
     {
-        // Arrange
         $this->userMock
             ->expects($this->once())
             ->method('getAllUsers')
             ->willReturn([]);
 
-        // Act
         $result = $this->userHelper->getAllUsersForTemplate();
 
-        // Assert
         $this->assertEmpty($result);
     }
 }
