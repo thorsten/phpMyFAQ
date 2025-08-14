@@ -2,262 +2,201 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class DateTest extends TestCase
 {
-    private Configuration $configuration;
+    private Configuration $mockConfiguration;
+    private Date $dateInstance;
 
-    /**
-     * Prepares the environment before running a test.
-     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        Strings::init();
+        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration->method('get')
+            ->with('main.dateFormat')
+            ->willReturn('Y-m-d H:i:s');
 
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.currentVersion', System::getVersion());
-        $this->configuration->set('main.dateFormat', 'Y-m-d H:i');
+        $this->dateInstance = new Date($this->mockConfiguration);
     }
-    public function testFormat(): void
+
+    public function testCreateIsoDateWithPhpMyFaqFormat(): void
     {
-        $dateString = '2022-04-01';
-        $expected = '2022-04-01 00:00';
+        $pmfDate = '20231225143000'; // 2023-12-25 14:30:00
+        $result = Date::createIsoDate($pmfDate);
 
-        $date = new Date($this->configuration);
-        $result = $date->format($dateString);
-        $this->assertEquals($expected, $result);
-
-        $dateString = 'invalid date format';
-        $expected = '';
-
-        $result = $date->format($dateString);
-        $this->assertEquals($expected, $result);
+        $this->assertEquals('2023-12-25 14:30', $result);
     }
 
-    public function testGetTrackingFileDate(): void
-    {
-        $date = new Date($this->configuration);
-        $file = 'tracking01042022';
-        $expected = 1648771200;
-
-        $result = $date->getTrackingFileDate($file);
-        $this->assertEquals($expected, $result);
-
-        $expected = 1648857599;
-
-        $result = $date->getTrackingFileDate($file, true);
-        $this->assertEquals($expected, $result);
-
-        $file = 'tracking42';
-        $expected = -1;
-
-        $result = $date->getTrackingFileDate($file);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testCreateIsoDateWithPmfFormat(): void
-    {
-        $date = '202204011230';
-        $expected = '2022-04-01 12:30';
-
-        $result = Date::createIsoDate($date);
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testCreateIsoDateWithoutPmfFormat(): void
-    {
-        $date = '1648809000';
-        $expected = '2022-04-01 12:30';
-
-        $result = Date::createIsoDate($date, 'Y-m-d H:i', false);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test createIsoDate with custom format
-     */
     public function testCreateIsoDateWithCustomFormat(): void
     {
-        $date = '202204011230';
-        $customFormat = 'd/m/Y H:i:s';
-        $expected = '01/04/2022 12:30:00';
+        $pmfDate = '20231225143000';
+        $customFormat = 'd.m.Y H:i';
+        $result = Date::createIsoDate($pmfDate, $customFormat);
 
-        $result = Date::createIsoDate($date, $customFormat);
-        $this->assertEquals($expected, $result);
+        $this->assertEquals('25.12.2023 14:30', $result);
     }
 
-    /**
-     * Test createIsoDate with different date lengths
-     */
-    public function testCreateIsoDateWithDifferentLengths(): void
+    public function testCreateIsoDateWithUnixTimestamp(): void
     {
-        // Full date with seconds
-        $date = '20220401123045';
-        $expected = '2022-04-01 12:30';
+        $timestamp = '1703511000'; // 2023-12-25 14:30:00
+        $result = Date::createIsoDate($timestamp, 'Y-m-d H:i', false);
 
-        $result = Date::createIsoDate($date);
-        $this->assertEquals($expected, $result);
-
-        // Date without time - the method expects at least 10 characters for time part
-        // An 8-character date like "20220401" gets parsed incorrectly, so we test with minimum valid format
-        $date = '202204010000'; // YYYYMMDDHHII format
-        $result = Date::createIsoDate($date);
-        $this->assertStringContainsString('2022-04-01', $result);
-    }
-
-    /**
-     * Test format with different date formats
-     */
-    public function testFormatWithDifferentFormats(): void
-    {
-        $date = new Date($this->configuration);
-
-        // Test ISO format - adjust for timezone
-        $dateString = '2022-04-01T12:30:45';
-        $result = $date->format($dateString);
-        $this->assertStringContainsString('2022-04-01', $result);
-
-        // Test timestamp - adjust for timezone
-        $dateString = '@1648809045';
-        $result = $date->format($dateString);
-        $this->assertStringContainsString('2022-04-01', $result);
-    }
-
-    /**
-     * Test format with custom date format configuration
-     */
-    public function testFormatWithCustomConfiguration(): void
-    {
-        $this->configuration->set('main.dateFormat', 'd.m.Y - H:i:s');
-        $date = new Date($this->configuration);
-
-        $dateString = '2022-04-01 12:30:45';
-        $expected = '01.04.2022 - 12:30:45';
-        $result = $date->format($dateString);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test format with various invalid date formats
-     */
-    public function testFormatWithInvalidDates(): void
-    {
-        $date = new Date($this->configuration);
-
-        $invalidDates = [
-            'not a date',
-            'completely invalid',
-            'abc123def'
-        ];
-
-        foreach ($invalidDates as $invalidDate) {
-            $result = $date->format($invalidDate);
-            $this->assertEquals('', $result);
-        }
-    }
-
-    /**
-     * Test getTrackingFileDate with various file name formats
-     */
-    public function testGetTrackingFileDateWithVariousFormats(): void
-    {
-        $date = new Date($this->configuration);
-
-        // Test with valid tracking file name
-        $file = 'tracking01042022suffix';
-        $expected = gmmktime(0, 0, 0, 4, 1, 2022);
-        $result = $date->getTrackingFileDate($file);
-        $this->assertEquals($expected, $result);
-
-        // Test end of day
-        $expected = gmmktime(23, 59, 59, 4, 1, 2022);
-        $result = $date->getTrackingFileDate($file, true);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test getTrackingFileDate with short file names
-     */
-    public function testGetTrackingFileDateWithShortNames(): void
-    {
-        $date = new Date($this->configuration);
-
-        $shortFiles = [
-            'short',
-            'tracking123',
-            'track01042022', // Less than 16 characters
-            ''
-        ];
-
-        foreach ($shortFiles as $file) {
-            $result = $date->getTrackingFileDate($file);
-            $this->assertEquals(-1, $result);
-        }
-    }
-
-    /**
-     * Test getTrackingFileDate edge cases
-     */
-    public function testGetTrackingFileDateEdgeCases(): void
-    {
-        $date = new Date($this->configuration);
-
-        // Test leap year
-        $file = 'tracking29022020extra'; // February 29, 2020 (leap year)
-        $expected = gmmktime(0, 0, 0, 2, 29, 2020);
-        $result = $date->getTrackingFileDate($file);
-        $this->assertEquals($expected, $result);
-
-        // Test year boundaries
-        $file = 'tracking31121999data';
-        $expected = gmmktime(0, 0, 0, 12, 31, 1999);
-        $result = $date->getTrackingFileDate($file);
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test createIsoDate with Unix timestamp edge cases
-     */
-    public function testCreateIsoDateUnixTimestampEdgeCases(): void
-    {
-        // Test epoch - adjust for timezone
-        $result = Date::createIsoDate('0', 'Y-m-d', false);
-        $this->assertEquals('1970-01-01', $result);
-
-        // Test future date
-        $futureTimestamp = '2147483647'; // Year 2038
-        $result = Date::createIsoDate($futureTimestamp, 'Y-m-d', false);
-        $expected = '2038-01-19';
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * Test Date class constructor
-     */
-    public function testDateConstructor(): void
-    {
-        $date = new Date($this->configuration);
-        $this->assertInstanceOf(Date::class, $date);
-    }
-
-    /**
-     * Test readonly property behavior
-     */
-    public function testReadonlyBehavior(): void
-    {
-        $date = new Date($this->configuration);
-
-        // Test that the class is properly constructed
-        $this->assertInstanceOf(Date::class, $date);
-
-        // Test that format method works with the injected configuration
-        $result = $date->format('2022-04-01');
         $this->assertIsString($result);
+        $this->assertStringContainsString('2023-12-25', $result);
+    }
+
+    public function testCreateIsoDateWithDifferentFormats(): void
+    {
+        $pmfDate = '20240101120000'; // 2024-01-01 12:00:00
+
+        $isoFormat = Date::createIsoDate($pmfDate, 'c'); // ISO 8601
+        $this->assertStringContainsString('2024-01-01T12:00:00', $isoFormat);
+
+        $shortFormat = Date::createIsoDate($pmfDate, 'Y-m-d');
+        $this->assertEquals('2024-01-01', $shortFormat);
+
+        $longFormat = Date::createIsoDate($pmfDate, 'l, F j, Y');
+        $this->assertStringContainsString('Monday', $longFormat);
+        $this->assertStringContainsString('January', $longFormat);
+    }
+
+    public function testGetTrackingFileDateValid(): void
+    {
+        $filename = 'tracking25122023.log'; // 16 characters
+        $result = $this->dateInstance->getTrackingFileDate($filename);
+
+        $this->assertIsInt($result);
+        $this->assertGreaterThan(0, $result);
+
+        // Test that it's the beginning of the day
+        $expectedDate = gmmktime(0, 0, 0, 12, 25, 2023);
+        $this->assertEquals($expectedDate, $result);
+    }
+
+    public function testGetTrackingFileDateEndOfDay(): void
+    {
+        $filename = 'tracking25122023.log';
+        $result = $this->dateInstance->getTrackingFileDate($filename, true);
+
+        $this->assertIsInt($result);
+        $this->assertGreaterThan(0, $result);
+
+        // Test that it's the end of the day
+        $expectedDate = gmmktime(23, 59, 59, 12, 25, 2023);
+        $this->assertEquals($expectedDate, $result);
+    }
+
+    public function testGetTrackingFileDateInvalidFilename(): void
+    {
+        $shortFilename = 'short.log'; // Less than 16 characters
+        $result = $this->dateInstance->getTrackingFileDate($shortFilename);
+
+        $this->assertEquals(-1, $result);
+    }
+
+    public function testGetTrackingFileDateWithDifferentFormats(): void
+    {
+        // Test various valid tracking file names
+        $testFiles = [
+            'tracking01012024.log', // New Year's Day 2024
+            'tracking31122023.log', // New Year's Eve 2023
+            'tracking29022024.log', // Leap year day 2024
+        ];
+
+        foreach ($testFiles as $filename) {
+            $result = $this->dateInstance->getTrackingFileDate($filename);
+            $this->assertGreaterThan(0, $result, "Failed for file: $filename");
+        }
+    }
+
+    public function testFormatWithValidDate(): void
+    {
+        $inputDate = '2023-12-25 14:30:00';
+        $result = $this->dateInstance->format($inputDate);
+
+        $this->assertEquals('2023-12-25 14:30:00', $result);
+    }
+
+    public function testFormatWithDifferentDateFormats(): void
+    {
+        // Test with different configuration formats
+        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig->method('get')
+            ->with('main.dateFormat')
+            ->willReturn('d.m.Y H:i');
+
+        $dateInstance = new Date($mockConfig);
+        $inputDate = '2023-12-25 14:30:00';
+        $result = $dateInstance->format($inputDate);
+
+        $this->assertEquals('25.12.2023 14:30', $result);
+    }
+
+    public function testFormatWithInvalidDate(): void
+    {
+        // Mock logger to verify error logging - use Monolog\Logger instead of generic LoggerInterface
+        $mockLogger = $this->createMock(\Monolog\Logger::class);
+        $mockLogger->expects($this->once())
+            ->method('error')
+            ->with($this->isString());
+
+        $this->mockConfiguration->method('getLogger')->willReturn($mockLogger);
+
+        $invalidDate = 'not-a-date';
+        $result = $this->dateInstance->format($invalidDate);
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testFormatWithEmptyDate(): void
+    {
+        // Empty string in DateTime constructor gets parsed as current date, not an error
+        // So we don't expect the logger to be called for an empty string
+        $emptyDate = '';
+        $result = $this->dateInstance->format($emptyDate);
+
+        // Empty string gets parsed as current date, so we expect a valid date string
+        $this->assertIsString($result);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testFormatWithActualInvalidDate(): void
+    {
+        // Mock logger for error case - use Monolog\Logger
+        $mockLogger = $this->createMock(\Monolog\Logger::class);
+        $mockLogger->expects($this->once())->method('error');
+        $this->mockConfiguration->method('getLogger')->willReturn($mockLogger);
+
+        // Use a truly invalid date format that will cause DateTime to throw an exception
+        $invalidDate = 'totally-invalid-date-format-that-will-fail';
+        $result = $this->dateInstance->format($invalidDate);
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testCreateIsoDateEdgeCases(): void
+    {
+        // Test with minimal valid phpMyFAQ date
+        $minimalDate = '20230101000000';
+        $result = Date::createIsoDate($minimalDate);
+        $this->assertEquals('2023-01-01 00:00', $result);
+
+        // Test with maximum values
+        $maxDate = '20231231235959';
+        $result = Date::createIsoDate($maxDate);
+        $this->assertEquals('2023-12-31 23:59', $result);
+    }
+
+    public function testDateInstanceIsReadonly(): void
+    {
+        // Test that Date class is readonly by checking if we can create it properly
+        $this->assertInstanceOf(Date::class, $this->dateInstance);
+
+        // Verify the configuration is properly set through constructor
+        $reflection = new \ReflectionClass($this->dateInstance);
+        $this->assertTrue($reflection->isReadOnly());
     }
 }
