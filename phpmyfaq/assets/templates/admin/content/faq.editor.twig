@@ -358,7 +358,11 @@
                         {{ ad_entry_restricted_users }}
                       </label>
                       <select name="restricted_users" id="selected-user" class="form-select">
-                        {{ userPermissionOptions | raw }}
+                        {% for user in userSelection %}
+                          <option value="{{ user.id }}"{% if user.selected %} selected{% endif %}>
+                            {{ user.displayName|e }} ({{ user.login|e }})
+                          </option>
+                        {% endfor %}
                       </select>
                     </div>
                   </div>

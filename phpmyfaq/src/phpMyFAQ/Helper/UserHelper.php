@@ -37,28 +37,30 @@ readonly class UserHelper
     /**
      * Get all users in <option> tags.
      *
-     * @param int  $id Selected user ID
+     * @param int  $selectedId Selected user ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g., in admin
+     * @return array Array of users with 'id', 'selected', 'displayName', and 'login' keys
      */
-    public function getAllUserOptions(int $id = 1, bool $allowBlockedUsers = false): string
+    public function getAllUsersForTemplate(int $selectedId = 1, bool $allowBlockedUsers = false): array
     {
-        $options = '';
+        $users = [];
         $user = clone $this->user;
-        $allUsers = $user->getAllUsers(true, $allowBlockedUsers);
+        $allUserIds = $user->getAllUsers(true, $allowBlockedUsers);
 
-        foreach ($allUsers as $allUser) {
-            if (-1 !== $allUser) {
-                $user->getUserById($allUser);
-                $options .= sprintf(
-                    '<option value="%d" %s>%s (%s)</option>',
-                    $allUser,
-                    (($allUser === $id) ? 'selected' : ''),
-                    Strings::htmlentities($user->getUserData('display_name')),
-                    $user->getLogin()
-                );
+        foreach ($allUserIds as $userId) {
+            if ($userId === -1) {
+                continue;
             }
+
+            $user->getUserById($userId);
+            $users[] = [
+                'id' => $userId,
+                'selected' => $userId === $selectedId,
+                'displayName' => $user->getUserData('display_name'),
+                'login' => $user->getLogin(),
+            ];
         }
 
-        return $options;
+        return $users;
     }
 }

@@ -394,7 +394,7 @@ class CategoryController extends AbstractAdministrationController
                 'categoryActive' => 1 === (int)$categoryEntity->getActive() ? 'checked' : '',
                 'categoryShowHome' => 1 === (int)$categoryEntity->getShowHome() ? 'checked' : '',
                 'categoryImageReset' => Translation::get('msgCategoryImageReset'),
-                'categoryOwnerOptions' => $userHelper->getAllUserOptions($categoryEntity->getUserId()),
+                'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
                 'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
                 'allGroupsOptions' => $allGroupsOptions,
                 'allGroups' => $allGroups ? 'checked' : '',
@@ -405,7 +405,6 @@ class CategoryController extends AbstractAdministrationController
                 'allUsers' => $allUsers ? 'checked' : '',
                 'restrictedUsers' => $restrictedUsers ? 'checked' : '',
                 'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
-                'allUsersOptions' => $userHelper->getAllUserOptions($categoryEntity->getUserId()),
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
@@ -530,7 +529,8 @@ class CategoryController extends AbstractAdministrationController
                 'langToTranslate' => $category->getCategoryLanguagesToTranslate($categoryId, $translateTo),
                 'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
                 'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
-                'userOptions' => $userHelper->getAllUserOptions((int) $category->categoryName[$categoryId]['user_id']),
+                'userSelection' =>
+                    $userHelper->getAllUsersForTemplate((int) $category->categoryName[$categoryId]['user_id']),
                 'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
                 'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
                 'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg')
@@ -745,7 +745,7 @@ class CategoryController extends AbstractAdministrationController
 
         return [
             'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
-            'userOptions' => $userHelper->getAllUserOptions(),
+            'userSelection' => $userHelper->getAllUsersForTemplate(),
             'permLevel' => $this->configuration->get('security.permLevel'),
             'msgAccessAllUsers' => Translation::get('msgAccessAllUsers'),
             'ad_entry_restricted_users' => Translation::get('ad_entry_restricted_users'),

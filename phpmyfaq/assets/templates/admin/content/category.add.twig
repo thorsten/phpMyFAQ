@@ -87,7 +87,11 @@
         </label>
         <div class="col-lg-4">
           <select name="user_id" id="user_id" class="form-select">
-            {{ userOptions|raw }}
+            {% for user in userSelection %}
+              <option value="{{ user.id }}"{% if user.selected %} selected{% endif %}>
+                {{ user.displayName|e }} ({{ user.login|e }})
+              </option>
+            {% endfor %}
           </select>
         </div>
       </div>
@@ -155,7 +159,11 @@
               </label>
             </div>
             <select name="restricted_users" id="restricted_users" class="form-select">
-              {{ userOptions|raw }}
+              {% for user in userSelection %}
+                <option value="{{ user.id }}"{% if user.selected %} selected{% endif %}>
+                  {{ user.displayName|e }} ({{ user.login|e }})
+                </option>
+              {% endfor %}
             </select>
           </div>
         </div>

@@ -147,7 +147,7 @@ class FaqController extends AbstractAdministrationController
                     $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
                 'allUsers' => true,
                 'restrictedUsers' => false,
-                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
                 'changelogs' => [],
                 'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),
@@ -281,7 +281,7 @@ class FaqController extends AbstractAdministrationController
                     $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
                 'allUsers' => $allUsers,
                 'restrictedUsers' => $restrictedUsers,
-                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
                 'changelogs' => $this->container->get('phpmyfaq.admin.changelog')->getByFaqId($faqId),
                 'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),
@@ -357,7 +357,7 @@ class FaqController extends AbstractAdministrationController
                     $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
                 'allUsers' => true,
                 'restrictedUsers' => false,
-                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
                 'changelogs' => [],
                 'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),
@@ -433,7 +433,7 @@ class FaqController extends AbstractAdministrationController
                     $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
                 'allUsers' => true,
                 'restrictedUsers' => false,
-                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
                 'changelogs' => [],
                 'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),
@@ -523,7 +523,7 @@ class FaqController extends AbstractAdministrationController
                     $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
                 'allUsers' => true,
                 'restrictedUsers' => false,
-                'userPermissionOptions' => $userHelper->getAllUserOptions(-1, true),
+                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
                 'changelogs' => [],
                 'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                     $this->currentUser->getUserId(),

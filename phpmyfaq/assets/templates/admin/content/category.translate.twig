@@ -51,7 +51,11 @@
           </label>
           <div class="col-lg-4">
             <select name="user_id" class="form-control">
-              {{ userOptions|raw }}
+              {% for user in userSelection %}
+                <option value="{{ user.id }}"{% if user.selected %} selected{% endif %}>
+                  {{ user.displayName|e }} ({{ user.login|e }})
+                </option>
+              {% endfor %}
             </select>
           </div>
         </div>
