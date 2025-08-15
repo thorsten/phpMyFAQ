@@ -191,13 +191,22 @@ readonly class StatisticsHelper
     public function renderDaySelector(): string
     {
         $request = Request::createFromGlobals();
+        $trackingDates = $this->getAllTrackingDates();
         $renderedHtml = '';
-        foreach ($this->getAllTrackingDates() as $trackingDate) {
+
+        if (empty($trackingDates)) {
+            $renderedHtml .= sprintf(
+                '<option value="" selected>%s</option>',
+                Translation::get('ad_stat_choose')
+            );
+            return $renderedHtml;
+        }
+
+        foreach ($trackingDates as $trackingDate) {
             $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
             if (date('Y-m-d', $trackingDate) === date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
                 $renderedHtml .= ' selected';
             }
-
             $renderedHtml .= '>';
             $renderedHtml .= $this->date->format(date('Y-m-d H:i', $trackingDate));
             $renderedHtml .= "</option>\n";

@@ -58,7 +58,7 @@ use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Setup\EnvironmentConfigurator;

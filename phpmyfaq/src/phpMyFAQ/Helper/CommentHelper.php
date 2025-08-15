@@ -20,7 +20,7 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Date;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Mail;
-use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;

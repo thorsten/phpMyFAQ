@@ -41,7 +41,7 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Seo;
-use phpMyFAQ\Services;
+use phpMyFAQ\Service;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;

@@ -24,7 +24,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\LanguageHelper;
-use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
 use phpMyFAQ\Twig\TwigWrapper;

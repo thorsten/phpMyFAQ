@@ -15,7 +15,7 @@
  * @since     2013-01-14
  */
 
-namespace phpMyFAQ\Services;
+namespace phpMyFAQ\Service;
 
 /**
  * Class Gravatar

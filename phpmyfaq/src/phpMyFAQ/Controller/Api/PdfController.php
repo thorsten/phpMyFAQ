@@ -22,7 +22,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Services;
+use phpMyFAQ\Service;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
