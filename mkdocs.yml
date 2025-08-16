@@ -12,4 +12,5 @@ nav:
   - 5. Manage phpMyFAQ: 'administration.md'
   - 6. Developer: 'development.md'
   - 7. Plugins: 'plugins.md'
-  - 8. Thank you!: 'thank-you.md'
+  - 8. MCP Server: 'mcp-server.md'
+  - 9. Thank you!: 'thank-you.md'

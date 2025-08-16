@@ -51,6 +51,8 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Plugin\PluginManager;
@@ -59,6 +61,8 @@ use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Service\Gravatar;
+use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
+use phpMyFAQ\Command\McpServerCommand;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
@@ -383,5 +387,12 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.visits', Visits::class)
         ->args([
             new Reference('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.service.mcp-server', PhpMyFaqMcpServer::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.search'),
+            new Reference('phpmyfaq.faq')
         ]);
 };

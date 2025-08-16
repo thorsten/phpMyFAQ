@@ -23,6 +23,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for FrankenPHP (Thorsten)
 - added experimental support for OpenSearch (Thorsten)
 - added experimental support for LDAP group support (Thorsten)
+- added experimental MCP Server (Thorsten)
 - added experimental update via command line (Thorsten)
 - added experimental support for .env files (Thorsten)
 - improved online update feature (Thorsten)

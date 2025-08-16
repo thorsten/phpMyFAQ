@@ -4,9 +4,13 @@
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
 
+use phpMyFAQ\Command\McpServerCommand;
 use phpMyFAQ\Translation;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
 use phpMyFAQ\Command\UpdateCommand;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 try {
     Translation::create()
@@ -18,6 +22,19 @@ try {
     echo $exception->getMessage();
 }
 
+//
+// Service Containers
+//
+$container = new ContainerBuilder();
+$loader = new PhpFileLoader($container, new FileLocator(__DIR__));
+try {
+    $loader->load('../phpmyfaq/src/services.php');
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+
+
 $application = new Application();
 $application->add(new UpdateCommand());
+$application->add(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
 $application->run();

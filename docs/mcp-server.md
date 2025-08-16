@@ -1,0 +1,82 @@
+# 8. phpMyFAQ MCP Server
+
+This document describes the Model Context Protocol (MCP) server implementation for phpMyFAQ.
+
+## 8.1 Overview
+
+The phpMyFAQ MCP Server allows Large Language Models (LLMs) to query the phpMyFAQ installation through the Model 
+Context Protocol. This enables AI assistants to provide contextually relevant answers based on your FAQ.
+
+## 8.2 Usage
+
+### 8.2.1 Starting the Server
+
+```bash
+# Show server information
+php bin/console phpmyfaq:mcp:server --info
+
+# Start the MCP server
+php bin/console phpmyfaq:mcp:server
+```
+
+### 8.2.2 Available Tools
+
+#### faq_search
+
+Search through the phpMyFAQ knowledge base to find relevant FAQ entries.
+
+**Parameters:**
+- `query` (required): The search query or question
+- `category_id` (optional): Limit search to a specific category
+- `limit` (optional): Maximum results to return (default: 10, max: 50)
+- `all_languages` (optional): Search in all languages (default: false)
+
+**Example Usage:**
+```json
+{
+  "tool": "faq_search",
+  "arguments": {
+    "query": "How to reset password?",
+    "limit": 5,
+    "category_id": 1
+  }
+}
+```
+
+**Response Format:**
+The tool returns formatted text with FAQ entries including:
+- Question and answer content
+- FAQ ID and language
+- Relevance score
+- Direct URL to the FAQ entry
+
+## 8.3 Integration with LLM Clients
+
+Once the MCP server is running, LLM clients can connect to it and use the `faq_search` tool to query your phpMyFAQ 
+database. The server follows the MCP specification and provides:
+
+- Tool discovery via `tools/list`
+- Tool execution via `tools/call`
+
+## 8.4 Configuration
+
+No additional configuration is required beyond having a working phpMyFAQ installation.
+
+## 8.5 Error Handling
+
+The server includes comprehensive error handling:
+- Invalid search queries return descriptive error messages
+- Database connection issues are logged and reported
+- Malformed requests are handled gracefully
+
+## 8.6 Security Considerations
+
+- The MCP server only provides read access to publicly available FAQ content
+- No authentication bypass or privileged access is provided
+- Search results respect phpMyFAQ's existing visibility rules
+
+## 8.7 Troubleshooting
+
+### 8.7.1 Debugging
+
+Enable debug logging by checking the Monolog output when running the server. The logger outputs to stdout by default.

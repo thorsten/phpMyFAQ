@@ -1,4 +1,4 @@
-# 8. Thank you!
+# 9. Thank you!
 
 Thank you for using phpMyFAQ! :-)
 
