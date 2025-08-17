@@ -70,7 +70,7 @@ class Gravatar
     /**
      * Returns the base URL
      */
-    public function getUrl(): string
+    private function getUrl(): string
     {
         return $this->httpBaseUrl;
     }
@@ -80,7 +80,7 @@ class Gravatar
      *
      * @param string $email Email address
      */
-    public static function getHash(string $email): string
+    private static function getHash(string $email): string
     {
         return md5($email);
     }

@@ -392,6 +392,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set('phpmyfaq.service.mcp-server', PhpMyFaqMcpServer::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.language'),
             new Reference('phpmyfaq.search'),
             new Reference('phpmyfaq.faq')
         ]);

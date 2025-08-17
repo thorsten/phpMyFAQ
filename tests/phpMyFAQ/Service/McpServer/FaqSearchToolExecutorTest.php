@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Service\McpServer;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search;
@@ -35,6 +36,9 @@ class FaqSearchToolExecutorTest extends TestCase
         $this->assertSame('faq_search', $this->executor->getName());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCallWithEmptyQueryReturnsError(): void
     {
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => '']);
@@ -44,6 +48,9 @@ class FaqSearchToolExecutorTest extends TestCase
         $this->assertStringContainsString('Search query cannot be empty', $result->result);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCallWithNoResults(): void
     {
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'test']);
@@ -51,9 +58,17 @@ class FaqSearchToolExecutorTest extends TestCase
 
         $result = $this->executor->call($toolCall);
 
-        $this->assertStringContainsString('No FAQ entries found', $result->result);
+        $jsonData = json_decode($result->result, true);
+        $this->assertIsArray($jsonData);
+        $this->assertArrayHasKey('results', $jsonData);
+        $this->assertArrayHasKey('total_found', $jsonData);
+        $this->assertEmpty($jsonData['results']);
+        $this->assertSame(0, $jsonData['total_found']);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCallWithResults(): void
     {
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'test', 'limit' => 1]);
@@ -70,15 +85,24 @@ class FaqSearchToolExecutorTest extends TestCase
 
         $result = $this->executor->call($toolCall);
 
-        $this->assertStringContainsString('Found 1 relevant FAQ entries', $result->result);
-        $this->assertStringContainsString('What is phpMyFAQ?', $result->result);
-        $this->assertStringContainsString('https://example.com/index.php?action=faq&cat=0&id=42&artlang=en', $result->result);
+        $jsonData = json_decode($result->result, true);
+        $this->assertIsArray($jsonData);
+        $this->assertArrayHasKey('results', $jsonData);
+        $this->assertArrayHasKey('total_found', $jsonData);
+        $this->assertSame(1, $jsonData['total_found']);
+        $this->assertCount(1, $jsonData['results']);
+        $this->assertSame(42, $jsonData['results'][0]['id']);
+        $this->assertSame('What is phpMyFAQ?', $jsonData['results'][0]['question']);
+        $this->assertStringContainsString(
+            'https://example.com/index.php?action=faq&cat=0&id=42&artlang=en',
+            $jsonData['results'][0]['url']
+        );
     }
 
     public function testCallWithException(): void
     {
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'test']);
-        $this->searchMock->method('search')->willThrowException(new \Exception('DB error'));
+        $this->searchMock->method('search')->willThrowException(new Exception('DB error'));
 
         $result = $this->executor->call($toolCall);
 

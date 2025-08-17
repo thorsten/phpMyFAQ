@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Service\McpServer;
 
 use Exception;
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Search;
@@ -47,6 +48,9 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
         return 'faq_search';
     }
 
+    /**
+     * @throws Exception
+     */
     public function call(ToolCall $input): ToolCallResult
     {
         $query = $input->arguments['query'] ?? '';
@@ -55,13 +59,18 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
         $allLanguages = $input->arguments['all_languages'] ?? false;
 
         if (empty($query)) {
-            return new ToolCallResult(
-                'Error: Search query cannot be empty.',
-                false
-            );
+            return new ToolCallResult('Error: Search query cannot be empty.', 'text', 'application/json');
         }
 
         try {
+            $this->faq->setUser(-1);
+            $this->faq->setGroups([-1]);
+
+            // Set the category class
+            $category = new Category($this->configuration, [-1]);
+            $category->setUser(-1);
+            $this->search->setCategory($category);
+
             // Set category filter if provided
             if ($categoryId !== null) {
                 $this->search->setCategoryId((int) $categoryId);
@@ -70,75 +79,60 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
             // Perform the search
             $searchResults = $this->search->search($query, (bool) $allLanguages);
 
-            // Limit results
-            $searchResults = array_slice($searchResults, 0, (int) $limit);
-
             if (empty($searchResults)) {
-                return new ToolCallResult(
-                    'No FAQ entries found for the given query.',
-                    true
-                );
+                $emptyResult = $this->formatResultsAsJson([]);
+                return new ToolCallResult($emptyResult, 'text', 'application/json');
             }
 
             // Format the results
-            $formattedResults = [];
+            $validResults = [];
             foreach ($searchResults as $result) {
-                $faqId = $result->id;
-                $faqLanguage = $result->lang;
+                $this->configuration->getLogger()->info(var_export($result, true));
 
-                // Get the full FAQ content
-                $faqData = $this->faq->getFaqResult($faqId, $faqLanguage, null, false);
-
-                if ($faqData) {
-                    $formattedResults[] = [
-                        'id' => $faqId,
-                        'language' => $faqLanguage,
-                        'question' => $result->question ?? '',
-                        'answer' => $result->answer ?? '',
-                        'category_id' => $result->category_id ?? null,
-                        'relevance_score' => $result->score ?? 0.0,
-                        'url' => $this->buildFaqUrl($faqId, $faqLanguage),
-                    ];
-                }
+                $validResults[] = [
+                    'id' => $result->id,
+                    'language' => $result->lang,
+                    'question' => $result->question ?? '',
+                    'answer' => $result->answer ?? '',
+                    'category_id' => $result->category_id ?? null,
+                    'relevance_score' => $result->score ?? 0.0,
+                    'url' => $this->buildFaqUrl($result->id, $result->lang),
+                ];
             }
 
-            $resultText = $this->formatResultsAsText($formattedResults);
+            // Limit results
+            $limitedResults = array_slice($validResults, 0, (int) $limit);
 
-            return new ToolCallResult($resultText, true);
+            if (empty($limitedResults)) {
+                return new ToolCallResult(
+                    'No accessible FAQ entries found for the given query.',
+                    'text',
+                    'application/json'
+                );
+            }
+
+            $resultJson = $this->formatResultsAsJson($limitedResults);
+            return new ToolCallResult($resultJson, 'text', 'application/json');
         } catch (Exception $e) {
-            return new ToolCallResult(
-                'Error searching FAQ database: ' . $e->getMessage(),
-                false
-            );
+            return new ToolCallResult('Error searching FAQ database: ' . $e->getMessage(), 'text', 'application/json');
         }
     }
 
-    private function formatResultsAsText(array $results): string
+    private function formatResultsAsJson(array $results): string
     {
         if (empty($results)) {
-            return 'No results found.';
+            return json_encode([
+                'results' => [],
+                'total_found' => 0
+            ]);
         }
 
-        $text = "Found " . count($results) . " relevant FAQ entries:\n\n";
+        $jsonData = [
+            'results' => $results,
+            'total_found' => count($results)
+        ];
 
-        foreach ($results as $index => $result) {
-            $text .= sprintf(
-                "**FAQ #%d** (ID: %d, Language: %s)\n" .
-                "**Question:** %s\n" .
-                "**Answer:** %s\n" .
-                "**URL:** %s\n" .
-                "**Relevance Score:** %.2f\n\n",
-                $index + 1,
-                $result['id'],
-                $result['language'],
-                strip_tags($result['question']),
-                strip_tags($result['answer']),
-                $result['url'],
-                $result['relevance_score']
-            );
-        }
-
-        return $text;
+        return json_encode($jsonData, JSON_PRETTY_PRINT);
     }
 
     private function buildFaqUrl(int $faqId, string $language): string

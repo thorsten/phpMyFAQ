@@ -19,6 +19,7 @@ namespace phpMyFAQ\Service\McpServer;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
 use phpMyFAQ\Search;
 use Symfony\AI\McpSdk\Capability\ToolChain;
 use Symfony\AI\McpSdk\Message\Factory;
@@ -48,9 +49,17 @@ class PhpMyFaqMcpServer
 
     public function __construct(
         private readonly Configuration $configuration,
+        private readonly Language $language,
         private readonly Search $search,
         private readonly Faq $faq
     ) {
+
+        $language->setLanguage(
+            $this->configuration->get('main.languageDetection'),
+            $this->configuration->get('main.language')
+        );
+        $this->configuration->setLanguage($language);
+
         $this->initializeServer();
     }
 

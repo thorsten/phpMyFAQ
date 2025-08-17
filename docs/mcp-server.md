@@ -58,6 +58,30 @@ database. The server follows the MCP specification and provides:
 - Tool discovery via `tools/list`
 - Tool execution via `tools/call`
 
+### 8.3.1 Example with MCP Inspector
+
+To test the server, you can use the MCP Inspector tool:
+
+```bash
+npx @modelcontextprotocol/inspector php bin/console phpmyfaq:mcp:server
+```
+
+You should see something like the following output:
+
+```bash
+Starting MCP inspector...
+⚙️ Proxy server listening on localhost:6277
+🔑 Session token: 428d7f0d505ea087fda1ef9005fbec76ade6cbdfd6f98a93c315b6207d4ac82a
+   Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
+
+🚀 MCP Inspector is up and running at:
+   http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=428d7f0d505ea087fda1ef9005fbec76ade6cbdfd6f98a93c315b6207d4ac82a
+
+🌐 Opening browser...
+```
+
+You can then access the MCP Inspector at the provided URL to interact with the server and test the `faq_search` tool.
+
 ## 8.4 Configuration
 
 No additional configuration is required beyond having a working phpMyFAQ installation.

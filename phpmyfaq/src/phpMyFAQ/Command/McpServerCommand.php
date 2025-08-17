@@ -17,6 +17,7 @@
 
 namespace phpMyFAQ\Command;
 
+use Exception;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -75,7 +76,7 @@ class McpServerCommand extends Command
         try {
             $this->mcpServer->runConsole($input, $output);
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->error('Failed to start MCP server: ' . $e->getMessage());
             return Command::FAILURE;
         }
