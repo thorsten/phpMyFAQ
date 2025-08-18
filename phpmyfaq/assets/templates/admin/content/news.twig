@@ -19,14 +19,14 @@
             {{ ad_news_header }}
           </label>
           <div class="col-9">
-            <input class="form-control" type="text" name="newsheader" id="newsheader">
+            <input class="form-control" type="text" name="newsheader" id="newsheader" required>
           </div>
         </div>
 
         <div class="row mb-2">
           <label class="col-3 col-form-label" for="news">{{ ad_news_text }}:</label>
           <div class="col-9">
-            <textarea rows="5" class="form-control" id="editor"></textarea>
+            <textarea rows="5" class="form-control" id="editor" required></textarea>
           </div>
         </div>
 
@@ -35,7 +35,7 @@
             {{ ad_news_author_name }}
           </label>
           <div class="col-9">
-            <input class="form-control" type="text" name="authorName" id="authorName"
+            <input class="form-control" type="text" name="authorName" id="authorName" required
                    value="{{ userName }}">
           </div>
         </div>
@@ -45,7 +45,7 @@
             {{ ad_news_author_email }}
           </label>
           <div class="col-9">
-            <input class="form-control" type="email" name="authorEmail" id="authorEmail"
+            <input class="form-control" type="email" name="authorEmail" id="authorEmail" required
                    value="{{ userEmail }}">
           </div>
         </div>
