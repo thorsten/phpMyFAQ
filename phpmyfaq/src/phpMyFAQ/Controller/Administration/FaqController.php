@@ -154,7 +154,7 @@ class FaqController extends AbstractAdministrationController
                     PermissionType::FAQ_APPROVE->value
                 ),
                 'isActive' => null,
-                'isInActive' => null,
+                'isInActive' => 'checked',
                 'nextSolutionId' => $faq->getNextSolutionId(),
                 'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
             ]
