@@ -460,10 +460,11 @@ class Faq
      * @param int[]  $faqIds Array of record ids
      * @param string $orderBy Order by
      * @param string $sortBy Sort by
+     * @param bool   $usePagination Whether to use internal pagination
      * @throws CommonMarkException
      * @todo this method needs to be refactored, parts of it should be moved to a Twig template
      */
-    public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): array
+    public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC', bool $usePagination = true): array
     {
         $records = implode(', ', $faqIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
@@ -533,7 +534,7 @@ class Faq
         $num = $this->configuration->getDb()->numRows($result);
         $numberPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
 
-        $first = $page == 1 ? 0 : ($page * $numberPerPage) - $numberPerPage;
+        $first = $usePagination && $page > 1 ? ($page * $numberPerPage) - $numberPerPage : 0;
 
         $searchResults = [];
         if ($num > 0) {
@@ -541,9 +542,9 @@ class Faq
             $displayedCounter = 0;
             $lastFaqId = 0;
             $faqHelper = new FaqHelper($this->configuration);
-            while (($row = $this->configuration->getDb()->fetchObject($result)) && $displayedCounter < $numberPerPage) {
+            while (($row = $this->configuration->getDb()->fetchObject($result)) && (!$usePagination || $displayedCounter < $numberPerPage)) {
                 ++$counter;
-                if ($counter <= $first) {
+                if ($usePagination && $counter <= $first) {
                     continue;
                 }
 
