@@ -464,7 +464,12 @@ class Faq
      * @throws CommonMarkException
      * @todo this method needs to be refactored, parts of it should be moved to a Twig template
      */
-    public function renderFaqsByFaqIds(array $faqIds, string $orderBy = 'fd.id', string $sortBy = 'ASC', bool $usePagination = true): array
+    public function renderFaqsByFaqIds(
+        array $faqIds,
+        string $orderBy = 'fd.id',
+        string $sortBy = 'ASC',
+        bool $usePagination = true
+    ): array
     {
         $records = implode(', ', $faqIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
@@ -542,7 +547,10 @@ class Faq
             $displayedCounter = 0;
             $lastFaqId = 0;
             $faqHelper = new FaqHelper($this->configuration);
-            while (($row = $this->configuration->getDb()->fetchObject($result)) && (!$usePagination || $displayedCounter < $numberPerPage)) {
+            while (
+                ($row = $this->configuration->getDb()->fetchObject($result)) &&
+                (!$usePagination || $displayedCounter < $numberPerPage)
+            ) {
                 ++$counter;
                 if ($usePagination && $counter <= $first) {
                     continue;
