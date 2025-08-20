@@ -469,8 +469,7 @@ class Faq
         string $orderBy = 'fd.id',
         string $sortBy = 'ASC',
         bool $usePagination = true
-    ): array
-    {
+    ): array {
         $records = implode(', ', $faqIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
