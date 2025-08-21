@@ -22,7 +22,7 @@
         {{ ad_news_header }}
       </label>
       <div class="col-9">
-        <input type="text" name="newsheader" id="newsheader" class="form-control"
+        <input type="text" name="newsheader" id="newsheader" class="form-control" required
                value="{% if newsData.header != null %} {{ newsData.header }} {% endif %}">
       </div>
     </div>
@@ -33,7 +33,7 @@
       </label>
       <div class="col-9">
         <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-        <textarea id="editor" class="form-control" rows="5">{{ newsDataContent|raw }}</textarea>
+        <textarea id="editor" class="form-control" rows="5" required>{{ newsDataContent|raw }}</textarea>
       </div>
     </div>
 
@@ -42,8 +42,7 @@
         {{ ad_news_author_name }}
       </label>
       <div class="col-9">
-        <input type="text" id="authorName"
-               value="{{ newsData.authorName|escape }}" class="form-control">
+        <input type="text" id="authorName" value="{{ newsData.authorName|escape }}" class="form-control" required>
       </div>
     </div>
 
@@ -52,8 +51,7 @@
         {{ ad_news_author_email }}
       </label>
       <div class="col-9">
-        <input type="email" id="authorEmail"
-               value="{{ newsData.authorEmail|escape }}" class="form-control">
+        <input type="email" id="authorEmail" value="{{ newsData.authorEmail|escape }}" class="form-control" required>
       </div>
     </div>
 
