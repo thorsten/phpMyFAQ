@@ -91,7 +91,7 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 }
 
 //
-// Check if config/database.php exist -> if not, redirect to installer
+// Check if config/database.php exist -> if not, redirect to the installer
 //
 if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CONFIG_DIR . '/database.php')) {
     $response = new RedirectResponse('./setup/');
