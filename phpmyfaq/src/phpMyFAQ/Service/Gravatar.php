@@ -27,7 +27,7 @@ class Gravatar
     private string $httpBaseUrl = 'https://secure.gravatar.com/';
 
     /**
-     * Returns a image or the URL to the image of a Gravatar based off an email
+     * Returns an image or the URL to the image of a Gravatar based off an email
      * address.
      *
      * @param string $email Email address
@@ -35,7 +35,7 @@ class Gravatar
      */
     public function getImage(string $email, array $params = []): string
     {
-        $imageUrl = $this->getUrl() . 'avatar/' . static::getHash($email);
+        $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
         $opts = [];
 
         if (isset($params['default'])) {
@@ -80,7 +80,7 @@ class Gravatar
      *
      * @param string $email Email address
      */
-    private static function getHash(string $email): string
+    private function getHash(string $email): string
     {
         return md5($email);
     }

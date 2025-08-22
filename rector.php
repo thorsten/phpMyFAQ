@@ -31,6 +31,8 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::NAMING,
         SetList::EARLY_RETURN,
         SetList::PHP_83,
+        SetList::INSTANCEOF,
+        SetList::TYPE_DECLARATION,
         PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,

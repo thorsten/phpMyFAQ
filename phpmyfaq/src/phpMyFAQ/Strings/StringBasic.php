@@ -129,10 +129,15 @@ class StringBasic extends StringsAbstract
     /**
      * Match a regexp.
      *
-     * @return int
+     * @return int|false
      */
-    public function preg_match(string $pattern, string $subject, &$matches = null, int $flags = 0, int $offset = 0) // phpcs:ignore
-    {
+    public function preg_match(
+        string $pattern,
+        string $subject,
+        &$matches = null,
+        int $flags = 0,
+        int $offset = 0
+    ): int|false /* phpcs:ignore */ {
         return preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -140,10 +145,15 @@ class StringBasic extends StringsAbstract
      * Match a regexp globally.
      *
      * @param string[][] $matches
-     * @return int
+     * @return int|false
      */
-    public function preg_match_all(string $pattern, string $subject, &$matches, int $flags = 0, int $offset = 0) // phpcs:ignore
-    {
+    public function preg_match_all(
+        string $pattern,
+        string $subject,
+        &$matches,
+        int $flags = 0,
+        int $offset = 0
+    ): int|false /* phpcs:ignore */ {
         return preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
 

@@ -162,6 +162,9 @@ HTACCESS;
         $this->assertFalse($this->htaccessUpdater->validateHtaccessStructure($this->testHtaccessPath));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testUpdateRewriteBaseWithRootPath(): void
     {
         // Create a test .htaccess file

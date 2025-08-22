@@ -3338,12 +3338,8 @@ class Stopwords
 
     /**
      * Executes all INSERT INTO statements.
-     *
-     * @param string $prefix
-     *
-     * @return bool
      */
-    public function executeInsertQueries($prefix = '')
+    public function executeInsertQueries(string $prefix = ''): bool
     {
         foreach ($this->insertQueries as $insertQuery) {
             $result = $this->configuration->getDb()->query(sprintf($insertQuery, $prefix));

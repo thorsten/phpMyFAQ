@@ -97,7 +97,7 @@ class HtaccessUpdater
      */
     private function addRewriteBase(string $content, string $basePath): string
     {
-        // Look for RewriteEngine directive and add RewriteBase after it
+        // Look for the RewriteEngine directive and add RewriteBase after it
         $pattern = '/^(\s*RewriteEngine\s+On\s*)$/mi';
         $replacement = '$1' . "\n    # the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
 
@@ -129,9 +129,9 @@ class HtaccessUpdater
         }
 
         // Check if it contains essential directives
-        $hasModRewrite = strpos($content, '<IfModule mod_rewrite.c>') !== false;
-        $hasRewriteEngine = strpos($content, 'RewriteEngine') !== false;
-        $hasRewriteBase = strpos($content, 'RewriteBase') !== false;
+        $hasModRewrite = str_contains($content, '<IfModule mod_rewrite.c>');
+        $hasRewriteEngine = str_contains($content, 'RewriteEngine');
+        $hasRewriteBase = str_contains($content, 'RewriteBase');
 
         return $hasModRewrite && $hasRewriteEngine && $hasRewriteBase;
     }

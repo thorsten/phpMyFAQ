@@ -775,7 +775,7 @@ class CurrentUser extends User
      */
     protected function sortAuthContainer(array $authContainer): array
     {
-        uksort($authContainer, function ($first, $second) {
+        uksort($authContainer, function ($first, $second): int {
             if ($first === 'local') {
                 return 1;
             }

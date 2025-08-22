@@ -1168,17 +1168,20 @@ EOT;
             switch ($dbType) {
                 case 'sqlsrv':
                 case 'pdo_sqlsrv':
-                    // SQL Server: Check if index exists before creating
+                    // SQL Server: Check if the index exists before creating
                     $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
                         "WHERE name = 'idx_faqsearches_searchterm') " .
-                        "CREATE INDEX idx_faqsearches_searchterm ON {$tablePrefix}faqsearches " .
+                        sprintf('CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches ', $tablePrefix) .
                         "(searchterm)";
                     $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
                         "WHERE name = 'idx_faqsearches_date_term') " .
-                        "CREATE INDEX idx_faqsearches_date_term ON {$tablePrefix}faqsearches (searchdate, searchterm)";
+                        sprintf(
+                            'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
+                            $tablePrefix
+                        );
                     $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
                         "WHERE name = 'idx_faqsearches_date_term_lang') " .
-                        "CREATE INDEX idx_faqsearches_date_term_lang ON {$tablePrefix}faqsearches " .
+                        sprintf('CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ', $tablePrefix) .
                         "(searchdate, searchterm, lang)";
                     break;
                 default:

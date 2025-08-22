@@ -85,11 +85,13 @@ class Translation
             if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey])) {
                 return true;
             }
+
             if (isset(self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey])) {
                 return true;
             }
         } catch (Exception) {
         }
+
         return false;
     }
 

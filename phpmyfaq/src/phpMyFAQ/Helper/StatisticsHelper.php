@@ -194,12 +194,11 @@ readonly class StatisticsHelper
         $trackingDates = $this->getAllTrackingDates();
         $renderedHtml = '';
 
-        if (empty($trackingDates)) {
-            $renderedHtml .= sprintf(
+        if ($trackingDates === []) {
+            return $renderedHtml . sprintf(
                 '<option value="" selected>%s</option>',
                 Translation::get('ad_stat_choose')
             );
-            return $renderedHtml;
         }
 
         foreach ($trackingDates as $trackingDate) {
@@ -207,6 +206,7 @@ readonly class StatisticsHelper
             if (date('Y-m-d', $trackingDate) === date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
                 $renderedHtml .= ' selected';
             }
+
             $renderedHtml .= '>';
             $renderedHtml .= $this->date->format(date('Y-m-d H:i', $trackingDate));
             $renderedHtml .= "</option>\n";

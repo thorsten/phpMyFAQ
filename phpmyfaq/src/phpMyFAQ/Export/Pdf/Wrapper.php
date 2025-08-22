@@ -609,12 +609,12 @@ class Wrapper extends TCPDF
      */
     public function convertExternalImagesToBase64(string $html): string
     {
-        if ($this->config === null) {
+        if (!$this->config instanceof Configuration) {
             return $html;
         }
 
         $allowedHosts = $this->config->getAllowedMediaHosts();
-        if (empty($allowedHosts) || (count($allowedHosts) === 1 && trim($allowedHosts[0]) === '')) {
+        if ($allowedHosts === [] || (count($allowedHosts) === 1 && trim($allowedHosts[0]) === '')) {
             return $html;
         }
 
@@ -634,7 +634,10 @@ class Wrapper extends TCPDF
             $isAllowed = false;
             foreach ($allowedHosts as $allowedHost) {
                 $allowedHost = trim($allowedHost);
-                if (empty($allowedHost)) {
+                if ($allowedHost === '') {
+                    continue;
+                }
+                if ($allowedHost === '0') {
                     continue;
                 }
 
@@ -656,12 +659,12 @@ class Wrapper extends TCPDF
                     $base64Image = base64_encode($imageData);
                     $mimeType = $this->getImageMimeType($imageData);
                     if ($mimeType && $base64Image) {
-                        $dataUri = "data:{$mimeType};base64,{$base64Image}";
+                        $dataUri = sprintf('data:%s;base64,%s', $mimeType, $base64Image);
                         return str_replace($imageUrl, $dataUri, $fullMatch);
                     }
                 }
-            } catch (Exception $e) {
-                // If fetching fails, return original
+            } catch (Exception) {
+                // If fetching fails, return the original
                 return $fullMatch;
             }
 
@@ -670,16 +673,16 @@ class Wrapper extends TCPDF
     }
 
     /**
-     * Fetches an external image with appropriate error handling.
+     * Fetches an external image with the appropriate error handling.
      *
      * @param string $url The image URL to fetch
      * @return string|false The image data or false on failure
      */
-    private function fetchExternalImage(string $url)
+    private function fetchExternalImage(string $url): false|string
     {
         $context = stream_context_create([
             'http' => [
-                'timeout' => 10, // 10 second timeout
+                'timeout' => 10, // 10-second timeout
                 'user_agent' => 'phpMyFAQ PDF Generator/1.0',
                 'follow_location' => true,
                 'max_redirects' => 3,
@@ -693,7 +696,7 @@ class Wrapper extends TCPDF
         $imageData = @file_get_contents($url, false, $context);
 
         // Validate that we actually got image data
-        if ($imageData === false || strlen($imageData) === 0) {
+        if ($imageData === false || $imageData === '') {
             return false;
         }
 
@@ -726,8 +729,8 @@ class Wrapper extends TCPDF
             'bmp' => ["BM"],
         ];
 
-        foreach ($signatures as $format => $sigs) {
-            foreach ($sigs as $sig) {
+        foreach ($signatures as $signature) {
+            foreach ($signature as $sig) {
                 if (str_starts_with($data, $sig)) {
                     return true;
                 }
@@ -750,13 +753,18 @@ class Wrapper extends TCPDF
             // Fallback to header-based detection
             if (str_starts_with($data, "\xFF\xD8\xFF")) {
                 return 'image/jpeg';
-            } elseif (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
+            }
+            if (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
                 return 'image/png';
-            } elseif (str_starts_with($data, "GIF87a") || str_starts_with($data, "GIF89a")) {
+            }
+            if (str_starts_with($data, 'GIF87a') || str_starts_with($data, 'GIF89a')) {
                 return 'image/gif';
-            } elseif (str_starts_with($data, "RIFF")) {
+            }
+            if (str_starts_with($data, 'RIFF')) {
                 return 'image/webp';
-            } elseif (str_starts_with($data, "BM")) {
+            }
+            // Fallback to header-based detection
+            if (str_starts_with($data, 'BM')) {
                 return 'image/bmp';
             }
             return false;

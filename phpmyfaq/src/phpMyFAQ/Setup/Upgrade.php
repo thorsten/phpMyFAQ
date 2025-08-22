@@ -194,7 +194,7 @@ class Upgrade extends Setup
 
         $zipFile = $zipArchive->open($path);
 
-        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback) {
+        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback): void {
             $progress = sprintf('%d%%', $rate * 100);
             $progressCallback($progress);
         });
@@ -232,7 +232,7 @@ class Upgrade extends Setup
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback) {
+        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback): void {
             $progress = sprintf('%d%%', $rate * 100);
             $progressCallback($progress);
         });

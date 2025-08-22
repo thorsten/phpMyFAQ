@@ -47,15 +47,15 @@ readonly class UserHelper
         $user = clone $this->user;
         $allUserIds = $user->getAllUsers(true, $allowBlockedUsers);
 
-        foreach ($allUserIds as $userId) {
-            if ($userId === -1) {
+        foreach ($allUserIds as $allUserId) {
+            if ($allUserId === -1) {
                 continue;
             }
 
-            $user->getUserById($userId);
+            $user->getUserById($allUserId);
             $users[] = [
-                'id' => $userId,
-                'selected' => $userId === $selectedId,
+                'id' => $allUserId,
+                'selected' => $allUserId === $selectedId,
                 'displayName' => $user->getUserData('display_name'),
                 'login' => $user->getLogin(),
             ];

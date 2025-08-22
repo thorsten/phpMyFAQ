@@ -49,7 +49,7 @@ class PhpMyFaqMcpServer
 
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly Language $language,
+        Language $language,
         private readonly Search $search,
         private readonly Faq $faq
     ) {
@@ -93,9 +93,9 @@ class PhpMyFaqMcpServer
      */
     public function runConsole(InputInterface $input, OutputInterface $output): void
     {
-        $transport = new SymfonyConsoleTransport($input, $output);
+        $symfonyConsoleTransport = new SymfonyConsoleTransport($input, $output);
         $server = new Server($this->jsonRpcHandler, $this->configuration->getLogger());
-        $server->connect($transport);
+        $server->connect($symfonyConsoleTransport);
     }
 
     /**

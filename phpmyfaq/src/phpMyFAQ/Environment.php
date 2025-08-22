@@ -22,13 +22,20 @@ use Symfony\Component\Dotenv\Dotenv;
 class Environment
 {
     private static bool $debugMode = false;
+
     private static int $debugLevel = 0;
+
     private static bool $debugLogQueries = false;
+
     private static bool $initialized = false;
+
     private static string $environment = 'production';
 
+
     private static bool $testMode = false;
+
     private static ?Dotenv $dotenv = null;
+
 
     public static function init(): void
     {

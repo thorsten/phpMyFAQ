@@ -297,17 +297,16 @@ class Search
         $searchResult = [];
 
         $byLang = $withLang ? ', lang' : '';
-        // Build time-based condition if timeWindow is specified
         $timeCondition = '';
         if ($timeWindow > 0) {
             $dbType = Database::getType();
             $timeCondition = match ($dbType) {
                 'pgsql', 'pdo_pgsql' => sprintf(
-                    ' WHERE searchdate >= NOW() - INTERVAL \'%d days\'',
+                    " WHERE searchdate >= NOW() - INTERVAL '%d days'",
                     $timeWindow
                 ),
                 'sqlite3', 'pdo_sqlite' => sprintf(
-                    ' WHERE searchdate >= datetime(\'now\', \'-%d days\')',
+                    " WHERE searchdate >= datetime('now', '-%d days')",
                     $timeWindow
                 ),
                 'sqlsrv', 'pdo_sqlsrv' => sprintf(

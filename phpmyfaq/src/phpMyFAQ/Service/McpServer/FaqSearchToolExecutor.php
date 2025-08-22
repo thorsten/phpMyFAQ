@@ -51,12 +51,12 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
     /**
      * @throws Exception
      */
-    public function call(ToolCall $input): ToolCallResult
+    public function call(ToolCall $toolCall): ToolCallResult
     {
-        $query = $input->arguments['query'] ?? '';
-        $categoryId = $input->arguments['category_id'] ?? null;
-        $limit = $input->arguments['limit'] ?? 10;
-        $allLanguages = $input->arguments['all_languages'] ?? false;
+        $query = $toolCall->arguments['query'] ?? '';
+        $categoryId = $toolCall->arguments['category_id'] ?? null;
+        $limit = $toolCall->arguments['limit'] ?? 10;
+        $allLanguages = $toolCall->arguments['all_languages'] ?? false;
 
         if (empty($query)) {
             return new ToolCallResult('Error: Search query cannot be empty.', 'text', 'application/json');
@@ -79,31 +79,31 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
             // Perform the search
             $searchResults = $this->search->search($query, (bool) $allLanguages);
 
-            if (empty($searchResults)) {
+            if ($searchResults === []) {
                 $emptyResult = $this->formatResultsAsJson([]);
                 return new ToolCallResult($emptyResult, 'text', 'application/json');
             }
 
             // Format the results
             $validResults = [];
-            foreach ($searchResults as $result) {
-                $this->configuration->getLogger()->info(var_export($result, true));
+            foreach ($searchResults as $searchResult) {
+                $this->configuration->getLogger()->info(var_export($searchResult, true));
 
                 $validResults[] = [
-                    'id' => $result->id,
-                    'language' => $result->lang,
-                    'question' => $result->question ?? '',
-                    'answer' => $result->answer ?? '',
-                    'category_id' => $result->category_id ?? null,
-                    'relevance_score' => $result->score ?? 0.0,
-                    'url' => $this->buildFaqUrl($result->id, $result->lang),
+                    'id' => $searchResult->id,
+                    'language' => $searchResult->lang,
+                    'question' => $searchResult->question ?? '',
+                    'answer' => $searchResult->answer ?? '',
+                    'category_id' => $searchResult->category_id ?? null,
+                    'relevance_score' => $searchResult->score ?? 0.0,
+                    'url' => $this->buildFaqUrl($searchResult->id, $searchResult->lang),
                 ];
             }
 
             // Limit results
             $limitedResults = array_slice($validResults, 0, (int) $limit);
 
-            if (empty($limitedResults)) {
+            if ($limitedResults === []) {
                 return new ToolCallResult(
                     'No accessible FAQ entries found for the given query.',
                     'text',
@@ -113,14 +113,18 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
 
             $resultJson = $this->formatResultsAsJson($limitedResults);
             return new ToolCallResult($resultJson, 'text', 'application/json');
-        } catch (Exception $e) {
-            return new ToolCallResult('Error searching FAQ database: ' . $e->getMessage(), 'text', 'application/json');
+        } catch (Exception $exception) {
+            return new ToolCallResult(
+                'Error searching FAQ database: ' . $exception->getMessage(),
+                'text',
+                'application/json'
+            );
         }
     }
 
     private function formatResultsAsJson(array $results): string
     {
-        if (empty($results)) {
+        if ($results === []) {
             return json_encode([
                 'results' => [],
                 'total_found' => 0
