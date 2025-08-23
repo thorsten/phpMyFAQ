@@ -103,13 +103,14 @@ class Database
             <head>
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
-                <link href="assets/dist/styles.css" rel="stylesheet">
-                <script src="assets/dist/frontend.js"></script>
+                <link href="assets/public/styles.css" rel="stylesheet">
+                <script src="assets/public/frontend.js"></script>
             </head>
             <body>
-                <div class="container mt-5">
-                <p class="alert alert-danger">The connection to the database server could not be established.</p>
-                <p class="alert alert-danger">The error message of the database server: ' . $method . '</p>
+                <div class="container">
+                <h1 class="pt-5">Fatal phpMyFAQ Error</h1>
+                <p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>
+                <p class="alert alert-info p-2">The error message of the database server: ' . $method . '</p>
                 </div>
             </body>
             </html>';

@@ -142,7 +142,7 @@ if ('' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, static fn($a, $b) => $b - $a);
+        uasort($relatedTags, static fn($a, $b): int => $b - $a);
         $numTags = 0;
 
         foreach ($relatedTags as $tagId => $relevance) {
@@ -274,7 +274,7 @@ $totalPages = (int)ceil($numOfResults / $confPerPage);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twig->addExtension(new AttributeExtension(TagNameTwigExtension::class));
-$twig->addFilter(new TwigFilter('repeat', fn($string, $times) => str_repeat((string) $string, $times)));
+$twig->addFilter(new TwigFilter('repeat', fn($string, $times): string => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
 $pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));

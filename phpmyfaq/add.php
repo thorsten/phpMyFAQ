@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This is the page there a user can add a FAQ record.
+ * This is the page where a user can add a FAQ record.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -74,7 +74,8 @@ if (!is_null($selectedQuestion)) {
         $readonly = ' readonly';
     }
 
-    // Display full form even if user switched off single fields because of use together with answering open questions
+    // Display full form even if the user switched off single fields because of use together with answering open
+    // questions
     $displayFullForm = true;
 }
 
@@ -90,7 +91,7 @@ $formData = $forms->getFormData(FormIds::ADD_NEW_FAQ->value);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addFilter(new TwigFilter('repeat', fn($string, $times) => str_repeat((string) $string, $times)));
+$twig->addFilter(new TwigFilter('repeat', fn($string, $times): string => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables

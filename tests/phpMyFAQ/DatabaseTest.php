@@ -69,11 +69,11 @@ class DatabaseTest extends TestCase
             $output
         );
         $this->assertStringContainsString(
-            '<p class="alert alert-danger">The connection to the database server could not be established.</p>',
+            '<p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>',
             $output
         );
         $this->assertStringContainsString(
-            '<p class="alert alert-danger">The error message of the database server: Error message</p>',
+            '<p class="alert alert-info p-2">The error message of the database server: Error message</p>',
             $output
         );
     }

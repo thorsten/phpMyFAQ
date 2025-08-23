@@ -179,7 +179,7 @@ class FaqHelper extends AbstractHelper
         return preg_replace_callback(
             '/style\s*=\s*"([^"]*)"/i',
             function (array $matches): string {
-                $styles = explode(';', (string) $matches[1]);
+                $styles = explode(';', $matches[1]);
                 $filteredStyles = array_filter($styles, function (string $style): bool {
                     return stripos(trim($style), 'overflow:') !== 0; // Exclude 'overflow' properties
                 });

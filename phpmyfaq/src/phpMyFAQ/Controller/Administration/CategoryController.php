@@ -754,6 +754,7 @@ class CategoryController extends AbstractAdministrationController
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
             'restricted_groups' => ($this->configuration->get('security.permLevel') === 'medium') ?
                 $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser) : '',
+            'buttonCancel' => Translation::get('ad_gen_cancel'),
         ];
     }
 }

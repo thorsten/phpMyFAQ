@@ -637,6 +637,7 @@ class Wrapper extends TCPDF
                 if ($allowedHost === '') {
                     continue;
                 }
+
                 if ($allowedHost === '0') {
                     continue;
                 }

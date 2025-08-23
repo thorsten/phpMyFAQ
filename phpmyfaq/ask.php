@@ -62,7 +62,7 @@ $formData = $forms->getFormData(FormIds::ASK_QUESTION->value);
 $categories = $category->getAllCategoryIds();
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
-$twig->addFilter(new TwigFilter('repeat', fn($string, $times) => str_repeat((string) $string, $times)));
+$twig->addFilter(new TwigFilter('repeat', fn($string, $times): string => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
