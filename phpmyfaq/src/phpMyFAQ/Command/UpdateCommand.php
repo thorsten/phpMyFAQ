@@ -196,7 +196,7 @@ class UpdateCommand extends Command
         $progressBar = $symfonyStyle->createProgressBar(100);
         $progressBar->start();
 
-        $progressCallback = static function ($progress) use ($progressBar) {
+        $progressCallback = static function ($progress) use ($progressBar): void {
             $progressBar->setProgress((int)$progress);
         };
 
@@ -226,7 +226,7 @@ class UpdateCommand extends Command
         $progressBar = $symfonyStyle->createProgressBar(100);
         $progressBar->start();
 
-        $progressCallback = static function ($progress) use ($progressBar) {
+        $progressCallback = static function ($progress) use ($progressBar): void {
             $progressBar->setProgress((int)$progress);
         };
 
@@ -255,7 +255,7 @@ class UpdateCommand extends Command
         $progressBar = $symfonyStyle->createProgressBar(100);
         $progressBar->start();
 
-        $progressCallback = static function ($progress) use ($progressBar) {
+        $progressCallback = static function ($progress) use ($progressBar): void {
             $progressBar->setProgress((int)$progress);
         };
 

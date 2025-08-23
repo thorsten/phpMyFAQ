@@ -55,7 +55,7 @@ class Application
         $this->handleRequest($routeCollection, $request, $requestContext);
     }
 
-    public function setUrlMatcher($urlMatcher): void
+    public function setUrlMatcher(UrlMatcher $urlMatcher): void
     {
         $this->urlMatcher = $urlMatcher;
     }

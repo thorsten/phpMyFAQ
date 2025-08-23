@@ -92,7 +92,7 @@ class OAuth
      * @throws JsonException
      * @throws TransportExceptionInterface
      */
-    public function refreshToken()
+    public function refreshToken(): mixed
     {
         $url = 'https://login.microsoftonline.com/' . AAD_OAUTH_TENANTID . '/oauth2/v2.0/token';
 
@@ -134,7 +134,7 @@ class OAuth
 
             $this->token = json_decode($idToken, null, 512, JSON_THROW_ON_ERROR);
             $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, json_encode($this->token, JSON_THROW_ON_ERROR));
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             // Malformed JSON - set empty token
             $this->token = new stdClass();
             $this->entraIdSession->set(EntraIdSession::ENTRA_ID_JWT, '{}');

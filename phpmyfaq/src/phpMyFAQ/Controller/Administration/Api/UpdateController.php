@@ -184,8 +184,8 @@ class UpdateController extends AbstractController
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $pathToPackage = urldecode((string) $this->configuration->get('upgrade.lastDownloadedPackage'));
 
-        return new StreamedResponse(static function () use ($upgrade, $pathToPackage) {
-            $progressCallback = static function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade, $pathToPackage): void {
+            $progressCallback = static function ($progress): void {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
@@ -206,8 +206,8 @@ class UpdateController extends AbstractController
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $backupHash = md5(uniqid());
 
-        return new StreamedResponse(static function () use ($upgrade, $backupHash) {
-            $progressCallback = static function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade, $backupHash): void {
+            $progressCallback = static function ($progress): void {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();
@@ -227,8 +227,8 @@ class UpdateController extends AbstractController
 
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
         $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
-        return new StreamedResponse(static function () use ($upgrade, $configurator) {
-            $progressCallback = static function ($progress) {
+        return new StreamedResponse(static function () use ($upgrade, $configurator): void {
+            $progressCallback = static function ($progress): void {
                 echo json_encode(['progress' => $progress]) . "\n";
                 ob_flush();
                 flush();

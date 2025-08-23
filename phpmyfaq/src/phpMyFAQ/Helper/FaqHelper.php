@@ -178,13 +178,13 @@ class FaqHelper extends AbstractHelper
 
         return preg_replace_callback(
             '/style\s*=\s*"([^"]*)"/i',
-            function ($matches) {
-                $styles = explode(';', $matches[1]);
-                $filteredStyles = array_filter($styles, function ($style) {
+            function (array $matches): string {
+                $styles = explode(';', (string) $matches[1]);
+                $filteredStyles = array_filter($styles, function (string $style): bool {
                     return stripos(trim($style), 'overflow:') !== 0; // Exclude 'overflow' properties
                 });
                 $newStyle = implode('; ', $filteredStyles);
-                // Remove style attribute if empty
+                // Remove the style attribute if empty
                 return $newStyle !== '' && $newStyle !== '0' ? 'style="' . $newStyle . '"' : '';
             },
             (string) $sanitizedContent
@@ -200,7 +200,7 @@ class FaqHelper extends AbstractHelper
      * - http://<url>/index.php?action=faq&cat=<category id>&id=<id>&artlang=<language>
      * - supports also HTML encoded parameter (&#61; instead of =, & instead of &)
      *
-     * to new URL structure:
+     * to the new URL structure:
      * https://<url>/content/<category id>/<id>/<language>/<the question with underscores as spaces>.html
      */
     public function convertOldInternalLinks(string $question, string $answer): string
@@ -212,7 +212,7 @@ class FaqHelper extends AbstractHelper
 
         $result = preg_replace_callback(
             $pattern,
-            function ($matches) use ($question, $link) {
+            function ($matches) use ($question, $link): string {
                 $baseUrl = $this->configuration->getDefaultUrl();
                 $categoryId = $matches[3];
                 $faqId = $matches[4];
@@ -236,7 +236,7 @@ class FaqHelper extends AbstractHelper
 
             return preg_replace_callback(
                 $htmlEncodedPattern,
-                function ($matches) use ($question, $link) {
+                function ($matches) use ($question, $link): string {
                     $baseUrl = $this->configuration->getDefaultUrl();
                     $categoryId = $matches[6];
                     $faqId = $matches[9];

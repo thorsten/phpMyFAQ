@@ -44,7 +44,7 @@ class EncryptedFile extends File
     /**
      * @param string $filepath
      */
-    public function __construct($filepath, string $mode, string $key)
+    public function __construct(mixed $filepath, string $mode, string $key)
     {
         $this->aes = new AES($mode);
         $this->aes->setKey($key);

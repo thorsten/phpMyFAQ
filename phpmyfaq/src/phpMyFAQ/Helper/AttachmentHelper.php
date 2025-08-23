@@ -36,7 +36,7 @@ class AttachmentHelper
             return [];
         }
 
-        return array_map(fn($attachment) => [
+        return array_map(fn(AbstractAttachment $attachment): array => [
             'icon' => $this->mapMimeTypeToIcon($attachment->getMimeType()),
             'url' => $attachment->buildUrl(),
             'filename' => $attachment->getFilename(),

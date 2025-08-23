@@ -620,7 +620,7 @@ class Wrapper extends TCPDF
 
         // Pattern to match img tags with src attributes
         $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
-        return preg_replace_callback($pattern, function ($matches) use ($allowedHosts) {
+        return preg_replace_callback($pattern, function (array $matches) use ($allowedHosts): string {
             $fullMatch = $matches[0];
             $imageUrl = $matches[1];
             // Parse the URL to get the host
@@ -746,7 +746,7 @@ class Wrapper extends TCPDF
      * @param string $data The image data
      * @return string|false The MIME type or false if not determined
      */
-    private function getImageMimeType(string $data)
+    private function getImageMimeType(string $data): string|false
     {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         if ($finfo === false) {
@@ -754,19 +754,24 @@ class Wrapper extends TCPDF
             if (str_starts_with($data, "\xFF\xD8\xFF")) {
                 return 'image/jpeg';
             }
+
             if (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
                 return 'image/png';
             }
+
             if (str_starts_with($data, 'GIF87a') || str_starts_with($data, 'GIF89a')) {
                 return 'image/gif';
             }
+
             if (str_starts_with($data, 'RIFF')) {
                 return 'image/webp';
             }
+
             // Fallback to header-based detection
             if (str_starts_with($data, 'BM')) {
                 return 'image/bmp';
             }
+
             return false;
         }
 
