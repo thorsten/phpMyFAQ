@@ -10,18 +10,18 @@
 phpMyFAQ is a multilingual, completely database-driven FAQ system.
 It supports various databases to store all data; PHP 8.3+ is needed to access this data.
 phpMyFAQ also offers a multi-language Content Management System with a WYSIWYG editor and a media manager, real time 
-search support with Elasticsearch an OpenSearch, flexible multi-user support with user and group based permissions on 
+search support with Elasticsearch and OpenSearch, flexible multi-user support with user and group based permissions on 
 categories and records, a wiki-like revision feature, a news system, user-tracking, 40+ supported languages, enhanced 
 automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a backup and restore system, a 
 dynamic sitemap, related FAQs, tagging, enhanced SEO features, built-in spam protection systems, Microsoft Entra ID, 
-Microsoft Active Directory and OpenLDAP support, and an easy-to-use installation. 
+Microsoft Active Directory and OpenLDAP support, a experimental MCP server, and an easy-to-use installation. 
 It's possible to update your phpMyFAQ installation via the web interface or on the command line.
 
 ## Requirements
 
 phpMyFAQ is only supported on PHP 8.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
-Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as the main search
-engine, you need Elasticsearch 6.x or later. Check our detailed requirements on
+Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch or Opensearch as the main 
+search engine, you need Elasticsearch v6+ or OpenSearch v1+. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
 
 ## Installation
@@ -47,7 +47,7 @@ For development purposes, you can start a full stack to run your current PhpMyFA
 
 The command above starts nine containers for multi-database development as follows.
 
-_Specific images started once to prepare the project:_
+_Specific images started at once to prepare the project:_
 
 - **composer**: update composer dependencies
 - **pnpm**: update pnpm dependencies
@@ -164,7 +164,7 @@ Releases will be numbered with the following format:
 And constructed with the following guidelines:
 
 - Breaking backward compatibility bumps the major (and resets the minor and patch)
-- New additions without breaking backward compatibility bumps the minor (and resets the patch)
+- New additions without breaking backward compatibility bump the minor (and reset the patch)
 - Bug fixes and misc changes bumps the patch
 
 For more information on SemVer, please visit http://semver.org/.
@@ -184,7 +184,7 @@ You can read the complete documentation on [here](https://phpmyfaq.readthedocs.i
 
 ## REST API v3.1 documentation
 
-The REST API documentation is available as OpenAPI 3.0 specification:
+The REST API documentation is available as an OpenAPI 3.0 specification:
 
 - [JSON](docs/openapi.json)
 - [YAML](docs/openapi.yaml)
