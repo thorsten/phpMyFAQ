@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd" bootstrap="tests/bootstrap.php"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.3/phpunit.xsd" bootstrap="tests/bootstrap.php"
          executionOrder="depends,defects"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
@@ -9,10 +9,10 @@
          cacheDirectory=".phpunit.cache"
          requireCoverageMetadata="false"
          beStrictAboutCoverageMetadata="true"
-         displayDetailsOnPhpunitDeprecations="false"
+         displayDetailsOnPhpunitDeprecations="true"
          displayDetailsOnIncompleteTests="true"
          displayDetailsOnSkippedTests="true"
-         displayDetailsOnTestsThatTriggerDeprecations="false"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
          displayDetailsOnTestsThatTriggerErrors="true"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerWarnings="true">
