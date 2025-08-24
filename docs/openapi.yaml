@@ -37,7 +37,7 @@ paths:
           content:
             application/json:
               schema: {}
-              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&amp;id=2\"\n            }\n        ]"
+              example: "\n        [\n            {\n                \"filename\": \"attachment-1.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&id=1\"\n            },\n            {\n                \"filename\": \"attachment-2.pdf\",\n                \"url\": \"https://www.example.org/index.php?action=attachment&id=2\"\n            }\n        ]"
         '404':
           description: 'If the FAQ has no attachments.'
           headers:
@@ -671,7 +671,7 @@ paths:
                 is-sticky:
                   type: boolean
               type: object
-            example: "{\n                \"faq-id\": 1,\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"question\": \"Is this the world we updated?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
+            example: "{\n                \"faq-id\": 1,\n                \"language\": \"de\",\n                \"category-id\": 1,\n                \"question\": \"Is this the world we updated?\",\n                \"answer\": \"What did we do it for, is this the world we invaded, against the law, so it seems in the \" .\n                    \"end, is this what we're all living for today\",\n                \"keywords\": \"phpMyFAQ, FAQ, Foo, Bar\",\n                \"author\": \"Freddie Mercury\",\n                \"email\": \"freddie.mercury@example.org\",\n                \"is-active\": \"true\",\n                \"is-sticky\": \"false\"\n            }"
       responses:
         '200':
           description: 'If all posted data is correct.'
@@ -1115,30 +1115,6 @@ paths:
             application/json:
               schema: {}
               example: 'phpMyFAQ Codename Porus'
-  /api/v3.1/update:
-    post:
-      tags:
-        - 'Endpoints with Authentication'
-      operationId: triggerUpdate
-      responses:
-        '200':
-          description: 'Returns the new and updated phpMyFAQ version number as string.'
-          headers:
-            x-pmf-token:
-              description: 'phpMyFAQ client API Token, generated in admin backend'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema: {}
-              example: 4.0.0
-        '401':
-          description: 'If the user is not authenticated and/or does not have sufficient permissions.'
-          headers:
-            x-pmf-token:
-              description: 'phpMyFAQ client API Token, generated in admin backend'
-              schema:
-                type: string
   /api/v3.1/version:
     get:
       tags:
