@@ -1,0 +1,233 @@
+// Theme toggle button
+#theme-toggle {
+  color: var(--bs-light) !important;
+  border: none;
+  background: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--bs-warning) !important;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.375rem;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+  }
+
+  i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover i {
+    transform: scale(1.1);
+  }
+}
+
+// Dark mode specific styles
+[data-bs-theme='dark'] {
+  // Global background
+  html,
+  body {
+    background: var(--bs-dark) !important;
+    color: var(--bs-light);
+  }
+
+  // Navigation adjustments for dark mode
+  .text-bg-pmf-nav {
+    background-color: var(--bs-gray-900) !important;
+  }
+
+  // Search form dark mode
+  .search {
+    .form-control {
+      background-color: var(--bs-gray-800);
+      border-color: var(--bs-gray-700);
+      color: var(--bs-light);
+
+      &:focus {
+        background-color: var(--bs-gray-800);
+        border-color: var(--bs-primary);
+        color: var(--bs-light);
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
+
+      &::placeholder {
+        color: var(--bs-gray-400);
+      }
+    }
+
+    .bi-search {
+      color: var(--bs-gray-400);
+    }
+  }
+
+  // Cards and content areas
+  .card {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+    color: var(--bs-light);
+  }
+
+  // Footer dark mode
+  .text-bg-pmf-footer {
+    background-color: var(--bs-gray-900) !important;
+  }
+
+  // Links in dark mode
+  a {
+    color: var(--bs-info);
+
+    &:hover {
+      color: var(--bs-info);
+      opacity: 0.8;
+    }
+  }
+
+  // Form elements
+  .form-control,
+  .form-select {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+    color: var(--bs-light);
+
+    &:focus {
+      background-color: var(--bs-gray-800);
+      border-color: var(--bs-primary);
+      color: var(--bs-light);
+    }
+  }
+
+  // Dropdowns
+  .dropdown-menu {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+
+    .dropdown-item {
+      color: var(--bs-light);
+
+      &:hover,
+      &:focus {
+        background-color: var(--bs-gray-700);
+        color: var(--bs-light);
+      }
+    }
+
+    .dropdown-divider {
+      border-color: var(--bs-gray-700);
+    }
+  }
+
+  // Buttons
+  .btn-outline-primary {
+    color: var(--bs-primary);
+    border-color: var(--bs-primary);
+
+    &:hover {
+      background-color: var(--bs-primary);
+      color: var(--bs-light);
+    }
+  }
+
+  // Alerts and notifications
+  .alert {
+    &.alert-info {
+      background-color: rgba(13, 202, 240, 0.1);
+      border-color: var(--bs-info);
+      color: var(--bs-info);
+    }
+
+    &.alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-color: var(--bs-warning);
+      color: var(--bs-warning);
+    }
+
+    &.alert-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-color: var(--bs-danger);
+      color: var(--bs-danger);
+    }
+
+    &.alert-success {
+      background-color: rgba(25, 135, 84, 0.1);
+      border-color: var(--bs-success);
+      color: var(--bs-success);
+    }
+  }
+
+  // Breadcrumbs
+  .pmf-breadcrumbs {
+    background-color: var(--bs-gray-800);
+    color: var(--bs-light);
+  }
+
+  // Tables
+  .table {
+    color: var(--bs-light);
+
+    &.table-striped > tbody > tr:nth-of-type(odd) > td {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    &.table-hover > tbody > tr:hover > td {
+      background-color: rgba(255, 255, 255, 0.075);
+    }
+  }
+
+  // Borders
+  .border {
+    border-color: var(--bs-gray-700) !important;
+  }
+
+  // Text muted
+  .text-muted {
+    color: var(--bs-gray-400) !important;
+  }
+}
+
+// Light mode specific adjustments (if needed)
+[data-bs-theme='light'] {
+  #theme-toggle {
+    #theme-icon-dark {
+      display: inline-block !important;
+    }
+
+    #theme-icon-light {
+      display: none !important;
+    }
+  }
+}
+
+// Dark mode icon visibility
+[data-bs-theme='dark'] {
+  #theme-toggle {
+    #theme-icon-dark {
+      display: none !important;
+    }
+
+    #theme-icon-light {
+      display: inline-block !important;
+    }
+  }
+}
+
+// Default state when no theme is set yet
+#theme-toggle {
+  #theme-icon-dark {
+    display: inline-block;
+  }
+
+  #theme-icon-light {
+    display: none;
+  }
+}
+
+// Smooth transitions for theme switching
+* {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}

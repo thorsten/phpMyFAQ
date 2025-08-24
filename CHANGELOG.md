@@ -19,6 +19,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added Urdu translation (Thorsten)
+- added dark mode / light mode toggle (Thorsten)
 - added experimental support for PHP 8.5 (Thorsten)
 - added experimental support for FrankenPHP (Thorsten)
 - added experimental support for OpenSearch (Thorsten)

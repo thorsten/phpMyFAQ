@@ -60,14 +60,14 @@ document.addEventListener('DOMContentLoaded', (): void => {
   handleSaveComment();
   handleComments();
 
-  // Handle Add a FAQ
+  // Handle Adds a FAQ
   handleAddFaq();
 
   // Handle show FAQ
   handleShowFaq();
   handleShareLinkButton();
 
-  // Handle Add a Question
+  // Handle Adds a Question
   handleQuestion();
 
   // Handle Bookmarks
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
   handleRegister();
   handleWebAuthn();
 
-  // Masonry on startpage
+  // Masonry on the startpage
   const masonryElement: HTMLElement | null = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });
