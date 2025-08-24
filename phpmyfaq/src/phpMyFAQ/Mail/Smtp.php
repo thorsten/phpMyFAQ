@@ -55,7 +55,7 @@ class Smtp implements MailUserAgentInterface
     public function send(string $recipients, array $headers, string $body): int
     {
         $sender = '';
-        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
+        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
             $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
@@ -67,8 +67,9 @@ class Smtp implements MailUserAgentInterface
             ->text($body)
             ->html($body);
 
-        if (isset($headers['CC'])) {
-            $email->cc($headers['CC']);
+        if (isset($headers['CC']) || isset($headers['Cc'])) {
+            $cc = $headers['CC'] ?? $headers['Cc'];
+            $email->cc($cc);
         }
 
         if (isset($headers['Bcc'])) {

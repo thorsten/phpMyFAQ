@@ -39,11 +39,11 @@ class Builtin implements MailUserAgentInterface
         unset($headers['Subject']);
 
         $sender = '';
-        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {
+        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
             $sender = str_replace(
                 ['<', '>'],
                 '',
-                (string) $headers['Return-Path']
+                $headers['Return-Path']
             );
             unset($headers['Return-Path']);
         }
