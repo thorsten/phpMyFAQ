@@ -9,14 +9,54 @@ use PHPUnit\Framework\TestCase;
 class BuiltinTest extends TestCase
 {
     private Builtin $builtin;
+    private bool $mailAvailable;
 
     protected function setUp(): void
     {
         $this->builtin = new Builtin();
+
+        // Check if mail functionality is available
+        $this->mailAvailable = $this->isMailAvailable();
+    }
+
+    /**
+     * Check if mail functionality is available in the environment
+     */
+    private function isMailAvailable(): bool
+    {
+        // Check if mail function exists
+        if (!function_exists('mail')) {
+            return false;
+        }
+
+        // Check if sendmail is available on Unix-like systems
+        if (PHP_OS_FAMILY !== 'Windows') {
+            $sendmailPath = ini_get('sendmail_path');
+            if (empty($sendmailPath) || $sendmailPath === '/usr/sbin/sendmail -t -i') {
+                // Default sendmail path, check if it actually exists
+                $paths = ['/usr/sbin/sendmail', '/usr/bin/sendmail', '/usr/local/bin/sendmail'];
+                $found = false;
+                foreach ($paths as $path) {
+                    if (is_executable($path)) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public function testSendBasicEmail(): void
     {
+        if (!$this->mailAvailable) {
+            $this->markTestSkipped('Mail functionality is not available (sendmail not installed or configured)');
+        }
+
         $recipients = 'test@example.com';
         $headers = [
             'Subject' => 'Test Subject',
@@ -25,11 +65,6 @@ class BuiltinTest extends TestCase
         ];
         $body = 'This is a test email body.';
 
-        // Mock the mail function
-        if (!function_exists('mail')) {
-            $this->markTestSkipped('mail() function is not available');
-        }
-
         $result = $this->builtin->send($recipients, $headers, $body);
 
         $this->assertIsInt($result);
@@ -37,6 +72,10 @@ class BuiltinTest extends TestCase
 
     public function testSendEmailWithSubjectHandling(): void
     {
+        if (!$this->mailAvailable) {
+            $this->markTestSkipped('Mail functionality is not available (sendmail not installed or configured)');
+        }
+
         $recipients = 'test@example.com';
         $headers = [
             'Subject' => 'Test Subject with Special Characters äöü',
@@ -55,6 +94,10 @@ class BuiltinTest extends TestCase
 
     public function testSendEmailWithReturnPath(): void
     {
+        if (!$this->mailAvailable) {
+            $this->markTestSkipped('Mail functionality is not available (sendmail not installed or configured)');
+        }
+
         $recipients = 'test@example.com';
         $headers = [
             'Subject' => 'Test Subject',
@@ -70,6 +113,10 @@ class BuiltinTest extends TestCase
 
     public function testSendEmailWithMultipleRecipients(): void
     {
+        if (!$this->mailAvailable) {
+            $this->markTestSkipped('Mail functionality is not available (sendmail not installed or configured)');
+        }
+
         $recipients = 'test1@example.com,test2@example.com,test3@example.com';
         $headers = [
             'Subject' => 'Multiple Recipients Test',
@@ -86,6 +133,10 @@ class BuiltinTest extends TestCase
 
     public function testSendEmailWithComplexHeaders(): void
     {
+        if (!$this->mailAvailable) {
+            $this->markTestSkipped('Mail functionality is not available (sendmail not installed or configured)');
+        }
+
         $recipients = 'test@example.com';
         $headers = [
             'Subject' => 'Complex Headers Test',
