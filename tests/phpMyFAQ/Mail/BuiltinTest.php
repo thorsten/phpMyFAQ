@@ -49,7 +49,7 @@ class BuiltinTest extends TestCase
         $result = $this->builtin->send($recipients, $headers, $body);
 
         $this->assertIsInt($result);
-        // Subject should be extracted from headers array during processing
+        // Subject should be extracted from a header array during processing
         $this->assertEquals('Test Subject with Special Characters äöü', $originalHeaders['Subject']);
     }
 
