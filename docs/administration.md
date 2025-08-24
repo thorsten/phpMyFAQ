@@ -13,7 +13,7 @@ Please change it after your successful login with the generated password.
 After entering your username and password, you can log into the system. On the dashboard page you can see the following
 cards:
 
-- some statistics about visits, entries, news and comments
+- some statistics about visits, entries, news, and comments
 - the latest current number fetched from phpmyfaq.de
 - a nice diagram with the number of visitors of the last 30 days
 - a list on inactive FAQs
@@ -132,11 +132,11 @@ time with all the relevant data of the specific entry. The meaning of the fields
   into the search box.
 
 - **Active?**
-  If a FAQ is "active" it is visible in the public area and will be included in searches. Is it "deactivated" it will
+  If a FAQ is "active," it is visible in the public area and will be included in searches. Is it "deactivated" it will
   be invisible. Suggested FAQs are deactivated by default to prevent any abuse.
 
 - **Sticky?**
-  If a FAQ is "sticky" it is a crucial FAQ record and will always be shown on all pages on the right column.
+  If a FAQ is "sticky," it is a crucial FAQ record and will always be shown on all pages on the right column.
   You should mark records as sticky if they're crucial for your whole FAQ. Sticky records also appear at the
   top positions of the lists of FAQ entries.
 
@@ -195,17 +195,18 @@ Additionally, you can delete them, too.
 ### 5.2.6 Glossary
 
 A glossary is a list of terms in a particular domain of knowledge with the definitions for those terms. You can add,
-edit and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
+edit, and delete glossary items here. The items will be automatically displayed in <abbr> tags in the frontend.
 
 ### 5.2.7 News Administration
 
 phpMyFAQ offers the ability to post news on the starting page of your FAQ.
-In the administration area, you can create new news, edit existing news or delete them.
+In the administration area, you can create new news, edit existing news, or delete them.
 
 ### 5.2.8 Attachment Administration
 
 In the attachment administration, you can see an overview of all attachments with their filename, file size,
-language and MIME type. You can delete them, too.
+language, and MIME type.
+You can delete them, too.
 
 ### 5.2.9 Tags Administration
 
@@ -225,7 +226,7 @@ above 4 results in a green number.
 
 This function lets you keep track of your visitors. Every visitor is assigned an ID when coming to your starting page,
 that identifies a user during his whole visit. Using the information gathered here, you could reconstruct the way
-visitors use your FAQ and make the necessary adjustments to your categories, content or keywords.
+visitors use your FAQ and make the necessary adjustments to your categories, content, or keywords.
 
 ### 5.3.3 View Admin log
 
@@ -235,7 +236,7 @@ intruder in the system, you can find out for sure by checking the admin log.
 ### 5.3.4 Search statistics
 
 On the search statistics page, you'll get a report about which keywords and how often your users are searching. This
-information is split into keywords, the number of searches for this term, the language and the overall percentage.
+information is split into keywords, the number of searches for this term, the language, and the overall percentage.
 
 ### 5.3.5 Reports
 
@@ -408,7 +409,7 @@ settings, Mail setup for SMTP, API settings, online update settings, and if enab
 
 You can see a list of all multisite installations, and you're able to add new ones.
 
-To host several distinct installations (with different configs, different templates and most importantly,
+To host several distinct installations (with different configs, different templates, and most importantly,
 different database credentials), but only want to update once, you need to follow these steps:
 
 - Make sure you have the _multisite/_ directory in your document root and _multisite.php_ in it
@@ -446,7 +447,7 @@ You can click through the update wizard:
 3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
 4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
-   files into your installation and in the end, the database is updated
+   files into your installation, and in the end, the database is updated
 
 ### 5.6.5 Elasticsearch configuration
 
@@ -464,7 +465,7 @@ This page is only available if OpenSearch is enabled.
 
 ### 5.6.7 System information
 
-On this page, phpMyFAQ displays some relevant system information like PHP version, database version or session path.
+On this page, phpMyFAQ displays some relevant system information like PHP version, database version, or session path.
 Please use this information when reporting bugs.
 
 ## 5.7 Using Microsoft Entra ID
@@ -514,7 +515,7 @@ Follow these steps to create an App Registration in Microsoft Azure:
 **Step 7: Create Azure config file**
 
 1. Copy the file `./config/azure.php.original` and name it `./config/azure.php`
-2. Add the Tenant ID, the client ID and the secret from Step 7 and save the file
+2. Add the Tenant ID, the client ID, and the secret from Step 7 and save the file
 3. Then, activate Microsoft Entra ID support in the administration under "Security"
 
 ## 5.8 Troubleshooting

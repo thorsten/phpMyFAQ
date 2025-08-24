@@ -12,9 +12,9 @@ With support for over 40 languages, it also boasts enhanced automatic content ne
 responsive templates.
 These Twig-based templates allow for the inclusion of your own text and HTML snippets.
 
-Additional features include PDF support, a backup system, a dynamic sitemap,
-related FAQs, tagging, a plugin system, and built-in spam protection systems.
-It also supports OpenLDAP, Microsoft Active Directory, and Microsoft Entra ID.
+Additional features include PDF support, a backup system, a dynamic sitemap, related FAQs, tagging, a plugin system, 
+and built-in spam protection systems.
+It also supports OpenLDAP, Microsoft Active Directory, Microsoft Entra ID, and a MCP Server for AI agents.
 The system is easy to install, thanks to its user-friendly installation script.
 
 phpMyFAQ is versatile
