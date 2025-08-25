@@ -216,7 +216,6 @@ class AttachmentControllerTest extends TestCase
         $reflection = new ReflectionClass(AttachmentController::class);
 
         $configurationProperty = $reflection->getProperty('configuration');
-        $configurationProperty->setAccessible(true);
         $configurationProperty->setValue($attachmentController, $configuration);
 
         return $attachmentController;

@@ -37,6 +37,9 @@ class TrackingTest extends TestCase
         $this->tracking = Tracking::getInstance($this->configurationMock, $this->requestMock, $this->userSessionMock);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testInitializeSessionId(): void
     {
         $this->requestMock->query = new InputBag([
@@ -46,14 +49,15 @@ class TrackingTest extends TestCase
 
         $reflection = new ReflectionClass($this->tracking);
         $method = $reflection->getMethod('initializeSessionId');
-        $method->setAccessible(true);
         $method->invoke($this->tracking);
 
         $property = $reflection->getProperty('currentSessionId');
-        $property->setAccessible(true);
         $this->assertEquals(123, $property->getValue($this->tracking));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testGetCookieId(): void
     {
         $this->requestMock->query = new InputBag([
@@ -63,7 +67,6 @@ class TrackingTest extends TestCase
 
         $reflection = new ReflectionClass($this->tracking);
         $method = $reflection->getMethod('getCookieId');
-        $method->setAccessible(true);
         $result = $method->invoke($this->tracking);
 
         $this->assertEquals(456, $result);
@@ -81,7 +84,6 @@ class TrackingTest extends TestCase
 
         $reflection = new ReflectionClass($this->tracking);
         $method = $reflection->getMethod('countBots');
-        $method->setAccessible(true);
         $result = $method->invoke($this->tracking);
 
         $this->assertEquals(1, $result);

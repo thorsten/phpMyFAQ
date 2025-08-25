@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class SetupTest extends TestCase
 {
@@ -30,9 +31,8 @@ class SetupTest extends TestCase
         $rootDir = '/path/to/root';
         $this->setup->setRootDir($rootDir);
 
-        $reflection = new \ReflectionClass($this->setup);
+        $reflection = new ReflectionClass($this->setup);
         $property = $reflection->getProperty('rootDir');
-        $property->setAccessible(true);
 
         $this->assertSame($rootDir, $property->getValue($this->setup));
     }

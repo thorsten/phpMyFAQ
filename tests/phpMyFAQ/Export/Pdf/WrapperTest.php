@@ -6,6 +6,7 @@ use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class WrapperTest extends TestCase
 {
@@ -121,9 +122,8 @@ class WrapperTest extends TestCase
     public function testValidateImageDataWithValidJpeg(): void
     {
         $jpegData = "\xFF\xD8\xFF\xE0\x00\x10JFIF\x00\x01\x01\x01";
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
-        $method->setAccessible(true);
 
         $this->assertTrue($method->invoke($this->wrapper, $jpegData));
     }
@@ -131,9 +131,8 @@ class WrapperTest extends TestCase
     public function testValidateImageDataWithValidPng(): void
     {
         $pngData = "\x89PNG\r\n\x1A\n\x00\x00\x00\x0DIHDR";
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
-        $method->setAccessible(true);
 
         $this->assertTrue($method->invoke($this->wrapper, $pngData));
     }
@@ -141,9 +140,8 @@ class WrapperTest extends TestCase
     public function testValidateImageDataWithInvalidData(): void
     {
         $invalidData = "This is not image data";
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
-        $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($this->wrapper, $invalidData));
     }
@@ -151,9 +149,8 @@ class WrapperTest extends TestCase
     public function testValidateImageDataWithTooShortData(): void
     {
         $shortData = "short";
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
-        $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($this->wrapper, $shortData));
     }
@@ -240,9 +237,8 @@ class WrapperTest extends TestCase
         $this->wrapper->setCategory($categoryId);
 
         // Use reflection to access private property
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('category');
-        $property->setAccessible(true);
 
         $this->assertEquals($categoryId, $property->getValue($this->wrapper));
     }
@@ -252,9 +248,8 @@ class WrapperTest extends TestCase
         $question = 'What is the meaning of life?';
         $this->wrapper->setQuestion($question);
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('question');
-        $property->setAccessible(true);
 
         $this->assertEquals($question, $property->getValue($this->wrapper));
     }
@@ -263,9 +258,8 @@ class WrapperTest extends TestCase
     {
         $this->wrapper->setQuestion('');
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('question');
-        $property->setAccessible(true);
 
         $this->assertEquals('', $property->getValue($this->wrapper));
     }
@@ -274,9 +268,8 @@ class WrapperTest extends TestCase
     {
         $this->wrapper->setQuestion(); // No parameter passed
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('question');
-        $property->setAccessible(true);
 
         $this->assertEquals('', $property->getValue($this->wrapper));
     }
@@ -303,9 +296,8 @@ class WrapperTest extends TestCase
     {
         $this->wrapper->setConfig($this->mockConfig);
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('config');
-        $property->setAccessible(true);
 
         $this->assertSame($this->mockConfig, $property->getValue($this->wrapper));
     }
@@ -321,9 +313,8 @@ class WrapperTest extends TestCase
 
         $this->wrapper->setFaq($faq);
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('faq');
-        $property->setAccessible(true);
 
         $this->assertEquals($faq, $property->getValue($this->wrapper));
     }
@@ -332,19 +323,16 @@ class WrapperTest extends TestCase
     {
         $this->wrapper->setFaq([]);
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('faq');
-        $property->setAccessible(true);
 
         $this->assertEquals([], $property->getValue($this->wrapper));
     }
 
     public function testGetCurrentFontReturnsCorrectFont(): void
     {
-        // Test default font
         $this->assertEquals('dejavusans', $this->wrapper->getCurrentFont());
 
-        // Test with different language settings
         Translation::create()
             ->setLanguagesDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('zh')
@@ -366,9 +354,8 @@ class WrapperTest extends TestCase
         $this->wrapper->setConfig($this->mockConfig);
         $this->wrapper->setCustomHeader();
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('customHeader');
-        $property->setAccessible(true);
 
         $this->assertEquals($customHeader, $property->getValue($this->wrapper));
     }
@@ -386,9 +373,8 @@ class WrapperTest extends TestCase
         $this->wrapper->setConfig($this->mockConfig);
         $this->wrapper->setCustomHeader();
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('customHeader');
-        $property->setAccessible(true);
 
         $this->assertEquals($expectedHeader, $property->getValue($this->wrapper));
     }
@@ -404,21 +390,22 @@ class WrapperTest extends TestCase
         $this->wrapper->setConfig($this->mockConfig);
         $this->wrapper->setCustomFooter();
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $property = $reflection->getProperty('customFooter');
-        $property->setAccessible(true);
 
         $this->assertEquals($customFooter, $property->getValue($this->wrapper));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testCheckBase64ImageWithValidJpegData(): void
     {
         // Create a simple 1x1 JPEG image data
         $jpegData = base64_decode('/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=');
 
-        $reflection = new \ReflectionClass($this->wrapper);
+        $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('checkBase64Image');
-        $method->setAccessible(true);
 
         $this->assertTrue($method->invoke($this->wrapper, $jpegData));
     }
@@ -432,7 +419,7 @@ class WrapperTest extends TestCase
 
             $decoded = urldecode($testFile);
             $this->assertEquals('/content/user/images/test image.jpg', $decoded);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $this->assertTrue(true);
         }
     }
@@ -448,7 +435,7 @@ class WrapperTest extends TestCase
 
             $wrapper = new Wrapper();
             $this->assertTrue(true);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $this->assertTrue(true, 'Constructor handles various language settings');
         }
     }

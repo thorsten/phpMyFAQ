@@ -3,6 +3,7 @@
 namespace phpMyFAQ\Plugin;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 require 'MockPlugin.php';
 require 'MockPluginEvent.php';
@@ -27,14 +28,11 @@ class PluginManagerTest extends TestCase
 
     public function testLoadPlugins(): void
     {
-        // Simulate loading plugins from directory
         $mockPluginPath = __DIR__ . '/MockPlugin.php';
         file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
 
-        // Use reflection to call private method getNamespaceFromFile
-        $reflection = new \ReflectionClass($this->pluginManager);
+        $reflection = new ReflectionClass($this->pluginManager);
         $method = $reflection->getMethod('getNamespaceFromFile');
-        $method->setAccessible(true);
         $namespace = $method->invokeArgs($this->pluginManager, [$mockPluginPath]);
 
         $this->assertEquals('phpMyFAQ\Plugin', $namespace);
@@ -48,14 +46,15 @@ class PluginManagerTest extends TestCase
         $this->assertEquals($config, $this->pluginManager->getPluginConfig('mockPlugin'));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testAreDependenciesMet(): void
     {
         $mockPlugin = new MockPlugin($this->pluginManager);
 
-        // Use reflection to call private method areDependenciesMet
-        $reflection = new \ReflectionClass($this->pluginManager);
+        $reflection = new ReflectionClass($this->pluginManager);
         $method = $reflection->getMethod('areDependenciesMet');
-        $method->setAccessible(true);
         $result = $method->invokeArgs($this->pluginManager, [$mockPlugin]);
 
         $this->assertTrue($result);

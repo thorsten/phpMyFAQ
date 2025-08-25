@@ -5,6 +5,7 @@ namespace phpMyFAQ\Auth\EntraId;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use stdClass;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -56,9 +57,8 @@ class OAuthTest extends TestCase
             ->with('POST', $this->stringContains('microsoftonline.com'))
             ->willReturn($mockResponse);
 
-        $reflection = new \ReflectionClass($this->oAuth);
+        $reflection = new ReflectionClass($this->oAuth);
         $clientProperty = $reflection->getProperty('httpClient');
-        $clientProperty->setAccessible(true);
         $clientProperty->setValue($this->oAuth, $this->mockClient);
 
         $result = $this->oAuth->getOAuthToken('authorization_code');
@@ -88,9 +88,8 @@ class OAuthTest extends TestCase
             ->with('POST', $this->stringContains('microsoftonline.com'))
             ->willReturn($mockResponse);
 
-        $reflection = new \ReflectionClass($this->oAuth);
+        $reflection = new ReflectionClass($this->oAuth);
         $clientProperty = $reflection->getProperty('httpClient');
-        $clientProperty->setAccessible(true);
         $clientProperty->setValue($this->oAuth, $this->mockClient);
 
         $result = $this->oAuth->refreshToken();
@@ -127,9 +126,8 @@ class OAuthTest extends TestCase
         $this->oAuth->setRefreshToken($refreshToken);
 
         // Use reflection to verify the token was set
-        $reflection = new \ReflectionClass($this->oAuth);
+        $reflection = new ReflectionClass($this->oAuth);
         $property = $reflection->getProperty('refreshToken');
-        $property->setAccessible(true);
 
         $this->assertEquals($refreshToken, $property->getValue($this->oAuth));
     }

@@ -183,17 +183,14 @@ class AuthEntraIdTest extends TestCase
 
     public function testCreateOAuthChallengeGeneration(): void
     {
-        // Use reflection to test private method
+        // Use reflection to test a private method
         $reflection = new ReflectionClass($this->authEntraId);
         $method = $reflection->getMethod('createOAuthChallenge');
-        $method->setAccessible(true);
 
         // Get private properties
         $verifierProperty = $reflection->getProperty('oAuthVerifier');
-        $verifierProperty->setAccessible(true);
 
         $challengeProperty = $reflection->getProperty('oAuthChallenge');
-        $challengeProperty->setAccessible(true);
 
         // Test challenge generation
         $method->invoke($this->authEntraId);
@@ -206,7 +203,7 @@ class AuthEntraIdTest extends TestCase
         $this->assertEquals(128, strlen($verifier));
         $this->assertMatchesRegularExpression('/^[0-9a-zA-Z\-\._~]+$/', $verifier);
 
-        // Verify challenge is generated correctly
+        // Verify the challenge is generated correctly
         $this->assertNotEmpty($challenge);
         $expectedChallenge = str_replace(
             '=',
@@ -220,10 +217,8 @@ class AuthEntraIdTest extends TestCase
     {
         $reflection = new ReflectionClass($this->authEntraId);
         $method = $reflection->getMethod('createOAuthChallenge');
-        $method->setAccessible(true);
 
         $verifierProperty = $reflection->getProperty('oAuthVerifier');
-        $verifierProperty->setAccessible(true);
 
         // Set existing verifier
         $existingVerifier = 'existing_verifier_123';
@@ -239,10 +234,8 @@ class AuthEntraIdTest extends TestCase
     {
         $reflection = new ReflectionClass($this->authEntraId);
         $method = $reflection->getMethod('createOAuthChallenge');
-        $method->setAccessible(true);
 
         $verifierProperty = $reflection->getProperty('oAuthVerifier');
-        $verifierProperty->setAccessible(true);
 
         // Set empty string verifier (should trigger generation)
         $verifierProperty->setValue($this->authEntraId, '');
@@ -258,10 +251,8 @@ class AuthEntraIdTest extends TestCase
     {
         $reflection = new ReflectionClass($this->authEntraId);
         $method = $reflection->getMethod('createOAuthChallenge');
-        $method->setAccessible(true);
 
         $verifierProperty = $reflection->getProperty('oAuthVerifier');
-        $verifierProperty->setAccessible(true);
 
         // Set '0' string verifier (should trigger generation)
         $verifierProperty->setValue($this->authEntraId, '0');

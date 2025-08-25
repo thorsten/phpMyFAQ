@@ -298,7 +298,6 @@ class SqlsrvTest extends TestCase
             public function addToLog(string $query): void
             {
                 $reflection = new ReflectionProperty(parent::class, 'sqlLog');
-                $reflection->setAccessible(true);
                 $currentLog = $reflection->getValue($this);
                 $reflection->setValue($this, $currentLog . $query);
             }
@@ -331,24 +330,31 @@ class SqlsrvTest extends TestCase
         $this->assertEquals('string', $reflection->getReturnType()->getName());
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testConnectionProperty(): void
     {
         $reflection = new ReflectionProperty($this->sqlsrv, 'conn');
         $this->assertTrue($reflection->isPrivate());
 
-        $reflection->setAccessible(true);
         $this->assertFalse($reflection->getValue($this->sqlsrv));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testConnectionOptionsProperty(): void
     {
         $reflection = new ReflectionProperty($this->sqlsrv, 'connectionOptions');
         $this->assertTrue($reflection->isPrivate());
 
-        $reflection->setAccessible(true);
         $this->assertEquals([], $reflection->getValue($this->sqlsrv));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testSetConnectionOptionsMethodExists(): void
     {
         $this->assertTrue(method_exists($this->sqlsrv, 'setConnectionOptions'));

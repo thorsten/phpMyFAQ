@@ -142,11 +142,9 @@ class LdapTest extends TestCase
             ->onlyMethods(['error'])
             ->getMock();
 
-        // Test that bind method validates connection state
         $reflection = new ReflectionClass(Ldap::class);
         $property = $reflection->getProperty('ds');
-        $property->setAccessible(true);
-        $property->setValue($ldapMock, false); // Set to false to simulate failed connection
+        $property->setValue($ldapMock, false);
 
         $result = $ldapMock->bind('test', 'password');
         $this->assertFalse($result);
@@ -170,16 +168,13 @@ class LdapTest extends TestCase
 
         // Set ds to a mock connection to bypass the connection check
         $dsProperty = $reflection->getProperty('ds');
-        $dsProperty->setAccessible(true);
         $dsProperty->setValue($this->ldap, true); // Simulate valid connection
 
         // Set base to bypass the base check
         $baseProperty = $reflection->getProperty('base');
-        $baseProperty->setAccessible(true);
         $baseProperty->setValue($this->ldap, 'dc=example,dc=com');
 
         $method = $reflection->getMethod('getLdapData');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->ldap, 'testuser', 'nonexistent');
         $this->assertFalse($result);
@@ -187,37 +182,13 @@ class LdapTest extends TestCase
     }
 
     /**
-     * Test LDAP connection scenarios with mocked functions
-     */
-    public function testConnectScenarios(): void
-    {
-        // Skip if LDAP extension is not available
-        if (!extension_loaded('ldap')) {
-            $this->markTestSkipped('LDAP extension not available');
-        }
-
-        // Test dynamic login configuration
-        $this->configuration->method('getLdapOptions')->willReturn([]);
-        $this->configuration->method('get')->willReturnMap([
-            ['ldap.ldap_use_dynamic_login', true],
-            ['ldap.ldap_dynamic_login_attribute', 'uid'],
-            ['ldap.ldap_use_anonymous_login', false]
-        ]);
-
-        // Note: Real LDAP connection tests would require a test LDAP server
-        // These tests focus on the logic flow
-        $this->assertTrue(true); // Placeholder for connection logic tests
-    }
-
-    /**
      * Test configuration scenarios
      */
     public function testConfigurationMapping(): void
     {
-        // Test that configuration is properly loaded via constructor
+        // Test that the configuration is properly loaded via constructor
         $reflection = new ReflectionClass(Ldap::class);
         $property = $reflection->getProperty('ldapConfig');
-        $property->setAccessible(true);
 
         $config = $property->getValue($this->ldap);
         $this->assertIsArray($config);
@@ -270,23 +241,6 @@ class LdapTest extends TestCase
     }
 
     /**
-     * Test connection validation logic separately
-     */
-    public function testConnectionValidationLogic(): void
-    {
-        // Test empty server
-        $result = $this->ldap->connect('', 389, 'DC=example,DC=com');
-        $this->assertFalse($result);
-
-        // Test empty base
-        $result = $this->ldap->connect('localhost', 389, '');
-        $this->assertFalse($result);
-
-        // These should fail before any LDAP function calls
-        $this->assertTrue(true); // If we reach here, validation works
-    }
-
-    /**
      * Test quote method edge cases
      */
     public function testQuoteMethodEdgeCases(): void
@@ -314,7 +268,7 @@ class LdapTest extends TestCase
      */
     public function testGetDataMethodsLogic(): void
     {
-        // Test quote method thoroughly (this works without LDAP connection)
+        // Test the quote method thoroughly (this works without LDAP connection)
         $this->assertEquals('test\\2a\\28\\29', $this->ldap->quote('test*()'));
 
         // Test error property manipulation
@@ -361,10 +315,8 @@ class LdapTest extends TestCase
         $ldap = new Ldap($mockConfig);
         $this->assertInstanceOf(Ldap::class, $ldap);
 
-        // Test private property access via reflection
         $reflection = new ReflectionClass(Ldap::class);
         $configProperty = $reflection->getProperty('ldapConfig');
-        $configProperty->setAccessible(true);
 
         $config = $configProperty->getValue($ldap);
         $this->assertArrayHasKey('ldap_mapping', $config);

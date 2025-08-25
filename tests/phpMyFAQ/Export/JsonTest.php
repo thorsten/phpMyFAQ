@@ -8,6 +8,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Class JsonTest
@@ -45,18 +46,15 @@ class JsonTest extends TestCase
 
     public function testConstructorStoresDependencies(): void
     {
-        $reflection = new \ReflectionClass($this->jsonExport);
+        $reflection = new ReflectionClass($this->jsonExport);
 
         $faqProperty = $reflection->getProperty('faq');
-        $faqProperty->setAccessible(true);
         $this->assertSame($this->faqMock, $faqProperty->getValue($this->jsonExport));
 
         $categoryProperty = $reflection->getProperty('category');
-        $categoryProperty->setAccessible(true);
         $this->assertSame($this->categoryMock, $categoryProperty->getValue($this->jsonExport));
 
         $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
         $this->assertSame($this->configMock, $configProperty->getValue($this->jsonExport));
     }
 

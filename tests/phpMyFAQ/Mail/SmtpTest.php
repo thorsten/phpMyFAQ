@@ -24,11 +24,9 @@ class SmtpTest extends TestCase
         // Use reflection to inject the mock mailer
         $reflection = new ReflectionClass($this->smtp);
         $mailerProperty = $reflection->getProperty('mailer');
-        $mailerProperty->setAccessible(true);
         $mailerProperty->setValue($this->smtp, $this->mockMailer);
 
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $userProperty->setValue($this->smtp, 'test@example.com');
     }
 

@@ -5,6 +5,7 @@ namespace phpMyFAQ\User;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
+use ReflectionClass;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuthException;
@@ -83,9 +84,8 @@ class TwoFactorTest extends TestCase
             ->with('testsecret', '123456')
             ->willReturn(true);
 
-        $reflection = new \ReflectionClass($this->twoFactor);
+        $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('twoFactorAuth');
-        $property->setAccessible(true);
         $property->setValue($this->twoFactor, $twoFactorAuth);
 
         $result = $this->twoFactor->validateToken('123456', 1);
@@ -114,9 +114,8 @@ class TwoFactorTest extends TestCase
         $qrCodeProvider->method('getQRCodeImage')
             ->willReturn('fakeimage');
 
-        $reflection = new \ReflectionClass($this->twoFactor);
+        $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('endroidQrCodeProvider');
-        $property->setAccessible(true);
         $property->setValue($this->twoFactor, $qrCodeProvider);
 
         $qrCode = $this->twoFactor->getQrCode('testsecret');

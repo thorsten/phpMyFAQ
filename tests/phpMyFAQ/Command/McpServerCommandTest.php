@@ -4,6 +4,7 @@ namespace phpMyFAQ\Command;
 
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
+use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,9 +21,8 @@ class McpServerCommandTest extends TestCase
 
     private function callExecute($input, $output)
     {
-        $reflection = new \ReflectionClass($this->command);
+        $reflection = new ReflectionClass($this->command);
         $method = $reflection->getMethod('execute');
-        $method->setAccessible(true);
         return $method->invoke($this->command, $input, $output);
     }
 

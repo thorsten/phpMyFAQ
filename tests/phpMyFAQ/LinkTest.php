@@ -34,7 +34,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isHomeIndex');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
@@ -47,7 +46,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isInternalReference');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertFalse($method->invokeArgs($this->link, array()));
@@ -66,7 +64,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isSystemLink');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
@@ -79,7 +76,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('hasScheme');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
         $this->assertTrue($method->invokeArgs($this->link, array()));
@@ -128,7 +124,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getHttpGetParameters');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/?foo=bar', $this->configuration);
         $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
@@ -150,7 +145,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getQuery');
-        $method->setAccessible(true);
 
         $this->link = new Link('https://example.com/my-test-faq/?foo=bar', $this->configuration);
         $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, array()));
@@ -166,7 +160,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getDefaultScheme');
-        $method->setAccessible(true);
 
         $this->configuration->set('security.useSslOnly', 'true');
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
@@ -251,7 +244,6 @@ class LinkTest extends TestCase
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('appendSids');
-        $method->setAccessible(true);
 
         $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
         $actual = $method->invokeArgs($this->link, array('http://example.com/my-test-faq/', 4711));

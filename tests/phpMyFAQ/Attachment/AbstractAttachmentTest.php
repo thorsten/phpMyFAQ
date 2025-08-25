@@ -167,7 +167,6 @@ class AbstractAttachmentTest extends TestCase
     {
         $reflection = new ReflectionClass($this->attachment);
         $idProperty = $reflection->getProperty('id');
-        $idProperty->setAccessible(true);
         $idProperty->setValue($this->attachment, 42);
 
         $url = $this->attachment->buildUrl();
@@ -199,7 +198,6 @@ class AbstractAttachmentTest extends TestCase
 
         $reflection = new ReflectionClass($this->attachment);
         $property = $reflection->getProperty('recordLang');
-        $property->setAccessible(true);
 
         $this->assertEquals('fr', $property->getValue($this->attachment));
     }
@@ -210,11 +208,8 @@ class AbstractAttachmentTest extends TestCase
 
         $reflection = new ReflectionClass($this->attachment);
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $encryptedProperty->setAccessible(true);
         $passwordHashProperty = $reflection->getProperty('passwordHash');
-        $passwordHashProperty->setAccessible(true);
 
         $this->assertEquals('secret123', $keyProperty->getValue($this->attachment));
         $this->assertTrue($encryptedProperty->getValue($this->attachment));
@@ -227,11 +222,8 @@ class AbstractAttachmentTest extends TestCase
 
         $reflection = new ReflectionClass($this->attachment);
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $encryptedProperty->setAccessible(true);
         $passwordHashProperty = $reflection->getProperty('passwordHash');
-        $passwordHashProperty->setAccessible(true);
 
         $this->assertEquals('custom456', $keyProperty->getValue($this->attachment));
         $this->assertTrue($encryptedProperty->getValue($this->attachment));
@@ -244,9 +236,7 @@ class AbstractAttachmentTest extends TestCase
 
         $reflection = new ReflectionClass($this->attachment);
         $keyProperty = $reflection->getProperty('key');
-        $keyProperty->setAccessible(true);
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $encryptedProperty->setAccessible(true);
 
         $this->assertNull($keyProperty->getValue($this->attachment));
         $this->assertFalse($encryptedProperty->getValue($this->attachment));
@@ -270,7 +260,6 @@ class AbstractAttachmentTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->attachment, $value);
         }
 
@@ -291,7 +280,6 @@ class AbstractAttachmentTest extends TestCase
     {
         $reflection = new ReflectionClass($this->attachment);
         $filenameProperty = $reflection->getProperty('filename');
-        $filenameProperty->setAccessible(true);
         $filenameProperty->setValue($this->attachment, 'document.pdf');
 
         $mimeType = $this->attachment->testReadMimeType();
@@ -305,11 +293,9 @@ class AbstractAttachmentTest extends TestCase
         $reflection = new ReflectionClass($this->attachment);
 
         $realHashProperty = $reflection->getProperty('realHash');
-        $realHashProperty->setAccessible(true);
         $realHashProperty->setValue($this->attachment, 'real_hash_123');
 
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $encryptedProperty->setAccessible(true);
         $encryptedProperty->setValue($this->attachment, false);
 
         $virtualHash = $this->attachment->testMkVirtualHash();
@@ -332,7 +318,6 @@ class AbstractAttachmentTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->attachment, $value);
         }
 
@@ -346,11 +331,12 @@ class AbstractAttachmentTest extends TestCase
     {
         $reflection = new ReflectionClass($this->attachment);
         $encryptedProperty = $reflection->getProperty('encrypted');
-        $encryptedProperty->setAccessible(true);
         $encryptedProperty->setValue($this->attachment, true);
 
         $this->expectException(AttachmentException::class);
-        $this->expectExceptionMessage('All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files');
+        $this->expectExceptionMessage(
+            'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files'
+        );
 
         $this->attachment->testMkVirtualHash();
     }
@@ -421,7 +407,6 @@ class AbstractAttachmentTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->attachment, $value);
         }
 
@@ -443,19 +428,15 @@ class AbstractAttachmentTest extends TestCase
         $reflection = new ReflectionClass($this->attachment);
 
         $filenameProperty = $reflection->getProperty('filename');
-        $filenameProperty->setAccessible(true);
         $filenameProperty->setValue($this->attachment, '');
 
         $mimeTypeProperty = $reflection->getProperty('mimeType');
-        $mimeTypeProperty->setAccessible(true);
         $mimeTypeProperty->setValue($this->attachment, '');
 
         $filesizeProperty = $reflection->getProperty('filesize');
-        $filesizeProperty->setAccessible(true);
         $filesizeProperty->setValue($this->attachment, 0);
 
         $realHashProperty = $reflection->getProperty('realHash');
-        $realHashProperty->setAccessible(true);
         $realHashProperty->setValue($this->attachment, '');
 
         // Test getters when properties are initialized with default values

@@ -50,10 +50,8 @@ class ApplicationTest extends TestCase
         $urlMatcher = $this->createMock(UrlMatcher::class);
         $this->application->setUrlMatcher($urlMatcher);
 
-        // Verwende Reflection um zu prüfen, ob der UrlMatcher gesetzt wurde
         $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('urlMatcher');
-        $property->setAccessible(true);
 
         $this->assertSame($urlMatcher, $property->getValue($this->application));
     }
@@ -65,7 +63,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $property = $reflection->getProperty('controllerResolver');
-        $property->setAccessible(true);
 
         $this->assertSame($controllerResolver, $property->getValue($this->application));
     }
@@ -103,7 +100,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('setLanguage');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->application);
         $this->assertEquals('de', $result);
@@ -118,7 +114,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('setLanguage');
-        $method->setAccessible(true);
 
         $result = $method->invoke($application);
         $this->assertEquals('en', $result);
@@ -131,7 +126,6 @@ class ApplicationTest extends TestCase
     {
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('initializeTranslation');
-        $method->setAccessible(true);
 
         $this->expectNotToPerformAssertions();
 
@@ -156,7 +150,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
-        $method->setAccessible(true);
 
         $this->expectOutputString('Test Response');
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
@@ -174,7 +167,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
-        $method->setAccessible(true);
 
         ob_start();
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
@@ -202,7 +194,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
-        $method->setAccessible(true);
 
         ob_start();
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
@@ -229,7 +220,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
-        $method->setAccessible(true);
 
         ob_start();
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
@@ -257,7 +247,6 @@ class ApplicationTest extends TestCase
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('handleRequest');
-        $method->setAccessible(true);
 
         ob_start();
         $method->invoke($this->application, $routeCollection, $request, $requestContext);

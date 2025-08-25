@@ -75,7 +75,6 @@ class UpdateTest extends TestCase
         $this->update->setDryRun(true);
         $reflection = new \ReflectionClass($this->update);
         $property = $reflection->getProperty('dryRun');
-        $property->setAccessible(true);
         $this->assertTrue($property->getValue($this->update));
 
         $this->update->setDryRun(false);

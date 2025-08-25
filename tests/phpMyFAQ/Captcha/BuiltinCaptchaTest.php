@@ -7,6 +7,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Class CaptchaTest
@@ -279,9 +280,8 @@ class BuiltinCaptchaTest extends TestCase
      */
     private function getPrivateProperty(object $object, string $propertyName): mixed
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
         return $property->getValue($object);
     }
 

@@ -356,7 +356,6 @@ class ApiTest extends TestCase
         // Use reflection to verify the HttpClient is properly initialized
         $reflection = new ReflectionClass($api);
         $property = $reflection->getProperty('httpClient');
-        $property->setAccessible(true);
         $httpClient = $property->getValue($api);
 
         $this->assertInstanceOf(HttpClientInterface::class, $httpClient);
@@ -367,7 +366,6 @@ class ApiTest extends TestCase
         // Verify that the API URL is correctly set
         $reflection = new ReflectionClass($this->api);
         $property = $reflection->getProperty('apiUrl');
-        $property->setAccessible(true);
         $apiUrl = $property->getValue($this->api);
 
         $this->assertEquals('https://api.phpmyfaq.de/', $apiUrl);
@@ -394,7 +392,6 @@ class ApiTest extends TestCase
         // Verify that remoteHashes was set
         $reflection = new ReflectionClass($this->api);
         $property = $reflection->getProperty('remoteHashes');
-        $property->setAccessible(true);
         $remoteHashes = $property->getValue($this->api);
 
         $this->assertEquals($expectedHashes, $remoteHashes);

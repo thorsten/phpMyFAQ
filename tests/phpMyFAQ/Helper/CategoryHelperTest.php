@@ -10,6 +10,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class CategoryHelperTest extends TestCase
 {
@@ -252,13 +253,11 @@ class CategoryHelperTest extends TestCase
      */
     public function testBuildAvailableCategoryTranslationsList(): void
     {
-        // Create real CategoryHelper instance
         $categoryHelper = new CategoryHelper();
 
         // Use reflection to set configuration
-        $reflection = new \ReflectionClass($categoryHelper);
+        $reflection = new ReflectionClass($categoryHelper);
         $configProperty = $reflection->getProperty('configuration');
-        $configProperty->setAccessible(true);
         $configProperty->setValue($categoryHelper, $this->mockConfiguration);
 
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://localhost/');
@@ -282,17 +281,14 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderAvailableTranslationsOptions(): void
     {
-        // Mock Language component
         $mockLanguage = $this->createMock(Language::class);
         $mockLanguage->method('isLanguageAvailable')->willReturn(['en', 'de']);
 
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
 
-        // Create CategoryHelper with proper setup
         $categoryHelper = new CategoryHelper();
-        $reflection = new \ReflectionClass($categoryHelper);
+        $reflection = new ReflectionClass($categoryHelper);
         $configProperty = $reflection->getProperty('configuration');
-        $configProperty->setAccessible(true);
         $configProperty->setValue($categoryHelper, $this->mockConfiguration);
 
         $result = $categoryHelper->renderAvailableTranslationsOptions(1);

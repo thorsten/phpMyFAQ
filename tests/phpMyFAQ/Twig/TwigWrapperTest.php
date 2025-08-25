@@ -4,6 +4,7 @@ namespace phpMyFAQ\Twig;
 
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Twig\Extension\ExtensionInterface;
 use Twig\TemplateWrapper;
 use Twig\TwigFilter;
@@ -24,9 +25,8 @@ class TwigWrapperTest extends TestCase
     public function testSetSetup(): void
     {
         $this->twigWrapper->setSetup(true);
-        $reflection = new \ReflectionClass($this->twigWrapper);
+        $reflection = new ReflectionClass($this->twigWrapper);
         $property = $reflection->getProperty('isSetup');
-        $property->setAccessible(true);
         $this->assertTrue($property->getValue($this->twigWrapper));
 
         $this->twigWrapper->setSetup(false);
@@ -50,9 +50,8 @@ class TwigWrapperTest extends TestCase
         $extensionMock = $this->createMock(ExtensionInterface::class);
         $this->twigWrapper->addExtension($extensionMock);
 
-        $reflection = new \ReflectionClass($this->twigWrapper);
+        $reflection = new ReflectionClass($this->twigWrapper);
         $property = $reflection->getProperty('twigEnvironment');
-        $property->setAccessible(true);
         $twigEnvironment = $property->getValue($this->twigWrapper);
 
         $this->assertTrue($twigEnvironment->hasExtension(get_class($extensionMock)));
@@ -65,9 +64,8 @@ class TwigWrapperTest extends TestCase
         });
         $this->twigWrapper->addFunction($function);
 
-        $reflection = new \ReflectionClass($this->twigWrapper);
+        $reflection = new ReflectionClass($this->twigWrapper);
         $property = $reflection->getProperty('twigEnvironment');
-        $property->setAccessible(true);
         $twigEnvironment = $property->getValue($this->twigWrapper);
 
         $this->assertInstanceOf(TwigFunction::class, $twigEnvironment->getFunction('testFunction'));
@@ -88,9 +86,8 @@ class TwigWrapperTest extends TestCase
         });
         $this->twigWrapper->addFilter($filter);
 
-        $reflection = new \ReflectionClass($this->twigWrapper);
+        $reflection = new ReflectionClass($this->twigWrapper);
         $property = $reflection->getProperty('twigEnvironment');
-        $property->setAccessible(true);
         $twigEnvironment = $property->getValue($this->twigWrapper);
 
         $this->assertInstanceOf(TwigFilter::class, $twigEnvironment->getFilter('testFilter'));

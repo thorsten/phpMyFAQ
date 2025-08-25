@@ -308,7 +308,6 @@ class Sqlite3Test extends TestCase
             public function addToLog(string $query): void
             {
                 $reflection = new ReflectionProperty(parent::class, 'sqlLog');
-                $reflection->setAccessible(true);
                 $currentLog = $reflection->getValue($this);
                 $reflection->setValue($this, $currentLog . $query);
             }
@@ -352,8 +351,7 @@ class Sqlite3Test extends TestCase
         $reflection = new ReflectionProperty($this->sqlite3, 'conn');
         $this->assertTrue($reflection->isPrivate());
 
-        // Initial state should be false
-        $reflection->setAccessible(true);
+        // The initial state should be false
         $this->assertFalse($reflection->getValue($this->sqlite3));
     }
 

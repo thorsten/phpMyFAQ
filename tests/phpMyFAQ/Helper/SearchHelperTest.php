@@ -28,7 +28,6 @@ class SearchHelperTest extends TestCase
 
         $reflection = new ReflectionClass($this->searchHelper);
         $sessionIdProperty = $reflection->getProperty('sessionId');
-        $sessionIdProperty->setAccessible(true);
         $sessionIdProperty->setValue($this->searchHelper, 'sid=test123&');
     }
 
@@ -47,7 +46,6 @@ class SearchHelperTest extends TestCase
 
         $reflection = new ReflectionClass($this->searchHelper);
         $searchTermProperty = $reflection->getProperty('searchTerm');
-        $searchTermProperty->setAccessible(true);
         $actualSearchTerm = $searchTermProperty->getValue($this->searchHelper);
 
         $this->assertEquals($searchTerm, $actualSearchTerm);
@@ -268,7 +266,6 @@ class SearchHelperTest extends TestCase
     {
         $reflection = new ReflectionClass($this->searchHelper);
         $method = $reflection->getMethod('renderScore');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->searchHelper, 0);
 
@@ -283,7 +280,6 @@ class SearchHelperTest extends TestCase
     {
         $reflection = new ReflectionClass($this->searchHelper);
         $method = $reflection->getMethod('renderScore');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->searchHelper, 25.5);
 
@@ -297,7 +293,6 @@ class SearchHelperTest extends TestCase
     {
         $reflection = new ReflectionClass($this->searchHelper);
         $method = $reflection->getMethod('renderScore');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->searchHelper, 50.0);
 
@@ -313,7 +308,6 @@ class SearchHelperTest extends TestCase
     {
         $reflection = new ReflectionClass($this->searchHelper);
         $method = $reflection->getMethod('renderScore');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->searchHelper, 85.0);
 

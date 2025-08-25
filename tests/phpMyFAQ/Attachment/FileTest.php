@@ -60,10 +60,9 @@ class FileTest extends TestCase
 
             public function testGetFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
             {
-                // Use reflection to call private method
-                $reflection = new \ReflectionClass($this);
+                // Use reflection to call a private method
+                $reflection = new ReflectionClass($this);
                 $method = $reflection->getMethod('getFile');
-                $method->setAccessible(true);
                 return $method->invoke($this, $mode);
             }
         };
@@ -81,7 +80,6 @@ class FileTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->file, $value);
         }
 
@@ -147,7 +145,6 @@ class FileTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->file, $value);
         }
 
@@ -171,7 +168,6 @@ class FileTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->file, $value);
         }
 
@@ -201,7 +197,6 @@ class FileTest extends TestCase
 
         foreach ($properties as $prop => $value) {
             $property = $reflection->getProperty($prop);
-            $property->setAccessible(true);
             $property->setValue($this->file, $value);
         }
 

@@ -249,7 +249,6 @@ class RegistrationHelperTest extends TestCase
     {
         $reflection = new ReflectionClass($this->registrationHelper);
         $property = $reflection->getProperty('configuration');
-        $property->setAccessible(true);
         $config = $property->getValue($this->registrationHelper);
 
         $this->assertSame($this->configurationMock, $config);

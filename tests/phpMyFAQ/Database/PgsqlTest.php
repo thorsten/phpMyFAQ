@@ -110,7 +110,6 @@ class PgsqlTest extends TestCase
             public function addToLog(string $query): void
             {
                 $reflection = new ReflectionProperty(parent::class, 'sqlLog');
-                $reflection->setAccessible(true);
                 $currentLog = $reflection->getValue($this);
                 $reflection->setValue($this, $currentLog . $query);
             }
@@ -382,7 +381,6 @@ class PgsqlTest extends TestCase
         $reflection = new ReflectionProperty($this->pgsql, 'conn');
         $this->assertTrue($reflection->isPrivate());
 
-        $reflection->setAccessible(true);
         $this->assertFalse($reflection->getValue($this->pgsql));
     }
 

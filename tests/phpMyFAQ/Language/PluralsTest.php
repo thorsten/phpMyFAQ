@@ -23,7 +23,6 @@ class PluralsTest extends TestCase
         // Use reflection to access a private plural method for testing
         $reflection = new ReflectionClass(Plurals::class);
         $this->pluralMethod = $reflection->getMethod('plural');
-        $this->pluralMethod->setAccessible(true);
     }
 
     /**
@@ -232,17 +231,14 @@ class PluralsTest extends TestCase
 
         // Test that properties are set during construction
         $nPluralsProperty = $reflection->getProperty('nPlurals');
-        $nPluralsProperty->setAccessible(true);
         $nPlurals = $nPluralsProperty->getValue($this->plurals);
         $this->assertIsInt($nPlurals);
 
         $langProperty = $reflection->getProperty('lang');
-        $langProperty->setAccessible(true);
         $lang = $langProperty->getValue($this->plurals);
         $this->assertNotNull($lang);
 
         $useDefaultProperty = $reflection->getProperty('useDefaultPluralForm');
-        $useDefaultProperty->setAccessible(true);
         $useDefault = $useDefaultProperty->getValue($this->plurals);
         $this->assertIsBool($useDefault);
     }

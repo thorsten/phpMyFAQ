@@ -45,15 +45,12 @@ class AttachmentFactoryTest extends TestCase
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');
-        $defaultKeyProperty->setAccessible(true);
         $defaultKeyProperty->setValue(null, null);
 
         $storageTypeProperty = $reflection->getProperty('storageType');
-        $storageTypeProperty->setAccessible(true);
         $storageTypeProperty->setValue(null, 0);
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
-        $encryptionEnabledProperty->setAccessible(true);
         $encryptionEnabledProperty->setValue(null, null);
     }
 
@@ -61,7 +58,6 @@ class AttachmentFactoryTest extends TestCase
     {
         $reflection = new ReflectionClass(AttachmentFactory::class);
         $storageTypeProperty = $reflection->getProperty('storageType');
-        $storageTypeProperty->setAccessible(true);
         $storageTypeProperty->setValue(null, $storageType);
     }
 
@@ -86,7 +82,7 @@ class AttachmentFactoryTest extends TestCase
 
     public function testCreateWithUnknownStorageType(): void
     {
-        // Set invalid storage type
+        // Set an invalid storage type
         $this->setStorageType(999);
 
         $this->expectException(AttachmentException::class);
@@ -114,7 +110,7 @@ class AttachmentFactoryTest extends TestCase
         // Initialize factory with encryption enabled
         AttachmentFactory::init('default_secret', true);
 
-        // Call create without custom key - should use default key
+        // Call create without a custom key - should use the default key
         $attachment = AttachmentFactory::create(123);
 
         $this->assertInstanceOf(File::class, $attachment);
@@ -207,11 +203,9 @@ class AttachmentFactoryTest extends TestCase
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');
-        $defaultKeyProperty->setAccessible(true);
         $this->assertEquals('secret123', $defaultKeyProperty->getValue());
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
-        $encryptionEnabledProperty->setAccessible(true);
         $this->assertTrue($encryptionEnabledProperty->getValue());
     }
 
@@ -227,11 +221,9 @@ class AttachmentFactoryTest extends TestCase
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');
-        $defaultKeyProperty->setAccessible(true);
         $this->assertEquals('secret123', $defaultKeyProperty->getValue());
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
-        $encryptionEnabledProperty->setAccessible(true);
         $this->assertTrue($encryptionEnabledProperty->getValue());
     }
 
@@ -242,11 +234,9 @@ class AttachmentFactoryTest extends TestCase
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');
-        $defaultKeyProperty->setAccessible(true);
         $this->assertEquals('secret456', $defaultKeyProperty->getValue());
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
-        $encryptionEnabledProperty->setAccessible(true);
         $this->assertFalse($encryptionEnabledProperty->getValue());
     }
 
@@ -291,15 +281,12 @@ class AttachmentFactoryTest extends TestCase
         $reflection = new ReflectionClass(AttachmentFactory::class);
 
         $defaultKeyProperty = $reflection->getProperty('defaultKey');
-        $defaultKeyProperty->setAccessible(true);
         $this->assertNull($defaultKeyProperty->getValue());
 
         $storageTypeProperty = $reflection->getProperty('storageType');
-        $storageTypeProperty->setAccessible(true);
         $this->assertEquals(0, $storageTypeProperty->getValue());
 
         $encryptionEnabledProperty = $reflection->getProperty('encryptionEnabled');
-        $encryptionEnabledProperty->setAccessible(true);
         $this->assertNull($encryptionEnabledProperty->getValue());
     }
 }

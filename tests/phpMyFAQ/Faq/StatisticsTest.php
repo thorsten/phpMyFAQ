@@ -58,11 +58,9 @@ class StatisticsTest extends TestCase
         $reflection = new ReflectionClass($statistics);
 
         $groupSupportProperty = $reflection->getProperty('groupSupport');
-        $groupSupportProperty->setAccessible(true);
         $this->assertFalse($groupSupportProperty->getValue($statistics));
 
         $pluralsProperty = $reflection->getProperty('plurals');
-        $pluralsProperty->setAccessible(true);
         $this->assertInstanceOf(Plurals::class, $pluralsProperty->getValue($statistics));
     }
 
@@ -81,7 +79,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $groupSupportProperty = $reflection->getProperty('groupSupport');
-        $groupSupportProperty->setAccessible(true);
         $this->assertTrue($groupSupportProperty->getValue($statistics));
     }
 
@@ -91,7 +88,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $pluralsProperty = $reflection->getProperty('plurals');
-        $pluralsProperty->setAccessible(true);
         $plurals = $pluralsProperty->getValue($statistics);
 
         $this->assertInstanceOf(Plurals::class, $plurals);
@@ -109,7 +105,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $this->assertEquals(123, $userProperty->getValue($statistics));
     }
 
@@ -122,7 +117,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $this->assertEquals(-1, $userProperty->getValue($statistics));
     }
 
@@ -137,7 +131,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $this->assertEquals(789, $userProperty->getValue($statistics));
     }
 
@@ -154,7 +147,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals($groups, $groupsProperty->getValue($statistics));
     }
 
@@ -167,7 +159,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals([], $groupsProperty->getValue($statistics));
     }
 
@@ -180,7 +171,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals([-1], $groupsProperty->getValue($statistics));
     }
 
@@ -195,7 +185,6 @@ class StatisticsTest extends TestCase
 
         $reflection = new ReflectionClass($statistics);
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals([3, 4, 5], $groupsProperty->getValue($statistics));
     }
 
@@ -207,11 +196,9 @@ class StatisticsTest extends TestCase
         $reflection = new ReflectionClass($statistics);
 
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $this->assertEquals(-1, $userProperty->getValue($statistics));
 
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals([-1], $groupsProperty->getValue($statistics));
     }
 
@@ -230,11 +217,9 @@ class StatisticsTest extends TestCase
         $reflection = new ReflectionClass($statistics);
 
         $userProperty = $reflection->getProperty('user');
-        $userProperty->setAccessible(true);
         $this->assertEquals(888, $userProperty->getValue($result));
 
         $groupsProperty = $reflection->getProperty('groups');
-        $groupsProperty->setAccessible(true);
         $this->assertEquals([10, 20, 30], $groupsProperty->getValue($result));
     }
 

@@ -55,18 +55,16 @@ class UpdateCommandTest extends TestCase
         $reflection = new ReflectionClass($command);
 
         $configProperty = $reflection->getProperty('configuration');
-        $configProperty->setAccessible(true);
         $this->assertInstanceOf(Configuration::class, $configProperty->getValue($command));
 
         $systemProperty = $reflection->getProperty('system');
-        $systemProperty->setAccessible(true);
         $this->assertInstanceOf(System::class, $systemProperty->getValue($command));
     }
 
     public function testExecuteWithoutUpdate(): void
     {
-        // This test may require specific environment setup
-        // For now, we test that execute returns an integer result
+        // This test may require a specific environment setup
+        // For now; we test that execute returns an integer result
         $exitCode = $this->commandTester->execute([]);
 
         $this->assertIsInt($exitCode);
@@ -281,8 +279,6 @@ class UpdateCommandTest extends TestCase
         $this->assertTrue($property->isStatic());
         $this->assertTrue($property->isProtected());
 
-        // Use reflection to access protected static property
-        $property->setAccessible(true);
         $this->assertEquals('phpmyfaq:update', $property->getValue());
     }
 
