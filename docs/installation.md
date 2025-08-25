@@ -136,15 +136,15 @@ Then start the phpMyFAQ web application:
 
 ### 2.2.3 Cloud or On-Premise Hosting via Kubernetes
 
-You can use any mysql deployment/helm chart, like: https://github.com/bitnami/charts/tree/main/bitnami/mysql, you can
-also choose another database engine.
-View official resources or find one on: https://artifacthub.io/
+You can use any MySQL or MariaDB deployment/helm chart, also choose another database engine.
+View official resources or find one on [artifacthub.io](https://artifacthub.io/)
 
 > You must have a storage method to persist your data.
 
-Then, install it, using referenced manifests on this project: https://github.com/thorsten/phpMyFAQ/tree/main/kubernetes-deploy.
+Then, install it, using referenced manifests on our project at 
+[GitHub](https://github.com/thorsten/phpMyFAQ/tree/main/kubernetes-deploy).
 
-Read the definitions and configure according to your needs. If you have any doubt, do not hesitate to consult us.
+Read the definitions and configure, according to your needs. If you have any doubt, do not hesitate to consult us.
 
 ## 2.3 PHP settings
 
@@ -193,9 +193,10 @@ You have to add at least one Elasticsearch or OpenSearch node and the index name
 
 ### Step 4: Admin user setup
 
-In addition, you can enter your language, default here is English. Furthermore, you should register your name, your
-email address and - very importantly - your password. You must enter the password twice, and it has to be at least eight
-characters long. Then click the button **"install"** to initialize the tables in your database.
+In addition, you can enter your language, the default here is English.
+Furthermore, you should register your name, your email address and - very importantly - your password.
+You must enter the password twice, and it has to be at least eight characters long.
+Then click the button **"install"** to initialize the tables in your database.
 
 ## 2.7 First Steps
 
