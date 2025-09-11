@@ -50,6 +50,7 @@ jobs:
       - name: Setup Node.js with pnpm
         uses: actions/setup-node@v5
         with:
+          package-manager-cache: false
           node-version: 22
 
       - name: Setup pnpm
