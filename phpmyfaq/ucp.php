@@ -16,7 +16,6 @@
  */
 
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\TwoFactor;
@@ -105,7 +104,12 @@ if ($user->isLoggedIn()) {
         'msgConfirmTwofactorConfig' => Translation::get('msgConfirmTwofactorConfig'),
         'csrfTokenRemoveTwofactor' => Token::getInstance($container->get('session'))->getTokenString('remove-twofactor'),
         'msgGravatarNotConnected' => Translation::get('msgGravatarNotConnected'),
-        'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport')
+        'webauthnSupportEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
+        'csrfExportUserData' => Token::getInstance($container->get('session'))->getTokenInput('export-userdata'),
+        'exportUserDataUrl' => 'api/user/data/export',
+        'msgDownloadYourData' => Translation::get('msgDownloadYourData'),
+        'msgDataExportDescription' => Translation::get('msgDataExportDescription'),
+        'msgDownload' => Translation::get('msgDownload'),
     ];
 
     return $templateVars;

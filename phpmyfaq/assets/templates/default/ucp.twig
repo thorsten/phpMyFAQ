@@ -293,6 +293,26 @@
       </div>
       {% endif %}
 
+      <!-- EU Data Act data export -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="h6 m-0 font-weight-bold">
+            <i aria-hidden="true" class="bi bi-file-zip"></i>
+            {{ msgDownloadYourData }}
+          </h6>
+        </div>
+        <div class="card-body">
+          <p class="pb-3 mb-3">{{ msgDataExportDescription }}</p>
+          <form action="{{ exportUserDataUrl }}" method="post">
+            {{ csrfExportUserData | raw }}
+            <input type="hidden" name="userid" value="{{ userid }}" />
+            <button type="submit" class="btn btn-success">
+              <i aria-hidden="true" class="bi bi-download"></i> {{ msgDownload }}
+            </button>
+          </form>
+        </div>
+      </div>
+
 
     </div>
   </div>

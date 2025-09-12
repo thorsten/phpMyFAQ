@@ -29,6 +29,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use ZipArchive;
 
 class UserController extends AbstractController
 {
@@ -118,6 +121,73 @@ class UserController extends AbstractController
         }
 
         return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * Export userdata of the currently logged-in user as a ZIP file.
+     *
+     * @throws \Exception
+     */
+    #[Route('api/user/data/export', name: 'api.private.user.data.export', methods: ['POST'])]
+    public function exportUserData(Request $request): Response
+    {
+        $this->userIsAuthenticated();
+
+        $payload = $request->getContent();
+        $data = json_decode($payload ?? '', false);
+
+        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userIdInput = Filter::filterVar($data->userid ?? null, FILTER_VALIDATE_INT);
+
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('export-userdata', $csrfToken)) {
+            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if (null !== $userIdInput && $userIdInput !== $this->currentUser->getUserId()) {
+            return $this->json(['error' => 'User ID mismatch!'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!class_exists(ZipArchive::class)) {
+            return $this->json(['error' => 'ZIP extension not available.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $userData = [
+            'user_id' => $this->currentUser->getUserId(),
+            'last_modified' => (string) ($this->currentUser->getUserData('last_modified') ?? ''),
+            'display_name' => (string) ($this->currentUser->getUserData('display_name') ?? ''),
+            'email' => (string) ($this->currentUser->getUserData('email') ?? ''),
+            'is_visible' => (int) ($this->currentUser->getUserData('is_visible') ?? 0),
+            'twofactor_enabled' => (int) ($this->currentUser->getUserData('twofactor_enabled') ?? 0),
+            'secret' => (string) ($this->currentUser->getUserData('secret') ?? ''),
+        ];
+
+        $json = json_encode($userData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        if ($json === false) {
+            return $this->json(['error' => 'Failed to encode userdata.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        // Create a temporary ZIP file
+        $tmpFile = tempnam(sys_get_temp_dir(), 'pmf_userdata_');
+        if ($tmpFile === false) {
+            return $this->json(['error' => 'Failed to create temp file.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($tmpFile, ZipArchive::OVERWRITE) !== true) {
+            return $this->json(['error' => 'Failed to create ZIP archive.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $zip->addFromString('userdata.json', $json);
+        $zip->close();
+
+        $fileName = sprintf('phpmyfaq-userdata-%d-%s.zip', $this->currentUser->getUserId(), date('YmdHis'));
+
+        $response = new BinaryFileResponse($tmpFile);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
+        $response->headers->set('Content-Type', 'application/zip');
+        $response->deleteFileAfterSend();
+
+        return $response;
     }
 
 

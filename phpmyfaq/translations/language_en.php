@@ -1522,5 +1522,8 @@ $PMF_LANG['msgNoChoicesText'] = 'No choices to choose from';
 $PMF_LANG['msgItemSelectText'] = 'Press to select';
 $PMF_LANG['msgUniqueItemText'] = 'Only unique values can be added';
 $PMF_LANG['msgCustomAddItemText'] = 'Only values matching specific conditions can be added';
+$PMF_LANG['msgDownloadYourData'] = 'Download your data';
+$PMF_LANG['msgDataExportDescription'] = 'Download a ZIP file containing your stored user data.';
+$PMF_LANG['msgDownload'] = 'Download';
 
 return $PMF_LANG;

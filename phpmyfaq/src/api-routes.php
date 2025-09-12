@@ -252,6 +252,11 @@ $routesConfig = [
         'controller' => [TranslationController::class, 'translations'],
         'methods' => 'POST'
     ],
+    'api.private.user.data.export' => [
+        'path' => 'user/data/export',
+        'controller' => [UserController::class, 'exportUserData'],
+        'methods' => 'PUT'
+    ],
     'api.private.user.password' => [
         'path' => 'user/password/update',
         'controller' => [UnauthorizedUserController::class, 'updatePassword'],

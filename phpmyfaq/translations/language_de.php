@@ -1499,5 +1499,8 @@ $PMF_LANG['msgNoChoicesText'] = 'Keine Auswahl getroffen';
 $PMF_LANG['msgItemSelectText'] = 'Klicke zum Auswählen';
 $PMF_LANG['msgUniqueItemText'] = 'Es kann nur ein Eintrag ausgewählt werden.';
 $PMF_LANG['msgCustomAddItemText'] = 'Es kann nur ein Eintrag  hinzugefügt werden.';
+$PMF_LANG['msgDownloadYourData'] = 'Eigene Daten herunterladen';
+$PMF_LANG['msgDataExportDescription'] = 'Laden Sie eine ZIP-Datei mit Ihren gespeicherten Benutzerdaten herunter.';
+$PMF_LANG['msgDownload'] = 'Herunterladen';
 
 return $PMF_LANG;

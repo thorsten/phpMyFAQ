@@ -18,6 +18,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added image upload and image manager in the Markdown editor (Thorsten)
 - added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
+- added EU Data Act 2025 compliance (Thorsten)
 - added Urdu translation (Thorsten)
 - added dark mode / light mode toggle (Thorsten)
 - added experimental support for PHP 8.5 (Thorsten)
