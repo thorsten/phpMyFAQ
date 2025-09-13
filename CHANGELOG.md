@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.0.11 - unreleased
+### phpMyFAQ v4.0.11 - 2025-09-13
 
 - re-added rewrite support for IIS (Thorsten, thanks to Todd Taylor)
 - updated third party dependencies (Thorsten)
@@ -73,23 +73,23 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PHP requirement to PHP 8.2 or later (Thorsten)
 - changed rewrite rules for Apache and nginx as mandatory requirement (Thorsten)
 - changed folder structure (Thorsten, Jan Harms)
-- added Twig as new template engine (Thorsten, Jan Harms)
+- added Twig as the new template engine (Thorsten, Jan Harms)
 - added Symfony Routing (Thorsten)
 - added trending FAQs (Thorsten)
-- added new frontend layout (Thorsten)
-- added new admin configuration frontend (Thorsten)
-- added new admin category management frontend with full drag and drop sorting support (Thorsten)
-- added new admin FAQ management frontend (Thorsten)
+- added a new frontend layout (Thorsten)
+- added a new admin configuration frontend (Thorsten)
+- added a new admin category management frontend with full drag and drop sorting support (Thorsten)
+- added a new admin FAQ management frontend (Thorsten)
 - added possibility to sort sticky FAQs (Jan Harms)
 - added possibility to enable/disable cookie consent (Thorsten)
-- added experimental online update feature (Jan Harms, Thorsten)
+- added an experimental online update feature (Jan Harms, Thorsten)
 - added new REST API v3 with OpenAPI specification (Thorsten)
 - added Kubernetes manifest samples (OWNDOMAINHOME SAS)
 - added experimental import of FAQs from CSV (Jan Harms)
 - added CSV export of user sessions (Jan Harms)
-- added possibility to add custom CSS via admin frontend (Thorsten)
+- added the possibility to add custom CSS via admin frontend (Thorsten)
 - added support for PHP 8.4 (Thorsten)
-- added "share with" feature (Jan Harms, Thorsten)
+- added the "share with" feature (Jan Harms, Thorsten)
 - added user bookmarks (Jan Harms)
 - added basic support for Rich Snippets (Thorsten)
 - added experimental plugin manager (Thorsten)
@@ -101,7 +101,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - removed support for adding own meta-content in templates (Thorsten)
 - removed HTML5 export (Thorsten)
 - removed REST API v2 (Thorsten)
-- removed "send to friend" feature (Thorsten)
+- removed the "send to friend" feature (Thorsten)
 - migrated from Yarn to PNPM (Thorsten)
 - migrated from Fork Awesome to Bootstrap Icons (Thorsten, Jan Harms)
 - migrated codebase to use PHP 8.2 language features (Thorsten)
@@ -168,7 +168,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.2.0 - 2023-09-04
 
 - changed PHP requirement to PHP 8.1.0 or later (Thorsten)
-- changed to HTTPS as new default (Thorsten)
+- changed to HTTPS as the new default (Thorsten)
 - changed MariaDB / MySQL / Percona Server / Galera Cluster to InnoDB only (Thorsten)
 - changed MariaDB requirement to 10.0 (Thorsten)
 - changed MySQL / Percona Server / Galera Cluster requirement to 8.0 or later (Thorsten)
@@ -182,7 +182,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added verification of backup files (Thorsten)
 - added option to disable questions and notifications (Thorsten)
 - added new options for more flexibility (Jan Harms)
-- added new mobile first, touch-friendly default layout (Thorsten)
+- added a new mobile first, touch-friendly default layout (Thorsten)
 - added HTTPS support for local Docker development (Thorsten)
 - added Symfony HttpFoundation (Thorsten)
 - added Monolog v3 as logging solution (Thorsten)
@@ -303,8 +303,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added REST API v2.1 to register users and add FAQs (Thorsten)
 - added API client tokens for REST API v2.1 (Thorsten)
 - added opt-in for displaying user data (Thorsten)
-- added mail notifications for new FAQs in admin section (Thorsten)
-- added possibility to login via email address (Thorsten)
+- added mail notifications for new FAQs in the admin section (Thorsten)
+- added the possibility to login via email address (Thorsten)
 - updated to Bootstrap v4.6 (Thorsten)
 - updated to Composer v2 and improved build (Alexander M. Turek, Thorsten)
 - updated to Twitter API v2 (Thorsten)
@@ -348,7 +348,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - fixed XSS vulnerability (Curtis Robinson, Thorsten)
 - added TOC plugin for TinyMCE (Thorsten)
-- removed support for deprecated data-vocabulary.org schema (Thorsten)
+- removed support for the deprecated data-vocabulary.org schema (Thorsten)
 - removed Travis CI build (Thorsten)
 - fixed minor bugs (Thorsten)
 
@@ -395,15 +395,15 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
-- added support for categories on homepage (Thorsten)
+- added support for categories on the homepage (Thorsten)
 - added filter functionality in templates (Thorsten)
 - added improved attachment overview (Thorsten)
 - added HTML5 export (Thorsten)
 - added support for EU General Data Protection Regulation (Jochen Steinhilber)
 - added multiple attachment upload (Thorsten)
-- added 404 page template (Thorsten)
+- added a 404-page template (Thorsten)
 - added Mongolian translation (khaidaw@gmail.com)
-- added support for adding own meta content in templates (Thorsten)
+- added support for adding own meta-content in templates (Thorsten)
 - added new REST API v2 (includes login) (Thorsten)
 - improved sticky records (Thorsten)
 - improved brute force handling (Thorsten)
@@ -458,7 +458,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v2.9.8 - 2017-07-12
 
 - fixed improper restriction (Thorsten)
-- add LDAP search in sub groups (Thorsten)
+- add LDAP search in subgroups (Thorsten)
 - updated French translation
 - fixed minor bugs (Thorsten)
 
@@ -497,7 +497,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v2.9.1 - 2016-05-31
 
 - fixed stored XSS vulnerability (Kacper Szurek)
-- added new source code paste plugin (Thorsten)
+- added a new source code paste plugin (Thorsten)
 - removed American English translation (Thorsten)
 - updated bundled TinyMCE to v4.3.12 (Thorsten)
 - updated bundled Typeahead.js to v0.11.0 (Thorsten)
@@ -509,14 +509,14 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
 - added support for Elasticsearch (Thorsten)
-- added new mobile first, touch-friendly default layout (Thorsten)
-- added tag intersection based search (Tomer Weinberg, Thorsten)
+- added a new mobile first, touch-friendly default layout (Thorsten)
+- added tag-intersection-based search (Tomer Weinberg, Thorsten)
 - added support for Markdown (Jerry van Kooten, Thorsten)
 - added permissions for guests (Thorsten)
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added experimental support for LDAP dynamic user binding (Thorsten)
 - added frontend dependency management using Bower (Thorsten)
-- added possibility to delete all logged search terms (Thorsten)
+- added the possibility to delete all logged search terms (Thorsten)
 - added support for MySQL sockets
 - added configuration for enable/disable highlighting search terms (Thorsten)
 - added configuration for enable/disable RSS feeds (Thorsten)
@@ -1046,7 +1046,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - fixed various mail issues (Thorsten)
 - improved links rewriting (Guillaume Le Maout)
-- improved sitemap for Chinese, Japanese and Korean content (Thorsten)
+- improved sitemap for Chinese, Japanese, and Korean content (Thorsten)
 - improved meta keyword handling
 - updated Portuguese translation (Fernando G. Monteiro)
 - updated French translation
@@ -1055,7 +1055,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v2.6.2 - 2010-02-01
 
 - fixed update script issue (Thorsten)
-- fixed display of Chinese, Japanese and Korean content in PDFs (Thorsten)
+- fixed display of Chinese, Japanese, and Korean content in PDFs (Thorsten)
 - fixed issues with RSS feeds (Thorsten)
 - fixed broken Spanish translation (Thorsten)
 - updated French translation (Cédric Frayssinet)
@@ -1318,7 +1318,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added "submit translation" link (Matteo)
 - added experimental support for Oracle (Thorsten)
 - added experimental support for Interbase/Firebird (Thorsten)
-- added sorting by id, title and date for records in admin backend (Thorsten)
+- added sorting by id, title, and date for records in admin backend (Thorsten)
 - added comment administration frontend (Thorsten)
 - added configurable simple reordering of records (Thorsten)
 - added questionnaire for statistics in installer (Johannes)
@@ -1522,7 +1522,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - mod_rewrite support
 - faster template engine parses PHP code
 - rewritten PDF export
-- complete XML, XHTML and DocBook XML exports
+- complete XML, XHTML, and DocBook XML exports
 - many code and performance improvements and code cleanup
 - better RSS support
 - updated bundled htmlArea
@@ -1759,7 +1759,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v1.3.1 - 2003-05-02
 
 - added preview at record editing
-- added RSS-Feeds from Top 10, News and latest records
+- added RSS-Feeds from Top 10, News, and latest records
 - better navigation in admin area
 - system information in admin area
 - added french language file
@@ -1806,7 +1806,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v1.2.3 - 2002-11-30
 
 - check whether installation oder update script isn't deleted
-- fixed bugs in language files, the news module and open questions
+- fixed bugs in language files, the news module, and open questions
 - automatic langauge detection in admin area
 
 ### phpMyFAQ v1.2.2 - 2002-11-04
