@@ -57,7 +57,7 @@ try {
 
 $faqConfig = $container->get('phpmyfaq.configuration');
 
-// get language (default: english)
+// get language (default: English)
 $Language = $container->get('phpmyfaq.language');
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
@@ -91,7 +91,7 @@ try {
 }
 
 //
-// Initializing static string wrapper
+// Initializing the static string wrapper
 //
 Strings::init($faqLangCode);
 

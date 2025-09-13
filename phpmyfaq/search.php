@@ -153,12 +153,12 @@ if ('' !== $inputTag) {
         }
 
         $numOfResults = count($recordIds);
-        
+
         // Apply pagination to record IDs for tag search
         $confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
         $first = ($page - 1) * $confPerPage;
         $paginatedRecordIds = array_slice($recordIds, $first, $confPerPage);
-        
+
         $searchResults = $faq->renderFaqsByFaqIds($paginatedRecordIds, 'fd.id', 'ASC', false);
     }
 } else {
