@@ -67,13 +67,13 @@
                   {{ msgAddBookmark }}
                 </a>
               </li>
+            {% endif %}
             <li class="list-group-item bg-transparent">
               <i aria-hidden="true" class="bi bi-file-pdf"></i>
               <a target="_blank" href="{{ linkToPdf }}" rel="noopener" class="text-decoration-none">
                 {{ msgPdf }}
               </a>
             </li>
-            {% endif %}
             {% if enableSendToFriend == true %}
               <li class="list-group-item bg-transparent">
                 <i aria-hidden="true" class="bi bi-share"></i>
