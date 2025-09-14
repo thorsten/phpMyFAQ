@@ -6,6 +6,10 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+### phpMyFAQ v4.0.12 - unreleased
+
+
+
 ### phpMyFAQ v4.0.11 - 2025-09-13
 
 - re-added rewrite support for IIS (Thorsten, thanks to Todd Taylor)
