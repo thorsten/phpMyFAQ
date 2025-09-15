@@ -132,6 +132,10 @@ class BasicPermission implements PermissionInterface
             return true;
         }
 
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
         if ($right instanceof PermissionType) {
             $right = $this->getRightId($right->value);
         }
