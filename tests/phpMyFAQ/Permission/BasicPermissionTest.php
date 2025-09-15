@@ -55,6 +55,7 @@ class BasicPermissionTest extends TestCase
         $this->assertTrue($this->basicPermission->hasPermission(1, 1));
         $this->assertFalse($this->basicPermission->hasPermission(-1, 1));
         $this->assertFalse($this->basicPermission->hasPermission(-1, PermissionType::USER_ADD));
+        $this->assertFalse($this->basicPermission->hasPermission(-1, PermissionType::USER_ADD->value));
     }
 
     public function testGetRightId(): void
