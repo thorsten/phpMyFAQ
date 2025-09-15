@@ -156,6 +156,15 @@ if ('' !== $inputTag) {
         $paginatedRecordIds = array_slice($recordIds, $first, $confPerPage);
 
         $searchResults = $faq->renderFaqsByFaqIds($paginatedRecordIds, 'fd.id', 'ASC', false);
+
+        // Set base URL scheme for tag search
+        $baseUrl = sprintf(
+            '%ssearch.html?tagging_id=%s&seite=%d%s',
+            $faqConfig->getDefaultUrl(),
+            $inputTag,
+            $page,
+            $languages,
+        );
     }
 } else {
     $searchResults = [];
@@ -203,6 +212,16 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
     } catch (Exception $exception) {
         $faqConfig->getLogger()->debug($exception->getMessage());
     }
+
+    // Set the base URL scheme for fulltext search
+    $baseUrl = sprintf(
+        '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
+        $faqConfig->getDefaultUrl(),
+        urlencode($inputSearchTerm),
+        $page,
+        $languages,
+        $inputCategory
+    );
 }
 
 // Change a little the $searchCategory value;
@@ -229,16 +248,6 @@ if (
 $category->buildCategoryTree();
 
 $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('search.numberSearchTerms'));
-
-// Set base URL scheme
-$baseUrl = sprintf(
-    '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
-    $faqConfig->getDefaultUrl(),
-    urlencode($inputSearchTerm),
-    $page,
-    $languages,
-    $inputCategory
-);
 
 // Pagination options
 $options = [
