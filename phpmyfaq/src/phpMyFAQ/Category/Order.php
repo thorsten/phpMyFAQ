@@ -76,7 +76,7 @@ readonly class Order
         int $position = 1,
         array &$insertQueries = []
     ): void {
-        // Clear existing category order table
+        // Clear the existing category order table
         if ($parentId === null) {
             $this->configuration->getDb()->query(
                 sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix())
@@ -157,6 +157,8 @@ readonly class Order
 
     /**
      * Returns all categories.
+     *
+     * @return array<int, array{category_id: int, parent_id: int, position: int}>
      */
     public function getAllCategories(): array
     {
