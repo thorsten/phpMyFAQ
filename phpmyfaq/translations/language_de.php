@@ -1502,5 +1502,6 @@ $PMF_LANG['msgCustomAddItemText'] = 'Es kann nur ein Eintrag  hinzugefügt werde
 $PMF_LANG['msgDownloadYourData'] = 'Eigene Daten herunterladen';
 $PMF_LANG['msgDataExportDescription'] = 'Laden Sie eine ZIP-Datei mit Ihren gespeicherten Benutzerdaten herunter.';
 $PMF_LANG['msgDownload'] = 'Herunterladen';
+$PMF_LANG['msgToggleTheme'] = 'Erscheinungsbild wechseln';
 
 return $PMF_LANG;

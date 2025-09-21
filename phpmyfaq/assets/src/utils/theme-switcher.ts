@@ -109,11 +109,6 @@ export class ThemeSwitcher {
         this.darkIcon.style.display = 'inline-block';
       }
     }
-
-    if (this.toggleButton) {
-      this.toggleButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-      this.toggleButton.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    }
   }
 
   /**

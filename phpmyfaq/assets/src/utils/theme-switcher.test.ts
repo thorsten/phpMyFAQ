@@ -167,8 +167,6 @@ describe('ThemeSwitcher', (): void => {
 
     expect(mockLightIcon.style.display).toBe('inline-block');
     expect(mockDarkIcon.style.display).toBe('none');
-    expect(mockToggleButton.setAttribute).toHaveBeenCalledWith('aria-label', 'Switch to light mode');
-    expect(mockToggleButton.setAttribute).toHaveBeenCalledWith('title', 'Switch to light mode');
   });
 
   test('should update button state and icons for light theme', (): void => {
@@ -177,8 +175,6 @@ describe('ThemeSwitcher', (): void => {
 
     expect(mockLightIcon.style.display).toBe('none');
     expect(mockDarkIcon.style.display).toBe('inline-block');
-    expect(mockToggleButton.setAttribute).toHaveBeenCalledWith('aria-label', 'Switch to dark mode');
-    expect(mockToggleButton.setAttribute).toHaveBeenCalledWith('title', 'Switch to dark mode');
   });
 
   test('should watch system theme changes', (): void => {

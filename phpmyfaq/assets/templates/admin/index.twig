@@ -37,6 +37,13 @@
     {{ renderedLanguageSelection | raw }}
   </form>
 
+  <!-- Theme toggle button -->
+  <button id="theme-toggle" class="btn btn-link nav-link px-2 me-2" type="button"
+          aria-label="{{ 'msgToggleTheme' | translate }}" title="{{ 'msgToggleTheme' | translate }}">
+    <i id="theme-icon-dark" class="bi bi-sun-fill"></i>
+    <i id="theme-icon-light" class="bi bi-moon-stars-fill"></i>
+  </button>
+
   {% if userHasAccessPermission %}
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
     <li class="nav-item dropdown">

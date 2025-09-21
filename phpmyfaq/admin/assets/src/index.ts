@@ -70,6 +70,7 @@ import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
 import { handlePasswordStrength, handlePasswordToggle } from '../../../assets/src/utils';
 import { handleSessionTimeout, initializeTooltips, sidebarToggle } from './utils';
+import '../../../assets/src/utils/theme-switcher';
 
 document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   'use strict';

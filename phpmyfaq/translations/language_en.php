@@ -1525,5 +1525,6 @@ $PMF_LANG['msgCustomAddItemText'] = 'Only values matching specific conditions ca
 $PMF_LANG['msgDownloadYourData'] = 'Download your data';
 $PMF_LANG['msgDataExportDescription'] = 'Download a ZIP file containing your stored user data.';
 $PMF_LANG['msgDownload'] = 'Download';
+$PMF_LANG['msgToggleTheme'] = 'Toggle theme';
 
 return $PMF_LANG;
