@@ -15,3 +15,74 @@ body {
     }
   }
 }
+
+// Dark mode improvements for Admin UI
+[data-bs-theme='dark'] {
+  html,
+  body,
+  .container,
+  .main-content,
+  #content,
+  .content-wrapper {
+    background-color: var(--bs-dark) !important;
+    color: var(--bs-light) !important;
+  }
+
+  // Admin footer overrides (template uses bg-light)
+  footer.bg-light {
+    background-color: var(--bs-gray-900) !important;
+    color: var(--bs-light) !important;
+
+    .text-muted {
+      color: var(--bs-gray-400) !important;
+    }
+
+    a {
+      color: var(--bs-info);
+
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+  }
+
+  // Configuration screens
+  #pmf-admin-configuration-container {
+    a.nav-link.active {
+      background-color: var(--bs-gray-800) !important;
+      color: var(--bs-light) !important;
+    }
+
+    .tab-content {
+      background-color: var(--bs-gray-800);
+      color: var(--bs-light);
+      border-bottom: 1px solid var(--bs-gray-700);
+    }
+  }
+
+  .pmf-configuration-panel {
+    background-color: var(--bs-gray-800) !important;
+    border-left-color: var(--bs-gray-700) !important;
+    border-right-color: var(--bs-gray-700) !important;
+    border-bottom-color: var(--bs-gray-700) !important;
+  }
+
+  // Form elements readability in admin
+  .form-control,
+  .form-select {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+    color: var(--bs-light);
+
+    &:focus {
+      background-color: var(--bs-gray-800);
+      border-color: var(--bs-primary);
+      color: var(--bs-light);
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    &::placeholder {
+      color: var(--bs-gray-400);
+    }
+  }
+}

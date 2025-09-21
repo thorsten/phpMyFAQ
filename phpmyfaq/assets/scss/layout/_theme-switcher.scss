@@ -70,6 +70,34 @@
     color: var(--bs-light);
   }
 
+  // Startpage: card cover should be dark in dark mode
+  .card.card-cover {
+    background-color: var(--bs-gray-800) !important;
+    color: var(--bs-light) !important;
+    position: relative;
+  }
+
+  // If a background image is set, add a subtle dark overlay for readability
+  .card.card-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+  }
+
+  // Ensure inner content sits above the overlay
+  .card.card-cover .d-flex {
+    position: relative;
+    z-index: 1;
+  }
+
+  // Explicitly override Bootstrap's text-bg-light on card-cover in dark mode
+  .card.card-cover.text-bg-light {
+    background-color: var(--bs-gray-800) !important;
+    color: var(--bs-light) !important;
+  }
+
   // Footer dark mode
   .text-bg-pmf-footer {
     background-color: var(--bs-gray-900) !important;
@@ -121,13 +149,30 @@
 
   // Buttons
   .btn-outline-primary {
-    color: var(--bs-primary);
-    border-color: var(--bs-primary);
+    color: var(--bs-info);
+    border-color: var(--bs-info);
 
     &:hover {
-      background-color: var(--bs-primary);
-      color: var(--bs-light);
+      background-color: var(--bs-info);
+      color: var(--bs-dark);
     }
+  }
+
+  // Improve readability of info badges inside tag buttons
+  .badge.bg-info {
+    color: var(--bs-dark);
+  }
+
+  // Ensure badge remains readable when the tag button is hovered
+  .btn-outline-primary:hover .badge.bg-info {
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+  }
+
+  // Light subtle backgrounds should be dark in dark mode
+  .bg-light-subtle {
+    background-color: var(--bs-gray-800) !important;
+    color: var(--bs-light) !important;
   }
 
   // Alerts and notifications
