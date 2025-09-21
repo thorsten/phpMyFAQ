@@ -26,6 +26,10 @@
   --bs-pmf-nav: #2f3035;
   --bs-pmf-footer: #142f48;
   --bs-pmf-background: #9eb6c9;
+
+  /* Bootstrap body variables for light mode */
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #212529;
 }
 
 [data-bs-theme='dark'] {
@@ -40,4 +44,8 @@
   --bs-pmf-nav: #2f3035;
   --bs-pmf-footer: #142f48;
   --bs-pmf-background: #9eb6c9;
+
+  /* Bootstrap body variables for dark mode */
+  --bs-body-bg: var(--bs-dark);
+  --bs-body-color: var(--bs-light);
 }
