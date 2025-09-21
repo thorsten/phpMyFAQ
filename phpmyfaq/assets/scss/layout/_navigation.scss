@@ -243,10 +243,6 @@ $transition-speed: 0.15s;
     $icon-color: rgba(255, 255, 255, 0.25),
     $active-color: #fff
   );
-
-  .pmf-admin-sidenav-footer {
-    background-color: #343a40;
-  }
 }
 
 // Light Theme
@@ -258,8 +254,4 @@ $transition-speed: 0.15s;
     $icon-color: #adb5bd,
     $active-color: #0d6efd
   );
-
-  .pmf-admin-sidenav-footer {
-    background-color: #e9ecef;
-  }
 }

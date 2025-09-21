@@ -50,6 +50,9 @@ export const renderEditor = () => {
     return;
   }
 
+  // Detect browser color scheme preference (dark/light)
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
   const joditEditor = Jodit.make(editor, {
     zIndex: 0,
     readonly: false,
@@ -57,7 +60,7 @@ export const renderEditor = () => {
     sourceEditor: 'area',
     activeButtonsInReadOnly: ['source', 'fullsize', 'print', 'about', 'dots'],
     toolbarButtonSize: 'middle',
-    theme: 'default',
+    theme: prefersDark.matches ? 'dark' : 'default',
     saveModeInStorage: false,
     spellcheck: true,
     editorClassName: false,
@@ -249,14 +252,62 @@ export const renderEditor = () => {
     },
   });
 
-  joditEditor.events.on('afterSetValue', () => {
-    joditEditor.container.querySelectorAll('pre code').forEach((block) => {
+  // Automatically update the editor theme when the system color scheme changes
+  const setJoditTheme = (theme: 'dark' | 'default'): void => {
+    // Update Jodit option (kept for consistency)
+    (joditEditor as any).options.theme = theme;
+
+    // Toggle container theme classes explicitly to reflect the change immediately
+    const container: HTMLDivElement = joditEditor.container;
+    container.classList.remove('jodit_theme_default', 'jodit_theme_dark');
+    container.classList.add(theme === 'dark' ? 'jodit_theme_dark' : 'jodit_theme_default');
+  };
+
+  const applyTheme = (): void => {
+    setJoditTheme(prefersDark.matches ? 'dark' : 'default');
+  };
+
+  if (typeof prefersDark.addEventListener === 'function') {
+    prefersDark.addEventListener('change', applyTheme);
+  } else if (typeof (prefersDark as any).addListener === 'function') {
+    // Fallback for older Safari versions
+    (prefersDark as any).addListener(applyTheme);
+  }
+
+  // Keep Jodit in sync with global Bootstrap theme toggles (manual light/dark)
+  const applyThemeFromAttr = (): void => {
+    const themeAttr: string | null = document.documentElement.getAttribute('data-bs-theme');
+    setJoditTheme(themeAttr === 'dark' ? 'dark' : 'default');
+  };
+
+  // Observe changes to the data-bs-theme attribute
+  const themeObserver = new MutationObserver((mutations): void => {
+    for (const m of mutations) {
+      if (m.type === 'attributes' && m.attributeName === 'data-bs-theme') {
+        applyThemeFromAttr();
+      }
+    }
+  });
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+
+  // Sync across tabs/windows when the localStorage key changes
+  window.addEventListener('storage', (e: StorageEvent): void => {
+    if (e.key === 'pmf-theme') {
+      applyThemeFromAttr();
+    }
+  });
+
+  // Ensure initial theme sync with current data-bs-theme attribute (if present)
+  applyThemeFromAttr();
+
+  joditEditor.events.on('afterSetValue', (): void => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block: Element): void => {
       hljs.highlightElement(block as HTMLElement);
     });
   });
 
-  joditEditor.events.on('change', () => {
-    joditEditor.container.querySelectorAll('pre code').forEach((block) => {
+  joditEditor.events.on('change', (): void => {
+    joditEditor.container.querySelectorAll('pre code').forEach((block: Element): void => {
       hljs.highlightElement(block as HTMLElement);
     });
   });

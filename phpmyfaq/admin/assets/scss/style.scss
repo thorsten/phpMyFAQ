@@ -25,7 +25,8 @@
 @import '../../../../node_modules/bootstrap-icons/font/bootstrap-icons';
 
 // Highlight.js
-@import '../../../../node_modules/highlight.js/styles/github-dark.css';
+@import url('../../../../node_modules/highlight.js/styles/github.css') screen and (prefers-color-scheme: light);
+@import url('../../../../node_modules/highlight.js/styles/github-dark.css') screen and (prefers-color-scheme: dark);
 
 // Import Mixins
 @import 'mixins.scss';
