@@ -119,8 +119,8 @@ devDependencies:
     specifier: ^2.1.0
     version: 2.1.0(vite@7.1.7)
   vite-plugin-static-copy:
-    specifier: ^2.3.2
-    version: 2.3.2(vite@7.1.7)
+    specifier: ^3.1.2
+    version: 3.1.2(vite@7.1.7)
   vitest:
     specifier: ^3.2.4
     version: 3.2.4(@types/node@20.19.17)(jsdom@25.0.1)(sass@1.93.0)
@@ -4434,17 +4434,17 @@ packages:
       vite: 7.1.7(@types/node@20.19.17)(sass@1.93.0)
     dev: true
 
-  /vite-plugin-static-copy@2.3.2(vite@7.1.7):
-    resolution: {integrity: sha512-iwrrf+JupY4b9stBttRWzGHzZbeMjAHBhkrn67MNACXJVjEMRpCI10Q3AkxdBkl45IHaTfw/CNVevzQhP7yTwg==}
+  /vite-plugin-static-copy@3.1.2(vite@7.1.7):
+    resolution: {integrity: sha512-aVmYOzptLVOI2b1jL+cmkF7O6uhRv1u5fvOkQgbohWZp2CbR22kn9ZqkCUIt9umKF7UhdbsEpshn1rf4720QFg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^5.0.0 || ^6.0.0
+      vite: ^5.0.0 || ^6.0.0 || ^7.0.0
     dependencies:
       chokidar: 3.6.0
-      fast-glob: 3.3.3
       fs-extra: 11.3.2
       p-map: 7.0.3
       picocolors: 1.1.1
+      tinyglobby: 0.2.15
       vite: 7.1.7(@types/node@20.19.17)(sass@1.93.0)
     dev: true
 
