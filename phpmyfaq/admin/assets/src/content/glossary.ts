@@ -17,11 +17,11 @@ import { createGlossary, deleteGlossary, getGlossary, updateGlossary } from '../
 import { addElement, pushNotification } from '../../../../assets/src/utils';
 
 export const handleDeleteGlossary = (): void => {
-  const deleteButtons = document.querySelectorAll('.pmf-admin-delete-glossary');
+  const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.pmf-admin-delete-glossary');
 
   if (deleteButtons) {
-    deleteButtons.forEach((button) => {
-      button.addEventListener('click', async (event: Event) => {
+    deleteButtons.forEach((button: HTMLButtonElement): void => {
+      button.addEventListener('click', async (event: Event): Promise<void> => {
         event.preventDefault();
 
         const glossaryId = button.getAttribute('data-pmf-glossary-id') as string;
@@ -42,16 +42,16 @@ export const handleDeleteGlossary = (): void => {
 export const handleAddGlossary = (): void => {
   const saveGlossaryButton = document.getElementById('pmf-admin-glossary-add') as HTMLButtonElement | null;
   const modal = document.getElementById('addGlossaryModal') as HTMLElement | null;
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
+  const modalBackdrop: HTMLCollectionOf<Element> = document.getElementsByClassName('modal-backdrop fade show');
 
   if (saveGlossaryButton) {
     saveGlossaryButton.addEventListener('click', async (event: Event) => {
       event.preventDefault();
 
-      const glossaryLanguage = (document.getElementById('language') as HTMLInputElement).value;
-      const glossaryItem = (document.getElementById('item') as HTMLInputElement).value;
-      const glossaryDefinition = (document.getElementById('definition') as HTMLInputElement).value;
-      const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value;
+      const glossaryLanguage = (document.getElementById('language') as HTMLInputElement).value as string;
+      const glossaryItem = (document.getElementById('item') as HTMLInputElement).value as string;
+      const glossaryDefinition = (document.getElementById('definition') as HTMLInputElement).value as string;
+      const csrfToken = (document.getElementById('pmf-csrf-token') as HTMLInputElement).value as string;
 
       const response = await createGlossary(glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
 
@@ -73,8 +73,9 @@ export const handleAddGlossary = (): void => {
               'button',
               {
                 classList: 'btn btn-danger pmf-admin-delete-glossary',
-                'data-pmfGlossaryId': glossaryItem,
-                'data-pmfCsrfToken': '',
+                'data-pmf-glossary-id': glossaryItem,
+                'data-pmf-csrf-token': '',
+                'data-pmf-glossary-language': glossaryLanguage,
                 type: 'button',
                 innerText: 'Delete',
               },
@@ -93,16 +94,35 @@ export const onOpenUpdateGlossaryModal = (): void => {
   const updateGlossaryModal = document.getElementById('updateGlossaryModal') as HTMLElement | null;
 
   if (updateGlossaryModal) {
-    updateGlossaryModal.addEventListener('show.bs.modal', async (event: Event) => {
-      const target = event.target as HTMLElement;
-      const glossaryId = target.getAttribute('data-pmf-glossary-id') as string;
-      const glossaryLang = target.getAttribute('data-pmf-glossary-language') as string;
-      const response = await getGlossary(glossaryId, glossaryLang);
+    updateGlossaryModal.addEventListener('show.bs.modal', async (event: Event): Promise<void> => {
+      const relatedEvent = event as unknown as { relatedTarget?: Element };
+      let triggeredElement =
+        (relatedEvent.relatedTarget as HTMLElement | null) ?? (document.activeElement as HTMLElement | null);
 
-      (document.getElementById('update-id') as HTMLInputElement).value = response.id;
-      (document.getElementById('update-language') as HTMLInputElement).value = response.language;
-      (document.getElementById('update-item') as HTMLInputElement).value = response.item;
-      (document.getElementById('update-definition') as HTMLInputElement).value = response.definition;
+      // If focus is on a child element, climb up to the element carrying the data attributes
+      if (triggeredElement && !triggeredElement.hasAttribute('data-pmf-glossary-id')) {
+        triggeredElement = triggeredElement.closest('[data-pmf-glossary-id]') as HTMLElement | null;
+      }
+
+      const glossaryId = triggeredElement?.getAttribute('data-pmf-glossary-id') ?? null;
+      const glossaryLang = triggeredElement?.getAttribute('data-pmf-glossary-language') ?? null;
+
+      if (!glossaryId || !glossaryLang) {
+        return;
+      }
+
+      // Pre-fill hidden fields so they are present even if the API call fails
+      (document.getElementById('update-id') as HTMLInputElement).value = glossaryId;
+      (document.getElementById('update-language') as HTMLInputElement).value = glossaryLang;
+
+      try {
+        const response = await getGlossary(glossaryId, glossaryLang);
+
+        (document.getElementById('update-item') as HTMLInputElement).value = response?.item ?? '';
+        (document.getElementById('update-definition') as HTMLInputElement).value = response?.definition ?? '';
+      } catch (e) {
+        pushNotification('Unable to load glossary item. Please try again.');
+      }
     });
   }
 };
@@ -110,17 +130,17 @@ export const onOpenUpdateGlossaryModal = (): void => {
 export const handleUpdateGlossary = (): void => {
   const updateGlossaryButton = document.getElementById('pmf-admin-glossary-update') as HTMLButtonElement | null;
   const modal = document.getElementById('updateGlossaryModal') as HTMLElement | null;
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop fade show');
+  const modalBackdrop: HTMLCollectionOf<Element> = document.getElementsByClassName('modal-backdrop fade show');
 
   if (updateGlossaryButton) {
-    updateGlossaryButton.addEventListener('click', async (event: Event) => {
+    updateGlossaryButton.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
 
-      const glossaryId = (document.getElementById('update-id') as HTMLInputElement).value;
-      const glossaryLanguage = (document.getElementById('update-language') as HTMLInputElement).value;
-      const glossaryItem = (document.getElementById('update-item') as HTMLInputElement).value;
-      const glossaryDefinition = (document.getElementById('update-definition') as HTMLInputElement).value;
-      const csrfToken = (document.getElementById('update-csrf-token') as HTMLInputElement).value;
+      const glossaryId = (document.getElementById('update-id') as HTMLInputElement).value as string;
+      const glossaryLanguage = (document.getElementById('update-language') as HTMLInputElement).value as string;
+      const glossaryItem = (document.getElementById('update-item') as HTMLInputElement).value as string;
+      const glossaryDefinition = (document.getElementById('update-definition') as HTMLInputElement).value as string;
+      const csrfToken = (document.getElementById('update-csrf-token') as HTMLInputElement).value as string;
 
       const response = await updateGlossary(glossaryId, glossaryLanguage, glossaryItem, glossaryDefinition, csrfToken);
 
@@ -133,11 +153,19 @@ export const handleUpdateGlossary = (): void => {
           modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
         }
 
-        const item = document.querySelector(`#pmf-glossary-id-${glossaryId} td:nth-child(1) a`) as HTMLElement;
-        const definition = document.querySelector(`#pmf-glossary-id-${glossaryId} td:nth-child(2)`) as HTMLElement;
+        const itemLink = document.querySelector(
+          `#pmf-glossary-id-${glossaryId} td:nth-child(1) a`
+        ) as HTMLElement | null;
+        const definitionCell = document.querySelector(
+          `#pmf-glossary-id-${glossaryId} td:nth-child(2)`
+        ) as HTMLElement | null;
 
-        item.innerText = glossaryItem;
-        definition.innerText = glossaryDefinition;
+        if (itemLink) {
+          itemLink.innerText = glossaryItem;
+        }
+        if (definitionCell) {
+          definitionCell.innerText = glossaryDefinition;
+        }
 
         pushNotification(response.success);
       }
