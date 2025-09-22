@@ -17,11 +17,11 @@ import { send } from './api';
 import { addElement } from './utils';
 import { ApiResponse } from './interfaces';
 
-export const handleContactForm = () => {
-  const contactSubmit = document.getElementById('pmf-submit-contact');
+export const handleContactForm = (): void => {
+  const contactSubmit = document.getElementById('pmf-submit-contact') as HTMLElement;
 
   if (contactSubmit) {
-    contactSubmit.addEventListener('click', async (event) => {
+    contactSubmit.addEventListener('click', async (event: PointerEvent): Promise<void> => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -32,8 +32,6 @@ export const handleContactForm = () => {
         const form = document.querySelector('#pmf-contact-form') as HTMLFormElement;
         const loader = document.getElementById('loader') as HTMLElement;
         const formData = new FormData(form);
-
-        console.log(formData);
 
         const response = (await send(formData)) as ApiResponse;
 
