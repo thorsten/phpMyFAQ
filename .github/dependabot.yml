@@ -10,6 +10,12 @@ updates:
   - dependency-name: elasticsearch/elasticsearch
     versions:
     - 7.10.0
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: "daily"
+    time: "04:00"
+  open-pull-requests-limit: 10
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
