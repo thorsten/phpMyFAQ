@@ -55,6 +55,7 @@ class Error
         }
 
         http_response_code($code);
+
         echo "<h1>phpMyFAQ Fatal error</h1>";
         echo "<p>Uncaught exception: '" . $exception::class . "'</p>";
         echo "<p>Message: '" . Strings::htmlentities($exception->getMessage()) . "'</p>";

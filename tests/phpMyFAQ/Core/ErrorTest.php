@@ -163,7 +163,7 @@ class ErrorTest extends TestCase
     #[RunInSeparateProcess]
     public function testExceptionHandlerWithCustomException(): void
     {
-        $customException = new class("Custom error message", 123) extends Exception {
+        $customException = new class ("Custom error message", 123) extends Exception {
             // Custom exception class for testing
         };
 
@@ -231,10 +231,8 @@ class ErrorTest extends TestCase
         }
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testExceptionHandlerWithErrorException(): void
     {
         $errorException = new ErrorException(
