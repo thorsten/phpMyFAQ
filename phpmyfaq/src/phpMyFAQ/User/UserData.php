@@ -287,4 +287,26 @@ class UserData
 
         return true;
     }
+
+    /**
+     * Checks if an email address already exists in the user data table.
+     * Returns true if the email exists, false otherwise.
+     *
+     * @param string $email Email address to check
+     */
+    public function emailExists(string $email): bool
+    {
+        if (empty($email)) {
+            return false;
+        }
+
+        $select = sprintf(
+            "SELECT user_id FROM %sfaquserdata WHERE email = '%s'",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($email)
+        );
+
+        $res = $this->configuration->getDb()->query($select);
+        return $this->configuration->getDb()->numRows($res) > 0;
+    }
 }
