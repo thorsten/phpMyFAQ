@@ -23,6 +23,7 @@ use phpMyFAQ\Mail;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User;
+use phpMyFAQ\User\UserData;
 use phpMyFAQ\Utils;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -42,16 +43,30 @@ class RegistrationHelper extends AbstractHelper
     }
 
     /**
-     * Creates a new user account, sends mail and returns success or
+     * Creates a new user account and saves the user data.
+     * If user generation was successful, account activation is sent via an email
      * error message as an array.
      * The password will be automatically generated and sent by email
-     * as soon if admin switch user to "active"
+     * as soon if admin switches user to "active"
      *
      * @throws Exception|TransportExceptionInterface
      */
     public function createUser(string $userName, string $fullName, string $email, bool $isVisible): array
     {
         $user = new User($this->configuration);
+
+        // Check if email already exists in the userdata table (even if the username is different)
+        if (!empty($email)) {
+            if (!$user->userdata instanceof UserData) {
+                $user->userdata = new UserData($this->configuration);
+            }
+            if ($user->userdata->emailExists($email)) {
+                return [
+                    'registered' => false,
+                    'error' => User::ERROR_USER_EMAIL_NOT_UNIQUE
+                ];
+            }
+        }
 
         if (!$user->createUser($userName, '')) {
             return [
@@ -99,14 +114,14 @@ class RegistrationHelper extends AbstractHelper
     }
 
     /**
-     * Returns true, if the hostname of the given email address is allowed.
+     * Returns true if the hostname of the given email address is allowed.
      * otherwise false.
      */
     public function isDomainAllowed(string $email): bool
     {
         $whitelistedDomains = $this->configuration->get('security.domainWhiteListForRegistrations');
 
-        if (Strings::strlen($whitelistedDomains) === 0) {
+        if ($whitelistedDomains === null || Strings::strlen(trim((string) $whitelistedDomains)) === 0) {
             return true;
         }
 

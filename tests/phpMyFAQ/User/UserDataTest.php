@@ -92,4 +92,30 @@ class UserDataTest extends TestCase
         $result = $this->userData->delete(1);
         $this->assertTrue($result);
     }
+
+    public function testEmailExistsReturnsTrueWhenEmailExists(): void
+    {
+        $this->database->method('escape')->willReturn('test@example.com');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+
+        $result = $this->userData->emailExists('test@example.com');
+        $this->assertTrue($result);
+    }
+
+    public function testEmailExistsReturnsFalseWhenEmailDoesNotExist(): void
+    {
+        $this->database->method('escape')->willReturn('nonexistent@example.com');
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(0);
+
+        $result = $this->userData->emailExists('nonexistent@example.com');
+        $this->assertFalse($result);
+    }
+
+    public function testEmailExistsReturnsFalseForEmptyEmail(): void
+    {
+        $result = $this->userData->emailExists('');
+        $this->assertFalse($result);
+    }
 }

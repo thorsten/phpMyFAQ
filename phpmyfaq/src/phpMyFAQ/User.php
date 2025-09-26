@@ -62,6 +62,8 @@ class User
 
     final public const string ERROR_USER_LOGIN_NOT_UNIQUE = 'The Login name already exists.';
 
+    final public const string ERROR_USER_EMAIL_NOT_UNIQUE = 'The email address already exists.';
+
     final public const string ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least ' .
         'four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
 
@@ -358,6 +360,16 @@ class User
             throw new Exception(self::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
 
+        // If $login is an email address, check if it already exists in the userdata table
+        if ($this->isEmailAddress($login)) {
+            if (!$this->userdata instanceof UserData) {
+                $this->userdata = new UserData($this->configuration);
+            }
+            if ($this->userdata->emailExists($login)) {
+                throw new Exception(self::ERROR_USER_EMAIL_NOT_UNIQUE);
+            }
+        }
+
         // set user-ID
         if (0 === $userId) {
             $this->userId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
@@ -365,7 +377,7 @@ class User
             $this->userId = $userId;
         }
 
-        // create user entry
+        // create a user entry
         $insert = sprintf(
             "INSERT INTO %sfaquser (user_id, login, session_timestamp, member_since) VALUES (%d, '%s', %d, '%s')",
             Database::getTablePrefix(),
@@ -785,7 +797,7 @@ class User
 
     /**
      * Returns true on success.
-     * This will change a users' status to active, and send an email with a new password.
+     * This will change a users' status to active and send an email with a new password.
      *
      * @throws Exception|TransportExceptionInterface
      */
@@ -998,5 +1010,15 @@ class User
         }
 
         return '';
+    }
+
+    /**
+     * Checks if a string is a valid email address.
+     *
+     * @param string $string String to check
+     */
+    private function isEmailAddress(string $string): bool
+    {
+        return filter_var($string, FILTER_VALIDATE_EMAIL) !== false;
     }
 }
