@@ -4,8 +4,8 @@
  * Manages the user authentication in phpMyFAQ
  *
  * Subclasses of Auth implement authentication functionality with different types. The class AuthLdap for example
- * provides with database access. Authentication functionality includes creation of a new login-and-password, deletion
- * of an existing login-and-password combination and validation of given by a user.
+ * provides database access. Authentication functionality includes creation of a new login-and-password, deletion
+ * of an existing login-and-password combination, and validation of given by a user.
  * These functions are provided by the database-specific see documentation of the database-specific authentication
  * classes AuthDatabase, or AuthLdap for further details. Passwords are usually encrypted before stored in a database.
  * For security, a password encryption method may be chosen. See documentation of Encryption class for further details.
@@ -30,18 +30,20 @@ use phpMyFAQ\Core\Exception;
 /**
  * Class Auth
  *
- * @package phpMyFAQ
+ * Manages user authentication in phpMyFAQ. Concrete adapters (e.g., AuthDatabase, AuthLdap, AuthHttp)
+ * implement the actual operations like creating, deleting, and validating login/password pairs.
+ * Passwords are encrypted via an Encryption implementation configured at runtime.
  */
 class Auth
 {
     private const string PMF_ERROR_USER_NO_AUTH_TYPE = 'Specified authentication access class could not be found.';
 
     /**
-     * public array that contains error messages.
+     * Public array that contains error messages.
      *
      * @var array<string>
      */
-    public array $errors = [];
+    protected array $errors = [];
 
     /**
      * Container that stores the encryption object.
@@ -49,7 +51,7 @@ class Auth
     protected ?Encryption $encContainer = null;
 
     /**
-     * Short description of attribute read_only.
+     * Read-only flag.
      */
     private bool $readOnly = false;
 
@@ -61,10 +63,7 @@ class Auth
     }
 
     /**
-     * This method instantiates a new EncryptionTypes object by calling the static
-     * method.
-     *
-     * @param string $encType encryption type
+     * Instantiates an Encryption implementation based on the given type.
      */
     public function getEncryptionContainer(string $encType): Encryption
     {
@@ -73,9 +72,7 @@ class Auth
     }
 
     /**
-     * The string returned by error() contains messages for all errors that
-     * during object processing. New lines separate messages.
-     * Error messages are stored in the public array errors.
+     * Returns a string with all collected error messages, each separated by a new line.
      */
     public function getErrors(): string
     {
@@ -85,28 +82,38 @@ class Auth
             $message .= $error . PHP_EOL;
         }
 
-        return $message . $this->encContainer->error();
+        // If no encryption container was set yet, don't trigger a fatal error
+        return $message . ($this->encContainer ? $this->encContainer->error() : '');
     }
 
     /**
-     * Returns an authentication object with the specified database access.
-     * This method is called statically. The parameter database specifies the
-     * of database access for the authentication object.
-     * If the given database-type is not supported, selectAuth() will return an
-     * object without database access and with an error message. See the
-     * of the error() method for further details.
+     * Adds an error message to the list of errors.
+     */
+    public function addError(string $message): void
+    {
+        $this->errors[] = $message;
+    }
+
+    /**
+     * Clears all collected Auth errors (does not touch encryption errors).
+     */
+    public function clearErrors(): void
+    {
+        $this->errors = [];
+    }
+
+    /**
+     * Returns an authentication object for the specified method.
      *
-     * @param string $method Authentication access methods
-     * @throws Exception
+     * @throws Exception If the auth class cannot be found
      */
     public function selectAuth(string $method): Auth
     {
         $method = ucfirst(strtolower($method));
-        $authClass = '\phpMyFAQ\\Auth\\Auth' . $method;
+        $authClass = '\\phpMyFAQ\\Auth\\Auth' . $method;
 
         if (!class_exists($authClass)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
-
             throw new Exception(self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
@@ -114,7 +121,7 @@ class Auth
     }
 
     /**
-     * @param bool $readOnly boolean flag
+     * Sets or unsets read-only mode and returns the previous state.
      */
     public function setReadOnly(bool $readOnly = false): bool
     {
@@ -125,10 +132,24 @@ class Auth
     }
 
     /**
-     * @param string $string string
+     * Returns the current read-only state.
+     */
+    public function isReadOnly(): bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * Encrypts a string using the configured encryption container.
+     *
+     * @throws Exception If no encryption container was configured
      */
     public function encrypt(string $string): string
     {
+        if ($this->encContainer === null) {
+            throw new Exception('No encryption container configured. Call getEncryptionContainer() first.');
+        }
+
         return $this->encContainer->encrypt($string);
     }
 }
