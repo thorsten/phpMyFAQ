@@ -2,3 +2,12 @@
   list-style: none;
   margin-left: 0;
 }
+
+// Category image styling to prevent overflow
+.bg-light-subtle .img-fluid.float-end {
+  max-width: 140px;
+  max-height: 140px;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
