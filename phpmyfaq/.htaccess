@@ -92,8 +92,6 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
 <IfModule mod_rewrite.c>
     # This has to be 'On'
     RewriteEngine On
-    # the path to your phpMyFAQ installation
-    RewriteBase /
     <IfModule mod_fcgid.c>
         RewriteCond %{HTTP:Authorization} .
         RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
