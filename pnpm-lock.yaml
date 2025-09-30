@@ -65,8 +65,8 @@ devDependencies:
     specifier: ^9.12.6
     version: 9.12.6
   '@types/jsdom':
-    specifier: ^21.1.7
-    version: 21.1.7
+    specifier: ^27.0.0
+    version: 27.0.0
   '@types/masonry-layout':
     specifier: ^4.2.8
     version: 4.2.8
@@ -2132,8 +2132,8 @@ packages:
       '@types/sizzle': 2.3.10
     dev: true
 
-  /@types/jsdom@21.1.7:
-    resolution: {integrity: sha512-yOriVnggzrnQ3a9OKOCxaVuSug3w3/SbOj5i7VwXWZEyUNl3bLF9V3MfxGbZKuwqJOQyRfqXyROBB1CoZLFWzA==}
+  /@types/jsdom@27.0.0:
+    resolution: {integrity: sha512-NZyFl/PViwKzdEkQg96gtnB8wm+1ljhdDay9ahn4hgb+SfVtPCbm3TlmDUFXTA+MGN3CijicnMhG18SI5H3rFw==}
     dependencies:
       '@types/node': 24.6.0
       '@types/tough-cookie': 4.0.5

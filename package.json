@@ -52,7 +52,7 @@
     "@commitlint/config-conventional": "^20.0.0",
     "@types/bootstrap": "^5.2.10",
     "@types/highlightjs": "^9.12.6",
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^27.0.0",
     "@types/masonry-layout": "^4.2.8",
     "@types/node": "^24.6.0",
     "@types/sortablejs": "^1.15.8",
