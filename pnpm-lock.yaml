@@ -33,8 +33,8 @@ dependencies:
     specifier: ^11.11.1
     version: 11.11.1
   jodit:
-    specifier: ^4.6.12
-    version: 4.6.12
+    specifier: ^4.6.13
+    version: 4.6.13
   masonry-layout:
     specifier: ^4.2.2
     version: 4.2.2
@@ -3389,8 +3389,8 @@ packages:
     hasBin: true
     dev: true
 
-  /jodit@4.6.12:
-    resolution: {integrity: sha512-6TbeTHTenUORMFzgSruRRevggk+q3rtt/EuSvXwN2aA6Vd0OgI0fadU6D6sPP2LXujtkftOipA3KZM8yZp8i3Q==}
+  /jodit@4.6.13:
+    resolution: {integrity: sha512-kCuf1ksHcOXkfYrhabfZDHQPlNzHH/RCScr5kpia/mvPta1Xz3A+OGVt/qyEXWLuUJorkx+B9TwFeuJdq/MFPA==}
     dependencies:
       autobind-decorator: 2.4.0
     dev: false
