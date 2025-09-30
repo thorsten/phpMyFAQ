@@ -16,15 +16,12 @@
  * @since     2005-09-18
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 use SensitiveParameter;
 
-/**
- * Class Encryption
- *
- * @package phpMyFAQ
- */
 class Encryption
 {
     /**
@@ -53,13 +50,13 @@ class Encryption
 
     /**
      * This method is called statically. The parameter encType specifies the
-     * of encryption method for the encryption object. Supported
+     * type of encryption method for the encryption object. Supported
      * are 'bcrypt', 'hash', and 'none'.
      * $enc = EncryptionTypes::getInstance('hash');
      * $enc is an instance of the class EncryptionTypes\Hash.
-     * If the given encryption-type is not supported, selectEnc() will return an
+     * If the given encryption-type is not supported, getInstance() will return an
      * object without database access and with an error message. See the
-     * of the error() method for further details.
+     * documentation of the error() method for further details.
      */
     public static function getInstance(string $encType, Configuration $configuration): Encryption
     {
@@ -88,24 +85,16 @@ class Encryption
 
     /**
      * The string returned by error() contains messages for all errors that
-     * during object processing.
+     * occurred during object processing.
      * New lines separate messages.
      */
     public function error(): string
     {
-        $message = '';
-
-        foreach ($this->errors as $error) {
-            $message .= $error . PHP_EOL;
-        }
-
-        return $message;
+        return $this->errors !== [] ? implode(PHP_EOL, $this->errors) . PHP_EOL : '';
     }
 
     /**
      * Setter for salt.
-     *
-     *
      */
     public function setSalt(string $login): Encryption
     {

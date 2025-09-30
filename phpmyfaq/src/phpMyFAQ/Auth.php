@@ -23,9 +23,12 @@
  * @since     2005-09-30
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
+use SensitiveParameter;
 
 /**
  * Class Auth
@@ -76,13 +79,7 @@ class Auth
      */
     public function getErrors(): string
     {
-        $message = '';
-
-        foreach ($this->errors as $error) {
-            $message .= $error . PHP_EOL;
-        }
-
-        // If no encryption container was set yet, don't trigger a fatal error
+        $message = $this->errors !== [] ? implode(PHP_EOL, $this->errors) . PHP_EOL : '';
         return $message . ($this->encContainer ? $this->encContainer->error() : '');
     }
 
@@ -144,7 +141,7 @@ class Auth
      *
      * @throws Exception If no encryption container was configured
      */
-    public function encrypt(string $string): string
+    public function encrypt(#[SensitiveParameter] string $string): string
     {
         if ($this->encContainer === null) {
             throw new Exception('No encryption container configured. Call getEncryptionContainer() first.');
