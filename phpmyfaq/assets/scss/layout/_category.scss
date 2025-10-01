@@ -5,8 +5,8 @@
 
 // Category image styling to prevent overflow
 .bg-light-subtle .img-fluid.float-end {
-  max-width: 140px;
-  max-height: 140px;
+  max-width: 140px !important;
+  max-height: 140px !important;
   width: auto;
   height: auto;
   object-fit: cover;
