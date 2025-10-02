@@ -575,7 +575,8 @@ class CategoryController extends AbstractAdministrationController
         }
 
         $existingImage = is_null($existingImage) ? '' : $existingImage;
-        $image = count($uploadedFile) > 0 ? $categoryImage->getFileName(
+        $hasUploadedImage = $uploadedFile instanceof UploadedFile;
+        $image = $hasUploadedImage ? $categoryImage->getFileName(
             $categoryId,
             $categoryLang
         ) : $existingImage;
@@ -592,7 +593,7 @@ class CategoryController extends AbstractAdministrationController
             ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
             ->setImage($image)
-            ->setShowHome(Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
+            ->setShowHome((bool) Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
 
         $permissions = [];
         if ('all' === Filter::filterVar($request->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
