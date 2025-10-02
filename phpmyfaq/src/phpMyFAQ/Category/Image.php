@@ -131,6 +131,15 @@ class Image
                 throw new Exception('Image MIME type validation failed.');
             }
 
+            // Ensure destination directory exists
+            if (!is_dir(self::UPLOAD_DIR)) {
+                if (!@mkdir(self::UPLOAD_DIR, 0775, true) && !is_dir(self::UPLOAD_DIR)) {
+                    throw new Exception(
+                        'Upload directory does not exist and could not be created: ' . self::UPLOAD_DIR
+                    );
+                }
+            }
+
             $this->uploadedFile->move(self::UPLOAD_DIR, $this->fileName);
 
             return true;
@@ -140,7 +149,7 @@ class Image
     }
 
     /**
-     * Deletes the current file, returns true, if no file is available.
+     * Deletes the current file, returns true if no file is available.
      */
     public function delete(): bool
     {

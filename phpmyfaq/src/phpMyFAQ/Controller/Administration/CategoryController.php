@@ -37,6 +37,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 use Twig\Error\LoaderError;
 
 class CategoryController extends AbstractAdministrationController
@@ -193,6 +194,7 @@ class CategoryController extends AbstractAdministrationController
         if ($uploadedFile instanceof UploadedFile) {
             $categoryImage->setUploadedFile($uploadedFile);
         }
+        $hasUploadedImage = $uploadedFile instanceof UploadedFile;
 
         $categoryEntity = new CategoryEntity();
         $categoryEntity
@@ -203,7 +205,7 @@ class CategoryController extends AbstractAdministrationController
             ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
             ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
             ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
-            ->setImage($categoryImage->getFileName($categoryId, $categoryLang))
+            ->setImage($hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : '')
             ->setParentId($parentId)
             ->setShowHome(Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
 
@@ -261,10 +263,10 @@ class CategoryController extends AbstractAdministrationController
                 $permissions['restricted_groups']
             );
 
-            if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+            if ($hasUploadedImage) {
                 try {
                     $categoryImage->upload();
-                } catch (Exception $exception) {
+                } catch (Throwable $exception) {
                     $templateVars = [
                         ...$templateVars,
                         'isWarning' => true,
@@ -407,6 +409,7 @@ class CategoryController extends AbstractAdministrationController
                 'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
                 'serpTitle' => $seoData->getTitle(),
                 'serpDescription' => $seoData->getDescription(),
+                'buttonCancel' => Translation::get('ad_gen_cancel'),
                 'buttonUpdate' => Translation::get('ad_gen_save'),
             ],
         );
@@ -684,10 +687,10 @@ class CategoryController extends AbstractAdministrationController
                 $permissions['restricted_groups']
             );
 
-            if ($categoryImage->getFileName($categoryId, $categoryLang)) {
+            if ($hasUploadedImage) {
                 try {
                     $categoryImage->upload();
-                } catch (Exception $exception) {
+                } catch (Throwable $exception) {
                     $templateVars = [
                         ...$templateVars,
                         'isWarning' => true,
@@ -730,7 +733,7 @@ class CategoryController extends AbstractAdministrationController
                 ... $this->getHeader($request),
                 ... $this->getFooter(),
                 ... $this->getBaseTemplateVars(),
-                ...$templateVars,
+                ... $templateVars,
             ],
         );
     }
