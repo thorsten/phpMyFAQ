@@ -35,11 +35,17 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
-- migrated from JavaScript to TypeScript (Thorsten) 
+- migrated from JavaScript to TypeScript (Thorsten)
 - migrated from Webpack to Vite v7 (Thorsten)
 - migrated from Jest to Vitest v3 (Thorsten)
 
-### phpMyFAQ v4.0.12 - unreleased
+### phpMyFAQ v4.0.13 - 2025-10-03
+
+- fixed security vulnerability (Thorsten)
+- updated third party dependencies (Thorsten)
+- fixed bugs (Thorsten)
+
+### phpMyFAQ v4.0.12 - 2025-09-23
 
 - updated third party dependencies (Thorsten)
 - fixed bugs (Thorsten)
