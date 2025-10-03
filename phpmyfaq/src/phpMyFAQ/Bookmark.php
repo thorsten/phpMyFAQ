@@ -21,19 +21,25 @@ use phpMyFAQ\User\CurrentUser;
 
 /**
  * Class Bookmark
- *
- * @package phpMyFAQ
  */
-readonly class Bookmark
+class Bookmark
 {
+    /**
+     * @var array<int, object>|null
+     */
+    private ?array $bookmarkCache;
+
     /**
      * Constructor.
      *
      * @param Configuration $configuration Configuration object
      * @param CurrentUser $currentUser CurrentUser object
      */
-    public function __construct(private Configuration $configuration, private CurrentUser $currentUser)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly CurrentUser $currentUser
+    ) {
+        $this->bookmarkCache = null;
     }
 
     /**
@@ -44,10 +50,17 @@ readonly class Bookmark
      */
     public function isFaqBookmark(int $faqId): bool
     {
+        if ($faqId <= 0) {
+            return false;
+        }
+
         $bookmarks = $this->getAll();
+        if ($bookmarks === []) {
+            return false;
+        }
 
         foreach ($bookmarks as $bookmark) {
-            if ((int) $bookmark->faqid === $faqId) {
+            if (isset($bookmark->faqid) && (int) $bookmark->faqid === $faqId) {
                 return true;
             }
         }
@@ -56,35 +69,54 @@ readonly class Bookmark
     }
 
     /**
-     * Saves a given Faq to the bookmark collection of the current user.
+     * Saves a given FAQ to the bookmark collection of the current user.
      *
      * @param int $faqId ID of the Faq
      */
     public function add(int $faqId): bool
     {
+        if ($faqId <= 0) {
+            return false;
+        }
+
         $query = sprintf(
-            "INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)",
+            'INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $this->currentUser->getUserId(),
             $faqId
         );
-        return (bool) $this->configuration->getDb()->query($query);
+
+        $result = (bool) $this->configuration->getDb()->query($query);
+
+        if ($result) {
+            $this->bookmarkCache = null;
+        }
+
+        return $result;
     }
 
     /**
      * Gets all bookmarks from the current user.
      *
-     * @return array<int>
+     * @return array<int, object> List of DB result objects each containing ->faqid
      */
     public function getAll(): array
     {
+        if ($this->bookmarkCache !== null) {
+            return $this->bookmarkCache;
+        }
+
         $query = sprintf(
             'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
             Database::getTablePrefix(),
             $this->currentUser->getUserId()
         );
         $result = $this->configuration->getDb()->query($query);
-        return $this->configuration->getDb()->fetchAll($result);
+        $data = $this->configuration->getDb()->fetchAll($result);
+
+        $this->bookmarkCache = is_array($data) ? $data : [];
+
+        return $this->bookmarkCache;
     }
 
     /**
@@ -94,6 +126,10 @@ readonly class Bookmark
      */
     public function remove(int $faqId): bool
     {
+        if ($faqId <= 0) {
+            return false;
+        }
+
         $query = sprintf(
             'DELETE FROM %sfaqbookmarks WHERE userid = %d AND faqid = %d',
             Database::getTablePrefix(),
@@ -101,12 +137,17 @@ readonly class Bookmark
             $faqId
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = (bool) $this->configuration->getDb()->query($query);
+
+        if ($result) {
+            $this->bookmarkCache = null;
+        }
+
+        return $result;
     }
 
     /**
      * Removes all bookmarks from the current user.
-     *
      */
     public function removeAll(): bool
     {
@@ -116,9 +157,18 @@ readonly class Bookmark
             $this->currentUser->getUserId()
         );
 
-        return (bool) $this->configuration->getDb()->query($query);
+        $result = (bool) $this->configuration->getDb()->query($query);
+
+        if ($result) {
+            $this->bookmarkCache = null;
+        }
+
+        return $result;
     }
 
+    /**
+     * @return array<int, array{url:string,title:string,id:int,answer:string}>
+     */
     public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();
@@ -132,27 +182,41 @@ readonly class Bookmark
         $list = [];
 
         foreach ($bookmarks as $bookmark) {
-            $faq->getFaq((int) $bookmark->faqid);
+            if (!isset($bookmark->faqid)) {
+                continue;
+            }
+            $faqId = (int) $bookmark->faqid;
+            if ($faqId <= 0) {
+                continue;
+            }
+
+            $faq->getFaq($faqId);
             $faqData = $faq->faqRecord;
 
+            if (empty($faqData['id'])) {
+                continue;
+            }
+
+            $categoryId = $category->getCategoryIdFromFaq($faqData['id']);
             $url = sprintf(
                 '%sindex.php?action=faq&id=%d&cat=%d&artlang=%s',
                 $this->configuration->getDefaultUrl(),
-                $faqData['id'],
-                $category->getCategoryIdFromFaq($faqData['id']),
-                $faqData['lang']
+                (int) $faqData['id'],
+                $categoryId,
+                $faqData['lang'] ?? ''
             );
 
             $link = new Link($url, $this->configuration);
-            $link->text = Strings::htmlentities($faqData['title']);
+            $title = (string) ($faqData['title'] ?? '');
+            $link->text = Strings::htmlentities($title);
             $link->itemTitle = $link->text;
             $link->tooltip = $link->text;
 
             $list[] = [
                 'url' => $link->toString(),
-                'title' => htmlspecialchars_decode((string) $faqData['title']),
-                'id' => $faqData['id'],
-                'answer' => $faqData['content']
+                'title' => htmlspecialchars_decode($title),
+                'id' => (int) $faqData['id'],
+                'answer' => (string) ($faqData['content'] ?? '')
             ];
         }
 
