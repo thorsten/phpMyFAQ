@@ -43,20 +43,11 @@ abstract class Setup
     }
 
     /**
-     * Updates only possible if maintenance mode is enabled.
+     * Updates only possible if the maintenance mode is enabled.
      */
     public function checkMaintenanceMode(): bool
     {
         return Configuration::getConfigurationInstance()->get('main.maintenanceMode');
-    }
-
-    /**
-     * Checks if the database file exists.
-     */
-    public function checkDatabaseFile(): bool
-    {
-        return !(!file_exists(PMF_ROOT_DIR . '/config/database.php') &&
-        !file_exists(PMF_ROOT_DIR . '/content/core/config/database.php'));
     }
 
     /**

@@ -27,14 +27,8 @@ class StopWords
 {
     private string $language;
 
-    /**
-     * Table name.
-     */
     private readonly string $tableName;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly Configuration $configuration)
     {
         $this->tableName = Database::getTablePrefix() . 'faqstopwords';
