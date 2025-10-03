@@ -28,6 +28,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental MCP Server (Thorsten)
 - added experimental update via command line (Thorsten)
 - added experimental support for .env files (Thorsten)
+- added experimental support for Mago (Thorsten)
 - improved online update feature (Thorsten)
 - updated Spanish translation (Thorsten)
 - updated Japanese translation (Kamo Tomoyuki)

@@ -1,0 +1,18 @@
+# Mago configuration file
+# For more information, see https://mago.carthage.software/#/getting-started/configuration
+php_version = "8.3.0"
+
+[source]
+paths = ["./phpmyfaq/src/phpMyFAQ"]
+includes = ["./phpmyfaq/src/libs"]
+excludes = []
+
+[format]
+print_width = 120
+tab_width = 4
+use_tabs = false
+inline_empty_constructor_braces = false
+
+[linter]
+default_plugins = true
+plugins = ["symfony", "php-unit"]
