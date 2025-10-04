@@ -80,6 +80,7 @@
     "vendor-dir": "phpmyfaq/src/libs",
     "bin-dir": "phpmyfaq/src/libs/bin",
     "allow-plugins": {
+      "carthage-software/mago": true,
       "cyclonedx/cyclonedx-php-composer": true,
       "php-http/discovery": true
     },
