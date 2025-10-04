@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-alpha.3 - unreleased
+### phpMyFAQ v4.1.0-alpha.3 - 2025-10-04
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
@@ -140,7 +140,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for WebAuthn / Passkeys (Thorsten)
 - improved installation and update (Thorsten)
 - improved SEO support (Thorsten)
-- improved session timout warning for admins (Thorsten)
+- improved session timeout warning for admins (Thorsten)
 - removed Twitter/X support (Thorsten)
 - removed support for adding own meta-content in templates (Thorsten)
 - removed HTML5 export (Thorsten)
@@ -201,7 +201,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 ### phpMyFAQ v3.2.2 - 2023-10-27
 
 - fixed multiple security vulnerabilities (Thorsten)
-- re-added fullscreen plugin for TinyMCE (Thorsten)
+- re-added a fullscreen plugin for TinyMCE (Thorsten)
 - updated bundled dependencies (Thorsten)
 - fixed minor bugs (Thorsten)
 
