@@ -20,19 +20,19 @@ class HtaccessUpdaterTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        // Clean up test files
         if (file_exists($this->testHtaccessPath)) {
             unlink($this->testHtaccessPath);
         }
         
-        // Clean up backup files
         $backupFiles = glob($this->testHtaccessPath . '.backup-*');
         foreach ($backupFiles as $backupFile) {
-            unlink($backupFile);
+            @unlink($backupFile);
         }
     }
 
-    public function testCreateBackup(): void
+    /**
+     * @throws Exception
+     */public function testCreateBackup(): void
     {
         // Create a test .htaccess file
         $originalContent = "RewriteEngine On\nRewriteBase /\n";
@@ -187,5 +187,50 @@ HTACCESS;
         // Verify RewriteBase was updated to root
         $this->assertStringContainsString('RewriteBase /', $updatedContent);
         $this->assertStringNotContainsString('RewriteBase /subfolder/', $updatedContent);
+    }
+
+    public function testRepeatedCallsAreIdempotentAndDoNotDuplicateOrCreateMultipleBackups(): void
+    {
+        $content = <<<HTACCESS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+HTACCESS;
+        file_put_contents($this->testHtaccessPath, $content);
+
+        // First run should add one RewriteBase and create exactly one backup
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/foo/bar/'));
+        $updatedOnce = file_get_contents($this->testHtaccessPath);
+        $this->assertEquals(1, substr_count($updatedOnce, 'RewriteBase /foo/bar/'));
+        $backupsAfterFirst = glob($this->testHtaccessPath . '.backup-*');
+        $this->assertCount(1, $backupsAfterFirst, 'Exactly one backup after first modification');
+
+        // Second run with the same base must not modify or create new backup
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/foo/bar/'));
+        $updatedTwice = file_get_contents($this->testHtaccessPath);
+        $this->assertSame($updatedOnce, $updatedTwice, 'File content must be unchanged on second run');
+        $backupsAfterSecond = glob($this->testHtaccessPath . '.backup-*');
+        $this->assertCount(1, $backupsAfterSecond, 'No additional backup should be created');
+    }
+
+    public function testExistingRewriteBaseWithoutTrailingSlashIsTreatedAsEqual(): void
+    {
+        $content = <<<HTACCESS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /foo/bar
+</IfModule>
+HTACCESS;
+        file_put_contents($this->testHtaccessPath, $content);
+
+        // Should detect equivalence and not write a backup
+        $this->assertTrue($this->htaccessUpdater->updateRewriteBase($this->testHtaccessPath, '/foo/bar/'));
+        $backups = glob($this->testHtaccessPath . '.backup-*');
+        $this->assertCount(0, $backups, 'No backup should be created when value is equivalent');
+
+        // Content should remain untouched (keep original style without trailing slash)
+        $final = file_get_contents($this->testHtaccessPath);
+        $this->assertStringContainsString('RewriteBase /foo/bar', $final);
+        $this->assertStringNotContainsString('RewriteBase /foo/bar/', $final);
     }
 }

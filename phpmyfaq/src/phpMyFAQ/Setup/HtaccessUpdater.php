@@ -43,7 +43,7 @@ class HtaccessUpdater
 
     /**
      * Surgically updates the RewriteBase directive in .htaccess while preserving
-     * all other user-generated content
+     * all other user-generated content. Idempotent and backup only on change.
      *
      * @throws Exception
      */
@@ -53,38 +53,48 @@ class HtaccessUpdater
             throw new Exception('The .htaccess file does not exist at: ' . $htaccessPath);
         }
 
-        // Create backup before modification
-        $this->createBackup($htaccessPath);
-
-        // Read the file content
         $content = file_get_contents($htaccessPath);
         if ($content === false) {
             throw new Exception('Failed to read .htaccess file');
         }
 
-        // Ensure the base path has proper format
-        $newBasePath = rtrim($newBasePath, '/') . '/';
-        if ($newBasePath === '/') {
-            $newBasePath = '/';
+        // Normalize base path: ensure leading slash and a single trailing slash, '/' stays '/'
+        $trimmed = trim($newBasePath);
+        $trimmed = trim($trimmed, "/\t\n\r\0\x0B");
+        $newBasePath = $trimmed === '' ? '/' : ('/' . trim($trimmed, '/'));
+        if ($newBasePath !== '/') {
+            $newBasePath .= '/';
         }
 
-        // Use regex to find and replace the RewriteBase directive
-        // This pattern matches the RewriteBase line while preserving comments and formatting
-        $pattern = '/^(\s*RewriteBase\s+)(.*)$/m';
-        $replacement = '${1}' . $newBasePath;
+        // No-op if an equivalent RewriteBase already exists (with or without trailing slash, optional comment)
+        $equivalentBase = rtrim($newBasePath, '/');
+        $equivalentRegex = '/^\s*RewriteBase\s+' . preg_quote($equivalentBase, '/') . '\/?(?:\s*(?:#.*)?)?\s*$/mi';
+        if (preg_match($equivalentRegex, $content) === 1) {
+            return true; // unchanged, avoid backup
+        }
 
-        $updatedContent = preg_replace($pattern, $replacement, $content);
-
+        // Replace existing RewriteBase occurrences, if any
+        $pattern = '/^(\s*RewriteBase\s+)([^\s#]+)(.*)$/mi';
+        $replacement = '${1}' . $newBasePath . '${3}';
+        $replaceCount = 0;
+        $updatedContent = preg_replace($pattern, $replacement, $content, -1, $replaceCount);
         if ($updatedContent === null) {
             throw new Exception('Failed to update RewriteBase directive');
         }
 
-        // If no RewriteBase was found, add it after the RewriteEngine directive
-        if ($updatedContent === $content) {
+        // If no RewriteBase existed, insert it once in a sensible location
+        if ($replaceCount === 0) {
             $updatedContent = $this->addRewriteBase($content, $newBasePath);
         }
 
-        // Write the updated content back to the file
+        // Still no change? Nothing to do.
+        if ($updatedContent === $content) {
+            return true;
+        }
+
+        // Create backup only when we actually change the file
+        $this->createBackup($htaccessPath);
+
         if (file_put_contents($htaccessPath, $updatedContent) === false) {
             throw new Exception('Failed to write updated .htaccess file');
         }
@@ -93,25 +103,34 @@ class HtaccessUpdater
     }
 
     /**
-     * Adds a RewriteBase directive after the RewriteEngine directive if it doesn't exist
+     * Adds a RewriteBase directive after the first "RewriteEngine On" or inside the first mod_rewrite block.
+     * Ensures we insert at most one occurrence.
      */
     private function addRewriteBase(string $content, string $basePath): string
     {
-        // Look for the RewriteEngine directive and add RewriteBase after it
+        // Insert once after the first RewriteEngine On
         $pattern = '/^(\s*RewriteEngine\s+On\s*)$/mi';
         $replacement = '$1' . "\n    # the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
+        $count = 0;
+        $updated = preg_replace($pattern, $replacement, $content, 1, $count);
 
-        $updatedContent = preg_replace($pattern, $replacement, $content);
-
-        // If RewriteEngine On was not found, add both directives at the beginning of mod_rewrite section
-        if ($updatedContent === $content) {
-            $pattern = '/^(\s*<IfModule\s+mod_rewrite\.c>\s*)$/mi';
-            $replacement = '$1' . "\n    # This has to be 'On'\n    RewriteEngine On\n    " .
-                "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
-            $updatedContent = preg_replace($pattern, $replacement, $content);
+        if ($count > 0) {
+            return $updated;
         }
 
-        return $updatedContent;
+        // Otherwise, insert into the first <IfModule mod_rewrite.c> block
+        $pattern = '/^(\s*<IfModule\s+mod_rewrite\.c>\s*)$/mi';
+        $replacement = '$1' . "\n    # This has to be 'On'\n    RewriteEngine On\n    " .
+            "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
+        $updated = preg_replace($pattern, $replacement, $content, 1, $count);
+
+        if ($count > 0) {
+            return $updated;
+        }
+
+        // Last resort: append a minimal block
+        return rtrim($content) . "\n\n<IfModule mod_rewrite.c>\n    # This has to be 'On'\n    RewriteEngine On\n    " .
+            "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath . "\n</IfModule>\n";
     }
 
     /**

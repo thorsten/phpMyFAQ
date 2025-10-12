@@ -12,6 +12,7 @@ print-width = 120
 tab-width = 4
 use-tabs = false
 inline-empty-constructor-braces = false
+null-type-hint = "question"
 
 [linter]
 integrations = ["symfony", "php-unit"]
