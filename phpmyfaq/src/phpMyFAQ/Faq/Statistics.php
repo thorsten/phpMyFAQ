@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for statistics based on FAQs
  *
@@ -44,8 +46,9 @@ class Statistics
     /** Plural form support. */
     private readonly Plurals $plurals;
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         $this->plurals = new Plurals();
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
@@ -68,7 +71,7 @@ class Statistics
             Database::getTablePrefix(),
             null === $language ? '' : "AND lang = '" . $this->configuration->getDb()->escape($language) . "'",
             $now,
-            $now
+            $now,
         );
 
         $num = $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
@@ -112,12 +115,12 @@ class Statistics
             $result = $this->getTopTenData(
                 PMF_NUMBER_RECORDS_TOPTEN,
                 0,
-                $this->configuration->getLanguage()->getLanguage()
+                $this->configuration->getLanguage()->getLanguage(),
             );
         } else {
             $result = $this->getTopVotedData(
                 PMF_NUMBER_RECORDS_TOPTEN,
-                $this->configuration->getLanguage()->getLanguage()
+                $this->configuration->getLanguage()->getLanguage(),
             );
         }
 
@@ -135,7 +138,7 @@ class Statistics
                     '%s %s 5 - %s',
                     round($row['avg'], 2),
                     Translation::get('msgVoteFrom'),
-                    $this->plurals->GetMsg('plmsgVotes', $row['user'])
+                    $this->plurals->GetMsg('plmsgVotes', $row['user']),
                 );
             }
 
@@ -155,7 +158,7 @@ class Statistics
         $date = new Date($this->configuration);
         $result = $this->getTrendingData(
             PMF_NUMBER_RECORDS_TRENDING,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
         $output = [];
 
@@ -198,25 +201,39 @@ class Statistics
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Database::getTablePrefix() . 'faqvisits fv,
-                ' . Database::getTablePrefix() . 'faqdata fd
+                '
+            . Database::getTablePrefix()
+            . 'faqvisits fv,
+                '
+            . Database::getTablePrefix()
+            . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
+                '
+            . Database::getTablePrefix()
+            . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \''
+            . $now
+            . '\'
+                AND fd.date_end   >= \''
+            . $now
+            . '\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -227,7 +244,8 @@ class Statistics
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
 
-        $query .= '
+        $query .=
+            '
                 ' . $queryHelper->queryPermission($this->groupSupport) . '
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
@@ -239,7 +257,7 @@ class Statistics
         $data = [];
 
         if ($result) {
-            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 if ($this->groupSupport) {
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
@@ -255,7 +273,7 @@ class Statistics
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->content;
-                $data['visits'] = (int)$row->visits;
+                $data['visits'] = (int) $row->visits;
 
                 $title = $row->question;
                 $url = sprintf(
@@ -264,7 +282,7 @@ class Statistics
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $title;
@@ -305,25 +323,39 @@ class Statistics
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Database::getTablePrefix() . 'faqvisits fv,
-                ' . Database::getTablePrefix() . 'faqdata fd
+                '
+            . Database::getTablePrefix()
+            . 'faqvisits fv,
+                '
+            . Database::getTablePrefix()
+            . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
+                '
+            . Database::getTablePrefix()
+            . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \''
+            . $now
+            . '\'
+                AND fd.date_end   >= \''
+            . $now
+            . '\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -334,8 +366,11 @@ class Statistics
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
 
-        $query .= '
-                ' . $queryHelper->queryPermission($this->groupSupport) . '
+        $query .=
+            '
+                '
+            . $queryHelper->queryPermission($this->groupSupport)
+            . '
             GROUP BY
                 fd.id, fd.lang, fd.created, fcr.category_id, fv.visits, fdg.group_id, fdu.user_id
             ORDER BY
@@ -346,7 +381,7 @@ class Statistics
         $data = [];
 
         if ($result) {
-            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 if ($this->groupSupport) {
                     if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
@@ -362,7 +397,7 @@ class Statistics
                 $data['date'] = Filter::filterVar($row->created, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->content;
-                $data['visits'] = (int)$row->visits;
+                $data['visits'] = (int) $row->visits;
 
                 $title = $row->question;
                 $url = sprintf(
@@ -370,7 +405,7 @@ class Statistics
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
-                    $row->language
+                    $row->language,
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $title;
@@ -398,7 +433,7 @@ class Statistics
     public function getTopTenData(
         int $count = PMF_NUMBER_RECORDS_TOPTEN,
         int $categoryId = 0,
-        ?string $language = null
+        ?string $language = null,
     ): array {
         global $sids;
 
@@ -417,25 +452,39 @@ class Statistics
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Database::getTablePrefix() . 'faqvisits fv,
-                ' . Database::getTablePrefix() . 'faqdata fd
+                '
+            . Database::getTablePrefix()
+            . 'faqvisits fv,
+                '
+            . Database::getTablePrefix()
+            . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
+                '
+            . Database::getTablePrefix()
+            . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
+                '
+            . Database::getTablePrefix()
+            . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \''
+            . $now
+            . '\'
+                AND fd.date_end   >= \''
+            . $now
+            . '\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -452,7 +501,8 @@ class Statistics
                 fd.lang = \'' . $this->configuration->getDb()->escape($language) . "'";
         }
 
-        $query .= '
+        $query .=
+            '
                 ' . $queryHelper->queryPermission($this->groupSupport) . '
 
             GROUP BY
@@ -478,7 +528,7 @@ class Statistics
                     continue;
                 }
 
-                $data['visits'] = (int)$row->visits;
+                $data['visits'] = (int) $row->visits;
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
@@ -491,7 +541,7 @@ class Statistics
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->question;
@@ -510,7 +560,6 @@ class Statistics
 
         return $topTen;
     }
-
 
     /**
      * This function generates data-set with the most voted FAQs.
@@ -563,10 +612,10 @@ class Statistics
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $now,
-            $now
+            $now,
         );
 
-        if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
+        if (isset($categoryId) && is_numeric($categoryId) && $categoryId != 0) {
             $query .= '
             AND
                 fcr.category_id = \'' . $categoryId . "'";
@@ -601,7 +650,7 @@ class Statistics
                     $sids,
                     $row->category_id,
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
                 $oLink->itemTitle = $row->thema;
@@ -617,7 +666,6 @@ class Statistics
 
         return $topten;
     }
-
 
     public function setUser(int $userId = -1): Statistics
     {

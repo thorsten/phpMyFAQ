@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Pagination handler class.
  *
@@ -61,8 +63,7 @@ class Pagination
     /**
      * Current page link template.
      */
-    protected string $currentPageLinkTpl =
-        '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
+    protected string $currentPageLinkTpl = '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Next page link template.
@@ -77,8 +78,7 @@ class Pagination
     /**
      * First page link template.
      */
-    protected string $firstPageLinkTpl =
-        '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
+    protected string $firstPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
 
     /**
      * Last page link template.
@@ -202,7 +202,7 @@ class Pagination
             }
         }
 
-        return $page;
+        return (int) $page;
     }
 
     /**
@@ -215,13 +215,13 @@ class Pagination
         $adjacent = max(floor($this->adjacent / 2), 1);
 
         for ($page = 1; $page <= $pages; ++$page) {
-            if ($page > $this->adjacent && $page < $this->currentPage - $adjacent) {
+            if ($page > $this->adjacent && $page < ($this->currentPage - $adjacent)) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $this->currentPage - $adjacent - 1;
                 continue;
             }
 
-            if ($page > $this->currentPage + $adjacent && $page <= $pages - $this->adjacent) {
+            if ($page > ($this->currentPage + $adjacent) && $page <= ($pages - $this->adjacent)) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $pages - $this->adjacent;
                 continue;
@@ -235,34 +235,24 @@ class Pagination
         }
 
         if (1 < $this->currentPage) {
-            array_unshift(
-                $content,
-                $this->renderLink(
-                    $this->prevPageLinkTpl,
-                    $this->renderUrl($this->baseUrl, $this->currentPage - 1),
-                    $this->currentPage - 1
-                )
-            );
-            array_unshift(
-                $content,
-                $this->renderLink(
-                    $this->firstPageLinkTpl,
-                    $this->renderUrl($this->baseUrl, 1),
-                    1
-                )
-            );
+            array_unshift($content, $this->renderLink(
+                $this->prevPageLinkTpl,
+                $this->renderUrl($this->baseUrl, $this->currentPage - 1),
+                $this->currentPage - 1,
+            ));
+            array_unshift($content, $this->renderLink($this->firstPageLinkTpl, $this->renderUrl($this->baseUrl, 1), 1));
         }
 
-        if ($page - 1 > $this->currentPage) {
+        if (($page - 1) > $this->currentPage) {
             $content[] = $this->renderLink(
                 $this->nextPageLinkTpl,
                 $this->renderUrl($this->baseUrl, $this->currentPage + 1),
-                $this->currentPage + 1
+                $this->currentPage + 1,
             );
             $content[] = $this->renderLink(
                 $this->lastPageLinkTpl,
                 $this->renderUrl($this->baseUrl, $page - 1),
-                $page - 1
+                $page - 1,
             );
         }
 
@@ -282,7 +272,7 @@ class Pagination
         }
 
         $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-        $separator = (str_contains($cleanedUrl, '?')) ? '&' : '?';
+        $separator = str_contains($cleanedUrl, '?') ? '&' : '?';
         return sprintf('%s%s%s=%d', $cleanedUrl, $separator, $this->pageParamName, $page);
     }
 

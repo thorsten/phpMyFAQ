@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Category Controller
  *
@@ -49,7 +51,7 @@ class CategoryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -68,7 +70,8 @@ class CategoryController extends AbstractController
         if (
             (
                 is_countable($category->getCategoryLanguagesTranslated($data->categoryId))
-                    ? count($category->getCategoryLanguagesTranslated($data->categoryId)) : 0
+                    ? count($category->getCategoryLanguagesTranslated($data->categoryId))
+                    : 0
             ) === 1
         ) {
             $categoryPermission->delete(Permission::USER, [$data->categoryId]);
@@ -77,16 +80,15 @@ class CategoryController extends AbstractController
         }
 
         if (
-            $category->delete($data->categoryId, $data->language) &&
-            $categoryRelation->delete($data->categoryId, $data->language)
+            $category->delete($data->categoryId, $data->language)
+            && $categoryRelation->delete($data->categoryId, $data->language)
         ) {
             return $this->json(['success' => Translation::get('ad_categ_deleted')], Response::HTTP_OK);
         }
 
-        return $this->json(
-            ['error' => Translation::get('ad_adus_dberr') . $this->configuration->getDb()->error()],
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
+        return $this->json([
+            'error' => Translation::get('ad_adus_dberr') . $this->configuration->getDb()->error(),
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     #[Route('admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
@@ -108,13 +110,10 @@ class CategoryController extends AbstractController
             return $this->json(['error' => 'Only integer values are valid.'], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(
-            [
-                'user' => $categoryPermission->get(Permission::USER, $categories),
-                'group' => $categoryPermission->get(Permission::GROUP, $categories)
-            ],
-            Response::HTTP_OK
-        );
+        return $this->json([
+            'user' => $categoryPermission->get(Permission::USER, $categories),
+            'group' => $categoryPermission->get(Permission::GROUP, $categories),
+        ], Response::HTTP_OK);
     }
 
     #[Route('admin/api/category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
@@ -145,12 +144,12 @@ class CategoryController extends AbstractController
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryOrder = $this->container->get('phpmyfaq.category.order');
         $categoryOrder->setCategoryTree($data->categoryTree);
 
-        $parentId = $categoryOrder->getParentId($data->categoryTree, (int)$data->categoryId);
+        $parentId = $categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);

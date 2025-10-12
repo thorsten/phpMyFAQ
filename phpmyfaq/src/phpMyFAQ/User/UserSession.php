@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Session class.
  *
@@ -46,8 +48,9 @@ class UserSession
 
     private ?CurrentUser $currentUser = null;
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -89,7 +92,7 @@ class UserSession
             Database::getTablePrefix(),
             $sessionIdToCheck,
             $ipAddress,
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86400
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 86400,
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -105,7 +108,7 @@ class UserSession
                 Request::createFromGlobals()->server->get('REQUEST_TIME'),
                 $this->currentUser->getUserId(),
                 $sessionIdToCheck,
-                $ipAddress
+                $ipAddress,
             );
             $this->configuration->getDb()->query($query);
         }
@@ -135,7 +138,7 @@ class UserSession
         $banned = false;
         $this->currentSessionId = Filter::filterVar(
             $request->query->get(self::KEY_NAME_SESSION_ID),
-            FILTER_VALIDATE_INT
+            FILTER_VALIDATE_INT,
         );
         $cookieId = Filter::filterVar($request->query->get(self::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
 
@@ -176,10 +179,10 @@ class UserSession
             if ($this->currentSessionId === null) {
                 $this->currentSessionId = $this->configuration->getDb()->nextId(
                     Database::getTablePrefix() . 'faqsessions',
-                    'sid'
+                    'sid',
                 );
                 // Check: force the session cookie to contains the current $sid
-                if (!is_null($cookieId) && (!$cookieId != $this->getCurrentSessionId())) {
+                if (!is_null($cookieId) && !$cookieId != $this->getCurrentSessionId()) {
                     self::setCookie(self::COOKIE_NAME_SESSION_ID, $this->getCurrentSessionId());
                 }
 
@@ -189,20 +192,29 @@ class UserSession
                     $this->getCurrentSessionId(),
                     $this->currentUser instanceof CurrentUser ? $this->currentUser->getUserId() : 0,
                     $remoteAddress,
-                    $request->server->get('REQUEST_TIME')
+                    $request->server->get('REQUEST_TIME'),
                 );
 
                 $this->configuration->getDb()->query($query);
             }
 
-            $data = $this->getCurrentSessionId() . ';' .
-                str_replace(';', ',', $action) . ';' .
-                $data . ';' .
-                $remoteAddress . ';' .
-                str_replace(';', ',', $request->server->get('QUERY_STRING') ?? '') . ';' .
-                str_replace(';', ',', $request->server->get('HTTP_REFERER') ?? '') . ';' .
-                str_replace(';', ',', urldecode((string) $request->server->get('HTTP_USER_AGENT'))) . ';' .
-                $request->server->get('REQUEST_TIME') . ";\n";
+            $data =
+                $this->getCurrentSessionId()
+                . ';'
+                . str_replace(';', ',', $action)
+                . ';'
+                . $data
+                . ';'
+                . $remoteAddress
+                . ';'
+                . str_replace(';', ',', $request->server->get('QUERY_STRING') ?? '')
+                . ';'
+                . str_replace(';', ',', $request->server->get('HTTP_REFERER') ?? '')
+                . ';'
+                . str_replace(';', ',', urldecode((string) $request->server->get('HTTP_USER_AGENT')))
+                . ';'
+                . $request->server->get('REQUEST_TIME')
+                . ";\n";
 
             $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
 
@@ -230,7 +242,7 @@ class UserSession
     {
         $request = Request::createFromGlobals();
 
-        setcookie($name, $sessionId ?? '', [
+        setcookie($name, (string) $sessionId ?? '', [
             'expires' => $request->server->get('REQUEST_TIME') + $timeout,
             'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
             'domain' => parse_url($this->configuration->getDefaultUrl(), PHP_URL_HOST),

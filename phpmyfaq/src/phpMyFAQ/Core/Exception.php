@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ main exception class.
  *
@@ -35,7 +37,7 @@ class Exception extends \Exception implements \Stringable
             $this->getMessage(),
             $this->getFile(),
             $this->getLine(),
-            $this->getTraceAsString()
+            $this->getTraceAsString(),
         );
     }
 }

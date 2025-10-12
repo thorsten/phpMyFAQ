@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LDAP configuration class
  *
@@ -41,10 +43,10 @@ class LdapConfiguration
             'ldap_base' => '',
         ];
 
-        include($filename);
+        include $filename;
 
         $this->mainServer = $PMF_LDAP['ldap_server'];
-        $this->mainPort = $PMF_LDAP['ldap_port'];
+        $this->mainPort = (int) $PMF_LDAP['ldap_port'];
         $this->mainUser = $PMF_LDAP['ldap_user'];
         $this->mainPassword = $PMF_LDAP['ldap_password'];
         $this->mainBase = $PMF_LDAP['ldap_base'];
@@ -53,10 +55,10 @@ class LdapConfiguration
             if (is_array($server)) {
                 $this->servers[$key] = [
                     'server' => $server['ldap_server'],
-                    'port' => $server['ldap_port'],
+                    'port' => (int) $server['ldap_port'],
                     'user' => $server['ldap_user'],
                     'password' => $server['ldap_password'],
-                    'base' => $server['ldap_base']
+                    'base' => $server['ldap_base'],
                 ];
             }
         }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Setup Controller
  *
@@ -57,24 +59,21 @@ class SetupController
             $checkBasicError = $exception->getMessage();
         }
 
-        return $this->render(
-            '@setup/index.twig',
-            [
-                'newVersion' => System::getVersion(),
-                'setupType' => 'Setup',
-                'currentYear' => date('Y'),
-                'currentLanguage' => 'en',
-                'documentationUrl' => System::getDocumentationUrl(),
-                'checkBasicError' => $checkBasicError,
-                'nonCriticalSettings' => $installer->checkNoncriticalSettings(),
-                'filePermissions' => $installer->checkFilesystemPermissions(),
-                'supportedDatabases' => $system->getSupportedSafeDatabases(),
-                'currentPath' => dirname(__DIR__, 4),
-                'isLdapEnabled' => $installer->hasLdapSupport(),
-                'isElasticsearchEnabled' => $installer->hasElasticsearchSupport(),
-                'supportedTranslations' => LanguageCodes::getAllSupported(),
-            ]
-        );
+        return $this->render('@setup/index.twig', [
+            'newVersion' => System::getVersion(),
+            'setupType' => 'Setup',
+            'currentYear' => date('Y'),
+            'currentLanguage' => 'en',
+            'documentationUrl' => System::getDocumentationUrl(),
+            'checkBasicError' => $checkBasicError,
+            'nonCriticalSettings' => $installer->checkNoncriticalSettings(),
+            'filePermissions' => $installer->checkFilesystemPermissions(),
+            'supportedDatabases' => $system->getSupportedSafeDatabases(),
+            'currentPath' => dirname(__DIR__, 4),
+            'isLdapEnabled' => $installer->hasLdapSupport(),
+            'isElasticsearchEnabled' => $installer->hasElasticsearchSupport(),
+            'supportedTranslations' => LanguageCodes::getAllSupported(),
+        ]);
     }
 
     /**
@@ -91,20 +90,17 @@ class SetupController
 
         try {
             $installer->startInstall();
-        } catch (Exception | AuthenticationException $exception) {
+        } catch (Exception|AuthenticationException $exception) {
             $installationError = $exception->getMessage();
         }
 
-        return $this->render(
-            '@setup/install.twig',
-            [
-                'newVersion' => System::getVersion(),
-                'setupType' => 'Setup',
-                'currentYear' => date('Y'),
-                'documentationUrl' => System::getDocumentationUrl(),
-                'installationError' => $installationError,
-            ]
-        );
+        return $this->render('@setup/install.twig', [
+            'newVersion' => System::getVersion(),
+            'setupType' => 'Setup',
+            'currentYear' => date('Y'),
+            'documentationUrl' => System::getDocumentationUrl(),
+            'installationError' => $installationError,
+        ]);
     }
 
     /**
@@ -128,18 +124,15 @@ class SetupController
             $checkBasicError = $exception->getMessage();
         }
 
-        return $this->render(
-            '@setup/update.twig',
-            [
-                'currentStep' => $currentStep ?? 1,
-                'installedVersion' => $configuration->getVersion(),
-                'newVersion' => System::getVersion(),
-                'checkBasicError' => $checkBasicError,
-                'currentYear' => date('Y'),
-                'documentationUrl' => System::getDocumentationUrl(),
-                'configTableNotAvailable' => $update->isConfigTableNotAvailable($configuration->getDb()),
-            ]
-        );
+        return $this->render('@setup/update.twig', [
+            'currentStep' => $currentStep ?? 1,
+            'installedVersion' => $configuration->getVersion(),
+            'newVersion' => System::getVersion(),
+            'checkBasicError' => $checkBasicError,
+            'currentYear' => date('Y'),
+            'documentationUrl' => System::getDocumentationUrl(),
+            'configTableNotAvailable' => $update->isConfigTableNotAvailable($configuration->getDb()),
+        ]);
     }
 
     /**

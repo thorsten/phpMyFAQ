@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Stop Word Controller
  *
@@ -64,9 +66,7 @@ class StopWordController extends AbstractController
         }
 
         if (null != $stopWordId && Language::isASupportedLanguage($stopWordsLang)) {
-            $stopWords
-                ->setLanguage($stopWordsLang)
-                ->remove((int)$stopWordId);
+            $stopWords->setLanguage($stopWordsLang)->remove((int) $stopWordId);
             return $this->json(['deleted' => $stopWordId], Response::HTTP_OK);
         }
 
@@ -96,7 +96,7 @@ class StopWordController extends AbstractController
             $stopWords->setLanguage($stopWordsLang);
 
             if (null !== $stopWordId && -1 < $stopWordId) {
-                $stopWords->update((int)$stopWordId, $stopWord);
+                $stopWords->update((int) $stopWordId, $stopWord);
                 return $this->json(['updated' => $stopWordId], Response::HTTP_OK);
             }
 

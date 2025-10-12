@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract attachment class.
  *
@@ -115,18 +117,14 @@ abstract class AbstractAttachment
     {
         $hasMeta = false;
 
-        $sql = sprintf(
-            '
+        $sql = sprintf('
             SELECT 
                 record_id, record_lang, real_hash, virtual_hash, password_hash,
                 filename, filesize, encrypted, mime_type
             FROM
                 %sfaqattachment
             WHERE 
-                id = %d',
-            Database::getTablePrefix(),
-            $this->id
-        );
+                id = %d', Database::getTablePrefix(), $this->id);
 
         $result = $this->databaseDriver->query($sql);
 
@@ -140,7 +138,7 @@ abstract class AbstractAttachment
                 $this->passwordHash = $assoc['password_hash'];
                 $this->filename = $assoc['filename'];
                 $this->filesize = $assoc['filesize'];
-                $this->encrypted = $assoc['encrypted'];
+                $this->encrypted = (bool) $assoc['encrypted'];
                 $this->mimeType = $assoc['mime_type'];
 
                 $hasMeta = true;
@@ -254,7 +252,7 @@ abstract class AbstractAttachment
                 $this->databaseDriver->escape($this->filename),
                 $this->filesize,
                 $this->encrypted ? 1 : 0,
-                $this->databaseDriver->escape($this->mimeType)
+                $this->databaseDriver->escape($this->mimeType),
             );
 
             $this->databaseDriver->query($sql);
@@ -293,7 +291,7 @@ abstract class AbstractAttachment
             Database::getTablePrefix(),
             $this->databaseDriver->escape($this->virtualHash),
             $this->readMimeType(),
-            $this->id
+            $this->id,
         );
 
         $this->databaseDriver->query($sql);
@@ -325,17 +323,18 @@ abstract class AbstractAttachment
     {
         if ($this->encrypted) {
             if (
-                null === $this->id || null === $this->recordId
-                || null === $this->realHash || null === $this->filename
+                null === $this->id
+                || null === $this->recordId
+                || null === $this->realHash
+                || null === $this->filename
                 || null === $this->key
             ) {
                 throw new AttachmentException(
-                    'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files'
+                    'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files',
                 );
             }
 
-            $src = $this->id . $this->recordId . $this->realHash .
-                $this->filename . $this->key;
+            $src = $this->id . $this->recordId . $this->realHash . $this->filename . $this->key;
             $this->virtualHash = md5($src);
         } else {
             $this->virtualHash = $this->realHash;
@@ -373,11 +372,7 @@ abstract class AbstractAttachment
      */
     public function deleteMeta(): void
     {
-        $sql = sprintf(
-            'DELETE FROM %sfaqattachment WHERE id = %d',
-            Database::getTablePrefix(),
-            $this->id
-        );
+        $sql = sprintf('DELETE FROM %sfaqattachment WHERE id = %d', Database::getTablePrefix(), $this->id);
 
         $this->databaseDriver->query($sql);
     }

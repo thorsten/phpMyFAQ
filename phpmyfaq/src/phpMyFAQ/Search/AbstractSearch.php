@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract class for phpMyFAQ search classes.
  *
@@ -17,8 +19,8 @@
 
 namespace phpMyFAQ\Search;
 
-use stdClass;
 use phpMyFAQ\Configuration;
+use stdClass;
 
 /**
  * Class AbstractSearch
@@ -37,7 +39,8 @@ abstract class AbstractSearch
     /**
      * AbstractSearch constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 }

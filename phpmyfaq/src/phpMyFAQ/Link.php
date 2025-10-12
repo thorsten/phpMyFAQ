@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Link management
  *
@@ -163,7 +165,7 @@ class Link
         'twofactor' => 1,
         'ucp' => 1,
         '404' => 1,
-        'bookmarks' => 1
+        'bookmarks' => 1,
     ];
 
     /**
@@ -211,8 +213,10 @@ class Link
      *
      * @param string $url URL
      */
-    public function __construct(public string $url, private readonly Configuration $configuration)
-    {
+    public function __construct(
+        public string $url,
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -230,7 +234,7 @@ class Link
      * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
      *           being requested, as obtained from the original URI given by the user or referring resource
      */
-    public function getSystemUri(string|null $path = null): string
+    public function getSystemUri(?string $path = null): string
     {
         $request = Request::createFromGlobals();
         $host = $request->getHost();
@@ -258,7 +262,7 @@ class Link
     /**
      * Returns the relative URI.
      */
-    public static function getSystemRelativeUri(string|null $path = null): string
+    public static function getSystemRelativeUri(?string $path = null): string
     {
         $request = Request::createFromGlobals();
         $scriptName = $request->getScriptName();
@@ -345,24 +349,26 @@ class Link
                         break;
 
                     case self::LINK_GET_ACTION_FAQ:
-                        $url .= self::LINK_CONTENT .
-                            $getParams[self::LINK_GET_CATEGORY] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_ARTLANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
+                        $url .=
+                            self::LINK_CONTENT
+                            . $getParams[self::LINK_GET_CATEGORY]
+                            . self::LINK_HTML_SLASH
+                            . $getParams[self::LINK_GET_ID]
+                            . self::LINK_HTML_SLASH
+                            . $getParams[self::LINK_GET_ARTLANG]
+                            . self::LINK_SLASH
+                            . $this->getSEOItemTitle()
+                            . self::LINK_HTML_EXTENSION;
                         if (isset($getParams[self::LINK_GET_HIGHLIGHT])) {
-                            $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_HIGHLIGHT . '=' .
-                                $getParams[self::LINK_GET_HIGHLIGHT];
+                            $url .=
+                                self::LINK_SEARCHPART_SEPARATOR
+                                . self::LINK_GET_HIGHLIGHT
+                                . '='
+                                . $getParams[self::LINK_GET_HIGHLIGHT];
                         }
 
                         if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
-                            $url .= self::LINK_FRAGMENT_SEPARATOR .
-                                $getParams[self::LINK_FRAGMENT_SEPARATOR];
+                            $url .= self::LINK_FRAGMENT_SEPARATOR . $getParams[self::LINK_FRAGMENT_SEPARATOR];
                         }
 
                         break;
@@ -409,40 +415,42 @@ class Link
                                 $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
                             }
 
-                            $url .= self::LINK_SLASH .
-                                $this->getSEOItemTitle() .
-                                self::LINK_HTML_EXTENSION;
+                            $url .= self::LINK_SLASH . $this->getSEOItemTitle() . self::LINK_HTML_EXTENSION;
                         } elseif (isset($getParams[self::LINK_GET_ACTION_SEARCH])) {
                             $url .= self::LINK_HTML_SEARCH;
-                            $url .= self::LINK_SEARCHPART_SEPARATOR .
-                                self::LINK_GET_ACTION_SEARCH . '=' .
-                                $getParams[self::LINK_GET_ACTION_SEARCH];
+                            $url .=
+                                self::LINK_SEARCHPART_SEPARATOR
+                                . self::LINK_GET_ACTION_SEARCH
+                                . '='
+                                . $getParams[self::LINK_GET_ACTION_SEARCH];
                             if (isset($getParams[self::LINK_GET_PAGE])) {
-                                $url .= self::LINK_AMPERSAND . self::LINK_GET_PAGE . '=' .
-                                    $getParams[self::LINK_GET_PAGE];
+                                $url .=
+                                    self::LINK_AMPERSAND . self::LINK_GET_PAGE . '=' . $getParams[self::LINK_GET_PAGE];
                             }
                         }
 
                         if (isset($getParams[self::LINK_GET_LANGS])) {
-                            $url .= self::LINK_AMPERSAND .
-                                self::LINK_GET_LANGS . '=' .
-                                $getParams[self::LINK_GET_LANGS];
+                            $url .=
+                                self::LINK_AMPERSAND . self::LINK_GET_LANGS . '=' . $getParams[self::LINK_GET_LANGS];
                         }
 
                         break;
 
                     case self::LINK_GET_ACTION_SITEMAP:
                         if (isset($getParams[self::LINK_GET_LETTER])) {
-                            $url .= self::LINK_SITEMAP .
-                                $getParams[self::LINK_GET_LETTER] .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
+                            $url .=
+                                self::LINK_SITEMAP
+                                . $getParams[self::LINK_GET_LETTER]
+                                . self::LINK_HTML_SLASH
+                                . $getParams[self::LINK_GET_LANG]
+                                . self::LINK_HTML_EXTENSION;
                         } else {
-                            $url .= self::LINK_SITEMAP . 'A' .
-                                self::LINK_HTML_SLASH .
-                                $getParams[self::LINK_GET_LANG] .
-                                self::LINK_HTML_EXTENSION;
+                            $url .=
+                                self::LINK_SITEMAP
+                                . 'A'
+                                . self::LINK_HTML_SLASH
+                                . $getParams[self::LINK_GET_LANG]
+                                . self::LINK_HTML_EXTENSION;
                         }
 
                         break;
@@ -450,38 +458,34 @@ class Link
                     case self::LINK_GET_ACTION_SHOW:
                         if (
                             !isset($getParams[self::LINK_GET_CATEGORY])
-                            || (isset($getParams[self::LINK_GET_CATEGORY])
-                                && (0 == $getParams[self::LINK_GET_CATEGORY]))
+                            || isset($getParams[self::LINK_GET_CATEGORY]) && 0 == $getParams[self::LINK_GET_CATEGORY]
                         ) {
                             $url .= self::LINK_HTML_SHOW_CATEGORIES;
                         } else {
-                            $url .= self::LINK_CATEGORY .
-                                $getParams[self::LINK_GET_CATEGORY];
+                            $url .= self::LINK_CATEGORY . $getParams[self::LINK_GET_CATEGORY];
                             if (isset($getParams[self::LINK_GET_PAGE])) {
-                                $url .= self::LINK_HTML_SLASH .
-                                    $getParams[self::LINK_GET_PAGE];
+                                $url .= self::LINK_HTML_SLASH . $getParams[self::LINK_GET_PAGE];
                             }
 
-                            $url .= self::LINK_HTML_SLASH .
-                                $this->getSEOItemTitle() .
-                                self::LINK_HTML_EXTENSION;
+                            $url .= self::LINK_HTML_SLASH . $this->getSEOItemTitle() . self::LINK_HTML_EXTENSION;
                         }
 
                         break;
 
                     case self::LINK_GET_ACTION_NEWS:
-                        $url .= self::LINK_NEWS .
-                            $getParams[self::LINK_GET_NEWS_ID] .
-                            self::LINK_HTML_SLASH .
-                            $getParams[self::LINK_GET_NEWS_LANG] .
-                            self::LINK_SLASH .
-                            $this->getSEOItemTitle() .
-                            self::LINK_HTML_EXTENSION;
+                        $url .=
+                            self::LINK_NEWS
+                            . $getParams[self::LINK_GET_NEWS_ID]
+                            . self::LINK_HTML_SLASH
+                            . $getParams[self::LINK_GET_NEWS_LANG]
+                            . self::LINK_SLASH
+                            . $this->getSEOItemTitle()
+                            . self::LINK_HTML_EXTENSION;
                         break;
                 }
 
                 if (isset($getParams[self::LINK_GET_SIDS])) {
-                    $url = $this->appendSids($url, (int)$getParams[self::LINK_GET_SIDS]);
+                    $url = $this->appendSids($url, (int) $getParams[self::LINK_GET_SIDS]);
                 }
 
                 if (isset($getParams['fragment'])) {
@@ -502,7 +506,7 @@ class Link
      */
     public function toUri(): string
     {
-        if ($this->url !== '' && $this->url !== '0' && ((!$this->hasScheme()) && (!$this->isInternalReference()))) {
+        if ($this->url !== '' && $this->url !== '0' && (!$this->hasScheme() && !$this->isInternalReference())) {
             return $this->getDefaultScheme() . $this->url;
         }
 
@@ -516,7 +520,7 @@ class Link
     {
         $parsed = parse_url($this->url);
 
-        return (isset($parsed['scheme']) && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0'));
+        return isset($parsed['scheme']) && ($parsed['scheme'] !== '' && $parsed['scheme'] !== '0');
     }
 
     /**
@@ -532,7 +536,7 @@ class Link
             return false;
         }
 
-        return (str_starts_with($this->url, '#'));
+        return str_starts_with($this->url, '#');
     }
 
     /**
@@ -545,7 +549,7 @@ class Link
             return false;
         }
 
-        return ($slashIdx == 0);
+        return $slashIdx == 0;
     }
 
     /**
@@ -663,7 +667,7 @@ class Link
         $itemTitle = str_replace(
             ['+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>', '%'],
             '',
-            (string) $itemTitle
+            (string) $itemTitle,
         );
         // Hack: move some chars to "similar" but plain ASCII chars
         $itemTitle = str_replace(
@@ -713,7 +717,7 @@ class Link
                 'u',
                 'z',
             ],
-            $itemTitle
+            $itemTitle,
         );
 
         // Clean up
@@ -728,11 +732,9 @@ class Link
      */
     private function appendSids(string $url, int $sids): string
     {
-        $separator = (str_contains($url, self::LINK_SEARCHPART_SEPARATOR))
-            ?
-            self::LINK_AMPERSAND
-            :
-            self::LINK_SEARCHPART_SEPARATOR;
+        $separator = str_contains($url, self::LINK_SEARCHPART_SEPARATOR)
+            ? self::LINK_AMPERSAND
+            : self::LINK_SEARCHPART_SEPARATOR;
 
         return $url . $separator . self::LINK_GET_SIDS . self::LINK_EQUAL . $sids;
     }

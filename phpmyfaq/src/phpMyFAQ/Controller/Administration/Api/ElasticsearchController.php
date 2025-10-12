@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Elasticsearch Controller
  *
@@ -39,10 +41,9 @@ class ElasticsearchController extends AbstractController
 
         try {
             $elasticsearch->createIndex();
-            return $this->json(
-                ['success' => Translation::get('msgAdminElasticsearchCreateIndex_success')],
-                Response::HTTP_OK
-            );
+            return $this->json(['success' => Translation::get(
+                'msgAdminElasticsearchCreateIndex_success',
+            )], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
@@ -60,10 +61,9 @@ class ElasticsearchController extends AbstractController
 
         try {
             $elasticsearch->dropIndex();
-            return $this->json(
-                ['success' => Translation::get('msgAdminElasticsearchDropIndex_success')],
-                Response::HTTP_OK
-            );
+            return $this->json(['success' => Translation::get(
+                'msgAdminElasticsearchDropIndex_success',
+            )], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
         }
@@ -101,18 +101,15 @@ class ElasticsearchController extends AbstractController
 
         $indexName = $elasticsearchConfiguration->getIndex();
         try {
-            return $this->json(
-                [
-                    'index' => $indexName,
-                    'stats' => $this->configuration
-                        ->getElasticsearch()
-                        ->indices()
-                        ->stats(['index' => $indexName])
-                        ->asArray()
-                ],
-                Response::HTTP_OK
-            );
-        } catch (ClientResponseException | ServerResponseException $e) {
+            return $this->json([
+                'index' => $indexName,
+                'stats' => $this->configuration
+                    ->getElasticsearch()
+                    ->indices()
+                    ->stats(['index' => $indexName])
+                    ->asArray(),
+            ], Response::HTTP_OK);
+        } catch (ClientResponseException|ServerResponseException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

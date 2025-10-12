@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ Elasticsearch based search classes.
  *
@@ -72,23 +74,23 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                                 'fields' => [
                                     'question',
                                     'answer',
-                                    'keywords'
+                                    'keywords',
                                 ],
                                 'query' => $searchTerm,
-                                'fuzziness' => 'AUTO'
-                            ]
+                                'fuzziness' => 'AUTO',
+                            ],
                         ],
                         'filter' => [
-                            'terms' => ['category_id' => $this->getCategoryIds()]
+                            'terms' => ['category_id' => $this->getCategoryIds()],
                         ],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         try {
             $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException | ServerResponseException) {
+        } catch (ClientResponseException|ServerResponseException) {
             $this->resultSet = [];
         }
 
@@ -154,25 +156,25 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
                                 'fields' => [
                                     'question',
                                     'answer',
-                                    'keywords'
+                                    'keywords',
                                 ],
                                 'query' => $searchTerm,
-                                'fuzziness' => 'AUTO'
-                            ]
+                                'fuzziness' => 'AUTO',
+                            ],
                         ],
                         'filter' => [
                             'term' => [
-                                'lang' => $this->getLanguage()
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                'lang' => $this->getLanguage(),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         try {
             $result = $this->client->search($searchParams)->asArray();
-        } catch (ClientResponseException | ServerResponseException) {
+        } catch (ClientResponseException|ServerResponseException) {
             return [];
         }
 

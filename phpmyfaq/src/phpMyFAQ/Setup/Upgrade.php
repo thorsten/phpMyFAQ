@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Upgrade class used for upgrading/installing phpMyFAQ from a ZIP file.
  *
@@ -47,8 +49,10 @@ class Upgrade extends Setup
 
     private bool $isNightly;
 
-    public function __construct(protected System $system, private readonly Configuration $configuration)
-    {
+    public function __construct(
+        protected System $system,
+        private readonly Configuration $configuration,
+    ) {
         parent::__construct($this->system);
 
         $this->isNightly = $this->configuration->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
@@ -82,16 +86,14 @@ class Upgrade extends Setup
         }
 
         if (
-            is_file(PMF_CONTENT_DIR . '/core/config/constants.php') &&
-            is_file(PMF_CONTENT_DIR . '/core/config/database.php')
+            is_file(PMF_CONTENT_DIR . '/core/config/constants.php')
+            && is_file(PMF_CONTENT_DIR . '/core/config/database.php')
         ) {
             if (
-                $this->configuration->isElasticsearchActive() &&
-                !is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')
+                $this->configuration->isElasticsearchActive()
+                && !is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')
             ) {
-                throw new Exception(
-                    'The file /content/core/config/elasticsearch.php is missing.'
-                );
+                throw new Exception('The file /content/core/config/elasticsearch.php is missing.');
             }
 
             if ($this->configuration->isLdapActive() && !is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
@@ -99,8 +101,8 @@ class Upgrade extends Setup
             }
 
             if (
-                $this->configuration->isSignInWithMicrosoftActive() &&
-                !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
+                $this->configuration->isSignInWithMicrosoftActive()
+                && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
             ) {
                 throw new Exception('The file /content/core/config/azure.php is missing.');
             }
@@ -109,7 +111,7 @@ class Upgrade extends Setup
         }
 
         throw new Exception(
-            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
+            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.',
         );
     }
 
@@ -137,12 +139,7 @@ class Upgrade extends Setup
             file_put_contents($this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
 
             return $this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version);
-        } catch (
-            TransportExceptionInterface |
-            ClientExceptionInterface |
-            RedirectionExceptionInterface |
-            ServerExceptionInterface $e
-        ) {
+        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
             throw new Exception($e->getMessage());
         }
     }
@@ -157,21 +154,13 @@ class Upgrade extends Setup
     public function verifyPackage(string $path, string $version): bool
     {
         $httpClient = HttpClient::create(['timeout' => 30]);
-        $response = $httpClient->request(
-            'GET',
-            DownloadHostType::PHPMYFAQ->value . 'info/' . $version
-        );
+        $response = $httpClient->request('GET', DownloadHostType::PHPMYFAQ->value . 'info/' . $version);
 
         try {
             $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
             return md5_file($path) === $responseContent['zip']['md5'];
-        } catch (
-            TransportExceptionInterface |
-            ClientExceptionInterface |
-            RedirectionExceptionInterface |
-            ServerExceptionInterface $e
-        ) {
+        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
 
             return false;
@@ -229,7 +218,7 @@ class Upgrade extends Setup
         $sourceDir = PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
         $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback): void {
@@ -241,9 +230,11 @@ class Upgrade extends Setup
             $file = realpath($file);
             if (!str_contains($file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
-                    $zipArchive->addEmptyDir(
-                        str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
-                    );
+                    $zipArchive->addEmptyDir(str_replace(
+                        $sourceDir . DIRECTORY_SEPARATOR,
+                        '',
+                        $file . DIRECTORY_SEPARATOR,
+                    ));
                 } elseif (is_file($file)) {
                     $zipArchive->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file));
                 }
@@ -265,7 +256,7 @@ class Upgrade extends Setup
 
         $sourceDirIterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
         $totalFiles = iterator_count($sourceDirIterator);
@@ -284,7 +275,7 @@ class Upgrade extends Setup
             }
 
             ++$currentFile;
-            if ($currentFile % 10 === 0) {
+            if (($currentFile % 10) === 0) {
                 $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
                 call_user_func($progressCallback, $progress);
             }
@@ -302,7 +293,7 @@ class Upgrade extends Setup
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directoryToDelete, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST,
         );
 
         foreach ($files as $file) {

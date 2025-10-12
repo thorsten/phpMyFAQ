@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Tag Controller
  *
@@ -83,7 +85,7 @@ class TagController extends AbstractController
             $tags = $tag->getAllTags(
                 strtolower(trim((string) $autoCompleteValue)),
                 PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-                true
+                true,
             );
         } else {
             $tags = $tag->getAllTags();

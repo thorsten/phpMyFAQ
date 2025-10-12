@@ -36,9 +36,9 @@ class LanguageTest extends TestCase
     {
         $this->dbHandle->query(
             'INSERT INTO faqdata (id, lang, solution_id, active, sticky, thema, author, email, updated) VALUES' .
-            '(1, "en", 1001, 1, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))'
+            '(999, "en", 1001, 1, 1, "Test", "Author", "test@example.org", DATETIME("now", "localtime"))'
         );
-        $result = $this->language->isLanguageAvailable(1);
+        $result = $this->language->isLanguageAvailable(999);
 
         $this->assertEquals(['en'], $result);
 

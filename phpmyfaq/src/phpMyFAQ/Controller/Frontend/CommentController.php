@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Comment Controller
  *
@@ -48,7 +50,7 @@ class CommentController extends AbstractController
         $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
             $this->configuration->get('main.languageDetection'),
-            $this->configuration->get('main.language')
+            $this->configuration->get('main.language'),
         );
 
         if (!$this->isCommentAllowed($this->currentUser)) {
@@ -61,10 +63,10 @@ class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('add-comment', $data->{'pmf-csrf-token'})
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'add-comment',
+            $data->{'pmf-csrf-token'},
+        )) {
             return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -98,10 +100,12 @@ class CommentController extends AbstractController
         }
 
         if (
-            !empty($username) && !empty($email) && !empty($commentText) &&
-            $stopWords->checkBannedWord($commentText) &&
-            $comment->isCommentAllowed($commentId, $languageCode, $type) &&
-            $faq->isActive($commentId, $languageCode, $type)
+            !empty($username)
+            && !empty($email)
+            && !empty($commentText)
+            && $stopWords->checkBannedWord($commentText)
+            && $comment->isCommentAllowed($commentId, $languageCode, $type)
+            && $faq->isActive($commentId, $languageCode, $type)
         ) {
             $session->userTracking('save_comment', $commentId);
             $commentEntity = new Comment();
@@ -131,10 +135,9 @@ class CommentController extends AbstractController
             return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(
-            ['error' => 'Please add your name, your e-mail address and a comment!'],
-            Response::HTTP_BAD_REQUEST
-        );
+        return $this->json([
+            'error' => 'Please add your name, your e-mail address and a comment!',
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -142,9 +145,9 @@ class CommentController extends AbstractController
      */
     private function isCommentAllowed(CurrentUser $currentUser): bool
     {
-        return !(!$this->configuration->get('records.allowCommentsForGuests') && !$currentUser->perm->hasPermission(
-            $currentUser->getUserId(),
-            PermissionType::COMMENT_ADD->value
-        ));
+        return !(
+            !$this->configuration->get('records.allowCommentsForGuests')
+            && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::COMMENT_ADD->value)
+        );
     }
 }

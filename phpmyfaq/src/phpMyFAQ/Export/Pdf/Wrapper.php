@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
@@ -284,7 +286,7 @@ class Wrapper extends TCPDF
 
         // Set font
         if (array_key_exists(Translation::get('metaLanguage'), $this->fontFiles)) {
-            $this->currentFont = (string)$this->fontFiles[Translation::get('metaLanguage')];
+            $this->currentFont = (string) $this->fontFiles[Translation::get('metaLanguage')];
         }
     }
 
@@ -350,7 +352,7 @@ class Wrapper extends TCPDF
                 0,
                 false,
                 true,
-                'C'
+                'C',
             );
         } else {
             $this->MultiCell(0, 10, html_entity_decode((string) $title, ENT_QUOTES, 'utf-8'), 0, 'C');
@@ -366,7 +368,7 @@ class Wrapper extends TCPDF
         $this->customHeader = html_entity_decode(
             (string) $this->config->get('main.customPdfHeader'),
             ENT_QUOTES,
-            'utf-8'
+            'utf-8',
         );
     }
 
@@ -387,7 +389,7 @@ class Wrapper extends TCPDF
             date('Y'),
             $this->config->get('main.metaPublisher'),
             $this->config->get('spam.mailAddressInExport') ? $this->config->getAdminEmail() : '',
-            $date->format(date('Y-m-d H:i'))
+            $date->format(date('Y-m-d H:i')),
         );
 
         if (0 < Strings::strlen($this->customFooter)) {
@@ -404,7 +406,7 @@ class Wrapper extends TCPDF
             Translation::get('ad_gen_page') . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
             0,
             0,
-            'C'
+            'C',
         );
         $this->SetY(-20);
         $this->SetFont($this->currentFont, 'B', 8);
@@ -521,7 +523,8 @@ class Wrapper extends TCPDF
      *                               boolean value to indicate if the image is the default for printing.
      */
     #[\Override]
-    public function Image(// phpcs:ignore
+    public function Image(
+        // phpcs:ignore
         $file,
         $x = null,
         $y = null,
@@ -540,7 +543,7 @@ class Wrapper extends TCPDF
         $hidden = false,
         $fitonpage = false,
         $alt = false,
-        $alternateImages = []
+        $alternateImages = [],
     ): void {
         $file = parse_url($file, PHP_URL_PATH);
 
@@ -573,7 +576,7 @@ class Wrapper extends TCPDF
             $hidden,
             $fitonpage,
             $alt,
-            $alternateImages
+            $alternateImages,
         );
     }
 
@@ -614,63 +617,67 @@ class Wrapper extends TCPDF
         }
 
         $allowedHosts = $this->config->getAllowedMediaHosts();
-        if ($allowedHosts === [] || (count($allowedHosts) === 1 && trim($allowedHosts[0]) === '')) {
+        if ($allowedHosts === [] || count($allowedHosts) === 1 && trim($allowedHosts[0]) === '') {
             return $html;
         }
 
         // Pattern to match img tags with src attributes
         $pattern = '/<img\s+[^>]*src\s*=\s*["\']([^"\']+)["\'][^>]*>/i';
-        return preg_replace_callback($pattern, function (array $matches) use ($allowedHosts): string {
-            $fullMatch = $matches[0];
-            $imageUrl = $matches[1];
-            // Parse the URL to get the host
-            $parsedUrl = parse_url($imageUrl);
-            if (!$parsedUrl || !isset($parsedUrl['host'])) {
-                return $fullMatch; // Return original if URL is malformed
-            }
-
-            $host = $parsedUrl['host'];
-            // Check if the host is in the allowed list
-            $isAllowed = false;
-            foreach ($allowedHosts as $allowedHost) {
-                $allowedHost = trim($allowedHost);
-                if ($allowedHost === '') {
-                    continue;
+        return preg_replace_callback(
+            $pattern,
+            function (array $matches) use ($allowedHosts): string {
+                $fullMatch = $matches[0];
+                $imageUrl = $matches[1];
+                // Parse the URL to get the host
+                $parsedUrl = parse_url($imageUrl);
+                if (!$parsedUrl || !isset($parsedUrl['host'])) {
+                    return $fullMatch; // Return original if URL is malformed
                 }
 
-                if ($allowedHost === '0') {
-                    continue;
-                }
+                $host = $parsedUrl['host'];
+                // Check if the host is in the allowed list
+                $isAllowed = false;
+                foreach ($allowedHosts as $allowedHost) {
+                    $allowedHost = trim($allowedHost);
+                    if ($allowedHost === '') {
+                        continue;
+                    }
 
-                // Allow exact match or subdomain match
-                if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
-                    $isAllowed = true;
-                    break;
-                }
-            }
+                    if ($allowedHost === '0') {
+                        continue;
+                    }
 
-            if (!$isAllowed) {
-                return $fullMatch; // Return original if host not allowed
-            }
-
-            // Try to fetch the image and convert to base64
-            try {
-                $imageData = $this->fetchExternalImage($imageUrl);
-                if ($imageData !== false) {
-                    $base64Image = base64_encode($imageData);
-                    $mimeType = $this->getImageMimeType($imageData);
-                    if ($mimeType && $base64Image) {
-                        $dataUri = sprintf('data:%s;base64,%s', $mimeType, $base64Image);
-                        return str_replace($imageUrl, $dataUri, $fullMatch);
+                    // Allow exact match or subdomain match
+                    if ($host === $allowedHost || str_ends_with($host, '.' . $allowedHost)) {
+                        $isAllowed = true;
+                        break;
                     }
                 }
-            } catch (Exception) {
-                // If fetching fails, return the original
-                return $fullMatch;
-            }
 
-            return $fullMatch;
-        }, $html);
+                if (!$isAllowed) {
+                    return $fullMatch; // Return original if host not allowed
+                }
+
+                // Try to fetch the image and convert to base64
+                try {
+                    $imageData = $this->fetchExternalImage($imageUrl);
+                    if ($imageData !== false) {
+                        $base64Image = base64_encode($imageData);
+                        $mimeType = $this->getImageMimeType($imageData);
+                        if ($mimeType && $base64Image) {
+                            $dataUri = sprintf('data:%s;base64,%s', $mimeType, $base64Image);
+                            return str_replace($imageUrl, $dataUri, $fullMatch);
+                        }
+                    }
+                } catch (Exception) {
+                    // If fetching fails, return the original
+                    return $fullMatch;
+                }
+
+                return $fullMatch;
+            },
+            $html,
+        );
     }
 
     /**
@@ -725,9 +732,9 @@ class Wrapper extends TCPDF
         $signatures = [
             'jpeg' => ["\xFF\xD8\xFF"],
             'png' => ["\x89PNG\r\n\x1A\n"],
-            'gif' => ["GIF87a", "GIF89a"],
-            'webp' => ["RIFF"],
-            'bmp' => ["BM"],
+            'gif' => ['GIF87a', 'GIF89a'],
+            'webp' => ['RIFF'],
+            'bmp' => ['BM'],
         ];
 
         foreach ($signatures as $signature) {
@@ -800,13 +807,14 @@ class Wrapper extends TCPDF
      * @param string $align Allows to center or align the image on the current line
      */
     #[\Override]
-    public function WriteHTML(// phpcs:ignore
+    public function WriteHTML(
+        // phpcs:ignore
         $html,
         $ln = true,
         $fill = false,
         $reseth = false,
         $cell = false,
-        $align = ''
+        $align = '',
     ): void {
         // Pre-process HTML content to convert external images to base64
         $processedHtml = $this->convertExternalImagesToBase64($html);

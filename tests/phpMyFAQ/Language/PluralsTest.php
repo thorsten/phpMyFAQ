@@ -291,4 +291,20 @@ class PluralsTest extends TestCase
             $this->assertEquals(1, $this->pluralMethod->invoke($this->plurals, $lang, 2), "Language $lang failed for 2");
         }
     }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testPluralReturnTypeIsIntForRepresentativeLanguages(): void
+    {
+        $languages = ['en', 'de', 'fr', 'pt_br', 'es', 'it', 'nb', 'nl', 'pt', 'sv'];
+        $numbers = [0, 1, 2, 5, 10];
+
+        foreach ($languages as $lang) {
+            foreach ($numbers as $n) {
+                $result = $this->pluralMethod->invoke($this->plurals, $lang, $n);
+                $this->assertIsInt($result, "plural() must return int for {$lang} with n={$n}");
+            }
+        }
+    }
 }

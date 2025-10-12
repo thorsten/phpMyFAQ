@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication via WebAuthn.
  *
@@ -59,9 +61,9 @@ class AuthWebAuthn extends Auth
 
         // Prepare user information
         $user = [
-            'name'         => $username,
-            'displayName'  => $username,
-            'id'           => $this->stringToArray($userId),
+            'name' => $username,
+            'displayName' => $username,
+            'id' => $this->stringToArray($userId),
         ];
 
         // Prepare relying party (rp) information
@@ -77,11 +79,11 @@ class AuthWebAuthn extends Auth
         // Prepare public key credential parameters
         $pubKeyCredParams = [
             [
-                'alg'  => self::ES256,
+                'alg' => self::ES256,
                 'type' => 'public-key',
             ],
             [
-                'alg'  => self::RS256,
+                'alg' => self::RS256,
                 'type' => 'public-key',
             ],
         ];
@@ -89,7 +91,7 @@ class AuthWebAuthn extends Auth
         // Prepare authenticator selection criteria
         $authSelection = [
             'requireResidentKey' => false,
-            'userVerification'   => 'discouraged',
+            'userVerification' => 'discouraged',
         ];
 
         // Prepare extensions
@@ -99,15 +101,15 @@ class AuthWebAuthn extends Auth
 
         // Build the publicKey object
         $publicKey = [
-            'challenge'              => $challengeArray,
-            'user'                   => $user,
-            'rp'                     => $relyingParty,
-            'pubKeyCredParams'       => $pubKeyCredParams,
+            'challenge' => $challengeArray,
+            'user' => $user,
+            'rp' => $relyingParty,
+            'pubKeyCredParams' => $pubKeyCredParams,
             'authenticatorSelection' => $authSelection,
-            'attestation'            => null,
-            'timeout'                => 60000,
-            'excludeCredentials'     => [],
-            'extensions'             => $extensions,
+            'attestation' => null,
+            'timeout' => 60000,
+            'excludeCredentials' => [],
+            'extensions' => $extensions,
         ];
 
         // Base64 URL-encode the challenge for later verification
@@ -115,7 +117,7 @@ class AuthWebAuthn extends Auth
 
         // Return the prepared data
         return [
-            'publicKey'    => $publicKey,
+            'publicKey' => $publicKey,
             'b64challenge' => $b64challenge,
         ];
     }
@@ -165,7 +167,7 @@ class AuthWebAuthn extends Auth
         }
 
         $attestationString = $this->arrayToString($info->response->attestationObject);
-        $attestationObject = (object)(CBOREncoder::decode($attestationString));
+        $attestationObject = (object) CBOREncoder::decode($attestationString);
 
         if (empty($attestationObject->fmt)) {
             throw new Exception('Cannot decode key for format');
@@ -208,10 +210,10 @@ class AuthWebAuthn extends Auth
         $attestationObject->attData->keyBytes = self::COSEECDHAtoPKCS($cborPubKey);
 
         if (is_null($attestationObject->attData->keyBytes)) {
-            $attestationObject->attData->aaguid = substr((string)$byteString, 37, 1);
+            $attestationObject->attData->aaguid = substr((string) $byteString, 37, 1);
             $attestationObject->attData->credIdLen = (ord($byteString[38]) << 8) + ord($byteString[39]);
             $attestationObject->attData->credId = substr(
-                (string)$byteString,
+                (string) $byteString,
                 40,
                 $attestationObject->attData->credIdLen,
             );
@@ -246,7 +248,7 @@ class AuthWebAuthn extends Auth
                 break;
             }
 
-            if (! $found) {
+            if (!$found) {
                 array_unshift($userWebAuthn, $publicKey);
             }
         }
@@ -266,7 +268,7 @@ class AuthWebAuthn extends Auth
     {
         $allow = new stdClass();
         $allow->type = 'public-key';
-        $allow->transports = ['usb','nfc','ble','internal'];
+        $allow->transports = ['usb', 'nfc', 'ble', 'internal'];
         $allow->id = null;
 
         $allows = [];
@@ -285,7 +287,7 @@ class AuthWebAuthn extends Auth
             $userWebAuthn = json_encode($webauthn);
         } else {
             $allow->id = [];
-            $rb = md5((string)time());
+            $rb = md5((string) time());
             $allow->id = $this->stringToArray($rb);
             $allows[] = clone $allow;
         }
@@ -416,10 +418,10 @@ class AuthWebAuthn extends Auth
             return null;
         }
 
-        $der  = "\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01";
+        $der = "\x30\x59\x30\x13\x06\x07\x2a\x86\x48\xce\x3d\x02\x01";
         $der .= "\x06\x08\x2a\x86\x48\xce\x3d\x03\x01\x07\x03\x42";
         $der .= "\x00" . $key;
-        $pem  = "-----BEGIN PUBLIC KEY-----\x0A";
+        $pem = "-----BEGIN PUBLIC KEY-----\x0A";
         $pem .= chunk_split(base64_encode($der), 64);
         return $pem . "-----END PUBLIC KEY-----\x0A";
     }
@@ -436,42 +438,42 @@ class AuthWebAuthn extends Auth
     {
         $cosePubKey = CBOREncoder::decode($binary);
 
-        if (!isset($cosePubKey[3] /* cose_alg */)) {
+        if (!isset($cosePubKey[3])) { /* cose_alg */
             return null;
         }
 
         switch ($cosePubKey[3]) {
             case self::ES256:
                 /* COSE Alg: ECDSA w/ SHA-256 */
-                if (!isset($cosePubKey[-1] /* cose_crv */)) {
+                if (!isset($cosePubKey[-1])) { /* cose_crv */
                     throw new Exception('Cannot decode key response for curve');
                 }
 
-                if (!isset($cosePubKey[-2] /* cose_crv_x */)) {
+                if (!isset($cosePubKey[-2])) { /* cose_crv_x */
                     throw new Exception('Cannot decode key response for x coordinate');
                 }
 
-                if ($cosePubKey[-1] !== 1 /* cose_crv_P256 */) {
+                if ($cosePubKey[-1] !== 1) { /* cose_crv_P256 */
                     throw new Exception('Cannot decode key response for curve P256');
                 }
 
-                if (!isset($cosePubKey[-2] /* cose_crv_x */)) {
+                if (!isset($cosePubKey[-2])) { /* cose_crv_x */
                     throw new Exception('x coordinate for curve missing');
                 }
 
-                if (!isset($cosePubKey[1] /* cose_kty */)) {
+                if (!isset($cosePubKey[1])) { /* cose_kty */
                     throw new Exception('Cannot decode key response for key type');
                 }
 
-                if (!isset($cosePubKey[-3] /* cose_crv_y */)) {
+                if (!isset($cosePubKey[-3])) { /* cose_crv_y */
                     throw new Exception('Cannot decode key response for y coordinate');
                 }
 
-                if (!isset($cosePubKey[-3] /* cose_crv_y */)) {
+                if (!isset($cosePubKey[-3])) { /* cose_crv_y */
                     throw new Exception('y coordinate for curve missing');
                 }
 
-                if ($cosePubKey[1] !== 2 /* cose_kty_ec2 */) {
+                if ($cosePubKey[1] !== 2) { /* cose_kty_ec2 */
                     throw new Exception('Cannot decode key response for key type EC2');
                 }
 
@@ -494,7 +496,7 @@ class AuthWebAuthn extends Auth
 
                 $e = new BigInteger(bin2hex((string) $cosePubKey[-2]->get_byte_string()), 16);
                 $n = new BigInteger(bin2hex((string) $cosePubKey[-1]->get_byte_string()), 16);
-                return (string)PublicKeyLoader::load(['e' => $e, 'n' => $n]);
+                return (string) PublicKeyLoader::load(['e' => $e, 'n' => $n]);
             default:
                 throw new Exception('Cannot decode key response for algorithm');
         }

@@ -51,37 +51,34 @@ class StatisticsSessionsController extends AbstractAdministrationController
         $stats = $statisticsHelper->getTrackingFilesStatistics();
         $visitsPerDay = $adminSession->getNumberOfSessions();
 
-        return $this->render(
-            '@admin/statistics/sessions.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderSessions' => Translation::get('ad_stat_sess'),
-                'csrfTokenClearVisits' => Token::getInstance($session)->getTokenString('clear-visits'),
-                'msgClearVisits' => Translation::get('ad_clear_all_visits'),
-                'msgDays' => Translation::get('ad_stat_days'),
-                'numberOfDays' => $stats->numberOfDays,
-                'msgVisits' => Translation::get('ad_stat_vis'),
-                'numberOfVisits' => $visitsPerDay,
-                'msgVisitsPerDay' => Translation::get('ad_stat_vpd'),
-                'visitsPerDay' => ($stats->numberOfDays !== 0) ? round(($visitsPerDay / $stats->numberOfDays), 2) : 0,
-                'msgFirstDate' =>  Translation::get('ad_stat_fien'),
-                'firstDate' =>  $statisticsHelper->getFirstTrackingDate($stats->firstDate),
-                'msgLastDate' => Translation::get('ad_stat_laen'),
-                'lastDate' => $statisticsHelper->getLastTrackingDate($stats->lastDate),
-                'msgSessionBrowse' => Translation::get('ad_stat_browse'),
-                'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
-                'buttonOkay' => Translation::get('ad_stat_ok'),
-                'msgSessionManagement' => Translation::get('ad_stat_management'),
-                'csrfTokenSessions' => Token::getInstance($session)->getTokenInput('sessions'),
-                'msgChooseMonth' => Translation::get('ad_stat_choose'),
-                'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
-                'buttonDeleteMonth' => Translation::get('ad_stat_delete'),
-                'csrfTokenExport' => Token::getInstance($session)->getTokenString('export-sessions'),
-                'dateToday' => date('Y-m-d'),
-                'datePickerMinDate' => date('Y-m-d', $stats->firstDate),
-            ]
-        );
+        return $this->render('@admin/statistics/sessions.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderSessions' => Translation::get('ad_stat_sess'),
+            'csrfTokenClearVisits' => Token::getInstance($session)->getTokenString('clear-visits'),
+            'msgClearVisits' => Translation::get('ad_clear_all_visits'),
+            'msgDays' => Translation::get('ad_stat_days'),
+            'numberOfDays' => $stats->numberOfDays,
+            'msgVisits' => Translation::get('ad_stat_vis'),
+            'numberOfVisits' => $visitsPerDay,
+            'msgVisitsPerDay' => Translation::get('ad_stat_vpd'),
+            'visitsPerDay' => $stats->numberOfDays !== 0 ? round($visitsPerDay / $stats->numberOfDays, 2) : 0,
+            'msgFirstDate' => Translation::get('ad_stat_fien'),
+            'firstDate' => $statisticsHelper->getFirstTrackingDate($stats->firstDate),
+            'msgLastDate' => Translation::get('ad_stat_laen'),
+            'lastDate' => $statisticsHelper->getLastTrackingDate($stats->lastDate),
+            'msgSessionBrowse' => Translation::get('ad_stat_browse'),
+            'renderedDaySelector' => $statisticsHelper->renderDaySelector(),
+            'buttonOkay' => Translation::get('ad_stat_ok'),
+            'msgSessionManagement' => Translation::get('ad_stat_management'),
+            'csrfTokenSessions' => Token::getInstance($session)->getTokenInput('sessions'),
+            'msgChooseMonth' => Translation::get('ad_stat_choose'),
+            'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
+            'buttonDeleteMonth' => Translation::get('ad_stat_delete'),
+            'csrfTokenExport' => Token::getInstance($session)->getTokenString('export-sessions'),
+            'dateToday' => date('Y-m-d'),
+            'datePickerMinDate' => date('Y-m-d', $stats->firstDate),
+        ]);
     }
 
     /**
@@ -102,19 +99,16 @@ class StatisticsSessionsController extends AbstractAdministrationController
         $session = $this->container->get('phpmyfaq.admin.session');
         $sessionData = $session->getSessionsByDate($firstHour, $lastHour);
 
-        return $this->render(
-            '@admin/statistics/sessions.day.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderSessionsPerDay' => Translation::get('ad_sess_session'),
-                'currentDay' => date('Y-m-d', $day),
-                'msgIpAddress' => Translation::get('ad_sess_ip'),
-                'msgSessionDate' => Translation::get('ad_sess_s_date'),
-                'msgSession' => Translation::get('ad_sess_session'),
-                'sessionData' => $sessionData,
-            ]
-        );
+        return $this->render('@admin/statistics/sessions.day.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderSessionsPerDay' => Translation::get('ad_sess_session'),
+            'currentDay' => date('Y-m-d', $day),
+            'msgIpAddress' => Translation::get('ad_sess_ip'),
+            'msgSessionDate' => Translation::get('ad_sess_s_date'),
+            'msgSession' => Translation::get('ad_sess_session'),
+            'sessionData' => $sessionData,
+        ]);
     }
 
     /**
@@ -133,20 +127,17 @@ class StatisticsSessionsController extends AbstractAdministrationController
         $time = $session->getTimeFromSessionId($sessionId);
         $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
 
-        return $this->render(
-            '@admin/statistics/sessions.session.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'ad_sess_session' => Translation::get('ad_sess_session'),
-                'sessionId' => $sessionId,
-                'ad_sess_back' => Translation::get('ad_sess_back'),
-                'ad_sess_referer' => Translation::get('ad_sess_referer'),
-                'ad_sess_browser' => Translation::get('ad_sess_browser'),
-                'ad_sess_ip' => Translation::get('ad_sess_ip'),
-                'trackingData' => $trackingData,
-                'thisDay' => date('Y-m-d', $time),
-            ]
-        );
+        return $this->render('@admin/statistics/sessions.session.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'ad_sess_session' => Translation::get('ad_sess_session'),
+            'sessionId' => $sessionId,
+            'ad_sess_back' => Translation::get('ad_sess_back'),
+            'ad_sess_referer' => Translation::get('ad_sess_referer'),
+            'ad_sess_browser' => Translation::get('ad_sess_browser'),
+            'ad_sess_ip' => Translation::get('ad_sess_ip'),
+            'trackingData' => $trackingData,
+            'thisDay' => date('Y-m-d', $time),
+        ]);
     }
 }

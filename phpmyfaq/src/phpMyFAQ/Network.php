@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The network class for IPv4 and IPv6 handling.
  *
@@ -32,8 +34,9 @@ readonly class Network
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**

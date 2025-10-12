@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Administration Elasticsearch Controller
  *
@@ -40,12 +42,9 @@ class OpenSearchController extends AbstractAdministrationController
             throw new UnauthorizedHttpException('You are not allowed to access this page.');
         }
 
-        return $this->render(
-            '@admin/configuration/opensearch.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-            ]
-        );
+        return $this->render('@admin/configuration/opensearch.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+        ]);
     }
 }

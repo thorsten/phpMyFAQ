@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main forms class.
  *
@@ -24,8 +26,9 @@ class Forms
 {
     private readonly Translation $translation;
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         $this->translation = new Translation();
     }
 
@@ -36,12 +39,8 @@ class Forms
      */
     public function getFormData(int $formId): array
     {
-        $query = sprintf(
-            "SELECT form_id, input_id, input_type, input_label, input_active, input_required, input_lang
-                    FROM %sfaqforms WHERE form_id = %d",
-            Database::getTablePrefix(),
-            $formId
-        );
+        $query = sprintf('SELECT form_id, input_id, input_type, input_label, input_active, input_required, input_lang
+                    FROM %sfaqforms WHERE form_id = %d', Database::getTablePrefix(), $formId);
 
         $result = $this->configuration->getDb()->query($query);
         $formData = $this->configuration->getDb()->fetchAll($result);
@@ -117,7 +116,7 @@ class Forms
             Database::getTablePrefix(),
             $activated,
             $formId,
-            $inputId
+            $inputId,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -137,10 +136,10 @@ class Forms
             Database::getTablePrefix(),
             $required,
             $formId,
-            $inputId
+            $inputId,
         );
 
-        return (bool)$this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -152,7 +151,7 @@ class Forms
             'SELECT input_lang, input_label FROM %sfaqforms WHERE form_id = %d AND input_id = %d',
             Database::getTablePrefix(),
             $formId,
-            $inputId
+            $inputId,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -183,7 +182,7 @@ class Forms
             $label,
             $formId,
             $inputId,
-            $lang
+            $lang,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -203,7 +202,7 @@ class Forms
             Database::getTablePrefix(),
             $formId,
             $inputId,
-            $lang
+            $lang,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -224,7 +223,7 @@ class Forms
                     AND input_lang='default'",
             Database::getTablePrefix(),
             $inputId,
-            $formId
+            $formId,
         );
 
         $response = $this->configuration->getDb()->query($selectQuery);
@@ -240,7 +239,7 @@ class Forms
             $this->configuration->getDb()->escape($translation),
             $inputData->input_active,
             $inputData->input_required,
-            LanguageCodes::getKey($lang)
+            LanguageCodes::getKey($lang),
         );
 
         return (bool) $this->configuration->getDb()->query($requestQuery);
@@ -258,7 +257,7 @@ class Forms
             'SELECT input_required, input_active FROM %sfaqforms WHERE form_id = %d AND input_id = %d',
             Database::getTablePrefix(),
             $formId,
-            $inputId
+            $inputId,
         );
 
         $response = $this->configuration->getDb()->query($query);
@@ -285,13 +284,13 @@ class Forms
             "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
                     input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($input['form_id']),
-            $this->configuration->getDb()->escape($input['input_id']),
+            (int) $input['form_id'],
+            (int) $input['input_id'],
             $this->configuration->getDb()->escape($input['input_type']),
             $this->configuration->getDb()->escape($input['input_label']),
             $this->configuration->getDb()->escape($input['input_lang']),
-            $this->configuration->getDb()->escape($input['input_active']),
-            $this->configuration->getDb()->escape($input['input_required'])
+            (int) $input['input_active'],
+            (int) $input['input_required'],
         );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ tags.
  *
@@ -59,17 +61,19 @@ class TagsHelper extends AbstractHelper
         $taggingIds = str_replace(',,', ',', $taggingIds);
         $taggingIds = trim(implode(',', $taggingIds), ',');
 
-        return ($taggingIds !== '') ? sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s ' .
-            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
-            $taggingIds,
-            Strings::htmlentities($tagName)
-        ) : sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&search=%s">%s ' .
-            '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
-            Strings::htmlentities($tagName),
-            Strings::htmlentities($tagName)
-        );
+        return $taggingIds !== ''
+            ? sprintf(
+                '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s '
+                . '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
+                $taggingIds,
+                Strings::htmlentities($tagName),
+            )
+            : sprintf(
+                '<a class="btn btn-outline-primary m-1" href="?action=search&search=%s">%s '
+                . '<i aria-hidden="true" class="bi bi-dash-square"></i></a> ',
+                Strings::htmlentities($tagName),
+                Strings::htmlentities($tagName),
+            );
     }
 
     /**
@@ -87,12 +91,11 @@ class TagsHelper extends AbstractHelper
      */
     public function setTaggingIds(array $taggingIds): void
     {
-        $this->taggingIds = array_filter(
-            $taggingIds,
-            static fn($tagId): mixed => Filter::filterVar($tagId, FILTER_VALIDATE_INT)
-        );
+        $this->taggingIds = array_filter($taggingIds, static fn($tagId): mixed => Filter::filterVar(
+            $tagId,
+            FILTER_VALIDATE_INT,
+        ));
     }
-
 
     /**
      * Renders the related tag.
@@ -104,12 +107,12 @@ class TagsHelper extends AbstractHelper
     public function renderRelatedTag(int $tagId, string $tagName, int $relevance): string
     {
         return sprintf(
-            '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s %s ' .
-            '<span class="badge bg-info">%d</span></a>',
+            '<a class="btn btn-outline-primary m-1" href="?action=search&tagging_id=%s">%s %s '
+            . '<span class="badge bg-info">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="bi bi-plus-square"></i> ',
             Strings::htmlentities($tagName),
-            $relevance
+            $relevance,
         );
     }
 }

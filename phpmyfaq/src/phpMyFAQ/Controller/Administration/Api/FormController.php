@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Form Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -117,10 +119,9 @@ class FormController extends AbstractController
 
         try {
             $forms->deleteTranslation($formId, $inputId, $lang);
-            return $this->json(
-                ['success' => Translation::get('msgFormsDeleteTranslationSuccessful')],
-                Response::HTTP_OK
-            );
+            return $this->json(['success' => Translation::get(
+                'msgFormsDeleteTranslationSuccessful',
+            )], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }

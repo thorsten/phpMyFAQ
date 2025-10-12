@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication with LDAP server.
  *
@@ -87,12 +89,10 @@ class AuthLdap extends Auth implements AuthDriverInterface
         $user->setAuthSource(AuthenticationSourceType::AUTH_LDAP->value);
 
         // Set user information from LDAP
-        $user->setUserData(
-            [
-                'display_name' => $this->ldapCore->getCompleteName($login),
-                'email' => $this->ldapCore->getMail($login)
-            ]
-        );
+        $user->setUserData([
+            'display_name' => $this->ldapCore->getCompleteName($login),
+            'email' => $this->ldapCore->getMail($login),
+        ]);
 
         // Handle group assignments if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
@@ -182,7 +182,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        ?array $optionalData = null
+        ?array $optionalData = null,
     ): bool {
         if ('' === trim($password)) {
             throw new AuthException(User::ERROR_USER_INCORRECT_PASSWORD);
@@ -193,7 +193,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             // Try all LDAP servers
             foreach (array_keys($this->ldapServer) as $key) {
                 $this->connect($key);
-                $this->activeServer = (int)$key;
+                $this->activeServer = (int) $key;
                 break;
             }
         }
@@ -216,7 +216,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$this->activeServer]['ldap_port'],
             $this->ldapServer[$this->activeServer]['ldap_base'],
             $bindLogin,
-            htmlspecialchars_decode($password)
+            htmlspecialchars_decode($password),
         );
 
         if (!$this->ldapCore->bind($bindLogin, htmlspecialchars_decode($password))) {
@@ -264,7 +264,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             // Try all LDAP servers
             foreach (array_keys($this->ldapServer) as $key) {
                 $this->connect($key);
-                $this->activeServer = (int)$key;
+                $this->activeServer = (int) $key;
                 break;
             }
         }
@@ -281,7 +281,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $this->ldapServer[$activeServer]['ldap_port'],
             $this->ldapServer[$activeServer]['ldap_base'],
             $this->ldapServer[$activeServer]['ldap_user'],
-            $this->ldapServer[$activeServer]['ldap_password']
+            $this->ldapServer[$activeServer]['ldap_password'],
         );
 
         if ($this->ldapCore->error) {

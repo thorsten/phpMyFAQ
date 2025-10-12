@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Unencrypted file handler class.
  *
@@ -48,7 +50,7 @@ class VanillaFile extends AbstractFile
         if ($doSimple) {
             // If the target is a string or vanilla object, just move
             // it the simplest way we can.
-            return $this->copyToSimple((string)$entry);
+            return $this->copyToSimple((string) $entry);
         }
 
         $entry->setMode(self::MODE_WRITE);

@@ -45,7 +45,7 @@ class AuthenticationController extends AbstractAdministrationController
         $password = Filter::filterVar(
             $request->get('faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
-            FILTER_FLAG_NO_ENCODE_QUOTES
+            FILTER_FLAG_NO_ENCODE_QUOTES,
         );
         $rememberMe = Filter::filterVar($request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 
@@ -67,7 +67,7 @@ class AuthenticationController extends AbstractAdministrationController
             } catch (Exception) {
                 $logging->log(
                     $this->currentUser,
-                    'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors)
+                    'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors),
                 );
                 //$error = $e->getMessage();
                 return new RedirectResponse('./login');
@@ -90,33 +90,30 @@ class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse('./authenticate');
         }
 
-        return $this->render(
-            '@admin/login.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'isSecure' => $request->isSecure() || !$this->configuration->get('security.useSslForLogins'),
-                'isError' => isset($error) && 0 < strlen((string) $error),
-                'errorMessage' => 'to be implemented',
-                'loginMessage' => Translation::get('ad_auth_insert'),
-                'isLogout' => $request->query->get('action') === 'logout',
-                'logoutMessage' => Translation::get('ad_logout'),
-                'loginUrl' => $this->configuration->getDefaultUrl() . 'admin/authenticate',
-                'redirectAction' => $request->query->get('action') ?? '' ,
-                'msgUsername' => Translation::get('ad_auth_user'),
-                'msgPassword' => Translation::get('ad_auth_passwd'),
-                'msgRememberMe' => Translation::get('rememberMe'),
-                'msgLostPassword' => Translation::get('lostPassword'),
-                'msgLoginUser' => Translation::get('msgLoginUser'),
-                'hasRegistrationEnabled' => $this->configuration->get('security.enableRegistration'),
-                'msgRegistration' => Translation::get('msgRegistration'),
-                'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
-                'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
-                'secureUrl' => sprintf('https://%s%s', $request->getHost(), $request->getRequestUri()),
-                'msgNotSecure' => Translation::get('msgSecureSwitch'),
-                'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
-            ]
-        );
+        return $this->render('@admin/login.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'isSecure' => $request->isSecure() || !$this->configuration->get('security.useSslForLogins'),
+            'isError' => isset($error) && 0 < strlen((string) $error),
+            'errorMessage' => 'to be implemented',
+            'loginMessage' => Translation::get('ad_auth_insert'),
+            'isLogout' => $request->query->get('action') === 'logout',
+            'logoutMessage' => Translation::get('ad_logout'),
+            'loginUrl' => $this->configuration->getDefaultUrl() . 'admin/authenticate',
+            'redirectAction' => $request->query->get('action') ?? '',
+            'msgUsername' => Translation::get('ad_auth_user'),
+            'msgPassword' => Translation::get('ad_auth_passwd'),
+            'msgRememberMe' => Translation::get('rememberMe'),
+            'msgLostPassword' => Translation::get('lostPassword'),
+            'msgLoginUser' => Translation::get('msgLoginUser'),
+            'hasRegistrationEnabled' => $this->configuration->get('security.enableRegistration'),
+            'msgRegistration' => Translation::get('msgRegistration'),
+            'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
+            'msgSignInWithMicrosoft' => Translation::get('msgSignInWithMicrosoft'),
+            'secureUrl' => sprintf('https://%s%s', $request->getHost(), $request->getRequestUri()),
+            'msgNotSecure' => Translation::get('msgSecureSwitch'),
+            'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+        ]);
     }
 
     /**
@@ -157,23 +154,20 @@ class AuthenticationController extends AbstractAdministrationController
 
         $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
 
-        return $this->render(
-            '@admin/user/twofactor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
-                'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
-                'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
-                'requestIsSecure' => $request->isSecure(),
-                'security.useSslForLogins' => $this->configuration->get('security.useSslForLogins'),
-                'requestHost' => $request->getHost(),
-                'requestUri' => $request->getRequestUri(),
-                'userId' => $userId,
-                'msgSecureSwitch' => Translation::get('msgSecureSwitch'),
-                'systemUri' => $this->configuration->getDefaultUrl()
-            ]
-        );
+        return $this->render('@admin/user/twofactor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'msgTwofactorEnabled' => Translation::get('msgTwofactorEnabled'),
+            'msgTwofactorCheck' => Translation::get('msgTwofactorCheck'),
+            'msgEnterTwofactorToken' => Translation::get('msgEnterTwofactorToken'),
+            'requestIsSecure' => $request->isSecure(),
+            'security.useSslForLogins' => $this->configuration->get('security.useSslForLogins'),
+            'requestHost' => $request->getHost(),
+            'requestUri' => $request->getRequestUri(),
+            'userId' => $userId,
+            'msgSecureSwitch' => Translation::get('msgSecureSwitch'),
+            'systemUri' => $this->configuration->getDefaultUrl(),
+        ]);
     }
 
     /**

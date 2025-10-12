@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin FAQ class
  *
@@ -25,8 +27,9 @@ class Faq
 {
     private ?string $language = null;
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -87,14 +90,14 @@ class Faq
             $categoryId,
             $this->configuration->getDb()->escape($this->getLanguage()),
             $onlyInactive ? "AND fd.active = 'no'" : '',
-            $onlyNew ? sprintf("AND fd.created > '%s'", date('Y-m-d H:i:s', strtotime('-1 month'))) : ''
+            $onlyNew ? sprintf("AND fd.created > '%s'", date('Y-m-d H:i:s', strtotime('-1 month'))) : '',
         );
 
         $result = $this->configuration->getDb()->query($query);
         $num = $this->configuration->getDb()->numRows($result);
 
         if ($num > 0) {
-            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $visits = empty($row->visits) ? 0 : $row->visits;
 
                 $faqData[] = [
@@ -114,7 +117,6 @@ class Faq
 
         return $faqData;
     }
-
 
     /**
      * Set or unset a faq item flag.
@@ -147,7 +149,7 @@ class Faq
                 $type,
                 $flag,
                 $faqId,
-                $this->configuration->getDb()->escape($faqLanguage)
+                $this->configuration->getDb()->escape($faqLanguage),
             );
 
             return (bool) $this->configuration->getDb()->query($update);
@@ -178,7 +180,7 @@ class Faq
             ORDER BY
                 fd.id DESC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -186,14 +188,14 @@ class Faq
         $data = [];
 
         $oldId = 0;
-        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
                 $inactive[] = $data;
             }
@@ -238,7 +240,7 @@ class Faq
                     fd.id DESC",
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -246,7 +248,7 @@ class Faq
         $data = [];
 
         $oldId = 0;
-        while (($row = $this->configuration->getDb()->fetchObject($result))) {
+        while ($row = $this->configuration->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $data = new stdClass();
                 $data->faqId = $row->id;
@@ -256,7 +258,7 @@ class Faq
                     '%sadmin/faq/edit/%d/%s',
                     $this->configuration->getDefaultUrl(),
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
                 $orphaned[] = $data;
             }
@@ -278,10 +280,10 @@ class Faq
         $counter = count($faqIds);
         for ($i = 0; $i < $counter; ++$i) {
             $query = sprintf(
-                "UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d",
+                'UPDATE %sfaqdata SET sticky_order=%d WHERE id=%d',
                 Database::getTablePrefix(),
                 $count,
-                $faqIds[$i]
+                $faqIds[$i],
             );
             $this->configuration->getDb()->query($query);
             ++$count;

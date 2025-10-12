@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Factory class for phpMyFAQ search classes.
  *

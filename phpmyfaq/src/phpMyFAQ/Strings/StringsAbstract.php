@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // phpcs:ignoreFile
 /**
  * Abstract parent for the string wrapper classes.
@@ -54,10 +57,11 @@ abstract class StringsAbstract
     public static function isUTF8(string $str): bool
     {
         if (function_exists('mb_detect_encoding')) {
-            return mb_detect_encoding($str, self::DEFAULT_ENCODING, true);
+            return (bool) mb_detect_encoding($str, self::DEFAULT_ENCODING, true);
         }
 
-        $regex = '/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|'
+        $regex =
+            '/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|'
             . '\xed[\x80-\x9f][\x80-\xbf]|'
             . '[\xee-\xef][\x80-\xbf]{2}|'
             . '\xf0[\x90-\xbf][\x80-\xbf]{2}|'

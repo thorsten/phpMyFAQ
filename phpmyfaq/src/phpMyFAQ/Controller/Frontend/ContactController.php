@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Contact Controller
  *
@@ -50,20 +52,20 @@ class ContactController extends AbstractController
         $stopWords = $this->container->get('phpmyfaq.stop-words');
 
         if (
-            $author !== '' &&
-            $author !== '0' &&
-            !empty($email) &&
-            ($question !== '' &&
-            $question !== '0') &&
-            $stopWords->checkBannedWord($question)
+            $author !== ''
+            && $author !== '0'
+            && !empty($email)
+            && $question !== ''
+            && $question !== '0'
+            && $stopWords->checkBannedWord($question)
         ) {
             $question = sprintf(
-                "%s: %s<br>%s: %s<br><br>%s",
+                '%s: %s<br>%s: %s<br><br>%s',
                 Translation::get('msgNewContentName'),
                 $author,
                 Translation::get('msgNewContentMail'),
                 $email,
-                $question
+                $question,
             );
 
             $mailer = $this->container->get('phpmyfaq.mail');
@@ -77,7 +79,7 @@ class ContactController extends AbstractController
                 unset($mailer);
 
                 return $this->json(['success' => Translation::get('msgMailContact')], Response::HTTP_OK);
-            } catch (Exception | TransportExceptionInterface $e) {
+            } catch (Exception|TransportExceptionInterface $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         } else {

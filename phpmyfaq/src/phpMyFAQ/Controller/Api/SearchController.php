@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Search Controller for the REST API
  *
@@ -45,17 +47,13 @@ class SearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(
-        path: '/api/v3.1/search',
-        operationId: 'getSearch',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/search', operationId: 'getSearch', tags: ['Public Endpoints'])]
     #[OA\Parameter(
         name: 'q',
         description: 'The search term',
         in: 'query',
         required: true,
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -70,7 +68,7 @@ class SearchController extends AbstractController
                 "answer": "Because it is cool!",
                 "link": "https://www.example.org/index.php?action=faq&cat=15&id=1&artlang=en"
             }
-        ]')
+        ]'),
     )]
     #[OA\Response(
         response: 404,
@@ -105,15 +103,11 @@ class SearchController extends AbstractController
         return $this->json([], Response::HTTP_NOT_FOUND);
     }
 
-    #[OA\Get(
-        path: '/api/v3.1/searches/popular',
-        operationId: 'getPopularSearch',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/searches/popular', operationId: 'getPopularSearch', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -132,7 +126,7 @@ class SearchController extends AbstractController
                 "number": 9,
                 "lang": "en"
             }
-        ]')
+        ]'),
     )]
     #[OA\Response(
         response: 404,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Comment class.
  *
@@ -18,8 +20,8 @@
 namespace phpMyFAQ;
 
 use DateTimeInterface;
-use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Entity\CommentType;
 
 /**
  * Class Comments
@@ -30,11 +32,10 @@ readonly class Comments
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
-
-
 
     /**
      * Returns all user comments from a record by type.
@@ -48,8 +49,7 @@ readonly class Comments
     {
         $comments = [];
 
-        $query = sprintf(
-            "
+        $query = sprintf("
             SELECT
                 id_comment, id, usr, email, comment, datum
             FROM
@@ -57,11 +57,7 @@ readonly class Comments
             WHERE
                 type = '%s'
             AND 
-                id = %d",
-            Database::getTablePrefix(),
-            $type,
-            $referenceId
-        );
+                id = %d", Database::getTablePrefix(), $type, $referenceId);
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
@@ -82,8 +78,6 @@ readonly class Comments
         return $comments;
     }
 
-
-
     /**
      * Adds a new comment.
      */
@@ -103,7 +97,7 @@ readonly class Comments
             $this->configuration->getDb()->escape($comment->getEmail()),
             $this->configuration->getDb()->escape($comment->getComment()),
             $comment->getDate(),
-            $comment->hasHelped()
+            $comment->hasHelped(),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -115,18 +109,13 @@ readonly class Comments
      */
     public function delete(string $type, int $commentId): bool
     {
-        $query = sprintf(
-            "
+        $query = sprintf("
             DELETE FROM
                 %sfaqcomments
             WHERE
                 type = '%s'
             AND
-                id_comment = %d",
-            Database::getTablePrefix(),
-            $type,
-            $commentId
-        );
+                id_comment = %d", Database::getTablePrefix(), $type, $commentId);
         return (bool) $this->configuration->getDb()->query($query);
     }
 
@@ -140,8 +129,7 @@ readonly class Comments
     {
         $num = [];
 
-        $query = sprintf(
-            "
+        $query = sprintf("
             SELECT
                 COUNT(id) AS anz,
                 id
@@ -150,10 +138,7 @@ readonly class Comments
             WHERE
                 type = '%s'
             GROUP BY id
-            ORDER BY id",
-            Database::getTablePrefix(),
-            $type
-        );
+            ORDER BY id", Database::getTablePrefix(), $type);
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
@@ -190,13 +175,13 @@ readonly class Comments
             ORDER BY fcg.category_id",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            CommentType::FAQ
+            CommentType::FAQ,
         );
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $numbers[$row->category_id] = (int)$row->number;
+                $numbers[$row->category_id] = (int) $row->number;
             }
         }
 
@@ -228,13 +213,15 @@ readonly class Comments
             %s
             WHERE
                 type = '%s'",
-            ($type === CommentType::FAQ) ? "fcg.category_id,\n" : '',
+            $type === CommentType::FAQ ? "fcg.category_id,\n" : '',
             Database::getTablePrefix(),
-            ($type === CommentType::FAQ) ? 'LEFT JOIN
+            $type === CommentType::FAQ
+                ? 'LEFT JOIN
                 ' . Database::getTablePrefix() . "faqcategoryrelations fcg
             ON
-                fc.id = fcg.record_id\n" : '',
-            $type
+                fc.id = fcg.record_id\n"
+                : '',
+            $type,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -286,7 +273,7 @@ readonly class Comments
             Database::getTablePrefix(),
             $table,
             $recordId,
-            $this->configuration->getDb()->escape($recordLang)
+            $this->configuration->getDb()->escape($recordLang),
         );
 
         $result = $this->configuration->getDb()->query($query);

@@ -33,10 +33,10 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
 use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
 use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
-use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,7 +59,7 @@ class FaqController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::FAQ_EDIT);
         $this->userHasPermission(PermissionType::FAQ_DELETE);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentAdminGroups, true);
         $category->setUser($currentAdminUser);
@@ -72,18 +72,15 @@ class FaqController extends AbstractAdministrationController
         $comments = $this->container->get('phpmyfaq.comments');
         $sessions = $this->container->get('session');
 
-        return $this->render(
-            '@admin/content/faq.overview.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('edit-faq'),
-                'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('faq-overview'),
-                'categories' => $category->getCategoryTree(),
-                'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
-                'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
-            ]
-        );
+        return $this->render('@admin/content/faq.overview.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('edit-faq'),
+            'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('faq-overview'),
+            'categories' => $category->getCategoryTree(),
+            'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
+            'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
+        ]);
     }
 
     /**
@@ -97,7 +94,7 @@ class FaqController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentAdminGroups, true);
         $category->setUser($currentAdminUser);
@@ -125,40 +122,38 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
-        return $this->render(
-            '@admin/content/faq.editor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'header' => Translation::get('msgAddFAQ'),
-                'editExistingFaq' => false,
-                'faqRevisionId' => 0,
-                'faqData' => $faqData,
-                'openQuestionId' => 0,
-                'notifyUser' => '',
-                'notifyEmail' => '',
-                'categoryOptions' => $categoryHelper->renderOptions($categories),
-                'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
-                'attachments' => [],
-                'allGroups' => true,
-                'restrictedGroups' => false,
-                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
-                'allUsers' => true,
-                'restrictedUsers' => false,
-                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-                'changelogs' => [],
-                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_APPROVE->value
-                ),
-                'isActive' => null,
-                'isInActive' => 'checked',
-                'nextSolutionId' => $faq->getNextSolutionId(),
-                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
-            ]
-        );
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get('msgAddFAQ'),
+            'editExistingFaq' => false,
+            'faqRevisionId' => 0,
+            'faqData' => $faqData,
+            'openQuestionId' => 0,
+            'notifyUser' => '',
+            'notifyEmail' => '',
+            'categoryOptions' => $categoryHelper->renderOptions($categories),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
+            'attachments' => [],
+            'allGroups' => true,
+            'restrictedGroups' => false,
+            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => true,
+            'restrictedUsers' => false,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => [],
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => null,
+            'isInActive' => 'checked',
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
     }
 
     /**
@@ -172,7 +167,7 @@ class FaqController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentAdminGroups, true);
         $category->setUser($currentAdminUser);
@@ -202,10 +197,7 @@ class FaqController extends AbstractAdministrationController
 
         // SERP
         $seoEntity = new SeoEntity();
-        $seoEntity
-            ->setSeoType(SeoType::FAQ)
-            ->setReferenceId($faqId)
-            ->setReferenceLanguage($faqLanguage);
+        $seoEntity->setSeoType(SeoType::FAQ)->setReferenceId($faqId)->setReferenceLanguage($faqLanguage);
         $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
         $faqData['serp-title'] = $seoData->getTitle();
         $faqData['serp-description'] = $seoData->getDescription();
@@ -220,7 +212,7 @@ class FaqController extends AbstractAdministrationController
             $this->configuration->getDefaultUrl(),
             $category->getCategoryIdFromFaq($faqId),
             $faqId,
-            $faqLanguage
+            $faqLanguage,
         );
 
         $link = new Link($faqUrl, $this->configuration);
@@ -252,47 +244,45 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
 
-        return $this->render(
-            '@admin/content/faq.editor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
-                'editExistingFaq' => true,
-                'currentRevision' => sprintf('%s 1.%d', Translation::get('msgRevision'), $selectedRevisionId),
-                'numberOfRevisions' => count($revisions),
-                'faqId' => $faqId,
-                'faqLang' => $faqLanguage,
-                'revisions' => $revisions,
-                'selectedRevisionId' => $selectedRevisionId ?? $faqData['revision_id'],
-                'faqRevisionId' => $faqData['revision_id'],
-                'faqData' => $faqData,
-                'faqUrl' => $link->toString(),
-                'openQuestionId' => 0,
-                'notifyUser' => '',
-                'notifyEmail' => '',
-                'categoryOptions' => $categoryHelper->renderOptions($categories),
-                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
-                'attachments' => $attachmentList,
-                'allGroups' => $allGroups,
-                'restrictedGroups' => $restrictedGroups,
-                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
-                'allUsers' => $allUsers,
-                'restrictedUsers' => $restrictedUsers,
-                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-                'changelogs' => $this->container->get('phpmyfaq.admin.changelog')->getByFaqId($faqId),
-                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_APPROVE->value
-                ),
-                'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
-                'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
-                'nextSolutionId' => $faq->getNextSolutionId(),
-                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
-            ]
-        );
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+            'editExistingFaq' => true,
+            'currentRevision' => sprintf('%s 1.%d', Translation::get('msgRevision'), $selectedRevisionId),
+            'numberOfRevisions' => count($revisions),
+            'faqId' => $faqId,
+            'faqLang' => $faqLanguage,
+            'revisions' => $revisions,
+            'selectedRevisionId' => $selectedRevisionId ?? $faqData['revision_id'],
+            'faqRevisionId' => $faqData['revision_id'],
+            'faqData' => $faqData,
+            'faqUrl' => $link->toString(),
+            'openQuestionId' => 0,
+            'notifyUser' => '',
+            'notifyEmail' => '',
+            'categoryOptions' => $categoryHelper->renderOptions($categories),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'attachments' => $attachmentList,
+            'allGroups' => $allGroups,
+            'restrictedGroups' => $restrictedGroups,
+            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => $allUsers,
+            'restrictedUsers' => $restrictedUsers,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => $this->container->get('phpmyfaq.admin.changelog')->getByFaqId($faqId),
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => $faqData['active'] === 'yes' ? 'checked' : null,
+            'isInActive' => $faqData['active'] !== 'yes' ? 'checked' : null,
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
     }
 
     /**
@@ -333,42 +323,40 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
-        return $this->render(
-            '@admin/content/faq.editor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
-                'editExistingFaq' => false,
-                'faqId' => 0,
-                'faqLang' => $faqLanguage,
-                'faqRevisionId' => 0,
-                'faqData' => $faqData,
-                'openQuestionId' => 0,
-                'notifyUser' => '',
-                'notifyEmail' => '',
-                'categoryOptions' => $categoryHelper->renderOptions($categories),
-                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
-                'attachments' => [],
-                'allGroups' => true,
-                'restrictedGroups' => false,
-                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
-                'allUsers' => true,
-                'restrictedUsers' => false,
-                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-                'changelogs' => [],
-                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_APPROVE->value
-                ),
-                'isActive' => null,
-                'isInActive' => null,
-                'nextSolutionId' => $faq->getNextSolutionId(),
-                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
-            ]
-        );
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+            'editExistingFaq' => false,
+            'faqId' => 0,
+            'faqLang' => $faqLanguage,
+            'faqRevisionId' => 0,
+            'faqData' => $faqData,
+            'openQuestionId' => 0,
+            'notifyUser' => '',
+            'notifyEmail' => '',
+            'categoryOptions' => $categoryHelper->renderOptions($categories),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'attachments' => [],
+            'allGroups' => true,
+            'restrictedGroups' => false,
+            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => true,
+            'restrictedUsers' => false,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => [],
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => null,
+            'isInActive' => null,
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
     }
 
     /**
@@ -409,42 +397,40 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
-        return $this->render(
-            '@admin/content/faq.editor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
-                'editExistingFaq' => false,
-                'faqId' => 0,
-                'faqLang' => $faqLanguage,
-                'faqRevisionId' => 0,
-                'faqData' => $faqData,
-                'openQuestionId' => 0,
-                'notifyUser' => '',
-                'notifyEmail' => '',
-                'categoryOptions' => $categoryHelper->renderOptions($categories),
-                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
-                'attachments' => [],
-                'allGroups' => true,
-                'restrictedGroups' => false,
-                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
-                'allUsers' => true,
-                'restrictedUsers' => false,
-                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-                'changelogs' => [],
-                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_APPROVE->value
-                ),
-                'isActive' => null,
-                'isInActive' => null,
-                'nextSolutionId' => $faq->getNextSolutionId(),
-                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
-            ]
-        );
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+            'editExistingFaq' => false,
+            'faqId' => 0,
+            'faqLang' => $faqLanguage,
+            'faqRevisionId' => 0,
+            'faqData' => $faqData,
+            'openQuestionId' => 0,
+            'notifyUser' => '',
+            'notifyEmail' => '',
+            'categoryOptions' => $categoryHelper->renderOptions($categories),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'attachments' => [],
+            'allGroups' => true,
+            'restrictedGroups' => false,
+            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => true,
+            'restrictedUsers' => false,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => [],
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => null,
+            'isInActive' => null,
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
     }
 
     /**
@@ -476,7 +462,7 @@ class FaqController extends AbstractAdministrationController
 
         $this->container->get('phpmyfaq.admin.admin-log')->log(
             $this->currentUser,
-            'admin-answer-question ' . $questionId
+            'admin-answer-question ' . $questionId,
         );
 
         $question = $this->container->get('phpmyfaq.question')->get($questionId);
@@ -499,42 +485,40 @@ class FaqController extends AbstractAdministrationController
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
-        return $this->render(
-            '@admin/content/faq.editor.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
-                'editExistingFaq' => false,
-                'faqId' => 0,
-                'faqLang' => $faqLanguage,
-                'faqRevisionId' => 0,
-                'faqData' => $faqData,
-                'openQuestionId' => 0,
-                'notifyUser' => $question['username'],
-                'notifyEmail' => $question['email'],
-                'categoryOptions' => $categoryHelper->renderOptions($categories),
-                'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
-                'attachments' => [],
-                'allGroups' => true,
-                'restrictedGroups' => false,
-                'groupPermissionOptions' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                    $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser) : '',
-                'allUsers' => true,
-                'restrictedUsers' => false,
-                'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-                'changelogs' => [],
-                'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_APPROVE->value
-                ),
-                'isActive' => null,
-                'isInActive' => null,
-                'nextSolutionId' => $faq->getNextSolutionId(),
-                'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
-            ]
-        );
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get('ad_entry_edit_1') . ' ' . Translation::get('ad_entry_edit_2'),
+            'editExistingFaq' => false,
+            'faqId' => 0,
+            'faqLang' => $faqLanguage,
+            'faqRevisionId' => 0,
+            'faqData' => $faqData,
+            'openQuestionId' => 0,
+            'notifyUser' => $question['username'],
+            'notifyEmail' => $question['email'],
+            'categoryOptions' => $categoryHelper->renderOptions($categories),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
+            'attachments' => [],
+            'allGroups' => true,
+            'restrictedGroups' => false,
+            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => true,
+            'restrictedUsers' => false,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => [],
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => null,
+            'isInActive' => null,
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
     }
 
     /**
@@ -548,17 +532,17 @@ class FaqController extends AbstractAdministrationController
 
         $canAddAttachments = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::ATTACHMENT_ADD->value
+            PermissionType::ATTACHMENT_ADD->value,
         );
 
         $canDeleteAttachments = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::ATTACHMENT_DELETE->value
+            PermissionType::ATTACHMENT_DELETE->value,
         );
 
         $canTranslateFaqs = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::FAQ_TRANSLATE->value
+            PermissionType::FAQ_TRANSLATE->value,
         );
 
         return [

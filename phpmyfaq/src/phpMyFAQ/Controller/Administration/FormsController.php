@@ -47,21 +47,18 @@ class FormsController extends AbstractAdministrationController
         $forms = $this->container->get('phpmyfaq.forms');
         $session = $this->container->get('session');
 
-        return $this->render(
-            '@admin/configuration/forms.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'formDataAskQuestion' => $forms->getFormData(FormIds::ASK_QUESTION->value),
-                'formDataAddContent' => $forms->getFormData(FormIds::ADD_NEW_FAQ->value),
-                'csrfActivate' => Token::getInstance($session)->getTokenString('activate-input'),
-                'csrfRequired' => Token::getInstance($session)->getTokenString('require-input'),
-                'ad_entry_id' => Translation::get('ad_entry_id'),
-                'ad_entry_active' => Translation::get('ad_entry_active'),
-                'ad_categ_translate' => Translation::get('ad_categ_translate'),
-                'msgHintDeactivateForms' => Translation::get('msgHintDeactivateForms')
-            ]
-        );
+        return $this->render('@admin/configuration/forms.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'formDataAskQuestion' => $forms->getFormData(FormIds::ASK_QUESTION->value),
+            'formDataAddContent' => $forms->getFormData(FormIds::ADD_NEW_FAQ->value),
+            'csrfActivate' => Token::getInstance($session)->getTokenString('activate-input'),
+            'csrfRequired' => Token::getInstance($session)->getTokenString('require-input'),
+            'ad_entry_id' => Translation::get('ad_entry_id'),
+            'ad_entry_active' => Translation::get('ad_entry_active'),
+            'ad_categ_translate' => Translation::get('ad_categ_translate'),
+            'msgHintDeactivateForms' => Translation::get('msgHintDeactivateForms'),
+        ]);
     }
 
     /**
@@ -100,20 +97,17 @@ class FormsController extends AbstractAdministrationController
         });
 
         $this->addFilter($twigFilter);
-        return $this->render(
-            '@admin/configuration/forms.translations.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'translations' => $forms->getTranslations($formId, $inputId),
-                'ad_sess_pageviews' => Translation::get('ad_sess_pageviews'),
-                'csrfTokenEditTranslation' => Token::getInstance($session)->getTokenString('edit-translation'),
-                'csrfTokenDeleteTranslation' => Token::getInstance($session)->getTokenString('delete-translation'),
-                'csrfTokenAddTranslation' => Token::getInstance($session)->getTokenString('add-translation'),
-                'languages' => $languages,
-                'formId' => $formId,
-                'inputId' => $inputId,
-            ]
-        );
+        return $this->render('@admin/configuration/forms.translations.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'translations' => $forms->getTranslations($formId, $inputId),
+            'ad_sess_pageviews' => Translation::get('ad_sess_pageviews'),
+            'csrfTokenEditTranslation' => Token::getInstance($session)->getTokenString('edit-translation'),
+            'csrfTokenDeleteTranslation' => Token::getInstance($session)->getTokenString('delete-translation'),
+            'csrfTokenAddTranslation' => Token::getInstance($session)->getTokenString('add-translation'),
+            'languages' => $languages,
+            'formId' => $formId,
+            'inputId' => $inputId,
+        ]);
     }
 }

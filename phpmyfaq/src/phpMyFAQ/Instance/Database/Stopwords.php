@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements
  * for the stop words.
@@ -3332,8 +3334,9 @@ class Stopwords
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**

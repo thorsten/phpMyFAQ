@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Rating class.
  *
@@ -36,8 +38,9 @@ readonly class Rating
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
         $this->plurals = new Plurals();
     }
 
@@ -49,7 +52,7 @@ readonly class Rating
         $query = sprintf(
             'SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d',
             Database::getTablePrefix(),
-            $id
+            $id,
         );
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
@@ -58,7 +61,7 @@ readonly class Rating
             return sprintf(
                 ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', $row->usr) . ')',
                 round($row->voting, 2),
-                round($row->voting, 2)
+                round($row->voting, 2),
             );
         }
 
@@ -79,7 +82,7 @@ readonly class Rating
             Database::getTablePrefix(),
             $id,
             $this->configuration->getDb()->escape($ip),
-            $check
+            $check,
         );
         return !$this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
     }
@@ -89,11 +92,7 @@ readonly class Rating
      */
     public function getNumberOfVotings(int $recordId): int
     {
-        $query = sprintf(
-            'SELECT usr FROM %sfaqvoting WHERE artikel = %d',
-            Database::getTablePrefix(),
-            $recordId
-        );
+        $query = sprintf('SELECT usr FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $recordId);
         if (!($result = $this->configuration->getDb()->query($query))) {
             return 0;
         }
@@ -117,10 +116,10 @@ readonly class Rating
             $vote->getFaqId(),
             $vote->getVote(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $this->configuration->getDb()->escape($vote->getIp())
+            $this->configuration->getDb()->escape($vote->getIp()),
         );
 
-        return (bool)$this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     /**
@@ -134,7 +133,7 @@ readonly class Rating
             $vote->getVote(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->configuration->getDb()->escape($vote->getIp()),
-            $vote->getFaqId()
+            $vote->getFaqId(),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -145,8 +144,8 @@ readonly class Rating
      */
     public function deleteAll(): bool
     {
-        return (bool) $this->configuration->getDb()->query(
-            sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix())
-        );
+        return (bool) $this->configuration
+            ->getDb()
+            ->query(sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix()));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Twig extension to return the FAQ question by FAQ ID.
  *

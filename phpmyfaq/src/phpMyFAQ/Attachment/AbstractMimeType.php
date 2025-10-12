@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Mime type class.
  *
@@ -178,7 +180,7 @@ abstract class AbstractMimeType
         'odp' => 'application/vnd.oasis.opendocument.presentation ',
         'sxc' => 'application/vnd.sun.xml.calc',
         'odt' => 'application/vnd.oasis.opendocument.text',
-        'log' => 'text/plain'
+        'log' => 'text/plain',
     ];
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
@@ -32,7 +34,7 @@ class Utils
      */
     public static function isLanguage(string $lang): bool
     {
-        return preg_match('/^[a-zA-Z\-]+$/', $lang);
+        return (bool) preg_match('/^[a-zA-Z\-]+$/', $lang);
     }
 
     /**
@@ -91,11 +93,7 @@ class Utils
         ];
 
         // Resolve any known pattern
-        return str_replace(
-            array_keys($markers),
-            array_values($markers),
-            $text
-        );
+        return str_replace(array_keys($markers), array_values($markers), $text);
     }
 
     /**
@@ -129,31 +127,110 @@ class Utils
     public static function setHighlightedString(string $string, string $highlight): string
     {
         $attributes = [
-            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'face', 'size', 'dir', 'rel', 'rev', 'role',
-            'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
-            'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline', 'ononline',
-            'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload',
-            'ondevicemotion', 'ondeviceorientation', 'onabort', 'onblur',
-            'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu',
-            'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave',
-            'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied',
-            'onended', 'onerror', 'onfocus', 'oninput', 'oninvalid', 'onkeydown',
-            'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata',
-            'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
-            'onmouseup', 'onmozfullscreenchange', 'onmozfullscreenerror', 'onpause',
-            'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset',
-            'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
-            'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
-            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
+            'href',
+            'src',
+            'title',
+            'alt',
+            'class',
+            'style',
+            'id',
+            'name',
+            'face',
+            'size',
+            'dir',
+            'rel',
+            'rev',
+            'role',
+            'onmouseenter',
+            'onmouseleave',
+            'onafterprint',
+            'onbeforeprint',
+            'onbeforeunload',
+            'onhashchange',
+            'onmessage',
+            'onoffline',
+            'ononline',
+            'onpopstate',
+            'onpagehide',
+            'onpageshow',
+            'onresize',
+            'onunload',
+            'ondevicemotion',
+            'ondeviceorientation',
+            'onabort',
+            'onblur',
+            'oncanplay',
+            'oncanplaythrough',
+            'onchange',
+            'onclick',
+            'oncontextmenu',
+            'ondblclick',
+            'ondrag',
+            'ondragend',
+            'ondragenter',
+            'ondragleave',
+            'ondragover',
+            'ondragstart',
+            'ondrop',
+            'ondurationchange',
+            'onemptied',
+            'onended',
+            'onerror',
+            'onfocus',
+            'oninput',
+            'oninvalid',
+            'onkeydown',
+            'onkeypress',
+            'onkeyup',
+            'onload',
+            'onloadeddata',
+            'onloadedmetadata',
+            'onloadstart',
+            'onmousedown',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'onmozfullscreenchange',
+            'onmozfullscreenerror',
+            'onpause',
+            'onplay',
+            'onplaying',
+            'onprogress',
+            'onratechange',
+            'onreset',
+            'onscroll',
+            'onseeked',
+            'onseeking',
+            'onselect',
+            'onshow',
+            'onstalled',
+            'onsubmit',
+            'onsuspend',
+            'ontimeupdate',
+            'onvolumechange',
+            'onwaiting',
+            'oncopy',
+            'oncut',
+            'onpaste',
+            'onbeforescriptexecute',
+            'onafterscriptexecute',
         ];
 
         return Strings::preg_replace_callback(
-            '/(' . $highlight . '="[^"]*")|' .
-            '((' . implode('|', $attributes) . ')="[^"]*' . $highlight . '[^"]*")|' .
-            '(' . $highlight . ')/mis',
+            '/('
+            . $highlight
+            . '="[^"]*")|'
+            . '(('
+            . implode('|', $attributes)
+            . ')="[^"]*'
+            . $highlight
+            . '[^"]*")|'
+            . '('
+            . $highlight
+            . ')/mis',
             ['phpMyFAQ\Utils', 'highlightNoLinks'],
-            $string
+            $string,
         );
     }
 
@@ -169,10 +246,7 @@ class Utils
         $postfix = $matches[5] ?? '';
 
         if (!empty($item) && !self::isForbiddenElement($item)) {
-            return sprintf(
-                '<mark class="pmf-highlighted-string">%s</mark>',
-                $prefix . $item . $postfix
-            );
+            return sprintf('<mark class="pmf-highlighted-string">%s</mark>', $prefix . $item . $postfix);
         }
 
         // Fallback: the original matched string
@@ -185,7 +259,9 @@ class Utils
     public static function isForbiddenElement(string $string): bool
     {
         $forbiddenElements = [
-            'img', 'picture', 'mark'
+            'img',
+            'picture',
+            'mark',
         ];
 
         foreach ($forbiddenElements as $forbiddenElement) {
@@ -264,7 +340,7 @@ class Utils
     /**
      * Formats a given number of Bytes to kB, MB, GB, and so on.
      */
-    public static function formatBytes(int $bytes, int $precision = 2): string
+    public static function formatBytes(float|int $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -272,7 +348,7 @@ class Utils
         $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));
         $pow = min($pow, count($units) - 1);
 
-        $bytes /= (1 << (10 * $pow));
+        $bytes /= 1 << (10 * $pow);
 
         return round($bytes, $precision) . ' ' . $units[$pow];
     }

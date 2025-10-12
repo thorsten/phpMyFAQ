@@ -24,8 +24,8 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\UserNameTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -67,22 +67,19 @@ class AdminLogController extends AbstractAdministrationController
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
-        return $this->render(
-            '@admin/statistics/admin-log.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'headerAdminLog' => Translation::get('ad_menu_adminlog'),
-                'buttonDeleteAdminLog' => Translation::get('ad_adminlog_del_older_30d'),
-                'csrfDeleteAdminLogToken' => Token::getInstance($session)->getTokenString('delete-adminlog'),
-                'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
-                'pagination' => $pagination->render(),
-                'msgId' => Translation::get('ad_categ_id'),
-                'msgDate' => Translation::get('ad_adminlog_date'),
-                'msgUser' => Translation::get('ad_adminlog_user'),
-                'msgIp' => Translation::get('ad_adminlog_ip'),
-                'loggingData' => $currentItems,
-            ]
-        );
+        return $this->render('@admin/statistics/admin-log.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'headerAdminLog' => Translation::get('ad_menu_adminlog'),
+            'buttonDeleteAdminLog' => Translation::get('ad_adminlog_del_older_30d'),
+            'csrfDeleteAdminLogToken' => Token::getInstance($session)->getTokenString('delete-adminlog'),
+            'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
+            'pagination' => $pagination->render(),
+            'msgId' => Translation::get('ad_categ_id'),
+            'msgDate' => Translation::get('ad_adminlog_date'),
+            'msgUser' => Translation::get('ad_adminlog_user'),
+            'msgIp' => Translation::get('ad_adminlog_ip'),
+            'loggingData' => $currentItems,
+        ]);
     }
 }

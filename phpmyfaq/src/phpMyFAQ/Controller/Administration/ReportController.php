@@ -41,13 +41,10 @@ class ReportController extends AbstractAdministrationController
 
         $session = $this->container->get('session');
 
-        return $this->render(
-            '@admin/statistics/report.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'csrfTokenInput' => Token::getInstance($session)->getTokenInput('create-report'),
-            ]
-        );
+        return $this->render('@admin/statistics/report.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfTokenInput' => Token::getInstance($session)->getTokenInput('create-report'),
+        ]);
     }
 }

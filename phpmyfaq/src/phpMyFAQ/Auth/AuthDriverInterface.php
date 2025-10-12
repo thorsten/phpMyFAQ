@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Interface for managing user authentication.
  *
@@ -30,7 +32,7 @@ interface AuthDriverInterface
      * is only used in LDAP/AD environments. Returns true on success,
      * otherwise false.
      */
-    public function create(string $login, #[\SensitiveParameter]  string $password, string $domain = ''): mixed;
+    public function create(string $login, #[\SensitiveParameter] string $password, string $domain = ''): mixed;
 
     /**
      * Changes the password for the account specified by login.
@@ -66,7 +68,7 @@ interface AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[\SensitiveParameter] string $password,
-        ?array $optionalData = []
+        ?array $optionalData = [],
     ): bool;
 
     /**

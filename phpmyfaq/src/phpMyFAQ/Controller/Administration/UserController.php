@@ -46,14 +46,11 @@ class UserController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::USER_EDIT);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/user.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-            ]
-        );
+        return $this->render('@admin/user/user.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+        ]);
     }
 
     /**
@@ -71,15 +68,12 @@ class UserController extends AbstractAdministrationController
         $userId = Filter::filterVar($request->get('userId'), FILTER_VALIDATE_INT);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/user.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'userId' => $userId
-            ]
-        );
+        return $this->render('@admin/user/user.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'userId' => $userId,
+        ]);
     }
 
     /**
@@ -132,25 +126,22 @@ class UserController extends AbstractAdministrationController
                 'status' => $user->getStatus(),
                 'isSuperAdmin' => $user->isSuperAdmin(),
                 'isVisible' => $user->getUserData('is_visible'),
-                'login' => $user->getLogin()
+                'login' => $user->getLogin(),
             ];
 
             $users[] = $tempUser;
         }
 
-        return $this->render(
-            '@admin/user/user-list.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'perPage' => $perPage,
-                'numUsers' => $numUsers,
-                'pagination' => $pagination->render(),
-                'users' => $users,
-                'userIsSuperAdmin' => $this->currentUser->isSuperAdmin()
-            ]
-        );
+        return $this->render('@admin/user/user-list.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'perPage' => $perPage,
+            'numUsers' => $numUsers,
+            'pagination' => $pagination->render(),
+            'users' => $users,
+            'userIsSuperAdmin' => $this->currentUser->isSuperAdmin(),
+        ]);
     }
 
     /**
@@ -165,15 +156,15 @@ class UserController extends AbstractAdministrationController
         return [
             'permissionAddUser' => $this->currentUser->perm->hasPermission(
                 $currentUserId,
-                PermissionType::USER_ADD->value
+                PermissionType::USER_ADD->value,
             ),
             'permissionDeleteUser' => $this->currentUser->perm->hasPermission(
                 $currentUserId,
-                PermissionType::USER_DELETE->value
+                PermissionType::USER_DELETE->value,
             ),
-            'permissionEditUser' =>  $this->currentUser->perm->hasPermission(
+            'permissionEditUser' => $this->currentUser->perm->hasPermission(
                 $currentUserId,
-                PermissionType::USER_EDIT->value
+                PermissionType::USER_EDIT->value,
             ),
             'csrfToken_updateUserData' => Token::getInstance($session)->getTokenString('update-user-data'),
             'csrfToken_updateUserRights' => Token::getInstance($session)->getTokenString('update-user-rights'),
@@ -182,7 +173,7 @@ class UserController extends AbstractAdministrationController
             'csrfToken_addUser' => Token::getInstance($session)->getTokenString('add-user'),
             'csrfToken_overwritePassword' => Token::getInstance($session)->getTokenString('overwrite-password'),
             'userRights' => $user->perm->getAllRightsData(),
-            'userIsSuperAdmin' => $this->currentUser->isSuperAdmin()
+            'userIsSuperAdmin' => $this->currentUser->isSuperAdmin(),
         ];
     }
 }

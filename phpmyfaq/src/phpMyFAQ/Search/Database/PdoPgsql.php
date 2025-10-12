@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ PostgreSQL (PDO_PGSQL) search classes.
  *
@@ -52,8 +54,8 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
             $enableRelevance = $this->configuration->get('search.enableRelevance');
 
             $columns = $this->getResultColumns();
-            $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult() : '';
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
+            $orderBy = $enableRelevance ? 'ORDER BY ' . $this->getMatchingOrder() : '';
 
             $query = sprintf(
                 "
@@ -69,13 +71,13 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
-                ($enableRelevance)
+                $enableRelevance
                     ? ", plainto_tsquery('" . $this->configuration->getDb()->escape($searchTerm) . "') query "
                     : '',
                 $this->getMatchingColumns(),
                 $this->configuration->getDb()->escape($searchTerm),
                 $this->getConditions(),
-                $orderBy
+                $orderBy,
             );
 
             $this->resultSet = $this->configuration->getDb()->query($query);
@@ -108,7 +110,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
                     "TS_RANK_CD(SETWEIGHT(TO_TSVECTOR(COALESCE(%s, '')), '%s'), query) AS relevance_%s",
                     $matchingColumn,
                     $weight[$columnName],
-                    $columnName
+                    $columnName,
                 );
 
                 $resultColumns .= ', ' . $column;
@@ -129,10 +131,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
         $order = '';
 
         foreach ($list as $field) {
-            $string = sprintf(
-                'relevance_%s DESC',
-                $field
-            );
+            $string = sprintf('relevance_%s DESC', $field);
             if ($order === '' || $order === '0') {
                 $order .= $string;
             } else {

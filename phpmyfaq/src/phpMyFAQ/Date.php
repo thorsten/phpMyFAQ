@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ Date class.
  *
@@ -31,8 +33,9 @@ readonly class Date
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -47,17 +50,21 @@ readonly class Date
     {
         if ($pmfFormat) {
             $dateString = strtotime(
-                substr($date, 0, 4) . '-' .
-                substr($date, 4, 2) . '-' .
-                substr($date, 6, 2) . ' ' .
-                substr($date, 8, 2) . ':' .
-                substr($date, 10, 2)
+                substr($date, 0, 4)
+                . '-'
+                . substr($date, 4, 2)
+                . '-'
+                . substr($date, 6, 2)
+                . ' '
+                . substr($date, 8, 2)
+                . ':'
+                . substr($date, 10, 2),
             );
         } else {
             $dateString = $date;
         }
 
-        return date($format, $dateString);
+        return date($format, (int) $dateString);
     }
 
     /**
@@ -74,7 +81,7 @@ readonly class Date
             $year = Strings::substr($file, 12, 4);
 
             if (!$endOfDay) {
-                return gmmktime(0, 0, 0, (int)$month, (int)$day, (int)$year);
+                return gmmktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
             }
 
             return gmmktime(23, 59, 59, (int) $month, (int) $day, (int) $year);

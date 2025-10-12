@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Group Controller
  *
@@ -38,9 +40,9 @@ class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupList = ($currentUser->perm instanceof MediumPermission) ? $currentUser->perm->getAllGroups(
-            $currentUser,
-        ) : [];
+        $groupList = $currentUser->perm instanceof MediumPermission
+            ? $currentUser->perm->getAllGroups($currentUser)
+            : [];
 
         $groups = [];
         foreach ($groupList as $groupId) {
@@ -86,7 +88,7 @@ class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = $request->get('groupId');
+        $groupId = (int) $request->get('groupId');
 
         return $this->json($currentUser->perm->getGroupData($groupId), Response::HTTP_OK);
     }
@@ -101,7 +103,7 @@ class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = $request->get('groupId');
+        $groupId = (int) $request->get('groupId');
 
         $members = [];
         foreach ($currentUser->perm->getGroupMembers($groupId) as $groupMember) {
@@ -125,7 +127,7 @@ class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = $request->get('groupId');
+        $groupId = (int) $request->get('groupId');
 
         return $this->json($currentUser->perm->getGroupRights($groupId), Response::HTTP_OK);
     }

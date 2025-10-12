@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Database configuration class
  *
@@ -45,7 +47,7 @@ readonly class DatabaseConfiguration
             'type' => '',
         ];
 
-        include($filename);
+        include $filename;
 
         $this->server = $DB['server'];
         $this->port = $DB['port'] === '' ? null : (int) $DB['port'];

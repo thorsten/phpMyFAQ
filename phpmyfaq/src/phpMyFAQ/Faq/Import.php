@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for importing records from a csv file.
  *
@@ -17,13 +19,13 @@
 
 namespace phpMyFAQ\Faq;
 
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\FaqEntity;
-use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -34,8 +36,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 readonly class Import
 {
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -78,16 +81,16 @@ readonly class Import
 
         $faqEntity = new FaqEntity();
         $faqEntity
-                ->setLanguage($languageCode)
-                ->setQuestion($question)
-                ->setAnswer($answer)
-                ->setKeywords($keywords)
-                ->setAuthor($author)
-                ->setEmail($email)
-                ->setActive($isActive)
-                ->setSticky($isSticky)
-                ->setComment(false)
-                ->setNotes('');
+            ->setLanguage($languageCode)
+            ->setQuestion($question)
+            ->setAnswer($answer)
+            ->setKeywords($keywords)
+            ->setAuthor($author)
+            ->setEmail($email)
+            ->setActive($isActive)
+            ->setSticky($isSticky)
+            ->setComment(false)
+            ->setNotes('');
 
         $faqEntity = $faq->create($faqEntity);
 
@@ -151,8 +154,8 @@ readonly class Import
             $validBooleanValues = ['true', 'false'];
 
             if (
-                !in_array(strtolower((string) $row[$activatedColumn]), $validBooleanValues) ||
-                    !in_array(strtolower((string) $row[$importantFAQColumn]), $validBooleanValues)
+                !in_array(strtolower((string) $row[$activatedColumn]), $validBooleanValues)
+                || !in_array(strtolower((string) $row[$importantFAQColumn]), $validBooleanValues)
             ) {
                 return false;
             }

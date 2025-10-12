@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ SQL Server Driver for PHP based search classes.
  *
@@ -53,7 +55,7 @@ class Sqlsrv extends SearchDatabase implements DatabaseInterface
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
-                $this->getConditions()
+                $this->getConditions(),
             );
 
             $this->resultSet = $this->configuration->getDb()->query($query);

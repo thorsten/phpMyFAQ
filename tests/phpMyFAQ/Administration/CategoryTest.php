@@ -17,7 +17,6 @@
 
 namespace phpMyFAQ\Administration;
 
-use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
@@ -141,15 +140,15 @@ class CategoryTest extends TestCase
     public function testLoadCategoriesWithSampleData(): void
     {
         $sampleData = [
-            'id' => '1',
+            'id' => 1,
             'lang' => 'en',
-            'parent_id' => '0',
+            'parent_id' => 0,
             'name' => 'Test Category',
             'description' => 'Test Description',
-            'user_id' => '1',
-            'group_id' => '1',
-            'active' => '1',
-            'show_home' => '1',
+            'user_id' => 1,
+            'group_id' => 1,
+            'active' => 1,
+            'show_home' => 1,
             'image' => 'test.png'
         ];
 
@@ -245,15 +244,15 @@ class CategoryTest extends TestCase
     public function testGetOwnerAfterLoadingCategories(): void
     {
         $sampleData = [
-            'id' => '5',
+            'id' => 5,
             'lang' => 'en',
-            'parent_id' => '0',
+            'parent_id' => 0,
             'name' => 'Test Category',
             'description' => 'Test Description',
-            'user_id' => '42',
-            'group_id' => '1',
-            'active' => '1',
-            'show_home' => '1',
+            'user_id' => 42,
+            'group_id' => 1,
+            'active' => 1,
+            'show_home' => 1,
             'image' => 'test.png'
         ];
 

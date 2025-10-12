@@ -48,10 +48,10 @@ class MediaBrowserController extends AbstractController
         $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg', 'mov', 'mpg', 'mp4', 'ogg', 'wmv', 'avi', 'webm'];
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
-            return $this->json(
-                ['error' => sprintf(Translation::get('ad_dir_missing'), '/images')],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->json(['error' => sprintf(
+                Translation::get('ad_dir_missing'),
+                '/images',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         $data = json_decode($request->getContent());
@@ -69,7 +69,7 @@ class MediaBrowserController extends AbstractController
                 'success' => true,
                 'data' => [
                     'code' => 220,
-                ]
+                ],
             ];
 
             return $this->json($response, Response::HTTP_OK);
@@ -104,11 +104,11 @@ class MediaBrowserController extends AbstractController
                         'baseurl' => $this->configuration->getDefaultUrl(),
                         'path' => 'content/user/images/',
                         'files' => $files,
-                        'name' => 'default'
-                    ]
+                        'name' => 'default',
+                    ],
                 ],
-                'code' => 220
-            ]
+                'code' => 220,
+            ],
         ];
 
         return $this->json($response, Response::HTTP_OK);

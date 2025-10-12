@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The category image class.
  *
@@ -41,8 +43,9 @@ class Image
      *
      * @param Configuration $configuration Configuration object
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -65,14 +68,12 @@ class Image
     public function getFileName(int $categoryId, string $categoryName): string
     {
         if ($this->isUpload) {
-            $this->setFileName(
-                sprintf(
-                    'category-%d-%s.%s',
-                    $categoryId,
-                    $categoryName,
-                    $this->getFileExtension($this->uploadedFile->getMimeType())
-                )
-            );
+            $this->setFileName(sprintf(
+                'category-%d-%s.%s',
+                $categoryId,
+                $categoryName,
+                $this->getFileExtension($this->uploadedFile->getMimeType()),
+            ));
         }
 
         return $this->fileName;
@@ -108,7 +109,7 @@ class Image
      */
     private function isValidMimeType(string $contentType): bool
     {
-        $types = ['image/jpeg','image/gif','image/png', 'image/webp'];
+        $types = ['image/jpeg', 'image/gif', 'image/png', 'image/webp'];
         return in_array($contentType, $types);
     }
 
@@ -120,7 +121,8 @@ class Image
     public function upload(): bool
     {
         if (
-            $this->isUpload && $this->uploadedFile->isValid()
+            $this->isUpload
+            && $this->uploadedFile->isValid()
             && $this->uploadedFile->getSize() < $this->configuration->get('records.maxAttachmentSize')
         ) {
             if (false === $this->uploadedFile->getSize()) {
@@ -134,9 +136,8 @@ class Image
             // Ensure destination directory exists
             if (!is_dir(self::UPLOAD_DIR)) {
                 if (!@mkdir(self::UPLOAD_DIR, 0775, true) && !is_dir(self::UPLOAD_DIR)) {
-                    throw new Exception(
-                        'Upload directory does not exist and could not be created: ' . self::UPLOAD_DIR
-                    );
+                    throw new Exception('Upload directory does not exist and could not be created: '
+                    . self::UPLOAD_DIR);
                 }
             }
 

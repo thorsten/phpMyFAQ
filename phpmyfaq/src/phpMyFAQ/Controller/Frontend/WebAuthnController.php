@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The WebAuthn Controller
  *
@@ -61,34 +63,26 @@ class WebAuthnController extends AbstractController
                 $this->user->createUser($username);
                 $this->user->setStatus('active');
                 $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
-                $this->user->setUserData(
-                    [
-                        'display_name' => $username,
-                        'email' => $username,
-                    ],
-                );
+                $this->user->setUserData([
+                    'display_name' => $username,
+                    'email' => $username,
+                ]);
             } catch (\Exception $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         }
 
         $webAuthnUser = new WebAuthnUser();
-        $webAuthnUser
-            ->setName($username)
-            ->setId((string) $this->user->getUserId())
-            ->setWebAuthnKeys('');
+        $webAuthnUser->setName($username)->setId((string) $this->user->getUserId())->setWebAuthnKeys('');
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
-        return $this->json(
-            [
-                'challenge' => $this->authWebAuthn->prepareChallengeForRegistration(
-                    $username,
-                    (string) $this->user->getUserId()
-                )
-            ],
-            Response::HTTP_OK,
-        );
+        return $this->json([
+            'challenge' => $this->authWebAuthn->prepareChallengeForRegistration(
+                $username,
+                (string) $this->user->getUserId(),
+            ),
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -111,13 +105,10 @@ class WebAuthnController extends AbstractController
         }
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
-            return $this->json(
-                [
-                    'success' => 'ok',
-                    'message' => Translation::get('msgPasskeyRegistrationSuccess'),
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'success' => 'ok',
+                'message' => Translation::get('msgPasskeyRegistrationSuccess'),
+            ], Response::HTTP_OK);
         }
 
         return $this->json(['error' => 'Cannot set WebAuthn keys'], Response::HTTP_BAD_REQUEST);
@@ -172,10 +163,10 @@ class WebAuthnController extends AbstractController
             $currentUser->setSuccess(true);
             $currentUser->updateSessionId(true);
             $currentUser->saveToSession();
-            return $this->json(
-                [ 'success' => 'ok', 'redirect' => $this->configuration->getDefaultUrl() ],
-                Response::HTTP_OK,
-            );
+            return $this->json([
+                'success' => 'ok',
+                'redirect' => $this->configuration->getDefaultUrl(),
+            ], Response::HTTP_OK);
         }
 
         return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_UNAUTHORIZED);

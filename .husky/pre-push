@@ -1,1 +1,1 @@
-composer lint && composer validate && composer test && pnpm pretty-quick --staged && pnpm test
+composer validate && composer test && pnpm pretty-quick --staged && pnpm test

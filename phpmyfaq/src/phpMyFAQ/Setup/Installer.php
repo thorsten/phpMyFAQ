@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
@@ -128,7 +130,7 @@ class Installer extends Setup
         ],
         [
             'name' => PermissionType::VIEW_ADMIN_LINK->value,
-            'description' => 'Right to see the link to the admin section'
+            'description' => 'Right to see the link to the admin section',
         ],
         [
             'name' => PermissionType::BACKUP->value,
@@ -224,28 +226,28 @@ class Installer extends Setup
         ],
         [
             'name' => PermissionType::FAQS_VIEW->value,
-            'description' => 'Right to view FAQs'
+            'description' => 'Right to view FAQs',
         ],
         [
             'name' => PermissionType::CATEGORIES_VIEW->value,
-            'description' => 'Right to view categories'
+            'description' => 'Right to view categories',
         ],
         [
             'name' => PermissionType::NEWS_VIEW->value,
-            'description' => 'Right to view news'
+            'description' => 'Right to view news',
         ],
         [
             'name' => PermissionType::GROUPS_ADMINISTRATE->value,
-            'description' => 'Right to administrate groups'
+            'description' => 'Right to administrate groups',
         ],
         [
             'name' => PermissionType::FORMS_EDIT->value,
-            'description' => 'Right to edit forms'
+            'description' => 'Right to edit forms',
         ],
         [
             'name' => PermissionType::FAQ_TRANSLATE->value,
-            'description' => 'Right to translate FAQs'
-        ]
+            'description' => 'Right to translate FAQs',
+        ],
     ];
 
     /**
@@ -282,10 +284,10 @@ class Installer extends Setup
         'main.enableAutoUpdateHint' => 'true',
         'main.enableAskQuestions' => 'false',
         'main.enableNotifications' => 'false',
-        'main.botIgnoreList' => 'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,' .
-        'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,' .
-        'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
-
+        'main.botIgnoreList' =>
+            'nustcrape,webpost,GoogleBot,msnbot,crawler,scooter,bravobrian,archiver,'
+            . 'w3c,controler,wget,bot,spider,Yahoo! Slurp,htdig,gsa-crawler,AirControler,Uptime-Kuma,facebookcatalog/1.0,'
+            . 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php),facebookexternalhit/1.1',
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
         'records.defaultActivation' => 'false',
@@ -313,7 +315,6 @@ class Installer extends Setup
         'records.enableAutoRevisions' => 'false',
         'records.orderStickyFaqsCustom' => 'false',
         'records.allowedMediaHosts' => 'www.youtube.com',
-
         'search.numberSearchTerms' => '10',
         'search.relevance' => 'thema,content,keywords',
         'search.enableRelevance' => 'false',
@@ -322,7 +323,6 @@ class Installer extends Setup
         'search.popularSearchTimeWindow' => '180',
         'search.enableElasticsearch' => 'false',
         'search.enableOpenSearch' => 'false',
-
         'security.permLevel' => 'basic',
         'security.ipCheck' => 'false',
         'security.enableLoginOnly' => 'false',
@@ -341,13 +341,11 @@ class Installer extends Setup
         'security.loginWithEmailAddress' => 'false',
         'security.enableWebAuthnSupport' => 'false',
         'security.enableAdminSessionTimeoutCounter' => 'true',
-
         'spam.checkBannedWords' => 'true',
         'spam.enableCaptchaCode' => null,
         'spam.enableSafeEmail' => 'true',
         'spam.manualActivation' => 'true',
         'spam.mailAddressInExport' => 'true',
-
         'seo.title' => 'phpMyFAQ Codename Porus',
         'seo.description' => 'phpMyFAQ should be the answer for all questions in life',
         'seo.enableXMLSitemap' => 'true',
@@ -358,13 +356,13 @@ class Installer extends Setup
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
         'seo.contentRobotsText' => 'User-agent: *\nDisallow: /admin/\nSitemap: /sitemap.xml',
-        'seo.contentLlmsText' => "# phpMyFAQ LLMs.txt\n\n" .
-            "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n" .
-            "Contact: Please see the contact information on the main website.\n\n" .
-            "The FAQ content in this system is available for LLM training purposes.\n" .
-            "Please respect the licensing terms and usage guidelines of the content.\n\n" .
-            "For more information about this FAQ system, visit: https://www.phpmyfaq.de",
-
+        'seo.contentLlmsText' =>
+            "# phpMyFAQ LLMs.txt\n\n"
+            . "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n"
+            . "Contact: Please see the contact information on the main website.\n\n"
+            . "The FAQ content in this system is available for LLM training purposes.\n"
+            . "Please respect the licensing terms and usage guidelines of the content.\n\n"
+            . 'For more information about this FAQ system, visit: https://www.phpmyfaq.de',
         'mail.noReplySenderAddress' => '',
         'mail.remoteSMTP' => 'false',
         'mail.remoteSMTPServer' => '',
@@ -372,7 +370,6 @@ class Installer extends Setup
         'mail.remoteSMTPPassword' => '',
         'mail.remoteSMTPPort' => '25',
         'mail.remoteSMTPDisableTLSPeerVerification' => 'false',
-
         'ldap.ldapSupport' => 'false',
         'ldap.ldap_mapping.name' => 'cn',
         'ldap.ldap_mapping.username' => 'samAccountName',
@@ -391,15 +388,12 @@ class Installer extends Setup
         'ldap.ldap_group_allowed_groups' => '',
         'ldap.ldap_group_auto_assign' => 'false',
         'ldap.ldap_group_mapping' => '',
-
         'api.enableAccess' => 'true',
         'api.apiClientToken' => '',
-
         'upgrade.dateLastChecked' => '',
         'upgrade.lastDownloadedPackage' => '',
         'upgrade.onlineUpdateEnabled' => 'false',
         'upgrade.releaseEnvironment' => '__PHPMYFAQ_RELEASE__',
-
         'layout.templateSet' => 'default',
         'layout.enablePrivacyLink' => 'true',
         'layout.enableCookieConsent' => 'true',
@@ -420,7 +414,7 @@ class Installer extends Setup
             'input_label' => 'msgQuestion',
             'input_active' => 1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 1,
@@ -429,7 +423,7 @@ class Installer extends Setup
             'input_label' => 'msgNewQuestion',
             'input_active' => 1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 1,
@@ -438,7 +432,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentName',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 1,
@@ -447,7 +441,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentMail',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 1,
@@ -456,7 +450,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentCategory',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 1,
@@ -465,7 +459,7 @@ class Installer extends Setup
             'input_label' => 'msgAskYourQuestion',
             'input_active' => -1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         // Add New FAQ inputs
         [
@@ -475,7 +469,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentHeader',
             'input_active' => 1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -484,7 +478,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentAddon',
             'input_active' => 1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -493,7 +487,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentName',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -502,7 +496,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentMail',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -511,7 +505,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentCategory',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -520,7 +514,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentTheme',
             'input_active' => -1,
             'input_required' => -1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -529,7 +523,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentArticle',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -538,7 +532,7 @@ class Installer extends Setup
             'input_label' => 'msgNewContentKeywords',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
+            'input_lang' => 'default',
         ],
         [
             'form_id' => 2,
@@ -547,8 +541,8 @@ class Installer extends Setup
             'input_label' => 'msgNewContentLink',
             'input_active' => 1,
             'input_required' => 1,
-            'input_lang' => 'default'
-        ]
+            'input_lang' => 'default',
+        ],
     ];
 
     /**
@@ -556,17 +550,19 @@ class Installer extends Setup
      *
      * @throws \Exception
      */
-    public function __construct(private readonly System $system)
-    {
+    public function __construct(
+        private readonly System $system,
+    ) {
         parent::__construct();
 
         $dynMainConfig = [
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
             'main.phpMyFAQToken' => bin2hex(random_bytes(16)),
-            'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false'),
-            'upgrade.releaseEnvironment' =>
-                System::isDevelopmentVersion() ? ReleaseType::DEVELOPMENT->value : ReleaseType::STABLE->value
+            'spam.enableCaptchaCode' => extension_loaded('gd') ? 'true' : 'false',
+            'upgrade.releaseEnvironment' => System::isDevelopmentVersion()
+                ? ReleaseType::DEVELOPMENT->value
+                : ReleaseType::STABLE->value,
         ];
 
         $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
@@ -605,17 +601,15 @@ class Installer extends Setup
         }
 
         if (!$this->system->checkRequiredExtensions()) {
-            throw new Exception(
-                sprintf(
-                    'Some required PHP extensions are missing: %s',
-                    implode(', ', $this->system->getMissingExtensions())
-                )
-            );
+            throw new Exception(sprintf('Some required PHP extensions are missing: %s', implode(
+                ', ',
+                $this->system->getMissingExtensions(),
+            )));
         }
 
         if (!$this->system->checkInstallation()) {
             throw new Exception(
-                'Looks like phpMyFAQ is already installed! Please use the <a href="../update">update</a>.'
+                'Looks like phpMyFAQ is already installed! Please use the <a href="../update">update</a>.',
             );
         }
     }
@@ -623,7 +617,7 @@ class Installer extends Setup
     /**
      * Checks if the file permissions are okay.
      */
-    public function checkFilesystemPermissions(): string|null
+    public function checkFilesystemPermissions(): ?string
     {
         $instanceSetup = new Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
@@ -642,17 +636,18 @@ class Installer extends Setup
         if (1 <= $numDirs) {
             $hints .= sprintf(
                 '<p class="alert alert-danger">The following %s could not be created or %s not writable:</p><ul>',
-                (1 < $numDirs) ? 'directories' : 'directory',
-                (1 < $numDirs) ? 'are' : 'is'
+                1 < $numDirs ? 'directories' : 'directory',
+                1 < $numDirs ? 'are' : 'is',
             );
             foreach ($failedDirs as $failedDir) {
                 $hints .= "<li>{$failedDir}</li>\n";
             }
 
-            return $hints . sprintf(
-                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
-                'greater if necessary).</p>',
-                (1 < $numDirs) ? 'them' : 'it'
+            return $hints
+            . sprintf(
+                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or '
+                . 'greater if necessary).</p>',
+                1 < $numDirs ? 'them' : 'it',
             );
         }
 
@@ -668,40 +663,46 @@ class Installer extends Setup
     {
         $hints = [];
         if (!$this->system->getHttpsStatus()) {
-            $hints[] = '<p class="alert alert-warning">HTTPS support is not enabled in your web server.' .
-                ' To ensure the security of your data and protect against potential vulnerabilities,' .
-                ' we highly recommend enabling HTTPS. Please configure your web server to support HTTPS as soon as' .
-                ' possible.</p>';
+            $hints[] =
+                '<p class="alert alert-warning">HTTPS support is not enabled in your web server.'
+                . ' To ensure the security of your data and protect against potential vulnerabilities,'
+                . ' we highly recommend enabling HTTPS. Please configure your web server to support HTTPS as soon as'
+                . ' possible.</p>';
         }
 
         if (!extension_loaded('gd')) {
-            $hints[] = '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. ' .
-                "Please enable GD support in your php.ini file otherwise you can't use Captchas for spam protection." .
-                "</p>";
+            $hints[] =
+                '<p class="alert alert-warning">You don\'t have GD support enabled in your PHP installation. '
+                . "Please enable GD support in your php.ini file otherwise you can't use Captchas for spam protection."
+                . '</p>';
         }
 
         if (!function_exists('imagettftext')) {
-            $hints[] = '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension ' .
-                ' of your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
-                'for spam protection will be quite easy to break.</p>';
+            $hints[] =
+                '<p class="alert alert-warning">You don\'t have Freetype support enabled in the GD extension '
+                . ' of your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas '
+                . 'for spam protection will be quite easy to break.</p>';
         }
 
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-            $hints[] = '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your ' .
-                "PHP installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you " .
-                " can't use Elasticsearch.</p>";
+            $hints[] =
+                '<p class="alert alert-warning">You don\'t have cURL and/or OpenSSL support enabled in your '
+                . 'PHP installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you '
+                . " can't use Elasticsearch.</p>";
         }
 
         if (!extension_loaded('fileinfo')) {
-            $hints[] = '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP ' .
-                "installation. Please enable Fileinfo support in your php.ini file otherwise you can't use our " .
-                'backup/restore functionality.</p>';
+            $hints[] =
+                '<p class="alert alert-warning">You don\'t have Fileinfo support enabled in your PHP '
+                . "installation. Please enable Fileinfo support in your php.ini file otherwise you can't use our "
+                . 'backup/restore functionality.</p>';
         }
 
         if (!extension_loaded('sodium')) {
-            $hints[] = '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP ' .
-                "installation. Please enable Sodium support in your php.ini file otherwise you can't use our " .
-                'backup/restore functionality.</p>';
+            $hints[] =
+                '<p class="alert alert-warning">You don\'t have Sodium support enabled in your PHP '
+                . "installation. Please enable Sodium support in your php.ini file otherwise you can't use our "
+                . 'backup/restore functionality.</p>';
         }
 
         return $hints;
@@ -727,7 +728,7 @@ class Installer extends Setup
      * @throws Exception|AuthenticationException
      * @throws \Exception
      */
-    public function startInstall(array|null $setup = null): void
+    public function startInstall(?array $setup = null): void
     {
         $ldapSetup = [];
         $query = [];
@@ -768,7 +769,7 @@ class Installer extends Setup
             $dbSetup['dbPort'] = $setup['dbPort'];
         }
 
-        if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
+        if (is_null($dbSetup['dbPort']) && !System::isSqlite($dbSetup['dbType'])) {
             throw new Exception('Installation Error: Please add a valid database port.');
         }
 
@@ -799,7 +800,7 @@ class Installer extends Setup
                 INPUT_POST,
                 'sql_sqlitefile',
                 FILTER_SANITIZE_SPECIAL_CHARS,
-                $setup['dbServer'] ?? null
+                $setup['dbServer'] ?? null,
             );
             if (is_null($dbSetup['dbServer'])) {
                 throw new Exception('Installation Error: Please add a SQLite database filename.');
@@ -814,7 +815,7 @@ class Installer extends Setup
             $dbSetup['dbUser'],
             $dbSetup['dbPassword'],
             $dbSetup['dbDatabaseName'],
-            $dbSetup['dbPort']
+            $dbSetup['dbPort'],
         );
 
         $configuration = new Configuration($db);
@@ -845,7 +846,7 @@ class Installer extends Setup
             $ldapSetup['ldapPassword'] = Filter::filterInput(
                 INPUT_POST,
                 'ldap_password',
-                FILTER_SANITIZE_SPECIAL_CHARS
+                FILTER_SANITIZE_SPECIAL_CHARS,
             );
 
             // set LDAP Config to prevent DB query
@@ -862,7 +863,7 @@ class Installer extends Setup
                 $ldapSetup['ldapPort'],
                 $ldapSetup['ldapBase'],
                 $ldapSetup['ldapUser'],
-                $ldapSetup['ldapPassword']
+                $ldapSetup['ldapPassword'],
             );
 
             if (!$ldapConnection) {
@@ -879,8 +880,8 @@ class Installer extends Setup
             $esHostFilter = [
                 'elasticsearch_server' => [
                     'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    'flags' => FILTER_REQUIRE_ARRAY
-                ]
+                    'flags' => FILTER_REQUIRE_ARRAY,
+                ],
             ];
 
             // ES hosts
@@ -924,8 +925,8 @@ class Installer extends Setup
             $osHostFilter = [
                 'opensearch_server' => [
                     'filter' => FILTER_SANITIZE_SPECIAL_CHARS,
-                    'flags' => FILTER_REQUIRE_ARRAY
-                ]
+                    'flags' => FILTER_REQUIRE_ARRAY,
+                ],
             ];
 
             // OS hosts
@@ -955,7 +956,6 @@ class Installer extends Setup
         } else {
             $osSetup = [];
         }
-
 
         // check the login name
         if (!isset($setup['loginname'])) {
@@ -990,17 +990,13 @@ class Installer extends Setup
         }
 
         if (strlen((string) $password) <= 7 || strlen((string) $passwordRetyped) <= 7) {
-            throw new Exception(
-                'Installation Error: Your password and retyped password are too short. Please set your password ' .
-                'and your retyped password with a minimum of 8 characters.'
-            );
+            throw new Exception('Installation Error: Your password and retyped password are too short. Please set your password '
+            . 'and your retyped password with a minimum of 8 characters.');
         }
 
         if ($password !== $passwordRetyped) {
-            throw new Exception(
-                'Installation Error: Your password and retyped password are not equal. Please check your password ' .
-                'and your retyped password.'
-            );
+            throw new Exception('Installation Error: Your password and retyped password are not equal. Please check your password '
+            . 'and your retyped password.');
         }
 
         $language = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS, 'en');
@@ -1021,10 +1017,10 @@ class Installer extends Setup
 
         // check LDAP is enabled
         if (
-            extension_loaded('ldap') &&
-            !is_null($ldapEnabled) &&
-            count($ldapSetup) &&
-            !$instanceSetup->createLdapFile($ldapSetup, '')
+            extension_loaded('ldap')
+            && !is_null($ldapEnabled)
+            && count($ldapSetup)
+            && !$instanceSetup->createLdapFile($ldapSetup, '')
         ) {
             self::cleanFailedInstallationFiles();
             throw new Exception('LDAP Installation Error: Setup cannot write to ./content/core/config/ldap.php.');
@@ -1034,7 +1030,7 @@ class Installer extends Setup
         if (!is_null($esEnabled) && count($esSetup) && !$instanceSetup->createElasticsearchFile($esSetup, '')) {
             self::cleanFailedInstallationFiles();
             throw new Exception(
-                'Elasticsearch Installation Error: Setup cannot write to ./content/core/config/elasticsearch.php.'
+                'Elasticsearch Installation Error: Setup cannot write to ./content/core/config/elasticsearch.php.',
             );
         }
 
@@ -1042,7 +1038,7 @@ class Installer extends Setup
         if (!is_null($openSearchEnabled) && count($osSetup) && !$instanceSetup->createOpenSearchFile($osSetup, '')) {
             self::cleanFailedInstallationFiles();
             throw new Exception(
-                'OpenSearch Installation Error: Setup cannot write to ./content/core/config/opensearch.php.'
+                'OpenSearch Installation Error: Setup cannot write to ./content/core/config/opensearch.php.',
             );
         }
 
@@ -1060,7 +1056,7 @@ class Installer extends Setup
             $databaseConfiguration->getUser(),
             $databaseConfiguration->getPassword(),
             $databaseConfiguration->getDatabase(),
-            $databaseConfiguration->getPort()
+            $databaseConfiguration->getPort(),
         );
 
         if (!$db instanceof DatabaseDriver) {
@@ -1093,18 +1089,16 @@ class Installer extends Setup
             if (!$result) {
                 $this->system->dropTables($uninstall);
                 self::cleanFailedInstallationFiles();
-                throw new Exception(
-                    sprintf(
-                        'Installation Error: Please install your version of phpMyFAQ once again: %s (%s)',
-                        $db->error(),
-                        htmlentities($executeQuery)
-                    )
-                );
+                throw new Exception(sprintf(
+                    'Installation Error: Please install your version of phpMyFAQ once again: %s (%s)',
+                    $db->error(),
+                    htmlentities($executeQuery),
+                ));
             }
 
             usleep(1000);
             ++$count;
-            if ($count % 10 === 0) {
+            if (($count % 10) === 0) {
                 echo '| ';
             }
         }
@@ -1128,9 +1122,10 @@ class Installer extends Setup
         $user = new User($configuration);
         if (!$user->createUser($loginName, $password, '', 1)) {
             self::cleanFailedInstallationFiles();
-            throw new Exception(
-                sprintf('Fatal Installation Error: Could not create the admin user: %s', $user->error())
-            );
+            throw new Exception(sprintf(
+                'Fatal Installation Error: Could not create the admin user: %s',
+                $user->error(),
+            ));
         }
 
         $user->setStatus('protected');

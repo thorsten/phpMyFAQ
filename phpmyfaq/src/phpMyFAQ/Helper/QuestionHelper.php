@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Questions helper class for phpMyFAQ.
  *
@@ -39,10 +41,10 @@ class QuestionHelper extends AbstractHelper
     public function generateSmartAnswer(SearchResultSet $searchResultSet): string
     {
         $plurals = new Plurals();
-        $smartAnswer = sprintf(
-            '<h5>%s</h5>',
-            $plurals->getMsg('plmsgSearchAmount', $searchResultSet->getNumberOfResults())
-        );
+        $smartAnswer = sprintf('<h5>%s</h5>', $plurals->getMsg(
+            'plmsgSearchAmount',
+            $searchResultSet->getNumberOfResults(),
+        ));
 
         $smartAnswer .= '<ul>';
         foreach ($searchResultSet->getResultSet() as $result) {
@@ -51,7 +53,7 @@ class QuestionHelper extends AbstractHelper
                 $this->configuration->getDefaultUrl(),
                 $result->category_id,
                 $result->id,
-                $result->lang
+                $result->lang,
             );
             $link = new Link($url, $this->configuration);
             $link->text = Utils::chopString($result->question, 15);
@@ -61,7 +63,7 @@ class QuestionHelper extends AbstractHelper
             $smartAnswer .= sprintf(
                 '<li>%s<br><small class="pmf-search-preview">%s...</small></li>',
                 $link->toHtmlAnchor(),
-                $faqHelper->renderAnswerPreview($result->answer, 10)
+                $faqHelper->renderAnswerPreview($result->answer, 10),
             );
         }
 
@@ -76,7 +78,7 @@ class QuestionHelper extends AbstractHelper
         $query = sprintf(
             "SELECT COUNT(id) AS num FROM %sfaqquestions WHERE lang = '%s' AND is_visible != 'Y'",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -88,7 +90,7 @@ class QuestionHelper extends AbstractHelper
         $query = sprintf(
             "SELECT * FROM %sfaqquestions WHERE lang = '%s' AND is_visible = 'Y' ORDER BY created ASC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);

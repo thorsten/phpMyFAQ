@@ -69,16 +69,13 @@ class CategoryController extends AbstractAdministrationController
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
 
-        return $this->render(
-            '@admin/content/category.overview.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'csrfTokenInput' => Token::getInstance($session)->getTokenInput('category'),
-                'categoryTree' => $categoryTree,
-                'categoryInfo' => $categoryInfo,
-            ],
-        );
+        return $this->render('@admin/content/category.overview.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfTokenInput' => Token::getInstance($session)->getTokenInput('category'),
+            'categoryTree' => $categoryTree,
+            'categoryInfo' => $categoryInfo,
+        ]);
     }
 
     /**
@@ -91,7 +88,7 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = $this->container->get('phpmyfaq.admin.category');
         $category->setUser($currentAdminUser);
@@ -101,17 +98,14 @@ class CategoryController extends AbstractAdministrationController
 
         $session = $this->container->get('session');
 
-        return $this->render(
-            '@admin/content/category.add.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
-                'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
-                'parentId' => 0,
-            ],
-        );
+        return $this->render('@admin/content/category.add.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
+            'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
+            'parentId' => 0,
+        ]);
     }
 
     /**
@@ -124,7 +118,7 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = $this->container->get('phpmyfaq.admin.category');
         $categoryPermission = $this->container->get('phpmyfaq.category.permission');
@@ -143,22 +137,19 @@ class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            '@admin/content/category.add.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
-                'parentId' => $parentId,
-                'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
-                'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
-                'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
-                'categoryName' => $category->categoryName[$parentId]['name'],
-                'msgMainCategory' => Translation::get('msgMainCategory'),
-                ... $templateVars,
-            ],
-        );
+        return $this->render('@admin/content/category.add.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
+            'parentId' => $parentId,
+            'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
+            'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
+            'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
+            'categoryName' => $category->categoryName[$parentId]['name'],
+            'msgMainCategory' => Translation::get('msgMainCategory'),
+            ...$templateVars,
+        ]);
     }
 
     /**
@@ -176,7 +167,7 @@ class CategoryController extends AbstractAdministrationController
             throw new Exception('Invalid CSRF token');
         }
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new Permission($this->configuration);
         $seo = $this->container->get('phpmyfaq.seo');
@@ -231,14 +222,12 @@ class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
-            $permissions += Filter::filterArray(
-                [
-                    'restricted_groups' => [
-                        'filter' => FILTER_VALIDATE_INT,
-                        'flags' => FILTER_REQUIRE_ARRAY,
-                    ],
-                ]
-            );
+            $permissions += Filter::filterArray([
+                'restricted_groups' => [
+                    'filter' => FILTER_VALIDATE_INT,
+                    'flags' => FILTER_REQUIRE_ARRAY,
+                ],
+            ]);
         }
 
         $templateVars = [
@@ -257,11 +246,7 @@ class CategoryController extends AbstractAdministrationController
 
         if ($categoryId) {
             $categoryPermission->add(Permission::USER, [$categoryId], $permissions['restricted_user']);
-            $categoryPermission->add(
-                Permission::GROUP,
-                [$categoryId],
-                $permissions['restricted_groups']
-            );
+            $categoryPermission->add(Permission::GROUP, [$categoryId], $permissions['restricted_groups']);
 
             if ($hasUploadedImage) {
                 try {
@@ -292,7 +277,7 @@ class CategoryController extends AbstractAdministrationController
             $templateVars = [
                 ...$templateVars,
                 'isSuccess' => true,
-                'successMessage' => Translation::get('ad_categ_added')
+                'successMessage' => Translation::get('ad_categ_added'),
             ];
         } else {
             $templateVars = [
@@ -302,15 +287,12 @@ class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            '@admin/content/category.main.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                ...$templateVars,
-            ],
-        );
+        return $this->render('@admin/content/category.main.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            ...$templateVars,
+        ]);
     }
 
     /**
@@ -323,7 +305,7 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT, 0);
 
@@ -364,55 +346,56 @@ class CategoryController extends AbstractAdministrationController
             $restrictedGroups = true;
         }
 
-        $header = Translation::get('ad_categ_edit_1') . ' "' . $categoryEntity->getName() . '" ' .
-            Translation::get('ad_categ_edit_2');
+        $header =
+            Translation::get('ad_categ_edit_1')
+            . ' "'
+            . $categoryEntity->getName()
+            . '" '
+            . Translation::get('ad_categ_edit_2');
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $allGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
                 [$categoryEntity->getGroupId()],
-                $this->currentUser
+                $this->currentUser,
             );
             $restrictedGroupOptions = $this->currentUser->perm->getAllGroupsOptions(
                 $groupPermission,
-                $this->currentUser
+                $this->currentUser,
             );
         }
 
-        return $this->render(
-            '@admin/content/category.edit.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'header' => $header,
-                'categoryId' => $categoryId,
-                'categoryLanguage' => $categoryEntity->getLang(),
-                'parentId' => $categoryEntity->getParentId(),
-                'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
-                'categoryImage' => $categoryEntity->getImage(),
-                'categoryName' => $categoryEntity->getName(),
-                'categoryDescription' => $categoryEntity->getDescription(),
-                'categoryActive' => 1 === (int)$categoryEntity->getActive() ? 'checked' : '',
-                'categoryShowHome' => 1 === (int)$categoryEntity->getShowHome() ? 'checked' : '',
-                'categoryImageReset' => Translation::get('msgCategoryImageReset'),
-                'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
-                'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
-                'allGroupsOptions' => $allGroupsOptions,
-                'allGroups' => $allGroups ? 'checked' : '',
-                'restrictedGroups' => $restrictedGroups ? 'checked' : '',
-                'restrictedGroupsLabel' => Translation::get('ad_entry_restricted_groups'),
-                'restrictedGroupsOptions' => $restrictedGroupOptions,
-                'userPermissionLabel' => Translation::get('ad_entry_userpermission'),
-                'allUsers' => $allUsers ? 'checked' : '',
-                'restrictedUsers' => $restrictedUsers ? 'checked' : '',
-                'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
-                'serpTitle' => $seoData->getTitle(),
-                'serpDescription' => $seoData->getDescription(),
-                'buttonCancel' => Translation::get('ad_gen_cancel'),
-                'buttonUpdate' => Translation::get('ad_gen_save'),
-            ],
-        );
+        return $this->render('@admin/content/category.edit.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'header' => $header,
+            'categoryId' => $categoryId,
+            'categoryLanguage' => $categoryEntity->getLang(),
+            'parentId' => $categoryEntity->getParentId(),
+            'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
+            'categoryImage' => $categoryEntity->getImage(),
+            'categoryName' => $categoryEntity->getName(),
+            'categoryDescription' => $categoryEntity->getDescription(),
+            'categoryActive' => 1 === (int) $categoryEntity->getActive() ? 'checked' : '',
+            'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
+            'categoryImageReset' => Translation::get('msgCategoryImageReset'),
+            'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
+            'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
+            'allGroupsOptions' => $allGroupsOptions,
+            'allGroups' => $allGroups ? 'checked' : '',
+            'restrictedGroups' => $restrictedGroups ? 'checked' : '',
+            'restrictedGroupsLabel' => Translation::get('ad_entry_restricted_groups'),
+            'restrictedGroupsOptions' => $restrictedGroupOptions,
+            'userPermissionLabel' => Translation::get('ad_entry_userpermission'),
+            'allUsers' => $allUsers ? 'checked' : '',
+            'restrictedUsers' => $restrictedUsers ? 'checked' : '',
+            'restrictedUsersLabel' => Translation::get('ad_entry_restricted_users'),
+            'serpTitle' => $seoData->getTitle(),
+            'serpDescription' => $seoData->getDescription(),
+            'buttonCancel' => Translation::get('ad_gen_cancel'),
+            'buttonUpdate' => Translation::get('ad_gen_save'),
+        ]);
     }
 
     /**
@@ -425,7 +408,7 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -462,28 +445,25 @@ class CategoryController extends AbstractAdministrationController
             }
         }
 
-        return $this->render(
-            '@admin/content/category.hierarchy.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'currentLanguage' => $currentLanguage,
-                'allLangs' => $languages,
-                'allLangCodes' => $languageCodes,
-                'categoryTree' => $category->getCategoryTree(),
-                'basePath' => $request->getBasePath(),
-                'faqlangcode' => $currentLangCode,
-                'msgCategoryRemark_overview' => Translation::get('msgCategoryRemark_overview'),
-                'categoryNameLabel' => Translation::get('categoryNameLabel'),
-                'ad_categ_translate' => Translation::get('ad_categ_translate'),
-                'ad_menu_categ_structure' => Translation::get('ad_menu_categ_structure'),
-                'msgAddCategory' => Translation::get('msgAddCategory'),
-                'msgHeaderCategoryOverview' => Translation::get('msgHeaderCategoryOverview'),
-                'msgCategory' => Translation::get('msgCategory'),
-                'translations' => $translations,
-                'ad_categ_translated' => Translation::get('ad_categ_translated')
-            ],
-        );
+        return $this->render('@admin/content/category.hierarchy.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'currentLanguage' => $currentLanguage,
+            'allLangs' => $languages,
+            'allLangCodes' => $languageCodes,
+            'categoryTree' => $category->getCategoryTree(),
+            'basePath' => $request->getBasePath(),
+            'faqlangcode' => $currentLangCode,
+            'msgCategoryRemark_overview' => Translation::get('msgCategoryRemark_overview'),
+            'categoryNameLabel' => Translation::get('categoryNameLabel'),
+            'ad_categ_translate' => Translation::get('ad_categ_translate'),
+            'ad_menu_categ_structure' => Translation::get('ad_menu_categ_structure'),
+            'msgAddCategory' => Translation::get('msgAddCategory'),
+            'msgHeaderCategoryOverview' => Translation::get('msgHeaderCategoryOverview'),
+            'msgCategory' => Translation::get('msgCategory'),
+            'translations' => $translations,
+            'ad_categ_translated' => Translation::get('ad_categ_translated'),
+        ]);
     }
 
     /**
@@ -496,7 +476,7 @@ class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $session = $this->container->get('session');
 
@@ -513,33 +493,30 @@ class CategoryController extends AbstractAdministrationController
         $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
         $groupPermission = $categoryPermission->get(Permission::GROUP, [$categoryId]);
 
-        return $this->render(
-            '@admin/content/category.translate.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'categoryName' => $category->categoryName[$categoryId]['name'],
-                'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
-                'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
-                'categoryId' => $categoryId,
-                'category' => $category->categoryName[$categoryId],
-                'permLevel' => $this->configuration->get('security.permLevel'),
-                'groupPermission' => $groupPermission[0],
-                'userPermission' => $userPermission[0],
-                'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
-                'categoryNameLabel' => Translation::get('categoryNameLabel'),
-                'ad_categ_lang' => Translation::get('ad_categ_lang'),
-                'langToTranslate' => $category->getCategoryLanguagesToTranslate($categoryId, $translateTo),
-                'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
-                'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
-                'userSelection' =>
-                    $userHelper->getAllUsersForTemplate((int) $category->categoryName[$categoryId]['user_id']),
-                'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
-                'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
-                'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg')
-
-            ],
-        );
+        return $this->render('@admin/content/category.translate.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'categoryName' => $category->categoryName[$categoryId]['name'],
+            'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
+            'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
+            'categoryId' => $categoryId,
+            'category' => $category->categoryName[$categoryId],
+            'permLevel' => $this->configuration->get('security.permLevel'),
+            'groupPermission' => $groupPermission[0],
+            'userPermission' => $userPermission[0],
+            'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
+            'categoryNameLabel' => Translation::get('categoryNameLabel'),
+            'ad_categ_lang' => Translation::get('ad_categ_lang'),
+            'langToTranslate' => $category->getCategoryLanguagesToTranslate($categoryId, $translateTo),
+            'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
+            'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
+            'userSelection' => $userHelper->getAllUsersForTemplate(
+                (int) $category->categoryName[$categoryId]['user_id'],
+            ),
+            'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
+            'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
+            'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg'),
+        ]);
     }
 
     /**
@@ -557,7 +534,7 @@ class CategoryController extends AbstractAdministrationController
             throw new Exception('Invalid CSRF token');
         }
 
-        [ $currentAdminUser, $currentAdminGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new Permission($this->configuration);
         $seo = $this->container->get('phpmyfaq.seo');
@@ -579,11 +556,7 @@ class CategoryController extends AbstractAdministrationController
 
         $existingImage = is_null($existingImage) ? '' : $existingImage;
         $hasUploadedImage = $uploadedFile instanceof UploadedFile;
-        $image = $hasUploadedImage ? $categoryImage->getFileName(
-            $categoryId,
-            $categoryLang
-        ) : $existingImage;
-
+        $image = $hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
 
         $categoryEntity = new CategoryEntity();
         $categoryEntity
@@ -620,14 +593,12 @@ class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
-            $permissions += Filter::filterArray(
-                [
-                    'restricted_groups' => [
-                        'filter' => FILTER_VALIDATE_INT,
-                        'flags' => FILTER_REQUIRE_ARRAY,
-                    ],
-                ]
-            );
+            $permissions += Filter::filterArray([
+                'restricted_groups' => [
+                    'filter' => FILTER_VALIDATE_INT,
+                    'flags' => FILTER_REQUIRE_ARRAY,
+                ],
+            ]);
         }
 
         $templateVars = [
@@ -636,14 +607,16 @@ class CategoryController extends AbstractAdministrationController
 
         if (!$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang())) {
             if (
-                $category->create($categoryEntity) && $categoryPermission->add(
+                $category->create($categoryEntity)
+                && $categoryPermission->add(
                     Permission::USER,
                     [$categoryEntity->getId()],
-                    $permissions['restricted_user']
-                ) && $categoryPermission->add(
+                    $permissions['restricted_user'],
+                )
+                && $categoryPermission->add(
                     Permission::GROUP,
                     [$categoryEntity->getId()],
-                    $permissions['restricted_groups']
+                    $permissions['restricted_groups'],
                 )
             ) {
                 // Add SERP-Title and Description to translated category
@@ -664,7 +637,7 @@ class CategoryController extends AbstractAdministrationController
                 $templateVars = [
                     ...$templateVars,
                     'isSuccess' => true,
-                    'successMessage' => Translation::get('ad_categ_translated')
+                    'successMessage' => Translation::get('ad_categ_translated'),
                 ];
             } else {
                 $templateVars = [
@@ -676,16 +649,8 @@ class CategoryController extends AbstractAdministrationController
         } elseif ($category->update($categoryEntity)) {
             $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
             $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
-            $categoryPermission->add(
-                Permission::USER,
-                [$categoryEntity->getId()],
-                $permissions['restricted_user']
-            );
-            $categoryPermission->add(
-                Permission::GROUP,
-                [$categoryEntity->getId()],
-                $permissions['restricted_groups']
-            );
+            $categoryPermission->add(Permission::USER, [$categoryEntity->getId()], $permissions['restricted_user']);
+            $categoryPermission->add(Permission::GROUP, [$categoryEntity->getId()], $permissions['restricted_groups']);
 
             if ($hasUploadedImage) {
                 try {
@@ -717,7 +682,7 @@ class CategoryController extends AbstractAdministrationController
             $templateVars = [
                 ...$templateVars,
                 'isSuccess' => true,
-                'successMessage' => Translation::get('ad_categ_updated')
+                'successMessage' => Translation::get('ad_categ_updated'),
             ];
         } else {
             $templateVars = [
@@ -727,15 +692,12 @@ class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            '@admin/content/category.main.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                ... $templateVars,
-            ],
-        );
+        return $this->render('@admin/content/category.main.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            ...$templateVars,
+        ]);
     }
 
     /**
@@ -756,8 +718,9 @@ class CategoryController extends AbstractAdministrationController
             'ad_entry_userpermission' => Translation::get('ad_entry_userpermission'),
             'ad_categ_add' => Translation::get('ad_categ_add'),
             'ad_entry_restricted_groups' => Translation::get('ad_entry_restricted_groups'),
-            'restricted_groups' => ($this->configuration->get('security.permLevel') === 'medium') ?
-                $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser) : '',
+            'restricted_groups' => $this->configuration->get('security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser)
+                : '',
             'buttonCancel' => Translation::get('ad_gen_cancel'),
         ];
     }

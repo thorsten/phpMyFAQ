@@ -158,9 +158,17 @@ class FaqTest extends TestCase
         $faqEntity->setSolutionId(42);
         $faqEntity = $this->faq->create($faqEntity);
 
-        $this->faq->getFaqBySolutionId(42);
+        // Fetch record by solution id and validate it matches the created one
+        $record = $this->faq->getIdFromSolutionId(42);
+        $this->assertNotEmpty($record);
+        $this->assertIsArray($record);
+        $this->assertGreaterThan(0, (int)$record['id']);
+        $this->assertEquals($faqEntity->getId(), (int)$record['id']);
 
-        $this->assertGreaterThan(1, $faqEntity->getId());
+        // Also verify the solution_id is actually 42 via getFaqBySolutionId
+        $this->faq->getFaqBySolutionId(42);
+        $this->assertArrayHasKey('solution_id', $this->faq->faqRecord);
+        $this->assertEquals(42, (int)$this->faq->faqRecord['solution_id']);
     }
 
     private function getFaqEntity(): FaqEntity

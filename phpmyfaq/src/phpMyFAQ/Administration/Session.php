@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Administration Session class.
  *
@@ -24,8 +26,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 readonly class Session
 {
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     public function getTimeFromSessionId(int $sessionId): int
@@ -44,7 +47,6 @@ readonly class Session
         return $timestamp;
     }
 
-
     /**
      * Returns all session from a date.
      *
@@ -61,7 +63,7 @@ readonly class Session
             'SELECT sid, ip, time FROM %sfaqsessions WHERE time > %d AND time < %d ORDER BY time',
             Database::getTablePrefix(),
             $firstHour,
-            $lastHour
+            $lastHour,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -105,7 +107,7 @@ readonly class Session
             'DELETE FROM %sfaqsessions WHERE time >= %d AND time <= %d',
             Database::getTablePrefix(),
             $first,
-            $last
+            $last,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -137,7 +139,7 @@ readonly class Session
             'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',
             Database::getTablePrefix(),
             $startDate,
-            $endDate
+            $endDate,
         );
         $result = $this->configuration->getDb()->query($query);
 

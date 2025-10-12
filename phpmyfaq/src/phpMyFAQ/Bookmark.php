@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bookmark handling.
  *
@@ -37,7 +39,7 @@ class Bookmark
      */
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly CurrentUser $currentUser
+        private readonly CurrentUser $currentUser,
     ) {
         $this->bookmarkCache = null;
     }
@@ -83,7 +85,7 @@ class Bookmark
             'INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $this->currentUser->getUserId(),
-            $faqId
+            $faqId,
         );
 
         $result = (bool) $this->configuration->getDb()->query($query);
@@ -109,7 +111,7 @@ class Bookmark
         $query = sprintf(
             'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
             Database::getTablePrefix(),
-            $this->currentUser->getUserId()
+            $this->currentUser->getUserId(),
         );
         $result = $this->configuration->getDb()->query($query);
         $data = $this->configuration->getDb()->fetchAll($result);
@@ -134,7 +136,7 @@ class Bookmark
             'DELETE FROM %sfaqbookmarks WHERE userid = %d AND faqid = %d',
             Database::getTablePrefix(),
             $this->currentUser->getUserId(),
-            $faqId
+            $faqId,
         );
 
         $result = (bool) $this->configuration->getDb()->query($query);
@@ -154,7 +156,7 @@ class Bookmark
         $query = sprintf(
             'DELETE FROM %sfaqbookmarks WHERE userid = %d',
             Database::getTablePrefix(),
-            $this->currentUser->getUserId()
+            $this->currentUser->getUserId(),
         );
 
         $result = (bool) $this->configuration->getDb()->query($query);
@@ -172,11 +174,9 @@ class Bookmark
     public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $faq = new Faq($this->configuration);
-        $faq
-            ->setUser($currentUser)
-            ->setGroups($currentGroups);
+        $faq->setUser($currentUser)->setGroups($currentGroups);
 
         $category = new Category($this->configuration);
         $list = [];
@@ -203,7 +203,7 @@ class Bookmark
                 $this->configuration->getDefaultUrl(),
                 (int) $faqData['id'],
                 $categoryId,
-                $faqData['lang'] ?? ''
+                $faqData['lang'] ?? '',
             );
 
             $link = new Link($url, $this->configuration);
@@ -216,7 +216,7 @@ class Bookmark
                 'url' => $link->toString(),
                 'title' => htmlspecialchars_decode($title),
                 'id' => (int) $faqData['id'],
-                'answer' => (string) ($faqData['content'] ?? '')
+                'answer' => (string) ($faqData['content'] ?? ''),
             ];
         }
 

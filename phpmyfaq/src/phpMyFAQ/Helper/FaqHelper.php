@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ FAQs.
  *
@@ -65,11 +67,7 @@ class FaqHelper extends AbstractHelper
     public function renderChangeLanguageSelector(Faq $faq, int $categoryId): string
     {
         $html = '';
-        $faqUrl = sprintf(
-            '?action=faq&cat=%d&id=%d&artlang=%%s',
-            $categoryId,
-            $faq->faqRecord['id']
-        );
+        $faqUrl = sprintf('?action=faq&cat=%d&id=%d&artlang=%%s', $categoryId, $faq->faqRecord['id']);
 
         $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
         $oLink->itemTitle = $faq->faqRecord['title'];
@@ -83,7 +81,7 @@ class FaqHelper extends AbstractHelper
 
             foreach ($availableLanguages as $availableLanguage) {
                 $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $availableLanguage));
-                $html .= ($faq->faqRecord['lang'] === $availableLanguage ? ' selected' : '');
+                $html .= $faq->faqRecord['lang'] === $availableLanguage ? ' selected' : '';
                 $html .= sprintf('>%s</option>', LanguageCodes::get($availableLanguage));
             }
 
@@ -146,7 +144,7 @@ class FaqHelper extends AbstractHelper
             $this->configuration->getDefaultUrl() . 'index.php',
             $categoryId,
             $faqEntity->getId(),
-            $faqEntity->getLanguage()
+            $faqEntity->getLanguage(),
         );
     }
 
@@ -158,19 +156,17 @@ class FaqHelper extends AbstractHelper
         $contentLength = strlen($content);
         $allowedHosts = $this->configuration->getAllowedMediaHosts();
         $allowedHosts[] = Request::createFromGlobals()->getHost();
-        $htmlSanitizer = new HtmlSanitizer(
-            (new HtmlSanitizerConfig())
-                ->withMaxInputLength($contentLength + 1)
-                ->allowSafeElements()
-                ->allowRelativeLinks()
-                ->allowStaticElements()
-                ->allowRelativeMedias()
-                ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
-                ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
-                ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
-                ->allowMediaHosts($allowedHosts)
-                ->allowLinkSchemes(['https', 'http', 'mailto', 'data'])
-        );
+        $htmlSanitizer = new HtmlSanitizer((new HtmlSanitizerConfig())
+            ->withMaxInputLength($contentLength + 1)
+            ->allowSafeElements()
+            ->allowRelativeLinks()
+            ->allowStaticElements()
+            ->allowRelativeMedias()
+            ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
+            ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
+            ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
+            ->allowMediaHosts($allowedHosts)
+            ->allowLinkSchemes(['https', 'http', 'mailto', 'data']));
 
         $sanitizedContent = $htmlSanitizer->sanitize($content);
 
@@ -180,14 +176,15 @@ class FaqHelper extends AbstractHelper
             '/style\s*=\s*"([^"]*)"/i',
             function (array $matches): string {
                 $styles = explode(';', $matches[1]);
-                $filteredStyles = array_filter($styles, function (string $style): bool {
-                    return stripos(trim($style), 'overflow:') !== 0; // Exclude 'overflow' properties
-                });
+                $filteredStyles = array_filter(
+                    $styles,
+                    fn(string $style): bool => stripos(trim($style), 'overflow:') !== 0,
+                );
                 $newStyle = implode('; ', $filteredStyles);
                 // Remove the style attribute if empty
                 return $newStyle !== '' && $newStyle !== '0' ? 'style="' . $newStyle . '"' : '';
             },
-            (string) $sanitizedContent
+            (string) $sanitizedContent,
         );
     }
 
@@ -224,15 +221,16 @@ class FaqHelper extends AbstractHelper
                     $categoryId,
                     $faqId,
                     $language,
-                    $link->getSEOItemTitle($question)
+                    $link->getSEOItemTitle($question),
                 );
             },
-            $decodedAnswer
+            $decodedAnswer,
         );
 
         if ($result === $decodedAnswer && $decodedAnswer !== $answer) {
-            $htmlEncodedPattern = '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&|&)cat' .
-                '(&#61;|=)(\d+)(&|&)id(&#61;|=)(\d+)((&|&)artlang(&#61;|=)([a-z]{2}))?/i';
+            $htmlEncodedPattern =
+                '/(https?:\/\/[^\/]+)\/index\.php\?action(&#61;|=)(artikel|faq)(&|&)cat'
+                . '(&#61;|=)(\d+)(&|&)id(&#61;|=)(\d+)((&|&)artlang(&#61;|=)([a-z]{2}))?/i';
 
             return preg_replace_callback(
                 $htmlEncodedPattern,
@@ -248,10 +246,10 @@ class FaqHelper extends AbstractHelper
                         $categoryId,
                         $faqId,
                         $language,
-                        $link->getSEOItemTitle($question)
+                        $link->getSEOItemTitle($question),
                     );
                 },
-                $answer
+                $answer,
             );
         }
 

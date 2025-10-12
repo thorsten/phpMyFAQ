@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ Google ReCAPTCHA v3 class.
  *
@@ -26,8 +28,9 @@ class GoogleRecaptcha implements CaptchaInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     public function checkCaptchaCode(string $code): bool
@@ -39,7 +42,7 @@ class GoogleRecaptcha implements CaptchaInterface
         $url = sprintf(
             'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
             $this->configuration->get('security.googleReCaptchaV2SecretKey'),
-            $code
+            $code,
         );
 
         $response = file_get_contents($url);

@@ -133,7 +133,7 @@ class ConfigurationTest extends TestCase
             PMF_TEST_DIR . '/content/core/config/ldap.php',
             "<?php\n" .
             "\$PMF_LDAP['ldap_server'] = 'localhost';\n" .
-            "\$PMF_LDAP['ldap_port'] = '389';\n" .
+            "\$PMF_LDAP['ldap_port'] = 389;\n" .
             "\$PMF_LDAP['ldap_user'] = 'admin';\n" .
             "\$PMF_LDAP['ldap_password'] = 'foobar';\n" .
             "\$PMF_LDAP['ldap_base'] = 'DC=foo,DC=bar,DC=baz';",
@@ -145,7 +145,7 @@ class ConfigurationTest extends TestCase
         $expected = [
             0 => [
                 'ldap_server' => 'localhost',
-                'ldap_port' => '389',
+                'ldap_port' => 389,
                 'ldap_user' => 'admin',
                 'ldap_password' => 'foobar',
                 'ldap_base' => 'DC=foo,DC=bar,DC=baz'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * FAQ meta-data class for phpMyFAQ.
  *
@@ -40,8 +42,9 @@ class MetaData
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     public function setFaqId(int $faqId): MetaData

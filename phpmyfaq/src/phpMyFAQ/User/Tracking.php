@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for User tracking handling.
  *
@@ -42,14 +44,14 @@ class Tracking
     private function __construct(
         private readonly Configuration $configuration,
         private readonly Request $request,
-        private readonly ?UserSession $userSession = null
+        private readonly ?UserSession $userSession = null,
     ) {
     }
 
     public static function getInstance(
         Configuration $configuration,
         Request $request,
-        UserSession $userSession
+        UserSession $userSession,
     ): Tracking {
         if (!self::$tracking instanceof Tracking) {
             self::$tracking = new self($configuration, $request, $userSession);
@@ -99,17 +101,14 @@ class Tracking
 
     private function getCookieId(): ?int
     {
-        return Filter::filterVar(
-            $this->request->query->get(UserSession::COOKIE_NAME_SESSION_ID),
-            FILTER_VALIDATE_INT
-        );
+        return Filter::filterVar($this->request->query->get(UserSession::COOKIE_NAME_SESSION_ID), FILTER_VALIDATE_INT);
     }
 
     private function countBots(): int
     {
         $bots = 0;
         foreach ($this->getBotIgnoreList() as $bot) {
-            if (Strings::strstr($this->getRequestHeaders()->get('user-agent') ?? 1, $bot)) {
+            if (Strings::strstr($this->getRequestHeaders()->get('user-agent') ?? '1', $bot)) {
                 ++$bots;
             }
         }
@@ -126,7 +125,7 @@ class Tracking
             $remoteAddress = $this->getRequestHeaders()->get('X-Forwarded-For');
         }
 
-        return preg_replace('([^0-9a-z:.]+)i', '', (string)$remoteAddress);
+        return preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
     }
 
     private function isBanned(string $remoteAddress): bool
@@ -143,13 +142,13 @@ class Tracking
         if ($this->currentSessionId === null) {
             $this->currentSessionId = $this->configuration->getDb()->nextId(
                 Database::getTablePrefix() . 'faqsessions',
-                'sid'
+                'sid',
             );
 
-            if (!is_null($cookieId) && (!$cookieId != $this->userSession->getCurrentSessionId())) {
+            if (!is_null($cookieId) && !$cookieId != $this->userSession->getCurrentSessionId()) {
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_SESSION_ID,
-                    $this->userSession->getCurrentSessionId()
+                    $this->userSession->getCurrentSessionId(),
                 );
             }
 
@@ -159,7 +158,7 @@ class Tracking
                 $this->userSession->getCurrentSessionId(),
                 CurrentUser::getCurrentUser($this->configuration)->getUserId(),
                 $remoteAddress,
-                $this->request->server->get('REQUEST_TIME')
+                $this->request->server->get('REQUEST_TIME'),
             );
 
             $this->configuration->getDb()->query($query);
@@ -170,14 +169,23 @@ class Tracking
 
     private function writeTrackingData(string $action, int|string|null $data, string $remoteAddress): void
     {
-        $data = $this->userSession->getCurrentSessionId() . ';' .
-            str_replace(';', ',', $action) . ';' .
-            $data . ';' .
-            $remoteAddress . ';' .
-            str_replace(';', ',', $this->request->server->get('QUERY_STRING') ?? '') . ';' .
-            str_replace(';', ',', $this->request->server->get('HTTP_REFERER') ?? '') . ';' .
-            str_replace(';', ',', urldecode((string) $this->request->server->get('HTTP_USER_AGENT'))) . ';' .
-            $this->request->server->get('REQUEST_TIME') . ";\n";
+        $data =
+            $this->userSession->getCurrentSessionId()
+            . ';'
+            . str_replace(';', ',', $action)
+            . ';'
+            . $data
+            . ';'
+            . $remoteAddress
+            . ';'
+            . str_replace(';', ',', $this->request->server->get('QUERY_STRING') ?? '')
+            . ';'
+            . str_replace(';', ',', $this->request->server->get('HTTP_REFERER') ?? '')
+            . ';'
+            . str_replace(';', ',', urldecode((string) $this->request->server->get('HTTP_USER_AGENT')))
+            . ';'
+            . $this->request->server->get('REQUEST_TIME')
+            . ";\n";
 
         $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
 

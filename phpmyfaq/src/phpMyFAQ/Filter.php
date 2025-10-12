@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ext/filter wrapper class.
  *
@@ -39,15 +41,11 @@ class Filter
         $return = filter_input($type, $variableName, $filter);
 
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_input(
-                $type,
-                $variableName,
-                FILTER_CALLBACK,
-                ['options' => static fn(string $string): string => (new Filter())->filterSanitizeString($string)]
-            );
+            $return = filter_input($type, $variableName, FILTER_CALLBACK, ['options' =>
+                (new Filter())->filterSanitizeString(...)]);
         }
 
-        return (is_null($return) || $return === false) ? $default : $return;
+        return is_null($return) || $return === false ? $default : $return;
     }
 
     /**
@@ -73,14 +71,10 @@ class Filter
         $return = filter_var($variable, $filter);
 
         if ($filter === FILTER_SANITIZE_SPECIAL_CHARS) {
-            $return = filter_var(
-                $variable,
-                FILTER_CALLBACK,
-                ['options' => static fn(string $string): string => (new Filter())->filterSanitizeString($string)]
-            );
+            $return = filter_var($variable, FILTER_CALLBACK, ['options' => (new Filter())->filterSanitizeString(...)]);
         }
 
-        return ($return === false) ? $default : $return;
+        return $return === false ? $default : $return;
     }
 
     /**
@@ -89,7 +83,7 @@ class Filter
     public static function filterArray(
         array $array,
         array|int $options = FILTER_UNSAFE_RAW,
-        bool $addEmpty = true
+        bool $addEmpty = true,
     ): bool|array|null {
         return filter_var_array($array, $options, $addEmpty);
     }
@@ -149,7 +143,7 @@ class Filter
             'target',
             'width',
             'height',
-            'controls'
+            'controls',
         ];
 
         // remove broken stuff
@@ -176,23 +170,137 @@ class Filter
     private static function isAttribute(string $attribute): bool
     {
         $globalAttributes = [
-            'autocomplete', 'autofocus', 'disabled', 'list', 'name', 'readonly', 'required', 'tabindex', 'type',
-            'value', 'accesskey', 'class', 'contenteditable', 'contextmenu', 'dir', 'draggable', 'dropzone', 'id',
-            'lang', 'style', 'tabindex', 'title', 'inputmode', 'is', 'itemid', 'itemprop', 'itemref', 'itemscope',
-            'itemtype', 'lang', 'slot', 'spellcheck', 'translate', 'autofocus', 'disabled', 'form', 'multiple', 'name',
-            'required', 'size', 'autocapitalize', 'autocomplete', 'autofocus', 'cols', 'disabled', 'form', 'maxlength',
-            'minlength', 'name', 'placeholder', 'readonly', 'required', 'rows', 'spellcheck', 'wrap', 'onmouseenter',
-            'onmouseleave', 'onafterprint', 'onbeforeprint', 'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline',
-            'ononline', 'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload', 'ondevicemotion', 'preload',
-            'ondeviceorientation', 'onabort', 'onblur', 'oncanplay', 'oncanplaythrough', 'onchange', 'onclick',
-            'oncontextmenu', 'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover',
-            'ondragstart', 'ondrop', 'ondurationchange', 'onemptied', 'onended', 'onerror', 'onfocus', 'oninput',
-            'oninvalid', 'onkeydown', 'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata',
-            'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup','controls',
-            'onmozfullscreenchange', 'onmozfullscreenerror', 'onpause', 'onplay', 'onplaying', 'onprogress',
-            'onratechange', 'onreset', 'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
-            'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting', 'oncopy', 'oncut', 'onpaste',
-            'onbeforescriptexecute', 'onafterscriptexecute'
+            'autocomplete',
+            'autofocus',
+            'disabled',
+            'list',
+            'name',
+            'readonly',
+            'required',
+            'tabindex',
+            'type',
+            'value',
+            'accesskey',
+            'class',
+            'contenteditable',
+            'contextmenu',
+            'dir',
+            'draggable',
+            'dropzone',
+            'id',
+            'lang',
+            'style',
+            'tabindex',
+            'title',
+            'inputmode',
+            'is',
+            'itemid',
+            'itemprop',
+            'itemref',
+            'itemscope',
+            'itemtype',
+            'lang',
+            'slot',
+            'spellcheck',
+            'translate',
+            'autofocus',
+            'disabled',
+            'form',
+            'multiple',
+            'name',
+            'required',
+            'size',
+            'autocapitalize',
+            'autocomplete',
+            'autofocus',
+            'cols',
+            'disabled',
+            'form',
+            'maxlength',
+            'minlength',
+            'name',
+            'placeholder',
+            'readonly',
+            'required',
+            'rows',
+            'spellcheck',
+            'wrap',
+            'onmouseenter',
+            'onmouseleave',
+            'onafterprint',
+            'onbeforeprint',
+            'onbeforeunload',
+            'onhashchange',
+            'onmessage',
+            'onoffline',
+            'ononline',
+            'onpopstate',
+            'onpagehide',
+            'onpageshow',
+            'onresize',
+            'onunload',
+            'ondevicemotion',
+            'preload',
+            'ondeviceorientation',
+            'onabort',
+            'onblur',
+            'oncanplay',
+            'oncanplaythrough',
+            'onchange',
+            'onclick',
+            'oncontextmenu',
+            'ondblclick',
+            'ondrag',
+            'ondragend',
+            'ondragenter',
+            'ondragleave',
+            'ondragover',
+            'ondragstart',
+            'ondrop',
+            'ondurationchange',
+            'onemptied',
+            'onended',
+            'onerror',
+            'onfocus',
+            'oninput',
+            'oninvalid',
+            'onkeydown',
+            'onkeypress',
+            'onkeyup',
+            'onload',
+            'onloadeddata',
+            'onloadedmetadata',
+            'onloadstart',
+            'onmousedown',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'controls',
+            'onmozfullscreenchange',
+            'onmozfullscreenerror',
+            'onpause',
+            'onplay',
+            'onplaying',
+            'onprogress',
+            'onratechange',
+            'onreset',
+            'onscroll',
+            'onseeked',
+            'onseeking',
+            'onselect',
+            'onshow',
+            'onstalled',
+            'onsubmit',
+            'onsuspend',
+            'ontimeupdate',
+            'onvolumechange',
+            'onwaiting',
+            'oncopy',
+            'oncut',
+            'onpaste',
+            'onbeforescriptexecute',
+            'onafterscriptexecute',
         ];
 
         return in_array($attribute, $globalAttributes);

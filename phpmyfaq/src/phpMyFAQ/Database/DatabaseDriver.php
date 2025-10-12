@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Interface for database drivers.
  *
@@ -39,7 +41,7 @@ interface DatabaseDriver
         string $user,
         string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool;
 
     /**

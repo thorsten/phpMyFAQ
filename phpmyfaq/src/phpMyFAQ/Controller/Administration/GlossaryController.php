@@ -46,26 +46,23 @@ class GlossaryController extends AbstractAdministrationController
         $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($this->configuration->getLanguage()->getLanguage());
 
-        return $this->render(
-            '@admin/content/glossary.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderGlossary' => Translation::get('ad_menu_glossary'),
-                'msgAddGlossary' => Translation::get('ad_glossary_add'),
-                'msgGlossaryItem' => Translation::get('ad_glossary_item'),
-                'msgGlossaryDefinition' => Translation::get('ad_glossary_definition'),
-                'glossaryItems' => $glossary->fetchAll(),
-                'buttonDelete' => Translation::get('msgDelete'),
-                'csrfTokenDelete' => Token::getInstance($session)->getTokenString('delete-glossary'),
-                'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),
-                'addGlossaryTitle' => Translation::get('ad_glossary_add'),
-                'addGlossaryCsrfTokenInput' => Token::getInstance($session)->getTokenInput('add-glossary'),
-                'closeModal' => Translation::get('ad_att_close'),
-                'saveModal' => Translation::get('ad_gen_save'),
-                'updateGlossaryTitle' => Translation::get('ad_glossary_edit'),
-                'updateGlossaryCsrfToken' => Token::getInstance($session)->getTokenString('update-glossary'),
-            ]
-        );
+        return $this->render('@admin/content/glossary.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderGlossary' => Translation::get('ad_menu_glossary'),
+            'msgAddGlossary' => Translation::get('ad_glossary_add'),
+            'msgGlossaryItem' => Translation::get('ad_glossary_item'),
+            'msgGlossaryDefinition' => Translation::get('ad_glossary_definition'),
+            'glossaryItems' => $glossary->fetchAll(),
+            'buttonDelete' => Translation::get('msgDelete'),
+            'csrfTokenDelete' => Token::getInstance($session)->getTokenString('delete-glossary'),
+            'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),
+            'addGlossaryTitle' => Translation::get('ad_glossary_add'),
+            'addGlossaryCsrfTokenInput' => Token::getInstance($session)->getTokenInput('add-glossary'),
+            'closeModal' => Translation::get('ad_att_close'),
+            'saveModal' => Translation::get('ad_gen_save'),
+            'updateGlossaryTitle' => Translation::get('ad_glossary_edit'),
+            'updateGlossaryCsrfToken' => Token::getInstance($session)->getTokenString('update-glossary'),
+        ]);
     }
 }

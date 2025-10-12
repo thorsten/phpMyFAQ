@@ -41,14 +41,11 @@ class PasswordChangeController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::PASSWORD_CHANGE);
 
-        return $this->render(
-            '@admin/user/password.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars()
-            ]
-        );
+        return $this->render('@admin/user/password.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+        ]);
     }
 
     /**
@@ -76,7 +73,7 @@ class PasswordChangeController extends AbstractAdministrationController
         $newPassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS);
         $retypedPassword = Filter::filterVar(
             $request->request->get('faqpassword_confirm'),
-            FILTER_SANITIZE_SPECIAL_CHARS
+            FILTER_SANITIZE_SPECIAL_CHARS,
         );
 
         $successMessage = '';
@@ -84,10 +81,8 @@ class PasswordChangeController extends AbstractAdministrationController
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
             $errorMessage = Translation::get('ad_passwd_fail');
         } elseif (
-            ($authSource->checkCredentials(
-                $this->currentUser->getLogin(),
-                $oldPassword
-            )) && ($newPassword == $retypedPassword)
+            $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
+            && $newPassword == $retypedPassword
         ) {
             if (!$this->currentUser->changePassword($newPassword)) {
                 $errorMessage = Translation::get('ad_passwd_fail');
@@ -98,16 +93,13 @@ class PasswordChangeController extends AbstractAdministrationController
             $errorMessage = Translation::get('ad_passwd_fail');
         }
 
-        return $this->render(
-            '@admin/user/password.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'successMessage' => $successMessage,
-                'errorMessage' => $errorMessage,
-            ]
-        );
+        return $this->render('@admin/user/password.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'successMessage' => $successMessage,
+            'errorMessage' => $errorMessage,
+        ]);
     }
 
     /**
@@ -122,7 +114,7 @@ class PasswordChangeController extends AbstractAdministrationController
             'adminMsgOldPassword' => Translation::get('ad_passwd_old'),
             'adminMsgNewPassword' => Translation::get('ad_passwd_new'),
             'adminMsgNewPasswordConfirm' => Translation::get('ad_passwd_con'),
-            'adminMsgButtonNewPassword' => Translation::get('ad_passwd_change')
+            'adminMsgButtonNewPassword' => Translation::get('ad_passwd_change'),
         ];
     }
 }

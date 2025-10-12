@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\Pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -62,7 +64,7 @@ class Pgsql implements DatabaseDriver
         #[\SensitiveParameter] string $user,
         #[\SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $connectionString = sprintf(
             'host=%s port=%d dbname=%s user=%s password=%s',
@@ -70,7 +72,7 @@ class Pgsql implements DatabaseDriver
             $port,
             $database,
             $user,
-            $password
+            $password,
         );
 
         try {

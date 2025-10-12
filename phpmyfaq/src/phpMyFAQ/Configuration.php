@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
@@ -47,7 +49,6 @@ class Configuration
 
     private PluginManager $pluginManager;
 
-
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
@@ -81,7 +82,7 @@ class Configuration
     {
         $this->logger = new Logger('phpmyfaq');
         $this->logger->pushHandler(
-            new StreamHandler(PMF_LOG_DIR, Environment::isDebugMode() ? Level::Debug : Level::Warning)
+            new StreamHandler(PMF_LOG_DIR, Environment::isDebugMode() ? Level::Debug : Level::Warning),
         );
         $this->logger->pushHandler(new BrowserConsoleHandler());
     }
@@ -101,7 +102,7 @@ class Configuration
             Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim((string) $value)),
-            $this->getDb()->escape(trim($key))
+            $this->getDb()->escape(trim($key)),
         );
 
         return (bool) $this->getDb()->query($query);
@@ -244,11 +245,7 @@ class Configuration
      */
     public function getAll(): array
     {
-        $query = sprintf(
-            'SELECT config_name, config_value FROM %s%s',
-            Database::getTablePrefix(),
-            $this->tableName
-        );
+        $query = sprintf('SELECT config_name, config_value FROM %s%s', Database::getTablePrefix(), $this->tableName);
 
         $result = $this->getDb()->query($query);
         $config = $this->getDb()->fetchAll($result);
@@ -443,10 +440,10 @@ class Configuration
                 Database::getTablePrefix(),
                 $this->tableName,
                 $this->getDb()->escape(trim($name)),
-                $this->getDb()->escape(trim((string)$value))
+                $this->getDb()->escape(trim((string) $value)),
             );
 
-            return (bool)$this->getDb()->query($insert);
+            return (bool) $this->getDb()->query($insert);
         }
 
         return true;
@@ -461,7 +458,7 @@ class Configuration
             "DELETE FROM %s%s WHERE config_name = '%s'",
             Database::getTablePrefix(),
             $this->tableName,
-            $this->getDb()->escape(trim($name))
+            $this->getDb()->escape(trim($name)),
         );
 
         return (bool) $this->getDb()->query($delete);
@@ -477,10 +474,10 @@ class Configuration
             Database::getTablePrefix(),
             $this->tableName,
             $newKey,
-            $currentKey
+            $currentKey,
         );
 
-        return (bool)$this->getDb()->query($rename);
+        return (bool) $this->getDb()->query($rename);
     }
 
     /**
@@ -510,7 +507,7 @@ class Configuration
                     Database::getTablePrefix(),
                     $this->tableName,
                     $this->getDb()->escape(trim($value ?? '')),
-                    $name
+                    $name,
                 );
 
                 $this->getDb()->query($update);
@@ -532,7 +529,7 @@ class Configuration
      */
     public function replaceMainReferenceUrl(string $oldUrl, string $newUrl): bool
     {
-        $query = sprintf("SELECT content FROM %sfaqdata", Database::getTablePrefix());
+        $query = sprintf('SELECT content FROM %sfaqdata', Database::getTablePrefix());
         $response = $this->getDb()->query($query);
         $contentItems = $this->getDb()->fetchAll($response);
         $newContentItems = [];
@@ -551,7 +548,7 @@ class Configuration
                 "UPDATE %sfaqdata SET content='%s' WHERE content='%s'",
                 Database::getTablePrefix(),
                 $this->getDb()->escape($newContentItem),
-                $this->getDb()->escape($contentItems[$count]->content)
+                $this->getDb()->escape($contentItems[$count]->content),
             );
             $count++;
             $this->getDb()->query($query);

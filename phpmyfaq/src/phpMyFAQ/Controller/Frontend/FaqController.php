@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The FAQ Controller
  *
@@ -53,7 +55,7 @@ class FaqController extends AbstractController
         $language = $this->container->get('phpmyfaq.language');
         $languageCode = $language->setLanguage(
             $this->configuration->get('main.languageDetection'),
-            $this->configuration->get('main.language')
+            $this->configuration->get('main.language'),
         );
 
         if (!$this->isAddingFaqsAllowed($this->currentUser)) {
@@ -80,12 +82,10 @@ class FaqController extends AbstractController
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         if (isset($data->rubrik)) {
             if (is_string($data->rubrik)) {
-                $data->rubrik = [ $data->rubrik ];
+                $data->rubrik = [$data->rubrik];
             }
 
-            $categories = Filter::filterArray(
-                $data->rubrik
-            );
+            $categories = Filter::filterArray($data->rubrik);
         } else {
             $categories = [$category->getAllCategoryIds()[0]];
         }
@@ -95,11 +95,13 @@ class FaqController extends AbstractController
         }
 
         if (
-            $author !== '' &&
-            $author !== '0' &&
-            ($email !== '' && $email !== '0') &&
-            ($questionText !== '' && $questionText !== '0') &&
-            $stopWords->checkBannedWord(strip_tags($questionText))
+            $author !== ''
+            && $author !== '0'
+            && $email !== ''
+            && $email !== '0'
+            && $questionText !== ''
+            && $questionText !== '0'
+            && $stopWords->checkBannedWord(strip_tags($questionText))
         ) {
             if ($answer !== '' && $answer !== '0') {
                 $stopWords->checkBannedWord(strip_tags($answer));
@@ -145,9 +147,7 @@ class FaqController extends AbstractController
 
             // Let the admin and the category owners to be informed by email of this new entry
             $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
-            $categoryHelper
-                ->setCategory($category)
-                ->setConfiguration($this->configuration);
+            $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
 
             $moderators = $categoryHelper->getModerators($categories);
 
@@ -163,26 +163,23 @@ class FaqController extends AbstractController
             try {
                 $notification = $this->container->get('phpmyfaq.notification');
                 $notification->sendNewFaqAdded($moderators, $faqEntity);
-            } catch (Exception | TransportExceptionInterface $e) {
-                $this->configuration->getLogger()->info('Notification could not be sent: ', [ $e->getMessage() ]);
+            } catch (Exception|TransportExceptionInterface $e) {
+                $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
             }
 
             if ($this->configuration->get('records.defaultActivation')) {
                 $link = [
                     'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
-                    'info' => Translation::get('msgRedirect')
+                    'info' => Translation::get('msgRedirect'),
                 ];
             } else {
                 $link = [];
             }
 
-            return $this->json(
-                [
-                    'success' => Translation::get('msgNewContentThanks'),
-                    ... $link
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'success' => Translation::get('msgNewContentThanks'),
+                ...$link,
+            ], Response::HTTP_OK);
         }
 
         return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
@@ -193,9 +190,9 @@ class FaqController extends AbstractController
      */
     private function isAddingFaqsAllowed(CurrentUser $currentUser): bool
     {
-        return !(!$this->configuration->get('records.allowNewFaqsForGuests') && !$currentUser->perm->hasPermission(
-            $currentUser->getUserId(),
-            PermissionType::FAQ_ADD->value,
-        ));
+        return !(
+            !$this->configuration->get('records.allowNewFaqsForGuests')
+            && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::FAQ_ADD->value)
+        );
     }
 }

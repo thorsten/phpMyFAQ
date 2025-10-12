@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The database abstraction factory.
  *
@@ -88,9 +90,11 @@ class Database
      */
     public static function checkOnEmptyTable(string $tableName): bool
     {
-        return self::$databaseDriver->numRows(
-            self::$databaseDriver->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
-        ) < 1;
+        return (
+            self::$databaseDriver->numRows(self::$databaseDriver->query('SELECT * FROM '
+            . self::getTablePrefix()
+            . $tableName)) < 1
+        );
     }
 
     /**
@@ -98,7 +102,8 @@ class Database
      */
     public static function errorPage(string $method): void
     {
-        echo '<!DOCTYPE html>
+        echo
+            '<!DOCTYPE html>
             <html lang="en" class="no-js">
             <head>
                 <meta charset="utf-8">
@@ -110,10 +115,13 @@ class Database
                 <div class="container">
                 <h1 class="pt-5">Fatal phpMyFAQ Error</h1>
                 <p class="alert alert-danger mt-5">The connection to the database server could not be established.</p>
-                <p class="alert alert-info p-2">The error message of the database server: ' . $method . '</p>
+                <p class="alert alert-info p-2">The error message of the database server: '
+                . $method
+                . '</p>
                 </div>
             </body>
-            </html>';
+            </html>'
+        ;
     }
 
     /**

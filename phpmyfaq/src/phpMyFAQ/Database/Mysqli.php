@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\Mysqli class provides methods and functions for MySQL and
  * MariaDB databases.
@@ -21,8 +23,8 @@ namespace phpMyFAQ\Database;
 
 use mysqli_result;
 use mysqli_sql_exception;
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use SensitiveParameter;
 
 /**
@@ -62,7 +64,7 @@ class Mysqli implements DatabaseDriver
         #[\SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         try {
             if (str_starts_with($host, '/')) {
@@ -272,15 +274,11 @@ class Mysqli implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $select = sprintf(
-            '
+        $select = sprintf('
            SELECT
                MAX(%s) AS current_id
            FROM
-               %s',
-            $columnId,
-            $table
-        );
+               %s', $columnId, $table);
 
         $mysqliresult = $this->query($select);
 

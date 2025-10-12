@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The News class for phpMyFAQ news.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -31,8 +33,9 @@ readonly class News
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -55,7 +58,7 @@ readonly class News
                 '%sindex.php?action=news&newsid=%d&newslang=%s',
                 $this->configuration->getDefaultUrl(),
                 $news['id'],
-                $news['lang']
+                $news['lang'],
             );
 
             $link = new Link($url, $this->configuration);
@@ -64,7 +67,7 @@ readonly class News
             $entry->url = $link->toString();
             $entry->header = $news['header'];
             $entry->content = strip_tags((string) $news['content']);
-            $entry->date =  $date->format($news['date']);
+            $entry->date = $date->format($news['date']);
 
             $output[] = $entry;
         }
@@ -95,36 +98,36 @@ readonly class News
         $result = $this->configuration->getDb()->query($query);
         $numberOfShownNews = $this->configuration->get('records.numberOfShownNewsEntries');
         if ($numberOfShownNews > 0 && $this->configuration->getDb()->numRows($result) > 0) {
-            while (($row = $this->configuration->getDb()->fetchObject($result))) {
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 ++$counter;
                 if (
-                    ($showArchive && ($counter > $numberOfShownNews)) ||
-                    ((!$showArchive) && (!$forceConfLimit) && ($counter <= $numberOfShownNews)) ||
-                    ((!$showArchive) && $forceConfLimit)
+                    $showArchive && $counter > $numberOfShownNews
+                    || !$showArchive && !$forceConfLimit && $counter <= $numberOfShownNews
+                    || !$showArchive && $forceConfLimit
                 ) {
                     $url = sprintf(
                         '%sindex.php?action=news&newsid=%d&newslang=%s',
                         $this->configuration->getDefaultUrl(),
                         $row->id,
-                        $row->lang
+                        $row->lang,
                     );
                     $oLink = new Link($url, $this->configuration);
                     $oLink->itemTitle = $row->header;
 
                     $item = [
-                        'id' => (int)$row->id,
+                        'id' => (int) $row->id,
                         'lang' => $row->lang,
                         'date' => Date::createIsoDate($row->datum, DATE_ATOM),
                         'header' => $row->header,
                         'content' => $row->artikel,
                         'authorName' => $row->author_name,
                         'authorEmail' => $row->author_email,
-                        'active' => ('y' == $row->active),
-                        'allowComments' => ('y' == $row->comment),
+                        'active' => 'y' == $row->active,
+                        'allowComments' => 'y' == $row->comment,
                         'link' => $row->link,
                         'linkTitle' => $row->linktitel,
                         'target' => $row->target,
-                        'url' => $oLink->toString()
+                        'url' => $oLink->toString(),
                     ];
                     $news[] = $item;
                 }
@@ -141,7 +144,8 @@ readonly class News
     {
         $headers = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, datum, lang, header, active
             FROM
@@ -149,7 +153,10 @@ readonly class News
             WHERE
                 lang = '%s'
             ORDER BY
-                datum DESC", Database::getTablePrefix(), $this->configuration->getLanguage()->getLanguage());
+                datum DESC",
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage(),
+        );
 
         $result = $this->configuration->getDb()->query($query);
 
@@ -160,7 +167,7 @@ readonly class News
                     'lang' => $row->lang,
                     'header' => $row->header,
                     'date' => Date::createIsoDate($row->datum),
-                    'active' => $row->active
+                    'active' => $row->active,
                 ];
             }
         }
@@ -183,18 +190,18 @@ readonly class News
             "SELECT * FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $newsId,
-            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         if (
-            $this->configuration->getDb()->numRows($result) > 0 &&
-            ($row = $this->configuration->getDb()->fetchObject($result))
+            $this->configuration->getDb()->numRows($result) > 0 && ($row =
+                $this->configuration->getDb()->fetchObject($result))
         ) {
             $content = $row->artikel;
-            $active = ('y' == $row->active);
-            $allowComments = ('y' == $row->comment);
+            $active = 'y' == $row->active;
+            $allowComments = 'y' == $row->comment;
             if (!$admin && !$active) {
                 $content = Translation::get('err_inactiveNews');
             }
@@ -211,7 +218,7 @@ readonly class News
                 'allowComments' => $allowComments,
                 'link' => $row->link,
                 'linkTitle' => $row->linktitel,
-                'target' => $row->target
+                'target' => $row->target,
             ];
         }
 
@@ -244,7 +251,7 @@ readonly class News
             $newsMessage->isComment() ? 'y' : 'n',
             $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
             $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
-            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? '')
+            $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? ''),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -287,7 +294,7 @@ readonly class News
             $this->configuration->getDb()->escape($newsMessage->getLink() ?? ''),
             $this->configuration->getDb()->escape($newsMessage->getLinkTitle() ?? ''),
             $this->configuration->getDb()->escape($newsMessage->getLinkTarget() ?? ''),
-            $newsMessage->getId()
+            $newsMessage->getId(),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -304,7 +311,7 @@ readonly class News
             "DELETE FROM %sfaqnews WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $newsId,
-            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage())
+            $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -322,7 +329,7 @@ readonly class News
             "UPDATE %sfaqnews SET active = '%s' WHERE id = %d",
             Database::getTablePrefix(),
             $status ? 'y' : 'n',
-            $newsId
+            $newsId,
         );
 
         return (bool) $this->configuration->getDb()->query($query);

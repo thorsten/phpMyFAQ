@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Configuration;
 
 readonly class OpenSearchConfiguration
@@ -16,7 +18,7 @@ readonly class OpenSearchConfiguration
             'index' => '',
         ];
 
-        include($filename);
+        include $filename;
 
         $this->hosts = $PMF_OS['hosts'];
         $this->index = $PMF_OS['index'];

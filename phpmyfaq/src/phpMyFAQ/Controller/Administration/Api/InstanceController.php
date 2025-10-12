@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Instance Controller
  *
@@ -71,10 +73,7 @@ class InstanceController extends AbstractController
         }
 
         $data = new InstanceEntity();
-        $data
-            ->setUrl($url)
-            ->setInstance($instance)
-            ->setComment($comment);
+        $data->setUrl($url)->setInstance($instance)->setComment($comment);
 
         $faqInstance = $this->container->get('phpmyfaq.instance');
         $instanceId = $faqInstance->create($data);
@@ -105,7 +104,7 @@ class InstanceController extends AbstractController
                 'dbPassword' => $databaseConfiguration->getPassword(),
                 'dbDatabaseName' => $databaseConfiguration->getDatabase(),
                 'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType' => $databaseConfiguration->getType()
+                'dbType' => $databaseConfiguration->getType(),
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
@@ -166,11 +165,7 @@ class InstanceController extends AbstractController
             $client = new Client($configuration);
             $client->setFileSystem(new Filesystem());
             $clientData = $client->getById($instanceId);
-            if (
-                1 !== $instanceId &&
-                $client->deleteClientFolder($clientData->url) &&
-                $client->delete($instanceId)
-            ) {
+            if (1 !== $instanceId && $client->deleteClientFolder($clientData->url) && $client->delete($instanceId)) {
                 return $this->json(['deleted' => $instanceId], Response::HTTP_OK);
             }
 

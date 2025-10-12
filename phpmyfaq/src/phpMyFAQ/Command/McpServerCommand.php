@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ MCP Server Console Command
  *
@@ -33,30 +35,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * This command starts the MCP server that allows LLM models to query
  * the phpMyFAQ knowledge base through the MCP protocol.
  */
-#[AsCommand(
-    name: 'phpmyfaq:mcp:server',
-    description: 'Run the phpMyFAQ MCP server for LLM integration'
-)]
+#[AsCommand(name: 'phpmyfaq:mcp:server', description: 'Run the phpMyFAQ MCP server for LLM integration')]
 class McpServerCommand extends Command
 {
-    public function __construct(private readonly PhpMyFaqMcpServer $mcpServer)
-    {
+    public function __construct(
+        private readonly PhpMyFaqMcpServer $mcpServer,
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Run the phpMyFAQ MCP server for LLM integration')
+        $this->setDescription('Run the phpMyFAQ MCP server for LLM integration')
             ->setHelp(
-                'This command starts the MCP server that allows LLM models to search and query phpMyFAQ installations.'
+                'This command starts the MCP server that allows LLM models to search and query phpMyFAQ installations.',
             )
-            ->addOption(
-                'info',
-                'i',
-                InputOption::VALUE_NONE,
-                'Show server information instead of running the server'
-            );
+            ->addOption('info', 'i', InputOption::VALUE_NONE, 'Show server information instead of running the server');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The FAQ revisions class.
  *
@@ -31,8 +33,9 @@ readonly class Revision
     /**
      * Revision constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -56,14 +59,13 @@ readonly class Revision
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getDb()->escape($faqLanguage)
+            $this->configuration->getDb()->escape($faqLanguage),
         );
 
         $this->configuration->getDb()->query($query);
 
         return true;
     }
-
 
     /**
      * Gets all revisions from a given FAQ ID and FAQ language
@@ -85,7 +87,7 @@ readonly class Revision
                 revision_id",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getDb()->escape($faqLanguage)
+            $this->configuration->getDb()->escape($faqLanguage),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -112,7 +114,7 @@ readonly class Revision
             "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getDb()->escape($faqLanguage)
+            $this->configuration->getDb()->escape($faqLanguage),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The language codes class provides support for language codes in phpMyFAQ translations.
  *
@@ -241,7 +243,7 @@ class LanguageCodes
         'zh_mo' => 'Chinese (Macau SAR)',
         'zh_sg' => 'Chinese (Singapore)',
         'zh_tw' => 'Chinese (Taiwan)',
-        'zu' => 'Zulu'
+        'zu' => 'Zulu',
     ];
 
     /**
@@ -332,7 +334,7 @@ class LanguageCodes
         return static::$supportedLanguageCodes[strtolower($key)] ?? null;
     }
 
-    public static function getKey(string $value): ?string
+    public static function getKey(string $value): false|int|string
     {
         return array_search($value, static::$languageCodes, true);
     }

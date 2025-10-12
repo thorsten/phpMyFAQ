@@ -20,15 +20,15 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use Exception;
+use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Enums\PermissionType;
-use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\System;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 
 class AbstractAdministrationController extends AbstractController
@@ -63,7 +63,7 @@ class AbstractAdministrationController extends AbstractController
             'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
             'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
                 $this->configuration->getLanguage()->getLanguage(),
-                true
+                true,
             ),
             'userName' => $this->currentUser->getUserData('display_name'),
             'hasGravatarSupport' => $this->configuration->get('main.enableGravatarSupport'),
@@ -89,156 +89,148 @@ class AbstractAdministrationController extends AbstractController
         $secLevelEntries['user'] = $adminHelper->addMenuEntry(
             'add_user+edit_user+delete_user',
             'ad_menu_user_administration',
-            'user'
+            'user',
         );
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
                 'addgroup+editgroup+delgroup',
                 'ad_menu_group_administration',
-                'group'
+                'group',
             );
         }
 
         $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
             PermissionType::PASSWORD_CHANGE->value,
             'ad_menu_passwd',
-            'password/change'
+            'password/change',
         );
 
         $secLevelEntries['content'] = $adminHelper->addMenuEntry(
             'addcateg+editcateg+delcateg',
             'msgHeaderCategoryOverview',
-            'category'
+            'category',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'msgAddFAQ',
-            'faq/add'
+            'faq/add',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'edit_faq+delete_faq',
             'msgHeaderFAQOverview',
-            'faqs'
+            'faqs',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,
             'stickyRecordsHeader',
-            'sticky-faqs'
+            'sticky-faqs',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::FAQ_EDIT->value,
             'msgOrphanedFAQs',
-            'orphaned-faqs'
+            'orphaned-faqs',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::QUESTION_DELETE->value,
             'ad_menu_open',
-            'questions'
+            'questions',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             PermissionType::COMMENT_DELETE->value,
             'ad_menu_comments',
-            'comments'
+            'comments',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addattachment+editattachment+delattachment',
             'msgAttachments',
-            'attachments'
+            'attachments',
         );
-        $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
-            PermissionType::FAQ_EDIT->value,
-            'msgTags',
-            'tags'
-        );
+        $secLevelEntries['content'] .= $adminHelper->addMenuEntry(PermissionType::FAQ_EDIT->value, 'msgTags', 'tags');
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addglossary+editglossary+delglossary',
             'ad_menu_glossary',
-            'glossary'
+            'glossary',
         );
         $secLevelEntries['content'] .= $adminHelper->addMenuEntry(
             'addnews+editnews+delnews',
             'ad_menu_news_edit',
-            'news'
+            'news',
         );
 
         $secLevelEntries['statistics'] = $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_VIEWLOGS->value,
             'ad_menu_stat',
-            'statistics/ratings'
+            'statistics/ratings',
         );
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_VIEWLOGS->value,
             'ad_menu_session',
-            'statistics/sessions'
+            'statistics/sessions',
         );
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_ADMINLOG->value,
             'ad_menu_adminlog',
-            'statistics/admin-log'
+            'statistics/admin-log',
         );
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::STATISTICS_VIEWLOGS->value,
             'msgAdminElasticsearchStats',
-            'statistics/search'
+            'statistics/search',
         );
         $secLevelEntries['statistics'] .= $adminHelper->addMenuEntry(
             PermissionType::REPORTS->value,
             'ad_menu_reports',
-            'statistics/report'
+            'statistics/report',
         );
 
         $secLevelEntries['imports_exports'] = $adminHelper->addMenuEntry(
             PermissionType::FAQ_ADD->value,
             'msgImportRecords',
-            'import'
+            'import',
         );
         $secLevelEntries['imports_exports'] .= $adminHelper->addMenuEntry(
             PermissionType::EXPORT->value,
             'ad_menu_export',
-            'export'
+            'export',
         );
 
         $secLevelEntries['backup'] = $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_menu_backup',
-            'backup'
+            'backup',
         );
 
         $secLevelEntries['config'] = $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_menu_editconfig',
-            'configuration'
+            'configuration',
         );
-        $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
-            'forms_edit',
-            'msgEditForms',
-            'forms'
-        );
+        $secLevelEntries['config'] .= $adminHelper->addMenuEntry('forms_edit', 'msgEditForms', 'forms');
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             'editinstances+addinstances+delinstances',
             'ad_menu_instances',
-            'instances'
+            'instances',
         );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_menu_stopwordsconfig',
-            'stopwords'
+            'stopwords',
         );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'msgAdminHeaderUpdate',
-            'update'
+            'update',
         );
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'msgPlugins',
-            'plugins'
+            'plugins',
         );
         if ($this->configuration->get('search.enableElasticsearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
                 'msgAdminHeaderElasticsearch',
-                'elasticsearch'
+                'elasticsearch',
             );
         }
 
@@ -246,14 +238,14 @@ class AbstractAdministrationController extends AbstractController
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
                 'msgAdminHeaderOpenSearch',
-                'opensearch'
+                'opensearch',
             );
         }
 
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'ad_system_info',
-            'system'
+            'system',
         );
 
         return $secLevelEntries;
@@ -357,10 +349,10 @@ class AbstractAdministrationController extends AbstractController
     {
         if ($this->currentUser->isLoggedIn() && $this->configuration->get('main.enableGravatarSupport')) {
             $gravatar = new Gravatar();
-            return $gravatar->getImage(
-                $this->currentUser->getUserData('email'),
-                ['size' => '24', 'class' => 'img-profile rounded-circle']
-            );
+            return $gravatar->getImage($this->currentUser->getUserData('email'), [
+                'size' => '24',
+                'class' => 'img-profile rounded-circle',
+            ]);
         }
 
         return '';

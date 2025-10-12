@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * OAuth class for Entra ID.
  *
@@ -45,7 +47,7 @@ class OAuth
      */
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly EntraIdSession $entraIdSession
+        private readonly EntraIdSession $entraIdSession,
     ) {
         $this->httpClient = HttpClient::create();
     }
@@ -81,8 +83,8 @@ class OAuth
                 'redirect_uri' => $this->configuration->getDefaultUrl() . 'services/azure/callback.php',
                 'code' => $code,
                 'code_verifier' => $codeVerifier,
-                'client_secret' => AAD_OAUTH_SECRET
-            ]
+                'client_secret' => AAD_OAUTH_SECRET,
+            ],
         ]);
 
         return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);
@@ -101,8 +103,8 @@ class OAuth
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $this->getRefreshToken(),
                 'client_id' => AAD_OAUTH_CLIENTID,
-                'scope' => AAD_OAUTH_SCOPE
-            ]
+                'scope' => AAD_OAUTH_SCOPE,
+            ],
         ]);
 
         return json_decode($response->getContent(), null, 512, JSON_THROW_ON_ERROR);

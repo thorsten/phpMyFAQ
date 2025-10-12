@@ -49,8 +49,7 @@ class UpdateCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setName(self::$defaultName)
+        $this->setName(self::$defaultName)
             ->setDescription('Executes the phpMyFAQ update process')
             ->addArgument('version', InputArgument::OPTIONAL, 'Requested version for the update');
     }
@@ -94,13 +93,11 @@ class UpdateCommand extends Command
                 return Command::FAILURE;
             }
 
-            $symfonyStyle->success(
-                sprintf(
-                    'phpMyFAQ was successfully updated to version %s on %s.',
-                    System::getVersion(),
-                    (new DateTime())->format('Y-m-d H:i:s')
-                )
-            );
+            $symfonyStyle->success(sprintf(
+                'phpMyFAQ was successfully updated to version %s on %s.',
+                System::getVersion(),
+                (new DateTime())->format('Y-m-d H:i:s'),
+            ));
             return Command::SUCCESS;
         } catch (Throwable $throwable) {
             $symfonyStyle->error('Error during update: ' . $throwable->getMessage());
@@ -110,7 +107,6 @@ class UpdateCommand extends Command
 
     private function taskHealthCheck(SymfonyStyle $symfonyStyle): int
     {
-
         $upgrade = new Upgrade($this->system, $this->configuration);
         if (!$upgrade->isMaintenanceEnabled()) {
             $symfonyStyle->warning(Translation::get('msgNotInMaintenanceMode'));
@@ -143,10 +139,9 @@ class UpdateCommand extends Command
                 $symfonyStyle->success(Translation::get('msgCurrentVersion') . $versions[$branch]);
             }
 
-
             $this->version = $versions['installed'];
             $symfonyStyle->success(Translation::get('versionIsUpToDate') . ' (' . $this->version . ')');
-        } catch (Exception | TransportExceptionInterface | DecodingExceptionInterface $exception) {
+        } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             $symfonyStyle->error('Error during update check: ' . $exception->getMessage());
         }
 
@@ -197,7 +192,7 @@ class UpdateCommand extends Command
         $progressBar->start();
 
         $progressCallback = static function ($progress) use ($progressBar): void {
-            $progressBar->setProgress((int)$progress);
+            $progressBar->setProgress((int) $progress);
         };
 
         $result = $upgrade->extractPackage($pathToPackage, $progressCallback);
@@ -227,7 +222,7 @@ class UpdateCommand extends Command
         $progressBar->start();
 
         $progressCallback = static function ($progress) use ($progressBar): void {
-            $progressBar->setProgress((int)$progress);
+            $progressBar->setProgress((int) $progress);
         };
 
         $result = $upgrade->createTemporaryBackup($backupFile, $progressCallback);
@@ -256,7 +251,7 @@ class UpdateCommand extends Command
         $progressBar->start();
 
         $progressCallback = static function ($progress) use ($progressBar): void {
-            $progressBar->setProgress((int)$progress);
+            $progressBar->setProgress((int) $progress);
         };
 
         $result = $upgrade->installPackage($progressCallback) && $environmentConfigurator->adjustRewriteBaseHtaccess();

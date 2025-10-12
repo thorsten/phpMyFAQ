@@ -25,9 +25,9 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatDateTwigExtension;
 use phpMyFAQ\Twig\Extensions\IsoDateTwigExtension;
-use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -52,15 +52,12 @@ class NewsController extends AbstractAdministrationController
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
-        return $this->render(
-            '@admin/content/news.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'news' => $news->getHeader()
-            ]
-        );
+        return $this->render('@admin/content/news.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'news' => $news->getHeader(),
+        ]);
     }
 
     /**
@@ -75,16 +72,13 @@ class NewsController extends AbstractAdministrationController
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
-        return $this->render(
-            '@admin/content/news.add.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'userEmail' => $this->currentUser->getUserData('email'),
-                'userName' => $this->currentUser->getUserData('display_name')
-            ]
-        );
+        return $this->render('@admin/content/news.add.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'userEmail' => $this->currentUser->getUserData('email'),
+            'userName' => $this->currentUser->getUserData('display_name'),
+        ]);
     }
 
     /**
@@ -107,22 +101,18 @@ class NewsController extends AbstractAdministrationController
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
-        return $this->render(
-            '@admin/content/news.edit.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'newsData' => $newsData,
-                'newsDataContent' => (isset($newsData['content']) ? htmlspecialchars(
-                    (string)$newsData['content'],
-                    ENT_QUOTES
-                ) : ''),
-                'comments' => $comments,
-                'newsId' => $newsId,
-                'commentTypeNews' => CommentType::NEWS
-            ]
-        );
+        return $this->render('@admin/content/news.edit.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'newsData' => $newsData,
+            'newsDataContent' => isset($newsData['content'])
+                ? htmlspecialchars((string) $newsData['content'], ENT_QUOTES)
+                : '',
+            'comments' => $comments,
+            'newsId' => $newsId,
+            'commentTypeNews' => CommentType::NEWS,
+        ]);
     }
 
     /**
@@ -185,7 +175,7 @@ class NewsController extends AbstractAdministrationController
             'csrfToken_deleteNews' => Token::getInstance($session)->getTokenString('delete-news'),
             'csrfToken_updateNews' => Token::getInstance($session)->getTokenString('update-news'),
             'ad_entry_active' => Translation::get('ad_entry_active'),
-            'csrfToken_activateNews' => Token::getInstance($session)->getTokenString('activate-news')
+            'csrfToken_activateNews' => Token::getInstance($session)->getTokenString('activate-news'),
         ];
     }
 }

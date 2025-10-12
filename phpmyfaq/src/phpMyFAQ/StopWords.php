@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main StopWords class.
  *
@@ -29,8 +31,9 @@ class StopWords
 
     private readonly string $tableName;
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         $this->tableName = Database::getTablePrefix() . 'faqstopwords';
     }
 
@@ -62,7 +65,7 @@ class StopWords
                 $this->getTableName(),
                 $this->configuration->getDb()->nextId($this->tableName, 'id'),
                 $this->configuration->getDb()->escape($this->language),
-                $word
+                $word,
             );
 
             return (bool) $this->configuration->getDb()->query($sql);
@@ -82,7 +85,7 @@ class StopWords
             $this->getTableName(),
             $this->configuration->getDb()->escape($word),
             $id,
-            $this->configuration->getDb()->escape($this->language)
+            $this->configuration->getDb()->escape($this->language),
         );
 
         return (bool) $this->configuration->getDb()->query($sql);
@@ -97,7 +100,7 @@ class StopWords
             "DELETE FROM %s WHERE id = %d AND lang = '%s'",
             $this->getTableName(),
             $id,
-            $this->configuration->getDb()->escape($this->language)
+            $this->configuration->getDb()->escape($this->language),
         );
 
         return (bool) $this->configuration->getDb()->query($sql);
@@ -112,7 +115,7 @@ class StopWords
             "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
             $this->getTableName(),
             $this->configuration->getDb()->escape($word),
-            $this->configuration->getDb()->escape($this->language)
+            $this->configuration->getDb()->escape($this->language),
         );
 
         $result = $this->configuration->getDb()->query($sql);
@@ -132,7 +135,7 @@ class StopWords
         $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
             $this->getTableName(),
-            $this->configuration->getDb()->escape($lang)
+            $this->configuration->getDb()->escape($lang),
         );
 
         $result = $this->configuration->getDb()->query($sql);
@@ -195,7 +198,7 @@ class StopWords
     {
         // Sanity checks
         $content = Strings::strtolower(trim($content));
-        if (('' === $content) || (!$this->configuration->get('spam.checkBannedWords'))) {
+        if ('' === $content || !$this->configuration->get('spam.checkBannedWords')) {
             return true;
         }
 

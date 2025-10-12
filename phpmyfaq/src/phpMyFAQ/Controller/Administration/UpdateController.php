@@ -44,18 +44,14 @@ class UpdateController extends AbstractAdministrationController
 
         $isOnNightlies = $this->configuration->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
 
-        return $this->render(
-            '@admin/configuration/upgrade.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'csrfActivateMaintenanceMode' => Token::getInstance($session)
-                    ->getTokenString('activate-maintenance-mode'),
-                'isOnNightlies' => $isOnNightlies,
-                'releaseEnvironment' => ucfirst((string) $this->configuration->get('upgrade.releaseEnvironment')),
-                'dateLastChecked' => $this->configuration->get('upgrade.dateLastChecked'),
-                'versionCurrent' => $this->configuration->get('main.currentVersion'),
-            ]
-        );
+        return $this->render('@admin/configuration/upgrade.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfActivateMaintenanceMode' => Token::getInstance($session)->getTokenString('activate-maintenance-mode'),
+            'isOnNightlies' => $isOnNightlies,
+            'releaseEnvironment' => ucfirst((string) $this->configuration->get('upgrade.releaseEnvironment')),
+            'dateLastChecked' => $this->configuration->get('upgrade.dateLastChecked'),
+            'versionCurrent' => $this->configuration->get('main.currentVersion'),
+        ]);
     }
 }

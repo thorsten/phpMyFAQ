@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for Two-Factor Authentication (2FA).
  *
@@ -23,10 +25,10 @@
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
+use RobThree\Auth\Algorithm;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
-use RobThree\Auth\Algorithm;
 
 class TwoFactor
 {
@@ -39,7 +41,7 @@ class TwoFactor
      */
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly CurrentUser $currentUser
+        private readonly CurrentUser $currentUser,
     ) {
         $this->endroidQrCodeProvider = new EndroidQrCodeProvider();
         $this->twoFactorAuth = new TwoFactorAuth(
@@ -47,7 +49,7 @@ class TwoFactor
             $this->configuration->get('main.titleFAQ'),
             6,
             30,
-            Algorithm::Sha1
+            Algorithm::Sha1,
         );
     }
 
@@ -74,7 +76,7 @@ class TwoFactor
     /**
      * Returns the secret of the current user
      */
-    public function getSecret(CurrentUser $currentUser): string|null
+    public function getSecret(CurrentUser $currentUser): ?string
     {
         return $currentUser->getUserData('secret');
     }
@@ -102,13 +104,13 @@ class TwoFactor
         $qrCodeText = sprintf(
             '%s&image=%sassets/templates/images/logo.png',
             $this->twoFactorAuth->getQrText($label, $secret),
-            $this->configuration->getDefaultUrl()
+            $this->configuration->getDefaultUrl(),
         );
 
         return sprintf(
             'data:%s;base64,%s',
             $this->endroidQrCodeProvider->getMimeType(),
-            base64_encode($this->endroidQrCodeProvider->getQRCodeImage($qrCodeText, 200))
+            base64_encode($this->endroidQrCodeProvider->getQRCodeImage($qrCodeText, 200)),
         );
     }
 }

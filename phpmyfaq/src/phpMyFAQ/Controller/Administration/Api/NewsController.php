@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin News Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -64,7 +66,7 @@ class NewsController extends AbstractController
         $newsMessage
             ->setLanguage($newsLang)
             ->setHeader($header)
-            ->setMessage(html_entity_decode((string)$content))
+            ->setMessage(html_entity_decode((string) $content))
             ->setAuthor($author)
             ->setEmail($email)
             ->setActive($active)
@@ -99,7 +101,7 @@ class NewsController extends AbstractController
 
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
-        if ($news->delete((int)$deleteId)) {
+        if ($news->delete((int) $deleteId)) {
             return $this->json(['success' => Translation::get('ad_news_delsuc')], Response::HTTP_OK);
         }
 
@@ -139,7 +141,7 @@ class NewsController extends AbstractController
             ->setId($newsId)
             ->setLanguage($newsLang)
             ->setHeader($header)
-            ->setMessage(html_entity_decode((string)$content))
+            ->setMessage(html_entity_decode((string) $content))
             ->setAuthor($author)
             ->setEmail($email)
             ->setActive($active)

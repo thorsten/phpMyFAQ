@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The abstract setup class for installation and updating phpMyFAQ.
  *
@@ -21,8 +23,9 @@ use phpMyFAQ\Core\Exception;
 
 abstract class Setup
 {
-    public function __construct(protected System $system)
-    {
+    public function __construct(
+        protected System $system,
+    ) {
     }
 
     /**
@@ -58,17 +61,15 @@ abstract class Setup
     {
         $database = null;
         if (!$this->checkMinimumPhpVersion()) {
-            throw new Exception(
-                sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP)
-            );
+            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
         }
 
         if (
-            !is_readable(PMF_ROOT_DIR . '/content/core/config/database.php') &&
-            !is_readable(PMF_ROOT_DIR . '/config/database.php')
+            !is_readable(PMF_ROOT_DIR . '/content/core/config/database.php')
+            && !is_readable(PMF_ROOT_DIR . '/config/database.php')
         ) {
             throw new Exception(
-                'Sorry, but the database configuration file is not readable. Please check the permissions.'
+                'Sorry, but the database configuration file is not readable. Please check the permissions.',
             );
         }
 
@@ -82,9 +83,10 @@ abstract class Setup
             }
 
             if (!$databaseFound) {
-                throw new Exception(
-                    sprintf('Sorry, but the database %s is not supported!', ucfirst((string) $database))
-                );
+                throw new Exception(sprintf(
+                    'Sorry, but the database %s is not supported!',
+                    ucfirst((string) $database),
+                ));
             }
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract class for 3rd party services, e.g., Gravatar.
  *
@@ -47,8 +49,9 @@ class Services
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     public function getCategoryId(): int
@@ -101,7 +104,7 @@ class Services
             $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
-            $this->getLanguage()
+            $this->getLanguage(),
         );
     }
 
@@ -115,7 +118,7 @@ class Services
             $this->configuration->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
-            $this->getLanguage()
+            $this->getLanguage(),
         );
     }
 }

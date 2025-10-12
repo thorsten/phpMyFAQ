@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -39,12 +41,8 @@ class Builtin implements MailUserAgentInterface
         unset($headers['Subject']);
 
         $sender = '';
-        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
-            $sender = str_replace(
-                ['<', '>'],
-                '',
-                $headers['Return-Path']
-            );
+        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3)) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
+            $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 
@@ -56,9 +54,9 @@ class Builtin implements MailUserAgentInterface
 
         // Send the email
         if (empty($sender)) {
-            return (int)mail($recipients, $subject, $body, $mailHeaders);
+            return (int) mail($recipients, $subject, $body, $mailHeaders);
         }
 
-        return (int)mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
+        return (int) mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
     }
 }

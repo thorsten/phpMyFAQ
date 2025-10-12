@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Tags class.
  *
@@ -31,8 +33,9 @@ readonly class Tags
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -49,7 +52,7 @@ readonly class Tags
             $url = sprintf(
                 '%sindex.php?action=search&tagging_id=%d',
                 $this->configuration->getDefaultUrl(),
-                $taggingId
+                $taggingId,
             );
             $oLink = new Link($url, $this->configuration);
             $oLink->itemTitle = $title;
@@ -87,7 +90,7 @@ readonly class Tags
                 t.tagging_name',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $recordId
+            $recordId,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -120,22 +123,17 @@ readonly class Tags
         foreach ($tags as $tag) {
             $tag = trim($tag);
             if (Strings::strlen($tag) > 0 && !in_array($tag, $registeredTags, true)) {
-                if (
-                    !in_array(
-                        Strings::strtolower($tag),
-                        array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
-                    )
-                ) {
+                if (!in_array(Strings::strtolower($tag), array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags))) {
                     // Create the new tag
                     $newTagId = $this->configuration->getDb()->nextId(
                         Database::getTablePrefix() . 'faqtags',
-                        'tagging_id'
+                        'tagging_id',
                     );
                     $query = sprintf(
                         "INSERT INTO %sfaqtags (tagging_id, tagging_name) VALUES (%d, '%s')",
                         Database::getTablePrefix(),
                         $newTagId,
-                        $tag
+                        $tag,
                     );
                     $this->configuration->getDb()->query($query);
 
@@ -144,7 +142,7 @@ readonly class Tags
                         'INSERT INTO %sfaqdata_tags (record_id, tagging_id) VALUES (%d, %d)',
                         Database::getTablePrefix(),
                         $recordId,
-                        $newTagId
+                        $newTagId,
                     );
                 } else {
                     // Add the tag reference for the faq record
@@ -155,8 +153,8 @@ readonly class Tags
                         array_search(
                             Strings::strtolower($tag),
                             array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags),
-                            true
-                        )
+                            true,
+                        ),
                     );
                 }
 
@@ -179,7 +177,7 @@ readonly class Tags
     public function getAllTags(
         ?string $search = null,
         int $limit = PMF_TAGS_CLOUD_RESULT_SET_SIZE,
-        bool $showInactive = false
+        bool $showInactive = false,
     ): array {
         $allTags = [];
 
@@ -213,8 +211,8 @@ readonly class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            ($showInactive ? '' : "AND d.active = 'yes'"),
-            (isset($search) && ($search !== '') ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '')
+            $showInactive ? '' : "AND d.active = 'yes'",
+            isset($search) && $search !== '' ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '',
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -242,11 +240,7 @@ readonly class Tags
      */
     public function deleteByRecordId(int $recordId): bool
     {
-        $query = sprintf(
-            'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
-            Database::getTablePrefix(),
-            $recordId
-        );
+        $query = sprintf('DELETE FROM %sfaqdata_tags WHERE record_id = %d', Database::getTablePrefix(), $recordId);
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -260,7 +254,7 @@ readonly class Tags
             "UPDATE %sfaqtags SET tagging_name = '%s' WHERE tagging_id = %d",
             Database::getTablePrefix(),
             $tag->getName(),
-            $tag->getId()
+            $tag->getId(),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -271,19 +265,11 @@ readonly class Tags
      */
     public function delete(int $tagId): bool
     {
-        $query = sprintf(
-            'DELETE FROM %sfaqtags WHERE tagging_id = %d',
-            Database::getTablePrefix(),
-            $tagId
-        );
+        $query = sprintf('DELETE FROM %sfaqtags WHERE tagging_id = %d', Database::getTablePrefix(), $tagId);
 
         $this->configuration->getDb()->query($query);
 
-        $query = sprintf(
-            'DELETE FROM %sfaqdata_tags WHERE tagging_id = %d',
-            Database::getTablePrefix(),
-            $tagId
-        );
+        $query = sprintf('DELETE FROM %sfaqdata_tags WHERE tagging_id = %d', Database::getTablePrefix(), $tagId);
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -319,7 +305,7 @@ readonly class Tags
             Database::getTablePrefix(),
             implode("', '", $arrayOfTags),
             $this->configuration->getLanguage()->getLanguage(),
-            count($arrayOfTags)
+            count($arrayOfTags),
         );
 
         $records = [];
@@ -339,8 +325,7 @@ readonly class Tags
      */
     public function getFaqsByTagId(int $tagId): array
     {
-        $query = sprintf(
-            '
+        $query = sprintf('
             SELECT
                 d.record_id AS record_id
             FROM
@@ -350,11 +335,7 @@ readonly class Tags
             AND
                 t.tagging_id = %d
             GROUP BY
-                record_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $tagId
-        );
+                record_id', Database::getTablePrefix(), Database::getTablePrefix(), $tagId);
 
         $records = [];
         $result = $this->configuration->getDb()->query($query);
@@ -387,7 +368,7 @@ readonly class Tags
             ORDER BY freq DESC",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -414,7 +395,7 @@ readonly class Tags
         $query = sprintf(
             'SELECT tagging_name FROM %sfaqtags WHERE tagging_id = %d',
             Database::getTablePrefix(),
-            $tagId
+            $tagId,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -438,7 +419,7 @@ readonly class Tags
             $data[] = [
                 'tagId' => $tagId,
                 'tagName' => $tagName,
-                'tagFrequency' => $tagFreq
+                'tagFrequency' => $tagFreq,
             ];
         }
 

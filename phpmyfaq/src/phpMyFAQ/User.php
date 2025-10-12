@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main User class.
  *
@@ -64,8 +66,9 @@ class User
 
     final public const string ERROR_USER_EMAIL_NOT_UNIQUE = 'The email address already exists.';
 
-    final public const string ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least ' .
-        'four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    final public const string ERROR_USER_LOGIN_INVALID =
+        'The chosen login is invalid. A valid login has at least '
+            . 'four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
 
     final public const string ERROR_USER_NO_USERID = 'No user-ID found. ';
 
@@ -75,8 +78,8 @@ class User
 
     final public const string ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
 
-    final public const string ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts' .
-        ' and are temporarily blocked. Please try again later.';
+    final public const string ERROR_USER_TOO_MANY_FAILED_LOGINS =
+        'You exceeded the maximum amounts of login attempts' . ' and are temporarily blocked. Please try again later.';
 
     final public const string STATUS_USER_PROTECTED = 'User account is protected. ';
 
@@ -149,13 +152,11 @@ class User
      * Constructor.
      *
      * @throws Core\Exception
-*/
-    public function __construct(protected ?Configuration $configuration)
-    {
-        $basicPermission = Permission::create(
-            $this->configuration->get('security.permLevel'),
-            $this->configuration
-        );
+     */
+    public function __construct(
+        protected ?Configuration $configuration,
+    ) {
+        $basicPermission = Permission::create($this->configuration->get('security.permLevel'), $this->configuration);
         if (!$this->addPerm($basicPermission)) {
             return;
         }
@@ -262,9 +263,9 @@ class User
             return false;
         }
 
-        $this->userId = (int)$user['user_id'];
-        $this->login = (string)$user['login'];
-        $this->status = (string)$user['account_status'];
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
@@ -511,7 +512,7 @@ class User
                     $nextChar = $caseFunc($vowels[random_int(0, 3)]);
                     break;
                 case 4:
-                    $nextChar = (string)random_int(2, 9);
+                    $nextChar = (string) random_int(2, 9);
                     break;
                 case 5:
                     $newPassword .= '_';
@@ -549,8 +550,8 @@ class User
         }
 
         if (
-            isset($this->allowedStatus[$this->status]) &&
-            $this->allowedStatus[$this->status] === self::STATUS_USER_PROTECTED
+            isset($this->allowedStatus[$this->status])
+            && $this->allowedStatus[$this->status] === self::STATUS_USER_PROTECTED
         ) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
 
@@ -560,11 +561,7 @@ class User
         /** @phpstan-ignore-next-line */
         $this->perm->refuseAllUserRights($this->userId);
 
-        $delete = sprintf(
-            'DELETE FROM %sfaquser WHERE user_id = %d',
-            Database::getTablePrefix(),
-            $this->userId,
-        );
+        $delete = sprintf('DELETE FROM %sfaquser WHERE user_id = %d', Database::getTablePrefix(), $this->userId);
 
         $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
@@ -646,8 +643,8 @@ class User
         $query = sprintf(
             'SELECT user_id FROM %sfaquser WHERE 1 = 1 %s %s ORDER BY user_id ASC',
             Database::getTablePrefix(),
-            ($withoutAnonymous ? 'AND user_id <> -1' : ''),
-            ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
+            $withoutAnonymous ? 'AND user_id <> -1' : '',
+            $allowBlockedUsers ? '' : "AND account_status != 'blocked'",
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -686,7 +683,7 @@ class User
                 user_id = %d %s',
             Database::getTablePrefix(),
             $userId,
-            $allowBlockedUsers ? '' : "AND account_status != 'blocked'"
+            $allowBlockedUsers ? '' : "AND account_status != 'blocked'",
         );
 
         $result = $this->configuration->getDb()->query($select);
@@ -732,9 +729,9 @@ class User
      * @param string $field Field
      * @return array<string>|string|int|null
      */
-    public function getUserData(string $field = '*'): array|int|string|null
+    public function getUserData(string $field = '*'): mixed
     {
-        if (!($this->userdata instanceof UserData)) {
+        if (!$this->userdata instanceof UserData) {
             $this->userdata = new UserData($this->configuration);
         }
 
@@ -748,7 +745,7 @@ class User
      */
     public function setUserData(array $data): bool
     {
-        if (!($this->userdata instanceof UserData)) {
+        if (!$this->userdata instanceof UserData) {
             $this->userdata = new UserData($this->configuration);
         }
 
@@ -810,7 +807,7 @@ class User
             // Send activation email.
             $subject = '[%sitename%] Login name / activation';
             $message = sprintf(
-                "Name: %s<br>Login name: %s<br>New password: %s",
+                'Name: %s<br>Login name: %s<br>New password: %s',
                 $this->getUserData('display_name'),
                 $this->getLogin(),
                 $newPassword,
@@ -948,9 +945,9 @@ class User
     {
         $this->isSuperAdmin = $isSuperAdmin;
         $update = sprintf(
-            "UPDATE %sfaquser SET is_superadmin = %d WHERE user_id = %d",
+            'UPDATE %sfaquser SET is_superadmin = %d WHERE user_id = %d',
             Database::getTablePrefix(),
-            (int)$this->isSuperAdmin,
+            (int) $this->isSuperAdmin,
             $this->userId,
         );
 
@@ -976,29 +973,29 @@ class User
     {
         $user = $this->configuration->getDb()->fetchArray($result);
 
-        $this->userId = (int)$user['user_id'];
-        $this->login = (string)$user['login'];
-        $this->status = (string)$user['account_status'];
-        $this->isSuperAdmin = (bool)$user['is_superadmin'];
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
+        $this->isSuperAdmin = (bool) $user['is_superadmin'];
         $this->authSource = (string) $user['auth_source'];
     }
 
     public function setWebAuthnKeys(string $webAuthnKeys): bool
     {
-         $query = sprintf(
-             "UPDATE %sfaquser SET webauthnkeys = '%s' WHERE user_id = %d",
-             Database::getTablePrefix(),
-             $this->configuration->getDb()->escape($webAuthnKeys),
-             $this->getUserId(),
-         );
+        $query = sprintf(
+            "UPDATE %sfaquser SET webauthnkeys = '%s' WHERE user_id = %d",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($webAuthnKeys),
+            $this->getUserId(),
+        );
 
-         return (bool) $this->configuration->getDb()->query($query);
+        return (bool) $this->configuration->getDb()->query($query);
     }
 
     public function getWebAuthnKeys(): string
     {
         $select = sprintf(
-            "SELECT webauthnkeys FROM %sfaquser WHERE user_id = %d",
+            'SELECT webauthnkeys FROM %sfaquser WHERE user_id = %d',
             Database::getTablePrefix(),
             $this->getUserId(),
         );

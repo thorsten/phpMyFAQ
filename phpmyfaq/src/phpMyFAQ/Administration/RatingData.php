@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Rating data class for the administration.
  *
@@ -24,8 +26,9 @@ use phpMyFAQ\Strings;
 
 readonly class RatingData
 {
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -48,8 +51,7 @@ readonly class RatingData
     {
         $prefix = Database::getTablePrefix();
         return match (Database::getType()) {
-            'sqlsrv' => sprintf(
-                '
+            'sqlsrv' => sprintf('
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -77,11 +79,8 @@ readonly class RatingData
                         fv.vote,
                         fv.usr
                     ORDER BY
-                        fcr.category_id',
-                $prefix, $prefix, $prefix
-            ),
-            default => sprintf(
-                '
+                        fcr.category_id', $prefix, $prefix, $prefix),
+            default => sprintf('
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -109,11 +108,7 @@ readonly class RatingData
                         fv.vote,
                         fv.usr
                     ORDER BY
-                        fcr.category_id',
-                $prefix,
-                $prefix,
-                $prefix
-            ),
+                        fcr.category_id', $prefix, $prefix, $prefix),
         };
     }
 
@@ -125,7 +120,7 @@ readonly class RatingData
             $this->configuration->getDefaultUrl(),
             $row->category_id,
             $row->id,
-            $row->lang
+            $row->lang,
         );
 
         $link = new Link($url, $this->configuration);
@@ -138,7 +133,7 @@ readonly class RatingData
             'question' => $question,
             'url' => $link->toString(),
             'number' => $row->num,
-            'user' => $row->usr
+            'user' => $row->usr,
         ];
     }
 }

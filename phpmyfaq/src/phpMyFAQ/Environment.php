@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Environment configuration manager
  *
@@ -31,11 +33,9 @@ class Environment
 
     private static string $environment = 'production';
 
-
     private static bool $testMode = false;
 
     private static ?Dotenv $dotenv = null;
-
 
     public static function init(): void
     {

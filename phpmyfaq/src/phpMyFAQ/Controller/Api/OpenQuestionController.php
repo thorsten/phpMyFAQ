@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Open Questions Controller for the REST API
  *
@@ -35,15 +37,11 @@ class OpenQuestionController extends AbstractController
         }
     }
 
-    #[OA\Get(
-        path: '/api/v3.1/open-questions',
-        operationId: 'getOpenQuestions',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/open-questions', operationId: 'getOpenQuestions', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the open questions.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -61,7 +59,7 @@ class OpenQuestionController extends AbstractController
                 "answerId": 0,
                 "isVisible": "N"
               }
-        ]')
+        ]'),
     )]
     #[OA\Response(
         response: 404,

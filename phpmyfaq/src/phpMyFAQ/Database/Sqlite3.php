@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\Sqlite3 class provides methods and functions for a SQLite v3 database.
  *
@@ -43,8 +45,9 @@ class Sqlite3 implements DatabaseDriver
     private string $sqlLog = '';
 
     private const string ERROR_MESSAGE =
-        "Do not call numRows() after you've fetched one or more result records, because " .
-        (Sqlite3::class . '::numRows() has to reset the results at its end.');
+        "Do not call numRows() after you've fetched one or more result records, because " . (
+            Sqlite3::class . '::numRows() has to reset the results at its end.'
+        );
 
     /**
      * Connects to the database.
@@ -54,7 +57,7 @@ class Sqlite3 implements DatabaseDriver
         string $user,
         #[\SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $this->conn = new \Sqlite3($host);
 
@@ -78,9 +81,7 @@ class Sqlite3 implements DatabaseDriver
     {
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
-        return $return
-            ? (object)$return
-            : null;
+        return $return ? (object) $return : null;
     }
 
     /**
@@ -116,7 +117,7 @@ class Sqlite3 implements DatabaseDriver
         }
 
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $ret[] = (object)$row;
+            $ret[] = (object) $row;
         }
 
         return $ret;
@@ -146,12 +147,14 @@ class Sqlite3 implements DatabaseDriver
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
+     * @throws Exception
      */
     public function getTableStatus(string $prefix = ''): array
     {
         $arr = [];
 
-        $result = $this->query("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name");
+        // Use sqlite_schema (preferred) instead of sqlite_master to avoid linter complaints and for newer SQLite
+        $result = $this->query("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name");
         while ($row = $this->fetchAssoc($result)) {
             $numResult = $this->query('SELECT * FROM ' . $row['name']);
             $arr[$row['name']] = $this->numRows($numResult);
@@ -276,15 +279,9 @@ class Sqlite3 implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $result = (int)$this->conn->querySingle(
-            sprintf(
-                'SELECT max(%s) AS current_id FROM %s',
-                $columnId,
-                $table
-            )
-        );
+        $result = (int) $this->conn->querySingle(sprintf('SELECT max(%s) AS current_id FROM %s', $columnId, $table));
 
-        return ($result + 1);
+        return $result + 1;
     }
 
     /**

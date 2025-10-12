@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for the default phpMyFAQ captchas.
  *
@@ -36,8 +38,9 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     /**
@@ -49,7 +52,7 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
         CaptchaInterface $captcha,
         string $action = '',
         string $label = '',
-        bool $auth = false
+        bool $auth = false,
     ): string {
         $html = '';
 
@@ -65,15 +68,15 @@ class BuiltinCaptchaAbstractHelper extends AbstractHelper implements CaptchaHelp
                 '<input type="text" class="form-control" name="%s" id="%s" size="%d" autocomplete="off" required>',
                 self::FORM_ID,
                 self::FORM_ID,
-                $captcha->captchaLength
+                $captcha->captchaLength,
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
-                '<button type="button" class="btn btn-primary" id="%s" data-action="%s">' .
-                    '<i aria-hidden="true" class="bi bi-arrow-repeat" data-action="%s"></i></button>',
+                '<button type="button" class="btn btn-primary" id="%s" data-action="%s">'
+                . '<i aria-hidden="true" class="bi bi-arrow-repeat" data-action="%s"></i></button>',
                 self::FORM_BUTTON,
                 $action,
-                $action
+                $action,
             );
             $html .= '            </span>';
             $html .= '        </div>';

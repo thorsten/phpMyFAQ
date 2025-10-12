@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Group Controller for the REST API
  *
@@ -40,17 +42,15 @@ class GroupController extends AbstractController
         path: '/api/v3.1/groups',
         operationId: 'getGroups',
         description: 'Used to fetch all group IDs.',
-        tags: ['Endpoints with Authentication']
+        tags: ['Endpoints with Authentication'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'Returns a list of group IDs.',
-        content: new OA\JsonContent(example: '
+    #[OA\Response(response: 200, description: 'Returns a list of group IDs.', content: new OA\JsonContent(
+        example: '
         [
             {
                 "group-id": 1
@@ -58,12 +58,9 @@ class GroupController extends AbstractController
             {
                 "group-id": 2
             }
-        ]')
-    )]
-    #[OA\Response(
-        response: 401,
-        description: 'If the user is not authenticated.'
-    )]
+        ]',
+    ))]
+    #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     public function list(): JsonResponse
     {
         $this->userIsAuthenticated();

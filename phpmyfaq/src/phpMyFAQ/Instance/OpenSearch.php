@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ OpenSearch instance class.
  *
@@ -43,8 +45,9 @@ readonly class OpenSearch
      *
      * @throws Exception
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
         $this->client = $this->configuration->getOpenSearch();
         $this->openSearchConfiguration = $this->configuration->getOpenSearchConfig();
 
@@ -55,18 +58,18 @@ readonly class OpenSearch
                 'solution_id' => ['type' => 'integer'],
                 'question' => [
                     'type' => 'text',
-                    'analyzer' => 'autocomplete'
+                    'analyzer' => 'autocomplete',
                 ],
                 'answer' => [
                     'type' => 'text',
-                    'analyzer' => 'autocomplete'
+                    'analyzer' => 'autocomplete',
                 ],
                 'keywords' => [
                     'type' => 'text',
-                    'analyzer' => 'autocomplete'
+                    'analyzer' => 'autocomplete',
                 ],
-                'category_id' => ['type' => 'integer']
-            ]
+                'category_id' => ['type' => 'integer'],
+            ],
         ];
     }
 
@@ -104,14 +107,12 @@ readonly class OpenSearch
                             'autocomplete_filter' => [
                                 'type' => 'edge_ngram',
                                 'min_gram' => 1,
-                                'max_gram' => 20
+                                'max_gram' => 20,
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => PMF_OPENSEARCH_STEMMING_LANGUAGE[
-                                $this->configuration->getDefaultLanguage()
-                                ]
-                            ]
+                                'name' => PMF_OPENSEARCH_STEMMING_LANGUAGE[$this->configuration->getDefaultLanguage()],
+                            ],
                         ],
                         'analyzer' => [
                             'autocomplete' => [
@@ -120,13 +121,13 @@ readonly class OpenSearch
                                 'filter' => [
                                     'lowercase',
                                     'autocomplete_filter',
-                                    'Language_stemmer'
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                    'Language_stemmer',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -140,17 +141,16 @@ readonly class OpenSearch
         $response = $this->getMapping();
 
         if (
-            0 === (
-            is_countable($response[$this->openSearchConfiguration->getIndex()]['mappings'])
-                ?
-                count($response[$this->openSearchConfiguration->getIndex()]['mappings'])
-                :
-                0
+            0
+            === (
+                is_countable($response[$this->openSearchConfiguration->getIndex()]['mappings'])
+                    ? count($response[$this->openSearchConfiguration->getIndex()]['mappings'])
+                    : 0
             )
         ) {
             $params = [
                 'index' => $this->openSearchConfiguration->getIndex(),
-                'body' => $this->mappings
+                'body' => $this->mappings,
             ];
 
             $response = $this->client->indices()->putMapping($params);
@@ -199,8 +199,8 @@ readonly class OpenSearch
                 'question' => $faq['question'],
                 'answer' => strip_tags($faq['answer']),
                 'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id']
-            ]
+                'category_id' => $faq['category_id'],
+            ],
         ];
 
         return $this->client->index($params);
@@ -226,7 +226,7 @@ readonly class OpenSearch
                 'index' => [
                     '_index' => $this->openSearchConfiguration->getIndex(),
                     '_id' => $faq['solution_id'],
-                ]
+                ],
             ];
 
             $params['body'][] = [
@@ -235,10 +235,10 @@ readonly class OpenSearch
                 'question' => $faq['title'],
                 'answer' => strip_tags((string) $faq['content']),
                 'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id']
+                'category_id' => $faq['category_id'],
             ];
 
-            if ($i % 1000 == 0) {
+            if (($i % 1000) == 0) {
                 $responses = $this->client->bulk($params);
 
                 $params = ['body' => []];
@@ -276,9 +276,9 @@ readonly class OpenSearch
                     'question' => $faq['question'],
                     'answer' => strip_tags($faq['answer']),
                     'keywords' => $faq['keywords'],
-                    'category_id' => $faq['category_id']
-                ]
-            ]
+                    'category_id' => $faq['category_id'],
+                ],
+            ],
         ];
 
         return $this->client->update($params);
@@ -293,7 +293,7 @@ readonly class OpenSearch
     {
         $params = [
             'index' => $this->openSearchConfiguration->getIndex(),
-            'id' => $solutionId
+            'id' => $solutionId,
         ];
 
         return $this->client->delete($params);

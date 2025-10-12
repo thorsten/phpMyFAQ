@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages the authentication process using PHP sessions.
  * The CurrentUser class is an extension of the User class.
@@ -126,8 +128,8 @@ class CurrentUser extends User
 
         // Check if the login is an email address and convert it to a username if needed
         if (
-            $this->configuration->get('security.loginWithEmailAddress') &&
-            Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+            $this->configuration->get('security.loginWithEmailAddress')
+            && Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
             $userId = $this->getUserIdByEmail($login);
             $this->getUserById($userId);
@@ -142,10 +144,10 @@ class CurrentUser extends User
 
         // Extract domain if LDAP is active and ldap_use_domain_prefix is true
         if (
-            $this->configuration->isLdapActive() &&
-            $this->configuration->get('ldap.ldap_use_domain_prefix') &&
-            '' !== $password &&
-            ($pos = strpos($login, '\\')) !== false
+            $this->configuration->isLdapActive()
+            && $this->configuration->get('ldap.ldap_use_domain_prefix')
+            && '' !== $password
+            && ($pos = strpos($login, '\\')) !== false
         ) {
             $optData['domain'] = $pos !== 0 ? substr($login, 0, $pos) : '';
             $login = substr($login, $pos + 1);
@@ -153,9 +155,9 @@ class CurrentUser extends User
 
         // Handle SSO authentication
         if (
-            $this->configuration->get('security.ssoSupport') &&
-            $request->server->get('REMOTE_USER') &&
-            '' === $password
+            $this->configuration->get('security.ssoSupport')
+            && $request->server->get('REMOTE_USER')
+            && '' === $password
         ) {
             $login = strtok($login, '@\\');
         }
@@ -173,7 +175,7 @@ class CurrentUser extends User
 
             // Login successful, proceed with post-login actions
             $this->getUserByLogin($login);
-            if ((int)$this->getUserData('twofactor_enabled') !== 1) {
+            if ((int) $this->getUserData('twofactor_enabled') !== 1) {
                 $this->setLoggedIn(true);
                 $this->updateSessionId(true);
                 $this->saveToSession();
@@ -185,7 +187,7 @@ class CurrentUser extends User
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_REMEMBER_ME,
                     $rememberMe,
-                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME
+                    $request->server->get('REQUEST_TIME') + self::PMF_REMEMBER_ME_EXPIRED_TIME,
                 );
             }
 
@@ -194,7 +196,7 @@ class CurrentUser extends User
                 return false;
             }
 
-            if ((int)$this->getUserData('twofactor_enabled') !== 1) {
+            if ((int) $this->getUserData('twofactor_enabled') !== 1) {
                 $this->setSuccess(true);
             }
 
@@ -207,8 +209,8 @@ class CurrentUser extends User
         }
 
         if (
-            $this->configuration->get('security.loginWithEmailAddress') &&
-            !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
+            $this->configuration->get('security.loginWithEmailAddress')
+            && !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
             throw new Exception(parent::ERROR_USER_INCORRECT_LOGIN);
         }
@@ -257,7 +259,7 @@ class CurrentUser extends User
         $query = sprintf(
             "SELECT auth_source FROM %sfaquser WHERE auth_source = 'local' AND user_id = %d",
             Database::getTablePrefix(),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -268,9 +270,9 @@ class CurrentUser extends User
     public function isBlocked(): bool
     {
         $query = sprintf(
-            "SELECT account_status FROM %sfaquser WHERE user_id = %d",
+            'SELECT account_status FROM %sfaquser WHERE user_id = %d',
             Database::getTablePrefix(),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -319,8 +321,7 @@ class CurrentUser extends User
      */
     public function getSessionInfo(): array
     {
-        $select = sprintf(
-            '
+        $select = sprintf('
             SELECT
                 session_id,
                 session_timestamp,
@@ -329,10 +330,7 @@ class CurrentUser extends User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d',
-            Database::getTablePrefix(),
-            $this->getUserId()
-        );
+                user_id = %d', Database::getTablePrefix(), $this->getUserId());
 
         $res = $this->configuration->getDb()->query($select);
         if (!$res || $this->configuration->getDb()->numRows($res) != 1) {
@@ -389,7 +387,7 @@ class CurrentUser extends User
             $requestTime,
             $updateLastLogin ? "last_login = '" . date('YmdHis', $requestTime) . "'," : '',
             Request::createFromGlobals()->getClientIp(),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         $res = $this->configuration->getDb()->query($update);
@@ -435,7 +433,7 @@ class CurrentUser extends User
                 user_id = %d',
             Database::getTablePrefix(),
             $deleteCookie ? ', remember_me = NULL' : '',
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         $res = $this->configuration->getDb()->query($update);
@@ -501,7 +499,7 @@ class CurrentUser extends User
             $currentGroups = [-1];
         }
 
-        return [ $currentUser, $currentGroups ];
+        return [$currentUser, $currentGroups];
     }
 
     /**
@@ -538,15 +536,15 @@ class CurrentUser extends User
 
         // session-id not found in user table
         $sessionInfo = $user->getSessionInfo();
-        $sessionId = ($sessionInfo['session_id'] ?? '');
+        $sessionId = $sessionInfo['session_id'] ?? '';
         if ($sessionId === '' || $sessionId !== session_id()) {
             return null;
         }
 
         // check ip
         if (
-            $configuration->get('security.ipCheck') &&
-            $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()
+            $configuration->get('security.ipCheck')
+            && $sessionInfo['ip'] != Request::createFromGlobals()->getClientIp()
         ) {
             return null;
         }
@@ -630,7 +628,7 @@ class CurrentUser extends User
             "UPDATE %sfaquser SET auth_source = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($authSource),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -645,7 +643,7 @@ class CurrentUser extends User
             "UPDATE %sfaquser SET remember_me = '%s' WHERE user_id = %d",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($rememberMe),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -656,7 +654,7 @@ class CurrentUser extends User
      */
     public function setSuccess(bool $success): bool
     {
-        $loginState = (int)$success;
+        $loginState = (int) $success;
         $this->loginAttempts = 0;
 
         $update = sprintf(
@@ -671,7 +669,7 @@ class CurrentUser extends User
             Database::getTablePrefix(),
             $loginState,
             $this->loginAttempts,
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -699,7 +697,7 @@ class CurrentUser extends User
             $token['access_token'],
             $token['code_verifier'],
             json_encode($token['jwt'], JSON_THROW_ON_ERROR),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -727,7 +725,7 @@ class CurrentUser extends User
             Database::getTablePrefix(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             Request::createFromGlobals()->getClientIp(),
-            $this->getUserId()
+            $this->getUserId(),
         );
 
         return $this->configuration->getDb()->query($update);
@@ -761,7 +759,7 @@ class CurrentUser extends User
             $this->getUserId(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $this->lockoutTime,
-            Request::createFromGlobals()->getClientIp()
+            Request::createFromGlobals()->getClientIp(),
         );
 
         $result = $this->configuration->getDb()->query($select);

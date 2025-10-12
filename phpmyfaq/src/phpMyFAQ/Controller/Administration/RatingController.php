@@ -42,7 +42,7 @@ class RatingController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentUser);
@@ -54,24 +54,21 @@ class RatingController extends AbstractAdministrationController
         $numberOfRatings = is_countable($data) ? count($data) : 0;
         $currentCategory = 0;
 
-        return $this->render(
-            '@admin/statistics/ratings.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('clear-statistics'),
-                'currentCategory' => $currentCategory,
-                'ratingData' => $data,
-                'numberOfRatings' => $numberOfRatings,
-                'categoryNames' => $category->categoryName,
-                'adminHeaderRatings' => Translation::get('ad_rs'),
-                'buttonDeleteAllVotings' => Translation::get('ad_delete_all_votings'),
-                'green' => Translation::get('ad_rs_green'),
-                'greenNote' => Translation::get('ad_rs_ahtf'),
-                'red' => Translation::get('ad_rs_red'),
-                'redNote' => Translation::get('ad_rs_altt'),
-                'msgNoRatings' => Translation::get('ad_rs_no')
-            ]
-        );
+        return $this->render('@admin/statistics/ratings.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('clear-statistics'),
+            'currentCategory' => $currentCategory,
+            'ratingData' => $data,
+            'numberOfRatings' => $numberOfRatings,
+            'categoryNames' => $category->categoryName,
+            'adminHeaderRatings' => Translation::get('ad_rs'),
+            'buttonDeleteAllVotings' => Translation::get('ad_delete_all_votings'),
+            'green' => Translation::get('ad_rs_green'),
+            'greenNote' => Translation::get('ad_rs_ahtf'),
+            'red' => Translation::get('ad_rs_red'),
+            'redNote' => Translation::get('ad_rs_altt'),
+            'msgNoRatings' => Translation::get('ad_rs_no'),
+        ]);
     }
 }

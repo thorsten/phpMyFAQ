@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ SQLite3 (PDO_SQLITE) based search classes.
  *
@@ -54,7 +56,7 @@ class PdoSqlite extends SearchDatabase implements DatabaseInterface
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
-                $this->getConditions()
+                $this->getConditions(),
             );
 
             $this->resultSet = $this->configuration->getDb()->query($query);

@@ -25,13 +25,10 @@ class PluginController extends AbstractAdministrationController
         $pluginManager = $this->container->get('phpmyfaq.plugin.plugin-manager');
         $pluginManager->loadPlugins();
 
-        return $this->render(
-            '@admin/configuration/plugins.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'pluginList' => $pluginManager->getPlugins(),
-            ]
-        );
+        return $this->render('@admin/configuration/plugins.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'pluginList' => $pluginManager->getPlugins(),
+        ]);
     }
 }

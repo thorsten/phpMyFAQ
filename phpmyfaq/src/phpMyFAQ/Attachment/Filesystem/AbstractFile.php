@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * File handler class.
  *
@@ -47,8 +49,10 @@ abstract class AbstractFile extends AbstractEntry
      * @param string $mode     mode for fopen
      * @throws FileException
      */
-    public function __construct(string $filepath, protected string $mode = self::MODE_READ)
-    {
+    public function __construct(
+        string $filepath,
+        protected string $mode = self::MODE_READ,
+    ) {
         $this->path = $filepath;
 
         $this->handle = @fopen($this->path, $this->mode);
@@ -173,7 +177,7 @@ abstract class AbstractFile extends AbstractEntry
 
         $it = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
-            RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST,
         );
 
         foreach ($it as $file) {

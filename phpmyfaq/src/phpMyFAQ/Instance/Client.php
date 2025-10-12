@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main phpMyFAQ instances class for instance clients.
  *
@@ -95,34 +97,34 @@ class Client extends Instance
             $instanceDatabase->createTables($prefix);
 
             // Then, copy data from the tables "faqconfig", "faqright" and "faquser_right"
-            $this->configuration->getDb()->query(
-                sprintf(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
                     $prefix,
-                    Database::getTablePrefix()
-                )
-            );
-            $this->configuration->getDb()->query(
-                sprintf(
+                    Database::getTablePrefix(),
+                ));
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
                     $prefix,
-                    $this->clientUrl
-                )
-            );
-            $this->configuration->getDb()->query(
-                sprintf(
+                    $this->clientUrl,
+                ));
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                     $prefix,
-                    Database::getTablePrefix()
-                )
-            );
-            $this->configuration->getDb()->query(
-                sprintf(
+                    Database::getTablePrefix(),
+                ));
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
                     $prefix,
-                    Database::getTablePrefix()
-                )
-            );
+                    Database::getTablePrefix(),
+                ));
         } catch (Exception) {
         }
     }
@@ -137,7 +139,7 @@ class Client extends Instance
     {
         return $this->filesystem->copy(
             $this->filesystem->getRootPath() . '/content/core/config/constants.php',
-            $destination
+            $destination,
         );
     }
 
@@ -171,7 +173,7 @@ class Client extends Instance
 
         return $this->filesystem->moveDirectory(
             $this->clientFolder . $sourcePath,
-            $this->clientFolder . $destinationPath
+            $this->clientFolder . $destinationPath,
         );
     }
 

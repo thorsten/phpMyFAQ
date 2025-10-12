@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main phpMyFAQ instances class.
  *
@@ -42,8 +44,9 @@ class Instance
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     /**
@@ -63,7 +66,7 @@ class Instance
             $this->configuration->getDb()->escape($instanceEntity->getInstance()),
             $this->configuration->getDb()->escape($instanceEntity->getComment()),
             $this->configuration->getDb()->now(),
-            $this->configuration->getDb()->now()
+            $this->configuration->getDb()->now(),
         );
 
         if (!$this->configuration->getDb()->query($insert)) {
@@ -96,10 +99,7 @@ class Instance
      */
     public function getAll(): array
     {
-        $select = sprintf(
-            'SELECT * FROM %sfaqinstances ORDER BY id',
-            Database::getTablePrefix()
-        );
+        $select = sprintf('SELECT * FROM %sfaqinstances ORDER BY id', Database::getTablePrefix());
 
         $result = $this->configuration->getDb()->query($select);
 
@@ -111,11 +111,7 @@ class Instance
      */
     public function getById(int $id): object
     {
-        $select = sprintf(
-            'SELECT * FROM %sfaqinstances WHERE id = %d',
-            Database::getTablePrefix(),
-            $id
-        );
+        $select = sprintf('SELECT * FROM %sfaqinstances WHERE id = %d', Database::getTablePrefix(), $id);
 
         $result = $this->configuration->getDb()->query($select);
 
@@ -133,7 +129,7 @@ class Instance
             $this->configuration->getDb()->escape($instanceEntity->getInstance()),
             $this->configuration->getDb()->escape($instanceEntity->getComment()),
             $this->configuration->getDb()->escape($instanceEntity->getUrl()),
-            $id
+            $id,
         );
 
         return (bool) $this->configuration->getDb()->query($update);
@@ -146,16 +142,8 @@ class Instance
     public function delete(int $id): bool
     {
         $deletes = [
-            sprintf(
-                'DELETE FROM %sfaqinstances WHERE id = %d',
-                Database::getTablePrefix(),
-                $id
-            ),
-            sprintf(
-                'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
-                Database::getTablePrefix(),
-                $id
-            ),
+            sprintf('DELETE FROM %sfaqinstances WHERE id = %d', Database::getTablePrefix(), $id),
+            sprintf('DELETE FROM %sfaqinstances_config WHERE instance_id = %d', Database::getTablePrefix(), $id),
         ];
 
         foreach ($deletes as $delete) {
@@ -182,7 +170,7 @@ class Instance
             Database::getTablePrefix(),
             $this->getId(),
             $this->configuration->getDb()->escape(trim($name)),
-            $this->configuration->getDb()->escape(trim($value))
+            $this->configuration->getDb()->escape(trim($value)),
         );
 
         return (bool) $this->configuration->getDb()->query($insert);
@@ -211,17 +199,13 @@ class Instance
      */
     public function getInstanceConfig(int $instanceId): array
     {
-        $query = sprintf(
-            '
+        $query = sprintf('
             SELECT
                 config_name, config_value
             FROM
                 %sfaqinstances_config
             WHERE
-                instance_id = %d',
-            Database::getTablePrefix(),
-            $instanceId
-        );
+                instance_id = %d', Database::getTablePrefix(), $instanceId);
 
         $result = $this->configuration->getDb()->query($query);
         $config = $this->configuration->getDb()->fetchAll($result);

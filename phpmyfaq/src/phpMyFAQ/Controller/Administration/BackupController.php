@@ -47,23 +47,20 @@ class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        return $this->render(
-            '@admin/backup/main.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderBackup' => Translation::get('ad_csv_backup'),
-                'adminBackupCardHeader' => Translation::get('ad_csv_head'),
-                'adminBackupCardBody' => Translation::get('ad_csv_make'),
-                'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),
-                'adminBackupLinkLogs' => Translation::get('ad_csv_linklog'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('restore'),
-                'adminRestoreCardHeader' => Translation::get('ad_csv_head2'),
-                'adminRestoreCardBody' => Translation::get('ad_csv_restore'),
-                'adminRestoreLabel' => Translation::get('ad_csv_file'),
-                'adminRestoreButton' => Translation::get('ad_csv_ok'),
-            ]
-        );
+        return $this->render('@admin/backup/main.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderBackup' => Translation::get('ad_csv_backup'),
+            'adminBackupCardHeader' => Translation::get('ad_csv_head'),
+            'adminBackupCardBody' => Translation::get('ad_csv_make'),
+            'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),
+            'adminBackupLinkLogs' => Translation::get('ad_csv_linklog'),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('restore'),
+            'adminRestoreCardHeader' => Translation::get('ad_csv_head2'),
+            'adminRestoreCardBody' => Translation::get('ad_csv_restore'),
+            'adminRestoreLabel' => Translation::get('ad_csv_file'),
+            'adminRestoreButton' => Translation::get('ad_csv_ok'),
+        ]);
     }
 
     #[Route('/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
@@ -93,7 +90,7 @@ class BackupController extends AbstractAdministrationController
 
                     $disposition = HeaderUtils::makeDisposition(
                         HeaderUtils::DISPOSITION_ATTACHMENT,
-                        urlencode($backupFileName)
+                        urlencode($backupFileName),
                     );
 
                     $response->headers->set('Content-Type', 'application/octet-stream; charset=UTF-8');
@@ -114,7 +111,7 @@ class BackupController extends AbstractAdministrationController
 
                     $disposition = HeaderUtils::makeDisposition(
                         HeaderUtils::DISPOSITION_ATTACHMENT,
-                        urlencode($backupFileName)
+                        urlencode($backupFileName),
                     );
 
                     $response->headers->set('Content-Type', 'application/octet-stream; charset=UTF-8');
@@ -146,7 +143,7 @@ class BackupController extends AbstractAdministrationController
         $file = $request->files->get('userfile');
 
         $templateVars = [
-            'adminHeaderRestore' => Translation::get('ad_csv_rest')
+            'adminHeaderRestore' => Translation::get('ad_csv_rest'),
         ];
 
         if ($file && $file->isValid()) {
@@ -167,7 +164,7 @@ class BackupController extends AbstractAdministrationController
                 } else {
                     $templateVars = [
                         ...$templateVars,
-                        'errorMessageNoVerification' => 'This file is not a verified backup file.'
+                        'errorMessageNoVerification' => 'This file is not a verified backup file.',
                     ];
                     $ok = 0;
                 }
@@ -183,8 +180,8 @@ class BackupController extends AbstractAdministrationController
                         '%s (Version check failure: "%s" found, "%s" expected)',
                         Translation::get('ad_csv_no'),
                         $versionFound,
-                        $versionExpected
-                    )
+                        $versionExpected,
+                    ),
                 ];
                 $ok = 0;
             }
@@ -205,7 +202,7 @@ class BackupController extends AbstractAdministrationController
                 $tablePrefix = '';
                 $templateVars = [
                     ...$templateVars,
-                    'prepareMessage' => Translation::get('ad_csv_prepare')
+                    'prepareMessage' => Translation::get('ad_csv_prepare'),
                 ];
                 while ($backupData = fgets($handle, 65536)) {
                     $backupData = trim($backupData);
@@ -215,7 +212,7 @@ class BackupController extends AbstractAdministrationController
                         $tablePrefix = trim(Strings::substr($backupData, $backupPrefixPatternLength));
                     }
 
-                    if ((Strings::substr($backupData, 0, 2) !== '--') && ($backupData !== '')) {
+                    if (Strings::substr($backupData, 0, 2) !== '--' && $backupData !== '') {
                         $queries[] = trim(Strings::substr($backupData, 0, -1));
                     }
                 }
@@ -225,7 +222,7 @@ class BackupController extends AbstractAdministrationController
 
                 $templateVars = [
                     ...$templateVars,
-                    'processMessage' => Translation::get('ad_csv_process')
+                    'processMessage' => Translation::get('ad_csv_process'),
                 ];
 
                 $numTables = count($queries);
@@ -234,7 +231,7 @@ class BackupController extends AbstractAdministrationController
                     $queries[$i] = DatabaseHelper::alignTablePrefix(
                         $queries[$i],
                         $tablePrefix,
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
 
                     $kg = $this->configuration->getDb()->query($queries[$i]);
@@ -244,8 +241,8 @@ class BackupController extends AbstractAdministrationController
                             'errorMessageQueryFailed' => sprintf(
                                 '<strong>Query</strong>: "%s" failed (Reason: %s)',
                                 Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
-                                $this->configuration->getDb()->error()
-                            )
+                                $this->configuration->getDb()->error(),
+                            ),
                         ];
 
                         ++$k;
@@ -253,7 +250,7 @@ class BackupController extends AbstractAdministrationController
                         printf(
                             '<!-- Query: "%s" okay</div> -->%s',
                             Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
-                            "\n"
+                            "\n",
                         );
                         ++$g;
                     }
@@ -266,8 +263,8 @@ class BackupController extends AbstractAdministrationController
                         $g,
                         Translation::get('ad_csv_of'),
                         $numTables,
-                        Translation::get('ad_csv_suc')
-                    )
+                        Translation::get('ad_csv_suc'),
+                    ),
                 ];
             } else {
                 $templateVars = ['errorMessageImportNotPossible' => Translation::get('ad_csv_no')];
@@ -286,17 +283,14 @@ class BackupController extends AbstractAdministrationController
             $templateVars = [
                 ...$templateVars,
                 'errorMessageUpload' => Translation::get('ad_csv_no'),
-                'errorMessageUploadDetails' => $errorMessage
+                'errorMessageUploadDetails' => $errorMessage,
             ];
         }
 
-        return $this->render(
-            '@admin/backup/import.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ...$templateVars
-            ]
-        );
+        return $this->render('@admin/backup/import.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$templateVars,
+        ]);
     }
 }

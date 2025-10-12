@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main admin category class.
  *
@@ -45,14 +47,13 @@ class Category
     /** @var array<int, int>> */
     private array $owner = [];
 
-
     /** @var array<int, int>> */
     private array $moderators = [];
 
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
-
 
     /**
      * Returns all categories with ordered category IDs.
@@ -67,7 +68,7 @@ class Category
         if ($this->getLanguage() !== null && preg_match("/^[a-z\-]{2,}$/", $this->getLanguage())) {
             $languageCheck .= sprintf(
                 "AND fc.lang = '%s'",
-                $this->configuration->getDb()->escape($this->getLanguage())
+                $this->configuration->getDb()->escape($this->getLanguage()),
             );
         }
 
@@ -115,31 +116,31 @@ class Category
             implode(', ', $this->groups),
             $this->user,
             implode(', ', $this->groups),
-            $languageCheck
+            $languageCheck,
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         if ($result) {
             while ($row = $this->configuration->getDb()->fetchArray($result)) {
-                $this->categoryName[(int)$row['id']] = $row;
-                $this->categories[(int)$row['id']] = $row;
-                $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
-                $this->owner[(int)$row['id']] = &$row['user_id'];
-                $this->moderators[(int)$row['id']] = &$row['group_id'];
+                $this->categoryName[(int) $row['id']] = $row;
+                $this->categories[(int) $row['id']] = $row;
+                $this->children[(int) $row['parent_id']][(int) $row['id']] = &$this->categoryName[(int) $row['id']];
+                $this->owner[(int) $row['id']] = &$row['user_id'];
+                $this->moderators[(int) $row['id']] = &$row['group_id'];
 
-                $categories[(int)$row['id']] = [
-                    'id' => (int)$row['id'],
+                $categories[(int) $row['id']] = [
+                    'id' => (int) $row['id'],
                     'lang' => $row['lang'],
-                    'parent_id' => (int)$row['parent_id'],
+                    'parent_id' => (int) $row['parent_id'],
                     'name' => $row['name'],
                     'description' => $row['description'],
-                    'user_id' => (int)$row['user_id'],
-                    'group_id' => (int)$row['group_id'],
-                    'active' => (int)$row['active'],
-                    'show_home' => (int)$row['show_home'],
+                    'user_id' => (int) $row['user_id'],
+                    'group_id' => (int) $row['group_id'],
+                    'active' => (int) $row['active'],
+                    'show_home' => (int) $row['show_home'],
                     'image' => $row['image'],
-                    'level' => $this->getLevelOf($row['id'])
+                    'level' => $this->getLevelOf((int) $row['id']),
                 ];
             }
 
@@ -222,11 +223,11 @@ class Category
         $level = 0;
 
         while (
-            (isset($this->categoryName[$categoryId]['parent_id'])) &&
-            ((int)$this->categoryName[$categoryId]['parent_id'] !== 0)
+            isset($this->categoryName[$categoryId]['parent_id'])
+            && (int) $this->categoryName[$categoryId]['parent_id'] !== 0
         ) {
             ++$level;
-            $categoryId = (int)$this->categoryName[$categoryId]['parent_id'];
+            $categoryId = (int) $this->categoryName[$categoryId]['parent_id'];
             if (in_array($categoryId, $alreadyListed)) {
                 break;
             } else {

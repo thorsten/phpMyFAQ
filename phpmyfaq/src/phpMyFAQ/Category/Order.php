@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The category order class.
  *
@@ -31,8 +33,9 @@ readonly class Order
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -45,7 +48,7 @@ readonly class Order
             Database::getTablePrefix(),
             $categoryId,
             $parentId,
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position')
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategory_order', 'position'),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -59,7 +62,7 @@ readonly class Order
         $query = sprintf(
             'DELETE FROM %sfaqcategory_order WHERE category_id = %d',
             Database::getTablePrefix(),
-            $categoryId
+            $categoryId,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -74,13 +77,13 @@ readonly class Order
         array $categoryTree,
         ?int $parentId = null,
         int $position = 1,
-        array &$insertQueries = []
+        array &$insertQueries = [],
     ): void {
         // Clear the existing category order table
         if ($parentId === null) {
-            $this->configuration->getDb()->query(
-                sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix())
-            );
+            $this->configuration
+                ->getDb()
+                ->query(sprintf('DELETE FROM %sfaqcategory_order', Database::getTablePrefix()));
         }
 
         foreach ($categoryTree as $category) {
@@ -92,7 +95,7 @@ readonly class Order
                     Database::getTablePrefix(),
                     $id,
                     $parentId,
-                    $position
+                    $position,
                 );
 
                 if (!empty($category->children)) {
@@ -112,7 +115,6 @@ readonly class Order
         }
     }
 
-
     /**
      * Returns the category tree.
      *
@@ -123,8 +125,8 @@ readonly class Order
         $result = [];
 
         foreach ($categories as $category) {
-            if ((int)$category['parent_id'] === $parentId) {
-                $childCategories = $this->getCategoryTree($categories, (int)$category['category_id']);
+            if ((int) $category['parent_id'] === $parentId) {
+                $childCategories = $this->getCategoryTree($categories, (int) $category['category_id']);
                 $result[$category['category_id']] = $childCategories;
             }
         }
@@ -140,8 +142,8 @@ readonly class Order
     public function getParentId(array $categoryTree, int $categoryId, ?int $parentId = null): ?int
     {
         foreach ($categoryTree as $category) {
-            if ((int)$category->id === $categoryId) {
-                return (int)$parentId;
+            if ((int) $category->id === $categoryId) {
+                return (int) $parentId;
             }
 
             if (!empty($category->children)) {
@@ -164,7 +166,7 @@ readonly class Order
     {
         $query = sprintf(
             'SELECT category_id, parent_id, position FROM %sfaqcategory_order ORDER BY position',
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
         $result = $this->configuration->getDb()->query($query);
 

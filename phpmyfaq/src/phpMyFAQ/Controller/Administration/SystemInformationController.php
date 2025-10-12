@@ -47,39 +47,33 @@ class SystemInformationController extends AbstractAdministrationController
             try {
                 $esFullInformation = $this->configuration->getElasticsearch()->info();
                 $esInformation = $esFullInformation['version']['number'];
-            } catch (ClientResponseException | ServerResponseException | NoNodeAvailableException $e) {
-                $this->configuration->getLogger()->error(
-                    'Error while fetching Elasticsearch information',
-                    [$e->getMessage()]
-                );
+            } catch (ClientResponseException|ServerResponseException|NoNodeAvailableException $e) {
+                $this->configuration->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
                 $esInformation = 'n/a';
             }
         } else {
             $esInformation = 'n/a';
         }
 
-        return $this->render(
-            '@admin/configuration/system.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderSystemInfo' => Translation::get('ad_system_info'),
-                'systemInformation' => [
-                    'phpMyFAQ Version' => $faqSystem->getVersion(),
-                    'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
-                    'phpMyFAQ Plugin API Version' => $faqSystem->getPluginVersion(),
-                    'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), 2),
-                    'Web server software' => $request->server->get('SERVER_SOFTWARE'),
-                    'Web server document root' => $request->server->get('DOCUMENT_ROOT'),
-                    'Web server Interface' => strtoupper(PHP_SAPI),
-                    'PHP Version' => PHP_VERSION,
-                    'PHP Extensions' => implode(', ', get_loaded_extensions()),
-                    'Database Driver' => Database::getType(),
-                    'Database Server Version' => $this->configuration->getDb()->serverVersion(),
-                    'Database Client Version' => $this->configuration->getDb()->clientVersion(),
-                    'Elasticsearch Version' => $esInformation
-                ],
-            ]
-        );
+        return $this->render('@admin/configuration/system.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderSystemInfo' => Translation::get('ad_system_info'),
+            'systemInformation' => [
+                'phpMyFAQ Version' => $faqSystem->getVersion(),
+                'phpMyFAQ API Version' => $faqSystem->getApiVersion(),
+                'phpMyFAQ Plugin API Version' => $faqSystem->getPluginVersion(),
+                'phpMyFAQ Installation Path' => dirname((string) $request->server->get('SCRIPT_FILENAME'), 2),
+                'Web server software' => $request->server->get('SERVER_SOFTWARE'),
+                'Web server document root' => $request->server->get('DOCUMENT_ROOT'),
+                'Web server Interface' => strtoupper(PHP_SAPI),
+                'PHP Version' => PHP_VERSION,
+                'PHP Extensions' => implode(', ', get_loaded_extensions()),
+                'Database Driver' => Database::getType(),
+                'Database Server Version' => $this->configuration->getDb()->serverVersion(),
+                'Database Client Version' => $this->configuration->getDb()->clientVersion(),
+                'Elasticsearch Version' => $esInformation,
+            ],
+        ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ MCP Server
  *
@@ -51,12 +53,11 @@ class PhpMyFaqMcpServer
         private readonly Configuration $configuration,
         Language $language,
         private readonly Search $search,
-        private readonly Faq $faq
+        private readonly Faq $faq,
     ) {
-
         $language->setLanguage(
             $this->configuration->get('main.languageDetection'),
-            $this->configuration->get('main.language')
+            $this->configuration->get('main.language'),
         );
         $this->configuration->setLanguage($language);
 
@@ -84,7 +85,7 @@ class PhpMyFaqMcpServer
             $messageFactory,
             $requestHandlers,
             $notificationHandlers,
-            $this->configuration->getLogger()
+            $this->configuration->getLogger(),
         );
     }
 

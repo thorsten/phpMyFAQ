@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main changelog class.
  *
@@ -31,8 +33,9 @@ readonly class Changelog
     /**
      * Changelog constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -53,7 +56,7 @@ readonly class Changelog
             $revisionId,
             $userId,
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $text
+            $text,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -66,18 +69,14 @@ readonly class Changelog
     {
         $entries = [];
 
-        $query = sprintf(
-            '
+        $query = sprintf('
             SELECT
                 DISTINCT revision_id, usr, datum, what
             FROM
                 %sfaqchanges
             WHERE
                 beitrag = %d
-            ORDER BY revision_id, datum DESC',
-            Database::getTablePrefix(),
-            $recordId
-        );
+            ORDER BY revision_id, datum DESC', Database::getTablePrefix(), $recordId);
 
         if ($result = $this->configuration->getDb()->query($query)) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {

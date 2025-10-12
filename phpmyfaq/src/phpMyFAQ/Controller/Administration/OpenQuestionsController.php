@@ -22,8 +22,8 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -47,26 +47,22 @@ class OpenQuestionsController extends AbstractAdministrationController
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));
-        return $this->render(
-            '@admin/content/open-questions.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'msgOpenQuestions' => Translation::get('msgOpenQuestions'),
-                'csrfTokenDeleteQuestion' => Token::getInstance($session)->getTokenString('delete-questions'),
-                'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
-                'msgQuestion' => Translation::get('msgQuestion'),
-                'msgVisibility' => Translation::get('ad_entry_visibility'),
-                'questions' => $question->getAll(),
-                'yes' => Translation::get('ad_gen_yes'),
-                'no' => Translation::get('ad_gen_no'),
-                'enableCloseQuestion' => $this->configuration->get('records.enableCloseQuestion'),
-                'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
-                'msgTakeQuestion' => Translation::get('ad_ques_take'),
-                'csrfTokenToggleVisibility' =>
-                    Token::getInstance($session)->getTokenString('toggle-question-visibility'),
-                'msgDeleteAllOpenQuestions' => Translation::get('msgDelete'),
-            ]
-        );
+        return $this->render('@admin/content/open-questions.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'msgOpenQuestions' => Translation::get('msgOpenQuestions'),
+            'csrfTokenDeleteQuestion' => Token::getInstance($session)->getTokenString('delete-questions'),
+            'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
+            'msgQuestion' => Translation::get('msgQuestion'),
+            'msgVisibility' => Translation::get('ad_entry_visibility'),
+            'questions' => $question->getAll(),
+            'yes' => Translation::get('ad_gen_yes'),
+            'no' => Translation::get('ad_gen_no'),
+            'enableCloseQuestion' => $this->configuration->get('records.enableCloseQuestion'),
+            'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
+            'msgTakeQuestion' => Translation::get('ad_ques_take'),
+            'csrfTokenToggleVisibility' => Token::getInstance($session)->getTokenString('toggle-question-visibility'),
+            'msgDeleteAllOpenQuestions' => Translation::get('msgDelete'),
+        ]);
     }
 }

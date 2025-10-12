@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Attachment Controller for the REST API
  *
@@ -42,24 +44,22 @@ class AttachmentController extends AbstractController
         path: '/api/v3.1/attachments/{faqId}',
         operationId: 'getAttachments',
         description: 'Returns a list of attachments for a given FAQ record ID.',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the attachment.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'faqId',
         description: 'The FAQ record ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If the FAQ has at least one attached file.',
-        content: new OA\JsonContent(example: '
+    #[OA\Response(response: 200, description: 'If the FAQ has at least one attached file.', content: new OA\JsonContent(
+        example: '
         [
             {
                 "filename": "attachment-1.pdf",
@@ -69,8 +69,8 @@ class AttachmentController extends AbstractController
                 "filename": "attachment-2.pdf",
                 "url": "https://www.example.org/index.php?action=attachment&id=2"
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: 'If the FAQ has no attachments.',

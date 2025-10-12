@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This class is a helper class for permission relevant methods.
  *
@@ -38,8 +40,8 @@ class PermissionHelper
             $output .= sprintf(
                 '<option value="%s" %s>%s</option>',
                 $option,
-                ($option === $current) ? 'selected' : '',
-                $option
+                $option === $current ? 'selected' : '',
+                $option,
             );
         }
 

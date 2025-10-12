@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ instances setup class.
  *
@@ -91,10 +93,7 @@ class Setup
 
             if ([] === $failedDirs) {
                 // if no failed dirs exist
-                copy(
-                    $this->rootDir . '/setup/index.html',
-                    $this->rootDir . $dir . '/index.html'
-                );
+                copy($this->rootDir . '/setup/index.html', $this->rootDir . $dir . '/index.html');
             }
         }
 
@@ -121,14 +120,28 @@ class Setup
         return file_put_contents(
             $this->rootDir . $folder . '/database.php',
             '<?php
-$DB[\'server\'] = \'' . $data['dbServer'] . "';\n" .
-            "\$DB['port'] = '" . $data['dbPort'] . "';\n" .
-            "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
-            "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
-            "\$DB['db'] = '" . $data['dbDatabaseName'] . "';\n" .
-            "\$DB['prefix'] = '" . $data['dbPrefix'] . "';\n" .
-            "\$DB['type'] = '" . $data['dbType'] . "';",
-            LOCK_EX
+$DB[\'server\'] = \''
+            . $data['dbServer']
+            . "';\n"
+            . "\$DB['port'] = '"
+            . $data['dbPort']
+            . "';\n"
+            . "\$DB['user'] = '"
+            . $data['dbUser']
+            . "';\n"
+            . "\$DB['password'] = '"
+            . $data['dbPassword']
+            . "';\n"
+            . "\$DB['db'] = '"
+            . $data['dbDatabaseName']
+            . "';\n"
+            . "\$DB['prefix'] = '"
+            . $data['dbPrefix']
+            . "';\n"
+            . "\$DB['type'] = '"
+            . $data['dbType']
+            . "';",
+            LOCK_EX,
         );
     }
 
@@ -143,12 +156,22 @@ $DB[\'server\'] = \'' . $data['dbServer'] . "';\n" .
         return file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
             '<?php
-$PMF_LDAP[\'ldap_server\'] = \'' . $data['ldapServer'] . "';\n" .
-            "\$PMF_LDAP['ldap_port'] = '" . $data['ldapPort'] . "';\n" .
-            "\$PMF_LDAP['ldap_user'] = '" . $data['ldapUser'] . "';\n" .
-            "\$PMF_LDAP['ldap_password'] = '" . $data['ldapPassword'] . "';\n" .
-            "\$PMF_LDAP['ldap_base'] = '" . $data['ldapBase'] . "';",
-            LOCK_EX
+$PMF_LDAP[\'ldap_server\'] = \''
+            . $data['ldapServer']
+            . "';\n"
+            . "\$PMF_LDAP['ldap_port'] = '"
+            . $data['ldapPort']
+            . "';\n"
+            . "\$PMF_LDAP['ldap_user'] = '"
+            . $data['ldapUser']
+            . "';\n"
+            . "\$PMF_LDAP['ldap_password'] = '"
+            . $data['ldapPassword']
+            . "';\n"
+            . "\$PMF_LDAP['ldap_base'] = '"
+            . $data['ldapBase']
+            . "';",
+            LOCK_EX,
         );
     }
 
@@ -163,9 +186,13 @@ $PMF_LDAP[\'ldap_server\'] = \'' . $data['ldapServer'] . "';\n" .
         return file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',
             '<?php
-$PMF_ES[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
-            "\$PMF_ES['index'] = '" . $data['index'] . "';\n",
-            LOCK_EX
+$PMF_ES[\'hosts\'] = [\''
+            . implode("'], ['", $data['hosts'])
+            . "'];\n"
+            . "\$PMF_ES['index'] = '"
+            . $data['index']
+            . "';\n",
+            LOCK_EX,
         );
     }
 
@@ -180,9 +207,13 @@ $PMF_ES[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
         return file_put_contents(
             $this->rootDir . $folder . '/config/opensearch.php',
             '<?php
-$PMF_OS[\'hosts\'] = [\'' . implode("'], ['", $data['hosts']) . "'];\n" .
-            "\$PMF_OS['index'] = '" . $data['index'] . "';\n",
-            LOCK_EX
+$PMF_OS[\'hosts\'] = [\''
+            . implode("'], ['", $data['hosts'])
+            . "'];\n"
+            . "\$PMF_OS['index'] = '"
+            . $data['index']
+            . "';\n",
+            LOCK_EX,
         );
     }
 }

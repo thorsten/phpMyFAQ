@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ Captcha class.
  *
@@ -103,8 +105,9 @@ class BuiltinCaptcha implements CaptchaInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         $request = Request::createFromGlobals();
         $this->userAgent = $request->headers->get('user-agent');
         $this->ip = $request->getClientIp();
@@ -140,7 +143,7 @@ class BuiltinCaptcha implements CaptchaInterface
             '<img id="captchaImage" class="rounded border" src="./api/captcha" height="%d" width="%d" alt="%s">',
             $this->height,
             $this->width,
-            'Chuck Norris has counted to infinity. Twice.'
+            'Chuck Norris has counted to infinity. Twice.',
         );
     }
 
@@ -178,7 +181,7 @@ class BuiltinCaptcha implements CaptchaInterface
             $this->gdImage,
             $this->backgroundColor['r'],
             $this->backgroundColor['g'],
-            $this->backgroundColor['b']
+            $this->backgroundColor['b'],
         );
 
         imagefilledrectangle($this->gdImage, 0, 0, $this->width, $this->height, $colorAllocate);
@@ -278,7 +281,7 @@ class BuiltinCaptcha implements CaptchaInterface
             WHERE 
                 captcha_time < %d',
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604800
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - 604800,
         );
 
         $this->configuration->getDb()->query($delete);
@@ -292,7 +295,7 @@ class BuiltinCaptcha implements CaptchaInterface
             Database::getTablePrefix(),
             $this->userAgent,
             $this->configuration->getLanguage()->getLanguage(),
-            $this->ip
+            $this->ip,
         );
 
         $this->configuration->getDb()->query($delete);
@@ -303,17 +306,13 @@ class BuiltinCaptcha implements CaptchaInterface
      */
     private function saveCaptcha(): bool
     {
-        $select = sprintf(
-            "
+        $select = sprintf("
            SELECT 
                id 
            FROM 
                %sfaqcaptcha 
            WHERE 
-               id = '%s'",
-            Database::getTablePrefix(),
-            $this->code
-        );
+               id = '%s'", Database::getTablePrefix(), $this->code);
 
         $result = $this->configuration->getDb()->query($select);
 
@@ -335,7 +334,7 @@ class BuiltinCaptcha implements CaptchaInterface
                 $this->userAgent,
                 $this->configuration->getLanguage()->getLanguage(),
                 $this->ip,
-                $this->timestamp
+                $this->timestamp,
             );
             $this->configuration->getDb()->query($insert);
             return true;
@@ -360,7 +359,7 @@ class BuiltinCaptcha implements CaptchaInterface
             $size = random_int(16, $this->height - 3);
             $rotation = random_int(-10, 10);
             $y = random_int($size, $this->height + 5);
-            $x = $w1 + $w2 * $p;
+            $x = $w1 + ($w2 * $p);
             $foreColor = [];
 
             do {
@@ -379,9 +378,9 @@ class BuiltinCaptcha implements CaptchaInterface
 
             // Add the letter
             if (function_exists('imagettftext')) {
-                imagettftext($this->gdImage, $size, $rotation, (int)$x + 2, $y, $colorOne, $this->font, $letter);
-                imagettftext($this->gdImage, $size, $rotation, (int)$x + 1, $y + 1, $colorOne, $this->font, $letter);
-                imagettftext($this->gdImage, $size, $rotation, (int)$x, $y + 2, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int) $x + 2, $y, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int) $x + 1, $y + 1, $colorOne, $this->font, $letter);
+                imagettftext($this->gdImage, $size, $rotation, (int) $x, $y + 2, $colorOne, $this->font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->gdImage, 0, 0, 255);
@@ -443,7 +442,7 @@ class BuiltinCaptcha implements CaptchaInterface
         $query = sprintf(
             "SELECT id FROM %sfaqcaptcha WHERE id = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($captchaCode)
+            $this->configuration->getDb()->escape($captchaCode),
         );
 
         if ($result = $this->configuration->getDb()->query($query)) {

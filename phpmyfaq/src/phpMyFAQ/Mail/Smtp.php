@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * MUA (Mail User Agent) implementation using the Symfony Mailer class.
  *
@@ -37,7 +39,7 @@ class Smtp implements MailUserAgentInterface
         string $user = '',
         string $password = '',
         int $port = 25,
-        bool $disableTlsPeerVerification = false
+        bool $disableTlsPeerVerification = false,
     ): void {
         $dsn = sprintf('smtp://%s:%s@%s:%d', $this->user = $user, urlencode($password), $server, $port);
 
@@ -55,7 +57,7 @@ class Smtp implements MailUserAgentInterface
     public function send(string $recipients, array $headers, string $body): int
     {
         $sender = '';
-        if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
+        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3)) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
             $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
             unset($headers['Return-Path']);
         }

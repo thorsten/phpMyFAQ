@@ -44,18 +44,15 @@ class SessionKeepAliveController extends AbstractAdministrationController
         $language = Filter::filterVar($request->query->get('lang', 'en'), FILTER_SANITIZE_SPECIAL_CHARS);
         $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 
-        return $this->render(
-            '@admin/session-keepalive.twig',
-            [
-                'metaLanguage' => $language,
-                'phpMyFAQVersion' => System::getVersion(),
-                'currentYear' => date('Y'),
-                'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('admin-logout'),
-                'msgConfirm' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
-                'sessionTimeout' => PMF_AUTH_TIMEOUT,
-                'refreshTime' => $refreshTime,
-            ]
-        );
+        return $this->render('@admin/session-keepalive.twig', [
+            'metaLanguage' => $language,
+            'phpMyFAQVersion' => System::getVersion(),
+            'currentYear' => date('Y'),
+            'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('admin-logout'),
+            'msgConfirm' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
+            'sessionTimeout' => PMF_AUTH_TIMEOUT,
+            'refreshTime' => $refreshTime,
+        ]);
     }
 }

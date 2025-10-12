@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Tags Controller for the REST API
  *
@@ -37,11 +39,7 @@ class TagController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[OA\Get(
-        path: '/api/v3.1/tags',
-        operationId: 'getTags',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/tags', operationId: 'getTags', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the tags for the given language provided by "Accept-Language".',
@@ -50,11 +48,7 @@ class TagController extends AbstractController
             {"tagId": 1, "tagName": "PHP 8", "tagFrequency": 2 }
         ]'),
     )]
-    #[OA\Response(
-        response: 404,
-        description: 'If no tags are stored.',
-        content: new OA\JsonContent(example: []),
-    )]
+    #[OA\Response(response: 404, description: 'If no tags are stored.', content: new OA\JsonContent(example: []))]
     public function list(): JsonResponse
     {
         $tags = $this->container->get('phpmyfaq.tags');

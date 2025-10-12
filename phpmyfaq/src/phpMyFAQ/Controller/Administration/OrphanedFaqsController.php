@@ -40,13 +40,10 @@ class OrphanedFaqsController extends AbstractAdministrationController
 
         $faq = $this->container->get('phpmyfaq.admin.faq');
 
-        return $this->render(
-            '@admin/content/orphaned-faqs.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'orphanedFaqs' => $faq->getOrphanedFaqs(),
-            ]
-        );
+        return $this->render('@admin/content/orphaned-faqs.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'orphanedFaqs' => $faq->getOrphanedFaqs(),
+        ]);
     }
 }

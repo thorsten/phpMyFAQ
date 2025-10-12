@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication with databases.
  *
@@ -59,9 +61,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             Database::getTablePrefix(),
             $this->databaseDriver->escape($login),
             $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
-            $this->databaseDriver->escape($domain)
+            $this->databaseDriver->escape($domain),
         );
-
 
         $add = $this->databaseDriver->query($add);
 
@@ -92,7 +93,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             "UPDATE %sfaquserlogin SET pass = '%s' WHERE login = '%s'",
             Database::getTablePrefix(),
             $this->databaseDriver->escape($this->encContainer->setSalt($login)->encrypt($password)),
-            $this->databaseDriver->escape($login)
+            $this->databaseDriver->escape($login),
         );
 
         $change = $this->databaseDriver->query($change);
@@ -123,7 +124,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $delete = sprintf(
             "DELETE FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->databaseDriver->escape($login)
+            $this->databaseDriver->escape($login),
         );
 
         $delete = $this->databaseDriver->query($delete);
@@ -148,12 +149,12 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[\SensitiveParameter] string $password,
-        ?array $optionalData = null
+        ?array $optionalData = null,
     ): bool {
         $check = sprintf(
             "SELECT login, pass FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->databaseDriver->escape($login)
+            $this->databaseDriver->escape($login),
         );
 
         $check = $this->databaseDriver->query($check);
@@ -193,7 +194,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         $check = sprintf(
             "SELECT login FROM %sfaquserlogin WHERE login = '%s'",
             Database::getTablePrefix(),
-            $this->databaseDriver->escape($login)
+            $this->databaseDriver->escape($login),
         );
 
         $check = $this->databaseDriver->query($check);

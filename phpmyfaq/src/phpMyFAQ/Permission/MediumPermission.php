@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The medium permission class provides group rights.
  *
@@ -30,8 +32,9 @@ use phpMyFAQ\User\CurrentUser;
  */
 class MediumPermission extends BasicPermission implements PermissionInterface
 {
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
         parent::__construct($configuration);
     }
 
@@ -76,7 +79,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $groupId
+            $groupId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -163,7 +166,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $rightId,
-            $userId
+            $userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -195,7 +198,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             'INSERT INTO %sfaqgroup_right (group_id, right_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $groupId,
-            $rightId
+            $rightId,
         );
 
         return (bool) $this->configuration->getDb()->query($insert);
@@ -223,7 +226,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $nextId,
             $this->configuration->getDb()->escape($groupData['name']),
             $this->configuration->getDb()->escape($groupData['description']),
-            (int)$groupData['auto_join']
+            (int) $groupData['auto_join'],
         );
 
         $res = $this->configuration->getDb()->query($insert);
@@ -245,7 +248,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $select = sprintf(
             "SELECT group_id FROM %sfaqgroup WHERE name = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($name)
+            $this->configuration->getDb()->escape($name),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -282,7 +285,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
 
-        $groupData['auto_join'] = (int)$groupData['auto_join'];
+        $groupData['auto_join'] = (int) $groupData['auto_join'];
 
         return $groupData;
     }
@@ -300,22 +303,17 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $comma = '';
 
         foreach (array_keys($groupData) as $key) {
-            $set .= $comma . $key . " = '" . $this->configuration->getDb()->escape($checkedData[$key]) . "'";
+            $set .= $comma . $key . " = '" . $this->configuration->getDb()->escape((string) $checkedData[$key]) . "'";
             $comma = ",\n                ";
         }
 
-        $update = sprintf(
-            '
+        $update = sprintf('
             UPDATE
                 %sfaqgroup
             SET
                 %s
             WHERE
-                group_id = %d',
-            Database::getTablePrefix(),
-            $set,
-            $groupId
-        );
+                group_id = %d', Database::getTablePrefix(), $set, $groupId);
 
         return (bool) $this->configuration->getDb()->query($update);
     }
@@ -332,33 +330,21 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaqgroup WHERE group_id = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+        $delete = sprintf('DELETE FROM %sfaqgroup WHERE group_id = %d', Database::getTablePrefix(), $groupId);
 
         $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaquser_group WHERE group_id = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+        $delete = sprintf('DELETE FROM %sfaquser_group WHERE group_id = %d', Database::getTablePrefix(), $groupId);
 
         $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaqgroup_right WHERE group_id = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+        $delete = sprintf('DELETE FROM %sfaqgroup_right WHERE group_id = %d', Database::getTablePrefix(), $groupId);
 
         return (bool) $this->configuration->getDb()->query($delete);
     }
@@ -392,7 +378,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $groupId
+            $groupId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -433,7 +419,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $userId
+            $userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -461,8 +447,8 @@ class MediumPermission extends BasicPermission implements PermissionInterface
                 $options .= sprintf(
                     '<option value="%d" %s>%s</option>',
                     $allGroup,
-                    ((in_array($allGroup, $groups) || (isset($groups[0]) && $groups[0] === -1)) ? 'selected' : ''),
-                    $this->getGroupName($allGroup)
+                    in_array($allGroup, $groups) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
+                    $this->getGroupName($allGroup),
                 );
             }
         }
@@ -481,9 +467,9 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
 
         if (
-            !$this->configuration->get('main.enableCategoryRestrictions') &&
-            $currentUser->getUserId() !== 1 &&
-            !$currentUser->isSuperAdmin()
+            !$this->configuration->get('main.enableCategoryRestrictions')
+            && $currentUser->getUserId() !== 1
+            && !$currentUser->isSuperAdmin()
         ) {
             $select = sprintf(
                 '
@@ -497,7 +483,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
                     fug.user_id = %d',
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $currentUser->getUserId()
+                $currentUser->getUserId(),
             );
         }
 
@@ -521,17 +507,13 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return '-';
         }
 
-        $select = sprintf(
-            '
+        $select = sprintf('
             SELECT
                 name
             FROM
                 %sfaqgroup
             WHERE
-                group_id = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+                group_id = %d', Database::getTablePrefix(), $groupId);
 
         $res = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($res) != 1) {
@@ -614,7 +596,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $userId
+            $userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -642,10 +624,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $select = sprintf(
-            'SELECT group_id FROM %sfaqgroup WHERE auto_join = 1',
-            Database::getTablePrefix()
-        );
+        $select = sprintf('SELECT group_id FROM %sfaqgroup WHERE auto_join = 1', Database::getTablePrefix());
 
         $res = $this->configuration->getDb()->query($select);
         if (!$res) {
@@ -687,7 +666,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             'INSERT INTO %sfaquser_group (user_id, group_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $userId,
-            $groupId
+            $groupId,
         );
 
         $res = $this->configuration->getDb()->query($insert);
@@ -711,7 +690,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $select = sprintf(
             'SELECT group_id, name, description, auto_join FROM %sfaqgroup WHERE group_id = %d',
             Database::getTablePrefix(),
-            $groupId
+            $groupId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -734,11 +713,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaquser_group WHERE user_id  = %d',
-            Database::getTablePrefix(),
-            $userId
-        );
+        $delete = sprintf('DELETE FROM %sfaquser_group WHERE user_id  = %d', Database::getTablePrefix(), $userId);
 
         return (bool) $this->configuration->getDb()->query($delete);
     }
@@ -755,11 +730,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaqgroup_right WHERE group_id  = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+        $delete = sprintf('DELETE FROM %sfaqgroup_right WHERE group_id  = %d', Database::getTablePrefix(), $groupId);
 
         return (bool) $this->configuration->getDb()->query($delete);
     }
@@ -776,11 +747,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $delete = sprintf(
-            'DELETE FROM %sfaquser_group WHERE group_id = %d',
-            Database::getTablePrefix(),
-            $groupId
-        );
+        $delete = sprintf('DELETE FROM %sfaquser_group WHERE group_id = %d', Database::getTablePrefix(), $groupId);
 
         return (bool) $this->configuration->getDb()->query($delete);
     }

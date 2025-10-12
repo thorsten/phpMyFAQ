@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Session wrapper to use Symfony Session instead of direct $_SESSION access.
  *

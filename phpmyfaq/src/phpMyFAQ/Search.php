@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ Search class.
  *
@@ -42,8 +44,9 @@ class Search
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         $this->table = Database::getTablePrefix() . 'faqsearches';
     }
 
@@ -138,7 +141,7 @@ class Search
             if ($this->getCategory() instanceof Category) {
                 $children = $this->getCategory()->getChildNodes($this->getCategoryId());
                 $selectedCategory = [
-                    $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children),
+                    $fcrTable . '.category_id' => array_merge((array) $this->getCategoryId(), $children),
                 ];
             } else { // @phpstan-ignore-line
                 $selectedCategory = [
@@ -149,29 +152,26 @@ class Search
             $condition = [...$selectedCategory, ...$condition];
         }
 
-        if ((!$allLanguages) && (!is_numeric($searchTerm))) {
+        if (!$allLanguages && !is_numeric($searchTerm)) {
             $selectedLanguage = ['fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'"];
-            $condition        = [...$selectedLanguage, ...$condition];
+            $condition = [...$selectedLanguage, ...$condition];
         }
 
-        $searchDatabase->setTable($fdTable)
-            ->setResultColumns(
-                [
+        $searchDatabase
+            ->setTable($fdTable)
+            ->setResultColumns([
                 'fd.id AS id',
                 'fd.lang AS lang',
                 'fd.solution_id AS solution_id',
                 $fcrTable . '.category_id AS category_id',
                 'fd.thema AS question',
-                'fd.content AS answer'
-                ]
-            )
+                'fd.content AS answer',
+            ])
             ->setJoinedTable($fcrTable)
-            ->setJoinedColumns(
-                [
+            ->setJoinedColumns([
                 'fd.id = ' . $fcrTable . '.record_id',
-                'fd.lang = ' . $fcrTable . '.record_lang'
-                ]
-            )
+                'fd.lang = ' . $fcrTable . '.record_lang',
+            ])
             ->setConditions($condition);
 
         if (is_numeric($searchTerm)) {
@@ -253,7 +253,7 @@ class Search
             $this->configuration->getDb()->nextId($this->table, 'id'),
             $this->configuration->getLanguage()->getLanguage(),
             $this->configuration->getDb()->escape($searchTerm),
-            $dateTime->format('Y-m-d H:i:s')
+            $dateTime->format('Y-m-d H:i:s'),
         );
 
         $this->configuration->getDb()->query($query);
@@ -264,11 +264,7 @@ class Search
      */
     public function deleteSearchTermById(int $searchTermId): bool
     {
-        $query = sprintf(
-            "DELETE FROM %s WHERE id = '%d'",
-            $this->table,
-            $searchTermId
-        );
+        $query = sprintf("DELETE FROM %s WHERE id = '%d'", $this->table, $searchTermId);
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -301,22 +297,10 @@ class Search
         if ($timeWindow > 0) {
             $dbType = Database::getType();
             $timeCondition = match ($dbType) {
-                'pgsql', 'pdo_pgsql' => sprintf(
-                    " WHERE searchdate >= NOW() - INTERVAL '%d days'",
-                    $timeWindow
-                ),
-                'sqlite3', 'pdo_sqlite' => sprintf(
-                    " WHERE searchdate >= datetime('now', '-%d days')",
-                    $timeWindow
-                ),
-                'sqlsrv', 'pdo_sqlsrv' => sprintf(
-                    ' WHERE searchdate >= DATEADD(day, -%d, GETDATE())',
-                    $timeWindow
-                ),
-                default => sprintf(
-                    ' WHERE searchdate >= DATE_SUB(NOW(), INTERVAL %d DAY)',
-                    $timeWindow
-                )
+                'pgsql', 'pdo_pgsql' => sprintf(" WHERE searchdate >= NOW() - INTERVAL '%d days'", $timeWindow),
+                'sqlite3', 'pdo_sqlite' => sprintf(" WHERE searchdate >= datetime('now', '-%d days')", $timeWindow),
+                'sqlsrv', 'pdo_sqlsrv' => sprintf(' WHERE searchdate >= DATEADD(day, -%d, GETDATE())', $timeWindow),
+                default => sprintf(' WHERE searchdate >= DATE_SUB(NOW(), INTERVAL %d DAY)', $timeWindow),
             };
         }
 
@@ -324,11 +308,10 @@ class Search
         $dbType = Database::getType();
         $limitClause = match ($dbType) {
             'sqlsrv', 'pdo_sqlsrv' => sprintf('OFFSET 0 ROWS FETCH NEXT %d ROWS ONLY', $numResults),
-            default => sprintf('LIMIT %d', $numResults)
+            default => sprintf('LIMIT %d', $numResults),
         };
 
-        $query = sprintf(
-            '
+        $query = sprintf('
             SELECT
                 MIN(id) as id, searchterm, COUNT(searchterm) AS number %s
             FROM
@@ -337,19 +320,13 @@ class Search
                 searchterm %s
             ORDER BY
                 number DESC
-            %s',
-            $byLang,
-            $this->table,
-            $timeCondition,
-            $byLang,
-            $limitClause
-        );
+            %s', $byLang, $this->table, $timeCondition, $byLang, $limitClause);
 
         $result = $this->configuration->getDb()->query($query);
 
         if (false !== $result) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $searchResult[] = (array)$row;
+                $searchResult[] = (array) $row;
             }
         }
 
@@ -361,14 +338,14 @@ class Search
      */
     public function getSearchesCount(): int
     {
-        $sql = sprintf(
-            'SELECT COUNT(*) AS count FROM %s',
-            $this->table
-        );
+        $sql = sprintf('SELECT COUNT(*) AS count FROM %s', $this->table);
 
         $result = $this->configuration->getDb()->query($sql);
 
-        return (int) $this->configuration->getDb()->fetchObject($result)->count;
+        return (int) $this->configuration
+            ->getDb()
+            ->fetchObject($result)
+            ->count;
     }
 
     public function setCategory(Category $category): void

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // phpcs:ignoreFile
 /**
  * The string wrapper class using a mbstring extension.
@@ -43,7 +46,7 @@ class Mbstring extends StringsAbstract
      */
     public static function getInstance(string $language = 'en'): Mbstring
     {
-        if (!(self::$mbstring instanceof Mbstring)) {
+        if (!self::$mbstring instanceof Mbstring) {
             self::$mbstring = new self();
             self::$mbstring->encoding = self::DEFAULT_ENCODING;
             self::$mbstring->language = Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
@@ -70,7 +73,7 @@ class Mbstring extends StringsAbstract
      * @param int      $start Start
      * @param int|null $length Length
      */
-    public function substr(string $str, int $start, int|null $length = null): string
+    public function substr(string $str, int $start, ?int $length = null): string
     {
         $length = null == $length ? mb_strlen($str) : $length;
 
@@ -155,7 +158,7 @@ class Mbstring extends StringsAbstract
         callable $callback,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array {
         if (is_array($pattern)) {
             foreach ($pattern as &$item) {
@@ -182,7 +185,7 @@ class Mbstring extends StringsAbstract
         string|array $replacement,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array|null {
         if (is_array($pattern)) {
             foreach ($pattern as &$item) {

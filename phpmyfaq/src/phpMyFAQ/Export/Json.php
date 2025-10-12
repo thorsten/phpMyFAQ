@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * JSON Export class for phpMyFAQ.
  *
@@ -74,8 +76,8 @@ class Json extends Export
                     'question' => strip_tags((string) $data['topic']),
                     'answer' => Strings::htmlspecialchars($data['content']),
                     'author' => $data['author_name'],
-                    'last_modified' => Date::createIsoDate($data['lastmodified'])
-                ]
+                    'last_modified' => Date::createIsoDate($data['lastmodified']),
+                ],
             ];
         }
 

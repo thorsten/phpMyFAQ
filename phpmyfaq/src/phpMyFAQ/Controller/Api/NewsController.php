@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The News Controller for the REST API
  *
@@ -35,15 +37,11 @@ class NewsController extends AbstractController
         }
     }
 
-    #[OA\Get(
-        path: '/api/v3.1/news',
-        operationId: 'getNews',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/news', operationId: 'getNews', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the open questions.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -67,13 +65,9 @@ class NewsController extends AbstractController
                 "target": "",
                 "url": "https://www.example.org/?action=news&newsid=1&newslang=de"
               }
-        ]')
+        ]'),
     )]
-    #[OA\Response(
-        response: 404,
-        description: 'If no news are stored.',
-        content: new OA\JsonContent(example: []),
-    )]
+    #[OA\Response(response: 404, description: 'If no news are stored.', content: new OA\JsonContent(example: []))]
     public function list(): JsonResponse
     {
         $news = new News($this->configuration);

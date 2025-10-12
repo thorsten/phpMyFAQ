@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The File Export Controller
  *
@@ -66,7 +68,7 @@ class ExportController extends AbstractController
             } else {
                 $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
             }
-        } catch (Exception | JsonException | CommonMarkException $e) {
+        } catch (Exception|JsonException|CommonMarkException $e) {
             echo $e->getMessage();
         }
     }
@@ -80,10 +82,10 @@ class ExportController extends AbstractController
         $this->userHasPermission(PermissionType::REPORTS);
 
         $data = json_decode($request->getContent())->data;
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('create-report', $data->{'pmf-csrf-token'})
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'create-report',
+            $data->{'pmf-csrf-token'},
+        )) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -191,15 +193,13 @@ class ExportController extends AbstractController
             }
 
             if (isset($data->url)) {
-                $text[$i][] = Report::sanitize($report->convertEncoding(
-                    sprintf(
-                        '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $this->configuration->getDefaultUrl(),
-                        $reportData['category_id'],
-                        $reportData['faq_id'],
-                        $reportData['faq_language']
-                    )
-                ));
+                $text[$i][] = Report::sanitize($report->convertEncoding(sprintf(
+                    '%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $this->configuration->getDefaultUrl(),
+                    $reportData['category_id'],
+                    $reportData['faq_id'],
+                    $reportData['faq_language'],
+                )));
             }
 
             if (isset($data->visits)) {

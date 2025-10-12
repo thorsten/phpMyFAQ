@@ -34,11 +34,7 @@ class CreateLinkTwigExtension extends AbstractExtension
     public static function categoryLink(int $categoryId): string
     {
         $configuration = Configuration::getConfigurationInstance();
-        $url = sprintf(
-            '%sindex.php?action=show&cat=%d',
-            $configuration->getDefaultUrl(),
-            $categoryId
-        );
+        $url = sprintf('%sindex.php?action=show&cat=%d', $configuration->getDefaultUrl(), $categoryId);
 
         $category = new Category($configuration);
         $categoryEntity = $category->getCategoryData($categoryId);
@@ -59,7 +55,7 @@ class CreateLinkTwigExtension extends AbstractExtension
             $configuration->getDefaultUrl(),
             $categoryId,
             $faqId,
-            $faqLanguage
+            $faqLanguage,
         );
 
         $faq = new Faq($configuration);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Interface for phpMyFAQ database-dependent search classes.
  *

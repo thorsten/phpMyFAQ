@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * API handler class.
  *
@@ -19,7 +21,6 @@ namespace phpMyFAQ\Administration;
 
 use Exception;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core;
 use phpMyFAQ\System;
 use stdClass;
 use Symfony\Component\HttpClient\HttpClient;
@@ -47,8 +48,10 @@ class Api
     /**
      * Api constructor.
      */
-    public function __construct(private readonly Configuration $configuration, private readonly System $system)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly System $system,
+    ) {
         $this->setHttpClient(HttpClient::create(['max_redirects' => 2, 'timeout' => 30]));
     }
 
@@ -61,10 +64,7 @@ class Api
      */
     public function getVersions(): array
     {
-        $response = $this->httpClient->request(
-            'GET',
-            $this->apiUrl . 'versions'
-        );
+        $response = $this->httpClient->request('GET', $this->apiUrl . 'versions');
 
         if ($response->getStatusCode() === Response::HTTP_OK) {
             try {
@@ -73,18 +73,13 @@ class Api
                     'installed' => $this->configuration->getVersion(),
                     'stable' => $content['stable'],
                     'development' => $content['development'],
-                    'nightly' => $content['nightly']
+                    'nightly' => $content['nightly'],
                 ];
-            } catch (
-                ClientExceptionInterface |
-                RedirectionExceptionInterface |
-                ServerExceptionInterface |
-                TransportExceptionInterface $exception
-            ) {
+            } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception) {
                 throw new Exception(
-                    'phpMyFAQ Verification API is not available: ' .  $exception->getMessage(),
+                    'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
                     $exception->getCode(),
-                    $exception
+                    $exception,
                 );
             }
         }
@@ -93,7 +88,7 @@ class Api
             'installed' => $this->configuration->getVersion(),
             'stable' => 'n/a',
             'development' => 'n/a',
-            'nightly' => 'n/a'
+            'nightly' => 'n/a',
         ];
     }
 
@@ -104,26 +99,18 @@ class Api
      */
     public function isVerified(): bool
     {
-        $response = $this->httpClient->request(
-            'GET',
-            $this->apiUrl . 'verify/' . $this->configuration->getVersion()
-        );
+        $response = $this->httpClient->request('GET', $this->apiUrl . 'verify/' . $this->configuration->getVersion());
 
         try {
             $this->remoteHashes = $response->getContent();
             if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
                 return is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
             }
-        } catch (
-            ClientExceptionInterface |
-            RedirectionExceptionInterface |
-            ServerExceptionInterface |
-            TransportExceptionInterface $exception
-        ) {
+        } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception) {
             throw new Exception(
-                'phpMyFAQ Verification API is not available: ' .  $exception->getMessage(),
+                'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
                 $exception->getCode(),
-                $exception
+                $exception,
             );
         }
 
@@ -139,7 +126,7 @@ class Api
     {
         return array_diff(
             json_decode($this->system->createHashes(), true, 512, JSON_THROW_ON_ERROR),
-            json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR)
+            json_decode((string) $this->remoteHashes, true, 512, JSON_THROW_ON_ERROR),
         );
     }
 

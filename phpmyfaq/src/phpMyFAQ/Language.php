@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages all language stuff.
  *
@@ -45,7 +47,7 @@ class Language
      */
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly SessionInterface $session
+        private readonly SessionInterface $session,
     ) {
     }
 
@@ -69,13 +71,7 @@ class Language
             $where = ' WHERE id = ' . $faqId;
         }
 
-        $query = sprintf(
-            'SELECT %s lang FROM %s%s %s',
-            $distinct,
-            Database::getTablePrefix(),
-            $table,
-            $where
-        );
+        $query = sprintf('SELECT %s lang FROM %s%s %s', $distinct, Database::getTablePrefix(), $table, $where);
 
         $result = $this->configuration->getDb()->query($query);
 
@@ -181,11 +177,9 @@ class Language
 
     private function getDetectionLanguage(bool $configDetection): ?string
     {
-        return ($configDetection && static::isASupportedLanguage($this->acceptLanguage))
-            ?
-            strtolower($this->acceptLanguage)
-            :
-            null;
+        return $configDetection && static::isASupportedLanguage($this->acceptLanguage)
+            ? strtolower($this->acceptLanguage)
+            : null;
     }
 
     /**

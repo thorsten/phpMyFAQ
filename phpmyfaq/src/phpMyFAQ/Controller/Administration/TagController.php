@@ -41,19 +41,16 @@ class TagController extends AbstractAdministrationController
 
         $tagData = $this->container->get('phpmyfaq.tags')->getAllTags();
 
-        return $this->render(
-            '@admin/content/tags.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderTags' => Translation::get('msgTags'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('tags'),
-                'tags' => $tagData,
-                'noTags' => Translation::get('ad_news_nodata'),
-                'buttonEdit' => Translation::get('ad_user_edit'),
-                'msgConfirm' => Translation::get('ad_user_del_3'),
-                'buttonDelete' => Translation::get('msgDelete'),
-            ]
-        );
+        return $this->render('@admin/content/tags.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderTags' => Translation::get('msgTags'),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('tags'),
+            'tags' => $tagData,
+            'noTags' => Translation::get('ad_news_nodata'),
+            'buttonEdit' => Translation::get('ad_user_edit'),
+            'msgConfirm' => Translation::get('ad_user_del_3'),
+            'buttonDelete' => Translation::get('msgDelete'),
+        ]);
     }
 }

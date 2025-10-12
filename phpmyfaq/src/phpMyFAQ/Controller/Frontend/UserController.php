@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The User Controller
  *
@@ -24,13 +26,13 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\TwoFactor;
 use RobThree\Auth\TwoFactorAuthException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use ZipArchive;
 
 class UserController extends AbstractController
@@ -69,10 +71,9 @@ class UserController extends AbstractController
 
         if (!$isAzureAdUser) {
             if ($password !== $confirm) {
-                return $this->json(
-                    ['error' => Translation::get('ad_user_error_passwordsDontMatch')],
-                    Response::HTTP_CONFLICT
-                );
+                return $this->json(['error' => Translation::get(
+                    'ad_user_error_passwordsDontMatch',
+                )], Response::HTTP_CONFLICT);
             }
 
             if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
@@ -89,7 +90,7 @@ class UserController extends AbstractController
                     'display_name' => $userName,
                     'email' => $email,
                     'is_visible' => $isVisible === 'on' ? 1 : 0,
-                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0
+                    'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
                 ];
             }
 
@@ -110,7 +111,7 @@ class UserController extends AbstractController
             $userData = [
                 'is_visible' => $isVisible === 'on' ? 1 : 0,
                 'twofactor_enabled' => $twoFactorEnabled === 'on' ? 1 : 0,
-                'secret' => $secret
+                'secret' => $secret,
             ];
 
             $success = $this->currentUser->setUserData($userData);
@@ -190,7 +191,6 @@ class UserController extends AbstractController
         return $response;
     }
 
-
     /**
      * @throws Exception|\Exception
      */
@@ -212,31 +212,33 @@ class UserController extends AbstractController
 
         // Validate User ID, Username and email
         if (
-            !$this->currentUser->getUserById($userId) ||
-            $userId !== $this->currentUser->getUserId() ||
-            $loginName !== $this->currentUser->getLogin() ||
-            $email !== $this->currentUser->getUserData('email')
+            !$this->currentUser->getUserById($userId)
+            || $userId !== $this->currentUser->getUserId()
+            || $loginName !== $this->currentUser->getLogin()
+            || $email !== $this->currentUser->getUserData('email')
         ) {
             return $this->json(['error' => Translation::get('ad_user_error_loginInvalid')], Response::HTTP_BAD_REQUEST);
         }
 
         $stopWords = $this->container->get('phpmyfaq.stop-words');
         if (
-            $author !== '' &&
-            $author !== '0' &&
-            ($email !== '' && $email !== '0') &&
-            ($question !== '' && $question !== '0') &&
-            $stopWords->checkBannedWord($question)
+            $author !== ''
+            && $author !== '0'
+            && $email !== ''
+            && $email !== '0'
+            && $question !== ''
+            && $question !== '0'
+            && $stopWords->checkBannedWord($question)
         ) {
             $question = sprintf(
-                "%s %s<br>%s %s<br>%s %s<br><br>%s",
+                '%s %s<br>%s %s<br>%s %s<br><br>%s',
                 Translation::get('msgUsername'),
                 $loginName,
                 Translation::get('msgNewContentName'),
                 $author,
                 Translation::get('msgNewContentMail'),
                 $email,
-                $question
+                $question,
             );
 
             $mailer = $this->container->get('phpmyfaq.mail');
@@ -250,7 +252,7 @@ class UserController extends AbstractController
                 unset($mailer);
 
                 return $this->json(['success' => Translation::get('msgMailContact')], Response::HTTP_OK);
-            } catch (Exception | TransportExceptionInterface $exception) {
+            } catch (Exception|TransportExceptionInterface $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -276,10 +278,9 @@ class UserController extends AbstractController
             $newSecret = $twoFactor->generateSecret();
 
             if ($this->currentUser->setUserData(['secret' => $newSecret, 'twofactor_enabled' => 0])) {
-                return $this->json(
-                    ['success' => Translation::get('msgRemoveTwofactorConfigSuccessful')],
-                    Response::HTTP_OK
-                );
+                return $this->json(['success' => Translation::get(
+                    'msgRemoveTwofactorConfigSuccessful',
+                )], Response::HTTP_OK);
             }
 
             return $this->json(['error' => Translation::get('msgErrorOccurred')], Response::HTTP_BAD_REQUEST);

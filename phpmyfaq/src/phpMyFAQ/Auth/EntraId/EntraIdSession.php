@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Session class for Entra ID.
  *
@@ -36,8 +38,10 @@ class EntraIdSession extends AbstractSession
 
     private string $currentSessionKey;
 
-    public function __construct(private readonly Configuration $configuration, private readonly Session $session)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly Session $session,
+    ) {
         parent::__construct($session);
 
         $this->createCurrentSessionKey();
@@ -48,7 +52,7 @@ class EntraIdSession extends AbstractSession
      */
     public function createCurrentSessionKey(): void
     {
-        $this->currentSessionKey = Uuid::v4();
+        $this->currentSessionKey = Uuid::v4()->toRfc4122();
     }
 
     /**

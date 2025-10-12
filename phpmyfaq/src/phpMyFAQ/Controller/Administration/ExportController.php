@@ -42,7 +42,7 @@ class ExportController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::EXPORT);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentUser);
@@ -52,30 +52,27 @@ class ExportController extends AbstractAdministrationController
         $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        return $this->render(
-            '@admin/import-export/export.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderExport' => Translation::get('ad_menu_export'),
-                'hasNoFaqs' => Database::checkOnEmptyTable('faqdata'),
-                'errorMessageNoFaqs' => Translation::get('msgErrorNoRecords'),
-                'hasCategories' => !Database::checkOnEmptyTable('faqcategories'),
-                'headerCategories' => Translation::get('ad_export_which_cat'),
-                'msgCategory' => Translation::get('msgCategory'),
-                'msgAllCategories' => Translation::get('msgShowAllCategories'),
-                'categoryOptions' => $categoryHelper->renderOptions(0),
-                'msgWithSubCategories' => Translation::get('ad_export_cat_downwards'),
-                'headerExportType' => Translation::get('ad_export_type'),
-                'msgChooseExportType' => Translation::get('ad_export_type_choose'),
-                'msgViewType' => Translation::get('ad_export_download_view'),
-                'msgDownloadType' => HeaderUtils::DISPOSITION_ATTACHMENT,
-                'msgDownload' => Translation::get('ad_export_download'),
-                'msgInlineType' => HeaderUtils::DISPOSITION_INLINE,
-                'msgInline' => Translation::get('ad_export_view'),
-                'buttonReset' => Translation::get('ad_config_reset'),
-                'buttonExport' => Translation::get('ad_menu_export'),
-            ]
-        );
+        return $this->render('@admin/import-export/export.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderExport' => Translation::get('ad_menu_export'),
+            'hasNoFaqs' => Database::checkOnEmptyTable('faqdata'),
+            'errorMessageNoFaqs' => Translation::get('msgErrorNoRecords'),
+            'hasCategories' => !Database::checkOnEmptyTable('faqcategories'),
+            'headerCategories' => Translation::get('ad_export_which_cat'),
+            'msgCategory' => Translation::get('msgCategory'),
+            'msgAllCategories' => Translation::get('msgShowAllCategories'),
+            'categoryOptions' => $categoryHelper->renderOptions(0),
+            'msgWithSubCategories' => Translation::get('ad_export_cat_downwards'),
+            'headerExportType' => Translation::get('ad_export_type'),
+            'msgChooseExportType' => Translation::get('ad_export_type_choose'),
+            'msgViewType' => Translation::get('ad_export_download_view'),
+            'msgDownloadType' => HeaderUtils::DISPOSITION_ATTACHMENT,
+            'msgDownload' => Translation::get('ad_export_download'),
+            'msgInlineType' => HeaderUtils::DISPOSITION_INLINE,
+            'msgInline' => Translation::get('ad_export_view'),
+            'buttonReset' => Translation::get('ad_config_reset'),
+            'buttonExport' => Translation::get('ad_menu_export'),
+        ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Backup Controller for the REST API
  *
@@ -45,27 +47,23 @@ class BackupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[OA\Get(
-        path: '/api/v3.1/backup/{type}',
-        operationId: 'createBackup',
-        tags: ['Endpoints with Authentication'],
-    )]
+    #[OA\Get(path: '/api/v3.1/backup/{type}', operationId: 'createBackup', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Header(
         header: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'type',
         description: 'The backup type. Can be "data", "logs" or "content".',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -73,19 +71,19 @@ class BackupController extends AbstractController
         content: new OA\MediaType(
             mediaType: 'application/octet-stream or application/zip',
             schema: new OA\Schema(type: 'string'),
-        )
+        ),
     )]
     #[OA\Response(
         response: 400,
         description: 'If the backup type is wrong or an internal error occurred',
         content: new OA\MediaType(
             mediaType: 'application/octet-stream',
-            schema: new OA\Schema(type: 'string')
-        )
+            schema: new OA\Schema(type: 'string'),
+        ),
     )]
     #[OA\Response(
         response: 401,
-        description: 'If the user is not authenticated and/or does not have sufficient permissions.'
+        description: 'If the user is not authenticated and/or does not have sufficient permissions.',
     )]
     public function download(Request $request): Response
     {
@@ -119,7 +117,7 @@ class BackupController extends AbstractController
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
-                urlencode($backupFileName)
+                urlencode($backupFileName),
             );
 
             $response->headers->set('Content-Type', 'application/zip');
@@ -140,7 +138,7 @@ class BackupController extends AbstractController
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
-                urlencode($backupFileName)
+                urlencode($backupFileName),
             );
 
             $response->headers->set('Content-Type', 'application/octet-stream');
@@ -148,10 +146,7 @@ class BackupController extends AbstractController
             $response->setStatusCode(Response::HTTP_OK);
             return $response->send();
         } catch (SodiumException) {
-            return new Response(
-                'An error occurred while creating the backup.',
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new Response('An error occurred while creating the backup.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

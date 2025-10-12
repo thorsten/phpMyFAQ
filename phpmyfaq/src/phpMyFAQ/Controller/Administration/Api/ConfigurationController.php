@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Configuration Controller
  *
@@ -36,7 +38,7 @@ class ConfigurationController extends AbstractController
     #[Route(
         'admin/api/configuration/send-test-mail',
         name: 'admin.api.configuration.send-test-mail',
-        methods: ['POST']
+        methods: ['POST'],
     )]
     public function sendTestMail(Request $request): JsonResponse
     {
@@ -57,7 +59,7 @@ class ConfigurationController extends AbstractController
             $result = $mail->send();
 
             return $this->json(['success' => $result], Response::HTTP_OK);
-        } catch (Exception | TransportExceptionInterface $e) {
+        } catch (Exception|TransportExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -68,7 +70,7 @@ class ConfigurationController extends AbstractController
     #[Route(
         'admin/api/configuration/activate-maintenance-mode',
         name: 'admin.api.configuration.activate-maintenance-mode',
-        methods: ['POST']
+        methods: ['POST'],
     )]
     public function activateMaintenanceMode(Request $request): JsonResponse
     {

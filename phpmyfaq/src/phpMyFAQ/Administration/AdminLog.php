@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Logging class.
  *
@@ -19,8 +21,8 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\User;
 use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
+use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,8 +35,9 @@ readonly class AdminLog
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -44,9 +47,7 @@ readonly class AdminLog
     {
         $query = sprintf('SELECT id FROM %sfaqadminlog', Database::getTablePrefix());
 
-        return $this->configuration->getDb()->numRows(
-            $this->configuration->getDb()->query($query)
-        );
+        return $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
     }
 
     /**
@@ -59,7 +60,7 @@ readonly class AdminLog
 
         $query = sprintf(
             'SELECT id, time, usr AS user, text, ip FROM %sfaqadminlog ORDER BY id DESC',
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -95,7 +96,7 @@ readonly class AdminLog
                 $request->server->get('REQUEST_TIME'),
                 $user->getUserId(),
                 $this->configuration->getDb()->escape(nl2br($logText)),
-                $this->configuration->getDb()->escape($request->getClientIp())
+                $this->configuration->getDb()->escape($request->getClientIp()),
             );
 
             return (bool) $this->configuration->getDb()->query($query);
@@ -112,7 +113,7 @@ readonly class AdminLog
         $query = sprintf(
             'DELETE FROM %sfaqadminlog WHERE time < %d',
             Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - 30 * 86400
+            Request::createFromGlobals()->server->get('REQUEST_TIME') - (30 * 86400),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

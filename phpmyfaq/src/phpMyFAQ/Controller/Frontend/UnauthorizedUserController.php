@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The User Controller for unauthorized users
  *
@@ -57,7 +59,7 @@ class UnauthorizedUserController
             $user = CurrentUser::getCurrentUser($this->configuration);
             $loginExist = $user->getUserByLogin($username);
 
-            if ($loginExist && ($email == $user->getUserData('email'))) {
+            if ($loginExist && $email == $user->getUserData('email')) {
                 try {
                     $newPassword = $user->createPassword();
                 } catch (\Exception $exception) {
@@ -70,10 +72,11 @@ class UnauthorizedUserController
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 
-                $text = Translation::get('lostpwd_text_1') .
-                    sprintf('<br><br>Username: %s', $username) .
-                    sprintf('<br>New Password: %s<br><br>', $newPassword) .
-                    Translation::get('lostpwd_text_2');
+                $text =
+                    Translation::get('lostpwd_text_1')
+                    . sprintf('<br><br>Username: %s', $username)
+                    . sprintf('<br>New Password: %s<br><br>', $newPassword)
+                    . Translation::get('lostpwd_text_2');
 
                 $mail = new Mail($this->configuration);
                 try {
@@ -84,12 +87,12 @@ class UnauthorizedUserController
 
                 $mail->subject = Utils::resolveMarkers(
                     '[%sitename%] Username / password request',
-                    $this->configuration
+                    $this->configuration,
                 );
                 $mail->message = $text;
                 try {
                     $mail->send();
-                } catch (Exception | TransportExceptionInterface $exception) {
+                } catch (Exception|TransportExceptionInterface $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
                 }
 

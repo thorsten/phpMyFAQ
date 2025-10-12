@@ -40,17 +40,14 @@ class ConfigurationController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        return $this->render(
-            '@admin/configuration/main.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderConfiguration' => Translation::get('ad_config_edit'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('configuration'),
-                'language' => $this->configuration->getLanguage()->getLanguage(),
-                'adminConfigurationButtonReset' => Translation::get('ad_config_reset'),
-                'adminConfigurationButtonSave' => Translation::get('ad_config_save'),
-            ]
-        );
+        return $this->render('@admin/configuration/main.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderConfiguration' => Translation::get('ad_config_edit'),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('configuration'),
+            'language' => $this->configuration->getLanguage()->getLanguage(),
+            'adminConfigurationButtonReset' => Translation::get('ad_config_reset'),
+            'adminConfigurationButtonSave' => Translation::get('ad_config_save'),
+        ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Category relations class.
  *
@@ -34,8 +36,10 @@ class Relation
     /**
      * CategoryRelation constructor.
      */
-    public function __construct(private readonly Configuration $configuration, private readonly Category $category)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+        private readonly Category $category,
+    ) {
     }
 
     /**
@@ -70,7 +74,7 @@ class Relation
             ORDER BY
                 fcr.category_id, fd.id',
             Database::getTablePrefix(),
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
         $result = $this->configuration->getDb()->query($query);
 
@@ -111,7 +115,7 @@ class Relation
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
@@ -119,7 +123,7 @@ class Relation
                 $query .= sprintf(
                     'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',
                     implode(', ', $this->category->getGroups()),
-                    implode(', ', $this->category->getGroups())
+                    implode(', ', $this->category->getGroups()),
                 );
             } else {
                 $query .= sprintf(
@@ -128,16 +132,13 @@ class Relation
                     $this->category->getUser(),
                     implode(', ', $this->category->getGroups()),
                     $this->category->getUser(),
-                    implode(', ', $this->category->getGroups())
+                    implode(', ', $this->category->getGroups()),
                 );
             }
         }
 
         if (strlen($this->configuration->getLanguage()->getLanguage()) > 0) {
-            $query .= sprintf(
-                " AND fd.lang = '%s'",
-                $this->configuration->getLanguage()->getLanguage()
-            );
+            $query .= sprintf(" AND fd.lang = '%s'", $this->configuration->getLanguage()->getLanguage());
         }
 
         $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id, fc.parent_id, fc.name, fc.description";
@@ -150,7 +151,7 @@ class Relation
                     'parent_id' => (int) $category->parent_id,
                     'name' => $category->category_name,
                     'description' => $category->description,
-                    'faqs' => (int) $category->number
+                    'faqs' => (int) $category->number,
                 ];
             }
         }
@@ -167,7 +168,7 @@ class Relation
         $numRecordsByCat = [];
         if ($categoryRestriction) {
             $query = sprintf(
-                "
+                '
                 SELECT
                     fcr.category_id AS category_id,
                     fc.parent_id as parent_id,
@@ -184,17 +185,17 @@ class Relation
                     fdg.group_id = %s
                 AND
                     fcr.record_lang = fd.lang
-                %s",
+                %s',
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 $this->groups[0],
-                $onlyActive ? " AND fd.active = 'yes'" : ''
+                $onlyActive ? " AND fd.active = 'yes'" : '',
             );
         } else {
             $query = sprintf(
-                "
+                '
                 SELECT
                     fcr.category_id AS category_id,
                     fc.parent_id as parent_id,
@@ -209,11 +210,11 @@ class Relation
                     fcr.record_id = fd.id
                 AND
                     fcr.record_lang = fd.lang
-                %s",
+                %s',
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $onlyActive ? " AND fd.active = 'yes'" : ''
+                $onlyActive ? " AND fd.active = 'yes'" : '',
             );
         }
 
@@ -225,12 +226,12 @@ class Relation
             );
         }
 
-        $query .= " GROUP BY fcr.category_id, fc.parent_id";
+        $query .= ' GROUP BY fcr.category_id, fc.parent_id';
 
         $result = $this->configuration->getDb()->query($query);
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $numRecordsByCat[$row->category_id] = (int)$row->number;
+                $numRecordsByCat[$row->category_id] = (int) $row->number;
             }
         }
 
@@ -277,8 +278,7 @@ class Relation
     {
         $categories = [];
 
-        $query = sprintf(
-            "
+        $query = sprintf("
             SELECT
                 category_id, category_lang
             FROM
@@ -286,17 +286,13 @@ class Relation
             WHERE
                 record_id = %d
             AND
-                record_lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $faqLang
-        );
+                record_lang = '%s'", Database::getTablePrefix(), $faqId, $faqLang);
 
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $categories[$row->category_id] = [
                 'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang
+                'category_lang' => $row->category_lang,
             ];
         }
 
@@ -313,16 +309,16 @@ class Relation
     public function add(array $categories, int $faqId, string $language): bool
     {
         foreach ($categories as $category) {
-            $this->configuration->getDb()->query(
-                sprintf(
+            $this->configuration
+                ->getDb()
+                ->query(sprintf(
                     "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
                     Database::getTablePrefix(),
                     $category,
                     $this->configuration->getDb()->escape($language),
                     $faqId,
-                    $this->configuration->getDb()->escape($language)
-                )
-            );
+                    $this->configuration->getDb()->escape($language),
+                ));
         }
 
         return true;
@@ -340,7 +336,7 @@ class Relation
         $query = sprintf(
             'DELETE FROM %sfaqcategoryrelations WHERE category_id = %d',
             Database::getTablePrefix(),
-            $categoryId
+            $categoryId,
         );
 
         if (!$deleteForAllLanguages) {
@@ -362,7 +358,7 @@ class Relation
             "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getDb()->escape($faqLanguage)
+            $this->configuration->getDb()->escape($faqLanguage),
         );
 
         return (bool) $this->configuration->getDb()->query($query);

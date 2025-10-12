@@ -103,7 +103,7 @@ class CommentsTest extends TestCase
             ->setUsername('testUser')
             ->setEmail('test@example.org')
             ->setComment('This is a test comment')
-            ->setDate((string)time())
+            ->setDate(time())
             ->setHelped(true);
 
         return $comment;

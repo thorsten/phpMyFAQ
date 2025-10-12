@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for filesystem operations.
  *
@@ -69,10 +71,7 @@ class Filesystem
             while ($file = readdir($directoryHandle)) {
                 if ('.' !== $file && '..' !== $file) {
                     if (!is_dir($source . '/' . $file)) {
-                        $this->copy(
-                            $source . '/' . $file,
-                            $dest . '/' . $directoryName . '/' . $file
-                        );
+                        $this->copy($source . '/' . $file, $dest . '/' . $directoryName . '/' . $file);
                     } else {
                         $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
                     }
@@ -126,8 +125,8 @@ class Filesystem
         }
 
         $directory = opendir($pathname);
-        while (false !== ( $file = readdir($directory))) {
-            if (( $file !== '.' ) && ( $file !== '..' )) {
+        while (false !== ($file = readdir($directory))) {
+            if ($file !== '.' && $file !== '..') {
                 $full = $pathname . '/' . $file;
                 if (is_dir($full)) {
                     $this->deleteDirectory($full);

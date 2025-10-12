@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main glossary class.
  *
@@ -33,8 +35,9 @@ class Glossary
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -140,19 +143,31 @@ class Glossary
             $this->definition = $item['definition'];
             $item['item'] = preg_quote((string) $item['item'], '/');
             $content = Strings::preg_replace_callback(
-                '/(' . $item['item'] . '="[^"]*")|'
+                '/('
+                . $item['item']
+                . '="[^"]*")|'
                 // b. the glossary item could be inside an attribute value
-                . '((' . implode('|', $attributes) . ')="[^"]*' . $item['item'] . '[^"]*")|'
+                . '(('
+                . implode('|', $attributes)
+                . ')="[^"]*'
+                . $item['item']
+                . '[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
-                . '(\W+)(' . $item['item'] . ')(\W+)|'
+                . '(\W+)('
+                . $item['item']
+                . ')(\W+)|'
                 // d. the glossary item could be at the beginning of the string as a distinct word
-                . '^(' . $item['item'] . ')(\W+)|'
+                . '^('
+                . $item['item']
+                . ')(\W+)|'
                 // e. the glossary item could be at the end of the string as a distinct word
-                . '(\W+)(' . $item['item'] . ')$'
+                . '(\W+)('
+                . $item['item']
+                . ')$'
                 . '/mis',
                 $this->setTooltip(...),
                 $content,
-                1
+                1,
             );
         }
 
@@ -175,7 +190,7 @@ class Glossary
         $query = sprintf(
             "SELECT id, lang, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
             Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -222,7 +237,7 @@ class Glossary
                 $prefix,
                 $this->definition,
                 $item,
-                $postfix
+                $postfix,
             );
         }
 
@@ -243,7 +258,7 @@ class Glossary
             "SELECT id, lang, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->getLanguage()
+            $this->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -276,7 +291,7 @@ class Glossary
             $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
             $this->getLanguage(),
             Strings::htmlspecialchars(substr($item, 0, 254)),
-            Strings::htmlspecialchars($this->definition)
+            Strings::htmlspecialchars($this->definition),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -299,7 +314,7 @@ class Glossary
             Strings::htmlspecialchars(substr($item, 0, 254)),
             Strings::htmlspecialchars($definition),
             $id,
-            $this->getLanguage()
+            $this->getLanguage(),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -315,7 +330,7 @@ class Glossary
             "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->getLanguage()
+            $this->getLanguage(),
         );
         return (bool) $this->configuration->getDb()->query($query);
     }

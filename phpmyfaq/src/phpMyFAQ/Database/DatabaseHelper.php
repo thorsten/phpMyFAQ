@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for database drivers.
  *
@@ -31,8 +33,9 @@ readonly class DatabaseHelper
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -61,7 +64,7 @@ readonly class DatabaseHelper
         string $query,
         string $startPattern,
         string $oldValue,
-        string $newValue
+        string $newValue,
     ): string {
         $return = $query;
         $matches = [];
@@ -115,7 +118,7 @@ readonly class DatabaseHelper
                 'INSERT INTO %s (%s) VALUES (%s);',
                 $table,
                 implode(',', $columns),
-                implode(',', $values)
+                implode(',', $values),
             );
         }
 

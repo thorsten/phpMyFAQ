@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * MUA (Mail User Agent) implementation.
  *
@@ -110,7 +112,7 @@ class Mail
         2 => 'High',
         3 => 'Normal',
         4 => 'Low',
-        5 => 'Lowest'
+        5 => 'Lowest',
     ];
 
     /**
@@ -185,8 +187,14 @@ class Mail
         // Set default value for public properties
         $this->agent = $configuration->get('mail.remoteSMTP') ? 'smtp' : 'built-in';
         $this->boundary = self::createBoundary();
-        $this->messageId = '<' . Request::createFromGlobals()->server->get('REQUEST_TIME') . '.' . md5(microtime()) .
-            '@' . self::getServerName() . '>';
+        $this->messageId =
+            '<'
+            . Request::createFromGlobals()->server->get('REQUEST_TIME')
+            . '.'
+            . md5(microtime())
+            . '@'
+            . self::getServerName()
+            . '>';
 
         // Set default value for private properties
         $this->configuration = $configuration;
@@ -252,8 +260,8 @@ class Mail
         if (count($target) > 2) {
             $keys = array_keys($target);
             throw new Exception(
-                sprintf('<strong>Mail Class</strong>: too many e-mail addresses, %s, ', $keys[0]) .
-                sprintf("have been already added as '%s'!", $targetAlias)
+                sprintf('<strong>Mail Class</strong>: too many e-mail addresses, %s, ', $keys[0])
+                . sprintf("have been already added as '%s'!", $targetAlias),
             );
         }
 
@@ -365,9 +373,9 @@ class Mail
     public function send(): int
     {
         // Check
-        if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
+        if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
             throw new Exception(
-                '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!'
+                '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!',
             );
         }
 
@@ -384,8 +392,8 @@ class Mail
         // Has any in-line attachment been provided?
         $hasInlineAttachments = false;
         $idx = 0;
-        while (!$hasInlineAttachments && ($idx < count($this->attachments))) {
-            $hasInlineAttachments = ('inline' == $this->attachments[$idx]['disposition']);
+        while (!$hasInlineAttachments && $idx < count($this->attachments)) {
+            $hasInlineAttachments = 'inline' == $this->attachments[$idx]['disposition'];
             ++$idx;
         }
 
@@ -404,7 +412,7 @@ class Mail
 
         $recipients = implode(',', $to);
         // Check for the need of undisclosed recipients outlook-like <TO:>
-        if (($recipients === '' || $recipients === '0') && (0 == count($this->cc))) {
+        if (($recipients === '' || $recipients === '0') && 0 == count($this->cc)) {
             $recipients = '<Undisclosed-Recipient:;>';
         }
 
@@ -423,7 +431,7 @@ class Mail
                 $this->configuration->get('mail.remoteSMTPUsername'),
                 $this->configuration->get('mail.remoteSMTPPassword'),
                 $this->configuration->get('mail.remoteSMTPPort'),
-                $this->configuration->get('mail.remoteSMTPDisableTLSPeerVerification')
+                $this->configuration->get('mail.remoteSMTPDisableTLSPeerVerification'),
             );
         }
 
@@ -514,7 +522,7 @@ class Mail
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = Utils::resolveMarkers(
             html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8'),
-            $this->configuration
+            $this->configuration,
         );
 
         // X-Mailer
@@ -575,12 +583,7 @@ class Mail
             $lines[] = '';
         }
 
-        if (
-            in_array(
-                $this->contentType,
-                ['multipart/mixed', 'multipart/related']
-            )
-        ) {
+        if (in_array($this->contentType, ['multipart/mixed', 'multipart/related'])) {
             $lines[] = '--' . $mainBoundary;
             $this->boundary = '--=alternative=' . self::createBoundary();
             $lines[] = 'Content-Type: multipart/alternative; boundary="' . $this->boundary . '"';
@@ -611,12 +614,7 @@ class Mail
             $lines[] = self::wrapLines($this->message);
         }
 
-        if (
-            in_array(
-                $this->contentType,
-                ['multipart/mixed', 'multipart/related']
-            )
-        ) {
+        if (in_array($this->contentType, ['multipart/mixed', 'multipart/related'])) {
             // Back to the main boundary
             $this->boundary = $mainBoundary;
             // Add the attachments
@@ -660,7 +658,7 @@ class Mail
         $lines = explode($this->eol, $message);
         $wrapped = '';
         foreach ($lines as $line) {
-            $wrapped .= ($wrapped === '' || $wrapped === '0' ? '' : $this->eol);
+            $wrapped .= $wrapped === '' || $wrapped === '0' ? '' : $this->eol;
             $wrapped .= wordwrap($line, $width, $this->eol, $cut);
         }
 
@@ -687,7 +685,7 @@ class Mail
                 "\n",
             ],
             "\n", // LF
-            $text
+            $text,
         );
         // Set any LF to the RFC 2822 EOL
         return str_replace("\n", $this->eol, $text);
@@ -701,13 +699,7 @@ class Mail
      */
     public static function getMUA(string $mua): Builtin|Smtp
     {
-        $className = ucfirst(
-            str_replace(
-                '-',
-                '',
-                $mua
-            )
-        );
+        $className = ucfirst(str_replace('-', '', $mua));
         $class = 'phpMyFAQ\Mail\\' . $className;
 
         return new $class();

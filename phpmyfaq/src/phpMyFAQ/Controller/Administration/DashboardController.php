@@ -59,7 +59,7 @@ class DashboardController extends AbstractAdministrationController
             'msgAdminWarningDevelopmentVersion' => sprintf(
                 Translation::get('msgAdminWarningDevelopmentVersion'),
                 System::getVersion(),
-                System::getGitHubIssuesUrl()
+                System::getGitHubIssuesUrl(),
             ),
             'adminDashboardInfoNumVisits' => $session->getNumberOfSessions(),
             'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
@@ -73,7 +73,7 @@ class DashboardController extends AbstractAdministrationController
             'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
             'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
                 $userId,
-                PermissionType::CONFIGURATION_EDIT->value
+                PermissionType::CONFIGURATION_EDIT->value,
             ),
             'showVersion' => $this->configuration->get('main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),
@@ -81,9 +81,9 @@ class DashboardController extends AbstractAdministrationController
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), '<')) {
             $templateVars = [
-                ... $templateVars,
+                ...$templateVars,
                 'hasVersionConflict' => true,
-                'currentVersionDatabase' => $this->configuration->getVersion()
+                'currentVersionDatabase' => $this->configuration->getVersion(),
             ];
         }
 
@@ -98,7 +98,6 @@ class DashboardController extends AbstractAdministrationController
                             'adminDashboardShouldUpdateMessage' => true,
                             'adminDashboardLatestVersionMessage' => Translation::get('ad_you_should_update'),
                             'adminDashboardVersions' => $versions,
-
                         ];
                     } else {
                         $templateVars = [
@@ -106,31 +105,26 @@ class DashboardController extends AbstractAdministrationController
                             'adminDashboardShouldUpdateMessage' => false,
                             'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
                             'adminDashboardVersions' => $versions,
-
                         ];
                     }
-                } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $e) {
+                } catch (DecodingExceptionInterface|TransportExceptionInterface|Exception $e) {
                     $templateVars = [
                         ...$templateVars,
-                        'adminDashboardErrorMessage' => $e->getMessage()
+                        'adminDashboardErrorMessage' => $e->getMessage(),
                     ];
                 }
             }
 
             $templateVars = [
                 ...$templateVars,
-                'showVersion' => $this->configuration->get('main.enableAutoUpdateHint') || ($version === 'version'),
+                'showVersion' => $this->configuration->get('main.enableAutoUpdateHint') || $version === 'version',
             ];
         }
 
-        return $this->render(
-            '@admin/dashboard.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $templateVars,
-
-            ]
-        );
+        return $this->render('@admin/dashboard.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$templateVars,
+        ]);
     }
 }

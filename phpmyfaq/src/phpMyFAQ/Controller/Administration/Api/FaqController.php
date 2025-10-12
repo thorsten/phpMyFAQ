@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin FAQ Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -62,7 +64,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $tagging = $this->container->get('phpmyfaq.tags');
@@ -121,13 +123,17 @@ class FaqController extends AbstractController
         $faqData
             ->setLanguage($language)
             ->setActive($active === 'yes')
-            ->setSticky(($sticky !== 'no') ? $sticky : false)
-            ->setQuestion(
-                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setAnswer(
-                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
+            ->setSticky($sticky !== 'no' ? $sticky : false)
+            ->setQuestion(Filter::removeAttributes(html_entity_decode(
+                (string) $question,
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8',
+            )))
+            ->setAnswer(Filter::removeAttributes(html_entity_decode(
+                (string) $content,
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8',
+            )))
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
@@ -144,7 +150,7 @@ class FaqController extends AbstractController
                 $faqData->getId(),
                 $this->currentUser->getUserId(),
                 nl2br((string) $changed),
-                $faqData->getLanguage()
+                $faqData->getLanguage(),
             );
 
             // Create the visit entry
@@ -164,11 +170,7 @@ class FaqController extends AbstractController
             // Add group permission
             if ($this->configuration->get('security.permLevel') !== 'basic') {
                 $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
-                $categoryPermission->add(
-                    CategoryPermission::GROUP,
-                    $categories,
-                    $permissions['restricted_groups']
-                );
+                $categoryPermission->add(CategoryPermission::GROUP, $categories, $permissions['restricted_groups']);
             }
 
             // Add the SEO data
@@ -196,7 +198,7 @@ class FaqController extends AbstractController
                     $this->configuration->getDefaultUrl(),
                     $categories[0],
                     $faqData->getId(),
-                    $faqData->getLanguage()
+                    $faqData->getLanguage(),
                 );
                 $oLink = new Link($url, $this->configuration);
 
@@ -205,66 +207,55 @@ class FaqController extends AbstractController
                     $notifyEmail = Filter::filterVar($data->notifyEmail, FILTER_SANITIZE_EMAIL);
                     $notifyUser = Filter::filterVar($data->notifyUser, FILTER_SANITIZE_SPECIAL_CHARS);
                     $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
-                } catch (Exception | TransportExceptionInterface $e) {
-                    $this->configuration->getLogger()->error(
-                        'Send open question answered notification failed: ' . $e->getMessage()
-                    );
+                } catch (Exception|TransportExceptionInterface $e) {
+                    $this->configuration
+                        ->getLogger()
+                        ->error('Send open question answered notification failed: ' . $e->getMessage());
                 }
             }
 
             // Let the admin and the category owners to be informed by email of this new entry
             try {
                 $categoryHelper = new CategoryHelper();
-                $categoryHelper
-                    ->setCategory($category)
-                    ->setConfiguration($this->configuration);
+                $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
                 $moderators = $categoryHelper->getModerators($categories);
                 $notification->sendNewFaqAdded($moderators, $faqData);
-            } catch (Exception | TransportExceptionInterface $e) {
-                $this->configuration->getLogger()->error(
-                    'Send moderator notification failed: ' . $e->getMessage()
-                );
+            } catch (Exception|TransportExceptionInterface $e) {
+                $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
             }
 
             // If Elasticsearch is enabled, index new FAQ document
             if ($this->configuration->get('search.enableElasticsearch')) {
                 $elasticsearch = new Elasticsearch($this->configuration);
-                $elasticsearch->index(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
+                $elasticsearch->index([
+                    'id' => $faqData->getId(),
+                    'lang' => $faqData->getLanguage(),
+                    'solution_id' => $faqData->getSolutionId(),
+                    'question' => $faqData->getQuestion(),
+                    'answer' => $faqData->getAnswer(),
+                    'keywords' => $faqData->getKeywords(),
+                    'category_id' => $categories[0],
+                ]);
             }
 
             // If OpenSearch is enabled, index new FAQ document
             if ($this->configuration->get('search.enableOpenSearch')) {
                 $openSearch = new OpenSearch($this->configuration);
-                $openSearch->index(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
+                $openSearch->index([
+                    'id' => $faqData->getId(),
+                    'lang' => $faqData->getLanguage(),
+                    'solution_id' => $faqData->getSolutionId(),
+                    'question' => $faqData->getQuestion(),
+                    'answer' => $faqData->getAnswer(),
+                    'keywords' => $faqData->getKeywords(),
+                    'category_id' => $categories[0],
+                ]);
             }
 
-            return $this->json(
-                [
-                    'success' => Translation::get('ad_entry_savedsuc'),
-                    'data' => $faqData->getJson(),
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'success' => Translation::get('ad_entry_savedsuc'),
+                'data' => $faqData->getJson(),
+            ], Response::HTTP_OK);
         }
 
         return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
@@ -279,7 +270,7 @@ class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $tagging = $this->container->get('phpmyfaq.tags');
@@ -353,13 +344,17 @@ class FaqController extends AbstractController
             ->setRevisionId($revisionId)
             ->setSolutionId($solutionId)
             ->setActive($active === 'yes')
-            ->setSticky(($sticky !== 'no') ? $sticky : false)
-            ->setQuestion(
-                Filter::removeAttributes(html_entity_decode((string) $question, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
-            ->setAnswer(
-                Filter::removeAttributes(html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-            )
+            ->setSticky($sticky !== 'no' ? $sticky : false)
+            ->setQuestion(Filter::removeAttributes(html_entity_decode(
+                (string) $question,
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8',
+            )))
+            ->setAnswer(Filter::removeAttributes(html_entity_decode(
+                (string) $content,
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8',
+            )))
             ->setKeywords($keywords)
             ->setAuthor($author)
             ->setEmail($email)
@@ -383,7 +378,7 @@ class FaqController extends AbstractController
             $this->currentUser->getUserId(),
             (string) $changed,
             $faqData->getLanguage(),
-            $revisionId
+            $revisionId,
         );
 
         // Create the visit entry
@@ -421,14 +416,10 @@ class FaqController extends AbstractController
             ->setDescription($serpDescription);
 
         if ($seo->get($seoEntity)->getId() === null) {
-            $seoEntity
-                ->setTitle($serpTitle)
-                ->setDescription($serpDescription);
+            $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
             $seo->create($seoEntity);
         } else {
-            $seoEntity
-                ->setTitle($serpTitle)
-                ->setDescription($serpDescription);
+            $seoEntity->setTitle($serpTitle)->setDescription($serpDescription);
             $seo->update($seoEntity);
         }
 
@@ -445,17 +436,15 @@ class FaqController extends AbstractController
         if ($this->configuration->get('search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);
             if ('yes' === $active) {
-                $elasticsearch->update(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
+                $elasticsearch->update([
+                    'id' => $faqData->getId(),
+                    'lang' => $faqData->getLanguage(),
+                    'solution_id' => $faqData->getSolutionId(),
+                    'question' => $faqData->getQuestion(),
+                    'answer' => $faqData->getAnswer(),
+                    'keywords' => $faqData->getKeywords(),
+                    'category_id' => $categories[0],
+                ]);
             }
         }
 
@@ -463,27 +452,22 @@ class FaqController extends AbstractController
         if ($this->configuration->get('search.enableOpenSearch')) {
             $openSearch = new OpenSearch($this->configuration);
             if ('yes' === $active) {
-                $openSearch->update(
-                    [
-                        'id' => $faqData->getId(),
-                        'lang' => $faqData->getLanguage(),
-                        'solution_id' => $faqData->getSolutionId(),
-                        'question' => $faqData->getQuestion(),
-                        'answer' => $faqData->getAnswer(),
-                        'keywords' => $faqData->getKeywords(),
-                        'category_id' => $categories[0]
-                    ]
-                );
+                $openSearch->update([
+                    'id' => $faqData->getId(),
+                    'lang' => $faqData->getLanguage(),
+                    'solution_id' => $faqData->getSolutionId(),
+                    'question' => $faqData->getQuestion(),
+                    'answer' => $faqData->getAnswer(),
+                    'keywords' => $faqData->getKeywords(),
+                    'category_id' => $categories[0],
+                ]);
             }
         }
 
-        return $this->json(
-            [
-                'success' => Translation::get('ad_entry_savedsuc'),
-                'data' => $faqData->getJson(),
-            ],
-            Response::HTTP_OK
-        );
+        return $this->json([
+            'success' => Translation::get('ad_entry_savedsuc'),
+            'data' => $faqData->getJson(),
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -498,13 +482,10 @@ class FaqController extends AbstractController
 
         $faqPermission = new FaqPermission($this->configuration);
 
-        return $this->json(
-            [
-                'user' => $faqPermission->get(FaqPermission::USER, $faqId),
-                'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
-            ],
-            Response::HTTP_OK
-        );
+        return $this->json([
+            'user' => $faqPermission->get(FaqPermission::USER, $faqId),
+            'group' => $faqPermission->get(FaqPermission::GROUP, $faqId),
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -524,16 +505,13 @@ class FaqController extends AbstractController
         $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
 
-        return $this->json(
-            [
-                'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
-                'isAllowedToTranslate' => $this->currentUser->perm->hasPermission(
-                    $this->currentUser->getUserId(),
-                    PermissionType::FAQ_TRANSLATE->value
-                ),
-            ],
-            Response::HTTP_OK
-        );
+        return $this->json([
+            'faqs' => $faq->getAllFaqsByCategory($categoryId, $onlyInactive, $onlyNew),
+            'isAllowedToTranslate' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_TRANSLATE->value,
+            ),
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -636,7 +614,7 @@ class FaqController extends AbstractController
 
         try {
             $faq->delete($faqId, $faqLanguage);
-        } catch (FileException | AttachmentException $e) {
+        } catch (FileException|AttachmentException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -672,10 +650,8 @@ class FaqController extends AbstractController
             $searchHelper = new SearchHelper($this->configuration);
             $searchHelper->setSearchTerm($searchString);
 
-            return $this->json(
-                ['success' => $searchHelper->renderAdminSuggestionResult($searchResultSet)],
-                Response::HTTP_OK
-            );
+            return $this->json(['success' =>
+                $searchHelper->renderAdminSuggestionResult($searchResultSet)], Response::HTTP_OK);
         }
 
         return $this->json(['error' => 'No search string provided.'], Response::HTTP_BAD_REQUEST);

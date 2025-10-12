@@ -42,19 +42,16 @@ class StickyFaqsController extends AbstractAdministrationController
 
         $customOrdering = $this->configuration->get('records.orderStickyFaqsCustom');
 
-        return $this->render(
-            '@admin/content/sticky-faqs.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'stickyFAQsHeader' => Translation::get('stickyRecordsHeader'),
-                'stickyData' => $this->container->get('phpmyfaq.faq')->getStickyFaqsData(),
-                'sortableDisabled' => ($customOrdering === false) ? 'sortable-disabled' : '',
-                'orderingStickyFaqsActivated' => $this->configuration->get('records.orderStickyFaqsCustom'),
-                'alertMessageStickyFaqsDeactivated' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
-                'alertMessageNoStickyRecords' => Translation::get('msgNoStickyFaqs'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('order-stickyfaqs')
-            ]
-        );
+        return $this->render('@admin/content/sticky-faqs.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'stickyFAQsHeader' => Translation::get('stickyRecordsHeader'),
+            'stickyData' => $this->container->get('phpmyfaq.faq')->getStickyFaqsData(),
+            'sortableDisabled' => $customOrdering === false ? 'sortable-disabled' : '',
+            'orderingStickyFaqsActivated' => $this->configuration->get('records.orderStickyFaqsCustom'),
+            'alertMessageStickyFaqsDeactivated' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
+            'alertMessageNoStickyRecords' => Translation::get('msgNoStickyFaqs'),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('order-stickyfaqs'),
+        ]);
     }
 }

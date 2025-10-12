@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Update class updates phpMyFAQ. Classy.
  *
@@ -30,6 +32,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\User;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\HttpFoundation\Request;
 use ZipArchive;
 
@@ -45,8 +48,10 @@ class Update extends Setup
     /** @var string[] */
     private array $dryRunQueries = [];
 
-    public function __construct(protected System $system, private readonly Configuration $configuration)
-    {
+    public function __construct(
+        protected System $system,
+        private readonly Configuration $configuration,
+    ) {
         parent::__construct($this->system);
     }
 
@@ -80,19 +85,44 @@ class Update extends Setup
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($configDir),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        foreach ($files as $file) {
-            $file = realpath($file);
-            if (str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
-                if (is_dir($file)) {
-                    $zipArchive->addEmptyDir(
-                        str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
-                    );
-                } elseif (is_file($file)) {
-                    $zipArchive->addFile($file, str_replace($configDir . DIRECTORY_SEPARATOR, '', $file));
-                }
+        foreach ($files as $fileInfo) {
+            if ($fileInfo instanceof SplFileInfo) {
+                $filePath = $fileInfo->getRealPath() ?: $fileInfo->getPathname();
+                $isDir = $fileInfo->isDir();
+                $isFile = $fileInfo->isFile();
+            } else {
+                $filePath = is_string($fileInfo) ? $fileInfo : (string) $fileInfo;
+                $filePath = realpath($filePath) ?: $filePath;
+                $isDir = is_dir($filePath);
+                $isFile = is_file($filePath);
+            }
+
+            if ($filePath === false || $filePath === null || $filePath === '') {
+                continue;
+            }
+
+            // Exclude the zip we are currently writing
+            if ($filePath === $outputZipFile) {
+                continue;
+            }
+
+            // Only include entries inside the config directory
+            if (!str_contains($filePath, $configDir . DIRECTORY_SEPARATOR) && $filePath !== $configDir) {
+                continue;
+            }
+
+            // Compute relative path inside archive
+            $relativePath = str_replace($configDir . DIRECTORY_SEPARATOR, '', $filePath);
+            $relativePath = ltrim($relativePath, DIRECTORY_SEPARATOR);
+
+            if ($isDir) {
+                // Ensure directory entries end with a slash
+                $zipArchive->addEmptyDir(rtrim($relativePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
+            } elseif ($isFile) {
+                $zipArchive->addFile($filePath, $relativePath);
             }
         }
 
@@ -104,7 +134,6 @@ class Update extends Setup
 
         return $this->configuration->getDefaultUrl() . 'content/core/config/' . $this->getBackupFilename();
     }
-
 
     /**
      * @throws Exception
@@ -119,7 +148,6 @@ class Update extends Setup
         $htaccessUpdater = new HtaccessUpdater();
         return $htaccessUpdater->updateRewriteBase($htaccessPath, $basePath);
     }
-
 
     /**
      * @throws Exception
@@ -219,12 +247,12 @@ class Update extends Setup
             if ('sqlite3' === Database::getType()) {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquserdata ADD COLUMN is_visible INT(1) DEFAULT 0',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             } else {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquserdata ADD is_visible INTEGER DEFAULT 0',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             }
 
@@ -255,12 +283,12 @@ class Update extends Setup
                 'mysqli' => sprintf(
                     'CREATE TABLE %sfaqcategory_order
                     (category_id int(11) NOT NULL, position int(11) NOT NULL, PRIMARY KEY (category_id))',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
                 'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
                     'CREATE TABLE %sfaqcategory_order
                     (category_id INTEGER NOT NULL, position INTEGER NOT NULL, PRIMARY KEY (category_id))',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
             };
         }
@@ -287,14 +315,14 @@ class Update extends Setup
                         ADD COLUMN access_token TEXT NULL DEFAULT NULL,
                         ADD COLUMN code_verifier VARCHAR(255) NULL DEFAULT NULL,
                         ADD COLUMN jwt TEXT NULL DEFAULT NULL;',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
 
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquserdata
                         ADD COLUMN twofactor_enabled INT(1) NULL DEFAULT 0,
                         ADD COLUMN secret VARCHAR(128) NULL DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             } else {
                 $this->queries[] = sprintf(
@@ -303,28 +331,25 @@ class Update extends Setup
                         ADD access_token TEXT NULL DEFAULT NULL,
                         ADD code_verifier VARCHAR(255) NULL DEFAULT NULL,
                         ADD jwt TEXT NULL DEFAULT NULL;',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
 
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquserdata
                         ADD twofactor_enabled INT NULL DEFAULT 0,
                         ADD secret VARCHAR(128) NULL DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             }
 
             // New backup
-            $this->queries[] = sprintf(
-                'CREATE TABLE %sfaqbackup (
+            $this->queries[] = sprintf('CREATE TABLE %sfaqbackup (
                     id INT NOT NULL,
                     filename VARCHAR(255) NOT NULL,
                     authkey VARCHAR(255) NOT NULL,
                     authcode VARCHAR(255) NOT NULL,
                     created timestamp NOT NULL,
-                    PRIMARY KEY (id))',
-                Database::getTablePrefix()
-            );
+                    PRIMARY KEY (id))', Database::getTablePrefix());
 
             // Migrate MySQL from MyISAM to InnoDB
             if ('mysqli' === Database::getType()) {
@@ -363,11 +388,11 @@ class Update extends Setup
             // Delete link verification columns
             $this->queries[] = sprintf(
                 'ALTER TABLE %sfaqdata DROP COLUMN links_state, DROP COLUMN links_check_date',
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 'ALTER TABLE %sfaqdata_revisions DROP COLUMN links_state, DROP COLUMN links_check_date',
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
 
             // Configuration values in a TEXT column
@@ -375,42 +400,36 @@ class Update extends Setup
                 case 'mysqli':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqconfig MODIFY config_value TEXT DEFAULT NULL',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TYPE TEXT',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
-                    $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqconfig_new (
+                    $this->queries[] = sprintf('CREATE TABLE %sfaqconfig_new (
                             config_name VARCHAR(255) NOT NULL default \'\',
                             config_value TEXT DEFAULT NULL, PRIMARY KEY (config_name)
-                         )',
-                        Database::getTablePrefix()
-                    );
+                         )', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'INSERT INTO %sfaqconfig_new SELECT config_name, config_value FROM %sfaqconfig',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf(
-                        'DROP TABLE %sfaqconfig',
-                        Database::getTablePrefix()
-                    );
+                    $this->queries[] = sprintf('DROP TABLE %sfaqconfig', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqconfig_new RENAME TO %sfaqconfig',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlsrv':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqconfig ALTER COLUMN config_value TEXT',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
@@ -441,13 +460,13 @@ class Update extends Setup
                 case 'mysqli':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaquser CHANGE ip ip VARCHAR(64) NULL DEFAULT NULL',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaquser ALTER COLUMN ip TYPE VARCHAR(64)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
@@ -471,17 +490,14 @@ class Update extends Setup
                         code_verifier VARCHAR(255) NULL DEFAULT NULL,
                         jwt TEXT NULL DEFAULT NULL,
                         PRIMARY KEY (user_id))',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     $this->queries[] = sprintf(
                         'INSERT INTO %sfaquser_new SELECT * FROM %sfaquser',
                         Database::getTablePrefix(),
                         Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf(
-                        'DROP TABLE %sfaquser',
-                        Database::getTablePrefix()
-                    );
+                    $this->queries[] = sprintf('DROP TABLE %sfaquser', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaquser_new RENAME TO %sfaquser',
                         Database::getTablePrefix(),
@@ -491,13 +507,12 @@ class Update extends Setup
                 case 'sqlsrv':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaquser ALTER COLUMN ip VARCHAR(64)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
         }
     }
-
 
     /**
      * @throws Exception
@@ -509,58 +524,34 @@ class Update extends Setup
             $fileSystem = new Filesystem(PMF_ROOT_DIR);
 
             // Copy database configuration
-            $fileSystem->copy(
-                PMF_LEGACY_CONFIG_DIR . '/database.php',
-                PMF_CONFIG_DIR . '/database.php'
-            );
+            $fileSystem->copy(PMF_LEGACY_CONFIG_DIR . '/database.php', PMF_CONFIG_DIR . '/database.php');
 
             // Copy Azure configuration, if available
             if (file_exists(PMF_LEGACY_CONFIG_DIR . '/azure.php')) {
-                $fileSystem->copy(
-                    PMF_LEGACY_CONFIG_DIR . '/azure.php',
-                    PMF_CONFIG_DIR . '/azure.php'
-                );
+                $fileSystem->copy(PMF_LEGACY_CONFIG_DIR . '/azure.php', PMF_CONFIG_DIR . '/azure.php');
             }
 
             // Copy Elasticsearch configuration, if available
             if (file_exists(PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php')) {
-                $fileSystem->copy(
-                    PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php',
-                    PMF_CONFIG_DIR . '/elasticsearch.php'
-                );
+                $fileSystem->copy(PMF_LEGACY_CONFIG_DIR . '/elasticsearch.php', PMF_CONFIG_DIR . '/elasticsearch.php');
             }
 
             // Copy LDAP configuration, if available
             if (file_exists(PMF_LEGACY_CONFIG_DIR . '/ldap.php')) {
-                $fileSystem->copy(
-                    PMF_LEGACY_CONFIG_DIR . '/ldap.php',
-                    PMF_CONFIG_DIR . '/ldap.php'
-                );
+                $fileSystem->copy(PMF_LEGACY_CONFIG_DIR . '/ldap.php', PMF_CONFIG_DIR . '/ldap.php');
             }
 
             // Copy data directory
-            $fileSystem->recursiveCopy(
-                PMF_ROOT_DIR . '/data',
-                PMF_ROOT_DIR . '/content/core'
-            );
+            $fileSystem->recursiveCopy(PMF_ROOT_DIR . '/data', PMF_ROOT_DIR . '/content/core');
 
             // Copy logs directory
-            $fileSystem->recursiveCopy(
-                PMF_ROOT_DIR . '/logs',
-                PMF_ROOT_DIR . '/content/core'
-            );
+            $fileSystem->recursiveCopy(PMF_ROOT_DIR . '/logs', PMF_ROOT_DIR . '/content/core');
 
             // Copy attachments directory
-            $fileSystem->recursiveCopy(
-                PMF_ROOT_DIR . '/attachments',
-                PMF_ROOT_DIR . '/content/user'
-            );
+            $fileSystem->recursiveCopy(PMF_ROOT_DIR . '/attachments', PMF_ROOT_DIR . '/content/user');
 
             // Copy images directory
-            $fileSystem->recursiveCopy(
-                PMF_ROOT_DIR . '/images',
-                PMF_ROOT_DIR . '/content/user'
-            );
+            $fileSystem->recursiveCopy(PMF_ROOT_DIR . '/images', PMF_ROOT_DIR . '/content/user');
 
             // Online Update configuration
             $this->configuration->add('upgrade.onlineUpdateEnabled', true);
@@ -582,11 +573,11 @@ class Update extends Setup
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
                     'CREATE TABLE %sfaqbookmarks (userid int(11) DEFAULT NULL, faqid int(11) DEFAULT NULL)',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
                 'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
                     'CREATE TABLE %sfaqbookmarks (userid INTEGER DEFAULT NULL, faqid INTEGER DEFAULT NULL)',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
             };
 
@@ -594,11 +585,11 @@ class Update extends Setup
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
                     'ALTER TABLE %sfaqdata ADD COLUMN sticky_order int(10) DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
                 'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
                     'ALTER TABLE %sfaqdata ADD COLUMN sticky_order integer DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
             };
 
@@ -606,11 +597,11 @@ class Update extends Setup
             $this->queries[] = match (Database::getType()) {
                 'mysqli' => sprintf(
                     'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order int(10) DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
                 'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
                     'ALTER TABLE %sfaqdata_revisions ADD COLUMN sticky_order integer DEFAULT NULL',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 ),
             };
             $this->configuration->add('records.orderStickyFaqsCustom', 'false');
@@ -630,13 +621,13 @@ class Update extends Setup
                 case 'mysqli':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id int(11) DEFAULT NULL AFTER category_id',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlsrv':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqcategory_order ADD COLUMN parent_id INTEGER DEFAULT NULL AFTER category_id',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
@@ -647,21 +638,18 @@ class Update extends Setup
                             parent_id INTEGER DEFAULT NULL,
                             position INTEGER NOT NULL,
                             PRIMARY KEY (category_id))',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     $this->queries[] = sprintf(
                         'INSERT INTO %sfaqcategory_order_new SELECT * FROM %sfaqcategory_order',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf(
-                        'DROP TABLE %sfaqcategory_order',
-                        Database::getTablePrefix()
-                    );
+                    $this->queries[] = sprintf('DROP TABLE %sfaqcategory_order', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqcategory_order_new RENAME TO %sfaqcategory_order',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
@@ -681,7 +669,7 @@ class Update extends Setup
             $user = new User($this->configuration);
             $rightData = [
                 'name' => 'forms_edit',
-                'description' => 'Right to edit forms'
+                'description' => 'Right to edit forms',
             ];
             $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
 
@@ -696,7 +684,7 @@ class Update extends Setup
                         input_active INT(1) NOT NULL,
                         input_required INT(1) NOT NULL,
                         input_lang VARCHAR(11) NOT NULL)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlsrv':
@@ -709,7 +697,7 @@ class Update extends Setup
                         input_active INTEGER NOT NULL,
                         input_required INTEGER NOT NULL,
                         input_lang NVARCHAR(11) NOT NULL)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
@@ -723,7 +711,7 @@ class Update extends Setup
                         input_active INTEGER NOT NULL,
                         input_required INTEGER NOT NULL,
                         input_lang VARCHAR(11) NOT NULL)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
@@ -756,7 +744,7 @@ class Update extends Setup
                             slug TEXT DEFAULT NULL,
                             created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlsrv':
@@ -771,7 +759,7 @@ class Update extends Setup
                             slug TEXT NULL,
                             created DATE NOT NULL DEFAULT GETDATE(),
                             PRIMARY KEY (id))',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
@@ -786,7 +774,7 @@ class Update extends Setup
                             slug TEXT NULL,
                             created DATE NOT NULL DEFAULT (date(\'now\')),
                             PRIMARY KEY (id))',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'pgsql':
@@ -801,7 +789,7 @@ class Update extends Setup
                             slug TEXT NULL,
                             created DATE NOT NULL DEFAULT CURRENT_DATE,
                             PRIMARY KEY (id))',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
@@ -837,12 +825,12 @@ class Update extends Setup
             if ('sqlite3' === Database::getType()) {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser ADD COLUMN webauthnkeys TEXT NULL DEFAULT NULL;',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             } else {
                 $this->queries[] = sprintf(
                     'ALTER TABLE %sfaquser ADD webauthnkeys TEXT NULL DEFAULT NULL;',
-                    Database::getTablePrefix()
+                    Database::getTablePrefix(),
                 );
             }
         }
@@ -854,23 +842,20 @@ class Update extends Setup
             // Delete old permissions
             $this->queries[] = sprintf(
                 "DELETE FROM %sfaqright WHERE name = 'view_sections'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
-            $this->queries[] = sprintf(
-                "DELETE FROM %sfaqright WHERE name = 'add_section'",
-                Database::getTablePrefix()
-            );
+            $this->queries[] = sprintf("DELETE FROM %sfaqright WHERE name = 'add_section'", Database::getTablePrefix());
             $this->queries[] = sprintf(
                 "DELETE FROM %sfaqright WHERE name = 'edit_section'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "DELETE FROM %sfaqright WHERE name = 'delete_section'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "DELETE FROM %sfaqright WHERE name = 'delete_section'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
 
             // Update faqforms table
@@ -878,27 +863,26 @@ class Update extends Setup
                 case 'mysqli':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqforms CHANGE input_label input_label VARCHAR(500) NOT NULL',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'pgsql':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET TYPE VARCHAR(500)',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqforms ALTER COLUMN input_label SET NOT NULL',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
                 case 'sqlite3':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqforms RENAME TO %sfaqforms_old',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf(
-                        'CREATE TABLE %sfaqforms (
+                    $this->queries[] = sprintf('CREATE TABLE %sfaqforms (
                             form_id INTEGER NOT NULL,
                             input_id INTEGER NOT NULL,
                             input_type VARCHAR(1000) NOT NULL,
@@ -906,26 +890,21 @@ class Update extends Setup
                             input_active INTEGER NOT NULL,
                             input_required INTEGER NOT NULL,
                             input_lang VARCHAR(11) NOT NULL
-                        )',
-                        Database::getTablePrefix()
-                    );
+                        )', Database::getTablePrefix());
                     $this->queries[] = sprintf(
                         'INSERT INTO %sfaqforms
                             SELECT
                                 form_id, input_id, input_type, input_label, input_active, input_required, input_lang
                             FROM %sfaqforms_old',
                         Database::getTablePrefix(),
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
-                    $this->queries[] = sprintf(
-                        'DROP TABLE %sfaqforms_old;',
-                        Database::getTablePrefix()
-                    );
+                    $this->queries[] = sprintf('DROP TABLE %sfaqforms_old;', Database::getTablePrefix());
                     break;
                 case 'sqlsrv':
                     $this->queries[] = sprintf(
                         'ALTER TABLE %sfaqforms ALTER COLUMN input_label NVARCHAR(500) NOT NULL',
-                        Database::getTablePrefix()
+                        Database::getTablePrefix(),
                     );
                     break;
             }
@@ -938,115 +917,115 @@ class Update extends Setup
             // Update language codes for fr_CA and pt_BR
             $this->queries[] = sprintf(
                 "UPDATE %sfaqattachment SET record_lang='fr_ca' WHERE record_lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcaptcha SET language='fr_ca' WHERE language='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategories SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqdata SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategoryrelations SET category_lang='fr_ca' WHERE category_lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategoryrelations SET record_lang='fr_ca' WHERE record_lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqchanges SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqdata_revisions SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqglossary SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqnews SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqquestions SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqsearches SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqvisits SET lang='fr_ca' WHERE lang='fr-ca'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqconfig SET config_value='language_fr_ca.php' WHERE config_value='language_fr-ca.php'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqattachment SET record_lang='pt_br' WHERE record_lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcaptcha SET language='pt_br' WHERE language='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategories SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqdata SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategoryrelations SET category_lang='pt_br' WHERE category_lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqcategoryrelations SET record_lang='pt_br' WHERE record_lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqchanges SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqdata_revisions SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqglossary SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqnews SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqquestions SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqsearches SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqvisits SET lang='pt_br' WHERE lang='pt-br'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "UPDATE %sfaqconfig SET config_value='language_pt_br.php' WHERE config_value='language_pt-br.php'",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
         }
     }
@@ -1054,22 +1033,16 @@ class Update extends Setup
     private function applyUpdates409(): void
     {
         if (version_compare($this->version, '4.0.9', '<') && Database::getType() === 'pgsql') {
-            $this->queries[] = sprintf(
-                'CREATE SEQUENCE %sfaqseo_id_seq',
-                Database::getTablePrefix()
-            );
+            $this->queries[] = sprintf('CREATE SEQUENCE %sfaqseo_id_seq', Database::getTablePrefix());
             $this->queries[] = sprintf(
                 "ALTER TABLE %sfaqseo ALTER COLUMN id SET DEFAULT nextval('faqseo_id_seq')",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
             $this->queries[] = sprintf(
                 "SELECT setval('faqseo_id_seq', (SELECT MAX(id) FROM %sfaqseo));",
-                Database::getTablePrefix()
+                Database::getTablePrefix(),
             );
-            $this->queries[] = sprintf(
-                'ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL',
-                Database::getTablePrefix()
-            );
+            $this->queries[] = sprintf('ALTER TABLE %sfaqseo ALTER COLUMN id SET NOT NULL', Database::getTablePrefix());
         }
     }
 
@@ -1077,46 +1050,46 @@ class Update extends Setup
     {
         if (version_compare($this->version, '4.1.0-alpha', '<')) {
             $text = <<<EOT
-User-agent: Amazonbot
-User-agent: anthropic-ai
-User-agent: Applebot-Extended
-User-agent: Bytespider
-User-agent: CCBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-Web
-User-agent: cohere-ai
-User-agent: Diffbot
-User-agent: FacebookBot
-User-agent: facebookexternalhit
-User-agent: FriendlyCrawler
-User-agent: Google-Extended
-User-agent: GoogleOther
-User-agent: GoogleOther-Image
-User-agent: GoogleOther-Video
-User-agent: GPTBot
-User-agent: ICC-Crawler
-User-agent: ImagesiftBot
-User-agent: img2dataset
-User-agent: Meta-ExternalAgent
-User-agent: OAI-SearchBot
-User-agent: omgili
-User-agent: omgilibot
-User-agent: PerplexityBot
-User-agent: PetalBot
-User-agent: Scrapy
-User-agent: Timpibot
-User-agent: VelenPublicWebCrawler
-User-agent: YouBot
-User-agent: Meta-ExternalFetcher
-User-agent: Applebot
-Disallow: /
+            User-agent: Amazonbot
+            User-agent: anthropic-ai
+            User-agent: Applebot-Extended
+            User-agent: Bytespider
+            User-agent: CCBot
+            User-agent: ChatGPT-User
+            User-agent: ClaudeBot
+            User-agent: Claude-Web
+            User-agent: cohere-ai
+            User-agent: Diffbot
+            User-agent: FacebookBot
+            User-agent: facebookexternalhit
+            User-agent: FriendlyCrawler
+            User-agent: Google-Extended
+            User-agent: GoogleOther
+            User-agent: GoogleOther-Image
+            User-agent: GoogleOther-Video
+            User-agent: GPTBot
+            User-agent: ICC-Crawler
+            User-agent: ImagesiftBot
+            User-agent: img2dataset
+            User-agent: Meta-ExternalAgent
+            User-agent: OAI-SearchBot
+            User-agent: omgili
+            User-agent: omgilibot
+            User-agent: PerplexityBot
+            User-agent: PetalBot
+            User-agent: Scrapy
+            User-agent: Timpibot
+            User-agent: VelenPublicWebCrawler
+            User-agent: YouBot
+            User-agent: Meta-ExternalFetcher
+            User-agent: Applebot
+            Disallow: /
 
-User-agent: *
-Disallow: /admin/
+            User-agent: *
+            Disallow: /admin/
 
-Sitemap: /sitemap.xml
-EOT;
+            Sitemap: /sitemap.xml
+            EOT;
             $this->configuration->add('seo.contentRobotsText', $text);
         }
     }
@@ -1134,7 +1107,7 @@ EOT;
             $user = new User($this->configuration);
             $rightData = [
                 'name' => PermissionType::FAQ_TRANSLATE->value,
-                'description' => 'Right to translate FAQs'
+                'description' => 'Right to translate FAQs',
             ];
             $user->perm->grantUserRight(1, $user->perm->addRight($rightData));
         }
@@ -1143,12 +1116,13 @@ EOT;
     private function applyUpdates410Alpha3(): void
     {
         if (version_compare($this->version, '4.1.0-alpha.3', '<')) {
-            $llmsText = "# phpMyFAQ LLMs.txt\n\n" .
-                "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n" .
-                "Contact: Please see the contact information on the main website.\n\n" .
-                "The FAQ content in this system is available for LLM training purposes.\n" .
-                "Please respect the licensing terms and usage guidelines of the content.\n\n" .
-                "For more information about this FAQ system, visit: https://www.phpmyfaq.de";
+            $llmsText =
+                "# phpMyFAQ LLMs.txt\n\n"
+                . "This file provides information about the AI/LLM training data availability for this FAQ system.\n\n"
+                . "Contact: Please see the contact information on the main website.\n\n"
+                . "The FAQ content in this system is available for LLM training purposes.\n"
+                . "Please respect the licensing terms and usage guidelines of the content.\n\n"
+                . 'For more information about this FAQ system, visit: https://www.phpmyfaq.de';
 
             $this->configuration->add('seo.contentLlmsText', $llmsText);
 
@@ -1169,36 +1143,39 @@ EOT;
                 case 'sqlsrv':
                 case 'pdo_sqlsrv':
                     // SQL Server: Check if the index exists before creating
-                    $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
-                        "WHERE name = 'idx_faqsearches_searchterm') " .
-                        sprintf('CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches ', $tablePrefix) .
-                        "(searchterm)";
-                    $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
-                        "WHERE name = 'idx_faqsearches_date_term') " .
-                        sprintf(
+                    $this->queries[] =
+                        'IF NOT EXISTS (SELECT * FROM sys.indexes '
+                        . "WHERE name = 'idx_faqsearches_searchterm') "
+                        . sprintf('CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches ', $tablePrefix)
+                        . '(searchterm)';
+                    $this->queries[] =
+                        'IF NOT EXISTS (SELECT * FROM sys.indexes '
+                        . "WHERE name = 'idx_faqsearches_date_term') "
+                        . sprintf(
                             'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches (searchdate, searchterm)',
-                            $tablePrefix
+                            $tablePrefix,
                         );
-                    $this->queries[] = "IF NOT EXISTS (SELECT * FROM sys.indexes " .
-                        "WHERE name = 'idx_faqsearches_date_term_lang') " .
-                        sprintf('CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ', $tablePrefix) .
-                        "(searchdate, searchterm, lang)";
+                    $this->queries[] =
+                        'IF NOT EXISTS (SELECT * FROM sys.indexes '
+                        . "WHERE name = 'idx_faqsearches_date_term_lang') "
+                        . sprintf('CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ', $tablePrefix)
+                        . '(searchdate, searchterm, lang)';
                     break;
                 default:
                     // MySQL, PostgreSQL, SQLite: Use IF NOT EXISTS
                     $this->queries[] = sprintf(
                         'CREATE INDEX IF NOT EXISTS idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
-                        $tablePrefix
+                        $tablePrefix,
                     );
                     $this->queries[] = sprintf(
-                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term ON %sfaqsearches ' .
-                        '(searchdate, searchterm)',
-                        $tablePrefix
+                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term ON %sfaqsearches '
+                        . '(searchdate, searchterm)',
+                        $tablePrefix,
                     );
                     $this->queries[] = sprintf(
-                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches ' .
-                        '(searchdate, searchterm, lang)',
-                        $tablePrefix
+                        'CREATE INDEX IF NOT EXISTS idx_faqsearches_date_term_lang ON %sfaqsearches '
+                        . '(searchdate, searchterm, lang)',
+                        $tablePrefix,
                     );
                     break;
             }

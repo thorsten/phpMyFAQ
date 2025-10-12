@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ main error class.
  *
@@ -37,7 +39,7 @@ class Error
     public static function errorHandler(int $level, string $message, string $filename, int $line): void
     {
         if (error_reporting() !== 0) {
-            $filename = (Environment::isDebugMode() ? $filename : basename($filename));
+            $filename = Environment::isDebugMode() ? $filename : basename($filename);
             throw new ErrorException($message, 0, $level, $filename, $line);
         }
     }
@@ -56,22 +58,20 @@ class Error
 
         http_response_code($code);
 
-        echo "<h1>phpMyFAQ Fatal error</h1>";
+        echo '<h1>phpMyFAQ Fatal error</h1>';
         echo "<p>Uncaught exception: '" . $exception::class . "'</p>";
         echo "<p>Message: '" . Strings::htmlentities($exception->getMessage()) . "'</p>";
-        echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
-        echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
+        echo '<p>Stack trace:<pre>' . $exception->getTraceAsString() . '</pre></p>';
+        echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . '</p>';
         if (ini_get('log_errors')) {
-            error_log(
-                sprintf(
-                    "phpMyFAQ %s: %s in %s on line %d\nStack trace:\n%s",
-                    $exception::class,
-                    $exception->getMessage(),
-                    $exception->getFile(),
-                    $exception->getLine(),
-                    $exception->getTraceAsString()
-                )
-            );
+            error_log(sprintf(
+                "phpMyFAQ %s: %s in %s on line %d\nStack trace:\n%s",
+                $exception::class,
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine(),
+                $exception->getTraceAsString(),
+            ));
         }
     }
 }

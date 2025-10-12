@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Registration Controller for the REST API
  *
@@ -45,67 +47,72 @@ class RegistrationController extends AbstractController
      * @throws Exception
      * @throws \JsonException
      */
-    #[OA\Post(
-        path: '/api/v3.1/register',
-        operationId: 'createUser',
-        tags: ['Endpoints with Authentication'],
-    )]
+    #[OA\Post(path: '/api/v3.1/register', operationId: 'createUser', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the question.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Header(
         header: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\RequestBody(
-        required: true,
-        content: new OA\MediaType(
-            mediaType: 'application/json',
-            schema: new OA\Schema(
-                required: [
-                    'username',
-                    'fullname',
-                    'email',
-                    'is-visible'
-                ],
-                properties: [
-                    new OA\Property(property: 'username', type: 'string'),
-                    new OA\Property(property: 'fullname', type: 'string'),
-                    new OA\Property(property: 'email', type: 'string'),
-                    new OA\Property(property: 'is-visible', type: 'boolean'),
-                ],
-                type: 'object'
-            ),
-            example: '{
+    #[OA\RequestBody(required: true, content: new OA\MediaType(
+        mediaType: 'application/json',
+        schema: new OA\Schema(
+            required: [
+                'username',
+                'fullname',
+                'email',
+                'is-visible',
+            ],
+            properties: [
+                new OA\Property(
+                    property: 'username',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'fullname',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'email',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'is-visible',
+                    type: 'boolean',
+                ),
+            ],
+            type: 'object',
+        ),
+        example: '{
                 "username": "ada",
                 "fullname": "Ada Lovelace",
                 "email": "ada.lovelace@example.org",
                 "is-visible": false
-            }'
-        )
-    )]
+            }',
+    ))]
     #[OA\Response(
         response: 201,
         description: 'If "username", "fullname", "email", and "is-visible" combination is correct.',
-        content: new OA\JsonContent(example: '{ "registered": true, "success": "User created."}')
+        content: new OA\JsonContent(example: '{ "registered": true, "success": "User created."}'),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username", "fullname", "email", and "is-visible" combination is not correct.',
-        content: new OA\JsonContent(example: '{ "registered": false, "error": "Error message"}')
+        content: new OA\JsonContent(example: '{ "registered": false, "error": "Error message"}'),
     )]
     #[OA\Response(
         response: 409,
         description: 'If the domain of the email address is not allowed.',
-        content: new OA\JsonContent(example: '{ "registered": false, "error": "The domain is not allowed."}')
+        content: new OA\JsonContent(example: '{ "registered": false, "error": "The domain is not allowed."}'),
     )]
     #[OA\Response(
         response: 401,
         description: 'If the user is not authenticated.',
-        content: new OA\JsonContent(example: '{ "registered": false }')
+        content: new OA\JsonContent(example: '{ "registered": false }'),
     )]
     public function create(Request $request): JsonResponse
     {
@@ -124,28 +131,25 @@ class RegistrationController extends AbstractController
         if (!$registrationHelper->isDomainAllowed($email)) {
             $result = [
                 'registered' => false,
-                'error' => 'The domain is not allowed.'
+                'error' => 'The domain is not allowed.',
             ];
             return $this->json($result, Response::HTTP_CONFLICT);
         }
 
         if (
-            $userName !== '' &&
-            $userName !== '0' &&
-            ($fullName !== '' && $fullName !== '0') &&
-            ($email !== '' && $email !== '0')
+            $userName !== '' && $userName !== '0' && $fullName !== '' && $fullName !== '0' && (
+                $email !== ''
+                && $email !== '0'
+            )
         ) {
             $result = $registrationHelper->createUser($userName, $fullName, $email, $isVisible);
 
             return $this->json($result, Response::HTTP_CREATED);
         }
 
-        return $this->json(
-            [
-                'registered' => false,
-                'error' => Translation::get('err_sendMail')
-            ],
-            Response::HTTP_BAD_REQUEST
-        );
+        return $this->json([
+            'registered' => false,
+            'error' => Translation::get('err_sendMail'),
+        ], Response::HTTP_BAD_REQUEST);
     }
 }

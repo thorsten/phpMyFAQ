@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for Administration backend.
  *
@@ -48,21 +50,15 @@ class Helper
         string $restrictions = '',
         string $caption = '',
         ?string $route = null,
-        bool $checkPerm = true
+        bool $checkPerm = true,
     ): string {
-
         if (Translation::get($caption) !== null) {
             $renderedCaption = Translation::get($caption);
         } else {
             $renderedCaption = 'No string for ' . $caption;
         }
 
-        $output = sprintf(
-            '<a class="nav-link" href="./%s">%s</a>%s',
-            $route,
-            $renderedCaption,
-            "\n"
-        );
+        $output = sprintf('<a class="nav-link" href="./%s">%s</a>%s', $route, $renderedCaption, "\n");
 
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
@@ -99,9 +95,10 @@ class Helper
                 }
             }
         } else {
-            $hasPermission = strlen($restrictions) > 0 &&
-                isset($this->permission[$restrictions]) &&
-                $this->permission [$restrictions];
+            $hasPermission =
+                strlen($restrictions) > 0
+                && isset($this->permission[$restrictions])
+                && $this->permission[$restrictions];
         }
 
         return $hasPermission;
@@ -147,11 +144,7 @@ class Helper
         ];
 
         foreach ($options as $option) {
-            $output .= sprintf(
-                '<option%s>%s</option>',
-                ($option === $metaRobots) ? ' selected' : '',
-                $option
-            );
+            $output .= sprintf('<option%s>%s</option>', $option === $metaRobots ? ' selected' : '', $option);
         }
 
         return $output;
@@ -166,11 +159,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption(
-                $current,
-                $option,
-                'ad_conf_order_' . $option
-            );
+            $output .= Helper::generateOption($current, $option, 'ad_conf_order_' . $option);
         }
 
         return $output;
@@ -185,11 +174,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption(
-                $current,
-                $option,
-                'ad_conf_' . strtolower($option)
-            );
+            $output .= Helper::generateOption($current, $option, 'ad_conf_' . strtolower($option));
         }
 
         return $output;
@@ -201,11 +186,7 @@ class Helper
         $output = '';
 
         foreach ($options as $option) {
-            $output .= Helper::generateOption(
-                $current,
-                $option,
-                'records.orderingPopularFaqs.' . $option
-            );
+            $output .= Helper::generateOption($current, $option, 'records.orderingPopularFaqs.' . $option);
         }
 
         return $output;
@@ -217,34 +198,31 @@ class Helper
         $output .= Helper::generateOption(
             $current,
             'thema,content,keywords',
-            'search.relevance.thema-content-keywords'
+            'search.relevance.thema-content-keywords',
         );
         $output .= Helper::generateOption(
             $current,
             'thema,keywords,content',
-            'search.relevance.thema-keywords-content'
+            'search.relevance.thema-keywords-content',
         );
         $output .= Helper::generateOption(
             $current,
             'content,thema,keywords',
-            'search.relevance.content-thema-keywords'
+            'search.relevance.content-thema-keywords',
         );
         $output .= Helper::generateOption(
             $current,
             'content,keywords,thema',
-            'search.relevance.content-keywords-thema'
+            'search.relevance.content-keywords-thema',
         );
         $output .= Helper::generateOption(
             $current,
             'keywords,content,thema',
-            'search.relevance.keywords-content-thema'
+            'search.relevance.keywords-content-thema',
         );
 
-        return $output . Helper::generateOption(
-            $current,
-            'keywords,thema,content',
-            'search.relevance.keywords-thema-content'
-        );
+        return $output
+        . Helper::generateOption($current, 'keywords,thema,content', 'search.relevance.keywords-thema-content');
     }
 
     public static function renderReleaseTypeOptions(string $current): string
@@ -258,8 +236,8 @@ class Helper
             $output .= sprintf(
                 '<option value="%s"%s>%s</option>',
                 $value,
-                ($value === $current) ? ' selected' : '',
-                ucfirst($releaseType->value)
+                $value === $current ? ' selected' : '',
+                ucfirst($releaseType->value),
             );
         }
 
@@ -271,25 +249,26 @@ class Helper
      */
     public function canAccessContent(CurrentUser $currentUser): bool
     {
-        return $currentUser->isLoggedIn() &&
-        (
-            (
-                is_countable($currentUser->perm->getAllUserRights($currentUser->getUserId()))
-                ?
-                count($currentUser->perm->getAllUserRights($currentUser->getUserId()))
-                : 0
-            ) || $currentUser->isSuperAdmin()
+        return (
+            $currentUser->isLoggedIn()
+            && (
+                (
+                    is_countable($currentUser->perm->getAllUserRights($currentUser->getUserId()))
+                        ? count($currentUser->perm->getAllUserRights($currentUser->getUserId()))
+                        : 0
+                )
+                || $currentUser->isSuperAdmin()
+            )
         );
     }
-
 
     private static function generateOption(string $current, string $value, string $label): string
     {
         return sprintf(
             '<option value="%s"%s>%s</option>',
             $value,
-            ($value === $current) ? ' selected' : '',
-            Translation::get($label)
+            $value === $current ? ' selected' : '',
+            Translation::get($label),
         );
     }
 }

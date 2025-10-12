@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * The plurals class provides support for plural forms in phpMyFAQ translations.
+ * The plural class provides support for plural forms in phpMyFAQ translations.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -27,7 +29,7 @@ use phpMyFAQ\Translation;
 readonly class Plurals
 {
     /**
-     * The number of plural forms for current language $lang.
+     * The number of plural forms for the current language $lang.
      */
     private int $nPlurals;
 
@@ -39,16 +41,16 @@ readonly class Plurals
     private mixed $lang;
 
     /**
-     * True when there is no support for plural forms in current language $lang.
+     * True when there is no support for plural forms in the current language $lang.
      */
     private bool $useDefaultPluralForm;
 
     public function __construct()
     {
-        $this->nPlurals = (int)Translation::get('nplurals');
+        $this->nPlurals = (int) Translation::get('nplurals');
         $this->lang = Translation::get('metaLanguage');
 
-        $this->useDefaultPluralForm = $this->plural($this->lang, 0) == -1;
+        $this->useDefaultPluralForm = $this->plural($this->lang, 0) === -1;
     }
 
     /**
@@ -61,21 +63,50 @@ readonly class Plurals
     private function plural(string $lang, int $n): int
     {
         return match ($lang) {
-            'ar' => ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 :
-                (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5)))),
+            'ar' => $n == 0
+                ? 0
+                : (
+                    $n == 1
+                        ? 1
+                        : (
+                            $n == 2
+                                ? 2
+                                : (
+                                    ($n % 100)
+                                    >= 3
+                                    && ($n % 100)
+                                    <= 10
+                                        ? 3
+                                        : (
+                                            ($n % 100)
+                                            >= 11
+                                            && ($n % 100)
+                                            <= 99
+                                            || ($n % 100)
+                                            == 1
+                                            || ($n % 100)
+                                            == 2
+                                                ? 4
+                                                : 5
+                                        )
+                                )
+                        )
+                ),
             'bn', 'he', 'hi', 'id', 'ja', 'ko', 'th', 'tr', 'tw', 'vi', 'zh' => 0,
-            'cy' => ($n == 1) ? 0 : ($n == 2 ? 1 : (($n != 8 && $n != 11) ? 2 : 3)),
-            'cs' => ($n == 1) ? 0 : (($n >= 2 && $n <= 4) ? 1 : 2),
-            'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'it', 'nb', 'nl', 'hu', 'pt', 'sv' => $n != 1,
-            'fr', 'pt_br' => $n > 1,
-            'lt' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ?
-                1 : 2),
-            'lv' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2),
-            'pl' => ($n == 1) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2),
-            'ro' => ($n == 1) ? 0 : (($n == 0 || ($n % 100 > 0 && $n % 100 < 20)) ? 1 : 2),
-            'ru', 'sr', 'uk' => ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 &&
-            ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2),
-            'sl' => ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || $n % 100 == 4 ? 2 : 3)),
+            'cy' => $n == 1 ? 0 : ($n == 2 ? 1 : ($n != 8 && $n != 11 ? 2 : 3)),
+            'cs' => $n == 1 ? 0 : ($n >= 2 && $n <= 4 ? 1 : 2),
+            'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'it', 'nb', 'nl', 'hu', 'pt', 'sv' => $n != 1 ? 1 : 0,
+            'fr', 'pt_br' => $n > 1 ? 1 : 0,
+            'lt' => ($n % 10) == 1 && ($n % 100) != 11
+                ? 0
+                : (($n % 10) >= 2 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
+            'lv' => ($n % 10) == 1 && ($n % 100) != 11 ? 0 : ($n != 0 ? 1 : 2),
+            'pl' => $n == 1 ? 0 : (($n % 10) >= 2 && ($n % 10) <= 4 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
+            'ro' => $n == 1 ? 0 : ($n == 0 || ($n % 100) > 0 && ($n % 100) < 20 ? 1 : 2),
+            'ru', 'sr', 'uk' => ($n % 10) == 1 && ($n % 100) != 11
+                ? 0
+                : (($n % 10) >= 2 && ($n % 10) <= 4 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
+            'sl' => ($n % 100) == 1 ? 0 : (($n % 100) == 2 ? 1 : (($n % 100) == 3 || ($n % 100) == 4 ? 2 : 3)),
             default => -1,
         };
     }
@@ -119,7 +150,7 @@ readonly class Plurals
         }
 
         $plural = $this->plural($this->lang, $number);
-        if ($plural > $this->nPlurals - 1) {
+        if ($plural > ($this->nPlurals - 1)) {
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;
         }

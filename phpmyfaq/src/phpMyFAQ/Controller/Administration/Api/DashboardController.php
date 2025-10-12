@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Dashboard Controller
  *
@@ -67,7 +69,7 @@ class DashboardController extends AbstractController
             }
 
             return $this->json($info);
-        } catch (DecodingExceptionInterface | TransportExceptionInterface | Exception $exception) {
+        } catch (DecodingExceptionInterface|TransportExceptionInterface|Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ MCP Server - FAQ Search Tool Metadata
  *
@@ -36,8 +38,10 @@ class FaqSearchToolMetadata implements MetadataInterface
 
     public function getDescription(): ?string
     {
-        return 'Search through the phpMyFAQ knowledge base to find relevant FAQ entries that can answer questions. ' .
-               'This tool searches both questions and answers in the FAQ database to provide comprehensive results.';
+        return (
+            'Search through the phpMyFAQ knowledge base to find relevant FAQ entries that can answer questions. '
+            . 'This tool searches both questions and answers in the FAQ database to provide comprehensive results.'
+        );
     }
 
     public function getTitle(): ?string

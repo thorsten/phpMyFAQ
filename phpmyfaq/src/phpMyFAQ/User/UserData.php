@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The userdata class provides methods to manage user information.
  *
@@ -48,8 +50,9 @@ class UserData
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -67,7 +70,7 @@ class UserData
             'SELECT %s FROM %sfaquserdata WHERE user_id = %d',
             $fields,
             Database::getTablePrefix(),
-            $this->userId
+            $this->userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -90,7 +93,7 @@ class UserData
             $key,
             Database::getTablePrefix(),
             $key,
-            $this->configuration->getDb()->escape($value)
+            $this->configuration->getDb()->escape($value),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -99,7 +102,10 @@ class UserData
             return null;
         }
 
-        return $this->configuration->getDb()->fetchObject($res)->$key;
+        return $this->configuration
+            ->getDb()
+            ->fetchObject($res)
+            ->$key;
     }
 
     /**
@@ -115,7 +121,7 @@ class UserData
             FROM %sfaquserdata WHERE %s = '%s'",
             Database::getTablePrefix(),
             $key,
-            $this->configuration->getDb()->escape($value)
+            $this->configuration->getDb()->escape($value),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -166,13 +172,12 @@ class UserData
      */
     public function load(int $userId): bool
     {
-        if (($userId <= 0) && ($userId != -1)) {
+        if ($userId <= 0 && $userId != -1) {
             return false;
         }
 
         $this->userId = $userId;
-        $select = sprintf(
-            '
+        $select = sprintf('
             SELECT
                 last_modified, 
                 display_name, 
@@ -183,10 +188,7 @@ class UserData
             FROM
                 %sfaquserdata
             WHERE
-                user_id = %d',
-            Database::getTablePrefix(),
-            $this->userId
-        );
+                user_id = %d', Database::getTablePrefix(), $this->userId);
 
         $res = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($res) !== 1) {
@@ -224,7 +226,7 @@ class UserData
             $this->data['is_visible'],
             $this->data['twofactor_enabled'],
             $this->data['secret'],
-            $this->userId
+            $this->userId,
         );
 
         $res = $this->configuration->getDb()->query($update);
@@ -239,7 +241,7 @@ class UserData
      */
     public function add(int $userId): bool
     {
-        if (($userId <= 0) && ($userId != -1)) {
+        if ($userId <= 0 && $userId != -1) {
             return false;
         }
 
@@ -253,7 +255,7 @@ class UserData
             (%d, '%s', 1, 0, '')",
             Database::getTablePrefix(),
             $this->userId,
-            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME'))
+            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME')),
         );
 
         $res = $this->configuration->getDb()->query($insert);
@@ -268,16 +270,12 @@ class UserData
      */
     public function delete(int $userId): bool
     {
-        if (($userId <= 0) && ($userId != -1)) {
+        if ($userId <= 0 && $userId != -1) {
             return false;
         }
 
         $this->userId = $userId;
-        $delete = sprintf(
-            'DELETE FROM %sfaquserdata WHERE user_id = %d',
-            Database::getTablePrefix(),
-            $this->userId
-        );
+        $delete = sprintf('DELETE FROM %sfaquserdata WHERE user_id = %d', Database::getTablePrefix(), $this->userId);
 
         $res = $this->configuration->getDb()->query($delete);
         if (!$res) {
@@ -304,7 +302,7 @@ class UserData
         $select = sprintf(
             "SELECT user_id FROM %sfaquserdata WHERE email = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($email)
+            $this->configuration->getDb()->escape($email),
         );
 
         $res = $this->configuration->getDb()->query($select);

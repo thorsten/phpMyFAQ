@@ -22,7 +22,7 @@ class AbstractAttachmentTest extends TestCase
         // Mock the DatabaseDriver
         $this->mockDb = $this->createMock(DatabaseDriver::class);
 
-        // Create anonymous class extending AbstractAttachment for testing
+        // Create an anonymous class extending AbstractAttachment for testing
         $this->attachment = new class($this->mockDb) extends AbstractAttachment {
             public function __construct(DatabaseDriver $mockDb, mixed $attachmentId = null)
             {
@@ -84,7 +84,7 @@ class AbstractAttachmentTest extends TestCase
             'password_hash' => 'pwd789',
             'filename' => 'test.pdf',
             'filesize' => 1024,
-            'encrypted' => 1,
+            'encrypted' => '1',
             'mime_type' => 'application/pdf'
         ];
 
@@ -120,7 +120,7 @@ class AbstractAttachmentTest extends TestCase
             'password_hash' => 'phash789',
             'filename' => 'document.docx',
             'filesize' => 2048,
-            'encrypted' => 0,
+            'encrypted' => '0',
             'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ];
 

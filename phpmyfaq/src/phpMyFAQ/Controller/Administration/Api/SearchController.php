@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Search Controller
  *
@@ -43,10 +45,10 @@ class SearchController extends AbstractController
 
         $search = new Search($this->configuration);
 
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('delete-searchterm', $deleteData->csrf)
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'delete-searchterm',
+            $deleteData->csrf,
+        )) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

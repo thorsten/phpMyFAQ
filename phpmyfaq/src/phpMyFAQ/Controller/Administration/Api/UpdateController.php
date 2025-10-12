@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Update Controller
  *
@@ -52,32 +54,23 @@ class UpdateController extends AbstractController
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
 
         if (!$upgrade->isMaintenanceEnabled()) {
-            return $this->json(
-                [
-                    'warning' => Translation::get('msgNotInMaintenanceMode'),
-                    'dateLastChecked' => $dateLastChecked,
-                ],
-                Response::HTTP_CONFLICT
-            );
+            return $this->json([
+                'warning' => Translation::get('msgNotInMaintenanceMode'),
+                'dateLastChecked' => $dateLastChecked,
+            ], Response::HTTP_CONFLICT);
         }
 
         try {
             $upgrade->checkFilesystem();
-            return $this->json(
-                [
-                    'success' => Translation::get('healthCheckOkay'),
-                    'dateLastChecked' => $dateLastChecked,
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'success' => Translation::get('healthCheckOkay'),
+                'dateLastChecked' => $dateLastChecked,
+            ], Response::HTTP_OK);
         } catch (Exception $exception) {
-            return $this->json(
-                [
-                    'error' => $exception->getMessage(),
-                    'dateLastChecked' => $dateLastChecked,
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->json([
+                'error' => $exception->getMessage(),
+                'dateLastChecked' => $dateLastChecked,
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -87,17 +80,9 @@ class UpdateController extends AbstractController
         $this->userIsAuthenticated();
 
         try {
-            $versions = HttpClient::create(['timeout' => 30])->request(
-                'GET',
-                'https://api.phpmyfaq.de/versions'
-            );
+            $versions = HttpClient::create(['timeout' => 30])->request('GET', 'https://api.phpmyfaq.de/versions');
             return $this->json($versions->getContent(), Response::HTTP_OK);
-        } catch (
-            TransportExceptionInterface |
-            ClientExceptionInterface |
-            ServerExceptionInterface |
-            RedirectionExceptionInterface $exception
-        ) {
+        } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface|RedirectionExceptionInterface $exception) {
             return $this->json($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
@@ -119,25 +104,19 @@ class UpdateController extends AbstractController
             $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
-                return $this->json(
-                    [
-                        'version' => $versions[$branch],
-                        'message' => Translation::get('msgCurrentVersion') . $versions[$branch],
-                        'dateLastChecked' => $dateLastChecked,
-                    ],
-                    Response::HTTP_OK
-                );
+                return $this->json([
+                    'version' => $versions[$branch],
+                    'message' => Translation::get('msgCurrentVersion') . $versions[$branch],
+                    'dateLastChecked' => $dateLastChecked,
+                ], Response::HTTP_OK);
             }
 
-            return $this->json(
-                [
-                    'version' => $versions['installed'],
-                    'message' => Translation::get('versionIsUpToDate'),
-                    'dateLastChecked' => $dateLastChecked,
-                ],
-                Response::HTTP_OK
-            );
-        } catch (TransportExceptionInterface | DecodingExceptionInterface $e) {
+            return $this->json([
+                'version' => $versions['installed'],
+                'message' => Translation::get('versionIsUpToDate'),
+                'dateLastChecked' => $dateLastChecked,
+            ], Response::HTTP_OK);
+        } catch (TransportExceptionInterface|DecodingExceptionInterface $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -252,18 +231,14 @@ class UpdateController extends AbstractController
         try {
             if ($update->applyUpdates()) {
                 $this->configuration->set('main.maintenanceMode', 'false');
-                return new JsonResponse(
-                    ['success' => 'Database successfully updated.'],
-                    Response::HTTP_OK
-                );
+                return new JsonResponse(['success' => 'Database successfully updated.'], Response::HTTP_OK);
             }
 
             return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
         } catch (Exception $exception) {
-            return new JsonResponse(
-                ['error' => 'Update database failed: ' . $exception->getMessage()],
-                Response::HTTP_BAD_GATEWAY
-            );
+            return new JsonResponse([
+                'error' => 'Update database failed: ' . $exception->getMessage(),
+            ], Response::HTTP_BAD_GATEWAY);
         }
     }
 

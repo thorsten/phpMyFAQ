@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Startpage category class.
  *
@@ -29,8 +31,9 @@ readonly class Startpage
 
     private string $language;
 
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     public function setUser(int $user): Startpage
@@ -116,7 +119,7 @@ readonly class Startpage
             implode(', ', $this->groups),
             $this->user,
             implode(', ', $this->groups),
-            $where
+            $where,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -131,7 +134,7 @@ readonly class Startpage
                 'url' => $link->toString(),
                 'name' => $row['name'],
                 'description' => $row['description'],
-                'image' => $image
+                'image' => $image,
             ];
 
             $categories[] = $category;

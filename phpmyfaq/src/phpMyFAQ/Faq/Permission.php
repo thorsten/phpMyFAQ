@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * FAQ permissions class for phpMyFAQ.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -35,8 +37,9 @@ class Permission
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -59,7 +62,7 @@ class Permission
                 $mode,
                 $mode,
                 $faqId,
-                $id
+                $id,
             );
 
             $this->configuration->getDb()->query($query);
@@ -80,12 +83,7 @@ class Permission
             return false;
         }
 
-        $query = sprintf(
-            'DELETE FROM %sfaqdata_%s WHERE record_id = %d',
-            Database::getTablePrefix(),
-            $mode,
-            $faqId
-        );
+        $query = sprintf('DELETE FROM %sfaqdata_%s WHERE record_id = %d', Database::getTablePrefix(), $mode, $faqId);
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -113,14 +111,14 @@ class Permission
             $mode,
             Database::getTablePrefix(),
             $mode,
-            $faqId
+            $faqId,
         );
 
         $result = $this->configuration->getDb()->query($query);
 
         if ($this->configuration->getDb()->numRows($result) > 0) {
-            while (($row = $this->configuration->getDb()->fetchObject($result))) {
-                $permissions[] = (int)$row->permission;
+            while ($row = $this->configuration->getDb()->fetchObject($result)) {
+                $permissions[] = (int) $row->permission;
             }
         }
 
@@ -160,7 +158,7 @@ class Permission
             ];
         } elseif (is_string($data->restricted_groups)) {
             $permissions += [
-                'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)]
+                'restricted_groups' => [Filter::filterVar($data->restricted_groups, FILTER_VALIDATE_INT)],
             ];
         } else {
             $permissions += [

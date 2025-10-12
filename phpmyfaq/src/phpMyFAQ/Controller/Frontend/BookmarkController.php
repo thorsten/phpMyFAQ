@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Bookmark Controller
  *
@@ -54,7 +56,7 @@ class BookmarkController extends AbstractController
             return $this->json([
                 'success' => Translation::get('msgBookmarkAdded'),
                 'linkText' => Translation::get('removeBookmark'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-bookmark')
+                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-bookmark'),
             ], Response::HTTP_OK);
         }
 
@@ -84,7 +86,7 @@ class BookmarkController extends AbstractController
             return $this->json([
                 'success' => Translation::get('msgBookmarkRemoved'),
                 'linkText' => Translation::get('msgAddBookmark'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('add-bookmark')
+                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('add-bookmark'),
             ], Response::HTTP_OK);
         }
 

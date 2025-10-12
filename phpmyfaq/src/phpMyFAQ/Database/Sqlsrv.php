@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
@@ -58,7 +60,7 @@ class Sqlsrv implements DatabaseDriver
         #[\SensitiveParameter] string $user,
         #[\SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $this->setConnectionOptions($user, $password, $database);
 
@@ -224,20 +226,16 @@ class Sqlsrv implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $select = sprintf(
-            '
+        $select = sprintf('
            SELECT 
                max(%s) as current_id
            FROM 
-               %s',
-            $columnId,
-            $table
-        );
+               %s', $columnId, $table);
 
         $result = $this->query($select);
         sqlsrv_fetch($result);
 
-        return (sqlsrv_get_field($result, 0) + 1);
+        return sqlsrv_get_field($result, 0) + 1;
     }
 
     /**
@@ -355,7 +353,7 @@ class Sqlsrv implements DatabaseDriver
                 'SQLSTATE: %s<br/>Code: %s<br/>Message: %s<br/>',
                 $error['SQLSTATE'],
                 $error['code'],
-                $error['message']
+                $error['message'],
             );
         }
 

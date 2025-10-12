@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // phpcs:ignoreFile
 
 /**
@@ -123,9 +126,8 @@ class Strings
         string $subject,
         &$matches = null,
         int $flags = 0,
-        int $offset = 0
-    ): int // phpcs:ignore
-    {
+        int $offset = 0,
+    ): int { // phpcs:ignore
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -137,9 +139,8 @@ class Strings
         string $subject,
         &$matches = null,
         int $flags = 0,
-        int $offset = 0
-    ): int // phpcs:ignore
-    {
+        int $offset = 0,
+    ): int { // phpcs:ignore
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -161,7 +162,7 @@ class Strings
         callable $callback,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -179,7 +180,7 @@ class Strings
         string|array $replacement,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array|null {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
@@ -196,14 +197,9 @@ class Strings
         ?string $string = '',
         int $quoteStyle = ENT_HTML5,
         string $charset = 'utf-8',
-        bool $doubleEncode = false
+        bool $doubleEncode = false,
     ): string {
-        return htmlspecialchars(
-            (string) $string,
-            $quoteStyle,
-            $charset,
-            $doubleEncode
-        );
+        return htmlspecialchars((string) $string, $quoteStyle, $charset, $doubleEncode);
     }
 
     /**
@@ -218,14 +214,8 @@ class Strings
         string $string,
         int $quoteStyle = ENT_HTML5,
         string $charset = 'utf-8',
-        bool $doubleEncode = false
-    ): string
-    {
-        return htmlentities(
-            $string,
-            $quoteStyle,
-            $charset,
-            $doubleEncode
-        );
+        bool $doubleEncode = false,
+    ): string {
+        return htmlentities($string, $quoteStyle, $charset, $doubleEncode);
     }
 }

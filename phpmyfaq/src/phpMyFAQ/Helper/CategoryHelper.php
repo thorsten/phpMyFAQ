@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ categories.
  *
@@ -90,17 +92,19 @@ class CategoryHelper extends AbstractHelper
         $aggregatedNumbers = $categoryRelation->getAggregatedFaqNumbers($normalizedCategoryNumbers);
 
         if ((is_countable($categoryTree) ? count($categoryTree) : 0) > 0) {
-            return sprintf(
-                '<ul class="pmf-category-overview">%s</ul>',
-                $this->buildCategoryList($categoryTree, $parentId, $aggregatedNumbers, $normalizedCategoryNumbers)
-            );
+            return sprintf('<ul class="pmf-category-overview">%s</ul>', $this->buildCategoryList(
+                $categoryTree,
+                $parentId,
+                $aggregatedNumbers,
+                $normalizedCategoryNumbers,
+            ));
         }
 
         $languagesAvailable = $this->getCategory()->getCategoryLanguagesTranslated($parentId);
         return sprintf(
             '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
             Translation::get('msgCategoryMissingButTranslationAvailable'),
-            $this->buildAvailableCategoryTranslationsList($languagesAvailable)
+            $this->buildAvailableCategoryTranslationsList($languagesAvailable),
         );
     }
 
@@ -115,7 +119,7 @@ class CategoryHelper extends AbstractHelper
         array $categoryTree,
         int $parentId = 0,
         array $aggregatedNumbers = [],
-        array $categoryNumbers = []
+        array $categoryNumbers = [],
     ): string {
         global $sids;
 
@@ -135,7 +139,7 @@ class CategoryHelper extends AbstractHelper
                         '%sindex.php?%saction=show&cat=%d',
                         $this->configuration->getDefaultUrl(),
                         $sids,
-                        $node['id']
+                        $node['id'],
                     );
 
                     $link = new Link($url, $this->configuration);
@@ -152,12 +156,14 @@ class CategoryHelper extends AbstractHelper
                     $node['id'],
                     $name,
                     $this->plurals->getMsg('plmsgEntries', $number),
-                    $node['description']
+                    $node['description'],
                 );
-                $html .= sprintf(
-                    '<ul>%s</ul>',
-                    $this->buildCategoryList($categoryTree, $node['id'], $aggregatedNumbers, $categoryNumbers)
-                );
+                $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
+                    $categoryTree,
+                    $node['id'],
+                    $aggregatedNumbers,
+                    $categoryNumbers,
+                ));
                 $html .= '</li>';
             }
         }
@@ -178,17 +184,13 @@ class CategoryHelper extends AbstractHelper
             $url = sprintf(
                 '%sindex.php?action=show&lang=%s',
                 $this->configuration->getDefaultUrl(),
-                LanguageCodes::getKey($language)
+                LanguageCodes::getKey($language),
             );
             $link = new Link($url, $this->configuration);
             $link->itemTitle = Strings::htmlentities($category);
             $link->text = Strings::htmlentities($category);
             $name = $link->toHtmlAnchor();
-            $html .= sprintf(
-                '<li><strong>%s</strong>: %s</li>',
-                $language,
-                $name
-            );
+            $html .= sprintf('<li><strong>%s</strong>: %s</li>', $language, $name);
         }
 
         return $html;
@@ -211,7 +213,7 @@ class CategoryHelper extends AbstractHelper
                 'parent_id' => (int) $category['parent_id'],
                 'name' => $category['name'],
                 'description' => $category['description'],
-                'faqs' => $categoryNumbers[$categoryId]['faqs'] ?? 0
+                'faqs' => $categoryNumbers[$categoryId]['faqs'] ?? 0,
             ];
         }
 
@@ -278,7 +280,7 @@ class CategoryHelper extends AbstractHelper
             $options .= sprintf(
                 '<option value="%s">%s</option>',
                 $availableTranslation,
-                $availableLanguages[$availableTranslation]
+                $availableLanguages[$availableTranslation],
             );
         }
 

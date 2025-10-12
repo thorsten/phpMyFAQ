@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Language Controller for the REST API
  *
@@ -33,15 +35,11 @@ class LanguageController extends AbstractController
         }
     }
 
-    #[OA\Get(
-        path: '/api/v3.1/language',
-        operationId: 'getLanguage',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/language', operationId: 'getLanguage', tags: ['Public Endpoints'])]
     #[OA\Response(
         response: 200,
         description: 'Returns the default language as language code.',
-        content: new OA\JsonContent(example: '"en"')
+        content: new OA\JsonContent(example: '"en"'),
     )]
     public function index(): JsonResponse
     {

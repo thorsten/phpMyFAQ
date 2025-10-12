@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Language helper class for phpMyFAQ.
  *
@@ -37,14 +39,14 @@ class LanguageHelper
         string $default,
         bool $submitOnChange = false,
         array $excludedLanguages = [],
-        string $id = 'language'
+        string $id = 'language',
     ): string {
         $output = sprintf(
             '<select class="form-select" name="%s" aria-label="%s" id="%s" %s>',
             $id,
             ucfirst($id),
             $id,
-            $submitOnChange ? ' onchange="this.form.submit();"' : ''
+            $submitOnChange ? ' onchange="this.form.submit();"' : '',
         );
         $languages = self::getAvailableLanguages();
 
@@ -55,7 +57,7 @@ class LanguageHelper
                         '<option value="%s" %s>%s</option>',
                         $lang,
                         $lang === $default ? 'selected' : '',
-                        $value
+                        $value,
                     );
                 }
             }
@@ -80,9 +82,7 @@ class LanguageHelper
         $dir = new DirectoryIterator(PMF_TRANSLATION_DIR);
         foreach ($dir as $fileInfo) {
             if (!$fileInfo->isDot()) {
-                $languageFiles[] = strtoupper(
-                    str_replace($search, '', trim($fileInfo->getFilename()))
-                );
+                $languageFiles[] = strtoupper(str_replace($search, '', trim($fileInfo->getFilename())));
             }
         }
 
@@ -111,7 +111,7 @@ class LanguageHelper
     public static function renderLanguageOptions(
         string $lang = '',
         bool $onlyThisLang = false,
-        bool $fileLanguageValue = false
+        bool $fileLanguageValue = false,
     ): string {
         $output = '';
         foreach (LanguageHelper::getAvailableLanguages() as $key => $value) {

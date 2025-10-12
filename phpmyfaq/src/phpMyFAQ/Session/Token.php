@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Token class for CSRF (Cross Site Request Forgery) protection.
  *
@@ -41,8 +43,9 @@ class Token
     /**
      * Constructor.
      */
-    final private function __construct(private readonly SessionInterface $session)
-    {
+    final private function __construct(
+        private readonly SessionInterface $session,
+    ) {
     }
 
     public function getPage(): string
@@ -89,13 +92,12 @@ class Token
         return $this;
     }
 
-
     /**
      * @throws Exception
      */
     public static function getInstance(SessionInterface $session): Token
     {
-        if (!(self::$token instanceof Token)) {
+        if (!self::$token instanceof Token) {
             self::$token = new self($session);
         }
 
@@ -113,7 +115,7 @@ class Token
             '<input type="hidden" id="%s" name="%s" value="%s">',
             self::PMF_SESSION_NAME,
             self::PMF_SESSION_NAME,
-            $token->sessionToken
+            $token->sessionToken,
         );
     }
 
@@ -145,7 +147,7 @@ class Token
 
         // check the hash matches the Session / Cookie
         $sessionConfirm = hash_equals($token->getSessionToken(), $requestToken);
-        $cookieConfirm  = hash_equals($token->getCookieToken(), $this->getCookie($page));
+        $cookieConfirm = hash_equals($token->getCookieToken(), $this->getCookie($page));
 
         // remove the token
         if ($removeToken) {
@@ -190,18 +192,14 @@ class Token
             ->setSessionToken($randomToken)
             ->setCookieToken($randomToken);
 
-        setcookie(
-            $token->getCookieName($page),
-            (string) $token->getCookieToken(),
-            [
-                'expires' => $token->getExpiry(),
-                'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
-                'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
-                'samesite' => 'strict',
-                'secure' => $request->isSecure(),
-                'httponly' => true,
-            ]
-        );
+        setcookie($token->getCookieName($page), (string) $token->getCookieToken(), [
+            'expires' => $token->getExpiry(),
+            'path' => dirname((string) $request->server->get('SCRIPT_NAME')),
+            'domain' => parse_url(Configuration::getConfigurationInstance()->getDefaultUrl(), PHP_URL_HOST),
+            'samesite' => 'strict',
+            'secure' => $request->isSecure(),
+            'httponly' => true,
+        ]);
 
         $this->session->set(sprintf('%s.%s', self::PMF_SESSION_NAME, $page), $token);
 

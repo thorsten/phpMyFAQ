@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Implements result sets for phpMyFAQ search classes.
  *
@@ -64,7 +66,7 @@ class SearchResultSet
     public function __construct(
         protected CurrentUser $currentUser,
         private readonly Permission $faqPermission,
-        protected Configuration $configuration
+        protected Configuration $configuration,
     ) {
     }
 
@@ -102,10 +104,8 @@ class SearchResultSet
             // check permission for user
             if ('basic' === $this->configuration->get('security.permLevel')) {
                 $userPermission = $this->faqPermission->get(Permission::USER, $result->id);
-                $permission = in_array(-1, $userPermission) || in_array(
-                    $this->currentUser->getUserId(),
-                    $userPermission
-                );
+                $permission =
+                    in_array(-1, $userPermission) || in_array($this->currentUser->getUserId(), $userPermission);
             }
 
             // check on duplicates
@@ -154,7 +154,7 @@ class SearchResultSet
             $score += $object->relevance_keywords;
         }
 
-        return round($score / 3 * 100);
+        return round(($score / 3) * 100);
     }
 
     /**

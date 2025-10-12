@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This class is just a wrapper for Twig v3
  *
@@ -44,19 +46,18 @@ class TwigWrapper
     /**
      * @throws LoaderError
      */
-    public function __construct(string $templatePath, private bool $isSetup = false)
-    {
+    public function __construct(
+        string $templatePath,
+        private bool $isSetup = false,
+    ) {
         $filesystemLoader = new FilesystemLoader();
         $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
         $filesystemLoader->addPath($templatePath . '/admin', 'admin');
         $filesystemLoader->addPath($templatePath . '/setup', 'setup');
 
-        $this->twigEnvironment = new Environment(
-            $filesystemLoader,
-            [
-                'debug' => System::isDevelopmentVersion()
-            ]
-        );
+        $this->twigEnvironment = new Environment($filesystemLoader, [
+            'debug' => System::isDevelopmentVersion(),
+        ]);
 
         // Always add the translation extension
         $this->twigEnvironment->addExtension(new AttributeExtension(TranslateTwigExtension::class));
@@ -84,7 +85,7 @@ class TwigWrapper
     {
         try {
             return $this->twigEnvironment->load($templateFile);
-        } catch (LoaderError | RuntimeError | SyntaxError $exception) {
+        } catch (LoaderError|RuntimeError|SyntaxError $exception) {
             throw new Exception($exception->getMessage());
         }
     }

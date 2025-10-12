@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin User Controller
  *
@@ -76,7 +78,7 @@ class UserController extends AbstractController
         foreach ($currentUser->searchUsers($filtered) as $singleUser) {
             $users = new stdClass();
             $users->label = $singleUser['login'];
-            $users->value = (int)$singleUser['user_id'];
+            $users->value = (int) $singleUser['user_id'];
             $allUsers[] = $users;
         }
 
@@ -101,7 +103,7 @@ class UserController extends AbstractController
             ',',
             '"',
             '\\',
-            PHP_EOL
+            PHP_EOL,
         );
 
         foreach ($allUsers as $allUser) {
@@ -121,7 +123,7 @@ class UserController extends AbstractController
                 ',',
                 '"',
                 '\\',
-                PHP_EOL
+                PHP_EOL,
             );
         }
 
@@ -148,7 +150,7 @@ class UserController extends AbstractController
 
         $user = $this->container->get('phpmyfaq.user.current_user');
 
-        $user->getUserById($request->get('userId'), true);
+        $user->getUserById((int) $request->get('userId'), true);
 
         $userData = $user->userdata->get('*');
         if (is_array($userData)) {
@@ -179,7 +181,7 @@ class UserController extends AbstractController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $userId = $request->get('userId');
-        $currentUser->getUserById($userId, true);
+        $currentUser->getUserById((int) $userId, true);
 
         return $this->json($currentUser->perm->getUserRights($userId), Response::HTTP_OK);
     }
@@ -202,14 +204,14 @@ class UserController extends AbstractController
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
-        $currentUser->getUserById($userId, true);
+        $currentUser->getUserById((int) $userId, true);
         try {
             if ($currentUser->activateUser()) {
                 return $this->json(['success' => $currentUser->getStatus()], Response::HTTP_OK);
             }
 
             return $this->json(['error' => $currentUser->getStatus()], Response::HTTP_BAD_REQUEST);
-        } catch (TransportExceptionInterface | \Exception $exception) {
+        } catch (TransportExceptionInterface|\Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -240,7 +242,7 @@ class UserController extends AbstractController
             return $this->json(['error' => Translation::get('msgPasswordTooShort')], Response::HTTP_BAD_REQUEST);
         }
 
-        $currentUser->getUserById($userId, true);
+        $currentUser->getUserById((int) $userId, true);
 
         $auth = new Auth($this->configuration);
         $authSource = $auth->selectAuth($currentUser->getAuthSource('name'));
@@ -277,10 +279,9 @@ class UserController extends AbstractController
 
         $currentUser->getUserById($userId, true);
         if ($currentUser->getStatus() === 'protected' || $userId === 1) {
-            return $this->json(
-                ['error' => Translation::get('ad_user_error_protectedAccount')],
-                Response::HTTP_BAD_REQUEST
-            );
+            return $this->json(['error' => Translation::get(
+                'ad_user_error_protectedAccount',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         if (!$currentUser->deleteUser()) {
@@ -355,11 +356,11 @@ class UserController extends AbstractController
             } else {
                 $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
                 $newUser->setStatus('active');
-                $newUser->setSuperAdmin((bool)$userIsSuperAdmin);
+                $newUser->setSuperAdmin((bool) $userIsSuperAdmin);
                 $mailHelper = new MailHelper($this->configuration);
                 try {
                     $mailHelper->sendMailToNewUser($newUser, $userPassword);
-                } catch (Exception | TransportExceptionInterface) {
+                } catch (Exception|TransportExceptionInterface) {
                     // @todo catch exception
                 }
 
@@ -420,9 +421,12 @@ class UserController extends AbstractController
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
         }
 
-        $success = Translation::get('ad_msg_savedsuc_1') . ' ' .
-            Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
-            Translation::get('ad_msg_savedsuc_2');
+        $success =
+            Translation::get('ad_msg_savedsuc_1')
+            . ' '
+            . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
+            . ' '
+            . Translation::get('ad_msg_savedsuc_2');
         return $this->json(['success' => $success], Response::HTTP_OK);
     }
 
@@ -437,16 +441,16 @@ class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('update-user-rights', $data->csrfToken)
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'update-user-rights',
+            $data->csrfToken,
+        )) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
 
-        if (0 === (int)$userId) {
+        if (0 === (int) $userId) {
             return $this->json(['error' => Translation::get('ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -463,9 +467,12 @@ class UserController extends AbstractController
         }
 
         $user->terminateSessionId();
-        $success = Translation::get('ad_msg_savedsuc_1') .
-            ' ' . Strings::htmlentities($user->getLogin(), ENT_QUOTES) . ' ' .
-            Translation::get('ad_msg_savedsuc_2');
+        $success =
+            Translation::get('ad_msg_savedsuc_1')
+            . ' '
+            . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
+            . ' '
+            . Translation::get('ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
     }

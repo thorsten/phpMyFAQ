@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract session class to wrap the Symfony session class.
  *
@@ -22,8 +24,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class AbstractSession
 {
-    public function __construct(private readonly Session $session)
-    {
+    public function __construct(
+        private readonly Session $session,
+    ) {
     }
 
     public function get(string $key): mixed

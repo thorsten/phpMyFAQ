@@ -57,7 +57,7 @@ class ReportTest extends TestCase
     public function testSanitizeWithSafeValues(): void
     {
         $this->assertEquals('John Doe', Report::sanitize('John Doe'));
-        $this->assertEquals('123', Report::sanitize(123));
+        $this->assertEquals('123', Report::sanitize('123'));
         $this->assertEquals('normal text', Report::sanitize('normal text'));
         $this->assertEquals('', Report::sanitize(''));
     }

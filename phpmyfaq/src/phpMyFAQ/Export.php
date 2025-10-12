@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * JSON, and PDF export
  *
@@ -44,7 +46,7 @@ class Export
         Faq $faq,
         Category $category,
         Configuration $configuration,
-        string $mode = 'pdf'
+        string $mode = 'pdf',
     ): Pdf|Json {
         return match ($mode) {
             'json' => new Json($faq, $category, $configuration),

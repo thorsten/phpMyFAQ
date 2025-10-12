@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Handles all the stuff for visits.
  *
@@ -29,8 +31,9 @@ readonly class Visits
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -45,7 +48,7 @@ readonly class Visits
             "SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -69,13 +72,34 @@ readonly class Visits
      */
     public function add(int $faqId): bool
     {
+        // If a row already exists for this (id, lang), update it instead of inserting to avoid unique constraint errors
+        $checkQuery = sprintf(
+            "SELECT COUNT(*) AS cnt FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
+            Database::getTablePrefix(),
+            $faqId,
+            $this->configuration->getLanguage()->getLanguage(),
+        );
+
+        $checkResult = $this->configuration->getDb()->query($checkQuery);
+        $exists = 0;
+
+        if ($checkResult) {
+            $row = $this->configuration->getDb()->fetchObject($checkResult);
+            $exists = (int) ($row->cnt ?? 0);
+        }
+
+        if ($exists > 0) {
+            $this->update($faqId);
+            return true;
+        }
+
         $query = sprintf(
             "INSERT INTO %sfaqvisits VALUES (%d, '%s', %d, %d)",
             Database::getTablePrefix(),
             $faqId,
             $this->configuration->getLanguage()->getLanguage(),
             1,
-            Request::createFromGlobals()->server->get('REQUEST_TIME')
+            Request::createFromGlobals()->server->get('REQUEST_TIME'),
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -93,7 +117,7 @@ readonly class Visits
             Database::getTablePrefix(),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
             $faqId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $this->configuration->getDb()->query($query);
@@ -108,10 +132,7 @@ readonly class Visits
     {
         $data = [];
 
-        $query = sprintf(
-            'SELECT * FROM %sfaqvisits ORDER BY visits DESC',
-            Database::getTablePrefix()
-        );
+        $query = sprintf('SELECT * FROM %sfaqvisits ORDER BY visits DESC', Database::getTablePrefix());
         $result = $this->configuration->getDb()->query($query);
 
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
@@ -131,12 +152,12 @@ readonly class Visits
      */
     public function resetAll(): bool
     {
-        return (bool) $this->configuration->getDb()->query(
-            sprintf(
+        return (bool) $this->configuration
+            ->getDb()
+            ->query(sprintf(
                 'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
                 Database::getTablePrefix(),
-                Request::createFromGlobals()->server->get('REQUEST_TIME')
-            )
-        );
+                Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            ));
     }
 }

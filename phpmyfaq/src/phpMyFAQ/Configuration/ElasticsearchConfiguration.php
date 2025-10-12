@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Elasticsearch's configuration class
  *
@@ -31,7 +33,7 @@ readonly class ElasticsearchConfiguration
             'index' => '',
         ];
 
-        include($filename);
+        include $filename;
 
         $this->hosts = $PMF_ES['hosts'];
         $this->index = $PMF_ES['index'];

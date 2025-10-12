@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The PDF Controller for the REST API
  *
@@ -47,34 +49,33 @@ class PdfController extends AbstractController
     #[OA\Get(
         path: '/api/v3.1/pdf/{categoryId}/{faqId}',
         operationId: 'getPdfById',
-        description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided ' .
-            'by "Accept-Language".',
-        tags: ['Public Endpoints']
+        description: 'This endpoint returns the URL to the PDF of FAQ for the given FAQ ID and the language provided '
+        . 'by "Accept-Language".',
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'categoryId',
         description: 'The category ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
     #[OA\Parameter(
         name: 'faqId',
         description: 'The FAQ ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-
     #[OA\Response(
         response: 200,
         description: 'If the PDF of the FAQ exists.',
-        content: new OA\JsonContent(example: '"https://www.example.org/pdf.php?cat=3&id=142&artlang=de"')
+        content: new OA\JsonContent(example: '"https://www.example.org/pdf.php?cat=3&id=142&artlang=de"'),
     )]
     #[OA\Response(
         response: 404,
@@ -83,7 +84,7 @@ class PdfController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = new Faq($this->configuration);
         $faq->setUser($currentUser);

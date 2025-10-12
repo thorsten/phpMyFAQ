@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ database based search classes.
  *
@@ -91,7 +93,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $this->getJoinedTable(),
             $this->getJoinedColumns(),
             $this->getMatchingColumns(),
-            $searchTerm
+            $searchTerm,
         );
 
         $this->resultSet = $this->configuration->getDb()->query($query);
@@ -276,7 +278,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
                     "%s%s LIKE '%%%s%%'",
                     $where,
                     $this->matchingColumns[$j],
-                    $this->configuration->getDb()->escape($keys[$i])
+                    $this->configuration->getDb()->escape($keys[$i]),
                 );
             }
 

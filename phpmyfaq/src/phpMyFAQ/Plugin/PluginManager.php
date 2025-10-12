@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main PluginManager class
  *
@@ -54,9 +56,7 @@ class PluginManager
         $plugin = new $pluginClass($this);
         if ($this->isCompatible($plugin)) {
             $this->plugins[$plugin->getName()] = $plugin;
-            $this->containerBuilder
-                ->register($plugin->getName(), $pluginClass)
-                ->setArguments([$this]);
+            $this->containerBuilder->register($plugin->getName(), $pluginClass)->setArguments([$this]);
         } else {
             throw new PluginException(sprintf('Plugin %s is not compatible.', $plugin->getName()));
         }

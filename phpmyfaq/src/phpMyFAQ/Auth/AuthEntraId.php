@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication with Microsoft Entra ID.
  *
@@ -18,8 +20,8 @@
 namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
-use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Auth\EntraId\EntraIdSession;
+use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\AuthenticationSourceType;
@@ -47,7 +49,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
      */
     public function __construct(
         Configuration $configuration,
-        private readonly OAuth $oAuth
+        private readonly OAuth $oAuth,
     ) {
         $this->configuration = $configuration;
 
@@ -73,12 +75,10 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         $user->setAuthSource(AuthenticationSourceType::AUTH_AZURE->value);
 
         // Set user information from JWT
-        $user->setUserData(
-            [
-                'display_name' => $this->oAuth->getName(),
-                'email' => $this->oAuth->getMail(),
-            ]
-        );
+        $user->setUserData([
+            'display_name' => $this->oAuth->getName(),
+            'email' => $this->oAuth->getMail(),
+        ]);
 
         return $result;
     }
@@ -106,7 +106,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        ?array $optionalData = []
+        ?array $optionalData = [],
     ): bool {
         $this->create($login, '');
         return true;
@@ -138,18 +138,18 @@ class AuthEntraId extends Auth implements AuthDriverInterface
             EntraIdSession::ENTRA_ID_OAUTH_VERIFIER,
             $this->oAuthVerifier,
             7200,
-            false
+            false,
         );
 
         $oAuthURL = sprintf(
-            'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize' .
-            '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
+            'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize'
+            . '?response_type=code&client_id=%s&redirect_uri=%s&scope=%s&code_challenge=%s&code_challenge_method=%s',
             AAD_OAUTH_TENANTID,
             AAD_OAUTH_CLIENTID,
             urlencode($this->configuration->getDefaultUrl() . 'services/azure/callback.php'),
             AAD_OAUTH_SCOPE,
             $this->oAuthChallenge,
-            self::ENTRAID_CHALLENGE_METHOD
+            self::ENTRAID_CHALLENGE_METHOD,
         );
 
         $redirectResponse = new RedirectResponse($oAuthURL);
@@ -191,7 +191,7 @@ class AuthEntraId extends Auth implements AuthDriverInterface
         $this->oAuthChallenge = str_replace(
             '=',
             '',
-            strtr(base64_encode(pack('H*', hash('sha256', $verifier))), '+/', '-_')
+            strtr(base64_encode(pack('H*', hash('sha256', $verifier))), '+/', '-_'),
         );
     }
 }

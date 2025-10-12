@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Faq Controller for the REST API
  *
@@ -48,26 +50,24 @@ class FaqController extends AbstractController
     #[OA\Get(
         path: '/api/v3.1/faqs/{categoryId}',
         operationId: 'getByCategoryId',
-        description: 'This endpoint returns all the FAQs with a preview of the answer for the given category ID and ' .
-            'the language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        description: 'This endpoint returns all the FAQs with a preview of the answer for the given category ID and '
+        . 'the language provided by "Accept-Language".',
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'categoryId',
         description: 'The category ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If the category returns at least one FAQ.',
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: 'If the category returns at least one FAQ.', content: new OA\JsonContent(
+        example: '[
             {
                 "record_id": 1,
                 "record_lang": "en",
@@ -79,16 +79,12 @@ class FaqController extends AbstractController
                 "visits": 3,
                 "record_created": "2018-09-03T21:30:17+02:00"
             }
-        ]')
-    )]
-    #[OA\Response(
-        response: 404,
-        description: 'If the category has no FAQs.',
-        content: new OA\JsonContent(example: []),
-    )]
+        ]',
+    ))]
+    #[OA\Response(response: 404, description: 'If the category has no FAQs.', content: new OA\JsonContent(example: []))]
     public function getByCategoryId(Request $request): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
@@ -99,7 +95,7 @@ class FaqController extends AbstractController
         try {
             $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
             return $this->json($result, Response::HTTP_OK);
-        } catch (Exception | CommonMarkException $exception) {
+        } catch (Exception|CommonMarkException $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -110,33 +106,30 @@ class FaqController extends AbstractController
     #[OA\Get(
         path: '/api/v3.1/faq/{categoryId}/{faqId}',
         operationId: 'getFaqById',
-        description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by ' .
-            '"Accept-Language".',
-        tags: ['Public Endpoints']
+        description: 'This endpoint returns the FAQ for the given FAQ ID and the language provided by '
+        . '"Accept-Language".',
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'categoryId',
         description: 'The category ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
     #[OA\Parameter(
         name: 'faqId',
         description: 'The FAQ ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If the FAQ exists.',
-        content: new OA\JsonContent(example: '{
+    #[OA\Response(response: 200, description: 'If the FAQ exists.', content: new OA\JsonContent(example: '{
             "id": 1,
             "lang": "en",
             "solution_id": 1000,
@@ -153,8 +146,7 @@ class FaqController extends AbstractController
             "dateStart": "00000000000000",
             "dateEnd": "99991231235959",
             "created": "2019-09-03T21:30:17+02:00"
-        }')
-    )]
+        }'))]
     #[OA\Response(
         response: 404,
         description: 'If there are no FAQs for the given FAQ ID.',
@@ -162,7 +154,7 @@ class FaqController extends AbstractController
     )]
     public function getById(Request $request): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
@@ -187,26 +179,25 @@ class FaqController extends AbstractController
     #[OA\Get(
         path: '/api/v3.1/faqs/tags/{tagId}',
         operationId: 'getByTagId',
-        description: 'This endpoint returns all the FAQs for the given tag ID and the language provided by ' . '
+        description: 'This endpoint returns all the FAQs for the given tag ID and the language provided by '
+        . '
         "Accept-Language"',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'tagId',
         description: 'The tag ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If the tag ID returns at least one FAQ.',
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: 'If the tag ID returns at least one FAQ.', content: new OA\JsonContent(
+        example: '[
             {
                 "record_id": 1,
                 "record_lang": "en",
@@ -218,16 +209,12 @@ class FaqController extends AbstractController
                 "visits": 3,
                 "record_created": "2018-09-03T21:30:17+02:00"
             }
-        ]')
-    )]
-    #[OA\Response(
-        response: 404,
-        description: 'If the tag ID has no FAQs.',
-        content: new OA\JsonContent(example: []),
-    )]
+        ]',
+    ))]
+    #[OA\Response(response: 404, description: 'If the tag ID has no FAQs.', content: new OA\JsonContent(example: []))]
     public function getByTagId(Request $request): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
@@ -253,17 +240,15 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faqs/popular',
         operationId: 'getPopular',
         description: 'This endpoint returns the popular FAQs for the given language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: "If there's at least one popular FAQ.",
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: "If there's at least one popular FAQ.", content: new OA\JsonContent(
+        example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
                 "question": "How can I survive without phpMyFAQ?",
@@ -271,8 +256,8 @@ class FaqController extends AbstractController
                 "visits": 10,
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: "If there's not a single popular FAQ.",
@@ -280,7 +265,7 @@ class FaqController extends AbstractController
     )]
     public function getPopular(): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
@@ -303,17 +288,15 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faqs/latest',
         operationId: 'getLatest',
         description: 'This endpoint returns the latest FAQs for the given language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: "If there's at least one latest FAQ.",
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: "If there's at least one latest FAQ.", content: new OA\JsonContent(
+        example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
                 "question": "How can I survive without phpMyFAQ?",
@@ -321,8 +304,8 @@ class FaqController extends AbstractController
                 "visits": 10,
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: "If there's not one latest FAQ.",
@@ -330,7 +313,7 @@ class FaqController extends AbstractController
     )]
     public function getLatest(): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
@@ -352,17 +335,15 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faqs/trending',
         operationId: 'getTrending',
         description: 'This endpoint returns the trending FAQs for the given language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: "If there's at least one trending FAQ.",
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: "If there's at least one trending FAQ.", content: new OA\JsonContent(
+        example: '[
             {
                 "date": "2019-07-13T11:28:00+0200",
                 "question": "How can I survive without phpMyFAQ?",
@@ -370,8 +351,8 @@ class FaqController extends AbstractController
                 "visits": 10,
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de"
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: "If there's not a single trending FAQ.",
@@ -379,7 +360,7 @@ class FaqController extends AbstractController
     )]
     public function getTrending(): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
@@ -401,17 +382,15 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faqs/sticky',
         operationId: 'getSticky',
         description: 'This endpoint returns the sticky FAQs for the given language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: "If there's at least one sticky FAQ.",
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: "If there's at least one sticky FAQ.", content: new OA\JsonContent(
+        example: '[
             {
                 "question": "How can I survive without phpMyFAQ?",
                 "url": "https://www.example.org/index.php?action=faq&cat=1&id=36&artlang=de",
@@ -424,8 +403,8 @@ class FaqController extends AbstractController
                 "id": 10,
                 "order": 2
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: "If there's not one sticky FAQ.",
@@ -433,7 +412,7 @@ class FaqController extends AbstractController
     )]
     public function getSticky(): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
@@ -455,17 +434,15 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faqs',
         operationId: 'getAll',
         description: 'This endpoint returns all the FAQs for the given language provided by "Accept-Language".',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the FAQ.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: "If there's at least one FAQ.",
-        content: new OA\JsonContent(example: '[
+    #[OA\Response(response: 200, description: "If there's at least one FAQ.", content: new OA\JsonContent(
+        example: '[
             {
                 "id": "1",
                 "lang": "en",
@@ -485,8 +462,8 @@ class FaqController extends AbstractController
                 "created": "2008-09-03T21:30:17+02:00",
                 "notes": ""
             }
-        ]')
-    )]
+        ]',
+    ))]
     #[OA\Response(
         response: 404,
         description: "If there's not one single FAQ.",
@@ -494,15 +471,12 @@ class FaqController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $faq = $this->container->get('phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllFaqs(
-            FAQ_SORTING_TYPE_CATID_FAQID,
-            ['lang' => $this->configuration->getLanguage()->getLanguage()]
-        );
+        $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $this->configuration->getLanguage()->getLanguage()]);
         $result = $faq->faqRecords;
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
@@ -515,25 +489,21 @@ class FaqController extends AbstractController
     /**
      * @throws \phpMyFAQ\Core\Exception|\JsonException|Exception
      */
-    #[OA\Post(
-        path: '/api/v3.1/faq/create',
-        operationId: 'createFaq',
-        tags: ['Endpoints with Authentication'],
-    )]
+    #[OA\Post(path: '/api/v3.1/faq/create', operationId: 'createFaq', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Header(
         header: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\RequestBody(
-        description: 'The category ID is a required value, the category name is optional. If the category name is ' .
-            'present and the ID can be mapped, the category ID from the name will be used. If the category name ' .
-            'cannot be mapped, a 409 error is thrown.',
+        description: 'The category ID is a required value, the category name is optional. If the category name is '
+        . 'present and the ID can be mapped, the category ID from the name will be used. If the category name '
+        . 'cannot be mapped, a 409 error is thrown.',
         required: true,
         content: new OA\MediaType(
             mediaType: 'application/json',
@@ -548,65 +518,90 @@ class FaqController extends AbstractController
                     'author',
                     'email',
                     'is-active',
-                    'is-sticky'
+                    'is-sticky',
                 ],
                 properties: [
-                    new OA\Property(property: 'language', type: 'string'),
-                    new OA\Property(property: 'category-id', type: 'integer'),
-                    new OA\Property(property: 'category-name', type: 'string'),
-                    new OA\Property(property: 'question', type: 'string'),
-                    new OA\Property(property: 'answer', type: 'string'),
-                    new OA\Property(property: 'keywords', type: 'string'),
-                    new OA\Property(property: 'author', type: 'string'),
-                    new OA\Property(property: 'email', type: 'string'),
-                    new OA\Property(property: 'is-active', type: 'boolean'),
-                    new OA\Property(property: 'is-sticky', type: 'boolean')
+                    new OA\Property(
+                        property: 'language',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'category-id',
+                        type: 'integer',
+                    ),
+                    new OA\Property(
+                        property: 'category-name',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'question',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'answer',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'keywords',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'author',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'email',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'is-active',
+                        type: 'boolean',
+                    ),
+                    new OA\Property(
+                        property: 'is-sticky',
+                        type: 'boolean',
+                    ),
                 ],
-                type: 'object'
+                type: 'object',
             ),
             example: '{
                 "language": "de",
                 "category-id": 1,
                 "category-name": "Queen Songs",
                 "question": "Is this the world we created?",
-                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the ' .
-                    'end, is this what we\'re all living for today",
+                "answer": "What did we do it for, is this the world we invaded, against the law, so it seems in the '
+            . 'end, is this what we\'re all living for today",
                 "keywords": "phpMyFAQ, FAQ, Foo, Bar",
                 "author": "Freddie Mercury",
                 "email": "freddie.mercury@example.org",
                 "is-active": "true",
                 "is-sticky": "false"
-            }'
-        )
+            }',
+        ),
     )]
     #[OA\Response(
         response: 201,
         description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }')
+        content: new OA\JsonContent(example: '{ "stored": true }'),
     )]
     #[OA\Response(
         response: 400,
         description: "If something didn't worked out.",
         content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
-        )
+            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }',
+        ),
     )]
     #[OA\Response(
         response: 409,
         description: 'If the parent category name cannot be mapped.',
-        content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "The given category name was not found" }'
-        )
+        content: new OA\JsonContent(example: '{ "stored": false, "error": "The given category name was not found" }'),
     )]
-    #[OA\Response(
-        response: 401,
-        description: 'If the user is not authenticated.'
-    )]
+    #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -643,7 +638,7 @@ class FaqController extends AbstractController
             if ($categoryIdFound === false) {
                 $result = [
                     'stored' => false,
-                    'error' => 'The given category name was not found.'
+                    'error' => 'The given category name was not found.',
                 ];
                 return $this->json($result, Response::HTTP_CONFLICT);
             }
@@ -654,12 +649,12 @@ class FaqController extends AbstractController
         if ($faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
-                'error' => 'It is not allowed, that the question title contains a hash.'
+                'error' => 'It is not allowed, that the question title contains a hash.',
             ];
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }
 
-        $categories = [ $categoryId ];
+        $categories = [$categoryId];
         $isActive = !is_null($isActive);
         $isSticky = !is_null($isSticky);
 
@@ -679,11 +674,7 @@ class FaqController extends AbstractController
         $faqEntity = $faq->create($faqData);
 
         $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
-        $faqMetaData
-            ->setFaqId($faqEntity->getId())
-            ->setFaqLanguage($languageCode)
-            ->setCategories($categories)
-            ->save();
+        $faqMetaData->setFaqId($faqEntity->getId())->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
     }
@@ -695,50 +686,78 @@ class FaqController extends AbstractController
         path: '/api/v3.1/faq/update',
         operationId: 'updateFaq',
         description: 'Used to update a FAQ in one existing category.',
-        tags: ['Endpoints with Authentication']
+        tags: ['Endpoints with Authentication'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Header(
         header: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\RequestBody(
-        required: true,
-        content: new OA\MediaType(
-            mediaType: 'application/json',
-            schema: new OA\Schema(
-                required: [
-                    'faq-id',
-                    'language',
-                    'category-id',
-                    'question',
-                    'answer',
-                    'keywords',
-                    'author',
-                    'email',
-                    'is-active',
-                    'is-sticky'
-                ],
-                properties: [
-                    new OA\Property(property: 'faq-id', type: 'integer'),
-                    new OA\Property(property: 'language', type: 'string'),
-                    new OA\Property(property: 'category-id', type: 'integer'),
-                    new OA\Property(property: 'question', type: 'string'),
-                    new OA\Property(property: 'answer', type: 'string'),
-                    new OA\Property(property: 'keywords', type: 'string'),
-                    new OA\Property(property: 'author', type: 'string'),
-                    new OA\Property(property: 'email', type: 'string'),
-                    new OA\Property(property: 'is-active', type: 'boolean'),
-                    new OA\Property(property: 'is-sticky', type: 'boolean')
-                ],
-                type: 'object'
-            ),
-            example: '{
+    #[OA\RequestBody(required: true, content: new OA\MediaType(
+        mediaType: 'application/json',
+        schema: new OA\Schema(
+            required: [
+                'faq-id',
+                'language',
+                'category-id',
+                'question',
+                'answer',
+                'keywords',
+                'author',
+                'email',
+                'is-active',
+                'is-sticky',
+            ],
+            properties: [
+                new OA\Property(
+                    property: 'faq-id',
+                    type: 'integer',
+                ),
+                new OA\Property(
+                    property: 'language',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'category-id',
+                    type: 'integer',
+                ),
+                new OA\Property(
+                    property: 'question',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'answer',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'keywords',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'author',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'email',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'is-active',
+                    type: 'boolean',
+                ),
+                new OA\Property(
+                    property: 'is-sticky',
+                    type: 'boolean',
+                ),
+            ],
+            type: 'object',
+        ),
+        example: '{
                 "faq-id": 1,
                 "language": "de",
                 "category-id": 1,
@@ -750,30 +769,26 @@ class FaqController extends AbstractController
                 "email": "freddie.mercury@example.org",
                 "is-active": "true",
                 "is-sticky": "false"
-            }'
-        )
-    )]
+            }',
+    ))]
     #[OA\Response(
         response: 200,
         description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }')
+        content: new OA\JsonContent(example: '{ "stored": true }'),
     )]
     #[OA\Response(
         response: 400,
         description: "If something didn't worked out.",
         content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }'
-        )
+            example: '{ "stored": false, "error": "It is not allowed, that the question title contains a hash." }',
+        ),
     )]
-    #[OA\Response(
-        response: 401,
-        description: 'If the user is not authenticated.'
-    )]
+    #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     public function update(Request $request): JsonResponse
     {
         $this->hasValidToken();
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -801,7 +816,7 @@ class FaqController extends AbstractController
         if ($faq->hasTitleAHash($question)) {
             $result = [
                 'stored' => false,
-                'error' => 'It is not allowed, that the question title contains a hash.'
+                'error' => 'It is not allowed, that the question title contains a hash.',
             ];
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }

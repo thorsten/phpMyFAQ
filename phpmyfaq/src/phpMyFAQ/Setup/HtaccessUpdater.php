@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The HtaccessUpdater class provides surgical updates to .htaccess files
  * while preserving user-generated content.
@@ -61,7 +63,7 @@ class HtaccessUpdater
         // Normalize base path: ensure leading slash and a single trailing slash, '/' stays '/'
         $trimmed = trim($newBasePath);
         $trimmed = trim($trimmed, "/\t\n\r\0\x0B");
-        $newBasePath = $trimmed === '' ? '/' : ('/' . trim($trimmed, '/'));
+        $newBasePath = $trimmed === '' ? '/' : '/' . trim($trimmed, '/');
         if ($newBasePath !== '/') {
             $newBasePath .= '/';
         }
@@ -120,8 +122,11 @@ class HtaccessUpdater
 
         // Otherwise, insert into the first <IfModule mod_rewrite.c> block
         $pattern = '/^(\s*<IfModule\s+mod_rewrite\.c>\s*)$/mi';
-        $replacement = '$1' . "\n    # This has to be 'On'\n    RewriteEngine On\n    " .
-            "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath;
+        $replacement =
+            '$1'
+            . "\n    # This has to be 'On'\n    RewriteEngine On\n    "
+            . "# the path to your phpMyFAQ installation\n    RewriteBase "
+            . $basePath;
         $updated = preg_replace($pattern, $replacement, $content, 1, $count);
 
         if ($count > 0) {
@@ -129,8 +134,13 @@ class HtaccessUpdater
         }
 
         // Last resort: append a minimal block
-        return rtrim($content) . "\n\n<IfModule mod_rewrite.c>\n    # This has to be 'On'\n    RewriteEngine On\n    " .
-            "# the path to your phpMyFAQ installation\n    RewriteBase " . $basePath . "\n</IfModule>\n";
+        return (
+            rtrim($content)
+            . "\n\n<IfModule mod_rewrite.c>\n    # This has to be 'On'\n    RewriteEngine On\n    "
+            . "# the path to your phpMyFAQ installation\n    RewriteBase "
+            . $basePath
+            . "\n</IfModule>\n"
+        );
     }
 
     /**

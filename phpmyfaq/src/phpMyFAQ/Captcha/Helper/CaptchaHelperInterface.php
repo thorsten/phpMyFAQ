@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Interface for the helper classes for captchas.
  *
@@ -25,6 +27,6 @@ interface CaptchaHelperInterface
         CaptchaInterface $captcha,
         string $action = '',
         string $label = '',
-        bool $auth = false
+        bool $auth = false,
     ): string;
 }

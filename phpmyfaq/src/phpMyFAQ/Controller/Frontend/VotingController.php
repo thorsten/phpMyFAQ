@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Voting Controller
  *
@@ -47,10 +49,7 @@ class VotingController extends AbstractController
             $session->userTracking('save_voting', $faqId);
 
             $votingData = new Vote();
-            $votingData
-                ->setFaqId($faqId)
-                ->setVote($vote)
-                ->setIp($userIp);
+            $votingData->setFaqId($faqId)->setVote($vote)->setIp($userIp);
 
             if ($rating->getNumberOfVotings($faqId) === 0) {
                 $rating->create($votingData);
@@ -58,13 +57,10 @@ class VotingController extends AbstractController
                 $rating->update($votingData);
             }
 
-            return $this->json(
-                [
-                    'success' => Translation::get('msgVoteThanks'),
-                    'rating' => $rating->get($faqId),
-                ],
-                Response::HTTP_OK
-            );
+            return $this->json([
+                'success' => Translation::get('msgVoteThanks'),
+                'rating' => $rating->get($faqId),
+            ], Response::HTTP_OK);
         }
 
         if (!$rating->check($faqId, $userIp)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Comment Controller
  *
@@ -38,10 +40,10 @@ class CommentController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('delete-comment', $data->data->{'pmf-csrf-token'})
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'delete-comment',
+            $data->data->{'pmf-csrf-token'},
+        )) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main PluginEvent class
  *
@@ -25,8 +27,9 @@ class PluginEvent extends Event
 {
     private string $output = '';
 
-    public function __construct(private readonly mixed $data)
-    {
+    public function __construct(
+        private readonly mixed $data,
+    ) {
     }
 
     public function getData(): mixed

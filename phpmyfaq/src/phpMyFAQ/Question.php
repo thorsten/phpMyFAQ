@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Question class.
  *
@@ -29,8 +31,9 @@ readonly class Question
     /**
      * Question constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -54,7 +57,7 @@ readonly class Question
             $this->configuration->getDb()->escape($questionEntity->getQuestion()),
             date('YmdHis'),
             $questionEntity->isVisible() ? 'Y' : 'N',
-            0
+            0,
         );
 
         return (bool) $this->configuration->getDb()->query($query);
@@ -69,7 +72,7 @@ readonly class Question
             "DELETE FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         return (bool) $this->configuration->getDb()->query($delete);
@@ -96,12 +99,12 @@ readonly class Question
                 lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         if (
-            ($result = $this->configuration->getDb()->query($query)) &&
-            ($row = $this->configuration->getDb()->fetchObject($result))
+            ($result = $this->configuration->getDb()->query($query)) && ($row =
+                $this->configuration->getDb()->fetchObject($result))
         ) {
             return [
                 'id' => $row->id,
@@ -140,7 +143,7 @@ readonly class Question
                 created ASC",
             Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
-            ($showAll === false ? " AND is_visible = 'Y'" : '')
+            $showAll === false ? " AND is_visible = 'Y'" : '',
         );
 
         if ($result = $this->configuration->getDb()->query($query)) {
@@ -164,7 +167,6 @@ readonly class Question
         return $questions;
     }
 
-
     /**
      * Returns the visibility of a question.
      */
@@ -174,7 +176,7 @@ readonly class Question
             "SELECT is_visible FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $questionId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -197,7 +199,7 @@ readonly class Question
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($isVisible),
             $questionId,
-            $this->configuration->getLanguage()->getLanguage()
+            $this->configuration->getLanguage()->getLanguage(),
         );
 
         $this->configuration->getDb()->query($query);
@@ -215,7 +217,7 @@ readonly class Question
             Database::getTablePrefix(),
             $faqId,
             $categoryId,
-            $openQuestionId
+            $openQuestionId,
         );
 
         return $this->configuration->getDb()->query($query);

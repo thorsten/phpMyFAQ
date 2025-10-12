@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL Server.
  *
@@ -35,7 +37,6 @@ class Sqlsrv extends Database implements Driver
             text NVARCHAR(4000) NOT NULL,
             ip NVARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
-
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
             id INTEGER NOT NULL,
             record_id INTEGER NOT NULL,
@@ -48,12 +49,10 @@ class Sqlsrv extends Database implements Driver
             encrypted INTEGER NOT NULL DEFAULT 0,
             mime_type NVARCHAR(255) NULL,
             PRIMARY KEY (id))',
-
         'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
             contents NVARCHAR(MAX) NOT NULL,
             PRIMARY KEY (virtual_hash))',
-
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
             id INT(11) NOT NULL,
             filename VARCHAR(255) NOT NULL,
@@ -61,11 +60,9 @@ class Sqlsrv extends Database implements Driver
             authcode VARCHAR(255) NOT NULL,
             created timestamp NOT NULL,
             PRIMARY KEY (id))',
-
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
             userid INT(11) DEFAULT NULL,
             faqid INT(11) DEFAULT NULL)',
-
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id NVARCHAR(6) NOT NULL,
             useragent NVARCHAR(255) NOT NULL,
@@ -73,7 +70,6 @@ class Sqlsrv extends Database implements Driver
             ip NVARCHAR(64) NOT NULL,
             captcha_time INTEGER NOT NULL,
             PRIMARY KEY (id))',
-
         'faqcategories' => 'CREATE TABLE %sfaqcategories (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
@@ -86,37 +82,30 @@ class Sqlsrv extends Database implements Driver
             image NVARCHAR(255) DEFAULT NULL,
             show_home SMALLINT DEFAULT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
             category_id INTEGER NOT NULL,
             category_lang NVARCHAR(5) NOT NULL,
             record_id INTEGER NOT NULL,
             record_lang NVARCHAR(5) NOT NULL,
             PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
-
         'faqcategoryrelations_idx' => 'CREATE INDEX idx_records ON %sfaqcategoryrelations (record_id, record_lang)',
-
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
             category_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, group_id))',
-
         'faqcategory_news' => 'CREATE TABLE %sfaqcategory_news (
             category_id INTEGER NOT NULL,
             news_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, news_id))',
-
         'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
             category_id INTEGER NOT NULL,
             parent_id INTEGER DEFAULT NULL,
             position INTEGER NOT NULL,
             PRIMARY KEY (category_id))',
-
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, user_id))',
-
         'faqchanges' => 'CREATE TABLE %sfaqchanges (
             id INTEGER NOT NULL,
             beitrag SMALLINT NOT NULL,
@@ -126,7 +115,6 @@ class Sqlsrv extends Database implements Driver
             datum INTEGER NOT NULL,
             what NVARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqcomments' => 'CREATE TABLE %sfaqcomments (
             id_comment INTEGER NOT NULL,
             id INTEGER NOT NULL,
@@ -137,12 +125,10 @@ class Sqlsrv extends Database implements Driver
             datum NVARCHAR(64) NOT NULL,
             helped NVARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id_comment))',
-
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
             config_name NVARCHAR(255) NOT NULL default \'\',
             config_value TEXT DEFAULT NULL,
             PRIMARY KEY (config_name))',
-
         'faqdata' => 'CREATE TABLE %sfaqdata (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
@@ -163,7 +149,6 @@ class Sqlsrv extends Database implements Driver
             notes NVARCHAR(MAX) DEFAULT NULL,
             sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
@@ -184,22 +169,18 @@ class Sqlsrv extends Database implements Driver
             notes NVARCHAR(MAX) DEFAULT NULL,
             sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang, solution_id, revision_id))',
-
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (
             record_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, group_id))',
-
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
             record_id INTEGER NOT NULL,
             tagging_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, tagging_id))',
-
         'faqdata_user' => 'CREATE TABLE %sfaqdata_user (
             record_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, user_id))',
-
         'faqforms' => 'CREATE TABLE %sfaqforms (
             form_id INTEGER NOT NULL,
             input_id INTEGER NOT NULL,
@@ -208,28 +189,23 @@ class Sqlsrv extends Database implements Driver
             input_active INTEGER NOT NULL,
             input_required INTEGER NOT NULL,
             input_lang NVARCHAR(11) NOT NULL)',
-
         'faqglossary' => 'CREATE TABLE %sfaqglossary (
             id INTEGER NOT NULL ,
             lang NVARCHAR(5) NOT NULL ,
             item NVARCHAR(255) NOT NULL ,
             definition NVARCHAR(MAX) NOT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqgroup' => 'CREATE TABLE %sfaqgroup (
             group_id INTEGER NOT NULL,
             name NVARCHAR(25) NULL,
             description NVARCHAR(MAX) NULL,
             auto_join INTEGER NULL,
             PRIMARY KEY(group_id))',
-
         'faqgroup_idx' => 'CREATE UNIQUE INDEX idx_name ON %sfaqgroup (name)',
-
         'faqgroup_right' => 'CREATE TABLE %sfaqgroup_right (
             group_id INTEGER NOT NULL,
             right_id INTEGER NOT NULL,
             PRIMARY KEY(group_id, right_id))',
-
         'faqinstances' => 'CREATE TABLE %sfaqinstances (
             id INT NOT NULL,
             url NVARCHAR(255) NOT NULL,
@@ -238,13 +214,11 @@ class Sqlsrv extends Database implements Driver
             created DATETIME NOT NULL,
             modified DATETIME NOT NULL,
             PRIMARY KEY (id))',
-
         'faqinstances_config' => 'CREATE TABLE %sfaqinstances_config (
             instance_id INT NOT NULL,
             config_name NVARCHAR(255) NOT NULL default \'\',
             config_value NVARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (instance_id, config_name))',
-
         'faqnews' => 'CREATE TABLE %sfaqnews (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
@@ -259,7 +233,6 @@ class Sqlsrv extends Database implements Driver
             linktitel NVARCHAR(255) DEFAULT NULL,
             target NVARCHAR(255) NOT NULL,
             PRIMARY KEY (id))',
-
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
@@ -271,7 +244,6 @@ class Sqlsrv extends Database implements Driver
             is_visible char(1) default \'Y\',
             answer_id INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (id))',
-
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INTEGER NOT NULL,
             name NVARCHAR(50) NULL,
@@ -280,14 +252,12 @@ class Sqlsrv extends Database implements Driver
             for_groups INTEGER NULL DEFAULT 1,
             for_sections INTEGER NULL DEFAULT 1,
             PRIMARY KEY (right_id))',
-
         'faqsearches' => 'CREATE TABLE %sfaqsearches (
             id INTEGER NOT NULL ,
             lang NVARCHAR(5) NOT NULL ,
             searchterm NVARCHAR(255) NOT NULL ,
             searchdate DATETIME,
             PRIMARY KEY (id, lang))',
-
         'faqseo' => 'CREATE TABLE %sfaqseo (
             id INT NOT NULL,
             type VARCHAR(32) NOT NULL,
@@ -298,35 +268,27 @@ class Sqlsrv extends Database implements Driver
             slug TEXT NULL,
             created DATE NOT NULL DEFAULT GETDATE(),
             PRIMARY KEY (id))',
-
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
             ip NVARCHAR(64) NOT NULL,
             time INTEGER NOT NULL,
             PRIMARY KEY (sid))',
-
         'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
-
         'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
-
-        'faqsearches_date_term_idx' => 'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches ' .
-            '(searchdate, searchterm)',
-
-        'faqsearches_date_term_lang_idx' => 'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' .
-            '(searchdate, searchterm, lang)',
-
+        'faqsearches_date_term_idx' =>
+            'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches ' . '(searchdate, searchterm)',
+        'faqsearches_date_term_lang_idx' =>
+            'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
             stopword NVARCHAR(64) NOT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqtags' => 'CREATE TABLE %sfaqtags (
             tagging_id INTEGER NOT NULL,
             tagging_name NVARCHAR(255) NOT NULL ,
             PRIMARY KEY (tagging_id, tagging_name))',
-
         'faquser' => 'CREATE TABLE %sfaquser (
             user_id INTEGER NOT NULL,
             login NVARCHAR(128) NOT NULL,
@@ -347,7 +309,6 @@ class Sqlsrv extends Database implements Driver
             jwt TEXT NULL DEFAULT NULL,
             webauthnkeys TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
-
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
             user_id INTEGER NOT NULL,
             last_modified NVARCHAR(14) NULL,
@@ -356,30 +317,25 @@ class Sqlsrv extends Database implements Driver
             is_visible INTEGER NULL DEFAULT 0,
             twofactor_enabled INTEGER NULL DEFAULT 0,
             secret NVARCHAR(128) NULL DEFAULT NULL)',
-
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login NVARCHAR(128) NOT NULL,
             pass NVARCHAR(80) NULL,
             domain NVARCHAR(255) NULL,
             PRIMARY KEY (login))',
-
         'faquser_group' => 'CREATE TABLE %sfaquser_group (
             user_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
             PRIMARY KEY (user_id, group_id))',
-
         'faquser_right' => 'CREATE TABLE %sfaquser_right (
             user_id INTEGER NOT NULL,
             right_id INTEGER NOT NULL,
             PRIMARY KEY (user_id, right_id))',
-
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
             id INTEGER NOT NULL,
             lang NVARCHAR(5) NOT NULL,
             visits INTEGER NOT NULL,
             last_visit INTEGER NOT NULL,
             PRIMARY KEY (id, lang))',
-
         'faqvoting' => 'CREATE TABLE %sfaqvoting (
             id INTEGER NOT NULL,
             artikel SMALLINT NOT NULL,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi or mod_auth_kerb.
  *
@@ -62,7 +64,7 @@ class AuthSso extends Auth implements AuthDriverInterface
         $user->setStatus('active');
         $user->setAuthSource(AuthenticationSourceType::AUTH_SSO->value);
         // Set user information
-        $user->setUserData([ 'display_name' => $login ]);
+        $user->setUserData(['display_name' => $login]);
         return $result;
     }
 
@@ -90,7 +92,7 @@ class AuthSso extends Auth implements AuthDriverInterface
     public function checkCredentials(
         string $login,
         #[SensitiveParameter] string $password,
-        ?array $optionalData = null
+        ?array $optionalData = null,
     ): bool {
         if ($this->request->server->get('REMOTE_USER') === null) {
             throw new AuthException('Remote User not set!');

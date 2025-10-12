@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Comment Controller for the REST API
  *
@@ -42,24 +44,22 @@ class CommentController extends AbstractController
         path: '/api/v3.1/comments/{faqId}',
         operationId: 'getComments',
         description: 'Returns a list of comments for a given FAQ record ID.',
-        tags: ['Public Endpoints']
+        tags: ['Public Endpoints'],
     )]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Parameter(
         name: 'faqId',
         description: 'The FAQ record ID.',
         in: 'path',
         required: true,
-        schema: new OA\Schema(type: 'integer')
+        schema: new OA\Schema(type: 'integer'),
     )]
-    #[OA\Response(
-        response: 200,
-        description: 'If the FAQ has at least one comment.',
-        content: new OA\JsonContent(example: '
+    #[OA\Response(response: 200, description: 'If the FAQ has at least one comment.', content: new OA\JsonContent(
+        example: '
         [
             {
                 "id": 2,
@@ -72,13 +72,9 @@ class CommentController extends AbstractController
                 "date": "2019-12-24T12:24:57+0100",
                 "helped": null
             }
-        ]')
-    )]
-    #[OA\Response(
-        response: 404,
-        description: 'If the FAQ has no comments.',
-        content: new OA\JsonContent(example: []),
-    )]
+        ]',
+    ))]
+    #[OA\Response(response: 404, description: 'If the FAQ has no comments.', content: new OA\JsonContent(example: []))]
     public function list(Request $request): JsonResponse
     {
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);

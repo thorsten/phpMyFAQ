@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for checking system requirements.
  *
@@ -192,7 +194,7 @@ class System
                 'powered with ❤️ and ☕️ by <a class="%s" target="_blank" href="%s">phpMyFAQ</a> %s',
                 'link-light text-decoration-none',
                 self::PHPMYFAQ_URL,
-                self::getVersion()
+                self::getVersion(),
             );
         }
 
@@ -384,7 +386,7 @@ class System
         $dateTime = new DateTime();
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(PMF_ROOT_DIR),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
         $hashes = [
@@ -403,10 +405,10 @@ class System
         try {
             foreach ($files as $file) {
                 if (
-                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION) &&
-                    !str_contains((string)$file->getPath(), '/tests/') &&
-                    !str_contains((string)$file->getPath(), '/multisites/') &&
-                    !str_contains((string)$file->getPath(), '/upgrades/')
+                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION)
+                    && !str_contains((string) $file->getPath(), '/tests/')
+                    && !str_contains((string) $file->getPath(), '/multisites/')
+                    && !str_contains((string) $file->getPath(), '/upgrades/')
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', (string) $file->getPathname());
 

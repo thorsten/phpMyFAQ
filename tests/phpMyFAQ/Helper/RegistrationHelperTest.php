@@ -267,4 +267,31 @@ class RegistrationHelperTest extends TestCase
         $result2 = $this->registrationHelper->isDomainAllowed('test@c.d');
         $this->assertFalse($result2);
     }
+
+    public function testIsDomainAllowedWithoutAtSignReturnsFalse(): void
+    {
+        $this->configurationMock->method('get')
+            ->with('security.domainWhiteListForRegistrations')
+            ->willReturn('example.com');
+
+        $this->assertFalse($this->registrationHelper->isDomainAllowed('invalid-email'));
+    }
+
+    public function testIsDomainAllowedWithMultipleAtSignsReturnsFalse(): void
+    {
+        $this->configurationMock->method('get')
+            ->with('security.domainWhiteListForRegistrations')
+            ->willReturn('example.com');
+
+        $this->assertFalse($this->registrationHelper->isDomainAllowed('test@@example.com'));
+    }
+
+    public function testIsDomainAllowedWithEmptyEmailReturnsFalse(): void
+    {
+        $this->configurationMock->method('get')
+            ->with('security.domainWhiteListForRegistrations')
+            ->willReturn('example.com');
+
+        $this->assertFalse($this->registrationHelper->isDomainAllowed(''));
+    }
 }

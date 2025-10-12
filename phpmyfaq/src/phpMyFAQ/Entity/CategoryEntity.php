@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Category entity class.
  *
@@ -82,7 +84,7 @@ class CategoryEntity
 
     public function getId(): int
     {
-        return (int)$this->id;
+        return (int) $this->id;
     }
 
     public function setId(int $id): CategoryEntity
@@ -118,7 +120,7 @@ class CategoryEntity
 
     public function getParentId(): int
     {
-        return (int)$this->parentId;
+        return (int) $this->parentId;
     }
 
     public function setParentId(int $parentId): CategoryEntity
@@ -130,7 +132,7 @@ class CategoryEntity
 
     public function getUserId(): int
     {
-        return (int)$this->userId;
+        return (int) $this->userId;
     }
 
     public function setUserId(int $userId): CategoryEntity

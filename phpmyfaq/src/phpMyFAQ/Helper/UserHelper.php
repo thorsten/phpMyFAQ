@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ user.
  *
@@ -30,8 +32,9 @@ readonly class UserHelper
     /**
      * UserHelper constructor.
      */
-    public function __construct(private User $user)
-    {
+    public function __construct(
+        private User $user,
+    ) {
     }
 
     /**

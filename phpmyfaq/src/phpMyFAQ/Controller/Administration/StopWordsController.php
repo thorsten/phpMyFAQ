@@ -43,22 +43,19 @@ class StopWordsController extends AbstractAdministrationController
 
         $hasPermission = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::CONFIGURATION_EDIT
+            PermissionType::CONFIGURATION_EDIT,
         );
 
-        return $this->render(
-            '@admin/configuration/stopwords.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderStopWords' => Translation::get('ad_menu_stopwordsconfig'),
-                'hasPermission' => $hasPermission,
-                'msgDescription' => Translation::get('ad_stopwords_desc'),
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('stopwords'),
-                'msgStopWordsLabel' => Translation::get('ad_stopwords_desc'),
-                'sortedLanguageCodes' => LanguageCodes::getAllSorted(),
-                'buttonAdd' => Translation::get('ad_config_stopword_input'),
-            ]
-        );
+        return $this->render('@admin/configuration/stopwords.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderStopWords' => Translation::get('ad_menu_stopwordsconfig'),
+            'hasPermission' => $hasPermission,
+            'msgDescription' => Translation::get('ad_stopwords_desc'),
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('stopwords'),
+            'msgStopWordsLabel' => Translation::get('ad_stopwords_desc'),
+            'sortedLanguageCodes' => LanguageCodes::getAllSorted(),
+            'buttonAdd' => Translation::get('ad_config_stopword_input'),
+        ]);
     }
 }

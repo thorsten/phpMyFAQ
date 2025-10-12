@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 // phpcs:ignoreFile
 /**
  * The string wrapper class using single byte string functions.
@@ -48,11 +51,12 @@ class StringBasic extends StringsAbstract
      */
     public static function getStringBasic(string $language = 'en'): StringBasic
     {
-        if (!(self::$stringBasic instanceof StringBasic)) {
+        if (!self::$stringBasic instanceof StringBasic) {
             self::$stringBasic = new self();
             self::$stringBasic->encoding = self::DEFAULT_ENCODING;
-            self::$stringBasic->language =
-                Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
+            self::$stringBasic->language = Language::isASupportedLanguage($language)
+                ? $language
+                : self::DEFAULT_LANGUAGE;
         }
 
         return self::$stringBasic;
@@ -136,8 +140,8 @@ class StringBasic extends StringsAbstract
         string $subject,
         &$matches = null,
         int $flags = 0,
-        int $offset = 0
-    ): int|false /* phpcs:ignore */ {
+        int $offset = 0,
+    ): int|false { /* phpcs:ignore */
         return preg_match($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -152,8 +156,8 @@ class StringBasic extends StringsAbstract
         string $subject,
         &$matches,
         int $flags = 0,
-        int $offset = 0
-    ): int|false /* phpcs:ignore */ {
+        int $offset = 0,
+    ): int|false { /* phpcs:ignore */
         return preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
 
@@ -177,7 +181,7 @@ class StringBasic extends StringsAbstract
         callable $callback,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -195,7 +199,7 @@ class StringBasic extends StringsAbstract
         string|array $replacement,
         string|array $subject,
         int $limit = -1,
-        int &$count = 0
+        int &$count = 0,
     ): string|array|null {
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

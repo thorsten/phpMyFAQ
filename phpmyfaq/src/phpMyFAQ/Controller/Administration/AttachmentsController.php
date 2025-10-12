@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Administration Attachment Controller
  *
@@ -22,8 +24,8 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -55,32 +57,27 @@ class AttachmentsController extends AbstractAdministrationController
 
         $baseUrl = sprintf('%sadmin/attachments?page=%d', $this->configuration->getDefaultUrl(), $page);
 
-        $pagination = new Pagination(
-            [
-                'baseUrl' => $baseUrl,
-                'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
-                'perPage' => $itemsPerPage,
-            ]
-        );
+        $pagination = new Pagination([
+            'baseUrl' => $baseUrl,
+            'total' => is_countable($allCrumbs) ? count($allCrumbs) : 0,
+            'perPage' => $itemsPerPage,
+        ]);
 
         $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
-        return $this->render(
-            '@admin/content/attachments.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
-                'adminMsgAttachmentsFilename' => Translation::get('msgAttachmentsFilename'),
-                'adminMsgTransToolLanguage' => Translation::get('msgTransToolLanguage'),
-                'adminMsgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
-                'adminMsgAttachmentsMimeType' => Translation::get('msgAttachmentsMimeType'),
-                'csrfTokenDeletion' => Token::getInstance($session)->getTokenString('delete-attachment'),
-                'csrfTokenRefresh' => Token::getInstance($session)->getTokenString('refresh-attachment'),
-                'attachments' => $crumbs,
-                'adminMsgButtonDelete' => Translation::get('ad_gen_delete'),
-                'adminMsgFaqTitle' => Translation::get('ad_entry_faq_record'),
-                'adminAttachmentPagination' => $pagination->render()
-            ]
-        );
+        return $this->render('@admin/content/attachments.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderAttachments' => Translation::get('ad_menu_attachment_admin'),
+            'adminMsgAttachmentsFilename' => Translation::get('msgAttachmentsFilename'),
+            'adminMsgTransToolLanguage' => Translation::get('msgTransToolLanguage'),
+            'adminMsgAttachmentsFilesize' => Translation::get('msgAttachmentsFilesize'),
+            'adminMsgAttachmentsMimeType' => Translation::get('msgAttachmentsMimeType'),
+            'csrfTokenDeletion' => Token::getInstance($session)->getTokenString('delete-attachment'),
+            'csrfTokenRefresh' => Token::getInstance($session)->getTokenString('refresh-attachment'),
+            'attachments' => $crumbs,
+            'adminMsgButtonDelete' => Translation::get('ad_gen_delete'),
+            'adminMsgFaqTitle' => Translation::get('ad_entry_faq_record'),
+            'adminAttachmentPagination' => $pagination->render(),
+        ]);
     }
 }

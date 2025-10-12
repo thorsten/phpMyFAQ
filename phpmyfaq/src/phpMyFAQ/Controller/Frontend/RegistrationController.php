@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Registration Controller
  *
@@ -52,17 +54,17 @@ class RegistrationController extends AbstractController
         }
 
         if (
-            $userName !== '' &&
-            $userName !== '0' &&
-            ($email !== '' && $email !== '0') &&
-            ($fullName !== '' && $fullName !== '0')
+            $userName !== '' && $userName !== '0' && $email !== '' && $email !== '0' && (
+                $fullName !== ''
+                && $fullName !== '0'
+            )
         ) {
             try {
                 return $this->json(
                     $registrationHelper->createUser($userName, $fullName, $email, $isVisible),
-                    Response::HTTP_CREATED
+                    Response::HTTP_CREATED,
                 );
-            } catch (Exception | TransportExceptionInterface $exception) {
+            } catch (Exception|TransportExceptionInterface $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         }

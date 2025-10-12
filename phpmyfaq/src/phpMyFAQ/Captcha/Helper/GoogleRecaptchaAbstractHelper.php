@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for the Google Recaptcha captchas.
  *
@@ -26,15 +28,16 @@ class GoogleRecaptchaAbstractHelper extends AbstractHelper implements CaptchaHel
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     public function renderCaptcha(
         CaptchaInterface $captcha,
         string $action = '',
         string $label = '',
-        bool $auth = false
+        bool $auth = false,
     ): string {
         $html = '';
 
@@ -45,7 +48,7 @@ class GoogleRecaptchaAbstractHelper extends AbstractHelper implements CaptchaHel
             $html .= '        <script src="https://www.google.com/recaptcha/api.js" async defer></script>';
             $html .= sprintf(
                 '<div class="g-recaptcha" data-sitekey="%s"></div>',
-                $this->configuration->get('security.googleReCaptchaV2SiteKey')
+                $this->configuration->get('security.googleReCaptchaV2SiteKey'),
             );
             $html .= '    </div>';
             $html .= '</div>';

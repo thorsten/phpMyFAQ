@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\PdoMysql class provides methods and functions for MySQL and
  * MariaDB databases with PDO.
@@ -61,7 +63,7 @@ class PdoMysql implements DatabaseDriver
         #[SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $dsn = sprintf('mysql:host=%s;dbname=%s;port=%s;charset=utf8mb4', $host, $database, $port);
         try {
@@ -230,7 +232,7 @@ class PdoMysql implements DatabaseDriver
 
         $row = $statement->fetch(PDO::FETCH_NUM);
 
-        return $row[0];
+        return (string) $row[0];
     }
 
     /**
@@ -239,15 +241,10 @@ class PdoMysql implements DatabaseDriver
      *
      * @param string $table The name of the table
      * @param string $columnId The name of the ID column
-     * @throws Exception
      */
     public function nextId(string $table, string $columnId): int
     {
-        $query = sprintf(
-            'SELECT MAX(%s) AS current_id FROM %s',
-            $columnId,
-            $table
-        );
+        $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $columnId, $table);
 
         $statement = $this->pdo->prepare($query);
         $statement->execute();

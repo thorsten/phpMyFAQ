@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class for User Authentication handling.
  *
@@ -37,7 +39,7 @@ class UserAuthentication
 
     public function __construct(
         private readonly Configuration $configuration,
-        private readonly CurrentUser $currentUser
+        private readonly CurrentUser $currentUser,
     ) {
     }
 

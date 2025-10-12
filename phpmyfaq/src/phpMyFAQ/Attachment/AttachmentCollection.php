@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Attachment collection class.
  *
@@ -30,8 +32,9 @@ class AttachmentCollection
     /**
      * Constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     /**
@@ -60,7 +63,7 @@ class AttachmentCollection
             GROUP BY
                 fa.id,fa.record_id,fa.record_lang,fa.filename,fa.filesize,fa.mime_type,fd.thema',
             Database::getTablePrefix() . 'faqattachment',
-            Database::getTablePrefix() . 'faqdata'
+            Database::getTablePrefix() . 'faqdata',
         );
 
         $result = $this->configuration->getDb()->query($query);

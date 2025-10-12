@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\PdoSqlsrv class provides methods and functions for MS SQL Server and SQL Azure databases with
  * PDO.
@@ -61,9 +63,9 @@ class PdoSqlsrv implements DatabaseDriver
         #[SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
-        $dsn = 'sqlsrv:Server=' . $host . ($port ? ',' . $port : "") . (';Database=' . $database);
+        $dsn = 'sqlsrv:Server=' . $host . ($port ? ',' . $port : '') . (';Database=' . $database);
         try {
             $this->pdo = new PDO($dsn, $user, $password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -243,11 +245,7 @@ class PdoSqlsrv implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $query = sprintf(
-            'SELECT MAX(%s) AS current_id FROM %s',
-            $columnId,
-            $table
-        );
+        $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $columnId, $table);
 
         $statement = $this->pdo->prepare($query);
         $statement->execute();

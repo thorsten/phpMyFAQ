@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Image Controller
  *
@@ -45,14 +47,11 @@ class ImageController extends AbstractController
         $timestamp = time();
 
         if (!Token::getInstance($session)->verifyToken('edit-faq', $request->query->get('csrf'))) {
-            return $this->json(
-                [
-                    'success' => false,
-                    'data' => ['code' => Response::HTTP_UNAUTHORIZED],
-                    'messages' => [Translation::get('msgNoPermission')]
-                ],
-                Response::HTTP_UNAUTHORIZED
-            );
+            return $this->json([
+                'success' => false,
+                'data' => ['code' => Response::HTTP_UNAUTHORIZED],
+                'messages' => [Translation::get('msgNoPermission')],
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         $files = $request->files->get('files');
@@ -62,8 +61,8 @@ class ImageController extends AbstractController
             $headers = [];
             if ($file && $file->isValid()) {
                 if (
-                    $request->server->get('HTTP_ORIGIN') !== null &&
-                    $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
+                    $request->server->get('HTTP_ORIGIN') !== null
+                    && $request->server->get('HTTP_ORIGIN') . '/' === $this->configuration->getDefaultUrl()
                 ) {
                     $headers = ['Access-Control-Allow-Origin', $request->server->get('HTTP_ORIGIN')];
                 }
@@ -74,10 +73,10 @@ class ImageController extends AbstractController
                         [
                             'success' => false,
                             'data' => ['code' => Response::HTTP_BAD_REQUEST],
-                            'messages' => ['Data contains invalid characters']
+                            'messages' => ['Data contains invalid characters'],
                         ],
                         Response::HTTP_BAD_REQUEST,
-                        $headers
+                        $headers,
                     );
                 }
 
@@ -87,10 +86,10 @@ class ImageController extends AbstractController
                         [
                             'success' => false,
                             'data' => ['code' => Response::HTTP_BAD_REQUEST],
-                            'messages' => ['File extension not allowed']
+                            'messages' => ['File extension not allowed'],
                         ],
                         Response::HTTP_BAD_REQUEST,
-                        $headers
+                        $headers,
                     );
                 }
 
@@ -115,11 +114,11 @@ class ImageController extends AbstractController
                         'baseurl' => $this->configuration->getDefaultUrl(),
                         'path' => 'content/user/images/',
                         'files' => $uploadedFiles,
-                        'name' => 'default'
-                    ]
+                        'name' => 'default',
+                    ],
                 ],
-                'code' => 220
-            ]
+                'code' => 220,
+            ],
         ];
 
         return $this->json($response, Response::HTTP_OK);

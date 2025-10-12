@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Manages user authentication with Apache's HTTP authentication.
  *
@@ -87,8 +89,8 @@ class AuthHttp extends Auth implements AuthDriverInterface
         }
 
         return (
-            $this->request->server->get('PHP_AUTH_USER') === $login &&
-            $this->request->server->get('PHP_AUTH_PW') === $password
+            $this->request->server->get('PHP_AUTH_USER') === $login
+            && $this->request->server->get('PHP_AUTH_PW') === $password
         );
     }
 

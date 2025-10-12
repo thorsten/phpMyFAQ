@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The query helpers for the FAQ class.
  *
@@ -34,14 +36,15 @@ readonly class QueryHelper
 
     public const string FAQ_QUERY_TYPE_EXPORT_JSON = 'faq_export_json';
 
-
     private Configuration $configuration;
 
     /**
      * @param int[] $groups
      */
-    public function __construct(private int $user, private array $groups)
-    {
+    public function __construct(
+        private int $user,
+        private array $groups,
+    ) {
         $this->configuration = Configuration::getConfigurationInstance();
     }
 
@@ -49,24 +52,18 @@ readonly class QueryHelper
     {
         if ($hasGroupSupport) {
             if (-1 === $this->user) {
-                return sprintf(
-                    'AND fdg.group_id IN (%s)',
-                    implode(', ', $this->groups)
-                );
+                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
             }
 
             return sprintf(
                 'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
                 $this->user,
-                implode(', ', $this->groups)
+                implode(', ', $this->groups),
             );
         }
 
         if (-1 !== $this->user) {
-            return sprintf(
-                'AND ( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user
-            );
+            return sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         }
 
         return 'AND fdu.user_id = -1';
@@ -81,10 +78,10 @@ readonly class QueryHelper
         bool $bDownwards,
         string $lang,
         string $date,
-        int $faqId = 0
+        int $faqId = 0,
     ): string {
         $query = sprintf(
-            "
+            '
             SELECT
                 fd.id AS id,
                 fd.solution_id AS solution_id,
@@ -111,10 +108,10 @@ readonly class QueryHelper
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
-            AND ",
+            AND ',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
         // faqvisits data selection
         if ($faqId !== 0) {
@@ -136,12 +133,12 @@ readonly class QueryHelper
             $query .= ')';
         }
 
-        if (($date !== '' && $date !== '0') && Utils::isLikeOnPMFDate($date)) {
+        if ($date !== '' && $date !== '0' && Utils::isLikeOnPMFDate($date)) {
             $query .= ' AND';
             $query .= " fd.updated LIKE '" . $date . "'";
         }
 
-        if (($lang !== '' && $lang !== '0') && Utils::isLanguage($lang)) {
+        if ($lang !== '' && $lang !== '0' && Utils::isLanguage($lang)) {
             $query .= ' AND';
             $query .= " fd.lang = '" . $this->configuration->getDb()->escape($lang) . "'";
         }
@@ -161,7 +158,8 @@ readonly class QueryHelper
 
         match ($queryType) {
             self::FAQ_QUERY_TYPE_EXPORT_PDF,
-            self::FAQ_QUERY_TYPE_EXPORT_JSON => $query .= "\nORDER BY fcr.category_id, fd.id",
+            self::FAQ_QUERY_TYPE_EXPORT_JSON,
+                => $query .= "\nORDER BY fcr.category_id, fd.id",
             default => $query .= "\nORDER BY fcr.category_id, fd.id",
         };
 

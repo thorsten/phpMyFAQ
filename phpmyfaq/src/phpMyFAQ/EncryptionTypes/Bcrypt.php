@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Provides methods for password encryption using PHP 5.5+ password_hash().
  *

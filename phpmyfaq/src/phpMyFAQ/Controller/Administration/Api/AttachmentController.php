@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Admin Attachment Controller
  *
@@ -43,10 +45,10 @@ class AttachmentController extends AbstractController
 
         $deleteData = json_decode($request->getContent());
         try {
-            if (
-                !Token::getInstance($this->container->get('session'))
-                    ->verifyToken('delete-attachment', $deleteData->csrf)
-            ) {
+            if (!Token::getInstance($this->container->get('session'))->verifyToken(
+                'delete-attachment',
+                $deleteData->csrf,
+            )) {
                 return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -68,7 +70,7 @@ class AttachmentController extends AbstractController
     #[Route(
         './admin/api/content/attachments/refresh',
         name: 'admin.api.content.attachments.refresh',
-        methods: ['POST']
+        methods: ['POST'],
     )]
     public function refresh(Request $request): JsonResponse
     {
@@ -76,10 +78,10 @@ class AttachmentController extends AbstractController
 
         $dataToCheck = json_decode($request->getContent());
         try {
-            if (
-                !Token::getInstance($this->container->get('session'))
-                    ->verifyToken('refresh-attachment', $dataToCheck->csrf)
-            ) {
+            if (!Token::getInstance($this->container->get('session'))->verifyToken(
+                'refresh-attachment',
+                $dataToCheck->csrf,
+            )) {
                 return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
@@ -119,21 +121,20 @@ class AttachmentController extends AbstractController
 
         foreach ($files as $file) {
             if (
-                $file->isValid() &&
-                $file->getSize() <= $this->configuration->get('records.maxAttachmentSize') &&
-                $file->getMimeType() !== 'text/html'
+                $file->isValid()
+                && $file->getSize() <= $this->configuration->get('records.maxAttachmentSize')
+                && $file->getMimeType() !== 'text/html'
             ) {
                 $attachment = AttachmentFactory::create();
                 $attachment->setRecordId($request->request->get('record_id'));
                 $attachment->setRecordLang($request->request->get('record_lang'));
                 try {
                     if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
-                        return $this->json(
-                            ['error' => Translation::get('msgImageCouldNotBeUploaded')],
-                            Response::HTTP_INTERNAL_SERVER_ERROR
-                        );
+                        return $this->json(['error' => Translation::get(
+                            'msgImageCouldNotBeUploaded',
+                        )], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                } catch (AttachmentException | FileException | FileNotFoundException $exception) {
+                } catch (AttachmentException|FileException|FileNotFoundException $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
@@ -141,7 +142,7 @@ class AttachmentController extends AbstractController
                     'attachmentId' => $attachment->getId(),
                     'fileName' => $attachment->getFilename(),
                     'faqId' => $request->request->get('record_id'),
-                    'faqLanguage' => $request->request->get('record_lang')
+                    'faqLanguage' => $request->request->get('record_lang'),
                 ];
             } else {
                 return $this->json(['error' => Translation::get('msgImageTooLarge')], Response::HTTP_BAD_REQUEST);

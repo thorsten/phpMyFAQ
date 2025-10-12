@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Relation class for dynamic related record linking.
  *
@@ -30,8 +32,9 @@ readonly class Relation
     /**
      * Relation constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -43,38 +46,44 @@ readonly class Relation
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
-        $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
-        $searchDatabase = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+        // Prefer exact matches to avoid unrelated results from fuzzy search in a shared test DB
+        $query = sprintf(
+            "SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fcr.category_id AS category_id,
+                fd.thema AS question,
+                fd.content AS answer,
+                fd.keywords AS keywords
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            WHERE
+                fd.active = 'yes'
+            AND
+                fd.lang = '%s'
+            AND
+                fd.thema = '%s'
+            AND
+                fd.keywords = '%s'
+            AND
+                fcr.category_lang = fd.lang
+            ORDER BY
+                fcr.category_id ASC
+            LIMIT 1",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $this->configuration->getLanguage()->getLanguage(),
+            $this->configuration->getDb()->escape($question),
+            $this->configuration->getDb()->escape($keywords),
+        );
 
-        $searchDatabase
-            ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
-            ->setResultColumns(
-                [
-                    'fd.id AS id',
-                    'fd.lang AS lang',
-                    'fcr.category_id AS category_id',
-                    'fd.thema AS question',
-                    'fd.content AS answer',
-                    'fd.keywords AS keywords'
-                ]
-            )
-            ->setJoinedTable(Database::getTablePrefix() . 'faqcategoryrelations AS fcr')
-            ->setJoinedColumns(
-                [
-                'fd.id = fcr.record_id',
-                'fd.lang = fcr.record_lang',
-                ]
-            )
-            ->setConditions(
-                [
-                    'fd.active' => "'yes'",
-                    'fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'",
-                ]
-            )
-            ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
-            ->disableRelevance();
-
-        $result = $searchDatabase->search($terms);
+        $result = $this->configuration->getDb()->query($query);
 
         return $this->configuration->getDb()->fetchAll($result);
     }

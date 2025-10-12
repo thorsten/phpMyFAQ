@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for registrations
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -63,7 +65,7 @@ class RegistrationHelper extends AbstractHelper
             if ($user->userdata->emailExists($email)) {
                 return [
                     'registered' => false,
-                    'error' => User::ERROR_USER_EMAIL_NOT_UNIQUE
+                    'error' => User::ERROR_USER_EMAIL_NOT_UNIQUE,
                 ];
             }
         }
@@ -71,21 +73,19 @@ class RegistrationHelper extends AbstractHelper
         if (!$user->createUser($userName, '')) {
             return [
                 'registered' => false,
-                'error' => $user->error()
+                'error' => $user->error(),
             ];
         }
 
-        $user->userdata->set(
-            ['display_name', 'email', 'is_visible'],
-            [$fullName, $email, $isVisible === 'on' ? 1 : 0]
-        );
+        $user->userdata->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible === 'on' ? 1 : 0]);
         $user->setStatus('blocked');
 
         $isNowActive = !$this->configuration->get('spam.manualActivation') && $user->activateUser();
         if ($isNowActive) {
             // @todo add translation strings
-            $adminMessage = 'This user has been automatically activated, you can still' .
-                ' modify the users permissions or decline membership by visiting the admin section';
+            $adminMessage =
+                'This user has been automatically activated, you can still'
+                . ' modify the users permissions or decline membership by visiting the admin section';
         } else {
             $adminMessage = 'To activate this user please use';
         }
@@ -95,7 +95,7 @@ class RegistrationHelper extends AbstractHelper
             $fullName,
             $userName,
             $adminMessage,
-            $this->configuration->getDefaultUrl()
+            $this->configuration->getDefaultUrl(),
         );
         $mail = new Mail($this->configuration);
         $mail->setReplyTo($email, $fullName);
@@ -108,8 +108,10 @@ class RegistrationHelper extends AbstractHelper
 
         return [
             'registered' => true,
-            'success' => trim((string) Translation::get('successMessage')) . ' ' .
-                trim((string) Translation::get('msgRegThankYou')),
+            'success' =>
+                trim((string) Translation::get('successMessage'))
+                . ' '
+                . trim((string) Translation::get('msgRegThankYou')),
         ];
     }
 
@@ -126,7 +128,18 @@ class RegistrationHelper extends AbstractHelper
         }
 
         $whitelistedDomainList = explode(',', (string) $whitelistedDomains);
-        $hostnameToCheck = trim(substr(strstr($email, '@'), 1));
+
+        // Robust: validate email and extract domain safely; invalid emails are not allowed
+        $email = trim($email);
+        if ($email === '' || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            return false;
+        }
+
+        $atPos = strrpos($email, '@');
+        if ($atPos === false) {
+            return false; // should not happen after filter_var, but double-check
+        }
+        $hostnameToCheck = trim(substr($email, $atPos + 1));
 
         foreach ($whitelistedDomainList as $hostname) {
             if ($hostnameToCheck === trim($hostname)) {

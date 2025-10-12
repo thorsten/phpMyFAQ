@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PDF Export class for phpMyFAQ.
  *
@@ -112,22 +114,18 @@ class Pdf extends Export
                     html_entity_decode(
                         (string) $this->category->categoryName[$faq['category_id']]['name'],
                         ENT_QUOTES,
-                        'utf-8'
+                        'utf-8',
                     ),
                     $this->category->categoryName[$faq['category_id']]['level'] - 1,
-                    0
+                    0,
                 );
             }
 
             // Bookmark for FAQs
             $this->wrapper->Bookmark(
-                html_entity_decode(
-                    (string) $faq['topic'],
-                    ENT_QUOTES,
-                    'utf-8'
-                ),
+                html_entity_decode((string) $faq['topic'], ENT_QUOTES, 'utf-8'),
                 $this->category->categoryName[$faq['category_id']]['level'],
-                0
+                0,
             );
 
             if ($this->tags instanceof Tags) {
@@ -163,7 +161,7 @@ class Pdf extends Export
             $this->wrapper->Ln();
             $this->wrapper->Write(
                 5,
-                Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified'])
+                Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
             $currentCategory = $this->category->categoryName[$faq['category_id']]['id'];

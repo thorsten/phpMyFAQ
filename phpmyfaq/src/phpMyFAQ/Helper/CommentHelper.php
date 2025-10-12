@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ categories.
  *
@@ -54,14 +56,14 @@ class CommentHelper extends AbstractHelper
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
                 $mail->safeEmail($comment->getEmail()),
-                Strings::htmlentities($comment->getUsername())
+                Strings::htmlentities($comment->getUsername()),
             );
             $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($comment->getDate()));
             $output .= '     </div>';
-            $output .= sprintf(
-                '<div class="card-body">%s</div>',
-                $this->showShortComment($comment->getId(), $comment->getComment())
-            );
+            $output .= sprintf('<div class="card-body">%s</div>', $this->showShortComment(
+                $comment->getId(),
+                $comment->getComment(),
+            ));
             $output .= '   </div>';
             $output .= '  </div>';
             $output .= '</div>';
@@ -83,13 +85,13 @@ class CommentHelper extends AbstractHelper
             $comment .= $word . ' ';
             if (15 === $numWords) {
                 $comment .= sprintf(
-                    '<span class="comment-dots-%d">&hellip; </span><a href="#" data-comment-id="%d" ' .
-                    'class="pmf-comments-show-more comment-show-more-%d">%s</a><span class="comment-more-%d d-none">',
+                    '<span class="comment-dots-%d">&hellip; </span><a href="#" data-comment-id="%d" '
+                    . 'class="pmf-comments-show-more comment-show-more-%d">%s</a><span class="comment-more-%d d-none">',
                     $commentId,
                     $commentId,
                     $commentId,
                     Translation::get('msgShowMore'),
-                    $commentId
+                    $commentId,
                 );
             }
 

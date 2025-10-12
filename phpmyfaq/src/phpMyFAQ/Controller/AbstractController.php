@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract Controller for phpMyFAQ
  *
@@ -38,12 +40,12 @@ use Twig\TwigFilter;
 
 #[OA\Info(
     version: '3.1',
-    description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ ' .
-    'version or doing a search against the phpMyFAQ installation.',
+    description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ '
+    . 'version or doing a search against the phpMyFAQ installation.',
     title: 'REST API for phpMyFAQ 4.1',
     contact: new OA\Contact(
         name: 'phpMyFAQ Team',
-        email: 'support@phpmyfaq.de'
+        email: 'support@phpmyfaq.de',
     ),
 )]
 #[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]
@@ -184,10 +186,10 @@ abstract class AbstractController
     {
         $currentUser = $this->currentUser;
         if (
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value) ||
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
+            || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
+            || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
         ) {
             throw new UnauthorizedHttpException('User has no group permission.');
         }
@@ -200,9 +202,9 @@ abstract class AbstractController
     {
         $currentUser = $this->currentUser;
         if (
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value) ||
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value) ||
-            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
+            !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_ADD->value)
+            || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
+            || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {
             throw new UnauthorizedHttpException('User has no user permission.');
         }

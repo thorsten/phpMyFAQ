@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Simple HTTP Streamer based on Symfony HttpFoundation.
  * This class manages the stream of a generic content
@@ -52,8 +54,10 @@ class HttpStreamer
      * @param string $type Type
      * @param string $content Content
      */
-    public function __construct(private readonly string $type, private readonly string $content)
-    {
+    public function __construct(
+        private readonly string $type,
+        private readonly string $content,
+    ) {
         $this->size = strlen($this->content);
     }
 
@@ -120,12 +124,12 @@ class HttpStreamer
         $this->response->setLastModified(new DateTime());
         $this->response->setExpires(new DateTime());
         $this->response->setCache([
-            'must_revalidate'  => true,
-            'no_cache'         => true,
-            'no_store'         => true,
-            'no_transform'     => false,
-            'public'           => false,
-            'private'          => true,
+            'must_revalidate' => true,
+            'no_cache' => true,
+            'no_store' => true,
+            'no_transform' => false,
+            'public' => false,
+            'private' => true,
         ]);
 
         // 2. Set the correct values for file streaming

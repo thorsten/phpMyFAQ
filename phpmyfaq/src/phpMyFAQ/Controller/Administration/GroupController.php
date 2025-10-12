@@ -23,8 +23,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\PermissionTranslationTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -47,14 +47,11 @@ class GroupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+        ]);
     }
 
     /**
@@ -68,15 +65,12 @@ class GroupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GROUP_ADD);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.add.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'csrfAddGroup' => Token::getInstance($this->container->get('session'))->getTokenString('add-group'),
-            ]
-        );
+        return $this->render('@admin/user/group.add.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'csrfAddGroup' => Token::getInstance($this->container->get('session'))->getTokenString('add-group'),
+        ]);
     }
 
     /**
@@ -117,15 +111,12 @@ class GroupController extends AbstractAdministrationController
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'message' => $message,
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -144,16 +135,13 @@ class GroupController extends AbstractAdministrationController
         $groupData = $this->currentUser->perm->getGroupData($groupId);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.confirm.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'groupName' => $groupData['name'],
-                'groupId' => $groupId,
-                'csrfDeleteGroup' => Token::getInstance($session)->getTokenString('delete-group'),
-            ]
-        );
+        return $this->render('@admin/user/group.confirm.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'groupName' => $groupData['name'],
+            'groupId' => $groupId,
+            'csrfDeleteGroup' => Token::getInstance($session)->getTokenString('delete-group'),
+        ]);
     }
 
     /**
@@ -179,15 +167,12 @@ class GroupController extends AbstractAdministrationController
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'message' => $message,
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -214,27 +199,24 @@ class GroupController extends AbstractAdministrationController
             $message = sprintf(
                 '<div class="alert alert-danger">%s %s</div>',
                 Translation::get('ad_msg_mysqlerr'),
-                $this->configuration->getDb()->error()
+                $this->configuration->getDb()->error(),
             );
         } else {
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get('ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2')
+                Translation::get('ad_msg_savedsuc_2'),
             );
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'message' => $message,
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -262,20 +244,17 @@ class GroupController extends AbstractAdministrationController
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get('ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2')
+                Translation::get('ad_msg_savedsuc_2'),
             );
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'message' => $message,
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'message' => $message,
+        ]);
     }
 
     /**
@@ -303,20 +282,17 @@ class GroupController extends AbstractAdministrationController
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 Translation::get('ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2')
+                Translation::get('ad_msg_savedsuc_2'),
             );
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
-        return $this->render(
-            '@admin/user/group.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-                'message' => $message,
-            ]
-        );
+        return $this->render('@admin/user/group.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'message' => $message,
+        ]);
     }
 
     /**

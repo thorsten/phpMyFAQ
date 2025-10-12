@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ MCP Server - FAQ Search Tool Executor
  *
@@ -39,7 +41,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
     public function __construct(
         private Configuration $configuration,
         private Search $search,
-        private Faq $faq
+        private Faq $faq,
     ) {
     }
 
@@ -107,7 +109,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
                 return new ToolCallResult(
                     'No accessible FAQ entries found for the given query.',
                     'text',
-                    'application/json'
+                    'application/json',
                 );
             }
 
@@ -117,7 +119,7 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
             return new ToolCallResult(
                 'Error searching FAQ database: ' . $exception->getMessage(),
                 'text',
-                'application/json'
+                'application/json',
             );
         }
     }
@@ -127,13 +129,13 @@ readonly class FaqSearchToolExecutor implements ToolExecutorInterface, Identifie
         if ($results === []) {
             return json_encode([
                 'results' => [],
-                'total_found' => 0
+                'total_found' => 0,
             ]);
         }
 
         $jsonData = [
             'results' => $results,
-            'total_found' => count($results)
+            'total_found' => count($results),
         ];
 
         return json_encode($jsonData, JSON_PRETTY_PRINT);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\PdoPgsql class provides methods and functions for PostgreSQL with PDO.
  *
@@ -60,7 +62,7 @@ class PdoPgsql implements DatabaseDriver
         #[SensitiveParameter] string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $dsn = sprintf('pgsql:host=%s;dbname=%s;port=%s', $host, $database, $port);
         try {
@@ -242,11 +244,7 @@ class PdoPgsql implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $query = sprintf(
-            'SELECT MAX(%s) AS current_id FROM  %s',
-            $columnId,
-            $table
-        );
+        $query = sprintf('SELECT MAX(%s) AS current_id FROM  %s', $columnId, $table);
 
         $statement = $this->pdo->prepare($query);
         $statement->execute();

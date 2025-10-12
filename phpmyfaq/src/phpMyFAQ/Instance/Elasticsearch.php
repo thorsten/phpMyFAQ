@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ instances basic Elasticsearch class.
  *
@@ -43,37 +45,38 @@ class Elasticsearch
      */
     private array $mappings = [
         '_source' => [
-            'enabled' => true
+            'enabled' => true,
         ],
         'properties' => [
             'question' => [
                 'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
             ],
             'answer' => [
                 'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
             ],
             'keywords' => [
                 'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
             ],
             'categories' => [
                 'type' => 'search_as_you_type',
                 'analyzer' => 'autocomplete',
-                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER
-            ]
-        ]
+                'search_analyzer' => PMF_ELASTICSEARCH_TOKENIZER,
+            ],
+        ],
     ];
 
     /**
      * Elasticsearch constructor.
      */
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
         $this->client = $configuration->getElasticsearch();
         $this->elasticsearchConfiguration = $configuration->getElasticsearchConfig();
     }
@@ -88,7 +91,7 @@ class Elasticsearch
         try {
             $this->client->indices()->create($this->getParams());
             return $this->putMapping();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             throw new Exception($e->getMessage());
         }
     }
@@ -111,14 +114,12 @@ class Elasticsearch
                             'autocomplete_filter' => [
                                 'type' => 'edge_ngram',
                                 'min_gram' => 1,
-                                'max_gram' => 20
+                                'max_gram' => 20,
                             ],
                             'Language_stemmer' => [
                                 'type' => 'stemmer',
-                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[
-                                    $this->configuration->getDefaultLanguage()
-                                ]
-                            ]
+                                'name' => PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->configuration->getDefaultLanguage()],
+                            ],
                         ],
                         'analyzer' => [
                             'autocomplete' => [
@@ -127,13 +128,13 @@ class Elasticsearch
                                 'filter' => [
                                     'lowercase',
                                     'autocomplete_filter',
-                                    'Language_stemmer'
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                    'Language_stemmer',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -145,17 +146,16 @@ class Elasticsearch
         $response = $this->getMapping();
 
         if (
-            0 === (
-            is_countable($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
-                ?
-                count($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
-                :
-                0
+            0
+            === (
+                is_countable($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
+                    ? count($response[$this->elasticsearchConfiguration->getIndex()]['mappings'])
+                    : 0
             )
         ) {
             $params = [
                 'index' => $this->elasticsearchConfiguration->getIndex(),
-                'body' => $this->mappings
+                'body' => $this->mappings,
             ];
 
             $response = $this->client->indices()->putMapping($params);
@@ -177,7 +177,7 @@ class Elasticsearch
     {
         try {
             return $this->client->indices()->getMapping();
-        } catch (ClientResponseException | ServerResponseException $e) {
+        } catch (ClientResponseException|ServerResponseException $e) {
             throw new Exception($e->getMessage());
         }
     }
@@ -190,12 +190,13 @@ class Elasticsearch
     public function dropIndex(): object
     {
         try {
-            return $this->client->indices()->delete(
-                [
-                    'index' => $this->elasticsearchConfiguration->getIndex()
-                ]
-            )->asObject();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $exception) {
+            return $this->client
+                ->indices()
+                ->delete([
+                    'index' => $this->elasticsearchConfiguration->getIndex(),
+                ])
+                ->asObject();
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $exception) {
             throw new Exception($exception->getMessage());
         }
     }
@@ -216,13 +217,13 @@ class Elasticsearch
                 'question' => $faq['question'],
                 'answer' => strip_tags($faq['answer']),
                 'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id']
-            ]
+                'category_id' => $faq['category_id'],
+            ],
         ];
 
         try {
             return $this->client->index($params)->asObject();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             $this->configuration->getLogger()->error('Index error.', [$e->getMessage()]);
         }
     }
@@ -248,7 +249,7 @@ class Elasticsearch
                 'index' => [
                     '_index' => $this->elasticsearchConfiguration->getIndex(),
                     '_id' => $faq['solution_id'],
-                ]
+                ],
             ];
 
             $params['body'][] = [
@@ -257,13 +258,13 @@ class Elasticsearch
                 'question' => $faq['title'],
                 'answer' => strip_tags((string) $faq['content']),
                 'keywords' => $faq['keywords'],
-                'category_id' => $faq['category_id']
+                'category_id' => $faq['category_id'],
             ];
 
-            if ($i % 1000 == 0) {
+            if (($i % 1000) == 0) {
                 try {
                     $responses = $this->client->bulk($params);
-                } catch (ClientResponseException | ServerResponseException $e) {
+                } catch (ClientResponseException|ServerResponseException $e) {
                     return ['error' => $e->getMessage()];
                 }
 
@@ -277,7 +278,7 @@ class Elasticsearch
         // Send the last batch if it exists
         try {
             $responses = $this->client->bulk($params);
-        } catch (ClientResponseException | ServerResponseException $e) {
+        } catch (ClientResponseException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
 
@@ -306,14 +307,14 @@ class Elasticsearch
                     'question' => $faq['question'],
                     'answer' => strip_tags($faq['answer']),
                     'keywords' => $faq['keywords'],
-                    'category_id' => $faq['category_id']
-                ]
-            ]
+                    'category_id' => $faq['category_id'],
+                ],
+            ],
         ];
 
         try {
             return $this->client->update($params)->asArray();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
     }
@@ -327,12 +328,12 @@ class Elasticsearch
     {
         $params = [
             'index' => $this->elasticsearchConfiguration->getIndex(),
-            'id' => $solutionId
+            'id' => $solutionId,
         ];
 
         try {
             return $this->client->delete($params)->asArray();
-        } catch (ClientResponseException | MissingParameterException | ServerResponseException $e) {
+        } catch (ClientResponseException|MissingParameterException|ServerResponseException $e) {
             return ['error' => $e->getMessage()];
         }
     }

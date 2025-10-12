@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Translation class provides methods and functions for the
  * translation file handling.
@@ -65,9 +67,9 @@ class Translation
 
             return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey];
         } catch (Exception) {
-            Configuration::getConfigurationInstance()->getLogger()->error(
-                'Error while fetching translation key: ' . $languageKey
-            );
+            Configuration::getConfigurationInstance()
+                ->getLogger()
+                ->error('Error while fetching translation key: ' . $languageKey);
         }
 
         return null;
@@ -172,7 +174,7 @@ class Translation
     public function setMultiByteLanguage(): void
     {
         $validMultiByteStrings = ['ja', 'en', 'uni'];
-        $multiByteLanguage = (self::get('metaLanguage') != 'ja') ? 'uni' : self::get('metaLanguage');
+        $multiByteLanguage = self::get('metaLanguage') != 'ja' ? 'uni' : self::get('metaLanguage');
         if (function_exists('mb_language') && in_array($multiByteLanguage, $validMultiByteStrings)) {
             mb_language($multiByteLanguage);
             mb_internal_encoding('utf-8');
@@ -201,13 +203,13 @@ class Translation
                         /** @phpstan-ignore-next-line */
                         $configuration[$key]['label'] = sprintf(
                             $configuration[$key]['label'],
-                            ini_get('upload_max_filesize')
+                            ini_get('upload_max_filesize'),
                         );
                         break;
                     case 'main.dateFormat':
                         $configuration[$key]['label'] = sprintf(
                             '<a target="_blank" href="https://www.php.net/manual/en/function.date.php">%s</a>',
-                            $configuration[$key]['label']
+                            $configuration[$key]['label'],
                         );
                         break;
                 }
@@ -226,9 +228,8 @@ class Translation
     {
         if (empty(self::$translation->loadedLanguages[self::$translation->defaultLanguage])) {
             self::$translation->checkCurrentLanguage();
-            self::$translation->loadedLanguages[self::$translation->defaultLanguage] = require(
-                self::$translation->filename(self::$translation->defaultLanguage)
-            );
+            self::$translation->loadedLanguages[self::$translation->defaultLanguage] = require
+                self::$translation->filename(self::$translation->defaultLanguage);
         }
     }
 
@@ -239,9 +240,8 @@ class Translation
     {
         if (empty(self::$translation->loadedLanguages[self::$translation->currentLanguage])) {
             self::$translation->checkCurrentLanguage();
-            self::$translation->loadedLanguages[self::$translation->currentLanguage] = require(
-                self::$translation->filename(self::$translation->currentLanguage)
-            );
+            self::$translation->loadedLanguages[self::$translation->currentLanguage] = require
+                self::$translation->filename(self::$translation->currentLanguage);
         }
     }
 

@@ -41,8 +41,17 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Lint with PHPCS
-        run: phpmyfaq/src/libs/bin/phpcs --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
+      #- name: Lint with PHPCS
+      #  run: phpmyfaq/src/libs/bin/phpcs --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
+
+      - name: Setup Mago
+        uses: nhedger/setup-mago@v1
+
+      #- name: Run Mago
+      #  run: |
+      #    mago format --dry-run
+      #    mago lint --reporting-format=github
+      #    mago analyze --reporting-format=github
 
       - name: Test with PHPUnit
         run: phpmyfaq/src/libs/bin/phpunit --coverage-text

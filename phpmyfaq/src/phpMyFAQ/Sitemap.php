@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Sitemap class.
  *
@@ -50,8 +52,9 @@ class Sitemap
     /**
      * Constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
         if ($this->configuration->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
@@ -83,13 +86,10 @@ class Sitemap
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups)
+                implode(', ', $this->groups),
             );
         } else {
-            $permPart = sprintf(
-                '( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user
-            );
+            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         }
 
         $letters = [];
@@ -121,7 +121,7 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($this->configuration->getLanguage()->getLanguage()),
-            $permPart
+            $permPart,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -134,7 +134,7 @@ class Sitemap
                     '%sindex.php?action=sitemap&letter=%s&lang=%s',
                     $this->configuration->getDefaultUrl(),
                     $letter->letter,
-                    $this->configuration->getLanguage()->getLanguage()
+                    $this->configuration->getLanguage()->getLanguage(),
                 );
                 $link = new Link($url, $this->configuration);
                 $letter->url = $link->toString();
@@ -163,13 +163,10 @@ class Sitemap
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups)
+                implode(', ', $this->groups),
             );
         } else {
-            $permPart = sprintf(
-                '( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user
-            );
+            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
         }
 
         $letter = Strings::strtoupper($this->configuration->getDb()->escape(Strings::substr($letter, 0, 1)));
@@ -212,7 +209,7 @@ class Sitemap
             $this->configuration->getDb() instanceof Sqlite3 ? 'SUBSTR' : 'SUBSTRING',
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getLanguage()->getLanguage(),
-            $permPart
+            $permPart,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -231,7 +228,7 @@ class Sitemap
                     $this->configuration->getDefaultUrl(),
                     $row->category_id,
                     $row->id,
-                    $row->lang
+                    $row->lang,
                 );
 
                 $link = new Link($url, $this->configuration);

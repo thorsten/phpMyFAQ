@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Helper class for phpMyFAQ search.
  *
@@ -84,7 +86,7 @@ class SearchHelper extends AbstractHelper
                     $result->category_id,
                     $result->id,
                     $result->lang,
-                    urlencode($this->searchTerm)
+                    urlencode($this->searchTerm),
                 );
 
                 $question = html_entity_decode((string) $result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
@@ -129,13 +131,10 @@ class SearchHelper extends AbstractHelper
 
                 // Build the link to the faq record
                 $currentUrl = $this->configuration->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
-                $adminUrl = $this->configuration->getDefaultUrl() . sprintf(
-                    'admin/faq/edit/%d/%s',
-                    $result->id,
-                    $result->lang
-                );
+                $adminUrl =
+                    $this->configuration->getDefaultUrl() . sprintf('admin/faq/edit/%d/%s', $result->id, $result->lang);
 
-                $results[] = [ 'url' => $currentUrl, 'question' => $result->question, 'adminUrl' => $adminUrl ];
+                $results[] = ['url' => $currentUrl, 'question' => $result->question, 'adminUrl' => $adminUrl];
                 ++$i;
             }
         }
@@ -188,7 +187,7 @@ class SearchHelper extends AbstractHelper
                 $searchTerm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
                     '',
-                    $this->searchTerm
+                    $this->searchTerm,
                 );
                 $searchTerm = preg_quote($searchTerm, '/');
                 $searchItems = explode(' ', $searchTerm);
@@ -209,7 +208,7 @@ class SearchHelper extends AbstractHelper
                     $resultSet->category_id,
                     $resultSet->id,
                     $resultSet->lang,
-                    urlencode($searchTerm)
+                    urlencode($searchTerm),
                 );
 
                 $oLink = new Link($currentUrl, $this->configuration);
@@ -276,7 +275,7 @@ class SearchHelper extends AbstractHelper
                     $this->configuration->getDefaultUrl(),
                     $result->category_id,
                     $result->id,
-                    $result->lang
+                    $result->lang,
                 );
                 $link = new Link($url, $this->configuration);
                 $link->itemTitle = Strings::htmlentities($result->question);

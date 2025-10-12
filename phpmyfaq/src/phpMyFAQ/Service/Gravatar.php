@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Service class for Gravatar support.
  *
@@ -60,11 +62,7 @@ class Gravatar
 
         $gravatar = $imageUrl . ($opts !== [] ? '?' . implode('&', $opts) : false);
 
-        return sprintf(
-            '<img src="%s" class="%s" alt="Gravatar">',
-            htmlspecialchars($gravatar),
-            $params['class']
-        );
+        return sprintf('<img src="%s" class="%s" alt="Gravatar">', htmlspecialchars($gravatar), $params['class']);
     }
 
     /**

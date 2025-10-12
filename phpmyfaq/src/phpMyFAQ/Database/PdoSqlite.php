@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ\Database\PdoSqlite class provides methods and functions for SQLite3 with PDO.
  *
@@ -56,7 +58,7 @@ class PdoSqlite implements DatabaseDriver
         string $user,
         #[SensitiveParameter] string $password,
         string $database = '',
-        int|null $port = null
+        ?int $port = null,
     ): ?bool {
         $dsn = 'sqlite:' . $host;
         try {
@@ -238,11 +240,7 @@ class PdoSqlite implements DatabaseDriver
      */
     public function nextId(string $table, string $columnId): int
     {
-        $query = sprintf(
-            'SELECT MAX(%s) AS current_id FROM %s',
-            $columnId,
-            $table
-        );
+        $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $columnId, $table);
 
         $statement = $this->pdo->prepare($query);
         $statement->execute();

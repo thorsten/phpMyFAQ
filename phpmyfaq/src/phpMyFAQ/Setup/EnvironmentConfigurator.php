@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The environment configurator is responsible for adjusting the .htaccess file to the user's environment.
  *
@@ -29,8 +31,9 @@ readonly class EnvironmentConfigurator
 {
     private string $htaccessPath;
 
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
         $this->htaccessPath = $this->configuration->getRootPath() . '/.htaccess';
     }
 
@@ -89,9 +92,9 @@ readonly class EnvironmentConfigurator
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
 
         $rewriteBase->removeArgument($this->getRewriteBase());
-        $rewriteBase->setArguments((array)$this->getServerPath());
+        $rewriteBase->setArguments((array) $this->getServerPath());
 
         $output = (string) $htaccess;
-        return file_put_contents($this->htaccessPath, $output);
+        return (bool) file_put_contents($this->htaccessPath, $output);
     }
 }

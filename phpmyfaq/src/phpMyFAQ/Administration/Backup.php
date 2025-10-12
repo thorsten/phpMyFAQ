@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Provides methods for phpMyFAQ backups
  *
@@ -37,8 +39,10 @@ readonly class Backup
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration, private DatabaseHelper $databaseHelper)
-    {
+    public function __construct(
+        private Configuration $configuration,
+        private DatabaseHelper $databaseHelper,
+    ) {
     }
 
     /**
@@ -48,7 +52,7 @@ readonly class Backup
     {
         $backupDate = date('Y-m-d-H-i-s');
 
-        $fileNamePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
+        $fileNamePrefix = Database::getTablePrefix() !== '' ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
         $fileName = sprintf('%s-%s.%s.sql', $fileNamePrefix, $backupType, $backupDate);
 
         $authKey = sodium_crypto_auth_keygen();
@@ -61,7 +65,7 @@ readonly class Backup
             $this->configuration->getDb()->escape($fileName),
             $this->configuration->getDb()->escape(sodium_bin2hex($authKey)),
             $this->configuration->getDb()->escape(sodium_bin2hex($authCode)),
-            $backupDate
+            $backupDate,
         );
 
         $this->configuration->getDb()->query($query);
@@ -88,7 +92,7 @@ readonly class Backup
             return sodium_crypto_auth_verify(
                 sodium_hex2bin((string) $row->authcode),
                 $backup,
-                sodium_hex2bin((string) $row->authkey)
+                sodium_hex2bin((string) $row->authkey),
             );
         }
 
@@ -101,10 +105,10 @@ readonly class Backup
 
         foreach (explode(' ', $tableNames) as $table) {
             if ('' !== $table) {
-                $backup .= implode(
-                    "\r\n",
-                    $this->databaseHelper->buildInsertQueries('SELECT * FROM ' . $table, $table)
-                );
+                $backup .= implode("\r\n", $this->databaseHelper->buildInsertQueries(
+                    'SELECT * FROM ' . $table,
+                    $table,
+                ));
             }
         }
 
@@ -134,8 +138,8 @@ readonly class Backup
             case BackupType::BACKUP_TYPE_LOGS:
                 foreach ($tables as $table) {
                     if (
-                        (Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)) ||
-                        (Database::getTablePrefix() . 'faqsessions' === trim((string) $table))
+                        Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)
+                        || Database::getTablePrefix() . 'faqsessions' === trim((string) $table)
                     ) {
                         $tableNames .= $table . ' ';
                     }
@@ -158,7 +162,7 @@ readonly class Backup
             '-- DO NOT REMOVE THE FIRST LINE!',
             '-- pmftableprefix: ' . Database::getTablePrefix(),
             '-- DO NOT REMOVE THE LINES ABOVE!',
-            '-- Otherwise this backup will be broken.'
+            '-- Otherwise this backup will be broken.',
         ];
     }
 
@@ -178,7 +182,7 @@ readonly class Backup
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(PMF_CONTENT_DIR),
-            RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY,
         );
 
         foreach ($files as $file) {

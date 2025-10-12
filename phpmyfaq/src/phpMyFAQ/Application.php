@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The main Application class
  *
@@ -37,8 +39,9 @@ class Application
 
     private ControllerResolver $controllerResolver;
 
-    public function __construct(private readonly ?ContainerInterface $container = null)
-    {
+    public function __construct(
+        private readonly ?ContainerInterface $container = null,
+    ) {
     }
 
     /**
@@ -71,8 +74,8 @@ class Application
             $configuration = $this->container->get('phpmyfaq.configuration');
             $language = $this->container->get('phpmyfaq.language');
             $currentLanguage = $language->setLanguage(
-                $configuration->get('main.languageDetection'),
-                $configuration->get('main.language')
+                (bool) $configuration->get('main.languageDetection'),
+                $configuration->get('main.language'),
             );
 
             require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
@@ -107,7 +110,7 @@ class Application
     private function handleRequest(
         RouteCollection $routeCollection,
         Request $request,
-        RequestContext $requestContext
+        RequestContext $requestContext,
     ): void {
         $urlMatcher = new UrlMatcher($routeCollection, $requestContext);
         $this->setUrlMatcher($urlMatcher);
@@ -129,17 +132,15 @@ class Application
                     'Not Found: %s at line %d at %s',
                     $exception->getMessage(),
                     $exception->getLine(),
-                    $exception->getFile()
+                    $exception->getFile(),
                 ),
-                Response::HTTP_NOT_FOUND
+                Response::HTTP_NOT_FOUND,
             );
         } catch (UnauthorizedHttpException) {
             if (str_contains($urlMatcher->getContext()->getBaseUrl(), '/api')) {
-                $response = new Response(
-                    json_encode(['error' => 'Unauthorized access']),
-                    Response::HTTP_UNAUTHORIZED,
-                    ['Content-Type' => 'application/json']
-                );
+                $response = new Response(json_encode(['error' => 'Unauthorized access']), Response::HTTP_UNAUTHORIZED, [
+                    'Content-Type' => 'application/json',
+                ]);
             } else {
                 $response = new RedirectResponse('/login');
             }
@@ -149,9 +150,9 @@ class Application
                     'An error occurred: %s at line %d at %s',
                     $exception->getMessage(),
                     $exception->getLine(),
-                    $exception->getFile()
+                    $exception->getFile(),
                 ),
-                Response::HTTP_BAD_REQUEST
+                Response::HTTP_BAD_REQUEST,
             );
         }
 

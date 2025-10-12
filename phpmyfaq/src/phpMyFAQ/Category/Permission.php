@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Category permissions class for phpMyFAQ.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -33,8 +35,9 @@ class Permission
     /**
      * FaqPermission constructor.
      */
-    public function __construct(private readonly Configuration $configuration)
-    {
+    public function __construct(
+        private readonly Configuration $configuration,
+    ) {
     }
 
     /**
@@ -58,7 +61,7 @@ class Permission
                     $mode,
                     $category,
                     $mode,
-                    $id
+                    $id,
                 );
 
                 if ($this->configuration->getDb()->numRows($this->configuration->getDb()->query($query)) !== 0) {
@@ -71,7 +74,7 @@ class Permission
                     $mode,
                     $mode,
                     $category,
-                    $id
+                    $id,
                 );
 
                 $this->configuration->getDb()->query($query);
@@ -94,16 +97,11 @@ class Permission
         }
 
         foreach ($categories as $category) {
-            $query = sprintf(
-                '
+            $query = sprintf('
                 DELETE FROM
                     %sfaqcategory_%s
                 WHERE
-                    category_id = %d',
-                Database::getTablePrefix(),
-                $mode,
-                $category
-            );
+                    category_id = %d', Database::getTablePrefix(), $mode, $category);
             $this->configuration->getDb()->query($query);
         }
 
@@ -118,8 +116,12 @@ class Permission
     {
         $hasUserPermissions = $this->get(self::USER, [$categoryId]);
         $hasGroupPermissions = $this->get(self::GROUP, [$categoryId]);
-        return (isset($hasUserPermissions[0]) && $hasUserPermissions[0] !== -1) ||
-        (isset($hasGroupPermissions[0]) && $hasGroupPermissions[0] !== -1);
+        return (
+            isset($hasUserPermissions[0])
+            && $hasUserPermissions[0] !== -1
+            || isset($hasGroupPermissions[0])
+            && $hasGroupPermissions[0] !== -1
+        );
     }
 
     /**
@@ -142,12 +144,12 @@ class Permission
             $mode,
             Database::getTablePrefix(),
             $mode,
-            implode(', ', $categories)
+            implode(', ', $categories),
         );
 
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $permissions[] = (int)$row->permission;
+            $permissions[] = (int) $row->permission;
         }
 
         return $permissions;
@@ -173,23 +175,23 @@ class Permission
         $query = sprintf(
             'SELECT category_id, user_id AS permission FROM %sfaqcategory_user WHERE category_id IN (%s)',
             Database::getTablePrefix(),
-            implode(', ', $categories)
+            implode(', ', $categories),
         );
 
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $permissions[$row->category_id][self::USER][] = (int)$row->permission;
+            $permissions[$row->category_id][self::USER][] = (int) $row->permission;
         }
 
         $query = sprintf(
             'SELECT category_id, group_id AS permission FROM %sfaqcategory_group WHERE category_id IN (%s)',
             Database::getTablePrefix(),
-            implode(', ', $categories)
+            implode(', ', $categories),
         );
 
         $result = $this->configuration->getDb()->query($query);
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $permissions[$row->category_id][self::GROUP][] = (int)$row->permission;
+            $permissions[$row->category_id][self::GROUP][] = (int) $row->permission;
         }
 
         return $permissions;

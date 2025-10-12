@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Category Controller for the REST API
  *
@@ -46,15 +48,11 @@ class CategoryController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[OA\Get(
-        path: '/api/v3.1/categories',
-        operationId: 'getCategories',
-        tags: ['Public Endpoints']
-    )]
+    #[OA\Get(path: '/api/v3.1/categories', operationId: 'getCategories', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the categories.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Response(
         response: 200,
@@ -74,7 +72,7 @@ class CategoryController extends AbstractController
                 "image": "category-1-en.png",
                 "level": 1
               }
-        ]')
+        ]'),
     )]
     #[OA\Response(
         response: 404,
@@ -86,7 +84,7 @@ class CategoryController extends AbstractController
         $language = $this->container->get('phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups, true);
         $category->setUser($currentUser);
@@ -105,25 +103,21 @@ class CategoryController extends AbstractController
     /**
      * @throws Exception|\JsonException
      */
-    #[OA\Post(
-        path: '/api/v3.1/category',
-        operationId: 'createCategory',
-        tags: ['Endpoints with Authentication'],
-    )]
+    #[OA\Post(path: '/api/v3.1/category', operationId: 'createCategory', tags: ['Endpoints with Authentication'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\Header(
         header: 'x-pmf-token',
         description: 'phpMyFAQ client API Token, generated in admin backend',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
     #[OA\RequestBody(
-        description: 'The parent category ID is a required value, the parent category name is optional. ' .
-            'If the parent category name is present and the ID can be mapped, the parent category ID from the name ' .
-            'will be used. If the parent category name cannot be mapped, a 409 error is thrown',
+        description: 'The parent category ID is a required value, the parent category name is optional. '
+        . 'If the parent category name is present and the ID can be mapped, the parent category ID from the name '
+        . 'will be used. If the parent category name cannot be mapped, a 409 error is thrown',
         required: true,
         content: new OA\MediaType(
             mediaType: 'application/json',
@@ -137,20 +131,47 @@ class CategoryController extends AbstractController
                     'user-id',
                     'group-id',
                     'is-active',
-                    'show-on-homepage'
+                    'show-on-homepage',
                 ],
                 properties: [
-                    new OA\Property(property: 'language', type: 'string'),
-                    new OA\Property(property: 'parent-id', type: 'integer'),
-                    new OA\Property(property: 'parent-category-name', type: 'string'),
-                    new OA\Property(property: 'category-name', type: 'string'),
-                    new OA\Property(property: 'description', type: 'string'),
-                    new OA\Property(property: 'user-id', type: 'integer'),
-                    new OA\Property(property: 'group-id', type: 'integer'),
-                    new OA\Property(property: 'is-active', type: 'boolean'),
-                    new OA\Property(property: 'show-on-homepage', type: 'boolean')
+                    new OA\Property(
+                        property: 'language',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'parent-id',
+                        type: 'integer',
+                    ),
+                    new OA\Property(
+                        property: 'parent-category-name',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'category-name',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'description',
+                        type: 'string',
+                    ),
+                    new OA\Property(
+                        property: 'user-id',
+                        type: 'integer',
+                    ),
+                    new OA\Property(
+                        property: 'group-id',
+                        type: 'integer',
+                    ),
+                    new OA\Property(
+                        property: 'is-active',
+                        type: 'boolean',
+                    ),
+                    new OA\Property(
+                        property: 'show-on-homepage',
+                        type: 'boolean',
+                    ),
                 ],
-                type: 'object'
+                type: 'object',
             ),
             example: '{
                 "language": "en",
@@ -162,35 +183,32 @@ class CategoryController extends AbstractController
                 "group-id": 1,
                 "is-active": true,
                 "show-on-homepage": true
-            }'
-        )
+            }',
+        ),
     )]
     #[OA\Response(
         response: 201,
         description: 'If all posted data is correct.',
-        content: new OA\JsonContent(example: '{ "stored": true }')
+        content: new OA\JsonContent(example: '{ "stored": true }'),
     )]
     #[OA\Response(
         response: 400,
         description: "If something didn't worked out.",
-        content: new OA\JsonContent(example: '{ "stored": false, "error": "Cannot add category" }')
+        content: new OA\JsonContent(example: '{ "stored": false, "error": "Cannot add category" }'),
     )]
     #[OA\Response(
         response: 409,
         description: 'If the parent category name cannot be mapped.',
         content: new OA\JsonContent(
-            example: '{ "stored": false, "error": "The given parent category name was not found." }'
-        )
+            example: '{ "stored": false, "error": "The given parent category name was not found." }',
+        ),
     )]
-    #[OA\Response(
-        response: 401,
-        description: 'If the user is not authenticated.'
-    )]
+    #[OA\Response(response: 401, description: 'If the user is not authenticated.')]
     public function create(Request $request): JsonResponse
     {
         $this->hasValidToken();
 
-        [ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
@@ -224,7 +242,7 @@ class CategoryController extends AbstractController
             if ($parentCategoryIdFound === false) {
                 $result = [
                     'stored' => false,
-                    'error' => 'The given parent category name was not found.'
+                    'error' => 'The given parent category name was not found.',
                 ];
                 return $this->json($result, Response::HTTP_CONFLICT);
             }
@@ -255,14 +273,14 @@ class CategoryController extends AbstractController
             $categoryPermission->add(Permission::GROUP, [$categoryId], [-1]);
 
             $result = [
-                'stored' => true
+                'stored' => true,
             ];
             return $this->json($result, Response::HTTP_CREATED);
         }
 
         $result = [
             'stored' => false,
-            'error' => 'Cannot add category'
+            'error' => 'Cannot add category',
         ];
         return $this->json($result, Response::HTTP_BAD_REQUEST);
     }

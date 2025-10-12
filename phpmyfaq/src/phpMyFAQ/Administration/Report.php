@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The reporting class for simple report generation.
  *
@@ -32,8 +34,9 @@ readonly class Report
     /**
      * Constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
     }
 
     /**
@@ -89,7 +92,7 @@ readonly class Report
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            Database::getTablePrefix()
+            Database::getTablePrefix(),
         );
 
         $result = $this->configuration->getDb()->query($query);

@@ -43,14 +43,11 @@ class InstanceController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        return $this->render(
-            '@admin/configuration/instances.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars()
-            ]
-        );
+        return $this->render('@admin/configuration/instances.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+        ]);
     }
 
     /**
@@ -68,22 +65,19 @@ class InstanceController extends AbstractAdministrationController
         $instance = $this->container->get('phpmyfaq.instance');
         $instanceData = $instance->getById($instanceId, 'array');
 
-        return $this->render(
-            '@admin/configuration/instances.edit.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'ad_menu_instances' => Translation::get('ad_menu_instances'),
-                'instanceConfig' => $instance->getInstanceConfig((int) $instanceData->id),
-                'ad_instance_url' => Translation::get('ad_instance_url'),
-                'ad_instance_button' => Translation::get('ad_instance_button'),
-                'ad_instance_path' => Translation::get('ad_instance_path'),
-                'ad_instance_name' => Translation::get('ad_instance_name'),
-                'ad_instance_config' => Translation::get('ad_instance_config'),
-                'ad_entry_back' => Translation::get('ad_entry_back'),
-                'instance' => $instanceData
-            ]
-        );
+        return $this->render('@admin/configuration/instances.edit.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'ad_menu_instances' => Translation::get('ad_menu_instances'),
+            'instanceConfig' => $instance->getInstanceConfig((int) $instanceData->id),
+            'ad_instance_url' => Translation::get('ad_instance_url'),
+            'ad_instance_button' => Translation::get('ad_instance_button'),
+            'ad_instance_path' => Translation::get('ad_instance_path'),
+            'ad_instance_name' => Translation::get('ad_instance_name'),
+            'ad_instance_config' => Translation::get('ad_instance_config'),
+            'ad_entry_back' => Translation::get('ad_entry_back'),
+            'instance' => $instanceData,
+        ]);
     }
 
     /**
@@ -134,15 +128,12 @@ class InstanceController extends AbstractAdministrationController
             $result = ['updateError' => $this->configuration->getDb()->error()];
         }
 
-        return $this->render(
-            '@admin/configuration/instances.twig',
-            [
-                ... $result,
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                ... $this->getBaseTemplateVars(),
-            ]
-        );
+        return $this->render('@admin/configuration/instances.twig', [
+            ...$result,
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+        ]);
     }
 
     /**
@@ -155,7 +146,7 @@ class InstanceController extends AbstractAdministrationController
     {
         $userPermInstanceAdd = $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::INSTANCE_ADD->value
+            PermissionType::INSTANCE_ADD->value,
         );
 
         $instance = $this->container->get('phpmyfaq.instance');
@@ -183,7 +174,7 @@ class InstanceController extends AbstractAdministrationController
             'ad_instance_path' => Translation::get('ad_instance_path'),
             'ad_instance_url' => Translation::get('ad_instance_url'),
             'ad_instance_error_notwritable' => Translation::get('ad_instance_error_notwritable'),
-            'ad_menu_instances' => Translation::get('ad_menu_instances')
+            'ad_menu_instances' => Translation::get('ad_menu_instances'),
         ];
     }
 }

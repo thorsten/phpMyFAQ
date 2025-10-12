@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Statistics Controller
  *
@@ -53,7 +55,6 @@ class StatisticsController extends AbstractController
         return $this->json(['error' => Translation::get('ad_adminlog_delete_failure')], Response::HTTP_BAD_REQUEST);
     }
 
-
     /**
      * @throws Exception|JsonException
      * @throws \Exception
@@ -64,10 +65,7 @@ class StatisticsController extends AbstractController
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('sessions', $data->csrfToken)
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('sessions', $data->csrfToken)) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -90,10 +88,10 @@ class StatisticsController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (
-            !Token::getInstance($this->container->get('session'))
-                ->verifyToken('truncate-search-terms', $data->csrfToken)
-        ) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'truncate-search-terms',
+            $data->csrfToken,
+        )) {
             return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 

@@ -61,8 +61,9 @@ class Auth
     /**
      * Constructor.
      */
-    public function __construct(protected ?Configuration $configuration)
-    {
+    public function __construct(
+        protected ?Configuration $configuration,
+    ) {
     }
 
     /**

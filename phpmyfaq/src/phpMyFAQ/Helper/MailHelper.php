@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This class is a helper class for sending mails.
  *
@@ -38,8 +40,9 @@ readonly class MailHelper
     /**
      * MailHelper constructor.
      */
-    public function __construct(private Configuration $configuration)
-    {
+    public function __construct(
+        private Configuration $configuration,
+    ) {
         $this->mail = new Mail($this->configuration);
     }
 
@@ -50,18 +53,18 @@ readonly class MailHelper
     public function sendMailToNewUser(User $user, #[SensitiveParameter] string $password): bool
     {
         $text = sprintf(
-            '<p>You have been registered as a new user:</p><p>Name: %s<br>Login name: %s<br>Password: %s</p>' .
-            '<p><a href="%s">Check it out here</a></p>',
+            '<p>You have been registered as a new user:</p><p>Name: %s<br>Login name: %s<br>Password: %s</p>'
+            . '<p><a href="%s">Check it out here</a></p>',
             $user->getUserData('display_name'),
             $user->getLogin(),
             $password,
-            $this->configuration->getDefaultUrl()
+            $this->configuration->getDefaultUrl(),
         );
 
         $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
         $this->mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->configuration);
         $this->mail->message = $text;
 
-        return (bool)$this->mail->send();
+        return (bool) $this->mail->send();
     }
 }

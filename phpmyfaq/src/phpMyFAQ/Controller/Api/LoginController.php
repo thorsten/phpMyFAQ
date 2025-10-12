@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Login Controller for the REST API
  *
@@ -44,40 +46,38 @@ class LoginController extends AbstractController
     /**
      * @throws JsonException|Exception
      */
-    #[OA\Post(
-        path: '/api/v3.1/login',
-        operationId: 'login',
-        tags: ['Public Endpoints'],
-    )]
+    #[OA\Post(path: '/api/v3.1/login', operationId: 'login', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the login.',
-        schema: new OA\Schema(type: 'string')
+        schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\RequestBody(
-        description: 'The username and password for the login.',
-        required: true,
-        content: new OA\MediaType(
-            mediaType: 'application/json',
-            schema: new OA\Schema(
-                required: ['username', 'password'],
-                properties: [
-                    new OA\Property(property: 'username', type: 'string'),
-                    new OA\Property(property: 'password', type: 'string')
-                ],
-                type: 'object'
-            )
-        )
-    )]
+    #[OA\RequestBody(description: 'The username and password for the login.', required: true, content: new OA\MediaType(
+        mediaType: 'application/json',
+        schema: new OA\Schema(
+            required: ['username', 'password'],
+            properties: [
+                new OA\Property(
+                    property: 'username',
+                    type: 'string',
+                ),
+                new OA\Property(
+                    property: 'password',
+                    type: 'string',
+                ),
+            ],
+            type: 'object',
+        ),
+    ))]
     #[OA\Response(
         response: 200,
         description: 'If "username" and "password" combination are correct.',
-        content: new OA\JsonContent(example: '{ "loggedin": true }')
+        content: new OA\JsonContent(example: '{ "loggedin": true }'),
     )]
     #[OA\Response(
         response: 400,
         description: 'If "username" and "password" combination are wrong.',
-        content: new OA\JsonContent(example: '{ "loggedin": false, "error": "Wrong username or password." }')
+        content: new OA\JsonContent(example: '{ "loggedin": false, "error": "Wrong username or password." }'),
     )]
     public function login(Request $request): JsonResponse
     {
@@ -91,14 +91,14 @@ class LoginController extends AbstractController
         try {
             $user = $userAuthentication->authenticate($faqUsername, $faqPassword);
             $result = [
-                'loggedin' => $user->isLoggedIn()
+                'loggedin' => $user->isLoggedIn(),
             ];
             return $this->json($result, Response::HTTP_OK);
         } catch (Exception $exception) {
             $this->configuration->getLogger()->error('Failed login: ' . $exception->getMessage());
             $result = [
                 'loggedin' => $user->isLoggedIn(),
-                'error' => Translation::get('ad_auth_fail')
+                'error' => Translation::get('ad_auth_fail'),
             ];
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }

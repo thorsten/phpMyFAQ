@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Question & Smart Answer Controller
  *
@@ -47,9 +49,7 @@ class QuestionController extends AbstractController
         $category = new Category($this->configuration);
 
         $questionHelper = $this->container->get('phpmyfaq.helper.question');
-        $questionHelper
-            ->setConfiguration($this->configuration)
-            ->setCategory($category);
+        $questionHelper->setConfiguration($this->configuration)->setCategory($category);
 
         $categories = $category->getAllCategories();
 
@@ -74,10 +74,7 @@ class QuestionController extends AbstractController
         }
 
         // Check if all necessary fields are provided and not empty
-        if (
-            $author !== '' && $email !== '' && $userQuestion !== '' &&
-            $stopWords->checkBannedWord($userQuestion)
-        ) {
+        if ($author !== '' && $email !== '' && $userQuestion !== '' && $stopWords->checkBannedWord($userQuestion)) {
             if ($selectedCategory === false) {
                 $selectedCategory = $category->getAllCategoryIds()[0];
             }
@@ -94,7 +91,7 @@ class QuestionController extends AbstractController
                 ->setIsVisible($visibility === 'Y');
 
             // Save the question immediately if smart answering is disabled
-            if (false === (bool)$save) {
+            if (false === (bool) $save) {
                 $cleanQuestion = $stopWords->clean($userQuestion);
 
                 $faqSearch = $this->container->get('phpmyfaq.search');
@@ -104,10 +101,10 @@ class QuestionController extends AbstractController
                 $faqPermission = new Permission($this->configuration);
                 $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-                $searchResult = array_merge(...array_map(
-                    fn($word) => $faqSearch->search($word, false),
-                    array_filter($cleanQuestion)
-                ));
+                $searchResult = array_merge(...array_map(fn($word) => $faqSearch->search(
+                    $word,
+                    false,
+                ), array_filter($cleanQuestion)));
 
                 $searchResultSet->reviewResultSet($searchResult);
 
@@ -143,7 +140,7 @@ class QuestionController extends AbstractController
 
         return $this->currentUser->perm->hasPermission(
             $this->currentUser->getUserId(),
-            PermissionType::QUESTION_ADD->value
+            PermissionType::QUESTION_ADD->value,
         );
     }
 }

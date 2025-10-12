@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The statistics helper class.
  *
@@ -26,8 +28,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 readonly class StatisticsHelper
 {
-    public function __construct(private Session $session, private Visits $visits, private Date $date)
-    {
+    public function __construct(
+        private Session $session,
+        private Visits $visits,
+        private Date $date,
+    ) {
     }
 
     public function getTrackingFilesStatistics(): object
@@ -132,14 +137,14 @@ readonly class StatisticsHelper
         while ($trackingFile = readdir($dir)) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
-            if (($trackingFile !== '.') && ($trackingFile !== '..') && (10 === strpos($trackingFile, $month))) {
+            if ($trackingFile !== '.' && $trackingFile !== '..' && 10 === strpos($trackingFile, $month)) {
                 $candidateFirst = $this->date->getTrackingFileDate($trackingFile);
                 $candidateLast = $this->date->getTrackingFileDate($trackingFile, true);
-                if (($candidateLast > 0) && ($candidateLast > $last)) {
+                if ($candidateLast > 0 && $candidateLast > $last) {
                     $last = $candidateLast;
                 }
 
-                if (($candidateFirst > 0) && ($candidateFirst < $first)) {
+                if ($candidateFirst > 0 && $candidateFirst < $first) {
                     $first = $candidateFirst;
                 }
 
@@ -179,7 +184,7 @@ readonly class StatisticsHelper
                 $renderedHtml .= sprintf(
                     '<option value="%s">%s</option>',
                     date('mY', $trackingDate),
-                    date('Y-m', $trackingDate)
+                    date('Y-m', $trackingDate),
                 );
                 $oldValue = $trackingDate;
             }
@@ -195,10 +200,7 @@ readonly class StatisticsHelper
         $renderedHtml = '';
 
         if ($trackingDates === []) {
-            return $renderedHtml . sprintf(
-                '<option value="" selected>%s</option>',
-                Translation::get('ad_stat_choose')
-            );
+            return $renderedHtml . sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
         }
 
         foreach ($trackingDates as $trackingDate) {

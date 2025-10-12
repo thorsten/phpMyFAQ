@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Attachment handler class for files stored in filesystem.
  *
@@ -42,11 +44,8 @@ class File extends AbstractAttachment implements AttachmentInterface
         $subDirNameLength = 5;
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $attachmentPath .= DIRECTORY_SEPARATOR . substr(
-                (string) $fsHash,
-                $i * $subDirNameLength,
-                $subDirNameLength
-            );
+            $attachmentPath .=
+                DIRECTORY_SEPARATOR . substr((string) $fsHash, $i * $subDirNameLength, $subDirNameLength);
         }
 
         return $attachmentPath . (DIRECTORY_SEPARATOR . substr((string) $fsHash, $i * $subDirNameLength));
@@ -76,11 +75,13 @@ class File extends AbstractAttachment implements AttachmentInterface
         clearstatcache();
         $attachmentDir = dirname($this->buildFilePath());
 
-        return false !== PMF_ATTACHMENTS_DIR &&
-               file_exists(PMF_ATTACHMENTS_DIR) &&
-               is_dir(PMF_ATTACHMENTS_DIR) &&
-               file_exists($attachmentDir) &&
-               is_dir($attachmentDir);
+        return (
+            false !== PMF_ATTACHMENTS_DIR
+            && file_exists(PMF_ATTACHMENTS_DIR)
+            && is_dir(PMF_ATTACHMENTS_DIR)
+            && file_exists($attachmentDir)
+            && is_dir($attachmentDir)
+        );
     }
 
     /**
@@ -177,11 +178,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     private function getFile(string $mode = FilesystemFile::MODE_READ): EncryptedFile|VanillaFile
     {
         if ($this->encrypted) {
-            return new EncryptedFile(
-                $this->buildFilePath(),
-                $mode,
-                $this->key
-            );
+            return new EncryptedFile($this->buildFilePath(), $mode, $this->key);
         }
 
         return new VanillaFile($this->buildFilePath(), $mode);

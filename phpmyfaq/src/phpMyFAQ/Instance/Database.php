@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The phpMyFAQ instances basic database class.
  *
@@ -77,8 +79,9 @@ class Database
     /**
      * Constructor.
      */
-    private function __construct(protected Configuration $configuration)
-    {
+    private function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     /**

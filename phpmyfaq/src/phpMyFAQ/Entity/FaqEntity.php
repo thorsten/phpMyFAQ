@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The FAQ entity class.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -81,7 +83,7 @@ class FaqEntity
         return $this;
     }
 
-    public function getSolutionId(): int
+    public function getSolutionId(): ?int
     {
         return $this->solutionId;
     }

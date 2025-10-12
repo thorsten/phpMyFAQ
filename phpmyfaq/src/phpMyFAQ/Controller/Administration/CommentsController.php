@@ -50,16 +50,13 @@ class CommentsController extends AbstractAdministrationController
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));
-        return $this->render(
-            '@admin/content/comments.twig',
-            [
-                ... $this->getHeader($request),
-                ... $this->getFooter(),
-                'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
-                'faqComments' => $faqComments,
-                'newsComments' => $newsComments,
-                'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-comment'),
-            ]
-        );
+        return $this->render('@admin/content/comments.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
+            'faqComments' => $faqComments,
+            'newsComments' => $newsComments,
+            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-comment'),
+        ]);
     }
 }

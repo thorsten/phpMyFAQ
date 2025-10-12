@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * phpMyFAQ MySQL (ext/mysqli) search classes.
  *
@@ -87,7 +89,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
             $this->getMatchingColumns(),
             $this->configuration->getDb()->escape($searchTerm),
             $this->getConditions(),
-            $orderBy
+            $orderBy,
         );
         $this->resultSet = $this->configuration->getDb()->query($query);
         // Fallback for searches with less than three characters
@@ -106,7 +108,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
-                $this->getConditions()
+                $this->getConditions(),
             );
 
             $this->resultSet = $this->configuration->getDb()->query($query);
@@ -123,7 +125,7 @@ class Mysqli extends SearchDatabase implements DatabaseInterface
         return sprintf(
             "MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE) as score",
             $this->getMatchingColumns(),
-            $this->configuration->getDb()->escape($searchTerm)
+            $this->configuration->getDb()->escape($searchTerm),
         );
     }
 }

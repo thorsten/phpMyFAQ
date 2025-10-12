@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The Setup Controller
  *
@@ -41,16 +43,15 @@ class SetupController extends AbstractController
         $update->setVersion($installedVersion);
 
         if (!$update->checkMaintenanceMode()) {
-            return $this->json(
-                ['message' => 'Maintenance mode is not enabled. Please enable it first.'],
-                Response::HTTP_CONFLICT
-            );
+            return $this->json([
+                'message' => 'Maintenance mode is not enabled. Please enable it first.',
+            ], Response::HTTP_CONFLICT);
         }
 
         if (!$update->checkMinimumUpdateVersion($installedVersion)) {
             $message = sprintf(
                 'Your installed version is phpMyFAQ %s. Please update to the latest phpMyFAQ 3.0 version first.',
-                $installedVersion
+                $installedVersion,
             );
             return $this->json(['message' => $message], Response::HTTP_CONFLICT);
         }
@@ -108,11 +109,10 @@ class SetupController extends AbstractController
             }
 
             return new JsonResponse(['error' => 'Update database failed.'], Response::HTTP_BAD_GATEWAY);
-        } catch (Exception | \Exception $exception) {
-            return new JsonResponse(
-                ['error' => 'Update database failed: ' . $exception->getMessage()],
-                Response::HTTP_BAD_GATEWAY
-            );
+        } catch (Exception|\Exception $exception) {
+            return new JsonResponse([
+                'error' => 'Update database failed: ' . $exception->getMessage(),
+            ], Response::HTTP_BAD_GATEWAY);
         }
     }
 }

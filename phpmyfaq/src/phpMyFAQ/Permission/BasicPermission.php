@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * The basic permission class provides user rights.
  *
@@ -30,8 +32,9 @@ use phpMyFAQ\User\CurrentUser;
  */
 class BasicPermission implements PermissionInterface
 {
-    public function __construct(protected Configuration $configuration)
-    {
+    public function __construct(
+        protected Configuration $configuration,
+    ) {
     }
 
     /**
@@ -44,7 +47,7 @@ class BasicPermission implements PermissionInterface
         'description' => 'Short description.',
         'for_users' => true,
         'for_groups' => true,
-        'for_sections' => true
+        'for_sections' => true,
     ];
 
     /**
@@ -66,7 +69,7 @@ class BasicPermission implements PermissionInterface
             'INSERT INTO %sfaquser_right (user_id, right_id) VALUES (%d, %d)',
             Database::getTablePrefix(),
             $userId,
-            $rightId
+            $rightId,
         );
 
         return (bool) $this->configuration->getDb()->query($insert);
@@ -82,8 +85,7 @@ class BasicPermission implements PermissionInterface
     public function getRightData(int $rightId): array
     {
         // get the right data
-        $select = sprintf(
-            '
+        $select = sprintf('
             SELECT
                 right_id,
                 name,
@@ -94,10 +96,7 @@ class BasicPermission implements PermissionInterface
             FROM
                 %sfaqright
             WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $rightId
-        );
+                right_id = %d', Database::getTablePrefix(), $rightId);
 
         $res = $this->configuration->getDb()->query($select);
         if ($this->configuration->getDb()->numRows($res) != 1) {
@@ -106,9 +105,9 @@ class BasicPermission implements PermissionInterface
 
         // process right data
         $rightData = $this->configuration->getDb()->fetchArray($res);
-        $rightData['for_users'] = (bool)$rightData['for_users'];
-        $rightData['for_groups'] = (bool)$rightData['for_groups'];
-        $rightData['for_sections'] = (bool)$rightData['for_sections'];
+        $rightData['for_users'] = (bool) $rightData['for_users'];
+        $rightData['for_groups'] = (bool) $rightData['for_groups'];
+        $rightData['for_sections'] = (bool) $rightData['for_sections'];
 
         return $rightData;
     }
@@ -160,7 +159,7 @@ class BasicPermission implements PermissionInterface
             WHERE
                 name = '%s'",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($name)
+            $this->configuration->getDb()->escape($name),
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -205,7 +204,7 @@ class BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $rightId,
-            $userId
+            $userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -266,7 +265,7 @@ class BasicPermission implements PermissionInterface
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $userId
+            $userId,
         );
 
         $res = $this->configuration->getDb()->query($select);
@@ -307,7 +306,7 @@ class BasicPermission implements PermissionInterface
             $rightData['description'],
             $rightData['for_users'] ?? 1,
             $rightData['for_groups'] ?? 1,
-            $rightData['for_sections'] ?? 1
+            $rightData['for_sections'] ?? 1,
         );
 
         if (!$this->configuration->getDb()->query($insert)) {
@@ -349,9 +348,9 @@ class BasicPermission implements PermissionInterface
             $rightData['for_sections'] = $this->defaultRightData['for_sections'];
         }
 
-        $rightData['for_users'] = (int)$rightData['for_users'];
-        $rightData['for_groups'] = (int)$rightData['for_groups'];
-        $rightData['for_sections'] = (int)$rightData['for_sections'];
+        $rightData['for_users'] = (int) $rightData['for_users'];
+        $rightData['for_groups'] = (int) $rightData['for_groups'];
+        $rightData['for_sections'] = (int) $rightData['for_sections'];
 
         return $rightData;
     }
@@ -366,18 +365,13 @@ class BasicPermission implements PermissionInterface
             return false;
         }
 
-        $update = sprintf(
-            '
+        $update = sprintf('
             UPDATE
                 %sfaqright
             SET
                 name = \'%s\'
             WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $newName,
-            $rightId
-        );
+                right_id = %d', Database::getTablePrefix(), $newName, $rightId);
         return (bool) $this->configuration->getDb()->query($update);
     }
 
@@ -394,8 +388,7 @@ class BasicPermission implements PermissionInterface
      */
     public function getAllRightsData(string $order = 'ASC'): array
     {
-        $select = sprintf(
-            '
+        $select = sprintf('
             SELECT
                 right_id,
                 name,
@@ -406,10 +399,7 @@ class BasicPermission implements PermissionInterface
             FROM
                 %sfaqright
             ORDER BY
-                right_id %s',
-            Database::getTablePrefix(),
-            $order
-        );
+                right_id %s', Database::getTablePrefix(), $order);
 
         $res = $this->configuration->getDb()->query($select);
         $result = [];
@@ -433,15 +423,11 @@ class BasicPermission implements PermissionInterface
      */
     public function refuseAllUserRights(int $userId): bool
     {
-        $delete = sprintf(
-            '
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_right
             WHERE
-                user_id  = %d',
-            Database::getTablePrefix(),
-            $userId
-        );
+                user_id  = %d', Database::getTablePrefix(), $userId);
 
         return (bool) $this->configuration->getDb()->query($delete);
     }
