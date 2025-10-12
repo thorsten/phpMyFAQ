@@ -140,7 +140,7 @@ class ExportController extends AbstractController
         $report = new Report($this->configuration);
         foreach ($report->getReportingData() as $reportData) {
             $i = $reportData['faq_id'];
-            if (isset($data->category) && isset($reportData['category_name'])) {
+            if (isset($data->category, $reportData['category_name'])) {
                 if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($reportData['category_parent']);
                 } else {
@@ -184,7 +184,7 @@ class ExportController extends AbstractController
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
             }
 
-            if (isset($data->last_modified_person) && isset($reportData['faq_last_author'])) {
+            if (isset($data->last_modified_person, $reportData['faq_last_author'])) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
             } else {
                 $text[$i][] = '';
