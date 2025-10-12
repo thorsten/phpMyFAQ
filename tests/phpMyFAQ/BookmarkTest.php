@@ -6,7 +6,7 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use ReflectionClass;use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class BookmarkTest extends TestCase
@@ -119,7 +119,7 @@ class BookmarkTest extends TestCase
     {
         $this->bookmark->removeAll();
         $this->bookmark->add(1);
-        $this->bookmark->add(1); // evtl. Duplikat, aber sollte nicht schaden für den Test der Löschung
+        $this->bookmark->add(1);
         $this->assertTrue($this->bookmark->removeAll());
         $this->assertSame([], $this->bookmark->getAll());
     }
@@ -135,25 +135,20 @@ class BookmarkTest extends TestCase
     public function testCacheInvalidationOnAdd(): void
     {
         $this->bookmark->removeAll();
-        // Initialer Aufruf füllt Cache (leer)
         $this->bookmark->getAll();
-        $reflection = new \ReflectionClass(Bookmark::class);
+        $reflection = new ReflectionClass(Bookmark::class);
         $prop = $reflection->getProperty('bookmarkCache');
-        $prop->setAccessible(true);
         $cached = $prop->getValue($this->bookmark);
         $this->assertIsArray($cached);
 
-        // Add invalidiert den Cache
         $this->bookmark->add(1);
         $afterAddCache = $prop->getValue($this->bookmark);
         $this->assertNull($afterAddCache, 'Cache sollte nach add() invalidiert sein');
 
-        // Neuer getAll-Aufruf baut Cache wieder auf
         $all = $this->bookmark->getAll();
         $this->assertNotNull($prop->getValue($this->bookmark));
         $this->assertCount(1, $all);
 
-        // Clean up
         $this->bookmark->remove(1);
     }
 
@@ -161,13 +156,12 @@ class BookmarkTest extends TestCase
     {
         $this->bookmark->removeAll();
         $this->bookmark->add(1);
-        $this->bookmark->getAll(); // Cache füllen
-        $reflection = new \ReflectionClass(Bookmark::class);
+        $this->bookmark->getAll();
+        $reflection = new ReflectionClass(Bookmark::class);
         $prop = $reflection->getProperty('bookmarkCache');
-        $prop->setAccessible(true);
         $this->assertIsArray($prop->getValue($this->bookmark));
 
-        $this->bookmark->remove(1); // sollte Cache invalidieren
+        $this->bookmark->remove(1);
         $this->assertNull($prop->getValue($this->bookmark));
     }
 
@@ -176,10 +170,9 @@ class BookmarkTest extends TestCase
         $this->bookmark->removeAll();
         $this->bookmark->add(1);
         $this->bookmark->add(1);
-        $this->bookmark->getAll(); // Cache füllen
-        $reflection = new \ReflectionClass(Bookmark::class);
+        $this->bookmark->getAll();
+        $reflection = new ReflectionClass(Bookmark::class);
         $prop = $reflection->getProperty('bookmarkCache');
-        $prop->setAccessible(true);
         $this->assertIsArray($prop->getValue($this->bookmark));
 
         $this->bookmark->removeAll();
