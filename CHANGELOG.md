@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-alpha.3 - 2025-10-04
+### phpMyFAQ v4.1.0-beta - unreleased
 
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
@@ -16,12 +16,12 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added an administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)
 - added image upload and image manager in the Markdown editor (Thorsten)
-- added experimental support for PDO (Thorsten)
+- added support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added EU Data Act 2025 compliance (Thorsten)
 - added Urdu translation (Thorsten)
 - added dark mode / light mode toggle (Thorsten)
-- added experimental support for PHP 8.5 (Thorsten)
+- added support for PHP 8.5 (Thorsten)
 - added experimental support for FrankenPHP (Thorsten)
 - added experimental support for OpenSearch (Thorsten)
 - added experimental support for LDAP group support (Thorsten)
