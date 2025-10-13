@@ -175,6 +175,16 @@ if ('' !== $inputTag) {
     $searchResult = '';
     $relTags = '';
     $tags = [];
+
+    // Set the base URL scheme for fulltext search
+    $baseUrl = sprintf(
+        '%ssearch.html?search=%s&seite=%d%s&pmf-search-category=%d',
+        $faqConfig->getDefaultUrl(),
+        urlencode($inputSearchTerm),
+        $page,
+        $languages,
+        $inputCategory,
+    );
 }
 
 //
@@ -257,7 +267,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 $options = [
     'baseUrl' => $baseUrl,
     'total' => $numOfResults,
-    'perPage' => $faqConfig->get('records.numberOfRecordsPerPage'),
+    'perPage' => (int) $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName' => 'seite',
     'layoutTpl' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
 ];

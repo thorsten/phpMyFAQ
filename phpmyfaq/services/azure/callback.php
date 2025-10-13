@@ -27,10 +27,6 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(-1);
-
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
     session_regenerate_id(true);
@@ -115,5 +111,3 @@ if ($entraIdSession->getCurrentSessionKey()) {
 } else {
     $redirect->send();
 }
-
-

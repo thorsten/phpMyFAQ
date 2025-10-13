@@ -64,16 +64,6 @@ class EnvironmentTest extends TestCase
         $this->assertIsBool($debugMode);
     }
 
-    public function testGetDebugLevelReturnsInt(): void
-    {
-        Environment::init();
-
-        $debugLevel = Environment::getDebugLevel();
-
-        $this->assertIsInt($debugLevel);
-        $this->assertGreaterThanOrEqual(0, $debugLevel);
-    }
-
     public function testShouldLogQueriesReturnsBool(): void
     {
         Environment::init();

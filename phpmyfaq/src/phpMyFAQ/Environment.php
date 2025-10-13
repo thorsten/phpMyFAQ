@@ -19,13 +19,15 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\ErrorHandler\ErrorHandler;
 
 class Environment
 {
     private static bool $debugMode = false;
-
-    private static int $debugLevel = 0;
 
     private static bool $debugLogQueries = false;
 
@@ -56,20 +58,9 @@ class Environment
         self::$testMode = true;
     }
 
-    public static function reset(): void
-    {
-        self::$debugMode = false;
-        self::$debugLevel = 0;
-        self::$debugLogQueries = false;
-        self::$initialized = false;
-        self::$environment = 'production';
-        self::$testMode = false;
-        self::$dotenv = null;
-    }
-
     private static function loadEnvironment(): void
     {
-        $envPath = dirname(__DIR__, 2);
+        $envPath = dirname(__DIR__, levels: 2);
         $envFile = $envPath . '/.env';
 
         if (file_exists($envFile)) {
@@ -80,35 +71,41 @@ class Environment
 
     private static function setupDebugMode(): void
     {
+        if (self::$testMode) {
+            return;
+        }
+
         self::$debugMode = filter_var($_ENV['DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
-        self::$debugLevel = (int) ($_ENV['DEBUG_LEVEL'] ?? 0);
         self::$debugLogQueries = filter_var($_ENV['DEBUG_LOG_QUERIES'] ?? false, FILTER_VALIDATE_BOOLEAN);
         self::$environment = $_ENV['APP_ENV'] ?? 'production';
 
-        // Legacy support
-        if (!defined('DEBUG')) {
-            define('DEBUG', self::$debugMode);
+        error_reporting(self::$debugMode ? E_ALL : E_ERROR | E_WARNING | E_PARSE);
+
+        if (self::$debugMode) {
+            Debug::enable();
+            ErrorHandler::register();
+            return;
         }
 
-        // Error reporting based on debug mode
-        if (self::$debugMode) {
-            ini_set('display_errors', '1');
-            ini_set('display_startup_errors', '1');
-            error_reporting(E_ALL);
-        } else {
-            ini_set('display_errors', '0');
-            error_reporting(E_ERROR | E_WARNING | E_PARSE);
-        }
+        $handler = ErrorHandler::register();
+
+        $logger = new Logger(name: 'phpmyfaq');
+        $logTarget = $_ENV['ERROR_LOG'] ?? 'php://stderr';
+        $logger->pushHandler(new StreamHandler($logTarget, Logger::WARNING));
+
+        $levelsMap = [
+            E_DEPRECATED => null,
+            E_USER_DEPRECATED => null,
+        ];
+        $handler->setDefaultLogger($logger, $levelsMap);
+
+        $handler->screamAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+        $handler->scopeAt(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
     }
 
     public static function isDebugMode(): bool
     {
         return self::$debugMode;
-    }
-
-    public static function getDebugLevel(): int
-    {
-        return self::$debugLevel;
     }
 
     public static function shouldLogQueries(): bool

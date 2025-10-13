@@ -40,6 +40,7 @@
     "symfony/dependency-injection": "^7.3",
     "symfony/dotenv": "^7.3",
     "symfony/event-dispatcher": "^7.3",
+    "symfony/error-handler": "^7.3",
     "symfony/html-sanitizer": "^7.3",
     "symfony/http-client": "^7.3",
     "symfony/http-foundation": "^7.3",

@@ -76,7 +76,6 @@ class Configuration
 
     /**
      * Sets the Monolog logger instance, logs into a normal logfile
-     * If DEBUG is true, it logs to the browser console as well.
      */
     public function setLogger(): void
     {

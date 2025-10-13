@@ -6,20 +6,19 @@
  * It preloads phpMyFAQ's bootstrap and handles requests in a long-running process.
  * 
  * @package phpMyFAQ
- * @author  phpMyFAQ Team
- * @since   2025-01-01
+ *  @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ *  @copyright 2025 phpMyFAQ Team
+ *  @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *  @link      https://www.phpmyfaq.de
+ *  @since     2025-07-06
  */
 
-// Set up error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Include phpMyFAQ bootstrap
+// Include phpMyFAQ bootstrap (sets up error handling via Environment)
 require_once __DIR__ . '/src/Bootstrap.php';
 
 // FrankenPHP worker loop
-while ($worker = \frankenphp_handle_request()) {
+while ($worker = frankenphp_handle_request()) {
     // The worker will handle each request here
-    // phpMyFAQ's routing and processing will be handled by the main application
+    // the main application will handle phpMyFAQ's routing and processing
     // through the Bootstrap.php inclusion
 }

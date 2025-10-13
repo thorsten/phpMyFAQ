@@ -31,10 +31,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(-1);
-
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
 //
@@ -48,7 +44,7 @@ while ((!$foundCurrPath) && ($i < count($includePaths))) {
     ++$i;
 }
 if (!$foundCurrPath) {
-    ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
+    set_include_path('.' . PATH_SEPARATOR . get_include_path());
 }
 
 //
@@ -121,8 +117,8 @@ define('PMF_TRANSLATION_DIR', dirname(__DIR__) . '/translations');
 //
 // Set the error handler and the exception handler
 //
-set_error_handler('\phpMyFAQ\Core\Error::errorHandler');
-set_exception_handler('\phpMyFAQ\Core\Error::exceptionHandler');
+set_error_handler('\\phpMyFAQ\\Core\\Error::errorHandler');
+set_exception_handler('\\phpMyFAQ\\Core\\Error::exceptionHandler');
 
 //
 // Request
@@ -163,22 +159,20 @@ $faqConfig->getAll();
 // We always need a valid, secure session!
 //
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    ini_set('session.use_only_cookies', '1'); // Avoid any PHP version to move sessions on URLs
-    ini_set('session.auto_start', '0'); // Prevent error to use session_start() if it's active in php.ini
-    ini_set('session.use_trans_sid', '0');
-    ini_set('session.cookie_samesite', 'Strict');
-    ini_set('session.cookie_httponly', 'true');
-    ini_set('session.cookie_secure', $request->isSecure());
-    ini_set('url_rewriter.tags', '');
+    $sessionOptions = [
+        'use_only_cookies' => 1,
+        'use_trans_sid' => 0,
+        'cookie_samesite' => 'Strict',
+        'cookie_httponly' => true,
+        'cookie_secure' => $request->isSecure(),
+    ];
 
-    //
     // Start the PHP session
-    //
     if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
-        session_save_path(PMF_SESSION_SAVE_PATH);
+        $sessionOptions['save_path'] = PMF_SESSION_SAVE_PATH;
     }
 
-    session_start();
+    session_start($sessionOptions);
     $session = new Session(new PhpBridgeSessionStorage());
     $session->start();
 }
