@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class StopWordsController extends AbstractAdministrationController
+final class StopWordsController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError

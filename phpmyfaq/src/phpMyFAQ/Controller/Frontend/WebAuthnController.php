@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WebAuthnController extends AbstractController
+final class WebAuthnController extends AbstractController
 {
     private readonly AuthWebAuthn $authWebAuthn;
 

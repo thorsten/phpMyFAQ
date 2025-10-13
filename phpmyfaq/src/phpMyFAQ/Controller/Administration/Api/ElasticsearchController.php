@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ElasticsearchController extends AbstractController
+final class ElasticsearchController extends AbstractController
 {
     #[Route('./admin/api/elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
     public function create(): JsonResponse

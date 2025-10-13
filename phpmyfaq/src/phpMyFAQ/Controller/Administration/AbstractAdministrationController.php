@@ -31,7 +31,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 
-class AbstractAdministrationController extends AbstractController
+abstract class AbstractAdministrationController extends AbstractController
 {
     /**
      * @return string[]

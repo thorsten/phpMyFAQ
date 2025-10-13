@@ -27,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class ElasticsearchController extends AbstractAdministrationController
+final class ElasticsearchController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError

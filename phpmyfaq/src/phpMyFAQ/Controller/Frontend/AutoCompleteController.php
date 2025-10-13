@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AutoCompleteController extends AbstractController
+final class AutoCompleteController extends AbstractController
 {
     /**
      * @throws \Exception

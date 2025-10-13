@@ -33,7 +33,7 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
 
-class DashboardController extends AbstractAdministrationController
+final class DashboardController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError

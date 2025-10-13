@@ -35,7 +35,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use ZipArchive;
 
-class UserController extends AbstractController
+final class UserController extends AbstractController
 {
     /**
      * @throws \Exception

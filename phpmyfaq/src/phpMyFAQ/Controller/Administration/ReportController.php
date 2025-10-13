@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class ReportController extends AbstractAdministrationController
+final class ReportController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError

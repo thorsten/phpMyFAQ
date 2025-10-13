@@ -35,7 +35,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class BackupController extends AbstractAdministrationController
+final class BackupController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

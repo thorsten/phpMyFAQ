@@ -44,7 +44,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class FaqController extends AbstractAdministrationController
+final class FaqController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

@@ -47,9 +47,9 @@ jobs:
       - name: Setup Mago
         uses: nhedger/setup-mago@v1
 
-      #- name: Run Mago
-      #  run: |
-      #    mago format --dry-run
+      - name: Run Mago
+        run: |
+          mago format --dry-run
       #    mago lint --reporting-format=github
       #    mago analyze --reporting-format=github
 

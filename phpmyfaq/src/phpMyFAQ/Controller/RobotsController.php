@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class RobotsController extends AbstractController
+final class RobotsController extends AbstractController
 {
     /**
      * @throws \Exception

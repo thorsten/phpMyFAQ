@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\TwigFilter;
 
-class FormsController extends AbstractAdministrationController
+final class FormsController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

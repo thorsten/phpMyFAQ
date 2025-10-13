@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class GroupController extends AbstractAdministrationController
+final class GroupController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

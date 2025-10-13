@@ -33,7 +33,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class SearchController extends AbstractController
+final class SearchController extends AbstractController
 {
     public function __construct()
     {

@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class StatisticsController extends AbstractController
+final class StatisticsController extends AbstractController
 {
     /**
      * @throws Exception|JsonException

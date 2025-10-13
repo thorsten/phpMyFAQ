@@ -73,16 +73,16 @@ class HttpStreamer
 
         // Sanity checks
         if (headers_sent()) {
-            throw new Exception('Error: unable to send my headers: someone already sent other headers!');
+            throw new Exception(message: 'Error: unable to send my headers: someone already sent other headers!');
         }
 
         if (ob_get_contents()) {
-            throw new Exception('Error: unable to send my data: someone already sent other data!');
+            throw new Exception(message: 'Error: unable to send my data: someone already sent other data!');
         }
 
         $this->response = new Response();
         $this->setHttpHeaders();
-        $this->response->setContent($this->streamContent());
+        $this->response->setContent(content: $this->streamContent());
         $this->response->send();
     }
 
@@ -121,9 +121,9 @@ class HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        $this->response->setLastModified(new DateTime());
-        $this->response->setExpires(new DateTime());
-        $this->response->setCache([
+        $this->response->setLastModified(date: new DateTime());
+        $this->response->setExpires(date: new DateTime());
+        $this->response->setCache(options: [
             'must_revalidate' => true,
             'no_cache' => true,
             'no_store' => true,
@@ -133,15 +133,36 @@ class HttpStreamer
         ]);
 
         // 2. Set the correct values for file streaming
-        $this->response->headers->set('Content-Type', $mimeType);
+        $this->response->headers->set(
+            key: 'Content-Type',
+            values: $mimeType,
+        );
 
-        // 3. RFC2616, �19.5.1: $filename must be a quoted-string
-        $disposition = HeaderUtils::makeDisposition($this->disposition, $filename);
-        $this->response->headers->set('Content-Disposition', $disposition);
-        $this->response->headers->set('Content-Description', $description);
-        $this->response->headers->set('Content-Transfer-Encoding', 'binary');
-        $this->response->headers->set('Accept-Ranges', 'none');
-        $this->response->headers->set('Content-Length', (string) $this->size);
+        // 3. RFC2616, §19.5.1: $filename must be a quoted-string
+        $disposition = HeaderUtils::makeDisposition(
+            disposition: $this->disposition,
+            filename: $filename,
+        );
+        $this->response->headers->set(
+            key: 'Content-Disposition',
+            values: $disposition,
+        );
+        $this->response->headers->set(
+            key: 'Content-Description',
+            values: $description,
+        );
+        $this->response->headers->set(
+            key: 'Content-Transfer-Encoding',
+            values: 'binary',
+        );
+        $this->response->headers->set(
+            key: 'Accept-Ranges',
+            values: 'none',
+        );
+        $this->response->headers->set(
+            key: 'Content-Length',
+            values: (string) $this->size,
+        );
     }
 
     /**

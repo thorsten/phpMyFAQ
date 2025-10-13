@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class NewsController extends AbstractController
+final class NewsController extends AbstractController
 {
     public function __construct()
     {

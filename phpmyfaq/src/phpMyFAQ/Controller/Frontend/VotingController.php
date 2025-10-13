@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class VotingController extends AbstractController
+final class VotingController extends AbstractController
 {
     /**
      * @throws Exception

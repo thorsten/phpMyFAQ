@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Error\LoaderError;
 
-class ConfigurationTabController extends AbstractController
+final class ConfigurationTabController extends AbstractController
 {
     /**
      * @throws TemplateException

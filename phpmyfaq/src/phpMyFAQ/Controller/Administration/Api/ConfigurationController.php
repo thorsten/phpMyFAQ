@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ConfigurationController extends AbstractController
+final class ConfigurationController extends AbstractController
 {
     /**
      * @throws Exception|\Exception

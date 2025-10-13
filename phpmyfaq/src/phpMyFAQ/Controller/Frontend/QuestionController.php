@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class QuestionController extends AbstractController
+final class QuestionController extends AbstractController
 {
     /**
      * @throws Exception

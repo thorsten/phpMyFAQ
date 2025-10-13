@@ -24,7 +24,7 @@ use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class TitleController extends AbstractController
+final class TitleController extends AbstractController
 {
     public function __construct()
     {

@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class AttachmentsController extends AbstractAdministrationController
+final class AttachmentsController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

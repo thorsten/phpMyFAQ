@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class StopWordController extends AbstractController
+final class StopWordController extends AbstractController
 {
     #[Route('admin/api/stopwords')]
     public function list(Request $request): JsonResponse

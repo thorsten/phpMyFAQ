@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class MediaBrowserController extends AbstractController
+final class MediaBrowserController extends AbstractController
 {
     /**
      * @throws LoaderError

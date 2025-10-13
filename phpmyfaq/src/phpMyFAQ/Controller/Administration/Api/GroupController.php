@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GroupController extends AbstractController
+final class GroupController extends AbstractController
 {
     /**
      * @throws Exception

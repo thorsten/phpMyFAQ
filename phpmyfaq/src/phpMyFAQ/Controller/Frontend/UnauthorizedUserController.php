@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UnauthorizedUserController
+final class UnauthorizedUserController
 {
     protected ?Configuration $configuration = null;
 

@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class NewsController extends AbstractAdministrationController
+final class NewsController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

@@ -31,7 +31,7 @@ use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
-class OpenQuestionsController extends AbstractAdministrationController
+final class OpenQuestionsController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

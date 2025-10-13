@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class FaqController extends AbstractController
+final class FaqController extends AbstractController
 {
     /**
      * @throws Exception|\JsonException|\Exception

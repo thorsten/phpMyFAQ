@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ExportController extends AbstractController
+final class ExportController extends AbstractController
 {
     /**
      * @throws Exception

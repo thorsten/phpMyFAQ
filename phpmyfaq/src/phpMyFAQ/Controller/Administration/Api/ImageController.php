@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImageController extends AbstractController
+final class ImageController extends AbstractController
 {
     /**
      * @throws Exception|\Exception

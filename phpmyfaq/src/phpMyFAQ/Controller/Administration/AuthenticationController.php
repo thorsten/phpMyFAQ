@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AuthenticationController extends AbstractAdministrationController
+final class AuthenticationController extends AbstractAdministrationController
 {
     #[Route('/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
     public function authenticate(Request $request): Response

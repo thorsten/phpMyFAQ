@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class ImportController extends AbstractAdministrationController
+final class ImportController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

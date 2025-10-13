@@ -37,7 +37,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class InstanceController extends AbstractController
+final class InstanceController extends AbstractController
 {
     /**
      * @throws Exception

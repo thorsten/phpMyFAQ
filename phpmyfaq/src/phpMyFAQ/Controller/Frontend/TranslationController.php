@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class TranslationController extends AbstractController
+final class TranslationController extends AbstractController
 {
     #[Route('api/translations/{language}', name: 'api.private.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse

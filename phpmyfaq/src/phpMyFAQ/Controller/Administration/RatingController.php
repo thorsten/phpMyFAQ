@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class RatingController extends AbstractAdministrationController
+final class RatingController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

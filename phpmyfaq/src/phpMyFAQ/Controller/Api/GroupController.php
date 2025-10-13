@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class GroupController extends AbstractController
+final class GroupController extends AbstractController
 {
     public function __construct()
     {

@@ -40,7 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UserController extends AbstractController
+final class UserController extends AbstractController
 {
     /**
      * @throws Exception

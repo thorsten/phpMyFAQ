@@ -23,7 +23,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Twig\TemplateException;
 use Symfony\Component\HttpFoundation\Response;
 
-class SitemapController extends AbstractController
+final class SitemapController extends AbstractController
 {
     private const int PMF_SITEMAP_GOOGLE_MAX_URLS = 50000;
 

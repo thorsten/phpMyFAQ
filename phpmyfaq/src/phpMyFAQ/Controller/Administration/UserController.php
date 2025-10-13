@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class UserController extends AbstractAdministrationController
+final class UserController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

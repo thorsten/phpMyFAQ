@@ -22,7 +22,7 @@ namespace phpMyFAQ\Controller\Frontend;
 use phpMyFAQ\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class CaptchaController extends AbstractController
+final class CaptchaController extends AbstractController
 {
     /**
      * @throws \JsonException|\Exception

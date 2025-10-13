@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class PdfController extends AbstractController
+final class PdfController extends AbstractController
 {
     public function __construct()
     {

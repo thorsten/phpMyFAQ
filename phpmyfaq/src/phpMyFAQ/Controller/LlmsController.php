@@ -21,7 +21,7 @@ namespace phpMyFAQ\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class LlmsController extends AbstractController
+final class LlmsController extends AbstractController
 {
     /**
      * @throws \Exception

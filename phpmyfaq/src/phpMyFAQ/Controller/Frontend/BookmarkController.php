@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BookmarkController extends AbstractController
+final class BookmarkController extends AbstractController
 {
     /**
      * @throws JsonException

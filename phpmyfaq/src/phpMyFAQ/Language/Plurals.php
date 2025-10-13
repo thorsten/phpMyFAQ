@@ -47,68 +47,173 @@ readonly class Plurals
 
     public function __construct()
     {
-        $this->nPlurals = (int) Translation::get('nplurals');
-        $this->lang = Translation::get('metaLanguage');
+        $this->nPlurals = (int) Translation::get(languageKey: 'nplurals');
+        $this->lang = Translation::get(languageKey: 'metaLanguage');
 
-        $this->useDefaultPluralForm = $this->plural($this->lang, 0) === -1;
+        $this->useDefaultPluralForm = $this->plural(language: $this->lang, number: 0) === -1;
     }
 
     /**
      * Returns the plural form for language $lang or -1 if language $lang is not supported.
      *
      * @link   https://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
-     * @param  string $lang The language code
-     * @param  int    $n    The number used to determine the plural form
+     * @param  string $language The language code
+     * @param  int    $number   The number used to determine the plural form
      */
-    private function plural(string $lang, int $n): int
+    private function plural(string $language, int $number): int
     {
-        return match ($lang) {
-            'ar' => $n == 0
-                ? 0
-                : (
-                    $n == 1
-                        ? 1
-                        : (
-                            $n == 2
-                                ? 2
-                                : (
-                                    ($n % 100)
-                                    >= 3
-                                    && ($n % 100)
-                                    <= 10
-                                        ? 3
-                                        : (
-                                            ($n % 100)
-                                            >= 11
-                                            && ($n % 100)
-                                            <= 99
-                                            || ($n % 100)
-                                            == 1
-                                            || ($n % 100)
-                                            == 2
-                                                ? 4
-                                                : 5
-                                        )
-                                )
-                        )
-                ),
-            'bn', 'he', 'hi', 'id', 'ja', 'ko', 'th', 'tr', 'tw', 'vi', 'zh' => 0,
-            'cy' => $n == 1 ? 0 : ($n == 2 ? 1 : ($n != 8 && $n != 11 ? 2 : 3)),
-            'cs' => $n == 1 ? 0 : ($n >= 2 && $n <= 4 ? 1 : 2),
-            'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'it', 'nb', 'nl', 'hu', 'pt', 'sv' => $n != 1 ? 1 : 0,
-            'fr', 'pt_br' => $n > 1 ? 1 : 0,
-            'lt' => ($n % 10) == 1 && ($n % 100) != 11
-                ? 0
-                : (($n % 10) >= 2 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
-            'lv' => ($n % 10) == 1 && ($n % 100) != 11 ? 0 : ($n != 0 ? 1 : 2),
-            'pl' => $n == 1 ? 0 : (($n % 10) >= 2 && ($n % 10) <= 4 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
-            'ro' => $n == 1 ? 0 : ($n == 0 || ($n % 100) > 0 && ($n % 100) < 20 ? 1 : 2),
-            'ru', 'sr', 'uk' => ($n % 10) == 1 && ($n % 100) != 11
-                ? 0
-                : (($n % 10) >= 2 && ($n % 10) <= 4 && (($n % 100) < 10 || ($n % 100) >= 20) ? 1 : 2),
-            'sl' => ($n % 100) == 1 ? 0 : (($n % 100) == 2 ? 1 : (($n % 100) == 3 || ($n % 100) == 4 ? 2 : 3)),
-            default => -1,
-        };
+        switch ($language) {
+            case 'ar':
+                if ($number === 0) {
+                    return 0;
+                }
+                if ($number === 1) {
+                    return 1;
+                }
+                if ($number === 2) {
+                    return 2;
+                }
+                $n100 = $number % 100;
+                if ($n100 >= 3 && $n100 <= 10) {
+                    return 3;
+                }
+                if (($n100 >= 11) || $n100 === 1 || $n100 === 2) {
+                    return 4;
+                }
+                return 5;
+
+            case 'bn':
+            case 'he':
+            case 'hi':
+            case 'id':
+            case 'ja':
+            case 'ko':
+            case 'th':
+            case 'tr':
+            case 'tw':
+            case 'vi':
+            case 'zh':
+                return 0;
+
+            case 'cy':
+                if ($number === 1) {
+                    return 0;
+                }
+                if ($number === 2) {
+                    return 1;
+                }
+                if ($number !== 8 && $number !== 11) {
+                    return 2;
+                }
+                return 3;
+
+            case 'cs':
+                if ($number === 1) {
+                    return 0;
+                }
+                if ($number >= 2 && $number <= 4) {
+                    return 1;
+                }
+                return 2;
+
+            case 'da':
+            case 'de':
+            case 'el':
+            case 'en':
+            case 'es':
+            case 'eu':
+            case 'fa':
+            case 'fi':
+            case 'it':
+            case 'nb':
+            case 'nl':
+            case 'hu':
+            case 'pt':
+            case 'sv':
+                if ($number !== 1) {
+                    return 1;
+                }
+                return 0;
+
+            case 'fr':
+            case 'pt_br':
+                if ($number > 1) {
+                    return 1;
+                }
+                return 0;
+
+            case 'lt':
+                $n10 = $number % 10;
+                $n100 = $number % 100;
+                if ($n10 === 1 && $n100 !== 11) {
+                    return 0;
+                }
+                if ($n10 >= 2 && ($n100 < 10 || $n100 >= 20)) {
+                    return 1;
+                }
+                return 2;
+
+            case 'lv':
+                $n10 = $number % 10;
+                $n100 = $number % 100;
+                if ($n10 === 1 && $n100 !== 11) {
+                    return 0;
+                }
+                if ($number !== 0) {
+                    return 1;
+                }
+                return 2;
+
+            case 'pl':
+                $n10 = $number % 10;
+                $n100 = $number % 100;
+                if ($number === 1) {
+                    return 0;
+                }
+                if ($n10 >= 2 && $n10 <= 4 && ($n100 < 10 || $n100 >= 20)) {
+                    return 1;
+                }
+                return 2;
+
+            case 'ro':
+                $n100 = $number % 100;
+                if ($number === 1) {
+                    return 0;
+                }
+                if ($number === 0 || ($n100 > 0 && $n100 < 20)) {
+                    return 1;
+                }
+                return 2;
+
+            case 'ru':
+            case 'sr':
+            case 'uk':
+                $n10 = $number % 10;
+                $n100 = $number % 100;
+                if ($n10 === 1 && $n100 !== 11) {
+                    return 0;
+                }
+                if ($n10 >= 2 && $n10 <= 4 && ($n100 < 10 || $n100 >= 20)) {
+                    return 1;
+                }
+                return 2;
+
+            case 'sl':
+                $n100 = $number % 100;
+                if ($n100 === 1) {
+                    return 0;
+                }
+                if ($n100 === 2) {
+                    return 1;
+                }
+                if ($n100 === 3 || $n100 === 4) {
+                    return 2;
+                }
+                return 3;
+
+            default:
+                return -1;
+        }
     }
 
     /**
@@ -145,11 +250,11 @@ readonly class Plurals
     private function getPlural(int $number): int
     {
         if ($this->useDefaultPluralForm) {
-            // this means we have to fall back to English, so return correct English plural form
-            return $this->plural('en', $number);
+            // this means we have to fall back to English, so return the correct English plural form
+            return $this->plural(language: 'en', number: $number);
         }
 
-        $plural = $this->plural($this->lang, $number);
+        $plural = $this->plural(language: $this->lang, number: $number);
         if ($plural > ($this->nPlurals - 1)) {
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;

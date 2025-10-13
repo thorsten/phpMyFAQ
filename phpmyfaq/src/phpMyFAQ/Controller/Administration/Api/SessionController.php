@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SessionController extends AbstractController
+final class SessionController extends AbstractController
 {
     /**
      * @throws Exception

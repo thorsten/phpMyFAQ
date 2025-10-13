@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class OpenSearchController extends AbstractController
+final class OpenSearchController extends AbstractController
 {
     /**
      * @throws \Exception

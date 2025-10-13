@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GlossaryController extends AbstractController
+final class GlossaryController extends AbstractController
 {
     /**
      * @throws Exception|\Exception

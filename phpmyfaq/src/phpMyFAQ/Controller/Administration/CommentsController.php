@@ -31,7 +31,7 @@ use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
-class CommentsController extends AbstractAdministrationController
+final class CommentsController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError

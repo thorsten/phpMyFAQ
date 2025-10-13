@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class SessionKeepAliveController extends AbstractAdministrationController
+final class SessionKeepAliveController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

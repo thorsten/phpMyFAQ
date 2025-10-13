@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class QuestionController extends AbstractController
+final class QuestionController extends AbstractController
 {
     public function __construct()
     {

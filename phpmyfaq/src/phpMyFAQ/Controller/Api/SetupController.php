@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetupController extends AbstractController
+final class SetupController extends AbstractController
 {
     public function check(Request $request): JsonResponse
     {

@@ -53,7 +53,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FaqController extends AbstractController
+final class FaqController extends AbstractController
 {
     /**
      * @throws \phpMyFAQ\Core\Exception

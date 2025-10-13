@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class DashboardController extends AbstractController
+final class DashboardController extends AbstractController
 {
     /**
      * @throws JsonException

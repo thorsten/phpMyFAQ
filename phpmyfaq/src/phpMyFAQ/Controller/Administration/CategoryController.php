@@ -40,7 +40,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 use Twig\Error\LoaderError;
 
-class CategoryController extends AbstractAdministrationController
+final class CategoryController extends AbstractAdministrationController
 {
     /**
      * @throws Exception

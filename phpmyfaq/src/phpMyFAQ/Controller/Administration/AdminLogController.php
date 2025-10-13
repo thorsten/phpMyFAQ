@@ -33,7 +33,7 @@ use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 use Twig\Extra\Intl\IntlExtension;
 
-class AdminLogController extends AbstractAdministrationController
+final class AdminLogController extends AbstractAdministrationController
 {
     /**
      * @throws LoaderError
