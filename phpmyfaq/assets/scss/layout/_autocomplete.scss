@@ -29,6 +29,7 @@
 
 .autocomplete {
   @extend .list-group;
+  z-index: 1000;
 }
 
 .autocomplete > div {
