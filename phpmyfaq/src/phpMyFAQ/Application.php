@@ -32,6 +32,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use Throwable;
 
 class Application
 {
@@ -71,16 +72,16 @@ class Application
     private function setLanguage(): string
     {
         if (!is_null($this->container)) {
-            $configuration = $this->container->get('phpmyfaq.configuration');
-            $language = $this->container->get('phpmyfaq.language');
+            $configuration = $this->container->get(id: 'phpmyfaq.configuration');
+            $language = $this->container->get(id: 'phpmyfaq.language');
             $currentLanguage = $language->setLanguage(
-                (bool) $configuration->get('main.languageDetection'),
-                $configuration->get('main.language'),
+                (bool) $configuration->get(item: 'main.languageDetection'),
+                $configuration->get(item: 'main.language'),
             );
 
-            require sprintf('%s/language_en.php', PMF_TRANSLATION_DIR);
+            require PMF_TRANSLATION_DIR . '/language_en.php';
             if (Language::isASupportedLanguage($currentLanguage)) {
-                require sprintf('%s/language_%s.php', PMF_TRANSLATION_DIR, strtolower($currentLanguage));
+                require PMF_TRANSLATION_DIR . '/language_' . strtolower($currentLanguage) . '.php';
             }
 
             $configuration->setLanguage($language);
@@ -99,7 +100,7 @@ class Application
         try {
             Translation::create()
                 ->setLanguagesDir(PMF_TRANSLATION_DIR)
-                ->setDefaultLanguage('en')
+                ->setDefaultLanguage(defaultLanguage: 'en')
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
         } catch (Exception $exception) {
@@ -127,35 +128,52 @@ class Application
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException $exception) {
+            $message = $this->formatExceptionMessage(
+                template: 'Not Found: :message at line :line at :file',
+                e: $exception,
+            );
             $response = new Response(
-                sprintf(
-                    'Not Found: %s at line %d at %s',
-                    $exception->getMessage(),
-                    $exception->getLine(),
-                    $exception->getFile(),
-                ),
-                Response::HTTP_NOT_FOUND,
+                content: $message,
+                status: Response::HTTP_NOT_FOUND,
             );
         } catch (UnauthorizedHttpException) {
-            if (str_contains($urlMatcher->getContext()->getBaseUrl(), '/api')) {
-                $response = new Response(json_encode(['error' => 'Unauthorized access']), Response::HTTP_UNAUTHORIZED, [
-                    'Content-Type' => 'application/json',
-                ]);
-            } else {
-                $response = new RedirectResponse('/login');
+            $response = new RedirectResponse(url: '/login');
+            if (str_contains(
+                haystack: $urlMatcher->getContext()->getBaseUrl(),
+                needle: '/api',
+            )) {
+                $response = new Response(
+                    content: json_encode(value: ['error' => 'Unauthorized access']),
+                    status: Response::HTTP_UNAUTHORIZED,
+                    headers: ['Content-Type' => 'application/json'],
+                );
             }
         } catch (BadRequestException $exception) {
+            $message = $this->formatExceptionMessage(
+                template: 'An error occurred: :message at line :line at :file',
+                e: $exception,
+            );
             $response = new Response(
-                sprintf(
-                    'An error occurred: %s at line %d at %s',
-                    $exception->getMessage(),
-                    $exception->getLine(),
-                    $exception->getFile(),
-                ),
-                Response::HTTP_BAD_REQUEST,
+                content: $message,
+                status: Response::HTTP_BAD_REQUEST,
             );
         }
 
         $response->send();
+    }
+
+    /**
+     * Formats an exception message from a template with named placeholders.
+     */
+    private function formatExceptionMessage(string $template, Throwable $e): string
+    {
+        return strtr(
+            string: $template,
+            from: [
+                ':message' => $e->getMessage(),
+                ':line' => (string) $e->getLine(),
+                ':file' => $e->getFile(),
+            ],
+        );
     }
 }
