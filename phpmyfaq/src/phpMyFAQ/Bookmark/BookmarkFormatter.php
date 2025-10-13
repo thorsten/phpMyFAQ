@@ -27,11 +27,11 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
-class BookmarkFormatter
+readonly class BookmarkFormatter
 {
     public function __construct(
-        private readonly Configuration $configuration,
-        private readonly CurrentUser $currentUser,
+        private Configuration $configuration,
+        private CurrentUser $currentUser,
     ) {
     }
 
@@ -69,7 +69,7 @@ class BookmarkFormatter
 
         $url = strtr('base:index.php?action=faq&id=id:&cat=cat:&artlang=lang:', [
             'base:' => $this->configuration->getDefaultUrl(),
-            'id:' => (string) ((int) $faqData['id']),
+            'id:' => (string) (int) $faqData['id'],
             'cat:' => (string) $categoryId,
             'lang:' => (string) ($faqData['lang'] ?? ''),
         ]);
