@@ -50,7 +50,11 @@ readonly class Plurals
         $this->nPlurals = (int) Translation::get(languageKey: 'nplurals');
         $this->lang = Translation::get(languageKey: 'metaLanguage');
 
-        $this->useDefaultPluralForm = $this->plural(language: $this->lang, number: 0) === -1;
+        $this->useDefaultPluralForm =
+            $this->plural(
+                language: $this->lang,
+                number: 0,
+            ) === -1;
     }
 
     /**
@@ -77,7 +81,7 @@ readonly class Plurals
                 if ($n100 >= 3 && $n100 <= 10) {
                     return 3;
                 }
-                if (($n100 >= 11) || $n100 === 1 || $n100 === 2) {
+                if ($n100 >= 11 || $n100 === 1 || $n100 === 2) {
                     return 4;
                 }
                 return 5;
@@ -180,7 +184,7 @@ readonly class Plurals
                 if ($number === 1) {
                     return 0;
                 }
-                if ($number === 0 || ($n100 > 0 && $n100 < 20)) {
+                if ($number === 0 || $n100 > 0 && $n100 < 20) {
                     return 1;
                 }
                 return 2;
@@ -251,10 +255,16 @@ readonly class Plurals
     {
         if ($this->useDefaultPluralForm) {
             // this means we have to fall back to English, so return the correct English plural form
-            return $this->plural(language: 'en', number: $number);
+            return $this->plural(
+                language: 'en',
+                number: $number,
+            );
         }
 
-        $plural = $this->plural(language: $this->lang, number: $number);
+        $plural = $this->plural(
+            language: $this->lang,
+            number: $number,
+        );
         if ($plural > ($this->nPlurals - 1)) {
             // incorrectly defined plural function or wrong $nPlurals
             return $this->nPlurals - 1;

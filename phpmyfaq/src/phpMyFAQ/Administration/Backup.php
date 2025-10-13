@@ -50,7 +50,7 @@ readonly class Backup
      */
     public function createBackup(string $backupType, string $backupFile): string
     {
-        $backupDate = date('Y-m-d-H-i-s');
+        $backupDate = date(format: 'Y-m-d-H-i-s');
 
         $fileNamePrefix = Database::getTablePrefix() !== '' ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
         $fileName = sprintf('%s-%s.%s.sql', $fileNamePrefix, $backupType, $backupDate);
