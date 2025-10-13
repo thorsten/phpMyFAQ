@@ -26,6 +26,7 @@ use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Environment;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -193,8 +194,32 @@ if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && e
 if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
     require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
     $esConfig = new ElasticsearchConfiguration(PMF_CONFIG_DIR . '/elasticsearch.php');
+
+    // Allow override via env to support containers and custom setups
+    $esBaseUri = $_ENV['ELASTICSEARCH_BASE_URI'] ?? $esConfig->getHosts()[0];
+
+    // Optional: wait for Elasticsearch to be ready (HTTP health)
     try {
-        $esClient = ClientBuilder::create()->setHosts($esConfig->getHosts())->build();
+        $http = HttpClient::create(['verify_peer' => false]);
+        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        do {
+            try {
+                $res = $http->request('GET', rtrim($esBaseUri, '/') . '/_cluster/health');
+                $code = $res->getStatusCode();
+                if ($code >= 200 && $code < 500) {
+                    break;
+                }
+            } catch (Throwable) {
+                // ignore and retry
+            }
+            usleep(500_000);
+        } while (time() < $deadline);
+    } catch (Throwable) {
+        // do not block bootstrap if a health check fails
+    }
+
+    try {
+        $esClient = ClientBuilder::create()->setHosts([$esBaseUri])->build();
         $faqConfig->setElasticsearch($esClient);
         $faqConfig->setElasticsearchConfig($esConfig);
     } catch (AuthenticationException $e) {
@@ -208,8 +233,30 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR 
 if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '/opensearch.php')) {
     require PMF_CONFIG_DIR . '/constants_opensearch.php';
     $openSearchConfig = new OpenSearchConfiguration(PMF_CONFIG_DIR . '/opensearch.php');
+    $baseUri = $_ENV['OPENSEARCH_BASE_URI'] ?? $openSearchConfig->getHosts()[0];
+
+    // Optional: wait for OpenSearch to be ready (HTTP health)
+    try {
+        $http = HttpClient::create(['verify_peer' => false]);
+        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        do {
+            try {
+                $res = $http->request('GET', rtrim($baseUri, '/') . '/_cluster/health');
+                $code = $res->getStatusCode();
+                if ($code >= 200 && $code < 500) {
+                    break;
+                }
+            } catch (Throwable) {
+                // ignore and retry
+            }
+            usleep(500_000);
+        } while (time() < $deadline);
+    } catch (Throwable) {
+        // do not block bootstrap if a health check fails
+    }
+
     $client = (new SymfonyClientFactory())->create([
-        'base_uri' => $openSearchConfig->getHosts()[0],
+        'base_uri' => $baseUri,
         'verify_peer' => false,
     ]);
     $faqConfig->setOpenSearch($client);
@@ -220,7 +267,7 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
 // Build an attachment path
 //
 $confAttachmentsPath = trim($faqConfig->get('records.attachmentsPath'));
-if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAttachmentsPath)) {
+if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:[\\/]%i', $confAttachmentsPath)) {
     // If we're here, some Windows or unix style absolute path was detected.
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {

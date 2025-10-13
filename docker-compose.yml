@@ -53,10 +53,14 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
+      - OPENSEARCH_BASE_URI=http://opensearch:9201
+      - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
+      - SEARCH_WAIT_TIMEOUT=30
     links:
       - mariadb:db
       - postgres
       - elasticsearch
+      - opensearch
     ports:
       - '8080:80'
       - '443:443'
@@ -94,10 +98,14 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
+      - OPENSEARCH_BASE_URI=http://opensearch:9201
+      - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
+      - SEARCH_WAIT_TIMEOUT=30
     links:
       - mariadb:db
       - postgres
       - elasticsearch
+      - opensearch
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
@@ -118,10 +126,14 @@ services:
       - PMF_MEMORY_LIMIT="2048M" # only for development
       - PHP_LOG_ERRORS="On"
       - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED" # Production Value: E_ALL & ~E_DEPRECATED
+      - OPENSEARCH_BASE_URI=http://opensearch:9201
+      - ELASTICSEARCH_BASE_URI=http://elasticsearch:9200
+      - SEARCH_WAIT_TIMEOUT=30
     links:
       - mariadb:db
       - postgres
       - elasticsearch
+      - opensearch
     ports:
       - '80:80'
       - '443:443'
