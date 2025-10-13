@@ -80,7 +80,7 @@ class Auth
      */
     public function getErrors(): string
     {
-        $message = $this->errors !== [] ? implode(PHP_EOL, $this->errors) . PHP_EOL : '';
+        $message = $this->errors !== [] ? implode(separator: PHP_EOL, array: $this->errors) . PHP_EOL : '';
         return $message . ($this->encContainer ? $this->encContainer->error() : '');
     }
 
@@ -90,14 +90,6 @@ class Auth
     public function addError(string $message): void
     {
         $this->errors[] = $message;
-    }
-
-    /**
-     * Clears all collected Auth errors (does not touch encryption errors).
-     */
-    public function clearErrors(): void
-    {
-        $this->errors = [];
     }
 
     /**
@@ -112,19 +104,30 @@ class Auth
 
         if (!class_exists($authClass)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTH_TYPE;
-            throw new Exception(self::PMF_ERROR_USER_NO_AUTH_TYPE);
+            throw new Exception(message: self::PMF_ERROR_USER_NO_AUTH_TYPE);
         }
 
         return new $authClass($this->configuration);
     }
 
     /**
-     * Sets or unsets read-only mode and returns the previous state.
+     * Enables read-only mode and returns the previous state.
      */
-    public function setReadOnly(bool $readOnly = false): bool
+    public function enableReadOnly(): bool
     {
         $oldReadOnly = $this->readOnly;
-        $this->readOnly = $readOnly;
+        $this->readOnly = true;
+
+        return $oldReadOnly;
+    }
+
+    /**
+     * Disables read-only mode and returns the previous state.
+     */
+    public function disableReadOnly(): bool
+    {
+        $oldReadOnly = $this->readOnly;
+        $this->readOnly = false;
 
         return $oldReadOnly;
     }
@@ -145,7 +148,7 @@ class Auth
     public function encrypt(#[SensitiveParameter] string $string): string
     {
         if ($this->encContainer === null) {
-            throw new Exception('No encryption container configured. Call getEncryptionContainer() first.');
+            throw new Exception(message: 'No encryption container configured. Call getEncryptionContainer() first.');
         }
 
         return $this->encContainer->encrypt($string);

@@ -67,7 +67,11 @@ final class PasswordChangeController extends AbstractAdministrationController
         $auth = $this->container->get('phpmyfaq.auth');
         $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name'));
         $authSource->getEncryptionContainer($this->currentUser->getAuthData('encType'));
-        $authSource->setReadOnly($this->currentUser->getAuthData('readOnly'));
+
+        $authSource->disableReadOnly();
+        if ($this->currentUser->getAuthData(key: 'readOnly')) {
+            $authSource->enableReadOnly();
+        }
 
         $oldPassword = Filter::filterVar($request->request->get('faqpassword_old'), FILTER_SANITIZE_SPECIAL_CHARS);
         $newPassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS);

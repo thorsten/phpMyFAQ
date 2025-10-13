@@ -63,14 +63,35 @@ class AuthTest extends TestCase
         $this->auth->selectAuth('foobar');
     }
 
-    public function testSetReadOnly(): void
+    public function testEnableDisableReadOnly(): void
     {
-        $this->assertFalse($this->auth->setReadOnly());
-        $this->assertFalse($this->auth->setReadOnly(true));
-        $this->assertTrue($this->auth->setReadOnly());
+        // initial state: false
+        $this->assertFalse($this->auth->isReadOnly());
+
+        // enable: returns previous (false), becomes true
+        $prev = $this->auth->enableReadOnly();
+        $this->assertFalse($prev);
+        $this->assertTrue($this->auth->isReadOnly());
+
+        // enable again: returns previous (true), stays true
+        $prev2 = $this->auth->enableReadOnly();
+        $this->assertTrue($prev2);
+        $this->assertTrue($this->auth->isReadOnly());
+
+        // disable: returns previous (true), becomes false
+        $prev3 = $this->auth->disableReadOnly();
+        $this->assertTrue($prev3);
+        $this->assertFalse($this->auth->isReadOnly());
+
+        // disable again: returns previous (false), stays false
+        $prev4 = $this->auth->disableReadOnly();
+        $this->assertFalse($prev4);
+        $this->assertFalse($this->auth->isReadOnly());
     }
 
-    public function testEncrypt(): void
+    /**
+     * @throws Exception
+     */public function testEncrypt(): void
     {
         $this->auth->getEncryptionContainer('bcrypt');
         $hash = $this->auth->encrypt('foobar');

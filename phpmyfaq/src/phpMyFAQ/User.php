@@ -167,7 +167,10 @@ class User
 
         $selectedAuth = $auth->selectAuth($this->getAuthSource('name'));
         $selectedAuth->getEncryptionContainer($this->getAuthData('encType'));
-        $selectedAuth->setReadOnly($this->getAuthData('readOnly'));
+        $selectedAuth->disableReadOnly();
+        if ($this->getAuthData(key: 'readOnly')) {
+            $selectedAuth->enableReadOnly();
+        }
 
         if (!$this->addAuth($selectedAuth, $this->getAuthSource('type'))) {
             return;
@@ -405,7 +408,7 @@ class User
 
         $success = false;
         foreach ($this->authContainer as $name => $auth) {
-            if ($auth->setReadOnly()) {
+            if ($auth->disableReadOnly()) {
                 continue;
             }
 
@@ -586,7 +589,7 @@ class User
         $delete = [];
         foreach ($this->authContainer as $auth) {
             ++$authCount;
-            if ($auth->setReadOnly()) {
+            if ($auth->disableReadOnly()) {
                 ++$readOnly;
                 continue;
             }
@@ -897,7 +900,7 @@ class User
 
         $success = false;
         foreach ($this->authContainer as $auth) {
-            if ($auth->setReadOnly()) {
+            if ($auth->disableReadOnly()) {
                 continue;
             }
 

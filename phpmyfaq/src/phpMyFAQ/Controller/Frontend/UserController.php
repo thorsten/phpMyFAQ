@@ -97,7 +97,7 @@ final class UserController extends AbstractController
             $success = $this->currentUser->setUserData($userData);
 
             foreach ($this->currentUser->getAuthContainer() as $authDriver) {
-                if ($authDriver->setReadOnly()) {
+                if ($authDriver->disableReadOnly()) {
                     continue;
                 }
 
