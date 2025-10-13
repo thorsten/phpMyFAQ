@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Bookmark\BookmarkFormatter;
+use phpMyFAQ\Bookmark\BookmarkRepository;
 use phpMyFAQ\User\CurrentUser;
 
 /**
@@ -31,6 +33,10 @@ class Bookmark
      */
     private ?array $bookmarkCache;
 
+    private readonly BookmarkRepository $repository;
+
+    private readonly BookmarkFormatter $formatter;
+
     /**
      * Constructor.
      *
@@ -42,6 +48,8 @@ class Bookmark
         private readonly CurrentUser $currentUser,
     ) {
         $this->bookmarkCache = null;
+        $this->repository = new BookmarkRepository($this->configuration, $this->currentUser);
+        $this->formatter = new BookmarkFormatter($this->configuration, $this->currentUser);
     }
 
     /**
@@ -77,18 +85,7 @@ class Bookmark
      */
     public function add(int $faqId): bool
     {
-        if ($faqId <= 0) {
-            return false;
-        }
-
-        $query = sprintf(
-            'INSERT INTO %sfaqbookmarks(userid, faqid) VALUES (%d, %d)',
-            Database::getTablePrefix(),
-            $this->currentUser->getUserId(),
-            $faqId,
-        );
-
-        $result = (bool) $this->configuration->getDb()->query($query);
+        $result = $this->repository->add($faqId);
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -108,15 +105,7 @@ class Bookmark
             return $this->bookmarkCache;
         }
 
-        $query = sprintf(
-            'SELECT faqid FROM %sfaqbookmarks WHERE userid = %d',
-            Database::getTablePrefix(),
-            $this->currentUser->getUserId(),
-        );
-        $result = $this->configuration->getDb()->query($query);
-        $data = $this->configuration->getDb()->fetchAll($result);
-
-        $this->bookmarkCache = is_array($data) ? $data : [];
+        $this->bookmarkCache = $this->repository->getAll();
 
         return $this->bookmarkCache;
     }
@@ -128,18 +117,7 @@ class Bookmark
      */
     public function remove(int $faqId): bool
     {
-        if ($faqId <= 0) {
-            return false;
-        }
-
-        $query = sprintf(
-            'DELETE FROM %sfaqbookmarks WHERE userid = %d AND faqid = %d',
-            Database::getTablePrefix(),
-            $this->currentUser->getUserId(),
-            $faqId,
-        );
-
-        $result = (bool) $this->configuration->getDb()->query($query);
+        $result = $this->repository->remove($faqId);
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -153,13 +131,7 @@ class Bookmark
      */
     public function removeAll(): bool
     {
-        $query = sprintf(
-            'DELETE FROM %sfaqbookmarks WHERE userid = %d',
-            Database::getTablePrefix(),
-            $this->currentUser->getUserId(),
-        );
-
-        $result = (bool) $this->configuration->getDb()->query($query);
+        $result = $this->repository->removeAll();
 
         if ($result) {
             $this->bookmarkCache = null;
@@ -174,50 +146,13 @@ class Bookmark
     public function getBookmarkList(): array
     {
         $bookmarks = $this->getAll();
-        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
-        $faq = new Faq($this->configuration);
-        $faq->setUser($currentUser)->setGroups($currentGroups);
-
-        $category = new Category($this->configuration);
         $list = [];
 
         foreach ($bookmarks as $bookmark) {
-            if (!isset($bookmark->faqid)) {
-                continue;
+            $item = $this->formatter->format($bookmark);
+            if ($item !== null) {
+                $list[] = $item;
             }
-            $faqId = (int) $bookmark->faqid;
-            if ($faqId <= 0) {
-                continue;
-            }
-
-            $faq->getFaq($faqId);
-            $faqData = $faq->faqRecord;
-
-            if (empty($faqData['id'])) {
-                continue;
-            }
-
-            $categoryId = $category->getCategoryIdFromFaq($faqData['id']);
-            $url = sprintf(
-                '%sindex.php?action=faq&id=%d&cat=%d&artlang=%s',
-                $this->configuration->getDefaultUrl(),
-                (int) $faqData['id'],
-                $categoryId,
-                $faqData['lang'] ?? '',
-            );
-
-            $link = new Link($url, $this->configuration);
-            $title = (string) ($faqData['title'] ?? '');
-            $link->text = Strings::htmlentities($title);
-            $link->itemTitle = $link->text;
-            $link->tooltip = $link->text;
-
-            $list[] = [
-                'url' => $link->toString(),
-                'title' => htmlspecialchars_decode($title),
-                'id' => (int) $faqData['id'],
-                'answer' => (string) ($faqData['content'] ?? ''),
-            ];
         }
 
         return $list;
