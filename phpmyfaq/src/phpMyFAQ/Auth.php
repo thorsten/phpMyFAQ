@@ -80,7 +80,11 @@ class Auth
      */
     public function getErrors(): string
     {
-        $message = $this->errors !== [] ? implode(separator: PHP_EOL, array: $this->errors) . PHP_EOL : '';
+        $message = $this->errors !== []
+            ? implode(
+                separator: PHP_EOL,
+                array: $this->errors,
+            ) . PHP_EOL : '';
         return $message . ($this->encContainer ? $this->encContainer->error() : '');
     }
 
