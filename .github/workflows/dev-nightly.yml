@@ -58,7 +58,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --no-dev
 
       - name: Set Node.js 22.x
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           package-manager-cache: false
           node-version: 22.x
