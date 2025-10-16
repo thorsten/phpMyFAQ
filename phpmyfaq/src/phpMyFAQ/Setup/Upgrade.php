@@ -139,7 +139,9 @@ class Upgrade extends Setup
             file_put_contents($this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
 
             return $this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version);
-        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+        } catch (
+            TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e
+        ) {
             throw new Exception($e->getMessage());
         }
     }
@@ -160,7 +162,9 @@ class Upgrade extends Setup
             $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
             return md5_file($path) === $responseContent['zip']['md5'];
-        } catch (TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+        } catch (
+            TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e
+        ) {
             $this->configuration->getLogger()->log(Level::Error, $e->getMessage());
 
             return false;

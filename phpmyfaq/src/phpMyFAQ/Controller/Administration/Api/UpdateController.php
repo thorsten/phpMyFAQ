@@ -82,7 +82,9 @@ final class UpdateController extends AbstractController
         try {
             $versions = HttpClient::create(['timeout' => 30])->request('GET', 'https://api.phpmyfaq.de/versions');
             return $this->json($versions->getContent(), Response::HTTP_OK);
-        } catch (TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface|RedirectionExceptionInterface $exception) {
+        } catch (
+            TransportExceptionInterface|ClientExceptionInterface|ServerExceptionInterface|RedirectionExceptionInterface $exception
+        ) {
             return $this->json($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }

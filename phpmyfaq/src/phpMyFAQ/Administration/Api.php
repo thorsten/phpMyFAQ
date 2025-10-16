@@ -75,7 +75,12 @@ class Api
                     'development' => $content['development'],
                     'nightly' => $content['nightly'],
                 ];
-            } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception) {
+            } catch (
+                ClientExceptionInterface|
+                RedirectionExceptionInterface|
+                ServerExceptionInterface|
+                TransportExceptionInterface $exception
+            ) {
                 throw new Exception(
                     'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
                     $exception->getCode(),
@@ -106,7 +111,9 @@ class Api
             if (json_decode($this->remoteHashes, null, 512, JSON_THROW_ON_ERROR) instanceof stdClass) {
                 return is_array(json_decode($this->remoteHashes, true, 512, JSON_THROW_ON_ERROR));
             }
-        } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception) {
+        } catch (
+            ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception
+        ) {
             throw new Exception(
                 'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
                 $exception->getCode(),
