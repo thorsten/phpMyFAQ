@@ -36,6 +36,9 @@ use ZipArchive;
  */
 readonly class Backup
 {
+    /** @var BackupRepository */
+    private BackupRepository $repository;
+
     /**
      * Constructor.
      */
@@ -43,6 +46,7 @@ readonly class Backup
         private Configuration $configuration,
         private DatabaseHelper $databaseHelper,
     ) {
+        $this->repository = new BackupRepository($this->configuration);
     }
 
     /**
@@ -58,17 +62,8 @@ readonly class Backup
         $authKey = sodium_crypto_auth_keygen();
         $authCode = sodium_crypto_auth($backupFile, $authKey);
 
-        $query = sprintf(
-            "INSERT INTO %sfaqbackup (id, filename, authkey, authcode, created) VALUES (%d, '%s', '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqbackup', 'id'),
-            $this->configuration->getDb()->escape($fileName),
-            $this->configuration->getDb()->escape(sodium_bin2hex($authKey)),
-            $this->configuration->getDb()->escape(sodium_bin2hex($authCode)),
-            $backupDate,
-        );
-
-        $this->configuration->getDb()->query($query);
+        // persist backup metadata via repository
+        $this->getRepository()->add($fileName, sodium_bin2hex($authKey), sodium_bin2hex($authCode), $backupDate);
 
         return $fileName;
     }
@@ -78,17 +73,8 @@ readonly class Backup
      */
     public function verifyBackup(string $backup, string $backupFileName): bool
     {
-        $query = sprintf(
-            "SELECT id, filename, authkey, authcode, created FROM %sfaqbackup WHERE filename = '%s'",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($backupFileName),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-
+        $row = $this->getRepository()->findByFilename($backupFileName);
+        if ($row !== null) {
             return sodium_crypto_auth_verify(
                 sodium_hex2bin((string) $row->authcode),
                 $backup,
@@ -101,21 +87,29 @@ readonly class Backup
 
     public function generateBackupQueries(string $tableNames): string
     {
-        $backup = implode("\r\n", $this->getBackupHeader($tableNames));
+        $backup = implode(
+            separator: "\r\n",
+            array: $this->getBackupHeader($tableNames),
+        );
 
-        foreach (explode(' ', $tableNames) as $table) {
-            if ('' !== $table) {
-                $backup .= implode("\r\n", $this->databaseHelper->buildInsertQueries(
-                    'SELECT * FROM ' . $table,
-                    $table,
-                ));
+        foreach (explode(
+            separator: ' ',
+            string: $tableNames,
+        ) as $tableName) {
+            if ('' !== $tableName) {
+                $backup .= implode(
+                    separator: "\r\n",
+                    array: $this->databaseHelper->buildInsertQueries('SELECT * FROM ' . $tableName, $tableName),
+                );
             }
         }
 
         return $backup;
     }
 
-    public function getBackupTableNames(BackupType $backupType): string
+    /**
+     * @throws \Exception
+     */ public function getBackupTableNames(BackupType $backupType): string
     {
         $tables = $this->configuration->getDb()->getTableNames(Database::getTablePrefix());
         $tableNames = '';
@@ -146,6 +140,8 @@ readonly class Backup
                 }
 
                 break;
+            case BackupType::BACKUP_TYPE_CONTENT:
+                throw new \Exception(message: 'To be implemented');
         }
 
         return $tableNames;
@@ -176,8 +172,8 @@ readonly class Backup
         $zipFile = PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'content.zip';
 
         $zipArchive = new ZipArchive();
-        if ($zipArchive->open($zipFile, ZipArchive::CREATE) !== true) {
-            throw new Exception('Error while creating ZipArchive');
+        if (!$zipArchive->open($zipFile, ZipArchive::CREATE)) {
+            throw new Exception(message: 'Error while creating ZipArchive');
         }
 
         $files = new RecursiveIteratorIterator(
@@ -196,5 +192,10 @@ readonly class Backup
         $zipArchive->close();
 
         return $zipFile;
+    }
+
+    private function getRepository(): BackupRepository
+    {
+        return $this->repository;
     }
 }
