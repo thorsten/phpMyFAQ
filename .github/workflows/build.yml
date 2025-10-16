@@ -46,6 +46,8 @@ jobs:
 
       - name: Setup Mago
         uses: nhedger/setup-mago@v1
+        with:
+          version: latest
 
       - name: Run Mago
         run: |
