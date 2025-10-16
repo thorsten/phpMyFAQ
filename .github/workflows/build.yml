@@ -44,10 +44,8 @@ jobs:
       #- name: Lint with PHPCS
       #  run: phpmyfaq/src/libs/bin/phpcs --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
 
-      - name: Setup Mago
+      - name: Setup Mago CLI
         uses: nhedger/setup-mago@v1
-        with:
-          version: latest
 
       - name: Run Mago
         run: |

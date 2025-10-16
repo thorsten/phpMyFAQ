@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use phpMyFAQ\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,12 +31,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class AdminLog
 {
+    /** @var AdminLogRepository */
+    private AdminLogRepository $repository;
+
     /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
+        $this->repository = new AdminLogRepository($this->configuration);
     }
 
     /**
@@ -45,9 +48,7 @@ readonly class AdminLog
      */
     public function getNumberOfEntries(): int
     {
-        $query = sprintf('SELECT id FROM %sfaqadminlog', Database::getTablePrefix());
-
-        return $this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
+        return $this->repository->getNumberOfEntries();
     }
 
     /**
@@ -56,27 +57,7 @@ readonly class AdminLog
      */
     public function getAll(): array
     {
-        $data = [];
-
-        $query = sprintf(
-            'SELECT id, time, usr AS user, text, ip FROM %sfaqadminlog ORDER BY id DESC',
-            Database::getTablePrefix(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $adminLog = new AdminLogEntity();
-            $adminLog
-                ->setId($row->id)
-                ->setTime($row->time)
-                ->setUserId($row->user)
-                ->setText($row->text)
-                ->setIp($row->ip);
-            $data[$row->id] = $adminLog;
-        }
-
-        return $data;
+        return $this->repository->getAll();
     }
 
     /**
@@ -87,22 +68,12 @@ readonly class AdminLog
      */
     public function log(User $user, string $logText = ''): bool
     {
-        if ($this->configuration->get('main.enableAdminLog')) {
-            $request = Request::createFromGlobals();
-            $query = sprintf(
-                "INSERT INTO %sfaqadminlog (id, time, usr, text, ip) VALUES (%d, %d, %d, '%s', '%s')",
-                Database::getTablePrefix(),
-                $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
-                $request->server->get('REQUEST_TIME'),
-                $user->getUserId(),
-                $this->configuration->getDb()->escape(nl2br($logText)),
-                $this->configuration->getDb()->escape($request->getClientIp()),
-            );
-
-            return (bool) $this->configuration->getDb()->query($query);
+        if (!$this->configuration->get('main.enableAdminLog')) {
+            return false; // early return, avoids else
         }
 
-        return false;
+        $request = Request::createFromGlobals();
+        return $this->repository->add($user, $logText, $request);
     }
 
     /**
@@ -110,12 +81,7 @@ readonly class AdminLog
      */
     public function delete(): bool
     {
-        $query = sprintf(
-            'DELETE FROM %sfaqadminlog WHERE time < %d',
-            Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME') - (30 * 86400),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        $timestamp = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - (30 * 86400);
+        return $this->repository->deleteOlderThan($timestamp);
     }
 }

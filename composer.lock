@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6cfea2948888a9990573c3e6092e26a9",
+    "content-hash": "13973a7a717b9974101e8f948526cbaf",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4231,12 +4231,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mcp-sdk.git",
-                "reference": "b7685368d10e380b2a4093d909c6b3f3d81b20ec"
+                "reference": "19464d5ce91b969c156d68ec7aa942e39ade5118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mcp-sdk/zipball/b7685368d10e380b2a4093d909c6b3f3d81b20ec",
-                "reference": "b7685368d10e380b2a4093d909c6b3f3d81b20ec",
+                "url": "https://api.github.com/repos/symfony/mcp-sdk/zipball/19464d5ce91b969c156d68ec7aa942e39ade5118",
+                "reference": "19464d5ce91b969c156d68ec7aa942e39ade5118",
                 "shasum": ""
             },
             "require": {
@@ -4246,7 +4246,6 @@
             },
             "require-dev": {
                 "phpstan/phpstan": "^2.1",
-                "phpstan/phpstan-strict-rules": "^2.0",
                 "phpunit/phpunit": "^11.5",
                 "psr/cache": "^3.0",
                 "symfony/console": "^7.3|^8.0"
@@ -4298,7 +4297,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-24T11:12:34+00:00"
+            "time": "2025-09-18T06:25:22+00:00"
         },
         {
             "name": "symfony/mime",
@@ -5979,16 +5978,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.0.0-beta.28",
+            "version": "1.0.0-beta.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "4fda6c12b126cf159d999fae36e87ecd2fd20957"
+                "reference": "acac89ca8c62b867f4dbcdefdf79d99da76d653b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/4fda6c12b126cf159d999fae36e87ecd2fd20957",
-                "reference": "4fda6c12b126cf159d999fae36e87ecd2fd20957",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/acac89ca8c62b867f4dbcdefdf79d99da76d653b",
+                "reference": "acac89ca8c62b867f4dbcdefdf79d99da76d653b",
                 "shasum": ""
             },
             "require": {
@@ -6026,7 +6025,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.0.0-beta.28"
+                "source": "https://github.com/carthage-software/mago/tree/1.0.0-beta.31"
             },
             "funding": [
                 {
@@ -6034,7 +6033,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-12T02:41:50+00:00"
+            "time": "2025-10-16T05:37:27+00:00"
         },
         {
             "name": "doctrine/deprecations",
