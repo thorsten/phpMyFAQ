@@ -76,10 +76,7 @@ class Api
                     'nightly' => $content['nightly'],
                 ];
             } catch (
-                ClientExceptionInterface|
-                RedirectionExceptionInterface|
-                ServerExceptionInterface|
-                TransportExceptionInterface $exception
+                ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $exception
             ) {
                 throw new Exception(
                     'phpMyFAQ Verification API is not available: ' . $exception->getMessage(),
