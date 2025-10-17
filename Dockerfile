@@ -4,7 +4,7 @@
 #
 
 # Stage 1: Composer dependencies with PHP extensions
-FROM php:8.4-cli AS composer
+FROM php:8.5.0RC2-cli AS composer
 
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev libzip-dev libicu-dev libpq-dev libldap2-dev libbz2-dev libsodium-dev \
@@ -22,7 +22,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --verbose
 
 # Stage 2: PHP runtime with same extensions
-FROM php:8.4-cli
+FROM php:8.5.0RC2-cli
 
 # Install necessary system dependencies again (clean stage)
 RUN apt-get update && apt-get install -y \
