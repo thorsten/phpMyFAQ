@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Category\Language\CategoryLanguageService;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Language\LanguageCodes;
@@ -273,15 +274,13 @@ class CategoryHelper extends AbstractHelper
     public function renderAvailableTranslationsOptions(int $categoryId): string
     {
         $options = '';
-        $availableTranslations = $this->configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
-        $availableLanguages = LanguageHelper::getAvailableLanguages();
 
-        foreach ($availableTranslations as $availableTranslation) {
-            $options .= sprintf(
-                '<option value="%s">%s</option>',
-                $availableTranslation,
-                $availableLanguages[$availableTranslation],
-            );
+        // Use new CategoryLanguageService to fetch existing translation languages
+        $languageService = new CategoryLanguageService();
+        $existingTranslations = $languageService->getExistingTranslations($this->configuration, $categoryId);
+
+        foreach ($existingTranslations as $code => $displayName) {
+            $options .= sprintf('<option value="%s">%s</option>', $code, $displayName);
         }
 
         return $options;

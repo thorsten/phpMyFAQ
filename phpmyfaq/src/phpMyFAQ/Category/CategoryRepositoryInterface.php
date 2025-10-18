@@ -8,9 +8,11 @@
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    phpMyFAQ Team
- * @copyright 2004-2025 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2026-10-18
  */
 
 declare(strict_types=1);
@@ -77,4 +79,9 @@ interface CategoryRepositoryInterface
      * @return array<int, array<string, mixed>>
      */
     public function findMissingCategories(?string $language = null): array;
+
+    /**
+     * Returns the number of categories that match name, language and parent.
+     */
+    public function countByNameLangParent(string $name, string $lang, int $parentId): int;
 }

@@ -22,7 +22,7 @@ namespace phpMyFAQ\Controller\Api;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Order;
-use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -219,7 +219,7 @@ final class CategoryController extends AbstractController
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
@@ -269,8 +269,8 @@ final class CategoryController extends AbstractController
         $categoryOrder->add($categoryId, $parentId);
 
         if ($categoryId) {
-            $categoryPermission->add(Permission::USER, [$categoryId], [-1]);
-            $categoryPermission->add(Permission::GROUP, [$categoryId], [-1]);
+            $categoryPermission->add(CategoryPermission::USER, [$categoryId], [-1]);
+            $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], [-1]);
 
             $result = [
                 'stored' => true,

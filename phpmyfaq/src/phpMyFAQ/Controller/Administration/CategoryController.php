@@ -20,7 +20,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Language\CategoryLanguageService;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -144,8 +145,8 @@ final class CategoryController extends AbstractAdministrationController
             'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
             'parentId' => $parentId,
             'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
-            'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
-            'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
+            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [(int) $parentId])[0] ?? -1,
+            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [(int) $parentId]),
             'categoryName' => $category->categoryName[$parentId]['name'],
             'msgMainCategory' => Translation::get('msgMainCategory'),
             ...$templateVars,
@@ -169,7 +170,7 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
         $seo = $this->container->get('phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], false);
@@ -326,9 +327,10 @@ final class CategoryController extends AbstractAdministrationController
         $seoEntity->setReferenceId($categoryId);
         $seoEntity->setReferenceLanguage($categoryEntity->getLang());
 
-        $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
+        $seoService = $this->container->get('phpmyfaq.seo');
+        $seoData = $seoService->get($seoEntity);
 
-        $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
+        $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
         if ($userPermission[0] == -1) {
             $allUsers = true;
             $restrictedUsers = false;
@@ -337,7 +339,7 @@ final class CategoryController extends AbstractAdministrationController
             $restrictedUsers = true;
         }
 
-        $groupPermission = $categoryPermission->get(Permission::GROUP, [$categoryId]);
+        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [$categoryId]);
         if ($groupPermission[0] == -1) {
             $allGroups = true;
             $restrictedGroups = false;
@@ -420,28 +422,21 @@ final class CategoryController extends AbstractAdministrationController
         $currentLangCode = $this->configuration->getLanguage()->getLanguage();
         $currentLanguage = LanguageCodes::get($currentLangCode);
 
-        // get languages in use for all categories
-        $allLanguages = $this->configuration->getLanguage()->isLanguageAvailable(0, 'faqcategories');
-        $languages = [];
-        foreach ($allLanguages as $language) {
-            $languages[$language] = LanguageCodes::get($language);
-        }
-
-        asort($languages);
+        // get languages in use for all categories via service
+        $languageService = new CategoryLanguageService();
+        $languages = $languageService->getLanguagesInUse($this->configuration); // [code => name]
 
         $translations = [];
-
         foreach ($category->getCategoryTree() as $cat) {
-            $languageIds = $category->getCategoryLanguagesTranslated((int) $cat['id']);
-            $translationArray = array_keys($languageIds);
-
-            $translations[$cat['id']] = $translationArray;
+            $existing = $languageService->getExistingTranslations($this->configuration, (int) $cat['id']); // [code => name]
+            $translations[$cat['id']] = array_keys($existing);
         }
 
-        $languageCodes = [LanguageCodes::getKey($currentLanguage)];
-        foreach ($languages as $language) {
-            if ($language !== $currentLanguage) {
-                $languageCodes[] = LanguageCodes::getKey($language);
+        // Build language codes list: current first
+        $languageCodes = [$currentLangCode];
+        foreach (array_keys($languages) as $code) {
+            if ($code !== $currentLangCode) {
+                $languageCodes[] = $code;
             }
         }
 
@@ -480,7 +475,7 @@ final class CategoryController extends AbstractAdministrationController
 
         $session = $this->container->get('session');
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
         $userHelper = new UserHelper($this->currentUser);
 
         $category = new Category($this->configuration, [], false);
@@ -490,8 +485,21 @@ final class CategoryController extends AbstractAdministrationController
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $translateTo = Filter::filterVar($request->query->get('translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $userPermission = $categoryPermission->get(Permission::USER, [$categoryId]);
-        $groupPermission = $categoryPermission->get(Permission::GROUP, [$categoryId]);
+        // Re-add permission arrays used in template
+        $userPermission = $categoryPermission->get(CategoryPermission::USER, [(int) $categoryId]);
+        $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [(int) $categoryId]);
+
+        // Prepare language selection options via service (keeps HTML output for BC)
+        $languageService = new CategoryLanguageService();
+        $toTranslate = $languageService->getLanguagesToTranslate($this->configuration, (int) $categoryId); // [code=>name]
+        $langOptions = '';
+        foreach ($toTranslate as $code => $name) {
+            $langOptions .= '<option value="' . $code . '"';
+            if ($code === $translateTo) {
+                $langOptions .= ' selected="selected"';
+            }
+            $langOptions .= '>' . $name . '</option>';
+        }
 
         return $this->render('@admin/content/category.translate.twig', [
             ...$this->getHeader($request),
@@ -502,12 +510,12 @@ final class CategoryController extends AbstractAdministrationController
             'categoryId' => $categoryId,
             'category' => $category->categoryName[$categoryId],
             'permLevel' => $this->configuration->get('security.permLevel'),
-            'groupPermission' => $groupPermission[0],
-            'userPermission' => $userPermission[0],
+            'groupPermission' => $groupPermission[0] ?? -1,
+            'userPermission' => $userPermission[0] ?? -1,
             'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
             'categoryNameLabel' => Translation::get('categoryNameLabel'),
             'ad_categ_lang' => Translation::get('ad_categ_lang'),
-            'langToTranslate' => $category->getCategoryLanguagesToTranslate($categoryId, $translateTo),
+            'langToTranslate' => $langOptions, // deprecated in future; generated from data service now
             'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
             'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
             'userSelection' => $userHelper->getAllUsersForTemplate(
@@ -536,7 +544,7 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryPermission = new Permission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
         $seo = $this->container->get('phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], false);
@@ -628,10 +636,11 @@ final class CategoryController extends AbstractAdministrationController
                     ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
                     ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
 
-                if ($seo->get(clone $seoEntity)->getId() === null) {
-                    $seo->create($seoEntity);
+                $seoService = $this->container->get('phpmyfaq.seo');
+                if ($seoService->get($seoEntity)->getId() === null) {
+                    $seoService->create($seoEntity);
                 } else {
-                    $seo->update($seoEntity);
+                    $seoService->update($seoEntity);
                 }
 
                 $templateVars = [
@@ -673,10 +682,11 @@ final class CategoryController extends AbstractAdministrationController
                 ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
                 ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
 
-            if ($seo->get(clone $seoEntity)->getId() === null) {
-                $seo->create($seoEntity);
+            $seoService = $this->container->get('phpmyfaq.seo');
+            if ($seoService->get($seoEntity)->getId() === null) {
+                $seoService->create($seoEntity);
             } else {
-                $seo->update($seoEntity);
+                $seoService->update($seoEntity);
             }
 
             $templateVars = [

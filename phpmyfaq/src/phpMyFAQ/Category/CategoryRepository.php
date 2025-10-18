@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Category repository implementation for phpMyFAQ.
  *
@@ -10,13 +8,18 @@ declare(strict_types=1);
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    phpMyFAQ Team
- * @copyright 2004-2025 phpMyFAQ Team
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2026-10-18
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 
+use phpMyFAQ\Category\Permission\CategoryPermissionService;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Entity\CategoryEntity;
@@ -26,6 +29,27 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function __construct(
         private readonly Configuration $configuration,
     ) {
+    }
+
+    /**
+     * Small mapper to cast DB row to a normalized category array.
+     * @param array<string, mixed> $row
+     * @return array<string, mixed>
+     */
+    private function mapRow(array $row): array
+    {
+        return [
+            'id' => (int) $row['id'],
+            'lang' => (string) $row['lang'],
+            'parent_id' => (int) $row['parent_id'],
+            'name' => (string) $row['name'],
+            'description' => (string) $row['description'],
+            'user_id' => (int) $row['user_id'],
+            'group_id' => (int) $row['group_id'],
+            'active' => (int) $row['active'],
+            'show_home' => (int) $row['show_home'],
+            'image' => (string) $row['image'],
+        ];
     }
 
     /**
@@ -41,9 +65,8 @@ class CategoryRepository implements CategoryRepositoryInterface
         $where = '';
 
         if ($withPermission) {
-            $groupsList = $groups === [] ? '-1' : implode(', ', $groups);
-            $activeClause = $withInactive ? '' : 'AND fc.active = 1';
-            $where = "WHERE ( fg.group_id IN ($groupsList) OR (fu.user_id = $userId AND fg.group_id IN ($groupsList))) $activeClause";
+            $perm = new CategoryPermissionService();
+            $where = $perm->buildWhereClause($groups, $userId, $withInactive);
         }
 
         if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {
@@ -85,18 +108,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         if ($result) {
             while ($row = $this->configuration->getDb()->fetchArray($result)) {
-                $categories[(int) $row['id']] = [
-                    'id' => (int) $row['id'],
-                    'lang' => (string) $row['lang'],
-                    'parent_id' => (int) $row['parent_id'],
-                    'name' => (string) $row['name'],
-                    'description' => (string) $row['description'],
-                    'user_id' => (int) $row['user_id'],
-                    'group_id' => (int) $row['group_id'],
-                    'active' => (int) $row['active'],
-                    'show_home' => (int) $row['show_home'],
-                    'image' => (string) $row['image'],
-                ];
+                $mapped = $this->mapRow($row);
+                $categories[$mapped['id']] = $mapped;
             }
         }
 
@@ -110,13 +123,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $categories = [];
         $prefix = Database::getTablePrefix();
-        $query = <<<SQL
-            SELECT 
-                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image 
-            FROM 
-                {$prefix}faqcategories
-        SQL;
-
+        $query = "SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM {$prefix}faqcategories";
         if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {
             $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
@@ -125,18 +132,8 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         if ($result) {
             while ($row = $this->configuration->getDb()->fetchArray($result)) {
-                $categories[(int) $row['id']] = [
-                    'id' => (int) $row['id'],
-                    'lang' => (string) $row['lang'],
-                    'parent_id' => (int) $row['parent_id'],
-                    'name' => (string) $row['name'],
-                    'description' => (string) $row['description'],
-                    'user_id' => (int) $row['user_id'],
-                    'group_id' => (int) $row['group_id'],
-                    'active' => (int) $row['active'],
-                    'show_home' => (int) $row['show_home'],
-                    'image' => (string) $row['image'],
-                ];
+                $mapped = $this->mapRow($row);
+                $categories[$mapped['id']] = $mapped;
             }
         }
 
@@ -406,5 +403,25 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         return $categories;
+    }
+
+    public function countByNameLangParent(string $name, string $lang, int $parentId): int
+    {
+        $query = sprintf(
+            "SELECT COUNT(*) AS cnt FROM %sfaqcategories WHERE name = '%s' AND lang = '%s' AND parent_id = %d",
+            Database::getTablePrefix(),
+            $this->configuration->getDb()->escape($name),
+            $this->configuration->getDb()->escape($lang),
+            $parentId,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row && isset($row['cnt'])) {
+                return (int) $row['cnt'];
+            }
+        }
+        return 0;
     }
 }

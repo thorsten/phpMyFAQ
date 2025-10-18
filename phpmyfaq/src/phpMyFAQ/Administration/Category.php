@@ -19,13 +19,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Category\Permission\CategoryPermissionService;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
 /**
  * Class Category
  *
- * All methods in this class only needed for admin category management.
+ * All methods in this class are only needed for admin category management.
  */
 class Category
 {
@@ -72,9 +73,13 @@ class Category
             );
         }
 
-        $query = sprintf(
-            '
-            SELECT
+        // Centralize permission WHERE clause
+        $perm = new CategoryPermissionService();
+        // In admin, include inactive categories (no active filter)
+        $where = $perm->buildWhereClause($this->groups, $this->user, true) . ' ' . $languageCheck;
+
+        $prefix = Database::getTablePrefix();
+        $query = "SELECT
                 fc.id AS id,
                 fc.lang AS lang,
                 fc.parent_id AS parent_id,
@@ -86,38 +91,19 @@ class Category
                 fc.image AS image,
                 fc.show_home AS show_home
             FROM
-                %sfaqcategories fc
-            LEFT JOIN
-                %sfaqcategory_group fg
-            ON
-                fc.id = fg.category_id
-            LEFT JOIN
-                %sfaqcategory_order fco
-            ON
-                fc.id = fco.category_id
-            LEFT JOIN
-                %sfaqcategory_user fu
-            ON
-                fc.id = fu.category_id
-            WHERE
-                ( fg.group_id IN (%s)
-            OR
-                (fu.user_id = %d AND fg.group_id IN (%s)))
-            %s
+                {$prefix}faqcategories fc
+            LEFT JOIN {$prefix}faqcategory_group fg
+                ON fc.id = fg.category_id
+            LEFT JOIN {$prefix}faqcategory_order fco
+                ON fc.id = fco.category_id
+            LEFT JOIN {$prefix}faqcategory_user fu
+                ON fc.id = fu.category_id
+            {$where}
             GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image,
                 fc.show_home, fco.position
             ORDER BY
-                fco.position, fc.id ASC',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups),
-            $languageCheck,
-        );
+                fco.position, fc.id ASC";
 
         $result = $this->configuration->getDb()->query($query);
 
@@ -144,8 +130,11 @@ class Category
                 ];
             }
 
-            foreach ($this->categoryName as $id) {
-                $this->categoryName[$id['id']]['level'] = $this->getLevelOf($this->categoryName[$id['id']]['id']);
+            // Ensure level is set for each entry in categoryName
+            foreach ($this->categoryName as $cid => $row) {
+                if (is_array($row) && isset($row['id'])) {
+                    $this->categoryName[$cid]['level'] = $this->getLevelOf((int) $row['id']);
+                }
             }
         }
 

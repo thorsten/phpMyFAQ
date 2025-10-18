@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main category class. Yes, it's huge.
  *
@@ -20,10 +18,16 @@ declare(strict_types=1);
  * @since     2004-02-16
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 use phpMyFAQ\Category\CategoryRepository;
 use phpMyFAQ\Category\CategoryRepositoryInterface;
+use phpMyFAQ\Category\Navigation\BreadcrumbsBuilder;
+use phpMyFAQ\Category\Navigation\BreadcrumbsHtmlRenderer;
+use phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter;
+use phpMyFAQ\Category\Tree\TreeBuilder;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
@@ -38,24 +42,28 @@ class Category
 {
     /**
      * The categories as an array.
+     * @deprecated Will be removed in a future version. Use query methods (e.g., getOrderedCategories) instead.
      * @var array<int, array<string, mixed>>
      */
     public array $categories = [];
 
     /**
      * The category names as an array indexed by category ID.
+     * @deprecated Will be removed in a future version. Use query methods and dedicated builders instead.
      * @var array<int, array<string, mixed>>
      */
     public array $categoryName = [];
 
     /**
      * The image as an array.
+     * @deprecated Will be removed in a future version.
      * @var array<int, string>
      */
     public array $image = [];
 
     /**
      * The tree with the tabs.
+     * @deprecated Will be removed in a future version.
      * @var array<int, array<string, mixed>>
      */
     public array $treeTab = [];
@@ -108,6 +116,26 @@ class Category
     private ?CategoryRepositoryInterface $categoryRepository = null;
 
     /**
+     * Internal tree builder (Phase 2 extraction).
+     */
+    private ?TreeBuilder $treeBuilder = null;
+
+    /**
+     * Internal breadcrumbs builder (Phase 3 extraction).
+     */
+    private ?BreadcrumbsBuilder $breadcrumbsBuilder = null;
+
+    /**
+     * Internal breadcrumbs HTML renderer (Phase 3 extraction).
+     */
+    private ?BreadcrumbsHtmlRenderer $breadcrumbsHtmlRenderer = null;
+
+    /**
+     * Internal admin category tree presenter (Phase 3 extraction).
+     */
+    private ?AdminCategoryTreePresenter $adminCategoryTreePresenter = null;
+
+    /**
      * Constructor.
      *
      * @param Configuration $configuration Configuration object
@@ -139,6 +167,50 @@ class Category
             $this->categoryRepository = new CategoryRepository($this->configuration);
         }
         return $this->categoryRepository;
+    }
+
+    /**
+     * Lazy tree builder factory.
+     */
+    private function getTreeBuilder(): TreeBuilder
+    {
+        if ($this->treeBuilder === null) {
+            $this->treeBuilder = new TreeBuilder();
+        }
+        return $this->treeBuilder;
+    }
+
+    /**
+     * Lazy breadcrumbs builder factory.
+     */
+    private function getBreadcrumbsBuilder(): BreadcrumbsBuilder
+    {
+        if ($this->breadcrumbsBuilder === null) {
+            $this->breadcrumbsBuilder = new BreadcrumbsBuilder();
+        }
+        return $this->breadcrumbsBuilder;
+    }
+
+    /**
+     * Lazy breadcrumbs HTML renderer factory.
+     */
+    private function getBreadcrumbsHtmlRenderer(): BreadcrumbsHtmlRenderer
+    {
+        if ($this->breadcrumbsHtmlRenderer === null) {
+            $this->breadcrumbsHtmlRenderer = new BreadcrumbsHtmlRenderer();
+        }
+        return $this->breadcrumbsHtmlRenderer;
+    }
+
+    /**
+     * Lazy admin category tree presenter factory.
+     */
+    private function getAdminCategoryTreePresenter(): AdminCategoryTreePresenter
+    {
+        if ($this->adminCategoryTreePresenter === null) {
+            $this->adminCategoryTreePresenter = new AdminCategoryTreePresenter();
+        }
+        return $this->adminCategoryTreePresenter;
     }
 
     /**
@@ -217,23 +289,7 @@ class Category
      */
     private function getLevelOf(int $categoryId): int
     {
-        $alreadyListed = [$categoryId];
-        $level = 0;
-
-        while (
-            isset($this->categoryName[$categoryId]['parent_id'])
-            && (int) $this->categoryName[$categoryId]['parent_id'] !== 0
-        ) {
-            ++$level;
-            $categoryId = (int) $this->categoryName[$categoryId]['parent_id'];
-            if (in_array($categoryId, $alreadyListed)) {
-                break;
-            } else {
-                $alreadyListed[] = $categoryId;
-            }
-        }
-
-        return $level;
+        return $this->getTreeBuilder()->computeLevel($this->categoryName, $categoryId);
     }
 
     public function setUser(int $userId = -1): Category
@@ -277,39 +333,8 @@ class Category
      */
     public function buildCategoryTree(int $parentId = 0, int $indent = 0): void
     {
-        $temporaryTree = [];
-        $xLevel = 0;
-
-        foreach ($this->categories as $categoryId => $n) {
-            if (!isset($n['parent_id'])) {
-                continue;
-            }
-
-            if ($n['parent_id'] != $parentId) {
-                continue;
-            }
-
-            if ($categoryId <= 0) {
-                continue;
-            }
-
-            $temporaryTree[$xLevel++] = $categoryId;
-        }
-
-        if ($xLevel != 0) {
-            foreach ($temporaryTree as $d) {
-                $tmp = [];
-                if (isset($this->categories[$d])) {
-                    foreach ($this->categories[$d] as $key => $value) {
-                        $tmp[$key] = $value;
-                    }
-
-                    $tmp['indent'] = $indent;
-                    $this->catTree[] = $tmp;
-                    $this->buildCategoryTree($tmp['id'], $indent + 1);
-                }
-            }
-        }
+        // Delegate to TreeBuilder to compute a fresh linear tree
+        $this->catTree = $this->getTreeBuilder()->buildLinearTree($this->categories, $parentId, $indent);
     }
 
     /**
@@ -317,16 +342,7 @@ class Category
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
-        $result = [];
-
-        foreach ($categories as $category) {
-            if ($category['parent_id'] === $parentId) {
-                $categoryId = $category['id'];
-                $result[$categoryId] = $this->buildAdminCategoryTree($categories, $categoryId);
-            }
-        }
-
-        return $result;
+        return $this->getTreeBuilder()->buildAdminCategoryTree($categories, $parentId);
     }
 
     /**
@@ -337,38 +353,17 @@ class Category
      */
     public function transform(int $categoryId): void
     {
-        $category = $this->categoryName[$categoryId] ?? [];
-        $parentId = $category['parent_id'] ?? 0;
-        $children = $this->children[$categoryId] ?? [];
-
-        if ($categoryId > 0) {
-            $category['level'] = $this->getLevelOf($categoryId);
-            $category['children'] = array_keys($children);
-            $category['tree'] = $this->buildTree($categoryId);
-            $category['symbol'] = $this->getSymbol($categoryId, $parentId);
-            $this->treeTab[] = $category;
-        }
-
-        foreach (array_keys($children) as $childId) {
-            $this->transform($childId);
+        $presenter = $this->getAdminCategoryTreePresenter();
+        $entries = $presenter->transform($this->getTreeBuilder(), $this->categoryName, $this->children, $categoryId);
+        // Append to legacy treeTab as before
+        foreach ($entries as $entry) {
+            $this->treeTab[] = $entry;
         }
     }
 
     private function buildTree(int $categoryId): array
     {
-        $ascendants = $this->getNodes($categoryId);
-        $tree = [];
-
-        foreach ($ascendants as $i => $ascendantId) {
-            if ($ascendantId == 0) {
-                break;
-            }
-
-            $brothers = $this->getBrothers($ascendantId);
-            $tree[$i] = $ascendantId == end($brothers) ? 'space' : 'vertical';
-        }
-
-        return $tree;
+        return $this->getTreeBuilder()->buildTree($this->categoryName, $this->children, $categoryId);
     }
 
     private function getSymbol(int $categoryId, int $parentId): string
@@ -387,35 +382,7 @@ class Category
      */
     private function getNodes(int $categoryId): array
     {
-        $nodes = [];
-
-        if ($categoryId <= 0) {
-            return $nodes;
-        }
-
-        $nodes[] = $categoryId;
-
-        $currentCategoryId = $categoryId;
-        while ($currentCategoryId > 0) {
-            if (!isset($this->categoryName[$currentCategoryId])) {
-                break;
-            }
-
-            $parentId = (int) $this->categoryName[$currentCategoryId]['parent_id'];
-
-            if ($parentId <= 0 || $parentId === $currentCategoryId) {
-                break;
-            }
-
-            if (!isset($this->categoryName[$parentId])) {
-                break;
-            }
-
-            array_unshift($nodes, $parentId);
-            $currentCategoryId = $parentId;
-        }
-
-        return $nodes;
+        return $this->getTreeBuilder()->getNodes($this->categoryName, $categoryId);
     }
 
     /**
@@ -426,10 +393,7 @@ class Category
      */
     private function getBrothers(int $categoryId): array
     {
-        if (!isset($this->categoryName[$categoryId]['parent_id'])) {
-            return [];
-        }
-        return $this->getChildren((int) $this->categoryName[$categoryId]['parent_id']);
+        return $this->getTreeBuilder()->getBrothers($this->categoryName, $this->children, $categoryId);
     }
 
     /**
@@ -437,7 +401,7 @@ class Category
      */
     public function getChildren(int $categoryId): array
     {
-        return isset($this->children[$categoryId]) ? array_keys($this->children[$categoryId]) : [];
+        return $this->getTreeBuilder()->getChildren($this->children, $categoryId);
     }
 
     /**
@@ -448,16 +412,7 @@ class Category
      */
     public function getChildNodes(int $categoryId): array
     {
-        $children = [];
-
-        if (isset($this->children[$categoryId])) {
-            foreach (array_keys($this->children[$categoryId]) as $childId) {
-                $children = array_merge($children, [$childId]);
-                $children = array_merge($children, $this->getChildNodes($childId));
-            }
-        }
-
-        return $children;
+        return $this->getTreeBuilder()->getChildNodes($this->children, $categoryId);
     }
 
     /**
@@ -548,49 +503,20 @@ class Category
         string $useCssClass = 'breadcrumb',
     ): string {
         $ids = $this->getNodes($catId);
+        // Build breadcrumb segments from ids
+        $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->categoryName, $ids);
 
-        $tempName = [];
-        $categoryId = [];
-        $description = [];
-        $breadcrumb = [];
-
-        foreach ($ids as $id) {
-            if (isset($this->categoryName[$id])) {
-                $tempName[] = $this->categoryName[$id]['name'];
-                $categoryId[] = $id;
-                $description[] = $this->categoryName[$id]['description'] ?? '';
-            }
-        }
-
-        if ($tempName === []) {
+        if ($segments === []) {
             return '';
         }
 
-        // @todo Maybe this should be done somewhere else ...
         if ($renderAsHtml) {
-            foreach ($tempName as $key => $category) {
-                $url = sprintf(
-                    '%sindex.php?action=show&cat=%d',
-                    $this->configuration->getDefaultUrl(),
-                    $categoryId[$key],
-                );
-                $oLink = new Link($url, $this->configuration);
-                $oLink->text = Strings::htmlentities($category);
-                $oLink->itemTitle = Strings::htmlentities($category);
-                $oLink->tooltip = Strings::htmlentities($description[$key] ?? '');
-                if (0 === $key) {
-                    $oLink->setRelation('index');
-                }
-
-                $breadcrumb[] = sprintf('<li class="breadcrumb-item">%s</li>', $oLink->toHtmlAnchor());
-            }
-
-            $tempName = $breadcrumb;
-
-            return sprintf('<ul class="%s">%s</ul>', $useCssClass, implode('', $tempName));
+            return $this->getBreadcrumbsHtmlRenderer()->render($this->configuration, $segments, $useCssClass);
         }
 
-        return implode($separator, $tempName);
+        // plain text
+        $names = array_map(static fn(array $s): string => (string) $s['name'], $segments);
+        return implode($separator, $names);
     }
 
     /**
@@ -660,17 +586,11 @@ class Category
      */
     public function checkIfCategoryExists(CategoryEntity $categoryEntity): int
     {
-        $query = sprintf(
-            "SELECT name from %sfaqcategories WHERE name = '%s' AND lang = '%s' AND parent_id = %d",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($categoryEntity->getName()),
-            $this->configuration->getDb()->escape($categoryEntity->getLang()),
+        return $this->getCategoryRepository()->countByNameLangParent(
+            $categoryEntity->getName(),
+            $categoryEntity->getLang(),
             $categoryEntity->getParentId(),
         );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        return $this->configuration->getDb()->numRows($result);
     }
 
     /**
@@ -740,6 +660,9 @@ class Category
 
     /**
      * Create all languages that can be used for translation as <option>.
+     *
+     * @deprecated Will be removed in a future version. Use \phpMyFAQ\Category\Language\CategoryLanguageService
+     *             to retrieve data and render options in the template layer.
      *
      * @param int $categoryId Entity id
      * @param string $selectedLanguage Selected language
