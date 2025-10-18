@@ -463,7 +463,7 @@ class Configuration
                     Database::getTablePrefix(),
                     $this->tableName,
                     $this->getDb()->escape(trim($value)),
-                    $name
+                    $this->getDb()->escape($name)
                 );
 
                 $this->getDb()->query($update);
