@@ -46,26 +46,31 @@ class McpServerCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Run the phpMyFAQ MCP server for LLM integration')
+        $this->setDescription(description: 'Run the phpMyFAQ MCP server for LLM integration')
             ->setHelp(
-                'This command starts the MCP server that allows LLM models to search and query phpMyFAQ installations.',
+                help: 'This command starts the MCP server that allows LLM models to search and query phpMyFAQ installations.',
             )
-            ->addOption('info', 'i', InputOption::VALUE_NONE, 'Show server information instead of running the server');
+            ->addOption(
+                name: 'info',
+                shortcut: 'i',
+                mode: InputOption::VALUE_NONE,
+                description: 'Show server information instead of running the server',
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        if ($input->getOption('info')) {
+        if ($input->getOption(name: 'info')) {
             $this->showServerInfo($io);
             return Command::SUCCESS;
         }
 
-        $io->title('phpMyFAQ MCP Server');
-        $io->info('Starting MCP server for phpMyFAQ knowledge base...');
-        $io->info('The server will handle MCP protocol requests from LLM clients.');
-        $io->warning('Press Ctrl+C to stop the server.');
+        $io->title(message: 'phpMyFAQ MCP Server');
+        $io->info(message: 'Starting MCP server for phpMyFAQ knowledge base...');
+        $io->info(message: 'The server will handle MCP protocol requests from LLM clients.');
+        $io->warning(message: 'Press Ctrl+C to stop the server.');
 
         try {
             $this->mcpServer->runConsole($input, $output);
@@ -84,17 +89,20 @@ class McpServerCommand extends Command
         $io->definitionList(
             ['Version' => $serverInfo['version']],
             ['Description' => $serverInfo['description']],
-            ['Capabilities' => implode(', ', array_keys(array_filter($serverInfo['capabilities'])))],
+            ['Capabilities' => implode(
+                separator: ', ',
+                array: array_keys(array_filter($serverInfo['capabilities'])),
+            )],
         );
 
-        $io->section('Available Tools');
+        $io->section(message: 'Available Tools');
         $toolsTable = [];
         foreach ($serverInfo['tools'] as $tool) {
             $toolsTable[] = [$tool['name'], $tool['description']];
         }
         $io->table(['Name', 'Description'], $toolsTable);
 
-        $io->section('Usage Examples');
+        $io->section(message: 'Usage Examples');
         $io->text([
             'Start the server:',
             '  php bin/console phpmyfaq:mcp:server',

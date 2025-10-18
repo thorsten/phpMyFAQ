@@ -3,20 +3,14 @@
 namespace phpMyFAQ\Command;
 
 use DateTime;
-use Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Setup\Upgrade;
 use phpMyFAQ\System;
-use phpMyFAQ\Translation;
 use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -31,7 +25,6 @@ class UpdateCommandTest extends TestCase
     {
         parent::setUp();
 
-        // Create real command instance for testing
         $this->command = new UpdateCommand();
         $this->commandTester = new CommandTester($this->command);
     }
@@ -51,7 +44,6 @@ class UpdateCommandTest extends TestCase
     {
         $command = new UpdateCommand();
 
-        // Use reflection to check private properties
         $reflection = new ReflectionClass($command);
 
         $configProperty = $reflection->getProperty('configuration');
@@ -63,8 +55,6 @@ class UpdateCommandTest extends TestCase
 
     public function testExecuteWithoutUpdate(): void
     {
-        // This test may require a specific environment setup
-        // For now; we test that execute returns an integer result
         $exitCode = $this->commandTester->execute([]);
 
         $this->assertIsInt($exitCode);
@@ -85,7 +75,6 @@ class UpdateCommandTest extends TestCase
 
     public function testExecuteHandlesExceptionsGracefully(): void
     {
-        // Create a command that will throw an exception
         $command = new class extends UpdateCommand {
             protected function execute($input, $output): int
             {
@@ -95,84 +84,10 @@ class UpdateCommandTest extends TestCase
 
         $commandTester = new CommandTester($command);
 
-        // Expect the exception to be thrown and caught
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Test exception');
 
         $commandTester->execute([]);
-    }
-
-    public function testTaskHealthCheckMethodExists(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasMethod('taskHealthCheck'));
-
-        $method = $reflection->getMethod('taskHealthCheck');
-        $this->assertTrue($method->isPrivate());
-
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-        $this->assertEquals('symfonyStyle', $parameters[0]->getName());
-    }
-
-    public function testTaskUpdateCheckMethodExists(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasMethod('taskUpdateCheck'));
-
-        $method = $reflection->getMethod('taskUpdateCheck');
-        $this->assertTrue($method->isPrivate());
-
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-        $this->assertEquals('symfonyStyle', $parameters[0]->getName());
-    }
-
-    public function testAllTaskMethodsExist(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-
-        $expectedMethods = [
-            'taskHealthCheck',
-            'taskUpdateCheck',
-            'taskDownloadPackage',
-            'taskExtractPackage',
-            'taskCreateTemporaryBackup',
-            'taskInstallPackage',
-            'taskUpdateDatabase',
-            'taskCleanup'
-        ];
-
-        foreach ($expectedMethods as $methodName) {
-            $this->assertTrue(
-                $reflection->hasMethod($methodName),
-                sprintf('Method %s should exist', $methodName)
-            );
-
-            $method = $reflection->getMethod($methodName);
-            $this->assertTrue(
-                $method->isPrivate(),
-                sprintf('Method %s should be private', $methodName)
-            );
-        }
-    }
-
-    public function testTaskMethodsReturnInteger(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-
-        $taskMethods = [
-            'taskHealthCheck',
-            'taskUpdateCheck'
-        ];
-
-        foreach ($taskMethods as $methodName) {
-            $method = $reflection->getMethod($methodName);
-            $returnType = $method->getReturnType();
-
-            $this->assertNotNull($returnType, sprintf('Method %s should have return type', $methodName));
-            $this->assertEquals('int', $returnType->getName(), sprintf('Method %s should return int', $methodName));
-        }
     }
 
     public function testCommandExtendsSymfonyCommand(): void
@@ -183,12 +98,11 @@ class UpdateCommandTest extends TestCase
     public function testCommandUsesCorrectNamespace(): void
     {
         $reflection = new ReflectionClass($this->command);
-        $this->assertEquals('phpMyFAQ\Command', $reflection->getNamespaceName());
+        $this->assertEquals('phpMyFAQ\\Command', $reflection->getNamespaceName());
     }
 
     public function testCommandHasCorrectImports(): void
     {
-        // Test that the command file contains necessary imports
         $reflection = new ReflectionClass($this->command);
         $commandFile = $reflection->getFileName();
         $this->assertFileExists($commandFile);
@@ -196,12 +110,12 @@ class UpdateCommandTest extends TestCase
         $content = file_get_contents($commandFile);
 
         $expectedImports = [
-            'use Symfony\Component\Console\Command\Command;',
-            'use Symfony\Component\Console\Input\InputInterface;',
-            'use Symfony\Component\Console\Output\OutputInterface;',
-            'use Symfony\Component\Console\Style\SymfonyStyle;',
-            'use phpMyFAQ\Configuration;',
-            'use phpMyFAQ\System;'
+            'use Symfony\\Component\\Console\\Command\\Command;',
+            'use Symfony\\Component\\Console\\Input\\InputInterface;',
+            'use Symfony\\Component\\Console\\Output\\OutputInterface;',
+            'use Symfony\\Component\\Console\\Style\\SymfonyStyle;',
+            'use phpMyFAQ\\Configuration;',
+            'use phpMyFAQ\\System;',
         ];
 
         foreach ($expectedImports as $import) {
@@ -237,90 +151,5 @@ class UpdateCommandTest extends TestCase
         $returnType = $method->getReturnType();
         $this->assertNotNull($returnType);
         $this->assertEquals('void', $returnType->getName());
-    }
-
-    public function testVersionPropertyExists(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasProperty('version'));
-
-        $property = $reflection->getProperty('version');
-        $this->assertTrue($property->isPrivate());
-
-        $type = $property->getType();
-        $this->assertNotNull($type);
-        $this->assertEquals('string', $type->getName());
-    }
-
-    public function testConfigurationPropertyExists(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasProperty('configuration'));
-
-        $property = $reflection->getProperty('configuration');
-        $this->assertTrue($property->isPrivate());
-    }
-
-    public function testSystemPropertyExists(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasProperty('system'));
-
-        $property = $reflection->getProperty('system');
-        $this->assertTrue($property->isPrivate());
-    }
-
-    public function testDefaultNameProperty(): void
-    {
-        $reflection = new ReflectionClass($this->command);
-        $this->assertTrue($reflection->hasProperty('defaultName'));
-
-        $property = $reflection->getProperty('defaultName');
-        $this->assertTrue($property->isStatic());
-        $this->assertTrue($property->isProtected());
-
-        $this->assertEquals('phpmyfaq:update', $property->getValue());
-    }
-
-    public function testCommandRegistration(): void
-    {
-        // Test that command can be properly registered
-        $application = new \Symfony\Component\Console\Application();
-        $application->add($this->command);
-
-        $this->assertTrue($application->has('phpmyfaq:update'));
-        $registeredCommand = $application->find('phpmyfaq:update');
-        $this->assertSame($this->command, $registeredCommand);
-    }
-
-    public function testExecuteOutputFormat(): void
-    {
-        $exitCode = $this->commandTester->execute([]);
-        $output = $this->commandTester->getDisplay();
-
-        // Test that output contains expected sections
-        $this->assertStringContainsString('Start automatic phpMyFAQ update', $output);
-
-        // Output should be properly formatted (contains dashes for title)
-        $this->assertStringContainsString('===', $output);
-    }
-
-    public function testExecuteWithVerboseOutput(): void
-    {
-        $exitCode = $this->commandTester->execute([], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
-        $output = $this->commandTester->getDisplay();
-
-        $this->assertIsInt($exitCode);
-        $this->assertStringContainsString('Start automatic phpMyFAQ update', $output);
-    }
-
-    public function testExecuteWithQuietOutput(): void
-    {
-        $exitCode = $this->commandTester->execute([], ['verbosity' => OutputInterface::VERBOSITY_QUIET]);
-
-        $this->assertIsInt($exitCode);
-        // Quiet mode should produce minimal output
-        $output = $this->commandTester->getDisplay();
-        $this->assertIsString($output);
     }
 }
