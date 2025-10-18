@@ -45,7 +45,7 @@ if ($selectedCategoryId === 0) {
     $selectedCategoryId = null;
 }
 
-if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
+if (!is_null($selectedCategoryId) && !isset($category->getCategoryName($selectedCategoryId))) {
     $response = new Response();
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
@@ -56,7 +56,7 @@ $categoryHelper->setPlurals(new Plurals());
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./show.twig');
 
-if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
+if (!is_null($selectedCategoryId) && isset($category->getCategoryName($selectedCategoryId))) {
     $faqSession->userTracking('show_category', $selectedCategoryId);
 
     $categoryData = $category->getCategoryData($selectedCategoryId);
@@ -96,7 +96,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             $sids,
             $categoryData->getParentId()
         );
-        $text = $category->categoryName[$categoryData->getParentId()]['name'] ?? Translation::get('msgCategoryUp');
+        $text = $category->getCategoryName($categoryData->getParentId()) ?? Translation::get('msgCategoryUp');
 
         $link = new Link($url, $faqConfig);
         $link->itemTitle = $text;

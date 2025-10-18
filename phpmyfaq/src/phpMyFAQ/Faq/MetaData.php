@@ -20,9 +20,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Category\Permission as CategoryPermission;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq\Permission as FaqPermission;
 use phpMyFAQ\Visits;
 
 /**
@@ -78,19 +79,20 @@ class MetaData
         $visits = new Visits($this->configuration);
         $visits->logViews($this->faqId);
 
-        // Set permissions
-        $faqPermission = new Permission($this->configuration);
-        $categoryPermission = new Permission($this->configuration);
+        // Set permissions: derive from category permissions and apply to both FAQ record and categories
+        $faqPermission = new FaqPermission($this->configuration);
+        $categoryPermission = new CategoryPermission($this->configuration);
 
-        $userPermissions = $categoryPermission->get(Permission::USER, $this->categories);
+        $userPermissions = $categoryPermission->get(CategoryPermission::USER, $this->categories);
 
-        $faqPermission->add(Permission::USER, $this->categories, $userPermissions);
-        $categoryPermission->add(Permission::USER, $this->categories, $userPermissions);
+        // Apply user permissions to the FAQ record and keep category permissions aligned
+        $faqPermission->add(FaqPermission::USER, (int) $this->faqId, $userPermissions);
+        $categoryPermission->add(CategoryPermission::USER, $this->categories, $userPermissions);
 
         if ($this->configuration->get('security.permLevel') !== 'basic') {
-            $groupPermissions = $categoryPermission->get(Permission::GROUP, $this->categories);
-            $faqPermission->add(Permission::GROUP, $this->categories, $groupPermissions);
-            $categoryPermission->add(Permission::GROUP, $this->categories, $groupPermissions);
+            $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $this->categories);
+            $faqPermission->add(FaqPermission::GROUP, (int) $this->faqId, $groupPermissions);
+            $categoryPermission->add(CategoryPermission::GROUP, $this->categories, $groupPermissions);
         }
     }
 }

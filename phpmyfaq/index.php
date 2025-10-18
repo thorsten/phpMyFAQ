@@ -438,13 +438,13 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 
-if (isset($cat) && ($cat !== 0) && ($id === 0) && isset($category->categoryName[$cat]['name'])) {
+if (isset($cat) && ($cat !== 0) && ($id === 0) && $category->getCategoryName($cat) !== null) {
     $seoEntity
         ->setSeoType(SeoType::CATEGORY)
         ->setReferenceId($cat);
     $seoData = $seo->get($seoEntity);
-    $title = $seoData->getTitle() ?? $category->categoryName[$cat]['name'];
-    $metaDescription = $seoData->getDescription() ?? $category->categoryName[$cat]['description'];
+    $title = $seoData->getTitle() ?? $category->getCategoryName($cat);
+    $metaDescription = $seoData->getDescription() ?? $category->getCategoryDescription($cat);
 }
 
 //

@@ -98,7 +98,7 @@ class Pdf extends Export
         $this->category->transform($categoryId);
 
         $this->wrapper->setCategory($categoryId);
-        $this->wrapper->setCategories($this->category->categoryName);
+        $this->wrapper->setCategories($this->category->categoryNames);
         $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
         $faqData = $this->faq->get('faq_export_pdf', $categoryId, $downwards, $language);
@@ -109,14 +109,14 @@ class Pdf extends Export
             $this->wrapper->AddPage();
 
             // Bookmark for categories
-            if ($currentCategory !== $this->category->categoryName[$faq['category_id']]['id']) {
+            if ($currentCategory !== $this->category->categoryNames[$faq['category_id']]['id']) {
                 $this->wrapper->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->categoryName[$faq['category_id']]['name'],
+                        (string) $this->category->categoryNames[$faq['category_id']]['name'],
                         ENT_QUOTES,
                         'utf-8',
                     ),
-                    $this->category->categoryName[$faq['category_id']]['level'] - 1,
+                    $this->category->categoryNames[$faq['category_id']]['level'] - 1,
                     0,
                 );
             }
@@ -124,7 +124,7 @@ class Pdf extends Export
             // Bookmark for FAQs
             $this->wrapper->Bookmark(
                 html_entity_decode((string) $faq['topic'], ENT_QUOTES, 'utf-8'),
-                $this->category->categoryName[$faq['category_id']]['level'],
+                $this->category->categoryNames[$faq['category_id']]['level'],
                 0,
             );
 
@@ -133,7 +133,7 @@ class Pdf extends Export
             }
 
             $this->wrapper->SetFont($this->wrapper->getCurrentFont(), 'b', 12);
-            $this->wrapper->WriteHTML('<h1>' . $this->category->categoryName[$faq['category_id']]['name'] . '</h1>');
+            $this->wrapper->WriteHTML('<h1>' . $this->category->categoryNames[$faq['category_id']]['name'] . '</h1>');
             $this->wrapper->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
             $this->wrapper->Ln(10);
 
@@ -164,7 +164,7 @@ class Pdf extends Export
                 Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
-            $currentCategory = $this->category->categoryName[$faq['category_id']]['id'];
+            $currentCategory = $this->category->categoryNames[$faq['category_id']]['id'];
         }
 
         // remove default header/footer
@@ -192,7 +192,7 @@ class Pdf extends Export
         $this->wrapper->setFaq($faqData);
         $this->wrapper->setCategory($faqData['category_id']);
         $this->wrapper->setQuestion($faqData['title']);
-        $this->wrapper->setCategories($this->category->categoryName);
+        $this->wrapper->setCategories($this->category->categoryNames);
 
         // Set any item
         $this->wrapper->SetTitle($faqData['title']);

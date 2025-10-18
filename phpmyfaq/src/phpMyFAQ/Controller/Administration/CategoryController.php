@@ -504,22 +504,22 @@ final class CategoryController extends AbstractAdministrationController
         return $this->render('@admin/content/category.translate.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'categoryName' => $category->categoryName[$categoryId]['name'],
+            'categoryName' => $category->getCategoryName($categoryId),
             'ad_categ_trans_1' => Translation::get('ad_categ_trans_1'),
             'ad_categ_trans_2' => Translation::get('ad_categ_trans_2'),
             'categoryId' => $categoryId,
-            'category' => $category->categoryName[$categoryId],
+            'category' => $category->getCategoryName($categoryId),
             'permLevel' => $this->configuration->get('security.permLevel'),
             'groupPermission' => $groupPermission[0] ?? -1,
             'userPermission' => $userPermission[0] ?? -1,
             'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
             'categoryNameLabel' => Translation::get('categoryNameLabel'),
             'ad_categ_lang' => Translation::get('ad_categ_lang'),
-            'langToTranslate' => $langOptions, // deprecated in future; generated from data service now
+            'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
             'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
             'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
             'userSelection' => $userHelper->getAllUsersForTemplate(
-                (int) $category->categoryName[$categoryId]['user_id'],
+                (int) $category->categoryNames[$categoryId]['user_id'],
             ),
             'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
             'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),

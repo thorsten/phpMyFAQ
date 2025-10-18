@@ -31,13 +31,6 @@ use phpMyFAQ\Category\Tree\TreeBuilder;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
-/**
- * Class Category
- *
- * @todo Refactor this class and split it into smaller classes.
- *
- * @package phpMyFAQ
- */
 class Category
 {
     /**
@@ -52,7 +45,7 @@ class Category
      * @deprecated Will be removed in a future version. Use query methods and dedicated builders instead.
      * @var array<int, array<string, mixed>>
      */
-    public array $categoryName = [];
+    public array $categoryNames = [];
 
     /**
      * The image as an array.
@@ -99,14 +92,14 @@ class Category
     /**
      * Entity owners
      *
-     * @var array<int, int>>
+     * @var array<int, int>
      */
     private array $owner = [];
 
     /**
      * Entity moderators
      *
-     * @var array<int, int>>
+     * @var array<int, int>
      */
     private array $moderators = [];
 
@@ -135,13 +128,6 @@ class Category
      */
     private ?AdminCategoryTreePresenter $adminCategoryTreePresenter = null;
 
-    /**
-     * Constructor.
-     *
-     * @param Configuration $configuration Configuration object
-     * @param int[] $groups Array with group IDs
-     * @param bool $withPerm With or without permission check
-     */
     public function __construct(
         private readonly Configuration $configuration,
         array $groups = [],
@@ -151,9 +137,9 @@ class Category
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         $this->getOrderedCategories($withPerm);
-        foreach ($this->categoryName as $row) {
+        foreach ($this->categoryNames as $row) {
             if (is_array($row) && isset($row['id'])) {
-                $this->categoryName[$row['id']]['level'] = $this->getLevelOf((int) $row['id']);
+                $this->categoryNames[$row['id']]['level'] = $this->getLevelOf((int) $row['id']);
             }
         }
     }
@@ -245,14 +231,11 @@ class Category
     /**
      * Returns all categories with ordered category IDs according to the user
      * and group permissions.
-     *
-     * @param bool $withPermission With or without permission check
      */
     public function getOrderedCategories(bool $withPermission = true, bool $withInactive = false): array
     {
         $categories = [];
 
-        // Delegate to repository to fetch raw rows
         $rows = $this->getCategoryRepository()->findOrderedCategories(
             $this->groups,
             $this->user,
@@ -261,18 +244,16 @@ class Category
             $withInactive,
         );
 
-        // Rebuild internal indexes/state as before
         foreach ($rows as $row) {
             $id = (int) $row['id'];
             $parentId = (int) $row['parent_id'];
 
-            $this->categoryName[$id] = $row;
+            $this->categoryNames[$id] = $row;
             $this->categories[$id] = $row;
-            $this->children[$parentId][$id] = &$this->categoryName[$id];
+            $this->children[$parentId][$id] = &$this->categoryNames[$id];
             $this->owner[$id] = (int) $row['user_id'];
             $this->moderators[$id] = (int) $row['group_id'];
 
-            // Keep method behavior: include a level entry based on current map
             $categories[$id] = $row
             + [
                 'level' => $this->getLevelOf($id),
@@ -284,12 +265,10 @@ class Category
 
     /**
      * Get the level of the item id.
-     *
-     * @param int $categoryId Entity id
      */
     private function getLevelOf(int $categoryId): int
     {
-        return $this->getTreeBuilder()->computeLevel($this->categoryName, $categoryId);
+        return $this->getTreeBuilder()->computeLevel($this->categoryNames, $categoryId);
     }
 
     public function setUser(int $userId = -1): Category
@@ -327,13 +306,9 @@ class Category
 
     /**
      * Builds the category tree.
-     *
-     * @param int $parentId Parent id
-     * @param int $indent Indention
      */
     public function buildCategoryTree(int $parentId = 0, int $indent = 0): void
     {
-        // Delegate to TreeBuilder to compute a fresh linear tree
         $this->catTree = $this->getTreeBuilder()->buildLinearTree($this->categories, $parentId, $indent);
     }
 
@@ -348,14 +323,11 @@ class Category
     /**
      * Transforms the linear array in a 1D array in the order of the tree, with
      * the info.
-     *
-     * @param int $categoryId Category ID
      */
     public function transform(int $categoryId): void
     {
         $presenter = $this->getAdminCategoryTreePresenter();
-        $entries = $presenter->transform($this->getTreeBuilder(), $this->categoryName, $this->children, $categoryId);
-        // Append to legacy treeTab as before
+        $entries = $presenter->transform($this->getTreeBuilder(), $this->categoryNames, $this->children, $categoryId);
         foreach ($entries as $entry) {
             $this->treeTab[] = $entry;
         }
@@ -363,37 +335,30 @@ class Category
 
     private function buildTree(int $categoryId): array
     {
-        return $this->getTreeBuilder()->buildTree($this->categoryName, $this->children, $categoryId);
+        return $this->getTreeBuilder()->buildTree($this->categoryNames, $this->children, $categoryId);
     }
 
     private function getSymbol(int $categoryId, int $parentId): string
     {
         $siblings = $this->children[$parentId] ?? [];
-
         $array = array_keys($siblings);
-
         return $categoryId == end($array) ? 'angle' : 'medium';
     }
 
     /**
      * List in array the root, super-root, ... of the $id.
-     *
-     * @return array<int>
      */
     private function getNodes(int $categoryId): array
     {
-        return $this->getTreeBuilder()->getNodes($this->categoryName, $categoryId);
+        return $this->getTreeBuilder()->getNodes($this->categoryNames, $categoryId);
     }
 
     /**
      * Gets the list of the brothers of $id (include $id).
-     *
-     * @param int $categoryId Brothers
-     * @return array<int>
      */
     private function getBrothers(int $categoryId): array
     {
-        return $this->getTreeBuilder()->getBrothers($this->categoryName, $this->children, $categoryId);
+        return $this->getTreeBuilder()->getBrothers($this->categoryNames, $this->children, $categoryId);
     }
 
     /**
@@ -406,9 +371,6 @@ class Category
 
     /**
      * List in an array of the $id of the child.
-     *
-     * @param int $categoryId Entity id
-     * @return array<int>
      */
     public function getChildNodes(int $categoryId): array
     {
@@ -451,8 +413,6 @@ class Category
 
     /**
      * Get the line number where to find the node $id in the category tree.
-     *
-     * @param int $categoryId Entity id
      */
     private function getLineCategory(int $categoryId): int
     {
@@ -468,17 +428,12 @@ class Category
 
     /**
      * Expand the node $id.
-     *
-     * @param int $categoryId Entity id
      */
     public function expand(int $categoryId): void
     {
         $this->treeTab[$this->getLineCategory($categoryId)]['symbol'] = 'minus';
     }
 
-    /**
-     * Returns the data of the given category.
-     */
     public function getCategoryData(int $categoryId): CategoryEntity
     {
         $entity = $this->language !== null
@@ -488,14 +443,6 @@ class Category
         return $entity ?? new CategoryEntity();
     }
 
-    /**
-     * Gets the path from root to child as breadcrumbs.
-     *
-     * @param int    $catId Entity ID
-     * @param string $separator Path separator
-     * @param bool   $renderAsHtml Renders breadcrumbs as HTML
-     * @param string $useCssClass Use CSS class "breadcrumb"
-     */
     public function getPath(
         int $catId,
         string $separator = ' / ',
@@ -503,8 +450,7 @@ class Category
         string $useCssClass = 'breadcrumb',
     ): string {
         $ids = $this->getNodes($catId);
-        // Build breadcrumb segments from ids
-        $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->categoryName, $ids);
+        $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->categoryNames, $ids);
 
         if ($segments === []) {
             return '';
@@ -514,29 +460,16 @@ class Category
             return $this->getBreadcrumbsHtmlRenderer()->render($this->configuration, $segments, $useCssClass);
         }
 
-        // plain text
         $names = array_map(static fn(array $s): string => (string) $s['name'], $segments);
         return implode($separator, $names);
     }
 
-    /**
-     * Returns the ID of a category that associated with the given article.
-     *
-     * @param int $faqId FAQ id
-     */
     public function getCategoryIdFromFaq(int $faqId): int
     {
         $cats = $this->getCategoryIdsFromFaq($faqId);
         return $cats[0] ?? 0;
     }
 
-    /**
-     * Returns an array with the IDs of all categories that are associated with
-     * the given article.
-     *
-     * @param int $faqId Record id
-     * @return int[]
-     */
     public function getCategoryIdsFromFaq(int $faqId): array
     {
         $categories = $this->getCategoriesFromFaq($faqId);
@@ -556,14 +489,6 @@ class Category
         return $id ?? false;
     }
 
-    /**
-     * Returns all categories that are related to the given article-id and
-     * the current language $this→language in an unsorted array which consists
-     * of associative arrays with the keys 'name', 'id', 'lang',
-     * 'parent_id' and 'description'.
-     *
-     * @param int $faqId Record id
-     */
     public function getCategoriesFromFaq(int $faqId): array
     {
         $rows = $this->getCategoryRepository()->findCategoriesFromFaq($faqId, (string) $this->language);
@@ -571,19 +496,11 @@ class Category
         return $this->categories;
     }
 
-    /**
-     * Creates a new category
-     */
     public function create(CategoryEntity $categoryEntity): ?int
     {
         return $this->getCategoryRepository()->create($categoryEntity);
     }
 
-    /**
-     * Check if category already exists.
-     *
-     * @param CategoryEntity $categoryEntity Array of category data
-     */
     public function checkIfCategoryExists(CategoryEntity $categoryEntity): int
     {
         return $this->getCategoryRepository()->countByNameLangParent(
@@ -593,44 +510,21 @@ class Category
         );
     }
 
-    /**
-     * Updates an existent category entry.
-     *
-     * @param CategoryEntity $categoryEntity CategoryEntity object
-     */
     public function update(CategoryEntity $categoryEntity): bool
     {
         return $this->getCategoryRepository()->update($categoryEntity);
     }
 
-    /**
-     * Move the categories' ownership for users.
-     *
-     * @param int $currentOwner Old user id
-     * @param int $newOwner New user id
-     */
     public function moveOwnership(int $currentOwner, int $newOwner): bool
     {
         return $this->getCategoryRepository()->moveOwnership($currentOwner, $newOwner);
     }
 
-    /**
-     * Checks if a language is already defined for a category id.
-     *
-     * @param int $categoryId Entity id
-     * @param string $categoryLanguage Entity language
-     */
     public function hasLanguage(int $categoryId, string $categoryLanguage): bool
     {
         return $this->getCategoryRepository()->hasLanguage($categoryId, $categoryLanguage);
     }
 
-    /**
-     * Updates the parent category.
-     *
-     * @param int $categoryId Entity id
-     * @param int $parentId Parent category id
-     */
     public function updateParentCategory(int $categoryId, int $parentId): bool
     {
         if ($categoryId === $parentId) {
@@ -640,33 +534,16 @@ class Category
         return $this->getCategoryRepository()->updateParentCategory($categoryId, $parentId);
     }
 
-    /**
-     * Deletes a category.
-     */
     public function delete(int $categoryId, string $categoryLang): bool
     {
         return $this->getCategoryRepository()->delete($categoryId, $categoryLang);
     }
 
-    /**
-     * Create an array with translated categories.
-     *
-     * @return string[]
-     */
     public function getCategoryLanguagesTranslated(int $categoryId): array
     {
         return $this->getCategoryRepository()->getCategoryLanguagesTranslated($categoryId);
     }
 
-    /**
-     * Create all languages that can be used for translation as <option>.
-     *
-     * @deprecated Will be removed in a future version. Use \phpMyFAQ\Category\Language\CategoryLanguageService
-     *             to retrieve data and render options in the template layer.
-     *
-     * @param int $categoryId Entity id
-     * @param string $selectedLanguage Selected language
-     */
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
     {
         $output = '';
@@ -686,20 +563,16 @@ class Category
         return $output;
     }
 
-    /**
-     * Gets all categories that are not translated in actual language
-     * to add in this→categories (used in the admin section).
-     */
     public function getMissingCategories(): void
     {
         $rows = $this->getCategoryRepository()->findMissingCategories($this->language);
         foreach ($rows as $row) {
             $id = (int) $row['id'];
             $parentId = (int) $row['parent_id'];
-            if (!array_key_exists($id, $this->categoryName)) {
-                $this->categoryName[$id] = $row;
+            if (!array_key_exists($id, $this->categoryNames)) {
+                $this->categoryNames[$id] = $row;
                 $this->categories[$id] = $row;
-                $this->children[$parentId][$id] = &$this->categoryName[$id];
+                $this->children[$parentId][$id] = &$this->categoryNames[$id];
             }
         }
     }
@@ -713,10 +586,28 @@ class Category
     }
 
     /**
+     * Returns the moderator group id for a given category or 0 if none assigned.
+     */
+    public function getModeratorGroupId(int $categoryId): int
+    {
+        return $this->moderators[$categoryId] ?? 0;
+    }
+
+    /**
      * Returns the category tree as an array.
      */
     public function getCategoryTree(): array
     {
         return $this->catTree;
+    }
+
+    public function getCategoryName(int $categoryId): array
+    {
+        return $this->categoryNames[$categoryId]['name'] ?? [];
+    }
+
+    public function getCategoryDescription(int $categoryId): array
+    {
+        return $this->categoryNames[$categoryId]['description'] ?? [];
     }
 }

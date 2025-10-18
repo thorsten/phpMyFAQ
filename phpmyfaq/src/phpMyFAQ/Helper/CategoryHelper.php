@@ -232,18 +232,27 @@ class CategoryHelper extends AbstractHelper
     {
         $recipients = [];
 
+        // Ensure we have a valid Category instance before proceeding
+        $categoryInstance = $this->Category;
+        if (!$categoryInstance instanceof \phpMyFAQ\Category) {
+            return $recipients;
+        }
+
         $user = new User($this->configuration);
 
+        // Track already added emails to avoid duplicates
+        $seen = [];
+
         foreach ($categories as $category) {
-            $userId = $this->Category->getOwner($category);
-            $groupId = $this->Category->getModeratorGroupId($category);
+            $userId = $categoryInstance->getOwner($category);
+            $groupId = $categoryInstance->getModeratorGroupId($category);
 
             $user->getUserById($userId);
             $emailCategoryOwner = $user->getUserData('email');
 
-            // Avoid sending multiple emails to the same owner
-            if (!empty($emailCategoryOwner) && !isset($send[$emailCategoryOwner])) {
+            if (!empty($emailCategoryOwner) && !isset($seen[$emailCategoryOwner])) {
                 $recipients[] = $emailCategoryOwner;
+                $seen[$emailCategoryOwner] = true;
             }
 
             if ($groupId > 0) {
@@ -251,16 +260,16 @@ class CategoryHelper extends AbstractHelper
                 foreach ($moderators as $moderator) {
                     $user->getUserById($moderator);
                     $moderatorEmail = $user->getUserData('email');
-                    // Avoid sending multiple emails to the same moderator
                     if (empty($moderatorEmail)) {
                         continue;
                     }
 
-                    if (isset($send[$moderatorEmail])) {
+                    if (isset($seen[$moderatorEmail])) {
                         continue;
                     }
 
                     $recipients[] = $moderatorEmail;
+                    $seen[$moderatorEmail] = true;
                 }
             }
         }
