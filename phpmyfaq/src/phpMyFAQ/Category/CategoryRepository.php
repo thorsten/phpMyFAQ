@@ -66,7 +66,9 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         if ($withPermission) {
             $perm = new CategoryPermissionService();
-            $where = $perm->buildWhereClause($groups, $userId, $withInactive);
+            $where = $withInactive
+                ? $perm->buildWhereClauseWithInactive($groups, $userId)
+                : $perm->buildWhereClause($groups, $userId);
         }
 
         if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {

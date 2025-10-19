@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Category language service class
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2025 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2026-10-18
+ */
+
 declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Language;
@@ -18,13 +33,13 @@ final class CategoryLanguageService
      */
     public function getLanguagesToTranslate(Configuration $configuration, int $categoryId): array
     {
-        $existing = $configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existing = $configuration->getLanguage()->isLanguageAvailable($categoryId, table: 'faqcategories');
         $existingLower = array_map(static fn($l) => strtolower((string) $l), $existing);
 
         $result = [];
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $name) {
             $langLower = strtolower((string) $lang);
-            if (!in_array($langLower, $existingLower, true)) {
+            if (!in_array($langLower, $existingLower, strict: true)) {
                 $result[$langLower] = $name;
             }
         }
@@ -40,13 +55,12 @@ final class CategoryLanguageService
      */
     public function getExistingTranslations(Configuration $configuration, int $categoryId): array
     {
-        $existing = $configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existing = $configuration->getLanguage()->isLanguageAvailable($categoryId, table: 'faqcategories');
         $available = LanguageHelper::getAvailableLanguages();
 
         $result = [];
         foreach ($existing as $code) {
-            $codeLower = strtolower((string) $code);
-            // Prefer LanguageHelper names, fallback to LanguageCodes
+            $codeLower = strtolower($code);
             $result[$codeLower] = $available[$codeLower] ?? LanguageCodes::get($codeLower) ?? $codeLower;
         }
 
@@ -62,10 +76,13 @@ final class CategoryLanguageService
      */
     public function getLanguagesInUse(Configuration $configuration): array
     {
-        $all = $configuration->getLanguage()->isLanguageAvailable(0, 'faqcategories');
+        $all = $configuration->getLanguage()->isLanguageAvailable(
+            identifier: 0,
+            table: 'faqcategories',
+        );
         $result = [];
         foreach ($all as $code) {
-            $codeLower = strtolower((string) $code);
+            $codeLower = strtolower($code);
             $result[$codeLower] = LanguageCodes::get($codeLower) ?? $codeLower;
         }
         asort($result);

@@ -21,6 +21,17 @@ namespace phpMyFAQ\Category\Tree;
 
 final class TreeBuilder
 {
+    private TreePathResolver $pathResolver;
+    private TreeVisualizer $visualizer;
+    private CategoryValidator $validator;
+
+    public function __construct()
+    {
+        $this->pathResolver = new TreePathResolver();
+        $this->visualizer = new TreeVisualizer($this->pathResolver);
+        $this->validator = new CategoryValidator();
+    }
+
     /**
      * Builds the category tree for the admin category overview.
      * Pure function: does not mutate input.
@@ -34,10 +45,7 @@ final class TreeBuilder
         $result = [];
 
         foreach ($categories as $category) {
-            if (!is_array($category)) {
-                continue;
-            }
-            if (!array_key_exists('parent_id', $category) || !array_key_exists('id', $category)) {
+            if (!$this->validator->isValidCategory($category)) {
                 continue;
             }
             if ((int) $category['parent_id'] === $parentId) {
@@ -60,28 +68,14 @@ final class TreeBuilder
      */
     public function buildLinearTree(array $categories, int $parentId = 0, int $indent = 0): array
     {
+        $childrenIds = $this->validator->collectDirectChildren($categories, $parentId);
+
+        if ($childrenIds === []) {
+            return [];
+        }
+
         $catTree = [];
-
-        // collect direct children ids in insertion order
-        $temporaryTree = [];
-        foreach ($categories as $categoryId => $n) {
-            if (!isset($n['parent_id'])) {
-                continue;
-            }
-            if ((int) $n['parent_id'] !== $parentId) {
-                continue;
-            }
-            if ($categoryId <= 0) {
-                continue;
-            }
-            $temporaryTree[] = $categoryId;
-        }
-
-        if ($temporaryTree === []) {
-            return $catTree;
-        }
-
-        foreach ($temporaryTree as $childId) {
+        foreach ($childrenIds as $childId) {
             if (!isset($categories[$childId])) {
                 continue;
             }
@@ -90,73 +84,44 @@ final class TreeBuilder
             $catTree[] = $row;
             $catTree = array_merge($catTree, $this->buildLinearTree($categories, $row['id'], $indent + 1));
         }
-
         return $catTree;
     }
 
     /**
-     * Returns a node path from root to the given category id.
+     * Delegates to TreePathResolver::getNodes()
      *
      * @param array<int, array<string, mixed>> $categoryName Map id => row (needs parent_id)
      * @return array<int>
      */
     public function getNodes(array $categoryName, int $categoryId): array
     {
-        $nodes = [];
-        if ($categoryId <= 0) {
-            return $nodes;
-        }
-        $nodes[] = $categoryId;
-        $currentCategoryId = $categoryId;
-        while ($currentCategoryId > 0) {
-            if (!isset($categoryName[$currentCategoryId])) {
-                break;
-            }
-            $parentId = (int) ($categoryName[$currentCategoryId]['parent_id'] ?? 0);
-            if ($parentId <= 0 || $parentId === $currentCategoryId) {
-                break;
-            }
-            if (!isset($categoryName[$parentId])) {
-                break;
-            }
-            array_unshift($nodes, $parentId);
-            $currentCategoryId = $parentId;
-        }
-        return $nodes;
+        return $this->pathResolver->getNodes($categoryName, $categoryId);
     }
 
     /**
-     * Returns direct children IDs for a category.
+     * Delegates to TreePathResolver::getChildren()
      *
      * @param array<int, array<int, array<string, mixed>>> $childrenMap parentId => [childId => row]
      * @return array<int>
      */
     public function getChildren(array $childrenMap, int $categoryId): array
     {
-        return isset($childrenMap[$categoryId]) ? array_keys($childrenMap[$categoryId]) : [];
+        return $this->pathResolver->getChildren($childrenMap, $categoryId);
     }
 
     /**
-     * Returns all descendant IDs of a category.
+     * Delegates to TreePathResolver::getChildNodes()
      *
      * @param array<int, array<int, array<string, mixed>>> $childrenMap
      * @return array<int>
      */
     public function getChildNodes(array $childrenMap, int $categoryId): array
     {
-        $result = [];
-        if (!isset($childrenMap[$categoryId])) {
-            return $result;
-        }
-        foreach (array_keys($childrenMap[$categoryId]) as $childId) {
-            $result[] = (int) $childId;
-            $result = array_merge($result, $this->getChildNodes($childrenMap, (int) $childId));
-        }
-        return $result;
+        return $this->pathResolver->getChildNodes($childrenMap, $categoryId);
     }
 
     /**
-     * Returns siblings (brothers) of a category including itself.
+     * Delegates to TreePathResolver::getBrothers()
      *
      * @param array<int, array<string, mixed>> $categoryName
      * @param array<int, array<int, array<string, mixed>>> $childrenMap
@@ -164,12 +129,11 @@ final class TreeBuilder
      */
     public function getBrothers(array $categoryName, array $childrenMap, int $categoryId): array
     {
-        $parentId = (int) ($categoryName[$categoryId]['parent_id'] ?? 0);
-        return $this->getChildren($childrenMap, $parentId);
+        return $this->pathResolver->getBrothers($categoryName, $childrenMap, $categoryId);
     }
 
     /**
-     * Builds branch visuals (vertical/space) for a category path.
+     * Delegates to TreeVisualizer::buildTree()
      *
      * @param array<int, array<string, mixed>> $categoryName
      * @param array<int, array<int, array<string, mixed>>> $childrenMap
@@ -177,36 +141,16 @@ final class TreeBuilder
      */
     public function buildTree(array $categoryName, array $childrenMap, int $categoryId): array
     {
-        $ascendants = $this->getNodes($categoryName, $categoryId);
-        $tree = [];
-        foreach ($ascendants as $i => $ascendantId) {
-            if ($ascendantId === 0) {
-                break;
-            }
-            $brothers = $this->getBrothers($categoryName, $childrenMap, (int) $ascendantId);
-            $last = end($brothers);
-            $tree[$i] = $ascendantId === $last ? 'space' : 'vertical';
-        }
-        return $tree;
+        return $this->visualizer->buildTree($categoryName, $childrenMap, $categoryId);
     }
 
     /**
-     * Computes the depth level of a category within the tree (root has 0).
+     * Delegates to TreePathResolver::computeLevel()
      *
      * @param array<int, array<string, mixed>> $categoryName Map id => row (needs parent_id)
      */
     public function computeLevel(array $categoryName, int $categoryId): int
     {
-        $alreadyListed = [$categoryId];
-        $level = 0;
-        while (isset($categoryName[$categoryId]['parent_id']) && (int) $categoryName[$categoryId]['parent_id'] !== 0) {
-            ++$level;
-            $categoryId = (int) $categoryName[$categoryId]['parent_id'];
-            if (in_array($categoryId, $alreadyListed, true)) {
-                break;
-            }
-            $alreadyListed[] = $categoryId;
-        }
-        return $level;
+        return $this->pathResolver->computeLevel($categoryName, $categoryId);
     }
 }

@@ -518,7 +518,7 @@ final class CategoryController extends AbstractAdministrationController
             'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
             'categoryDescriptionLabel' => Translation::get('categoryDescriptionLabel'),
             'categoryOwnerLabel' => Translation::get('categoryOwnerLabel'),
-            'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId),),
+            'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId)),
             'ad_categ_transalready' => Translation::get('ad_categ_transalready'),
             'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
             'ad_categ_translatecateg' => Translation::get('ad_categ_translatecateg'),

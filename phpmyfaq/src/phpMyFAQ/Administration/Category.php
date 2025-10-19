@@ -76,7 +76,7 @@ class Category
         // Centralize permission WHERE clause
         $perm = new CategoryPermissionService();
         // In admin, include inactive categories (no active filter)
-        $where = $perm->buildWhereClause($this->groups, $this->user, true) . ' ' . $languageCheck;
+        $where = $perm->buildWhereClauseWithInactive($this->groups, $this->user) . ' ' . $languageCheck;
 
         $prefix = Database::getTablePrefix();
         $query = "SELECT
