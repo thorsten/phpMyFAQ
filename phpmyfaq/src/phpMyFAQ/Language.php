@@ -55,20 +55,20 @@ class Language
      * Returns an array of country codes for a specific FAQ record ID,
      * specific category ID or all languages used by FAQ records, categories.
      *
-     * @param int    $faqId    ID
-     * @param string $table Specifies table
+     * @param int    $identifier ID
+     * @param string $table      Specifies table
      * @return string[]
      */
-    public function isLanguageAvailable(int $faqId, string $table = 'faqdata'): array
+    public function isLanguageAvailable(int $identifier, string $table = 'faqdata'): array
     {
         $output = [];
 
-        if ($faqId === 0) {
+        if ($identifier === 0) {
             $distinct = ' DISTINCT ';
             $where = '';
         } else {
             $distinct = '';
-            $where = ' WHERE id = ' . $faqId;
+            $where = ' WHERE id = ' . $identifier;
         }
 
         $query = sprintf('SELECT %s lang FROM %s%s %s', $distinct, Database::getTablePrefix(), $table, $where);

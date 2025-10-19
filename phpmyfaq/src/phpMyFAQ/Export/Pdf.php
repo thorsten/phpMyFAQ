@@ -109,14 +109,14 @@ class Pdf extends Export
             $this->wrapper->AddPage();
 
             // Bookmark for categories
-            if ($currentCategory !== $this->category->categoryNames[$faq['category_id']]['id']) {
+            if ($currentCategory !== $faq['category_id']) {
                 $this->wrapper->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->categoryNames[$faq['category_id']]['name'],
+                        (string) $this->category->getCategoryName($faq['category_id']),
                         ENT_QUOTES,
                         'utf-8',
                     ),
-                    $this->category->categoryNames[$faq['category_id']]['level'] - 1,
+                    $this->category->getLevelOf($faq['category_id']) - 1,
                     0,
                 );
             }
@@ -124,7 +124,7 @@ class Pdf extends Export
             // Bookmark for FAQs
             $this->wrapper->Bookmark(
                 html_entity_decode((string) $faq['topic'], ENT_QUOTES, 'utf-8'),
-                $this->category->categoryNames[$faq['category_id']]['level'],
+                $this->category->getLevelOf($faq['category_id']),
                 0,
             );
 
@@ -133,7 +133,7 @@ class Pdf extends Export
             }
 
             $this->wrapper->SetFont($this->wrapper->getCurrentFont(), 'b', 12);
-            $this->wrapper->WriteHTML('<h1>' . $this->category->categoryNames[$faq['category_id']]['name'] . '</h1>');
+            $this->wrapper->WriteHTML('<h1>' . $this->category->getCategoryName($faq['category_id']) . '</h1>');
             $this->wrapper->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
             $this->wrapper->Ln(10);
 
@@ -164,7 +164,7 @@ class Pdf extends Export
                 Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
-            $currentCategory = $this->category->categoryNames[$faq['category_id']]['id'];
+            $currentCategory = $faq['category_id'];
         }
 
         // remove default header/footer

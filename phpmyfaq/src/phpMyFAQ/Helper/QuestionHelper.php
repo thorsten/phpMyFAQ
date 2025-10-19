@@ -104,7 +104,7 @@ class QuestionHelper extends AbstractHelper
                 $question->email = $mail->safeEmail($row->email);
                 $question->userName = $row->username;
                 $question->categoryId = $row->category_id;
-                $question->categoryName = $this->getCategory()->categoryNames[$row->category_id]['name'] ?? '';
+                $question->categoryName = $this->getCategory()->getCategoryName($row->category_id);
                 $question->question = $row->question;
                 $question->answerId = $row->answer_id;
 

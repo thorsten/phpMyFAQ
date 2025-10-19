@@ -35,10 +35,9 @@ class Category
 {
     /**
      * The categories as an array.
-     * @deprecated Will be removed in a future version. Use query methods (e.g., getOrderedCategories) instead.
      * @var array<int, array<string, mixed>>
      */
-    public array $categories = [];
+    private array $categories = [];
 
     /**
      * The category names as an array indexed by category ID.
@@ -46,13 +45,6 @@ class Category
      * @var array<int, array<string, mixed>>
      */
     public array $categoryNames = [];
-
-    /**
-     * The image as an array.
-     * @deprecated Will be removed in a future version.
-     * @var array<int, string>
-     */
-    public array $image = [];
 
     /**
      * The tree with the tabs.
@@ -266,7 +258,7 @@ class Category
     /**
      * Get the level of the item id.
      */
-    private function getLevelOf(int $categoryId): int
+    public function getLevelOf(int $categoryId): int
     {
         return $this->getTreeBuilder()->computeLevel($this->categoryNames, $categoryId);
     }
@@ -342,11 +334,11 @@ class Category
     {
         $siblings = $this->children[$parentId] ?? [];
         $array = array_keys($siblings);
-        return $categoryId == end($array) ? 'angle' : 'medium';
+        return $categoryId === end($array) ? 'angle' : 'medium';
     }
 
     /**
-     * List in array the root, super-root, ... of the $id.
+     * List in an array the root, super-root, ... of the $id.
      */
     private function getNodes(int $categoryId): array
     {
@@ -547,10 +539,13 @@ class Category
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
     {
         $output = '';
-        $existingLanguage = $this->configuration->getLanguage()->isLanguageAvailable($categoryId, 'faqcategories');
+        $existingLanguage = $this->configuration->getLanguage()->isLanguageAvailable(
+            identifier: $categoryId,
+            table: 'faqcategories',
+        );
 
         foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower((string) $lang), $existingLanguage)) {
+            if (!in_array(strtolower((string) $lang), $existingLanguage, strict: true)) {
                 $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
                 if ($lang === $selectedLanguage) {
                     $output .= ' selected="selected"';
@@ -601,13 +596,13 @@ class Category
         return $this->catTree;
     }
 
-    public function getCategoryName(int $categoryId): array
+    public function getCategoryName(int $categoryId): string
     {
-        return $this->categoryNames[$categoryId]['name'] ?? [];
+        return $this->categoryNames[$categoryId]['name'] ?? '';
     }
 
-    public function getCategoryDescription(int $categoryId): array
+    public function getCategoryDescription(int $categoryId): string
     {
-        return $this->categoryNames[$categoryId]['description'] ?? [];
+        return $this->categoryNames[$categoryId]['description'] ?? '';
     }
 }
