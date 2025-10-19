@@ -5978,16 +5978,16 @@
     "packages-dev": [
         {
             "name": "carthage-software/mago",
-            "version": "1.0.0-beta.32",
+            "version": "1.0.0-beta.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/carthage-software/mago.git",
-                "reference": "18c2f9af3ea02811c6d80bb42358d59b7b6e9ad0"
+                "reference": "1a29b3aae45456ec840d1af94be1346820415e38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/carthage-software/mago/zipball/18c2f9af3ea02811c6d80bb42358d59b7b6e9ad0",
-                "reference": "18c2f9af3ea02811c6d80bb42358d59b7b6e9ad0",
+                "url": "https://api.github.com/repos/carthage-software/mago/zipball/1a29b3aae45456ec840d1af94be1346820415e38",
+                "reference": "1a29b3aae45456ec840d1af94be1346820415e38",
                 "shasum": ""
             },
             "require": {
@@ -6025,7 +6025,7 @@
             ],
             "support": {
                 "issues": "https://github.com/carthage-software/mago/issues",
-                "source": "https://github.com/carthage-software/mago/tree/1.0.0-beta.32"
+                "source": "https://github.com/carthage-software/mago/tree/1.0.0-beta.34"
             },
             "funding": [
                 {
@@ -6033,7 +6033,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-17T05:02:46+00:00"
+            "time": "2025-10-19T06:57:10+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -8361,16 +8361,16 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "5.5.0",
+            "version": "5.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "436ba3cf0f168498653dd2ba1cbdb004ca46bf37"
+                "reference": "a1b6fba7695bed5ba8a0052f615fe828912e3f5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/436ba3cf0f168498653dd2ba1cbdb004ca46bf37",
-                "reference": "436ba3cf0f168498653dd2ba1cbdb004ca46bf37",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/a1b6fba7695bed5ba8a0052f615fe828912e3f5a",
+                "reference": "a1b6fba7695bed5ba8a0052f615fe828912e3f5a",
                 "shasum": ""
             },
             "require": {
@@ -8443,9 +8443,9 @@
             ],
             "support": {
                 "issues": "https://github.com/zircote/swagger-php/issues",
-                "source": "https://github.com/zircote/swagger-php/tree/5.5.0"
+                "source": "https://github.com/zircote/swagger-php/tree/5.5.1"
             },
-            "time": "2025-10-16T03:15:37+00:00"
+            "time": "2025-10-17T21:07:41+00:00"
         }
     ],
     "aliases": [],
