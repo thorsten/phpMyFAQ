@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2006-01-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -506,7 +506,7 @@ class Configuration
                     Database::getTablePrefix(),
                     $this->tableName,
                     $this->getDb()->escape(trim($value ?? '')),
-                    $name,
+                    $this->getDb()->escape($name),
                 );
 
                 $this->getDb()->query($update);
