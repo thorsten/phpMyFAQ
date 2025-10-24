@@ -22,59 +22,33 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Category\CategoryCache;
+use phpMyFAQ\Category\CategoryPermissionContext;
 use phpMyFAQ\Category\CategoryRepository;
 use phpMyFAQ\Category\CategoryRepositoryInterface;
+use phpMyFAQ\Category\CategoryService;
+use phpMyFAQ\Category\CategoryTreeFacade;
+use phpMyFAQ\Category\Language\CategoryLanguageService;
 use phpMyFAQ\Category\Navigation\BreadcrumbsBuilder;
 use phpMyFAQ\Category\Navigation\BreadcrumbsHtmlRenderer;
+use phpMyFAQ\Category\Navigation\CategoryTreeNavigator;
 use phpMyFAQ\Category\Presentation\AdminCategoryTreePresenter;
 use phpMyFAQ\Category\Tree\TreeBuilder;
 use phpMyFAQ\Entity\CategoryEntity;
-use phpMyFAQ\Helper\LanguageHelper;
 
 class Category
 {
     /**
-     * The categories as an array.
-     * @var array<int, array<string, mixed>>
-     */
-    private array $categories = [];
-
-    /**
-     * The category names as an array indexed by category ID.
-     * @deprecated Will be removed in a future version. Use query methods and dedicated builders instead.
+     * @deprecated Will be removed in a future version. Use CategoryCache instead.
      * @var array<int, array<string, mixed>>
      */
     public array $categoryNames = [];
 
     /**
-     * The tree with the tabs.
-     * @deprecated Will be removed in a future version.
+     * @deprecated Will be removed in a future version. Use CategoryCache instead.
      * @var array<int, array<string, mixed>>
      */
     public array $treeTab = [];
-
-    /**
-     * The category tree.
-     * @var array<int, array<string, mixed>>
-     */
-    private array $catTree = [];
-
-    /**
-     * User ID.
-     */
-    private int $user = -1;
-
-    /**
-     * Groups.
-     * @var int[]
-     */
-    private array $groups = [-1];
-
-    /**
-     * The children nodes: parentId => [childId => &categoryRow]
-     * @var array<int, array<int, array<string, mixed>>>
-     */
-    private array $children = [];
 
     /**
      * The current language.
@@ -82,23 +56,29 @@ class Category
     private ?string $language = null;
 
     /**
-     * Entity owners
-     *
-     * @var array<int, int>
+     * Internal cache for category data.
      */
-    private array $owner = [];
+    private CategoryCache $cache;
 
     /**
-     * Entity moderators
-     *
-     * @var array<int, int>
+     * Permission context for category access control.
      */
-    private array $moderators = [];
+    private CategoryPermissionContext $permissionContext;
 
     /**
      * Internal repository for persistence access (Phase 1 extraction).
      */
     private ?CategoryRepositoryInterface $categoryRepository = null;
+
+    /**
+     * Internal service for CRUD operations (Phase 2 extraction).
+     */
+    private ?CategoryService $categoryService = null;
+
+    /**
+     * Internal tree facade for tree operations (Phase 2 extraction).
+     */
+    private ?CategoryTreeFacade $treeFacade = null;
 
     /**
      * Internal tree builder (Phase 2 extraction).
@@ -120,20 +100,50 @@ class Category
      */
     private ?AdminCategoryTreePresenter $adminCategoryTreePresenter = null;
 
+    /**
+     * Internal category tree navigator (Phase 3 extraction).
+     */
+    private ?CategoryTreeNavigator $categoryTreeNavigator = null;
+
+    /**
+     * Internal category language service (Phase 3 extraction).
+     */
+    private ?CategoryLanguageService $categoryLanguageService = null;
+
     public function __construct(
         private readonly Configuration $configuration,
         array $groups = [],
         bool $withPerm = true,
     ) {
-        $this->setGroups($groups);
+        $this->cache = new CategoryCache();
+        $this->permissionContext = new CategoryPermissionContext($groups);
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         $this->getOrderedCategories($withPerm);
-        foreach ($this->categoryNames as $row) {
+
+        // Sync deprecated properties for backward compatibility
+        $this->syncDeprecatedProperties();
+
+        foreach ($this->cache->getCategoryNames() as $row) {
             if (is_array($row) && isset($row['id'])) {
-                $this->categoryNames[$row['id']]['level'] = $this->getLevelOf((int) $row['id']);
+                $id = (int) $row['id'];
+                $level = $this->getLevelOf($id);
+                $this->cache->addCategoryName($id, array_merge($row, ['level' => $level]));
             }
         }
+
+        // Sync again after updates
+        $this->syncDeprecatedProperties();
+    }
+
+    /**
+     * Syncs data to deprecated public properties for backward compatibility.
+     * @deprecated Will be removed when deprecated properties are removed.
+     */
+    private function syncDeprecatedProperties(): void
+    {
+        $this->categoryNames = $this->cache->getCategoryNames();
+        $this->treeTab = $this->cache->getTreeTab();
     }
 
     /**
@@ -192,6 +202,50 @@ class Category
     }
 
     /**
+     * Lazy category tree navigator factory.
+     */
+    private function getCategoryTreeNavigator(): CategoryTreeNavigator
+    {
+        if ($this->categoryTreeNavigator === null) {
+            $this->categoryTreeNavigator = new CategoryTreeNavigator();
+        }
+        return $this->categoryTreeNavigator;
+    }
+
+    /**
+     * Lazy category service factory.
+     */
+    private function getCategoryService(): CategoryService
+    {
+        if ($this->categoryService === null) {
+            $this->categoryService = new CategoryService($this->getCategoryRepository());
+        }
+        return $this->categoryService;
+    }
+
+    /**
+     * Lazy tree facade factory.
+     */
+    private function getTreeFacade(): CategoryTreeFacade
+    {
+        if ($this->treeFacade === null) {
+            $this->treeFacade = new CategoryTreeFacade();
+        }
+        return $this->treeFacade;
+    }
+
+    /**
+     * Lazy category language service factory.
+     */
+    private function getCategoryLanguageService(): CategoryLanguageService
+    {
+        if ($this->categoryLanguageService === null) {
+            $this->categoryLanguageService = new CategoryLanguageService();
+        }
+        return $this->categoryLanguageService;
+    }
+
+    /**
      * @param int[] $groups
      */
     public function setGroups(array $groups): Category
@@ -200,7 +254,7 @@ class Category
             $groups = [-1];
         }
 
-        $this->groups = $groups;
+        $this->permissionContext->setGroups($groups);
         return $this;
     }
 
@@ -212,12 +266,12 @@ class Category
 
     public function getUser(): int
     {
-        return $this->user;
+        return $this->permissionContext->getUser();
     }
 
     public function getGroups(): array
     {
-        return $this->groups;
+        return $this->permissionContext->getGroups();
     }
 
     /**
@@ -229,8 +283,8 @@ class Category
         $categories = [];
 
         $rows = $this->getCategoryRepository()->findOrderedCategories(
-            $this->groups,
-            $this->user,
+            $this->permissionContext->getGroups(),
+            $this->permissionContext->getUser(),
             $this->language,
             $withPermission,
             $withInactive,
@@ -238,14 +292,8 @@ class Category
 
         foreach ($rows as $row) {
             $id = (int) $row['id'];
-            $parentId = (int) $row['parent_id'];
 
-            $this->categoryNames[$id] = $row;
-            $this->categories[$id] = $row;
-            $this->children[$parentId][$id] = &$this->categoryNames[$id];
-            $this->owner[$id] = (int) $row['user_id'];
-            $this->moderators[$id] = (int) $row['group_id'];
-
+            $this->cache->addCategory($id, $row);
             $categories[$id] = $row
             + [
                 'level' => $this->getLevelOf($id),
@@ -260,12 +308,12 @@ class Category
      */
     public function getLevelOf(int $categoryId): int
     {
-        return $this->getTreeBuilder()->computeLevel($this->categoryNames, $categoryId);
+        return $this->getTreeFacade()->getLevelOf($this->cache->getCategoryNames(), $categoryId);
     }
 
     public function setUser(int $userId = -1): Category
     {
-        $this->user = $userId;
+        $this->permissionContext->setUser($userId);
         return $this;
     }
 
@@ -301,7 +349,11 @@ class Category
      */
     public function buildCategoryTree(int $parentId = 0, int $indent = 0): void
     {
-        $this->catTree = $this->getTreeBuilder()->buildLinearTree($this->categories, $parentId, $indent);
+        $this->cache->setCatTree($this->getTreeFacade()->buildLinearTree(
+            $this->cache->getCategories(),
+            $parentId,
+            $indent,
+        ));
     }
 
     /**
@@ -309,7 +361,7 @@ class Category
      */
     public function buildAdminCategoryTree(array $categories, int $parentId = 0): array
     {
-        return $this->getTreeBuilder()->buildAdminCategoryTree($categories, $parentId);
+        return $this->getTreeFacade()->buildAdminCategoryTree($categories, $parentId);
     }
 
     /**
@@ -319,22 +371,18 @@ class Category
     public function transform(int $categoryId): void
     {
         $presenter = $this->getAdminCategoryTreePresenter();
-        $entries = $presenter->transform($this->getTreeBuilder(), $this->categoryNames, $this->children, $categoryId);
+        $entries = $presenter->transform(
+            $this->getTreeBuilder(),
+            $this->cache->getCategoryNames(),
+            $this->cache->getChildren(),
+            $categoryId,
+        );
         foreach ($entries as $entry) {
-            $this->treeTab[] = $entry;
+            $this->cache->addTreeTabEntry($entry);
         }
-    }
 
-    private function buildTree(int $categoryId): array
-    {
-        return $this->getTreeBuilder()->buildTree($this->categoryNames, $this->children, $categoryId);
-    }
-
-    private function getSymbol(int $categoryId, int $parentId): string
-    {
-        $siblings = $this->children[$parentId] ?? [];
-        $array = array_keys($siblings);
-        return $categoryId === end($array) ? 'angle' : 'medium';
+        // Sync deprecated properties
+        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -342,15 +390,7 @@ class Category
      */
     private function getNodes(int $categoryId): array
     {
-        return $this->getTreeBuilder()->getNodes($this->categoryNames, $categoryId);
-    }
-
-    /**
-     * Gets the list of the brothers of $id (include $id).
-     */
-    private function getBrothers(int $categoryId): array
-    {
-        return $this->getTreeBuilder()->getBrothers($this->categoryNames, $this->children, $categoryId);
+        return $this->getTreeBuilder()->getNodes($this->cache->getCategoryNames(), $categoryId);
     }
 
     /**
@@ -358,7 +398,7 @@ class Category
      */
     public function getChildren(int $categoryId): array
     {
-        return $this->getTreeBuilder()->getChildren($this->children, $categoryId);
+        return $this->getTreeBuilder()->getChildren($this->cache->getChildren(), $categoryId);
     }
 
     /**
@@ -366,7 +406,7 @@ class Category
      */
     public function getChildNodes(int $categoryId): array
     {
-        return $this->getTreeBuilder()->getChildNodes($this->children, $categoryId);
+        return $this->getTreeBuilder()->getChildNodes($this->cache->getChildren(), $categoryId);
     }
 
     /**
@@ -379,15 +419,21 @@ class Category
         $ascendants[] = $categoryId;
         $numAscendants = count($ascendants);
         for ($i = 0; $i < $numAscendants; ++$i) {
-            if (isset($this->treeTab[$this->getLineCategory($ascendants[$i])]['numChildren'])) {
-                $numChildren = $this->treeTab[$this->getLineCategory($ascendants[$i])]['numChildren'];
+            $lineIndex = $this->getLineCategory($ascendants[$i]);
+            $entry = $this->cache->getTreeTabEntry($lineIndex);
+            if ($entry !== null && isset($entry['numChildren'])) {
+                $numChildren = $entry['numChildren'];
                 if ($numChildren > 0) {
                     $this->expand($ascendants[$i]);
-                } else {
-                    $i = count($ascendants);
+                    continue;
                 }
+
+                break;
             }
         }
+
+        // Sync deprecated properties
+        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -395,12 +441,16 @@ class Category
      */
     public function collapseAll(): void
     {
-        $numTreeTab = count($this->treeTab);
+        $numTreeTab = $this->cache->countTreeTab();
         for ($i = 0; $i < $numTreeTab; ++$i) {
-            if ($this->treeTab[$i]['symbol'] == 'minus') {
-                $this->treeTab[$i]['symbol'] = 'plus';
+            $entry = $this->cache->getTreeTabEntry($i);
+            if ($entry !== null && isset($entry['symbol']) && $entry['symbol'] === 'minus') {
+                $this->cache->updateTreeTabEntry($i, ['symbol' => 'plus']);
             }
         }
+
+        // Sync deprecated properties
+        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -408,9 +458,10 @@ class Category
      */
     private function getLineCategory(int $categoryId): int
     {
-        $num = count($this->treeTab);
+        $num = $this->cache->countTreeTab();
         for ($i = 0; $i < $num; ++$i) {
-            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] === $categoryId) {
+            $entry = $this->cache->getTreeTabEntry($i);
+            if ($entry !== null && isset($entry['id']) && $entry['id'] === $categoryId) {
                 return $i;
             }
         }
@@ -423,16 +474,20 @@ class Category
      */
     public function expand(int $categoryId): void
     {
-        $this->treeTab[$this->getLineCategory($categoryId)]['symbol'] = 'minus';
+        $lineIndex = $this->getLineCategory($categoryId);
+        $this->cache->updateTreeTabEntry($lineIndex, ['symbol' => 'minus']);
+
+        // Sync deprecated properties
+        $this->syncDeprecatedProperties();
     }
 
     public function getCategoryData(int $categoryId): CategoryEntity
     {
         $entity = $this->language !== null
-            ? $this->getCategoryRepository()->findByIdAndLanguage($categoryId, $this->language)
-            : null;
+            ? $this->getCategoryService()->getCategoryData($categoryId, $this->language)
+            : new CategoryEntity();
 
-        return $entity ?? new CategoryEntity();
+        return $entity;
     }
 
     public function getPath(
@@ -442,7 +497,7 @@ class Category
         string $useCssClass = 'breadcrumb',
     ): string {
         $ids = $this->getNodes($catId);
-        $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->categoryNames, $ids);
+        $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->cache->getCategoryNames(), $ids);
 
         if ($segments === []) {
             return '';
@@ -484,8 +539,10 @@ class Category
     public function getCategoriesFromFaq(int $faqId): array
     {
         $rows = $this->getCategoryRepository()->findCategoriesFromFaq($faqId, (string) $this->language);
-        $this->categories = $rows;
-        return $this->categories;
+        foreach ($rows as $id => $row) {
+            $this->cache->addCategory($id, $row);
+        }
+        return $this->cache->getCategories();
     }
 
     public function create(CategoryEntity $categoryEntity): ?int
@@ -536,40 +593,39 @@ class Category
         return $this->getCategoryRepository()->getCategoryLanguagesTranslated($categoryId);
     }
 
+    /**
+     * Returns languages available to translate for a given category as HTML options.
+     *
+     * @deprecated Use CategoryLanguageService::renderLanguagesToTranslateAsHtml() instead
+     */
     public function getCategoryLanguagesToTranslate(int $categoryId, string $selectedLanguage): string
     {
-        $output = '';
-        $existingLanguage = $this->configuration->getLanguage()->isLanguageAvailable(
-            identifier: $categoryId,
-            table: 'faqcategories',
+        return $this->getCategoryLanguageService()->renderLanguagesToTranslateAsHtml(
+            $this->configuration,
+            $categoryId,
+            $selectedLanguage,
         );
-
-        foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
-            if (!in_array(strtolower((string) $lang), $existingLanguage, strict: true)) {
-                $output .= "\t<option value=\"" . strtolower((string) $lang) . '"';
-                if ($lang === $selectedLanguage) {
-                    $output .= ' selected="selected"';
-                }
-
-                $output .= '>' . $langname . "</option>\n";
-            }
-        }
-
-        return $output;
     }
 
     public function getMissingCategories(): void
     {
-        $rows = $this->getCategoryRepository()->findMissingCategories($this->language);
+        $rows = $this->getCategoryService()->getMissingCategories($this->language);
         foreach ($rows as $row) {
             $id = (int) $row['id'];
             $parentId = (int) $row['parent_id'];
-            if (!array_key_exists($id, $this->categoryNames)) {
-                $this->categoryNames[$id] = $row;
-                $this->categories[$id] = $row;
-                $this->children[$parentId][$id] = &$this->categoryNames[$id];
+
+            $currentNames = $this->cache->getCategoryNames();
+            if (!array_key_exists($id, $currentNames)) {
+                $this->cache->addCategoryName($id, $row);
+                $this->cache->addCategory($id, $row);
+
+                $categoryNameRef = $this->cache->getCategoryName($id);
+                $this->cache->addChild($parentId, $id, $categoryNameRef);
             }
         }
+
+        // Sync deprecated properties
+        $this->syncDeprecatedProperties();
     }
 
     /**
@@ -577,7 +633,7 @@ class Category
      */
     public function getOwner(?int $categoryId = null): int
     {
-        return $this->owner[$categoryId] ?? 1;
+        return $this->permissionContext->getOwner($categoryId);
     }
 
     /**
@@ -585,7 +641,7 @@ class Category
      */
     public function getModeratorGroupId(int $categoryId): int
     {
-        return $this->moderators[$categoryId] ?? 0;
+        return $this->permissionContext->getModeratorGroupId($categoryId);
     }
 
     /**
@@ -593,16 +649,26 @@ class Category
      */
     public function getCategoryTree(): array
     {
-        return $this->catTree;
+        return $this->cache->getCatTree();
     }
 
     public function getCategoryName(int $categoryId): string
     {
-        return $this->categoryNames[$categoryId]['name'] ?? '';
+        $categoryName = $this->cache->getCategoryName($categoryId);
+        return $categoryName['name'] ?? '';
     }
 
     public function getCategoryDescription(int $categoryId): string
     {
-        return $this->categoryNames[$categoryId]['description'] ?? '';
+        $categoryName = $this->cache->getCategoryName($categoryId);
+        return $categoryName['description'] ?? '';
+    }
+
+    /**
+     * Checks if a category has a link to a specific FAQ.
+     */
+    public function categoryHasLinkToFaq(int $faqId, int $categoryId): bool
+    {
+        return $this->getCategoryRepository()->hasLinkToFaq($faqId, $categoryId);
     }
 }

@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Tree;
 
-final class TreeBuilder
+class TreeBuilder implements TreeBuilderInterface
 {
     private TreePathResolver $pathResolver;
     private TreeVisualizer $visualizer;

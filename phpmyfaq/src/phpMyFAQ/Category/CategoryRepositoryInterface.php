@@ -81,7 +81,12 @@ interface CategoryRepositoryInterface
     public function findMissingCategories(?string $language = null): array;
 
     /**
-     * Returns the number of categories that match name, language and parent.
+     * Returns the number of categories that match name, language, and parent.
      */
     public function countByNameLangParent(string $name, string $lang, int $parentId): int;
+
+    /**
+     * Checks if a category has a link to a specific FAQ.
+     */
+    public function hasLinkToFaq(int $faqId, int $categoryId): bool;
 }

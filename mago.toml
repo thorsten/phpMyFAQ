@@ -16,4 +16,3 @@ null-type-hint = "question"
 
 [linter]
 integrations = ["symfony", "php-unit"]
-

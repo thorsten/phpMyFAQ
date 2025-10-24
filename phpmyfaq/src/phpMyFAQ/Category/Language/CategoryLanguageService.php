@@ -88,4 +88,28 @@ final class CategoryLanguageService
         asort($result);
         return $result;
     }
+
+    /**
+     * Renders languages available to translate as HTML options.
+     *
+     * @deprecated Use getLanguagesToTranslate() instead and render in template
+     */
+    public function renderLanguagesToTranslateAsHtml(
+        Configuration $configuration,
+        int $categoryId,
+        string $selectedLanguage = '',
+    ): string {
+        $languages = $this->getLanguagesToTranslate($configuration, $categoryId);
+        $output = '';
+
+        foreach ($languages as $lang => $name) {
+            $output .= "\t<option value=\"" . $lang . '"';
+            if ($lang === strtolower($selectedLanguage)) {
+                $output .= ' selected="selected"';
+            }
+            $output .= '>' . $name . "</option>\n";
+        }
+
+        return $output;
+    }
 }

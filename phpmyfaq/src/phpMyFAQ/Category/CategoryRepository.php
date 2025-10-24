@@ -71,7 +71,13 @@ class CategoryRepository implements CategoryRepositoryInterface
                 : $perm->buildWhereClause($groups, $userId);
         }
 
-        if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {
+        if (
+            $language !== null
+            && preg_match(
+                pattern: '/^[a-z\-]{2,}$/',
+                subject: $language,
+            )
+        ) {
             $where .= $where === '' ? ' WHERE' : ' AND';
             $where .= " fc.lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
@@ -126,7 +132,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         $categories = [];
         $prefix = Database::getTablePrefix();
         $query = "SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM {$prefix}faqcategories";
-        if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {
+        if (
+            $language !== null
+            && preg_match(
+                pattern: '/^[a-z\-]{2,}$/',
+                subject: $language,
+            )
+        ) {
             $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
 
@@ -151,7 +163,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $query = sprintf('SELECT id FROM %sfaqcategories', Database::getTablePrefix());
 
-        if ($language !== null && preg_match('/^[a-z\-]{2,}$/', $language)) {
+        if (
+            $language !== null
+            && preg_match(
+                pattern: '/^[a-z\-]{2,}$/',
+                subject: $language,
+            )
+        ) {
             $query .= sprintf(" WHERE lang = '%s'", $this->configuration->getDb()->escape($language));
         }
 
@@ -200,7 +218,24 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function findCategoriesFromFaq(int $faqId, string $language): array
     {
         $query = sprintf(
-            "\n            SELECT\n                fc.id AS id,\n                fc.lang AS lang,\n                fc.parent_id AS parent_id,\n                fc.name AS name,\n                fc.description AS description\n            FROM\n                %sfaqcategoryrelations fcr,\n                %sfaqcategories fc\n            WHERE\n                fc.id = fcr.category_id\n            AND\n                fcr.record_id = %d\n            AND\n                fcr.category_lang = '%s'\n            AND\n                fc.lang = '%s'",
+            "
+            SELECT
+                fc.id AS id,
+                fc.lang AS lang,
+                fc.parent_id AS parent_id,
+                fc.name AS name,
+                fc.description AS description
+            FROM
+                %sfaqcategoryrelations fcr,
+                %sfaqcategories fc
+            WHERE
+                fc.id = fcr.category_id
+            AND
+                fcr.record_id = %d
+            AND
+                fcr.category_lang = '%s'
+            AND
+                fc.lang = '%s'",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
@@ -246,12 +281,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         if ($categoryEntity->getId() === 0) {
             $categoryEntity->setId($this->configuration->getDb()->nextId(
                 Database::getTablePrefix() . 'faqcategories',
-                'id',
+                columnId: 'id',
             ));
         }
 
         $query = sprintf(
-            "\n            INSERT INTO\n                %sfaqcategories\n            (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)\n                VALUES\n            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
+            "INSERT INTO    %sfaqcategories(id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)    VALUES(%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             Database::getTablePrefix(),
             $categoryEntity->getId(),
             $this->configuration->getDb()->escape($categoryEntity->getLang()),
@@ -273,7 +308,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function update(CategoryEntity $categoryEntity): bool
     {
         $query = sprintf(
-            "\n            UPDATE\n                %sfaqcategories\n            SET\n                name = '%s',\n                description = '%s',\n                user_id = %d,\n                group_id = %d,\n                active = %d,\n                show_home = %d,\n                image = '%s'\n            WHERE\n                id = %d\n            AND\n                lang = '%s'",
+            "UPDATE %sfaqcategories SET name = '%s', description = '%s', user_id = %d, group_id = %d, active = %d, show_home = %d, image = '%s' WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($categoryEntity->getName()),
             $this->configuration->getDb()->escape($categoryEntity->getDescription()),
@@ -356,13 +391,16 @@ class CategoryRepository implements CategoryRepositoryInterface
             $query = sprintf(
                 'SELECT name, description FROM %sfaqcategories WHERE %s',
                 Database::getTablePrefix(),
-                implode(' AND ', $whereParts),
+                implode(
+                    separator: ' AND ',
+                    array: $whereParts,
+                ),
             );
 
             $result = $this->configuration->getDb()->query($query);
             if ($row = $this->configuration->getDb()->fetchArray($result)) {
                 $translated[$existingLanguage] =
-                    $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
+                    $row['name'] . ($row['description'] === '' ? '' : '  (' . $row['description'] . ')');
             }
         }
 
@@ -374,8 +412,8 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function findMissingCategories(?string $language = null): array
     {
         $query = sprintf(
-            format: 'SELECT id, lang, parent_id, name, description, user_id, group_id, active FROM %sfaqcategories',
-            values: Database::getTablePrefix(),
+            'SELECT id, lang, parent_id, name, description, user_id, group_id, active FROM %sfaqcategories',
+            Database::getTablePrefix(),
         );
         if (
             $language !== null
@@ -425,5 +463,27 @@ class CategoryRepository implements CategoryRepositoryInterface
             }
         }
         return 0;
+    }
+
+    /**
+     * Checks if a category has a link to a specific FAQ.
+     */
+    public function hasLinkToFaq(int $faqId, int $categoryId): bool
+    {
+        $query = sprintf(
+            'SELECT COUNT(*) AS cnt FROM %sfaqcategoryrelations WHERE category_id = %d AND record_id = %d',
+            Database::getTablePrefix(),
+            $categoryId,
+            $faqId,
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+        if ($result) {
+            $row = $this->configuration->getDb()->fetchArray($result);
+            if ($row && isset($row['cnt'])) {
+                return (int) $row['cnt'] > 0;
+            }
+        }
+        return false;
     }
 }

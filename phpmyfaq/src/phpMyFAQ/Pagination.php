@@ -139,7 +139,7 @@ class Pagination
         }
 
         if (isset($options['perPage'])) {
-            $this->perPage = $options['perPage'];
+            $this->perPage = (int) $options['perPage'];
         }
 
         if (isset($options['linkTpl'])) {
