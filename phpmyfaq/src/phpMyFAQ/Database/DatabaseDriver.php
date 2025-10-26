@@ -62,6 +62,7 @@ interface DatabaseDriver
     /**
      * Fetch a result row as an array.
      *
+     * @param mixed $result
      * @return array|false|null
      */
     public function fetchArray(mixed $result): array|false|null;
@@ -97,9 +98,9 @@ interface DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table The name of the table
-     * @param string $columnId The name of the ID column
+     * @param string $column The name of the column
      */
-    public function nextId(string $table, string $columnId): int;
+    public function nextId(string $table, string $column): int;
 
     /**
      * Returns the error string.
@@ -129,8 +130,8 @@ interface DatabaseDriver
     public function close();
 
     /**
-     * Return SQL expression that yields current datetime in the local timezone.
-     * The actual SQL value may be of SQL datetime type (or timestamp or similar)
+     * Return an SQL expression that yields current datetime in the local timezone.
+     * The actual SQL value may be of SQL datetime type (or timestamp or similar),
      * or it may be varchar/text (as is in SQLite3) - so make sure the consumer
      * code doesn't depend on the actual type.
      *

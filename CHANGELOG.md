@@ -16,7 +16,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added an administration view for orphaned FAQs (Thorsten)
 - added plugin administration backend (Thorsten)
 - added image upload and image manager in the Markdown editor (Thorsten)
-- added support for PDO (Thorsten)
+- added experimental support for PDO (Thorsten)
 - added possibility to enable/disable admin session counter (Thorsten)
 - added EU Data Act 2025 compliance (Thorsten)
 - added Urdu translation (Thorsten)

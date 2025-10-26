@@ -281,7 +281,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         if ($categoryEntity->getId() === 0) {
             $categoryEntity->setId($this->configuration->getDb()->nextId(
                 Database::getTablePrefix() . 'faqcategories',
-                columnId: 'id',
+                column: 'id',
             ));
         }
 

@@ -12,10 +12,10 @@ declare(strict_types=1);
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2025 phpMyFAQ Team
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2015-04-06
+ * @since     2025-10-26
  */
 
 namespace phpMyFAQ\Instance\Database;
@@ -28,7 +28,7 @@ use phpMyFAQ\Instance\Database;
  *
  * @package phpMyFAQ\Instance\Database
  */
-class Mysqli extends Database implements Driver
+class PdoMysql extends Database implements Driver
 {
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (

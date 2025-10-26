@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 /**
- * The phpMyFAQ instances a database class with CREATE TABLE statements for MySQL, MariaBD, Percona Server and Galera
- * Cluster for MySQL.
+ * The phpMyFAQ instances a database class with CREATE TABLE statements for SQLite3.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,10 +11,10 @@ declare(strict_types=1);
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2025 phpMyFAQ Team
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2015-04-06
+ * @since     2025-10-26
  */
 
 namespace phpMyFAQ\Instance\Database;
@@ -24,210 +23,204 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Instance\Database;
 
 /**
- * Class Mysqli
+ * Class Sqlite3
  *
  * @package phpMyFAQ\Instance\Database
  */
-class Mysqli extends Database implements Driver
+class PdoSqlite extends Database implements Driver
 {
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
-            id INT(11) NOT NULL,
-            time INT(11) NOT NULL,
-            usr INT(11) NOT NULL,
-            text TEXT NOT NULL,
+            id INTEGER NOT NULL,
+            time INTEGER NOT NULL,
+            usr INTEGER NOT NULL,
+            text VARCHAR(8000) NOT NULL,
             ip VARCHAR(64) NOT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
-            id INT(11) NOT NULL,
-            record_id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
+            record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             real_hash CHAR(32) NOT NULL,
             virtual_hash CHAR(32) NOT NULL,
             password_hash CHAR(40) NULL,
             filename VARCHAR(255) NOT NULL,
-            filesize INT(11) NOT NULL,
-            encrypted INT(11) NOT NULL DEFAULT 0,
+            filesize INTEGER NOT NULL,
+            encrypted INTEGER NOT NULL DEFAULT 0,
             mime_type VARCHAR(255) NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
         'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
-            contents BLOB NOT NULL,
-            PRIMARY KEY (virtual_hash)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            contents TEXT NOT NULL,
+            PRIMARY KEY (virtual_hash))',
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
             id INT(11) NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,
             created timestamp NOT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
             userid INT(11) DEFAULT NULL,
-            faqid INT(11) DEFAULT NULL) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            faqid INT(11) DEFAULT NULL)',
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,
             language VARCHAR(5) NOT NULL,
             ip VARCHAR(64) NOT NULL,
-            captcha_time INT(11) NOT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            captcha_time INTEGER NOT NULL,
+            PRIMARY KEY (id))',
         'faqcategories' => 'CREATE TABLE %sfaqcategories (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
             parent_id INTEGER NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
-            user_id INT(11) NOT NULL,
-            group_id INT(11) NOT NULL DEFAULT -1,
-            active INT(11) NULL DEFAULT 1,
+            user_id INTEGER NOT NULL,
+            group_id INTEGER NOT NULL DEFAULT -1,
+            active INTEGER NULL DEFAULT 1,
             image VARCHAR(255) DEFAULT NULL,
-            show_home INT(1) DEFAULT NULL,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-        'faqcategory_news' => 'CREATE TABLE %sfaqcategory_news (
-            category_id INT(11) NOT NULL,
-            news_id INT(11) NOT NULL,
-            PRIMARY KEY (category_id, news_id)) ENGINE = InnoDB',
+            show_home INTEGER DEFAULT NULL,
+            PRIMARY KEY (id, lang))',
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
-            category_id INT(11) NOT NULL,
+            category_id INTEGER NOT NULL,
             category_lang VARCHAR(5) NOT NULL,
-            record_id INT(11) NOT NULL,
+            record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
-            PRIMARY KEY (category_id, category_lang, record_id, record_lang),
-            KEY idx_records (record_id, record_lang)) 
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
+        'faqcategoryrelations_idx' => 'CREATE INDEX idx_records ON %sfaqcategoryrelations (record_id, record_lang)',
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
-            category_id INT(11) NOT NULL,
-            group_id INT(11) NOT NULL,
-            PRIMARY KEY (category_id, group_id)) 
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-        'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
-            category_id INT(11) NOT NULL,
-            user_id INT(11) NOT NULL,
-            PRIMARY KEY (category_id, user_id)) 
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            category_id INTEGER NOT NULL,
+            group_id INTEGER NOT NULL,
+            PRIMARY KEY (category_id, group_id))',
+        'faqcategory_news' => 'CREATE TABLE %sfaqcategory_news (
+            category_id INTEGER NOT NULL,
+            news_id INTEGER NOT NULL,
+            PRIMARY KEY (category_id, news_id))',
         'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
-            category_id int(11) NOT NULL,
-            parent_id int(11) DEFAULT NULL,
-            position int(11) NOT NULL,
-            PRIMARY KEY (category_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            category_id INTEGER NOT NULL,
+            parent_id INTEGER DEFAULT NULL,
+            position INTEGER NOT NULL,
+            PRIMARY KEY (category_id))',
+        'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
+            category_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            PRIMARY KEY (category_id, user_id))',
         'faqchanges' => 'CREATE TABLE %sfaqchanges (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             beitrag SMALLINT NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            revision_id INT(11) NOT NULL DEFAULT 0,
-            usr INT(11) NOT NULL ,
-            datum INT(11) NOT NULL,
+            revision_id INTEGER NOT NULL DEFAULT 0,
+            usr INTEGER NOT NULL ,
+            datum INTEGER NOT NULL,
             what text DEFAULT NULL,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id, lang))',
         'faqcomments' => 'CREATE TABLE %sfaqcomments (
-            id_comment INT(11) NOT NULL,
-            id INT(11) NOT NULL,
+            id_comment INTEGER NOT NULL,
+            id INTEGER NOT NULL,
             type VARCHAR(10) NOT NULL,
             usr VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment text NOT NULL,
             datum VARCHAR(64) NOT NULL,
             helped text DEFAULT NULL,
-            PRIMARY KEY (id_comment)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id_comment))',
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
             config_name VARCHAR(255) NOT NULL default \'\',
             config_value TEXT DEFAULT NULL,
-            PRIMARY KEY (config_name)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (config_name))',
         'faqdata' => 'CREATE TABLE %sfaqdata (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            solution_id INT(11) NOT NULL,
-            revision_id INT(11) NOT NULL DEFAULT 0,
+            solution_id INTEGER NOT NULL,
+            revision_id INTEGER NOT NULL DEFAULT 0,
             active char(3) NOT NULL,
-            sticky INT(11) NOT NULL,
-            keywords TEXT DEFAULT NULL,
-            thema TEXT NOT NULL,
-            content LONGTEXT DEFAULT NULL,
+            sticky INTEGER NOT NULL,
+            keywords text DEFAULT NULL,
+            thema text NOT NULL,
+            content text DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
             updated VARCHAR(15) NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            notes TEXT DEFAULT NULL,
-            sticky_order int(10) DEFAULT NULL,
-            FULLTEXT (keywords,thema,content),
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
-        'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
-            id INT(11) NOT NULL,
-            lang VARCHAR(5) NOT NULL,
-            solution_id INT(11) NOT NULL,
-            revision_id INT(11) NOT NULL DEFAULT 0,
-            active char(3) NOT NULL,
-            sticky INT(11) NOT NULL,
-            keywords TEXT DEFAULT NULL,
-            thema TEXT NOT NULL,
-            content LONGTEXT DEFAULT NULL,
-            author VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-            comment char(1) default \'y\',
-            updated VARCHAR(15) NOT NULL,
-            date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
-            date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created DATETIME DEFAULT CURRENT_TIMESTAMP,
             notes text DEFAULT NULL,
-            sticky_order int(10) DEFAULT NULL,
-            PRIMARY KEY (id, lang, solution_id, revision_id)) 
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            sticky_order INTEGER DEFAULT NULL,
+            PRIMARY KEY (id, lang))',
+        'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
+            id INTEGER NOT NULL,
+            lang VARCHAR(5) NOT NULL,
+            solution_id INTEGER NOT NULL,
+            revision_id INTEGER NOT NULL DEFAULT 0,
+            active char(3) NOT NULL,
+            sticky INTEGER NOT NULL,
+            keywords text DEFAULT NULL,
+            thema text NOT NULL,
+            content text DEFAULT NULL,
+            author VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            comment char(1) default \'y\',
+            updated VARCHAR(15) NOT NULL,
+            date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
+            date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+            created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            notes text DEFAULT NULL,
+            sticky_order INTEGER DEFAULT NULL,
+            PRIMARY KEY (id, lang, solution_id, revision_id))',
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (
-            record_id INT(11) NOT NULL,
-            group_id INT(11) NOT NULL,
+            record_id INTEGER NOT NULL,
+            group_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, group_id))',
         'faqdata_tags' => 'CREATE TABLE %sfaqdata_tags (
-            record_id INT(11) NOT NULL,
-            tagging_id INT(11) NOT NULL,
+            record_id INTEGER NOT NULL,
+            tagging_id INTEGER NOT NULL,
             PRIMARY KEY (record_id, tagging_id))',
         'faqdata_user' => 'CREATE TABLE %sfaqdata_user (
-            record_id INT(11) NOT NULL,
-            user_id INT(11) NOT NULL,
-            PRIMARY KEY (record_id, user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            record_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            PRIMARY KEY (record_id, user_id))',
         'faqforms' => 'CREATE TABLE %sfaqforms (
-            form_id INT(1) NOT NULL,
-            input_id INT(11) NOT NULL,
+            form_id INTEGER NOT NULL,
+            input_id INTEGER NOT NULL,
             input_type VARCHAR(1000) NOT NULL,
             input_label VARCHAR(500) NOT NULL,
-            input_active INT(1) NOT NULL,
-            input_required INT(1) NOT NULL,
+            input_active INTEGER NOT NULL,
+            input_required INTEGER NOT NULL,
             input_lang VARCHAR(11) NOT NULL)',
         'faqglossary' => 'CREATE TABLE %sfaqglossary (
-            id INT(11) NOT NULL ,
+            id INTEGER NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
             item VARCHAR(255) NOT NULL ,
             definition text NOT NULL,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id, lang))',
         'faqgroup' => 'CREATE TABLE %sfaqgroup (
-            group_id INT(11) NOT NULL,
+            group_id INTEGER NOT NULL,
             name VARCHAR(25) NULL,
             description text NULL,
-            auto_join INT(11) NULL,
-            PRIMARY KEY(group_id),
-            KEY idx_name (name)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            auto_join INTEGER NULL,
+            PRIMARY KEY(group_id))',
+        'faqgroup_idx' => 'CREATE UNIQUE INDEX idx_name ON %sfaqgroup (name)',
         'faqgroup_right' => 'CREATE TABLE %sfaqgroup_right (
-            group_id INT(11) NOT NULL,
-            right_id INT(11) NOT NULL,
-            PRIMARY KEY(group_id, right_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            group_id INTEGER NOT NULL,
+            right_id INTEGER NOT NULL,
+            PRIMARY KEY(group_id, right_id))',
         'faqinstances' => 'CREATE TABLE %sfaqinstances (
             id INT NOT NULL,
             url VARCHAR(255) NOT NULL,
             instance VARCHAR(255) NOT NULL,
             comment TEXT NULL,
-            created TIMESTAMP DEFAULT \'1977-04-07 14:47:00\',
+            created DATETIME NOT NULL,
             modified DATETIME NOT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
         'faqinstances_config' => 'CREATE TABLE %sfaqinstances_config (
             instance_id INT NOT NULL,
             config_name VARCHAR(255) NOT NULL default \'\',
             config_value VARCHAR(255) DEFAULT NULL,
-            PRIMARY KEY (instance_id, config_name))
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (instance_id, config_name))',
         'faqnews' => 'CREATE TABLE %sfaqnews (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
             header VARCHAR(255) NOT NULL,
             artikel text NOT NULL,
@@ -239,48 +232,48 @@ class Mysqli extends Database implements Driver
             link VARCHAR(255) DEFAULT NULL,
             linktitel VARCHAR(255) DEFAULT NULL,
             target VARCHAR(255) NOT NULL,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
             username VARCHAR(100) NOT NULL,
             email VARCHAR(100) NOT NULL,
-            category_id INT(11) NOT NULL,
+            category_id INTEGER NOT NULL,
             question text NOT NULL,
             created VARCHAR(20) NOT NULL,
             is_visible char(1) default \'Y\',
-            answer_id INT(11) NOT NULL DEFAULT 0,
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            answer_id INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (id))',
         'faqright' => 'CREATE TABLE %sfaqright (
-            right_id INT(11) NOT NULL,
+            right_id INTEGER NOT NULL,
             name VARCHAR(50) NULL,
             description text NULL,
-            for_users INT(11) NULL DEFAULT 1,
-            for_groups INT(11) NULL DEFAULT 1,
-            for_sections INT(11) NULL DEFAULT 1,
-            PRIMARY KEY (right_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            for_users INTEGER NULL DEFAULT 1,
+            for_groups INTEGER NULL DEFAULT 1,
+            for_sections INTEGER NULL DEFAULT 1,
+            PRIMARY KEY (right_id))',
         'faqsearches' => 'CREATE TABLE %sfaqsearches (
-            id INT(11) NOT NULL ,
+            id INTEGER NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
             searchterm VARCHAR(255) NOT NULL ,
-            searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            searchdate DATETIME,
+            PRIMARY KEY (id, lang))',
         'faqseo' => 'CREATE TABLE %sfaqseo (
-            id INT(11) NOT NULL,
+            id INT NOT NULL,
             type VARCHAR(32) NOT NULL,
-            reference_id INT(11) NOT NULL,
+            reference_id INT NOT NULL,
             reference_language VARCHAR(5) NOT NULL,
-            title TEXT DEFAULT NULL,
-            description TEXT DEFAULT NULL,
-            slug TEXT DEFAULT NULL,
-            created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id)) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            title TEXT NULL,
+            description TEXT NULL,
+            slug TEXT NULL,
+            created DATE NOT NULL DEFAULT (date(\'now\')),
+            PRIMARY KEY (id))',
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
-            sid INT(11) NOT NULL,
-            user_id INT(11) NOT NULL,
+            sid INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
             ip VARCHAR(64) NOT NULL,
-            time INT(11) NOT NULL,
-            PRIMARY KEY (sid)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            time INTEGER NOT NULL,
+            PRIMARY KEY (sid))',
         'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
         'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
         'faqsearches_date_term_idx' =>
@@ -288,20 +281,19 @@ class Mysqli extends Database implements Driver
         'faqsearches_date_term_lang_idx' =>
             'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
             stopword VARCHAR(64) NOT NULL,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id, lang))',
         'faqtags' => 'CREATE TABLE %sfaqtags (
-            tagging_id INT(11) NOT NULL,
+            tagging_id INTEGER NOT NULL,
             tagging_name VARCHAR(255) NOT NULL ,
-            PRIMARY KEY (tagging_id, tagging_name))
-            DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (tagging_id, tagging_name))',
         'faquser' => 'CREATE TABLE %sfaquser (
-            user_id INT(11) NOT NULL,
+            user_id INTEGER NOT NULL,
             login VARCHAR(128) NOT NULL,
             session_id VARCHAR(150) NULL,
-            session_timestamp INT(11) NULL,
+            session_timestamp INTEGER NULL,
             ip VARCHAR(64) NULL,
             account_status VARCHAR(50) NULL,
             last_login VARCHAR(14) NULL,
@@ -316,9 +308,9 @@ class Mysqli extends Database implements Driver
             code_verifier VARCHAR(255) NULL DEFAULT NULL,
             jwt TEXT NULL DEFAULT NULL,
             webauthnkeys TEXT NULL DEFAULT NULL,
-            PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (user_id))',
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
-            user_id INT(11) NOT NULL,
+            user_id INTEGER NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
             email VARCHAR(128) NULL,
@@ -329,29 +321,29 @@ class Mysqli extends Database implements Driver
             login VARCHAR(128) NOT NULL,
             pass VARCHAR(80) NULL,
             domain VARCHAR(255) NULL,
-            PRIMARY KEY (login)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (login))',
         'faquser_group' => 'CREATE TABLE %sfaquser_group (
-            user_id INT(11) NOT NULL,
-            group_id INT(11) NOT NULL,
-            PRIMARY KEY (user_id, group_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            user_id INTEGER NOT NULL,
+            group_id INTEGER NOT NULL,
+            PRIMARY KEY (user_id, group_id))',
         'faquser_right' => 'CREATE TABLE %sfaquser_right (
-            user_id INT(11) NOT NULL,
-            right_id INT(11) NOT NULL,
-            PRIMARY KEY (user_id, right_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            user_id INTEGER NOT NULL,
+            right_id INTEGER NOT NULL,
+            PRIMARY KEY (user_id, right_id))',
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            visits INT(11) NOT NULL,
-            last_visit INT(11) NOT NULL,
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            visits INTEGER NOT NULL,
+            last_visit INTEGER NOT NULL,
+            PRIMARY KEY (id, lang))',
         'faqvoting' => 'CREATE TABLE %sfaqvoting (
-            id INT(11) NOT NULL,
-            artikel INT(11) NOT NULL,
-            vote INT(11) NOT NULL,
-            usr INT(11) NOT NULL,
+            id INTEGER NOT NULL,
+            artikel SMALLINT NOT NULL,
+            vote SMALLINT NOT NULL,
+            usr SMALLINT NOT NULL,
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
-            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB',
+            PRIMARY KEY (id))',
     ];
 
     /**
@@ -373,9 +365,6 @@ class Mysqli extends Database implements Driver
             $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
 
             if (!$result) {
-                echo sprintf($createTableStatement, $prefix);
-                echo $this->configuration->getDb()->error();
-
                 return false;
             }
         }

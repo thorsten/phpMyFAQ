@@ -275,11 +275,11 @@ class Sqlite3 implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $columnId the name of the ID column
+     * @param string $column the name of the ID column
      */
-    public function nextId(string $table, string $columnId): int
+    public function nextId(string $table, string $column): int
     {
-        $result = (int) $this->conn->querySingle(sprintf('SELECT max(%s) AS current_id FROM %s', $columnId, $table));
+        $result = (int) $this->conn->querySingle(sprintf('SELECT max(%s) AS current_id FROM %s', $column, $table));
 
         return $result + 1;
     }

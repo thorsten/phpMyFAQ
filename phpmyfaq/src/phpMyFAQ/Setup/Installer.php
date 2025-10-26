@@ -750,8 +750,14 @@ class Installer extends Setup
 
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim((string) $dbSetup['dbType']);
-            if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
-                throw new Exception(sprintf('Installation Error: Invalid server type: %s', $dbSetup['dbType']));
+            if (str_starts_with($dbSetup['dbType'], 'pdo_')) {
+                $dataBaseFile = 'Pdo' . ucfirst(substr($dbSetup['dbType'], 4));
+            } else {
+                $dataBaseFile = ucfirst($dbSetup['dbType']);
+            }
+
+            if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . $dataBaseFile . '.php')) {
+                throw new Exception(sprintf('Installation Error: Invalid server type "%s"', $dbSetup['dbType']));
             }
         } else {
             throw new Exception('Installation Error: Please select a database type.');

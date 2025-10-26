@@ -240,12 +240,12 @@ class PdoSqlsrv implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $columnId The name of the ID column
+     * @param string $column The name of the ID column
      * @throws Exception
      */
-    public function nextId(string $table, string $columnId): int
+    public function nextId(string $table, string $column): int
     {
-        $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $columnId, $table);
+        $query = sprintf('SELECT MAX(%s) AS current_id FROM %s', $column, $table);
 
         $statement = $this->pdo->prepare($query);
         $statement->execute();

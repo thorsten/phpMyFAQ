@@ -234,11 +234,11 @@ class Pgsql implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $columnId    the name of the ID column
+     * @param string $column    the name of the ID column
      */
-    public function nextId(string $table, string $columnId): int
+    public function nextId(string $table, string $column): int
     {
-        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $columnId . "_seq') as current_id;");
+        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $column . "_seq') as current_id;");
     }
 
     /**

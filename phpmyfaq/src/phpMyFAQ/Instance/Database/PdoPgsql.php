@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * The phpMyFAQ instances a database class with CREATE TABLE statements for SQLite3.
+ * The phpMyFAQ instances a database class with CREATE TABLE statements for PostgreSQL.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,10 +11,10 @@ declare(strict_types=1);
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2025 phpMyFAQ Team
+ * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2015-04-16
+ * @since     2025-10-26
  */
 
 namespace phpMyFAQ\Instance\Database;
@@ -23,22 +23,23 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Instance\Database;
 
 /**
- * Class Sqlite3
+ * Class Pgsql
  *
  * @package phpMyFAQ\Instance\Database
  */
-class Sqlite3 extends Database implements Driver
+class PdoPgsql extends Database implements Driver
 {
     private array $createTableStatements = [
+        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             time INTEGER NOT NULL,
             usr INTEGER NOT NULL,
-            text VARCHAR(8000) NOT NULL,
+            text TEXT NOT NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
         'faqattachment' => 'CREATE TABLE %sfaqattachment (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             real_hash CHAR(32) NOT NULL,
@@ -51,18 +52,18 @@ class Sqlite3 extends Database implements Driver
             PRIMARY KEY (id))',
         'faqattachment_file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
-            contents TEXT NOT NULL,
+            contents BYTEA,
             PRIMARY KEY (virtual_hash))',
         'faqbackup' => 'CREATE TABLE %sfaqbackup (
-            id INT(11) NOT NULL,
+            id INTEGER NOT NULL,
             filename VARCHAR(255) NOT NULL,
             authkey VARCHAR(255) NOT NULL,
             authcode VARCHAR(255) NOT NULL,
             created timestamp NOT NULL,
             PRIMARY KEY (id))',
         'faqbookmarks' => 'CREATE TABLE %sfaqbookmarks (
-            userid INT(11) DEFAULT NULL,
-            faqid INT(11) DEFAULT NULL)',
+            userid INTEGER DEFAULT NULL,
+            faqid INTEGER DEFAULT NULL)',
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
             id VARCHAR(6) NOT NULL,
             useragent VARCHAR(255) NOT NULL,
@@ -71,7 +72,7 @@ class Sqlite3 extends Database implements Driver
             captcha_time INTEGER NOT NULL,
             PRIMARY KEY (id))',
         'faqcategories' => 'CREATE TABLE %sfaqcategories (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             parent_id INTEGER NOT NULL,
             name VARCHAR(255) NOT NULL,
@@ -88,7 +89,8 @@ class Sqlite3 extends Database implements Driver
             record_id INTEGER NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
-        'faqcategoryrelations_idx' => 'CREATE INDEX idx_records ON %sfaqcategoryrelations (record_id, record_lang)',
+        'idx_records' => 'CREATE INDEX idx_records_%s ON %sfaqcategoryrelations
+            (record_id, record_lang)',
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
             category_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL,
@@ -102,12 +104,13 @@ class Sqlite3 extends Database implements Driver
             parent_id INTEGER DEFAULT NULL,
             position INTEGER NOT NULL,
             PRIMARY KEY (category_id))',
+        'faqcategory_order_position_seq' => 'CREATE SEQUENCE %sfaqcategory_order_position_seq START WITH 1',
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, user_id))',
         'faqchanges' => 'CREATE TABLE %sfaqchanges (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             beitrag SMALLINT NOT NULL,
             lang VARCHAR(5) NOT NULL,
             revision_id INTEGER NOT NULL DEFAULT 0,
@@ -116,7 +119,7 @@ class Sqlite3 extends Database implements Driver
             what text DEFAULT NULL,
             PRIMARY KEY (id, lang))',
         'faqcomments' => 'CREATE TABLE %sfaqcomments (
-            id_comment INTEGER NOT NULL,
+            id_comment SERIAL NOT NULL,
             id INTEGER NOT NULL,
             type VARCHAR(10) NOT NULL,
             usr VARCHAR(255) NOT NULL,
@@ -130,42 +133,42 @@ class Sqlite3 extends Database implements Driver
             config_value TEXT DEFAULT NULL,
             PRIMARY KEY (config_name))',
         'faqdata' => 'CREATE TABLE %sfaqdata (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             solution_id INTEGER NOT NULL,
             revision_id INTEGER NOT NULL DEFAULT 0,
-            active char(3) NOT NULL,
+            active VARCHAR(3) NOT NULL,
             sticky INTEGER NOT NULL,
-            keywords text DEFAULT NULL,
-            thema text NOT NULL,
-            content text DEFAULT NULL,
+            keywords TEXT DEFAULT NULL,
+            thema TEXT NOT NULL,
+            content TEXT DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
             updated VARCHAR(15) NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-            created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes text DEFAULT NULL,
             sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang))',
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             solution_id INTEGER NOT NULL,
             revision_id INTEGER NOT NULL DEFAULT 0,
-            active char(3) NOT NULL,
+            active VARCHAR(3) NOT NULL,
             sticky INTEGER NOT NULL,
-            keywords text DEFAULT NULL,
-            thema text NOT NULL,
-            content text DEFAULT NULL,
+            keywords TEXT DEFAULT NULL,
+            thema TEXT NOT NULL,
+            content TEXT DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
             updated VARCHAR(15) NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-            created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes text DEFAULT NULL,
             sticky_order INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang, solution_id, revision_id))',
@@ -190,37 +193,36 @@ class Sqlite3 extends Database implements Driver
             input_required INTEGER NOT NULL,
             input_lang VARCHAR(11) NOT NULL)',
         'faqglossary' => 'CREATE TABLE %sfaqglossary (
-            id INTEGER NOT NULL ,
+            id SERIAL NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
             item VARCHAR(255) NOT NULL ,
             definition text NOT NULL,
             PRIMARY KEY (id, lang))',
         'faqgroup' => 'CREATE TABLE %sfaqgroup (
-            group_id INTEGER NOT NULL,
+            group_id SERIAL NOT NULL,
             name VARCHAR(25) NULL,
             description text NULL,
             auto_join INTEGER NULL,
             PRIMARY KEY(group_id))',
-        'faqgroup_idx' => 'CREATE UNIQUE INDEX idx_name ON %sfaqgroup (name)',
         'faqgroup_right' => 'CREATE TABLE %sfaqgroup_right (
             group_id INTEGER NOT NULL,
             right_id INTEGER NOT NULL,
             PRIMARY KEY(group_id, right_id))',
         'faqinstances' => 'CREATE TABLE %sfaqinstances (
-            id INT NOT NULL,
+            id SERIAL NOT NULL,
             url VARCHAR(255) NOT NULL,
             instance VARCHAR(255) NOT NULL,
             comment TEXT NULL,
-            created DATETIME NOT NULL,
-            modified DATETIME NOT NULL,
+            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            modified TIMESTAMP NOT NULL,
             PRIMARY KEY (id))',
         'faqinstances_config' => 'CREATE TABLE %sfaqinstances_config (
-            instance_id INT NOT NULL,
+            instance_id INTEGER NOT NULL,
             config_name VARCHAR(255) NOT NULL default \'\',
             config_value VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (instance_id, config_name))',
         'faqnews' => 'CREATE TABLE %sfaqnews (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             header VARCHAR(255) NOT NULL,
             artikel text NOT NULL,
@@ -234,7 +236,7 @@ class Sqlite3 extends Database implements Driver
             target VARCHAR(255) NOT NULL,
             PRIMARY KEY (id))',
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             username VARCHAR(100) NOT NULL,
             email VARCHAR(100) NOT NULL,
@@ -245,7 +247,7 @@ class Sqlite3 extends Database implements Driver
             answer_id INTEGER NOT NULL DEFAULT 0,
             PRIMARY KEY (id))',
         'faqright' => 'CREATE TABLE %sfaqright (
-            right_id INTEGER NOT NULL,
+            right_id SERIAL NOT NULL,
             name VARCHAR(50) NULL,
             description text NULL,
             for_users INTEGER NULL DEFAULT 1,
@@ -253,44 +255,44 @@ class Sqlite3 extends Database implements Driver
             for_sections INTEGER NULL DEFAULT 1,
             PRIMARY KEY (right_id))',
         'faqsearches' => 'CREATE TABLE %sfaqsearches (
-            id INTEGER NOT NULL ,
+            id SERIAL NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
             searchterm VARCHAR(255) NOT NULL ,
-            searchdate DATETIME,
+            searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang))',
         'faqseo' => 'CREATE TABLE %sfaqseo (
-            id INT NOT NULL,
+            id SERIAL NOT NULL,
             type VARCHAR(32) NOT NULL,
-            reference_id INT NOT NULL,
+            reference_id INTEGER NOT NULL,
             reference_language VARCHAR(5) NOT NULL,
-            title TEXT NULL,
-            description TEXT NULL,
-            slug TEXT NULL,
-            created DATE NOT NULL DEFAULT (date(\'now\')),
+            title TEXT,
+            description TEXT,
+            slug TEXT,
+            created DATE NOT NULL DEFAULT CURRENT_DATE,
             PRIMARY KEY (id))',
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
-            sid INTEGER NOT NULL,
+            sid SERIAL NOT NULL,
             user_id INTEGER NOT NULL,
             ip VARCHAR(64) NOT NULL,
             time INTEGER NOT NULL,
             PRIMARY KEY (sid))',
-        'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
-        'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm ON %sfaqsearches (searchterm)',
+        'faqsessions_idx' => 'CREATE INDEX idx_time_%s ON %sfaqsessions (time)',
+        'faqsearches_searchterm_idx' => 'CREATE INDEX idx_faqsearches_searchterm_%s ON %sfaqsearches (searchterm)',
         'faqsearches_date_term_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term ON %sfaqsearches ' . '(searchdate, searchterm)',
+            'CREATE INDEX idx_faqsearches_date_term_%s ON %sfaqsearches ' . '(searchdate, searchterm)',
         'faqsearches_date_term_lang_idx' =>
-            'CREATE INDEX idx_faqsearches_date_term_lang ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
+            'CREATE INDEX idx_faqsearches_date_term_lang_%s ON %sfaqsearches ' . '(searchdate, searchterm, lang)',
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             stopword VARCHAR(64) NOT NULL,
             PRIMARY KEY (id, lang))',
         'faqtags' => 'CREATE TABLE %sfaqtags (
-            tagging_id INTEGER NOT NULL,
+            tagging_id SERIAL NOT NULL,
             tagging_name VARCHAR(255) NOT NULL ,
             PRIMARY KEY (tagging_id, tagging_name))',
         'faquser' => 'CREATE TABLE %sfaquser (
-            user_id INTEGER NOT NULL,
+            user_id SERIAL NOT NULL,
             login VARCHAR(128) NOT NULL,
             session_id VARCHAR(150) NULL,
             session_timestamp INTEGER NULL,
@@ -300,9 +302,9 @@ class Sqlite3 extends Database implements Driver
             auth_source VARCHAR(100) NULL,
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
-            success INT(1) NULL DEFAULT 1,
-            is_superadmin INT(1) NULL DEFAULT 0,
-            login_attempts INT(1) NULL DEFAULT 0,
+            success SMALLINT NULL DEFAULT 1,
+            is_superadmin SMALLINT NULL DEFAULT 0,
+            login_attempts SMALLINT NULL DEFAULT 0,
             refresh_token TEXT NULL DEFAULT NULL,
             access_token TEXT NULL DEFAULT NULL,
             code_verifier VARCHAR(255) NULL DEFAULT NULL,
@@ -310,12 +312,12 @@ class Sqlite3 extends Database implements Driver
             webauthnkeys TEXT NULL DEFAULT NULL,
             PRIMARY KEY (user_id))',
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
-            user_id INTEGER NOT NULL,
+            user_id SERIAL NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
             email VARCHAR(128) NULL,
-            is_visible INT(1) NULL DEFAULT 0,
-            twofactor_enabled INT(1) NULL DEFAULT 0,
+            is_visible SMALLINT NULL DEFAULT 0,
+            twofactor_enabled SMALLINT NULL DEFAULT 0,
             secret VARCHAR(128) NULL DEFAULT NULL)',
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
@@ -331,16 +333,16 @@ class Sqlite3 extends Database implements Driver
             right_id INTEGER NOT NULL,
             PRIMARY KEY (user_id, right_id))',
         'faqvisits' => 'CREATE TABLE %sfaqvisits (
-            id INTEGER NOT NULL,
+            id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
             visits INTEGER NOT NULL,
             last_visit INTEGER NOT NULL,
             PRIMARY KEY (id, lang))',
         'faqvoting' => 'CREATE TABLE %sfaqvoting (
-            id INTEGER NOT NULL,
-            artikel SMALLINT NOT NULL,
-            vote SMALLINT NOT NULL,
-            usr SMALLINT NOT NULL,
+            id SERIAL NOT NULL,
+            artikel INTEGER NOT NULL,
+            vote INTEGER NOT NULL,
+            usr INTEGER NOT NULL,
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
             PRIMARY KEY (id))',
@@ -357,12 +359,15 @@ class Sqlite3 extends Database implements Driver
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.
      *
-     *
      */
     public function createTables(string $prefix = ''): bool
     {
-        foreach ($this->createTableStatements as $createTableStatement) {
-            $result = $this->configuration->getDb()->query(sprintf($createTableStatement, $prefix));
+        foreach ($this->createTableStatements as $key => $stmt) {
+            if ($key == 'idx_records' || $key == 'faqsessions_idx') {
+                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix, $prefix));
+            } else {
+                $result = $this->configuration->getDb()->query(sprintf($stmt, $prefix));
+            }
 
             if (!$result) {
                 return false;

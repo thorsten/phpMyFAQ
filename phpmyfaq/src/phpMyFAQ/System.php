@@ -221,7 +221,7 @@ class System
      */
     public static function isSqlite(string $dbType): bool
     {
-        return 'sqlite3' === $dbType;
+        return 'sqlite3' === $dbType || 'pdo_sqlite' === $dbType;
     }
 
     public static function isDevelopmentVersion(): bool

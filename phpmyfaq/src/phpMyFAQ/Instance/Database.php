@@ -93,7 +93,11 @@ class Database
      */
     public static function factory(Configuration $configuration, string $type): ?Driver
     {
-        $class = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
+        if (str_starts_with($type, 'pdo_')) {
+            $class = 'phpMyFAQ\Instance\Database\Pdo' . ucfirst(substr($type, 4));
+        } else {
+            $class = 'phpMyFAQ\Instance\Database\\' . ucfirst($type);
+        }
 
         if (class_exists($class)) {
             self::$driver = new $class($configuration);

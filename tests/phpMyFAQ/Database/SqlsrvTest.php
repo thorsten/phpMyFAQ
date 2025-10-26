@@ -249,7 +249,7 @@ class SqlsrvTest extends TestCase
 
         $this->assertCount(2, $parameters);
         $this->assertEquals('table', $parameters[0]->getName());
-        $this->assertEquals('columnId', $parameters[1]->getName());
+        $this->assertEquals('column', $parameters[1]->getName());
         $this->assertEquals('int', $reflection->getReturnType()->getName());
     }
 

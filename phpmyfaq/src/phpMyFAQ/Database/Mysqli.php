@@ -269,16 +269,16 @@ class Mysqli implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $columnId The name of the ID column
+     * @param string $column The name of the ID column
      * @throws Exception
      */
-    public function nextId(string $table, string $columnId): int
+    public function nextId(string $table, string $column): int
     {
         $select = sprintf('
            SELECT
                MAX(%s) AS current_id
            FROM
-               %s', $columnId, $table);
+               %s', $column, $table);
 
         $mysqliresult = $this->query($select);
 

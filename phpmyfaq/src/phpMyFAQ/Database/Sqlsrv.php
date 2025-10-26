@@ -222,15 +222,15 @@ class Sqlsrv implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $columnId    the name of the ID column
+     * @param string $column    the name of the ID column
      */
-    public function nextId(string $table, string $columnId): int
+    public function nextId(string $table, string $column): int
     {
         $select = sprintf('
            SELECT 
                max(%s) as current_id
            FROM 
-               %s', $columnId, $table);
+               %s', $column, $table);
 
         $result = $this->query($select);
         sqlsrv_fetch($result);
