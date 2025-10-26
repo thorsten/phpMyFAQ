@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
+    "autobind-decorator": "^2.4.0",
     "autocompleter": "^9.3.2",
     "bootstrap": "^5.3.8",
     "bootstrap-datepicker": "^1.10.1",
