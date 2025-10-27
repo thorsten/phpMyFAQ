@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^24.9.1
     version: 24.9.1
   '@types/sortablejs':
-    specifier: ^1.15.8
-    version: 1.15.8
+    specifier: ^1.15.9
+    version: 1.15.9
   '@vitest/coverage-istanbul':
     specifier: ^3.2.4
     version: 3.2.4(vitest@3.2.4)
@@ -2165,8 +2165,8 @@ packages:
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
     dev: true
 
-  /@types/sortablejs@1.15.8:
-    resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
+  /@types/sortablejs@1.15.9:
+    resolution: {integrity: sha512-7HP+rZGE2p886PKV9c9OJzLBI6BBJu1O7lJGYnPyG3fS4/duUCcngkNCjsLwIMV+WMqANe3tt4irrXHSIe68OQ==}
     dev: true
 
   /@types/tough-cookie@4.0.5:
