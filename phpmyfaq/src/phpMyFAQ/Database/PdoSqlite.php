@@ -81,10 +81,15 @@ class PdoSqlite implements DatabaseDriver
 
     /**
      * Escapes a string for use in a query.
+     *
+     * Note: Unlike PDO::quote(), this method intentionally does NOT add surrounding quotes.
+     * It mirrors the behavior of other drivers (e.g., Sqlite3::escapeString), returning
+     * only the escaped content so callers can uniformly wrap values in SQL strings.
      */
     public function escape(string $string): string
     {
-        return $this->pdo->quote($string);
+        // For SQLite, escaping single quotes by doubling them is enough.
+        return str_replace("'", "''", $string);
     }
 
     /**
@@ -92,7 +97,8 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchArray(mixed $result): ?array
     {
-        return $result->fetch(PDO::FETCH_ASSOC);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        return $row === false || $row === null ? null : $row;
     }
 
     /**
@@ -126,7 +132,8 @@ class PdoSqlite implements DatabaseDriver
      */
     public function fetchObject(mixed $result): mixed
     {
-        return $result->fetch(PDO::FETCH_OBJ);
+        $obj = $result->fetch(PDO::FETCH_OBJ);
+        return $obj === false ? null : $obj;
     }
 
     /**
@@ -134,7 +141,28 @@ class PdoSqlite implements DatabaseDriver
      */
     public function numRows(mixed $result): int
     {
-        return $result->rowCount();
+        try {
+            $sql = $result->queryString ?? '';
+            if (is_string($sql) && $sql !== '' && preg_match('/^\s*SELECT\b/i', $sql) === 1) {
+                $inner = rtrim($sql, " \t\n\r\0\x0B;");
+                $countSql = 'SELECT COUNT(*) AS c FROM (' . $inner . ') AS _pmf_cnt';
+                $stmt = $this->pdo->query($countSql);
+                if ($stmt === false) {
+                    return 0;
+                }
+                $row = $stmt->fetch(PDO::FETCH_NUM);
+                return isset($row[0]) ? (int) $row[0] : 0;
+            }
+        } catch (\Throwable) {
+            // ignore
+        }
+
+        // Fallback: for non-SELECT statements rely on rowCount (INSERT/UPDATE/DELETE)
+        try {
+            return (int) $result->rowCount();
+        } catch (\Throwable) {
+            return 0;
+        }
     }
 
     /**

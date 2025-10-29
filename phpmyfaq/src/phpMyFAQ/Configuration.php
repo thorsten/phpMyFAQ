@@ -435,7 +435,7 @@ class Configuration
     {
         if (!isset($this->config[$name])) {
             $insert = sprintf(
-                "INSERT INTO %s%s VALUES ('%s', '%s')",
+                "INSERT INTO %s%s (config_name, config_value) VALUES ('%s', '%s')",
                 Database::getTablePrefix(),
                 $this->tableName,
                 $this->getDb()->escape(trim($name)),

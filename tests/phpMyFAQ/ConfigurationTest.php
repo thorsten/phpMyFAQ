@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class ConfigurationTest extends TestCase
 {
     /** @var Configuration */
-    private $configuration;
+    private Configuration $configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -74,7 +74,6 @@ class ConfigurationTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->configuration = null;
         parent::tearDown();
     }
 

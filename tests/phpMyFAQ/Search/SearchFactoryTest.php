@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class SearchFactoryTest extends TestCase
 {
     /** @var Configuration */
-    private Configuration $configuration;
+    private $configuration;
 
     /**
      * Prepares the environment before running a test.
@@ -54,6 +54,6 @@ class SearchFactoryTest extends TestCase
     {
         $search = SearchFactory::create($this->configuration, array('database' => Database::getType()));
 
-        $this->assertInstanceOf('phpMyFAQ\Search\Database\Sqlite3', $search);
+        $this->assertInstanceOf('phpMyFAQ\Search\Database\PdoSqlite', $search);
     }
 }

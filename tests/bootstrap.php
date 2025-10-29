@@ -71,7 +71,7 @@ $loader->register();
 //
 $setup = [
     'dbServer' => PMF_TEST_DIR . '/test.db',
-    'dbType' => 'sqlite3',
+    'dbType' => 'pdo_sqlite',
     'dbPort' => null,
     'dbDatabaseName' => '',
     'loginname' => 'admin',

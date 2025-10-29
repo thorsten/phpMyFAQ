@@ -3,7 +3,7 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
-use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -13,7 +13,7 @@ class SitemapTest extends TestCase
 {
     private Sitemap $sitemap;
 
-    private Sqlite3 $db;
+    private PdoSqlite $db;
 
     /**
      * @throws Exception
