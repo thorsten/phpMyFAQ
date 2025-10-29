@@ -118,4 +118,26 @@ class UserDataTest extends TestCase
         $result = $this->userData->emailExists('');
         $this->assertFalse($result);
     }
+
+    public function testGetDecodesHtmlEntitiesInDisplayName(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'J&uuml;rgen']);
+
+        $this->userData->load(1);
+        $result = $this->userData->get('display_name');
+        $this->assertEquals('Jürgen', $result);
+    }
+
+    public function testGetPreservesPlainUtf8InDisplayName(): void
+    {
+        $this->database->method('query')->willReturn(true);
+        $this->database->method('numRows')->willReturn(1);
+        $this->database->method('fetchArray')->willReturn(['display_name' => 'Jürgen']);
+
+        $this->userData->load(1);
+        $result = $this->userData->get('display_name');
+        $this->assertEquals('Jürgen', $result);
+    }
 }
