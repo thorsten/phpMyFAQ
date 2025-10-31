@@ -4,14 +4,26 @@
 
 .autocomplete {
   @extend .shadow;
+  // Ensure dropdown background adapts to theme
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  overflow: hidden;
 }
 
 .pmf-user-list-result {
-  background-color: white;
+  // Use theme variables so it works in light and dark mode
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
   padding: 10px;
   cursor: pointer;
 
-  &:hover {
-    background-color: #f5f5f5;
+  &:hover,
+  &.selected {
+    background-color: var(--bs-tertiary-bg);
+  }
+
+  strong {
+    color: var(--bs-primary);
   }
 }
