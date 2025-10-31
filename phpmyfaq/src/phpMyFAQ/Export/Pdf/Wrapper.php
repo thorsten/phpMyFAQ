@@ -598,7 +598,7 @@ class Wrapper extends TCPDF
         $trimmedFile = ltrim($file, '/');
 
         $pos = strpos($trimmedFile, 'content');
-        $relativePath = substr($trimmedFile, $pos);
+        $relativePath = substr($trimmedFile, (int) $pos);
 
         return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
     }

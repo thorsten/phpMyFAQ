@@ -112,11 +112,11 @@ class Pdf extends Export
             if ($currentCategory !== $faq['category_id']) {
                 $this->wrapper->Bookmark(
                     html_entity_decode(
-                        (string) $this->category->getCategoryName($faq['category_id']),
+                        (string) $this->category->getCategoryName((int) $faq['category_id']),
                         ENT_QUOTES,
                         'utf-8',
                     ),
-                    $this->category->getLevelOf($faq['category_id']) - 1,
+                    $this->category->getLevelOf((int) $faq['category_id']) - 1,
                     0,
                 );
             }
@@ -124,16 +124,16 @@ class Pdf extends Export
             // Bookmark for FAQs
             $this->wrapper->Bookmark(
                 html_entity_decode((string) $faq['topic'], ENT_QUOTES, 'utf-8'),
-                $this->category->getLevelOf($faq['category_id']),
+                $this->category->getLevelOf((int) $faq['category_id']),
                 0,
             );
 
             if ($this->tags instanceof Tags) {
-                $tags = $this->tags->getAllTagsById($faq['id']);
+                $tags = $this->tags->getAllTagsById((int) $faq['id']);
             }
 
             $this->wrapper->SetFont($this->wrapper->getCurrentFont(), 'b', 12);
-            $this->wrapper->WriteHTML('<h1>' . $this->category->getCategoryName($faq['category_id']) . '</h1>');
+            $this->wrapper->WriteHTML('<h1>' . $this->category->getCategoryName((int) $faq['category_id']) . '</h1>');
             $this->wrapper->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
             $this->wrapper->Ln(10);
 

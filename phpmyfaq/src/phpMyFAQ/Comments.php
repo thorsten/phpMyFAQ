@@ -229,8 +229,8 @@ readonly class Comments
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $comment = new Comment();
                 $comment
-                    ->setId($row->comment_id)
-                    ->setRecordId($row->record_id)
+                    ->setId((int) $row->comment_id)
+                    ->setRecordId((int) $row->record_id)
                     ->setType($type)
                     ->setComment($row->comment)
                     ->setDate($row->comment_date)
@@ -238,7 +238,7 @@ readonly class Comments
                     ->setEmail($row->email);
 
                 if (isset($row->category_id)) {
-                    $comment->setCategoryId($row->category_id);
+                    $comment->setCategoryId((int) $row->category_id);
                 }
 
                 $comments[] = $comment;

@@ -71,7 +71,7 @@ class Json extends Export
                 'faq' => [
                     'id' => $data['id'],
                     'language' => $data['lang'],
-                    'category' => $this->category->getPath($data['category_id'], ' >> '),
+                    'category' => $this->category->getPath((int) $data['category_id'], ' >> '),
                     'keywords' => $data['keywords'],
                     'question' => strip_tags((string) $data['topic']),
                     'answer' => Strings::htmlspecialchars($data['content']),

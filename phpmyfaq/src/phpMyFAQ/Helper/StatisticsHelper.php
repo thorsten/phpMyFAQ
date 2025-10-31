@@ -78,7 +78,7 @@ readonly class StatisticsHelper
             }
 
             fclose($fp);
-            return $this->date->format(date('Y-m-d H:i', $date));
+            return $this->date->format(date('Y-m-d H:i', (int) $date));
         }
 
         return Translation::get('ad_sess_noentry');
@@ -102,7 +102,7 @@ readonly class StatisticsHelper
                 $date = $request->server->get('REQUEST_TIME');
             }
 
-            return $this->date->format(date('Y-m-d H:i', $date));
+            return $this->date->format(date('Y-m-d H:i', (int) $date));
         }
 
         return Translation::get('ad_sess_noentry');

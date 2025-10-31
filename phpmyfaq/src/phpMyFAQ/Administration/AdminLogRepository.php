@@ -56,9 +56,9 @@ readonly class AdminLogRepository
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $adminLog = new AdminLogEntity();
             $adminLog
-                ->setId($row->id)
-                ->setTime($row->time)
-                ->setUserId($row->user)
+                ->setId((int) $row->id)
+                ->setTime((int) $row->time)
+                ->setUserId((int) $row->user)
                 ->setText($row->text)
                 ->setIp($row->ip);
             $data[$row->id] = $adminLog;

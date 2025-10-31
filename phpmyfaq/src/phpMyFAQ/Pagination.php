@@ -227,11 +227,11 @@ class Pagination
                 continue;
             }
 
-            $link = $this->renderUrl($this->baseUrl, $page);
+            $link = $this->renderUrl($this->baseUrl, (int) $page);
 
             $template = $page == $this->currentPage ? $this->currentPageLinkTpl : $this->linkTpl;
 
-            $content[] = $this->renderLink($template, $link, $page);
+            $content[] = $this->renderLink($template, $link, (int) $page);
         }
 
         if (1 < $this->currentPage) {
@@ -251,7 +251,7 @@ class Pagination
             );
             $content[] = $this->renderLink(
                 $this->lastPageLinkTpl,
-                $this->renderUrl($this->baseUrl, $page - 1),
+                $this->renderUrl($this->baseUrl, (int) $page - 1),
                 $page - 1,
             );
         }

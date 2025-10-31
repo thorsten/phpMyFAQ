@@ -150,14 +150,14 @@ readonly class Question
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $question = new QuestionEntity();
                 $question
-                    ->setId($row->id)
+                    ->setId((int) $row->id)
                     ->setLanguage($row->lang)
                     ->setUsername($row->username)
                     ->setEmail($row->email)
-                    ->setCategoryId($row->category_id)
+                    ->setCategoryId((int) $row->category_id)
                     ->setQuestion($row->question)
                     ->setCreated(Date::createIsoDate($row->created))
-                    ->setAnswerId($row->answer_id)
+                    ->setAnswerId((int) $row->answer_id)
                     ->setIsVisible($row->is_visible === 'Y');
 
                 $questions[] = $question;

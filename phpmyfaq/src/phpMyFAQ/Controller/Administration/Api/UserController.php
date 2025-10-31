@@ -183,7 +183,7 @@ final class UserController extends AbstractController
         $userId = $request->get('userId');
         $currentUser->getUserById((int) $userId, true);
 
-        return $this->json($currentUser->perm->getUserRights($userId), Response::HTTP_OK);
+        return $this->json($currentUser->perm->getUserRights((int) $userId), Response::HTTP_OK);
     }
 
     /**

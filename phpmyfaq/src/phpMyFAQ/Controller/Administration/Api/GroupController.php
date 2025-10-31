@@ -46,7 +46,7 @@ final class GroupController extends AbstractController
 
         $groups = [];
         foreach ($groupList as $groupId) {
-            $data = $currentUser->perm->getGroupData($groupId);
+            $data = $currentUser->perm->getGroupData((int) $groupId);
             $groups[] = [
                 'group_id' => $data['group_id'],
                 'name' => $data['name'],
@@ -107,7 +107,7 @@ final class GroupController extends AbstractController
 
         $members = [];
         foreach ($currentUser->perm->getGroupMembers($groupId) as $groupMember) {
-            $currentUser->getUserById($groupMember, true);
+            $currentUser->getUserById((int) $groupMember, true);
             $members[] = [
                 'user_id' => $currentUser->getUserId(),
                 'login' => $currentUser->getLogin(),
