@@ -257,6 +257,32 @@
     <div class="col-3 mb-4">
       <div class="card shadow mb-4">
         <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-hdd"></i> {{ 'msgBackup' | translate }}
+        </h5>
+        <div class="card-body">
+          {% if lastBackupDate %}
+            <p class="mb-2">{{ 'msgBackupLast' | translate }} <strong>{{ lastBackupDate }}</strong></p>
+          {% else %}
+            <p class="mb-2">{{ 'msgBackupNoneFound' | translate }}</p>
+          {% endif %}
+
+          {% if isBackupOlderThan30Days %}
+            <div class="alert alert-warning mt-1" role="alert">
+              {{ 'msgBackupTooOld' | translate }}
+            </div>
+          {% else %}
+            <div class="alert alert-success mt-1" role="alert">
+              {{ 'msgBackupRecent' | translate }}
+            </div>
+          {% endif %}
+          <a class="btn btn-secondary w-100" href="./backup">{{ 'msgBackupGoTo' | translate }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-3 mb-4">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-heart-fill"></i> {{ 'msgSupportUs' | translate }}
         </h5>
         <div class="card-body">

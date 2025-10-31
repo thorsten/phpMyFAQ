@@ -402,7 +402,7 @@ $PMF_LANG["ad_csv_prepare"] = "Chuẩn bị cơ sở dữ liệu...";
 $PMF_LANG["ad_csv_process"] = "gửi yêu cầu...";
 $PMF_LANG["ad_csv_of"] = "của";
 $PMF_LANG["ad_csv_suc"] = "đã thực hiện.";
-$PMF_LANG["ad_csv_backup"] = "Bản lưu";
+$PMF_LANG["msgBackup"] = "Bản lưu";
 $PMF_LANG["ad_csv_rest"] = "Tái tạo bản lưu";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

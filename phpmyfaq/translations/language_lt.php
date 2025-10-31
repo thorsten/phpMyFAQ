@@ -398,7 +398,7 @@ $PMF_LANG["ad_csv_prepare"] = "Ruošiamos duomenų bazės užklausos...";
 $PMF_LANG["ad_csv_process"] = "Vykdomos užklausos...";
 $PMF_LANG["ad_csv_of"] = "iš";
 $PMF_LANG["ad_csv_suc"] = "buvo sėkmingos.";
-$PMF_LANG["ad_csv_backup"] = "Atsarginė kopija";
+$PMF_LANG["msgBackup"] = "Atsarginė kopija";
 $PMF_LANG["ad_csv_rest"] = "Atkurti iš atsarginės kopijos";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

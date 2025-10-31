@@ -402,7 +402,7 @@ $PMF_LANG["ad_csv_prepare"] = "Datu-basea prestatzen";
 $PMF_LANG["ad_csv_process"] = "Kontsultatzen";
 $PMF_LANG["ad_csv_of"] = "";
 $PMF_LANG["ad_csv_suc"] = "zuzena izan da.";
-$PMF_LANG["ad_csv_backup"] = "Backup";
+$PMF_LANG["msgBackup"] = "Backup";
 $PMF_LANG["ad_csv_rest"] = "Backup bat berrezarri";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

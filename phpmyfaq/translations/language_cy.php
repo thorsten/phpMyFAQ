@@ -397,7 +397,7 @@ $PMF_LANG["ad_csv_prepare"] = "Paratoi ymholiadau'r gronfa ddata...";
 $PMF_LANG["ad_csv_process"] = "Ymholi...";
 $PMF_LANG["ad_csv_of"] = "o";
 $PMF_LANG["ad_csv_suc"] = "roedd  yn llwyddiannus.";
-$PMF_LANG["ad_csv_backup"] = "Wrth gefn";
+$PMF_LANG["msgBackup"] = "Wrth gefn";
 $PMF_LANG["ad_csv_rest"] = "Adfer ffeiliau wrth gefn";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

@@ -399,7 +399,7 @@ $PMF_LANG["ad_csv_prepare"] = "Menyiapkan kueri database ...";
 $PMF_LANG["ad_csv_process"] = "Melakukan kueri...";
 $PMF_LANG["ad_csv_of"] = "dari";
 $PMF_LANG["ad_csv_suc"] = "berhasil.";
-$PMF_LANG["ad_csv_backup"] = "Backup";
+$PMF_LANG["msgBackup"] = "Backup";
 $PMF_LANG["ad_csv_rest"] = "Restore backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

@@ -400,7 +400,7 @@ $PMF_LANG["ad_csv_prepare"] = "Tiek sagatavoti datu b&acirc;zes piepras&icirc;ju
 $PMF_LANG["ad_csv_process"] = "Process...";
 $PMF_LANG["ad_csv_of"] = "";
 $PMF_LANG["ad_csv_suc"] = "veiksm&icirc;gi pabeigts.";
-$PMF_LANG["ad_csv_backup"] = "Rezerves kopija";
+$PMF_LANG["msgBackup"] = "Rezerves kopija";
 $PMF_LANG["ad_csv_rest"] = "Atjaunot rezerves kopiju";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

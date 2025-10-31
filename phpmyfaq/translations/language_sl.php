@@ -399,7 +399,7 @@ $PMF_LANG["ad_csv_prepare"] = "Pripravljam vnose za bazo...";
 $PMF_LANG["ad_csv_process"] = "Urejam...";
 $PMF_LANG["ad_csv_of"] = "od";
 $PMF_LANG["ad_csv_suc"] = "je bila uspešna.";
-$PMF_LANG["ad_csv_backup"] = "Varnostna kopija";
+$PMF_LANG["msgBackup"] = "Varnostna kopija";
 $PMF_LANG["ad_csv_rest"] = "Nadgradi varnostno kipijo";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

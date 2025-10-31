@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
+use DateTimeImmutable;
+use phpMyFAQ\Administration\BackupRepository;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -51,6 +53,29 @@ final class DashboardController extends AbstractAdministrationController
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
 
+        $lastBackupDateFormatted = null;
+        try {
+            $backupRepository = new BackupRepository($this->configuration);
+            $backups = $backupRepository->getAll();
+            $lastBackup = $backups[0] ?? null;
+
+            if ($lastBackup !== null && isset($lastBackup->created)) {
+                $createdRaw = (string) $lastBackup->created;
+                $createdDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdRaw) ?: null;
+                if ($createdDate !== null) {
+                    $lastBackupDateFormatted = $createdDate->format('Y-m-d H:i:s');
+                    $threshold = new DateTimeImmutable('-30 days');
+                    $isBackupOlderThan30Days = $createdDate < $threshold;
+                } else {
+                    $isBackupOlderThan30Days = true;
+                }
+            } else {
+                $isBackupOlderThan30Days = true;
+            }
+        } catch (\Throwable) {
+            $isBackupOlderThan30Days = true;
+        }
+
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
             'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
@@ -77,6 +102,8 @@ final class DashboardController extends AbstractAdministrationController
             ),
             'showVersion' => $this->configuration->get('main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),
+            'lastBackupDate' => $lastBackupDateFormatted,
+            'isBackupOlderThan30Days' => $isBackupOlderThan30Days,
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), '<')) {

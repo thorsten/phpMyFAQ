@@ -397,7 +397,7 @@ $PMF_LANG["ad_csv_prepare"] = "डाटाबेस क्वैरी तय�
 $PMF_LANG["ad_csv_process"] = "क्वैरी कर रहे हैं...";
 $PMF_LANG["ad_csv_of"] = "of";
 $PMF_LANG["ad_csv_suc"] = "सफल.";
-$PMF_LANG["ad_csv_backup"] = "बेकप";
+$PMF_LANG["msgBackup"] = "बेकप";
 $PMF_LANG["ad_csv_rest"] = "बेकप रिस्टोर करें";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

@@ -398,7 +398,7 @@ $PMF_LANG["ad_csv_prepare"] = "Preparing the database queries...";
 $PMF_LANG["ad_csv_process"] = "Querying...";
 $PMF_LANG["ad_csv_of"] = "of";
 $PMF_LANG["ad_csv_suc"] = "were successful.";
-$PMF_LANG["ad_csv_backup"] = "Backup";
+$PMF_LANG["msgBackup"] = "Backup";
 $PMF_LANG["ad_csv_rest"] = "Restore a backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
