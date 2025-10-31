@@ -395,7 +395,7 @@ $PMF_LANG["ad_csv_prepare"] = "Préparation des requêtes de la base de données
 $PMF_LANG["ad_csv_process"] = "interrogation...";
 $PMF_LANG["ad_csv_of"] = "de";
 $PMF_LANG["ad_csv_suc"] = "effectuée.";
-$PMF_LANG["ad_csv_backup"] = "Sauvegarde";
+$PMF_LANG["msgBackup"] = "Sauvegarde";
 $PMF_LANG["ad_csv_rest"] = "Restaurer une sauvegarde";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

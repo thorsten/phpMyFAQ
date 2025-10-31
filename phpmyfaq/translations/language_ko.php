@@ -399,7 +399,7 @@ $PMF_LANG["ad_csv_prepare"] = "데이터베이스 쿼리 준비중......";
 $PMF_LANG["ad_csv_process"] = "쿼리중......";
 $PMF_LANG["ad_csv_of"] = "";
 $PMF_LANG["ad_csv_suc"] = " 이(가) 성공하였습니다.";
-$PMF_LANG["ad_csv_backup"] = "백업";
+$PMF_LANG["msgBackup"] = "백업";
 $PMF_LANG["ad_csv_rest"] = "백업 복구";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

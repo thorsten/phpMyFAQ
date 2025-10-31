@@ -394,7 +394,7 @@ $PMF_LANG["ad_csv_prepare"] = "Preparing the database queries...";
 $PMF_LANG["ad_csv_process"] = "Querying...";
 $PMF_LANG["ad_csv_of"] = "of";
 $PMF_LANG["ad_csv_suc"] = "амжилттай.";
-$PMF_LANG["ad_csv_backup"] = "Нөөц";
+$PMF_LANG["msgBackup"] = "Нөөц";
 $PMF_LANG["ad_csv_rest"] = "Нөөцийг сэргээх";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

@@ -401,7 +401,7 @@ $PMF_LANG["ad_csv_prepare"] = "Pripremam database queries...";
 $PMF_LANG["ad_csv_process"] = "U&#269;itavam...";
 $PMF_LANG["ad_csv_of"] = "od";
 $PMF_LANG["ad_csv_suc"] = "su bili uspe&#353;ni.";
-$PMF_LANG["ad_csv_backup"] = "Backup";
+$PMF_LANG["msgBackup"] = "Backup";
 $PMF_LANG["ad_csv_rest"] = "U&#269;itaj backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

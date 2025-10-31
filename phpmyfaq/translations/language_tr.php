@@ -395,7 +395,7 @@ $PMF_LANG["ad_csv_prepare"] = "Veritabanı sorguları hazırlanıyor...";
 $PMF_LANG["ad_csv_process"] = "Sorgular çalıştırılıyor...";
 $PMF_LANG["ad_csv_of"] = "of";
 $PMF_LANG["ad_csv_suc"] = "başarılı.";
-$PMF_LANG["ad_csv_backup"] = "Yedekleme";
+$PMF_LANG["msgBackup"] = "Yedekleme";
 $PMF_LANG["ad_csv_rest"] = "Yedeği geri yükle";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

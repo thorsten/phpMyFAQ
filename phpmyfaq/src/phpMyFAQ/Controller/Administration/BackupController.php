@@ -50,7 +50,7 @@ final class BackupController extends AbstractAdministrationController
         return $this->render('@admin/backup/main.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderBackup' => Translation::get('ad_csv_backup'),
+            'adminHeaderBackup' => Translation::get('msgBackup'),
             'adminBackupCardHeader' => Translation::get('ad_csv_head'),
             'adminBackupCardBody' => Translation::get('ad_csv_make'),
             'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),

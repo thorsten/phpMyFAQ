@@ -400,7 +400,7 @@ $PMF_LANG["ad_csv_prepare"] = "Підготовка запитів...";
 $PMF_LANG["ad_csv_process"] = "Виконання запиту до бази даних...";
 $PMF_LANG["ad_csv_of"] = "з";
 $PMF_LANG["ad_csv_suc"] = "виконані успішно.";
-$PMF_LANG["ad_csv_backup"] = "Архівація даних";
+$PMF_LANG["msgBackup"] = "Архівація даних";
 $PMF_LANG["ad_csv_rest"] = "Restore a backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

@@ -392,7 +392,7 @@ $PMF_LANG['ad_csv_prepare'] = "Bereite die Datenbankanfragen vor...";
 $PMF_LANG['ad_csv_process'] = "Führe die Datenbankabfragen aus...";
 $PMF_LANG['ad_csv_of'] = "von";
 $PMF_LANG['ad_csv_suc'] = "Anfragen waren erfolgreich.";
-$PMF_LANG['ad_csv_backup'] = "Datensicherung";
+$PMF_LANG['msgBackup'] = "Datensicherung";
 $PMF_LANG['ad_csv_rest'] = "Wiederherstellung";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
@@ -1503,5 +1503,12 @@ $PMF_LANG['msgDownloadYourData'] = 'Eigene Daten herunterladen';
 $PMF_LANG['msgDataExportDescription'] = 'Laden Sie eine ZIP-Datei mit Ihren gespeicherten Benutzerdaten herunter.';
 $PMF_LANG['msgDownload'] = 'Herunterladen';
 $PMF_LANG['msgToggleTheme'] = 'Erscheinungsbild wechseln';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Datum der letzten Datensicherung';
+$PMF_LANG['msgBackupNoneFound'] = 'Es wurden keine Datensicherungen gefunden.';
+$PMF_LANG['msgBackupTooOld'] = 'Die letzte Datensicherung ist älter als 30 Tage.';
+$PMF_LANG['msgBackupRecent'] = 'Die letzte Datensicherung ist aktuell.';
+$PMF_LANG['msgBackupGoTo'] = 'Gehe zum Sicherungsbereich';
 
 return $PMF_LANG;

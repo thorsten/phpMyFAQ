@@ -390,7 +390,7 @@ $PMF_LANG["ad_csv_prepare"] = "ڈیٹا بیس کی تیاری...";
 $PMF_LANG["ad_csv_process"] = "کوئری چلائی جا رہی ہے...";
 $PMF_LANG["ad_csv_of"] = "کا";
 $PMF_LANG["ad_csv_suc"] = "کامیابی سے مکمل ہو گیا۔";
-$PMF_LANG["ad_csv_backup"] = "بیک اپ";
+$PMF_LANG["msgBackup"] = "بیک اپ";
 $PMF_LANG["ad_csv_rest"] = "بیک اپ بحال کریں";
 
 // شامل کیا گیا v0.8 - 25.05.2001 - Bastian - ایڈمن

@@ -398,7 +398,7 @@ $PMF_LANG["ad_csv_prepare"] = "Príprava otázok databázy...";
 $PMF_LANG["ad_csv_process"] = "Dotazovanie...";
 $PMF_LANG["ad_csv_of"] = "z";
 $PMF_LANG["ad_csv_suc"] = "boli úspešné.";
-$PMF_LANG["ad_csv_backup"] = "Záloha";
+$PMF_LANG["msgBackup"] = "Záloha";
 $PMF_LANG["ad_csv_rest"] = "Obnoviť zálohu";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

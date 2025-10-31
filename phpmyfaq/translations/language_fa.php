@@ -339,7 +339,7 @@ $PMF_LANG['ad_csv_prepare'] = 'آماده‌سازی برای پرس و جوی �
 $PMF_LANG['ad_csv_process'] = 'پرس و جو';
 $PMF_LANG['ad_csv_of'] = 'از';
 $PMF_LANG['ad_csv_suc'] = 'موفقیت‌آمیز بود.';
-$PMF_LANG['ad_csv_backup'] = 'پشتیبان‌گیری';
+$PMF_LANG['msgBackup'] = 'پشتیبان‌گیری';
 $PMF_LANG['ad_csv_rest'] = 'برگرداندن یک پشتیبان';
 $PMF_LANG['ad_menu_backup'] = 'پشتیبان';
 $PMF_LANG['ad_logout'] = 'دوره بسته شد.';

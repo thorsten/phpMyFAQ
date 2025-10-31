@@ -396,7 +396,7 @@ $PMF_LANG["ad_csv_prepare"] = "Przygotowywanie zapytań do bazy danych...";
 $PMF_LANG["ad_csv_process"] = "Zapytanie...";
 $PMF_LANG["ad_csv_of"] = "z";
 $PMF_LANG["ad_csv_suc"] = "zakończyły się sukcesem.";
-$PMF_LANG["ad_csv_backup"] = "Kopia zapasowa";
+$PMF_LANG["msgBackup"] = "Kopia zapasowa";
 $PMF_LANG["ad_csv_rest"] = "Przywróć kopię zapasową";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin

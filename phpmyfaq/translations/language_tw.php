@@ -396,7 +396,7 @@ $PMF_LANG["ad_csv_prepare"] = "準備資料庫查詢動作... (Preparing the dat
 $PMF_LANG["ad_csv_process"] = "查詢進行中...";
 $PMF_LANG["ad_csv_of"] = "屬於 (of)";
 $PMF_LANG["ad_csv_suc"] = "成功。";
-$PMF_LANG["ad_csv_backup"] = "備份";
+$PMF_LANG["msgBackup"] = "備份";
 $PMF_LANG["ad_csv_rest"] = "還原一個備份";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin - 管理

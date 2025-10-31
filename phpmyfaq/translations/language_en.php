@@ -393,7 +393,7 @@ $PMF_LANG["ad_csv_prepare"] = "Preparing the database queries...";
 $PMF_LANG["ad_csv_process"] = "Querying...";
 $PMF_LANG["ad_csv_of"] = "of";
 $PMF_LANG["ad_csv_suc"] = "were successful.";
-$PMF_LANG["ad_csv_backup"] = "Backup";
+$PMF_LANG["msgBackup"] = "Backup";
 $PMF_LANG["ad_csv_rest"] = "Restore a backup";
 
 // Added v0.8 - 25.05.2001 - Bastian - Admin
@@ -1526,5 +1526,12 @@ $PMF_LANG['msgDownloadYourData'] = 'Download your data';
 $PMF_LANG['msgDataExportDescription'] = 'Download a ZIP file containing your stored user data.';
 $PMF_LANG['msgDownload'] = 'Download';
 $PMF_LANG['msgToggleTheme'] = 'Toggle theme';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Date of last backup';
+$PMF_LANG['msgBackupNoneFound'] = 'No backups found.';
+$PMF_LANG['msgBackupTooOld'] = 'Last backup is older than 30 days.';
+$PMF_LANG['msgBackupRecent'] = 'The current backup is recent.';
+$PMF_LANG['msgBackupGoTo'] = 'Go to Backup page';
 
 return $PMF_LANG;
