@@ -152,8 +152,8 @@ readonly class Session
         }
 
         foreach ($visits as $visitDate) {
-            if (isset($stats[date('Y-m-d', $visitDate)])) {
-                ++$stats[date('Y-m-d', $visitDate)];
+            if (isset($stats[date('Y-m-d', (int) $visitDate)])) {
+                ++$stats[date('Y-m-d', (int) $visitDate)];
             }
         }
 
