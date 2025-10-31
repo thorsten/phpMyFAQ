@@ -89,7 +89,7 @@ readonly class Session
         $result = $this->configuration->getDb()->query($query);
         if ($result) {
             $row = $this->configuration->getDb()->fetchObject($result);
-            $num = $row->num_sessions;
+            $num = (int) $row->num_sessions;
         }
 
         return $num;

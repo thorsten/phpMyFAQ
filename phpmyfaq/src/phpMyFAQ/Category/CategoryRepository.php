@@ -197,13 +197,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
             $categoryEntity = (new CategoryEntity())
-                ->setId($row->id)
+                ->setId((int) $row->id)
                 ->setLang($row->lang)
-                ->setParentId($row->parent_id)
+                ->setParentId((int) $row->parent_id)
                 ->setName($row->name)
                 ->setDescription($row->description)
-                ->setUserId($row->user_id)
-                ->setGroupId($row->group_id)
+                ->setUserId((int) $row->user_id)
+                ->setGroupId((int) $row->group_id)
                 ->setActive((bool) $row->active)
                 ->setShowHome((bool) $row->show_home)
                 ->setImage($row->image);

@@ -169,7 +169,7 @@ class BasicPermission implements PermissionInterface
 
         $row = $this->configuration->getDb()->fetchArray($res);
 
-        return $row['right_id'];
+        return (int) $row['right_id'];
     }
 
     /**

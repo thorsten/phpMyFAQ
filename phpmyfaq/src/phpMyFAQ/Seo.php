@@ -74,7 +74,7 @@ readonly class Seo
         if ($this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $seoEntity
-                    ->setId($row->id)
+                    ->setId((int) $row->id)
                     ->setTitle($row->title)
                     ->setDescription($row->description)
                     ->setCreated(new DateTime($row->created));

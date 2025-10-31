@@ -410,7 +410,7 @@ class Faq
                 );
                 $renderedItems[$row->id] .= sprintf('<span id="viewsPerRecord" class="badge text-bg-primary rounded-pill">%s</span></li>', $this->plurals->getMsg(
                     'plmsgViews',
-                    $visits,
+                    (int) $visits,
                 ));
             }
 
