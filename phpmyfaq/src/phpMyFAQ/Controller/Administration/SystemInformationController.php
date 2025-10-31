@@ -55,6 +55,18 @@ final class SystemInformationController extends AbstractAdministrationController
             $esInformation = 'n/a';
         }
 
+        if ($this->configuration->get('search.enableOpenSearch')) {
+            try {
+                $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
+                $openSearchInformation = $openSearchFullInformation['version']['number'];
+            } catch (NoNodeAvailableException $e) {
+                $this->configuration->getLogger()->error('Error while fetching OpenSearch information', [$e->getMessage()]);
+                $openSearchInformation = 'n/a';
+            }
+        } else {
+            $openSearchInformation = 'n/a';
+        }
+
         return $this->render('@admin/configuration/system.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
@@ -73,6 +85,7 @@ final class SystemInformationController extends AbstractAdministrationController
                 'Database Server Version' => $this->configuration->getDb()->serverVersion(),
                 'Database Client Version' => $this->configuration->getDb()->clientVersion(),
                 'Elasticsearch Version' => $esInformation,
+                'OpenSearch Version' => $openSearchInformation,
             ],
         ]);
     }
