@@ -1533,5 +1533,7 @@ $PMF_LANG['msgBackupNoneFound'] = 'No backups found.';
 $PMF_LANG['msgBackupTooOld'] = 'Last backup is older than 30 days.';
 $PMF_LANG['msgBackupRecent'] = 'The current backup is recent.';
 $PMF_LANG['msgBackupGoTo'] = 'Go to Backup page';
+$PMF_LANG['msgNewestUsers'] = 'Newest users';
+$PMF_LANG['msgMemberSince'] = 'Member since';
 
 return $PMF_LANG;

@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
+use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Filter;
@@ -54,6 +55,10 @@ final class DashboardController extends AbstractAdministrationController
 
         $backupInfo = $backup->getLastBackupInfo();
 
+        // Neu: letzte 5 Benutzer laden über Service
+        $latestUsersService = new \phpMyFAQ\Administration\LatestUsersService($this->configuration);
+        $latestUsers = $latestUsersService->get(5);
+
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
             'isMaintenanceMode' => $this->configuration->get(item: 'main.maintenanceMode'),
@@ -84,6 +89,7 @@ final class DashboardController extends AbstractAdministrationController
             'documentationUrl' => System::getDocumentationUrl(),
             'lastBackupDate' => $backupInfo['lastBackupDate'],
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
+            'adminDashboardLatestUsers' => $latestUsers,
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {

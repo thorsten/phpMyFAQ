@@ -217,6 +217,32 @@
       </div>
     </div>
 
+    <div class="col-3 mb-4">
+      <div class="card shadow mb-4">
+        <h5 class="card-header py-3">
+          <i aria-hidden="true" class="bi bi-people"></i> {{ 'msgNewestUsers' | translate | default('Newest users') }}
+        </h5>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            {% if adminDashboardLatestUsers and adminDashboardLatestUsers|length > 0 %}
+              {% for u in adminDashboardLatestUsers %}
+                <li class="mb-2">
+                  <i class="bi bi-person-circle"></i>
+                  <strong>{{ u.display_name|default(u.login) }}</strong>
+                  {% if u.member_since_iso %}
+                    <div class="small text-muted">{{ 'msgMemberSince' | translate | default('Member since') }}: {{ u.member_since_iso }}</div>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            {% else %}
+              <li>n/a</li>
+            {% endif %}
+          </ul>
+          <a class="btn btn-primary w-100" href="./user/list">{{ 'msgUserList' | translate }}</a>
+        </div>
+      </div>
+    </div>
+
     {% if hasPermissionEditConfig %}
       <div class="col-3 mb-4">
         <div class="card shadow mb-4">
@@ -293,7 +319,7 @@
               {{ 'msgBackupRecent' | translate }}
             </div>
           {% endif %}
-          <a class="btn btn-secondary w-100" href="./backup">{{ 'msgBackupGoTo' | translate }}</a>
+          <a class="btn btn-primary w-100" href="./backup">{{ 'msgBackupGoTo' | translate }}</a>
         </div>
       </div>
     </div>

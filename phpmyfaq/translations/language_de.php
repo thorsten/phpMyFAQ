@@ -1510,5 +1510,7 @@ $PMF_LANG['msgBackupNoneFound'] = 'Es wurden keine Datensicherungen gefunden.';
 $PMF_LANG['msgBackupTooOld'] = 'Die letzte Datensicherung ist älter als 30 Tage.';
 $PMF_LANG['msgBackupRecent'] = 'Die letzte Datensicherung ist aktuell.';
 $PMF_LANG['msgBackupGoTo'] = 'Gehe zum Sicherungsbereich';
+$PMF_LANG['msgNewestUsers'] = 'Neueste Benutzer';
+$PMF_LANG['msgMemberSince'] = 'Mitglied seit';
 
 return $PMF_LANG;
