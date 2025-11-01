@@ -19,9 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Administration\LatestUsersService;use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
-use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;
 use phpMyFAQ\Filter;
@@ -55,7 +54,6 @@ final class DashboardController extends AbstractAdministrationController
         $userId = $this->currentUser->getUserId();
 
         $backupInfo = $backup->getLastBackupInfo();
-
 
         $latestUsers = $latestUsersService->getList(limit: 5);
 

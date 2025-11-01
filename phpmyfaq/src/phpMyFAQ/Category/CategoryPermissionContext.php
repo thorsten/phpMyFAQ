@@ -90,6 +90,10 @@ final class CategoryPermissionContext
 
     public function getOwner(?int $categoryId = null): int
     {
+        if ($categoryId === null) {
+            return 1;
+        }
+
         return $this->owner[$categoryId] ?? 1;
     }
 
