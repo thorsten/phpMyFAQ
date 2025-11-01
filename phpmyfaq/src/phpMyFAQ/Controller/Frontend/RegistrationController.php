@@ -40,7 +40,7 @@ final class RegistrationController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        $fullName = trim((string) Filter::filterVar($data->realname, FILTER_SANITIZE_SPECIAL_CHARS));
+        $fullName = trim(strip_tags((string) $data->realname));
         $userName = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
         $isVisible = Filter::filterVar($data->isVisible, FILTER_SANITIZE_SPECIAL_CHARS) ?? false;

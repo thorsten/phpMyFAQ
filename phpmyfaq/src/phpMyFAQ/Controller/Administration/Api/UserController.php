@@ -317,7 +317,7 @@ final class UserController extends AbstractController
         $errorMessage = [];
 
         $userName = Filter::filterVar($data->userName, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userRealName = Filter::filterVar($data->realName, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userRealName = trim(strip_tags((string) $data->realName));
         $userEmail = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $automaticPassword = Filter::filterVar($data->automaticPassword, FILTER_VALIDATE_BOOLEAN);
         $userPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -391,7 +391,7 @@ final class UserController extends AbstractController
         }
 
         $userData = [];
-        $userData['display_name'] = Filter::filterVar($data->display_name, FILTER_SANITIZE_SPECIAL_CHARS);
+        $userData['display_name'] = trim(strip_tags((string) $data->display_name));
         $userData['email'] = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
         $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');

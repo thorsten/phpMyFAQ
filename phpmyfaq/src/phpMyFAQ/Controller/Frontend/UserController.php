@@ -54,7 +54,7 @@ final class UserController extends AbstractController
         }
 
         $userId = Filter::filterVar($data->userid, FILTER_VALIDATE_INT);
-        $userName = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
+        $userName = trim(strip_tags((string) $data->name));
         $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $isVisible = Filter::filterVar($data->{'is_visible'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));

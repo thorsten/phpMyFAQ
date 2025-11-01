@@ -80,6 +80,15 @@ class UserData
 
         $array = $this->configuration->getDb()->fetchArray($res);
 
+        // Decode HTML entities in display_name for backward compatibility
+        if (isset($array['display_name'])) {
+            $array['display_name'] = html_entity_decode(
+                $array['display_name'],
+                ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE,
+                'UTF-8',
+            );
+        }
+
         return $singleReturn && $field != '*' ? $array[$field] : $array;
     }
 
