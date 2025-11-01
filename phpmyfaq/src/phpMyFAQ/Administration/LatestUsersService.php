@@ -35,7 +35,7 @@ final readonly class LatestUsersService
      *
      * @return array<int, array<string, mixed>>
      */
-    public function get(int $limit = 5): array
+    public function getList(int $limit = 5): array
     {
         $users = [];
         $db = $this->configuration->getDb();

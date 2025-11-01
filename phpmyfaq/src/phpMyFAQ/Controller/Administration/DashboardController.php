@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Administration\LatestUsersService;use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Enums\PermissionType;
@@ -49,15 +49,15 @@ final class DashboardController extends AbstractAdministrationController
         $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
         $backup = $this->container->get(id: 'phpmyfaq.admin.backup');
+        $latestUsersService = $this->container->get(id: 'phpmyfaq.admin.service.latest-users');
 
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
 
         $backupInfo = $backup->getLastBackupInfo();
 
-        // Neu: letzte 5 Benutzer laden über Service
-        $latestUsersService = new \phpMyFAQ\Administration\LatestUsersService($this->configuration);
-        $latestUsers = $latestUsersService->get(5);
+
+        $latestUsers = $latestUsersService->getList(limit: 5);
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),

@@ -21,7 +21,7 @@ use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\RatingData;
+use phpMyFAQ\Administration\LatestUsersService;use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth;
@@ -126,6 +126,11 @@ return static function (ContainerConfigurator $container): void {
         ]);
 
     $services->set('phpmyfaq.admin.rating-data', RatingData::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+        ]);
+
+    $services->set('phpmyfaq.admin.service.latest-users', LatestUsersService::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
