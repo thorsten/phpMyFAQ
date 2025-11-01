@@ -5,3 +5,7 @@ h1.pmf-start-page {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.masonry-grid {
+  padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
+}

@@ -1512,5 +1512,6 @@ $PMF_LANG['msgBackupRecent'] = 'Die letzte Datensicherung ist aktuell.';
 $PMF_LANG['msgBackupGoTo'] = 'Gehe zum Sicherungsbereich';
 $PMF_LANG['msgNewestUsers'] = 'Neueste Benutzer';
 $PMF_LANG['msgMemberSince'] = 'Mitglied seit';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Benutzer';
 
 return $PMF_LANG;

@@ -64,7 +64,7 @@
 
   <section class="row" id="pmf-dashboard-metrics">
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-2 col-md-6 mb-4">
       <div class="card text-bg-primary bg-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-2 col-md-6 mb-4">
       <div class="card text-bg-success bg-success shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -104,7 +104,7 @@
       </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-2 col-md-6 mb-4">
       <div class="card text-bg-info bg-info shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-2 col-md-6 mb-4">
       <div class="card text-bg-warning bg-warning shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -144,7 +144,7 @@
       </div>
     </div>
 
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-2 col-md-6 mb-4">
       <div class="card text-bg-secondary bg-secondary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
@@ -161,6 +161,27 @@
         </div>
       </div>
     </div>
+
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card text-bg-warning bg-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold mb-1">
+                <a class="text-white" href="./user/list">
+                  {{ 'msgNumberRegisteredUsers' | translate }}
+                </a>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumUser }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-person-check h1 text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   {% if hasUserTracking %}
@@ -346,8 +367,8 @@
       </div>
     </div>
 
-    <div class="col-3 mt-4">
-      <div class="card shadow mt-4">
+    <div class="col-3 mb-4">
+      <div class="card shadow mb-4">
         <h5 class="card-header py-3">
           <i aria-hidden="true" class="bi bi-info-circle-fill"></i> Support
         </h5>

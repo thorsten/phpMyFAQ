@@ -1535,5 +1535,6 @@ $PMF_LANG['msgBackupRecent'] = 'The current backup is recent.';
 $PMF_LANG['msgBackupGoTo'] = 'Go to Backup page';
 $PMF_LANG['msgNewestUsers'] = 'Newest users';
 $PMF_LANG['msgMemberSince'] = 'Member since';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Registered users';
 
 return $PMF_LANG;

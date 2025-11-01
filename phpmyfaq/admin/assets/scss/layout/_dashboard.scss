@@ -82,3 +82,8 @@
     }
   }
 }
+
+// Ensure bottom spacing for Masonry grid so last row doesn't stick to the footer
+.masonry-grid {
+  padding-bottom: map-get($spacers, 4); // equals .mb-4 (≈1.5rem)
+}
