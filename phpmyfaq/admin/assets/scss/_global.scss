@@ -85,4 +85,33 @@ body {
       color: var(--bs-gray-400);
     }
   }
+
+  // Improve visibility of input-group-text (e.g., password toggles)
+  .input-group .input-group-text {
+    background-color: var(--bs-gray-800);
+    border-color: var(--bs-gray-700);
+    color: var(--bs-light);
+  }
+
+  // Specific styling for password toggle in dark mode
+  #faqpassword_toggle {
+    cursor: pointer;
+    color: var(--bs-light);
+
+    &:hover {
+      color: var(--bs-primary);
+      background-color: rgba(var(--bs-primary-rgb), 0.1);
+    }
+
+    .bi {
+      color: currentColor;
+    }
+  }
+
+  // Focus state when focusing inputs within the group
+  .input-group:focus-within .input-group-text {
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+  }
 }
