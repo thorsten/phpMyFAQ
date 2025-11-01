@@ -86,7 +86,7 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             
             // Validate that the category was found
             if ($parentCategoryData->getId() > 0) {
-                $parentCategoryLang = $parentCategoryData->getLang() ?? $faqConfig->getLanguage()->getLanguage();
+                $parentCategoryLang = $parentCategoryData->getLang();
                 $parentCategoryName = $parentCategoryData->getName();
             } else {
                 // Parent category doesn't exist in database - use fallback values
