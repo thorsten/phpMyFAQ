@@ -48,14 +48,12 @@ final class DashboardController extends AbstractAdministrationController
         $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
         $backup = $this->container->get(id: 'phpmyfaq.admin.backup');
-        $latestUsersService = $this->container->get(id: 'phpmyfaq.admin.service.latest-users');
+        $latestUsers = $this->container->get(id: 'phpmyfaq.admin.latest-users');
 
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
 
         $backupInfo = $backup->getLastBackupInfo();
-
-        $latestUsers = $latestUsersService->getList(limit: 5);
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
@@ -87,7 +85,7 @@ final class DashboardController extends AbstractAdministrationController
             'documentationUrl' => System::getDocumentationUrl(),
             'lastBackupDate' => $backupInfo['lastBackupDate'],
             'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
-            'adminDashboardLatestUsers' => $latestUsers,
+            'adminDashboardLatestUsers' => $latestUsers->getList(limit: 5),
         ];
 
         if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {

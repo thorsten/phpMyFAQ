@@ -23,7 +23,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 
-final readonly class LatestUsersService
+final readonly class LatestUsers
 {
     public function __construct(
         private Configuration $configuration,

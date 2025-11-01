@@ -21,7 +21,7 @@ use phpMyFAQ\Administration\Backup;
 use phpMyFAQ\Administration\Category;
 use phpMyFAQ\Administration\Changelog;
 use phpMyFAQ\Administration\Faq as AdminFaq;
-use phpMyFAQ\Administration\LatestUsersService;use phpMyFAQ\Administration\RatingData;
+use phpMyFAQ\Administration\LatestUsers;use phpMyFAQ\Administration\RatingData;
 use phpMyFAQ\Administration\Session as AdminSession;
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Auth;
@@ -51,8 +51,6 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use phpMyFAQ\News;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Plugin\PluginManager;
@@ -62,7 +60,6 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Seo;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
-use phpMyFAQ\Command\McpServerCommand;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Session\SessionWrapper;
 use phpMyFAQ\Setup\EnvironmentConfigurator;
@@ -125,12 +122,12 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration'),
         ]);
 
-    $services->set('phpmyfaq.admin.rating-data', RatingData::class)
+    $services->set('phpmyfaq.admin.latest-users', LatestUsers::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
 
-    $services->set('phpmyfaq.admin.service.latest-users', LatestUsersService::class)
+    $services->set('phpmyfaq.admin.rating-data', RatingData::class)
         ->args([
             new Reference('phpmyfaq.configuration'),
         ]);
