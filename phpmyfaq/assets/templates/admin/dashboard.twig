@@ -62,7 +62,7 @@
     </section>
   {% endif %}
 
-  <section class="row">
+  <section class="row" id="pmf-dashboard-metrics">
 
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card text-bg-primary bg-primary shadow h-100 py-2">
@@ -138,6 +138,24 @@
             </div>
             <div class="col-auto">
               <i class="bi bi-question-circle h1 text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card text-bg-secondary bg-secondary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold mb-1">
+                <span class="text-white">{{ adminDashboardHeaderUsersOnline }}</span>
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ adminDashboardInfoNumUsersOnline }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="bi bi-people h1 text-gray-300"></i>
             </div>
           </div>
         </div>

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
+use DateTimeImmutable;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -47,6 +48,41 @@ readonly class Backup
         private DatabaseHelper $databaseHelper,
     ) {
         $this->repository = new BackupRepository($this->configuration);
+    }
+
+    /**
+     * Returns last backup date (formatted) and whether it's older than 30 days.
+     *
+     * @return array{lastBackupDate: ?string, isBackupOlderThan30Days: bool}
+     */
+    public function getLastBackupInfo(): array
+    {
+        $lastBackupDateFormatted = null;
+        try {
+            $backups = $this->getRepository()->getAll();
+            $lastBackup = $backups[0] ?? null;
+
+            if ($lastBackup !== null && isset($lastBackup->created)) {
+                $createdRaw = (string) $lastBackup->created;
+                $createdDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdRaw) ?: null;
+                if ($createdDate !== null) {
+                    $lastBackupDateFormatted = $createdDate->format('Y-m-d H:i:s');
+                    $threshold = new DateTimeImmutable('-30 days');
+                    $isBackupOlderThan30Days = $createdDate < $threshold;
+                } else {
+                    $isBackupOlderThan30Days = true;
+                }
+            } else {
+                $isBackupOlderThan30Days = true;
+            }
+        } catch (\Throwable) {
+            $isBackupOlderThan30Days = true;
+        }
+
+        return [
+            'lastBackupDate' => $lastBackupDateFormatted,
+            'isBackupOlderThan30Days' => $isBackupOlderThan30Days,
+        ];
     }
 
     /**

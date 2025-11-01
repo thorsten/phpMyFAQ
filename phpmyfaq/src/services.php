@@ -101,6 +101,13 @@ return static function (ContainerConfigurator $container): void {
             new Reference('phpmyfaq.configuration'),
         ]);
 
+    $services->set('phpmyfaq.admin.backup', Backup::class)
+        ->args([
+            new Reference('phpmyfaq.configuration'),
+            new Reference('phpmyfaq.database.helper')
+        ]);
+
+
     $services->set('phpmyfaq.admin.category', Category::class)
         ->args([
             new Reference('phpmyfaq.configuration'),

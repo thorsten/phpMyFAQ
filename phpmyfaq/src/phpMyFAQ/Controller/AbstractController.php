@@ -80,24 +80,24 @@ abstract class AbstractController
     }
 
     /**
-     * Returns a Twig rendered template as response.
+     * Returns a Twig-rendered template as a response.
      *
-     * @param string[] $templateVars
+     * @param string[] $context
      * @throws Exception|LoaderError
      */
-    public function render(string $pathToTwigFile, array $templateVars = [], ?Response $response = null): Response
+    public function render(string $file, array $context = [], ?Response $response = null): Response
     {
         $response ??= new Response();
         $twigWrapper = $this->getTwigWrapper();
-        $templateWrapper = $twigWrapper->loadTemplate($pathToTwigFile);
+        $templateWrapper = $twigWrapper->loadTemplate($file);
 
-        $response->setContent($templateWrapper->render($templateVars));
+        $response->setContent($templateWrapper->render($context));
 
         return $response;
     }
 
     /**
-     * Returns a Twig rendered template as string.
+     * Returns a Twig-rendered template as a string.
      *
      * @param array<string, array<int<0, max>, array<string, mixed>>> $templateVars
      * @throws Exception|LoaderError

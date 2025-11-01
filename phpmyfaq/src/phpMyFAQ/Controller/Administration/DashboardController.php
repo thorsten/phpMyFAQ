@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 
-use DateTimeImmutable;
-use phpMyFAQ\Administration\BackupRepository;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -42,47 +40,27 @@ final class DashboardController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/', name: 'admin.dashboard', methods: ['GET'])]
+    #[Route(path: '/', name: 'admin.dashboard', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userIsAuthenticated();
 
-        $session = $this->container->get('phpmyfaq.admin.session');
-        $faq = $this->container->get('phpmyfaq.admin.faq');
+        $session = $this->container->get(id: 'phpmyfaq.admin.session');
+        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
+        $backup = $this->container->get(id: 'phpmyfaq.admin.backup');
 
         $faqTableInfo = $this->configuration->getDb()->getTableStatus(Database::getTablePrefix());
         $userId = $this->currentUser->getUserId();
 
-        $lastBackupDateFormatted = null;
-        try {
-            $backupRepository = new BackupRepository($this->configuration);
-            $backups = $backupRepository->getAll();
-            $lastBackup = $backups[0] ?? null;
-
-            if ($lastBackup !== null && isset($lastBackup->created)) {
-                $createdRaw = (string) $lastBackup->created;
-                $createdDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdRaw) ?: null;
-                if ($createdDate !== null) {
-                    $lastBackupDateFormatted = $createdDate->format('Y-m-d H:i:s');
-                    $threshold = new DateTimeImmutable('-30 days');
-                    $isBackupOlderThan30Days = $createdDate < $threshold;
-                } else {
-                    $isBackupOlderThan30Days = true;
-                }
-            } else {
-                $isBackupOlderThan30Days = true;
-            }
-        } catch (\Throwable) {
-            $isBackupOlderThan30Days = true;
-        }
+        $backupInfo = $backup->getLastBackupInfo();
 
         $templateVars = [
             'isDebugMode' => Environment::isDebugMode(),
-            'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
+            'isMaintenanceMode' => $this->configuration->get(item: 'main.maintenanceMode'),
             'isDevelopmentVersion' => System::isDevelopmentVersion(),
             'currentVersionApp' => System::getVersion(),
             'msgAdminWarningDevelopmentVersion' => sprintf(
-                Translation::get('msgAdminWarningDevelopmentVersion'),
+                Translation::get(languageKey: 'msgAdminWarningDevelopmentVersion'),
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
@@ -90,23 +68,25 @@ final class DashboardController extends AbstractAdministrationController
             'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
             'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
             'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
-            'adminDashboardInfoUser' => Translation::get('msgNews'),
+            'adminDashboardInfoUser' => Translation::get(languageKey: 'msgNews'),
             'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
-            'adminDashboardHeaderVisits' => Translation::get('ad_stat_report_visits'),
-            'hasUserTracking' => $this->configuration->get('main.enableUserTracking'),
-            'adminDashboardHeaderInactiveFaqs' => Translation::get('ad_record_inactive'),
+            'adminDashboardHeaderUsersOnline' => Translation::get(languageKey: 'msgUserOnline'),
+            'adminDashboardInfoNumUsersOnline' => $session->getNumberOfOnlineUsers(windowSeconds: 600),
+            'adminDashboardHeaderVisits' => Translation::get(languageKey: 'ad_stat_report_visits'),
+            'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
+            'adminDashboardHeaderInactiveFaqs' => Translation::get(languageKey: 'ad_record_inactive'),
             'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
             'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
                 $userId,
                 PermissionType::CONFIGURATION_EDIT->value,
             ),
-            'showVersion' => $this->configuration->get('main.enableAutoUpdateHint'),
+            'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint'),
             'documentationUrl' => System::getDocumentationUrl(),
-            'lastBackupDate' => $lastBackupDateFormatted,
-            'isBackupOlderThan30Days' => $isBackupOlderThan30Days,
+            'lastBackupDate' => $backupInfo['lastBackupDate'],
+            'isBackupOlderThan30Days' => $backupInfo['isBackupOlderThan30Days'],
         ];
 
-        if (version_compare($this->configuration->getVersion(), System::getVersion(), '<')) {
+        if (version_compare($this->configuration->getVersion(), System::getVersion(), operator: '<')) {
             $templateVars = [
                 ...$templateVars,
                 'hasVersionConflict' => true,
@@ -115,22 +95,24 @@ final class DashboardController extends AbstractAdministrationController
         }
 
         if ($this->currentUser->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
-            $version = Filter::filterVar($request->get('param'), FILTER_SANITIZE_SPECIAL_CHARS);
-            if (!$this->configuration->get('main.enableAutoUpdateHint') && $version === 'version') {
+            $version = Filter::filterVar($request->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
+            if (!$this->configuration->get(item: 'main.enableAutoUpdateHint') && $version === 'version') {
                 try {
-                    $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
+                    $versions = $this->container->get(id: 'phpmyfaq.admin.api')->getVersions();
+                    $templateVars = [
+                        ...$templateVars,
+                        'adminDashboardShouldUpdateMessage' => false,
+                        'adminDashboardLatestVersionMessage' => Translation::get(languageKey: 'ad_xmlrpc_latest'),
+                        'adminDashboardVersions' => $versions,
+                    ];
+
                     if (-1 === version_compare($versions['installed'], $versions['stable'])) {
                         $templateVars = [
                             ...$templateVars,
                             'adminDashboardShouldUpdateMessage' => true,
-                            'adminDashboardLatestVersionMessage' => Translation::get('ad_you_should_update'),
-                            'adminDashboardVersions' => $versions,
-                        ];
-                    } else {
-                        $templateVars = [
-                            ...$templateVars,
-                            'adminDashboardShouldUpdateMessage' => false,
-                            'adminDashboardLatestVersionMessage' => Translation::get('ad_xmlrpc_latest'),
+                            'adminDashboardLatestVersionMessage' => Translation::get(
+                                languageKey: 'ad_you_should_update',
+                            ),
                             'adminDashboardVersions' => $versions,
                         ];
                     }
@@ -144,14 +126,17 @@ final class DashboardController extends AbstractAdministrationController
 
             $templateVars = [
                 ...$templateVars,
-                'showVersion' => $this->configuration->get('main.enableAutoUpdateHint') || $version === 'version',
+                'showVersion' => $this->configuration->get(item: 'main.enableAutoUpdateHint') || $version === 'version',
             ];
         }
 
-        return $this->render('@admin/dashboard.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            ...$templateVars,
-        ]);
+        return $this->render(
+            file: '@admin/dashboard.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ],
+        );
     }
 }

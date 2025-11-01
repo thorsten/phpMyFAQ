@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Administration Session class.
  *
@@ -17,18 +15,56 @@ declare(strict_types=1);
  * @since     2024-10-29
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 readonly class Session
 {
     public function __construct(
         private Configuration $configuration,
     ) {
+    }
+
+    /**
+     * Returns the number of currently online (logged-in) users within the last windowSeconds.
+     */
+    public function getNumberOfOnlineUsers(int $windowSeconds = 600): int
+    {
+        $count = 0;
+
+        try {
+            $minTimestamp = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - $windowSeconds;
+            if ($this->configuration->get(item: 'main.enableUserTracking')) {
+                $query = sprintf(
+                    'SELECT COUNT(DISTINCT user_id) AS cnt FROM %sfaqsessions WHERE time >= %d AND user_id > 0',
+                    Database::getTablePrefix(),
+                    $minTimestamp - (PMF_AUTH_TIMEOUT * 60),
+                );
+            } else {
+                $query = sprintf(
+                    'SELECT COUNT(*) AS cnt FROM %sfaquser WHERE session_id IS NOT NULL AND session_timestamp >= %d AND success = 1',
+                    Database::getTablePrefix(),
+                    $minTimestamp,
+                );
+            }
+
+            $result = $this->configuration->getDb()->query($query);
+            if ($result) {
+                $row = $this->configuration->getDb()->fetchObject($result);
+                $count = isset($row->cnt) ? (int) $row->cnt : 0;
+            }
+        } catch (Throwable) {
+            $count = 0;
+        }
+
+        return $count;
     }
 
     public function getTimeFromSessionId(int $sessionId): int
@@ -133,7 +169,7 @@ readonly class Session
         $stats = [];
         $visits = [];
         $completeData = [];
-        $startDate = strtotime('-1 month');
+        $startDate = strtotime(datetime: '-1 month');
 
         $query = sprintf(
             'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',
@@ -148,12 +184,25 @@ readonly class Session
         }
 
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
-            $stats[date('Y-m-d', $date)] = 0;
+            $stats[date(
+                format: 'Y-m-d',
+                timestamp: $date,
+            )] = 0;
         }
 
         foreach ($visits as $visitDate) {
-            if (isset($stats[date('Y-m-d', (int) $visitDate)])) {
-                ++$stats[date('Y-m-d', (int) $visitDate)];
+            if (
+                isset(
+                    $stats[date(
+                        format: 'Y-m-d',
+                        timestamp: (int) $visitDate,
+                    )],
+                )
+            ) {
+                ++$stats[date(
+                    format: 'Y-m-d',
+                    timestamp: (int) $visitDate,
+                )];
             }
         }
 
