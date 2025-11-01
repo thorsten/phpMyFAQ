@@ -38,14 +38,14 @@ export const addElement = (
 ): HTMLElement => {
   const element = Object.assign(document.createElement(HTMLElement), properties);
 
-  Object.keys(properties).forEach((key) => {
+  Object.keys(properties).forEach((key: string): void => {
     if (key.startsWith('data-')) {
-      const dataKey = key.replace('data-', '');
+      const dataKey: string = key.replace('data-', '');
       element.dataset[dataKey] = properties[key];
     }
   });
 
-  children.forEach((child) => element.appendChild(child));
+  children.forEach((child: Node): Node => element.appendChild(child));
   return element;
 };
 

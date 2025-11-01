@@ -13,8 +13,7 @@
  * @since     2022-03-23
  */
 
-import { Response } from '../interfaces';
-import { UserData } from '../interfaces/userData';
+import { Response, UserData } from '../interfaces';
 
 export const fetchUsers = async (userName: string): Promise<Response> => {
   try {

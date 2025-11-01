@@ -13,7 +13,7 @@
  * @since     2022-03-23
  */
 
-import autocomplete, { AutocompleteItem } from 'autocompleter';
+import autocomplete, { AutocompleteItem, EventTrigger } from 'autocompleter';
 import { updateUser } from './users';
 import { fetchUsers } from '../api';
 import { addElement } from '../../../../assets/src/utils';
@@ -32,20 +32,25 @@ document.addEventListener('DOMContentLoaded', () => {
         input.value = item.label;
         await updateUser(item.value);
       },
-      fetch: async (text: string, callback: (items: UserSuggestion[]) => void) => {
-        const match = text.toLowerCase();
-        const users = await fetchUsers(match);
-        callback(
-          users?.filter((n: UserSuggestion) => {
-            return n.label.toLowerCase().indexOf(match) !== -1;
-          })
+      fetch: async (
+        text: string,
+        update: (items: UserSuggestion[] | false) => void,
+        _trigger: EventTrigger,
+        _cursorPos: number
+      ): Promise<void> => {
+        const match: string = text.toLowerCase();
+        const users = (await fetchUsers(match)) as unknown as UserSuggestion[] | undefined;
+        const list: UserSuggestion[] = (users ?? []).filter((n: UserSuggestion): boolean =>
+          n.label.toLowerCase().includes(match)
         );
+        update(list);
       },
       render: (item: UserSuggestion, currentValue: string): HTMLDivElement => {
-        const regex = new RegExp(currentValue, 'gi');
+        const safe: string = currentValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(safe, 'gi');
         return addElement('div', {
           classList: 'pmf-user-list-result border',
-          innerHTML: item.label.replace(regex, (match) => `<strong>${match}</strong>`),
+          innerHTML: item.label.replace(regex, (content: string): string => `<strong>${content}</strong>`),
         }) as HTMLDivElement;
       },
       emptyMsg: 'No users found',
