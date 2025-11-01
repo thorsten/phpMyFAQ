@@ -16,6 +16,7 @@
  * @since     2003-12-20
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -75,12 +76,26 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
     if ($parentId > 0) {
         $userAllowed = $categoryPermission->get(Permission::USER, [$parentId]);
         $groupsAllowed = $categoryPermission->get(Permission::GROUP, [$parentId]);
+        
+        // Check if parent category exists in loaded categories
+        // If not (due to permission restrictions), fetch it directly
+        if (!isset($category->categoryName[$parentId])) {
+            $baseCategory = new Category($faqConfig, [], false);
+            $baseCategory->setLanguage($faqConfig->getLanguage()->getLanguage());
+            $parentCategoryData = $baseCategory->getCategoryData($parentId);
+            $parentCategoryLang = $parentCategoryData->getLang();
+            $parentCategoryName = $parentCategoryData->getName();
+        } else {
+            $parentCategoryLang = $category->categoryName[$parentId]['lang'];
+            $parentCategoryName = $category->categoryName[$parentId]['name'];
+        }
+        
         $templateVars = [
             ...$templateVars,
-            'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang']),
+            'categoryNameLangCode' => LanguageCodes::get($parentCategoryLang),
             'userAllowed' => $categoryPermission->get(Permission::USER, [$parentId])[0],
             'groupsAllowed' => $categoryPermission->get(Permission::GROUP, [$parentId]),
-            'categoryName' => $category->categoryName[$parentId]['name'],
+            'categoryName' => $parentCategoryName,
             'msgMainCategory' => Translation::get('msgMainCategory'),
         ];
     }
