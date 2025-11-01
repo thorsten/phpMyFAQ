@@ -83,8 +83,16 @@ if ($currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType:
             $baseCategory = new Category($faqConfig, [], false);
             $baseCategory->setLanguage($faqConfig->getLanguage()->getLanguage());
             $parentCategoryData = $baseCategory->getCategoryData($parentId);
-            $parentCategoryLang = $parentCategoryData->getLang();
-            $parentCategoryName = $parentCategoryData->getName();
+            
+            // Validate that the category was found
+            if ($parentCategoryData->getId() > 0) {
+                $parentCategoryLang = $parentCategoryData->getLang() ?? $faqConfig->getLanguage()->getLanguage();
+                $parentCategoryName = $parentCategoryData->getName();
+            } else {
+                // Parent category doesn't exist in database - use fallback values
+                $parentCategoryLang = $faqConfig->getLanguage()->getLanguage();
+                $parentCategoryName = '';
+            }
         } else {
             $parentCategoryLang = $category->categoryName[$parentId]['lang'];
             $parentCategoryName = $category->categoryName[$parentId]['name'];
