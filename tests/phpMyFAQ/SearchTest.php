@@ -54,8 +54,10 @@ class SearchTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testSearchWithNumericTerm(): void
+    public function testSearchWithNumericTermWhenSolutionIdSearchEnabled(): void
     {
+        $this->configuration->set('search.searchForSolutionId', 'true');
+        
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
@@ -63,6 +65,71 @@ class SearchTest extends TestCase
 
         $this->search->expects($this->once())
             ->method('searchDatabase')
+            ->with('123', true)
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->search->search('123'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchWithNumericTermWhenSolutionIdSearchDisabled(): void
+    {
+        $this->configuration->set('search.searchForSolutionId', 'false');
+        $this->configuration->set('search.enableElasticsearch', 'false');
+        $this->configuration->set('search.enableOpenSearch', 'false');
+        
+        $this->search = $this->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchDatabase'])
+            ->getMock();
+
+        $this->search->expects($this->once())
+            ->method('searchDatabase')
+            ->with('123', true)
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->search->search('123'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchWithNumericTermWhenElasticsearchEnabledAndSolutionIdSearchDisabled(): void
+    {
+        $this->configuration->set('search.searchForSolutionId', 'false');
+        $this->configuration->set('search.enableElasticsearch', 'true');
+        
+        $this->search = $this->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchElasticsearch'])
+            ->getMock();
+
+        $this->search->expects($this->once())
+            ->method('searchElasticsearch')
+            ->with('123', true)
+            ->willReturn([]);
+
+        $this->assertEquals([], $this->search->search('123'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSearchWithNumericTermWhenOpenSearchEnabledAndSolutionIdSearchDisabled(): void
+    {
+        $this->configuration->set('search.searchForSolutionId', 'false');
+        $this->configuration->set('search.enableElasticsearch', 'false');
+        $this->configuration->set('search.enableOpenSearch', 'true');
+        
+        $this->search = $this->getMockBuilder(Search::class)
+            ->setConstructorArgs([$this->configuration])
+            ->onlyMethods(['searchOpenSearch'])
+            ->getMock();
+
+        $this->search->expects($this->once())
+            ->method('searchOpenSearch')
             ->with('123', true)
             ->willReturn([]);
 

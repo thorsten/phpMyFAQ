@@ -77,7 +77,7 @@ class Search
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
     {
-        if (is_numeric($searchTerm)) {
+        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
 
