@@ -31,6 +31,13 @@ use phpMyFAQ\Search\SearchDatabase;
 class Pgsql extends SearchDatabase implements DatabaseInterface
 {
     /**
+     * List of relevance columns that were actually added to the SELECT clause.
+     *
+     * @var string[]
+     */
+    private array $addedRelevanceColumns = [];
+
+    /**
      * Constructor.
      */
     public function __construct(Configuration $configuration)
@@ -102,6 +109,9 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
             $weight[$columnName] = array_shift($weights);
         }
 
+        // Reset the list of added columns
+        $this->addedRelevanceColumns = [];
+
         foreach ($this->matchingColumns as $matchingColumn) {
             $columnName = substr(strstr($matchingColumn, '.'), 1);
 
@@ -114,6 +124,7 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
                 );
 
                 $resultColumns .= ', ' . $column;
+                $this->addedRelevanceColumns[] = $columnName;
             }
         }
 
@@ -131,11 +142,14 @@ class Pgsql extends SearchDatabase implements DatabaseInterface
         $order = '';
 
         foreach ($list as $field) {
-            $string = sprintf('relevance_%s DESC', $field);
-            if ($order === '' || $order === '0') {
-                $order .= $string;
-            } else {
-                $order .= ', ' . $string;
+            // Only add to ORDER BY if this relevance column was actually added to SELECT
+            if (in_array($field, $this->addedRelevanceColumns)) {
+                $string = sprintf('relevance_%s DESC', $field);
+                if ($order === '' || $order === '0') {
+                    $order .= $string;
+                } else {
+                    $order .= ', ' . $string;
+                }
             }
         }
 
