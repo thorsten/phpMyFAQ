@@ -16,6 +16,7 @@ class PdoPgsqlTest extends TestCase
 {
     private PdoPgsql $pdoPgsqlSearch;
     private Configuration $configuration;
+    private array $originalConfig = [];
 
     protected function setUp(): void
     {
@@ -25,11 +26,17 @@ class PdoPgsqlTest extends TestCase
 
         $this->configuration = Configuration::getConfigurationInstance();
         
-        // Set up search relevance configuration using reflection
+        // Save original config values and set up test configuration using reflection
         $reflection = new ReflectionClass($this->configuration);
         $configProperty = $reflection->getProperty('config');
         $configProperty->setAccessible(true);
         $config = $configProperty->getValue($this->configuration);
+        
+        // Save original values
+        $this->originalConfig['search.relevance'] = $config['search.relevance'] ?? null;
+        $this->originalConfig['search.enableRelevance'] = $config['search.enableRelevance'] ?? null;
+        
+        // Set test values
         $config['search.relevance'] = 'thema,content,keywords';
         $config['search.enableRelevance'] = true;
         $configProperty->setValue($this->configuration, $config);
@@ -39,6 +46,21 @@ class PdoPgsqlTest extends TestCase
 
     protected function tearDown(): void
     {
+        // Restore original config values
+        $reflection = new ReflectionClass($this->configuration);
+        $configProperty = $reflection->getProperty('config');
+        $configProperty->setAccessible(true);
+        $config = $configProperty->getValue($this->configuration);
+        
+        foreach ($this->originalConfig as $key => $value) {
+            if ($value === null) {
+                unset($config[$key]);
+            } else {
+                $config[$key] = $value;
+            }
+        }
+        $configProperty->setValue($this->configuration, $config);
+        
         $this->pdoPgsqlSearch = null;
         parent::tearDown();
     }
