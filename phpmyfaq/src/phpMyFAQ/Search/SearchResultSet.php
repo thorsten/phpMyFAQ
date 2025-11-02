@@ -147,7 +147,7 @@ class SearchResultSet
         }
 
         if (isset($object->relevance_content)) {
-            $score += $object->relevance_thema;
+            $score += $object->relevance_content;
         }
 
         if (isset($object->relevance_keywords)) {
