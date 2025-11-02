@@ -28,7 +28,7 @@
     "pretty-quick": "pretty-quick",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
