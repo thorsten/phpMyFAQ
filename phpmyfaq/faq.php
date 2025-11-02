@@ -188,7 +188,7 @@ $renderedCategoryPath = '';
 $multiCategories = $category->getCategoriesFromFaq($faqId);
 if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
     foreach ($multiCategories as $multiCategory) {
-        $path = $category->getPath($multiCategory['id'], ' &raquo; ', true, 'list-unstyled');
+        $path = $category->getPath((int) $multiCategory['id'], ' &raquo; ', true, 'list-unstyled');
         if ('' === trim($path)) {
             continue;
         }
@@ -213,7 +213,7 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Number of comments
 $numComments = $comment->getNumberOfComments();
-$comments = $comment->getCommentsData($faqId, CommentType::FAQ);
+$comments = $comment->getCommentsData((int) $faqId, CommentType::FAQ);
 
 $commentHelper = new CommentHelper();
 $commentHelper->setConfiguration($faqConfig);

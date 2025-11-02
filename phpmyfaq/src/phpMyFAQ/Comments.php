@@ -64,8 +64,8 @@ readonly class Comments
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $comment = new Comment();
                 $comment
-                    ->setId($row->id_comment)
-                    ->setRecordId($row->id)
+                    ->setId((int) $row->id_comment)
+                    ->setRecordId((int) $row->id)
                     ->setComment($row->comment)
                     ->setDate(Date::createIsoDate($row->datum, DateTimeInterface::ATOM, false))
                     ->setUsername($row->usr)

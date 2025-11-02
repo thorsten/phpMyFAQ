@@ -72,7 +72,7 @@ class FaqHelper extends AbstractHelper
         $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
         $oLink->itemTitle = $faq->faqRecord['title'];
 
-        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable($faq->faqRecord['id']);
+        $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable((int) $faq->faqRecord['id']);
 
         if ((is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
             $html = '<form method="post">';
