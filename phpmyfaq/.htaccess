@@ -103,9 +103,10 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Error pages
     ErrorDocument 404 /index.php?action=404
     # General pages
-    RewriteRule add-faq.html$ index.php?action=add [L,QSA]
-    RewriteRule add-question.html$ index.php?action=ask [L,QSA]
-    RewriteRule show-categories.html$ index.php?action=show [L,QSA]
+    RewriteRule ^add-faq.html$ index.php?action=add [L,QSA]
+    RewriteRule ^add-question.html$ index.php?action=ask [L,QSA]
+    RewriteRule ^show-categories.html$ index.php?action=show [L,QSA]
+    RewriteRule ^forgot-password$ index.php?action=password [L,QSA]
     RewriteRule ^(search|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
     RewriteRule ^(login) index.php?action=login [L,QSA]
     # start page

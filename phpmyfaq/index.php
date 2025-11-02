@@ -2,8 +2,8 @@
 
 /**
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
- * language, gets and sets all cookies, post and get information and includes
- * the templates we need and set all internal variables to the template
+ * language, gets and sets all cookies, posts and gets information and includes
+ * the templates we need and sets all internal variables to the template
  * variables. That's all.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -85,7 +85,7 @@ $csrfLogoutToken = Token::getInstance($container->get('session'))->getTokenStrin
 
 
 //
-// Get language (default: english)
+// Get language (default: English)
 //
 $Language = $container->get('phpmyfaq.language');
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
@@ -96,7 +96,7 @@ if (!Language::isASupportedLanguage($faqLangCode)) {
 }
 
 //
-// Set translation class
+// Set a translation class
 //
 try {
     Translation::create()
@@ -109,7 +109,7 @@ try {
 }
 
 //
-// Initializing static string wrapper
+// Initializing a static string wrapper
 //
 Strings::init($faqLangCode);
 
@@ -132,7 +132,7 @@ AttachmentFactory::init(
 $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPECIAL_CHARS);
 
 //
-// Authenticate current user
+// Authenticate the current user
 //
 $error = null;
 $loginVisibility = 'hidden';
@@ -167,7 +167,7 @@ if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyT
 }
 
 //
-// Validating token from 2FA if given; else: returns error message
+// Validating token from 2FA if given; else: returns an error message
 //
 if ($token !== '' && !is_null($userId)) {
     if (strlen((string) $token) === 6 && is_numeric((string)$token)) {
@@ -528,7 +528,7 @@ $templateVars = [
     'copyright' => System::getPoweredByString(true),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
     'msgRegisterUser' => Translation::get('msgRegisterUser'),
-    'sendPassword' => '<a href="?action=password">' . Translation::get('lostPassword') . '</a>',
+    'sendPassword' => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'forgot-password">' . Translation::get('lostPassword') . '</a>',
     'msgFullName' => Translation::get('ad_user_loggedin') . $user->getLogin(),
     'msgLoginName' => $user->getUserData('display_name'),
     'loginHeader' => Translation::get('msgLoginUser'),
@@ -644,6 +644,11 @@ if ('twofactor' === $action) {
 // Include requested PHP file
 //
 require $includePhp;
+
+if (!isset($twigTemplate)) {
+    $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
+    $twigTemplate = $twig->loadTemplate('./startpage.twig');
+}
 
 //
 // Check for 404 HTTP status code

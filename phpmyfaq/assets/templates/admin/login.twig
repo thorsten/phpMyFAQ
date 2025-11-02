@@ -28,70 +28,71 @@
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                       {{ logoutMessage }}
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      {% endif %}
                     </div>
-                    <div class="card-body">
-                      <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form">
-                        <input type="hidden" name="redirect-action" value="{{ redirectAction }}">
-                        <div class="form-floating mb-3">
-                          <input class="form-control" id="faqusername" name="faqusername" type="text"
-                                 placeholder="{{ msgUsername }}">
-                          <label for="faqusername">{{ msgUsername }}</label>
+                    {% endif %}
+                  </div>
+                  <div class="card-body">
+                    <form action="{{ loginUrl }}" method="post" accept-charset="utf-8" role="form">
+                      <input type="hidden" name="redirect-action" value="{{ redirectAction }}">
+                      <div class="form-floating mb-3">
+                        <input class="form-control" id="faqusername" name="faqusername" type="text"
+                               placeholder="{{ msgUsername }}">
+                        <label for="faqusername">{{ msgUsername }}</label>
+                      </div>
+                      <div class="input-group mb-3">
+                        <div class="form-floating">
+                          <input class="form-control" id="faqpassword" name="faqpassword" type="password"
+                                 autocomplete="off"
+                                 placeholder="{{ msgPassword }}" data-pmf-toggle="faqpassword_toggle">
+                          <label for="faqpassword">{{ msgPassword }}</label>
                         </div>
-                        <div class="input-group mb-3">
-                          <div class="form-floating">
-                            <input class="form-control" id="faqpassword" name="faqpassword" type="password"
-                                   autocomplete="off"
-                                   placeholder="{{ msgPassword }}" data-pmf-toggle="faqpassword_toggle">
-                            <label for="faqpassword">{{ msgPassword }}</label>
-                          </div>
-                          <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
-                        <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
-                      </span>
-                        </div>
-                        <div class="form-check mb-3">
-                          <input class="form-check-input" id="faqrememberme" name="faqrememberme" type="checkbox"
-                                 value="rememberMe">
-                          <label class="form-check-label" for="faqrememberme">{{ msgRememberMe }}</label>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                          <a class="small" href="../?action=password">{{ msgLostPassword }}</a>
-                          <button type="submit" class="btn btn-primary">
-                            {{ msgLoginUser }}
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="card-footer text-center py-3">
-                      {% if hasRegistrationEnabled %}
-                        <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" href="../user/register">
-                          {{ msgRegistration }}
+                        <span class="input-group-text" id="faqpassword_toggle" role="button" tabindex="0">
+                          <i class="bi bi-eye-slash" id="faqpassword_toggle_icon"></i>
+                        </span>
+                      </div>
+                      <div class="form-check mb-3">
+                        <input class="form-check-input" id="faqrememberme" name="faqrememberme" type="checkbox"
+                               value="rememberMe">
+                        <label class="form-check-label" for="faqrememberme">{{ msgRememberMe }}</label>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                        <a class="small" href="../forgot-password">{{ msgLostPassword }}</a>
+                        <button type="submit" class="btn btn-primary">
+                          {{ msgLoginUser }}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="card-footer text-center py-3">
+                    {% if hasRegistrationEnabled %}
+                      <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" href="../user/register">
+                        {{ msgRegistration }}
+                      </a>
+                    {% endif %}
+                    {% if hasSignInWithMicrosoftActive %}
+                      <a class="w-100 py-2 mb-2 btn btn-outline-warning rounded-3" href="../services/azure">
+                        <i class="bi bi-windows" aria-hidden="true"></i>
+                        {{ msgSignInWithMicrosoft }}
+                      </a>
+                      {% if isWebAuthnEnabled %}
+                        <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../services/webauthn">
+                          <i class="bi bi-key" aria-hidden="true"></i>
+                          {{ 'msgSignInWithPasskey' | translate }}
                         </a>
                       {% endif %}
-                      {% if hasSignInWithMicrosoftActive %}
-                        <a class="w-100 py-2 mb-2 btn btn-outline-warning rounded-3" href="../services/azure">
-                          <i class="bi bi-windows" aria-hidden="true"></i>
-                          {{ msgSignInWithMicrosoft }}
-                        </a>
-                        {% if isWebAuthnEnabled %}
-                          <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" href="../services/webauthn">
-                            <i class="bi bi-key" aria-hidden="true"></i>
-                            {{ 'msgSignInWithPasskey' | translate }}
-                          </a>
-                        {% endif %}
-                      {% endif %}
-                    </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
             </div>
+          </div>
         </main>
       </div>
     </div>
   {% else %}
-    <div class="alert alert-danger" role="alert">
+    <p class="alert alert-danger" role="alert">
       <a href="{{ secureUrl }}">{{ msgNotSecure }}</a>
-    </div>
+    </p>
   {% endif %}
 
 {% endblock %}

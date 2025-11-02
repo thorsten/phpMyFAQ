@@ -108,6 +108,8 @@ class Link
 
     private const string LINK_GET_ACTION_BOOKMARKS = 'bookmarks';
 
+    private const string LINK_GET_ACTION_PASSWORD = 'password';
+
     private const string LINK_GET_ACTION_REGISTER = 'register';
 
     private const string LINK_HTML_EXTENSION = '.html';
@@ -133,6 +135,8 @@ class Link
     private const string LINK_HTML_BOOKMARKS = 'user/bookmarks';
 
     private const string LINK_HTML_REGISTER = 'user/register';
+
+    private const string LINK_HTML_FORGOT_PASSWORD = 'forgot-password';
 
     /**
      * @var int[] List of allowed action parameters
@@ -204,7 +208,7 @@ class Link
     public string $id = '';
 
     /**
-     * rel property.
+     * The "rel" property.
      */
     protected string $rel = '';
 
@@ -395,6 +399,10 @@ class Link
 
                     case self::LINK_GET_ACTION_LOGIN:
                         $url .= self::LINK_HTML_LOGIN;
+                        break;
+
+                    case self::LINK_GET_ACTION_PASSWORD:
+                        $url .= self::LINK_HTML_FORGOT_PASSWORD;
                         break;
 
                     case self::LINK_GET_ACTION_BOOKMARKS:

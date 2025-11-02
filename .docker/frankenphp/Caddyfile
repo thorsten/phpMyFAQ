@@ -42,6 +42,7 @@
     rewrite /login /index.php?action=login
     rewrite /index.html /index.php
     rewrite /bookmarks.html /index.php?action=bookmarks
+    rewrite /forgot-password /index.php?action=password
 
     # Solution ID pages
     @solution_id path_regexp solution ^/solution_id_([0-9]+)\.html$
