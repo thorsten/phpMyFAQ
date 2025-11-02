@@ -1,0 +1,141 @@
+<?php
+
+namespace phpMyFAQ\Search\Database;
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Strings;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class PgsqlTest
+ *
+ * Tests for PostgreSQL search database class
+ */
+class PgsqlTest extends TestCase
+{
+    private Pgsql $pgsqlSearch;
+    private Configuration $configuration;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Strings::init('en');
+
+        $dbHandle = new Sqlite3();
+        $this->configuration = new Configuration($dbHandle);
+        
+        // Set up search relevance configuration
+        $this->configuration->set('search.relevance', 'thema,content,keywords');
+        $this->configuration->set('search.enableRelevance', true);
+        
+        $this->pgsqlSearch = new Pgsql($this->configuration);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->pgsqlSearch = null;
+        parent::tearDown();
+    }
+
+    /**
+     * Test that getMatchingOrder only includes columns that were added to SELECT
+     */
+    public function testGetMatchingOrderOnlyIncludesAddedColumns(): void
+    {
+        // Set matching columns to only include 'keywords' - missing 'thema' and 'content'
+        $this->pgsqlSearch->setMatchingColumns(['fd.keywords']);
+        
+        // Generate the SELECT columns
+        $resultColumns = $this->pgsqlSearch->getMatchingColumnsAsResult();
+        
+        // Verify that only relevance_keywords is in the result
+        $this->assertStringContainsString('relevance_keywords', $resultColumns);
+        $this->assertStringNotContainsString('relevance_thema', $resultColumns);
+        $this->assertStringNotContainsString('relevance_content', $resultColumns);
+        
+        // Generate the ORDER BY clause
+        $orderBy = $this->pgsqlSearch->getMatchingOrder();
+        
+        // Verify that ORDER BY only includes relevance_keywords, not the missing columns
+        $this->assertStringContainsString('relevance_keywords', $orderBy);
+        $this->assertStringNotContainsString('relevance_thema', $orderBy);
+        $this->assertStringNotContainsString('relevance_content', $orderBy);
+    }
+
+    /**
+     * Test that all columns are included when all matching columns are present
+     */
+    public function testGetMatchingOrderIncludesAllColumnsWhenPresent(): void
+    {
+        // Set matching columns to include all three
+        $this->pgsqlSearch->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
+        
+        // Generate the SELECT columns
+        $resultColumns = $this->pgsqlSearch->getMatchingColumnsAsResult();
+        
+        // Verify that all relevance columns are in the result
+        $this->assertStringContainsString('relevance_thema', $resultColumns);
+        $this->assertStringContainsString('relevance_content', $resultColumns);
+        $this->assertStringContainsString('relevance_keywords', $resultColumns);
+        
+        // Generate the ORDER BY clause
+        $orderBy = $this->pgsqlSearch->getMatchingOrder();
+        
+        // Verify that ORDER BY includes all relevance columns
+        $this->assertStringContainsString('relevance_thema', $orderBy);
+        $this->assertStringContainsString('relevance_content', $orderBy);
+        $this->assertStringContainsString('relevance_keywords', $orderBy);
+    }
+
+    /**
+     * Test that ORDER BY respects the order from configuration
+     */
+    public function testGetMatchingOrderRespectsConfigOrder(): void
+    {
+        // Set a different order in configuration
+        $this->configuration->set('search.relevance', 'keywords,content,thema');
+        
+        // Set matching columns
+        $this->pgsqlSearch->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
+        
+        // Generate the SELECT and ORDER BY
+        $this->pgsqlSearch->getMatchingColumnsAsResult();
+        $orderBy = $this->pgsqlSearch->getMatchingOrder();
+        
+        // Check that keywords comes before content, and content before thema
+        $keywordsPos = strpos($orderBy, 'relevance_keywords');
+        $contentPos = strpos($orderBy, 'relevance_content');
+        $themaPos = strpos($orderBy, 'relevance_thema');
+        
+        $this->assertNotFalse($keywordsPos);
+        $this->assertNotFalse($contentPos);
+        $this->assertNotFalse($themaPos);
+        $this->assertLessThan($contentPos, $keywordsPos);
+        $this->assertLessThan($themaPos, $contentPos);
+    }
+
+    /**
+     * Test with partial matching columns
+     */
+    public function testGetMatchingOrderWithPartialMatchingColumns(): void
+    {
+        // Only include thema and keywords, skip content
+        $this->pgsqlSearch->setMatchingColumns(['fd.thema', 'fd.keywords']);
+        
+        // Generate the SELECT columns
+        $resultColumns = $this->pgsqlSearch->getMatchingColumnsAsResult();
+        
+        // Verify content is not in the result
+        $this->assertStringNotContainsString('relevance_content', $resultColumns);
+        
+        // Generate the ORDER BY clause
+        $orderBy = $this->pgsqlSearch->getMatchingOrder();
+        
+        // Verify ORDER BY doesn't include content but includes others
+        $this->assertStringContainsString('relevance_thema', $orderBy);
+        $this->assertStringNotContainsString('relevance_content', $orderBy);
+        $this->assertStringContainsString('relevance_keywords', $orderBy);
+    }
+}
