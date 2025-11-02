@@ -3,7 +3,6 @@
 namespace phpMyFAQ\Search\Database;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -24,8 +23,7 @@ class PgsqlTest extends TestCase
 
         Strings::init('en');
 
-        $dbHandle = new Sqlite3();
-        $this->configuration = new Configuration($dbHandle);
+        $this->configuration = Configuration::getConfigurationInstance();
         
         // Set up search relevance configuration using reflection
         $reflection = new ReflectionClass($this->configuration);
