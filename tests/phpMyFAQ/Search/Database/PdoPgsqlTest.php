@@ -5,7 +5,6 @@ namespace phpMyFAQ\Search\Database;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 /**
  * Class PdoPgsqlTest
@@ -15,8 +14,6 @@ use ReflectionClass;
 class PdoPgsqlTest extends TestCase
 {
     private PdoPgsql $pdoPgsqlSearch;
-    private Configuration $configuration;
-    private array $originalConfig = [];
 
     protected function setUp(): void
     {
@@ -24,43 +21,22 @@ class PdoPgsqlTest extends TestCase
 
         Strings::init('en');
 
-        $this->configuration = Configuration::getConfigurationInstance();
+        // Create a mock configuration
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')
+            ->willReturnCallback(function ($key) {
+                return match ($key) {
+                    'search.relevance' => 'thema,content,keywords',
+                    'search.enableRelevance' => true,
+                    default => null,
+                };
+            });
         
-        // Save original config values and set up test configuration using reflection
-        $reflection = new ReflectionClass($this->configuration);
-        $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
-        $config = $configProperty->getValue($this->configuration);
-        
-        // Save original values
-        $this->originalConfig['search.relevance'] = $config['search.relevance'] ?? null;
-        $this->originalConfig['search.enableRelevance'] = $config['search.enableRelevance'] ?? null;
-        
-        // Set test values
-        $config['search.relevance'] = 'thema,content,keywords';
-        $config['search.enableRelevance'] = true;
-        $configProperty->setValue($this->configuration, $config);
-        
-        $this->pdoPgsqlSearch = new PdoPgsql($this->configuration);
+        $this->pdoPgsqlSearch = new PdoPgsql($configuration);
     }
 
     protected function tearDown(): void
     {
-        // Restore original config values
-        $reflection = new ReflectionClass($this->configuration);
-        $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
-        $config = $configProperty->getValue($this->configuration);
-        
-        foreach ($this->originalConfig as $key => $value) {
-            if ($value === null) {
-                unset($config[$key]);
-            } else {
-                $config[$key] = $value;
-            }
-        }
-        $configProperty->setValue($this->configuration, $config);
-        
         $this->pdoPgsqlSearch = null;
         parent::tearDown();
     }
@@ -120,20 +96,25 @@ class PdoPgsqlTest extends TestCase
      */
     public function testGetMatchingOrderRespectsConfigOrder(): void
     {
-        // Set a different order in configuration using reflection
-        $reflection = new ReflectionClass($this->configuration);
-        $configProperty = $reflection->getProperty('config');
-        $configProperty->setAccessible(true);
-        $config = $configProperty->getValue($this->configuration);
-        $config['search.relevance'] = 'keywords,content,thema';
-        $configProperty->setValue($this->configuration, $config);
+        // Create a new instance with different config order
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('get')
+            ->willReturnCallback(function ($key) {
+                return match ($key) {
+                    'search.relevance' => 'keywords,content,thema',
+                    'search.enableRelevance' => true,
+                    default => null,
+                };
+            });
+        
+        $pdoPgsqlSearch = new PdoPgsql($configuration);
         
         // Set matching columns
-        $this->pdoPgsqlSearch->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
+        $pdoPgsqlSearch->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
         
         // Generate the SELECT and ORDER BY
-        $this->pdoPgsqlSearch->getMatchingColumnsAsResult();
-        $orderBy = $this->pdoPgsqlSearch->getMatchingOrder();
+        $pdoPgsqlSearch->getMatchingColumnsAsResult();
+        $orderBy = $pdoPgsqlSearch->getMatchingOrder();
         
         // Check that keywords comes before content, and content before thema
         $keywordsPos = strpos($orderBy, 'relevance_keywords');
