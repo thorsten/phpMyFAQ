@@ -7,6 +7,7 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use stdClass;
 
 class SearchTest extends TestCase
@@ -39,6 +40,19 @@ class SearchTest extends TestCase
         $this->search->deleteAllSearchTerms();
     }
 
+    /**
+     * Helper method to set configuration values for testing using reflection
+     */
+    private function setConfigValue(string $key, mixed $value): void
+    {
+        $reflection = new ReflectionClass($this->configuration);
+        $property = $reflection->getProperty('config');
+        $property->setAccessible(true);
+        $config = $property->getValue($this->configuration);
+        $config[$key] = $value;
+        $property->setValue($this->configuration, $config);
+    }
+
     public function testSetCategoryId(): void
     {
         $this->search->setCategoryId(1);
@@ -56,7 +70,7 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNumericTermWhenSolutionIdSearchEnabled(): void
     {
-        $this->configuration->set('search.searchForSolutionId', 'true');
+        $this->setConfigValue('search.searchForSolutionId', 'true');
         
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
@@ -82,9 +96,9 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNumericTermWhenSolutionIdSearchDisabled(): void
     {
-        $this->configuration->set('search.searchForSolutionId', 'false');
-        $this->configuration->set('search.enableElasticsearch', 'false');
-        $this->configuration->set('search.enableOpenSearch', 'false');
+        $this->setConfigValue('search.searchForSolutionId', 'false');
+        $this->setConfigValue('search.enableElasticsearch', 'false');
+        $this->setConfigValue('search.enableOpenSearch', 'false');
         
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
@@ -104,8 +118,8 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNumericTermWhenElasticsearchEnabledAndSolutionIdSearchDisabled(): void
     {
-        $this->configuration->set('search.searchForSolutionId', 'false');
-        $this->configuration->set('search.enableElasticsearch', 'true');
+        $this->setConfigValue('search.searchForSolutionId', 'false');
+        $this->setConfigValue('search.enableElasticsearch', 'true');
         
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
@@ -125,9 +139,9 @@ class SearchTest extends TestCase
      */
     public function testSearchWithNumericTermWhenOpenSearchEnabledAndSolutionIdSearchDisabled(): void
     {
-        $this->configuration->set('search.searchForSolutionId', 'false');
-        $this->configuration->set('search.enableElasticsearch', 'false');
-        $this->configuration->set('search.enableOpenSearch', 'true');
+        $this->setConfigValue('search.searchForSolutionId', 'false');
+        $this->setConfigValue('search.enableElasticsearch', 'false');
+        $this->setConfigValue('search.enableOpenSearch', 'true');
         
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
