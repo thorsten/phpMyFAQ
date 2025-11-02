@@ -73,6 +73,9 @@ class SearchTest extends TestCase
 
     /**
      * @throws Exception
+     * When solution ID search is disabled and no search engines are enabled,
+     * numeric searches should fall through to searchDatabase() which will
+     * perform a full-text search (not a solution ID search).
      */
     public function testSearchWithNumericTermWhenSolutionIdSearchDisabled(): void
     {
