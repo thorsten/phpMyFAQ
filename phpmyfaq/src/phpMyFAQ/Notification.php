@@ -146,7 +146,7 @@ readonly class Notification
         $faqUrl = sprintf(
             '%s?action=faq&cat=%d&id=%d&artlang=%s',
             $this->configuration->getDefaultUrl(),
-            $category->getCategoryIdFromFaq($faq->faqRecord['id']),
+            $category->getCategoryIdFromFaq((int) $faq->faqRecord['id']),
             $faq->faqRecord['id'],
             $faq->faqRecord['lang'],
         );
@@ -177,7 +177,7 @@ readonly class Notification
 
         // Let the category owner of a FAQ get a copy of the message
         $category = new Category($this->configuration);
-        $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
+        $categories = $category->getCategoryIdsFromFaq((int) $faq->faqRecord['id']);
         foreach ($categories as $_category) {
             $userId = $category->getOwner($_category);
             $catUser = new User($this->configuration);

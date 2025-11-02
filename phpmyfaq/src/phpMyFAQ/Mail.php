@@ -430,7 +430,7 @@ class Mail
                 $this->configuration->get('mail.remoteSMTPServer'),
                 $this->configuration->get('mail.remoteSMTPUsername'),
                 $this->configuration->get('mail.remoteSMTPPassword'),
-                $this->configuration->get('mail.remoteSMTPPort'),
+                (int) $this->configuration->get('mail.remoteSMTPPort'),
                 $this->configuration->get('mail.remoteSMTPDisableTLSPeerVerification'),
             );
         }

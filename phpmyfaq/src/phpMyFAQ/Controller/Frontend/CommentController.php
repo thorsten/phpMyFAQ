@@ -110,12 +110,12 @@ final class CommentController extends AbstractController
             $session->userTracking('save_comment', $commentId);
             $commentEntity = new Comment();
             $commentEntity
-                ->setRecordId($commentId)
+                ->setRecordId((int) $commentId)
                 ->setType($type)
                 ->setUsername($username)
                 ->setEmail($email)
                 ->setComment(nl2br(strip_tags((string) $commentText)))
-                ->setDate($request->server->get('REQUEST_TIME'));
+                ->setDate((string) $request->server->get('REQUEST_TIME'));
 
             if ($comment->create($commentEntity)) {
                 $notification = $this->container->get('phpmyfaq.notification');
