@@ -6,6 +6,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Class PdoPgsqlTest
@@ -26,9 +27,14 @@ class PdoPgsqlTest extends TestCase
         $dbHandle = new Sqlite3();
         $this->configuration = new Configuration($dbHandle);
         
-        // Set up search relevance configuration
-        $this->configuration->set('search.relevance', 'thema,content,keywords');
-        $this->configuration->set('search.enableRelevance', true);
+        // Set up search relevance configuration using reflection
+        $reflection = new ReflectionClass($this->configuration);
+        $configProperty = $reflection->getProperty('config');
+        $configProperty->setAccessible(true);
+        $config = $configProperty->getValue($this->configuration);
+        $config['search.relevance'] = 'thema,content,keywords';
+        $config['search.enableRelevance'] = true;
+        $configProperty->setValue($this->configuration, $config);
         
         $this->pdoPgsqlSearch = new PdoPgsql($this->configuration);
     }
@@ -94,8 +100,13 @@ class PdoPgsqlTest extends TestCase
      */
     public function testGetMatchingOrderRespectsConfigOrder(): void
     {
-        // Set a different order in configuration
-        $this->configuration->set('search.relevance', 'keywords,content,thema');
+        // Set a different order in configuration using reflection
+        $reflection = new ReflectionClass($this->configuration);
+        $configProperty = $reflection->getProperty('config');
+        $configProperty->setAccessible(true);
+        $config = $configProperty->getValue($this->configuration);
+        $config['search.relevance'] = 'keywords,content,thema';
+        $configProperty->setValue($this->configuration, $config);
         
         // Set matching columns
         $this->pdoPgsqlSearch->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
