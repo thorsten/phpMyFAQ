@@ -3,12 +3,10 @@
 namespace phpMyFAQ;
 
 use Exception;
-use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use stdClass;
 
 class SearchTest extends TestCase
 {
@@ -47,7 +45,6 @@ class SearchTest extends TestCase
     {
         $reflection = new ReflectionClass($this->configuration);
         $property = $reflection->getProperty('config');
-        $property->setAccessible(true);
         $config = $property->getValue($this->configuration);
         $config[$key] = $value;
         $property->setValue($this->configuration, $config);
