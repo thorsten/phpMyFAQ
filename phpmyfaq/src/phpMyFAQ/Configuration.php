@@ -27,11 +27,14 @@ use Monolog\Level;
 use Monolog\Logger;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Configuration\LayoutSettings;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\LdapSettings;
 use phpMyFAQ\Configuration\MailSettings;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
 use phpMyFAQ\Configuration\SearchSettings;
+use phpMyFAQ\Configuration\SecuritySettings;
+use phpMyFAQ\Configuration\UrlSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
@@ -61,6 +64,12 @@ class Configuration
 
     private SearchSettings $searchSettings;
 
+    private SecuritySettings $securitySettings;
+
+    private LayoutSettings $layoutSettings;
+
+    private UrlSettings $urlSettings;
+
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
@@ -75,6 +84,9 @@ class Configuration
         $this->ldapSettings = new LdapSettings($this);
         $this->mailSettings = new MailSettings($this);
         $this->searchSettings = new SearchSettings($this);
+        $this->securitySettings = new SecuritySettings($this);
+        $this->layoutSettings = new LayoutSettings($this);
+        $this->urlSettings = new UrlSettings($this);
 
         if (is_null(self::$configuration)) {
             self::$configuration = $this;
@@ -190,7 +202,7 @@ class Configuration
 
     public function getTemplateSet(): string
     {
-        return $this->config['layout.templateSet'] ?? 'default';
+        return $this->layoutSettings->getTemplateSet();
     }
 
     /**
@@ -206,13 +218,7 @@ class Configuration
      */
     public function getDefaultUrl(): string
     {
-        $defaultUrl = $this->get(item: 'main.referenceURL');
-
-        if (!str_ends_with((string) $defaultUrl, needle: '/')) {
-            return $defaultUrl . '/';
-        }
-
-        return $defaultUrl;
+        return $this->urlSettings->getDefaultUrl();
     }
 
     public function getRootPath(): string
@@ -328,7 +334,7 @@ class Configuration
 
     public function isSignInWithMicrosoftActive(): bool
     {
-        return $this->get(item: 'security.enableSignInWithMicrosoft');
+        return $this->securitySettings->isSignInWithMicrosoftActive();
     }
 
     /**
@@ -482,15 +488,12 @@ class Configuration
      */
     public function getAllowedMediaHosts(): array
     {
-        return explode(
-            separator: ',',
-            string: trim((string) $this->get(item: 'records.allowedMediaHosts')),
-        );
+        return $this->urlSettings->getAllowedMediaHosts();
     }
 
     public function getCustomCss(): string
     {
-        return $this->get(item: 'layout.customCss');
+        return $this->layoutSettings->getCustomCss();
     }
 
     /**
