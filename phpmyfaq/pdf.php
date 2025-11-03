@@ -126,6 +126,9 @@ if (true === $getAll) {
 }
 
 $tags = new Tags($faqConfig);
+$tags
+    ->setUser($currentUser)
+    ->setGroups($currentGroups);
 
 $response->setExpires(new DateTime());
 

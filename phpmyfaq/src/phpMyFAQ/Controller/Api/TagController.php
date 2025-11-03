@@ -52,6 +52,10 @@ final class TagController extends AbstractController
     public function list(): JsonResponse
     {
         $tags = $this->container->get('phpmyfaq.tags');
+        [$currentUser, $currentGroups] = \phpMyFAQ\User\CurrentUser::getCurrentUserGroupId($this->currentUser);
+        $tags
+            ->setUser($currentUser)
+            ->setGroups($currentGroups);
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
