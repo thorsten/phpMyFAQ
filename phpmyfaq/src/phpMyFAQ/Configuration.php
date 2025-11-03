@@ -28,7 +28,10 @@ use Monolog\Logger;
 use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
+use phpMyFAQ\Configuration\LdapSettings;
+use phpMyFAQ\Configuration\MailSettings;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Configuration\SearchSettings;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Plugin\PluginException;
 use phpMyFAQ\Plugin\PluginManager;
@@ -52,6 +55,12 @@ class Configuration
 
     private ConfigurationRepository $repository;
 
+    private LdapSettings $ldapSettings;
+
+    private MailSettings $mailSettings;
+
+    private SearchSettings $searchSettings;
+
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
@@ -63,6 +72,9 @@ class Configuration
         }
 
         $this->repository = new ConfigurationRepository($this);
+        $this->ldapSettings = new LdapSettings($this);
+        $this->mailSettings = new MailSettings($this);
+        $this->searchSettings = new SearchSettings($this);
 
         if (is_null(self::$configuration)) {
             self::$configuration = $this;
@@ -186,12 +198,7 @@ class Configuration
      */
     public function getNoReplyEmail(): string
     {
-        $sender = $this->config['mail.noReplySenderAddress'] ?? '';
-        if ($sender === '' || $sender === null) {
-            return $this->getAdminEmail();
-        }
-
-        return (string) $sender;
+        return $this->mailSettings->getNoReplyEmail();
     }
 
     /**
@@ -255,39 +262,8 @@ class Configuration
      */
     public function setLdapConfig(LdapConfiguration $ldapConfiguration): void
     {
-        // Always add the main LDAP server
-        $this->config['core.ldapServer'][0] = [
-            'ldap_server' => $ldapConfiguration->getMainServer(),
-            'ldap_port' => $ldapConfiguration->getMainPort(),
-            'ldap_user' => $ldapConfiguration->getMainUser(),
-            'ldap_password' => $ldapConfiguration->getMainPassword(),
-            'ldap_base' => $ldapConfiguration->getMainBase(),
-        ];
-
-        // Add multiple LDAP servers if enabled
-        if (true === $this->get(item: 'ldap.ldap_use_multiple_servers')) {
-            $key = 1;
-            while (true) {
-                if (isset($ldapConfiguration->getServers()[$key])) {
-                    $this->config['core.ldapServer'][$key] = $ldapConfiguration->getServers()[$key];
-                    ++$key;
-                    continue;
-                }
-                break;
-            }
-        }
-
-        // Set LDAP configuration
-        $this->config['core.ldapConfig'] = [
-            'ldap_use_multiple_servers' => $this->get(item: 'ldap.ldap_use_multiple_servers'),
-            'ldap_mapping' => $this->getLdapMapping(),
-            'ldap_use_domain_prefix' => $this->get(item: 'ldap.ldap_use_domain_prefix'),
-            'ldap_options' => $this->getLdapOptions(),
-            'ldap_use_memberOf' => $this->get(item: 'ldap.ldap_use_memberOf'),
-            'ldap_use_sasl' => $this->get(item: 'ldap.ldap_use_sasl'),
-            'ldap_use_anonymous_login' => $this->get(item: 'ldap.ldap_use_anonymous_login'),
-            'ldap_group_config' => $this->getLdapGroupConfig(),
-        ];
+        $this->config['core.ldapServer'] = $this->ldapSettings->buildServers($ldapConfiguration);
+        $this->config['core.ldapConfig'] = $this->ldapSettings->buildConfig();
     }
 
     /**
@@ -297,12 +273,7 @@ class Configuration
      */
     public function getLdapMapping(): array
     {
-        return [
-            'name' => $this->get(item: 'ldap.ldap_mapping.name'),
-            'username' => $this->get(item: 'ldap.ldap_mapping.username'),
-            'mail' => $this->get(item: 'ldap.ldap_mapping.mail'),
-            'memberOf' => $this->get(item: 'ldap.ldap_mapping.memberOf'),
-        ];
+        return $this->ldapSettings->getLdapMapping();
     }
 
     /**
@@ -312,10 +283,7 @@ class Configuration
      */
     public function getLdapOptions(): array
     {
-        return [
-            'LDAP_OPT_PROTOCOL_VERSION' => $this->get(item: 'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
-            'LDAP_OPT_REFERRALS' => $this->get(item: 'ldap.ldap_options.LDAP_OPT_REFERRALS'),
-        ];
+        return $this->ldapSettings->getLdapOptions();
     }
 
     /**
@@ -325,19 +293,7 @@ class Configuration
      */
     public function getLdapGroupConfig(): array
     {
-        $allowedGroups = $this->get(item: 'ldap.ldap_group_allowed_groups');
-        $groupMapping = $this->get(item: 'ldap.ldap_group_mapping');
-
-        return [
-            'use_group_restriction' => $this->get(item: 'ldap.ldap_use_group_restriction'),
-            'allowed_groups' => $allowedGroups
-                ? explode(
-                    separator: ',',
-                    string: (string) $allowedGroups,
-                ) : [],
-            'auto_assign' => $this->get(item: 'ldap.ldap_group_auto_assign'),
-            'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, associative: true) : [],
-        ];
+        return $this->ldapSettings->getLdapGroupConfig();
     }
 
     /**
@@ -362,12 +318,12 @@ class Configuration
 
     public function isLdapActive(): bool
     {
-        return (bool) $this->get(item: 'ldap.ldapSupport');
+        return $this->ldapSettings->isActive();
     }
 
     public function isElasticsearchActive(): bool
     {
-        return (bool) $this->get(item: 'search.enableElasticsearch');
+        return $this->searchSettings->isElasticsearchActive();
     }
 
     public function isSignInWithMicrosoftActive(): bool
