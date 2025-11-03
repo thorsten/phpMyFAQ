@@ -25,6 +25,7 @@ use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use phpMyFAQ\Configuration\ConfigurationRepository;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
@@ -49,6 +50,8 @@ class Configuration
 
     private PluginManager $pluginManager;
 
+    private ConfigurationRepository $repository;
+
     public function __construct(DatabaseDriver $databaseDriver)
     {
         $this->setDatabase($databaseDriver);
@@ -58,6 +61,8 @@ class Configuration
         } catch (PluginException $pluginException) {
             $this->getLogger()->error($pluginException->getMessage());
         }
+
+        $this->repository = new ConfigurationRepository($this);
 
         if (is_null(self::$configuration)) {
             self::$configuration = $this;
@@ -79,7 +84,7 @@ class Configuration
      */
     public function setLogger(): void
     {
-        $this->logger = new Logger('phpmyfaq');
+        $this->logger = new Logger(name: 'phpmyfaq');
         $this->logger->pushHandler(
             new StreamHandler(PMF_LOG_DIR, Environment::isDebugMode() ? Level::Debug : Level::Warning),
         );
@@ -96,15 +101,7 @@ class Configuration
      */
     public function set(string $key, mixed $value): bool
     {
-        $query = sprintf(
-            "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->getDb()->escape(trim((string) $value)),
-            $this->getDb()->escape(trim($key)),
-        );
-
-        return (bool) $this->getDb()->query($query);
+        return $this->repository->updateConfigValue($key, (string) $value);
     }
 
     /**
@@ -152,7 +149,7 @@ class Configuration
      */
     public function getDefaultLanguage(): string
     {
-        return str_replace(['language_', '.php'], '', (string) $this->config['main.language']);
+        return str_replace(['language_', '.php'], replace: '', subject: (string) $this->config['main.language']);
     }
 
     /**
@@ -189,11 +186,12 @@ class Configuration
      */
     public function getNoReplyEmail(): string
     {
-        if (empty($this->config['mail.noReplySenderAddress'])) {
+        $sender = $this->config['mail.noReplySenderAddress'] ?? '';
+        if ($sender === '' || $sender === null) {
             return $this->getAdminEmail();
         }
 
-        return $this->config['mail.noReplySenderAddress'];
+        return (string) $sender;
     }
 
     /**
@@ -201,9 +199,9 @@ class Configuration
      */
     public function getDefaultUrl(): string
     {
-        $defaultUrl = $this->get('main.referenceURL');
+        $defaultUrl = $this->get(item: 'main.referenceURL');
 
-        if (!str_ends_with((string) $defaultUrl, '/')) {
+        if (!str_ends_with((string) $defaultUrl, needle: '/')) {
             return $defaultUrl . '/';
         }
 
@@ -244,11 +242,8 @@ class Configuration
      */
     public function getAll(): array
     {
-        $query = sprintf('SELECT config_name, config_value FROM %s%s', Database::getTablePrefix(), $this->tableName);
-
-        $result = $this->getDb()->query($query);
-        $config = $this->getDb()->fetchAll($result);
-        foreach ($config as $items) {
+        $rows = $this->repository->fetchAll();
+        foreach ($rows as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
 
@@ -270,27 +265,27 @@ class Configuration
         ];
 
         // Add multiple LDAP servers if enabled
-        if (true === $this->get('ldap.ldap_use_multiple_servers')) {
+        if (true === $this->get(item: 'ldap.ldap_use_multiple_servers')) {
             $key = 1;
             while (true) {
                 if (isset($ldapConfiguration->getServers()[$key])) {
                     $this->config['core.ldapServer'][$key] = $ldapConfiguration->getServers()[$key];
                     ++$key;
-                } else {
-                    break;
+                    continue;
                 }
+                break;
             }
         }
 
         // Set LDAP configuration
         $this->config['core.ldapConfig'] = [
-            'ldap_use_multiple_servers' => $this->get('ldap.ldap_use_multiple_servers'),
+            'ldap_use_multiple_servers' => $this->get(item: 'ldap.ldap_use_multiple_servers'),
             'ldap_mapping' => $this->getLdapMapping(),
-            'ldap_use_domain_prefix' => $this->get('ldap.ldap_use_domain_prefix'),
+            'ldap_use_domain_prefix' => $this->get(item: 'ldap.ldap_use_domain_prefix'),
             'ldap_options' => $this->getLdapOptions(),
-            'ldap_use_memberOf' => $this->get('ldap.ldap_use_memberOf'),
-            'ldap_use_sasl' => $this->get('ldap.ldap_use_sasl'),
-            'ldap_use_anonymous_login' => $this->get('ldap.ldap_use_anonymous_login'),
+            'ldap_use_memberOf' => $this->get(item: 'ldap.ldap_use_memberOf'),
+            'ldap_use_sasl' => $this->get(item: 'ldap.ldap_use_sasl'),
+            'ldap_use_anonymous_login' => $this->get(item: 'ldap.ldap_use_anonymous_login'),
             'ldap_group_config' => $this->getLdapGroupConfig(),
         ];
     }
@@ -303,10 +298,10 @@ class Configuration
     public function getLdapMapping(): array
     {
         return [
-            'name' => $this->get('ldap.ldap_mapping.name'),
-            'username' => $this->get('ldap.ldap_mapping.username'),
-            'mail' => $this->get('ldap.ldap_mapping.mail'),
-            'memberOf' => $this->get('ldap.ldap_mapping.memberOf'),
+            'name' => $this->get(item: 'ldap.ldap_mapping.name'),
+            'username' => $this->get(item: 'ldap.ldap_mapping.username'),
+            'mail' => $this->get(item: 'ldap.ldap_mapping.mail'),
+            'memberOf' => $this->get(item: 'ldap.ldap_mapping.memberOf'),
         ];
     }
 
@@ -318,8 +313,8 @@ class Configuration
     public function getLdapOptions(): array
     {
         return [
-            'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
-            'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS'),
+            'LDAP_OPT_PROTOCOL_VERSION' => $this->get(item: 'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
+            'LDAP_OPT_REFERRALS' => $this->get(item: 'ldap.ldap_options.LDAP_OPT_REFERRALS'),
         ];
     }
 
@@ -330,14 +325,18 @@ class Configuration
      */
     public function getLdapGroupConfig(): array
     {
-        $allowedGroups = $this->get('ldap.ldap_group_allowed_groups');
-        $groupMapping = $this->get('ldap.ldap_group_mapping');
+        $allowedGroups = $this->get(item: 'ldap.ldap_group_allowed_groups');
+        $groupMapping = $this->get(item: 'ldap.ldap_group_mapping');
 
         return [
-            'use_group_restriction' => $this->get('ldap.ldap_use_group_restriction'),
-            'allowed_groups' => $allowedGroups ? explode(',', (string) $allowedGroups) : [],
-            'auto_assign' => $this->get('ldap.ldap_group_auto_assign'),
-            'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, true) : [],
+            'use_group_restriction' => $this->get(item: 'ldap.ldap_use_group_restriction'),
+            'allowed_groups' => $allowedGroups
+                ? explode(
+                    separator: ',',
+                    string: (string) $allowedGroups,
+                ) : [],
+            'auto_assign' => $this->get(item: 'ldap.ldap_group_auto_assign'),
+            'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, associative: true) : [],
         ];
     }
 
@@ -363,17 +362,17 @@ class Configuration
 
     public function isLdapActive(): bool
     {
-        return (bool) $this->get('ldap.ldapSupport');
+        return (bool) $this->get(item: 'ldap.ldapSupport');
     }
 
     public function isElasticsearchActive(): bool
     {
-        return (bool) $this->get('search.enableElasticsearch');
+        return (bool) $this->get(item: 'search.enableElasticsearch');
     }
 
     public function isSignInWithMicrosoftActive(): bool
     {
-        return $this->get('security.enableSignInWithMicrosoft');
+        return $this->get(item: 'security.enableSignInWithMicrosoft');
     }
 
     /**
@@ -434,15 +433,7 @@ class Configuration
     public function add(string $name, mixed $value): bool
     {
         if (!isset($this->config[$name])) {
-            $insert = sprintf(
-                "INSERT INTO %s%s (config_name, config_value) VALUES ('%s', '%s')",
-                Database::getTablePrefix(),
-                $this->tableName,
-                $this->getDb()->escape(trim($name)),
-                $this->getDb()->escape(trim((string) $value)),
-            );
-
-            return (bool) $this->getDb()->query($insert);
+            return $this->repository->insert($name, (string) $value);
         }
 
         return true;
@@ -453,14 +444,7 @@ class Configuration
      */
     public function delete(string $name): bool
     {
-        $delete = sprintf(
-            "DELETE FROM %s%s WHERE config_name = '%s'",
-            Database::getTablePrefix(),
-            $this->tableName,
-            $this->getDb()->escape(trim($name)),
-        );
-
-        return (bool) $this->getDb()->query($delete);
+        return $this->repository->delete($name);
     }
 
     /**
@@ -468,15 +452,7 @@ class Configuration
      */
     public function rename(string $currentKey, string $newKey): bool
     {
-        $rename = sprintf(
-            "UPDATE %s%s SET config_name = '%s' WHERE config_name = '%s'",
-            Database::getTablePrefix(),
-            $this->tableName,
-            $newKey,
-            $currentKey,
-        );
-
-        return (bool) $this->getDb()->query($rename);
+        return $this->repository->renameKey($currentKey, $newKey);
     }
 
     /**
@@ -487,29 +463,24 @@ class Configuration
     public function update(array $newConfigs): bool
     {
         $runtimeConfigs = [
-            'core.database', // phpMyFAQ\Database\DatabaseDriver
-            'core.instance', // Instance
-            'core.language', // Language
-            'core.ldapServer', // Ldap
-            'core.ldapConfig', // $LDAP
-            'core.elasticsearch', // Elasticsearch\Client
-            'core.opensearch', // OpenSearch\Client
-            'core.elasticsearchConfig', // $ES
-            'core.openSearchConfig', // $OS
-            'core.pluginManager', // PluginManager
+            'core.database',
+            'core.instance',
+            'core.language',
+            'core.ldapServer',
+            'core.ldapConfig',
+            'core.elasticsearch',
+            'core.opensearch',
+            'core.elasticsearchConfig',
+            'core.openSearchConfig',
+            'core.pluginManager',
         ];
 
         foreach ($newConfigs as $name => $value) {
-            if ($name != 'main.phpMyFAQToken' && !in_array($name, $runtimeConfigs)) {
-                $update = sprintf(
-                    "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
-                    Database::getTablePrefix(),
-                    $this->tableName,
-                    $this->getDb()->escape(trim($value ?? '')),
-                    $this->getDb()->escape($name),
-                );
-
-                $this->getDb()->query($update);
+            if (
+                !hash_equals((string) $name, user_string: 'main.phpMyFAQToken')
+                && !in_array($name, $runtimeConfigs, strict: true)
+            ) {
+                $this->repository->updateConfigValue((string) $name, $value ?? '');
                 if (isset($this->config[$name])) {
                     unset($this->config[$name]);
                 }
@@ -528,29 +499,21 @@ class Configuration
      */
     public function replaceMainReferenceUrl(string $oldUrl, string $newUrl): bool
     {
-        $query = sprintf('SELECT content FROM %sfaqdata', Database::getTablePrefix());
-        $response = $this->getDb()->query($query);
-        $contentItems = $this->getDb()->fetchAll($response);
+        $contentItems = $this->repository->getFaqDataContents();
         $newContentItems = [];
 
         foreach ($contentItems as $contentItem) {
             if (str_contains((string) $contentItem->content, $oldUrl)) {
                 $newContentItems[] = str_replace($oldUrl, $newUrl, $contentItem->content);
-            } else {
-                $newContentItems[] = $contentItem->content;
+                continue;
             }
+            $newContentItems[] = $contentItem->content;
         }
 
         $count = 0;
         foreach ($newContentItems as $newContentItem) {
-            $query = sprintf(
-                "UPDATE %sfaqdata SET content='%s' WHERE content='%s'",
-                Database::getTablePrefix(),
-                $this->getDb()->escape($newContentItem),
-                $this->getDb()->escape($contentItems[$count]->content),
-            );
+            $this->repository->updateFaqDataContent($contentItems[$count]->content, $newContentItem);
             $count++;
-            $this->getDb()->query($query);
         }
 
         return true;
@@ -563,12 +526,15 @@ class Configuration
      */
     public function getAllowedMediaHosts(): array
     {
-        return explode(',', trim((string) $this->get('records.allowedMediaHosts')));
+        return explode(
+            separator: ',',
+            string: trim((string) $this->get(item: 'records.allowedMediaHosts')),
+        );
     }
 
     public function getCustomCss(): string
     {
-        return $this->get('layout.customCss');
+        return $this->get(item: 'layout.customCss');
     }
 
     /**

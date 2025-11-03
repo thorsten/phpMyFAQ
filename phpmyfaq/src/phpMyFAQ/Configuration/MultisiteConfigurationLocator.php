@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Multisite configuration locator class
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-06-19
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Configuration;
 
