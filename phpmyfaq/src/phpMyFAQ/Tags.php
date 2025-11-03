@@ -490,18 +490,14 @@ class Tags
         if ($groupSupport) {
             if (-1 === $this->user) {
                 // Only group permissions apply (anonymous user)
-                // Sanitize group IDs (they are already integers from setGroups)
-                $sanitizedGroups = array_map('intval', $this->groups);
-                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $sanitizedGroups));
+                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
             }
 
             // Check both user and group permissions
-            // Sanitize group IDs (they are already integers from setGroups)
-            $sanitizedGroups = array_map('intval', $this->groups);
             return sprintf(
                 'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
                 (int) $this->user,
-                implode(', ', $sanitizedGroups),
+                implode(', ', $this->groups),
             );
         }
 
