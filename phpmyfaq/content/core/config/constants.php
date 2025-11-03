@@ -94,14 +94,14 @@ const PMF_NUMBER_RECORDS_LATEST = 5;
 const PMF_NUMBER_RECORDS_TRENDING = 5;
 
 /**
- * This is the flag with which the Tags Cloud list is limited to
+ * This is the flag with which the Tag Cloud list is limited to
  *
  * @var int
  */
 const PMF_TAGS_CLOUD_RESULT_SET_SIZE = 50;
 
 /**
- * This is the flag with which the auto complete list is limited to
+ * This is the flag with which the auto-complete list is limited to
  *
  * @var int
  */
@@ -125,14 +125,14 @@ const PMF_ENCRYPTION_TYPE = 'hash';
  * List of denied extensions when uploading a file.
  * Here is an example:
  * <code>
- * $denyUploadExts = array(
- *     '',         // Files with no extension not allowed
- *     'shtml',    // SSI files not allowed
- *     'php',      // PHP files not allowed
- *     'cgi',      // CGI not allowed
+ * $denyUploadExts = [
+ *     '', // Files with no extension not allowed
+ *     'shtml', // SSI files not allowed
+ *     'php', // PHP files not allowed
+ *     'cgi', // CGI not allowed
  *     'pl',
- *     'exe'       // Win executables not allowed
- * );
+ *     'exe' // Win executables not allowed
+ * ];
  * </code>
  *
  * @var string[] $denyUploadExts
