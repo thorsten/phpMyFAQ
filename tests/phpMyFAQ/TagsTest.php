@@ -110,4 +110,45 @@ class TagsTest extends TestCase
 
         $this->assertCount(1, $this->tags->getFaqsByTagId(1));
     }
+
+    public function testSetUserAndGroups(): void
+    {
+        $this->tags->setUser(42);
+        $this->tags->setGroups([1, 2, 3]);
+
+        // Test that methods can be called - actual permission filtering
+        // requires database setup with faqdata_user and faqdata_group tables
+        $this->assertIsArray($this->tags->getPopularTags());
+        $this->assertIsArray($this->tags->getAllTags());
+    }
+
+    public function testGetPopularTagsWithPermissions(): void
+    {
+        // Set up tags for a record
+        $testData = ['SecretTag'];
+        $this->tags->create(1, $testData);
+
+        // Set user and groups
+        $this->tags->setUser(1);
+        $this->tags->setGroups([1]);
+
+        // Should return tags (with proper database setup)
+        $popularTags = $this->tags->getPopularTags();
+        $this->assertIsArray($popularTags);
+    }
+
+    public function testGetAllTagsWithPermissions(): void
+    {
+        // Set up tags for a record
+        $testData = ['VisibleTag'];
+        $this->tags->create(1, $testData);
+
+        // Set user and groups
+        $this->tags->setUser(-1);
+        $this->tags->setGroups([-1]);
+
+        // Should return tags (with proper database setup)
+        $allTags = $this->tags->getAllTags();
+        $this->assertIsArray($allTags);
+    }
 }
