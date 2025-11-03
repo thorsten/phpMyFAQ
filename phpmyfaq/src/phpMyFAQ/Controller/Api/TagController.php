@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -52,7 +53,7 @@ final class TagController extends AbstractController
     public function list(): JsonResponse
     {
         $tags = $this->container->get('phpmyfaq.tags');
-        [$currentUser, $currentGroups] = \phpMyFAQ\User\CurrentUser::getCurrentUserGroupId($this->currentUser);
+        [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $tags
             ->setUser($currentUser)
             ->setGroups($currentGroups);
