@@ -1,6 +1,6 @@
 # 4. Use phpMyFAQ
 
-The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on
+The public phpMyFAQ frontend has a simple, HTML5 / CCS3-based default layout based on
 [Bootstrap v5.3](https://getbootstrap.com/docs/5.3/).
 The header has the main links for all categories, propose new FAQs, add questions, open questions, and a login.
 On the left side you only see the main categories.
@@ -19,15 +19,8 @@ powered FAQ, the current language will be the one your browser is using or the l
 administrator of the FAQ.
 If you change the language, you'll see the categories and records of your chosen language.
 If there are no entries in this language, you'll see no entries.
-If you're switching to languages with a right to left text direction (for example,
+If you're switching to languages with a right-to-left text direction (for example,
 Arabic, Hebrew or Farsi), the whole default layout will be switching, according to the text direction.
-
-**Note:** phpMyFAQ uses a WYSIWYG online editor that has support for multiple languages.
-However, phpMyFAQ comes only with English language pack installed so changing the current language will not change the
-language of WYSIWYG editor.
-If you would like to have WYSIWYG editor in another language, download the latest
-[language pack](https://www.tiny.cloud/get-tiny/language-packages/), extract it and upload the extracted files to
-admin/editor directory under your phpMyFAQ's installation directory on your web server.
 
 ## 4.2 Find As You Type
 

@@ -171,7 +171,7 @@ However, there are a few rules and limitations when doing so and this page lists
 
 1. Contributed code will be licensed under the MPL 2.0 license.
 2. Copyright notices will be changed to phpMyFAQ Team. But contributors will get credit for their work!
-3. All third party code will be reviewed, tested and possible modified before being released.
+3. All third party code will be reviewed, tested, and possibly modified before being released.
 
 These basic rules make it possible for us to earn a living of the phpMyFAQ project, but it also ensures that the code
 remains Open Source and under the MPL 2.0 license.
@@ -187,11 +187,11 @@ work on your copy and send pull requests.
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP v8.3+
-- PHPUnit v12.x
+- PHP 8.3 up to 8.6
+- PHPUnit 12.x
 - Composer
-- Node.js v22+
-- TypeScript v5.x
+- Node.js 22+
+- TypeScript 5.x
 - PNPM
 - Docker
 
@@ -220,14 +220,14 @@ Every PR on GitHub will check the coding standards and tests as well.
 ### 6.5.5 Run Docker Compose
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
-to run any release for development purpose.
+to run any release for development purposes.
 It does not contain any code as the phpmyfaq folder is meant to be mounted as the /var/www/html folder in the container.
 
 For development purposes, you can start a full stack to run your current phpMyFAQ source code from your local repository.
 
     $ docker-compose up
 
-The command above starts nine containers for multi database development as following.
+The command above starts nine containers for ^multi-database development as follows.
 
 _Specific images started once to prepare the project:_
 
@@ -236,7 +236,7 @@ _Specific images started once to prepare the project:_
 
 _Running using named volumes:_
 
-- **mariadb**: image with MariaDB database with xtrabackup support
+- **mariadb**: image with MariaD                B database with xtrabackup support
 - **phpmyadmin**: a PHP tool to have a look on your MariaDB database.
 - **postgres**: image with PostgreSQL database
 - **pgadmin**: a PHP tool to have a look on your PostgreSQL database.
@@ -415,7 +415,7 @@ To create a new SSL certificate, you can use the following command:
 
 For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
 
-### 6.7.2 Using a OpenLDAP docker container for testing
+### 6.7.2 Using an OpenLDAP docker container for testing
 
 To test phpMyFAQ during development with an OpenLDAP docker container, you can use the following test setup:
 
