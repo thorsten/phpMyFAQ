@@ -28,14 +28,39 @@ use phpMyFAQ\Entity\Tag;
  *
  * @package phpMyFAQ
  */
-readonly class Tags
+class Tags
 {
+    private int $user = -1;
+
+    /** @var array<int> */
+    private array $groups = [-1];
+
     /**
      * Constructor.
      */
     public function __construct(
-        private Configuration $configuration,
+        private readonly Configuration $configuration,
     ) {
+    }
+
+    /**
+     * Sets the user.
+     */
+    public function setUser(int $userId = -1): Tags
+    {
+        $this->user = $userId;
+        return $this;
+    }
+
+    /**
+     * Sets the groups.
+     *
+     * @param array<int> $groups Array of group IDs
+     */
+    public function setGroups(array $groups): Tags
+    {
+        $this->groups = $groups;
+        return $this;
     }
 
     /**
@@ -186,6 +211,9 @@ readonly class Tags
             default => 'LIKE',
         };
 
+        // Build permission check for user and groups
+        $permissionCheck = $this->buildPermissionCheck();
+
         $query = sprintf(
             '
             SELECT
@@ -200,8 +228,17 @@ readonly class Tags
                 %sfaqdata d
             ON
                 d.id = dt.record_id
+            LEFT JOIN
+                %sfaqdata_user fdu
+            ON
+                d.id = fdu.record_id
+            LEFT JOIN
+                %sfaqdata_group fdg
+            ON
+                d.id = fdg.record_id
             WHERE
                 1=1
+                %s
                 %s
                 %s
             GROUP BY
@@ -211,8 +248,11 @@ readonly class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $showInactive ? '' : "AND d.active = 'yes'",
             isset($search) && $search !== '' ? 'AND tagging_name ' . $like . " '" . $search . "%'" : '',
+            $permissionCheck,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -354,21 +394,33 @@ readonly class Tags
     {
         $tags = [];
 
+        // Build permission check for user and groups
+        $permissionCheck = $this->buildPermissionCheck();
+
         $query = sprintf(
             "
             SELECT
-                COUNT(record_id) as freq, tagging_id
+                COUNT(dt.record_id) as freq, dt.tagging_id
             FROM
-                %sfaqdata_tags
+                %sfaqdata_tags dt
             JOIN
-                %sfaqdata ON id = record_id
+                %sfaqdata d ON d.id = dt.record_id
+            LEFT JOIN
+                %sfaqdata_user fdu ON d.id = fdu.record_id
+            LEFT JOIN
+                %sfaqdata_group fdg ON d.id = fdg.record_id
             WHERE
-              lang = '%s'
-            GROUP BY tagging_id
+                d.lang = '%s'
+                AND d.active = 'yes'
+                %s
+            GROUP BY dt.tagging_id
             ORDER BY freq DESC",
             Database::getTablePrefix(),
             Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->configuration->getLanguage()->getLanguage(),
+            $permissionCheck,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -424,5 +476,36 @@ readonly class Tags
         }
 
         return $data;
+    }
+
+    /**
+     * Builds the permission check SQL clause based on user and groups.
+     * This ensures that only tags from FAQs that the current user has permission to view are included.
+     */
+    private function buildPermissionCheck(): string
+    {
+        $groupSupport = $this->configuration->get('security.permLevel') !== 'basic';
+
+        if ($groupSupport) {
+            if (-1 === $this->user) {
+                // Only group permissions apply (anonymous user)
+                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
+            }
+
+            // Check both user and group permissions
+            return sprintf(
+                'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
+                $this->user,
+                implode(', ', $this->groups),
+            );
+        }
+
+        // Basic permission level - only user permissions
+        if (-1 !== $this->user) {
+            return sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
+        }
+
+        // Anonymous user with basic permission level
+        return 'AND fdu.user_id = -1';
     }
 }

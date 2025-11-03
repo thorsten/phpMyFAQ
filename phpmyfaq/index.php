@@ -339,6 +339,9 @@ $category
 // Create a new Tags object
 //
 $oTag = new Tags($faqConfig);
+$oTag
+    ->setUser($currentUser)
+    ->setGroups($currentGroups);
 
 //
 // Create new SEO objects

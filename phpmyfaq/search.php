@@ -90,6 +90,9 @@ $faqSearch = new Search($faqConfig);
 $faqPermission = new Permission($faqConfig);
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
+$tagging
+    ->setUser($currentUser)
+    ->setGroups($currentGroups);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
 $numOfResults = 0;

@@ -63,6 +63,9 @@ $user = $container->get('phpmyfaq.user.current_user');
 
 $glossary = new Glossary($faqConfig);
 $tagging = new Tags($faqConfig);
+$tagging
+    ->setUser($currentUser)
+    ->setGroups($currentGroups);
 $relation = new Relation($faqConfig);
 $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
