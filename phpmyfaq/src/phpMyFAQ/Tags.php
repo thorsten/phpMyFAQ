@@ -59,7 +59,8 @@ class Tags
      */
     public function setGroups(array $groups): Tags
     {
-        $this->groups = $groups;
+        // Ensure all values are integers for security
+        $this->groups = array_map('intval', $groups);
         return $this;
     }
 
@@ -489,20 +490,24 @@ class Tags
         if ($groupSupport) {
             if (-1 === $this->user) {
                 // Only group permissions apply (anonymous user)
-                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $this->groups));
+                // Sanitize group IDs (they are already integers from setGroups)
+                $sanitizedGroups = array_map('intval', $this->groups);
+                return sprintf('AND fdg.group_id IN (%s)', implode(', ', $sanitizedGroups));
             }
 
             // Check both user and group permissions
+            // Sanitize group IDs (they are already integers from setGroups)
+            $sanitizedGroups = array_map('intval', $this->groups);
             return sprintf(
                 'AND ( fdu.user_id = %d OR fdg.group_id IN (%s) )',
-                $this->user,
-                implode(', ', $this->groups),
+                (int) $this->user,
+                implode(', ', $sanitizedGroups),
             );
         }
 
         // Basic permission level - only user permissions
         if (-1 !== $this->user) {
-            return sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', $this->user);
+            return sprintf('AND ( fdu.user_id = %d OR fdu.user_id = -1 )', (int) $this->user);
         }
 
         // Anonymous user with basic permission level
