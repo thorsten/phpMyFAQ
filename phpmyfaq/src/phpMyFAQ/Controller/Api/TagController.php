@@ -54,9 +54,8 @@ final class TagController extends AbstractController
     {
         $tags = $this->container->get('phpmyfaq.tags');
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
-        $tags
-            ->setUser($currentUser)
-            ->setGroups($currentGroups);
+        $tags->setUser($currentUser);
+        $tags->setGroups($currentGroups);
         $result = $tags->getPopularTagsAsArray(16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
