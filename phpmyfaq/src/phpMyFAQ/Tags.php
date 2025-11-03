@@ -26,6 +26,10 @@ use phpMyFAQ\Entity\Tag;
 /**
  * Class Tags
  *
+ * Manages FAQ tags with support for permission-based filtering.
+ * Tags are filtered based on user and group permissions to ensure
+ * that only tags from FAQs the current user can access are displayed.
+ *
  * @package phpMyFAQ
  */
 class Tags
@@ -482,6 +486,8 @@ class Tags
     /**
      * Builds the permission check SQL clause based on user and groups.
      * This ensures that only tags from FAQs that the current user has permission to view are included.
+     *
+     * @return string SQL WHERE clause for permission filtering
      */
     private function buildPermissionCheck(): string
     {
