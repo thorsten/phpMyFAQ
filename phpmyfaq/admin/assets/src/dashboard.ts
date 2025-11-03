@@ -426,6 +426,6 @@ export const handleVerificationModal = async (): Promise<void> => {
 window.onload = (): void => {
   const masonryElement = document.querySelector('.masonry-grid') as HTMLElement;
   if (masonryElement) {
-    new Masonry(masonryElement, { columnWidth: 0 });
+    new Masonry(masonryElement, { percentPosition: true });
   }
 };
