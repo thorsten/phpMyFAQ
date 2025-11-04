@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
+use Exception;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Controller\AbstractController;
@@ -40,7 +41,9 @@ final class CommentController extends AbstractController
         }
     }
 
-    #[OA\Get(
+    /**
+     * @throws Exception
+     */ #[OA\Get(
         path: '/api/v3.1/comments/{faqId}',
         operationId: 'getComments',
         description: 'Returns a list of comments for a given FAQ record ID.',
@@ -79,7 +82,8 @@ final class CommentController extends AbstractController
     {
         $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
 
-        $comments = new Comments($this->configuration);
+        /** @var Comments $comments */
+        $comments = $this->container->get('phpmyfaq.comments');
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);

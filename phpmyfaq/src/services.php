@@ -33,6 +33,7 @@ use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Comment\CommentsRepository;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Date;
@@ -197,9 +198,15 @@ return static function (ContainerConfigurator $container): void {
             service('phpmyfaq.configuration')
         ]);
 
-    $services->set('phpmyfaq.comments', Comments::class)
+    $services->set('phpmyfaq.comment.comments-repository', CommentsRepository::class)
         ->args([
             service('phpmyfaq.configuration')
+        ]);
+
+    $services->set('phpmyfaq.comments', Comments::class)
+        ->args([
+            service('phpmyfaq.configuration'),
+            service('phpmyfaq.comment.comments-repository')
         ]);
 
     $services->set('phpmyfaq.configuration', Configuration::class)
