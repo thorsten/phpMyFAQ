@@ -63,55 +63,6 @@ class DateTest extends TestCase
         $this->assertStringContainsString('January', $longFormat);
     }
 
-    public function testGetTrackingFileDateValid(): void
-    {
-        $filename = 'tracking25122023.log'; // 16 characters
-        $result = $this->dateInstance->getTrackingFileDate($filename);
-
-        $this->assertIsInt($result);
-        $this->assertGreaterThan(0, $result);
-
-        // Test that it's the beginning of the day
-        $expectedDate = gmmktime(0, 0, 0, 12, 25, 2023);
-        $this->assertEquals($expectedDate, $result);
-    }
-
-    public function testGetTrackingFileDateEndOfDay(): void
-    {
-        $filename = 'tracking25122023.log';
-        $result = $this->dateInstance->getTrackingFileDate($filename, true);
-
-        $this->assertIsInt($result);
-        $this->assertGreaterThan(0, $result);
-
-        // Test that it's the end of the day
-        $expectedDate = gmmktime(23, 59, 59, 12, 25, 2023);
-        $this->assertEquals($expectedDate, $result);
-    }
-
-    public function testGetTrackingFileDateInvalidFilename(): void
-    {
-        $shortFilename = 'short.log'; // Less than 16 characters
-        $result = $this->dateInstance->getTrackingFileDate($shortFilename);
-
-        $this->assertEquals(-1, $result);
-    }
-
-    public function testGetTrackingFileDateWithDifferentFormats(): void
-    {
-        // Test various valid tracking file names
-        $testFiles = [
-            'tracking01012024.log', // New Year's Day 2024
-            'tracking31122023.log', // New Year's Eve 2023
-            'tracking29022024.log', // Leap year day 2024
-        ];
-
-        foreach ($testFiles as $filename) {
-            $result = $this->dateInstance->getTrackingFileDate($filename);
-            $this->assertGreaterThan(0, $result, "Failed for file: $filename");
-        }
-    }
-
     public function testFormatWithValidDate(): void
     {
         $inputDate = '2023-12-25 14:30:00';

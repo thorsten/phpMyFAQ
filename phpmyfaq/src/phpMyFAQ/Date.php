@@ -79,16 +79,6 @@ readonly class Date
     }
 
     /**
-     * Backwards compatibility: Returns tracking file date.
-     * If $endOfDay is truthy (>0), returns the end-of-day timestamp, otherwise start-of-day.
-     * Note: Prefer using getTrackingFileDateStart()/getTrackingFileDateEnd().
-     */
-    public function getTrackingFileDate(string $file, int $endOfDay = 0): int
-    {
-        return $endOfDay > 0 ? $this->getTrackingFileDateEnd($file) : $this->getTrackingFileDateStart($file);
-    }
-
-    /**
      * Returns the start-of-day timestamp of a tracking filename (trackingDDMMYYYY).
      */
     public function getTrackingFileDateStart(string $file): int
