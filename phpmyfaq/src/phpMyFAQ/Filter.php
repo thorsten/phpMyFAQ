@@ -80,12 +80,9 @@ class Filter
     /**
      * Static wrapper method for filter_var_array().
      */
-    public static function filterArray(
-        array $array,
-        array|int $options = FILTER_UNSAFE_RAW,
-        bool $addEmpty = true,
-    ): bool|array|null {
-        return filter_var_array($array, $options, $addEmpty);
+    public static function filterArray(array $array, array|int $options = FILTER_UNSAFE_RAW): bool|array|null
+    {
+        return filter_var_array($array, $options);
     }
 
     /**
@@ -118,7 +115,11 @@ class Filter
     public function filterSanitizeString(string $string): string
     {
         $string = htmlspecialchars($string);
-        $string = preg_replace('/\x00|<[^>]*>?/', '', $string);
+        $string = preg_replace(
+            pattern: '/\x00|<[^>]*>?/',
+            replacement: '',
+            subject: $string,
+        );
         return str_replace(["'", '"'], ['&#39;', '&#34;'], (string) $string);
     }
 
@@ -147,21 +148,29 @@ class Filter
         ];
 
         // remove broken stuff
-        $html = str_replace('&#13;', '', $html);
+        $html = str_replace(
+            search: '&#13;',
+            replace: '',
+            subject: $html,
+        );
 
-        preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
+        preg_match_all(
+            pattern: '/[a-z]+=".+"/iU',
+            subject: $html,
+            matches: $attributes,
+        );
 
         foreach ($attributes[0] as $attribute) {
-            $attributeName = stristr($attribute, '=', true);
+            $attributeName = stristr($attribute, needle: '=', before_needle: true);
             if (!self::isAttribute($attributeName)) {
                 continue;
             }
 
-            if (in_array($attributeName, $keep)) {
+            if (in_array($attributeName, $keep, strict: true)) {
                 continue;
             }
 
-            $html = str_replace(' ' . $attribute, '', $html);
+            $html = str_replace(' ' . $attribute, replace: '', subject: $html);
         }
 
         return $html;
@@ -303,6 +312,6 @@ class Filter
             'onafterscriptexecute',
         ];
 
-        return in_array($attribute, $globalAttributes);
+        return in_array($attribute, $globalAttributes, strict: true);
     }
 }

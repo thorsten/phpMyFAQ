@@ -99,7 +99,7 @@ class Encryption
      */
     public function setSalt(string $login): Encryption
     {
-        $this->salt = $this->configuration->get('security.salt') . $login;
+        $this->salt = $this->configuration->get(item: 'security.salt') . $login;
         return $this;
     }
 }

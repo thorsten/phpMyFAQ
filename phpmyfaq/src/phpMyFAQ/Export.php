@@ -51,7 +51,7 @@ class Export
         return match ($mode) {
             'json' => new Json($faq, $category, $configuration),
             'pdf' => new Pdf($faq, $category, $configuration),
-            default => throw new Exception('Export not implemented!'),
+            default => throw new Exception(message: 'Export not implemented!'),
         };
     }
 
@@ -60,6 +60,9 @@ class Export
      */
     public static function getExportTimestamp(): string
     {
-        return date('Y-m-d-H-i-s', Request::createFromGlobals()->server->get('REQUEST_TIME'));
+        return date(
+            format: 'Y-m-d-H-i-s',
+            timestamp: Request::createFromGlobals()->server->get(key: 'REQUEST_TIME'),
+        );
     }
 }
