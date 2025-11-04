@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * phpMyFAQ Date class.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-24
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -39,52 +39,96 @@ readonly class Date
     }
 
     /**
-     * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard.
+     * Converts a phpMyFAQ date format (YmdHi[...]) to a format similar to ISO 8601 standard.
      *
-     * @param string $date      Date string
-     * @param string $format    Date format
-     * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
-     *                          Unix timestamp format
+     * Example: "202501311530" -> "2025-01-31 15:30" (default format)
      */
-    public static function createIsoDate(string $date, string $format = 'Y-m-d H:i', bool $pmfFormat = true): string
+    public static function createIsoDate(string $date, string $format = 'Y-m-d H:i', mixed $pmfFormat = null): string
     {
-        if ($pmfFormat) {
-            $dateString = strtotime(
-                substr($date, 0, 4)
-                . '-'
-                . substr($date, 4, 2)
-                . '-'
-                . substr($date, 6, 2)
-                . ' '
-                . substr($date, 8, 2)
-                . ':'
-                . substr($date, 10, 2),
-            );
-        } else {
-            $dateString = $date;
+        // Back-compat: if the third param is explicitly false, interpret $date as Unix timestamp / strtotime string
+        if ($pmfFormat === false) {
+            return self::createIsoDateFromUnixTimestamp($date, $format);
         }
 
-        return date($format, (int) $dateString);
+        $timestamp = strtotime(
+            substr($date, offset: 0, length: 4)
+            . '-'
+            . substr($date, offset: 4, length: 2)
+            . '-'
+            . substr($date, offset: 6, length: 2)
+            . ' '
+            . substr($date, offset: 8, length: 2)
+            . ':'
+            . substr($date, offset: 10, length: 2),
+        );
+
+        return date($format, (int) $timestamp);
     }
 
     /**
-     * Returns the timestamp of a tracking file.
-     *
-     * @param string $file     Filename
-     * @param bool   $endOfDay End of day?
+     * Formats a Unix timestamp according to the given format (default similar to ISO 8601).
      */
-    public function getTrackingFileDate(string $file, bool $endOfDay = false): int
+    public static function createIsoDateFromUnixTimestamp(int|string $timestamp, string $format = 'Y-m-d H:i'): string
+    {
+        if (is_string($timestamp) && !ctype_digit($timestamp)) {
+            $parsed = strtotime($timestamp);
+            return date($format, (int) $parsed);
+        }
+
+        return date($format, (int) $timestamp);
+    }
+
+    /**
+     * Backwards compatibility: Returns tracking file date.
+     * If $endOfDay is truthy (>0), returns the end-of-day timestamp, otherwise start-of-day.
+     * Note: Prefer using getTrackingFileDateStart()/getTrackingFileDateEnd().
+     */
+    public function getTrackingFileDate(string $file, int $endOfDay = 0): int
+    {
+        return $endOfDay > 0 ? $this->getTrackingFileDateEnd($file) : $this->getTrackingFileDateStart($file);
+    }
+
+    /**
+     * Returns the start-of-day timestamp of a tracking filename (trackingDDMMYYYY).
+     */
+    public function getTrackingFileDateStart(string $file): int
     {
         if (Strings::strlen($file) >= 16) {
-            $day = Strings::substr($file, 8, 2);
-            $month = Strings::substr($file, 10, 2);
-            $year = Strings::substr($file, 12, 4);
+            $day = Strings::substr($file, start: 8, length: 2);
+            $month = Strings::substr($file, start: 10, length: 2);
+            $year = Strings::substr($file, start: 12, length: 4);
 
-            if (!$endOfDay) {
-                return gmmktime(0, 0, 0, (int) $month, (int) $day, (int) $year);
-            }
+            return gmmktime(
+                hour: 0,
+                minute: 0,
+                second: 0,
+                month: (int) $month,
+                day: (int) $day,
+                year: (int) $year,
+            );
+        }
 
-            return gmmktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
+        return -1;
+    }
+
+    /**
+     * Returns the end-of-day timestamp of a tracking filename (trackingDDMMYYYY).
+     */
+    public function getTrackingFileDateEnd(string $file): int
+    {
+        if (Strings::strlen($file) >= 16) {
+            $day = Strings::substr($file, start: 8, length: 2);
+            $month = Strings::substr($file, start: 10, length: 2);
+            $year = Strings::substr($file, start: 12, length: 4);
+
+            return gmmktime(
+                hour: 23,
+                minute: 59,
+                second: 59,
+                month: (int) $month,
+                day: (int) $day,
+                year: (int) $year,
+            );
         }
 
         return -1;
@@ -97,7 +141,7 @@ readonly class Date
     {
         try {
             $dateTime = new DateTime($unformattedDate);
-            return $dateTime->format($this->configuration->get('main.dateFormat'));
+            return $dateTime->format($this->configuration->get(item: 'main.dateFormat'));
         } catch (Exception $exception) {
             $this->configuration->getLogger()->error($exception->getMessage());
             return '';

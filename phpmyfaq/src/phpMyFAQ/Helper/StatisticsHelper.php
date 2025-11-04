@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The statistics helper class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-01-13
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
@@ -46,12 +46,15 @@ readonly class StatisticsHelper
                 ++$numberOfDays;
             }
 
-            if ($this->date->getTrackingFileDate($dat) > $last) {
-                $last = $this->date->getTrackingFileDate($dat);
+            if ($this->date->getTrackingFileDateStart($dat) > $last) {
+                $last = $this->date->getTrackingFileDateStart($dat);
             }
 
-            if ($this->date->getTrackingFileDate($dat) < $first && $this->date->getTrackingFileDate($dat) > 0) {
-                $first = $this->date->getTrackingFileDate($dat);
+            if (
+                $this->date->getTrackingFileDateStart($dat) < $first
+                && $this->date->getTrackingFileDateStart($dat) > 0
+            ) {
+                $first = $this->date->getTrackingFileDateStart($dat);
             }
         }
 
@@ -119,7 +122,7 @@ readonly class StatisticsHelper
         $trackingDates = [];
         while (false !== ($dat = readdir($dir))) {
             if ($dat !== '.' && $dat !== '..' && strlen($dat) === 16 && !is_dir($dat)) {
-                $trackingDates[] = $this->date->getTrackingFileDate($dat);
+                $trackingDates[] = $this->date->getTrackingFileDateStart($dat);
             }
         }
 
@@ -138,8 +141,8 @@ readonly class StatisticsHelper
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
             if ($trackingFile !== '.' && $trackingFile !== '..' && 10 === strpos($trackingFile, $month)) {
-                $candidateFirst = $this->date->getTrackingFileDate($trackingFile);
-                $candidateLast = $this->date->getTrackingFileDate($trackingFile, true);
+                $candidateFirst = $this->date->getTrackingFileDateStart($trackingFile);
+                $candidateLast = $this->date->getTrackingFileDateEnd($trackingFile);
                 if ($candidateLast > 0 && $candidateLast > $last) {
                     $last = $candidateLast;
                 }
@@ -178,13 +181,13 @@ readonly class StatisticsHelper
 
         $trackingDates = $this->getAllTrackingDates();
         foreach ($trackingDates as $trackingDate) {
-            if (date('Y-m', $oldValue) !== date('Y-m', $trackingDate)) {
+            if (date('Y-m', $oldValue) !== date('Y-m', (int) $trackingDate)) {
                 // The filename format is: trackingDDMMYYYY
                 // e.g.: tracking02042006
                 $renderedHtml .= sprintf(
                     '<option value="%s">%s</option>',
-                    date('mY', $trackingDate),
-                    date('Y-m', $trackingDate),
+                    date('mY', (int) $trackingDate),
+                    date('Y-m', (int) $trackingDate),
                 );
                 $oldValue = $trackingDate;
             }
@@ -205,12 +208,12 @@ readonly class StatisticsHelper
 
         foreach ($trackingDates as $trackingDate) {
             $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
-            if (date('Y-m-d', $trackingDate) === date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
+            if (date('Y-m-d', (int) $trackingDate) === date('Y-m-d', $request->server->get('REQUEST_TIME'))) {
                 $renderedHtml .= ' selected';
             }
 
             $renderedHtml .= '>';
-            $renderedHtml .= $this->date->format(date('Y-m-d H:i', $trackingDate));
+            $renderedHtml .= $this->date->format(date('Y-m-d H:i', (int) $trackingDate));
             $renderedHtml .= "</option>\n";
         }
 

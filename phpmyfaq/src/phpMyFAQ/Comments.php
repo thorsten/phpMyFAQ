@@ -59,7 +59,7 @@ class Comments
                 ->setId((int) $row->id_comment)
                 ->setRecordId((int) $row->id)
                 ->setComment($row->comment)
-                ->setDate(Date::createIsoDate($row->datum, DateTimeInterface::ATOM, pmfFormat: false))
+                ->setDate(Date::createIsoDateFromUnixTimestamp($row->datum, DateTimeInterface::ATOM))
                 ->setUsername($row->usr)
                 ->setEmail($row->email)
                 ->setType($type);
