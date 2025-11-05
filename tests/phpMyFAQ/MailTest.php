@@ -54,8 +54,7 @@ class MailTest extends TestCase
 
     public function testSetFromWithInvalidAddress(): void
     {
-        $this->expectException(Exception::class);
-        $this->mail->setFrom('invalid-email');
+        $this->assertFalse($this->mail->setFrom('invalid-email'));
     }
 
     public function testValidateEmailWithValidAddress(): void
@@ -99,8 +98,7 @@ class MailTest extends TestCase
 
     public function testAddCcWithInvalidAddress(): void
     {
-        $this->expectException(Exception::class);
-        $this->mail->addCc('invalid-email');
+        $this->assertFalse($this->mail->addCc('invalid-email'));
     }
 
     /**
@@ -114,8 +112,7 @@ class MailTest extends TestCase
 
     public function testAddToWithInvalidAddress(): void
     {
-        $this->expectException(Exception::class);
-        $this->mail->addTo('invalid-email');
+        $this->assertFalse($this->mail->addTo('invalid-email'));
     }
 
     public function testGetDateWithValidTimestamp(): void
@@ -205,8 +202,7 @@ class MailTest extends TestCase
 
     public function testSetReplyToWithInvalidAddress(): void
     {
-        $this->expectException(Exception::class);
-        $this->mail->setReplyTo('invalid-email');
+        $this->assertFalse($this->mail->setReplyTo('invalid-email'));
     }
 
     public function testSafeEmailWithSafeEmailEnabled(): void
