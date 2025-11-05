@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Minimaler Service-Provider für Forms/Repository Wiring (Symfony DI).
+ * Minimal service provider for Forms/Repository wiring.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
