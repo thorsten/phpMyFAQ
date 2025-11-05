@@ -155,7 +155,12 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @return string|string[]
+     * @param string $pattern
+     * @param callable $callback
+     * @param string|array $subject
+     * @param int $limit
+     * @param int $count
+     * @return string|array|null
      */
     public static function preg_replace_callback(
         string $pattern,
@@ -163,7 +168,7 @@ class Strings
         string|array $subject,
         int $limit = -1,
         int &$count = 0,
-    ): string|array {
+    ): string|array|null {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main glossary class.
  *
@@ -17,7 +15,12 @@ declare(strict_types=1);
  * @since     2005-09-15
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
+
+use phpMyFAQ\Glossary\GlossaryRepository;
+use phpMyFAQ\Glossary\GlossaryRepositoryInterface;
 
 /**
  * Class Glossary
@@ -32,12 +35,14 @@ class Glossary
 
     private array $cachedItems = [];
 
-    /**
-     * Constructor.
-     */
+    // Repository to access storage
+    private GlossaryRepositoryInterface $repository;
+
     public function __construct(
         private readonly Configuration $configuration,
+        ?GlossaryRepositoryInterface $repository = null,
     ) {
+        $this->repository = $repository ?? new GlossaryRepository($this->configuration);
     }
 
     /**
@@ -47,164 +52,24 @@ class Glossary
      */
     public function insertItemsIntoContent(string $content = ''): string
     {
-        if ('' === $content) {
+        if ($content === '') {
             return '';
         }
 
-        $attributes = [
-            'href',
-            'src',
-            'title',
-            'alt',
-            'class',
-            'style',
-            'id',
-            'name',
-            'face',
-            'size',
-            'dir',
-            'rel',
-            'rev',
-            'onmouseenter',
-            'onmouseleave',
-            'onafterprint',
-            'onbeforeprint',
-            'onbeforeunload',
-            'onhashchange',
-            'onmessage',
-            'onoffline',
-            'ononline',
-            'onpopstate',
-            'onpagehide',
-            'onpageshow',
-            'onresize',
-            'onunload',
-            'ondevicemotion',
-            'ondeviceorientation',
-            'onabort',
-            'onblur',
-            'oncanplay',
-            'oncanplaythrough',
-            'onchange',
-            'onclick',
-            'oncontextmenu',
-            'ondblclick',
-            'ondrag',
-            'ondragend',
-            'ondragenter',
-            'ondragleave',
-            'ondragover',
-            'ondragstart',
-            'ondrop',
-            'ondurationchange',
-            'onemptied',
-            'onended',
-            'onerror',
-            'onfocus',
-            'oninput',
-            'oninvalid',
-            'onkeydown',
-            'onkeypress',
-            'onkeyup',
-            'onload',
-            'onloadeddata',
-            'onloadedmetadata',
-            'onloadstart',
-            'onmousedown',
-            'onmousemove',
-            'onmouseout',
-            'onmouseover',
-            'onmouseup',
-            'onpause',
-            'onplay',
-            'onplaying',
-            'onprogress',
-            'onratechange',
-            'onreset',
-            'onscroll',
-            'onseeked',
-            'onseeking',
-            'onselect',
-            'onshow',
-            'onstalled',
-            'onsubmit',
-            'onsuspend',
-            'ontimeupdate',
-            'onvolumechange',
-            'onwaiting',
-            'oncopy',
-            'oncut',
-            'onpaste',
-            'onbeforescriptexecute',
-            'onafterscriptexecute',
-        ];
-
         foreach ($this->fetchAll() as $item) {
             $this->definition = $item['definition'];
-            $item['item'] = preg_quote((string) $item['item'], '/');
+            $quotedItem = preg_quote($item['item'], delimiter: '/');
+            $pattern = '/(^|\W)(' . $quotedItem . ')(\W|$)/';
+
             $content = Strings::preg_replace_callback(
-                '/('
-                . $item['item']
-                . '="[^"]*")|'
-                // b. the glossary item could be inside an attribute value
-                . '(('
-                . implode('|', $attributes)
-                . ')="[^"]*'
-                . $item['item']
-                . '[^"]*")|'
-                // c. the glossary item could be everywhere as a distinct word
-                . '(\W+)('
-                . $item['item']
-                . ')(\W+)|'
-                // d. the glossary item could be at the beginning of the string as a distinct word
-                . '^('
-                . $item['item']
-                . ')(\W+)|'
-                // e. the glossary item could be at the end of the string as a distinct word
-                . '(\W+)('
-                . $item['item']
-                . ')$'
-                . '/mis',
-                $this->setTooltip(...),
-                $content,
-                1,
+                pattern: $pattern,
+                callback: $this->setTooltip(...),
+                subject: $content,
+                limit: 1,
             );
         }
 
         return $content;
-    }
-
-    /**
-     * Gets all items and definitions from the database.
-     *
-     * @return array<array<int, string, string>>
-     */
-    public function fetchAll(): array
-    {
-        $items = [];
-
-        if ($this->cachedItems !== []) {
-            return $this->cachedItems;
-        }
-
-        $query = sprintf(
-            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
-            Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $items[] = [
-                'id' => $row->id,
-                'language' => $row->lang,
-                'item' => stripslashes((string) $row->item),
-                'definition' => stripslashes((string) $row->definition),
-            ];
-        }
-
-        return $this->cachedItems = $items;
     }
 
     /**
@@ -216,33 +81,42 @@ class Glossary
     {
         $prefix = '';
         $postfix = '';
-        if (count($matches) > 9) {
+        $item = '';
+        $count = count($matches);
+
+        if ($count > 9) {
             // if the word is at the end of the string
             $prefix = $matches[9];
             $item = $matches[10];
-        } elseif (count($matches) > 7) {
+        }
+
+        if ($item === '' && $count > 7) {
             // if the word is at the beginning of the string
             $item = $matches[7];
             $postfix = $matches[8];
-        } elseif (count($matches) > 4) {
+        }
+
+        if ($item === '' && $count > 4) {
             // if the word is else where in the string
             $prefix = $matches[4];
             $item = $matches[5];
             $postfix = $matches[6];
         }
 
-        if (!empty($item)) {
-            return sprintf(
-                '%s<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="%s" class="initialism">%s</abbr>%s',
-                $prefix,
-                $this->definition,
-                $item,
-                $postfix,
-            );
+        if ($item === '' && $count >= 3) {
+            // simplified pattern fallback: (^|\W) (item) (\W|$)
+            $prefix = $matches[1] ?? '';
+            $item = $matches[2] ?? '';
+            $postfix = $matches[3] ?? '';
         }
 
-        // Fallback: the original matched string
-        return $matches[0];
+        if ($item === '') {
+            // Fallback: the original matched string
+            return $matches[0];
+        }
+
+        $fmt = '%s<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="%s" class="initialism">%s</abbr>%s';
+        return sprintf($fmt, $prefix, $this->definition, $item, $postfix);
     }
 
     /**
@@ -252,27 +126,27 @@ class Glossary
      */
     public function fetch(int $id): array
     {
-        $item = [];
+        return $this->repository->fetch($id, $this->currentLanguage());
+    }
 
-        $query = sprintf(
-            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $this->getLanguage(),
-        );
+    /**
+     * Gets all items and definitions from the database.
+     *
+     * @return array<int, array{id:int, language:string, item:string, definition:string}>
+     */
+    public function fetchAll(): array
+    {
+        $language = $this->currentLanguage();
 
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $item = [
-                'id' => $row->id,
-                'language' => $row->lang,
-                'item' => stripslashes((string) $row->item),
-                'definition' => stripslashes((string) $row->definition),
-            ];
+        if (isset($this->cachedItems[$language])) {
+            return $this->cachedItems[$language];
         }
 
-        return $item;
+        $items = $this->repository->fetchAll($language);
+
+        $this->cachedItems[$language] = $items;
+
+        return $items;
     }
 
     /**
@@ -283,17 +157,7 @@ class Glossary
      */
     public function create(string $item, string $definition): bool
     {
-        $this->definition = $this->configuration->getDb()->escape($definition);
-
-        $query = sprintf(
-            "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
-            $this->getLanguage(),
-            Strings::htmlspecialchars(substr($item, 0, 254)),
-            Strings::htmlspecialchars($this->definition),
-        );
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->create($this->currentLanguage(), $item, $definition);
     }
 
     /**
@@ -305,18 +169,7 @@ class Glossary
      */
     public function update(int $id, string $item, string $definition): bool
     {
-        $item = $this->configuration->getDb()->escape($item);
-        $definition = $this->configuration->getDb()->escape($definition);
-
-        $query = sprintf(
-            "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            Strings::htmlspecialchars(substr($item, 0, 254)),
-            Strings::htmlspecialchars($definition),
-            $id,
-            $this->getLanguage(),
-        );
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->update($id, $this->currentLanguage(), $item, $definition);
     }
 
     /**
@@ -326,13 +179,7 @@ class Glossary
      */
     public function delete(int $id): bool
     {
-        $query = sprintf(
-            "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $this->getLanguage(),
-        );
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->delete($id, $this->currentLanguage());
     }
 
     public function getLanguage(): string
@@ -343,6 +190,19 @@ class Glossary
     public function setLanguage(string $language): Glossary
     {
         $this->language = $language;
+        // Reset cache when language changes
+        $this->cachedItems = [];
         return $this;
+    }
+
+    /**
+     * Returns explicitly set language or falls back to the configuration language.
+     */
+    private function currentLanguage(): string
+    {
+        if (isset($this->language) && $this->language !== '') {
+            return $this->language;
+        }
+        return $this->configuration->getLanguage()->getLanguage();
     }
 }

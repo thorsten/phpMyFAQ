@@ -151,7 +151,7 @@ class Mbstring extends StringsAbstract
      * @param string|string[] $pattern
      * @param string|string[] $subject
      *
-     * @return string|string[]
+     * @return string|string[]|null
      */
     public function preg_replace_callback(
         string|array $pattern,
@@ -159,7 +159,7 @@ class Mbstring extends StringsAbstract
         string|array $subject,
         int $limit = -1,
         int &$count = 0,
-    ): string|array {
+    ): string|array|null {
         if (is_array($pattern)) {
             foreach ($pattern as &$item) {
                 $item = $this->appendU($item);
