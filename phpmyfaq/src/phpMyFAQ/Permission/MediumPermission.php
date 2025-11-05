@@ -490,7 +490,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $res = $this->configuration->getDb()->query($select);
         $result = [];
         while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['group_id'];
+            $result[] = (int) $row['group_id'];
         }
 
         return $result;
