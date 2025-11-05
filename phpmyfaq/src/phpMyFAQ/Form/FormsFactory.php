@@ -30,4 +30,3 @@ final class FormsFactory
         return new Forms($configuration, $repository);
     }
 }
-

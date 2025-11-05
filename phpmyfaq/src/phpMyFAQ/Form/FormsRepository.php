@@ -124,7 +124,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
     public function fetchDefaultInputData(int $formId, int $inputId): ?object
     {
         $query = sprintf(
-            "SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d "
+            'SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d '
             . "AND input_lang='default'",
             Database::getTablePrefix(),
             $inputId,
@@ -147,7 +147,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
         string $langCode,
     ): bool {
         $query = sprintf(
-            "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_active, input_required, "
+            'INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_active, input_required, '
             . " input_lang) VALUES (%d, %d, '%s', '%s', %d, %d, '%s')",
             Database::getTablePrefix(),
             $formId,
@@ -171,7 +171,7 @@ readonly class FormsRepository implements FormsRepositoryInterface
     public function buildInsertQuery(array $input): string
     {
         return sprintf(
-            "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, "
+            'INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, '
             . " input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
             Database::getTablePrefix(),
             (int) $input['form_id'],
