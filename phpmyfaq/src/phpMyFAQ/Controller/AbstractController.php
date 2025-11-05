@@ -25,6 +25,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Form\FormsServiceProvider;
 use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\Config\FileLocator;
@@ -265,6 +266,9 @@ abstract class AbstractController
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
+
+        // Register Forms services
+        FormsServiceProvider::register($containerBuilder);
 
         return $containerBuilder;
     }

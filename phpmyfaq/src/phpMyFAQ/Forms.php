@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main forms class.
  *
@@ -18,18 +16,25 @@ declare(strict_types=1);
  * @since     2024-03-21
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
+use phpMyFAQ\Form\FormsRepository;
+use phpMyFAQ\Form\FormsRepositoryInterface;
 use phpMyFAQ\Language\LanguageCodes;
 
-class Forms
+readonly class Forms
 {
-    private readonly Translation $translation;
+    private Translation $translation;
+    private FormsRepositoryInterface $repository;
 
     public function __construct(
-        private readonly Configuration $configuration,
+        private Configuration $configuration,
+        ?FormsRepositoryInterface $repository = null,
     ) {
         $this->translation = new Translation();
+        $this->repository = $repository ?? new FormsRepository($this->configuration);
     }
 
     /**
@@ -39,11 +44,7 @@ class Forms
      */
     public function getFormData(int $formId): array
     {
-        $query = sprintf('SELECT form_id, input_id, input_type, input_label, input_active, input_required, input_lang
-                    FROM %sfaqforms WHERE form_id = %d', Database::getTablePrefix(), $formId);
-
-        $result = $this->configuration->getDb()->query($query);
-        $formData = $this->configuration->getDb()->fetchAll($result);
+        $formData = $this->repository->fetchFormDataByFormId($formId);
 
         foreach ($formData as $input) {
             if ($input->input_lang === 'default') {
@@ -53,7 +54,7 @@ class Forms
 
         $filteredEntries = [];
 
-        $formDataHasntMatchingLanguage = [];
+        $formDataNoMatchingLanguage = [];
         $idsAlreadyFiltered = [];
 
         foreach ($formData as $entry) {
@@ -61,12 +62,12 @@ class Forms
                 $filteredEntries[] = $entry;
                 $idsAlreadyFiltered[] = $entry->input_id;
             } else {
-                $formDataHasntMatchingLanguage[] = $entry;
+                $formDataNoMatchingLanguage[] = $entry;
             }
         }
 
-        foreach ($formDataHasntMatchingLanguage as $item) {
-            if ($item->input_lang === 'default' && !in_array($item->input_id, $idsAlreadyFiltered)) {
+        foreach ($formDataNoMatchingLanguage as $item) {
+            if ($item->input_lang === 'default' && !in_array($item->input_id, $idsAlreadyFiltered, strict: true)) {
                 $filteredEntries[] = $item;
             }
         }
@@ -111,15 +112,7 @@ class Forms
      */
     public function saveActivateInputStatus(int $formId, int $inputId, int $activated): bool
     {
-        $query = sprintf(
-            'UPDATE %sfaqforms SET input_active = %d WHERE form_id = %d AND input_id = %d',
-            Database::getTablePrefix(),
-            $activated,
-            $formId,
-            $inputId,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->updateInputActive($formId, $inputId, $activated);
     }
 
     /**
@@ -127,19 +120,12 @@ class Forms
      *
      * @param int $formId Form ID
      * @param int $inputId Input ID
-     * @param int $activated Requirement status
+     * @param int $required
+     * @return bool
      */
     public function saveRequiredInputStatus(int $formId, int $inputId, int $required): bool
     {
-        $query = sprintf(
-            'UPDATE %sfaqforms SET input_required = %d WHERE form_id = %d AND input_id = %d',
-            Database::getTablePrefix(),
-            $required,
-            $formId,
-            $inputId,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->updateInputRequired($formId, $inputId, $required);
     }
 
     /**
@@ -147,15 +133,7 @@ class Forms
      */
     public function getTranslations(int $formId, int $inputId): array
     {
-        $query = sprintf(
-            'SELECT input_lang, input_label FROM %sfaqforms WHERE form_id = %d AND input_id = %d',
-            Database::getTablePrefix(),
-            $formId,
-            $inputId,
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-        $translations = $this->configuration->getDb()->fetchAll($result);
+        $translations = $this->repository->fetchTranslationsByFormAndInput($formId, $inputId);
 
         foreach ($translations as $translation) {
             if ($translation->input_lang === 'default') {
@@ -176,16 +154,7 @@ class Forms
      */
     public function editTranslation(string $label, int $formId, int $inputId, string $lang): bool
     {
-        $query = sprintf(
-            "UPDATE %sfaqforms SET input_label='%s' WHERE form_id=%d AND input_id=%d AND input_lang='%s'",
-            Database::getTablePrefix(),
-            $label,
-            $formId,
-            $inputId,
-            $lang,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->updateTranslation($label, $formId, $inputId, $lang);
     }
 
     /**
@@ -197,15 +166,7 @@ class Forms
      */
     public function deleteTranslation(int $formId, int $inputId, string $lang): bool
     {
-        $query = sprintf(
-            "DELETE FROM %sfaqforms WHERE form_id=%d AND input_id=%d AND input_lang='%s'",
-            Database::getTablePrefix(),
-            $formId,
-            $inputId,
-            $lang,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->deleteTranslation($formId, $inputId, $lang);
     }
 
     /**
@@ -218,52 +179,20 @@ class Forms
      */
     public function addTranslation(int $formId, int $inputId, string $lang, string $translation): bool
     {
-        $selectQuery = sprintf(
-            "SELECT input_type, input_active, input_required FROM %sfaqforms WHERE input_id=%d AND form_id=%d
-                    AND input_lang='default'",
-            Database::getTablePrefix(),
-            $inputId,
-            $formId,
-        );
+        $inputData = $this->repository->fetchDefaultInputData($formId, $inputId);
+        if ($inputData === null) {
+            return false;
+        }
 
-        $response = $this->configuration->getDb()->query($selectQuery);
-        $inputData = $this->configuration->getDb()->fetchObject($response);
-
-        $requestQuery = sprintf(
-            "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_active, input_required, 
-                    input_lang) VALUES (%d, %d, '%s', '%s', %d, %d, '%s')",
-            Database::getTablePrefix(),
+        return $this->repository->insertTranslationRow(
             $formId,
             $inputId,
-            $this->configuration->getDb()->escape($inputData->input_type),
-            $this->configuration->getDb()->escape($translation),
-            $inputData->input_active,
-            $inputData->input_required,
+            $inputData->input_type,
+            $translation,
+            (int) $inputData->input_active,
+            (int) $inputData->input_required,
             LanguageCodes::getKey($lang),
         );
-
-        return (bool) $this->configuration->getDb()->query($requestQuery);
-    }
-
-    /**
-     * Check if a given input is required
-     *
-     * @param int $formId Form ID
-     * @param int $inputId Input ID
-     */
-    public function checkIfRequired(int $formId, int $inputId): bool
-    {
-        $query = sprintf(
-            'SELECT input_required, input_active FROM %sfaqforms WHERE form_id = %d AND input_id = %d',
-            Database::getTablePrefix(),
-            $formId,
-            $inputId,
-        );
-
-        $response = $this->configuration->getDb()->query($query);
-        $data = $this->configuration->getDb()->fetchObject($response);
-
-        return $data->input_active !== 0 && $data->input_required !== 0;
     }
 
     /**
@@ -273,24 +202,11 @@ class Forms
      */
     public function insertInputIntoDatabase(array $input): bool
     {
-        $query = $this->getInsertQueries($input);
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->insertInput($input);
     }
 
     public function getInsertQueries(array $input): string
     {
-        return sprintf(
-            "INSERT INTO %sfaqforms(form_id, input_id, input_type, input_label, input_lang, input_active, 
-                    input_required) VALUES (%d, %d, '%s', '%s', '%s', %d, %d)",
-            Database::getTablePrefix(),
-            (int) $input['form_id'],
-            (int) $input['input_id'],
-            $this->configuration->getDb()->escape($input['input_type']),
-            $this->configuration->getDb()->escape($input['input_label']),
-            $this->configuration->getDb()->escape($input['input_lang']),
-            (int) $input['input_active'],
-            (int) $input['input_required'],
-        );
+        return $this->repository->buildInsertQuery($input);
     }
 }
