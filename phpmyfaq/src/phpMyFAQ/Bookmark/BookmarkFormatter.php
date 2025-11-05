@@ -67,12 +67,20 @@ readonly class BookmarkFormatter
         $category = new Category($this->configuration);
         $categoryId = $category->getCategoryIdFromFaq((int) $faqData['id']);
 
-        $url = strtr('base:index.php?action=faq&id=id:&cat=cat:&artlang=lang:', [
-            'base:' => $this->configuration->getDefaultUrl(),
-            'id:' => (string) (int) $faqData['id'],
-            'cat:' => (string) $categoryId,
-            'lang:' => (string) ($faqData['lang'] ?? ''),
-        ]);
+        $base = rtrim($this->configuration->getDefaultUrl(), characters: '/') . '/index.php';
+        $query = http_build_query(
+            [
+                'action' => 'faq',
+                'id' => (int) $faqData['id'],
+                'cat' => $categoryId,
+                'artlang' => $faqData['lang'] ?? '',
+            ],
+            numeric_prefix: '',
+            arg_separator: '&',
+            encoding_type: PHP_QUERY_RFC3986,
+        );
+
+        $url = $base . '?' . $query;
 
         $link = new Link($url, $this->configuration);
         $title = (string) ($faqData['title'] ?? '');

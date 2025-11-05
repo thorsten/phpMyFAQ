@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Bookmark Respository.
+ * Bookmark Repository.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -24,7 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\User\CurrentUser;
 
-readonly class BookmarkRepository
+readonly class BookmarkRepository implements BookmarkRepositoryInterface
 {
     public function __construct(
         private Configuration $configuration,
@@ -40,11 +40,10 @@ readonly class BookmarkRepository
 
         $table = Database::getTablePrefix() . 'faqbookmarks';
         $userId = $this->currentUser->getUserId();
-        $query = strtr('INSERT INTO table: (userid, faqid) VALUES (userId:, faqId:)', [
-            'table:' => $table,
-            'userId:' => (string) $userId,
-            'faqId:' => (string) $faqId,
-        ]);
+
+        $query = <<<SQL
+            INSERT INTO {$table} (userid, faqid) VALUES ({$userId},{$faqId})
+        SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -56,10 +55,10 @@ readonly class BookmarkRepository
     {
         $table = Database::getTablePrefix() . 'faqbookmarks';
         $userId = $this->currentUser->getUserId();
-        $query = strtr('SELECT faqid FROM table: WHERE userid = userId:', [
-            'table:' => $table,
-            'userId:' => (string) $userId,
-        ]);
+
+        $query = <<<SQL
+            SELECT faqid FROM {$table} WHERE userid = {$userId}
+        SQL;
 
         $result = $this->configuration->getDb()->query($query);
         $data = $this->configuration->getDb()->fetchAll($result);
@@ -75,11 +74,10 @@ readonly class BookmarkRepository
 
         $table = Database::getTablePrefix() . 'faqbookmarks';
         $userId = $this->currentUser->getUserId();
-        $query = strtr('DELETE FROM table: WHERE userid = userId: AND faqid = faqId:', [
-            'table:' => $table,
-            'userId:' => (string) $userId,
-            'faqId:' => (string) $faqId,
-        ]);
+
+        $query = <<<SQL
+            DELETE FROM {$table} WHERE userid = {$userId} AND faqid = {$faqId}
+        SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }
@@ -88,10 +86,10 @@ readonly class BookmarkRepository
     {
         $table = Database::getTablePrefix() . 'faqbookmarks';
         $userId = $this->currentUser->getUserId();
-        $query = strtr('DELETE FROM table: WHERE userid = userId:', [
-            'table:' => $table,
-            'userId:' => (string) $userId,
-        ]);
+
+        $query = <<<SQL
+            DELETE FROM {$table} WHERE userid = {$userId}
+        SQL;
 
         return (bool) $this->configuration->getDb()->query($query);
     }

@@ -24,7 +24,7 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
 
-readonly class CommentsRepository
+readonly class CommentsRepository implements CommentsRepositoryInterface
 {
     public function __construct(
         private CoreConfiguration $configuration,

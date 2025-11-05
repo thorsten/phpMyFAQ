@@ -344,7 +344,7 @@ final class FaqController extends AbstractController
             ->setRevisionId($revisionId)
             ->setSolutionId($solutionId)
             ->setActive($active === 'yes')
-            ->setSticky($sticky !== 'no' ? true : false)
+            ->setSticky($sticky !== 'no')
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 (string) $question,
                 ENT_QUOTES | ENT_HTML5,
