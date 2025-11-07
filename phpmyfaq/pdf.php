@@ -59,7 +59,9 @@ $faqConfig = $container->get('phpmyfaq.configuration');
 
 // get language (default: English)
 $Language = $container->get('phpmyfaq.language');
-$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $faqConfig->get('main.languageDetection')
+    ? $Language->setLanguageWithDetection($faqConfig->get('main.language'))
+    : $Language->setLanguageFromConfiguration($faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
 // Found an article language?
@@ -79,7 +81,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 }
 
 //
-// Set translation class
+// Set the translation class
 //
 try {
     Translation::create()

@@ -41,7 +41,7 @@ class BookmarkFormatterTest extends TestCase
 
         $this->currentUser = CurrentUser::getCurrentUser($this->configuration);
         $language = new Language($this->configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 
         $this->formatter = new BookmarkFormatter($this->configuration, $this->currentUser);

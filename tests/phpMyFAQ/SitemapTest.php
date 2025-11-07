@@ -39,7 +39,7 @@ class SitemapTest extends TestCase
         $configuration->set('main.referenceURL', 'https://example.com/');
 
         $language = new Language($configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->sitemap = new Sitemap($configuration);

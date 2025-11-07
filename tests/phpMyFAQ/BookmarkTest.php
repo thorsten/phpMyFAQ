@@ -36,7 +36,7 @@ class BookmarkTest extends TestCase
 
         $user = CurrentUser::getCurrentUser($configuration);
         $language = new Language($configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->bookmark = new Bookmark($configuration, $user);

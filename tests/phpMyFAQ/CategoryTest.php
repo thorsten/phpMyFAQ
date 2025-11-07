@@ -24,7 +24,7 @@ class CategoryTest extends TestCase
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
         $language = new Language($configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 
         $this->category = new Category($configuration);

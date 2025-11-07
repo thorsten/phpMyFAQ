@@ -74,10 +74,13 @@ class Application
         if (!is_null($this->container)) {
             $configuration = $this->container->get(id: 'phpmyfaq.configuration');
             $language = $this->container->get(id: 'phpmyfaq.language');
-            $currentLanguage = $language->setLanguage(
-                (bool) $configuration->get(item: 'main.languageDetection'),
-                $configuration->get(item: 'main.language'),
-            );
+
+            $detect = (bool) $configuration->get(item: 'main.languageDetection');
+            $configLang = $configuration->get(item: 'main.language');
+
+            $currentLanguage = $detect
+                ? $language->setLanguageWithDetection($configLang)
+                : $language->setLanguageFromConfiguration($configLang);
 
             require PMF_TRANSLATION_DIR . '/language_en.php';
             if (Language::isASupportedLanguage($currentLanguage)) {

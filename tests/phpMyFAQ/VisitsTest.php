@@ -34,7 +34,7 @@ class VisitsTest extends TestCase
         $this->configuration->set('main.currentVersion', System::getVersion());
 
         $language = new Language($this->configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 
         $this->visits = new Visits($this->configuration);

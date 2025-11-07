@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class ApplicationTest extends TestCase
 {
@@ -73,20 +74,19 @@ class ApplicationTest extends TestCase
     public function testSetLanguageWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $language = $this->createMock(Language::class);
+        $session = $this->createMock(Session::class);
+        $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
-                ['main.languageDetection', 'browser'],
-                ['main.language', 'en']
+                ['main.languageDetection', true],
+                ['main.language', 'en'],
             ]);
 
-        $language->expects($this->once())
-            ->method('setLanguage')
-            ->with('browser', 'en')
-            ->willReturn('de');
+        // Keine Mock-Erwartung auf Language::setLanguage() – echte Instanz wird verwendet
 
+        // Konfiguration speichert die Language-Instanz über setLanguage()
         $configuration->expects($this->once())
             ->method('setLanguage')
             ->with($language);
@@ -95,14 +95,14 @@ class ApplicationTest extends TestCase
             ->method('get')
             ->willReturnMap([
                 ['phpmyfaq.configuration', $configuration],
-                ['phpmyfaq.language', $language]
+                ['phpmyfaq.language', $language],
             ]);
 
         $reflection = new ReflectionClass(Application::class);
         $method = $reflection->getMethod('setLanguage');
 
         $result = $method->invoke($this->application);
-        $this->assertEquals('de', $result);
+        $this->assertEquals('en', $result);
     }
 
     /**
@@ -262,19 +262,17 @@ class ApplicationTest extends TestCase
     public function testRunMethodWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $language = $this->createMock(Language::class);
+        $session = $this->createMock(Session::class);
+        $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
-                ['main.languageDetection', 'browser'],
-                ['main.language', 'en']
+                ['main.languageDetection', true],
+                ['main.language', 'en'],
             ]);
 
-        $language->expects($this->once())
-            ->method('setLanguage')
-            ->with('browser', 'en')
-            ->willReturn('en');
+        // Keine Mock-Erwartung auf Language::setLanguage() – echte Instanz wird verwendet
 
         $configuration->expects($this->once())
             ->method('setLanguage')
@@ -284,14 +282,14 @@ class ApplicationTest extends TestCase
             ->method('get')
             ->willReturnMap([
                 ['phpmyfaq.configuration', $configuration],
-                ['phpmyfaq.language', $language]
+                ['phpmyfaq.language', $language],
             ]);
 
         $routeCollection = new RouteCollection();
         $routeCollection->add('test_route', new Route('/', [
             '_controller' => function () {
                 return new Response('Welcome');
-            }
+            },
         ]));
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -304,7 +302,7 @@ class ApplicationTest extends TestCase
         } catch (PMFException $e) {
             $this->assertInstanceOf(PMFException::class, $e);
         }
-        $output = ob_get_clean();
+        ob_get_clean();
 
         $this->assertTrue(true);
     }

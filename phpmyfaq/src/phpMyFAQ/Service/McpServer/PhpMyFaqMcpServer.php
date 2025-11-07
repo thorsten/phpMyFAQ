@@ -55,10 +55,15 @@ class PhpMyFaqMcpServer
         private readonly Search $search,
         private readonly Faq $faq,
     ) {
-        $language->setLanguage(
-            $this->configuration->get('main.languageDetection'),
-            $this->configuration->get('main.language'),
-        );
+        $detectionEnabled = (bool) $this->configuration->get(item: 'main.languageDetection');
+        $configLang = (string) $this->configuration->get(item: 'main.language');
+        if ($detectionEnabled) {
+            $language->setLanguageWithDetection($configLang);
+            $this->configuration->setLanguage($language);
+            $this->initializeServer();
+            return;
+        }
+        $language->setLanguageFromConfiguration($configLang);
         $this->configuration->setLanguage($language);
 
         $this->initializeServer();

@@ -84,20 +84,20 @@ class LanguageTest extends TestCase
 
     public function testSetLanguageReturnsCorrectLanguageForValidConfigLanguage(): void
     {
-        $language = $this->language->setLanguage(true, 'language_en.php');
+        $language = $this->language->setLanguageWithDetection('language_en.php');
         $this->assertEquals('en', $language);
     }
 
     public function testSetLanguageReturnsCorrectLanguageForValidSessionLanguage(): void
     {
         $this->session->method('get')->willReturn('en');
-        $language = $this->language->setLanguage(true, 'language_en.php');
+        $language = $this->language->setLanguageWithDetection('language_en.php');
         $this->assertEquals('en', $language);
     }
 
     public function testSetLanguageReturnsFallbackLanguageForInvalidConfigLanguageAndNoOtherDetectedLanguages(): void
     {
-        $language = $this->language->setLanguage(true, 'invalid_language.php');
+        $language = $this->language->setLanguageWithDetection('invalid_language.php');
         $this->assertEquals('en', $language);
     }
 }

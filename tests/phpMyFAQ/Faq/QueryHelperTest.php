@@ -29,7 +29,7 @@ class QueryHelperTest extends TestCase
 
         $configuration = Configuration::getConfigurationInstance();
         $language = new Language($configuration, $this->createMock(Session::class));
-        $language->setLanguage(true, 'language_en.php');
+        $language->setLanguageWithDetection('language_en.php');
 
         $configuration->setLanguage($language);
     }

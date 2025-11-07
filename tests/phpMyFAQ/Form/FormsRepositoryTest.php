@@ -37,7 +37,7 @@ class FormsRepositoryTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
         $language = new Language($this->configuration, $this->createMock(Session::class));
-        $language->setLanguage(false, 'en');
+        $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 
         $this->repository = new FormsRepository($this->configuration);

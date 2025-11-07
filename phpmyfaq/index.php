@@ -88,7 +88,9 @@ $csrfLogoutToken = Token::getInstance($container->get('session'))->getTokenStrin
 // Get language (default: English)
 //
 $Language = $container->get('phpmyfaq.language');
-$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $faqConfig->get('main.languageDetection')
+    ? $Language->setLanguageWithDetection($faqConfig->get('main.language'))
+    : $Language->setLanguageFromConfiguration($faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
 if (!Language::isASupportedLanguage($faqLangCode)) {

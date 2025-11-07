@@ -25,6 +25,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Service;
+use phpMyFAQ\Services;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
