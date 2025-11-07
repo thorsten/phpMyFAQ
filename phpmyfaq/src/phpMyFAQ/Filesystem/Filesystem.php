@@ -21,11 +21,6 @@ namespace phpMyFAQ\Filesystem;
 
 use phpMyFAQ\Core\Exception;
 
-/**
- * Class Filesystem
- *
- * @package phpMyFAQ
- */
 class Filesystem
 {
     private readonly string $rootPath;
@@ -33,11 +28,11 @@ class Filesystem
     private string $path;
 
     /**
-     * Constructor, sets the root path of the primary phpMyFAQ installation.
+     * Constructor sets the root path of the primary phpMyFAQ installation.
      */
     public function __construct(string $rootPath = '')
     {
-        $this->rootPath = $rootPath === '' || $rootPath === '0' ? dirname(__DIR__, 2) : $rootPath;
+        $this->rootPath = $rootPath === '' || $rootPath === '0' ? dirname(__DIR__, levels: 2) : $rootPath;
     }
 
     public function getRootPath(): string
@@ -56,62 +51,60 @@ class Filesystem
     }
 
     /**
-     * Copies recursively the source to the destination.
-     *
+     * Recursively copies the source to the destination.
      * @throws Exception
      */
     public function recursiveCopy(string $source, string $dest): bool
     {
-        if (is_dir($source)) {
-            $directoryHandle = opendir($source);
-            $directoryName = substr($source, strrpos($source, '/') + 1);
-
-            $this->createDirectory($dest . '/' . $directoryName, 0750, true);
-
-            while ($file = readdir($directoryHandle)) {
-                if ('.' !== $file && '..' !== $file) {
-                    if (!is_dir($source . '/' . $file)) {
-                        $this->copy($source . '/' . $file, $dest . '/' . $directoryName . '/' . $file);
-                    } else {
-                        $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
-                    }
-                }
-            }
-
-            closedir($directoryHandle);
-
-            return true;
+        if (!is_dir($source)) {
+            return false;
         }
 
-        return false;
+        $directoryName = substr($source, strrpos($source, needle: '/') + 1);
+        $this->createDirectory($dest . DIRECTORY_SEPARATOR . $directoryName, mode: 0o750, recursive: true);
+
+        $entries = scandir($source);
+        if ($entries === false) {
+            return false;
+        }
+
+        foreach (array_diff($entries, ['.', '..']) as $file) {
+            $sourcePath = $source . DIRECTORY_SEPARATOR . $file;
+            $targetPath = $dest . DIRECTORY_SEPARATOR . $directoryName . DIRECTORY_SEPARATOR . $file;
+
+            if (is_link($sourcePath)) {
+                continue;
+            }
+
+            if (is_dir($sourcePath)) {
+                $this->recursiveCopy($sourcePath, $dest . DIRECTORY_SEPARATOR . $directoryName);
+                continue;
+            }
+
+            // Default: try to copy, copy() validates readability and destination
+            $this->copy($sourcePath, $targetPath);
+        }
+
+        return true;
     }
 
     /**
      * Creates directory.
-     *
-     * @param string $pathname  The directory path
-     * @param int    $mode      The mode is 0777 by default
-     * @param bool   $recursive Allows the creation of nested directories
-     *                          specified in the pathname.
      */
-    public function createDirectory(string $pathname, int $mode = 0777, bool $recursive = false): bool
+    public function createDirectory(string $pathname, int $mode = 0o777, bool $recursive = false): bool
     {
         if (is_dir($pathname)) {
-            return true; // Directory already exists
+            return true;
         }
 
         return mkdir($pathname, $mode, $recursive);
     }
 
     /**
-     * Moves given directory.
+     * Moves a given directory.
      */
     public function moveDirectory(string $sourcePath, string $destinationPath): bool
     {
-        if (is_dir($destinationPath)) {
-            return false;
-        }
-
         return rename($sourcePath, $destinationPath);
     }
 
@@ -120,23 +113,25 @@ class Filesystem
      */
     public function deleteDirectory(string $pathname): bool
     {
-        if (!is_dir($pathname)) {
+        // Guard for empty or invalid paths
+        if ($pathname === '' || $pathname === '0' || !is_dir($pathname)) {
             return false;
         }
 
-        $directory = opendir($pathname);
-        while (false !== ($file = readdir($directory))) {
-            if ($file !== '.' && $file !== '..') {
-                $full = $pathname . '/' . $file;
-                if (is_dir($full)) {
-                    $this->deleteDirectory($full);
-                } else {
-                    unlink($full);
-                }
-            }
+        $entries = scandir($pathname);
+        if ($entries === false) {
+            return false;
         }
 
-        closedir($directory);
+        foreach (array_diff($entries, ['.', '..']) as $file) {
+            $full = $pathname . DIRECTORY_SEPARATOR . $file;
+
+            if (is_dir($full) && !is_link($full)) {
+                $this->deleteDirectory($full);
+                continue;
+            }
+            unlink($full);
+        }
 
         return rmdir($pathname);
     }
@@ -148,12 +143,8 @@ class Filesystem
      */
     public function copy(string $sourceFileName, string $destinationFileName): bool
     {
-        if (!is_readable($sourceFileName)) {
-            throw new Exception($sourceFileName . ' is not readable.');
-        }
-
-        if (!is_writable(dirname($destinationFileName))) {
-            throw new Exception($destinationFileName . ' is not writeable.');
+        if (!is_readable($sourceFileName) || !is_writable(dirname($destinationFileName))) {
+            throw new Exception(message: 'Source not readable or destination directory not writeable.');
         }
 
         if (copy($sourceFileName, $destinationFileName) === false) {
