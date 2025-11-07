@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Glossary\GlossaryHelper;
 use phpMyFAQ\Glossary\GlossaryRepository;
 use phpMyFAQ\Glossary\GlossaryRepositoryInterface;
 
@@ -37,12 +38,14 @@ class Glossary
 
     // Repository to access storage
     private GlossaryRepositoryInterface $repository;
+    private GlossaryHelper $helper;
 
     public function __construct(
         private readonly Configuration $configuration,
         ?GlossaryRepositoryInterface $repository = null,
     ) {
         $this->repository = $repository ?? new GlossaryRepository($this->configuration);
+        $this->helper = new GlossaryHelper();
     }
 
     /**
@@ -52,6 +55,11 @@ class Glossary
      */
     public function insertItemsIntoContent(string $content = ''): string
     {
+        // Lazy init in case a test created a mock without running the constructor
+        if (!isset($this->helper)) {
+            $this->helper = new GlossaryHelper();
+        }
+
         if ($content === '') {
             return '';
         }
@@ -79,44 +87,15 @@ class Glossary
      */
     public function setTooltip(array $matches): string
     {
-        $prefix = '';
-        $postfix = '';
-        $item = '';
-        $count = count($matches);
-
-        if ($count > 9) {
-            // if the word is at the end of the string
-            $prefix = $matches[9];
-            $item = $matches[10];
+        if (!isset($this->helper)) {
+            $this->helper = new GlossaryHelper();
         }
 
-        if ($item === '' && $count > 7) {
-            // if the word is at the beginning of the string
-            $item = $matches[7];
-            $postfix = $matches[8];
-        }
-
-        if ($item === '' && $count > 4) {
-            // if the word is else where in the string
-            $prefix = $matches[4];
-            $item = $matches[5];
-            $postfix = $matches[6];
-        }
-
-        if ($item === '' && $count >= 3) {
-            // simplified pattern fallback: (^|\W) (item) (\W|$)
-            $prefix = $matches[1] ?? '';
-            $item = $matches[2] ?? '';
-            $postfix = $matches[3] ?? '';
-        }
-
+        [$prefix, $item, $postfix] = $this->helper->extractMatchParts($matches);
         if ($item === '') {
-            // Fallback: the original matched string
             return $matches[0];
         }
-
-        $fmt = '%s<abbr data-bs-toggle="tooltip" data-bs-placement="bottom" title="%s" class="initialism">%s</abbr>%s';
-        return sprintf($fmt, $prefix, $this->definition, $item, $postfix);
+        return $this->helper->formatTooltip($this->definition, $item, $prefix, $postfix);
     }
 
     /**
@@ -157,7 +136,11 @@ class Glossary
      */
     public function create(string $item, string $definition): bool
     {
-        return $this->repository->create($this->currentLanguage(), $item, $definition);
+        $ok = $this->repository->create($this->currentLanguage(), $item, $definition);
+        if ($ok) {
+            unset($this->cachedItems[$this->currentLanguage()]);
+        }
+        return $ok;
     }
 
     /**
@@ -169,7 +152,11 @@ class Glossary
      */
     public function update(int $id, string $item, string $definition): bool
     {
-        return $this->repository->update($id, $this->currentLanguage(), $item, $definition);
+        $ok = $this->repository->update($id, $this->currentLanguage(), $item, $definition);
+        if ($ok) {
+            unset($this->cachedItems[$this->currentLanguage()]);
+        }
+        return $ok;
     }
 
     /**
@@ -179,7 +166,11 @@ class Glossary
      */
     public function delete(int $id): bool
     {
-        return $this->repository->delete($id, $this->currentLanguage());
+        $ok = $this->repository->delete($id, $this->currentLanguage());
+        if ($ok) {
+            unset($this->cachedItems[$this->currentLanguage()]);
+        }
+        return $ok;
     }
 
     public function getLanguage(): string

@@ -3,12 +3,14 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
-use PHPUnit\Framework\MockObject\Exception;
+use phpMyFAQ\Glossary\GlossaryRepository;use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class GlossaryTest extends TestCase
 {
+    private Configuration $configuration;
+
     private Glossary $glossary;
 
     /**
@@ -22,12 +24,12 @@ class GlossaryTest extends TestCase
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-        $config = new Configuration($dbHandle);
-        $language = new Language($config, $this->createMock(Session::class));
+        $this->configuration = new Configuration($dbHandle);
+        $language = new Language($this->configuration, $this->createMock(Session::class));
         $language->setLanguage(false, 'en');
-        $config->setLanguage($language);
+        $this->configuration->setLanguage($language);
 
-        $this->glossary = new Glossary($config);
+        $this->glossary = new Glossary($this->configuration);
         $this->glossary->setLanguage('en');
     }
 
@@ -83,22 +85,19 @@ class GlossaryTest extends TestCase
         $this->assertIsArray($result);
     }
 
-    public function testInsertItemsIntoContent()
+    public function testInsertItemsIntoContent(): void
     {
-        // Create a mock of the class containing the method you want to test
         $glossary = $this->getMockBuilder(Glossary::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['fetchAll'])
             ->getMock();
 
-        // Define the return value for fetchAll() to simulate glossary items
         $glossaryItems = [
             ['item' => 'word', 'definition' => 'definition'],
             ['item' => 'phrase', 'definition' => 'definition'],
         ];
         $glossary->method('fetchAll')->willReturn($glossaryItems);
 
-        // Define test cases with different input content
         $testCases = [
             // Case 1: No content
             [
@@ -133,5 +132,39 @@ class GlossaryTest extends TestCase
             // Assert that the output matches the expected result
             $this->assertEquals($case['expected'], $output);
         }
+    }
+
+    public function testCacheInvalidationOnCreateUpdateDelete(): void
+    {
+        $this->glossary->create('cItem', 'cDef');
+        $firstFetch = $this->glossary->fetchAll();
+        $this->assertNotEmpty($firstFetch);
+        $this->glossary->update($firstFetch[0]['id'], 'cItemUpdated', 'cDefUpdated');
+        $secondFetch = $this->glossary->fetchAll();
+        $this->assertNotSame($firstFetch[0]['item'], $secondFetch[0]['item']);
+        $this->glossary->delete($secondFetch[0]['id']);
+        $thirdFetch = $this->glossary->fetchAll();
+        $this->assertEmpty($thirdFetch);
+    }
+
+    public function testRepositoryErrorHandling(): void
+    {
+        $repoMock = $this->getMockBuilder(GlossaryRepository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create', 'update', 'delete', 'fetchAll', 'fetch'])
+            ->getMock();
+        $repoMock->method('fetchAll')->willReturn([]);
+        $repoMock->method('fetch')->willReturn([]);
+        $repoMock->method('create')->willReturn(false);
+        $repoMock->method('update')->willReturn(false);
+        $repoMock->method('delete')->willReturn(false);
+
+        $glossary = new Glossary($this->configuration, $repoMock);
+        $glossary->setLanguage('en');
+        $this->assertFalse($glossary->create('x','y'));
+        $this->assertFalse($glossary->update(1,'x','y'));
+        $this->assertFalse($glossary->delete(1));
+        $this->assertEmpty($glossary->fetchAll());
+        $this->assertEmpty($glossary->fetch(1));
     }
 }

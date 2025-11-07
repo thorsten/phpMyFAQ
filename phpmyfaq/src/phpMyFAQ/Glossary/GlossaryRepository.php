@@ -22,12 +22,18 @@ namespace phpMyFAQ\Glossary;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Strings;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 readonly class GlossaryRepository implements GlossaryRepositoryInterface
 {
+    private LoggerInterface $logger;
+
     public function __construct(
         private Configuration $configuration,
+        ?LoggerInterface $logger = null,
     ) {
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function fetchAll(string $language): array
@@ -35,21 +41,26 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $db = $this->configuration->getDb();
         $items = [];
 
-        $query = sprintf(
-            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC",
-            Database::getTablePrefix(),
-            $db->escape($language),
-        );
+        $sql = "SELECT id, lang, item, definition FROM %sfaqglossary WHERE lang = '%s' ORDER BY item ASC";
+        $query = sprintf($sql, Database::getTablePrefix(), $db->escape($language));
 
         $result = $db->query($query);
-
-        while ($row = $db->fetchObject($result)) {
+        if ($result === false) {
+            $this->logger->error(
+                message: 'Glossary fetchAll query failed',
+                context: ['language' => $language],
+            );
+            return [];
+        }
+        $row = $db->fetchObject($result);
+        while ($row) {
             $items[] = [
                 'id' => (int) $row->id,
                 'language' => (string) $row->lang,
                 'item' => stripslashes((string) $row->item),
                 'definition' => stripslashes((string) $row->definition),
             ];
+            $row = $db->fetchObject($result);
         }
 
         return $items;
@@ -59,23 +70,27 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
     {
         $db = $this->configuration->getDb();
 
-        $query = sprintf(
-            "SELECT id, lang, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $db->escape($language),
-        );
+        $sql = "SELECT id, lang, item, definition FROM %sfaqglossary WHERE id = %d AND lang = '%s'";
+        $query = sprintf($sql, Database::getTablePrefix(), $id, $db->escape($language));
 
         $result = $db->query($query);
+        if ($result === false) {
+            $this->logger->warning(
+                message: 'Glossary fetch failed',
+                context: ['id' => $id, 'language' => $language],
+            );
+            return [];
+        }
         $item = [];
-
-        while ($row = $db->fetchObject($result)) {
+        $row = $db->fetchObject($result);
+        while ($row) {
             $item = [
                 'id' => (int) $row->id,
                 'language' => (string) $row->lang,
                 'item' => stripslashes((string) $row->item),
                 'definition' => stripslashes((string) $row->definition),
             ];
+            $row = $db->fetchObject($result);
         }
 
         return $item;
@@ -89,16 +104,24 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedDefinition = $db->escape($definition);
         $escapedLanguage = $db->escape($language);
 
-        $query = sprintf(
-            "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $db->nextId(Database::getTablePrefix() . 'faqglossary', column: 'id'),
-            $escapedLanguage,
-            Strings::htmlspecialchars(substr($escapedItem, 0, 254)),
-            Strings::htmlspecialchars($escapedDefinition),
-        );
+        $id = $db->nextId(Database::getTablePrefix() . 'faqglossary', column: 'id');
+        $safeItem = Strings::htmlspecialchars(substr(
+            string: $escapedItem,
+            offset: 0,
+            length: 254,
+        ));
+        $safeDef = Strings::htmlspecialchars($escapedDefinition);
+        $sql = "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')";
+        $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $safeItem, $safeDef);
 
-        return (bool) $db->query($query);
+        $ok = (bool) $db->query($query);
+        if (!$ok) {
+            $this->logger->error(
+                message: 'Glossary create failed',
+                context: ['language' => $language, 'item' => $item],
+            );
+        }
+        return $ok;
     }
 
     public function update(int $id, string $language, string $item, string $definition): bool
@@ -109,29 +132,39 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedDefinition = $db->escape($definition);
         $escapedLanguage = $db->escape($language);
 
-        $query = sprintf(
-            "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            Strings::htmlspecialchars(substr($escapedItem, 0, 254)),
-            Strings::htmlspecialchars($escapedDefinition),
-            $id,
-            $escapedLanguage,
-        );
+        $safeItem = Strings::htmlspecialchars(substr(
+            string: $escapedItem,
+            offset: 0,
+            length: 254,
+        ));
+        $safeDef = Strings::htmlspecialchars($escapedDefinition);
+        $sql = "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'";
+        $query = sprintf($sql, Database::getTablePrefix(), $safeItem, $safeDef, $id, $escapedLanguage);
 
-        return (bool) $db->query($query);
+        $ok = (bool) $db->query($query);
+        if (!$ok) {
+            $this->logger->error(
+                message: 'Glossary update failed',
+                context: ['id' => $id, 'language' => $language],
+            );
+        }
+        return $ok;
     }
 
     public function delete(int $id, string $language): bool
     {
         $db = $this->configuration->getDb();
 
-        $query = sprintf(
-            "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $db->escape($language),
-        );
+        $sql = "DELETE FROM %sfaqglossary WHERE id = %d AND lang = '%s'";
+        $query = sprintf($sql, Database::getTablePrefix(), $id, $db->escape($language));
 
-        return (bool) $db->query($query);
+        $ok = (bool) $db->query($query);
+        if (!$ok) {
+            $this->logger->warning(
+                message: 'Glossary delete failed',
+                context: ['id' => $id, 'language' => $language],
+            );
+        }
+        return $ok;
     }
 }
