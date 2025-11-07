@@ -56,10 +56,11 @@ class Instance
      */
     public function create(InstanceEntity $instanceEntity): int
     {
-        $this->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
+        $this->setId($this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', column: 'id'));
 
+        $query = "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)";
         $insert = sprintf(
-            "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
+            $query,
             Database::getTablePrefix(),
             $this->getId(),
             $this->configuration->getDb()->escape($instanceEntity->getUrl()),
@@ -99,7 +100,8 @@ class Instance
      */
     public function getAll(): array
     {
-        $select = sprintf('SELECT * FROM %sfaqinstances ORDER BY id', Database::getTablePrefix());
+        $query = 'SELECT * FROM %sfaqinstances ORDER BY id';
+        $select = sprintf($query, Database::getTablePrefix());
 
         $result = $this->configuration->getDb()->query($select);
 
@@ -111,7 +113,8 @@ class Instance
      */
     public function getById(int $id): object
     {
-        $select = sprintf('SELECT * FROM %sfaqinstances WHERE id = %d', Database::getTablePrefix(), $id);
+        $query = 'SELECT * FROM %sfaqinstances WHERE id = %d';
+        $select = sprintf($query, Database::getTablePrefix(), $id);
 
         $result = $this->configuration->getDb()->query($select);
 
@@ -123,8 +126,9 @@ class Instance
      */
     public function update(int $id, InstanceEntity $instanceEntity): bool
     {
+        $query = "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d";
         $update = sprintf(
-            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
+            $query,
             Database::getTablePrefix(),
             $this->configuration->getDb()->escape($instanceEntity->getInstance()),
             $this->configuration->getDb()->escape($instanceEntity->getComment()),
@@ -141,9 +145,12 @@ class Instance
      */
     public function delete(int $id): bool
     {
+        $queryDeleteInstance = 'DELETE FROM %sfaqinstances WHERE id = %d';
+        $queryDeleteConfig = 'DELETE FROM %sfaqinstances_config WHERE instance_id = %d';
+
         $deletes = [
-            sprintf('DELETE FROM %sfaqinstances WHERE id = %d', Database::getTablePrefix(), $id),
-            sprintf('DELETE FROM %sfaqinstances_config WHERE instance_id = %d', Database::getTablePrefix(), $id),
+            sprintf($queryDeleteInstance, Database::getTablePrefix(), $id),
+            sprintf($queryDeleteConfig, Database::getTablePrefix(), $id),
         ];
 
         foreach ($deletes as $delete) {
@@ -162,11 +169,9 @@ class Instance
      */
     public function addConfig(string $name, string $value): mixed
     {
+        $query = "INSERT INTO %sfaqinstances_config VALUES (%d, '%s', '%s')";
         $insert = sprintf(
-            "INSERT INTO
-                %sfaqinstances_config
-            VALUES
-                (%d, '%s', '%s')",
+            $query,
             Database::getTablePrefix(),
             $this->getId(),
             $this->configuration->getDb()->escape(trim($name)),
@@ -199,13 +204,8 @@ class Instance
      */
     public function getInstanceConfig(int $instanceId): array
     {
-        $query = sprintf('
-            SELECT
-                config_name, config_value
-            FROM
-                %sfaqinstances_config
-            WHERE
-                instance_id = %d', Database::getTablePrefix(), $instanceId);
+        $query = 'SELECT config_name, config_value FROM %sfaqinstances_config WHERE instance_id = %d';
+        $query = sprintf($query, Database::getTablePrefix(), $instanceId);
 
         $result = $this->configuration->getDb()->query($query);
         $config = $this->configuration->getDb()->fetchAll($result);
