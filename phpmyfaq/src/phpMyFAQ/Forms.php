@@ -20,12 +20,14 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Form\FormsHelper;
 use phpMyFAQ\Form\FormsRepository;
 use phpMyFAQ\Form\FormsRepositoryInterface;
 use phpMyFAQ\Language\LanguageCodes;
 
 readonly class Forms
 {
+    /* @mago-expect[too-many-methods]: Backward-compatible wrappers retained until the next major release. */
     private Translation $translation;
     private FormsRepositoryInterface $repository;
 
@@ -45,44 +47,7 @@ readonly class Forms
     public function getFormData(int $formId): array
     {
         $formData = $this->repository->fetchFormDataByFormId($formId);
-
-        foreach ($formData as $input) {
-            if ($input->input_lang === 'default') {
-                $input->input_label = Translation::get($input->input_label);
-            }
-        }
-
-        $filteredEntries = [];
-
-        $formDataNoMatchingLanguage = [];
-        $idsAlreadyFiltered = [];
-
-        foreach ($formData as $entry) {
-            if ($entry->input_lang === $this->translation->getCurrentLanguage()) {
-                $filteredEntries[] = $entry;
-                $idsAlreadyFiltered[] = $entry->input_id;
-            } else {
-                $formDataNoMatchingLanguage[] = $entry;
-            }
-        }
-
-        foreach ($formDataNoMatchingLanguage as $item) {
-            if ($item->input_lang === 'default' && !in_array($item->input_id, $idsAlreadyFiltered, strict: true)) {
-                $filteredEntries[] = $item;
-            }
-        }
-
-        usort($filteredEntries, [$this, 'sortByInputId']);
-
-        return $filteredEntries;
-    }
-
-    /**
-     * Sort function for usort | Sorting form data by input-id
-     */
-    private function sortByInputId(object $first, object $second): int
-    {
-        return $first->input_id - $second->input_id;
+        return (new FormsHelper())->filterAndSortFormData($formData, $this->translation);
     }
 
     /**
@@ -104,28 +69,18 @@ readonly class Forms
     }
 
     /**
-     * Save the (de-)activation of a given input
-     *
-     * @param int $formId Form ID
-     * @param int $inputId Input ID
-     * @param int $activated Activation status
+     * Update activation and required flags of a given input.
      */
-    public function saveActivateInputStatus(int $formId, int $inputId, int $activated): bool
+    public function updateInputFlags(int $formId, int $inputId, ?int $activated = null, ?int $required = null): bool
     {
-        return $this->repository->updateInputActive($formId, $inputId, $activated);
-    }
-
-    /**
-     * Save the requirement status of a given input
-     *
-     * @param int $formId Form ID
-     * @param int $inputId Input ID
-     * @param int $required
-     * @return bool
-     */
-    public function saveRequiredInputStatus(int $formId, int $inputId, int $required): bool
-    {
-        return $this->repository->updateInputRequired($formId, $inputId, $required);
+        $ok = true;
+        if ($activated !== null) {
+            $ok = $ok && $this->repository->updateInputActive($formId, $inputId, $activated);
+        }
+        if ($required !== null) {
+            $ok = $ok && $this->repository->updateInputRequired($formId, $inputId, $required);
+        }
+        return $ok;
     }
 
     /**
@@ -208,5 +163,21 @@ readonly class Forms
     public function getInsertQueries(array $input): string
     {
         return $this->repository->buildInsertQuery($input);
+    }
+
+    /**
+     * Save the (de-)activation of a given input (legacy wrapper).
+     */
+    public function saveActivateInputStatus(int $formId, int $inputId, int $activated): bool
+    {
+        return $this->updateInputFlags($formId, $inputId, activated: $activated);
+    }
+
+    /**
+     * Save the requirement status of a given input (legacy wrapper).
+     */
+    public function saveRequiredInputStatus(int $formId, int $inputId, int $required): bool
+    {
+        return $this->updateInputFlags($formId, $inputId, required: $required);
     }
 }

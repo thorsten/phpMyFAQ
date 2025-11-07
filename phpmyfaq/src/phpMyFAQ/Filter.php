@@ -103,10 +103,17 @@ class Filter
         parse_str($queryString, $urlData);
 
         foreach ($urlData as $key => $urlPart) {
-            $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);
+            $cleanKey = strip_tags((string) $key);
+            if (is_array($urlPart)) {
+                // sanitize one level deep; http_build_query will handle arrays
+                $cleanUrlData[$cleanKey] = array_map(static fn($v) => strip_tags((string) $v), $urlPart);
+                continue;
+            }
+
+            $cleanUrlData[$cleanKey] = strip_tags((string) $urlPart);
         }
 
-        return http_build_query($cleanUrlData);
+        return http_build_query($cleanUrlData, arg_separator: '&', encoding_type: PHP_QUERY_RFC3986);
     }
 
     /**
@@ -114,7 +121,12 @@ class Filter
      */
     public function filterSanitizeString(string $string): string
     {
-        $string = htmlspecialchars($string);
+        $string = htmlspecialchars(
+            string: $string,
+            flags: ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401,
+            encoding: 'UTF-8',
+            double_encode: true,
+        );
         $string = preg_replace(
             pattern: '/\x00|<[^>]*>?/',
             replacement: '',
