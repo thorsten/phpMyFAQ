@@ -261,7 +261,10 @@ class Mail
             $keys = array_keys($target);
             throw new Exception(
                 sprintf('Too many e-mail addresses, %s, ', $keys[0])
-                . sprintf(format: "have been already added as '%s'!", values: $targetAlias),
+                . sprintf(
+                    format: "have been already added as '%s'!",
+                    values: $targetAlias,
+                ),
             );
         }
 
@@ -292,20 +295,37 @@ class Mail
 
         if (isset($name)) {
             // Remove CR and LF characters to prevent header injection
-            $name = str_replace(search: ["\n", "\r"], replace: '', subject: $name);
+            $name = str_replace(
+                search: ["\n", "\r"],
+                replace: '',
+                subject: $name,
+            );
 
             // Encode any special characters in the displayed name
             $name = iconv_mime_encode($targetAlias, $name);
 
             // Wrap the displayed name in quotes (to fix problems with commas etc.),
             // and escape any existing quotes
-            $name = '"' . str_replace(search: '"', replace: '\"', subject: $name) . '"';
+            $name =
+                '"'
+                . str_replace(
+                    search: '"',
+                    replace: '\"',
+                    subject: $name,
+                )
+                . '"';
         }
 
         // Add the email address into the target array
         $target[$address] = $name;
         // On Windows, when using PHP built-in mail drops any name, just use the e-mail address
-        if ('WIN' !== strtoupper(substr(string: PHP_OS, offset: 0, length: 3))) {
+        if (
+            'WIN' !== strtoupper(substr(
+                string: PHP_OS,
+                offset: 0,
+                length: 3,
+            ))
+        ) {
             return true;
         }
 
@@ -332,7 +352,13 @@ class Mail
         }
 
         $unsafe = ["\r", "\n"];
-        if ($address !== str_replace(search: $unsafe, replace: '', subject: $address)) {
+        if (
+            $address !== str_replace(
+                search: $unsafe,
+                replace: '',
+                subject: $address,
+            )
+        ) {
             return false;
         }
 
@@ -408,7 +434,10 @@ class Mail
             $to[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
-        $recipients = implode(separator: ',', array: $to);
+        $recipients = implode(
+            separator: ',',
+            array: $to,
+        );
         // Check for the need of undisclosed recipients outlook-like <TO:>
         if (($recipients === '' || $recipients === '0') && 0 === count($this->cc)) {
             $recipients = '<Undisclosed-Recipient:;>';
@@ -469,7 +498,10 @@ class Mail
             $notifyTos[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
-        $notifyTo = implode(separator: ',', array: $notifyTos);
+        $notifyTo = implode(
+            separator: ',',
+            array: $notifyTos,
+        );
         if ($notifyTo !== '' && $notifyTo !== '0') {
             $this->headers['Disposition-Notification-To'] = $notifyTo;
         }
@@ -549,7 +581,10 @@ class Mail
      */
     public static function getDate(int $date): string
     {
-        return date(format: 'r', timestamp: $date);
+        return date(
+            format: 'r',
+            timestamp: $date,
+        );
     }
 
     /**
@@ -685,7 +720,11 @@ class Mail
             subject: $text,
         );
         // Set any LF to the RFC 2822 EOL
-        return str_replace(search: "\n", replace: $this->eol, subject: $text);
+        return str_replace(
+            search: "\n",
+            replace: $this->eol,
+            subject: $text,
+        );
     }
 
     /**
@@ -696,7 +735,11 @@ class Mail
      */
     public static function getMUA(string $mua): Builtin|Smtp
     {
-        $className = ucfirst(str_replace(search: '-', replace: '', subject: $mua));
+        $className = ucfirst(str_replace(
+            search: '-',
+            replace: '',
+            subject: $mua,
+        ));
         $class = 'phpMyFAQ\Mail\\' . $className;
 
         return new $class();
