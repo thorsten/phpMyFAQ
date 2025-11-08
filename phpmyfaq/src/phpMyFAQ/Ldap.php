@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Ldap class provides methods and functions for LDAP and/or Active Directory.
  *
@@ -19,6 +17,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2004-12-16
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -66,7 +66,7 @@ class Ldap
     }
 
     /**
-     * Connects to given LDAP server with given credentials.
+     * Connects to a given LDAP server with given credentials.
      */
     public function connect(
         string $ldapServer,
@@ -93,33 +93,37 @@ class Ldap
         foreach ($this->configuration->getLdapOptions() as $key => $ldapOption) {
             if (!ldap_set_option($this->ds, constant($key), $ldapOption)) {
                 $this->errno = ldap_errno($this->ds);
-                $this->error = sprintf(
-                    'Unable to set LDAP option "%s" to "%s" (Error: %s).',
-                    $key,
-                    $ldapOption,
-                    ldap_error($this->ds),
-                );
+                $errorMessage = 'Unable to set LDAP option "%s" to "%s" (Error: %s).';
+                $this->error = sprintf($errorMessage, $key, $ldapOption, ldap_error($this->ds));
 
                 return false;
             }
         }
 
-        if ($this->configuration->get('ldap.ldap_use_dynamic_login')) {
-            // Check for dynamic user binding
-            $ldapRdn =
-                $this->configuration->get('ldap.ldap_dynamic_login_attribute') . '=' . $ldapUser . ',' . $ldapBase;
+        // Default: user binding without RDN.
+        $ldapBind = $this->bind($ldapUser, $ldapPassword);
+
+        // Dynamic user binding (the highest priority) – overrides default.
+        if ($this->configuration->get(item: 'ldap.ldap_use_dynamic_login')) {
+            $loginAttribute = $this->configuration->get(item: 'ldap.ldap_dynamic_login_attribute');
+            $ldapRdn = $loginAttribute . '=' . $ldapUser . ',' . $ldapBase;
             $ldapBind = $this->bind($ldapRdn, $ldapPassword);
-        } elseif ($this->configuration->get('ldap.ldap_use_anonymous_login')) {
-            // Check for anonymous binding
+        }
+
+        // Anonymous binding only if not already bound via dynamic login.
+        if (
+            !$this->configuration->get(item: 'ldap.ldap_use_dynamic_login')
+            && $this->configuration->get(item: 'ldap.ldap_use_anonymous_login')
+        ) {
             $ldapBind = $this->bind();
-        } else {
-            // Check for user binding without RDN
-            $ldapBind = $this->bind($ldapUser, $ldapPassword);
         }
 
         if (false === $ldapBind) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Unable to bind to LDAP server (Error: %s).', ldap_error($this->ds));
+            $this->error = sprintf(
+                format: 'Unable to bind to LDAP server (Error: %s).',
+                values: ldap_error($this->ds),
+            );
             $this->ds = false;
 
             return false;
@@ -153,7 +157,7 @@ class Ldap
      */
     public function getMail(string $username): bool|string
     {
-        return $this->getLdapData($username, 'mail');
+        return $this->getLdapData($username, data: 'mail');
     }
 
     /**
@@ -177,22 +181,22 @@ class Ldap
         }
 
         if (!array_key_exists($data, $this->ldapConfig['ldap_mapping'])) {
-            $this->error = sprintf(
-                'The requested data field "%s" does not exist in LDAP mapping configuration.',
-                $data,
-            );
+            $errorMessage = 'The requested data field "%s" does not exist in LDAP mapping configuration.';
+            $this->error = sprintf($errorMessage, $data);
 
             return false;
         }
 
-        $filter = sprintf('(%s=%s)', $this->configuration->get('ldap.ldap_mapping.username'), $this->quote($username));
+        $comparison = '(%s=%s)';
+        $filter = sprintf(
+            $comparison,
+            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            $this->quote($username),
+        );
 
-        if ($this->configuration->get('ldap.ldap_use_memberOf')) {
-            $filter = sprintf(
-                '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))',
-                $filter,
-                $this->configuration->get('ldap.ldap_mapping.memberOf'),
-            );
+        if ($this->configuration->get(item: 'ldap.ldap_use_memberOf')) {
+            $comparison = '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))';
+            $filter = sprintf($comparison, $filter, $this->configuration->get(item: 'ldap.ldap_mapping.memberOf'));
         }
 
         $fields = [$this->ldapConfig['ldap_mapping'][$data]];
@@ -200,7 +204,8 @@ class Ldap
         $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
-            $this->error = sprintf('Unable to search for "%s" (Error: %s)', $username, ldap_error($this->ds));
+            $errorMessage = 'Unable to search for "%s" (Error: %s)';
+            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
 
             return false;
         }
@@ -209,7 +214,10 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->error = sprintf(
+                format: 'Cannot get the value(s). Error: %s',
+                values: ldap_error($this->ds),
+            );
 
             return false;
         }
@@ -261,11 +269,17 @@ class Ldap
             return false;
         }
 
-        $filter = sprintf('(%s=%s)', $this->configuration->get('ldap.ldap_mapping.username'), $this->quote($username));
+        $comparison = '(%s=%s)';
+        $filter = sprintf(
+            $comparison,
+            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            $this->quote($username),
+        );
         $sr = ldap_search($this->ds, $this->base, $filter);
 
         if (false === $sr) {
-            $this->error = sprintf('Unable to search for "%s" (Error: %s)', $username, ldap_error($this->ds));
+            $errorMessage = 'Unable to search for "%s" (Error: %s)';
+            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
 
             return false;
         }
@@ -273,7 +287,10 @@ class Ldap
         $entryId = ldap_first_entry($this->ds, $sr);
 
         if (false === $entryId) {
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->error = sprintf(
+                format: 'Cannot get the value(s). Error: %s',
+                values: ldap_error($this->ds),
+            );
 
             return false;
         }
@@ -288,7 +305,7 @@ class Ldap
      */
     public function getCompleteName(string $username): bool|string
     {
-        return $this->getLdapData($username, 'name');
+        return $this->getLdapData($username, data: 'name');
     }
 
     /**
@@ -309,14 +326,20 @@ class Ldap
             return false;
         }
 
-        $filter = sprintf('(%s=%s)', $this->configuration->get('ldap.ldap_mapping.username'), $this->quote($username));
+        $comparison = '(%s=%s)';
+        $filter = sprintf(
+            $comparison,
+            $this->configuration->get(item: 'ldap.ldap_mapping.username'),
+            $this->quote($username),
+        );
 
         $fields = ['memberOf'];
 
         $searchResult = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (!$searchResult) {
-            $this->error = sprintf('Unable to search for "%s" (Error: %s)', $username, ldap_error($this->ds));
+            $errorMessage = 'Unable to search for "%s" (Error: %s)';
+            $this->error = sprintf($errorMessage, $username, ldap_error($this->ds));
 
             return false;
         }
@@ -325,7 +348,10 @@ class Ldap
 
         if (!$entryId) {
             $this->errno = ldap_errno($this->ds);
-            $this->error = sprintf('Cannot get the value(s). Error: %s', ldap_error($this->ds));
+            $this->error = sprintf(
+                format: 'Cannot get the value(s). Error: %s',
+                values: ldap_error($this->ds),
+            );
 
             return false;
         }

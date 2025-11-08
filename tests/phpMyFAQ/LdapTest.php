@@ -159,7 +159,7 @@ class LdapTest extends TestCase
     }
 
     /**
-     * Test private getLdapData method via reflection
+     * Test the private getLdapData method via reflection
      */
     public function testGetLdapDataWithInvalidField(): void
     {
