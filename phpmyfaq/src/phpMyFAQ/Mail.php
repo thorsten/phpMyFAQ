@@ -175,12 +175,12 @@ class Mail
 
     private readonly Configuration $configuration;
 
-    /*
+    /**
      * Default constructor.
      * Note: any email will be sent from the PMF administrator, use unsetFrom
      * before using setFrom.
      *
-     * @param Configuration $config
+     * @param Configuration $configuration
      */
     public function __construct(Configuration $configuration)
     {
@@ -204,7 +204,7 @@ class Mail
         try {
             $this->setFrom($this->configuration->getAdminEmail(), $this->configuration->getTitle());
         } catch (Exception) {
-            // @todo handle exception
+            // Silently ignore when admin email is not configured
         }
     }
 
@@ -228,7 +228,8 @@ class Mail
     public static function getServerName(): string
     {
         $request = Request::createFromGlobals();
-        return $request->getHost() ?: 'localhost.localdomain';
+        $host = $request->getHost();
+        return $host !== '' && $host !== null ? $host : 'localhost.localdomain';
     }
 
     /**
@@ -259,13 +260,11 @@ class Mail
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
             $keys = array_keys($target);
-            throw new Exception(
-                sprintf('Too many e-mail addresses, %s, ', $keys[0])
-                . sprintf(
-                    format: "have been already added as '%s'!",
-                    values: $targetAlias,
-                ),
-            );
+            throw new Exception(sprintf(
+                "Too many e-mail addresses, %s, have been already added as '%s'!",
+                $keys[0],
+                $targetAlias,
+            ));
         }
 
         return $this->addEmailTo($target, $targetAlias, $address, $name);
@@ -409,7 +408,7 @@ class Mail
         }
 
         // Has any attachment been provided?
-        if (!empty($this->attachments)) {
+        if (count($this->attachments) > 0) {
             $this->contentType = 'multipart/mixed';
         }
 
@@ -431,7 +430,7 @@ class Mail
         // Prepare the recipients
         $to = [];
         foreach ($this->to as $address => $name) {
-            $to[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $to[] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         $recipients = implode(
@@ -495,7 +494,7 @@ class Mail
         // Disposition-Notification-To, RFC 3798
         $notifyTos = [];
         foreach ($this->notifyTo as $address => $name) {
-            $notifyTos[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $notifyTos[] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         $notifyTo = implode(
@@ -508,17 +507,17 @@ class Mail
 
         // From
         foreach ($this->from as $address => $name) {
-            $this->headers['From'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $this->headers['From'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         // CC
         foreach ($this->cc as $address => $name) {
-            $this->headers['CC'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $this->headers['CC'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         // BCC
         foreach ($this->bcc as $address => $name) {
-            $this->headers['BCC'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $this->headers['BCC'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         // Message-Id
@@ -530,7 +529,7 @@ class Mail
         // Reply-To
         $this->headers['Reply-To'] = $this->headers['From'];
         foreach ($this->replyTo as $address => $name) {
-            $this->headers['Reply-To'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $this->headers['Reply-To'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         // Return-Path
@@ -545,7 +544,7 @@ class Mail
         // Sender
         $this->headers['Sender'] = $this->headers['From'];
         foreach ($this->sender as $address => $name) {
-            $this->headers['Sender'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
+            $this->headers['Sender'] = ($name !== null && $name !== '' ? $name . ' ' : '') . '<' . $address . '>';
         }
 
         // Subject. Note: it must be RFC 2047 compliant
