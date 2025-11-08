@@ -149,7 +149,7 @@ class MailTest extends TestCase
         $_SERVER['REQUEST_TIME'] = $requestTimeToRestore;
     }
 
-    public function testWrapLinesWithDefaultWidthAndNoCut(): void
+    public function testWrapLinesWithDefaultWidth(): void
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum acnunc quis neque tempor varius.";
         $result = $this->mail->wrapLines($message);
@@ -158,16 +158,7 @@ class MailTest extends TestCase
         $this->assertSame($expectedResult, $result);
     }
 
-    public function testWrapLinesWithCustomWidthAndCut(): void
-    {
-        $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac nunc quis neque tempor varius.";
-        $result = $this->mail->wrapLines($message, 20, true);
-
-        $expectedResult = "Lorem ipsum dolor\r\nsit amet,\r\nconsectetur\r\nadipiscing elit.\r\nVestibulum ac nunc\r\nquis neque tempor\r\nvarius.";
-        $this->assertSame($expectedResult, $result);
-    }
-
-    public function testWrapLinesWithCustomWidthAndNoCut(): void
+    public function testWrapLinesWithCustomWidth(): void
     {
         $message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac nunc quis neque tempor varius.";
         $result = $this->mail->wrapLines($message, 30);
