@@ -243,7 +243,7 @@ class LinkTest extends TestCase
     public function testAppendSids(): void
     {
         $class = new ReflectionClass('phpMyFAQ\Link');
-        $method = $class->getMethod('appendSids');
+        $method = $class->getMethod('appendSessionId');
 
         $this->link = new Link('http://example.com/my-test-faq/', $this->configuration);
         $actual = $method->invokeArgs($this->link, array('http://example.com/my-test-faq/', 4711));
@@ -295,18 +295,18 @@ class LinkTest extends TestCase
     {
         $url = 'https://example.com/my-test-faq/';
         $this->link = new Link($url, $this->configuration);
-        $this->assertEquals($url, $this->link->toString(true));
+        $this->assertEquals($url, $this->link->toStringWithoutSession());
 
         $url = 'https://example.com/my-test-faq/add-faq.html';
         $this->link = new Link($url, $this->configuration);
-        $this->assertEquals($url, $this->link->toString(true));
+        $this->assertEquals($url, $this->link->toStringWithoutSession());
 
         $url = 'https://example.com/my-test-faq/index.php?sid=4711&action=faq&cat=1&id=36&artlang=de';
         $this->link = new Link($url, $this->configuration);
         $this->link->itemTitle = 'Foobar';
         $this->assertEquals(
             'https://example.com/my-test-faq/content/1/36/de/foobar.html',
-            $this->link->toString(true)
+            $this->link->toStringWithoutSession()
         );
     }
 }

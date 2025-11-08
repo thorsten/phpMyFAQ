@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
+use phpMyFAQ\Category\Relation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -29,6 +30,12 @@ class CommentsTest extends TestCase
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 
+        // Ensure clean category relations for record 1 / en to avoid leakage from other tests
+        $category = new Category($this->configuration);
+        $category->setLanguage('en');
+        $relation = new Relation($this->configuration, $category);
+        $relation->deleteByFAQ(1, 'en');
+
         $this->comments = new Comments($this->configuration);
     }
 
@@ -37,6 +44,11 @@ class CommentsTest extends TestCase
         parent::tearDown();
 
         $this->comments->delete(CommentType::FAQ, 1);
+        // Cleanup any category relations created for this record during tests
+        $category = new Category($this->configuration);
+        $category->setLanguage('en');
+        $relation = new Relation($this->configuration, $category);
+        $relation->deleteByFAQ(1, 'en');
     }
 
     public function testCreate(): void
@@ -77,13 +89,13 @@ class CommentsTest extends TestCase
 
         $category = new Category($this->configuration);
         $category->setLanguage('en');
-        $relation = new \phpMyFAQ\Category\Relation($this->configuration, $category);
+        $relation = new Relation($this->configuration, $category);
         $relation->add([1], 1, 'en');
 
         $this->assertEquals([1 => 1], $this->comments->getNumberOfCommentsByCategory());
 
         // Cleanup
-        $relation->delete(1, 'en');
+        $relation->deleteByFAQ(1, 'en');
     }
 
     public function testGetAllComments(): void

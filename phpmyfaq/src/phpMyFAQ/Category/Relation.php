@@ -308,17 +308,33 @@ class Relation
      */
     public function add(array $categories, int $faqId, string $language): bool
     {
+        $db = $this->configuration->getDb();
+        $escapedLang = $db->escape($language);
+        $prefix = Database::getTablePrefix();
+
         foreach ($categories as $category) {
-            $this->configuration
-                ->getDb()
-                ->query(sprintf(
-                    "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
-                    Database::getTablePrefix(),
-                    $category,
-                    $this->configuration->getDb()->escape($language),
-                    $faqId,
-                    $this->configuration->getDb()->escape($language),
-                ));
+            // Skip insert if the relation already exists to avoid UNIQUE constraint violation (SQLite warning)
+            $existsQuery = sprintf(
+                "SELECT 1 FROM %sfaqcategoryrelations WHERE category_id = %d AND category_lang = '%s' AND record_id = %d AND record_lang = '%s' LIMIT 1",
+                $prefix,
+                (int) $category,
+                $escapedLang,
+                $faqId,
+                $escapedLang,
+            );
+            $existsResult = $db->query($existsQuery);
+            if ($db->numRows($existsResult) > 0) {
+                continue; // already present
+            }
+
+            $db->query(sprintf(
+                "INSERT INTO %sfaqcategoryrelations VALUES (%d, '%s', %d, '%s')",
+                $prefix,
+                (int) $category,
+                $escapedLang,
+                $faqId,
+                $escapedLang,
+            ));
         }
 
         return true;

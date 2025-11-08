@@ -203,7 +203,8 @@ class FaqHelper extends AbstractHelper
     public function convertOldInternalLinks(string $question, string $answer): string
     {
         $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
-        $pattern = '/(https?:\/\/[^\/]+)\/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(&artlang=([a-z]{2}))?/i';
+        // Optional artlang parameter; prevents an empty match (sets fallback later)
+        $pattern = '/(https?:\/\/[^\/]+)\/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(?:&artlang=([a-z]{2}))?/i';
 
         $decodedAnswer = html_entity_decode($answer);
 
@@ -213,7 +214,10 @@ class FaqHelper extends AbstractHelper
                 $baseUrl = $this->configuration->getDefaultUrl();
                 $categoryId = $matches[3];
                 $faqId = $matches[4];
-                $language = $matches[6] ?? $this->configuration->getLanguage()->getLanguage();
+                $language = $matches[5] ?? $this->configuration->getLanguage()->getLanguage();
+                if ($language === '' || $language === '0') {
+                    $language = 'en';
+                }
 
                 return sprintf(
                     '%scontent/%d/%d/%s/%s.html',
@@ -239,6 +243,9 @@ class FaqHelper extends AbstractHelper
                     $categoryId = $matches[6];
                     $faqId = $matches[9];
                     $language = $matches[13] ?? $this->configuration->getLanguage()->getLanguage();
+                    if ($language === '' || $language === '0') {
+                        $language = 'en';
+                    }
 
                     return sprintf(
                         '%scontent/%d/%d/%s/%s.html',
