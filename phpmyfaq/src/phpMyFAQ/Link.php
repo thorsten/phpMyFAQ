@@ -29,6 +29,7 @@ use phpMyFAQ\Link\Strategy\NewsStrategy;
 use phpMyFAQ\Link\Strategy\SearchStrategy;
 use phpMyFAQ\Link\Strategy\ShowStrategy;
 use phpMyFAQ\Link\Strategy\SitemapStrategy;
+use phpMyFAQ\Link\Strategy\StrategyInterface;
 use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use phpMyFAQ\Link\Util\LinkQueryParser;
 use phpMyFAQ\Link\Util\TitleSlugifier;
@@ -237,26 +238,33 @@ class Link
     public function __construct(
         public string $url,
         private readonly Configuration $configuration,
+        ?StrategyRegistry $strategyRegistry = null,
     ) {
-        $this->strategyRegistry = new StrategyRegistry([
-            // Complex strategies
-            self::LINK_GET_ACTION_FAQ => new FaqStrategy(),
-            self::LINK_GET_ACTION_SEARCH => new SearchStrategy(),
-            self::LINK_GET_ACTION_SITEMAP => new SitemapStrategy(),
-            self::LINK_GET_ACTION_SHOW => new ShowStrategy(),
-            self::LINK_GET_ACTION_NEWS => new NewsStrategy(),
-            // Simple path-based strategies
-            self::LINK_GET_ACTION_ADD => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
-            self::LINK_GET_ACTION_ASK => new GenericPathStrategy(self::LINK_HTML_ASK),
-            self::LINK_GET_ACTION_CONTACT => new GenericPathStrategy(self::LINK_HTML_CONTACT),
-            self::LINK_GET_ACTION_GLOSSARY => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
-            self::LINK_GET_ACTION_HELP => new GenericPathStrategy(self::LINK_HTML_HELP),
-            self::LINK_GET_ACTION_OPEN => new GenericPathStrategy(self::LINK_HTML_OPEN),
-            self::LINK_GET_ACTION_LOGIN => new GenericPathStrategy(self::LINK_HTML_LOGIN),
-            self::LINK_GET_ACTION_PASSWORD => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
-            self::LINK_GET_ACTION_BOOKMARKS => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
-            self::LINK_GET_ACTION_REGISTER => new GenericPathStrategy(self::LINK_HTML_REGISTER),
-        ]);
+        if ($strategyRegistry === null) {
+            // default registry population (previous behavior)
+            $strategyRegistry = new StrategyRegistry([
+                self::LINK_GET_ACTION_FAQ => new FaqStrategy(),
+                self::LINK_GET_ACTION_SEARCH => new SearchStrategy(),
+                self::LINK_GET_ACTION_SITEMAP => new SitemapStrategy(),
+                self::LINK_GET_ACTION_SHOW => new ShowStrategy(),
+                self::LINK_GET_ACTION_NEWS => new NewsStrategy(),
+                // Simple path-based strategies
+                self::LINK_GET_ACTION_ADD => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
+                self::LINK_GET_ACTION_ASK => new GenericPathStrategy(self::LINK_HTML_ASK),
+                self::LINK_GET_ACTION_CONTACT => new GenericPathStrategy(self::LINK_HTML_CONTACT),
+                self::LINK_GET_ACTION_GLOSSARY => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
+                self::LINK_GET_ACTION_HELP => new GenericPathStrategy(self::LINK_HTML_HELP),
+                self::LINK_GET_ACTION_OPEN => new GenericPathStrategy(self::LINK_HTML_OPEN),
+                self::LINK_GET_ACTION_LOGIN => new GenericPathStrategy(self::LINK_HTML_LOGIN),
+                self::LINK_GET_ACTION_PASSWORD => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
+                self::LINK_GET_ACTION_BOOKMARKS => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
+                self::LINK_GET_ACTION_REGISTER => new GenericPathStrategy(self::LINK_HTML_REGISTER),
+            ]);
+        } else {
+            // Merge missing default strategies when a custom registry is injected (non-destructive)
+            $this->ensureDefaultStrategies($strategyRegistry);
+        }
+        $this->strategyRegistry = $strategyRegistry;
     }
 
     /**
@@ -597,5 +605,51 @@ class Link
             : self::LINK_SEARCHPART_SEPARATOR;
 
         return $url . $separator . self::LINK_GET_SIDS . self::LINK_EQUAL . $sids;
+    }
+
+    /**
+     * Returns the injected StrategyRegistry instance.
+     */
+    public function getStrategyRegistry(): StrategyRegistry
+    {
+        return $this->strategyRegistry;
+    }
+
+    /**
+     * Registers or overrides a strategy at runtime (plugin extension point).
+     */
+    public function registerStrategy(string $action, StrategyInterface $strategy): void
+    {
+        $this->strategyRegistry->register($action, $strategy);
+    }
+
+    /**
+     * Ensures that all default strategies exist in the provided registry without overriding existing entries.
+     */
+    private function ensureDefaultStrategies(StrategyRegistry $registry): void
+    {
+        $defaults = [
+            self::LINK_GET_ACTION_FAQ => fn() => new FaqStrategy(),
+            self::LINK_GET_ACTION_SEARCH => fn() => new SearchStrategy(),
+            self::LINK_GET_ACTION_SITEMAP => fn() => new SitemapStrategy(),
+            self::LINK_GET_ACTION_SHOW => fn() => new ShowStrategy(),
+            self::LINK_GET_ACTION_NEWS => fn() => new NewsStrategy(),
+            // Simple path-based strategies
+            self::LINK_GET_ACTION_ADD => fn() => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
+            self::LINK_GET_ACTION_ASK => fn() => new GenericPathStrategy(self::LINK_HTML_ASK),
+            self::LINK_GET_ACTION_CONTACT => fn() => new GenericPathStrategy(self::LINK_HTML_CONTACT),
+            self::LINK_GET_ACTION_GLOSSARY => fn() => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
+            self::LINK_GET_ACTION_HELP => fn() => new GenericPathStrategy(self::LINK_HTML_HELP),
+            self::LINK_GET_ACTION_OPEN => fn() => new GenericPathStrategy(self::LINK_HTML_OPEN),
+            self::LINK_GET_ACTION_LOGIN => fn() => new GenericPathStrategy(self::LINK_HTML_LOGIN),
+            self::LINK_GET_ACTION_PASSWORD => fn() => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
+            self::LINK_GET_ACTION_BOOKMARKS => fn() => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
+            self::LINK_GET_ACTION_REGISTER => fn() => new GenericPathStrategy(self::LINK_HTML_REGISTER),
+        ];
+        foreach ($defaults as $action => $factory) {
+            if (!$registry->has($action)) {
+                $registry->register($action, $factory());
+            }
+        }
     }
 }
