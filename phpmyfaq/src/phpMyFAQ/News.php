@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The News class for phpMyFAQ news.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-25
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -96,7 +96,7 @@ readonly class News
         );
 
         $result = $this->configuration->getDb()->query($query);
-        $numberOfShownNews = $this->configuration->get('records.numberOfShownNewsEntries');
+        $numberOfShownNews = $this->configuration->get(item: 'records.numberOfShownNewsEntries');
         if ($numberOfShownNews > 0 && $this->configuration->getDb()->numRows($result) > 0) {
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 ++$counter;
@@ -122,8 +122,8 @@ readonly class News
                         'content' => $row->artikel,
                         'authorName' => $row->author_name,
                         'authorEmail' => $row->author_email,
-                        'active' => 'y' == $row->active,
-                        'allowComments' => 'y' == $row->comment,
+                        'active' => 'y' === $row->active,
+                        'allowComments' => 'y' === $row->comment,
                         'link' => $row->link,
                         'linkTitle' => $row->linktitel,
                         'target' => $row->target,
@@ -180,7 +180,7 @@ readonly class News
      *
      * @param int  $newsId ID of news
      * @param bool $admin Is admin
-     * @return array<mixed>
+     * @return array
      */
     public function get(int $newsId, bool $admin = false): array
     {
@@ -240,8 +240,8 @@ readonly class News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
-            $newsMessage->getCreated()->format('YmdHis'),
+            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqnews', column: 'id'),
+            $newsMessage->getCreated()->format(format: 'YmdHis'),
             $this->configuration->getDb()->escape($newsMessage->getLanguage()),
             $this->configuration->getDb()->escape($newsMessage->getHeader()),
             $this->configuration->getDb()->escape($newsMessage->getMessage()),
@@ -283,7 +283,7 @@ readonly class News
             WHERE
                 id = %d",
             Database::getTablePrefix(),
-            $newsMessage->getCreated()->format('YmdHis'),
+            $newsMessage->getCreated()->format(format: 'YmdHis'),
             $this->configuration->getDb()->escape($newsMessage->getLanguage()),
             $this->configuration->getDb()->escape($newsMessage->getHeader()),
             $this->configuration->getDb()->escape($newsMessage->getMessage()),

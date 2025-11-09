@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The network class for IPv4 and IPv6 handling.
  *
@@ -19,6 +17,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -47,7 +47,10 @@ readonly class Network
      */
     public function isBanned(string $ipAddress): bool
     {
-        $bannedIps = explode(' ', (string) $this->configuration->get('security.bannedIPs'));
+        $bannedIps = explode(
+            separator: ' ',
+            string: (string) $this->configuration->get(item: 'security.bannedIPs'),
+        );
         return IpUtils::checkIp($ipAddress, $bannedIps);
     }
 }
