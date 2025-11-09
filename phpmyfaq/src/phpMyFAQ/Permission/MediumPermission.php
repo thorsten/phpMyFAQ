@@ -21,7 +21,6 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
 
@@ -32,10 +31,13 @@ use phpMyFAQ\User\CurrentUser;
  */
 class MediumPermission extends BasicPermission implements PermissionInterface
 {
+    protected MediumPermissionRepository $mediumRepository;
+
     public function __construct(
         protected Configuration $configuration,
     ) {
         parent::__construct($configuration);
+        $this->mediumRepository = new MediumPermissionRepository($configuration);
     }
 
     /**
@@ -59,36 +61,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupRights(int $groupId): array
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
-            return [];
-        }
-
-        // check right
-        $select = sprintf(
-            '
-            SELECT
-                fr.right_id AS right_id
-            FROM
-                %sfaqright fr,
-                %sfaqgroup_right fgr,
-                %sfaqgroup fg
-            WHERE
-                fg.group_id = %d AND
-                fg.group_id = fgr.group_id AND
-                fr.right_id = fgr.right_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $groupId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['right_id'];
-        }
-
-        return $result;
+        return $this->mediumRepository->getGroupRights($groupId);
     }
 
     /**
@@ -138,39 +111,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function checkUserGroupRight(int $userId, int $rightId): bool
     {
-        // check input
-        if ($rightId <= 0 || $userId <= 0) {
-            return false;
-        }
-
-        $select = sprintf(
-            '
-            SELECT
-                fr.right_id AS right_id
-            FROM
-                %sfaqright fr,
-                %sfaqgroup_right fgr,
-                %sfaqgroup fg,
-                %sfaquser_group fug,
-                %sfaquser fu
-            WHERE
-                fr.right_id = %d AND
-                fr.right_id = fgr.right_id AND
-                fg.group_id = fgr.group_id AND
-                fg.group_id = fug.group_id AND
-                fu.user_id  = fug.user_id AND
-                fu.user_id  = %d',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $rightId,
-            $userId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        return $this->configuration->getDb()->numRows($res) !== 0;
+        return $this->mediumRepository->checkUserGroupRight($userId, $rightId);
     }
 
     /**
@@ -182,26 +123,12 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function grantGroupRight(int $groupId, int $rightId): bool
     {
-        // check input
-        if ($rightId <= 0 || $groupId <= 0) {
-            return false;
-        }
-
-        // is right for users?
         $right_data = $this->getRightData($rightId);
-        if (!$right_data['for_groups']) {
+        if (empty($right_data) || !($right_data['for_groups'] ?? false)) {
             return false;
         }
 
-        // grant right
-        $insert = sprintf(
-            'INSERT INTO %sfaqgroup_right (group_id, right_id) VALUES (%d, %d)',
-            Database::getTablePrefix(),
-            $groupId,
-            $rightId,
-        );
-
-        return (bool) $this->configuration->getDb()->query($insert);
+        return $this->mediumRepository->grantGroupRight($groupId, $rightId);
     }
 
     /**
@@ -213,24 +140,14 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function addGroup(array $groupData): int
     {
-        // check if a group already exists
         if ($this->getGroupId($groupData['name']) > 0) {
             return 0;
         }
 
-        $nextId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqgroup', 'group_id');
+        $nextId = $this->mediumRepository->nextGroupId();
         $groupData = $this->checkGroupData($groupData);
-        $insert = sprintf(
-            "INSERT INTO %sfaqgroup (group_id, name, description, auto_join) VALUES (%d, '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $nextId,
-            $this->configuration->getDb()->escape($groupData['name']),
-            $this->configuration->getDb()->escape($groupData['description']),
-            (int) $groupData['auto_join'],
-        );
 
-        $res = $this->configuration->getDb()->query($insert);
-        if (!$res) {
+        if (!$this->mediumRepository->addGroup($groupData, $nextId)) {
             return 0;
         }
 
@@ -245,20 +162,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupId(string $name): int
     {
-        $select = sprintf(
-            "SELECT group_id FROM %sfaqgroup WHERE name = '%s'",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($name),
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) !== 1) {
-            return 0;
-        }
-
-        $row = $this->configuration->getDb()->fetchArray($res);
-
-        return $row['group_id'];
+        return $this->mediumRepository->getGroupId($name);
     }
 
     /**
@@ -299,23 +203,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function changeGroup(int $groupId, array $groupData): bool
     {
         $checkedData = $this->checkGroupData($groupData);
-        $set = '';
-        $comma = '';
-
-        foreach (array_keys($groupData) as $key) {
-            $set .= $comma . $key . " = '" . $this->configuration->getDb()->escape((string) $checkedData[$key]) . "'";
-            $comma = ",\n                ";
-        }
-
-        $update = sprintf('
-            UPDATE
-                %sfaqgroup
-            SET
-                %s
-            WHERE
-                group_id = %d', Database::getTablePrefix(), $set, $groupId);
-
-        return (bool) $this->configuration->getDb()->query($update);
+        return $this->mediumRepository->changeGroup($groupId, $checkedData);
     }
 
     /**
@@ -326,27 +214,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function deleteGroup(int $groupId): bool
     {
-        if ($groupId <= 0) {
+        if (!$this->mediumRepository->deleteGroup($groupId)) {
             return false;
         }
 
-        $delete = sprintf('DELETE FROM %sfaqgroup WHERE group_id = %d', Database::getTablePrefix(), $groupId);
-
-        $res = $this->configuration->getDb()->query($delete);
-        if (!$res) {
+        if (!$this->mediumRepository->deleteGroupMemberships($groupId)) {
             return false;
         }
 
-        $delete = sprintf('DELETE FROM %sfaquser_group WHERE group_id = %d', Database::getTablePrefix(), $groupId);
-
-        $res = $this->configuration->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        $delete = sprintf('DELETE FROM %sfaqgroup_right WHERE group_id = %d', Database::getTablePrefix(), $groupId);
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->mediumRepository->deleteGroupRights($groupId);
     }
 
     /**
@@ -359,35 +235,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupMembers(int $groupId): array
     {
-        if ($groupId <= 0) {
-            return [];
-        }
-
-        $select = sprintf(
-            '
-            SELECT
-                fu.user_id AS user_id
-            FROM
-                %sfaquser fu,
-                %sfaquser_group fug,
-                %sfaqgroup fg
-            WHERE
-                fg.group_id = %d AND
-                fg.group_id = fug.group_id AND
-                fu.user_id  = fug.user_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $groupId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['user_id'];
-        }
-
-        return $result;
+        return $this->mediumRepository->getGroupMembers($groupId);
     }
 
     /**
@@ -400,35 +248,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getUserGroups(int $userId): array
     {
-        if ($userId <= 0) {
-            return [-1];
-        }
-
-        $select = sprintf(
-            '
-            SELECT
-                fg.group_id AS group_id
-            FROM
-                %sfaquser fu,
-                %sfaquser_group fug,
-                %sfaqgroup fg
-            WHERE
-                fu.user_id  = %d AND
-                fu.user_id  = fug.user_id AND
-                fg.group_id = fug.group_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $userId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [-1];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['group_id'];
-        }
-
-        return $result;
+        return $this->mediumRepository->getUserGroups($userId);
     }
 
     /**
@@ -464,36 +284,15 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getAllGroups(CurrentUser $currentUser): array
     {
-        $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
-
         if (
             !$this->configuration->get(item: 'main.enableCategoryRestrictions')
             && $currentUser->getUserId() !== 1
             && !$currentUser->isSuperAdmin()
         ) {
-            $select = sprintf(
-                '
-                SELECT
-                    fg.group_id
-                FROM
-                    %sfaqgroup fg
-                LEFT JOIN
-                    %sfaquser_group fug ON fg.group_id = fug.group_id
-                WHERE
-                    fug.user_id = %d',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                $currentUser->getUserId(),
-            );
+            return $this->mediumRepository->getAllGroups($currentUser->getUserId());
         }
 
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = (int) $row['group_id'];
-        }
-
-        return $result;
+        return $this->mediumRepository->getAllGroups();
     }
 
     /**
@@ -503,26 +302,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupName(int $groupId): string
     {
-        if ($groupId <= 0 || !is_numeric($groupId)) {
-            return '-';
-        }
-
-        $select = sprintf('
-            SELECT
-                name
-            FROM
-                %sfaqgroup
-            WHERE
-                group_id = %d', Database::getTablePrefix(), $groupId);
-
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
-            return '-';
-        }
-
-        $row = $this->configuration->getDb()->fetchArray($res);
-
-        return $row['name'];
+        return $this->mediumRepository->getGroupName($groupId);
     }
 
     /**
@@ -571,41 +351,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getUserGroupRights(int $userId): array
     {
-        if ($userId <= 0) {
-            return [];
-        }
-
-        $select = sprintf(
-            '
-            SELECT
-                fr.right_id AS right_id
-            FROM
-                %sfaqright fr,
-                %sfaqgroup_right fgr,
-                %sfaqgroup fg,
-                %sfaquser_group fug,
-                %sfaquser fu
-            WHERE
-                fu.user_id  = %d AND
-                fu.user_id  = fug.user_id AND
-                fg.group_id = fug.group_id AND
-                fg.group_id = fgr.group_id AND
-                fr.right_id = fgr.right_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $userId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['right_id'];
-        }
-
-        return $result;
+        return $this->mediumRepository->getUserGroupRights($userId);
     }
 
     /**
@@ -624,20 +370,10 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        $select = sprintf('SELECT group_id FROM %sfaqgroup WHERE auto_join = 1', Database::getTablePrefix());
-
-        $res = $this->configuration->getDb()->query($select);
-        if (!$res) {
-            return false;
-        }
-
-        $auto_join = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $auto_join[] = $row['group_id'];
-        }
+        $autoJoinGroups = $this->mediumRepository->getAutoJoinGroups();
 
         // add to groups
-        foreach ($auto_join as $groupId) {
+        foreach ($autoJoinGroups as $groupId) {
             $this->addToGroup($userId, $groupId);
         }
 
@@ -661,16 +397,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             return false;
         }
 
-        // add user to group
-        $insert = sprintf(
-            'INSERT INTO %sfaquser_group (user_id, group_id) VALUES (%d, %d)',
-            Database::getTablePrefix(),
-            $userId,
-            $groupId,
-        );
-
-        $res = $this->configuration->getDb()->query($insert);
-        return (bool) $res;
+        return $this->mediumRepository->addToGroup($userId, $groupId);
     }
 
     /**
@@ -683,22 +410,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function getGroupData(int $groupId): array
     {
-        if ($groupId <= 0) {
-            return [];
-        }
-
-        $select = sprintf(
-            'SELECT group_id, name, description, auto_join FROM %sfaqgroup WHERE group_id = %d',
-            Database::getTablePrefix(),
-            $groupId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
-            return [];
-        }
-
-        return $this->configuration->getDb()->fetchArray($res);
+        return $this->mediumRepository->getGroupData($groupId);
     }
 
     /**
@@ -709,13 +421,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function removeFromAllGroups(int $userId): bool
     {
-        if ($userId <= 0) {
-            return false;
-        }
-
-        $delete = sprintf('DELETE FROM %sfaquser_group WHERE user_id  = %d', Database::getTablePrefix(), $userId);
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->mediumRepository->removeFromAllGroups($userId);
     }
 
     /**
@@ -726,13 +432,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function refuseAllGroupRights(int $groupId): bool
     {
-        if ($groupId <= 0) {
-            return false;
-        }
-
-        $delete = sprintf('DELETE FROM %sfaqgroup_right WHERE group_id  = %d', Database::getTablePrefix(), $groupId);
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->mediumRepository->refuseAllGroupRights($groupId);
     }
 
     /**
@@ -743,13 +443,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
      */
     public function removeAllUsersFromGroup(int $groupId): bool
     {
-        if ($groupId <= 0) {
-            return false;
-        }
-
-        $delete = sprintf('DELETE FROM %sfaquser_group WHERE group_id = %d', Database::getTablePrefix(), $groupId);
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->mediumRepository->removeAllUsersFromGroup($groupId);
     }
 
     /**

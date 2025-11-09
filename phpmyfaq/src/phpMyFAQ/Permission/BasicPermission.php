@@ -21,7 +21,6 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
 
@@ -32,9 +31,12 @@ use phpMyFAQ\User\CurrentUser;
  */
 class BasicPermission implements PermissionInterface
 {
+    protected BasicPermissionRepository $repository;
+
     public function __construct(
         protected Configuration $configuration,
     ) {
+        $this->repository = new BasicPermissionRepository($configuration);
     }
 
     /**
@@ -65,14 +67,7 @@ class BasicPermission implements PermissionInterface
             return false;
         }
 
-        $insert = sprintf(
-            'INSERT INTO %sfaquser_right (user_id, right_id) VALUES (%d, %d)',
-            Database::getTablePrefix(),
-            $userId,
-            $rightId,
-        );
-
-        return (bool) $this->configuration->getDb()->query($insert);
+        return $this->repository->grantUserRight($userId, $rightId);
     }
 
     /**
@@ -84,32 +79,7 @@ class BasicPermission implements PermissionInterface
      */
     public function getRightData(int $rightId): array
     {
-        // get the right data
-        $select = sprintf('
-            SELECT
-                right_id,
-                name,
-                description,
-                for_users,
-                for_groups,
-                for_sections
-            FROM
-                %sfaqright
-            WHERE
-                right_id = %d', Database::getTablePrefix(), $rightId);
-
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
-            return [];
-        }
-
-        // process right data
-        $rightData = $this->configuration->getDb()->fetchArray($res);
-        $rightData['for_users'] = (bool) $rightData['for_users'];
-        $rightData['for_groups'] = (bool) $rightData['for_groups'];
-        $rightData['for_sections'] = (bool) $rightData['for_sections'];
-
-        return $rightData;
+        return $this->repository->getRightData($rightId);
     }
 
     /**
@@ -149,27 +119,7 @@ class BasicPermission implements PermissionInterface
      */
     public function getRightId(string $name): int
     {
-        // get right id
-        $select = sprintf(
-            "
-            SELECT
-                right_id
-            FROM
-                %sfaqright
-            WHERE
-                name = '%s'",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($name),
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        if ($this->configuration->getDb()->numRows($res) != 1) {
-            return 0;
-        }
-
-        $row = $this->configuration->getDb()->fetchArray($res);
-
-        return (int) $row['right_id'];
+        return $this->repository->getRightId($name);
     }
 
     /**
@@ -181,35 +131,7 @@ class BasicPermission implements PermissionInterface
      */
     public function checkUserRight(int $userId, int $rightId): bool
     {
-        // check right id
-        if ($rightId <= 0) {
-            return false;
-        }
-
-        // check right
-        $select = sprintf(
-            '
-            SELECT
-                fr.right_id AS right_id
-            FROM
-                %sfaqright fr,
-                %sfaquser_right fur,
-                %sfaquser fu
-            WHERE
-                fr.right_id = %d AND
-                fr.right_id = fur.right_id AND
-                fu.user_id  = %d AND
-                fu.user_id  = fur.user_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $rightId,
-            $userId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-
-        return $this->configuration->getDb()->numRows($res) === 1;
+        return $this->repository->checkUserRight($userId, $rightId);
     }
 
     /**
@@ -249,32 +171,7 @@ class BasicPermission implements PermissionInterface
      */
     public function getUserRights(int $userId): array
     {
-        // get user rights
-        $select = sprintf(
-            '
-            SELECT
-                fr.right_id AS right_id
-            FROM
-                %sfaqright fr,
-                %sfaquser_right fur,
-                %sfaquser fu
-            WHERE
-                fr.right_id = fur.right_id AND
-                fu.user_id  = %d AND
-                fu.user_id  = fur.user_id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $userId,
-        );
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        while ($row = $this->configuration->getDb()->fetchArray($res)) {
-            $result[] = $row['right_id'];
-        }
-
-        return $result;
+        return $this->repository->getUserRights($userId);
     }
 
     /**
@@ -290,26 +187,10 @@ class BasicPermission implements PermissionInterface
             return 0;
         }
 
-        $nextId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqright', 'right_id');
+        $nextId = $this->repository->nextRightId();
         $rightData = $this->checkRightData($rightData);
 
-        $insert = sprintf(
-            "
-            INSERT INTO
-                %sfaqright
-            (right_id, name, description, for_users, for_groups, for_sections)
-                VALUES
-            (%d, '%s', '%s', %d, %d, %d)",
-            Database::getTablePrefix(),
-            $nextId,
-            $rightData['name'],
-            $rightData['description'],
-            $rightData['for_users'] ?? 1,
-            $rightData['for_groups'] ?? 1,
-            $rightData['for_sections'] ?? 1,
-        );
-
-        if (!$this->configuration->getDb()->query($insert)) {
+        if (!$this->repository->addRight($rightData, $nextId)) {
             return 0;
         }
 
@@ -365,14 +246,7 @@ class BasicPermission implements PermissionInterface
             return false;
         }
 
-        $update = sprintf('
-            UPDATE
-                %sfaqright
-            SET
-                name = \'%s\'
-            WHERE
-                right_id = %d', Database::getTablePrefix(), $newName, $rightId);
-        return (bool) $this->configuration->getDb()->query($update);
+        return $this->repository->renameRight($rightId, $newName);
     }
 
     /**
@@ -388,31 +262,7 @@ class BasicPermission implements PermissionInterface
      */
     public function getAllRightsData(string $order = 'ASC'): array
     {
-        $select = sprintf('
-            SELECT
-                right_id,
-                name,
-                description,
-                for_users,
-                for_groups,
-                for_sections
-            FROM
-                %sfaqright
-            ORDER BY
-                right_id %s', Database::getTablePrefix(), $order);
-
-        $res = $this->configuration->getDb()->query($select);
-        $result = [];
-        $i = 0;
-
-        if ($res) {
-            while ($row = $this->configuration->getDb()->fetchArray($res)) {
-                $result[$i] = $row;
-                ++$i;
-            }
-        }
-
-        return $result;
+        return $this->repository->getAllRightsData($order);
     }
 
     /**
@@ -423,12 +273,6 @@ class BasicPermission implements PermissionInterface
      */
     public function refuseAllUserRights(int $userId): bool
     {
-        $delete = sprintf('
-            DELETE FROM
-                %sfaquser_right
-            WHERE
-                user_id  = %d', Database::getTablePrefix(), $userId);
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->repository->refuseAllUserRights($userId);
     }
 }

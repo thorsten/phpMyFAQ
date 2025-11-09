@@ -35,11 +35,6 @@ namespace phpMyFAQ;
 use InvalidArgumentException;
 use phpMyFAQ\Permission\PermissionInterface;
 
-/**
- * Class Permission
- *
- * @package phpMyFAQ
- */
 class Permission
 {
     /**
