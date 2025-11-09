@@ -63,9 +63,9 @@ $twigTemplate = $twig->loadTemplate('./glossary.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('ad_menu_glossary'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get('msgGlossaryMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get('ad_menu_glossary'),
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'ad_menu_glossary'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(languageKey: 'msgGlossaryMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(languageKey: 'ad_menu_glossary'),
     'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
     'pagination' => $pagination->render(),
 ];

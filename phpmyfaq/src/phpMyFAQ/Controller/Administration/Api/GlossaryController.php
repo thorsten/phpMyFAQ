@@ -63,17 +63,23 @@ final class GlossaryController extends AbstractController
         $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-glossary', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->delete($glossaryId)) {
-            return $this->json(['success' => Translation::get('ad_glossary_delete_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_glossary_delete_success',
+            )], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_glossary_delete_error')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_glossary_delete_error',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -91,17 +97,23 @@ final class GlossaryController extends AbstractController
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('add-glossary', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
-            return $this->json(['success' => Translation::get('ad_glossary_save_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_glossary_save_success',
+            )], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_glossary_save_error')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_glossary_save_error',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -120,16 +132,22 @@ final class GlossaryController extends AbstractController
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('update-glossary', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $glossary = $this->container->get('phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {
-            return $this->json(['success' => Translation::get('ad_glossary_update_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_glossary_update_success',
+            )], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_glossary_update_error')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_glossary_update_error',
+        )], Response::HTTP_BAD_REQUEST);
     }
 }

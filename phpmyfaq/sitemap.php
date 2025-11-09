@@ -52,12 +52,12 @@ $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgSitemap'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get('msgSitemapMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgSitemap'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(languageKey: 'msgSitemapMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get(languageKey: 'msgSitemap') : $currLetter,
     'letters' => $siteMap->getAllFirstLetters(),
     'faqs' => $siteMap->getFaqsFromLetter($currLetter),
-    'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get('msgSitemap') : $currLetter,
+    'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get(languageKey: 'msgSitemap') : $currLetter,
 ];
 
 return $templateVars;

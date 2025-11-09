@@ -44,19 +44,19 @@ $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgOpenQuestions'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get('msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get('msgOpenQuestions'),
-    'msgQuestionText' => Translation::get('msgQuestionText'),
-    'msgDate_User' => Translation::get('msgDate_User'),
-    'msgQuestion2' => Translation::get('msgQuestion2'),
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgOpenQuestions'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(languageKey: 'msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(languageKey: 'msgOpenQuestions'),
+    'msgQuestionText' => Translation::get(languageKey: 'msgQuestionText'),
+    'msgDate_User' => Translation::get(languageKey: 'msgDate_User'),
+    'msgQuestion2' => Translation::get(languageKey: 'msgQuestion2'),
     'openQuestions' => $questionHelper->getOpenQuestions(),
     'isCloseQuestionEnabled' => $faqConfig->get('records.enableCloseQuestion'),
     'userHasPermissionToAnswer' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value),
-    'msgQuestionsWaiting' => Translation::get('msgQuestionsWaiting'),
-    'msgNoQuestionsAvailable' => Translation::get('msgNoQuestionsAvailable'),
-    'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
-    'msg2answer' => Translation::get('msg2answer')
+    'msgQuestionsWaiting' => Translation::get(languageKey: 'msgQuestionsWaiting'),
+    'msgNoQuestionsAvailable' => Translation::get(languageKey: 'msgNoQuestionsAvailable'),
+    'msg2answerFAQ' => Translation::get(languageKey: 'msg2answerFAQ'),
+    'msg2answer' => Translation::get(languageKey: 'msg2answer')
 ];
 
 return $templateVars;

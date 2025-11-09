@@ -92,7 +92,9 @@ final class ConfigurationTabController extends AbstractController
         $oldConfigurationData = $this->configuration->getAll();
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         // Set the new values
@@ -157,7 +159,7 @@ final class ConfigurationTabController extends AbstractController
 
         $this->configuration->update($newConfigValues);
 
-        return $this->json(['success' => Translation::get('ad_config_saved')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(languageKey: 'ad_config_saved')], Response::HTTP_OK);
     }
 
     /**

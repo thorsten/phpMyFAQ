@@ -50,16 +50,16 @@ final class BackupController extends AbstractAdministrationController
         return $this->render('@admin/backup/main.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderBackup' => Translation::get('msgBackup'),
-            'adminBackupCardHeader' => Translation::get('ad_csv_head'),
-            'adminBackupCardBody' => Translation::get('ad_csv_make'),
-            'adminBackupLinkData' => Translation::get('ad_csv_linkdat'),
-            'adminBackupLinkLogs' => Translation::get('ad_csv_linklog'),
+            'adminHeaderBackup' => Translation::get(languageKey: 'msgBackup'),
+            'adminBackupCardHeader' => Translation::get(languageKey: 'ad_csv_head'),
+            'adminBackupCardBody' => Translation::get(languageKey: 'ad_csv_make'),
+            'adminBackupLinkData' => Translation::get(languageKey: 'ad_csv_linkdat'),
+            'adminBackupLinkLogs' => Translation::get(languageKey: 'ad_csv_linklog'),
             'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('restore'),
-            'adminRestoreCardHeader' => Translation::get('ad_csv_head2'),
-            'adminRestoreCardBody' => Translation::get('ad_csv_restore'),
-            'adminRestoreLabel' => Translation::get('ad_csv_file'),
-            'adminRestoreButton' => Translation::get('ad_csv_ok'),
+            'adminRestoreCardHeader' => Translation::get(languageKey: 'ad_csv_head2'),
+            'adminRestoreCardBody' => Translation::get(languageKey: 'ad_csv_restore'),
+            'adminRestoreLabel' => Translation::get(languageKey: 'ad_csv_file'),
+            'adminRestoreButton' => Translation::get(languageKey: 'ad_csv_ok'),
         ]);
     }
 
@@ -143,7 +143,7 @@ final class BackupController extends AbstractAdministrationController
         $file = $request->files->get('userfile');
 
         $templateVars = [
-            'adminHeaderRestore' => Translation::get('ad_csv_rest'),
+            'adminHeaderRestore' => Translation::get(languageKey: 'ad_csv_rest'),
         ];
 
         if ($file && $file->isValid()) {
@@ -178,7 +178,7 @@ final class BackupController extends AbstractAdministrationController
                     ...$templateVars,
                     'errorMessageVersionMisMatch' => sprintf(
                         '%s (Version check failure: "%s" found, "%s" expected)',
-                        Translation::get('ad_csv_no'),
+                        Translation::get(languageKey: 'ad_csv_no'),
                         $versionFound,
                         $versionExpected,
                     ),
@@ -202,7 +202,7 @@ final class BackupController extends AbstractAdministrationController
                 $tablePrefix = '';
                 $templateVars = [
                     ...$templateVars,
-                    'prepareMessage' => Translation::get('ad_csv_prepare'),
+                    'prepareMessage' => Translation::get(languageKey: 'ad_csv_prepare'),
                 ];
                 while ($backupData = fgets($handle, 65536)) {
                     $backupData = trim($backupData);
@@ -222,7 +222,7 @@ final class BackupController extends AbstractAdministrationController
 
                 $templateVars = [
                     ...$templateVars,
-                    'processMessage' => Translation::get('ad_csv_process'),
+                    'processMessage' => Translation::get(languageKey: 'ad_csv_process'),
                 ];
 
                 $numTables = count($queries);
@@ -261,13 +261,13 @@ final class BackupController extends AbstractAdministrationController
                     'successMessage' => sprintf(
                         '%d %s %d %s',
                         $g,
-                        Translation::get('ad_csv_of'),
+                        Translation::get(languageKey: 'ad_csv_of'),
                         $numTables,
-                        Translation::get('ad_csv_suc'),
+                        Translation::get(languageKey: 'ad_csv_suc'),
                     ),
                 ];
             } else {
-                $templateVars = ['errorMessageImportNotPossible' => Translation::get('ad_csv_no')];
+                $templateVars = ['errorMessageImportNotPossible' => Translation::get(languageKey: 'ad_csv_no')];
             }
         } else {
             $errorMessage = match ($file->getError()) {
@@ -282,7 +282,7 @@ final class BackupController extends AbstractAdministrationController
             };
             $templateVars = [
                 ...$templateVars,
-                'errorMessageUpload' => Translation::get('ad_csv_no'),
+                'errorMessageUpload' => Translation::get(languageKey: 'ad_csv_no'),
                 'errorMessageUploadDetails' => $errorMessage,
             ];
         }

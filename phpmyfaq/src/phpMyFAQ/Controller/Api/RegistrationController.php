@@ -149,7 +149,7 @@ final class RegistrationController extends AbstractController
 
         return $this->json([
             'registered' => false,
-            'error' => Translation::get('err_sendMail'),
+            'error' => Translation::get(languageKey: 'err_sendMail'),
         ], Response::HTTP_BAD_REQUEST);
     }
 }

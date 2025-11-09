@@ -49,7 +49,7 @@ final class MediaBrowserController extends AbstractController
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
             return $this->json(['error' => sprintf(
-                Translation::get('ad_dir_missing'),
+                Translation::get(languageKey: 'ad_dir_missing'),
                 '/images',
             )], Response::HTTP_BAD_REQUEST);
         }

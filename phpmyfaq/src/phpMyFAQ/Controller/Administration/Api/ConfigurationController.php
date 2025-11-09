@@ -47,7 +47,9 @@ final class ConfigurationController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -81,11 +83,13 @@ final class ConfigurationController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($session)->verifyToken('activate-maintenance-mode', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $this->configuration->set('main.maintenanceMode', 'true');
 
-        return $this->json(['success' => Translation::get('healthCheckOkay')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(languageKey: 'healthCheckOkay')], Response::HTTP_OK);
     }
 }

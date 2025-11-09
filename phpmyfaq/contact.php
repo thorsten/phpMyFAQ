@@ -47,7 +47,7 @@ $twigTemplate = $twig->loadTemplate('./contact.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgContact'), $faqConfig->getTitle()),
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgContact'), $faqConfig->getTitle()),
     'msgContactOwnText' => $contactText,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
     'lang' => $Language->getLanguage(),
@@ -55,7 +55,7 @@ $templateVars = [
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'version' => $faqConfig->getVersion(),
     'captchaFieldset' =>
-        $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get('msgCaptcha'), $user->isLoggedIn()),
+        $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get(languageKey: 'msgCaptcha'), $user->isLoggedIn()),
 ];
 
 return $templateVars;#

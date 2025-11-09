@@ -44,7 +44,9 @@ final class CommentController extends AbstractController
             'delete-comment',
             $data->data->{'pmf-csrf-token'},
         )) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $comments = $this->container->get('phpmyfaq.comments');

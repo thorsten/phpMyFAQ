@@ -62,13 +62,13 @@ final class RatingController extends AbstractAdministrationController
             'ratingData' => $data,
             'numberOfRatings' => $numberOfRatings,
             'categoryNames' => $category->categoryNames,
-            'adminHeaderRatings' => Translation::get('ad_rs'),
-            'buttonDeleteAllVotings' => Translation::get('ad_delete_all_votings'),
-            'green' => Translation::get('ad_rs_green'),
-            'greenNote' => Translation::get('ad_rs_ahtf'),
-            'red' => Translation::get('ad_rs_red'),
-            'redNote' => Translation::get('ad_rs_altt'),
-            'msgNoRatings' => Translation::get('ad_rs_no'),
+            'adminHeaderRatings' => Translation::get(languageKey: 'ad_rs'),
+            'buttonDeleteAllVotings' => Translation::get(languageKey: 'ad_delete_all_votings'),
+            'green' => Translation::get(languageKey: 'ad_rs_green'),
+            'greenNote' => Translation::get(languageKey: 'ad_rs_ahtf'),
+            'red' => Translation::get(languageKey: 'ad_rs_red'),
+            'redNote' => Translation::get(languageKey: 'ad_rs_altt'),
+            'msgNoRatings' => Translation::get(languageKey: 'ad_rs_no'),
         ]);
     }
 }

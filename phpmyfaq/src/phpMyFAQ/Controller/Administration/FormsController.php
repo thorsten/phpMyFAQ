@@ -54,10 +54,10 @@ final class FormsController extends AbstractAdministrationController
             'formDataAddContent' => $forms->getFormData(FormIds::ADD_NEW_FAQ->value),
             'csrfActivate' => Token::getInstance($session)->getTokenString('activate-input'),
             'csrfRequired' => Token::getInstance($session)->getTokenString('require-input'),
-            'ad_entry_id' => Translation::get('ad_entry_id'),
-            'ad_entry_active' => Translation::get('ad_entry_active'),
-            'ad_categ_translate' => Translation::get('ad_categ_translate'),
-            'msgHintDeactivateForms' => Translation::get('msgHintDeactivateForms'),
+            'ad_entry_id' => Translation::get(languageKey: 'ad_entry_id'),
+            'ad_entry_active' => Translation::get(languageKey: 'ad_entry_active'),
+            'ad_categ_translate' => Translation::get(languageKey: 'ad_categ_translate'),
+            'msgHintDeactivateForms' => Translation::get(languageKey: 'msgHintDeactivateForms'),
         ]);
     }
 
@@ -101,7 +101,7 @@ final class FormsController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'translations' => $forms->getTranslations($formId, $inputId),
-            'ad_sess_pageviews' => Translation::get('ad_sess_pageviews'),
+            'ad_sess_pageviews' => Translation::get(languageKey: 'ad_sess_pageviews'),
             'csrfTokenEditTranslation' => Token::getInstance($session)->getTokenString('edit-translation'),
             'csrfTokenDeleteTranslation' => Token::getInstance($session)->getTokenString('delete-translation'),
             'csrfTokenAddTranslation' => Token::getInstance($session)->getTokenString('add-translation'),

@@ -95,7 +95,7 @@ final class GroupController extends AbstractAdministrationController
 
         // check group name
         if ($groupName === '') {
-            $message = Translation::get('ad_group_error_noName');
+            $message = Translation::get(languageKey: 'ad_group_error_noName');
         }
 
         $groupData = [
@@ -105,9 +105,15 @@ final class GroupController extends AbstractAdministrationController
         ];
 
         if ($user->perm->addGroup($groupData) === 0) {
-            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_adus_dberr'));
+            $message = sprintf(
+                '<div class="alert alert-danger">%s</div>',
+                Translation::get(languageKey: 'ad_adus_dberr'),
+            );
         } else {
-            $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get('ad_group_suc'));
+            $message = sprintf(
+                '<div class="alert alert-success">%s</div>',
+                Translation::get(languageKey: 'ad_group_suc'),
+            );
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
@@ -161,9 +167,15 @@ final class GroupController extends AbstractAdministrationController
         }
 
         if (!$this->currentUser->perm->deleteGroup($groupId)) {
-            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_group_error_delete'));
+            $message = sprintf(
+                '<div class="alert alert-danger">%s</div>',
+                Translation::get(languageKey: 'ad_group_error_delete'),
+            );
         } else {
-            $message = sprintf('<div class="alert alert-success">%s</div>', Translation::get('ad_group_deleted'));
+            $message = sprintf(
+                '<div class="alert alert-success">%s</div>',
+                Translation::get(languageKey: 'ad_group_deleted'),
+            );
         }
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
@@ -198,15 +210,15 @@ final class GroupController extends AbstractAdministrationController
         if (!$user->perm->changeGroup($groupId, $groupData)) {
             $message = sprintf(
                 '<div class="alert alert-danger">%s %s</div>',
-                Translation::get('ad_msg_mysqlerr'),
+                Translation::get(languageKey: 'ad_msg_mysqlerr'),
                 $this->configuration->getDb()->error(),
             );
         } else {
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_2'),
             );
         }
 
@@ -234,7 +246,10 @@ final class GroupController extends AbstractAdministrationController
 
         $user = $this->container->get('phpmyfaq.user');
         if (!$user->perm->removeAllUsersFromGroup($groupId)) {
-            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
+            $message = sprintf(
+                '<div class="alert alert-danger">%s</div>',
+                Translation::get(languageKey: 'ad_msg_mysqlerr'),
+            );
         } else {
             foreach ($groupMembers as $groupMember) {
                 $user->perm->addToGroup((int) $groupMember, $groupId);
@@ -242,9 +257,9 @@ final class GroupController extends AbstractAdministrationController
 
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_2'),
             );
         }
 
@@ -272,7 +287,10 @@ final class GroupController extends AbstractAdministrationController
 
         $user = $this->container->get('phpmyfaq.user');
         if (!$user->perm->refuseAllGroupRights($groupId)) {
-            $message = sprintf('<div class="alert alert-danger">%s</div>', Translation::get('ad_msg_mysqlerr'));
+            $message = sprintf(
+                '<div class="alert alert-danger">%s</div>',
+                Translation::get(languageKey: 'ad_msg_mysqlerr'),
+            );
         } else {
             foreach ($groupPermissions as $groupPermission) {
                 $user->perm->grantGroupRight($groupId, (int) $groupPermission);
@@ -280,9 +298,9 @@ final class GroupController extends AbstractAdministrationController
 
             $message = sprintf(
                 '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-                Translation::get('ad_msg_savedsuc_1'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_1'),
                 $user->perm->getGroupName($groupId),
-                Translation::get('ad_msg_savedsuc_2'),
+                Translation::get(languageKey: 'ad_msg_savedsuc_2'),
             );
         }
 

@@ -49,7 +49,7 @@ abstract class AbstractAdministrationController extends AbstractController
         $gravatarImage = $this->getGravatarImage();
 
         return [
-            'metaLanguage' => Translation::get('metaLanguage'),
+            'metaLanguage' => Translation::get(languageKey: 'metaLanguage'),
             'layoutMode' => 'light',
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
@@ -57,9 +57,9 @@ abstract class AbstractAdministrationController extends AbstractController
             'currentYear' => date('Y'),
             'metaRobots' => $this->configuration->get('seo.metaTagsAdmin'),
             'templateSetName' => TwigWrapper::getTemplateSetName(),
-            'pageDirection' => Translation::get('direction'),
+            'pageDirection' => Translation::get(languageKey: 'direction'),
             'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
-            'msgSessionExpiration' => Translation::get('ad_session_expiration'),
+            'msgSessionExpiration' => Translation::get(languageKey: 'ad_session_expiration'),
             'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
             'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
                 $this->configuration->getLanguage()->getLanguage(),
@@ -68,16 +68,16 @@ abstract class AbstractAdministrationController extends AbstractController
             'userName' => $this->currentUser->getUserData('display_name'),
             'hasGravatarSupport' => $this->configuration->get('main.enableGravatarSupport'),
             'gravatarImage' => $gravatarImage,
-            'msgChangePassword' => Translation::get('ad_menu_passwd'),
+            'msgChangePassword' => Translation::get(languageKey: 'ad_menu_passwd'),
             'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
-            'msgLogout' => Translation::get('admin_mainmenu_logout'),
+            'msgLogout' => Translation::get(languageKey: 'admin_mainmenu_logout'),
             'secondLevelEntries' => $secLevelEntries,
-            'menuUsers' => Translation::get('admin_mainmenu_users'),
-            'menuContent' => Translation::get('admin_mainmenu_content'),
-            'menuStatistics' => Translation::get('admin_mainmenu_statistics'),
-            'menuImportsExports' => Translation::get('admin_mainmenu_imports_exports'),
-            'menuBackup' => Translation::get('admin_mainmenu_backup'),
-            'menuConfiguration' => Translation::get('admin_mainmenu_configuration'),
+            'menuUsers' => Translation::get(languageKey: 'admin_mainmenu_users'),
+            'menuContent' => Translation::get(languageKey: 'admin_mainmenu_content'),
+            'menuStatistics' => Translation::get(languageKey: 'admin_mainmenu_statistics'),
+            'menuImportsExports' => Translation::get(languageKey: 'admin_mainmenu_imports_exports'),
+            'menuBackup' => Translation::get(languageKey: 'admin_mainmenu_backup'),
+            'menuConfiguration' => Translation::get(languageKey: 'admin_mainmenu_configuration'),
             'isSessionTimeoutCounterEnabled' => $this->configuration->get('security.enableAdminSessionTimeoutCounter'),
         ] + $pageFlags;
     }
@@ -364,7 +364,10 @@ abstract class AbstractAdministrationController extends AbstractController
     protected function getFooter(): array
     {
         return [
-            'msgModalSessionWarning' => sprintf(Translation::get('ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
+            'msgModalSessionWarning' => sprintf(
+                Translation::get(languageKey: 'ad_session_expiring'),
+                PMF_AUTH_TIMEOUT_WARNING,
+            ),
             'msgPoweredBy' => System::getPoweredByString(),
             'documentationUrl' => System::getDocumentationUrl(),
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,

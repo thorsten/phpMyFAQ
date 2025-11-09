@@ -39,7 +39,7 @@ if ($user->isLoggedIn()) {
     // Twig template variables
     $templateVars = [
         ... $templateVars,
-        'title' => sprintf('%s - %s', Translation::get('msgBookmarks'), $faqConfig->getTitle()),
+        'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgBookmarks'), $faqConfig->getTitle()),
         'bookmarksList' => $bookmark->getBookmarkList(),
         'csrfTokenDeleteBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
         'csrfTokenDeleteAllBookmarks' => Token::getInstance($container->get('session'))->getTokenString('delete-all-bookmarks')

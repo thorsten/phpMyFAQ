@@ -48,12 +48,12 @@ $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('faqOverview'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get('msgOverviewMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get('faqOverview'),
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'faqOverview'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(languageKey: 'msgOverviewMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(languageKey: 'faqOverview'),
     'faqOverview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
-    'msgAuthor' => Translation::get('msgAuthor'),
-    'msgLastUpdateArticle' => Translation::get('msgLastUpdateArticle')
+    'msgAuthor' => Translation::get(languageKey: 'msgAuthor'),
+    'msgLastUpdateArticle' => Translation::get(languageKey: 'msgLastUpdateArticle')
 ];
 
 return $templateVars;

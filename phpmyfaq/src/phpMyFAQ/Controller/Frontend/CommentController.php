@@ -53,11 +53,11 @@ final class CommentController extends AbstractController
             : $language->setLanguageFromConfiguration($this->configuration->get('main.language'));
 
         if (!$this->isCommentAllowed($this->currentUser)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
+            return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
         if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
@@ -66,7 +66,9 @@ final class CommentController extends AbstractController
             'add-comment',
             $data->{'pmf-csrf-token'},
         )) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_msg_noauth',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $type = Filter::filterVar($data->type, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -86,7 +88,9 @@ final class CommentController extends AbstractController
         }
 
         if (empty($commentId)) {
-            return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'errSaveComment',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         // Check display name and e-mail address for not logged-in users
@@ -94,7 +98,9 @@ final class CommentController extends AbstractController
             $user = $this->container->get('phpmyfaq.user');
             if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
                 $this->configuration->getLogger()->error('Name and email already used by registered user.');
-                return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_CONFLICT);
+                return $this->json(['error' => Translation::get(
+                    languageKey: 'errSaveComment',
+                )], Response::HTTP_CONFLICT);
             }
         }
 
@@ -127,11 +133,13 @@ final class CommentController extends AbstractController
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                return $this->json(['success' => Translation::get('msgCommentThanks')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(languageKey: 'msgCommentThanks')], Response::HTTP_OK);
             }
 
             $session->userTracking('error_save_comment', $commentId);
-            return $this->json(['error' => Translation::get('errSaveComment')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'errSaveComment',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json([

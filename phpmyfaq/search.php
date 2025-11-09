@@ -299,7 +299,7 @@ $twig->addExtension(new AttributeExtension(TagNameTwigExtension::class));
 $twig->addFilter(new TwigFilter('repeat', fn($string, $times): string => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
-$pageHeader = ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch'));
+$pageHeader = ($tagSearch ? Translation::get(languageKey: 'msgTagSearch') : Translation::get(languageKey: 'msgAdvancedSearch'));
 
 $templateVars = [
     ... $templateVars,
@@ -308,32 +308,32 @@ $templateVars = [
     'isTagSearch' => $tagSearch,
     'selectedCategory' => $inputCategory,
     'categories' => $category->getCategoryTree(),
-    'msgSearch' => Translation::get('msgSearch'),
-    'msgAdvancedSearch' => ($tagSearch ? Translation::get('msgTagSearch') : Translation::get('msgAdvancedSearch')),
-    'msgCurrentTags' => Translation::get('msg_tags'),
+    'msgSearch' => Translation::get(languageKey: 'msgSearch'),
+    'msgAdvancedSearch' => ($tagSearch ? Translation::get(languageKey: 'msgTagSearch') : Translation::get(languageKey: 'msgAdvancedSearch')),
+    'msgCurrentTags' => Translation::get(languageKey: 'msg_tags'),
     'numberOfSearchResults' => $numOfResults,
     'totalPages' => $totalPages,
-    'msgPage' => Translation::get('msgPage'),
+    'msgPage' => Translation::get(languageKey: 'msgPage'),
     'currentPage' => $page,
-    'from' => Translation::get('msgVoteFrom'),
+    'from' => Translation::get(languageKey: 'msgVoteFrom'),
     'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults ?? 0),
     'searchTerm' => $searchTerm,
     'searchTags' =>  ($tagSearch ? $tagHelper->renderTagList($tags) : ''),
-    'msgSearchWord' => Translation::get('msgSearchWord'),
+    'msgSearchWord' => Translation::get(languageKey: 'msgSearchWord'),
     'searchResults' => $searchResults,
     'formActionUrl' => '?action=search',
     'searchString' => $inputSearchTerm,
-    'searchOnAllLanguages' => Translation::get('msgSearchOnAllLanguages'),
+    'searchOnAllLanguages' => Translation::get(languageKey: 'msgSearchOnAllLanguages'),
     'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-    'selectCategories' => Translation::get('msgSelectCategories'),
-    'allCategories' => Translation::get('msgAllCategories'),
-    'noSearchResults' => Translation::get('msgErrorNoRecords'),
+    'selectCategories' => Translation::get(languageKey: 'msgSelectCategories'),
+    'allCategories' => Translation::get(languageKey: 'msgAllCategories'),
+    'noSearchResults' => Translation::get(languageKey: 'msgErrorNoRecords'),
     'pagination' => $faqPagination->render(),
-    'msgMostPopularSearches' => Translation::get('msgMostPopularSearches'),
+    'msgMostPopularSearches' => Translation::get(languageKey: 'msgMostPopularSearches'),
     'mostPopularSearches' => $mostPopularSearchData,
-    'relatedTagsHeader' => Translation::get('msgRelatedTags'),
+    'relatedTagsHeader' => Translation::get(languageKey: 'msgRelatedTags'),
     'relatedTags' => $relTags,
-    'msgTags' => Translation::get('msgPopularTags'),
+    'msgTags' => Translation::get(languageKey: 'msgPopularTags'),
     'tagList' => $tagging->getPopularTags(),
 ];
 

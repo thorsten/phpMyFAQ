@@ -49,7 +49,9 @@ final class SearchController extends AbstractController
             'delete-searchterm',
             $deleteData->csrf,
         )) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $searchId = Filter::filterVar($deleteData->searchTermId, FILTER_VALIDATE_INT);

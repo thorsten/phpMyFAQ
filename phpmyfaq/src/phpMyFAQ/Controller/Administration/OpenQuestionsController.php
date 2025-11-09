@@ -50,19 +50,19 @@ final class OpenQuestionsController extends AbstractAdministrationController
         return $this->render('@admin/content/open-questions.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'msgOpenQuestions' => Translation::get('msgOpenQuestions'),
+            'msgOpenQuestions' => Translation::get(languageKey: 'msgOpenQuestions'),
             'csrfTokenDeleteQuestion' => Token::getInstance($session)->getTokenString('delete-questions'),
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
-            'msgQuestion' => Translation::get('msgQuestion'),
-            'msgVisibility' => Translation::get('ad_entry_visibility'),
+            'msgQuestion' => Translation::get(languageKey: 'msgQuestion'),
+            'msgVisibility' => Translation::get(languageKey: 'ad_entry_visibility'),
             'questions' => $question->getAll(),
-            'yes' => Translation::get('ad_gen_yes'),
-            'no' => Translation::get('ad_gen_no'),
+            'yes' => Translation::get(languageKey: 'ad_gen_yes'),
+            'no' => Translation::get(languageKey: 'ad_gen_no'),
             'enableCloseQuestion' => $this->configuration->get('records.enableCloseQuestion'),
-            'msg2answerFAQ' => Translation::get('msg2answerFAQ'),
-            'msgTakeQuestion' => Translation::get('ad_ques_take'),
+            'msg2answerFAQ' => Translation::get(languageKey: 'msg2answerFAQ'),
+            'msgTakeQuestion' => Translation::get(languageKey: 'ad_ques_take'),
             'csrfTokenToggleVisibility' => Token::getInstance($session)->getTokenString('toggle-question-visibility'),
-            'msgDeleteAllOpenQuestions' => Translation::get('msgDelete'),
+            'msgDeleteAllOpenQuestions' => Translation::get(languageKey: 'msgDelete'),
         ]);
     }
 }

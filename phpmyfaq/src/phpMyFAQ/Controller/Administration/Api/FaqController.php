@@ -83,7 +83,9 @@ final class FaqController extends AbstractController
         $data = json_decode($request->getContent())->data;
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         // Collect FAQ data
@@ -116,7 +118,9 @@ final class FaqController extends AbstractController
         $logging->log($this->currentUser, 'admin-save-new-faq');
 
         if (empty($question) && empty($content)) {
-            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoQuestionAndAnswer',
+            )], Response::HTTP_CONFLICT);
         }
 
         $faqData = new FaqEntity();
@@ -253,12 +257,14 @@ final class FaqController extends AbstractController
             }
 
             return $this->json([
-                'success' => Translation::get('ad_entry_savedsuc'),
+                'success' => Translation::get(languageKey: 'ad_entry_savedsuc'),
                 'data' => $faqData->getJson(),
             ], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_entry_savedfail',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -287,7 +293,9 @@ final class FaqController extends AbstractController
         $data = json_decode($request->getContent())->data;
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         // Collect FAQ data
@@ -320,7 +328,9 @@ final class FaqController extends AbstractController
         $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (empty($question) && empty($content)) {
-            return $this->json(['error' => Translation::get('msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoQuestionAndAnswer',
+            )], Response::HTTP_CONFLICT);
         }
 
         // Permissions
@@ -465,7 +475,7 @@ final class FaqController extends AbstractController
         }
 
         return $this->json([
-            'success' => Translation::get('ad_entry_savedsuc'),
+            'success' => Translation::get(languageKey: 'ad_entry_savedsuc'),
             'data' => $faqData->getJson(),
         ], Response::HTTP_OK);
     }
@@ -529,7 +539,9 @@ final class FaqController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
@@ -543,10 +555,14 @@ final class FaqController extends AbstractController
             }
 
             if ($success) {
-                return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(
+                    languageKey: 'ad_entry_savedsuc',
+                )], Response::HTTP_OK);
             }
 
-            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_entry_savedfail',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
@@ -567,7 +583,9 @@ final class FaqController extends AbstractController
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!($faqIds === false || $faqIds === [] || $faqIds === null)) {
@@ -581,10 +599,14 @@ final class FaqController extends AbstractController
             }
 
             if ($success) {
-                return $this->json(['success' => Translation::get('ad_entry_savedsuc')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(
+                    languageKey: 'ad_entry_savedsuc',
+                )], Response::HTTP_OK);
             }
 
-            return $this->json(['error' => Translation::get('ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_entry_savedfail',
+            )], Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json(['error' => 'No FAQ IDs provided.'], Response::HTTP_BAD_REQUEST);
@@ -606,7 +628,9 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $adminLog = $this->container->get('phpmyfaq.admin.admin-log');
@@ -618,7 +642,7 @@ final class FaqController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        return $this->json(['success' => Translation::get('ad_entry_delsuc')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(languageKey: 'ad_entry_delsuc')], Response::HTTP_OK);
     }
 
     /**
@@ -632,7 +656,9 @@ final class FaqController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $faqPermission = new FaqPermission($this->configuration);
@@ -668,13 +694,15 @@ final class FaqController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('order-stickyfaqs', $data->csrf)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $faq = $this->container->get('phpmyfaq.admin.faq');
         $faq->setStickyFaqOrder($data->faqIds);
 
-        return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(languageKey: 'ad_categ_save_order')], Response::HTTP_OK);
     }
 
     /**
@@ -693,7 +721,9 @@ final class FaqController extends AbstractController
         }
 
         if (!Token::getInstance($session)->verifyToken('importfaqs', $request->request->get('csrf'))) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $faqImport = new Import($this->configuration);
@@ -707,7 +737,7 @@ final class FaqController extends AbstractController
             if (!$faqImport->validateCSV($csvData)) {
                 $result = [
                     'storedAll' => false,
-                    'error' => Translation::get('msgCSVFileNotValidated'),
+                    'error' => Translation::get(languageKey: 'msgCSVFileNotValidated'),
                 ];
                 return $this->json($result, Response::HTTP_BAD_REQUEST);
             }
@@ -722,7 +752,7 @@ final class FaqController extends AbstractController
             if ($errors === []) {
                 $result = [
                     'storedAll' => true,
-                    'success' => Translation::get('msgImportSuccessful'),
+                    'success' => Translation::get(languageKey: 'msgImportSuccessful'),
                 ];
                 return $this->json($result, Response::HTTP_OK);
             }

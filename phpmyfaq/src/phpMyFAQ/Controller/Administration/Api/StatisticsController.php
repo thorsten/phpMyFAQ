@@ -45,14 +45,20 @@ final class StatisticsController extends AbstractController
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-adminlog', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if ($this->container->get('phpmyfaq.admin.admin-log')->delete()) {
-            return $this->json(['success' => Translation::get('ad_adminlog_delete_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_adminlog_delete_success',
+            )], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_adminlog_delete_failure')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_adminlog_delete_failure',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -66,12 +72,16 @@ final class StatisticsController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
         if (!Token::getInstance($this->container->get('session'))->verifyToken('sessions', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $month = Filter::filterVar($request->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->container->get('phpmyfaq.helper.statistics')->deleteTrackingFiles($month)) {
-            return $this->json(['success' => Translation::get('ad_adminlog_delete_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_adminlog_delete_success',
+            )], Response::HTTP_OK);
         }
 
         return $this->json(['error' => 'Cannot delete sessions.'], Response::HTTP_BAD_REQUEST);
@@ -92,14 +102,20 @@ final class StatisticsController extends AbstractController
             'truncate-search-terms',
             $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if ($this->container->get('phpmyfaq.search')->deleteAllSearchTerms()) {
-            return $this->json(['success' => Translation::get('ad_searchterm_del_suc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_searchterm_del_suc',
+            )], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_searchterm_del_err')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_searchterm_del_err',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -113,14 +129,18 @@ final class StatisticsController extends AbstractController
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('clear-statistics', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if ($this->container->get('phpmyfaq.rating')->deleteAll()) {
-            return $this->json(['success' => Translation::get('msgDeleteAllVotings')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'msgDeleteAllVotings')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('msgDeleteAllVotings')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'msgDeleteAllVotings',
+        )], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -134,11 +154,15 @@ final class StatisticsController extends AbstractController
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('clear-visits', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         if ($this->container->get('phpmyfaq.helper.statistics')->clearAllVisits()) {
-            return $this->json(['success' => Translation::get('ad_reset_visits_success')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(
+                languageKey: 'ad_reset_visits_success',
+            )], Response::HTTP_OK);
         }
 
         return $this->json(['error' => 'Cannot clear visits.'], Response::HTTP_BAD_REQUEST);

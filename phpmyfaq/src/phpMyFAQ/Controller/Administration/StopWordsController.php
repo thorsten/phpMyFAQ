@@ -49,13 +49,13 @@ final class StopWordsController extends AbstractAdministrationController
         return $this->render('@admin/configuration/stopwords.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderStopWords' => Translation::get('ad_menu_stopwordsconfig'),
+            'adminHeaderStopWords' => Translation::get(languageKey: 'ad_menu_stopwordsconfig'),
             'hasPermission' => $hasPermission,
-            'msgDescription' => Translation::get('ad_stopwords_desc'),
+            'msgDescription' => Translation::get(languageKey: 'ad_stopwords_desc'),
             'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('stopwords'),
-            'msgStopWordsLabel' => Translation::get('ad_stopwords_desc'),
+            'msgStopWordsLabel' => Translation::get(languageKey: 'ad_stopwords_desc'),
             'sortedLanguageCodes' => LanguageCodes::getAllSorted(),
-            'buttonAdd' => Translation::get('ad_config_stopword_input'),
+            'buttonAdd' => Translation::get(languageKey: 'ad_config_stopword_input'),
         ]);
     }
 }

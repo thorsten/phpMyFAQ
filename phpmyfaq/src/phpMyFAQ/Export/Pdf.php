@@ -149,19 +149,22 @@ class Pdf extends Export
 
             if (!empty($faq['keywords'])) {
                 $this->wrapper->Ln();
-                $this->wrapper->Write(5, Translation::get('msgNewContentKeywords') . ' ' . $faq['keywords']);
+                $this->wrapper->Write(
+                    5,
+                    Translation::get(languageKey: 'msgNewContentKeywords') . ' ' . $faq['keywords'],
+                );
             }
 
             if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->wrapper->Ln();
-                $this->wrapper->Write(5, Translation::get('msgTags') . ': ' . implode(', ', $tags));
+                $this->wrapper->Write(5, Translation::get(languageKey: 'msgTags') . ': ' . implode(', ', $tags));
             }
 
             $this->wrapper->Ln();
             $this->wrapper->Ln();
             $this->wrapper->Write(
                 5,
-                Translation::get('msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
+                Translation::get(languageKey: 'msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
             $currentCategory = $faq['category_id'];
@@ -216,7 +219,7 @@ class Pdf extends Export
         if (isset($faqData['attachmentList'])) {
             $this->wrapper->Ln(10);
             $this->wrapper->Ln();
-            $this->wrapper->Write(5, Translation::get('msgAttachedFiles') . ':');
+            $this->wrapper->Write(5, Translation::get(languageKey: 'msgAttachedFiles') . ':');
             $this->wrapper->Ln(5);
             $this->wrapper->Ln();
             $listItems = '<ul class="pb-4 mb-4 border-bottom">';
@@ -231,7 +234,10 @@ class Pdf extends Export
         $this->wrapper->Ln(10);
         $this->wrapper->Ln();
         $this->wrapper->SetFont($this->wrapper->getCurrentFont(), '', 9);
-        $this->wrapper->Write(5, Translation::get('ad_entry_solution_id') . ': #' . $faqData['solution_id']);
+        $this->wrapper->Write(
+            5,
+            Translation::get(languageKey: 'ad_entry_solution_id') . ': #' . $faqData['solution_id'],
+        );
 
         // Check if the author name should be visible, according to the GDPR option
         $currentUser = new CurrentUser($this->config);
@@ -239,9 +245,12 @@ class Pdf extends Export
 
         $this->wrapper->SetAuthor($author);
         $this->wrapper->Ln();
-        $this->wrapper->Write(5, Translation::get('msgAuthor') . ': ' . $author);
+        $this->wrapper->Write(5, Translation::get(languageKey: 'msgAuthor') . ': ' . $author);
         $this->wrapper->Ln();
-        $this->wrapper->Write(5, Translation::get('msgLastUpdateArticle') . $date->format($faqData['date']));
+        $this->wrapper->Write(
+            5,
+            Translation::get(languageKey: 'msgLastUpdateArticle') . $date->format($faqData['date']),
+        );
 
         return $this->wrapper->Output($filename);
     }

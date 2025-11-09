@@ -73,10 +73,10 @@ final class UnauthorizedUserController
                 }
 
                 $text =
-                    Translation::get('lostpwd_text_1')
+                    Translation::get(languageKey: 'lostpwd_text_1')
                     . sprintf('<br><br>Username: %s', $username)
                     . sprintf('<br>New Password: %s<br><br>', $newPassword)
-                    . Translation::get('lostpwd_text_2');
+                    . Translation::get(languageKey: 'lostpwd_text_2');
 
                 $mail = new Mail($this->configuration);
                 try {
@@ -98,13 +98,15 @@ final class UnauthorizedUserController
 
                 unset($mail);
                 // Trust that the email has been sent
-                return $this->json(['success' => Translation::get('lostpwd_mail_okay')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(
+                    languageKey: 'lostpwd_mail_okay',
+                )], Response::HTTP_OK);
             }
 
-            return $this->json(['error' => Translation::get('lostpwd_err_1')], Response::HTTP_CONFLICT);
+            return $this->json(['error' => Translation::get(languageKey: 'lostpwd_err_1')], Response::HTTP_CONFLICT);
         }
 
-        return $this->json(['error' => Translation::get('lostpwd_err_2')], Response::HTTP_CONFLICT);
+        return $this->json(['error' => Translation::get(languageKey: 'lostpwd_err_2')], Response::HTTP_CONFLICT);
     }
 
     /**

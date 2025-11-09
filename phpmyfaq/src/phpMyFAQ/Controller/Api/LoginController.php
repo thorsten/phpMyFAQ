@@ -98,7 +98,7 @@ final class LoginController extends AbstractController
             $this->configuration->getLogger()->error('Failed login: ' . $exception->getMessage());
             $result = [
                 'loggedin' => $user->isLoggedIn(),
-                'error' => Translation::get('ad_auth_fail'),
+                'error' => Translation::get(languageKey: 'ad_auth_fail'),
             ];
             return $this->json($result, Response::HTTP_BAD_REQUEST);
         }

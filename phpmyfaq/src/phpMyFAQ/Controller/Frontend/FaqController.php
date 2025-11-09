@@ -58,7 +58,7 @@ final class FaqController extends AbstractController
             : $language->setLanguageFromConfiguration($this->configuration->get('main.language'));
 
         if (!$this->isAddingFaqsAllowed($this->currentUser)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_FORBIDDEN);
+            return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
@@ -90,7 +90,7 @@ final class FaqController extends AbstractController
         }
 
         if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
         if (
@@ -169,19 +169,19 @@ final class FaqController extends AbstractController
             if ($this->configuration->get('records.defaultActivation')) {
                 $link = [
                     'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
-                    'info' => Translation::get('msgRedirect'),
+                    'info' => Translation::get(languageKey: 'msgRedirect'),
                 ];
             } else {
                 $link = [];
             }
 
             return $this->json([
-                'success' => Translation::get('msgNewContentThanks'),
+                'success' => Translation::get(languageKey: 'msgNewContentThanks'),
                 ...$link,
             ], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('errSaveEntries')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(languageKey: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
     }
 
     /**

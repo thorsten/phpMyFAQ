@@ -45,12 +45,12 @@ final class StickyFaqsController extends AbstractAdministrationController
         return $this->render('@admin/content/sticky-faqs.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'stickyFAQsHeader' => Translation::get('stickyRecordsHeader'),
+            'stickyFAQsHeader' => Translation::get(languageKey: 'stickyRecordsHeader'),
             'stickyData' => $this->container->get('phpmyfaq.faq')->getStickyFaqsData(),
             'sortableDisabled' => $customOrdering === false ? 'sortable-disabled' : '',
             'orderingStickyFaqsActivated' => $this->configuration->get('records.orderStickyFaqsCustom'),
-            'alertMessageStickyFaqsDeactivated' => Translation::get('msgOrderStickyFaqsCustomDeactivated'),
-            'alertMessageNoStickyRecords' => Translation::get('msgNoStickyFaqs'),
+            'alertMessageStickyFaqsDeactivated' => Translation::get(languageKey: 'msgOrderStickyFaqsCustomDeactivated'),
+            'alertMessageNoStickyRecords' => Translation::get(languageKey: 'msgNoStickyFaqs'),
             'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('order-stickyfaqs'),
         ]);
     }

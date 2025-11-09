@@ -355,11 +355,11 @@ class Faq
             if ($pages > 1) {
                 $output .= sprintf(
                     '<p>%s <strong>%d</strong> %s <strong>%d</strong> %s</p>',
-                    Translation::get('msgPage'),
+                    Translation::get(languageKey: 'msgPage'),
                     $page,
-                    Translation::get('msgVoteFrom'),
+                    Translation::get(languageKey: 'msgVoteFrom'),
                     $pages,
-                    Translation::get('msgPages'),
+                    Translation::get(languageKey: 'msgPages'),
                 );
             }
 
@@ -620,11 +620,11 @@ class Faq
 
             if (!$isAdmin) {
                 if (!$active) {
-                    $answer = Translation::get('err_inactiveArticle');
+                    $answer = Translation::get(languageKey: 'err_inactiveArticle');
                 }
 
                 if ($expired) {
-                    $answer = Translation::get('err_expiredArticle');
+                    $answer = Translation::get(languageKey: 'err_expiredArticle');
                 }
             }
 
@@ -657,7 +657,7 @@ class Faq
                 'sticky' => 0,
                 'keywords' => '',
                 'title' => '',
-                'content' => Translation::get('msgAccessDenied'),
+                'content' => Translation::get(languageKey: 'msgAccessDenied'),
                 'author' => '',
                 'email' => '',
                 'comment' => '',
@@ -1136,11 +1136,11 @@ class Faq
             $expired = date('YmdHis') > $row->date_end;
 
             if (!$active) {
-                $content = Translation::get('err_inactiveArticle');
+                $content = Translation::get(languageKey: 'err_inactiveArticle');
             }
 
             if ($expired) {
-                $content = Translation::get('err_expiredArticle');
+                $content = Translation::get(languageKey: 'err_expiredArticle');
             }
 
             $this->faqRecord = [
@@ -1326,11 +1326,11 @@ class Faq
             $expired = date('YmdHis') > $row->date_end;
 
             if (!$active) {
-                $content = Translation::get('err_inactiveArticle');
+                $content = Translation::get(languageKey: 'err_inactiveArticle');
             }
 
             if ($expired) {
-                $content = Translation::get('err_expiredArticle');
+                $content = Translation::get(languageKey: 'err_expiredArticle');
             }
 
             $this->faqRecords[] = [
@@ -1382,7 +1382,7 @@ class Faq
                 $question = $row->question;
             }
         } else {
-            $question = Translation::get('no_cats');
+            $question = Translation::get(languageKey: 'no_cats');
         }
 
         return $question;

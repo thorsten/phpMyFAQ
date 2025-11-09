@@ -57,7 +57,7 @@ $oNews = new News($faqConfig);
 $faqSession->userTracking('news_view', $newsId);
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->getTitle() . Translation::get('msgNews');
+$newsMainHeader = $faqConfig->getTitle() . Translation::get(languageKey: 'msgNews');
 
 // Get all data from the news record
 $news = $oNews->get($newsId);
@@ -77,7 +77,7 @@ $newsContent = $helper->cleanUpContent($newsContent);
 if (strlen((string) $news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
-        Translation::get('msgInfo'),
+        Translation::get(languageKey: 'msgInfo'),
         Strings::htmlentities($news['link']),
         $news['target'],
         Strings::htmlentities($news['linkTitle'])
@@ -90,7 +90,7 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT->va
     $editThisEntry = sprintf(
         '<a href="./admin/index.php?action=news&do=edit&id=%d">%s</a>',
         $newsId,
-        Translation::get('ad_menu_news_edit')
+        Translation::get(languageKey: 'ad_menu_news_edit')
     );
 }
 
@@ -99,11 +99,11 @@ if (
     (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
     (!$news['active']) || (!$news['allowComments'])
 ) {
-    $commentMessage = Translation::get('msgWriteNoComment');
+    $commentMessage = Translation::get(languageKey: 'msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
         '<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-        Translation::get('newsWriteComment')
+        Translation::get(languageKey: 'newsWriteComment')
     );
 }
 
@@ -112,7 +112,7 @@ if ($news['active']) {
     $date = new Date($faqConfig);
     $newsDate = sprintf(
         '%s<span id="newsLastUpd">%s</span>',
-        Translation::get('msgLastUpdateArticle'),
+        Translation::get(languageKey: 'msgLastUpdateArticle'),
         $date->format($news['date'])
     );
 } else {
@@ -136,26 +136,26 @@ $templateVars = [
     'newsHeader' => $newsHeader,
     'mainPageContent' => $newsContent,
     'writeDateMsg' => $newsDate,
-    'msgAboutThisNews' => Translation::get('msgAboutThisNews'),
-    'writeAuthor' => ($news['active']) ? Translation::get('msgAuthor') . ': ' . $news['authorName'] : '',
+    'msgAboutThisNews' => Translation::get(languageKey: 'msgAboutThisNews'),
+    'writeAuthor' => ($news['active']) ? Translation::get(languageKey: 'msgAuthor') . ': ' . $news['authorName'] : '',
     'editThisEntry' => $editThisEntry,
     'writeCommentMsg' => $commentMessage,
-    'msgWriteComment' => Translation::get('newsWriteComment'),
+    'msgWriteComment' => Translation::get(languageKey: 'newsWriteComment'),
     'newsId' => $newsId,
     'newsLang' => $news['lang'],
-    'msgCommentHeader' => Translation::get('msgCommentHeader'),
-    'msgNewContentName' => Translation::get('msgNewContentName'),
-    'msgNewContentMail' => Translation::get('msgNewContentMail'),
+    'msgCommentHeader' => Translation::get(languageKey: 'msgCommentHeader'),
+    'msgNewContentName' => Translation::get(languageKey: 'msgNewContentName'),
+    'msgNewContentMail' => Translation::get(languageKey: 'msgNewContentMail'),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
-    'msgYourComment' => Translation::get('msgYourComment'),
+    'msgYourComment' => Translation::get(languageKey: 'msgYourComment'),
     'csrfInput' => Token::getInstance($container->get('session'))->getTokenInput('add-comment'),
-    'msgCancel' => Translation::get('ad_gen_cancel'),
-    'msgNewContentSubmit' => Translation::get('msgNewContentSubmit'),
+    'msgCancel' => Translation::get(languageKey: 'ad_gen_cancel'),
+    'msgNewContentSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
-        Translation::get('msgCaptcha'),
+        Translation::get(languageKey: 'msgCaptcha'),
         $user->isLoggedIn()
     ),
     'renderComments' => $commentHelper->getComments($comments),

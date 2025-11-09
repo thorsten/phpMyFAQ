@@ -46,7 +46,7 @@ final class ContactController extends AbstractController
         $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
 
         if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get('msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
         $stopWords = $this->container->get('phpmyfaq.stop-words');
@@ -61,9 +61,9 @@ final class ContactController extends AbstractController
         ) {
             $question = sprintf(
                 '%s: %s<br>%s: %s<br><br>%s',
-                Translation::get('msgNewContentName'),
+                Translation::get(languageKey: 'msgNewContentName'),
                 $author,
-                Translation::get('msgNewContentMail'),
+                Translation::get(languageKey: 'msgNewContentMail'),
                 $email,
                 $question,
             );
@@ -78,12 +78,12 @@ final class ContactController extends AbstractController
                 $mailer->send();
                 unset($mailer);
 
-                return $this->json(['success' => Translation::get('msgMailContact')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(languageKey: 'msgMailContact')], Response::HTTP_OK);
             } catch (Exception|TransportExceptionInterface $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         } else {
-            return $this->json(['error' => Translation::get('err_sendMail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
         }
     }
 }

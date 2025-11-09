@@ -47,20 +47,22 @@ final class BookmarkController extends AbstractController
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('add-bookmark', $csrfToken)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_msg_noauth',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
         if ($bookmark->add($bookmarkId)) {
             return $this->json([
-                'success' => Translation::get('msgBookmarkAdded'),
-                'linkText' => Translation::get('removeBookmark'),
+                'success' => Translation::get(languageKey: 'msgBookmarkAdded'),
+                'linkText' => Translation::get(languageKey: 'removeBookmark'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-bookmark'),
             ], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(languageKey: 'msgError')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -77,20 +79,22 @@ final class BookmarkController extends AbstractController
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-bookmark', $csrfToken)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_msg_noauth',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
         if ($bookmark->remove($bookmarkId)) {
             return $this->json([
-                'success' => Translation::get('msgBookmarkRemoved'),
-                'linkText' => Translation::get('msgAddBookmark'),
+                'success' => Translation::get(languageKey: 'msgBookmarkRemoved'),
+                'linkText' => Translation::get(languageKey: 'msgAddBookmark'),
                 'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('add-bookmark'),
             ], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(languageKey: 'msgError')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -106,15 +110,17 @@ final class BookmarkController extends AbstractController
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-all-bookmarks', $csrfToken)) {
-            return $this->json(['error' => Translation::get('ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'ad_msg_noauth',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $bookmark = new Bookmark($this->configuration, $this->currentUser);
 
         if ($bookmark->removeAll()) {
-            return $this->json(['success' => Translation::get('msgBookmarkRemoved')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'msgBookmarkRemoved')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('msgError')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(languageKey: 'msgError')], Response::HTTP_BAD_REQUEST);
     }
 }

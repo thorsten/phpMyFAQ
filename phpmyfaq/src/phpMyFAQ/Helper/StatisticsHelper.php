@@ -84,7 +84,7 @@ readonly class StatisticsHelper
             return $this->date->format(date('Y-m-d H:i', (int) $date));
         }
 
-        return Translation::get('ad_sess_noentry');
+        return Translation::get(languageKey: 'ad_sess_noentry');
     }
 
     public function getLastTrackingDate(int $lastDate): string
@@ -108,7 +108,7 @@ readonly class StatisticsHelper
             return $this->date->format(date('Y-m-d H:i', (int) $date));
         }
 
-        return Translation::get('ad_sess_noentry');
+        return Translation::get(languageKey: 'ad_sess_noentry');
     }
 
     /**
@@ -177,7 +177,10 @@ readonly class StatisticsHelper
     public function renderMonthSelector(): string
     {
         $oldValue = mktime(0, 0, 0, 1, 1, 1970);
-        $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
+        $renderedHtml = sprintf(
+            '<option value="" selected>%s</option>',
+            Translation::get(languageKey: 'ad_stat_choose'),
+        );
 
         $trackingDates = $this->getAllTrackingDates();
         foreach ($trackingDates as $trackingDate) {
@@ -203,7 +206,8 @@ readonly class StatisticsHelper
         $renderedHtml = '';
 
         if ($trackingDates === []) {
-            return $renderedHtml . sprintf('<option value="" selected>%s</option>', Translation::get('ad_stat_choose'));
+            return $renderedHtml
+            . sprintf('<option value="" selected>%s</option>', Translation::get(languageKey: 'ad_stat_choose'));
         }
 
         foreach ($trackingDates as $trackingDate) {

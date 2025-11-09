@@ -101,7 +101,7 @@ class RegistrationHelper extends AbstractHelper
         $mail->setReplyTo($email, $fullName);
         $mail->addTo($this->configuration->getAdminEmail());
 
-        $mail->subject = Utils::resolveMarkers(Translation::get('emailRegSubject'), $this->configuration);
+        $mail->subject = Utils::resolveMarkers(Translation::get(languageKey: 'emailRegSubject'), $this->configuration);
         $mail->message = $text;
         $mail->send();
         unset($mail);
@@ -109,9 +109,9 @@ class RegistrationHelper extends AbstractHelper
         return [
             'registered' => true,
             'success' =>
-                trim((string) Translation::get('successMessage'))
+                trim((string) Translation::get(languageKey: 'successMessage'))
                 . ' '
-                . trim((string) Translation::get('msgRegThankYou')),
+                . trim((string) Translation::get(languageKey: 'msgRegThankYou')),
         ];
     }
 

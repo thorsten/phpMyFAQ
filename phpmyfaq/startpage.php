@@ -41,7 +41,7 @@ $faqStatistics = new Statistics($faqConfig);
 
 $request = Request::createFromGlobals();
 
-$writeNewsHeader = Translation::get('newsArchive');
+$writeNewsHeader = Translation::get(languageKey: 'newsArchive');
 
 $startPageCategory = new Startpage($faqConfig);
 $startPageCategory
@@ -66,29 +66,29 @@ $templateVars = [
     'pageHeader' => $faqConfig->getTitle(),
     'startPageCategories' => (is_countable($startPageCategories) ? count($startPageCategories) : 0) > 0,
     'startPageCategoryDecks' => $startPageCategories,
-    'stickyRecordsHeader' => Translation::get('stickyRecordsHeader'),
+    'stickyRecordsHeader' => Translation::get(languageKey: 'stickyRecordsHeader'),
     'stickyRecordsList' => $faq->getStickyFaqsData(),
-    'writeTopTenHeader' => Translation::get('msgTopTen'),
+    'writeTopTenHeader' => Translation::get(languageKey: 'msgTopTen'),
     'topRecordsList' => $faqStatistics->getTopTen($param),
-    'errorMsgTopTen' => Translation::get('err_noTopTen'),
-    'writeNewestHeader' => Translation::get('msgLatestArticles'),
+    'errorMsgTopTen' => Translation::get(languageKey: 'err_noTopTen'),
+    'writeNewestHeader' => Translation::get(languageKey: 'msgLatestArticles'),
     'latestRecordsList' => $faqStatistics->getLatest(),
-    'errorMsgLatest' => Translation::get('msgErrorNoRecords'),
-    'msgTrendingFAQs' => Translation::get('msgTrendingFAQs'),
+    'errorMsgLatest' => Translation::get(languageKey: 'msgErrorNoRecords'),
+    'msgTrendingFAQs' => Translation::get(languageKey: 'msgTrendingFAQs'),
     'trendingRecordsList' => $faqStatistics->getTrending(),
-    'errorMsgTrendingFaqs' => Translation::get('msgErrorNoRecords'),
+    'errorMsgTrendingFaqs' => Translation::get(languageKey: 'msgErrorNoRecords'),
     'msgNewsHeader' => $writeNewsHeader,
     'newsList' => $news->getAll(),
     'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faqStatistics->totalFaqs($faqLangCode)),
-    'msgTags' => Translation::get('msgPopularTags'),
+    'msgTags' => Translation::get(languageKey: 'msgPopularTags'),
     'tagsList' => $oTag->getPopularTags(12),
     'formActionUrl' => '?' . $sids . 'action=search',
-    'searchBox' => Translation::get('msgSearch'),
+    'searchBox' => Translation::get(languageKey: 'msgSearch'),
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'msgSearch' => sprintf(
         '<a class="help" href="%sindex.php?action=search">%s</a>',
         Strings::htmlentities($faqSystem->getSystemUri($faqConfig)),
-        Translation::get('msgAdvancedSearch')
+        Translation::get(languageKey: 'msgAdvancedSearch')
     )
 ];
 

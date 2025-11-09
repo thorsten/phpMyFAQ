@@ -70,7 +70,7 @@ try {
     $userPermission = $faqPermission->get(Permission::USER, $attachment->getRecordId());
     $groupPermission = $faqPermission->get(Permission::GROUP, $attachment->getRecordId());
 } catch (AttachmentException $attachmentException) {
-    $attachmentErrors[] = Translation::get('msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
+    $attachmentErrors[] = Translation::get(languageKey: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
 }
 
 // Check on group permissions
@@ -136,7 +136,7 @@ if (
     $response->headers->set('Content-MD5', $attachment->getRealHash());
     $response->send();
 } else {
-    $attachmentErrors[] = Translation::get('msgAttachmentInvalid');
+    $attachmentErrors[] = Translation::get(languageKey: 'msgAttachmentInvalid');
 }
 
 // If we're here, there was an error with file download

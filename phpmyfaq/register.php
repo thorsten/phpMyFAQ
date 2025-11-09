@@ -50,13 +50,13 @@ $twigTemplate = $twig->loadTemplate('./register.twig');
 // Twig template variables
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get('msgRegistration'), $faqConfig->getTitle()),
+    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgRegistration'), $faqConfig->getTitle()),
     'lang' => $faqLangCode,
     'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'register',
-        Translation::get('msgCaptcha'),
+        Translation::get(languageKey: 'msgCaptcha'),
         $user->isLoggedIn()
     ),
 ];

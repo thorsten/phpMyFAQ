@@ -101,13 +101,13 @@ final class WebAuthnController extends AbstractController
         try {
             $this->user->getUserByLogin($webAuthnUser->getName());
         } catch (Exception) {
-            return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
         }
 
         if ($this->user->setWebAuthnKeys($webAuthnUser->getWebAuthnKeys())) {
             return $this->json([
                 'success' => 'ok',
-                'message' => Translation::get('msgPasskeyRegistrationSuccess'),
+                'message' => Translation::get(languageKey: 'msgPasskeyRegistrationSuccess'),
             ], Response::HTTP_OK);
         }
 
@@ -127,7 +127,7 @@ final class WebAuthnController extends AbstractController
         try {
             $this->user->getUserByLogin($login);
         } catch (Exception) {
-            return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(languageKey: 'ad_auth_fail')], Response::HTTP_BAD_REQUEST);
         }
 
         $webAuthnKeys = $this->user->getWebAuthnKeys();
@@ -156,7 +156,9 @@ final class WebAuthnController extends AbstractController
             $currentUser->getUserByLogin($login);
 
             if ($currentUser->isBlocked()) {
-                return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+                return $this->json(['error' => Translation::get(
+                    languageKey: 'ad_auth_fail',
+                )], Response::HTTP_UNAUTHORIZED);
             }
 
             $currentUser->setLoggedIn(true);
@@ -169,6 +171,6 @@ final class WebAuthnController extends AbstractController
             ], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
+        return $this->json(['error' => Translation::get(languageKey: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
     }
 }

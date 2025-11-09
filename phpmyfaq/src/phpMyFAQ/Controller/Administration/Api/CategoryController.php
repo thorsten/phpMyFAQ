@@ -48,7 +48,9 @@ final class CategoryController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -83,11 +85,11 @@ final class CategoryController extends AbstractController
             $category->delete($data->categoryId, $data->language)
             && $categoryRelation->delete($data->categoryId, $data->language)
         ) {
-            return $this->json(['success' => Translation::get('ad_categ_deleted')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'ad_categ_deleted')], Response::HTTP_OK);
         }
 
         return $this->json([
-            'error' => Translation::get('ad_adus_dberr') . $this->configuration->getDb()->error(),
+            'error' => Translation::get(languageKey: 'ad_adus_dberr') . $this->configuration->getDb()->error(),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
@@ -141,7 +143,9 @@ final class CategoryController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
@@ -156,6 +160,6 @@ final class CategoryController extends AbstractController
         $category->setGroups($currentAdminGroups);
         $category->updateParentCategory($data->categoryId, $parentId);
 
-        return $this->json(['success' => Translation::get('ad_categ_save_order')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(languageKey: 'ad_categ_save_order')], Response::HTTP_OK);
     }
 }

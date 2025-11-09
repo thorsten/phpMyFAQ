@@ -70,7 +70,7 @@ final class SystemInformationController extends AbstractAdministrationController
         return $this->render('@admin/configuration/system.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderSystemInfo' => Translation::get('ad_system_info'),
+            'adminHeaderSystemInfo' => Translation::get(languageKey: 'ad_system_info'),
             'systemInformation' => [
                 'phpMyFAQ Version' => $faqSystem->getVersion(),
                 'phpMyFAQ API Version' => $faqSystem->getApiVersion(),

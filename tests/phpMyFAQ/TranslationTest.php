@@ -44,7 +44,7 @@ class TranslationTest extends TestCase
         Translation::create()
             ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
             ->setCurrentLanguage('de');
-        $this->assertEquals('deutsch', Translation::get('language'));
+        $this->assertEquals('deutsch', Translation::get(languageKey: 'language'));
     }
 
     public function testCreate(): void
