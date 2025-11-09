@@ -34,7 +34,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 
 /**
- * Class Pdf
+ * Class PDF
  *
  * @package phpMyFAQ\Export
  */
@@ -67,7 +67,7 @@ class Pdf extends Export
 
         // Set PDF options
         $this->wrapper->Open();
-        $this->wrapper->SetDisplayMode('real');
+        $this->wrapper->SetDisplayMode(zoom: 'real');
         $this->wrapper->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $this->wrapper->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->wrapper->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -101,7 +101,12 @@ class Pdf extends Export
         $this->wrapper->setCategories($this->category->categoryNames);
         $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
-        $faqData = $this->faq->get('faq_export_pdf', $categoryId, $downwards, $language);
+        $faqData = $this->faq->get(
+            queryType: 'faq_export_pdf',
+            categoryId: $categoryId,
+            downwards: $downwards,
+            lang: $language,
+        );
 
         $currentCategory = 0;
 
@@ -111,33 +116,33 @@ class Pdf extends Export
             // Bookmark for categories
             if ($currentCategory !== $faq['category_id']) {
                 $this->wrapper->Bookmark(
-                    html_entity_decode(
-                        (string) $this->category->getCategoryName((int) $faq['category_id']),
+                    txt: html_entity_decode(
+                        $this->category->getCategoryName((int) $faq['category_id']),
                         ENT_QUOTES,
-                        'utf-8',
+                        encoding: 'utf-8',
                     ),
-                    $this->category->getLevelOf((int) $faq['category_id']) - 1,
-                    0,
+                    level: $this->category->getLevelOf((int) $faq['category_id']) - 1,
+                    y: 0,
                 );
             }
 
             // Bookmark for FAQs
             $this->wrapper->Bookmark(
-                html_entity_decode((string) $faq['topic'], ENT_QUOTES, 'utf-8'),
-                $this->category->getLevelOf((int) $faq['category_id']),
-                0,
+                txt: html_entity_decode((string) $faq['topic'], ENT_QUOTES, encoding: 'utf-8'),
+                level: $this->category->getLevelOf((int) $faq['category_id']),
+                y: 0,
             );
 
             if ($this->tags instanceof Tags) {
                 $tags = $this->tags->getAllTagsById((int) $faq['id']);
             }
 
-            $this->wrapper->SetFont($this->wrapper->getCurrentFont(), 'b', 12);
+            $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: 'b', size: 12);
             $this->wrapper->WriteHTML('<h1>' . $this->category->getCategoryName((int) $faq['category_id']) . '</h1>');
             $this->wrapper->WriteHTML('<h2>' . $faq['topic'] . '</h2>');
-            $this->wrapper->Ln(10);
+            $this->wrapper->Ln(h: 10);
 
-            $this->wrapper->SetFont($this->wrapper->getCurrentFont(), '', 10);
+            $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 10);
 
             if ($this->config->get(item: 'main.enableMarkdownEditor')) {
                 $this->wrapper->WriteHTML(trim($this->commonMarkConverter->convert($faq['content'])->getContent()));
@@ -145,33 +150,41 @@ class Pdf extends Export
                 $this->wrapper->WriteHTML(trim((string) $faq['content']));
             }
 
-            $this->wrapper->Ln(10);
+            $this->wrapper->Ln(h: 10);
 
-            if (!empty($faq['keywords'])) {
+            if (isset($faq['keywords'])) {
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
-                    5,
-                    Translation::get(languageKey: 'msgNewContentKeywords') . ' ' . $faq['keywords'],
+                    h: 5,
+                    txt: Translation::get(languageKey: 'msgNewContentKeywords') . ' ' . $faq['keywords'],
                 );
             }
 
             if (isset($tags) && 0 !== (is_countable($tags) ? count($tags) : 0)) {
                 $this->wrapper->Ln();
-                $this->wrapper->Write(5, Translation::get(languageKey: 'msgTags') . ': ' . implode(', ', $tags));
+                $this->wrapper->Write(
+                    h: 5,
+                    txt: Translation::get(languageKey: 'msgTags')
+                    . ': '
+                    . implode(
+                        separator: ', ',
+                        array: $tags,
+                    ),
+                );
             }
 
             $this->wrapper->Ln();
             $this->wrapper->Ln();
             $this->wrapper->Write(
-                5,
-                Translation::get(languageKey: 'msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
+                h: 5,
+                txt: Translation::get(languageKey: 'msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
             $currentCategory = $faq['category_id'];
         }
 
         // remove default header/footer
-        $this->wrapper->setPrintHeader(false);
+        $this->wrapper->setPrintHeader(val: false);
         $this->wrapper->addFaqToc();
 
         return $this->wrapper->Output($filename);
@@ -185,9 +198,10 @@ class Pdf extends Export
      */
     public function generateFile(array $faqData, ?string $filename = null): string
     {
-        // Default filename: FAQ-<id>-<language>.pdf
         if ($filename === null || $filename === '') {
-            $filename = sprintf('FAQ-%s-%s.pdf', $faqData['id'], $faqData['lang']);
+            // Default filename: FAQ-<id>-<language>.pdf
+            $name = 'FAQ-%s-%s.pdf';
+            $filename = sprintf($name, $faqData['id'], $faqData['lang']);
         }
 
         $date = new Date($this->config);
@@ -202,12 +216,12 @@ class Pdf extends Export
         $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
         $this->wrapper->AddPage();
-        $this->wrapper->SetFont($this->wrapper->getCurrentFont(), '', 10);
-        $this->wrapper->SetDisplayMode('real');
+        $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 10);
+        $this->wrapper->SetDisplayMode(zoom: 'real');
         $this->wrapper->Ln();
         $this->wrapper->Ln();
         $this->wrapper->WriteHTML('<h3>' . $faqData['title'] . '</h3>');
-        $this->wrapper->Ln(5);
+        $this->wrapper->Ln(h: 5);
         $this->wrapper->Ln();
 
         if ($this->config->get(item: 'main.enableMarkdownEditor')) {
@@ -217,26 +231,30 @@ class Pdf extends Export
         }
 
         if (isset($faqData['attachmentList'])) {
-            $this->wrapper->Ln(10);
+            $this->wrapper->Ln(h: 10);
             $this->wrapper->Ln();
-            $this->wrapper->Write(5, Translation::get(languageKey: 'msgAttachedFiles') . ':');
-            $this->wrapper->Ln(5);
+            $this->wrapper->Write(
+                h: 5,
+                txt: Translation::get(languageKey: 'msgAttachedFiles') . ':',
+            );
+            $this->wrapper->Ln(h: 5);
             $this->wrapper->Ln();
             $listItems = '<ul class="pb-4 mb-4 border-bottom">';
             foreach ($faqData['attachmentList'] as $attachment) {
-                $listItems .= sprintf('<li><a href="%s">%s</a></li>', $attachment['url'], $attachment['filename']);
+                $list = '<li><a href="%s">%s</a></li>';
+                $listItems .= sprintf($list, $attachment['url'], $attachment['filename']);
             }
 
             $listItems .= '</ul>';
             $this->wrapper->WriteHTML($listItems);
         }
 
-        $this->wrapper->Ln(10);
+        $this->wrapper->Ln(h: 10);
         $this->wrapper->Ln();
-        $this->wrapper->SetFont($this->wrapper->getCurrentFont(), '', 9);
+        $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 9);
         $this->wrapper->Write(
-            5,
-            Translation::get(languageKey: 'ad_entry_solution_id') . ': #' . $faqData['solution_id'],
+            h: 5,
+            txt: Translation::get(languageKey: 'ad_entry_solution_id') . ': #' . $faqData['solution_id'],
         );
 
         // Check if the author name should be visible, according to the GDPR option
@@ -245,11 +263,14 @@ class Pdf extends Export
 
         $this->wrapper->SetAuthor($author);
         $this->wrapper->Ln();
-        $this->wrapper->Write(5, Translation::get(languageKey: 'msgAuthor') . ': ' . $author);
+        $this->wrapper->Write(
+            h: 5,
+            txt: Translation::get(languageKey: 'msgAuthor') . ': ' . $author,
+        );
         $this->wrapper->Ln();
         $this->wrapper->Write(
-            5,
-            Translation::get(languageKey: 'msgLastUpdateArticle') . $date->format($faqData['date']),
+            h: 5,
+            txt: Translation::get(languageKey: 'msgLastUpdateArticle') . $date->format($faqData['date']),
         );
 
         return $this->wrapper->Output($filename);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * JSON Export class for phpMyFAQ.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2015-12-29
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Export;
 
 use phpMyFAQ\Category;
@@ -26,10 +26,13 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 
-define('FAQ_QUERY_TYPE_EXPORT_JSON', 'faq_export_json');
+define(
+    constant_name: 'FAQ_QUERY_TYPE_EXPORT_JSON',
+    value: 'faq_export_json',
+);
 
 /**
- * Class Json
+ * Class JSON
  *
  * @package phpMyFAQ\Export
  */
@@ -64,14 +67,19 @@ class Json extends Export
         // Initialize categories
         $this->category->transform($categoryId);
 
-        $faqData = $this->faq->get('faq_export_json', $categoryId, $downwards, $language);
+        $faqData = $this->faq->get(
+            queryType: 'faq_export_json',
+            categoryId: $categoryId,
+            downwards: $downwards,
+            lang: $language,
+        );
 
         foreach ($faqData as $data) {
             $generated[] = [
                 'faq' => [
                     'id' => $data['id'],
                     'language' => $data['lang'],
-                    'category' => $this->category->getPath((int) $data['category_id'], ' >> '),
+                    'category' => $this->category->getPath((int) $data['category_id'], separator: ' >> '),
                     'keywords' => $data['keywords'],
                     'question' => strip_tags((string) $data['topic']),
                     'answer' => Strings::htmlspecialchars($data['content']),
@@ -81,7 +89,7 @@ class Json extends Export
             ];
         }
 
-        header('Content-type: application/json');
+        header(header: 'Content-type: application/json');
 
         return json_encode($generated, JSON_THROW_ON_ERROR);
     }
