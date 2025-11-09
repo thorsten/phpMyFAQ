@@ -68,7 +68,7 @@ readonly class Notification
             $this->mail->message = sprintf(
                 '%s' . "\n\r" . '%s',
                 sprintf(Translation::get(languageKey: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
-                $url
+                $url,
             );
             $this->mail->send();
         }
@@ -91,7 +91,11 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
+            $this->faq->getFaq(
+                faqId: $faqEntity->getId(),
+                faqRevisionId: null,
+                isAdmin: true,
+            );
 
             $linkToAdmin = '%sadmin/faq/index/%d/%s';
             $url = sprintf(
@@ -170,7 +174,7 @@ readonly class Notification
             $title,
             Translation::get(languageKey: 'ad_news_link_url'),
             $urlToContent,
-            strip_tags(wordwrap($comment->getComment(), width: 72))
+            strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
 
         $send = [];
@@ -215,12 +219,7 @@ readonly class Notification
         $title = $newsData['header'];
 
         $url = '%s?action=news&newsid=%d&newslang=%s';
-        $newsUrl = sprintf(
-            $url,
-            $this->configuration->getDefaultUrl(),
-            $newsData['id'],
-            $newsData['lang'],
-        );
+        $newsUrl = sprintf($url, $this->configuration->getDefaultUrl(), $newsData['id'], $newsData['lang']);
         $link = new Link($newsUrl, $this->configuration);
         $link->itemTitle = $newsData['header'];
 
@@ -237,7 +236,7 @@ readonly class Notification
             $title,
             Translation::get(languageKey: 'ad_news_link_url'),
             $urlToContent,
-            strip_tags(wordwrap($comment->getComment(), width: 72))
+            strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
 
         $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
