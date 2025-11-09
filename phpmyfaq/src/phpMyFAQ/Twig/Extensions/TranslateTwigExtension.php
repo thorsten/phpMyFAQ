@@ -25,7 +25,7 @@ use Twig\Extension\AbstractExtension;
 
 class TranslateTwigExtension extends AbstractExtension
 {
-    #[AsTwigFilter('translate')]
+    #[AsTwigFilter(name: 'translate')]
     public static function translate(string $translationKey): string
     {
         return Translation::get($translationKey) ?? $translationKey;

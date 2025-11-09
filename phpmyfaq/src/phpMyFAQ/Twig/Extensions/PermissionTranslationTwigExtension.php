@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to translate the permission string.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-04-27
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Translation;
@@ -25,10 +25,13 @@ use Twig\Extension\AbstractExtension;
 
 class PermissionTranslationTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('permission')]
+    #[AsTwigFilter(name: 'permission')]
     public static function getPermissionTranslation(string $string): string
     {
-        $key = sprintf('permission::%s', $string);
+        $key = sprintf(
+            format: 'permission::%s',
+            values: $string,
+        );
         return Translation::has($key) ? Translation::get($key) : '';
     }
 }

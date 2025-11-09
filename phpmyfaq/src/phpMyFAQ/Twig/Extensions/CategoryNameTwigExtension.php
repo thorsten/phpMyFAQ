@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to return the category name by category ID.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-04-26
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Category;
@@ -27,8 +27,8 @@ use Twig\Extension\AbstractExtension;
 
 class CategoryNameTwigExtension extends AbstractExtension
 {
-    #[AsTwigFilter('categoryName')]
-    #[AsTwigFunction('categoryName')]
+    #[AsTwigFilter(name: 'categoryName')]
+    #[AsTwigFunction(name: 'categoryName')]
     public static function getCategoryName(int $categoryId): string
     {
         $category = new Category(Configuration::getConfigurationInstance());

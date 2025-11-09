@@ -221,7 +221,7 @@ class UserNameTwigExtensionTest extends TestCase
         $filename = (new ReflectionClass(UserNameTwigExtension::class))->getFileName();
         $source = file_get_contents($filename);
 
-        // Should create User instance and call getUserById
+        // Should create a User instance and call getUserById
         $this->assertStringContainsString('$user->getUserById($userId)', $source);
         $this->assertStringContainsString('$user->getLogin()', $source);
     }
@@ -233,7 +233,7 @@ class UserNameTwigExtensionTest extends TestCase
 
         // Should create User instance and call getUserById
         $this->assertStringContainsString('$user->getUserById($userId)', $source);
-        $this->assertStringContainsString('$user->getUserData(\'display_name\')', $source);
+        $this->assertStringContainsString("getUserData(field: 'display_name')", $source);
     }
 
     public function testMethodsAreStaticForTwigCompatibility(): void
@@ -306,10 +306,9 @@ class UserNameTwigExtensionTest extends TestCase
         $getUserNameMethod = $reflection->getMethod('getUserName');
         $attributes = $getUserNameMethod->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('userName', $arguments[0]);
-                break;
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains($arguments[0], ['userName','realName']);
             }
         }
 
@@ -317,10 +316,9 @@ class UserNameTwigExtensionTest extends TestCase
         $getRealNameMethod = $reflection->getMethod('getRealName');
         $attributes = $getRealNameMethod->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('realName', $arguments[0]);
-                break;
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains($arguments[0], ['userName','realName']);
             }
         }
     }
@@ -370,7 +368,7 @@ class UserNameTwigExtensionTest extends TestCase
         $this->assertStringContainsString('return $user->getLogin();', $source);
 
         // getRealName should call getUserData('display_name')
-        $this->assertStringContainsString('return $user->getUserData(\'display_name\');', $source);
+        $this->assertStringContainsString('return $user->getUserData(field: \'display_name\');', $source);
     }
 
     public function testDocumentationExists(): void

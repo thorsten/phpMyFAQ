@@ -76,7 +76,7 @@ class FormatDateTwigExtensionTest extends TestCase
 
         $this->assertNotNull($filterAttribute, 'Method should have AsTwigFilter attribute');
 
-        $arguments = $filterAttribute->getArguments();
+        $arguments = array_values($filterAttribute->getArguments());
         $this->assertContains('formatDate', $arguments);
     }
 
@@ -161,9 +161,9 @@ class FormatDateTwigExtensionTest extends TestCase
 
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('formatDate', $arguments[0]);
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains('formatDate', $arguments);
                 break;
             }
         }

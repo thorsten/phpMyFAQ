@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to format the date
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-04-27
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
@@ -26,7 +26,7 @@ use Twig\Extension\AbstractExtension;
 
 class FormatDateTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('formatDate')]
+    #[AsTwigFilter(name: 'formatDate')]
     public static function formatDate(string $string): string
     {
         $configuration = Configuration::getConfigurationInstance();

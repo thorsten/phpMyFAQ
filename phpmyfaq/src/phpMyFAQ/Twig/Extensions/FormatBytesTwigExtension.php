@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to format bytes
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2023-05-21
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Utils;
@@ -25,7 +25,7 @@ use Twig\Extension\AbstractExtension;
 
 class FormatBytesTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('formatBytes')]
+    #[AsTwigFilter(name: 'formatBytes')]
     public static function formatBytes(int $bytes, int $precision = 2): string
     {
         return Utils::formatBytes($bytes, $precision);

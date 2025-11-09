@@ -76,7 +76,7 @@ class FaqTwigExtensionTest extends TestCase
 
         $this->assertNotNull($filterAttribute, 'Method should have AsTwigFilter attribute');
 
-        $arguments = $filterAttribute->getArguments();
+        $arguments = array_values($filterAttribute->getArguments());
         $this->assertContains('faqQuestion', $arguments);
     }
 
@@ -152,8 +152,8 @@ class FaqTwigExtensionTest extends TestCase
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('faqQuestion', $arguments[0]);
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains('faqQuestion', $arguments);
                 break;
             }
         }

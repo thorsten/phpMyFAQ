@@ -198,7 +198,9 @@ class CategoryNameTwigExtensionTest extends TestCase
         foreach ($attributes as $attribute) {
             $arguments = $attribute->getArguments();
             if (!empty($arguments)) {
-                $this->assertEquals('categoryName', $arguments[0]);
+                // Support both positional and named arguments
+                $values = array_values($arguments);
+                $this->assertContains('categoryName', $values);
             }
         }
     }

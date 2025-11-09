@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to create an ISO date.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-04-27
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Date;
@@ -25,7 +25,7 @@ use Twig\Extension\AbstractExtension;
 
 class IsoDateTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('createIsoDate')]
+    #[AsTwigFilter(name: 'createIsoDate')]
     public static function createIsoDate(string $string): string
     {
         return Date::createIsoDate($string);

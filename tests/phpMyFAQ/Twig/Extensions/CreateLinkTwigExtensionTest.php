@@ -70,7 +70,7 @@ class CreateLinkTwigExtensionTest extends TestCase
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
                 $hasFilterAttribute = true;
-                $arguments = $attribute->getArguments();
+                $arguments = array_values($attribute->getArguments());
                 $this->assertContains('categoryLink', $arguments);
                 break;
             }
@@ -91,7 +91,7 @@ class CreateLinkTwigExtensionTest extends TestCase
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === 'Twig\Attribute\AsTwigFunction') {
                 $hasFunctionAttribute = true;
-                $arguments = $attribute->getArguments();
+                $arguments = array_values($attribute->getArguments());
                 $this->assertContains('categoryLink', $arguments);
                 break;
             }
@@ -270,9 +270,9 @@ class CreateLinkTwigExtensionTest extends TestCase
 
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
-            $arguments = $attribute->getArguments();
+            $arguments = array_values($attribute->getArguments());
             if (!empty($arguments)) {
-                $this->assertEquals('categoryLink', $arguments[0]);
+                $this->assertContains('categoryLink', $arguments);
             }
         }
     }

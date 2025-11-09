@@ -25,7 +25,7 @@ use Twig\Extension\AbstractExtension;
 
 class PluginTwigExtension extends AbstractExtension
 {
-    #[AsTwigFunction('phpMyFAQPlugin')]
+    #[AsTwigFunction(name: 'phpMyFAQPlugin')]
     public static function triggerPluginEvent(string $eventName, mixed $data = null): string
     {
         return Configuration::getConfigurationInstance()->getPluginManager()->triggerEvent($eventName, $data);

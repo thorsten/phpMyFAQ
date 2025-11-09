@@ -25,7 +25,7 @@ use Twig\Extension\AbstractExtension;
 
 class LanguageCodeTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('getFromLanguageCode')]
+    #[AsTwigFilter(name: 'getFromLanguageCode')]
     public static function getFromLanguageCode(string $languageCode): string
     {
         return LanguageCodes::get($languageCode);

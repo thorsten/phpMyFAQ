@@ -126,9 +126,9 @@ class TranslateTwigExtensionTest extends TestCase
 
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('translate', $arguments[0]);
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains('translate', $arguments);
                 break;
             }
         }

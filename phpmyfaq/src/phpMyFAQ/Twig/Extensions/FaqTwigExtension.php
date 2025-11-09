@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to return the FAQ question by FAQ ID.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-05-01
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
@@ -26,7 +26,7 @@ use Twig\Extension\AbstractExtension;
 
 class FaqTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('faqQuestion')]
+    #[AsTwigFilter(name: 'faqQuestion')]
     public static function getFaqQuestion(int $faqId): string
     {
         $faq = new Faq(Configuration::getConfigurationInstance());

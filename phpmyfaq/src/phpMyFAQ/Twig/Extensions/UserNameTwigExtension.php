@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Twig extension to return the login name of a user
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-04-21
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Twig\Extensions;
 
 use phpMyFAQ\Configuration;
@@ -30,7 +30,7 @@ class UserNameTwigExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    #[asTwigFilter('userName')]
+    #[AsTwigFilter(name: 'userName')]
     public static function getUserName(int $userId): string
     {
         $user = new User(Configuration::getConfigurationInstance());
@@ -41,11 +41,11 @@ class UserNameTwigExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    #[asTwigFilter('realName')]
+    #[AsTwigFilter(name: 'realName')]
     public static function getRealName(int $userId): string
     {
         $user = new User(Configuration::getConfigurationInstance());
         $user->getUserById($userId);
-        return $user->getUserData('display_name');
+        return $user->getUserData(field: 'display_name');
     }
 }

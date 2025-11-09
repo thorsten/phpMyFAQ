@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This class is just a wrapper for Twig v3
  *
@@ -9,13 +7,15 @@ declare(strict_types=1);
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package   phpMyFAQ\Template
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2023-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2023-05-27
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Twig;
 
@@ -48,12 +48,13 @@ class TwigWrapper
      */
     public function __construct(
         string $templatePath,
+        /* @mago-ignore lint:no-boolean-flag-parameter */
         private bool $isSetup = false,
     ) {
         $filesystemLoader = new FilesystemLoader();
         $filesystemLoader->addPath($templatePath . '/' . self::$templateSetName);
-        $filesystemLoader->addPath($templatePath . '/admin', 'admin');
-        $filesystemLoader->addPath($templatePath . '/setup', 'setup');
+        $filesystemLoader->addPath($templatePath . '/admin', namespace: 'admin');
+        $filesystemLoader->addPath($templatePath . '/setup', namespace: 'setup');
 
         $this->twigEnvironment = new Environment($filesystemLoader, [
             'debug' => System::isDevelopmentVersion(),

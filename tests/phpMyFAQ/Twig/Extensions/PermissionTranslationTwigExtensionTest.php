@@ -101,7 +101,8 @@ class PermissionTranslationTwigExtensionTest extends TestCase
         $filename = (new ReflectionClass(PermissionTranslationTwigExtension::class))->getFileName();
         $source = file_get_contents($filename);
 
-        $this->assertStringContainsString('sprintf(\'permission::%s\', $string)', $source);
+        $this->assertStringContainsString("format: 'permission::%s'", $source);
+        $this->assertStringContainsString('values: $string', $source);
     }
 
     public function testMethodImplementsTranslationLogic(): void
@@ -169,9 +170,9 @@ class PermissionTranslationTwigExtensionTest extends TestCase
 
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFilter') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('permission', $arguments[0]);
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains('permission', $arguments);
                 break;
             }
         }

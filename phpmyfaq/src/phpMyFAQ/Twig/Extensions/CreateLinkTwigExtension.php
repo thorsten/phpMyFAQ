@@ -29,12 +29,13 @@ use Twig\Extension\AbstractExtension;
 
 class CreateLinkTwigExtension extends AbstractExtension
 {
-    #[asTwigFilter('categoryLink')]
-    #[asTwigFunction('categoryLink')]
+    #[AsTwigFilter(name: 'categoryLink')]
+    #[AsTwigFunction(name: 'categoryLink')]
     public static function categoryLink(int $categoryId): string
     {
         $configuration = Configuration::getConfigurationInstance();
-        $url = sprintf('%sindex.php?action=show&cat=%d', $configuration->getDefaultUrl(), $categoryId);
+        $urlString = '%sindex.php?action=show&cat=%d';
+        $url = sprintf($urlString, $configuration->getDefaultUrl(), $categoryId);
 
         $category = new Category($configuration);
         $categoryEntity = $category->getCategoryData($categoryId);
@@ -45,18 +46,13 @@ class CreateLinkTwigExtension extends AbstractExtension
         return $link->toString();
     }
 
-    #[asTwigFilter('faqLink')]
-    #[asTwigFunction('faqLink')]
+    #[AsTwigFilter(name: 'faqLink')]
+    #[AsTwigFunction(name: 'faqLink')]
     public static function faqLink(int $categoryId, int $faqId, string $faqLanguage): string
     {
         $configuration = Configuration::getConfigurationInstance();
-        $url = sprintf(
-            '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
-            $configuration->getDefaultUrl(),
-            $categoryId,
-            $faqId,
-            $faqLanguage,
-        );
+        $urlString = '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s';
+        $url = sprintf($urlString, $configuration->getDefaultUrl(), $categoryId, $faqId, $faqLanguage);
 
         $faq = new Faq($configuration);
         $link = new Link($url, $configuration);

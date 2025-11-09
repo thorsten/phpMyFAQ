@@ -82,7 +82,7 @@ class PluginTwigExtensionTest extends TestCase
 
         $this->assertNotNull($functionAttribute, 'Method should have AsTwigFunction attribute');
 
-        $arguments = $functionAttribute->getArguments();
+        $arguments = array_values($functionAttribute->getArguments());
         $this->assertContains('phpMyFAQPlugin', $arguments);
     }
 
@@ -172,9 +172,9 @@ class PluginTwigExtensionTest extends TestCase
 
         $attributes = $method->getAttributes();
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === 'Twig\Attribute\AsTwigFunction') {
-                $arguments = $attribute->getArguments();
-                $this->assertEquals('phpMyFAQPlugin', $arguments[0]);
+            if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFunction') {
+                $arguments = array_values($attribute->getArguments());
+                $this->assertContains('phpMyFAQPlugin', $arguments);
                 break;
             }
         }
