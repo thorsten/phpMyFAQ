@@ -65,10 +65,11 @@ readonly class Notification
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
                 $this->configuration->getTitle() . ' - ' . Translation::get(languageKey: 'msgQuestionAnswered');
-            $this->mail->message =
-                sprintf(Translation::get(languageKey: 'msgMessageQuestionAnswered'), $this->configuration->getTitle())
-                . "\n\r"
-                . $url;
+            $this->mail->message = sprintf(
+                '%s' . "\n\r" . '%s',
+                sprintf(Translation::get(languageKey: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
+                $url
+            );
             $this->mail->send();
         }
     }
@@ -90,10 +91,11 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq($faqEntity->getId(), null, true);
+            $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
 
+            $linkToAdmin = '%sadmin/faq/index/%d/%s';
             $url = sprintf(
-                '%sadmin/faq/edit/%d/%s',
+                $linkToAdmin,
                 $this->configuration->getDefaultUrl(),
                 $faqEntity->getId(),
                 $faqEntity->getLanguage(),
@@ -128,7 +130,7 @@ readonly class Notification
     }
 
     /**
-     * Sends mail to user who added a comment.
+     * Sends mail to the user who added a comment.
      *
      * @throws TransportExceptionInterface
      * @throws Exception
@@ -144,8 +146,9 @@ readonly class Notification
 
         $title = $faq->faqRecord['title'];
 
+        $url = '%s?action=faq&cat=%d&id=%d&artlang=%s';
         $faqUrl = sprintf(
-            '%s?action=faq&cat=%d&id=%d&artlang=%s',
+            $url,
             $this->configuration->getDefaultUrl(),
             $category->getCategoryIdFromFaq((int) $faq->faqRecord['id']),
             $faq->faqRecord['id'],
@@ -156,17 +159,19 @@ readonly class Notification
 
         $urlToContent = $link->toString();
 
-        $commentMail =
-            sprintf(
-                '%s: %s, <a href="mailto:%s">%s</a><br>',
-                Translation::get(languageKey: 'ad_stat_report_owner'),
-                $comment->getUsername(),
-                $comment->getEmail(),
-                $comment->getEmail(),
-            )
-            . sprintf('%s: %s<br>', Translation::get(languageKey: 'msgYourComment'), $title)
-            . sprintf('%s: %s<br><br>', Translation::get(languageKey: 'ad_news_link_url'), $urlToContent)
-            . strip_tags(wordwrap($comment->getComment(), 72));
+        $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s';
+        $commentMail = sprintf(
+            $format,
+            Translation::get(languageKey: 'ad_stat_report_owner'),
+            $comment->getUsername(),
+            $comment->getEmail(),
+            $comment->getEmail(),
+            Translation::get(languageKey: 'msgYourComment'),
+            $title,
+            Translation::get(languageKey: 'ad_news_link_url'),
+            $urlToContent,
+            strip_tags(wordwrap($comment->getComment(), width: 72))
+        );
 
         $send = [];
 
@@ -183,7 +188,7 @@ readonly class Notification
             $userId = $category->getOwner($_category);
             $catUser = new User($this->configuration);
             $catUser->getUserById($userId);
-            $catOwnerEmail = $catUser->getUserData('email');
+            $catOwnerEmail = $catUser->getUserData(field: 'email');
 
             if ($catOwnerEmail !== '' && (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo)) {
                 $this->mail->addCc($catOwnerEmail);
@@ -203,14 +208,15 @@ readonly class Notification
      */
     public function sendNewsCommentNotification(array $newsData, Comment $comment): void
     {
-        if ($newsData['authorEmail'] != '') {
+        if ($newsData['authorEmail'] !== '') {
             $this->mail->addTo($newsData['authorEmail']);
         }
 
         $title = $newsData['header'];
 
+        $url = '%s?action=news&newsid=%d&newslang=%s';
         $newsUrl = sprintf(
-            '%s?action=news&newsid=%d&newslang=%s',
+            $url,
             $this->configuration->getDefaultUrl(),
             $newsData['id'],
             $newsData['lang'],
@@ -220,17 +226,19 @@ readonly class Notification
 
         $urlToContent = $link->toString();
 
-        $commentMail =
-            sprintf(
-                '%s: %s, <a href="mailto:%s">%s</a><br>',
-                Translation::get(languageKey: 'ad_stat_report_owner'),
-                $comment->getUsername(),
-                $comment->getEmail(),
-                $comment->getEmail(),
-            )
-            . sprintf('%s: %s<br>', Translation::get(languageKey: 'msgYourComment'), $title)
-            . sprintf('%s: %s<br><br>', Translation::get(languageKey: 'ad_news_link_url'), $urlToContent)
-            . strip_tags(wordwrap($comment->getComment(), 72));
+        $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s';
+        $commentMail = sprintf(
+            $format,
+            Translation::get(languageKey: 'ad_stat_report_owner'),
+            $comment->getUsername(),
+            $comment->getEmail(),
+            $comment->getEmail(),
+            Translation::get(languageKey: 'msgYourComment'),
+            $title,
+            Translation::get(languageKey: 'ad_news_link_url'),
+            $urlToContent,
+            strip_tags(wordwrap($comment->getComment(), width: 72))
+        );
 
         $this->mail->setReplyTo($comment->getEmail(), $comment->getUsername());
 
@@ -245,15 +253,16 @@ readonly class Notification
 
     public function sendQuestionSuccessMail(QuestionEntity $questionEntity, array $categories): void
     {
+        $mailText = '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s';
         $questionMail = sprintf(
-            '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s',
+            $mailText,
             Translation::get(languageKey: 'msgNewQuestionAdded'),
             $questionEntity->getUsername(),
             $questionEntity->getEmail(),
             Translation::get(languageKey: 'msgCategory'),
             $categories[$questionEntity->getCategoryId()]['name'],
             Translation::get(languageKey: 'msgAskYourQuestion'),
-            wordwrap($questionEntity->getQuestion(), 72),
+            wordwrap($questionEntity->getQuestion(), width: 72),
             $this->configuration->getDefaultUrl() . 'admin/',
         );
 
@@ -261,7 +270,7 @@ readonly class Notification
         try {
             $oUser = new User($this->configuration);
             $oUser->getUserById($userId);
-            $userEmail = $oUser->getUserData('email');
+            $userEmail = $oUser->getUserData(field: 'email');
         } catch (Exception $exception) {
             $this->configuration->getLogger()->error('Error getting user data: ' . $exception->getMessage());
             $userEmail = null;
@@ -275,7 +284,7 @@ readonly class Notification
             $mail->addTo($mainAdminEmail);
 
             // Let the category owner get a copy of the message
-            if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
+            if (isset($userEmail) && $mainAdminEmail !== $userEmail) {
                 $mail->addCc($userEmail);
             }
 
