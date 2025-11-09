@@ -55,40 +55,17 @@ class Pagination
     protected int $adjacent = 4;
 
     /**
-     * Default link template.
-     * Possible variables are {LINK}, {TITLE}, {TEXT}.
+     * Template configuration.
      */
-    protected string $linkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
-
-    /**
-     * Current page link template.
-     */
-    protected string $currentPageLinkTpl = '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
-
-    /**
-     * Next page link template.
-     */
-    protected string $nextPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>';
-
-    /**
-     * Previous page link template.
-     */
-    protected string $prevPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>';
-
-    /**
-     * First page link template.
-     */
-    protected string $firstPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
-
-    /**
-     * Last page link template.
-     */
-    protected string $lastPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>';
-
-    /**
-     * Layout template.
-     */
-    protected string $layoutTpl = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>';
+    protected array $templates = [
+        'link' => '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
+        'currentPage' => '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>',
+        'nextPage' => '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>',
+        'prevPage' => '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>',
+        'firstPage' => '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>',
+        'lastPage' => '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>',
+        'layout' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
+    ];
 
     /**
      * Current page index.
@@ -96,19 +73,13 @@ class Pagination
     protected int $currentPage = 0;
 
     /**
-     * Param name to associate the page numbers to.
+     * URL configuration.
      */
-    protected string $pageParamName = 'page';
-
-    /**
-     * SEO name.
-     */
-    protected string $seoName = '';
-
-    /**
-     * Rewritten URL format for page param.
-     */
-    protected string $rewriteUrl = '';
+    protected array $urlConfig = [
+        'pageParamName' => 'page',
+        'seoName' => '',
+        'rewriteUrl' => '',
+    ];
 
     /**
      * Constructor.
@@ -143,43 +114,43 @@ class Pagination
         }
 
         if (isset($options['linkTpl'])) {
-            $this->linkTpl = $options['linkTpl'];
+            $this->templates['link'] = $options['linkTpl'];
         }
 
         if (isset($options['currentPageLinkTpl'])) {
-            $this->currentPageLinkTpl = $options['currentPageLinkTpl'];
+            $this->templates['currentPage'] = $options['currentPageLinkTpl'];
         }
 
         if (isset($options['nextPageLinkTpl'])) {
-            $this->nextPageLinkTpl = $options['nextPageLinkTpl'];
+            $this->templates['nextPage'] = $options['nextPageLinkTpl'];
         }
 
         if (isset($options['prevPageLinkTpl'])) {
-            $this->prevPageLinkTpl = $options['prevPageLinkTpl'];
+            $this->templates['prevPage'] = $options['prevPageLinkTpl'];
         }
 
         if (isset($options['firstPageLinkTpl'])) {
-            $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
+            $this->templates['firstPage'] = $options['firstPageLinkTpl'];
         }
 
         if (isset($options['lastPageLinkTpl'])) {
-            $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
+            $this->templates['lastPage'] = $options['lastPageLinkTpl'];
         }
 
         if (isset($options['layoutTpl'])) {
-            $this->layoutTpl = $options['layoutTpl'];
+            $this->templates['layout'] = $options['layoutTpl'];
         }
 
         if (isset($options['pageParamName'])) {
-            $this->pageParamName = $options['pageParamName'];
+            $this->urlConfig['pageParamName'] = $options['pageParamName'];
         }
 
         if (isset($options['seoName'])) {
-            $this->seoName = $options['seoName'];
+            $this->urlConfig['seoName'] = $options['seoName'];
         }
 
         if (isset($options['rewriteUrl'])) {
-            $this->rewriteUrl = $options['rewriteUrl'];
+            $this->urlConfig['rewriteUrl'] = $options['rewriteUrl'];
         }
 
         // Let this call to be last cuz it needs some options to be set before
@@ -197,7 +168,7 @@ class Pagination
 
         if ($url !== '' && $url !== '0') {
             $match = [];
-            if (Strings::preg_match('/[?&]' . $this->pageParamName . '=(\d+)/', $url, $match) !== 0) {
+            if (Strings::preg_match('/[?&]' . $this->urlConfig['pageParamName'] . '=(\d+)/', $url, $match) !== 0) {
                 $page = $match[1] ?? $page;
             }
         }
@@ -210,53 +181,109 @@ class Pagination
      */
     public function render(): string
     {
+        $pages = (int) ceil($this->total / $this->perPage);
+        $content = $this->renderPageNumbers($pages);
+        $content = $this->addNavigationButtons($content, $pages);
+
+        return $this->renderLayout(implode(
+            separator: '&nbsp;&nbsp;',
+            array: $content,
+        ));
+    }
+
+    /**
+     * Render page number links.
+     *
+     * @param int $pages Total number of pages
+     * @return array<string> Array of rendered page links
+     */
+    protected function renderPageNumbers(int $pages): array
+    {
         $content = [];
-        $pages = ceil($this->total / $this->perPage);
-        $adjacent = max(floor($this->adjacent / 2), 1);
+        $adjacent = (int) max(floor($this->adjacent / 2), 1);
 
         for ($page = 1; $page <= $pages; ++$page) {
-            if ($page > $this->adjacent && $page < ($this->currentPage - $adjacent)) {
+            if ($this->shouldSkipBeforeCurrentPage($page, $adjacent)) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $this->currentPage - $adjacent - 1;
                 continue;
             }
 
-            if ($page > ($this->currentPage + $adjacent) && $page <= ($pages - $this->adjacent)) {
+            if ($this->shouldSkipAfterCurrentPage($page, $adjacent, $pages)) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
                 $page = $pages - $this->adjacent;
                 continue;
             }
 
-            $link = $this->renderUrl($this->baseUrl, (int) $page);
-
-            $template = $page == $this->currentPage ? $this->currentPageLinkTpl : $this->linkTpl;
-
-            $content[] = $this->renderLink($template, $link, (int) $page);
+            $content[] = $this->renderPageLink($page);
         }
 
+        return $content;
+    }
+
+    /**
+     * Check if pages before the current page should be skipped.
+     */
+    protected function shouldSkipBeforeCurrentPage(int $page, int $adjacent): bool
+    {
+        return $page > $this->adjacent && $page < ($this->currentPage - $adjacent);
+    }
+
+    /**
+     * Check if pages after the current page should be skipped.
+     */
+    protected function shouldSkipAfterCurrentPage(int $page, int $adjacent, int $totalPages): bool
+    {
+        return $page > ($this->currentPage + $adjacent) && $page <= ($totalPages - $this->adjacent);
+    }
+
+    /**
+     * Render a single-page link.
+     */
+    protected function renderPageLink(int $page): string
+    {
+        $link = $this->renderUrl($this->baseUrl, $page);
+        $template = $page === $this->currentPage ? $this->templates['currentPage'] : $this->templates['link'];
+
+        return $this->renderLink($template, $link, $page);
+    }
+
+    /**
+     * Add first/prev/next/last navigation buttons.
+     *
+     * @param array<string> $content Array of page links
+     * @param int $pages Total number of pages
+     * @return array<string> Array with navigation buttons added
+     */
+    protected function addNavigationButtons(array $content, int $pages): array
+    {
         if (1 < $this->currentPage) {
             array_unshift($content, $this->renderLink(
-                $this->prevPageLinkTpl,
+                $this->templates['prevPage'],
                 $this->renderUrl($this->baseUrl, $this->currentPage - 1),
                 $this->currentPage - 1,
             ));
-            array_unshift($content, $this->renderLink($this->firstPageLinkTpl, $this->renderUrl($this->baseUrl, 1), 1));
+            array_unshift($content, $this->renderLink(
+                $this->templates['firstPage'],
+                $this->renderUrl($this->baseUrl, page: 1),
+                linkText: 1,
+            ));
         }
 
-        if (($page - 1) > $this->currentPage) {
+        if ($pages > $this->currentPage) {
             $content[] = $this->renderLink(
-                $this->nextPageLinkTpl,
+                $this->templates['nextPage'],
                 $this->renderUrl($this->baseUrl, $this->currentPage + 1),
                 $this->currentPage + 1,
             );
             $content[] = $this->renderLink(
-                $this->lastPageLinkTpl,
-                $this->renderUrl($this->baseUrl, (int) $page - 1),
-                $page - 1,
+                $this->templates['lastPage'],
+                $this->renderUrl($this->baseUrl, $pages),
+                $pages,
             );
         }
 
-        return $this->renderLayout(implode('&nbsp;&nbsp;', $content));
+        return $content;
     }
 
     /**
@@ -268,12 +295,17 @@ class Pagination
     protected function renderUrl(string $url = '', int $page = 1): string
     {
         if ($url === '') {
-            return sprintf($this->rewriteUrl, $page);
+            return sprintf($this->urlConfig['rewriteUrl'], $page);
         }
 
-        $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
-        $separator = str_contains($cleanedUrl, '?') ? '&' : '?';
-        return sprintf('%s%s%s=%d', $cleanedUrl, $separator, $this->pageParamName, $page);
+        $urlToParse = '%s%s%s=%d';
+        $cleanedUrl = Strings::preg_replace(
+            ['$&(amp;|)' . $this->urlConfig['pageParamName'] . '=(\d+)$'],
+            replacement: '',
+            subject: $url,
+        );
+        $separator = str_contains($cleanedUrl, needle: '?') ? '&' : '?';
+        return sprintf($urlToParse, $cleanedUrl, $separator, $this->urlConfig['pageParamName'], $page);
     }
 
     /**
@@ -298,6 +330,6 @@ class Pagination
      */
     protected function renderLayout(string $content): string
     {
-        return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->layoutTpl);
+        return str_replace(self::TPL_VAR_LAYOUT_CONTENT, $content, $this->templates['layout']);
     }
 }
