@@ -38,7 +38,7 @@ final class NewsController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/news/create')]
+    #[Route(path: 'admin/api/news/create')]
     public function create(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
@@ -47,8 +47,13 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('save-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'save-news',
+            requestToken: $data->csrfToken,
+        )) {
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -77,16 +82,18 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->create($newsMessage)) {
-            return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_news_insertfail')], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_news_insertfail',
+        )], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
      * @throws Exception
      */
-    #[Route('admin/api/news/delete')]
+    #[Route(path: 'admin/api/news/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
@@ -95,23 +102,30 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'delete-news',
+            requestToken: $data->csrfToken,
+        )) {
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         if ($news->delete((int) $deleteId)) {
-            return $this->json(['success' => Translation::get('ad_news_delsuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'ad_news_delsuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_news_updatefail',
+        )], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
      * @throws Exception
      */
-    #[Route('admin/api/news/update')]
+    #[Route(path: 'admin/api/news/update')]
     public function update(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_DELETE);
@@ -120,8 +134,13 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'update-news',
+            requestToken: $data->csrfToken,
+        )) {
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -152,16 +171,18 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->update($newsMessage)) {
-            return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(
+            languageKey: 'ad_news_updatefail',
+        )], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
      * @throws Exception
      */
-    #[Route('admin/api/news/activate')]
+    #[Route(path: 'admin/api/news/activate')]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::NEWS_EDIT);
@@ -169,17 +190,24 @@ final class NewsController extends AbstractController
 
         $news = new News($this->configuration);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-news', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get('msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'activate-news',
+            requestToken: $data->csrfToken,
+        )) {
+            return $this->json(['error' => Translation::get(
+                languageKey: 'msgNoPermission',
+            )], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
-        $status = Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
+        $status = (bool) Filter::filterVar($data->status, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($news->activate($newsId, $status)) {
-            return $this->json(['success' => Translation::get('ad_news_updatesuc')], Response::HTTP_OK);
+        if ($status) {
+            $news->activate($newsId);
+            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get('ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
+        $news->deactivate($newsId);
+        return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
     }
 }
