@@ -40,14 +40,11 @@ use phpMyFAQ\User\CurrentUser;
  */
 class Pdf extends Export
 {
-    /**
-     * Wrapper object.
-     */
-    private readonly ?Wrapper $wrapper;
+    private readonly Wrapper $wrapper;
 
-    private ?Tags $tags = null;
+    private Tags $tags;
 
-    private readonly ?CommonMarkConverter $commonMarkConverter;
+    private readonly CommonMarkConverter $commonMarkConverter;
 
     /**
      * Constructor.
@@ -61,6 +58,8 @@ class Pdf extends Export
         $this->faq = $faq;
         $this->category = $category;
         $this->config = $configuration;
+
+        $this->tags = new Tags($this->config);
 
         $this->wrapper = new Wrapper();
         $this->wrapper->setConfig($this->config);
@@ -98,7 +97,7 @@ class Pdf extends Export
         $this->category->transform($categoryId);
 
         $this->wrapper->setCategory($categoryId);
-        $this->wrapper->setCategories($this->category->categoryNames);
+        $this->wrapper->setCategories($this->category->getAllCategories());
         $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
 
         $faqData = $this->faq->get(
@@ -144,11 +143,10 @@ class Pdf extends Export
 
             $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 10);
 
-            if ($this->config->get(item: 'main.enableMarkdownEditor')) {
-                $this->wrapper->WriteHTML(trim($this->commonMarkConverter->convert($faq['content'])->getContent()));
-            } else {
-                $this->wrapper->WriteHTML(trim((string) $faq['content']));
-            }
+            $content = $this->config->get(item: 'main.enableMarkdownEditor')
+                ? trim($this->commonMarkConverter->convert($faq['content'])->getContent())
+                : trim((string) $faq['content']);
+            $this->wrapper->WriteHTML($content);
 
             $this->wrapper->Ln(h: 10);
 
@@ -209,7 +207,7 @@ class Pdf extends Export
         $this->wrapper->setFaq($faqData);
         $this->wrapper->setCategory($faqData['category_id']);
         $this->wrapper->setQuestion($faqData['title']);
-        $this->wrapper->setCategories($this->category->categoryNames);
+        $this->wrapper->setCategories($this->category->getAllCategories());
 
         // Set any item
         $this->wrapper->SetTitle($faqData['title']);
@@ -224,11 +222,10 @@ class Pdf extends Export
         $this->wrapper->Ln(h: 5);
         $this->wrapper->Ln();
 
-        if ($this->config->get(item: 'main.enableMarkdownEditor')) {
-            $this->wrapper->WriteHTML($this->commonMarkConverter->convert($faqData['content'])->getContent());
-        } else {
-            $this->wrapper->WriteHTML((string) $faqData['content']);
-        }
+        $content = $this->config->get(item: 'main.enableMarkdownEditor')
+            ? $this->commonMarkConverter->convert($faqData['content'])->getContent()
+            : (string) $faqData['content'];
+        $this->wrapper->WriteHTML($content);
 
         if (isset($faqData['attachmentList'])) {
             $this->wrapper->Ln(h: 10);
