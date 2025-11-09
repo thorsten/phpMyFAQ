@@ -30,6 +30,6 @@ readonly class SecuritySettings
 
     public function isSignInWithMicrosoftActive(): bool
     {
-        return (bool) $this->configuration->get('security.enableSignInWithMicrosoft');
+        return (bool) $this->configuration->get(item: 'security.enableSignInWithMicrosoft');
     }
 }

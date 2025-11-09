@@ -77,15 +77,15 @@ class Search
      */
     public function search(string $searchTerm, bool $allLanguages = true): array
     {
-        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
 
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         }
 
-        if ($this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             return $this->searchOpenSearch($searchTerm, $allLanguages);
         }
 
@@ -100,7 +100,7 @@ class Search
      */
     public function autoComplete(string $searchTerm): array
     {
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 
@@ -110,7 +110,7 @@ class Search
             return $elasticsearch->autoComplete($searchTerm);
         }
 
-        if ($this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $opensearch = new OpenSearch($this->configuration);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 

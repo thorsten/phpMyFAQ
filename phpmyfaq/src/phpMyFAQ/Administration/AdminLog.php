@@ -68,7 +68,7 @@ readonly class AdminLog
      */
     public function log(User $user, string $logText = ''): bool
     {
-        if (!$this->configuration->get('main.enableAdminLog')) {
+        if (!$this->configuration->get(item: 'main.enableAdminLog')) {
             return false; // early return, avoids else
         }
 

@@ -405,7 +405,7 @@ class BuiltinCaptcha implements CaptchaInterface
             return true;
         }
 
-        if ($this->configuration->get('spam.enableCaptchaCode')) {
+        if ($this->configuration->get(item: 'spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
         }
 

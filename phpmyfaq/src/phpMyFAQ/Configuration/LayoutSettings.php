@@ -30,11 +30,11 @@ readonly class LayoutSettings
 
     public function getTemplateSet(): string
     {
-        return (string) ($this->configuration->get('layout.templateSet') ?? 'default');
+        return (string) ($this->configuration->get(item: 'layout.templateSet') ?? 'default');
     }
 
     public function getCustomCss(): string
     {
-        return (string) $this->configuration->get('layout.customCss');
+        return (string) $this->configuration->get(item: 'layout.customCss');
     }
 }

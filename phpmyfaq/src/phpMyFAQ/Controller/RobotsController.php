@@ -35,7 +35,7 @@ final class RobotsController extends AbstractController
             values: 'text/plain',
         );
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setContent($this->configuration->get('seo.contentRobotsText'));
+        $response->setContent($this->configuration->get(item: 'seo.contentRobotsText'));
 
         return $response;
     }

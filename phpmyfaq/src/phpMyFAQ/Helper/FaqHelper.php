@@ -101,7 +101,7 @@ class FaqHelper extends AbstractHelper
      */
     public function renderAnswerPreview(string $answer, int $wordCount): string
     {
-        if ($this->configuration->get('main.enableMarkdownEditor')) {
+        if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {
             $config = [
                 'html_input' => 'strip',
                 'allow_unsafe_links' => false,
@@ -162,7 +162,7 @@ class FaqHelper extends AbstractHelper
             ->allowRelativeLinks()
             ->allowStaticElements()
             ->allowRelativeMedias()
-            ->forceHttpsUrls($this->configuration->get('security.useSslOnly'))
+            ->forceHttpsUrls($this->configuration->get(item: 'security.useSslOnly'))
             ->allowElement('iframe', ['title', 'src', 'width', 'height', 'allow', 'allowfullscreen'])
             ->allowMediaSchemes(['https', 'http', 'mailto', 'data'])
             ->allowMediaHosts($allowedHosts)

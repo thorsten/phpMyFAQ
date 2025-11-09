@@ -55,10 +55,10 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     #[\Override]
     public function search(string $searchTerm): mixed
     {
-        if (is_numeric($searchTerm) && $this->configuration->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->configuration->get(item: 'search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = $this->configuration->get('search.enableRelevance');
+            $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
 
             $columns = $this->getResultColumns();
             $columns .= $enableRelevance ? $this->getMatchingColumnsAsResult() : '';
@@ -99,7 +99,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     public function getMatchingColumnsAsResult(): string
     {
         $resultColumns = '';
-        $config = $this->configuration->get('search.relevance');
+        $config = $this->configuration->get(item: 'search.relevance');
         $list = explode(',', (string) $config);
 
         // Set weight
@@ -138,7 +138,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
      */
     public function getMatchingOrder(): string
     {
-        $list = explode(',', (string) $this->configuration->get('search.relevance'));
+        $list = explode(',', (string) $this->configuration->get(item: 'search.relevance'));
         $order = '';
 
         foreach ($list as $field) {
@@ -162,7 +162,7 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
     #[\Override]
     public function getMatchingColumns(): string
     {
-        $enableRelevance = $this->configuration->get('search.enableRelevance');
+        $enableRelevance = $this->configuration->get(item: 'search.enableRelevance');
 
         if ($enableRelevance) {
             $matchColumns = '';

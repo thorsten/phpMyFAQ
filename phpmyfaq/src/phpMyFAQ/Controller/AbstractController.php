@@ -145,7 +145,7 @@ abstract class AbstractController
     protected function hasValidToken(): void
     {
         $request = Request::createFromGlobals();
-        if ($this->configuration->get('api.apiClientToken') !== $request->headers->get('x-pmf-token')) {
+        if ($this->configuration->get(item: 'api.apiClientToken') !== $request->headers->get(key: 'x-pmf-token')) {
             throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
         }
     }
@@ -155,7 +155,7 @@ abstract class AbstractController
      */
     protected function isSecured(): void
     {
-        if (!$this->currentUser->isLoggedIn() && $this->configuration->get('security.enableLoginOnly')) {
+        if (!$this->currentUser->isLoggedIn() && $this->configuration->get(item: 'security.enableLoginOnly')) {
             throw new UnauthorizedHttpException('You are not allowed to view this content.');
         }
     }
@@ -166,7 +166,7 @@ abstract class AbstractController
     protected function userIsAuthenticated(): void
     {
         if (!$this->currentUser->isLoggedIn()) {
-            throw new UnauthorizedHttpException('User is not authenticated.');
+            throw new UnauthorizedHttpException(challenge: 'User is not authenticated.');
         }
     }
 
@@ -176,7 +176,7 @@ abstract class AbstractController
     protected function userIsSuperAdmin(): void
     {
         if (!$this->currentUser->isSuperAdmin()) {
-            throw new UnauthorizedHttpException('User is not super admin.');
+            throw new UnauthorizedHttpException(challenge: 'User is not super admin.');
         }
     }
 
@@ -192,7 +192,7 @@ abstract class AbstractController
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
         ) {
-            throw new UnauthorizedHttpException('User has no group permission.');
+            throw new UnauthorizedHttpException(challenge: 'User has no group permission.');
         }
     }
 
@@ -207,7 +207,7 @@ abstract class AbstractController
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {
-            throw new UnauthorizedHttpException('User has no user permission.');
+            throw new UnauthorizedHttpException(challenge: 'User has no user permission.');
         }
     }
 
@@ -233,7 +233,7 @@ abstract class AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if ($this->configuration->get('security.enableGoogleReCaptchaV2')) {
+        if ($this->configuration->get(item: 'security.enableGoogleReCaptchaV2')) {
             $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         } else {
             $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -244,7 +244,7 @@ abstract class AbstractController
 
     public function isApiEnabled(): bool
     {
-        return (bool) $this->configuration->get('api.enableAccess');
+        return (bool) $this->configuration->get(item: 'api.enableAccess');
     }
 
     public function addExtension(ExtensionInterface $extension): void

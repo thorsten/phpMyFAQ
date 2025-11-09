@@ -39,7 +39,7 @@ final class ElasticsearchController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        if (!$this->configuration->get('search.enableElasticsearch')) {
+        if (!$this->configuration->get(item: 'search.enableElasticsearch')) {
             throw new UnauthorizedHttpException('You are not allowed to access this page.');
         }
 

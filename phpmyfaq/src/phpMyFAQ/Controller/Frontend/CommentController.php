@@ -48,9 +48,9 @@ final class CommentController extends AbstractController
         $session->setCurrentUser($this->currentUser);
 
         $language = $this->container->get('phpmyfaq.language');
-        $languageCode = $this->configuration->get('main.languageDetection')
-            ? $language->setLanguageWithDetection($this->configuration->get('main.language'))
-            : $language->setLanguageFromConfiguration($this->configuration->get('main.language'));
+        $languageCode = $this->configuration->get(item: 'main.languageDetection')
+            ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
+            : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
 
         if (!$this->isCommentAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
@@ -153,7 +153,7 @@ final class CommentController extends AbstractController
     private function isCommentAllowed(CurrentUser $currentUser): bool
     {
         return !(
-            !$this->configuration->get('records.allowCommentsForGuests')
+            !$this->configuration->get(item: 'records.allowCommentsForGuests')
             && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::COMMENT_ADD->value)
         );
     }

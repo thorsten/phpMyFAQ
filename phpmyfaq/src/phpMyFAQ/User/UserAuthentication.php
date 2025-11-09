@@ -112,7 +112,7 @@ class UserAuthentication
 
     private function authenticateSso(): void
     {
-        if ($this->configuration->get('security.ssoSupport')) {
+        if ($this->configuration->get(item: 'security.ssoSupport')) {
             $authSso = new AuthSso($this->configuration);
             $this->currentUser->addAuth($authSso, 'sso');
         }

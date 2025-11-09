@@ -92,10 +92,10 @@ final class WebAuthnController extends AbstractController
         ];
 
         return $this->render('/webauthn.twig', [
-            'isMaintenanceMode' => $this->configuration->get('main.maintenanceMode'),
-            'isCompletelySecured' => $this->configuration->get('security.enableLoginOnly'),
+            'isMaintenanceMode' => $this->configuration->get(item: 'main.maintenanceMode'),
+            'isCompletelySecured' => $this->configuration->get(item: 'security.enableLoginOnly'),
             'isDebugEnabled' => Environment::isDebugMode(),
-            'richSnippetsEnabled' => $this->configuration->get('seo.enableRichSnippets'),
+            'richSnippetsEnabled' => $this->configuration->get(item: 'seo.enableRichSnippets'),
             'tplSetName' => TwigWrapper::getTemplateSetName(),
             'msgLoginUser' => Translation::get(languageKey: 'msgLoginUser'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
@@ -104,7 +104,7 @@ final class WebAuthnController extends AbstractController
             'customCss' => $this->configuration->getCustomCss(),
             'version' => $this->configuration->getVersion(),
             'header' => str_replace('"', '', $this->configuration->getTitle()),
-            'metaPublisher' => $this->configuration->get('main.metaPublisher'),
+            'metaPublisher' => $this->configuration->get(item: 'main.metaPublisher'),
             'metaLanguage' => Translation::get(languageKey: 'metaLanguage'),
             'phpmyfaqVersion' => $this->configuration->getVersion(),
             'stylesheet' => Translation::get(languageKey: 'direction') == 'rtl' ? 'style.rtl' : 'style',
@@ -117,12 +117,12 @@ final class WebAuthnController extends AbstractController
             'languageBox' => Translation::get(languageKey: 'msgLanguageSubmit'),
             'switchLanguages' => LanguageHelper::renderSelectLanguage($this->configuration->getDefaultLanguage(), true),
             'copyright' => System::getPoweredByString(true),
-            'isUserRegistrationEnabled' => $this->configuration->get('security.enableRegistration'),
+            'isUserRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
             'msgRegisterUser' => Translation::get(languageKey: 'msgRegisterUser'),
-            'isPrivacyLinkEnabled' => $this->configuration->get('layout.enablePrivacyLink'),
-            'urlPrivacyLink' => $this->configuration->get('main.privacyURL'),
+            'isPrivacyLinkEnabled' => $this->configuration->get(item: 'layout.enablePrivacyLink'),
+            'urlPrivacyLink' => $this->configuration->get(item: 'main.privacyURL'),
             'msgPrivacyNote' => Translation::get(languageKey: 'msgPrivacyNote'),
-            'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
+            'isCookieConsentEnabled' => $this->configuration->get(item: 'layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(languageKey: 'cookiePreferences'),
         ]);
     }

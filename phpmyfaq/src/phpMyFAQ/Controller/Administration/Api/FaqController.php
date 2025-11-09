@@ -172,7 +172,7 @@ final class FaqController extends AbstractController
             $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
             $categoryPermission->add(CategoryPermission::USER, $categories, $permissions['restricted_user']);
             // Add group permission
-            if ($this->configuration->get('security.permLevel') !== 'basic') {
+            if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
                 $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
                 $categoryPermission->add(CategoryPermission::GROUP, $categories, $permissions['restricted_groups']);
             }
@@ -191,7 +191,7 @@ final class FaqController extends AbstractController
             $questionObject = $this->container->get('phpmyfaq.question');
             $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
-                if ($this->configuration->get('records.enableDeleteQuestion')) { // deletes question
+                if ($this->configuration->get(item: 'records.enableDeleteQuestion')) { // deletes question
                     $questionObject->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $questionObject->updateQuestionAnswer($openQuestionId, $faqData->getId(), $categories[0]);
@@ -229,7 +229,7 @@ final class FaqController extends AbstractController
             }
 
             // If Elasticsearch is enabled, index new FAQ document
-            if ($this->configuration->get('search.enableElasticsearch')) {
+            if ($this->configuration->get(item: 'search.enableElasticsearch')) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
                     'id' => $faqData->getId(),
@@ -243,7 +243,7 @@ final class FaqController extends AbstractController
             }
 
             // If OpenSearch is enabled, index new FAQ document
-            if ($this->configuration->get('search.enableOpenSearch')) {
+            if ($this->configuration->get(item: 'search.enableOpenSearch')) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
                     'id' => $faqData->getId(),
@@ -341,7 +341,7 @@ final class FaqController extends AbstractController
             $logging->log($this->currentUser, 'admin-publish-existing-faq ' . $faqId);
         }
 
-        if ('yes' === $revision && $this->configuration->get('records.enableAutoRevisions')) {
+        if ('yes' === $revision && $this->configuration->get(item: 'records.enableAutoRevisions')) {
             $faqRevision = new Revision($this->configuration);
             $faqRevision->create($faqId, $faqLang);
             ++$revisionId;
@@ -437,13 +437,13 @@ final class FaqController extends AbstractController
         $faqPermission->delete(FaqPermission::USER, $faqData->getId());
         $faqPermission->add(FaqPermission::USER, $faqData->getId(), $permissions['restricted_user']);
         // Add group permission
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $faqPermission->delete(FaqPermission::GROUP, $faqData->getId());
             $faqPermission->add(FaqPermission::GROUP, $faqData->getId(), $permissions['restricted_groups']);
         }
 
         // If Elasticsearch is enabled, update an active or delete inactive FAQ document
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);
             if ('yes' === $active) {
                 $elasticsearch->update([
@@ -459,7 +459,7 @@ final class FaqController extends AbstractController
         }
 
         // If OpenSearch is enabled, update an active or delete inactive FAQ document
-        if ($this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $openSearch = new OpenSearch($this->configuration);
             if ('yes' === $active) {
                 $openSearch->update([

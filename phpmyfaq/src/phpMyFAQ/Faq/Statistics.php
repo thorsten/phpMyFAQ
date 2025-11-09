@@ -51,7 +51,7 @@ class Statistics
     ) {
         $this->plurals = new Plurals();
 
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }

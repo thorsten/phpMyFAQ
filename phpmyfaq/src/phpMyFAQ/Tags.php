@@ -491,7 +491,7 @@ class Tags
      */
     private function buildPermissionCheck(): string
     {
-        $groupSupport = $this->configuration->get('security.permLevel') !== 'basic';
+        $groupSupport = $this->configuration->get(item: 'security.permLevel') !== 'basic';
 
         if ($groupSupport) {
             if (-1 === $this->user) {

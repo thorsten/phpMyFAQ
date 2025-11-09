@@ -80,7 +80,7 @@ class RegistrationHelper extends AbstractHelper
         $user->userdata->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible === 'on' ? 1 : 0]);
         $user->setStatus('blocked');
 
-        $isNowActive = !$this->configuration->get('spam.manualActivation') && $user->activateUser();
+        $isNowActive = !$this->configuration->get(item: 'spam.manualActivation') && $user->activateUser();
         if ($isNowActive) {
             // @todo add translation strings
             $adminMessage =
@@ -121,7 +121,7 @@ class RegistrationHelper extends AbstractHelper
      */
     public function isDomainAllowed(string $email): bool
     {
-        $whitelistedDomains = $this->configuration->get('security.domainWhiteListForRegistrations');
+        $whitelistedDomains = $this->configuration->get(item: 'security.domainWhiteListForRegistrations');
 
         if ($whitelistedDomains === null || Strings::strlen(trim((string) $whitelistedDomains)) === 0) {
             return true;

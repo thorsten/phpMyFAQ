@@ -53,9 +53,9 @@ final class FaqController extends AbstractController
         $faqPermission = new FaqPermission($this->configuration);
 
         $language = $this->container->get('phpmyfaq.language');
-        $languageCode = $this->configuration->get('main.languageDetection')
-            ? $language->setLanguageWithDetection($this->configuration->get('main.language'))
-            : $language->setLanguageFromConfiguration($this->configuration->get('main.language'));
+        $languageCode = $this->configuration->get(item: 'main.languageDetection')
+            ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
+            : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
 
         if (!$this->isAddingFaqsAllowed($this->currentUser)) {
             return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
@@ -68,7 +68,7 @@ final class FaqController extends AbstractController
         $questionText = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $questionText = trim(strip_tags((string) $questionText));
 
-        if ($this->configuration->get('main.enableWysiwygEditorFrontend')) {
+        if ($this->configuration->get(item: 'main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = trim(html_entity_decode((string) $answer));
         } else {
@@ -110,7 +110,7 @@ final class FaqController extends AbstractController
 
             $session->userTracking('save_new_entry', 0);
 
-            $autoActivate = $this->configuration->get('records.defaultActivation');
+            $autoActivate = $this->configuration->get(item: 'records.defaultActivation');
 
             $faqEntity = new FaqEntity();
             $faqEntity
@@ -130,7 +130,7 @@ final class FaqController extends AbstractController
 
             $openQuestionId = Filter::filterVar($data->openQuestionID, FILTER_VALIDATE_INT);
             if ($openQuestionId) {
-                if ($this->configuration->get('records.enableDeleteQuestion')) {
+                if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     $question->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
                     $question->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
@@ -154,7 +154,7 @@ final class FaqController extends AbstractController
             $permissions = $categoryPermission->getAll($categories);
             foreach ($categories as $category) {
                 $faqPermission->add(FaqPermission::USER, $recordId, $permissions[$category]['user']);
-                if ($this->configuration->get('security.permLevel') !== 'basic') {
+                if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
                     $faqPermission->add(FaqPermission::GROUP, $recordId, $permissions[$category]['group']);
                 }
             }
@@ -166,7 +166,7 @@ final class FaqController extends AbstractController
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);
             }
 
-            if ($this->configuration->get('records.defaultActivation')) {
+            if ($this->configuration->get(item: 'records.defaultActivation')) {
                 $link = [
                     'link' => $faqHelper->createFaqUrl($faqEntity, $categories[0]),
                     'info' => Translation::get(languageKey: 'msgRedirect'),
@@ -190,7 +190,7 @@ final class FaqController extends AbstractController
     private function isAddingFaqsAllowed(CurrentUser $currentUser): bool
     {
         return !(
-            !$this->configuration->get('records.allowNewFaqsForGuests')
+            !$this->configuration->get(item: 'records.allowNewFaqsForGuests')
             && !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::FAQ_ADD->value)
         );
     }

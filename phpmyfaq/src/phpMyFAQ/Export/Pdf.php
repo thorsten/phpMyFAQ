@@ -139,7 +139,7 @@ class Pdf extends Export
 
             $this->wrapper->SetFont($this->wrapper->getCurrentFont(), '', 10);
 
-            if ($this->config->get('main.enableMarkdownEditor')) {
+            if ($this->config->get(item: 'main.enableMarkdownEditor')) {
                 $this->wrapper->WriteHTML(trim($this->commonMarkConverter->convert($faq['content'])->getContent()));
             } else {
                 $this->wrapper->WriteHTML(trim((string) $faq['content']));
@@ -210,7 +210,7 @@ class Pdf extends Export
         $this->wrapper->Ln(5);
         $this->wrapper->Ln();
 
-        if ($this->config->get('main.enableMarkdownEditor')) {
+        if ($this->config->get(item: 'main.enableMarkdownEditor')) {
             $this->wrapper->WriteHTML($this->commonMarkConverter->convert($faqData['content'])->getContent());
         } else {
             $this->wrapper->WriteHTML((string) $faqData['content']);

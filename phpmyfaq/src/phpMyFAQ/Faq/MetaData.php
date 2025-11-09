@@ -89,7 +89,7 @@ class MetaData
         $faqPermission->add(FaqPermission::USER, (int) $this->faqId, $userPermissions);
         $categoryPermission->add(CategoryPermission::USER, $this->categories, $userPermissions);
 
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $groupPermissions = $categoryPermission->get(CategoryPermission::GROUP, $this->categories);
             $faqPermission->add(FaqPermission::GROUP, (int) $this->faqId, $groupPermissions);
             $categoryPermission->add(CategoryPermission::GROUP, $this->categories, $groupPermissions);

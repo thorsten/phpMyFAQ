@@ -110,7 +110,7 @@ final class QuestionController extends AbstractController
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
         $email = Filter::filterVar($data->email, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $visibility = $this->configuration->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
+        $visibility = $this->configuration->get(item: 'records.enableVisibilityQuestions') ? 'Y' : 'N';
 
         $questionEntity = new QuestionEntity();
         $questionEntity

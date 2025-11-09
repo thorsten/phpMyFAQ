@@ -41,14 +41,14 @@ class GoogleRecaptchaAbstractHelper extends AbstractHelper implements CaptchaHel
     ): string {
         $html = '';
 
-        if (true === $this->configuration->get('spam.enableCaptchaCode') && !$auth) {
+        if (true === $this->configuration->get(item: 'spam.enableCaptchaCode') && !$auth) {
             $html .= '<div class="row mb-2">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $label);
             $html .= '    <div class="col-sm-9">';
             $html .= '        <script src="https://www.google.com/recaptcha/api.js" async defer></script>';
             $html .= sprintf(
                 '<div class="g-recaptcha" data-sitekey="%s"></div>',
-                $this->configuration->get('security.googleReCaptchaV2SiteKey'),
+                $this->configuration->get(item: 'security.googleReCaptchaV2SiteKey'),
             );
             $html .= '    </div>';
             $html .= '</div>';

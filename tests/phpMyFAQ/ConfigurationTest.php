@@ -284,7 +284,7 @@ class ConfigurationTest extends TestCase
     public function testErrorHandling(): void
     {
         // Test getting non-existent configuration
-        $this->assertNull($this->configuration->get('non.existent.key'));
+        $this->assertNull($this->configuration->get(item: 'non.existent.key'));
 
         // Test with empty key might still work in some implementations
         $result = $this->configuration->set('', 'value');

@@ -65,7 +65,7 @@ class Tracking
      */
     public function log(string $action, int|string|null $data = null): bool
     {
-        if (!$this->configuration->get('main.enableUserTracking')) {
+        if (!$this->configuration->get(item: 'main.enableUserTracking')) {
             return false;
         }
 
@@ -206,7 +206,7 @@ class Tracking
      */
     private function getBotIgnoreList(): array
     {
-        return explode(',', (string) $this->configuration->get('main.botIgnoreList'));
+        return explode(',', (string) $this->configuration->get(item: 'main.botIgnoreList'));
     }
 
     private function getRequestHeaders(): HeaderBag

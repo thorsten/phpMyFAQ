@@ -40,7 +40,7 @@ final class StickyFaqsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $customOrdering = $this->configuration->get('records.orderStickyFaqsCustom');
+        $customOrdering = $this->configuration->get(item: 'records.orderStickyFaqsCustom');
 
         return $this->render('@admin/content/sticky-faqs.twig', [
             ...$this->getHeader($request),
@@ -48,7 +48,7 @@ final class StickyFaqsController extends AbstractAdministrationController
             'stickyFAQsHeader' => Translation::get(languageKey: 'stickyRecordsHeader'),
             'stickyData' => $this->container->get('phpmyfaq.faq')->getStickyFaqsData(),
             'sortableDisabled' => $customOrdering === false ? 'sortable-disabled' : '',
-            'orderingStickyFaqsActivated' => $this->configuration->get('records.orderStickyFaqsCustom'),
+            'orderingStickyFaqsActivated' => $this->configuration->get(item: 'records.orderStickyFaqsCustom'),
             'alertMessageStickyFaqsDeactivated' => Translation::get(languageKey: 'msgOrderStickyFaqsCustomDeactivated'),
             'alertMessageNoStickyRecords' => Translation::get(languageKey: 'msgNoStickyFaqs'),
             'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('order-stickyfaqs'),

@@ -61,7 +61,7 @@ readonly class Notification
      */
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url): void
     {
-        if ($this->configuration->get('main.enableNotifications')) {
+        if ($this->configuration->get(item: 'main.enableNotifications')) {
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
                 $this->configuration->getTitle() . ' - ' . Translation::get(languageKey: 'msgQuestionAnswered');
@@ -81,7 +81,7 @@ readonly class Notification
      */
     public function sendNewFaqAdded(array $emails, FaqEntity $faqEntity): void
     {
-        if ($this->configuration->get('main.enableNotifications')) {
+        if ($this->configuration->get(item: 'main.enableNotifications')) {
             $this->mail->addTo($this->configuration->getAdminEmail());
             foreach ($emails as $email) {
                 if ($email !== $this->configuration->getAdminEmail()) {

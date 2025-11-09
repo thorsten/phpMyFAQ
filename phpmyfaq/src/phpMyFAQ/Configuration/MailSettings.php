@@ -30,9 +30,9 @@ readonly class MailSettings
 
     public function getNoReplyEmail(): string
     {
-        $sender = $this->configuration->get('mail.noReplySenderAddress');
+        $sender = $this->configuration->get(item: 'mail.noReplySenderAddress');
         if ($sender === '' || $sender === null) {
-            return $this->configuration->get('main.administrationMail');
+            return $this->configuration->get(item: 'main.administrationMail');
         }
 
         return (string) $sender;

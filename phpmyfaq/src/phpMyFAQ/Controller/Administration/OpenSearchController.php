@@ -38,7 +38,7 @@ final class OpenSearchController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        if (!$this->configuration->get('search.enableOpenSearch')) {
+        if (!$this->configuration->get(item: 'search.enableOpenSearch')) {
             throw new UnauthorizedHttpException('You are not allowed to access this page.');
         }
 

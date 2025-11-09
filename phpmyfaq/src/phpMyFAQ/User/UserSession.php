@@ -121,7 +121,7 @@ class UserSession
      */
     private function getBotIgnoreList(): array
     {
-        return explode(',', (string) $this->configuration->get('main.botIgnoreList'));
+        return explode(',', (string) $this->configuration->get(item: 'main.botIgnoreList'));
     }
 
     /**
@@ -129,7 +129,7 @@ class UserSession
      */
     public function userTracking(string $action, int|string|null $data = null): void
     {
-        if (!$this->configuration->get('main.enableUserTracking')) {
+        if (!$this->configuration->get(item: 'main.enableUserTracking')) {
             return;
         }
 

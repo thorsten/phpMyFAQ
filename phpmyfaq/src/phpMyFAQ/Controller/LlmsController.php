@@ -35,7 +35,7 @@ final class LlmsController extends AbstractController
             values: 'text/plain',
         );
         $response->setStatusCode(Response::HTTP_OK);
-        $response->setContent($this->configuration->get('seo.contentLlmsText'));
+        $response->setContent($this->configuration->get(item: 'seo.contentLlmsText'));
 
         return $response;
     }

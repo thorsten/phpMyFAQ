@@ -175,7 +175,7 @@ final class ConfigurationTabController extends AbstractController
         $languages = LanguageHelper::getAvailableLanguages();
         if ($languages !== []) {
             return $response->setContent(LanguageHelper::renderLanguageOptions(
-                str_replace(['language_', '.php'], '', (string) $this->configuration->get('main.language')),
+                str_replace(['language_', '.php'], '', (string) $this->configuration->get(item: 'main.language')),
                 false,
                 true,
             ));

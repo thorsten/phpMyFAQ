@@ -41,7 +41,7 @@ class GoogleRecaptcha implements CaptchaInterface
 
         $url = sprintf(
             'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s',
-            $this->configuration->get('security.googleReCaptchaV2SecretKey'),
+            $this->configuration->get(item: 'security.googleReCaptchaV2SecretKey'),
             $code,
         );
 

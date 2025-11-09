@@ -55,7 +55,8 @@ class Upgrade extends Setup
     ) {
         parent::__construct($this->system);
 
-        $this->isNightly = $this->configuration->get('upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
+        $this->isNightly =
+            $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
     }
 
     /**
@@ -364,6 +365,6 @@ class Upgrade extends Setup
 
     public function isMaintenanceEnabled(): bool
     {
-        return $this->configuration->get('main.maintenanceMode');
+        return $this->configuration->get(item: 'main.maintenanceMode');
     }
 }

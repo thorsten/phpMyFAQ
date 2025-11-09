@@ -467,7 +467,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
 
         if (
-            !$this->configuration->get('main.enableCategoryRestrictions')
+            !$this->configuration->get(item: 'main.enableCategoryRestrictions')
             && $currentUser->getUserId() !== 1
             && !$currentUser->isSuperAdmin()
         ) {

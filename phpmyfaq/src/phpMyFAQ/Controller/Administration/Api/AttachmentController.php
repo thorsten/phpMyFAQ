@@ -135,7 +135,7 @@ final class AttachmentController extends AbstractController
         foreach ($files as $file) {
             if (
                 $file->isValid()
-                && $file->getSize() <= $this->configuration->get('records.maxAttachmentSize')
+                && $file->getSize() <= $this->configuration->get(item: 'records.maxAttachmentSize')
                 && $file->getMimeType() !== 'text/html'
             ) {
                 $attachment = AttachmentFactory::create();

@@ -56,7 +56,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     {
         $this->configuration = $configuration;
         $this->ldapServer = $this->configuration->getLdapServer();
-        $this->multipleServers = $this->configuration->get('ldap.ldap_use_multiple_servers');
+        $this->multipleServers = $this->configuration->get(item: 'ldap.ldap_use_multiple_servers');
 
         parent::__construct($this->configuration);
 
@@ -96,7 +96,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
 
         // Handle group assignments if enabled
         $ldapGroupConfig = $this->configuration->getLdapGroupConfig();
-        if ($ldapGroupConfig['auto_assign'] && $this->configuration->get('security.permLevel') === 'medium') {
+        if ($ldapGroupConfig['auto_assign'] && $this->configuration->get(item: 'security.permLevel') === 'medium') {
             $this->assignUserToGroups($login, $user->getUserId());
         }
 
@@ -199,7 +199,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $bindLogin = $login;
-        if ($this->configuration->get('ldap.ldap_use_domain_prefix')) {
+        if ($this->configuration->get(item: 'ldap.ldap_use_domain_prefix')) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }

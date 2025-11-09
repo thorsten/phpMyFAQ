@@ -99,7 +99,7 @@ final class UpdateController extends AbstractController
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $branch = $this->configuration->get('upgrade.releaseEnvironment');
+        $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
             $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
@@ -167,7 +167,7 @@ final class UpdateController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
-        $pathToPackage = urldecode((string) $this->configuration->get('upgrade.lastDownloadedPackage'));
+        $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage): void {
             $progressCallback = static function ($progress): void {

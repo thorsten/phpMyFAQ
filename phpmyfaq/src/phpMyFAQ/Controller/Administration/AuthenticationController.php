@@ -50,13 +50,13 @@ final class AuthenticationController extends AbstractAdministrationController
         $rememberMe = Filter::filterVar($request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 
         // Set username via SSO
-        if ($this->configuration->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
+        if ($this->configuration->get(item: 'security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
             $username = trim((string) $request->server->get('REMOTE_USER'));
             $password = '';
         }
 
         // Login via local DB or LDAP or SSO
-        if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
+        if ($username !== '' && ($password !== '' || $this->configuration->get(item: 'security.ssoSupport'))) {
             $userAuthentication = new UserAuthentication($this->configuration, $this->currentUser);
             $userAuthentication->setRememberMe($rememberMe ?? false);
             try {
@@ -86,14 +86,14 @@ final class AuthenticationController extends AbstractAdministrationController
     public function login(Request $request): Response
     {
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
-        if ($this->configuration->get('security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
+        if ($this->configuration->get(item: 'security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
             return new RedirectResponse('./authenticate');
         }
 
         return $this->render('@admin/login.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'isSecure' => $request->isSecure() || !$this->configuration->get('security.useSslForLogins'),
+            'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
             'isError' => isset($error) && 0 < strlen((string) $error),
             'errorMessage' => 'to be implemented',
             'loginMessage' => Translation::get(languageKey: 'ad_auth_insert'),
@@ -106,13 +106,13 @@ final class AuthenticationController extends AbstractAdministrationController
             'msgRememberMe' => Translation::get(languageKey: 'rememberMe'),
             'msgLostPassword' => Translation::get(languageKey: 'lostPassword'),
             'msgLoginUser' => Translation::get(languageKey: 'msgLoginUser'),
-            'hasRegistrationEnabled' => $this->configuration->get('security.enableRegistration'),
+            'hasRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
             'msgRegistration' => Translation::get(languageKey: 'msgRegistration'),
             'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
             'msgSignInWithMicrosoft' => Translation::get(languageKey: 'msgSignInWithMicrosoft'),
             'secureUrl' => sprintf('https://%s%s', $request->getHost(), $request->getRequestUri()),
             'msgNotSecure' => Translation::get(languageKey: 'msgSecureSwitch'),
-            'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
+            'isWebAuthnEnabled' => $this->configuration->get(item: 'security.enableWebAuthnSupport'),
         ]);
     }
 
@@ -133,8 +133,8 @@ final class AuthenticationController extends AbstractAdministrationController
         }
 
         $this->currentUser->deleteFromSession(true);
-        $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
-        if ($this->configuration->get('security.ssoSupport') && !empty($ssoLogout)) {
+        $ssoLogout = $this->configuration->get(item: 'security.ssoLogoutRedirect');
+        if ($this->configuration->get(item: 'security.ssoSupport') && !empty($ssoLogout)) {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
         }
@@ -161,7 +161,7 @@ final class AuthenticationController extends AbstractAdministrationController
             'msgTwofactorCheck' => Translation::get(languageKey: 'msgTwofactorCheck'),
             'msgEnterTwofactorToken' => Translation::get(languageKey: 'msgEnterTwofactorToken'),
             'requestIsSecure' => $request->isSecure(),
-            'security.useSslForLogins' => $this->configuration->get('security.useSslForLogins'),
+            'security.useSslForLogins' => $this->configuration->get(item: 'security.useSslForLogins'),
             'requestHost' => $request->getHost(),
             'requestUri' => $request->getRequestUri(),
             'userId' => $userId,

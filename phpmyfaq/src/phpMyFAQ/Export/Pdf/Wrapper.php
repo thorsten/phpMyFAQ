@@ -29,173 +29,278 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use TCPDF;
 
-if (!defined('PMF_ROOT_DIR')) {
-    define('PMF_ROOT_DIR', __DIR__ . '/../../../');
+if (!defined(constant_name: 'PMF_ROOT_DIR')) {
+    define(
+        constant_name: 'PMF_ROOT_DIR',
+        value: __DIR__ . '/../../../',
+    );
 }
 
-if (!defined('PMF_SRC_DIR')) {
-    define('PMF_SRC_DIR', __DIR__ . '/../../');
+if (!defined(constant_name: 'PMF_SRC_DIR')) {
+    define(
+        constant_name: 'PMF_SRC_DIR',
+        value: __DIR__ . '/../../',
+    );
 }
 
-define('K_TCPDF_EXTERNAL_CONFIG', true);
+define(
+    constant_name: 'K_TCPDF_EXTERNAL_CONFIG',
+    value: true,
+);
 
-define('K_PATH_URL', '');
+define(
+    constant_name: 'K_PATH_URL',
+    value: '',
+);
 
 /*
  * path to TCPDF
  *
  */
-define('K_PATH_MAIN', PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/');
+define(
+    constant_name: 'K_PATH_MAIN',
+    value: PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/',
+);
 
 /*
  * path for PDF fonts
  */
-define('K_PATH_FONTS', PMF_SRC_DIR . '/fonts/');
+define(
+    constant_name: 'K_PATH_FONTS',
+    value: PMF_SRC_DIR . '/fonts/',
+);
 
 /*
  * cache directory for temporary files (full path)
  */
-define('K_PATH_CACHE', PMF_ROOT_DIR . '/content/user/images/');
+define(
+    constant_name: 'K_PATH_CACHE',
+    value: PMF_ROOT_DIR . '/content/user/images/',
+);
 
 /*
  * cache directory for temporary files (url path)
  */
-define('K_PATH_URL_CACHE', K_PATH_CACHE);
+define(
+    constant_name: 'K_PATH_URL_CACHE',
+    value: K_PATH_CACHE,
+);
 
 /*
  * images directory
  */
-define('K_PATH_IMAGES', PMF_ROOT_DIR . '/content/user/images/');
+define(
+    constant_name: 'K_PATH_IMAGES',
+    value: PMF_ROOT_DIR . '/content/user/images/',
+);
 
 /*
  * blank image
  */
-define('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
+define(
+    constant_name: 'K_BLANK_IMAGE',
+    value: K_PATH_IMAGES . '_blank.png',
+);
 
 /*
  * page format
  */
-define('PDF_PAGE_FORMAT', 'A4');
+define(
+    constant_name: 'PDF_PAGE_FORMAT',
+    value: 'A4',
+);
 
 /*
  * page orientation (P=portrait, L=landscape)
  */
-define('PDF_PAGE_ORIENTATION', 'P');
+define(
+    constant_name: 'PDF_PAGE_ORIENTATION',
+    value: 'P',
+);
 
 /*
  * document creator
  */
-define('PDF_CREATOR', 'TCPDF');
+define(
+    constant_name: 'PDF_CREATOR',
+    value: 'TCPDF',
+);
 
 /*
  * document author
  */
-define('PDF_AUTHOR', 'TCPDF');
+define(
+    constant_name: 'PDF_AUTHOR',
+    value: 'TCPDF',
+);
 
 /*
  * header title
  */
-define('PDF_HEADER_TITLE', 'phpMyFAQ');
+define(
+    constant_name: 'PDF_HEADER_TITLE',
+    value: 'phpMyFAQ',
+);
 
 /*
  * header description string
  */
-define('PDF_HEADER_STRING', 'by phpMyFAQ - www.phpmyfaq.de');
+define(
+    constant_name: 'PDF_HEADER_STRING',
+    value: 'by phpMyFAQ - www.phpmyfaq.de',
+);
 
 /*
  * image logo
  */
-define('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
+define(
+    constant_name: 'PDF_HEADER_LOGO',
+    value: 'tcpdf_logo.jpg',
+);
 
 /*
  * header logo image width [mm]
  */
-define('PDF_HEADER_LOGO_WIDTH', 30);
+define(
+    constant_name: 'PDF_HEADER_LOGO_WIDTH',
+    value: 30,
+);
 
 /*
  * document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
  */
-define('PDF_UNIT', 'mm');
+define(
+    constant_name: 'PDF_UNIT',
+    value: 'mm',
+);
 
 /*
  * header margin
  */
-define('PDF_MARGIN_HEADER', 5);
+define(
+    constant_name: 'PDF_MARGIN_HEADER',
+    value: 5,
+);
 
 /*
  * footer margin
  */
-define('PDF_MARGIN_FOOTER', 10);
+define(
+    constant_name: 'PDF_MARGIN_FOOTER',
+    value: 10,
+);
 
 /*
  * top margin
  */
-define('PDF_MARGIN_TOP', 27);
+define(
+    constant_name: 'PDF_MARGIN_TOP',
+    value: 27,
+);
 
 /*
  * bottom margin
  */
-define('PDF_MARGIN_BOTTOM', 25);
+define(
+    constant_name: 'PDF_MARGIN_BOTTOM',
+    value: 25,
+);
 
 /*
  * left margin
  */
-define('PDF_MARGIN_LEFT', 15);
+define(
+    constant_name: 'PDF_MARGIN_LEFT',
+    value: 15,
+);
 
 /*
  * right margin
  */
-define('PDF_MARGIN_RIGHT', 15);
+define(
+    constant_name: 'PDF_MARGIN_RIGHT',
+    value: 15,
+);
 
 /*
  * default main font name
  */
-define('PDF_FONT_NAME_MAIN', 'arialunicid0');
+define(
+    constant_name: 'PDF_FONT_NAME_MAIN',
+    value: 'arialunicid0',
+);
 
 /*
  * default main font size
  */
-define('PDF_FONT_SIZE_MAIN', 10);
+define(
+    constant_name: 'PDF_FONT_SIZE_MAIN',
+    value: 10,
+);
 
 /*
  * default data font name
  */
-define('PDF_FONT_NAME_DATA', 'arialunicid0');
+define(
+    constant_name: 'PDF_FONT_NAME_DATA',
+    value: 'arialunicid0',
+);
 
 /*
  * default data font size
  */
-define('PDF_FONT_SIZE_DATA', 8);
+define(
+    constant_name: 'PDF_FONT_SIZE_DATA',
+    value: 8,
+);
 
 /*
  * default monospaced font name
  */
-define('PDF_FONT_MONOSPACED', 'DejaVuSansMono');
+define(
+    constant_name: 'PDF_FONT_MONOSPACED',
+    value: 'DejaVuSansMono',
+);
 
 /*
  * ratio used to adjust the conversion of pixels to user units
  */
-define('PDF_IMAGE_SCALE_RATIO', 1);
+define(
+    constant_name: 'PDF_IMAGE_SCALE_RATIO',
+    value: 1,
+);
 
 /*
  * magnification factor for titles
  */
-define('HEAD_MAGNIFICATION', 1.1);
+define(
+    constant_name: 'HEAD_MAGNIFICATION',
+    value: 1.1,
+);
 
 /*
- * height of cell repect font height
+ * height of cell respect font height
  */
-define('K_CELL_HEIGHT_RATIO', 1.25);
+define(
+    constant_name: 'K_CELL_HEIGHT_RATIO',
+    value: 1.25,
+);
 
 /*
  * title magnification respect main font size
  */
-define('K_TITLE_MAGNIFICATION', 1.3);
+define(
+    constant_name: 'K_TITLE_MAGNIFICATION',
+    value: 1.3,
+);
 
 /*
- * reduction factor for small font
+ * reduction factor for a small font
  */
-define('K_SMALL_RATIO', 2 / 3);
+define(
+    constant_name: 'K_SMALL_RATIO',
+    value: 2 / 3,
+);
 
 /**
  * Class Wrapper
@@ -271,7 +376,7 @@ class Wrapper extends TCPDF
     {
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT);
 
-        $this->setFontSubsetting(false);
+        $this->setFontSubsetting(enable: false);
 
         // set image scale factor
         $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -281,7 +386,7 @@ class Wrapper extends TCPDF
 
         // Check on RTL
         if ('rtl' === Translation::get(languageKey: 'direction')) {
-            $this->setRTL(true);
+            $this->setRTL(enable: true);
         }
 
         // Set font
@@ -329,33 +434,49 @@ class Wrapper extends TCPDF
      * The header of the PDF file.
      */
     #[\Override]
-    public function Header(): void // phpcs:ignore
+    public function Header(): void
     {
-        // Set custom header and footer
+        // Set a custom header and footer
         $this->setCustomHeader();
 
         $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
 
-        $this->SetTextColor(0, 0, 0);
-        $this->SetFont($this->currentFont, 'B', 14);
+        $this->SetTextColor(
+            col1: 0,
+            col2: 0,
+            col3: 0,
+        );
+        $this->SetFont($this->currentFont, style: 'B', size: 14);
 
         if (0 < Strings::strlen($this->customHeader)) {
-            $this->writeHTMLCell(0, 0, 0, 0, $this->customHeader);
+            $this->writeHTMLCell(
+                w: 0,
+                h: 0,
+                x: 0,
+                y: 0,
+                html: $this->customHeader,
+            );
             $this->Ln();
             $this->writeHTMLCell(
-                0,
-                0,
-                0,
-                0,
-                html_entity_decode((string) $title, ENT_QUOTES, 'utf-8'),
-                0,
-                0,
-                false,
-                true,
-                'C',
+                w: 0,
+                h: 0,
+                x: 0,
+                y: 0,
+                html: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
+                border: 0,
+                ln: 0,
+                fill: false,
+                reseth: true,
+                align: 'C',
             );
         } else {
-            $this->MultiCell(0, 10, html_entity_decode((string) $title, ENT_QUOTES, 'utf-8'), 0, 'C');
+            $this->MultiCell(
+                w: 0,
+                h: 10,
+                txt: html_entity_decode((string) $title, ENT_QUOTES, encoding: 'utf-8'),
+                border: 0,
+                align: 'C',
+            );
             $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
         }
     }
@@ -366,9 +487,9 @@ class Wrapper extends TCPDF
     public function setCustomHeader(): void
     {
         $this->customHeader = html_entity_decode(
-            (string) $this->config->get('main.customPdfHeader'),
+            (string) $this->config->get(item: 'main.customPdfHeader'),
             ENT_QUOTES,
-            'utf-8',
+            encoding: 'utf-8',
         );
     }
 
@@ -377,54 +498,70 @@ class Wrapper extends TCPDF
      * @throws Exception
      */
     #[\Override]
-    public function Footer(): void // phpcs:ignore
+    public function Footer(): void
     {
-        // Set custom footer
+        // Set a custom footer
         $this->setCustomFooter();
 
         $date = new Date($this->config);
 
         $footer = sprintf(
-            $this->config->get('spam.mailAddressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
-            date('Y'),
-            $this->config->get('main.metaPublisher'),
-            $this->config->get('spam.mailAddressInExport') ? $this->config->getAdminEmail() : '',
-            $date->format(date('Y-m-d H:i')),
+            $this->config->get(item: 'spam.mailAddressInExport') ? '© %d %s <%s> | %s' : '© %d %s %s| %s',
+            date(format: 'Y'),
+            $this->config->get(item: 'main.metaPublisher'),
+            $this->config->get(item: 'spam.mailAddressInExport') ? $this->config->getAdminEmail() : '',
+            $date->format(date(format: 'Y-m-d H:i')),
         );
 
         if (0 < Strings::strlen($this->customFooter)) {
-            $this->writeHTMLCell(0, 0, null, null, $this->customFooter);
+            $this->writeHTMLCell(
+                w: 0,
+                h: 0,
+                x: null,
+                y: null,
+                html: $this->customFooter,
+            );
         }
 
         $currentTextColor = $this->TextColor;
-        $this->SetTextColor(0, 0, 0);
+        $this->SetTextColor(
+            col1: 0,
+            col2: 0,
+            col3: 0,
+        );
         $this->SetY(-25);
-        $this->SetFont($this->currentFont, '', 10);
+        $this->SetFont($this->currentFont, style: '', size: 10);
         $this->Cell(
-            0,
-            10,
-            Translation::get(languageKey: 'ad_gen_page')
+            w: 0,
+            h: 10,
+            txt: Translation::get(languageKey: 'ad_gen_page')
             . ' '
             . $this->getAliasNumPage()
             . ' / '
             . $this->getAliasNbPages(),
-            0,
-            0,
-            'C',
+            border: 0,
+            ln: 0,
+            align: 'C',
         );
         $this->SetY(-20);
-        $this->SetFont($this->currentFont, 'B', 8);
-        $this->Cell(0, 10, $footer, 0, 1, 'C');
+        $this->SetFont($this->currentFont, style: 'B', size: 8);
+        $this->Cell(
+            w: 0,
+            h: 10,
+            txt: $footer,
+            border: 0,
+            ln: 1,
+            align: 'C',
+        );
         if (!$this->enableBookmarks) {
             $this->SetY(-15);
-            $this->SetFont($this->currentFont, '', 8);
+            $this->SetFont($this->currentFont, style: '', size: 8);
             $baseUrl = 'index.php';
             if ($this->faq !== []) {
                 $baseUrl .= '?action=faq&';
+                $baseUrl .= 'cat=0';
                 if (array_key_exists($this->category, $this->categories)) {
                     $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
-                } else {
-                    $baseUrl .= 'cat=0';
                 }
 
                 $baseUrl .= '&id=' . $this->faq['id'];
@@ -434,7 +571,16 @@ class Wrapper extends TCPDF
             $url = $this->config->getDefaultUrl() . $baseUrl;
             $link = new Link($url, $this->config);
             $link->itemTitle = $this->question;
-            $this->Cell(0, 10, 'URL: ' . $link->toString(), 0, 1, 'C', false, $link->toString());
+            $this->Cell(
+                w: 0,
+                h: 10,
+                txt: 'URL: ' . $link->toString(),
+                border: 0,
+                ln: 1,
+                align: 'C',
+                fill: false,
+                link: $link->toString(),
+            );
         }
 
         $this->TextColor = $currentTextColor;
@@ -445,7 +591,7 @@ class Wrapper extends TCPDF
      */
     public function setCustomFooter(): void
     {
-        $this->customFooter = $this->config->get('main.customPdfFooter') ?? '';
+        $this->customFooter = $this->config->get(item: 'main.customPdfFooter') ?? '';
     }
 
     /**
@@ -456,18 +602,37 @@ class Wrapper extends TCPDF
         $this->addTOCPage();
 
         // Title
-        $this->SetFont($this->currentFont, 'B', 24);
-        $this->MultiCell(0, 0, $this->config->getTitle(), 0, 'C');
+        $this->SetFont($this->currentFont, style: 'B', size: 24);
+        $this->MultiCell(
+            w: 0,
+            h: 0,
+            txt: $this->config->getTitle(),
+            border: 0,
+            align: 'C',
+        );
         $this->Ln();
 
         // TOC
-        $this->SetFont($this->currentFont, 'B', 16);
-        $this->MultiCell(0, 0, Translation::get(languageKey: 'msgTableOfContent'), 0, 'C');
+        $this->SetFont($this->currentFont, style: 'B', size: 16);
+        $this->MultiCell(
+            w: 0,
+            h: 0,
+            txt: Translation::get(languageKey: 'msgTableOfContent'),
+            border: 0,
+            align: 'C',
+        );
         $this->Ln();
-        $this->SetFont($this->currentFont, '', 12);
+        $this->SetFont($this->currentFont, style: '', size: 12);
 
         // Render TOC
-        $this->addTOC(1, $this->currentFont, '.', Translation::get(languageKey: 'msgTableOfContent'), 'B', [128, 0, 0]);
+        $this->addTOC(
+            page: 1,
+            numbersfont: $this->currentFont,
+            filler: '.',
+            toc_name: Translation::get(languageKey: 'msgTableOfContent'),
+            style: 'B',
+            color: [128, 0, 0],
+        );
         $this->endTOCPage();
     }
 
@@ -527,8 +692,8 @@ class Wrapper extends TCPDF
      *                               boolean value to indicate if the image is the default for printing.
      */
     #[\Override]
+    /* @mago-ignore lint:excessive-parameter-list */
     public function Image(
-        // phpcs:ignore
         $file,
         $x = null,
         $y = null,
@@ -598,10 +763,14 @@ class Wrapper extends TCPDF
 
     public function concatenatePaths(string $path, string $file): string
     {
-        $trimmedPath = rtrim(str_replace('\\', '/', $path), '/');
-        $trimmedFile = ltrim($file, '/');
+        $trimmedPath = rtrim(str_replace(
+            search: '\\',
+            replace: '/',
+            subject: $path,
+        ), characters: '/');
+        $trimmedFile = ltrim($file, characters: '/');
 
-        $pos = strpos($trimmedFile, 'content');
+        $pos = strpos($trimmedFile, needle: 'content');
         $relativePath = substr($trimmedFile, (int) $pos);
 
         return $trimmedPath . DIRECTORY_SEPARATOR . $relativePath;
@@ -669,7 +838,8 @@ class Wrapper extends TCPDF
                         $base64Image = base64_encode($imageData);
                         $mimeType = $this->getImageMimeType($imageData);
                         if ($mimeType && $base64Image) {
-                            $dataUri = sprintf('data:%s;base64,%s', $mimeType, $base64Image);
+                            $fmt = 'data:%s;base64,%s';
+                            $dataUri = sprintf($fmt, $mimeType, $base64Image);
                             return str_replace($imageUrl, $dataUri, $fullMatch);
                         }
                     }
@@ -705,7 +875,7 @@ class Wrapper extends TCPDF
             ],
         ]);
 
-        $imageData = @file_get_contents($url, false, $context);
+        $imageData = file_get_contents($url, use_include_path: false, context: $context);
 
         // Validate that we actually got image data
         if ($imageData === false || $imageData === '') {
@@ -763,24 +933,24 @@ class Wrapper extends TCPDF
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         if ($finfo === false) {
             // Fallback to header-based detection
-            if (str_starts_with($data, "\xFF\xD8\xFF")) {
+            if (str_starts_with($data, needle: "\xFF\xD8\xFF")) {
                 return 'image/jpeg';
             }
 
-            if (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
+            if (str_starts_with($data, needle: "\x89PNG\r\n\x1A\n")) {
                 return 'image/png';
             }
 
-            if (str_starts_with($data, 'GIF87a') || str_starts_with($data, 'GIF89a')) {
+            if (str_starts_with($data, needle: 'GIF87a') || str_starts_with($data, needle: 'GIF89a')) {
                 return 'image/gif';
             }
 
-            if (str_starts_with($data, 'RIFF')) {
+            if (str_starts_with($data, needle: 'RIFF')) {
                 return 'image/webp';
             }
 
             // Fallback to header-based detection
-            if (str_starts_with($data, 'BM')) {
+            if (str_starts_with($data, needle: 'BM')) {
                 return 'image/bmp';
             }
 
@@ -791,7 +961,7 @@ class Wrapper extends TCPDF
         finfo_close($finfo);
 
         // Ensure it's actually an image MIME type
-        if ($mimeType && str_starts_with($mimeType, 'image/')) {
+        if ($mimeType && str_starts_with($mimeType, needle: 'image/')) {
             return $mimeType;
         }
 
@@ -808,9 +978,10 @@ class Wrapper extends TCPDF
      * @param bool $fill Indicates if the background must be painted (true) or transparent (false)
      * @param bool $reseth If true, reset the last cell height
      * @param bool $cell If true, add the current left/right/top/bottom cell margins to the coordinates
-     * @param string $align Allows to center or align the image on the current line
+     * @param string $align Allows centering or align the image on the current line
      */
     #[\Override]
+    /* @mago-ignore lint:excessive-parameter-list */
     public function WriteHTML(
         // phpcs:ignore
         $html,

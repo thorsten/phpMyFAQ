@@ -55,7 +55,7 @@ class Sitemap
     public function __construct(
         private readonly Configuration $configuration,
     ) {
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }
@@ -235,7 +235,7 @@ class Sitemap
                 $link->itemTitle = $row->thema;
                 $faq->url = $link->toString();
 
-                if ($this->configuration->get('main.enableMarkdownEditor')) {
+                if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {
                     $answer = strip_tags($commonMarkConverter->convert($row->snap)->getContent());
                 } else {
                     $answer = strip_tags((string) $row->snap);

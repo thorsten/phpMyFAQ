@@ -128,7 +128,7 @@ class CurrentUser extends User
 
         // Check if the login is an email address and convert it to a username if needed
         if (
-            $this->configuration->get('security.loginWithEmailAddress')
+            $this->configuration->get(item: 'security.loginWithEmailAddress')
             && Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
             $userId = $this->getUserIdByEmail($login);
@@ -145,7 +145,7 @@ class CurrentUser extends User
         // Extract domain if LDAP is active and ldap_use_domain_prefix is true
         if (
             $this->configuration->isLdapActive()
-            && $this->configuration->get('ldap.ldap_use_domain_prefix')
+            && $this->configuration->get(item: 'ldap.ldap_use_domain_prefix')
             && '' !== $password
             && ($pos = strpos($login, '\\')) !== false
         ) {
@@ -155,7 +155,7 @@ class CurrentUser extends User
 
         // Handle SSO authentication
         if (
-            $this->configuration->get('security.ssoSupport')
+            $this->configuration->get(item: 'security.ssoSupport')
             && $request->server->get('REMOTE_USER')
             && '' === $password
         ) {
@@ -204,12 +204,12 @@ class CurrentUser extends User
         }
 
         // No successful login, handle errors
-        if ($this->configuration->get('security.loginWithEmailAddress')) {
+        if ($this->configuration->get(item: 'security.loginWithEmailAddress')) {
             $this->setLoginAttempt(); // Only set a login attempt if email addresses are allowed
         }
 
         if (
-            $this->configuration->get('security.loginWithEmailAddress')
+            $this->configuration->get(item: 'security.loginWithEmailAddress')
             && !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
             throw new Exception(parent::ERROR_USER_INCORRECT_LOGIN);

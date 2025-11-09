@@ -133,7 +133,7 @@ final class NewsController extends AbstractAdministrationController
             'permissionEditNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT),
             'permissionDeleteNews' => $user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_DELETE),
             'defaultUrl' => $this->configuration->getDefaultUrl(),
-            'enableWysiwyg' => $this->configuration->get('main.enableWysiwygEditor'),
+            'enableWysiwyg' => $this->configuration->get(item: 'main.enableWysiwygEditor'),
             'ad_news_add' => Translation::get(languageKey: 'ad_news_add'),
             'csrfToken_saveNews' => Token::getInstance($session)->getTokenString('save-news'),
             'ad_news_author_name' => Translation::get(languageKey: 'ad_news_author_name'),

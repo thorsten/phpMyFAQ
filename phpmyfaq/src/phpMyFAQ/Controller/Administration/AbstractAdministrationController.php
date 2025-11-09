@@ -55,7 +55,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),
             'currentYear' => date('Y'),
-            'metaRobots' => $this->configuration->get('seo.metaTagsAdmin'),
+            'metaRobots' => $this->configuration->get(item: 'seo.metaTagsAdmin'),
             'templateSetName' => TwigWrapper::getTemplateSetName(),
             'pageDirection' => Translation::get(languageKey: 'direction'),
             'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
@@ -66,7 +66,7 @@ abstract class AbstractAdministrationController extends AbstractController
                 true,
             ),
             'userName' => $this->currentUser->getUserData('display_name'),
-            'hasGravatarSupport' => $this->configuration->get('main.enableGravatarSupport'),
+            'hasGravatarSupport' => $this->configuration->get(item: 'main.enableGravatarSupport'),
             'gravatarImage' => $gravatarImage,
             'msgChangePassword' => Translation::get(languageKey: 'ad_menu_passwd'),
             'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
@@ -78,7 +78,9 @@ abstract class AbstractAdministrationController extends AbstractController
             'menuImportsExports' => Translation::get(languageKey: 'admin_mainmenu_imports_exports'),
             'menuBackup' => Translation::get(languageKey: 'admin_mainmenu_backup'),
             'menuConfiguration' => Translation::get(languageKey: 'admin_mainmenu_configuration'),
-            'isSessionTimeoutCounterEnabled' => $this->configuration->get('security.enableAdminSessionTimeoutCounter'),
+            'isSessionTimeoutCounterEnabled' => $this->configuration->get(
+                item: 'security.enableAdminSessionTimeoutCounter',
+            ),
         ] + $pageFlags;
     }
 
@@ -91,7 +93,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'ad_menu_user_administration',
             'user',
         );
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
                 'addgroup+editgroup+delgroup',
                 'ad_menu_group_administration',
@@ -226,7 +228,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'msgPlugins',
             'plugins',
         );
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
                 'msgAdminHeaderElasticsearch',
@@ -234,7 +236,7 @@ abstract class AbstractAdministrationController extends AbstractController
             );
         }
 
-        if ($this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
                 PermissionType::CONFIGURATION_EDIT->value,
                 'msgAdminHeaderOpenSearch',
@@ -347,7 +349,7 @@ abstract class AbstractAdministrationController extends AbstractController
 
     private function getGravatarImage(): string
     {
-        if ($this->currentUser->isLoggedIn() && $this->configuration->get('main.enableGravatarSupport')) {
+        if ($this->currentUser->isLoggedIn() && $this->configuration->get(item: 'main.enableGravatarSupport')) {
             $gravatar = new Gravatar();
             return $gravatar->getImage($this->currentUser->getUserData('email'), [
                 'size' => '24',

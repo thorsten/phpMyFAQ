@@ -68,7 +68,7 @@ class SearchHelper extends AbstractHelper
     public function createAutoCompleteResult(SearchResultSet $searchResultSet): array
     {
         $results = [];
-        $maxResults = $this->configuration->get('records.numberOfRecordsPerPage');
+        $maxResults = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
@@ -111,7 +111,7 @@ class SearchHelper extends AbstractHelper
      */
     public function renderAdminSuggestionResult(SearchResultSet $searchResultSet): array
     {
-        $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
         $results = [];
 
@@ -151,7 +151,7 @@ class SearchHelper extends AbstractHelper
     public function getSearchResult(SearchResultSet $searchResultSet, int $currentPage): array
     {
         $results = [];
-        $confPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $numOfResults = $searchResultSet->getNumberOfResults();
 
         $lastPage = $currentPage * $confPerPage;
@@ -192,7 +192,10 @@ class SearchHelper extends AbstractHelper
                 $searchTerm = preg_quote($searchTerm, '/');
                 $searchItems = explode(' ', $searchTerm);
 
-                if ($this->configuration->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
+                if (
+                    $this->configuration->get(item: 'search.enableHighlighting')
+                    && Strings::strlen($searchItems[0]) > 1
+                ) {
                     foreach ($searchItems as $searchItem) {
                         if (Strings::strlen($searchItem) > 2) {
                             $question = Utils::setHighlightedString($question, $searchItem);

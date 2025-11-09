@@ -306,7 +306,7 @@ final class UserController extends AbstractController
         $category->moveOwnership((int) $userId, 1);
 
         // Remove the user from groups
-        if ('basic' !== $this->configuration->get('security.permLevel')) {
+        if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
             $permissions = Permission::create('medium', $this->configuration);
             $permissions->removeFromAllGroups($userId);
         }

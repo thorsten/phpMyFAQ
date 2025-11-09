@@ -198,7 +198,7 @@ class StopWords
     {
         // Sanity checks
         $content = Strings::strtolower(trim($content));
-        if ('' === $content || !$this->configuration->get('spam.checkBannedWords')) {
+        if ('' === $content || !$this->configuration->get(item: 'spam.checkBannedWords')) {
             return true;
         }
 

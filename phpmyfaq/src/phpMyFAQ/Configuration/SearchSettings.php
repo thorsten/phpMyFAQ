@@ -30,6 +30,6 @@ readonly class SearchSettings
 
     public function isElasticsearchActive(): bool
     {
-        return (bool) $this->configuration->get('search.enableElasticsearch');
+        return (bool) $this->configuration->get(item: 'search.enableElasticsearch');
     }
 }

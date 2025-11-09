@@ -118,7 +118,7 @@ class Relation
             Database::getTablePrefix(),
         );
 
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             if (-1 === $this->category->getUser()) {
                 $query .= sprintf(
                     'AND fdg.group_id IN (%s) AND fcg.group_id IN (%s)',

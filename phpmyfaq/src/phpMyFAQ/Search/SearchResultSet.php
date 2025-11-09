@@ -82,7 +82,7 @@ class SearchResultSet
         $duplicateResults = [];
         $currentGroupIds = [-1];
 
-        if ('basic' !== $this->configuration->get('security.permLevel')) {
+        if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
             $currentGroupIds = $this->currentUser->perm->getUserGroups($this->currentUser->getUserId());
         }
 
@@ -90,7 +90,7 @@ class SearchResultSet
             $permission = false;
 
             // check permissions for groups
-            if ('medium' === $this->configuration->get('security.permLevel')) {
+            if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(Permission::GROUP, (int) $result->id);
                 foreach ($groupPermissions as $groupPermission) {
                     if (in_array($groupPermission, $currentGroupIds)) {
@@ -100,7 +100,7 @@ class SearchResultSet
             }
 
             // check permission for a user
-            if ('basic' === $this->configuration->get('security.permLevel')) {
+            if ('basic' === $this->configuration->get(item: 'security.permLevel')) {
                 $userPermission = $this->faqPermission->get(Permission::USER, (int) $result->id);
                 $permission =
                     in_array(-1, $userPermission) || in_array($this->currentUser->getUserId(), $userPermission);

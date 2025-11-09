@@ -30,7 +30,7 @@ readonly class UrlSettings
 
     public function getDefaultUrl(): string
     {
-        $defaultUrl = (string) $this->configuration->get('main.referenceURL');
+        $defaultUrl = (string) $this->configuration->get(item: 'main.referenceURL');
         return str_ends_with($defaultUrl, '/') ? $defaultUrl : $defaultUrl . '/';
     }
 
@@ -40,7 +40,7 @@ readonly class UrlSettings
      */
     public function getAllowedMediaHosts(): array
     {
-        $val = (string) $this->configuration->get('records.allowedMediaHosts');
+        $val = (string) $this->configuration->get(item: 'records.allowedMediaHosts');
         return $val === '' ? [] : explode(',', $val);
     }
 }

@@ -362,7 +362,7 @@ class Update extends Setup
 
             // update options
             $this->configuration->rename('security.loginWithEmailAddress', 'security.loginWithEmailAddress');
-            if ($this->configuration->get('security.permLevel') === 'large') {
+            if ($this->configuration->get(item: 'security.permLevel') === 'large') {
                 $this->configuration->set('security.permLevel', 'medium');
             }
 
@@ -801,8 +801,8 @@ class Update extends Setup
             facebookexternalhit/1.1']);
             $this->configuration->add('mail.noReplySenderAddress', '');
             $this->configuration->add('records.allowedMediaHosts', 'www.youtube.com');
-            $this->configuration->add('seo.title', $this->configuration->get('main.titleFAQ'));
-            $this->configuration->add('seo.description', $this->configuration->get('main.metaDescription'));
+            $this->configuration->add('seo.title', $this->configuration->get(item: 'main.titleFAQ'));
+            $this->configuration->add('seo.description', $this->configuration->get(item: 'main.metaDescription'));
             $this->configuration->add('layout.enablePrivacyLink', 'true');
             $this->configuration->add('layout.customCss', '');
             $this->configuration->add('seo.enableRichSnippets', 'false');

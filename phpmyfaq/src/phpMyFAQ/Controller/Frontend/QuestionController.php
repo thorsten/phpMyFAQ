@@ -64,7 +64,7 @@ final class QuestionController extends AbstractController
         $storeNow = Filter::filterVar($data->store ?? 'not', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If smart answering is disabled, save the question immediately
-        if (false === $this->configuration->get('main.enableSmartAnswering')) {
+        if (false === $this->configuration->get(item: 'main.enableSmartAnswering')) {
             $save = true;
         }
 
@@ -79,7 +79,7 @@ final class QuestionController extends AbstractController
                 $selectedCategory = $category->getAllCategoryIds()[0];
             }
 
-            $visibility = $this->configuration->get('records.enableVisibilityQuestions') ? 'Y' : 'N';
+            $visibility = $this->configuration->get(item: 'records.enableVisibilityQuestions') ? 'Y' : 'N';
 
             $questionEntity = new QuestionEntity();
             $questionEntity
@@ -130,11 +130,11 @@ final class QuestionController extends AbstractController
      */
     private function isAddingQuestionsAllowed(): bool
     {
-        if ($this->configuration->get('records.allowQuestionsForGuests')) {
+        if ($this->configuration->get(item: 'records.allowQuestionsForGuests')) {
             return true;
         }
 
-        if ($this->configuration->get('main.enableAskQuestions')) {
+        if ($this->configuration->get(item: 'main.enableAskQuestions')) {
             return true;
         }
 

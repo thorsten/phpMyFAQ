@@ -123,7 +123,7 @@ class Image
         if (
             $this->isUpload
             && $this->uploadedFile->isValid()
-            && $this->uploadedFile->getSize() < $this->configuration->get('records.maxAttachmentSize')
+            && $this->uploadedFile->getSize() < $this->configuration->get(item: 'records.maxAttachmentSize')
         ) {
             if (false === $this->uploadedFile->getSize()) {
                 throw new Exception('Cannot detect image size');

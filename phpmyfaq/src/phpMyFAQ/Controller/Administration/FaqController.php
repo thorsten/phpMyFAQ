@@ -116,7 +116,7 @@ final class FaqController extends AbstractAdministrationController
             'revision_id' => 0,
             'author' => $this->currentUser->getUserData('display_name'),
             'email' => $this->currentUser->getUserData('email'),
-            'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
+            'comment' => $this->configuration->get(item: 'records.defaultAllowComments') ? 'checked' : null,
         ];
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
@@ -138,7 +138,7 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
@@ -270,7 +270,7 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => $attachmentList,
             'allGroups' => $allGroups,
             'restrictedGroups' => $restrictedGroups,
-            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => $allUsers,
@@ -347,7 +347,7 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
@@ -424,7 +424,7 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
@@ -483,7 +483,7 @@ final class FaqController extends AbstractAdministrationController
             'revision_id' => 0,
             'author' => $this->currentUser->getUserData('display_name'),
             'email' => $this->currentUser->getUserData('email'),
-            'comment' => $this->configuration->get('records.defaultAllowComments') ? 'checked' : null,
+            'comment' => $this->configuration->get(item: 'records.defaultAllowComments') ? 'checked' : null,
         ];
 
         $categories = [
@@ -515,7 +515,7 @@ final class FaqController extends AbstractAdministrationController
             'attachments' => [],
             'allGroups' => true,
             'restrictedGroups' => false,
-            'groupPermissionOptions' => $this->configuration->get('security.permLevel') === 'medium'
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
                 : '',
             'allUsers' => true,
@@ -561,12 +561,12 @@ final class FaqController extends AbstractAdministrationController
             'csrfToken' => $token->getTokenString('edit-faq'),
             'csrfTokenDeleteAttachment' => $token->getTokenString('delete-attachment'),
             'csrfTokenUploadAttachment' => $token->getTokenString('upload-attachment'),
-            'isEditorEnabled' => $this->configuration->get('main.enableWysiwygEditor'),
-            'isMarkdownEditorEnabled' => $this->configuration->get('main.enableMarkdownEditor'),
-            'isBasicPermission' => $this->configuration->get('security.permLevel') === 'basic',
+            'isEditorEnabled' => $this->configuration->get(item: 'main.enableWysiwygEditor'),
+            'isMarkdownEditorEnabled' => $this->configuration->get(item: 'main.enableMarkdownEditor'),
+            'isBasicPermission' => $this->configuration->get(item: 'security.permLevel') === 'basic',
             'defaultUrl' => $this->configuration->getDefaultUrl(),
-            'canBeNewRevision' => !$this->configuration->get('records.enableAutoRevisions'),
-            'maxAttachmentSize' => $this->configuration->get('records.maxAttachmentSize'),
+            'canBeNewRevision' => !$this->configuration->get(item: 'records.enableAutoRevisions'),
+            'maxAttachmentSize' => $this->configuration->get(item: 'records.maxAttachmentSize'),
             'hasPermissionForAddAttachments' => $canAddAttachments,
             'hasPermissionForDeleteAttachments' => $canDeleteAttachments,
             'hasPermissionForTranslateFaqs' => $canTranslateFaqs,

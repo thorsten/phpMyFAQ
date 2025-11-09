@@ -58,7 +58,7 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         $api = new Api($this->configuration, new System());
-        $releaseEnvironment = $this->configuration->get('upgrade.releaseEnvironment');
+        $releaseEnvironment = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
             $versions = $api->getVersions();
@@ -85,7 +85,7 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        if ($this->configuration->get('main.enableUserTracking')) {
+        if ($this->configuration->get(item: 'main.enableUserTracking')) {
             $session = $this->container->get('phpmyfaq.admin.session');
             $endDate = $request->server->get('REQUEST_TIME');
             return $this->json($session->getLast30DaysVisits($endDate));
@@ -102,7 +102,7 @@ final class DashboardController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        if ($this->configuration->get('main.enableUserTracking')) {
+        if ($this->configuration->get(item: 'main.enableUserTracking')) {
             $faqStatistics = new Faq\Statistics($this->configuration);
             return $this->json($faqStatistics->getTopTenData());
         }

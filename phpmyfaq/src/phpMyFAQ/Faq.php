@@ -98,7 +98,7 @@ class Faq
     ) {
         $this->plurals = new Plurals();
 
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }
@@ -267,7 +267,7 @@ class Faq
     {
         global $sids;
 
-        $numPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $numPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
         $output = '';
         $title = '';
@@ -275,7 +275,7 @@ class Faq
         $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
 
         // If random FAQs are activated, we don't need an order
-        if (true === $this->configuration->get('records.randomSort')) {
+        if (true === $this->configuration->get(item: 'records.randomSort')) {
             $order = '';
         } else {
             $order = sprintf(
@@ -395,7 +395,7 @@ class Faq
                 $oLink->class = 'text-decoration-none';
 
                 // If random FAQs are activated, we don't need sticky FAQs
-                if (true === $this->configuration->get('records.randomSort')) {
+                if (true === $this->configuration->get(item: 'records.randomSort')) {
                     $row->sticky = 0;
                 }
 
@@ -415,7 +415,7 @@ class Faq
             }
 
             // If random FAQs are activated, shuffle the FAQs :-)
-            if (true === $this->configuration->get('records.randomSort')) {
+            if (true === $this->configuration->get(item: 'records.randomSort')) {
                 shuffle($renderedItems);
             }
 
@@ -445,7 +445,7 @@ class Faq
             $options = [
                 'baseUrl' => $baseUrl,
                 'total' => $num,
-                'perPage' => $this->configuration->get('records.numberOfRecordsPerPage'),
+                'perPage' => $this->configuration->get(item: 'records.numberOfRecordsPerPage'),
                 'rewriteUrl' => $rewriteUrl,
                 'pageParamName' => 'seite',
             ];
@@ -539,7 +539,7 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         $num = $this->configuration->getDb()->numRows($result);
-        $numberPerPage = $this->configuration->get('records.numberOfRecordsPerPage');
+        $numberPerPage = $this->configuration->get(item: 'records.numberOfRecordsPerPage');
 
         $first = $usePagination && $page > 1 ? ($page * $numberPerPage) - $numberPerPage : 0;
 
@@ -991,7 +991,7 @@ class Faq
         }
 
         // Delete possible Elasticsearch documents
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             $elasticsearch = new Elasticsearch($this->configuration);
             $elasticsearch->delete($solutionId);
         }
@@ -1552,7 +1552,7 @@ class Faq
         }
 
         // Sort stickyData by order if activated
-        if ($this->configuration->get('records.orderStickyFaqsCustom') === true) {
+        if ($this->configuration->get(item: 'records.orderStickyFaqsCustom') === true) {
             usort($sticky, $this->sortStickyArrayByOrder(...));
         }
 

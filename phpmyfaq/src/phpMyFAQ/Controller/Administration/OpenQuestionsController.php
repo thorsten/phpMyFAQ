@@ -58,7 +58,7 @@ final class OpenQuestionsController extends AbstractAdministrationController
             'questions' => $question->getAll(),
             'yes' => Translation::get(languageKey: 'ad_gen_yes'),
             'no' => Translation::get(languageKey: 'ad_gen_no'),
-            'enableCloseQuestion' => $this->configuration->get('records.enableCloseQuestion'),
+            'enableCloseQuestion' => $this->configuration->get(item: 'records.enableCloseQuestion'),
             'msg2answerFAQ' => Translation::get(languageKey: 'msg2answerFAQ'),
             'msgTakeQuestion' => Translation::get(languageKey: 'ad_ques_take'),
             'csrfTokenToggleVisibility' => Token::getInstance($session)->getTokenString('toggle-question-visibility'),

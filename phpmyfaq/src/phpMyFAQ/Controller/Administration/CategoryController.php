@@ -132,7 +132,7 @@ final class CategoryController extends AbstractAdministrationController
         $parentId = Filter::filterVar($request->get('parentId'), FILTER_VALIDATE_INT);
 
         $templateVars = [];
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $templateVars = [
                 'groupsOptions' => $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser),
             ];
@@ -357,7 +357,7 @@ final class CategoryController extends AbstractAdministrationController
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
-        if ($this->configuration->get('security.permLevel') !== 'basic') {
+        if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
             $allGroupsOptions = $this->currentUser->perm->getAllGroupsOptions(
                 [$categoryEntity->getGroupId()],
                 $this->currentUser,
@@ -383,7 +383,7 @@ final class CategoryController extends AbstractAdministrationController
             'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
             'categoryImageReset' => Translation::get(languageKey: 'msgCategoryImageReset'),
             'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
-            'isMediumPermission' => $this->configuration->get('security.permLevel') !== 'basic',
+            'isMediumPermission' => $this->configuration->get(item: 'security.permLevel') !== 'basic',
             'allGroupsOptions' => $allGroupsOptions,
             'allGroups' => $allGroups ? 'checked' : '',
             'restrictedGroups' => $restrictedGroups ? 'checked' : '',
@@ -509,7 +509,7 @@ final class CategoryController extends AbstractAdministrationController
             'ad_categ_trans_2' => Translation::get(languageKey: 'ad_categ_trans_2'),
             'categoryId' => $categoryId,
             'category' => $category->getCategoryName($categoryId),
-            'permLevel' => $this->configuration->get('security.permLevel'),
+            'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'groupPermission' => $groupPermission[0] ?? -1,
             'userPermission' => $userPermission[0] ?? -1,
             'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
@@ -720,13 +720,13 @@ final class CategoryController extends AbstractAdministrationController
         return [
             'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
             'userSelection' => $userHelper->getAllUsersForTemplate(),
-            'permLevel' => $this->configuration->get('security.permLevel'),
+            'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'msgAccessAllUsers' => Translation::get(languageKey: 'msgAccessAllUsers'),
             'ad_entry_restricted_users' => Translation::get(languageKey: 'ad_entry_restricted_users'),
             'ad_entry_userpermission' => Translation::get(languageKey: 'ad_entry_userpermission'),
             'ad_categ_add' => Translation::get(languageKey: 'ad_categ_add'),
             'ad_entry_restricted_groups' => Translation::get(languageKey: 'ad_entry_restricted_groups'),
-            'restricted_groups' => $this->configuration->get('security.permLevel') === 'medium'
+            'restricted_groups' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser)
                 : '',
             'buttonCancel' => Translation::get(languageKey: 'ad_gen_cancel'),

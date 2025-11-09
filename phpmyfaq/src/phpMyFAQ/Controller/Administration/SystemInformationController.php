@@ -43,7 +43,7 @@ final class SystemInformationController extends AbstractAdministrationController
 
         $faqSystem = $this->container->get('phpmyfaq.system');
 
-        if ($this->configuration->get('search.enableElasticsearch')) {
+        if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {
                 $esFullInformation = $this->configuration->getElasticsearch()->info();
                 $esInformation = $esFullInformation['version']['number'];
@@ -55,7 +55,7 @@ final class SystemInformationController extends AbstractAdministrationController
             $esInformation = 'n/a';
         }
 
-        if ($this->configuration->get('search.enableOpenSearch')) {
+        if ($this->configuration->get(item: 'search.enableOpenSearch')) {
             try {
                 $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
                 $openSearchInformation = $openSearchFullInformation['version']['number'];
