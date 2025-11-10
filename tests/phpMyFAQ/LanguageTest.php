@@ -30,6 +30,16 @@ class LanguageTest extends TestCase
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($this->dbHandle);
         $this->language = new Language($configuration, $this->session);
+
+        // Clean up any leftover test data - both test IDs
+        $this->dbHandle->query('DELETE FROM faqdata WHERE id IN (1, 999)');
+    }
+
+    protected function tearDown(): void
+    {
+        // Ensure cleanup after each test
+        $this->dbHandle->query('DELETE FROM faqdata WHERE id IN (1, 999)');
+        parent::tearDown();
     }
 
     public function testIsLanguageAvailableWithId(): void
