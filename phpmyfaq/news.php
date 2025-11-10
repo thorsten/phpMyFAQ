@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Shows the page with the news record and - when available - the user
+ * Shows the page with the news record, and - when available - the user
  * comments.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -88,7 +88,7 @@ if (strlen((string) $news['link']) > 0) {
 $editThisEntry = '';
 if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT->value)) {
     $editThisEntry = sprintf(
-        '<a href="./admin/index.php?action=news&do=edit&id=%d">%s</a>',
+        '<a href="./admin/news/edit/%d">%s</a>',
         $newsId,
         Translation::get(languageKey: 'ad_menu_news_edit')
     );
