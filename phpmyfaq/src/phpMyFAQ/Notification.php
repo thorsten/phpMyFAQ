@@ -97,7 +97,7 @@ readonly class Notification
                 isAdmin: true,
             );
 
-            $linkToAdmin = '%sadmin/faq/index/%d/%s';
+            $linkToAdmin = '%sadmin/faq/edit/%d/%s';
             $url = sprintf(
                 $linkToAdmin,
                 $this->configuration->getDefaultUrl(),

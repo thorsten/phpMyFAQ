@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main Question class.
  *
@@ -17,9 +15,12 @@ declare(strict_types=1);
  * @since     2019-11-22
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\QuestionEntity;
+use phpMyFAQ\Question\QuestionRepository;
 
 /**
  * Class Question
@@ -28,12 +29,15 @@ use phpMyFAQ\Entity\QuestionEntity;
  */
 readonly class Question
 {
+    private QuestionRepository $repository;
+
     /**
      * Question constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
+        $this->repository = new QuestionRepository($configuration);
     }
 
     /**
@@ -41,26 +45,7 @@ readonly class Question
      */
     public function add(QuestionEntity $questionEntity): bool
     {
-        $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqquestions
-            (id, lang, username, email, category_id, question, created, is_visible, answer_id)
-                VALUES
-            (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqquestions', 'id'),
-            $this->configuration->getDb()->escape($questionEntity->getLanguage()),
-            $this->configuration->getDb()->escape($questionEntity->getUsername()),
-            $this->configuration->getDb()->escape($questionEntity->getEmail()),
-            $questionEntity->getCategoryId(),
-            $this->configuration->getDb()->escape($questionEntity->getQuestion()),
-            date('YmdHis'),
-            $questionEntity->isVisible() ? 'Y' : 'N',
-            0,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->add($questionEntity);
     }
 
     /**
@@ -68,14 +53,7 @@ readonly class Question
      */
     public function delete(int $questionId): bool
     {
-        $delete = sprintf(
-            "DELETE FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
-
-        return (bool) $this->configuration->getDb()->query($delete);
+        return $this->repository->delete($questionId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -85,40 +63,7 @@ readonly class Question
      */
     public function get(int $questionId): array
     {
-        $question = [];
-
-        $query = sprintf(
-            "
-            SELECT
-                 id, lang, username, email, category_id, question, created, is_visible
-            FROM
-                %sfaqquestions
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
-
-        if (
-            ($result = $this->configuration->getDb()->query($query)) && ($row =
-                $this->configuration->getDb()->fetchObject($result))
-        ) {
-            return [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'username' => $row->username,
-                'email' => $row->email,
-                'category_id' => $row->category_id,
-                'question' => $row->question,
-                'created' => $row->created,
-                'is_visible' => $row->is_visible,
-            ];
-        }
-
-        return $question;
+        return $this->repository->getById($questionId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -129,39 +74,22 @@ readonly class Question
     public function getAll(bool $showAll = true): array
     {
         $questions = [];
+        $rows = $this->repository->getAll($this->configuration->getLanguage()->getLanguage(), $showAll);
 
-        $query = sprintf(
-            "
-            SELECT
-                id, lang, username, email, category_id, question, created, answer_id, is_visible
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-                %s
-            ORDER BY 
-                created ASC",
-            Database::getTablePrefix(),
-            $this->configuration->getLanguage()->getLanguage(),
-            $showAll === false ? " AND is_visible = 'Y'" : '',
-        );
+        foreach ($rows as $row) {
+            $question = new QuestionEntity();
+            $question
+                ->setId($row['id'])
+                ->setLanguage($row['lang'])
+                ->setUsername($row['username'])
+                ->setEmail($row['email'])
+                ->setCategoryId($row['category_id'])
+                ->setQuestion($row['question'])
+                ->setCreated(Date::createIsoDate($row['created']))
+                ->setAnswerId($row['answer_id'])
+                ->setIsVisible($row['is_visible'] === 'Y');
 
-        if ($result = $this->configuration->getDb()->query($query)) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $question = new QuestionEntity();
-                $question
-                    ->setId((int) $row->id)
-                    ->setLanguage($row->lang)
-                    ->setUsername($row->username)
-                    ->setEmail($row->email)
-                    ->setCategoryId((int) $row->category_id)
-                    ->setQuestion($row->question)
-                    ->setCreated(Date::createIsoDate($row->created))
-                    ->setAnswerId((int) $row->answer_id)
-                    ->setIsVisible($row->is_visible === 'Y');
-
-                $questions[] = $question;
-            }
+            $questions[] = $question;
         }
 
         return $questions;
@@ -172,21 +100,7 @@ readonly class Question
      */
     public function getVisibility(int $questionId): string
     {
-        $query = sprintf(
-            "SELECT is_visible FROM %sfaqquestions WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-
-            return $row->is_visible;
-        }
-
-        return '';
+        return $this->repository->getVisibility($questionId, $this->configuration->getLanguage()->getLanguage());
     }
 
     /**
@@ -194,17 +108,11 @@ readonly class Question
      */
     public function setVisibility(int $questionId, string $isVisible): bool
     {
-        $query = sprintf(
-            "UPDATE %sfaqquestions SET is_visible = '%s' WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($isVisible),
+        return $this->repository->setVisibility(
             $questionId,
+            $isVisible,
             $this->configuration->getLanguage()->getLanguage(),
         );
-
-        $this->configuration->getDb()->query($query);
-
-        return true;
     }
 
     /**
@@ -212,14 +120,6 @@ readonly class Question
      */
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool
     {
-        $query = sprintf(
-            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d WHERE id= %d',
-            Database::getTablePrefix(),
-            $faqId,
-            $categoryId,
-            $openQuestionId,
-        );
-
-        return $this->configuration->getDb()->query($query);
+        return $this->repository->updateQuestionAnswer($openQuestionId, $faqId, $categoryId);
     }
 }

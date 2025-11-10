@@ -246,8 +246,8 @@ final class CategoryController extends AbstractAdministrationController
         $categoryId = $category->create($categoryEntity);
 
         if ($categoryId) {
-            $categoryPermission->add(Permission::USER, [$categoryId], $permissions['restricted_user']);
-            $categoryPermission->add(Permission::GROUP, [$categoryId], $permissions['restricted_groups']);
+            $categoryPermission->add(CategoryPermission::USER, [$categoryId], $permissions['restricted_user']);
+            $categoryPermission->add(CategoryPermission::GROUP, [$categoryId], $permissions['restricted_groups']);
 
             if ($hasUploadedImage) {
                 try {
@@ -485,7 +485,7 @@ final class CategoryController extends AbstractAdministrationController
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $translateTo = Filter::filterVar($request->query->get('translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        // Re-add permission arrays used in template
+        // Re-add permission arrays used in the template
         $userPermission = $categoryPermission->get(CategoryPermission::USER, [(int) $categoryId]);
         $groupPermission = $categoryPermission->get(CategoryPermission::GROUP, [(int) $categoryId]);
 
@@ -615,17 +615,17 @@ final class CategoryController extends AbstractAdministrationController
             if (
                 $category->create($categoryEntity)
                 && $categoryPermission->add(
-                    Permission::USER,
+                    CategoryPermission::USER,
                     [$categoryEntity->getId()],
                     $permissions['restricted_user'],
                 )
                 && $categoryPermission->add(
-                    Permission::GROUP,
+                    CategoryPermission::GROUP,
                     [$categoryEntity->getId()],
                     $permissions['restricted_groups'],
                 )
             ) {
-                // Add SERP-Title and Description to translated category
+                // Add SERP-Title and Description to the translated category
                 $seoEntity = new SeoEntity();
                 $seoEntity
                     ->setSeoType(SeoType::CATEGORY)
@@ -654,10 +654,18 @@ final class CategoryController extends AbstractAdministrationController
                 ];
             }
         } elseif ($category->update($categoryEntity)) {
-            $categoryPermission->delete(Permission::USER, [$categoryEntity->getId()]);
-            $categoryPermission->delete(Permission::GROUP, [$categoryEntity->getId()]);
-            $categoryPermission->add(Permission::USER, [$categoryEntity->getId()], $permissions['restricted_user']);
-            $categoryPermission->add(Permission::GROUP, [$categoryEntity->getId()], $permissions['restricted_groups']);
+            $categoryPermission->delete(CategoryPermission::USER, [$categoryEntity->getId()]);
+            $categoryPermission->delete(CategoryPermission::GROUP, [$categoryEntity->getId()]);
+            $categoryPermission->add(
+                CategoryPermission::USER,
+                [$categoryEntity->getId()],
+                $permissions['restricted_user'],
+            );
+            $categoryPermission->add(
+                CategoryPermission::GROUP,
+                [$categoryEntity->getId()],
+                $permissions['restricted_groups'],
+            );
 
             if ($hasUploadedImage) {
                 try {
