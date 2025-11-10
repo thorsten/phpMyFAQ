@@ -142,7 +142,7 @@ final class AuthenticationController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $redirectResponse = new RedirectResponse(url: './');
+        $redirectResponse = new RedirectResponse(url: $this->configuration->getDefaultUrl() . 'admin/login');
 
         $csrfToken = Filter::filterVar($request->get(key: 'csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
