@@ -11,7 +11,9 @@
   flex-wrap: nowrap;
 
   .pmf-admin-sidenav-menu {
-    flex-grow: 1;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
 
     .nav {
       flex-direction: column;

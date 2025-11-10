@@ -112,9 +112,14 @@ $transition-speed: 0.15s;
 
       .pmf-admin-sidenav {
         padding-top: $topnav-height;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
 
         &-menu {
+          flex: 1 1 auto;
           overflow-y: auto;
+          min-height: 0;
         }
       }
     }
@@ -153,7 +158,9 @@ $transition-speed: 0.15s;
   flex-wrap: nowrap;
 
   &-menu {
-    flex-grow: 1;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
 
     .nav {
       @include flex-column;
