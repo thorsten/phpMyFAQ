@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Comment Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -133,7 +133,19 @@ final class CommentController extends AbstractController
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                return $this->json(['success' => Translation::get(languageKey: 'msgCommentThanks')], Response::HTTP_OK);
+                $gravatar = $this->container->get('phpmyfaq.services.gravatar');
+                $gravatarUrl = $gravatar->getImageUrl($commentEntity->getEmail(), ['size' => 50, 'default' => 'mm']);
+
+                return $this->json([
+                    'success' => Translation::get(languageKey: 'msgCommentThanks'),
+                    'commentData' => [
+                        'username' => $commentEntity->getUsername(),
+                        'email' => $commentEntity->getEmail(),
+                        'comment' => $commentEntity->getComment(),
+                        'date' => $commentEntity->getDate(),
+                        'gravatarUrl' => $gravatarUrl,
+                    ],
+                ], Response::HTTP_OK);
             }
 
             $session->userTracking('error_save_comment', $commentId);

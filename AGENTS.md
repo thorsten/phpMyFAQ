@@ -57,9 +57,9 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 
 ## Building
 
-- TypeScript build: pnpm build
-- TypeScript build in watch mode: pnpm build:watch
-- TypeScript production build: pnpm build:prod
+- TypeScript and CSS build: pnpm build
+- TypeScript and CSS build in watch mode: pnpm build:watch
+- TypeScript and CSS production build: pnpm build:prod
 
 ## Coding Standards
 

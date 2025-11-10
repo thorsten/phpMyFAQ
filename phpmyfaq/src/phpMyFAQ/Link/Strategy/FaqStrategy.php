@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Link\Strategy;
 
+use InvalidArgumentException;
 use phpMyFAQ\Link;
 
 final class FaqStrategy implements StrategyInterface
@@ -29,11 +30,13 @@ final class FaqStrategy implements StrategyInterface
     public function build(array $params, Link $link): string
     {
         if (!isset($params[Link::LINK_GET_CATEGORY])) {
-            throw new \InvalidArgumentException('Missing required parameter: category');
+            throw new InvalidArgumentException('Missing required parameter: category');
         }
+
         if (!isset($params[Link::LINK_GET_ID])) {
-            throw new \InvalidArgumentException('Missing required parameter: id');
+            throw new InvalidArgumentException('Missing required parameter: id');
         }
+
         $art = $params[Link::LINK_GET_ARTLANG] ?? 'en';
         $url =
             Link::LINK_CONTENT
@@ -50,9 +53,11 @@ final class FaqStrategy implements StrategyInterface
             $url .=
                 Link::LINK_SEARCHPART_SEPARATOR . Link::LINK_GET_HIGHLIGHT . '=' . $params[Link::LINK_GET_HIGHLIGHT];
         }
+
         if (isset($params[Link::LINK_FRAGMENT_SEPARATOR])) {
             $url .= Link::LINK_FRAGMENT_SEPARATOR . $params[Link::LINK_FRAGMENT_SEPARATOR];
         }
+
         return $url;
     }
 }

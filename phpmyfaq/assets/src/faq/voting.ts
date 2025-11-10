@@ -13,7 +13,7 @@
  * @since     2023-03-20
  */
 
-import { addElement } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 import { saveVoting } from '../api';
 
 export const handleUserVoting = (): void => {
@@ -74,19 +74,11 @@ export const handleUserVoting = (): void => {
         const response = await saveVoting(votingId, votingLanguage, selectedIndex);
 
         if (response.success) {
-          const message = document.getElementById('pmf-voting-result') as HTMLElement;
-          message.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-success', innerText: response.success })
-          );
+          pushNotification(response.success);
         }
 
         if (response.error) {
-          const element = document.getElementById('pmf-voting-result') as HTMLElement;
-          element.insertAdjacentElement(
-            'afterend',
-            addElement('div', { classList: 'alert alert-danger', innerText: response.error })
-          );
+          pushErrorNotification(response.error);
         }
       },
       false

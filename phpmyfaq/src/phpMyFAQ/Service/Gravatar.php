@@ -66,6 +66,36 @@ class Gravatar
     }
 
     /**
+     * Returns the URL to a Gravatar image based on an email address.
+     *
+     * @param string $email Email address
+     * @param string[] $params Allows multiple keys with values to give more control
+     */
+    public function getImageUrl(string $email, array $params = []): string
+    {
+        $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
+        $opts = [];
+
+        if (isset($params['default'])) {
+            $opts[] = 'default=' . $params['default'];
+        }
+
+        if (isset($params['size'])) {
+            $opts[] = 'size=' . $params['size'];
+        }
+
+        if (isset($params['rating'])) {
+            $opts[] = 'rating=' . $params['rating'];
+        }
+
+        if (isset($params['force_default']) && $params['force_default']) {
+            $opts[] = 'forcedefault=y';
+        }
+
+        return $imageUrl . ($opts !== [] ? '?' . implode('&', $opts) : '');
+    }
+
+    /**
      * Returns the base URL
      */
     private function getUrl(): string

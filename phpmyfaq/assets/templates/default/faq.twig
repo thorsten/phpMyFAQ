@@ -39,7 +39,6 @@
       {% endif %}
 
       <p class="d-print-none">{{ writeCommentMsg|raw }}</p>
-      <div id="pmf-comment-add-success"></div>
       <div class="d-print-none" id="comments">{{ renderComments|raw }}</div>
     </div>
 
@@ -137,7 +136,6 @@
             </div>
             <div class="text-end bold">&empty; <span id="rating">{{ renderVotingResult|raw }}</span></div>
           </form>
-          <div id="pmf-voting-result"></div>
         </div>
 
         {% if renderTags is defined %}

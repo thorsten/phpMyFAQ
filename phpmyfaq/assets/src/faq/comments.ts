@@ -13,7 +13,7 @@
  * @since     2016-01-11
  */
 
-import { addElement } from '../utils';
+import { pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
 import { ApiResponse } from '../interfaces';
 
@@ -35,20 +35,16 @@ export const handleSaveComment = (): void => {
           const response = (await createComment(comments)) as ApiResponse;
 
           if (response.success) {
-            const message = document.getElementById('pmf-comment-add-success') as HTMLElement;
-            message.insertAdjacentElement(
-              'afterend',
-              addElement('div', { classList: 'alert alert-success', innerText: response.success })
-            );
+            pushNotification(response.success);
+
+            // Add the new comment to the DOM if commentData is returned
+            if (response.commentData) {
+              addCommentToDOM(response.commentData);
+            }
           }
 
           if (response.error) {
-            console.log('Error: ', response.error);
-            const message = document.getElementById('pmf-comment-add-error') as HTMLElement;
-            message.insertAdjacentElement(
-              'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: response.error })
-            );
+            pushErrorNotification(response.error);
           }
 
           if (modal) {
@@ -65,6 +61,50 @@ export const handleSaveComment = (): void => {
       }
     });
   }
+};
+
+const addCommentToDOM = (commentData: any): void => {
+  const commentsContainer = document.getElementById('comments');
+  if (!commentsContainer) {
+    return;
+  }
+
+  // Format the date
+  const date = new Date(parseInt(commentData.date) * 1000);
+  const formattedDate = date.toLocaleString();
+
+  // Escape HTML to prevent XSS
+  const escapeHtml = (text: string): string => {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  };
+
+  const escapedUsername = escapeHtml(commentData.username);
+  const escapedEmail = escapeHtml(commentData.email);
+
+  // Create the comment HTML matching the structure from CommentHelper::getComments()
+  const commentHtml = `
+    <div class="row mt-2 mb-2">
+      <div class="col-sm-1">
+        <div class="thumbnail">
+          <img src="${commentData.gravatarUrl}" alt="${escapedUsername}" class="img-thumbnail">
+        </div>
+      </div>
+      <div class="col-sm-11">
+        <div class="card">
+          <div class="card-header card-header-comments">
+            <strong><a href="mailto:${escapedEmail}">${escapedUsername}</a></strong>
+            <span class="text-muted">(${formattedDate})</span>
+          </div>
+          <div class="card-body">${commentData.comment}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Insert the new comment at the end of the comments container
+  commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
 };
 
 export const handleComments = (): void => {

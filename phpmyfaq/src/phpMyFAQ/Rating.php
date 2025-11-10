@@ -59,9 +59,9 @@ readonly class Rating
             $row = $this->configuration->getDb()->fetchObject($result);
 
             return sprintf(
-                ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', $row->usr) . ')',
-                round($row->voting, 2),
-                round($row->voting, 2),
+                ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', (int) $row->usr) . ')',
+                round((int) $row->voting, 2),
+                round((int) $row->voting, 2),
             );
         }
 
