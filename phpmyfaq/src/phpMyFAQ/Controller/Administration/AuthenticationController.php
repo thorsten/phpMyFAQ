@@ -32,26 +32,29 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AuthenticationController extends AbstractAdministrationController
 {
-    #[Route('/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
+    #[Route(path: '/authenticate', name: 'admin.auth.authenticate', methods: ['POST'])]
     public function authenticate(Request $request): Response
     {
         if ($this->currentUser->isLoggedIn()) {
-            return new RedirectResponse('./');
+            return new RedirectResponse(url: './');
         }
 
-        $logging = $this->container->get('phpmyfaq.admin.admin-log');
+        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
 
-        $username = Filter::filterVar($request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($request->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
         $password = Filter::filterVar(
-            $request->get('faqpassword'),
+            $request->get(key: 'faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
             FILTER_FLAG_NO_ENCODE_QUOTES,
         );
-        $rememberMe = Filter::filterVar($request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+        $rememberMe = Filter::filterVar($request->get(key: 'faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 
         // Set username via SSO
-        if ($this->configuration->get(item: 'security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
-            $username = trim((string) $request->server->get('REMOTE_USER'));
+        if (
+            $this->configuration->get(item: 'security.ssoSupport')
+            && $request->server->get(key: 'REMOTE_USER') !== null
+        ) {
+            $username = trim((string) $request->server->get(key: 'REMOTE_USER'));
             $password = '';
         }
 
@@ -62,19 +65,24 @@ final class AuthenticationController extends AbstractAdministrationController
             try {
                 $this->currentUser = $userAuthentication->authenticate($username, $password);
                 if ($userAuthentication->hasTwoFactorAuthentication()) {
-                    return new RedirectResponse('./token?user-id=' . $this->currentUser->getUserId());
+                    return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
                 }
             } catch (Exception) {
                 $logging->log(
                     $this->currentUser,
-                    'Login-error\nLogin: ' . $username . '\nErrors: ' . implode(', ', $this->currentUser->errors),
+                    'Login-error\nLogin: '
+                    . $username
+                    . '\nErrors: '
+                    . implode(
+                        separator: ', ',
+                        array: $this->currentUser->errors,
+                    ),
                 );
-                //$error = $e->getMessage();
-                return new RedirectResponse('./login');
+                return new RedirectResponse(url: './login');
             }
         }
 
-        return new RedirectResponse('./');
+        return new RedirectResponse(url: './');
     }
 
     /**
@@ -82,59 +90,68 @@ final class AuthenticationController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/login', name: 'admin.auth.logout', methods: ['GET'])]
+    #[Route(path: '/login', name: 'admin.auth.logout', methods: ['GET'])]
     public function login(Request $request): Response
     {
         // Redirect to authenticate if SSO is enabled and the user is already authenticated
-        if ($this->configuration->get(item: 'security.ssoSupport') && $request->server->get('REMOTE_USER') !== null) {
-            return new RedirectResponse('./authenticate');
+        if (
+            $this->configuration->get(item: 'security.ssoSupport')
+            && $request->server->get(key: 'REMOTE_USER') !== null
+        ) {
+            return new RedirectResponse(url: './authenticate');
         }
 
-        return $this->render('@admin/login.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
-            'isError' => isset($error) && 0 < strlen((string) $error),
-            'errorMessage' => 'to be implemented',
-            'loginMessage' => Translation::get(languageKey: 'ad_auth_insert'),
-            'isLogout' => $request->query->get('action') === 'logout',
-            'logoutMessage' => Translation::get(languageKey: 'ad_logout'),
-            'loginUrl' => $this->configuration->getDefaultUrl() . 'admin/authenticate',
-            'redirectAction' => $request->query->get('action') ?? '',
-            'msgUsername' => Translation::get(languageKey: 'ad_auth_user'),
-            'msgPassword' => Translation::get(languageKey: 'ad_auth_passwd'),
-            'msgRememberMe' => Translation::get(languageKey: 'rememberMe'),
-            'msgLostPassword' => Translation::get(languageKey: 'lostPassword'),
-            'msgLoginUser' => Translation::get(languageKey: 'msgLoginUser'),
-            'hasRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
-            'msgRegistration' => Translation::get(languageKey: 'msgRegistration'),
-            'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
-            'msgSignInWithMicrosoft' => Translation::get(languageKey: 'msgSignInWithMicrosoft'),
-            'secureUrl' => sprintf('https://%s%s', $request->getHost(), $request->getRequestUri()),
-            'msgNotSecure' => Translation::get(languageKey: 'msgSecureSwitch'),
-            'isWebAuthnEnabled' => $this->configuration->get(item: 'security.enableWebAuthnSupport'),
-        ]);
+        return $this->render(
+            file: '@admin/login.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                'isSecure' => $request->isSecure() || !$this->configuration->get(item: 'security.useSslForLogins'),
+                'isError' => isset($error) && 0 < strlen((string) $error),
+                'errorMessage' => 'to be implemented',
+                'loginMessage' => Translation::get(languageKey: 'ad_auth_insert'),
+                'isLogout' => $request->query->get(key: 'action') === 'logout',
+                'logoutMessage' => Translation::get(languageKey: 'ad_logout'),
+                'loginUrl' => $this->configuration->getDefaultUrl() . 'admin/authenticate',
+                'redirectAction' => $request->query->get(key: 'action') ?? '',
+                'msgUsername' => Translation::get(languageKey: 'ad_auth_user'),
+                'msgPassword' => Translation::get(languageKey: 'ad_auth_passwd'),
+                'msgRememberMe' => Translation::get(languageKey: 'rememberMe'),
+                'msgLostPassword' => Translation::get(languageKey: 'lostPassword'),
+                'msgLoginUser' => Translation::get(languageKey: 'msgLoginUser'),
+                'hasRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
+                'msgRegistration' => Translation::get(languageKey: 'msgRegistration'),
+                'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
+                'msgSignInWithMicrosoft' => Translation::get(languageKey: 'msgSignInWithMicrosoft'),
+                'secureUrl' => preg_replace(pattern: '/^http:/', replacement: 'https:', subject: $request->getUri()),
+                'msgNotSecure' => Translation::get(languageKey: 'msgSecureSwitch'),
+                'isWebAuthnEnabled' => $this->configuration->get(item: 'security.enableWebAuthnSupport'),
+            ],
+        );
     }
 
     /**
      * @throws \Exception
      */
-    #[Route('/logout', name: 'admin.auth.logout', methods: ['GET'])]
+    #[Route(path: '/logout', name: 'admin.auth.logout', methods: ['GET'])]
     public function logout(Request $request): Response
     {
         $this->userIsAuthenticated();
 
-        $redirectResponse = new RedirectResponse('./');
+        $redirectResponse = new RedirectResponse(url: './');
 
-        $csrfToken = Filter::filterVar($request->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('admin-logout', $csrfToken)) {
+        $csrfToken = Filter::filterVar($request->get(key: 'csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'admin-logout',
+            requestToken: $csrfToken,
+        )) {
             // @todo add an error message
             return $redirectResponse->send();
         }
 
-        $this->currentUser->deleteFromSession(true);
+        $this->currentUser->deleteFromSession(deleteCookie: true);
         $ssoLogout = $this->configuration->get(item: 'security.ssoLogoutRedirect');
-        if ($this->configuration->get(item: 'security.ssoSupport') && !empty($ssoLogout)) {
+        if ($this->configuration->get(item: 'security.ssoSupport') && strlen($ssoLogout) > 0) {
             $redirectResponse->isRedirect($ssoLogout);
             $redirectResponse->send();
         }
@@ -145,54 +162,57 @@ final class AuthenticationController extends AbstractAdministrationController
     /**
      * @throws \Exception
      */
-    #[Route('/token', name: 'admin.auth.token', methods: ['GET'])]
+    #[Route(path: '/token', name: 'admin.auth.token', methods: ['GET'])]
     public function token(Request $request): Response
     {
         if ($this->currentUser->isLoggedIn()) {
-            return new RedirectResponse('./');
+            return new RedirectResponse(url: './');
         }
 
-        $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
+        $userId = Filter::filterVar($request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        return $this->render('@admin/user/twofactor.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            'msgTwofactorEnabled' => Translation::get(languageKey: 'msgTwofactorEnabled'),
-            'msgTwofactorCheck' => Translation::get(languageKey: 'msgTwofactorCheck'),
-            'msgEnterTwofactorToken' => Translation::get(languageKey: 'msgEnterTwofactorToken'),
-            'requestIsSecure' => $request->isSecure(),
-            'security.useSslForLogins' => $this->configuration->get(item: 'security.useSslForLogins'),
-            'requestHost' => $request->getHost(),
-            'requestUri' => $request->getRequestUri(),
-            'userId' => $userId,
-            'msgSecureSwitch' => Translation::get(languageKey: 'msgSecureSwitch'),
-            'systemUri' => $this->configuration->getDefaultUrl(),
-        ]);
+        return $this->render(
+            file: '@admin/user/twofactor.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                'msgTwofactorEnabled' => Translation::get(languageKey: 'msgTwofactorEnabled'),
+                'msgTwofactorCheck' => Translation::get(languageKey: 'msgTwofactorCheck'),
+                'msgEnterTwofactorToken' => Translation::get(languageKey: 'msgEnterTwofactorToken'),
+                'requestIsSecure' => $request->isSecure(),
+                'security.useSslForLogins' => $this->configuration->get(item: 'security.useSslForLogins'),
+                'requestHost' => $request->getHost(),
+                'requestUri' => $request->getRequestUri(),
+                'userId' => $userId,
+                'msgSecureSwitch' => Translation::get(languageKey: 'msgSecureSwitch'),
+                'systemUri' => $this->configuration->getDefaultUrl(),
+            ],
+        );
     }
 
     /**
      * @throws \Exception
      */
-    #[Route('/check', name: 'admin.auth.check', methods: ['POST'])]
+    #[Route(path: '/check', name: 'admin.auth.check', methods: ['POST'])]
     public function check(Request $request): Response
     {
         if ($this->currentUser->isLoggedIn()) {
-            return new RedirectResponse('./');
+            return new RedirectResponse(url: './');
         }
 
-        $token = Filter::filterVar($request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $userId = Filter::filterVar($request->get('user-id'), FILTER_VALIDATE_INT);
+        $token = Filter::filterVar($request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = Filter::filterVar($request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
-        $user = $this->container->get('phpmyfaq.user.current_user');
+        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);
 
         if (strlen((string) $token) === 6) {
-            $tfa = $this->container->get('phpmyfaq.user.two-factor');
+            $tfa = $this->container->get(id: 'phpmyfaq.user.two-factor');
             $result = $tfa->validateToken($token, $userId);
 
             if ($result) {
                 $user->twoFactorSuccess();
-                return new RedirectResponse('./');
+                return new RedirectResponse(url: './');
             }
         }
 
