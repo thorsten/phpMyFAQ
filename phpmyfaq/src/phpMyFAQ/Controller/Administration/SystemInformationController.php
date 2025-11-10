@@ -21,7 +21,6 @@ namespace phpMyFAQ\Controller\Administration;
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
-use Elastic\Transport\Exception\NoNodeAvailableException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
@@ -47,7 +46,7 @@ final class SystemInformationController extends AbstractAdministrationController
             try {
                 $esFullInformation = $this->configuration->getElasticsearch()->info();
                 $esInformation = $esFullInformation['version']['number'];
-            } catch (ClientResponseException|ServerResponseException|NoNodeAvailableException $e) {
+            } catch (ClientResponseException|ServerResponseException $e) {
                 $this->configuration->getLogger()->error('Error while fetching Elasticsearch information', [$e->getMessage()]);
                 $esInformation = 'n/a';
             }
@@ -56,13 +55,8 @@ final class SystemInformationController extends AbstractAdministrationController
         }
 
         if ($this->configuration->get(item: 'search.enableOpenSearch')) {
-            try {
-                $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
-                $openSearchInformation = $openSearchFullInformation['version']['number'];
-            } catch (NoNodeAvailableException $e) {
-                $this->configuration->getLogger()->error('Error while fetching OpenSearch information', [$e->getMessage()]);
-                $openSearchInformation = 'n/a';
-            }
+            $openSearchFullInformation = $this->configuration->getOpenSearch()->info();
+            $openSearchInformation = $openSearchFullInformation['version']['number'];
         } else {
             $openSearchInformation = 'n/a';
         }

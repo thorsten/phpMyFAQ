@@ -228,7 +228,7 @@ final class FaqController extends AbstractController
                 $this->configuration->getLogger()->error('Send moderator notification failed: ' . $e->getMessage());
             }
 
-            // If Elasticsearch is enabled, index new FAQ document
+            // If Elasticsearch is enabled, index the new FAQ document
             if ($this->configuration->get(item: 'search.enableElasticsearch')) {
                 $elasticsearch = new Elasticsearch($this->configuration);
                 $elasticsearch->index([
@@ -242,7 +242,7 @@ final class FaqController extends AbstractController
                 ]);
             }
 
-            // If OpenSearch is enabled, index new FAQ document
+            // If OpenSearch is enabled, index the new FAQ document
             if ($this->configuration->get(item: 'search.enableOpenSearch')) {
                 $openSearch = new OpenSearch($this->configuration);
                 $openSearch->index([
