@@ -123,7 +123,11 @@ final class AuthenticationController extends AbstractAdministrationController
                 'msgRegistration' => Translation::get(languageKey: 'msgRegistration'),
                 'hasSignInWithMicrosoftActive' => $this->configuration->isSignInWithMicrosoftActive(),
                 'msgSignInWithMicrosoft' => Translation::get(languageKey: 'msgSignInWithMicrosoft'),
-                'secureUrl' => preg_replace(pattern: '/^http:/', replacement: 'https:', subject: $request->getUri()),
+                'secureUrl' => preg_replace(
+                    pattern: '/^http:/',
+                    replacement: 'https:',
+                    subject: $request->getUri(),
+                ),
                 'msgNotSecure' => Translation::get(languageKey: 'msgSecureSwitch'),
                 'isWebAuthnEnabled' => $this->configuration->get(item: 'security.enableWebAuthnSupport'),
             ],
