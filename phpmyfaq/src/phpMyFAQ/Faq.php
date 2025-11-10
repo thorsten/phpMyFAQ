@@ -807,6 +807,109 @@ class Faq
     }
 
     /**
+     * Returns a FAQ by ID and category ID.
+     *
+     * @param int $faqId FAQ ID
+     * @param int $categoryId Category ID
+     * @return array<string, mixed>
+     * @throws Exception
+     */
+    public function getFaqByIdAndCategoryId(int $faqId, int $categoryId): array
+    {
+        $queryHelper = new QueryHelper($this->user, $this->groups);
+        $query = sprintf(
+            "
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.solution_id AS solution_id,
+                fd.revision_id AS revision_id,
+                fd.active AS active,
+                fd.sticky AS sticky,
+                fd.keywords AS keywords,
+                fd.thema AS question,
+                fd.content AS answer,
+                fd.author AS author,
+                fd.email AS email,
+                fd.comment AS comment,
+                fd.updated AS updated,
+                fd.date_start AS date_start,
+                fd.date_end AS date_end,
+                fd.created AS created,
+                fcr.category_id AS category_id
+            FROM
+                %sfaqdata AS fd
+            LEFT JOIN
+                %sfaqcategoryrelations AS fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            AND
+                fcr.category_id = %d
+            AND
+                fd.lang = '%s'
+                %s",
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $faqId,
+            $categoryId,
+            $this->configuration->getLanguage()->getLanguage(),
+            $queryHelper->queryPermission($this->groupSupport),
+        );
+
+        $result = $this->configuration->getDb()->query($query);
+
+        if ($row = $this->configuration->getDb()->fetchObject($result)) {
+            $faqUrl = sprintf(
+                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+                $this->configuration->getDefaultUrl(),
+                $row->category_id,
+                $row->id,
+                $row->lang,
+            );
+
+            $link = new Link($faqUrl, $this->configuration);
+            $link->itemTitle = $row->question;
+
+            return [
+                'id' => (int) $row->id,
+                'lang' => $row->lang,
+                'solution_id' => (int) $row->solution_id,
+                'revision_id' => (int) $row->revision_id,
+                'active' => $row->active,
+                'sticky' => (int) $row->sticky,
+                'keywords' => $row->keywords,
+                'question' => $row->question,
+                'answer' => $row->answer,
+                'author' => $row->author,
+                'email' => $row->email,
+                'comment' => $row->comment,
+                'updated' => $row->updated,
+                'date_start' => $row->date_start,
+                'date_end' => $row->date_end,
+                'created' => $row->created,
+                'category_id' => (int) $row->category_id,
+                'link' => $link->toString(),
+            ];
+        }
+
+        return [];
+    }
+
+    /**
      * Creates a new FAQ.
      */
     public function create(FaqEntity $faqEntity): FaqEntity

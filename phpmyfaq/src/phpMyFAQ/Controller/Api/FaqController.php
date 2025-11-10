@@ -137,15 +137,17 @@ final class FaqController extends AbstractController
             "active": "yes",
             "sticky": 0,
             "keywords": "",
-            "title": "Is there life after death?",
-            "content": "Maybe!",
+            "question": "Is there life after death?",
+            "answer": "Maybe!",
             "author": "phpMyFAQ User",
             "email": "user@example.org",
             "comment": "y",
-            "date": "2019-10-10 17:54",
+            "updated": "2019-10-10 17:54",
             "dateStart": "00000000000000",
             "dateEnd": "99991231235959",
-            "created": "2019-09-03T21:30:17+02:00"
+            "created": "2019-09-03T21:30:17+02:00",
+            "category_id": 1,
+            "link": "https://localhost/content/1/1/en/is_there_life_after_death.html"
         }'))]
     #[OA\Response(
         response: 404,
@@ -161,9 +163,9 @@ final class FaqController extends AbstractController
         $faq->setGroups($currentGroups);
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
 
-        $faq->getFaq($faqId);
-        $result = $faq->faqRecord;
+        $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
         if ((is_countable($result) ? count($result) : 0) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
