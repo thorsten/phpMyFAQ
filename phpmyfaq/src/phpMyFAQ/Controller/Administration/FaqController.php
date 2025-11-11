@@ -51,7 +51,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/faqs', name: 'admin.faqs', methods: ['GET'])]
+    #[Route(path: '/faqs', name: 'admin.faqs', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -89,7 +89,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route('/faq/add', name: 'admin.faq.add', methods: ['GET'])]
+    #[Route(path: '/faq/add', name: 'admin.faq.add', methods: ['GET'])]
     public function add(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -156,13 +156,82 @@ final class FaqController extends AbstractAdministrationController
         ]);
     }
 
+    #[Route(path: '/faq/add/:categoryId/:categoryLanguage', name: 'admin.faq.add', methods: ['GET'])]
+    public function addInCategory(Request $request): Response
+    {
+        $this->userHasPermission(PermissionType::FAQ_ADD);
+
+        [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
+
+        $category = new Category($this->configuration, $currentAdminGroups, true);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+        $category->buildCategoryTree();
+
+        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryLanguage = Filter::filterVar($request->get('categoryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper->setCategory($category);
+
+        $faq = $this->container->get('phpmyfaq.faq');
+        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+
+        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+
+        $faqData = [
+            'id' => 0,
+            'lang' => $categoryLanguage,
+            'revision_id' => 0,
+            'author' => $this->currentUser->getUserData('display_name'),
+            'email' => $this->currentUser->getUserData('email'),
+            'comment' => $this->configuration->get(item: 'records.defaultAllowComments') ? 'checked' : null,
+        ];
+
+        $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
+        $this->addExtension(new AttributeExtension(UserNameTwigExtension::class));
+        $this->addExtension(new AttributeExtension(FormatBytesTwigExtension::class));
+        return $this->render('@admin/content/faq.editor.twig', [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'header' => Translation::get(languageKey: 'msgAddFAQ'),
+            'editExistingFaq' => false,
+            'faqRevisionId' => 0,
+            'faqData' => $faqData,
+            'openQuestionId' => 0,
+            'notifyUser' => '',
+            'notifyEmail' => '',
+            'categoryOptions' => $categoryHelper->renderOptions($categoryId),
+            'languageOptions' => LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang'),
+            'attachments' => [],
+            'allGroups' => true,
+            'restrictedGroups' => false,
+            'groupPermissionOptions' => $this->configuration->get(item: 'security.permLevel') === 'medium'
+                ? $this->currentUser->perm->getAllGroupsOptions([-1], $this->currentUser)
+                : '',
+            'allUsers' => true,
+            'restrictedUsers' => false,
+            'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
+            'changelogs' => [],
+            'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
+                $this->currentUser->getUserId(),
+                PermissionType::FAQ_APPROVE->value,
+            ),
+            'isActive' => null,
+            'isInActive' => 'checked',
+            'nextSolutionId' => $faq->getNextSolutionId(),
+            'nextFaqId' => $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id'),
+        ]);
+    }
+
     /**
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route('/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET'])]
+    #[Route(path: '/faq/edit/:faqId/:faqLanguage', name: 'admin.faq.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -294,7 +363,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route('/faq/copy/:faqId/:faqLanguage', name: 'admin.faq.copy', methods: ['GET'])]
+    #[Route(path: '/faq/copy/:faqId/:faqLanguage', name: 'admin.faq.copy', methods: ['GET'])]
     public function copy(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -371,7 +440,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route('/faq/translate/:faqId/:faqLanguage', name: 'admin.faq.translate', methods: ['GET'])]
+    #[Route(path: '/faq/translate/:faqId/:faqLanguage', name: 'admin.faq.translate', methods: ['GET'])]
     public function translate(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
@@ -448,7 +517,7 @@ final class FaqController extends AbstractAdministrationController
      * @throws \Exception
      * @todo refactor Twig template variables
      */
-    #[Route('/faq/answer/:questionId/:faqLanguage', name: 'admin.faq.answer', methods: ['GET'])]
+    #[Route(path: '/faq/answer/:questionId/:faqLanguage', name: 'admin.faq.answer', methods: ['GET'])]
     public function answer(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);

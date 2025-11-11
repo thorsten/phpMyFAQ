@@ -175,6 +175,11 @@ $routesConfig = [
         'controller' => [FaqController::class, 'add'],
         'methods' => 'GET'
     ],
+    'admin.faq.add.category' => [
+        'path' => '/faq/add/{categoryId}/{categoryLanguage}',
+        'controller' => [FaqController::class, 'addInCategory'],
+        'methods' => 'GET'
+    ],
     'admin.faq.answer' => [
         'path' => '/faq/answer/{questionId}/{faqLanguage}',
         'controller' => [FaqController::class, 'answer'],
