@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Upgrade class used for upgrading/installing phpMyFAQ from a ZIP file.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-06-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Setup;
 
@@ -342,7 +342,7 @@ class Upgrade extends Setup
     public function getFilename(string $version): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_FILENAME, date('Y-m-d', strtotime('-1 days')));
+            return sprintf(self::GITHUB_FILENAME, date('Y-m-d', strtotime('now')));
         }
 
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
