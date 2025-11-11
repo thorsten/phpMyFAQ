@@ -1875,16 +1875,16 @@
         },
         {
             "name": "opensearch-project/opensearch-php",
-            "version": "2.4.5",
+            "version": "2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opensearch-project/opensearch-php.git",
-                "reference": "97e942dfac44d40d3db5b3c4a8656fe0d1e22294"
+                "reference": "eec5a78ade77337c6c630add63e8f90cdc2d337a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/97e942dfac44d40d3db5b3c4a8656fe0d1e22294",
-                "reference": "97e942dfac44d40d3db5b3c4a8656fe0d1e22294",
+                "url": "https://api.github.com/repos/opensearch-project/opensearch-php/zipball/eec5a78ade77337c6c630add63e8f90cdc2d337a",
+                "reference": "eec5a78ade77337c6c630add63e8f90cdc2d337a",
                 "shasum": ""
             },
             "require": {
@@ -1953,9 +1953,9 @@
             ],
             "support": {
                 "issues": "https://github.com/opensearch-project/opensearch-php/issues",
-                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.4.5"
+                "source": "https://github.com/opensearch-project/opensearch-php/tree/2.4.6"
             },
-            "time": "2025-08-06T08:36:44+00:00"
+            "time": "2025-11-10T07:56:12+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
