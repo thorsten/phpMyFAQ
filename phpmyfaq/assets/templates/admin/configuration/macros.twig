@@ -53,6 +53,7 @@
     'records.numberOfShownNewsEntries': 'number',
     'records.numberOfRelatedArticles': 'number',
     'search.numberSearchTerms': 'number',
+    'search.popularSearchTimeWindow': 'number',
     'mail.remoteSMTPPort': 'number',
     'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION': 'number',
     'ldap.ldap_options.LDAP_OPT_REFERRALS': 'number',
@@ -63,16 +64,14 @@
     <span class="form-text">{{ description }}</span>
   </label>
   <div class="col-6">
-    <div class="input-group">
+    <div class="input-group mb-3">
       <input class="form-control" type="{{ type }}" name="edit[{{ key }}]" id="edit[{{ key }}]"
              value="{{ value | raw }}" step="1" min="0">
-    {% if key == 'api.apiClientToken' %}
-      <div class="input-group-append">
-        <button class="btn btn-dark" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">
+      {% if key == 'api.apiClientToken' %}
+        <button class="btn btn-outline-primary" id="pmf-generate-api-token" type="button" onclick="generateApiToken()">
           {{ 'msgGenerateApiClientToken' | translate }}
         </button>
-      </div>
-    {% endif %}
+      {% endif %}
     </div>
   </div>
 {% endmacro %}
