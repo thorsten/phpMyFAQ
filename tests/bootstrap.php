@@ -34,12 +34,22 @@ define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 define('PMF_CONFIG_DIR', dirname(__DIR__) . '/tests/content/core/config');
 define('PMF_CONTENT_DIR', dirname(__DIR__) . '/tests/content');
 
-const PMF_LOG_DIR = __DIR__ . '/logs';
+const PMF_LOG_DIR = __DIR__ . '/logs/phpmyfaq.log';
 const PMF_TEST_DIR = __DIR__;
 const IS_VALID_PHPMYFAQ = true;
 
 $_SERVER['HTTP_HOST'] = 'localhost';
 $_SERVER['SERVER_NAME'] = 'localhost';
+
+// Ensure test log destination exists as a writable file for Monolog
+$logDirectory = dirname(PMF_LOG_DIR);
+if (!is_dir($logDirectory)) {
+    mkdir($logDirectory, 0777, true);
+}
+
+if (!file_exists(PMF_LOG_DIR)) {
+    touch(PMF_LOG_DIR);
+}
 
 require PMF_ROOT_DIR . '/content/core/config/constants.php';
 

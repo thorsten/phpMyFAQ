@@ -277,19 +277,22 @@ class Mail
      * @param string        $targetAlias Alias Target alias.
      * @param string        $address User e-mail address.
      * @param string|null   $name Username (optional).
-     * @throws Exception
      * @return bool True if successful, false otherwise.
      */
     private function addEmailTo(array &$target, string $targetAlias, string $address, ?string $name = null): bool
     {
         // Check
         if (!self::validateEmail($address)) {
-            throw new Exception('"' . $address . '" is not a valid email address!');
+            $this->configuration->getLogger()->error('"' . $address . '" is not a valid email address!');
+            return false;
         }
 
         // Don't allow duplicated addresses
         if (array_key_exists($address, $target)) {
-            throw new Exception('"' . $address . '" has been already added in ' . $targetAlias . '!');
+            $this->configuration
+                ->getLogger()
+                ->error('"' . $address . '" has been already added in ' . $targetAlias . '!');
+            return false;
         }
 
         if (isset($name)) {
