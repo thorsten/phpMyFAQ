@@ -149,10 +149,16 @@ export const handleCheckForUpdates = (): void => {
         const divExtractPackage = document.getElementById('pmf-update-step-extract-package') as HTMLElement;
         const card = document.getElementById('pmf-update-step-download') as HTMLElement;
 
-        if (result) {
+        if (response.success) {
           card.classList.add('text-bg-success');
           divExtractPackage!.classList.remove('d-none');
           result.replaceWith(addElement('p', { innerText: response.success! }));
+          spinner.classList.add('d-none');
+        }
+
+        if (response.error) {
+          card.classList.add('text-bg-danger');
+          result.replaceWith(addElement('p', { innerText: response.error! }));
           spinner.classList.add('d-none');
         }
       } catch (error) {

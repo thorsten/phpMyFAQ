@@ -139,7 +139,11 @@ final class UpdateController extends AbstractController
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
-        $pathToPackage = $upgrade->downloadPackage($versionNumber);
+        try {
+            $pathToPackage = $upgrade->downloadPackage($versionNumber);
+        } catch (Exception $exception) {
+            return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
 
         if ($pathToPackage === false) {
             return $this->json(['error' => Translation::get(

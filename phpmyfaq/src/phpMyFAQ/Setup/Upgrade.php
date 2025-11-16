@@ -132,7 +132,7 @@ class Upgrade extends Setup
             $response = $httpClient->request('GET', $url);
 
             if ($response->getStatusCode() !== 200) {
-                throw new Exception('Cannot download package.');
+                throw new Exception('Cannot download package (HTTP Status: ' . $response->getStatusCode() . ').');
             }
 
             $package = $response->getContent();
@@ -342,7 +342,7 @@ class Upgrade extends Setup
     public function getFilename(string $version): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_FILENAME, date('Y-m-d', strtotime('now')));
+            return sprintf(self::GITHUB_FILENAME, date('Y-m-d', strtotime('-1 days')));
         }
 
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
