@@ -41,7 +41,7 @@ final class NewsStrategy implements StrategyInterface
             . Link::LINK_HTML_SLASH
             . $params[Link::LINK_GET_NEWS_LANG]
             . Link::LINK_SLASH
-            . $link->getSEOItemTitle()
+            . $link->getSEOTitle()
             . Link::LINK_HTML_EXTENSION
         );
     }

@@ -84,36 +84,33 @@ class LinkTest extends TestCase
         $this->assertFalse($method->invokeArgs($this->link, array()));
     }
 
-    /**
-     * Tests getSEOItemTitle()
-     */
-    public function testGetSEOItemTitle(): void
+    public function testGetSEOTitle(): void
     {
         $this->link = new Link('https://example.com/my-test-faq/', $this->configuration);
 
         $this->assertEquals(
             'hd-ready',
-            $this->link->getSEOItemTitle('HD Ready')
+            $this->link->getSEOTitle('HD Ready')
         );
         $this->assertEquals(
             'hd-ready',
-            $this->link->getSEOItemTitle('HD Ready                     ')
+            $this->link->getSEOTitle('HD Ready                     ')
         );
         $this->assertEquals(
             'hd_ready',
-            $this->link->getSEOItemTitle('HD-Ready')
+            $this->link->getSEOTitle('HD-Ready')
         );
         $this->assertEquals(
             'hd-ready',
-            $this->link->getSEOItemTitle("HD\r\nReady")
+            $this->link->getSEOTitle("HD\r\nReady")
         );
         $this->assertEquals(
             'hd-ready',
-            $this->link->getSEOItemTitle('{HD + Ready}')
+            $this->link->getSEOTitle('{HD + Ready}')
         );
         $this->assertEquals(
             'hd-raedy',
-            $this->link->getSEOItemTitle('HD Rädy')
+            $this->link->getSEOTitle('HD Rädy')
         );
     }
 
@@ -280,7 +277,7 @@ class LinkTest extends TestCase
             'http://example.com/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
             $this->configuration
         );
-        $this->link->itemTitle = 'HD Ready';
+        $this->link->setTitle('HD Ready');
         $this->assertEquals(
             'http://example.com/my-test-faq/content/1/36/de/hd-ready.html',
             $this->link->toString()
@@ -303,7 +300,7 @@ class LinkTest extends TestCase
 
         $url = 'https://example.com/my-test-faq/index.php?sid=4711&action=faq&cat=1&id=36&artlang=de';
         $this->link = new Link($url, $this->configuration);
-        $this->link->itemTitle = 'Foobar';
+        $this->link->setTitle('Foobar');
         $this->assertEquals(
             'https://example.com/my-test-faq/content/1/36/de/foobar.html',
             $this->link->toStringWithoutSession()

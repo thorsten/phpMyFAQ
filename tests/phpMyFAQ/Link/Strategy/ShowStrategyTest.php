@@ -26,7 +26,7 @@ final class ShowStrategyTest extends TestCase
     {
         $strategy = new ShowStrategy();
         $link = new Link('https://example.com/index.php?action=show', $this->configuration);
-        $link->itemTitle = 'Category Title';
+        $link->setTitle('Category Title');
         $params = [
             Link::LINK_GET_CATEGORY => '0',
         ];
@@ -38,7 +38,7 @@ final class ShowStrategyTest extends TestCase
     {
         $strategy = new ShowStrategy();
         $link = new Link('https://example.com/index.php?action=show', $this->configuration);
-        $link->itemTitle = 'My Category';
+        $link->setTitle('My Category');
         $params = [
             Link::LINK_GET_CATEGORY => '55',
             Link::LINK_GET_PAGE => '2',

@@ -85,7 +85,7 @@ readonly class BookmarkFormatter
         $link = new Link($url, $this->configuration);
         $title = (string) ($faqData['title'] ?? '');
         $link->text = Strings::htmlentities($title);
-        $link->itemTitle = $link->text;
+        $link->setTitle($link->text);
         $link->tooltip = $link->text;
 
         return [

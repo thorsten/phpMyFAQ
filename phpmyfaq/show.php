@@ -99,7 +99,7 @@ if (!is_null($selectedCategoryId)) {
         $text = $category->getCategoryName($categoryData->getParentId()) ?? Translation::get(languageKey: 'msgCategoryUp');
 
         $link = new Link($url, $faqConfig);
-        $link->itemTitle = $text;
+        $link->setTitle($text);
         $link->text = $text;
         $link->tooltip = Translation::get(languageKey: 'msgCategoryUp');
 

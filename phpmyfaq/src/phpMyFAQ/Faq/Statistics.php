@@ -285,7 +285,7 @@ class Statistics
                     $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $title;
+                $oLink->setTitle($title);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -408,7 +408,7 @@ class Statistics
                     $row->language,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $title;
+                $oLink->setTitle($title);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -544,7 +544,7 @@ class Statistics
                     $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->question;
+                $oLink->setTitle($row->question);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -653,7 +653,7 @@ class Statistics
                     $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->thema;
+                $oLink->setTitle($row->thema);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 

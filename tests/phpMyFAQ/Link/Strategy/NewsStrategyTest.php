@@ -26,7 +26,7 @@ final class NewsStrategyTest extends TestCase
     {
         $strategy = new NewsStrategy();
         $link = new Link('https://example.com/index.php?action=news', $this->configuration);
-        $link->itemTitle = 'Release Notes';
+        $link->setTitle('Release Notes');
         $params = [
             Link::LINK_GET_NEWS_ID => '777',
             Link::LINK_GET_NEWS_LANG => 'en',
@@ -41,7 +41,7 @@ final class NewsStrategyTest extends TestCase
         $this->expectExceptionMessage('Missing required parameter: newsid');
         $strategy = new NewsStrategy();
         $link = new Link('https://example.com/index.php?action=news', $this->configuration);
-        $link->itemTitle = 'X';
+        $link->setTitle('X');
         $strategy->build([Link::LINK_GET_NEWS_LANG => 'en'], $link);
     }
 
@@ -51,7 +51,7 @@ final class NewsStrategyTest extends TestCase
         $this->expectExceptionMessage('Missing required parameter: newslang');
         $strategy = new NewsStrategy();
         $link = new Link('https://example.com/index.php?action=news', $this->configuration);
-        $link->itemTitle = 'X';
+        $link->setTitle('X');
         $strategy->build([Link::LINK_GET_NEWS_ID => '1'], $link);
     }
 }

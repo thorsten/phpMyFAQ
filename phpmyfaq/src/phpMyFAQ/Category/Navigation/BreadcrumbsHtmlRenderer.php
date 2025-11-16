@@ -44,7 +44,7 @@ final class BreadcrumbsHtmlRenderer
             );
             $oLink = new Link($url, $configuration);
             $oLink->text = Strings::htmlentities($segment['name']);
-            $oLink->itemTitle = Strings::htmlentities($segment['name']);
+            $oLink->setTitle(Strings::htmlentities($segment['name']));
             $oLink->tooltip = Strings::htmlentities($segment['description'] ?? '');
             if (0 === $index) {
                 $oLink->setRelation(rel: 'index');

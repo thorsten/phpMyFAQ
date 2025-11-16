@@ -249,7 +249,7 @@ class CreateLinkTwigExtensionTest extends TestCase
 
         // Should properly create Link object and set properties
         $this->assertStringContainsString('$link = new Link', $source);
-        $this->assertStringContainsString('$link->itemTitle', $source);
+        $this->assertStringContainsString('$link->setTitle(', $source);
         $this->assertStringContainsString('$link->toString()', $source);
     }
 

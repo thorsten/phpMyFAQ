@@ -70,7 +70,7 @@ class FaqHelper extends AbstractHelper
         $faqUrl = sprintf('?action=faq&cat=%d&id=%d&artlang=%%s', $categoryId, $faq->faqRecord['id']);
 
         $oLink = new Link($this->configuration->getDefaultUrl() . $faqUrl, $this->configuration);
-        $oLink->itemTitle = $faq->faqRecord['title'];
+        $oLink->setTitle($faq->faqRecord['title']);
 
         $availableLanguages = $this->configuration->getLanguage()->isLanguageAvailable((int) $faq->faqRecord['id']);
 
@@ -225,7 +225,7 @@ class FaqHelper extends AbstractHelper
                     $categoryId,
                     $faqId,
                     $language,
-                    $link->getSEOItemTitle($question),
+                    $link->getSEOTitle($question),
                 );
             },
             $decodedAnswer,
@@ -253,7 +253,7 @@ class FaqHelper extends AbstractHelper
                         $categoryId,
                         $faqId,
                         $language,
-                        $link->getSEOItemTitle($question),
+                        $link->getSEOTitle($question),
                     );
                 },
                 $answer,

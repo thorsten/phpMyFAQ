@@ -57,7 +57,7 @@ class QuestionHelper extends AbstractHelper
             );
             $link = new Link($url, $this->configuration);
             $link->text = Utils::chopString($result->question, 15);
-            $link->itemTitle = $result->question;
+            $link->setTitle($result->question);
 
             $faqHelper = new FaqHelper($this->configuration);
             $smartAnswer .= sprintf(

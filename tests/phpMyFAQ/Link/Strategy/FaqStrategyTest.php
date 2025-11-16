@@ -26,7 +26,7 @@ final class FaqStrategyTest extends TestCase
     {
         $strategy = new FaqStrategy();
         $link = new Link('https://example.com/index.php?action=faq', $this->configuration);
-        $link->itemTitle = 'HD Ready';
+        $link->setTitle('HD Ready');
         $params = [
             Link::LINK_GET_CATEGORY => '12',
             Link::LINK_GET_ID => '34',
@@ -40,7 +40,7 @@ final class FaqStrategyTest extends TestCase
     {
         $strategy = new FaqStrategy();
         $link = new Link('https://example.com/index.php?action=faq', $this->configuration);
-        $link->itemTitle = 'HD Ready';
+        $link->setTitle('HD Ready');
         $params = [
             Link::LINK_GET_CATEGORY => '5',
             Link::LINK_GET_ID => '99',
@@ -58,7 +58,7 @@ final class FaqStrategyTest extends TestCase
         $this->expectExceptionMessage('Missing required parameter: category');
         $strategy = new FaqStrategy();
         $link = new Link('https://example.com/index.php?action=faq', $this->configuration);
-        $link->itemTitle = 'X';
+        $link->setTitle('X');
         $strategy->build([Link::LINK_GET_ID => '1'], $link);
     }
 
@@ -68,7 +68,7 @@ final class FaqStrategyTest extends TestCase
         $this->expectExceptionMessage('Missing required parameter: id');
         $strategy = new FaqStrategy();
         $link = new Link('https://example.com/index.php?action=faq', $this->configuration);
-        $link->itemTitle = 'X';
+        $link->setTitle('X');
         $strategy->build([Link::LINK_GET_CATEGORY => '1'], $link);
     }
 }

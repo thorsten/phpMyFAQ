@@ -570,7 +570,7 @@ class Wrapper extends TCPDF
 
             $url = $this->config->getDefaultUrl() . $baseUrl;
             $link = new Link($url, $this->config);
-            $link->itemTitle = $this->question;
+            $link->setTitle($this->question);
             $this->Cell(
                 w: 0,
                 h: 10,

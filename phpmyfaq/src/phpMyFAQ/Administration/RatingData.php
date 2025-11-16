@@ -124,7 +124,7 @@ readonly class RatingData
         );
 
         $link = new Link($url, $this->configuration);
-        $link->itemTitle = $question;
+        $link->setTitle($question);
 
         return [
             'id' => $row->id,

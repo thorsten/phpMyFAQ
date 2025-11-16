@@ -105,7 +105,7 @@ readonly class Notification
                 $faqEntity->getLanguage(),
             );
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $this->faq->getQuestion($faqEntity->getId());
+            $link->setTitle($this->faq->getQuestion($faqEntity->getId()));
 
             $this->mail->message =
                 html_entity_decode((string) Translation::get(languageKey: 'msgMailCheck'))
@@ -159,21 +159,22 @@ readonly class Notification
             $faq->faqRecord['lang'],
         );
         $link = new Link($faqUrl, $this->configuration);
-        $link->itemTitle = $faq->faqRecord['title'];
+        $link->setTitle($title);
 
-        $urlToContent = $link->toString();
+        $urlToContent = $link->toHtmlAnchor();
 
-        $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s';
+        $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s:<br>%s';
         $commentMail = sprintf(
             $format,
             Translation::get(languageKey: 'ad_stat_report_owner'),
             $comment->getUsername(),
             $comment->getEmail(),
             $comment->getEmail(),
-            Translation::get(languageKey: 'msgYourComment'),
+            Translation::get(languageKey: 'msgQuestion'),
             $title,
             Translation::get(languageKey: 'ad_news_link_url'),
             $urlToContent,
+            Translation::get(languageKey: 'msgYourComment'),
             strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
 
@@ -221,7 +222,7 @@ readonly class Notification
         $url = '%s?action=news&newsid=%d&newslang=%s';
         $newsUrl = sprintf($url, $this->configuration->getDefaultUrl(), $newsData['id'], $newsData['lang']);
         $link = new Link($newsUrl, $this->configuration);
-        $link->itemTitle = $newsData['header'];
+        $link->setTitle($newsData['header']);
 
         $urlToContent = $link->toString();
 

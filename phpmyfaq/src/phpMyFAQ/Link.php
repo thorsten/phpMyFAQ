@@ -215,7 +215,12 @@ class Link
     /**
      * property specific to the SEO/SEF URLs.
      */
-    public string $itemTitle = '';
+    private string $itemTitle = '';
+
+    /**
+     * href
+     */
+    private string $reference = '';
 
     /**
      * id selector.
@@ -581,10 +586,16 @@ class Link
         return $query;
     }
 
+    public function setTitle(string $title): Link
+    {
+        $this->itemTitle = $title;
+        return $this;
+    }
+
     /**
      * Returns a search engine optimized title.
      */
-    public function getSEOItemTitle(string $title = ''): string
+    public function getSEOTitle(string $title = ''): string
     {
         if ($title === '') {
             $title = $this->itemTitle;

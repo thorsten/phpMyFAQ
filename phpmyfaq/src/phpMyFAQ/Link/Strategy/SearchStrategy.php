@@ -36,7 +36,7 @@ final class SearchStrategy implements StrategyInterface
             if (isset($params[Link::LINK_GET_PAGE])) {
                 $url .= Link::LINK_HTML_SLASH . $params[Link::LINK_GET_PAGE];
             }
-            $url .= Link::LINK_SLASH . $link->getSEOItemTitle() . Link::LINK_HTML_EXTENSION;
+            $url .= Link::LINK_SLASH . $link->getSEOTitle() . Link::LINK_HTML_EXTENSION;
         } else {
             $url = Link::LINK_HTML_SEARCH;
             if ($hasSearch) {

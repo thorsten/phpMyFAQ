@@ -218,7 +218,7 @@ class Faq
                     $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->thema;
+                $oLink->setTitle($row->thema);
                 $oLink->text = $row->thema;
                 $oLink->tooltip = $row->thema;
 
@@ -389,7 +389,7 @@ class Faq
                 );
 
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $title;
+                $oLink->setTitle($title);
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $oLink->class = 'text-decoration-none';
@@ -431,7 +431,7 @@ class Faq
                 '%scategory/%d/%%d/%s.html',
                 $this->configuration->getDefaultUrl(),
                 $categoryId,
-                $link->getSEOItemTitle($title),
+                $link->getSEOTitle($title),
             );
 
             $baseUrl = sprintf(
@@ -576,7 +576,7 @@ class Faq
                 );
 
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->question;
+                $oLink->setTitle($row->question);
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
@@ -786,7 +786,7 @@ class Faq
                 $row->lang,
             );
             $oLink = new Link($url, $this->configuration);
-            $oLink->itemTitle = $row->question;
+            $oLink->setTitle($row->question);
             $oLink->text = $row->question;
             $oLink->tooltip = $row->question;
 
@@ -882,7 +882,7 @@ class Faq
             );
 
             $link = new Link($faqUrl, $this->configuration);
-            $link->itemTitle = $row->question;
+            $link->setTitle($row->question);
 
             return [
                 'id' => (int) $row->id,
@@ -1642,7 +1642,7 @@ class Faq
                     $row->lang,
                 );
                 $oLink = new Link($url, $this->configuration);
-                $oLink->itemTitle = $row->thema;
+                $oLink->setTitle($row->thema);
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
                 $data['id'] = (int) $row->id;

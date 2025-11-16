@@ -285,7 +285,7 @@ final class FaqController extends AbstractAdministrationController
         );
 
         $link = new Link($faqUrl, $this->configuration);
-        $link->itemTitle = $faqData['title'];
+        $link->setTitle($faqData['title']);
 
         // User permissions
         $userPermission = $this->container->get('phpmyfaq.faq.permission')->get(Permission::USER, $faqId);

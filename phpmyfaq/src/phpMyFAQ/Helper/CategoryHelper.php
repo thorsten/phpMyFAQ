@@ -144,7 +144,7 @@ class CategoryHelper extends AbstractHelper
                     );
 
                     $link = new Link($url, $this->configuration);
-                    $link->itemTitle = Strings::htmlentities($node['name']);
+                    $link->setTitle(Strings::htmlentities($node['name']));
                     $link->text = Strings::htmlentities($node['name']);
                     $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
                     $name = $link->toHtmlAnchor();
@@ -188,7 +188,7 @@ class CategoryHelper extends AbstractHelper
                 LanguageCodes::getKey($language),
             );
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = Strings::htmlentities($category);
+            $link->setTitle(Strings::htmlentities($category));
             $link->text = Strings::htmlentities($category);
             $name = $link->toHtmlAnchor();
             $html .= sprintf('<li><strong>%s</strong>: %s</li>', $language, $name);

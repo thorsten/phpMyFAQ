@@ -232,7 +232,7 @@ class Sitemap
                 );
 
                 $link = new Link($url, $this->configuration);
-                $link->itemTitle = $row->thema;
+                $link->setTitle($row->thema);
                 $faq->url = $link->toString();
 
                 if ($this->configuration->get(item: 'main.enableMarkdownEditor')) {

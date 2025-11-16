@@ -46,7 +46,7 @@ final class FaqStrategy implements StrategyInterface
             . Link::LINK_HTML_SLASH
             . $art
             . Link::LINK_SLASH
-            . $link->getSEOItemTitle()
+            . $link->getSEOTitle()
             . Link::LINK_HTML_EXTENSION;
 
         if (isset($params[Link::LINK_GET_HIGHLIGHT])) {

@@ -127,7 +127,7 @@ readonly class Startpage
         while ($row = $this->configuration->getDb()->fetchArray($result)) {
             $url = sprintf('%sindex.php?action=show&cat=%d', $this->configuration->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $row['name'];
+            $link->setTitle($row['name']);
             $image = '' === $row['image'] ? '' : 'content/user/images/' . $row['image'];
 
             $category = [

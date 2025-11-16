@@ -68,7 +68,7 @@ readonly class News
             $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
             $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
             $link = new Link($url, $this->configuration);
-            $link->itemTitle = $row->header;
+            $link->setTitle($row->header);
             $entry->url = $link->toString();
             $entry->header = $row->header;
             $entry->content = strip_tags((string) $row->artikel);
@@ -107,7 +107,7 @@ readonly class News
             $link = '%sindex.php?action=news&newsid=%d&newslang=%s';
             $url = sprintf($link, $this->configuration->getDefaultUrl(), $row->id, $row->lang);
             $oLink = new Link($url, $this->configuration);
-            $oLink->itemTitle = $row->header;
+            $oLink->setTitle($row->header);
             $item = [
                 'id' => (int) $row->id,
                 'lang' => $row->lang,

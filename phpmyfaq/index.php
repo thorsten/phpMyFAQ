@@ -381,7 +381,7 @@ if ($id !== 0) {
         $lang
     );
     $faqLink = new Link($url, $faqConfig);
-    $faqLink->itemTitle = $faq->faqRecord['title'];
+    $faqLink->setTitle($faq->faqRecord['title']);
 } else {
     $title = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('seo.description'));
@@ -413,7 +413,7 @@ if ($solutionId) {
         $lang
     );
     $faqLink = new Link($url, $faqConfig);
-    $faqLink->itemTitle = Strings::htmlentities($faqData['question']);
+    $faqLink->setTitle(Strings::htmlentities($faqData['question']));
 }
 
 //

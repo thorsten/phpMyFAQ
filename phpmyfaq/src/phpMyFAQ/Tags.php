@@ -85,7 +85,7 @@ class Tags
                 $taggingId,
             );
             $oLink = new Link($url, $this->configuration);
-            $oLink->itemTitle = $title;
+            $oLink->setTitle($title);
             $oLink->text = $title;
             $oLink->tooltip = $title;
             $oLink->class = 'btn btn-outline-primary';

@@ -26,7 +26,7 @@ final class SearchStrategyTest extends TestCase
     {
         $strategy = new SearchStrategy();
         $link = new Link('https://example.com/index.php?action=search', $this->configuration);
-        $link->itemTitle = 'My Tag Title';
+        $link->setTitle('My Tag Title');
         $params = [
             Link::LINK_GET_TAGGING_ID => '42',
             Link::LINK_GET_PAGE => '3',
@@ -39,7 +39,7 @@ final class SearchStrategyTest extends TestCase
     {
         $strategy = new SearchStrategy();
         $link = new Link('https://example.com/index.php?action=search', $this->configuration);
-        $link->itemTitle = 'Search Title';
+        $link->setTitle('Search Title');
         $params = [
             Link::LINK_GET_ACTION_SEARCH => 'term',
             Link::LINK_GET_PAGE => '2',
@@ -53,7 +53,7 @@ final class SearchStrategyTest extends TestCase
     {
         $strategy = new SearchStrategy();
         $link = new Link('https://example.com/index.php?action=search', $this->configuration);
-        $link->itemTitle = 'Search Title';
+        $link->setTitle('Search Title');
         $params = [
             Link::LINK_GET_ACTION_SEARCH => 'lcd',
         ];

@@ -91,7 +91,7 @@ class SearchHelper extends AbstractHelper
 
                 $question = html_entity_decode((string) $result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
                 $link = new Link($currentUrl, $this->configuration);
-                $link->itemTitle = $result->question;
+                $link->setTitle($result->question);
                 $faq = new stdClass();
                 $faq->category = $this->Category->getPath($result->category_id ?? 0);
                 $faq->question = Utils::chopString($question, 15);
@@ -215,7 +215,7 @@ class SearchHelper extends AbstractHelper
                 );
 
                 $oLink = new Link($currentUrl, $this->configuration);
-                $oLink->itemTitle = $resultSet->question;
+                $oLink->setTitle($resultSet->question);
 
                 $path = isset($categoryInfo[0]['id']) ? $this->Category->getPath($categoryInfo[0]['id']) : '';
 
@@ -281,7 +281,7 @@ class SearchHelper extends AbstractHelper
                     $result->lang,
                 );
                 $link = new Link($url, $this->configuration);
-                $link->itemTitle = Strings::htmlentities($result->question);
+                $link->setTitle(Strings::htmlentities($result->question));
                 $link->text = Strings::htmlentities($result->question);
                 $link->tooltip = Strings::htmlentities($result->question);
                 $link->class = 'text-decoration-none';

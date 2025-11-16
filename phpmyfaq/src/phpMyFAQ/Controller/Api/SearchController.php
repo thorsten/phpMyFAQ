@@ -25,7 +25,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Search;
+use phpMyFAQ\Link;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +40,7 @@ final class SearchController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -77,23 +77,32 @@ final class SearchController extends AbstractController
     )]
     public function search(Request $request): JsonResponse
     {
-        $search = new Search($this->configuration);
+        $search = $this->container->get(id: 'phpmyfaq.search');
         $search->setCategory(new Category($this->configuration));
 
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        $searchString = Filter::filterVar($request->get('q'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $searchResults = $search->search($searchString, false);
+        $searchString = Filter::filterVar($request->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchResults = $search->search(
+            searchTerm: $searchString,
+            allLanguages: false,
+        );
         $searchResultSet->reviewResultSet($searchResults);
 
         if ($searchResultSet->getNumberOfResults() > 0) {
             $url = $this->configuration->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $result = [];
             foreach ($searchResultSet->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, 'utf-8');
-                $data->answer = Utils::makeShorterText($data->answer, 12);
-                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, encoding: 'utf-8');
+                $data->answer = Utils::makeShorterText(
+                    string: $data->answer,
+                    characters: 12,
+                );
+                $url = sprintf($url, $data->category_id, $data->id, $data->lang);
+                $link = new Link($url, $this->configuration);
+                $link->setTitle($data->question);
+                $data->link = $link->toString();
                 $result[] = $data;
             }
 
@@ -135,8 +144,10 @@ final class SearchController extends AbstractController
     )]
     public function popular(): JsonResponse
     {
-        $search = new Search($this->configuration);
-        $result = $search->getMostPopularSearches(7, true);
+        $result = $this->container->get(id: 'phpmyfaq.search')->getMostPopularSearches(
+            numResults: 7,
+            withLang: true,
+        );
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

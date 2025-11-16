@@ -41,7 +41,7 @@ class CreateLinkTwigExtension extends AbstractExtension
         $categoryEntity = $category->getCategoryData($categoryId);
 
         $link = new Link($url, $configuration);
-        $link->itemTitle = $categoryEntity->getName();
+        $link->setTitle($categoryEntity->getName());
 
         return $link->toString();
     }
@@ -56,7 +56,7 @@ class CreateLinkTwigExtension extends AbstractExtension
 
         $faq = new Faq($configuration);
         $link = new Link($url, $configuration);
-        $link->itemTitle = $faq->getQuestion($faqId);
+        $link->setTitle($faq->getQuestion($faqId));
 
         return $link->toString();
     }
