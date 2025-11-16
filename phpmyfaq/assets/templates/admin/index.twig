@@ -15,6 +15,7 @@
   <meta name="robots" content="{{ metaRobots }}">
 
   <link rel="stylesheet" href="../assets/public/admin.css">
+  <link rel="stylesheet" href="../assets/templates/default/theme.css">
 
   <script src="./assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/images/favicon.ico">
@@ -37,12 +38,21 @@
     {{ renderedLanguageSelection | raw }}
   </form>
 
-  <!-- Theme toggle button -->
-  <button id="theme-toggle" class="btn btn-link nav-link px-2 me-2" type="button"
-          aria-label="{{ 'msgToggleTheme' | translate }}" title="{{ 'msgToggleTheme' | translate }}">
-    <i id="theme-icon-dark" class="bi bi-sun-fill"></i>
-    <i id="theme-icon-light" class="bi bi-moon-stars-fill"></i>
-  </button>
+  <!-- Theme switcher -->
+  <div class="btn-group pmf-theme-switcher border me-2" role="group" aria-label="{{ 'msgToggleTheme' | translate }}">
+    <button type="button" class="btn btn-link nav-link px-2" id="theme-light"
+            aria-label="Light mode" title="Light mode">
+      <i class="bi bi-sun-fill"></i>
+    </button>
+    <button type="button" class="btn btn-link nav-link px-2" id="theme-dark"
+            aria-label="Dark mode" title="Dark mode">
+      <i class="bi bi-moon-stars-fill"></i>
+    </button>
+    <button type="button" class="btn btn-link nav-link px-2" id="theme-high-contrast"
+            aria-label="High contrast mode" title="High contrast mode">
+      <i class="bi bi-circle-half"></i>
+    </button>
+  </div>
 
   {% if userHasAccessPermission %}
   <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">

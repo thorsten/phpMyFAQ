@@ -49,3 +49,24 @@
   --bs-body-bg: var(--bs-dark);
   --bs-body-color: var(--bs-light);
 }
+
+[data-bs-theme='high-contrast'] {
+  --bs-light: #ffffff;
+  --bs-dark: #000000;
+  --bs-primary: #ffff00;
+  --bs-secondary: #00ffff;
+  --bs-info: #00ffff;
+  --bs-success: #00ff00;
+  --bs-warning: #ffff00;
+  --bs-danger: #ff0000;
+  --bs-pmf-nav: #000000;
+  --bs-pmf-footer: #000000;
+  --bs-pmf-background: #000000;
+
+  /* Bootstrap body variables for high contrast mode */
+  --bs-body-bg: #000000;
+  --bs-body-color: #ffffff;
+  --bs-border-color: #ffffff;
+  --bs-link-color: #ffff00;
+  --bs-link-hover-color: #ffff66;
+}

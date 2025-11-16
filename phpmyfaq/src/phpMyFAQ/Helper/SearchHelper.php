@@ -176,10 +176,10 @@ class SearchHelper extends AbstractHelper
 
                 ++$displayedCounter;
 
-                // Set language for current category to fetch the correct category name
+                // Set language for the current category to fetch the correct category name
                 $this->Category->setLanguage($resultSet->lang);
 
-                $categoryInfo = $this->Category->getCategoriesFromFaq($resultSet->id);
+                $categoryInfo = $this->Category->getCategoriesFromFaq((int) $resultSet->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = Utils::chopString(Strings::htmlentities($resultSet->question), 15);
                 $answerPreview = $faqHelper->renderAnswerPreview($resultSet->answer, 20);

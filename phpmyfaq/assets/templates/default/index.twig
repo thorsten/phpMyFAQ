@@ -54,11 +54,20 @@
 
       <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
         <li class="nav-item me-2">
-          <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-toggle"
-                  aria-label="{{ 'msgToggleTheme' | translate }}" title="{{ 'msgToggleTheme' | translate }}">
-            <i class="bi bi-sun-fill" id="theme-icon-dark"></i>
-            <i class="bi bi-moon-stars-fill" id="theme-icon-light" style="display: none;"></i>
-          </button>
+          <div class="btn-group pmf-theme-switcher border" role="group" aria-label="{{ 'msgToggleTheme' | translate }}">
+            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-light"
+                    aria-label="Light mode" title="Light mode">
+              <i class="bi bi-sun-fill"></i>
+            </button>
+            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-dark"
+                    aria-label="Dark mode" title="Dark mode">
+              <i class="bi bi-moon-stars-fill"></i>
+            </button>
+            <button type="button" class="btn btn-link nav-link py-2 px-2" id="theme-high-contrast"
+                    aria-label="High contrast mode" title="High contrast mode">
+              <i class="bi bi-circle-half"></i>
+            </button>
+          </div>
         </li>
         <li class="nav-item dropdown">
           <button type="button" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"

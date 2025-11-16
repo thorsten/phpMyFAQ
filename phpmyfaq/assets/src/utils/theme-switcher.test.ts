@@ -2,18 +2,29 @@ import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
 import { ThemeSwitcher } from './theme-switcher';
 
 // Mock DOM elements
-const mockToggleButton = {
+const mockLightButton = {
   addEventListener: vi.fn(),
-  setAttribute: vi.fn(),
+  classList: {
+    add: vi.fn(),
+    remove: vi.fn(),
+  },
 } as unknown as HTMLButtonElement;
 
-const mockLightIcon = {
-  style: { display: '' },
-} as HTMLElement;
+const mockDarkButton = {
+  addEventListener: vi.fn(),
+  classList: {
+    add: vi.fn(),
+    remove: vi.fn(),
+  },
+} as unknown as HTMLButtonElement;
 
-const mockDarkIcon = {
-  style: { display: '' },
-} as HTMLElement;
+const mockHighContrastButton = {
+  addEventListener: vi.fn(),
+  classList: {
+    add: vi.fn(),
+    remove: vi.fn(),
+  },
+} as unknown as HTMLButtonElement;
 
 // Mock localStorage properly
 const mockLocalStorage = {
@@ -54,12 +65,24 @@ describe('ThemeSwitcher', (): void => {
     // Reset all mocks
     vi.clearAllMocks();
 
+    // Create a simple attribute store for realistic getAttribute/setAttribute behavior
+    let currentTheme: string | null = null;
+
     // Mock document with proper mock functions
     mockDocument = {
       getElementById: vi.fn(),
       documentElement: {
-        setAttribute: vi.fn(),
-        getAttribute: vi.fn().mockReturnValue(null),
+        setAttribute: vi.fn((attr: string, value: string) => {
+          if (attr === 'data-bs-theme') {
+            currentTheme = value;
+          }
+        }),
+        getAttribute: vi.fn((attr: string) => {
+          if (attr === 'data-bs-theme') {
+            return currentTheme;
+          }
+          return null;
+        }),
       },
       addEventListener: vi.fn(),
     };
@@ -78,12 +101,12 @@ describe('ThemeSwitcher', (): void => {
     // Setup default DOM element returns
     mockDocument.getElementById.mockImplementation((id: string) => {
       switch (id) {
-        case 'theme-toggle':
-          return mockToggleButton;
-        case 'theme-icon-light':
-          return mockLightIcon;
-        case 'theme-icon-dark':
-          return mockDarkIcon;
+        case 'theme-light':
+          return mockLightButton;
+        case 'theme-dark':
+          return mockDarkButton;
+        case 'theme-high-contrast':
+          return mockHighContrastButton;
         default:
           return null;
       }
@@ -109,6 +132,7 @@ describe('ThemeSwitcher', (): void => {
 
     expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'light');
     expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'light');
+    expect(mockLightButton.classList.add).toHaveBeenCalledWith('active');
   });
 
   test('should initialize with dark theme when no stored preference and system prefers dark', (): void => {
@@ -118,6 +142,7 @@ describe('ThemeSwitcher', (): void => {
 
     expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
     expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'dark');
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
   });
 
   test('should apply stored theme from localStorage', (): void => {
@@ -126,55 +151,104 @@ describe('ThemeSwitcher', (): void => {
     themeSwitcher = new ThemeSwitcher();
 
     expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
   });
 
-  test('should setup event listeners for toggle button', (): void => {
+  test('should setup event listeners for all three theme buttons', (): void => {
     themeSwitcher = new ThemeSwitcher();
 
-    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-toggle');
-    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-icon-light');
-    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-icon-dark');
-    expect(mockToggleButton.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-light');
+    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-dark');
+    expect(mockDocument.getElementById).toHaveBeenCalledWith('theme-high-contrast');
+    expect(mockLightButton.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+    expect(mockDarkButton.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+    expect(mockHighContrastButton.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
   });
 
-  test('should toggle theme from light to dark when button is clicked', (): void => {
-    vi.mocked(mockDocument.documentElement.getAttribute).mockReturnValue('light');
+  test('should set light theme when light button is clicked', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('dark');
     themeSwitcher = new ThemeSwitcher();
 
-    // Simulate button click - properly type the handler
-    const clickHandler = vi.mocked(mockToggleButton.addEventListener).mock.calls[0][1] as EventListener;
-    clickHandler(new Event('click'));
-
-    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
-    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'dark');
-  });
-
-  test('should toggle theme from dark to light when button is clicked', (): void => {
-    vi.mocked(mockDocument.documentElement.getAttribute).mockReturnValue('dark');
-    themeSwitcher = new ThemeSwitcher();
-
-    // Simulate button click - properly type the handler
-    const clickHandler = vi.mocked(mockToggleButton.addEventListener).mock.calls[0][1] as EventListener;
+    // Simulate light button click
+    const clickHandler = vi.mocked(mockLightButton.addEventListener).mock.calls[0][1] as EventListener;
     clickHandler(new Event('click'));
 
     expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'light');
     expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'light');
+    expect(mockLightButton.classList.add).toHaveBeenCalledWith('active');
   });
 
-  test('should update button state and icons for dark theme', (): void => {
-    vi.mocked(mockDocument.documentElement.getAttribute).mockReturnValue('dark');
+  test('should set dark theme when dark button is clicked', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('light');
     themeSwitcher = new ThemeSwitcher();
 
-    expect(mockLightIcon.style.display).toBe('inline-block');
-    expect(mockDarkIcon.style.display).toBe('none');
+    // Simulate dark button click
+    const clickHandler = vi.mocked(mockDarkButton.addEventListener).mock.calls[0][1] as EventListener;
+    clickHandler(new Event('click'));
+
+    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'dark');
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'dark');
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
   });
 
-  test('should update button state and icons for light theme', (): void => {
-    vi.mocked(mockDocument.documentElement.getAttribute).mockReturnValue('light');
+  test('should set high-contrast theme when high-contrast button is clicked', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('light');
     themeSwitcher = new ThemeSwitcher();
 
-    expect(mockLightIcon.style.display).toBe('none');
-    expect(mockDarkIcon.style.display).toBe('inline-block');
+    // Simulate high-contrast button click
+    const clickHandler = vi.mocked(mockHighContrastButton.addEventListener).mock.calls[0][1] as EventListener;
+    clickHandler(new Event('click'));
+
+    expect(mockDocument.documentElement.setAttribute).toHaveBeenCalledWith('data-bs-theme', 'high-contrast');
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith('pmf-theme', 'high-contrast');
+    expect(mockHighContrastButton.classList.add).toHaveBeenCalledWith('active');
+  });
+
+  test('should update button states correctly for light theme', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('light');
+    themeSwitcher = new ThemeSwitcher();
+
+    expect(mockLightButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockDarkButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockHighContrastButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockLightButton.classList.add).toHaveBeenCalledWith('active');
+  });
+
+  test('should update button states correctly for dark theme', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('dark');
+    themeSwitcher = new ThemeSwitcher();
+
+    expect(mockLightButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockDarkButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockHighContrastButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
+  });
+
+  test('should update button states correctly for high-contrast theme', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('high-contrast');
+    themeSwitcher = new ThemeSwitcher();
+
+    expect(mockLightButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockDarkButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockHighContrastButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockHighContrastButton.classList.add).toHaveBeenCalledWith('active');
+  });
+
+  test('should remove active class from all buttons before adding to selected', (): void => {
+    vi.mocked(mockLocalStorage.getItem).mockReturnValue('light');
+    themeSwitcher = new ThemeSwitcher();
+
+    // Click dark button
+    const clickHandler = vi.mocked(mockDarkButton.addEventListener).mock.calls[0][1] as EventListener;
+    clickHandler(new Event('click'));
+
+    // Should remove active from all buttons first
+    expect(mockLightButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockDarkButton.classList.remove).toHaveBeenCalledWith('active');
+    expect(mockHighContrastButton.classList.remove).toHaveBeenCalledWith('active');
+
+    // Then add to dark button
+    expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
   });
 
   test('should watch system theme changes', (): void => {
@@ -190,7 +264,7 @@ describe('ThemeSwitcher', (): void => {
     themeSwitcher = new ThemeSwitcher();
     themeSwitcher.watchSystemTheme();
 
-    // Simulate system theme change to dark - properly type the handler
+    // Simulate system theme change to dark
     const changeHandler = vi.mocked(mockMatchMedia.addEventListener).mock.calls[0][1] as EventListener;
     changeHandler({ matches: true } as MediaQueryListEvent);
 
@@ -207,7 +281,7 @@ describe('ThemeSwitcher', (): void => {
 
     themeSwitcher.watchSystemTheme();
 
-    // Simulate system theme change to dark - properly type the handler
+    // Simulate system theme change to dark
     const changeHandler = vi.mocked(mockMatchMedia.addEventListener).mock.calls[0][1] as EventListener;
     changeHandler({ matches: true } as MediaQueryListEvent);
 

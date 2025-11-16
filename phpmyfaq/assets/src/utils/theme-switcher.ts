@@ -1,5 +1,5 @@
 /**
- * Theme switcher functionality for dark/light mode
+ * Theme switcher functionality for dark/light/high-contrast mode
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,10 +18,11 @@ export class ThemeSwitcher {
   private static readonly THEME_ATTRIBUTE = 'data-bs-theme';
   private static readonly LIGHT_THEME = 'light';
   private static readonly DARK_THEME = 'dark';
+  private static readonly HIGH_CONTRAST_THEME = 'high-contrast';
 
-  private toggleButton: HTMLButtonElement | null = null;
-  private lightIcon: HTMLElement | null = null;
-  private darkIcon: HTMLElement | null = null;
+  private lightButton: HTMLButtonElement | null = null;
+  private darkButton: HTMLButtonElement | null = null;
+  private highContrastButton: HTMLButtonElement | null = null;
 
   constructor() {
     this.init();
@@ -37,28 +38,30 @@ export class ThemeSwitcher {
   }
 
   /**
-   * Set up event listeners for the theme toggle button
+   * Set up event listeners for the theme buttons
    */
   private setupEventListeners(): void {
-    this.toggleButton = document.getElementById('theme-toggle') as HTMLButtonElement;
-    this.lightIcon = document.getElementById('theme-icon-light');
-    this.darkIcon = document.getElementById('theme-icon-dark');
+    this.lightButton = document.getElementById('theme-light') as HTMLButtonElement;
+    this.darkButton = document.getElementById('theme-dark') as HTMLButtonElement;
+    this.highContrastButton = document.getElementById('theme-high-contrast') as HTMLButtonElement;
 
-    if (this.toggleButton) {
-      this.toggleButton.addEventListener('click', () => {
-        this.toggleTheme();
+    if (this.lightButton) {
+      this.lightButton.addEventListener('click', () => {
+        this.setTheme(ThemeSwitcher.LIGHT_THEME);
       });
     }
-  }
 
-  /**
-   * Toggle between light and dark theme
-   */
-  private toggleTheme(): void {
-    const currentTheme = this.getCurrentTheme();
-    const newTheme = currentTheme === ThemeSwitcher.LIGHT_THEME ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
+    if (this.darkButton) {
+      this.darkButton.addEventListener('click', () => {
+        this.setTheme(ThemeSwitcher.DARK_THEME);
+      });
+    }
 
-    this.setTheme(newTheme);
+    if (this.highContrastButton) {
+      this.highContrastButton.addEventListener('click', () => {
+        this.setTheme(ThemeSwitcher.HIGH_CONTRAST_THEME);
+      });
+    }
   }
 
   /**
@@ -94,20 +97,29 @@ export class ThemeSwitcher {
   }
 
   /**
-   * Update button state and icons
+   * Update button state to show active theme
    */
   private updateButtonState(): void {
     const currentTheme = this.getCurrentTheme();
-    const isDark = currentTheme === ThemeSwitcher.DARK_THEME;
 
-    if (this.lightIcon && this.darkIcon) {
-      if (isDark) {
-        this.lightIcon.style.display = 'inline-block';
-        this.darkIcon.style.display = 'none';
-      } else {
-        this.lightIcon.style.display = 'none';
-        this.darkIcon.style.display = 'inline-block';
-      }
+    // Remove active class from all buttons
+    if (this.lightButton) {
+      this.lightButton.classList.remove('active');
+    }
+    if (this.darkButton) {
+      this.darkButton.classList.remove('active');
+    }
+    if (this.highContrastButton) {
+      this.highContrastButton.classList.remove('active');
+    }
+
+    // Add active class to the current theme button
+    if (currentTheme === ThemeSwitcher.LIGHT_THEME && this.lightButton) {
+      this.lightButton.classList.add('active');
+    } else if (currentTheme === ThemeSwitcher.DARK_THEME && this.darkButton) {
+      this.darkButton.classList.add('active');
+    } else if (currentTheme === ThemeSwitcher.HIGH_CONTRAST_THEME && this.highContrastButton) {
+      this.highContrastButton.classList.add('active');
     }
   }
 
@@ -115,9 +127,9 @@ export class ThemeSwitcher {
    * Listen for system theme changes
    */
   public watchSystemTheme(): void {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event: MediaQueryListEvent): void => {
       if (!localStorage.getItem(ThemeSwitcher.STORAGE_KEY)) {
-        const newTheme = e.matches ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
+        const newTheme = event.matches ? ThemeSwitcher.DARK_THEME : ThemeSwitcher.LIGHT_THEME;
         this.setTheme(newTheme);
       }
     });
@@ -125,7 +137,7 @@ export class ThemeSwitcher {
 }
 
 // Initialize the theme switcher when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (): void => {
   const themeSwitcher = new ThemeSwitcher();
   themeSwitcher.watchSystemTheme();
 });
