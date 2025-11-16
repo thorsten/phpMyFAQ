@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Question Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-02-27
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -46,6 +46,7 @@ final class QuestionController extends AbstractController
     /**
      * @throws Exception
      * @throws \JsonException
+     * @throws \Exception
      */
     #[OA\Post(path: '/api/v3.1/question', operationId: 'createQuestion', tags: ['Endpoints with Authentication'])]
     #[OA\Header(

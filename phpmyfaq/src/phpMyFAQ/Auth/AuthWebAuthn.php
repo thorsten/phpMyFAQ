@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages user authentication via WebAuthn.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-07
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 
@@ -306,7 +306,7 @@ class AuthWebAuthn extends Auth
     /**
      * Validates a response for login or 2FA, requires info from the hardware via JavaScript given below.
      *
-     * @param string & $userWebAuthn the existing webauthn field for the user
+     * @param string $userWebAuthn the existing webauthn field for the user
      * @throws Exception
      */
     public function authenticate(stdClass $info, string &$userWebAuthn): bool

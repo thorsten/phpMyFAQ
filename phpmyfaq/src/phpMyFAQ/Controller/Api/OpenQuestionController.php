@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Open Questions Controller for the REST API
  *
@@ -17,11 +15,12 @@ declare(strict_types=1);
  * @since     2023-07-29
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -37,7 +36,9 @@ final class OpenQuestionController extends AbstractController
         }
     }
 
-    #[OA\Get(path: '/api/v3.1/open-questions', operationId: 'getOpenQuestions', tags: ['Public Endpoints'])]
+    /**
+     * @throws \Exception
+     */ #[OA\Get(path: '/api/v3.1/open-questions', operationId: 'getOpenQuestions', tags: ['Public Endpoints'])]
     #[OA\Header(
         header: 'Accept-Language',
         description: 'The language code for the open questions.',
@@ -68,7 +69,7 @@ final class OpenQuestionController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $question = new Question($this->configuration);
+        $question = $this->container->get('phpmyfaq.question');
         $result = $question->getAll();
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
