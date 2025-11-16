@@ -69,7 +69,7 @@ final class OpenQuestionController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $question = $this->container->get('phpmyfaq.question');
+        $question = $this->container->get(id: 'phpmyfaq.question');
         $result = $question->getAll();
 
         if ((is_countable($result) ? count($result) : 0) === 0) {

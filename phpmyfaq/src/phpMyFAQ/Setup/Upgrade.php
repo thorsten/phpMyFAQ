@@ -26,7 +26,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\Enums\ReleaseType;
-use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -37,7 +36,7 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use ZipArchive;
 
-class Upgrade extends Setup
+class Upgrade extends AbstractSetup
 {
     final public const string GITHUB_PATH = 'thorsten/phpMyFAQ/releases/download/development-nightly-%s/';
 

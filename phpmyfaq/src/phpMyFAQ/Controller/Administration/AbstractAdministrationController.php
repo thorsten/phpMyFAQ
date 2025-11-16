@@ -218,11 +218,13 @@ abstract class AbstractAdministrationController extends AbstractController
             'ad_menu_stopwordsconfig',
             'stopwords',
         );
-        $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
-            PermissionType::CONFIGURATION_EDIT->value,
-            'msgAdminHeaderUpdate',
-            'update',
-        );
+        if ($this->configuration->get(item: 'upgrade.onlineUpdateEnabled')) {
+            $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+                PermissionType::CONFIGURATION_EDIT->value,
+                'msgAdminHeaderUpdate',
+                'update',
+            );
+        }
         $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
             PermissionType::CONFIGURATION_EDIT->value,
             'msgPlugins',

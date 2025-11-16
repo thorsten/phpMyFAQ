@@ -27,7 +27,6 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Enums\ReleaseType;
 use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
-use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
 use RecursiveDirectoryIterator;
@@ -36,7 +35,7 @@ use SplFileInfo;
 use Symfony\Component\HttpFoundation\Request;
 use ZipArchive;
 
-class Update extends Setup
+class Update extends AbstractSetup
 {
     private string $version;
 

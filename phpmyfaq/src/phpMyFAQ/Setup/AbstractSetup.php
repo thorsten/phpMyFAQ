@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The abstract setup class for installation and updating phpMyFAQ.
  *
@@ -17,11 +15,15 @@ declare(strict_types=1);
  * @since     2023-04-04
  */
 
-namespace phpMyFAQ;
+declare(strict_types=1);
 
+namespace phpMyFAQ\Setup;
+
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\System;
 
-abstract class Setup
+abstract class AbstractSetup
 {
     public function __construct(
         protected System $system,
@@ -34,7 +36,12 @@ abstract class Setup
      */
     public function checkMinimumPhpVersion(): bool
     {
-        return version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP) > 0;
+        return (
+            version_compare(
+                version1: PHP_VERSION,
+                version2: System::VERSION_MINIMUM_PHP,
+            ) > 0
+        );
     }
 
     /**
@@ -42,7 +49,11 @@ abstract class Setup
      */
     public function checkMinimumUpdateVersion(string $version): bool
     {
-        return version_compare($version, '3.0.0', '>');
+        return version_compare(
+            version1: $version,
+            version2: '3.0.0',
+            operator: '>',
+        );
     }
 
     /**
@@ -50,7 +61,7 @@ abstract class Setup
      */
     public function checkMaintenanceMode(): bool
     {
-        return Configuration::getConfigurationInstance()->get('main.maintenanceMode');
+        return Configuration::getConfigurationInstance()->get(item: 'main.maintenanceMode');
     }
 
     /**
@@ -61,7 +72,10 @@ abstract class Setup
     {
         $database = null;
         if (!$this->checkMinimumPhpVersion()) {
-            throw new Exception(sprintf('Sorry, but you need PHP %s or later!', System::VERSION_MINIMUM_PHP));
+            throw new Exception(sprintf(
+                format: 'Sorry, but you need PHP %s or later!',
+                values: System::VERSION_MINIMUM_PHP,
+            ));
         }
 
         if (
@@ -76,16 +90,17 @@ abstract class Setup
         if ('' !== $databaseType) {
             $databaseFound = false;
             foreach (array_keys($this->system->getSupportedDatabases()) as $database) {
-                if ($database === $databaseType) {
-                    $databaseFound = true;
-                    break;
+                if ($database !== $databaseType) {
+                    continue;
                 }
+                $databaseFound = true;
+                break;
             }
 
             if (!$databaseFound) {
                 throw new Exception(sprintf(
-                    'Sorry, but the database %s is not supported!',
-                    ucfirst((string) $database),
+                    format: 'Sorry, but the database %s is not supported!',
+                    values: ucfirst((string) $database),
                 ));
             }
         }

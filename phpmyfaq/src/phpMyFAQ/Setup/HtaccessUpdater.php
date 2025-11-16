@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The HtaccessUpdater class provides surgical updates to .htaccess files
  * while preserving user-generated content.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-01-01
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Setup;
 
