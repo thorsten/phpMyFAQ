@@ -41,7 +41,7 @@
   // Global background
   html,
   body {
-    background: var(--bs-dark) !important;
+    background: var(--bs-gray-700) !important;
     color: var(--bs-light);
   }
 
@@ -121,6 +121,10 @@
     &:hover {
       color: var(--bs-info);
       opacity: 0.8;
+    }
+
+    &.btn {
+      color: var(--bs-light);
     }
   }
 
