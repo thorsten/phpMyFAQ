@@ -1185,22 +1185,6 @@ $PMF_LANG['ad_group_rights'] = "Grup izinleri";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Bölüm";
-$PMF_LANG['ad_section_add'] = "Bölüm ekle";
-$PMF_LANG['ad_section_add_link'] = "Bölüm ekle";
-$PMF_LANG['ad_sections'] = "Bölümler";
-$PMF_LANG['ad_section_details'] = "Bölüm detayları";
-$PMF_LANG['ad_section_name'] = "İsim";
-$PMF_LANG['ad_section_description'] = "Açıklama";
-$PMF_LANG['ad_section_membership'] = "Bölüm ilişkilendir";
-$PMF_LANG['ad_section_members'] = "İlişkilendirmeler";
-$PMF_LANG['ad_section_addMember'] = "ekle";
-$PMF_LANG['ad_section_removeMember'] = "çıkar";
-$PMF_LANG['ad_section_deleteSection'] = "Bölüm sil";
-$PMF_LANG['ad_section_deleteQuestion'] = "Bu bölümü silmek istediğinizden emin misiniz?";
-$PMF_LANG['ad_section_error_delete'] = "Bölüm silinemedi.";
-$PMF_LANG['ad_section_error_noName'] = "Lütfen bir bölüm adı girin.";
-$PMF_LANG['ad_section_suc'] = "Bölüm başarıyla eklendi.";
-$PMF_LANG['ad_section_deleted'] = "Bölüm başarıyla silindi.";
 $PMF_LANG['permission::viewadminlink'] = "Yönetici bağlantısını görüntüle";
 
 return $PMF_LANG;

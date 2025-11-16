@@ -69,6 +69,7 @@ $PMF_LANG['msgCommentHeader'] = "Kommentar zur FAQ";
 $PMF_LANG['msgYourComment'] = "Kommentar";
 $PMF_LANG['msgCommentThanks'] = "Vielen Dank für den Kommentar!";
 $PMF_LANG['msgShareFAQ'] = "FAQ teilen";
+$PMF_LANG['msgS2FButton'] = "E-Mail senden";
 
 // Search
 $PMF_LANG['msgSearchWord'] = "Suchbegriff";

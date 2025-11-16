@@ -966,22 +966,6 @@ $PMF_LANG['ad_group_rights'] = 'グループ権限';
 
 // added v3.0.0-alpha.3
 $PMF_LANG['ad_menu_section_administration'] = "セクションの管理";
-$PMF_LANG['ad_section_add'] = "セクションの追加";
-$PMF_LANG['ad_section_add_link'] = "セクションを追加する";
-$PMF_LANG['ad_sections'] = 'セクション';
-$PMF_LANG['ad_section_details'] = "セクションの詳細";
-$PMF_LANG['ad_section_name'] = "名称:";
-$PMF_LANG['ad_section_description'] = "説明:";
-$PMF_LANG['ad_section_membership'] = "セクションのメンバー設定";
-$PMF_LANG['ad_section_members'] = "セクションのメンバー一覧";
-$PMF_LANG['ad_section_addMember'] = "追加 >>";
-$PMF_LANG['ad_section_removeMember'] = "<< 削除";
-$PMF_LANG['ad_section_deleteSection'] = "セクションの削除";
-$PMF_LANG['ad_section_deleteQuestion'] = "このセクションを本当に削除しますか？";
-$PMF_LANG['ad_section_error_delete'] = "セクションを削除できません。";
-$PMF_LANG['ad_section_error_noName'] = "セクションの名称を指定して下さい。";
-$PMF_LANG['ad_section_suc'] = "セクションの追加に成功しました。";
-$PMF_LANG['ad_section_deleted'] = "セクションを削除しました。";
 $PMF_LANG['permission::viewadminlink'] = '管理リンクを表示';
 
 // added v3.0.0-beta.3

@@ -431,8 +431,8 @@ $PMF_LANG["no_cats"] = "No Categories found.";
 // Added v1.1 - 17.01.2002 - Bastian
 $PMF_LANG["ad_log_lger"] = "Invalid user or password.";
 $PMF_LANG["ad_log_sess"] = "Session expired.";
-$PMF_LANG["ad_log_edit"] = "\"Edit User\" form for the following user: ";
-$PMF_LANG["ad_log_crea"] = "\"New article\" form.";
+$PMF_LANG["ad_log_edit"] = '"Edit User" form for the following user: ';
+$PMF_LANG["ad_log_crea"] = '"New article" form.';
 $PMF_LANG["ad_log_crsa"] = "New entry created.";
 $PMF_LANG["ad_log_ussa"] = "Update data for the following user: ";
 $PMF_LANG["ad_log_usde"] = "Deleted the following user: ";
@@ -1200,23 +1200,6 @@ $PMF_LANG['permission::administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "Sections";
-$PMF_LANG['ad_section_add'] = "Add Section";
-$PMF_LANG['ad_section_add_link'] = "Add Section";
-$PMF_LANG['ad_sections'] = 'Sections';
-$PMF_LANG['ad_section_details'] = "Section Details";
-$PMF_LANG['ad_section_name'] = "Name";
-$PMF_LANG['ad_section_description'] = "Description";
-$PMF_LANG['ad_section_membership'] = "Section Assignment";
-$PMF_LANG['ad_section_members'] = "Assignments";
-$PMF_LANG['ad_section_addMember'] = "+";
-$PMF_LANG['ad_section_removeMember'] = "-";
-$PMF_LANG['ad_section_deleteSection'] = "Delete Section";
-$PMF_LANG['ad_section_deleteQuestion'] = "Are you sure you want to delete this section?";
-$PMF_LANG['ad_section_error_delete'] = "The section could not be deleted. ";
-$PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
-$PMF_LANG['ad_section_suc'] = "The section was successfully added.";
-$PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
 $PMF_LANG['permission::viewadminlink'] = 'View admin link';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten

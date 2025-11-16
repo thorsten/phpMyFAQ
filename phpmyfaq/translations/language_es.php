@@ -1199,22 +1199,6 @@ $PMF_LANG['ad_group_rights'] = 'Permisos de grupo';
 
 // añadido v3.0.0-alpha.3 - 2018-09-20 por Timo
 $PMF_LANG['ad_menu_section_administration'] = "Secciones";
-$PMF_LANG['ad_section_add'] = "Añadir sección";
-$PMF_LANG['ad_section_add_link'] = "Añadir sección";
-$PMF_LANG['ad_sections'] = 'Secciones';
-$PMF_LANG['ad_section_details'] = "Detalles de la sección";
-$PMF_LANG['ad_section_name'] = "Nombre";
-$PMF_LANG['ad_section_description'] = "Descripción";
-$PMF_LANG['ad_section_membership'] = "Asignación de sección";
-$PMF_LANG['ad_section_members'] = "Asignaciones";
-$PMF_LANG['ad_section_addMember'] = "+";
-$PMF_LANG['ad_section_removeMember'] = "-";
-$PMF_LANG['ad_section_deleteSection'] = "Eliminar sección";
-$PMF_LANG['ad_section_deleteQuestion'] = "¿Estás seguro de que quieres eliminar esta sección?";
-$PMF_LANG['ad_section_error_delete'] = "La sección no pudo ser eliminada.";
-$PMF_LANG['ad_section_error_noName'] = "Por favor, introduzca un nombre para la sección.";
-$PMF_LANG['ad_section_suc'] = "La sección ha sido añadida correctamente.";
-$PMF_LANG['ad_section_deleted'] = "La sección fue eliminada con éxito.";
 $PMF_LANG['permission::viewadminlink'] = 'Ver enlace a la administración';
 
 // añadido v3.0.0-beta.3 - 2019-09-22 por Thorsten

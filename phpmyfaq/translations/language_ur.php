@@ -1182,22 +1182,6 @@ $PMF_LANG['ad_group_rights'] = 'گروپ کی اجازتیں';
 
 // شامل کیا گیا v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "حصوں کا انتظام";
-$PMF_LANG['ad_section_add'] = "نیا حصہ شامل کریں";
-$PMF_LANG['ad_section_add_link'] = "نیا حصہ شامل کریں";
-$PMF_LANG['ad_sections'] = 'حصے';
-$PMF_LANG['ad_section_details'] = "حصے کی تفصیلات";
-$PMF_LANG['ad_section_name'] = "نام";
-$PMF_LANG['ad_section_description'] = "تفصیل";
-$PMF_LANG['ad_section_membership'] = "حصے کی تفویض";
-$PMF_LANG['ad_section_members'] = "تفویضات";
-$PMF_LANG['ad_section_addMember'] = "+";
-$PMF_LANG['ad_section_removeMember'] = "-";
-$PMF_LANG['ad_section_deleteSection'] = "حصہ حذف کریں";
-$PMF_LANG['ad_section_deleteQuestion'] = "کیا آپ واقعی اس حصے کو حذف کرنا چاہتے ہیں؟";
-$PMF_LANG['ad_section_error_delete'] = "یہ حصہ حذف نہیں کیا جا سکا۔";
-$PMF_LANG['ad_section_error_noName'] = "براہ کرم ایک حصہ کا نام درج کریں۔";
-$PMF_LANG['ad_section_suc'] = "حصہ کامیابی سے شامل کر دیا گیا۔";
-$PMF_LANG['ad_section_deleted'] = "حصہ کامیابی سے حذف کر دیا گیا۔";
 $PMF_LANG['permission::viewadminlink'] = 'ایڈمن لنک دیکھیں';
 
 // شامل کیا گیا v3.0.0-beta.3 - 2019-09-22 by Thorsten

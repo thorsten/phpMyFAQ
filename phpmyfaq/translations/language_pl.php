@@ -1220,22 +1220,6 @@ $PMF_LANG['ad_meta_copy_snippet'] = 'Kopiuj fragment kodu szablonów';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Sekcje";
-$PMF_LANG['ad_section_add'] = "Dodaj Sekcję";
-$PMF_LANG['ad_section_add_link'] = "Dodaj Sekcję";
-$PMF_LANG['ad_sections'] = 'Sekcje';
-$PMF_LANG['ad_section_details'] = "Szczegóły Sekcji";
-$PMF_LANG['ad_section_name'] = "Nazwa";
-$PMF_LANG['ad_section_description'] = "Opis";
-$PMF_LANG['ad_section_membership'] = "Przypisanie Sekcji";
-$PMF_LANG['ad_section_members'] = "Przydziały";
-$PMF_LANG['ad_section_addMember'] = "+";
-$PMF_LANG['ad_section_removeMember'] = "-";
-$PMF_LANG['ad_section_deleteSection'] = "Usuń Sekcję";
-$PMF_LANG['ad_section_deleteQuestion'] = "Czy na pewno chcesz usunąć tę sekcję?";
-$PMF_LANG['ad_section_error_delete'] = "Sekcja nie mogła zostać usunięta. ";
-$PMF_LANG['ad_section_error_noName'] = "Proszę wprowadzić nazwę sekcji. ";
-$PMF_LANG['ad_section_suc'] = "Sekcja została pomyślnie dodana.";
-$PMF_LANG['ad_section_deleted'] = "Sekcja została pomyślnie usunięta.";
 $PMF_LANG['rightsLanguage::viewadminlink'] = 'Zobacz link administratora';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
