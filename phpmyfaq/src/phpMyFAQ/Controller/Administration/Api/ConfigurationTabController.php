@@ -42,56 +42,63 @@ final class ConfigurationTabController extends AbstractController
     /**
      * @throws TemplateException
      * @throws Exception
-     * @throws LoaderError
+     * @throws LoaderError*@throws \Exception
+     *
      */
-    #[Route('admin/api/configuration/list/{mode}')]
+    #[Route(path: 'admin/api/configuration/list/{mode}')]
     public function list(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $language = $this->container->get('phpmyfaq.language');
+        $language = $this->container->get(id: 'phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
         try {
             Translation::create()
                 ->setLanguagesDir(PMF_LANGUAGE_DIR)
-                ->setDefaultLanguage('en')
+                ->setDefaultLanguage(defaultLanguage: 'en')
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
         } catch (Exception $exception) {
             throw new BadRequestException($exception->getMessage());
         }
 
-        $mode = $request->get('mode');
+        $mode = $request->get(key: 'mode');
         $configurationList = Translation::getConfigurationItems($mode);
 
-        return $this->render('@admin/configuration/tab-list.twig', [
-            'mode' => $mode,
-            'configurationList' => $configurationList,
-            'configurationData' => $this->configuration->getAll(),
-            'specialCases' => [
-                'ldapSupport' => extension_loaded('ldap'),
-                'useSslForLogins' => Request::createFromGlobals()->isSecure(),
-                'useSslOnly' => Request::createFromGlobals()->isSecure(),
-                'ssoSupport' => Request::createFromGlobals()->server->get('REMOTE_USER'),
-                'buttonTes',
+        return $this->render(
+            file: '@admin/configuration/tab-list.twig',
+            context: [
+                'mode' => $mode,
+                'configurationList' => $configurationList,
+                'configurationData' => $this->configuration->getAll(),
+                'specialCases' => [
+                    'ldapSupport' => extension_loaded(extension: 'ldap'),
+                    'useSslForLogins' => Request::createFromGlobals()->isSecure(),
+                    'useSslOnly' => Request::createFromGlobals()->isSecure(),
+                    'ssoSupport' => Request::createFromGlobals()->server->get(key: 'REMOTE_USER'),
+                    'buttonTes',
+                ],
             ],
-        ]);
+        );
     }
 
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/configuration')]
+    #[Route(path: 'admin/api/configuration')]
     public function save(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $csrfToken = $request->get('pmf-csrf-token');
-        $configurationData = $request->get('edit');
+        $csrfToken = $request->get(key: 'pmf-csrf-token');
+        $configurationData = $request->get(key: 'edit');
         $oldConfigurationData = $this->configuration->getAll();
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'configuration',
+            requestToken: $csrfToken,
+        )) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -116,14 +123,18 @@ final class ConfigurationTabController extends AbstractController
         }
 
         if (isset($configurationData['records.attachmentsPath'])) {
-            if (false !== realpath($configurationData['records.attachmentsPath'])) {
-                $configurationData['records.attachmentsPath'] = str_replace(
-                    Request::createFromGlobals()->server->get('DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
-                    '',
-                    realpath($configurationData['records.attachmentsPath']),
-                );
-            } else {
+            $realPath = realpath($configurationData['records.attachmentsPath']);
+
+            if (false === $realPath) {
                 unset($configurationData['records.attachmentsPath']);
+            }
+
+            if (false !== $realPath) {
+                $configurationData['records.attachmentsPath'] = str_replace(
+                    search: Request::createFromGlobals()->server->get(key: 'DOCUMENT_ROOT') . DIRECTORY_SEPARATOR,
+                    replace: '',
+                    subject: $realPath,
+                );
             }
         }
 
@@ -165,7 +176,11 @@ final class ConfigurationTabController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/configuration/translations', name: 'admin.api.configuration.translations', methods: ['GET'])]
+    #[Route(
+        path: 'admin/api/configuration/translations',
+        name: 'admin.api.configuration.translations',
+        methods: ['GET'],
+    )]
     public function translations(): Response
     {
         $this->userIsAuthenticated();
@@ -175,37 +190,42 @@ final class ConfigurationTabController extends AbstractController
         $languages = LanguageHelper::getAvailableLanguages();
         if ($languages !== []) {
             return $response->setContent(LanguageHelper::renderLanguageOptions(
-                str_replace(['language_', '.php'], '', (string) $this->configuration->get(item: 'main.language')),
-                false,
-                true,
+                str_replace(
+                    ['language_', '.php'],
+                    replace: '',
+                    subject: (string) $this->configuration->get(item: 'main.language'),
+                ),
+                onlyThisLang: false,
+                fileLanguageValue: true,
             ));
         }
 
-        return $response->setContent('<option value="language_en.php">English</option>');
+        return $response->setContent(content: '<option value="language_en.php">English</option>');
     }
 
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
+    #[Route(path: 'admin/api/configuration/templates', name: 'admin.api.configuration.templates', methods: ['GET'])]
     public function templates(): Response
     {
         $this->userIsAuthenticated();
 
         $response = new Response();
-        $faqSystem = $this->container->get('phpmyfaq.system');
+        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
         $templates = $faqSystem->getAvailableTemplates();
         $htmlString = '';
 
         foreach ($templates as $template => $selected) {
-            $htmlString .= sprintf('<option%s>%s</option>', $selected === true ? ' selected' : '', $template);
+            $selectedAttribute = $selected === true ? ' selected' : '';
+            $htmlString .= "<option{$selectedAttribute}>{$template}</option>";
         }
 
         return $response->setContent($htmlString);
     }
 
     #[Route(
-        'admin/api/configuration/faqs-sorting-key',
+        path: 'admin/api/configuration/faqs-sorting-key',
         name: 'admin.api.configuration.faqs-sorting-key',
         methods: ['GET'],
     )]
@@ -213,11 +233,11 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingKeyOptions($request->get('current')));
+        return new Response(Helper::sortingKeyOptions($request->get(key: 'current')));
     }
 
     #[Route(
-        'admin/api/configuration/faqs-sorting-order',
+        path: 'admin/api/configuration/faqs-sorting-order',
         name: 'admin.api.configuration.faqs-sorting-order',
         methods: ['GET'],
     )]
@@ -225,11 +245,11 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingOrderOptions($request->get('current')));
+        return new Response(Helper::sortingOrderOptions($request->get(key: 'current')));
     }
 
     #[Route(
-        'admin/api/configuration/faqs-sorting-popular',
+        path: 'admin/api/configuration/faqs-sorting-popular',
         name: 'admin.api.configuration.faqs-sorting-popular',
         methods: ['GET'],
     )]
@@ -237,19 +257,19 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingPopularFaqsOptions($request->get('current')));
+        return new Response(Helper::sortingPopularFaqsOptions($request->get(key: 'current')));
     }
 
-    #[Route('admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
+    #[Route(path: 'admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
     public function permLevel(Request $request): Response
     {
         $this->userIsAuthenticated();
 
-        return new Response(PermissionHelper::permOptions($request->get('current')));
+        return new Response(PermissionHelper::permOptions($request->get(key: 'current')));
     }
 
     #[Route(
-        'admin/api/configuration/release-environment',
+        path: 'admin/api/configuration/release-environment',
         name: 'admin.api.configuration.release-environment',
         methods: ['GET'],
     )]
@@ -257,11 +277,11 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderReleaseTypeOptions($request->get('current')));
+        return new Response(Helper::renderReleaseTypeOptions($request->get(key: 'current')));
     }
 
     #[Route(
-        'admin/api/configuration/search-relevance',
+        path: 'admin/api/configuration/search-relevance',
         name: 'admin.api.configuration.search-relevance',
         methods: ['GET'],
     )]
@@ -269,14 +289,18 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::searchRelevanceOptions($request->get('current')));
+        return new Response(Helper::searchRelevanceOptions($request->get(key: 'current')));
     }
 
-    #[Route('admin/api/configuration/seo-metatags', name: 'admin.api.configuration.seo-metatags', methods: ['GET'])]
+    #[Route(
+        path: 'admin/api/configuration/seo-metatags',
+        name: 'admin.api.configuration.seo-metatags',
+        methods: ['GET'],
+    )]
     public function seoMetaTags(Request $request): Response
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderMetaRobotsDropdown($request->get('current')));
+        return new Response(Helper::renderMetaRobotsDropdown($request->get(key: 'current')));
     }
 }
