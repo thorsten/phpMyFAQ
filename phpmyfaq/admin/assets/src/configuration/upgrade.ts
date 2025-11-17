@@ -35,6 +35,61 @@ interface ResponseData {
   message?: string;
 }
 
+interface ProgressData {
+  progress?: string;
+}
+
+/**
+ * Handles streaming progress updates for a progress bar
+ * @param response - The fetch Response object with a readable stream
+ * @param progressBarId - The ID of the progress bar element
+ * @returns Promise that resolves when the stream is complete
+ */
+export const handleStreamingProgress = async (response: Response, progressBarId: string): Promise<void> => {
+  const progressBar = document.getElementById(progressBarId);
+
+  if (!progressBar) {
+    console.error(`Progress bar element with id "${progressBarId}" not found`);
+    return;
+  }
+
+  if (!response.body) {
+    console.error('Response body is null, cannot stream progress');
+    return;
+  }
+
+  const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+  const bar = progressBar; // Create a non-null reference for closure
+
+  async function pump(): Promise<void> {
+    const { done, value } = await reader.read();
+
+    if (done) {
+      bar.style.width = '100%';
+      bar.innerText = '100%';
+      bar.classList.remove('progress-bar-animated', 'bg-primary');
+      bar.classList.add('bg-success');
+      return;
+    }
+
+    const decodedValue: string = new TextDecoder().decode(value);
+    try {
+      const data: ProgressData = JSON.parse(decodedValue);
+      if (data.progress) {
+        bar.style.width = data.progress;
+        bar.innerText = data.progress;
+      }
+    } catch (e) {
+      // Ignore JSON parse errors for incomplete chunks
+      console.debug('JSON parse error (likely incomplete chunk):', e);
+    }
+
+    return pump();
+  }
+
+  await pump();
+};
+
 export const handleCheckForUpdates = (): void => {
   const checkHealthButton = document.getElementById('pmf-button-check-health') as HTMLButtonElement;
   const checkUpdateButton = document.getElementById('pmf-button-check-updates') as HTMLButtonElement;
@@ -213,39 +268,15 @@ export const handleCheckForUpdates = (): void => {
 const createTemporaryBackup = async (): Promise<void> => {
   try {
     const response = (await startTemporaryBackup()) as unknown as Response;
-
-    const progressBarBackup = document.getElementById('result-backup-package') as HTMLElement;
-    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
-
-    async function pump(): Promise<void> {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        progressBarBackup!.style.width = '100%';
-        progressBarBackup!.innerText = '100%';
-        progressBarBackup!.classList.remove('progress-bar-animated', 'bg-primary');
-        progressBarBackup!.classList.add('bg-success');
-        return;
-      }
-
-      const decodedValue: string = new TextDecoder().decode(value);
-      try {
-        const data = JSON.parse(decodedValue);
-        if (data.progress) {
-          progressBarBackup!.style.width = data.progress;
-          progressBarBackup!.innerText = data.progress;
-        }
-      } catch (e) {
-        // Ignore JSON parse errors for incomplete chunks
-        console.debug('JSON parse error:', e);
-      }
-
-      return pump();
-    }
-
-    await pump();
+    await handleStreamingProgress(response, 'result-backup-package');
   } catch (error) {
-    console.error(error);
+    console.error('Error during temporary backup:', error);
+    const progressBar = document.getElementById('result-backup-package') as HTMLElement | null;
+    if (progressBar) {
+      progressBar.classList.remove('progress-bar-animated', 'bg-primary');
+      progressBar.classList.add('bg-danger');
+    }
+    throw error;
   }
 
   await installPackage();
@@ -254,81 +285,40 @@ const createTemporaryBackup = async (): Promise<void> => {
 const installPackage = async (): Promise<void> => {
   try {
     const response = (await startInstallation()) as unknown as Response;
-
-    const progressBarInstallation = document.getElementById('result-install-package') as HTMLElement;
-    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
-
-    async function pump(): Promise<void> {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        progressBarInstallation!.style.width = '100%';
-        progressBarInstallation!.innerText = '100%';
-        progressBarInstallation!.classList.remove('progress-bar-animated', 'bg-primary');
-        progressBarInstallation!.classList.add('bg-success');
-        return;
-      }
-
-      const decodedValue: string = new TextDecoder().decode(value);
-      try {
-        const data = JSON.parse(decodedValue);
-        if (data.progress) {
-          progressBarInstallation!.style.width = data.progress;
-          progressBarInstallation!.innerText = data.progress;
-        }
-      } catch (e) {
-        // Ignore JSON parse errors for incomplete chunks
-        console.debug('JSON parse error:', e);
-      }
-
-      return pump();
-    }
-
-    await pump();
+    await handleStreamingProgress(response, 'result-install-package');
   } catch (error) {
-    console.error(error);
+    console.error('Error during package installation:', error);
+    const progressBar = document.getElementById('result-install-package') as HTMLElement | null;
+    if (progressBar) {
+      progressBar.classList.remove('progress-bar-animated', 'bg-primary');
+      progressBar.classList.add('bg-danger');
+    }
+    throw error;
   }
 
   await updateDatabase();
 };
 
 const updateDatabase = async (): Promise<void> => {
+  const card = document.getElementById('pmf-update-step-install-package') as HTMLElement | null;
+
   try {
     const response = (await startDatabaseUpdate()) as unknown as Response;
+    await handleStreamingProgress(response, 'result-update-database');
 
-    const progressBarInstallation = document.getElementById('result-update-database') as HTMLElement;
-    const reader: ReadableStreamDefaultReader<Uint8Array> = response.body!.getReader();
-    const card = document.getElementById('pmf-update-step-install-package') as HTMLElement;
-
-    async function pump(): Promise<void> {
-      const { done, value } = await reader.read();
-
-      if (done) {
-        progressBarInstallation!.style.width = '100%';
-        progressBarInstallation!.innerText = '100%';
-        progressBarInstallation!.classList.remove('progress-bar-animated', 'bg-primary');
-        progressBarInstallation!.classList.add('bg-success');
-        card.classList.add('text-bg-success');
-        return;
-      }
-
-      const decodedValue: string = new TextDecoder().decode(value);
-      try {
-        const data = JSON.parse(decodedValue);
-        if (data.progress) {
-          progressBarInstallation!.style.width = data.progress;
-          progressBarInstallation!.innerText = data.progress;
-        }
-      } catch (e) {
-        // Ignore JSON parse errors for incomplete chunks
-        console.debug('JSON parse error:', e);
-      }
-
-      return pump();
+    if (card) {
+      card.classList.add('text-bg-success');
     }
-
-    await pump();
   } catch (error) {
-    console.error(error);
+    console.error('Error during database update:', error);
+    const progressBar = document.getElementById('result-update-database') as HTMLElement | null;
+    if (progressBar) {
+      progressBar.classList.remove('progress-bar-animated', 'bg-primary');
+      progressBar.classList.add('bg-danger');
+    }
+    if (card) {
+      card.classList.add('text-bg-danger');
+    }
+    throw error;
   }
 };
