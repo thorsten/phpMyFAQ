@@ -216,16 +216,25 @@ const createTemporaryBackup = async (): Promise<void> => {
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarBackup!.style.width = '100%';
         progressBarBackup!.innerText = '100%';
-        progressBarBackup!.classList.remove('progress-bar-animated');
+        progressBarBackup!.classList.remove('progress-bar-animated', 'bg-primary');
+        progressBarBackup!.classList.add('bg-success');
         return;
-      } else {
-        progressBarBackup!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarBackup!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+      }
+
+      const decodedValue: string = new TextDecoder().decode(value);
+      try {
+        const data = JSON.parse(decodedValue);
+        if (data.progress) {
+          progressBarBackup!.style.width = data.progress;
+          progressBarBackup!.innerText = data.progress;
+        }
+      } catch (e) {
+        // Ignore JSON parse errors for incomplete chunks
+        console.debug('JSON parse error:', e);
       }
 
       return pump();
@@ -248,16 +257,25 @@ const installPackage = async (): Promise<void> => {
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarInstallation!.style.width = '100%';
         progressBarInstallation!.innerText = '100%';
-        progressBarInstallation!.classList.remove('progress-bar-animated');
+        progressBarInstallation!.classList.remove('progress-bar-animated', 'bg-primary');
+        progressBarInstallation!.classList.add('bg-success');
         return;
-      } else {
-        progressBarInstallation!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarInstallation!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+      }
+
+      const decodedValue: string = new TextDecoder().decode(value);
+      try {
+        const data = JSON.parse(decodedValue);
+        if (data.progress) {
+          progressBarInstallation!.style.width = data.progress;
+          progressBarInstallation!.innerText = data.progress;
+        }
+      } catch (e) {
+        // Ignore JSON parse errors for incomplete chunks
+        console.debug('JSON parse error:', e);
       }
 
       return pump();
@@ -281,17 +299,26 @@ const updateDatabase = async (): Promise<void> => {
 
     async function pump(): Promise<void> {
       const { done, value } = await reader.read();
-      const decodedValue: string = new TextDecoder().decode(value);
 
       if (done) {
         progressBarInstallation!.style.width = '100%';
         progressBarInstallation!.innerText = '100%';
-        progressBarInstallation!.classList.remove('progress-bar-animated');
+        progressBarInstallation!.classList.remove('progress-bar-animated', 'bg-primary');
+        progressBarInstallation!.classList.add('bg-success');
         card.classList.add('text-bg-success');
         return;
-      } else {
-        progressBarInstallation!.style.width = JSON.parse(JSON.stringify(decodedValue)).progress;
-        progressBarInstallation!.innerText = JSON.parse(JSON.stringify(decodedValue)).progress;
+      }
+
+      const decodedValue: string = new TextDecoder().decode(value);
+      try {
+        const data = JSON.parse(decodedValue);
+        if (data.progress) {
+          progressBarInstallation!.style.width = data.progress;
+          progressBarInstallation!.innerText = data.progress;
+        }
+      } catch (e) {
+        // Ignore JSON parse errors for incomplete chunks
+        console.debug('JSON parse error:', e);
       }
 
       return pump();
