@@ -119,6 +119,7 @@ export const handleCheckForUpdates = (): void => {
           card.classList.add('text-bg-success');
           result.replaceWith(addElement('p', { innerText: response.message! }));
           spinner.classList.add('d-none');
+          checkUpdateButton.disabled = true;
         }
       } catch (error) {
         console.error(error);
@@ -154,6 +155,7 @@ export const handleCheckForUpdates = (): void => {
           divExtractPackage!.classList.remove('d-none');
           result.replaceWith(addElement('p', { innerText: response.success! }));
           spinner.classList.add('d-none');
+          downloadButton.disabled = true;
         }
 
         if (response.error) {
@@ -188,6 +190,7 @@ export const handleCheckForUpdates = (): void => {
           divInstallPackage!.classList.remove('d-none');
           result.replaceWith(addElement('p', { innerText: response.message! }));
           spinner.classList.add('d-none');
+          extractButton.disabled = true;
         }
       } catch (error) {
         console.error(error);
