@@ -115,7 +115,7 @@ export const startTemporaryBackup = async (): Promise<Response> => {
       },
     });
 
-    return await response.json();
+    return response;
   } catch (error) {
     throw error;
   }
@@ -131,7 +131,7 @@ export const startInstallation = async (): Promise<Response> => {
       },
     });
 
-    return await response.json();
+    return response;
   } catch (error) {
     throw error;
   }
@@ -147,7 +147,7 @@ export const startDatabaseUpdate = async (): Promise<Response> => {
       },
     });
 
-    return await response.json();
+    return response;
   } catch (error) {
     throw error;
   }
