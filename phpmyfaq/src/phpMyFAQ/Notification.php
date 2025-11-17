@@ -150,7 +150,7 @@ readonly class Notification
 
         $title = $faq->faqRecord['title'];
 
-        $url = '%s?action=faq&cat=%d&id=%d&artlang=%s';
+        $url = '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s';
         $faqUrl = sprintf(
             $url,
             $this->configuration->getDefaultUrl(),
@@ -219,7 +219,7 @@ readonly class Notification
 
         $title = $newsData['header'];
 
-        $url = '%s?action=news&newsid=%d&newslang=%s';
+        $url = '%sindex.php?action=news&newsid=%d&newslang=%s';
         $newsUrl = sprintf($url, $this->configuration->getDefaultUrl(), $newsData['id'], $newsData['lang']);
         $link = new Link($newsUrl, $this->configuration);
         $link->setTitle($newsData['header']);
