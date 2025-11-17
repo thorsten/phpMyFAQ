@@ -231,7 +231,7 @@ class Upgrade extends AbstractSetup
         });
 
         foreach ($files as $file) {
-            $file = realpath($file);
+            $file = $file->getRealPath();
             if (!str_contains($file, $this->upgradeDirectory . DIRECTORY_SEPARATOR)) {
                 if (is_dir($file)) {
                     $zipArchive->addEmptyDir(str_replace(
