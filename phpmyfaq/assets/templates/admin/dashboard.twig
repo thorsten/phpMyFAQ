@@ -225,7 +225,7 @@
           <ul class="list-unstyled">
             {% if adminDashboardInactiveFaqs|length > 0 %}
               {% for inactiveFaqs in adminDashboardInactiveFaqs %}
-                <li>
+                <li class="mb-2">
                   <i class="bi bi-question-circle"></i>
                   <a href="{{ inactiveFaqs.url }}">{{ inactiveFaqs.question }}</a>
                 </li>
@@ -249,7 +249,7 @@
               {% for u in adminDashboardLatestUsers %}
                 <li class="mb-2">
                   <i class="bi bi-person-circle"></i>
-                  <strong>{{ u.display_name|default(u.login) }}</strong>
+                  <a href="./user/edit/{{ u.id }}">{{ u.display_name|default(u.login) }}</a>
                   {% if u.member_since_iso %}
                     <div class="small text-muted">{{ 'msgMemberSince' | translate | default('Member since') }}: {{ u.member_since_iso }}</div>
                   {% endif %}

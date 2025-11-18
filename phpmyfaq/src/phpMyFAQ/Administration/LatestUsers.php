@@ -41,7 +41,7 @@ final readonly class LatestUsers
         $db = $this->configuration->getDb();
 
         $query = sprintf(
-            'SELECT fu.login, fu.member_since, fud.display_name FROM %sfaquser fu LEFT JOIN %sfaquserdata fud '
+            'SELECT fu.user_id, fu.login, fu.member_since, fud.display_name FROM %sfaquser fu LEFT JOIN %sfaquserdata fud '
             . 'ON (fud.user_id = fu.user_id) WHERE fu.user_id <> -1 ORDER BY fu.member_since DESC',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -51,6 +51,7 @@ final readonly class LatestUsers
         if ($result) {
             while ($row = $db->fetchArray($result)) {
                 $users[] = [
+                    'id' => (int) ($row['user_id'] ?? 0),
                     'login' => (string) ($row['login'] ?? ''),
                     'display_name' => (string) ($row['display_name'] ?? ''),
                     'member_since_iso' => !empty($row['member_since']) ? Date::createIsoDate($row['member_since']) : '',
