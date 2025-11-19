@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main Rating class.
  *
@@ -9,19 +7,21 @@ declare(strict_types=1);
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
+ * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link  https://www.phpmyfaq.de
- * @since 2007-03-31
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-31
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language\Plurals;
-use Symfony\Component\HttpFoundation\Request;
+use phpMyFAQ\Rating\RatingRepository;
 
 /**
  * Class Rating
@@ -36,12 +36,18 @@ readonly class Rating
     private Plurals $plurals;
 
     /**
+     * Rating repository.
+     */
+    private RatingRepository $repository;
+
+    /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
         $this->plurals = new Plurals();
+        $this->repository = new RatingRepository($configuration);
     }
 
     /**
@@ -49,15 +55,9 @@ readonly class Rating
      */
     public function get(int $id): string
     {
-        $query = sprintf(
-            'SELECT (vote/usr) as voting, usr FROM %sfaqvoting WHERE artikel = %d',
-            Database::getTablePrefix(),
-            $id,
-        );
-        $result = $this->configuration->getDb()->query($query);
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
+        $row = $this->repository->fetchByRecordId($id);
 
+        if ($row !== null) {
             return sprintf(
                 ' <span data-rating="%s">%s</span> (' . $this->plurals->GetMsg('plmsgVotes', (int) $row->usr) . ')',
                 round((int) $row->voting, 2),
@@ -76,15 +76,7 @@ readonly class Rating
      */
     public function check(int $id, string $ip): bool
     {
-        $check = Request::createFromGlobals()->server->get('REQUEST_TIME') - 300;
-        $query = sprintf(
-            "SELECT id FROM %sfaqvoting WHERE artikel = %d AND (ip = '%s' AND datum > '%s')",
-            Database::getTablePrefix(),
-            $id,
-            $this->configuration->getDb()->escape($ip),
-            $check,
-        );
-        return !$this->configuration->getDb()->numRows($this->configuration->getDb()->query($query));
+        return $this->repository->isVoteAllowed($id, $ip);
     }
 
     /**
@@ -92,16 +84,7 @@ readonly class Rating
      */
     public function getNumberOfVotings(int $recordId): int
     {
-        $query = sprintf('SELECT usr FROM %sfaqvoting WHERE artikel = %d', Database::getTablePrefix(), $recordId);
-        if (!($result = $this->configuration->getDb()->query($query))) {
-            return 0;
-        }
-
-        if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            return $row->usr;
-        }
-
-        return 0;
+        return $this->repository->getNumberOfVotings($recordId);
     }
 
     /**
@@ -109,17 +92,7 @@ readonly class Rating
      */
     public function create(Vote $vote): bool
     {
-        $query = sprintf(
-            "INSERT INTO %sfaqvoting VALUES (%d, %d, %d, 1, %d, '%s')",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
-            $vote->getFaqId(),
-            $vote->getVote(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $this->configuration->getDb()->escape($vote->getIp()),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->create($vote);
     }
 
     /**
@@ -127,16 +100,7 @@ readonly class Rating
      */
     public function update(Vote $vote): bool
     {
-        $query = sprintf(
-            "UPDATE %sfaqvoting SET vote = vote + %d, usr = usr + 1, datum = %d, ip = '%s' WHERE artikel = %d",
-            Database::getTablePrefix(),
-            $vote->getVote(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $this->configuration->getDb()->escape($vote->getIp()),
-            $vote->getFaqId(),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->update($vote);
     }
 
     /**
@@ -144,8 +108,6 @@ readonly class Rating
      */
     public function deleteAll(): bool
     {
-        return (bool) $this->configuration
-            ->getDb()
-            ->query(sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix()));
+        return $this->repository->deleteAll();
     }
 }

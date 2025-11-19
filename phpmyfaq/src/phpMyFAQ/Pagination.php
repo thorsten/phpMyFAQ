@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Pagination handler class.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-27
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
