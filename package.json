@@ -65,7 +65,7 @@
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "pretty-quick": "^4.2.2",
-    "sass": "^1.94.1",
+    "sass": "^1.94.2",
     "sigmund": "^1.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.2",
