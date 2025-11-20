@@ -18,7 +18,7 @@
   <link href="{{ baseHref }}assets/public/styles.css" rel="stylesheet" media="screen">
   <link href="{{ baseHref }}assets/templates/{{ tplSetName }}/theme.css" rel="stylesheet" media="screen">
   <style type="text/css" media="screen">
-    {{ customCss }}
+    {{ customCss | raw }}
   </style>
   <link href="{{ baseHref }}assets/images/favicon.ico" rel="shortcut icon">
   <link href="{{ currentPageUrl }}" rel="canonical">
