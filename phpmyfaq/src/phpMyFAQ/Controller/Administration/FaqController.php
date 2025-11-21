@@ -75,8 +75,8 @@ final class FaqController extends AbstractAdministrationController
         return $this->render('@admin/content/faq.overview.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('edit-faq'),
-            'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('faq-overview'),
+            'csrfTokenSearch' => Token::getInstance($sessions)->getTokenInput('pmf-csrf-token'),
+            'csrfTokenOverview' => Token::getInstance($sessions)->getTokenString('pmf-csrf-token'),
             'categories' => $category->getCategoryTree(),
             'numberOfRecords' => $categoryRelation->getNumberOfFaqsPerCategory(),
             'numberOfComments' => $comments->getNumberOfCommentsByCategory(),
@@ -627,7 +627,7 @@ final class FaqController extends AbstractAdministrationController
         );
 
         return [
-            'csrfToken' => $token->getTokenString('edit-faq'),
+            'csrfToken' => $token->getTokenString('pmf-csrf-token'),
             'csrfTokenDeleteAttachment' => $token->getTokenString('delete-attachment'),
             'csrfTokenUploadAttachment' => $token->getTokenString('upload-attachment'),
             'isEditorEnabled' => $this->configuration->get(item: 'main.enableWysiwygEditor'),

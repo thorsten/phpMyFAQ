@@ -13,7 +13,7 @@
  * @since     2023-04-30
  */
 
-import { create, update } from '../api';
+import { create, update, deleteFaq } from '../api';
 import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
 
@@ -41,7 +41,7 @@ export const handleSaveFaqData = (): void => {
       }
 
       if (response?.success) {
-        const data = JSON.parse(response.data);
+        const data = response.data ? JSON.parse(response.data) : {};
         const faqId = document.getElementById('faqId') as HTMLInputElement;
         const revisionId = document.getElementById('revisionId') as HTMLInputElement;
 
@@ -50,10 +50,53 @@ export const handleSaveFaqData = (): void => {
 
         pushNotification(response.success);
       } else {
-        pushErrorNotification(response.error);
+        if (response && response.error) {
+          pushErrorNotification(response.error);
+        }
       }
     });
   }
+};
+
+export const handleDeleteFaqEditorModal = (): void => {
+  const deleteButton = document.getElementById('faqEditorDelete') as HTMLButtonElement | null;
+  const confirmDeleteButton = document.getElementById('pmf-confirm-delete-faq') as HTMLButtonElement | null;
+
+  if (!deleteButton || !confirmDeleteButton) {
+    return;
+  }
+
+  confirmDeleteButton.addEventListener('click', async (event: Event): Promise<void> => {
+    event.preventDefault();
+
+    const faqId = deleteButton.getAttribute('data-faq-id') as string;
+    const faqLanguage = deleteButton.getAttribute('data-faq-language') as string;
+    const csrfToken = deleteButton.getAttribute('data-pmf-csrf-token') as string;
+
+    if (!faqId || !faqLanguage || !csrfToken) {
+      pushErrorNotification('Fehlende Parameter zum Löschen der FAQ.');
+      return;
+    }
+
+    try {
+      const response = await deleteFaq(faqId, faqLanguage, csrfToken);
+
+      if (response?.success) {
+        pushNotification(response.success);
+        // Nach kurzer Verzögerung zur FAQ-Übersicht umleiten
+        window.setTimeout(() => {
+          window.location.href = './faqs';
+        }, 1000);
+      } else if (response?.error) {
+        pushErrorNotification(response.error);
+      } else {
+        pushErrorNotification('Beim Löschen der FAQ ist ein unbekannter Fehler aufgetreten.');
+      }
+    } catch (error) {
+      console.error(error);
+      pushErrorNotification('Beim Löschen der FAQ ist ein Fehler aufgetreten.');
+    }
+  });
 };
 
 export const handleUpdateQuestion = (): void => {

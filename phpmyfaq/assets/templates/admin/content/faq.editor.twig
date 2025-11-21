@@ -449,8 +449,18 @@
             <button class="btn btn-info" type="reset">
               {{ ad_gen_reset }}
             </button>
+
+            {% if editExistingFaq %}
+            <button class="btn btn-danger" type="button" id="faqEditorDelete" data-bs-toggle="modal"
+                    data-bs-target="#deleteFaqModal" data-faq-id="{{ faqData['id'] }}"
+                    data-faq-language="{{ faqData['lang'] }}"
+                    data-pmf-csrf-token="{{ csrfToken }}">
+              <i class="bi bi-trash" aria-hidden="true"></i> {{ 'msgDelete' | translate }}
+            </button>
+            {% endif %}
+
             <button class="btn btn-primary" type="submit" id="faqEditorSubmit">
-              {{ ad_entry_save }}
+              <i class="bi bi-save" aria-hidden="true"></i> {{ ad_entry_save }}
             </button>
           {% endif %}
         </div>
@@ -604,6 +614,29 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
             {{ ad_att_butt }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete FAQ Modal -->
+  <div class="modal fade" id="deleteFaqModal" tabindex="-1" role="dialog" aria-labelledby="deleteFaqModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteFaqModalLabel">{{ 'msgDelete' | translate }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ 'msgConfirmDeleteFAQ' | translate }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            {{ 'msgCancel' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger" id="pmf-confirm-delete-faq">
+            {{ 'msgDelete' | translate }}
           </button>
         </div>
       </div>

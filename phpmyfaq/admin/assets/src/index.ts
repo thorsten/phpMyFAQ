@@ -64,7 +64,7 @@ import {
   handleToggleVisibility,
   handleResetCategoryImage,
   handleResetButton,
-  handleDeleteFaqModal,
+  handleDeleteFaqEditorModal,
 } from './content';
 import { handleUserList, handleUsers } from './user';
 import { handleGroups } from './group';
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async (): Promise<void> => {
   handleFileFilter();
   handleSaveFaqData();
   handleUpdateQuestion();
-  handleDeleteFaqModal();
+  handleDeleteFaqEditorModal();
   handleResetButton();
   await handleFaqOverview();
 

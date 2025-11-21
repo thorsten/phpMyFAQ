@@ -46,7 +46,7 @@ final class ImageController extends AbstractController
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];
         $timestamp = time();
 
-        if (!Token::getInstance($session)->verifyToken('edit-faq', $request->query->get('csrf'))) {
+        if (!Token::getInstance($session)->verifyToken('pmf-csrf-token', $request->query->get('csrf'))) {
             return $this->json([
                 'success' => false,
                 'data' => ['code' => Response::HTTP_UNAUTHORIZED],

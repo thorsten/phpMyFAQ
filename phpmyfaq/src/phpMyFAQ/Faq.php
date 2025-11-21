@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main FAQ class. Yes, it's very huge.
  *
@@ -21,6 +19,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-12-20
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -1117,7 +1117,7 @@ class Faq
         $result = $this->configuration->getDb()->query($query);
 
         if ($row = $this->configuration->getDb()->fetchObject($result)) {
-            return $row->solution_id;
+            return (int) $row->solution_id;
         }
 
         return $this->getNextSolutionId();

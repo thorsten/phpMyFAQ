@@ -1518,5 +1518,6 @@ $PMF_LANG['msgBackupGoTo'] = 'Gehe zum Sicherungsbereich';
 $PMF_LANG['msgNewestUsers'] = 'Neueste Benutzer';
 $PMF_LANG['msgMemberSince'] = 'Mitglied seit';
 $PMF_LANG['msgNumberRegisteredUsers'] = 'Benutzer';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Möchten Sie diese FAQ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.';
 
 return $PMF_LANG;

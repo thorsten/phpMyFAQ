@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin FAQ Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -15,6 +13,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-28
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
@@ -82,7 +82,10 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'pmf-csrf-token',
+            $data->{'pmf-csrf-token'},
+        )) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -292,7 +295,10 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->{'pmf-csrf-token'})) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            'pmf-csrf-token',
+            $data->{'pmf-csrf-token'},
+        )) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -538,7 +544,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -582,7 +588,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -627,10 +633,10 @@ final class FaqController extends AbstractController
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('faq-overview', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+            return $this->json([
+                'error' => 'CSRF Token - ' . Translation::get(languageKey: 'msgNoPermission'),
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         $adminLog = $this->container->get('phpmyfaq.admin.admin-log');
@@ -655,7 +661,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-faq', $data->csrf)) {
+        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
