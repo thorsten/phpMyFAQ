@@ -33,7 +33,7 @@ final class OpenSearchController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws Exception
      */
-    #[Route('/opensearch', name: 'admin.opensearch', methods: ['GET'])]
+    #[Route(path: '/opensearch', name: 'admin.opensearch', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

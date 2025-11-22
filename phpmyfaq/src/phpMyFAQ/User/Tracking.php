@@ -187,7 +187,7 @@ class Tracking
             . $this->request->server->get('REQUEST_TIME')
             . ";\n";
 
-        $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date('dmY');
+        $file = PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY');
 
         if (!is_file($file)) {
             touch($file);

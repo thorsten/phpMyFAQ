@@ -37,7 +37,7 @@ final class BookmarkController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route('api/bookmark/create')]
+    #[Route(path: 'api/bookmark/create')]
     public function create(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -71,7 +71,7 @@ final class BookmarkController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route('api/bookmark/delete')]
+    #[Route(path: 'api/bookmark/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -103,7 +103,7 @@ final class BookmarkController extends AbstractController
      * @throws JsonException
      * @throws Exception
      */
-    #[Route('api/bookmark/delete-all')]
+    #[Route(path: 'api/bookmark/delete-all')]
     public function deleteAll(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();

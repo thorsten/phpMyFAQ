@@ -33,7 +33,7 @@ final class GroupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/group/groups')]
+    #[Route(path: 'admin/api/group/groups')]
     public function listGroups(): JsonResponse
     {
         $this->userHasGroupPermission();
@@ -59,7 +59,7 @@ final class GroupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/group/users')]
+    #[Route(path: 'admin/api/group/users')]
     public function listUsers(): JsonResponse
     {
         $this->userHasGroupPermission();
@@ -81,7 +81,7 @@ final class GroupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/group/data')]
+    #[Route(path: 'admin/api/group/data')]
     public function groupData(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
@@ -96,7 +96,7 @@ final class GroupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/group/members')]
+    #[Route(path: 'admin/api/group/members')]
     public function listMembers(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();
@@ -120,7 +120,7 @@ final class GroupController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/group/permissions')]
+    #[Route(path: 'admin/api/group/permissions')]
     public function listPermissions(Request $request): JsonResponse
     {
         $this->userHasGroupPermission();

@@ -385,7 +385,14 @@ class CurrentUser extends User
             Database::getTablePrefix(),
             session_id(),
             $requestTime,
-            $updateLastLogin ? "last_login = '" . date('YmdHis', $requestTime) . "'," : '',
+            $updateLastLogin
+                ? "last_login = '"
+                . date(
+                    format: 'YmdHis',
+                    timestamp: $requestTime,
+                )
+                . "',"
+                : '',
             Request::createFromGlobals()->getClientIp(),
             $this->getUserId(),
         );

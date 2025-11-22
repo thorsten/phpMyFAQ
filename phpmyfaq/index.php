@@ -552,7 +552,7 @@ $templateVars = [
     'msgSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
     'loginPageMessage' => Translation::get(languageKey: 'loginPageMessage'),
     'msgAdvancedSearch' => Translation::get(languageKey: 'msgAdvancedSearch'),
-    'currentYear' => date('Y', time()),
+    'currentYear' => date(format: 'Y', timestamp: time()),
     'cookieConsentEnabled' =>  $faqConfig->get('layout.enableCookieConsent'),
 ];
 
@@ -614,7 +614,7 @@ $templateVars = [
     'msgPrivacyNote' => Translation::get(languageKey: 'msgPrivacyNote'),
     'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
     'cookiePreferences' => Translation::get(languageKey: 'cookiePreferences'),
-    'currentYear' => date('Y', time()),
+    'currentYear' => date(format: 'Y', timestamp: time()),
 ];
 
 //

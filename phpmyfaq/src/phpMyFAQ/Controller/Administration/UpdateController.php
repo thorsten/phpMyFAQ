@@ -35,7 +35,7 @@ final class UpdateController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/update', name: 'admin.update', methods: ['GET'])]
+    #[Route(path: '/update', name: 'admin.update', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

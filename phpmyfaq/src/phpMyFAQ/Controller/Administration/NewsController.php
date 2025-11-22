@@ -41,7 +41,7 @@ final class NewsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/news', name: 'admin.news', methods: ['GET'])]
+    #[Route(path: '/news', name: 'admin.news', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
@@ -65,7 +65,7 @@ final class NewsController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/news/add', name: 'admin.news.add', methods: ['GET'])]
+    #[Route(path: '/news/add', name: 'admin.news.add', methods: ['GET'])]
     public function add(Request $request): Response
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);
@@ -86,7 +86,7 @@ final class NewsController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/news/edit/:newsId', name: 'admin.news.edit', methods: ['GET'])]
+    #[Route(path: '/news/edit/:newsId', name: 'admin.news.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::NEWS_ADD);

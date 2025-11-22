@@ -40,7 +40,7 @@ final class WebAuthnController extends AbstractController
     /**
      * @throws Exception|LoaderError
      */
-    #[Route('/', name: 'public.webauthn.index')]
+    #[Route(path: '/', name: 'public.webauthn.index')]
     public function index(Request $request): Response
     {
         $system = new System();

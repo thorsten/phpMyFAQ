@@ -33,7 +33,7 @@ final class OrphanedFaqsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/orphaned-faqs', name: 'admin.content.orphaned-faqs', methods: ['GET'])]
+    #[Route(path: '/orphaned-faqs', name: 'admin.content.orphaned-faqs', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

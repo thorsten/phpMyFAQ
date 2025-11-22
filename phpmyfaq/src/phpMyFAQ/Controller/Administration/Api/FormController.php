@@ -33,7 +33,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class FormController extends AbstractController
 {
-    #[Route('admin/api/forms/activate')]
+    #[Route(path: 'admin/api/forms/activate')]
     public function activateInput(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
@@ -59,7 +59,7 @@ final class FormController extends AbstractController
         }
     }
 
-    #[Route('admin/api/forms/required')]
+    #[Route(path: 'admin/api/forms/required')]
     public function setInputAsRequired(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
@@ -85,7 +85,7 @@ final class FormController extends AbstractController
         }
     }
 
-    #[Route('admin/api/forms/translation-edit')]
+    #[Route(path: 'admin/api/forms/translation-edit')]
     public function editTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
@@ -115,7 +115,7 @@ final class FormController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/forms/translation-delete')]
+    #[Route(path: 'admin/api/forms/translation-delete')]
     public function deleteTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
@@ -141,7 +141,7 @@ final class FormController extends AbstractController
         }
     }
 
-    #[Route('admin/api/forms/translation-add')]
+    #[Route(path: 'admin/api/forms/translation-add')]
     public function addTranslation(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);

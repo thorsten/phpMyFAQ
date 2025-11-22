@@ -38,7 +38,7 @@ final class CommentsController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/comments')]
+    #[Route(path: '/comments')]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);

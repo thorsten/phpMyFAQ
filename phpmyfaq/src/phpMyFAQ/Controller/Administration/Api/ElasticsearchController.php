@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ElasticsearchController extends AbstractController
 {
-    #[Route('./admin/api/elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
+    #[Route(path: './admin/api/elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -52,7 +52,7 @@ final class ElasticsearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('./admin/api/elasticsearch/drop', name: 'admin.api.elasticsearch.drop', methods: ['DELETE'])]
+    #[Route(path: './admin/api/elasticsearch/drop', name: 'admin.api.elasticsearch.drop', methods: ['DELETE'])]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -72,7 +72,7 @@ final class ElasticsearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/elasticsearch/import', name: 'admin.api.elasticsearch.import', methods: ['POST'])]
+    #[Route(path: './admin/api/elasticsearch/import', name: 'admin.api.elasticsearch.import', methods: ['POST'])]
     public function import(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -94,7 +94,7 @@ final class ElasticsearchController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('./admin/api/elasticsearch/statistics', name: 'admin.api.elasticsearch.statistics', methods: ['GET'])]
+    #[Route(path: './admin/api/elasticsearch/statistics', name: 'admin.api.elasticsearch.statistics', methods: ['GET'])]
     public function statistics(): JsonResponse
     {
         $this->userIsAuthenticated();

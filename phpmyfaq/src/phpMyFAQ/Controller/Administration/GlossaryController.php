@@ -35,7 +35,7 @@ final class GlossaryController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/glossary')]
+    #[Route(path: '/glossary')]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GLOSSARY_ADD);

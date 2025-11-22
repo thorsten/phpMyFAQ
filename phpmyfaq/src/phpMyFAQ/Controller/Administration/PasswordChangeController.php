@@ -36,7 +36,7 @@ final class PasswordChangeController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/password/change', name: 'admin.password.change', methods: ['GET'])]
+    #[Route(path: '/password/change', name: 'admin.password.change', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::PASSWORD_CHANGE);
@@ -53,7 +53,7 @@ final class PasswordChangeController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/password/update', name: 'admin.password.update', methods: ['POST'])]
+    #[Route(path: '/password/update', name: 'admin.password.update', methods: ['POST'])]
     public function update(Request $request): Response
     {
         $this->userHasPermission(PermissionType::PASSWORD_CHANGE);

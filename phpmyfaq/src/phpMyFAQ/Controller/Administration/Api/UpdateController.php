@@ -44,7 +44,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/health-check')]
+    #[Route(path: 'admin/api/health-check')]
     public function healthCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -74,7 +74,7 @@ final class UpdateController extends AbstractController
         }
     }
 
-    #[Route('admin/api/versions')]
+    #[Route(path: 'admin/api/versions')]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -92,7 +92,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/update-check')]
+    #[Route(path: 'admin/api/update-check')]
     public function updateCheck(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -131,7 +131,7 @@ final class UpdateController extends AbstractController
      * @throws \JsonException
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/download-package')]
+    #[Route(path: 'admin/api/download-package')]
     public function downloadPackage(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -165,7 +165,7 @@ final class UpdateController extends AbstractController
         return $this->json(['success' => Translation::get(languageKey: 'downloadSuccessful')], Response::HTTP_OK);
     }
 
-    #[Route('admin/api/extract-package')]
+    #[Route(path: 'admin/api/extract-package')]
     public function extractPackage(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -187,7 +187,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route('admin/api/create-temporary-backup')]
+    #[Route(path: 'admin/api/create-temporary-backup')]
     public function createTemporaryBackup(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -209,7 +209,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route('admin/api/install-package')]
+    #[Route(path: 'admin/api/install-package')]
     public function installPackage(): StreamedResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -230,7 +230,7 @@ final class UpdateController extends AbstractController
         });
     }
 
-    #[Route('admin/api/update-database')]
+    #[Route(path: 'admin/api/update-database')]
     public function updateDatabase(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -255,7 +255,7 @@ final class UpdateController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/cleanup')]
+    #[Route(path: 'admin/api/cleanup')]
     public function cleanUp(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

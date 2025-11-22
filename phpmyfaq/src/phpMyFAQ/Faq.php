@@ -138,7 +138,7 @@ class Faq
 
         $currentTable = $orderBy === 'visits' ? 'fv' : 'fd';
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
@@ -286,7 +286,7 @@ class Faq
             );
         }
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
@@ -476,7 +476,7 @@ class Faq
         $records = implode(', ', $faqIds);
         $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "
@@ -616,7 +616,7 @@ class Faq
             $question = nl2br((string) $row->thema);
             $answer = $row->content;
             $active = 'yes' === $row->active;
-            $expired = date('YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > $row->date_end;
 
             if (!$isAdmin) {
                 if (!$active) {
@@ -661,11 +661,11 @@ class Faq
                 'author' => '',
                 'email' => '',
                 'comment' => '',
-                'date' => Date::createIsoDate(date('YmdHis')),
+                'date' => Date::createIsoDate(date(format: 'YmdHis')),
                 'dateStart' => '',
                 'dateEnd' => '',
                 'notes' => '',
-                'created' => date('c'),
+                'created' => date(format: 'c'),
             ];
         }
     }
@@ -943,10 +943,10 @@ class Faq
             $this->configuration->getDb()->escape($faqEntity->getAuthor()),
             $this->configuration->getDb()->escape($faqEntity->getEmail()),
             $faqEntity->isComment() ? 'y' : 'n',
-            date('YmdHis'),
+            date(format: 'YmdHis'),
             '00000000000000',
             '99991231235959',
-            date('Y-m-d H:i:s'),
+            date(format: 'Y-m-d H:i:s'),
             $this->configuration->getDb()->escape($faqEntity->getNotes()),
         );
 
@@ -1236,7 +1236,7 @@ class Faq
             $question = nl2br((string) $row->thema);
             $content = $row->content;
             $active = 'yes' == $row->active;
-            $expired = date('YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > $row->date_end;
 
             if (!$active) {
                 $content = Translation::get(languageKey: 'err_inactiveArticle');
@@ -1426,7 +1426,7 @@ class Faq
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
             $content = $row->content;
             $active = 'yes' == $row->active;
-            $expired = date('YmdHis') > $row->date_end;
+            $expired = date(format: 'YmdHis') > $row->date_end;
 
             if (!$active) {
                 $content = Translation::get(languageKey: 'err_inactiveArticle');

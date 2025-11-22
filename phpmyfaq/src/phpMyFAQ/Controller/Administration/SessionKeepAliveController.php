@@ -36,7 +36,7 @@ final class SessionKeepAliveController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/session-keep-alive', name: 'admin.session.keepalive', methods: ['GET'])]
+    #[Route(path: '/session-keep-alive', name: 'admin.session.keepalive', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -47,7 +47,7 @@ final class SessionKeepAliveController extends AbstractAdministrationController
         return $this->render('@admin/session-keepalive.twig', [
             'metaLanguage' => $language,
             'phpMyFAQVersion' => System::getVersion(),
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('admin-logout'),
             'msgConfirm' => sprintf(Translation::get(languageKey: 'ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),

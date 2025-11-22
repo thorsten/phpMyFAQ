@@ -40,7 +40,7 @@ final class MediaBrowserController extends AbstractController
      * @throws LoaderError
      * @throws Exception
      */
-    #[Route('admin/api/media-browser', name: 'admin.media.browser', methods: ['GET'])]
+    #[Route(path: 'admin/api/media-browser', name: 'admin.media.browser', methods: ['GET'])]
     public function index(Request $request): JsonResponse|Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
@@ -91,7 +91,10 @@ final class MediaBrowserController extends AbstractController
                 'size' => Utils::formatBytes($file->getSize()),
                 'isImage' => true,
                 'thumb' => $file->getFilename(),
-                'changed' => date('Y-m-d H:i:s', $file->getMTime()),
+                'changed' => date(
+                    format: 'Y-m-d H:i:s',
+                    timestamp: $file->getMTime(),
+                ),
             ];
         }
 

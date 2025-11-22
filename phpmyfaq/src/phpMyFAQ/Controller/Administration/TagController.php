@@ -34,7 +34,7 @@ final class TagController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/tags', name: 'admin.tags', methods: ['GET'])]
+    #[Route(path: '/tags', name: 'admin.tags', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userIsAuthenticated();

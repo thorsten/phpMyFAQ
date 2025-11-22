@@ -35,7 +35,7 @@ final class SystemInformationController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/system', name: 'admin.system', methods: ['GET'])]
+    #[Route(path: '/system', name: 'admin.system', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

@@ -19,7 +19,7 @@ final class PluginController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/plugins')]
+    #[Route(path: '/plugins')]
     public function index(Request $request): Response
     {
         $pluginManager = $this->container->get(id: 'phpmyfaq.plugin.plugin-manager');

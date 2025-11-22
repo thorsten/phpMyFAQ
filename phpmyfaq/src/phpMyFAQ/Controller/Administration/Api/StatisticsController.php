@@ -37,7 +37,7 @@ final class StatisticsController extends AbstractController
      * @throws Exception|JsonException
      * @throws \Exception
      */
-    #[Route('./admin/api/statistics/admin-log', methods: ['DELETE'])]
+    #[Route(path: './admin/api/statistics/admin-log', methods: ['DELETE'])]
     public function deleteAdminLog(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -68,7 +68,11 @@ final class StatisticsController extends AbstractController
      * @throws Exception|JsonException
      * @throws \Exception
      */
-    #[Route('./admin/api/statistics/sessions', name: 'admin.api.statistics.sessions.truncate', methods: ['DELETE'])]
+    #[Route(
+        path: './admin/api/statistics/sessions',
+        name: 'admin.api.statistics.sessions.truncate',
+        methods: ['DELETE'],
+    )]
     public function truncateSessions(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -94,7 +98,7 @@ final class StatisticsController extends AbstractController
      * @throws Exception|JsonException
      * @throws \Exception
      */
-    #[Route('./admin/api/statistics/search-terms', methods: ['DELETE'])]
+    #[Route(path: './admin/api/statistics/search-terms', methods: ['DELETE'])]
     public function truncateSearchTerms(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -124,7 +128,11 @@ final class StatisticsController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/statistics/ratings/clear', name: 'admin.api.statistics.ratings.clear', methods: ['DELETE'])]
+    #[Route(
+        path: './admin/api/statistics/ratings/clear',
+        name: 'admin.api.statistics.ratings.clear',
+        methods: ['DELETE'],
+    )]
     public function clearRatings(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -152,7 +160,11 @@ final class StatisticsController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/statistics/visits/clear', name: 'admin.api.statistics.visits.clear', methods: ['DELETE'])]
+    #[Route(
+        path: './admin/api/statistics/visits/clear',
+        name: 'admin.api.statistics.visits.clear',
+        methods: ['DELETE'],
+    )]
     public function clearVisits(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);

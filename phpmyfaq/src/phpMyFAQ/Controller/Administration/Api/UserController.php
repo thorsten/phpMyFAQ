@@ -45,7 +45,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/user/users')]
+    #[Route(path: 'admin/api/user/users')]
     public function list(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -88,7 +88,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/user/users/csv')]
+    #[Route(path: 'admin/api/user/users/csv')]
     public function csvExport(): Response
     {
         $this->userHasUserPermission();
@@ -143,7 +143,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/user/data')]
+    #[Route(path: 'admin/api/user/data')]
     public function userData(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -173,7 +173,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/user/permissions')]
+    #[Route(path: 'admin/api/user/permissions')]
     public function userPermissions(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -190,7 +190,7 @@ final class UserController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/user/activate')]
+    #[Route(path: 'admin/api/user/activate')]
     public function activate(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -222,7 +222,7 @@ final class UserController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/user/overwrite-password')]
+    #[Route(path: 'admin/api/user/overwrite-password')]
     public function overwritePassword(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -272,7 +272,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/user/delete')]
+    #[Route(path: 'admin/api/user/delete')]
     public function deleteUser(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_DELETE);
@@ -317,7 +317,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/user/add')]
+    #[Route(path: 'admin/api/user/add')]
     public function addUser(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
@@ -390,7 +390,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception|\Exception|TransportExceptionInterface
      */
-    #[Route('admin/api/user/edit')]
+    #[Route(path: 'admin/api/user/edit')]
     public function editUser(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_EDIT);
@@ -457,7 +457,7 @@ final class UserController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/user/update-rights')]
+    #[Route(path: 'admin/api/user/update-rights')]
     public function updateUserRights(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::USER_EDIT);

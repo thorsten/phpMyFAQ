@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class StopWordController extends AbstractController
 {
-    #[Route('admin/api/stopwords')]
+    #[Route(path: 'admin/api/stopwords')]
     public function list(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -50,7 +50,7 @@ final class StopWordController extends AbstractController
         return $this->json(['error' => 'Language not supported'], Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route('admin/api/stopword/delete')]
+    #[Route(path: 'admin/api/stopword/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -78,7 +78,7 @@ final class StopWordController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/stopword/save')]
+    #[Route(path: 'admin/api/stopword/save')]
     public function save(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

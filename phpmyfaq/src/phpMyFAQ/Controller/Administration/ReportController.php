@@ -34,7 +34,7 @@ final class ReportController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/statistics/report', name: 'admin.statistics.report', methods: ['GET'])]
+    #[Route(path: '/statistics/report', name: 'admin.statistics.report', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::REPORTS);

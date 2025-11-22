@@ -34,7 +34,7 @@ final class ElasticsearchController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/elasticsearch', name: 'admin.elasticsearch', methods: ['GET'])]
+    #[Route(path: '/elasticsearch', name: 'admin.elasticsearch', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);

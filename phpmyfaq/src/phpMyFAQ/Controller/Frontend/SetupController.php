@@ -40,7 +40,7 @@ final class SetupController
      * @throws TemplateException
      * @throws \Exception
      */
-    #[Route('/setup', name: 'public.setup.update')]
+    #[Route(path: '/setup', name: 'public.setup.update')]
     public function index(Request $request): Response
     {
         $system = new System();
@@ -62,7 +62,7 @@ final class SetupController
         return $this->render('@setup/index.twig', [
             'newVersion' => System::getVersion(),
             'setupType' => 'Setup',
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
             'currentLanguage' => 'en',
             'documentationUrl' => System::getDocumentationUrl(),
             'checkBasicError' => $checkBasicError,
@@ -80,7 +80,7 @@ final class SetupController
      * @throws TemplateException
      * @throws \Exception
      */
-    #[Route('/setup/install', name: 'public.setup.install')]
+    #[Route(path: '/setup/install', name: 'public.setup.install')]
     public function install(): Response
     {
         $system = new System();
@@ -97,7 +97,7 @@ final class SetupController
         return $this->render('@setup/install.twig', [
             'newVersion' => System::getVersion(),
             'setupType' => 'Setup',
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
             'documentationUrl' => System::getDocumentationUrl(),
             'installationError' => $installationError,
         ]);
@@ -108,7 +108,7 @@ final class SetupController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/update', name: 'public.setup.update')]
+    #[Route(path: '/update', name: 'public.setup.update')]
     public function update(Request $request): Response
     {
         $currentStep = Filter::filterVar($request->get('step'), FILTER_VALIDATE_INT);
@@ -129,7 +129,7 @@ final class SetupController
             'installedVersion' => $configuration->getVersion(),
             'newVersion' => System::getVersion(),
             'checkBasicError' => $checkBasicError,
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
             'documentationUrl' => System::getDocumentationUrl(),
             'configTableNotAvailable' => $update->isConfigTableNotAvailable($configuration->getDb()),
         ]);

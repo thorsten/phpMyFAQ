@@ -37,7 +37,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/statistics/sessions', name: 'admin.statistics.sessions', methods: ['GET'])]
+    #[Route(path: '/statistics/sessions', name: 'admin.statistics.sessions', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -76,8 +76,11 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             'renderedMonthSelector' => $statisticsHelper->renderMonthSelector(),
             'buttonDeleteMonth' => Translation::get(languageKey: 'ad_stat_delete'),
             'csrfTokenExport' => Token::getInstance($session)->getTokenString('export-sessions'),
-            'dateToday' => date('Y-m-d'),
-            'datePickerMinDate' => date('Y-m-d', $stats->firstDate),
+            'dateToday' => date(format: 'Y-m-d'),
+            'datePickerMinDate' => date(
+                format: 'Y-m-d',
+                timestamp: $stats->firstDate,
+            ),
         ]);
     }
 
@@ -86,7 +89,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/statistics/sessions/:day', name: 'admin.statistics.session', methods: ['GET'])]
+    #[Route(path: '/statistics/sessions/:day', name: 'admin.statistics.session', methods: ['GET'])]
     public function viewDay(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -103,7 +106,10 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'adminHeaderSessionsPerDay' => Translation::get(languageKey: 'ad_sess_session'),
-            'currentDay' => date('Y-m-d', $day),
+            'currentDay' => date(
+                format: 'Y-m-d',
+                timestamp: $day,
+            ),
             'msgIpAddress' => Translation::get(languageKey: 'ad_sess_ip'),
             'msgSessionDate' => Translation::get(languageKey: 'ad_sess_s_date'),
             'msgSession' => Translation::get(languageKey: 'ad_sess_session'),
@@ -116,7 +122,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/statistics/session/:sessionId', name: 'admin.statistics.session', methods: ['POST'])]
+    #[Route(path: '/statistics/session/:sessionId', name: 'admin.statistics.session', methods: ['POST'])]
     public function viewSession(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
@@ -125,7 +131,15 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
 
         $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $time = $session->getTimeFromSessionId($sessionId);
-        $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
+        $trackingData = explode(
+            "\n",
+            file_get_contents(PMF_CONTENT_DIR
+            . '/core/data/tracking'
+            . date(
+                format: 'dmY',
+                timestamp: $time,
+            )),
+        );
 
         return $this->render('@admin/statistics/sessions.session.twig', [
             ...$this->getHeader($request),
@@ -137,7 +151,10 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
             'ad_sess_browser' => Translation::get(languageKey: 'ad_sess_browser'),
             'ad_sess_ip' => Translation::get(languageKey: 'ad_sess_ip'),
             'trackingData' => $trackingData,
-            'thisDay' => date('Y-m-d', $time),
+            'thisDay' => date(
+                format: 'Y-m-d',
+                timestamp: $time,
+            ),
         ]);
     }
 }

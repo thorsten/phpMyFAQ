@@ -391,7 +391,10 @@ class User
             $this->getUserId(),
             $this->configuration->getDb()->escape($login),
             Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            date('YmdHis', Request::createFromGlobals()->server->get('REQUEST_TIME')),
+            date(
+                format: 'YmdHis',
+                timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME'),
+            ),
         );
 
         $this->configuration->getDb()->query($insert);

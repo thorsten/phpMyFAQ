@@ -33,7 +33,7 @@ final class OpenSearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/opensearch/create', name: 'admin.api.opensearch.create', methods: ['POST'])]
+    #[Route(path: './admin/api/opensearch/create', name: 'admin.api.opensearch.create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -53,7 +53,7 @@ final class OpenSearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/opensearch/drop', name: 'admin.api.opensearch.drop', methods: ['DELETE'])]
+    #[Route(path: './admin/api/opensearch/drop', name: 'admin.api.opensearch.drop', methods: ['DELETE'])]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -73,7 +73,7 @@ final class OpenSearchController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/opensearch/import', name: 'admin.api.opensearch.import', methods: ['POST'])]
+    #[Route(path: './admin/api/opensearch/import', name: 'admin.api.opensearch.import', methods: ['POST'])]
     public function import(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
@@ -96,7 +96,7 @@ final class OpenSearchController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('./admin/api/opensearch/statistics', name: 'admin.api.opensearch.statistics', methods: ['GET'])]
+    #[Route(path: './admin/api/opensearch/statistics', name: 'admin.api.opensearch.statistics', methods: ['GET'])]
     public function statistics(): JsonResponse
     {
         $this->userIsAuthenticated();

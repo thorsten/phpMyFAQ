@@ -42,7 +42,7 @@ final class BackupController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/backup', name: 'admin.backup', methods: ['GET'])]
+    #[Route(path: '/backup', name: 'admin.backup', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::BACKUP);
@@ -63,7 +63,7 @@ final class BackupController extends AbstractAdministrationController
         ]);
     }
 
-    #[Route('/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
+    #[Route(path: '/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
     public function export(Request $request): Response
     {
         $this->userHasPermission(PermissionType::BACKUP);
@@ -130,7 +130,7 @@ final class BackupController extends AbstractAdministrationController
      * @throws \Exception
      * @todo: Refactor this method
      */
-    #[Route('/backup/restore', name: 'admin.backup.restore', methods: ['POST'])]
+    #[Route(path: '/backup/restore', name: 'admin.backup.restore', methods: ['POST'])]
     public function restore(Request $request): Response
     {
         $this->userHasPermission(PermissionType::RESTORE);

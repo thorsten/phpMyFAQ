@@ -38,7 +38,7 @@ final class AttachmentController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('./admin/api/content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
+    #[Route(path: './admin/api/content/attachments', name: 'admin.api.content.attachments', methods: ['GET'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);
@@ -117,7 +117,11 @@ final class AttachmentController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('./admin/api/content/attachments/upload', name: 'admin.api.content.attachments.upload', methods: ['POST'])]
+    #[Route(
+        path: './admin/api/content/attachments/upload',
+        name: 'admin.api.content.attachments.upload',
+        methods: ['POST'],
+    )]
     public function upload(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_ADD);
@@ -147,7 +151,7 @@ final class AttachmentController extends AbstractController
                             'msgImageCouldNotBeUploaded',
                         )], Response::HTTP_INTERNAL_SERVER_ERROR);
                     }
-                } catch (AttachmentException|FileException|FileNotFoundException $exception) {
+                } catch (AttachmentException|FileNotFoundException $exception) {
                     return $this->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
                 }
 

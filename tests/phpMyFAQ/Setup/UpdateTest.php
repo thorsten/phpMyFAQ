@@ -36,10 +36,10 @@ class UpdateTest extends TestCase
         $this->update->createConfigBackup($configPath);
 
         $this->assertFileExists(
-            PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date('Y-m-d') . '.zip'
+            PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date(format: 'Y-m-d') . '.zip'
         );
 
-        unlink(PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date('Y-m-d') . '.zip');
+        unlink(PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date(format: 'Y-m-d') . '.zip');
     }
 
     public function testIsConfigTableNotAvailable(): void

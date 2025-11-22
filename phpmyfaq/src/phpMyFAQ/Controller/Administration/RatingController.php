@@ -37,7 +37,7 @@ final class RatingController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/statistics/rating', name: 'admin.statistics.rating', methods: ['GET'])]
+    #[Route(path: '/statistics/rating', name: 'admin.statistics.rating', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);

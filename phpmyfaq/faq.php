@@ -212,7 +212,7 @@ $searchHelper = new SearchHelper($faqConfig);
 $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 
 // Is the faq expired?
-$expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
+$expired = (date(format: 'YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Number of comments
 $numComments = $comment->getNumberOfComments();

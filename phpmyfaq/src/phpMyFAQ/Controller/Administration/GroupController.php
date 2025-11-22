@@ -39,7 +39,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/group', name: 'admin.group', methods: ['GET'])]
+    #[Route(path: '/group', name: 'admin.group', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
@@ -59,7 +59,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/group/add', name: 'admin.group.add', methods: ['GET'])]
+    #[Route(path: '/group/add', name: 'admin.group.add', methods: ['GET'])]
     public function add(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
@@ -78,7 +78,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/group/create', name: 'admin.group.create', methods: ['POST'])]
+    #[Route(path: '/group/create', name: 'admin.group.create', methods: ['POST'])]
     public function create(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_ADD);
@@ -133,7 +133,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/group/confirm', name: 'admin.group.confirm', methods: ['POST'])]
+    #[Route(path: '/group/confirm', name: 'admin.group.confirm', methods: ['POST'])]
     public function confirm(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_DELETE);
@@ -157,7 +157,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws Exception
      */
-    #[Route('/group/delete', name: 'admin.group.delete', methods: ['POST'])]
+    #[Route(path: '/group/delete', name: 'admin.group.delete', methods: ['POST'])]
     public function delete(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_DELETE);
@@ -195,7 +195,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/group/update', name: 'admin.group.update', methods: ['POST'])]
+    #[Route(path: '/group/update', name: 'admin.group.update', methods: ['POST'])]
     public function update(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
@@ -239,7 +239,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/group/update/members', name: 'admin.group.update.members', methods: ['POST'])]
+    #[Route(path: '/group/update/members', name: 'admin.group.update.members', methods: ['POST'])]
     public function updateMembers(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
@@ -280,7 +280,7 @@ final class GroupController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/group/update/permissions', name: 'admin.group.update.permissions', methods: ['POST'])]
+    #[Route(path: '/group/update/permissions', name: 'admin.group.update.permissions', methods: ['POST'])]
     public function updatePermissions(Request $request): Response
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);

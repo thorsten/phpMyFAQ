@@ -35,7 +35,7 @@ final class StickyFaqsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/sticky-faqs')]
+    #[Route(path: '/sticky-faqs')]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);

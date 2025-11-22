@@ -1189,6 +1189,6 @@ class Update extends AbstractSetup
 
     private function getBackupFilename(): string
     {
-        return sprintf('phpmyfaq-config-backup.%s.zip', date('Y-m-d'));
+        return sprintf('phpmyfaq-config-backup.%s.zip', date(format: 'Y-m-d'));
     }
 }

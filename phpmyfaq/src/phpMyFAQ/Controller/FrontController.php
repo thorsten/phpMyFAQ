@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FrontController extends AbstractController
 {
-    #[Route('/{path}', name: 'front_controller', requirements: ['path' => '.+'])]
+    #[Route(path: '/{path}', name: 'front_controller', requirements: ['path' => '.+'])]
     public function handle(Request $request, string $path): Response
     {
         return new Response('Handled by FrontController: ' . $path);

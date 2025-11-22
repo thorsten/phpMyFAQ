@@ -47,7 +47,7 @@ final class UnauthorizedUserController
     /**
      * @throws Exception
      */
-    #[Route('api/user/password/update', methods: ['PUT'])]
+    #[Route(path: 'api/user/password/update', methods: ['PUT'])]
     public function updatePassword(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());

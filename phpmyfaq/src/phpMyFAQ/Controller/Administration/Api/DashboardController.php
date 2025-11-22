@@ -38,7 +38,7 @@ final class DashboardController extends AbstractController
     /**
      * @throws JsonException
      */
-    #[Route('admin/api/dashboard/verify', name: 'admin.api.dashboard.verify', methods: ['POST'])]
+    #[Route(path: 'admin/api/dashboard/verify', name: 'admin.api.dashboard.verify', methods: ['POST'])]
     public function verify(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -52,7 +52,7 @@ final class DashboardController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/dashboard/versions', name: 'admin.api.dashboard.versions', methods: ['GET'])]
+    #[Route(path: 'admin/api/dashboard/versions', name: 'admin.api.dashboard.versions', methods: ['GET'])]
     public function versions(): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -80,7 +80,7 @@ final class DashboardController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/dashboard/visits', name: 'admin.api.dashboard.visits', methods: ['GET'])]
+    #[Route(path: 'admin/api/dashboard/visits', name: 'admin.api.dashboard.visits', methods: ['GET'])]
     public function visits(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -97,7 +97,7 @@ final class DashboardController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('admin/api/dashboard/topten', name: 'admin.api.dashboard.topten', methods: ['GET'])]
+    #[Route(path: 'admin/api/dashboard/topten', name: 'admin.api.dashboard.topten', methods: ['GET'])]
     public function topTen(): JsonResponse
     {
         $this->userIsAuthenticated();

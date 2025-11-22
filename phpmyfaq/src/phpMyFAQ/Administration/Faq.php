@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin FAQ class
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-04-02
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
@@ -90,7 +90,12 @@ class Faq
             $categoryId,
             $this->configuration->getDb()->escape($this->getLanguage()),
             $onlyInactive ? "AND fd.active = 'no'" : '',
-            $onlyNew ? sprintf("AND fd.created > '%s'", date('Y-m-d H:i:s', strtotime('-1 month'))) : '',
+            $onlyNew
+                ? sprintf("AND fd.created > '%s'", date(
+                    format: 'Y-m-d H:i:s',
+                    timestamp: strtotime('-1 month'),
+                ))
+                : '',
         );
 
         $result = $this->configuration->getDb()->query($query);

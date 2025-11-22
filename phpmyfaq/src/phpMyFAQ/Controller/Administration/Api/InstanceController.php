@@ -43,7 +43,7 @@ final class InstanceController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/instance/add')]
+    #[Route(path: 'admin/api/instance/add')]
     public function add(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
@@ -148,7 +148,7 @@ final class InstanceController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/instance/delete')]
+    #[Route(path: 'admin/api/instance/delete')]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);

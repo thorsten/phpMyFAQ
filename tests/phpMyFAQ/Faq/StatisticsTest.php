@@ -228,7 +228,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $expectedQuery = "SELECT id FROM faqdata WHERE active = 'yes'  AND date_start <= '" . date('YmdHis') . "' AND date_end >= '" . date('YmdHis') . "'";
+        $expectedQuery = "SELECT id FROM faqdata WHERE active = 'yes'  AND date_start <= '" . date(format: 'YmdHis') . "' AND date_end >= '" . date(format: 'YmdHis') . "'";
 
         $resultMock = $this->createMock(\SQLite3Result::class);
 
@@ -321,7 +321,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $resultMock = $this->createMock(\SQLite3Result::class);
 
         $this->dbMock->expects($this->once())

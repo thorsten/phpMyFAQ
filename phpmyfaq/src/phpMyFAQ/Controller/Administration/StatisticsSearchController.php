@@ -39,7 +39,7 @@ final class StatisticsSearchController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/statistics/search', name: 'admin.statistics.search', methods: ['GET'])]
+    #[Route(path: '/statistics/search', name: 'admin.statistics.search', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);

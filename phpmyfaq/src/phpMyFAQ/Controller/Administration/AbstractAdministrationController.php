@@ -54,7 +54,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
             'metaRobots' => $this->configuration->get(item: 'seo.metaTagsAdmin'),
             'templateSetName' => TwigWrapper::getTemplateSetName(),
             'pageDirection' => Translation::get(languageKey: 'direction'),
@@ -378,7 +378,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
             'currentLanguage' => $this->configuration->getLanguage()->getLanguage(),
             'currentTimeStamp' => time(),
-            'currentYear' => date('Y'),
+            'currentYear' => date(format: 'Y'),
         ];
     }
 }

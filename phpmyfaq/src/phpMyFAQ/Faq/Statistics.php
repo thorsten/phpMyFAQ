@@ -64,7 +64,7 @@ class Statistics
      */
     public function totalFaqs(?string $language = null): int
     {
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
 
         $query = sprintf(
             "SELECT id FROM %sfaqdata WHERE active = 'yes' %s AND date_start <= '%s' AND date_end >= '%s'",
@@ -186,7 +186,7 @@ class Statistics
     {
         global $sids;
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             '
@@ -308,7 +308,7 @@ class Statistics
      */
     public function getTrendingData(int $count = PMF_NUMBER_RECORDS_TRENDING, ?string $language = null): array
     {
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             '
@@ -437,7 +437,7 @@ class Statistics
     ): array {
         global $sids;
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query =
             'SELECT
@@ -532,7 +532,10 @@ class Statistics
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
-                $data['last_visit'] = date('c', (int) $row->last_visit);
+                $data['last_visit'] = date(
+                    format: 'c',
+                    timestamp: (int) $row->last_visit,
+                );
 
                 $title = $row->question;
                 $url = sprintf(
@@ -573,7 +576,7 @@ class Statistics
         $topten = [];
         $data = [];
 
-        $now = date('YmdHis');
+        $now = date(format: 'YmdHis');
         $queryHelper = new QueryHelper($this->user, $this->groups);
         $query = sprintf(
             "SELECT

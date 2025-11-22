@@ -35,7 +35,7 @@ final class ImportController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/import', name: 'admin.import', methods: ['GET'])]
+    #[Route(path: '/import', name: 'admin.import', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);

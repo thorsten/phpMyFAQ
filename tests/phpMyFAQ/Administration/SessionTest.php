@@ -137,7 +137,7 @@ class SessionTest extends TestCase
         $expectedVisits = [];
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $visit = new stdClass();
-            $visit->date = date('Y-m-d', $date);
+            $visit->date = date(format: 'Y-m-d', timestamp: $date);
             $visit->number = ($date == $startDate + 86400) ? 1 : 0;
             $expectedVisits[] = $visit;
         }

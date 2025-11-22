@@ -37,7 +37,7 @@ final class ExportController extends AbstractAdministrationController
      * @throws Exception
      * @throws LoaderError
      */
-    #[Route('/export', name: 'admin.export', methods: ['GET'])]
+    #[Route(path: '/export', name: 'admin.export', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::EXPORT);

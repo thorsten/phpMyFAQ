@@ -43,7 +43,7 @@ final class ExportController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/export/file', name: 'admin.api.export.file', methods: ['GET'])]
+    #[Route(path: 'admin/api/export/file', name: 'admin.api.export.file', methods: ['GET'])]
     public function exportFile(Request $request): void
     {
         $this->userHasPermission(PermissionType::EXPORT);
@@ -76,7 +76,7 @@ final class ExportController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('admin/api/export/report', name: 'admin.api.export.report', methods: ['POST'])]
+    #[Route(path: 'admin/api/export/report', name: 'admin.api.export.report', methods: ['POST'])]
     public function exportReport(Request $request): Response
     {
         $this->userHasPermission(PermissionType::REPORTS);

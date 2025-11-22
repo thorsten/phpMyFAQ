@@ -40,7 +40,7 @@ final class UserController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('api/user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
+    #[Route(path: 'api/user/data/update', name: 'api.private.user.update', methods: ['PUT'])]
     public function updateData(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -135,7 +135,7 @@ final class UserController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route('api/user/data/export', name: 'api.private.user.data.export', methods: ['POST'])]
+    #[Route(path: 'api/user/data/export', name: 'api.private.user.data.export', methods: ['POST'])]
     public function exportUserData(Request $request): Response
     {
         $this->userIsAuthenticated();
@@ -189,7 +189,7 @@ final class UserController extends AbstractController
         $zip->addFromString('userdata.json', $json);
         $zip->close();
 
-        $fileName = sprintf('phpmyfaq-userdata-%d-%s.zip', $this->currentUser->getUserId(), date('YmdHis'));
+        $fileName = sprintf('phpmyfaq-userdata-%d-%s.zip', $this->currentUser->getUserId(), date(format: 'YmdHis'));
 
         $response = new BinaryFileResponse($tmpFile);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $fileName);
@@ -202,7 +202,7 @@ final class UserController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route('api/user/request-removal', methods: ['POST'])]
+    #[Route(path: 'api/user/request-removal', methods: ['POST'])]
     public function requestUserRemoval(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
@@ -275,7 +275,7 @@ final class UserController extends AbstractController
     /**
      * @throws \Exception|Exception|TwoFactorAuthException
      */
-    #[Route('api/user/remove-twofactor', methods: ['POST'])]
+    #[Route(path: 'api/user/remove-twofactor', methods: ['POST'])]
     public function removeTwofactorConfig(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());

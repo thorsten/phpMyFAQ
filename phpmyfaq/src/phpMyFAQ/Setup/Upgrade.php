@@ -329,7 +329,10 @@ class Upgrade extends AbstractSetup
     public function getPath(): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_PATH, date('Y-m-d', strtotime('-1 days')));
+            return sprintf(self::GITHUB_PATH, date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-1 days'),
+            ));
         }
 
         return '';
@@ -341,7 +344,10 @@ class Upgrade extends AbstractSetup
     public function getFilename(string $version): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_FILENAME, date('Y-m-d', strtotime('-1 days')));
+            return sprintf(self::GITHUB_FILENAME, date(
+                format: 'Y-m-d',
+                timestamp: strtotime('-1 days'),
+            ));
         }
 
         return sprintf(self::PHPMYFAQ_FILENAME, $version);

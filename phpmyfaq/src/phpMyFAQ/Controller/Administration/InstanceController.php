@@ -38,7 +38,7 @@ final class InstanceController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/instances', name: 'admin.instances', methods: ['GET'])]
+    #[Route(path: '/instances', name: 'admin.instances', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
@@ -55,7 +55,7 @@ final class InstanceController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/instance/edit/:id', name: 'admin.instance.edit', methods: ['GET'])]
+    #[Route(path: '/instance/edit/:id', name: 'admin.instance.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);
@@ -85,7 +85,7 @@ final class InstanceController extends AbstractAdministrationController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('/instance/update', name: 'admin.instance.update', methods: ['POST'])]
+    #[Route(path: '/instance/update', name: 'admin.instance.update', methods: ['POST'])]
     public function update(Request $request): Response
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);

@@ -35,7 +35,7 @@ class HtaccessUpdater
             throw new Exception('The .htaccess file does not exist at: ' . $htaccessPath);
         }
 
-        $backupPath = $htaccessPath . '.backup-' . date('Y-m-d-H-i-s');
+        $backupPath = $htaccessPath . '.backup-' . date(format: 'Y-m-d-H-i-s');
         if (!copy($htaccessPath, $backupPath)) {
             throw new Exception('Failed to create backup of .htaccess file');
         }

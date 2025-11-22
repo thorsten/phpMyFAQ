@@ -123,7 +123,7 @@ class MailTest extends TestCase
         $timestamp = strtotime('2023-01-01 12:00:00');
         $result = Mail::getDate($timestamp);
 
-        $this->assertEquals(date('r', $timestamp), $result);
+        $this->assertEquals(date(format: 'r', timestamp: $timestamp), $result);
     }
 
     public function testGetTimeWithRequestTimeSet(): void

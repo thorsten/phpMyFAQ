@@ -40,7 +40,7 @@ final class CategoryController extends AbstractController
      * @throws Exception
      * @throws \Exception
      */
-    #[Route('admin/api/category/delete', name: 'admin.api.category.delete', methods: ['DELETE'])]
+    #[Route(path: 'admin/api/category/delete', name: 'admin.api.category.delete', methods: ['DELETE'])]
     public function delete(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_DELETE);
@@ -93,7 +93,7 @@ final class CategoryController extends AbstractController
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    #[Route('admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
+    #[Route(path: 'admin/api/category/permissions', name: 'admin.api.category.permissions', methods: ['GET'])]
     public function permissions(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -118,7 +118,7 @@ final class CategoryController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('admin/api/category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
+    #[Route(path: 'admin/api/category/translations', name: 'admin.api.category.translations', methods: ['GET'])]
     public function translations(Request $request): JsonResponse
     {
         $this->userIsAuthenticated();
@@ -135,7 +135,7 @@ final class CategoryController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('admin/api/category/update-order', name: 'admin.api.category.update-order', methods: ['POST'])]
+    #[Route(path: 'admin/api/category/update-order', name: 'admin.api.category.update-order', methods: ['POST'])]
     public function updateOrder(Request $request): JsonResponse
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);

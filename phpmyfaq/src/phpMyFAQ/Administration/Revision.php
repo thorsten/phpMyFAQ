@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The FAQ revisions class.
  *
@@ -17,11 +15,12 @@ declare(strict_types=1);
  * @since     2020-11-01
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
-use phpMyFAQ\Strings;
 
 /**
  * Class Revision
@@ -96,7 +95,7 @@ readonly class Revision
             while ($row = $this->configuration->getDb()->fetchObject($result)) {
                 $revisionData[] = [
                     'revision_id' => $row->revision_id,
-                    'updated' => $faqId === 0 ? date('YmdHis') : $row->updated,
+                    'updated' => $faqId === 0 ? date(format: 'YmdHis') : $row->updated,
                     'author' => $faqId === 0 ? ucfirst($faqAuthor) : $row->author,
                 ];
             }

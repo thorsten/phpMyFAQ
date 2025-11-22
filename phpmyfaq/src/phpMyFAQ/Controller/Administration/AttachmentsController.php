@@ -39,7 +39,7 @@ final class AttachmentsController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/attachments', name: 'admin.attachments', methods: ['GET'])]
+    #[Route(path: '/attachments', name: 'admin.attachments', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::ATTACHMENT_DELETE);

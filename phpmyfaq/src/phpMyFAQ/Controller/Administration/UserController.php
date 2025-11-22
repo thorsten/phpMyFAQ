@@ -38,7 +38,7 @@ final class UserController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/user', name: 'admin.user', methods: ['GET'])]
+    #[Route(path: '/user', name: 'admin.user', methods: ['GET'])]
     public function index(Request $request): Response
     {
         $this->userHasPermission(PermissionType::USER_ADD);
@@ -58,7 +58,7 @@ final class UserController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/user/edit/:userId', name: 'admin.user.edit', methods: ['GET'])]
+    #[Route(path: '/user/edit/:userId', name: 'admin.user.edit', methods: ['GET'])]
     public function edit(Request $request): Response
     {
         $this->userHasPermission(PermissionType::USER_ADD);
@@ -81,7 +81,7 @@ final class UserController extends AbstractAdministrationController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route('/user/list', name: 'admin.user.list', methods: ['GET'])]
+    #[Route(path: '/user/list', name: 'admin.user.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
         $user = $this->container->get(id: 'phpmyfaq.user');
