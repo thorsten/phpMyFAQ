@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Faq Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-02-26
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -40,7 +40,7 @@ final class FaqController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -86,11 +86,11 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
         try {
             $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
@@ -158,12 +158,12 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
         $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
@@ -218,13 +218,13 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
+        $tagId = Filter::filterVar($request->get(key: 'tagId'), FILTER_VALIDATE_INT);
 
-        $tags = $this->container->get('phpmyfaq.tags');
+        $tags = $this->container->get(id: 'phpmyfaq.tags');
         $recordIds = $tags->getFaqsByTagId($tagId);
 
         try {
@@ -269,7 +269,7 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
+        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -317,7 +317,7 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
+        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -364,7 +364,7 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faqStatistics = $this->container->get('phpmyfaq.faq.statistics');
+        $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
         $faqStatistics->setUser($currentUser);
         $faqStatistics->setGroups($currentGroups);
 
@@ -416,7 +416,7 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -475,7 +475,7 @@ final class FaqController extends AbstractController
     {
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllFaqs(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $this->configuration->getLanguage()->getLanguage()]);
@@ -605,25 +605,30 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, withPerm: true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
+        $categoryName = null;
+
         if (isset($data->{'category-name'})) {
             $categoryName = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $categoryName = null;
         }
 
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -642,6 +647,7 @@ final class FaqController extends AbstractController
                     'stored' => false,
                     'error' => 'The given category name was not found.',
                 ];
+
                 return $this->json($result, Response::HTTP_CONFLICT);
             }
 
@@ -670,12 +676,12 @@ final class FaqController extends AbstractController
             ->setEmail($email)
             ->setActive($isActive)
             ->setSticky($isSticky)
-            ->setComment(false)
-            ->setNotes('');
+            ->setComment(comment: false)
+            ->setNotes(notes: '');
 
         $faqEntity = $faq->create($faqData);
 
-        $faqMetaData = $this->container->get('phpmyfaq.faq.metadata');
+        $faqMetaData = $this->container->get(id: 'phpmyfaq.faq.metadata');
         $faqMetaData->setFaqId($faqEntity->getId())->setFaqLanguage($languageCode)->setCategories($categories)->save();
 
         return $this->json(['stored' => true], Response::HTTP_CREATED);
@@ -792,16 +798,21 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, withPerm: true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
@@ -829,7 +840,7 @@ final class FaqController extends AbstractController
         $faqEntity = new FaqEntity();
         $faqEntity
             ->setId($faqId)
-            ->setRevisionId(0)
+            ->setRevisionId(revisionId: 0)
             ->setLanguage($languageCode)
             ->setQuestion($question)
             ->setAnswer($answer)
@@ -838,8 +849,8 @@ final class FaqController extends AbstractController
             ->setEmail($email)
             ->setActive($isActive)
             ->setSticky($isSticky)
-            ->setComment(false)
-            ->setNotes('');
+            ->setComment(comment: false)
+            ->setNotes(notes: '');
 
         $faq->update($faqEntity);
 

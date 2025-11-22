@@ -60,11 +60,11 @@ final class PasswordChangeController extends AbstractAdministrationController
 
         $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('password', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('password', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
 
-        $auth = $this->container->get('phpmyfaq.auth');
+        $auth = $this->container->get(id: 'phpmyfaq.auth');
         $authSource = $auth->selectAuth($this->currentUser->getAuthSource('name'));
         $authSource->getEncryptionContainer($this->currentUser->getAuthData('encType'));
 
@@ -114,7 +114,7 @@ final class PasswordChangeController extends AbstractAdministrationController
     {
         return [
             'adminHeaderPasswordChange' => Translation::get(languageKey: 'ad_passwd_cop'),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('password'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('password'),
             'adminMsgOldPassword' => Translation::get(languageKey: 'ad_passwd_old'),
             'adminMsgNewPassword' => Translation::get(languageKey: 'ad_passwd_new'),
             'adminMsgNewPasswordConfirm' => Translation::get(languageKey: 'ad_passwd_con'),

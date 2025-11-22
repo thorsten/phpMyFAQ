@@ -49,7 +49,7 @@ final class UserController extends AbstractController
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('ucp', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('ucp', $csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'ad_msg_noauth',
             )], Response::HTTP_UNAUTHORIZED);
@@ -146,7 +146,7 @@ final class UserController extends AbstractController
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
         $userIdInput = Filter::filterVar($data->userid ?? null, FILTER_VALIDATE_INT);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('export-userdata', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('export-userdata', $csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'ad_msg_noauth',
             )], Response::HTTP_UNAUTHORIZED);
@@ -208,7 +208,7 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('request-removal', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('request-removal', $csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'ad_msg_noauth',
             )], Response::HTTP_UNAUTHORIZED);
@@ -232,7 +232,7 @@ final class UserController extends AbstractController
             )], Response::HTTP_BAD_REQUEST);
         }
 
-        $stopWords = $this->container->get('phpmyfaq.stop-words');
+        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
         if (
             $author !== ''
             && $author !== '0'
@@ -253,7 +253,7 @@ final class UserController extends AbstractController
                 $question,
             );
 
-            $mailer = $this->container->get('phpmyfaq.mail');
+            $mailer = $this->container->get(id: 'phpmyfaq.mail');
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());
@@ -282,7 +282,7 @@ final class UserController extends AbstractController
         $twoFactor = new TwoFactor($this->configuration, $this->currentUser);
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('remove-twofactor', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('remove-twofactor', $csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'ad_msg_noauth',
             )], Response::HTTP_UNAUTHORIZED);

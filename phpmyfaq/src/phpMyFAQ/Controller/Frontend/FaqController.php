@@ -42,17 +42,17 @@ final class FaqController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $faq = $this->container->get('phpmyfaq.faq');
-        $faqHelper = $this->container->get('phpmyfaq.helper.faq');
-        $question = $this->container->get('phpmyfaq.question');
-        $stopWords = $this->container->get('phpmyfaq.stop-words');
-        $session = $this->container->get('phpmyfaq.user.session');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $faqHelper = $this->container->get(id: 'phpmyfaq.helper.faq');
+        $question = $this->container->get(id: 'phpmyfaq.question');
+        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
+        $session = $this->container->get(id: 'phpmyfaq.user.session');
         $session->setCurrentUser($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
-        $language = $this->container->get('phpmyfaq.language');
+        $language = $this->container->get(id: 'phpmyfaq.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
             ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
             : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
@@ -145,7 +145,7 @@ final class FaqController extends AbstractController
                 ->save();
 
             // Let the admin and the category owners to be informed by email of this new entry
-            $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+            $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
             $categoryHelper->setCategory($category)->setConfiguration($this->configuration);
 
             $moderators = $categoryHelper->getModerators($categories);
@@ -160,7 +160,7 @@ final class FaqController extends AbstractController
             }
 
             try {
-                $notification = $this->container->get('phpmyfaq.notification');
+                $notification = $this->container->get(id: 'phpmyfaq.notification');
                 $notification->sendNewFaqAdded($moderators, $faqEntity);
             } catch (Exception|TransportExceptionInterface $e) {
                 $this->configuration->getLogger()->info('Notification could not be sent: ', [$e->getMessage()]);

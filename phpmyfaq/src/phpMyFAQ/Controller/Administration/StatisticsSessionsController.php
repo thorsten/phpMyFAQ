@@ -42,10 +42,10 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $session = $this->container->get('session');
-        $adminSession = $this->container->get('phpmyfaq.admin.session');
-        $date = $this->container->get('phpmyfaq.date');
-        $visits = $this->container->get('phpmyfaq.visits');
+        $session = $this->container->get(id: 'session');
+        $adminSession = $this->container->get(id: 'phpmyfaq.admin.session');
+        $date = $this->container->get(id: 'phpmyfaq.date');
+        $visits = $this->container->get(id: 'phpmyfaq.visits');
         $statisticsHelper = new StatisticsHelper($adminSession, $visits, $date);
 
         $stats = $statisticsHelper->getTrackingFilesStatistics();
@@ -96,7 +96,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
         $firstHour = strtotime('midnight', $day);
         $lastHour = strtotime('tomorrow', $firstHour) - 1;
 
-        $session = $this->container->get('phpmyfaq.admin.session');
+        $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $sessionData = $session->getSessionsByDate($firstHour, $lastHour);
 
         return $this->render('@admin/statistics/sessions.day.twig', [
@@ -123,7 +123,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
 
         $sessionId = Filter::filterVar($request->get('sessionId'), FILTER_VALIDATE_INT);
 
-        $session = $this->container->get('phpmyfaq.admin.session');
+        $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $time = $session->getTimeFromSessionId($sessionId);
         $trackingData = explode("\n", file_get_contents(PMF_CONTENT_DIR . '/core/data/tracking' . date('dmY', $time)));
 

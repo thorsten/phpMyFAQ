@@ -51,7 +51,7 @@ final class UpdateController extends AbstractController
 
         $dateTime = new DateTime();
         $dateLastChecked = $dateTime->format(DateTimeInterface::ATOM);
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
 
         if (!$upgrade->isMaintenanceEnabled()) {
             return $this->json([
@@ -102,7 +102,7 @@ final class UpdateController extends AbstractController
         $branch = $this->configuration->get(item: 'upgrade.releaseEnvironment');
 
         try {
-            $versions = $this->container->get('phpmyfaq.admin.api')->getVersions();
+            $versions = $this->container->get(id: 'phpmyfaq.admin.api')->getVersions();
             $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
@@ -138,7 +138,7 @@ final class UpdateController extends AbstractController
 
         $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         try {
             $pathToPackage = $upgrade->downloadPackage($versionNumber);
         } catch (Exception $exception) {
@@ -170,7 +170,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $pathToPackage = urldecode((string) $this->configuration->get(item: 'upgrade.lastDownloadedPackage'));
 
         return new StreamedResponse(static function () use ($upgrade, $pathToPackage): void {
@@ -192,7 +192,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $backupHash = md5(uniqid());
 
         return new StreamedResponse(static function () use ($upgrade, $backupHash): void {
@@ -214,8 +214,8 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
-        $configurator = $this->container->get('phpmyfaq.setup.environment_configurator');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
+        $configurator = $this->container->get(id: 'phpmyfaq.setup.environment_configurator');
         return new StreamedResponse(static function () use ($upgrade, $configurator): void {
             $progressCallback = static function ($progress): void {
                 echo json_encode(['progress' => $progress]) . "\n";
@@ -235,7 +235,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $update = $this->container->get('phpmyfaq.setup.update');
+        $update = $this->container->get(id: 'phpmyfaq.setup.update');
         $update->setVersion(System::getVersion());
 
         try {
@@ -260,7 +260,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $upgrade = $this->container->get('phpmyfaq.setup.upgrade');
+        $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         $upgrade->cleanUp();
 
         return $this->json(['message' => 'Cleanup successful.'], Response::HTTP_OK);

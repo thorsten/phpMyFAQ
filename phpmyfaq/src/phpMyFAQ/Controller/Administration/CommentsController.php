@@ -43,7 +43,7 @@ final class CommentsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
-        $comment = $this->container->get('phpmyfaq.comments');
+        $comment = $this->container->get(id: 'phpmyfaq.comments');
 
         $faqComments = $comment->getAllComments();
         $newsComments = $comment->getAllComments(CommentType::NEWS);
@@ -56,7 +56,7 @@ final class CommentsController extends AbstractAdministrationController
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
             'faqComments' => $faqComments,
             'newsComments' => $newsComments,
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('delete-comment'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('delete-comment'),
         ]);
     }
 }

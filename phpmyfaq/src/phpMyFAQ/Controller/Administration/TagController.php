@@ -39,13 +39,13 @@ final class TagController extends AbstractAdministrationController
     {
         $this->userIsAuthenticated();
 
-        $tagData = $this->container->get('phpmyfaq.tags')->getAllTags();
+        $tagData = $this->container->get(id: 'phpmyfaq.tags')->getAllTags();
 
         return $this->render('@admin/content/tags.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'adminHeaderTags' => Translation::get(languageKey: 'msgTags'),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenInput('tags'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenInput('tags'),
             'tags' => $tagData,
             'noTags' => Translation::get(languageKey: 'ad_news_nodata'),
             'buttonEdit' => Translation::get(languageKey: 'ad_user_edit'),

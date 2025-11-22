@@ -47,8 +47,8 @@ final class AutoCompleteController extends AbstractController
         $category->transform(0);
         $category->buildCategoryTree();
 
-        $faqPermission = $this->container->get('phpmyfaq.faq.permission');
-        $faqSearch = $this->container->get('phpmyfaq.search');
+        $faqPermission = $this->container->get(id: 'phpmyfaq.faq.permission');
+        $faqSearch = $this->container->get(id: 'phpmyfaq.search');
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         if (!is_null($searchString)) {
@@ -58,10 +58,10 @@ final class AutoCompleteController extends AbstractController
 
             $searchResultSet->reviewResultSet($searchResult);
 
-            $faqSearchHelper = $this->container->get('phpmyfaq.helper.search');
+            $faqSearchHelper = $this->container->get(id: 'phpmyfaq.helper.search');
             $faqSearchHelper->setSearchTerm($searchString);
             $faqSearchHelper->setCategory($category);
-            $faqSearchHelper->setPlurals($this->container->get('phpmyfaq.language.plurals'));
+            $faqSearchHelper->setPlurals($this->container->get(id: 'phpmyfaq.language.plurals'));
 
             return $this->json($faqSearchHelper->createAutoCompleteResult($searchResultSet), Response::HTTP_OK);
         }

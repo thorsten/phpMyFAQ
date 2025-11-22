@@ -35,8 +35,8 @@ final class VotingController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $rating = $this->container->get('phpmyfaq.rating');
-        $session = $this->container->get('phpmyfaq.user.session');
+        $rating = $this->container->get(id: 'phpmyfaq.rating');
+        $session = $this->container->get(id: 'phpmyfaq.user.session');
         $session->setCurrentUser($this->currentUser);
 
         $data = json_decode($request->getContent());

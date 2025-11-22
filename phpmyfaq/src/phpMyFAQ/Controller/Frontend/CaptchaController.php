@@ -34,7 +34,7 @@ final class CaptchaController extends AbstractController
         $response->headers->set('Content-Type', 'image/jpeg');
 
         // Set image content
-        $response->setContent($this->container->get('phpmyfaq.captcha')->getCaptchaImage());
+        $response->setContent($this->container->get(id: 'phpmyfaq.captcha')->getCaptchaImage());
 
         return $response;
     }

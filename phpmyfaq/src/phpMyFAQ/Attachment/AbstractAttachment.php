@@ -131,13 +131,13 @@ abstract class AbstractAttachment
         if ($result) {
             $assoc = $this->databaseDriver->fetchArray($result);
             if ($assoc !== null && $assoc !== []) {
-                $this->recordId = $assoc['record_id'];
+                $this->recordId = (int) $assoc['record_id'];
                 $this->recordLang = $assoc['record_lang'];
                 $this->realHash = $assoc['real_hash'];
                 $this->virtualHash = $assoc['virtual_hash'];
                 $this->passwordHash = $assoc['password_hash'];
                 $this->filename = $assoc['filename'];
-                $this->filesize = $assoc['filesize'];
+                $this->filesize = (int) $assoc['filesize'];
                 $this->encrypted = (bool) $assoc['encrypted'];
                 $this->mimeType = $assoc['mime_type'];
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Attachment Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -78,7 +78,7 @@ class AttachmentController extends AbstractController
     )]
     public function list(Request $request): JsonResponse
     {
-        $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
+        $recordId = Filter::filterVar($request->get(key: 'recordId'), FILTER_VALIDATE_INT);
         $result = [];
 
         try {

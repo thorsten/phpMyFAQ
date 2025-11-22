@@ -40,7 +40,7 @@ final class UpdateController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $isOnNightlies = $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
 

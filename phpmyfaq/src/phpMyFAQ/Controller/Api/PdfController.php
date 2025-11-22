@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The PDF Controller for the REST API
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2024-03-02
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
@@ -24,7 +24,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Service;
 use phpMyFAQ\Services;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
@@ -40,7 +39,7 @@ final class PdfController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -91,8 +90,8 @@ final class PdfController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         $faq->getFaq($faqId);
         $result = $faq->faqRecord;

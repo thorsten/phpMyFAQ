@@ -39,7 +39,7 @@ final class ReportController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::REPORTS);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         return $this->render('@admin/statistics/report.twig', [
             ...$this->getHeader($request),

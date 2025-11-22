@@ -40,7 +40,7 @@ final class CommentController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'delete-comment',
             $data->data->{'pmf-csrf-token'},
         )) {
@@ -49,7 +49,7 @@ final class CommentController extends AbstractController
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $comments = $this->container->get('phpmyfaq.comments');
+        $comments = $this->container->get(id: 'phpmyfaq.comments');
         $commentIds = $data->data->{'comments[]'} ?? [];
 
         $result = false;

@@ -45,10 +45,10 @@ final class QuestionController extends AbstractController
             return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
-        $stopWords = $this->container->get('phpmyfaq.stop-words');
+        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
         $category = new Category($this->configuration);
 
-        $questionHelper = $this->container->get('phpmyfaq.helper.question');
+        $questionHelper = $this->container->get(id: 'phpmyfaq.helper.question');
         $questionHelper->setConfiguration($this->configuration)->setCategory($category);
 
         $categories = $category->getAllCategories();
@@ -94,7 +94,7 @@ final class QuestionController extends AbstractController
             if (false === (bool) $save) {
                 $cleanQuestion = $stopWords->clean($userQuestion);
 
-                $faqSearch = $this->container->get('phpmyfaq.search');
+                $faqSearch = $this->container->get(id: 'phpmyfaq.search');
                 $faqSearch->setCategory(new Category($this->configuration));
                 $faqSearch->setCategoryId((int) $selectedCategory);
 
@@ -114,9 +114,9 @@ final class QuestionController extends AbstractController
                 }
             }
 
-            $question = $this->container->get('phpmyfaq.question');
+            $question = $this->container->get(id: 'phpmyfaq.question');
             $question->add($questionEntity);
-            $notification = $this->container->get('phpmyfaq.notification');
+            $notification = $this->container->get(id: 'phpmyfaq.notification');
             $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
             return $this->json(['success' => Translation::get(languageKey: 'msgAskThx4Mail')], Response::HTTP_OK);

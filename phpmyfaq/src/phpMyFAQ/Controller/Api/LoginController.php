@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Login Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -39,7 +39,7 @@ final class LoginController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -81,10 +81,15 @@ final class LoginController extends AbstractController
     )]
     public function login(Request $request): JsonResponse
     {
-        $postBody = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
-        $faqUsername = Filter::filterVar($postBody->username, FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqPassword = Filter::filterVar($postBody->password, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqUsername = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $user = new CurrentUser($this->configuration);
         $userAuthentication = new UserAuthentication($this->configuration, $user);

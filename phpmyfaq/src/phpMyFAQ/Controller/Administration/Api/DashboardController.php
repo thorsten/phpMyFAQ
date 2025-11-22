@@ -86,7 +86,7 @@ final class DashboardController extends AbstractController
         $this->userIsAuthenticated();
 
         if ($this->configuration->get(item: 'main.enableUserTracking')) {
-            $session = $this->container->get('phpmyfaq.admin.session');
+            $session = $this->container->get(id: 'phpmyfaq.admin.session');
             $endDate = $request->server->get('REQUEST_TIME');
             return $this->json($session->getLast30DaysVisits($endDate));
         }

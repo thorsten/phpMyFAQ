@@ -84,7 +84,7 @@ final class UserController extends AbstractAdministrationController
     #[Route('/user/list', name: 'admin.user.list', methods: ['GET'])]
     public function list(Request $request): Response
     {
-        $user = $this->container->get('phpmyfaq.user');
+        $user = $this->container->get(id: 'phpmyfaq.user');
         $allUsers = $user->getAllUsers(false);
         $numUsers = is_countable($allUsers) ? count($allUsers) : 0;
 
@@ -151,8 +151,8 @@ final class UserController extends AbstractAdministrationController
     private function getBaseTemplateVars(): array
     {
         $currentUserId = $this->currentUser->getUserId();
-        $session = $this->container->get('session');
-        $user = $this->container->get('phpmyfaq.user');
+        $session = $this->container->get(id: 'session');
+        $user = $this->container->get(id: 'phpmyfaq.user');
         return [
             'permissionAddUser' => $this->currentUser->perm->hasPermission(
                 $currentUserId,

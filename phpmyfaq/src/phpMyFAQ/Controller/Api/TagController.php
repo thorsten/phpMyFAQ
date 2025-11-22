@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Tags Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -33,7 +33,7 @@ final class TagController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -52,11 +52,11 @@ final class TagController extends AbstractController
     #[OA\Response(response: 404, description: 'If no tags are stored.', content: new OA\JsonContent(example: []))]
     public function list(): JsonResponse
     {
-        $tags = $this->container->get('phpmyfaq.tags');
+        $tags = $this->container->get(id: 'phpmyfaq.tags');
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
         $tags->setUser($currentUser);
         $tags->setGroups($currentGroups);
-        $result = $tags->getPopularTagsAsArray(16);
+        $result = $tags->getPopularTagsAsArray(limit: 16);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);
         }

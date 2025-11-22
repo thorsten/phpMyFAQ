@@ -48,11 +48,11 @@ final class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_ADD);
 
-        $configuration = $this->container->get('phpmyfaq.configuration');
+        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('add-instance', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-instance', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -77,7 +77,7 @@ final class InstanceController extends AbstractController
         $data = new InstanceEntity();
         $data->setUrl($url)->setInstance($instance)->setComment($comment);
 
-        $faqInstance = $this->container->get('phpmyfaq.instance');
+        $faqInstance = $this->container->get(id: 'phpmyfaq.instance');
         $instanceId = $faqInstance->create($data);
 
         $faqInstanceClient = new Client($configuration);
@@ -153,11 +153,11 @@ final class InstanceController extends AbstractController
     {
         $this->userHasPermission(PermissionType::INSTANCE_DELETE);
 
-        $configuration = $this->container->get('phpmyfaq.configuration');
+        $configuration = $this->container->get(id: 'phpmyfaq.configuration');
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-instance', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-instance', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);

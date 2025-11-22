@@ -39,10 +39,10 @@ abstract class AbstractAdministrationController extends AbstractController
      */
     protected function getHeader(Request $request): array
     {
-        $adminHelper = $this->container->get('phpmyfaq.admin.helper');
+        $adminHelper = $this->container->get(id: 'phpmyfaq.admin.helper');
         $adminHelper->setUser($this->currentUser);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $secLevelEntries = $this->getSecondLevelEntries($adminHelper);
         $pageFlags = $this->getPageFlags($request);

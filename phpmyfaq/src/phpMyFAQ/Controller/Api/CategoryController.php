@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Category Controller for the REST API
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2023-07-29
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
@@ -27,7 +27,6 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Language;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +40,7 @@ final class CategoryController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -81,12 +80,12 @@ final class CategoryController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $language = $this->container->get('phpmyfaq.language');
+        $language = $this->container->get(id: 'phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = new Category($this->configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, withPerm: true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
@@ -210,11 +209,16 @@ final class CategoryController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
-        $category = new Category($this->configuration, $currentGroups, true);
+        $category = new Category($this->configuration, $currentGroups, withPerm: true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $category->setLanguage($currentLanguage);
@@ -223,10 +227,10 @@ final class CategoryController extends AbstractController
 
         $languageCode = Filter::filterVar($data->language, FILTER_SANITIZE_SPECIAL_CHARS);
         $parentId = Filter::filterVar($data->{'parent-id'}, FILTER_VALIDATE_INT);
+        $parentCategoryName = null;
+
         if (isset($data->{'parent-category-name'})) {
             $parentCategoryName = Filter::filterVar($data->{'parent-category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $parentCategoryName = null;
         }
 
         $name = Filter::filterVar($data->{'category-name'}, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -259,7 +263,7 @@ final class CategoryController extends AbstractController
             ->setUserId($userId)
             ->setGroupId($groupId)
             ->setActive($active)
-            ->setImage('')
+            ->setImage(image: '')
             ->setShowHome($showOnHome);
 
         $categoryId = $category->create($categoryEntity);

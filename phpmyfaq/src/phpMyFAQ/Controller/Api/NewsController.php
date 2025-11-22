@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The News Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -33,7 +33,7 @@ final class NewsController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -71,7 +71,11 @@ final class NewsController extends AbstractController
     public function list(): JsonResponse
     {
         $news = new News($this->configuration);
-        $result = $news->getLatestData(false, true, true);
+        $result = $news->getLatestData(
+            showArchive: false,
+            active: true,
+            forceConfLimit: true,
+        );
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }

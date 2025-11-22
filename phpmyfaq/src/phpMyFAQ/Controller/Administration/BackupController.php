@@ -55,7 +55,7 @@ final class BackupController extends AbstractAdministrationController
             'adminBackupCardBody' => Translation::get(languageKey: 'ad_csv_make'),
             'adminBackupLinkData' => Translation::get(languageKey: 'ad_csv_linkdat'),
             'adminBackupLinkLogs' => Translation::get(languageKey: 'ad_csv_linklog'),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('restore'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('restore'),
             'adminRestoreCardHeader' => Translation::get(languageKey: 'ad_csv_head2'),
             'adminRestoreCardBody' => Translation::get(languageKey: 'ad_csv_restore'),
             'adminRestoreLabel' => Translation::get(languageKey: 'ad_csv_file'),
@@ -69,7 +69,7 @@ final class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::BACKUP);
 
         $type = $request->get('type');
-        $backup = $this->container->get('phpmyfaq.backup');
+        $backup = $this->container->get(id: 'phpmyfaq.backup');
 
         switch ($type) {
             case 'content':
@@ -136,7 +136,7 @@ final class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::RESTORE);
 
         $csrfToken = $request->query->get('csrf');
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('restore', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('restore', $csrfToken)) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
         }
 
@@ -147,7 +147,7 @@ final class BackupController extends AbstractAdministrationController
         ];
 
         if ($file && $file->isValid()) {
-            $backup = $this->container->get('phpmyfaq.backup');
+            $backup = $this->container->get(id: 'phpmyfaq.backup');
 
             $handle = fopen($file->getPathname(), 'r');
             $backupData = fgets($handle, 65536);

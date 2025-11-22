@@ -131,10 +131,13 @@ class Application
             $response->setStatusCode(Response::HTTP_OK);
             $response = call_user_func_array($controller, $arguments);
         } catch (ResourceNotFoundException $exception) {
-            $message = $this->formatExceptionMessage(
-                template: 'Not Found: :message at line :line at :file',
-                e: $exception,
-            );
+            $message = Environment::isDebugMode()
+                ? $this->formatExceptionMessage(
+                    template: 'Not Found: :message at line :line at :file',
+                    exception: $exception,
+                )
+                : 'Not Found';
+
             $response = new Response(
                 content: $message,
                 status: Response::HTTP_NOT_FOUND,
@@ -152,10 +155,12 @@ class Application
                 );
             }
         } catch (BadRequestException $exception) {
-            $message = $this->formatExceptionMessage(
-                template: 'An error occurred: :message at line :line at :file',
-                e: $exception,
-            );
+            $message = Environment::isDebugMode()
+                ? $this->formatExceptionMessage(
+                    template: 'An error occurred: :message at line :line at :file',
+                    exception: $exception,
+                )
+                : 'Bad Request';
             $response = new Response(
                 content: $message,
                 status: Response::HTTP_BAD_REQUEST,
@@ -168,14 +173,14 @@ class Application
     /**
      * Formats an exception message from a template with named placeholders.
      */
-    private function formatExceptionMessage(string $template, Throwable $e): string
+    private function formatExceptionMessage(string $template, Throwable $exception): string
     {
         return strtr(
             string: $template,
             from: [
-                ':message' => $e->getMessage(),
-                ':line' => (string) $e->getLine(),
-                ':file' => $e->getFile(),
+                ':message' => $exception->getMessage(),
+                ':line' => (string) $exception->getLine(),
+                ':file' => $exception->getFile(),
             ],
         );
     }

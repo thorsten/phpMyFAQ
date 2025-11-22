@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Version Controller for the REST API
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2023-07-29
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
@@ -31,7 +31,7 @@ final class VersionController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 

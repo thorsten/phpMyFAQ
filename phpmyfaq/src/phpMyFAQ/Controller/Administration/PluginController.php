@@ -22,7 +22,7 @@ final class PluginController extends AbstractAdministrationController
     #[Route('/plugins')]
     public function index(Request $request): Response
     {
-        $pluginManager = $this->container->get('phpmyfaq.plugin.plugin-manager');
+        $pluginManager = $this->container->get(id: 'phpmyfaq.plugin.plugin-manager');
         $pluginManager->loadPlugins();
 
         return $this->render('@admin/configuration/plugins.twig', [

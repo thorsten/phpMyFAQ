@@ -43,7 +43,7 @@ final class FormController extends AbstractController
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('activate-input', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('activate-input', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -69,7 +69,7 @@ final class FormController extends AbstractController
         $inputId = Filter::filterVar($data->inputid, FILTER_VALIDATE_INT);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('require-input', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('require-input', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -96,7 +96,7 @@ final class FormController extends AbstractController
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('edit-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('edit-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -125,7 +125,7 @@ final class FormController extends AbstractController
         $lang = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -154,7 +154,7 @@ final class FormController extends AbstractController
         $translation = Filter::filterVar($data->translation, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $forms = new Forms($this->configuration);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('add-translation', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-translation', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);

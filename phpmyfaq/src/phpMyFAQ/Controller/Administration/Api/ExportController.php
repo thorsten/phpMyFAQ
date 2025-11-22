@@ -53,7 +53,7 @@ final class ExportController extends AbstractController
         $inlineDisposition = Filter::filterVar($request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
         $type = Filter::filterVar($request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $category = new Category($this->configuration, [], false);
         $category->buildCategoryTree($categoryId);
 
@@ -82,7 +82,7 @@ final class ExportController extends AbstractController
         $this->userHasPermission(PermissionType::REPORTS);
 
         $data = json_decode($request->getContent())->data;
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'create-report',
             $data->{'pmf-csrf-token'},
         )) {

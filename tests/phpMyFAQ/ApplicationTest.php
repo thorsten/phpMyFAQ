@@ -172,7 +172,7 @@ class ApplicationTest extends TestCase
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('Not Found:', $output);
+        $this->assertStringContainsString('Not Found', $output);
     }
 
     /**
@@ -252,8 +252,7 @@ class ApplicationTest extends TestCase
         $method->invoke($this->application, $routeCollection, $request, $requestContext);
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('An error occurred:', $output);
-        $this->assertStringContainsString('Bad request', $output);
+        $this->assertStringContainsString('Bad Request', $output);
     }
 
     /**

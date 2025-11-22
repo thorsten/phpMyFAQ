@@ -46,14 +46,14 @@ final class ConfigurationController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('configuration', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('configuration', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
-            $mail = $this->container->get('phpmyfaq.mail');
+            $mail = $this->container->get(id: 'phpmyfaq.mail');
             $mail->addTo($this->configuration->getAdminEmail());
             $mail->setReplyTo($this->configuration->getNoReplyEmail());
             $mail->subject = $this->configuration->getTitle() . ': Mail test successful.';
@@ -78,7 +78,7 @@ final class ConfigurationController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $data = json_decode($request->getContent());
 

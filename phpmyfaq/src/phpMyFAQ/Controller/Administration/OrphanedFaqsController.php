@@ -38,7 +38,7 @@ final class OrphanedFaqsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $faq = $this->container->get('phpmyfaq.admin.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
 
         return $this->render('@admin/content/orphaned-faqs.twig', [
             ...$this->getHeader($request),

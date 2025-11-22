@@ -45,7 +45,7 @@ final class SearchController extends AbstractController
 
         $search = new Search($this->configuration);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'delete-searchterm',
             $deleteData->csrf,
         )) {

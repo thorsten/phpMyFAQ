@@ -40,7 +40,7 @@ final class SystemInformationController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $faqSystem = $this->container->get('phpmyfaq.system');
+        $faqSystem = $this->container->get(id: 'phpmyfaq.system');
 
         if ($this->configuration->get(item: 'search.enableElasticsearch')) {
             try {

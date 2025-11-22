@@ -42,8 +42,8 @@ final class GlossaryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
         $this->userHasPermission(PermissionType::GLOSSARY_DELETE);
 
-        $session = $this->container->get('session');
-        $glossary = $this->container->get('phpmyfaq.glossary');
+        $session = $this->container->get(id: 'session');
+        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($this->configuration->getLanguage()->getLanguage());
 
         return $this->render('@admin/content/glossary.twig', [

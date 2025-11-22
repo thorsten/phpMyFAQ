@@ -45,8 +45,8 @@ final class AdminLogController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::STATISTICS_ADMINLOG);
 
-        $adminLog = $this->container->get('phpmyfaq.admin.admin-log');
-        $session = $this->container->get('session');
+        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        $session = $this->container->get(id: 'session');
 
         $itemsPerPage = 15;
         $page = Filter::filterVar($request->get('page'), FILTER_VALIDATE_INT, 1);

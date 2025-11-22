@@ -47,7 +47,7 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -61,13 +61,13 @@ final class CategoryController extends AbstractController
 
         $categoryRelation = new Relation($this->configuration, $category);
 
-        $categoryImage = $this->container->get('phpmyfaq.category.image');
+        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
         $categoryImage->setFileName($category->getCategoryData($data->categoryId)->getImage());
 
-        $categoryOrder = $this->container->get('phpmyfaq.category.order');
+        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
         $categoryOrder->remove($data->categoryId);
 
-        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
+        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
         if (
             (
@@ -98,7 +98,7 @@ final class CategoryController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
+        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
         $categoryData = $request->get('categories');
 
@@ -142,7 +142,7 @@ final class CategoryController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('category', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('category', $data->csrfToken)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -150,7 +150,7 @@ final class CategoryController extends AbstractController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryOrder = $this->container->get('phpmyfaq.category.order');
+        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
         $categoryOrder->setCategoryTree($data->categoryTree);
 
         $parentId = $categoryOrder->getParentId($data->categoryTree, (int) $data->categoryId);

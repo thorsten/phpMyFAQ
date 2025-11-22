@@ -42,7 +42,7 @@ final class QuestionController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'delete-questions',
             $data->data->{'pmf-csrf-token'},
         )) {
@@ -76,8 +76,8 @@ final class QuestionController extends AbstractController
     {
         $this->userHasPermission(PermissionType::QUESTION_ADD);
 
-        $session = $this->container->get('session');
-        $question = $this->container->get('phpmyfaq.question');
+        $session = $this->container->get(id: 'session');
+        $question = $this->container->get(id: 'phpmyfaq.question');
 
         $data = json_decode($request->getContent());
 

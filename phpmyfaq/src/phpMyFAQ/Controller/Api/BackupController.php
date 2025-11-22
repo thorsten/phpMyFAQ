@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Backup Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-24
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -40,7 +40,7 @@ final class BackupController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -89,7 +89,7 @@ final class BackupController extends AbstractController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        $type = Filter::filterVar($request->get('type'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = Filter::filterVar($request->get(key: 'type'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'data':
@@ -102,26 +102,38 @@ final class BackupController extends AbstractController
                 $backupType = BackupType::BACKUP_TYPE_CONTENT;
                 break;
             default:
-                return new Response('Invalid backup type.', Response::HTTP_BAD_REQUEST);
+                return new Response(
+                    content: 'Invalid backup type.',
+                    status: Response::HTTP_BAD_REQUEST,
+                );
         }
 
         $databaseHelper = new DatabaseHelper($this->configuration);
         $backup = new Backup($this->configuration, $databaseHelper);
 
-        // Create ZipArchive of content-folder
+        // Create ZipArchive of the content-folder
         if ($backupType === BackupType::BACKUP_TYPE_CONTENT) {
             $backupFile = $backup->createContentFolderBackup();
             $response = new Response(file_get_contents($backupFile));
 
-            $backupFileName = sprintf('content_%s.zip', date('dmY_H-i'));
+            $backupFileName = sprintf(
+                format: 'content_%s.zip',
+                values: date(format: 'dmY_H-i'),
+            );
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
                 urlencode($backupFileName),
             );
 
-            $response->headers->set('Content-Type', 'application/zip');
-            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set(
+                key: 'Content-Type',
+                values: 'application/zip',
+            );
+            $response->headers->set(
+                key: 'Content-Disposition',
+                values: $disposition,
+            );
             $response->setStatusCode(Response::HTTP_OK);
             // Remove temporary ZipArchive
             unlink($backupFile);
@@ -141,12 +153,21 @@ final class BackupController extends AbstractController
                 urlencode($backupFileName),
             );
 
-            $response->headers->set('Content-Type', 'application/octet-stream');
-            $response->headers->set('Content-Disposition', $disposition);
+            $response->headers->set(
+                key: 'Content-Type',
+                values: 'application/octet-stream',
+            );
+            $response->headers->set(
+                key: 'Content-Disposition',
+                values: $disposition,
+            );
             $response->setStatusCode(Response::HTTP_OK);
             return $response->send();
         } catch (SodiumException) {
-            return new Response('An error occurred while creating the backup.', Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new Response(
+                content: 'An error occurred while creating the backup.',
+                status: Response::HTTP_INTERNAL_SERVER_ERROR,
+            );
         }
     }
 }

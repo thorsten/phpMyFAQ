@@ -46,8 +46,8 @@ final class StatisticsSearchController extends AbstractAdministrationController
 
         $perPage = 10;
 
-        $search = $this->container->get('phpmyfaq.search');
-        $session = $this->container->get('session');
+        $search = $this->container->get(id: 'phpmyfaq.search');
+        $session = $this->container->get(id: 'session');
 
         $searchesCount = $search->getSearchesCount();
         $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);

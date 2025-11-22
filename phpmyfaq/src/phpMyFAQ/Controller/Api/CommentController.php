@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Comment Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -37,7 +37,7 @@ final class CommentController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -80,10 +80,10 @@ final class CommentController extends AbstractController
     #[OA\Response(response: 404, description: 'If the FAQ has no comments.', content: new OA\JsonContent(example: []))]
     public function list(Request $request): JsonResponse
     {
-        $recordId = Filter::filterVar($request->get('recordId'), FILTER_VALIDATE_INT);
+        $recordId = Filter::filterVar($request->get(key: 'recordId'), FILTER_VALIDATE_INT);
 
         /** @var Comments $comments */
-        $comments = $this->container->get('phpmyfaq.comments');
+        $comments = $this->container->get(id: 'phpmyfaq.comments');
         $result = $comments->getCommentsData($recordId, CommentType::FAQ);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             $this->json($result, Response::HTTP_NOT_FOUND);

@@ -66,13 +66,13 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $tagging = $this->container->get('phpmyfaq.tags');
-        $notification = $this->container->get('phpmyfaq.notification');
-        $logging = $this->container->get('phpmyfaq.admin.admin-log');
-        $changelog = $this->container->get('phpmyfaq.admin.changelog');
-        $visits = $this->container->get('phpmyfaq.visits');
-        $seo = $this->container->get('phpmyfaq.seo');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $tagging = $this->container->get(id: 'phpmyfaq.tags');
+        $notification = $this->container->get(id: 'phpmyfaq.notification');
+        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
+        $visits = $this->container->get(id: 'phpmyfaq.visits');
+        $seo = $this->container->get(id: 'phpmyfaq.seo');
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -82,7 +82,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'pmf-csrf-token',
             $data->{'pmf-csrf-token'},
         )) {
@@ -191,7 +191,7 @@ final class FaqController extends AbstractController
             $seo->create($seoEntity);
 
             // Open question answered
-            $questionObject = $this->container->get('phpmyfaq.question');
+            $questionObject = $this->container->get(id: 'phpmyfaq.question');
             $openQuestionId = Filter::filterVar($data->openQuestionId, FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) { // deletes question
@@ -281,12 +281,12 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $tagging = $this->container->get('phpmyfaq.tags');
-        $logging = $this->container->get('phpmyfaq.admin.admin-log');
-        $changelog = $this->container->get('phpmyfaq.admin.changelog');
-        $visits = $this->container->get('phpmyfaq.visits');
-        $seo = $this->container->get('phpmyfaq.seo');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $tagging = $this->container->get(id: 'phpmyfaq.tags');
+        $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
+        $changelog = $this->container->get(id: 'phpmyfaq.admin.changelog');
+        $visits = $this->container->get(id: 'phpmyfaq.visits');
+        $seo = $this->container->get(id: 'phpmyfaq.seo');
         $faqPermission = new FaqPermission($this->configuration);
 
         $category = new Category($this->configuration, [], false);
@@ -295,7 +295,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent())->data;
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'pmf-csrf-token',
             $data->{'pmf-csrf-token'},
         )) {
@@ -544,7 +544,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -588,7 +588,7 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -633,13 +633,13 @@ final class FaqController extends AbstractController
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json([
                 'error' => 'CSRF Token - ' . Translation::get(languageKey: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $adminLog = $this->container->get('phpmyfaq.admin.admin-log');
+        $adminLog = $this->container->get(id: 'phpmyfaq.admin.admin-log');
         $adminLog->log($this->currentUser, 'Deleted FAQ ID ' . $faqId);
 
         try {
@@ -661,7 +661,7 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -699,13 +699,13 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('order-stickyfaqs', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('order-stickyfaqs', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $faq = $this->container->get('phpmyfaq.admin.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.admin.faq');
         $faq->setStickyFaqOrder($data->faqIds);
 
         return $this->json(['success' => Translation::get(languageKey: 'ad_categ_save_order')], Response::HTTP_OK);
@@ -719,7 +719,7 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_ADD);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $file = $request->files->get('file');
         if (!isset($file)) {

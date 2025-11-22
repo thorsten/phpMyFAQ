@@ -40,7 +40,7 @@ final class ImageController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $uploadDir = PMF_CONTENT_DIR . '/user/images/';
         $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'svg', 'mov', 'mp4', 'webm'];

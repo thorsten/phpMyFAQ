@@ -47,8 +47,8 @@ final class AttachmentsController extends AbstractAdministrationController
         $page = Filter::filterVar($request->query->get('page'), FILTER_VALIDATE_INT);
         $page = max(1, $page);
 
-        $session = $this->container->get('session');
-        $collection = $this->container->get('phpmyfaq.attachment-collection');
+        $session = $this->container->get(id: 'session');
+        $collection = $this->container->get(id: 'phpmyfaq.attachment-collection');
 
         $itemsPerPage = 24;
         $allCrumbs = $collection->getBreadcrumbs();

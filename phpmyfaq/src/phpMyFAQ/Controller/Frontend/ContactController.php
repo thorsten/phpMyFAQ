@@ -49,7 +49,7 @@ final class ContactController extends AbstractController
             return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
-        $stopWords = $this->container->get('phpmyfaq.stop-words');
+        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
 
         if (
             $author !== ''
@@ -68,7 +68,7 @@ final class ContactController extends AbstractController
                 $question,
             );
 
-            $mailer = $this->container->get('phpmyfaq.mail');
+            $mailer = $this->container->get(id: 'phpmyfaq.mail');
             try {
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());

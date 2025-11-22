@@ -41,13 +41,13 @@ final class CommentController extends AbstractController
      */
     public function create(Request $request): JsonResponse
     {
-        $faq = $this->container->get('phpmyfaq.faq');
-        $comment = $this->container->get('phpmyfaq.comments');
-        $stopWords = $this->container->get('phpmyfaq.stop-words');
-        $session = $this->container->get('phpmyfaq.user.session');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $comment = $this->container->get(id: 'phpmyfaq.comments');
+        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
+        $session = $this->container->get(id: 'phpmyfaq.user.session');
         $session->setCurrentUser($this->currentUser);
 
-        $language = $this->container->get('phpmyfaq.language');
+        $language = $this->container->get(id: 'phpmyfaq.language');
         $languageCode = $this->configuration->get(item: 'main.languageDetection')
             ? $language->setLanguageWithDetection($this->configuration->get(item: 'main.language'))
             : $language->setLanguageFromConfiguration($this->configuration->get(item: 'main.language'));
@@ -62,7 +62,7 @@ final class CommentController extends AbstractController
 
         $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken(
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             'add-comment',
             $data->{'pmf-csrf-token'},
         )) {
@@ -95,7 +95,7 @@ final class CommentController extends AbstractController
 
         // Check display name and e-mail address for not logged-in users
         if (!$this->currentUser->isLoggedIn()) {
-            $user = $this->container->get('phpmyfaq.user');
+            $user = $this->container->get(id: 'phpmyfaq.user');
             if ($user->checkDisplayName($username) && $user->checkMailAddress($email)) {
                 $this->configuration->getLogger()->error('Name and email already used by registered user.');
                 return $this->json(['error' => Translation::get(
@@ -123,17 +123,17 @@ final class CommentController extends AbstractController
                 ->setDate((string) $request->server->get('REQUEST_TIME'));
 
             if ($comment->create($commentEntity)) {
-                $notification = $this->container->get('phpmyfaq.notification');
+                $notification = $this->container->get(id: 'phpmyfaq.notification');
                 if ('faq' == $type) {
                     $faq->getFaq($commentId);
                     $notification->sendFaqCommentNotification($faq, $commentEntity);
                 } else {
-                    $news = $this->container->get('phpmyfaq.news');
+                    $news = $this->container->get(id: 'phpmyfaq.news');
                     $newsData = $news->get($commentId);
                     $notification->sendNewsCommentNotification($newsData, $commentEntity);
                 }
 
-                $gravatar = $this->container->get('phpmyfaq.services.gravatar');
+                $gravatar = $this->container->get(id: 'phpmyfaq.services.gravatar');
                 $gravatarUrl = $gravatar->getImageUrl($commentEntity->getEmail(), ['size' => 50, 'default' => 'mm']);
 
                 return $this->json([

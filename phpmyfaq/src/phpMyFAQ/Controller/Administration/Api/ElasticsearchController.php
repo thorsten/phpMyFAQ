@@ -78,7 +78,7 @@ final class ElasticsearchController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $elasticsearch = new Elasticsearch($this->configuration);
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 
         $bulkIndexResult = $elasticsearch->bulkIndex($faq->faqRecords);

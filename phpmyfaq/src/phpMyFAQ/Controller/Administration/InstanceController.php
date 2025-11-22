@@ -62,7 +62,7 @@ final class InstanceController extends AbstractAdministrationController
 
         $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
 
-        $instance = $this->container->get('phpmyfaq.instance');
+        $instance = $this->container->get(id: 'phpmyfaq.instance');
         $instanceData = $instance->getById($instanceId, 'array');
 
         return $this->render('@admin/configuration/instances.edit.twig', [
@@ -93,11 +93,11 @@ final class InstanceController extends AbstractAdministrationController
         $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
 
         $fileSystem = new Filesystem(PMF_ROOT_DIR);
-        $currentClient = $this->container->get('phpmyfaq.instance.client');
+        $currentClient = $this->container->get(id: 'phpmyfaq.instance.client');
         $currentClient->setFileSystem($fileSystem);
 
-        $instance = $this->container->get('phpmyfaq.instance');
-        $updatedClient = $this->container->get('phpmyfaq.instance.client');
+        $instance = $this->container->get(id: 'phpmyfaq.instance');
+        $updatedClient = $this->container->get(id: 'phpmyfaq.instance.client');
 
         $moveInstance = false;
         $instance->setId($instanceId);
@@ -149,8 +149,8 @@ final class InstanceController extends AbstractAdministrationController
             PermissionType::INSTANCE_ADD->value,
         );
 
-        $instance = $this->container->get('phpmyfaq.instance');
-        $session = $this->container->get('session');
+        $instance = $this->container->get(id: 'phpmyfaq.instance');
+        $session = $this->container->get(id: 'session');
         $mainConfig = [];
         foreach ($instance->getAll() as $site) {
             $mainConfig[$site->id] = $instance->getInstanceConfig((int) $site->id)['isMaster'];

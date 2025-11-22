@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Setup Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-17
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -33,7 +33,7 @@ final class SetupController extends AbstractController
 {
     public function check(Request $request): JsonResponse
     {
-        if (empty($request->getContent())) {
+        if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -49,10 +49,10 @@ final class SetupController extends AbstractController
         }
 
         if (!$update->checkMinimumUpdateVersion($installedVersion)) {
-            $message = sprintf(
-                'Your installed version is phpMyFAQ %s. Please update to the latest phpMyFAQ 3.0 version first.',
-                $installedVersion,
-            );
+            $message =
+                'Your installed version is phpMyFAQ '
+                . $installedVersion
+                . '. Please update to at least phpMyFAQ 3.0 first.';
             return $this->json(['message' => $message], Response::HTTP_CONFLICT);
         }
 
@@ -68,7 +68,7 @@ final class SetupController extends AbstractController
 
     public function backup(Request $request): JsonResponse
     {
-        if (empty($request->getContent())) {
+        if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -78,7 +78,12 @@ final class SetupController extends AbstractController
         $installedVersion = Filter::filterVar($request->getContent(), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $configPath = PMF_ROOT_DIR . '/content/core/config';
-        if (!version_compare($installedVersion, '4.0.0-alpha') < 0) {
+        if (
+            !version_compare(
+                version1: $installedVersion,
+                version2: '4.0.0-alpha',
+            ) < 0
+        ) {
             $configPath = PMF_ROOT_DIR . '/config';
         }
 
@@ -93,7 +98,7 @@ final class SetupController extends AbstractController
 
     public function updateDatabase(Request $request): JsonResponse
     {
-        if (empty($request->getContent())) {
+        if (trim($request->getContent()) === '') {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -104,7 +109,10 @@ final class SetupController extends AbstractController
 
         try {
             if ($update->applyUpdates()) {
-                $this->configuration->set('main.maintenanceMode', 'false');
+                $this->configuration->set(
+                    key: 'main.maintenanceMode',
+                    value: 'false',
+                );
                 return new JsonResponse(['success' => 'Database successfully updated.'], Response::HTTP_OK);
             }
 

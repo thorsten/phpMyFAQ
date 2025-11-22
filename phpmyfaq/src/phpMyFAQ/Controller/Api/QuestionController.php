@@ -39,7 +39,7 @@ final class QuestionController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -105,7 +105,12 @@ final class QuestionController extends AbstractController
     {
         $this->hasValidToken();
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);

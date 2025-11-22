@@ -42,8 +42,8 @@ final class OpenQuestionsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::QUESTION_DELETE);
 
-        $session = $this->container->get('session');
-        $question = $this->container->get('phpmyfaq.question');
+        $session = $this->container->get(id: 'session');
+        $question = $this->container->get(id: 'phpmyfaq.question');
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(CategoryNameTwigExtension::class));

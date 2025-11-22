@@ -43,7 +43,7 @@ final class GlossaryController extends AbstractController
         $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
         $glossaryLanguage = Filter::filterVar($request->get('glossaryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $glossary = $this->container->get('phpmyfaq.glossary');
+        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         return $this->json($glossary->fetch($glossaryId), Response::HTTP_OK);
@@ -62,13 +62,13 @@ final class GlossaryController extends AbstractController
         $glossaryId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
         $glossaryLanguage = Filter::filterVar($data->lang, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('delete-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = $this->container->get('phpmyfaq.glossary');
+        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->delete($glossaryId)) {
@@ -96,13 +96,13 @@ final class GlossaryController extends AbstractController
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('add-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = $this->container->get('phpmyfaq.glossary');
+        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->create($glossaryItem, $glossaryDefinition)) {
@@ -131,13 +131,13 @@ final class GlossaryController extends AbstractController
         $glossaryItem = Filter::filterVar($data->item, FILTER_SANITIZE_SPECIAL_CHARS);
         $glossaryDefinition = Filter::filterVar($data->definition, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-glossary', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-glossary', $data->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $glossary = $this->container->get('phpmyfaq.glossary');
+        $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);
 
         if ($glossary->update($glossaryId, $glossaryItem, $glossaryDefinition)) {

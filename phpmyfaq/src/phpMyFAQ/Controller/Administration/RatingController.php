@@ -48,7 +48,7 @@ final class RatingController extends AbstractAdministrationController
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
-        $ratingData = $this->container->get('phpmyfaq.admin.rating-data');
+        $ratingData = $this->container->get(id: 'phpmyfaq.admin.rating-data');
 
         $data = $ratingData->getAll();
         $numberOfRatings = is_countable($data) ? count($data) : 0;
@@ -57,7 +57,7 @@ final class RatingController extends AbstractAdministrationController
         return $this->render('@admin/statistics/ratings.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('clear-statistics'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('clear-statistics'),
             'currentCategory' => $currentCategory,
             'ratingData' => $data,
             'numberOfRatings' => $numberOfRatings,

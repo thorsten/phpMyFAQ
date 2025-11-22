@@ -48,7 +48,7 @@ final class NewsController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::NEWS_DELETE);
         $this->userHasPermission(PermissionType::NEWS_EDIT);
 
-        $news = $this->container->get('phpmyfaq.news');
+        $news = $this->container->get(id: 'phpmyfaq.news');
 
         $this->addExtension(new AttributeExtension(IsoDateTwigExtension::class));
         $this->addExtension(new AttributeExtension(FormatDateTwigExtension::class));
@@ -93,8 +93,8 @@ final class NewsController extends AbstractAdministrationController
 
         $newsId = Filter::filterVar($request->get('newsId'), FILTER_VALIDATE_INT);
 
-        $news = $this->container->get('phpmyfaq.news');
-        $comment = $this->container->get('phpmyfaq.comments');
+        $news = $this->container->get(id: 'phpmyfaq.news');
+        $comment = $this->container->get(id: 'phpmyfaq.comments');
         $newsData = $news->get($newsId, true);
 
         $comments = $comment->getCommentsData($newsId, CommentType::NEWS);
@@ -124,7 +124,7 @@ final class NewsController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
         $user = $this->currentUser;
         $language = $this->configuration->getLanguage()->getLanguage();
 

@@ -79,7 +79,7 @@ final class OpenSearchController extends AbstractController
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
         $openSearch = new OpenSearch($this->configuration);
-        $faq = $this->container->get('phpmyfaq.faq');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 
         $bulkIndexResult = $openSearch->bulkIndex($faq->faqRecords);

@@ -60,8 +60,8 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryInfo = $category->getAllCategories();
 
-        $session = $this->container->get('session');
-        $categoryOrder = $this->container->get('phpmyfaq.category.order');
+        $session = $this->container->get(id: 'session');
+        $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
         $orderedCategories = $categoryOrder->getAllCategories();
         $categoryTree = $categoryOrder->getCategoryTree($orderedCategories);
 
@@ -91,13 +91,13 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = $this->container->get('phpmyfaq.admin.category');
+        $category = $this->container->get(id: 'phpmyfaq.admin.category');
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->setLanguage($this->configuration->getLanguage()->getLanguage());
         $category->loadCategories();
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         return $this->render('@admin/content/category.add.twig', [
             ...$this->getHeader($request),
@@ -121,8 +121,8 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $category = $this->container->get('phpmyfaq.admin.category');
-        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
+        $category = $this->container->get(id: 'phpmyfaq.admin.category');
+        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -164,14 +164,14 @@ final class CategoryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
         $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('save-category', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('save-category', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
-        $seo = $this->container->get('phpmyfaq.seo');
+        $seo = $this->container->get(id: 'phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -182,7 +182,7 @@ final class CategoryController extends AbstractAdministrationController
         $categoryLang = Filter::filterVar($request->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $uploadedFile = $request->files->get('image') ?? [];
-        $categoryImage = $this->container->get('phpmyfaq.category.image');
+        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
         if ($uploadedFile instanceof UploadedFile) {
             $categoryImage->setUploadedFile($uploadedFile);
         }
@@ -262,7 +262,7 @@ final class CategoryController extends AbstractAdministrationController
             }
 
             // Category Order entry
-            $categoryOrder = $this->container->get('phpmyfaq.category.order');
+            $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
             $categoryOrder->add($categoryId, $parentId);
 
             // SEO data
@@ -310,9 +310,9 @@ final class CategoryController extends AbstractAdministrationController
 
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT, 0);
 
-        $session = $this->container->get('session');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
-        $categoryPermission = $this->container->get('phpmyfaq.category.permission');
+        $session = $this->container->get(id: 'session');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
+        $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
         $category = new Category($this->configuration, [], false);
         $category
@@ -327,7 +327,7 @@ final class CategoryController extends AbstractAdministrationController
         $seoEntity->setReferenceId($categoryId);
         $seoEntity->setReferenceLanguage($categoryEntity->getLang());
 
-        $seoService = $this->container->get('phpmyfaq.seo');
+        $seoService = $this->container->get(id: 'phpmyfaq.seo');
         $seoData = $seoService->get($seoEntity);
 
         $userPermission = $categoryPermission->get(CategoryPermission::USER, [$categoryId]);
@@ -473,7 +473,7 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
 
         $categoryPermission = new CategoryPermission($this->configuration);
         $userHelper = new UserHelper($this->currentUser);
@@ -536,14 +536,14 @@ final class CategoryController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
         $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('update-category', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-category', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $categoryPermission = new CategoryPermission($this->configuration);
-        $seo = $this->container->get('phpmyfaq.seo');
+        $seo = $this->container->get(id: 'phpmyfaq.seo');
 
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
@@ -555,7 +555,7 @@ final class CategoryController extends AbstractAdministrationController
         $existingImage = Filter::filterVar($request->get('existing_image'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $uploadedFile = $request->files->get('image') ?? [];
-        $categoryImage = $this->container->get('phpmyfaq.category.image');
+        $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
         if ($uploadedFile instanceof UploadedFile) {
             $categoryImage->setUploadedFile($uploadedFile);
         }
@@ -634,7 +634,7 @@ final class CategoryController extends AbstractAdministrationController
                     ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
                     ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
 
-                $seoService = $this->container->get('phpmyfaq.seo');
+                $seoService = $this->container->get(id: 'phpmyfaq.seo');
                 if ($seoService->get($seoEntity)->getId() === null) {
                     $seoService->create($seoEntity);
                 } else {
@@ -688,7 +688,7 @@ final class CategoryController extends AbstractAdministrationController
                 ->setTitle(Filter::filterInput(INPUT_POST, 'serpTitle', FILTER_SANITIZE_SPECIAL_CHARS))
                 ->setDescription(Filter::filterInput(INPUT_POST, 'serpDescription', FILTER_SANITIZE_SPECIAL_CHARS));
 
-            $seoService = $this->container->get('phpmyfaq.seo');
+            $seoService = $this->container->get(id: 'phpmyfaq.seo');
             if ($seoService->get($seoEntity)->getId() === null) {
                 $seoService->create($seoEntity);
             } else {
@@ -722,8 +722,8 @@ final class CategoryController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get('session');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $session = $this->container->get(id: 'session');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         return [
             'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),

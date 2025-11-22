@@ -45,7 +45,7 @@ final class AttachmentController extends AbstractController
 
         $deleteData = json_decode($request->getContent());
         try {
-            if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
                 'delete-attachment',
                 $deleteData->csrf,
             )) {
@@ -84,7 +84,7 @@ final class AttachmentController extends AbstractController
 
         $dataToCheck = json_decode($request->getContent());
         try {
-            if (!Token::getInstance($this->container->get('session'))->verifyToken(
+            if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
                 'refresh-attachment',
                 $dataToCheck->csrf,
             )) {

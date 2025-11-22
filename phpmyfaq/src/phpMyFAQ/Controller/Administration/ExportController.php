@@ -49,7 +49,7 @@ final class ExportController extends AbstractAdministrationController
         $category->setGroups($currentGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
         return $this->render('@admin/import-export/export.twig', [

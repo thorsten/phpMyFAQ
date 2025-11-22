@@ -46,7 +46,7 @@ final class TagController extends AbstractController
 
         $postData = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('tags', $postData->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('tags', $postData->csrf)) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
@@ -59,7 +59,7 @@ final class TagController extends AbstractController
         $tag->setId($id);
         $tag->setName($newTag);
 
-        if ($this->container->get('phpmyfaq.tags')->update($tag)) {
+        if ($this->container->get(id: 'phpmyfaq.tags')->update($tag)) {
             return $this->json(['updated' => Translation::get(languageKey: 'ad_entryins_suc')], Response::HTTP_OK);
         }
 
@@ -74,7 +74,7 @@ final class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $tag = $this->container->get('phpmyfaq.tags');
+        $tag = $this->container->get(id: 'phpmyfaq.tags');
 
         $autoCompleteValue = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -121,7 +121,7 @@ final class TagController extends AbstractController
 
         $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
 
-        if ($this->container->get('phpmyfaq.tags')->delete($tagId)) {
+        if ($this->container->get(id: 'phpmyfaq.tags')->delete($tagId)) {
             return $this->json(['success' => Translation::get(
                 languageKey: 'ad_tag_delete_success',
             )], Response::HTTP_OK);

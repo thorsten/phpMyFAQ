@@ -44,8 +44,8 @@ final class FormsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
 
-        $forms = $this->container->get('phpmyfaq.forms');
-        $session = $this->container->get('session');
+        $forms = $this->container->get(id: 'phpmyfaq.forms');
+        $session = $this->container->get(id: 'session');
 
         return $this->render('@admin/configuration/forms.twig', [
             ...$this->getHeader($request),
@@ -74,8 +74,8 @@ final class FormsController extends AbstractAdministrationController
         $formId = Filter::filterVar($request->get('formId'), FILTER_VALIDATE_INT);
         $inputId = Filter::filterVar($request->get('inputId'), FILTER_VALIDATE_INT);
 
-        $forms = $this->container->get('phpmyfaq.forms');
-        $session = $this->container->get('session');
+        $forms = $this->container->get(id: 'phpmyfaq.forms');
+        $session = $this->container->get(id: 'session');
 
         // Get supported languages for adding new translations
         $languages = [];

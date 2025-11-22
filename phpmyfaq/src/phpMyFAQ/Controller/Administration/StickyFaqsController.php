@@ -46,12 +46,12 @@ final class StickyFaqsController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'stickyFAQsHeader' => Translation::get(languageKey: 'stickyRecordsHeader'),
-            'stickyData' => $this->container->get('phpmyfaq.faq')->getStickyFaqsData(),
+            'stickyData' => $this->container->get(id: 'phpmyfaq.faq')->getStickyFaqsData(),
             'sortableDisabled' => $customOrdering === false ? 'sortable-disabled' : '',
             'orderingStickyFaqsActivated' => $this->configuration->get(item: 'records.orderStickyFaqsCustom'),
             'alertMessageStickyFaqsDeactivated' => Translation::get(languageKey: 'msgOrderStickyFaqsCustomDeactivated'),
             'alertMessageNoStickyRecords' => Translation::get(languageKey: 'msgNoStickyFaqs'),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('order-stickyfaqs'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('order-stickyfaqs'),
         ]);
     }
 }

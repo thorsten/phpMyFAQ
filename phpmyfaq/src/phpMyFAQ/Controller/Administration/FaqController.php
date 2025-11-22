@@ -69,8 +69,8 @@ final class FaqController extends AbstractAdministrationController
         $categoryRelation = new Relation($this->configuration, $category);
         $categoryRelation->setGroups($currentAdminGroups);
 
-        $comments = $this->container->get('phpmyfaq.comments');
-        $sessions = $this->container->get('session');
+        $comments = $this->container->get(id: 'phpmyfaq.comments');
+        $sessions = $this->container->get(id: 'session');
 
         return $this->render('@admin/content/faq.overview.twig', [
             ...$this->getHeader($request),
@@ -101,13 +101,13 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
         $categories = [];
 
         $faqData = [
@@ -171,13 +171,13 @@ final class FaqController extends AbstractAdministrationController
         $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
         $categoryLanguage = Filter::filterVar($request->get('categoryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-add-faq');
 
         $faqData = [
             'id' => 0,
@@ -243,18 +243,18 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
         $categoryRelation = new Relation($this->configuration, $category);
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
         $selectedRevisionId = Filter::filterVar($request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
 
         $categories = $categoryRelation->getCategories($faqId, $faqLanguage);
 
@@ -262,12 +262,12 @@ final class FaqController extends AbstractAdministrationController
         $faqData = $faq->faqRecord;
 
         // Tags
-        $faqData['tags'] = implode(', ', $this->container->get('phpmyfaq.tags')->getAllTagsById($faqId));
+        $faqData['tags'] = implode(', ', $this->container->get(id: 'phpmyfaq.tags')->getAllTagsById($faqId));
 
         // SERP
         $seoEntity = new SeoEntity();
         $seoEntity->setSeoType(SeoType::FAQ)->setReferenceId($faqId)->setReferenceLanguage($faqLanguage);
-        $seoData = $this->container->get('phpmyfaq.seo')->get($seoEntity);
+        $seoData = $this->container->get(id: 'phpmyfaq.seo')->get($seoEntity);
         $faqData['serp-title'] = $seoData->getTitle();
         $faqData['serp-description'] = $seoData->getDescription();
 
@@ -288,7 +288,7 @@ final class FaqController extends AbstractAdministrationController
         $link->setTitle($faqData['title']);
 
         // User permissions
-        $userPermission = $this->container->get('phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
+        $userPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::USER, $faqId);
         if (count($userPermission) == 0 || $userPermission[0] == -1) {
             $allUsers = true;
             $restrictedUsers = false;
@@ -299,7 +299,7 @@ final class FaqController extends AbstractAdministrationController
         }
 
         // Group permissions
-        $groupPermission = $this->container->get('phpmyfaq.faq.permission')->get(Permission::GROUP, $faqId);
+        $groupPermission = $this->container->get(id: 'phpmyfaq.faq.permission')->get(Permission::GROUP, $faqId);
         if (count($groupPermission) == 0 || $groupPermission[0] == -1) {
             $allGroups = true;
             $restrictedGroups = false;
@@ -345,7 +345,7 @@ final class FaqController extends AbstractAdministrationController
             'allUsers' => $allUsers,
             'restrictedUsers' => $restrictedUsers,
             'userSelection' => $userHelper->getAllUsersForTemplate(-1, true),
-            'changelogs' => $this->container->get('phpmyfaq.admin.changelog')->getByFaqId($faqId),
+            'changelogs' => $this->container->get(id: 'phpmyfaq.admin.changelog')->getByFaqId($faqId),
             'hasPermissionForApprove' => $this->currentUser->perm->hasPermission(
                 $this->currentUser->getUserId(),
                 PermissionType::FAQ_APPROVE->value,
@@ -375,16 +375,16 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-copy-faq ' . $faqId);
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-copy-faq ' . $faqId);
 
         $categories = [];
 
@@ -452,16 +452,16 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
 
         $categories = [];
 
@@ -529,21 +529,21 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryHelper = $this->container->get('phpmyfaq.helper.category-helper');
+        $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
 
-        $faq = $this->container->get('phpmyfaq.faq');
-        $userHelper = $this->container->get('phpmyfaq.helper.user-helper');
+        $faq = $this->container->get(id: 'phpmyfaq.faq');
+        $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
         $questionId = Filter::filterVar($request->get('questionId'), FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $this->container->get('phpmyfaq.admin.admin-log')->log(
+        $this->container->get(id: 'phpmyfaq.admin.admin-log')->log(
             $this->currentUser,
             'admin-answer-question ' . $questionId,
         );
 
-        $question = $this->container->get('phpmyfaq.question')->get($questionId);
+        $question = $this->container->get(id: 'phpmyfaq.question')->get($questionId);
 
         $faqData = [
             'id' => 0,
@@ -608,7 +608,7 @@ final class FaqController extends AbstractAdministrationController
      */
     private function getBaseTemplateVars(): array
     {
-        $session = $this->container->get('session');
+        $session = $this->container->get(id: 'session');
         $token = Token::getInstance($session);
 
         $canAddAttachments = $this->currentUser->perm->hasPermission(

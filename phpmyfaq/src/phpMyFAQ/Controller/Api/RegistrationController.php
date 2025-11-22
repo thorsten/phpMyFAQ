@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Registration Controller for the REST API
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-02-27
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Api;
 
@@ -38,7 +38,7 @@ final class RegistrationController extends AbstractController
         parent::__construct();
 
         if (!$this->isApiEnabled()) {
-            throw new UnauthorizedHttpException('API is not enabled');
+            throw new UnauthorizedHttpException(challenge: 'API is not enabled');
         }
     }
 
@@ -120,7 +120,12 @@ final class RegistrationController extends AbstractController
 
         $registrationHelper = new RegistrationHelper($this->configuration);
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode(
+            json: $request->getContent(),
+            associative: false,
+            depth: 512,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
         $userName = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
         $fullName = trim((string) Filter::filterVar($data->fullname, FILTER_SANITIZE_SPECIAL_CHARS));

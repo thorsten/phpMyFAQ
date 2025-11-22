@@ -59,7 +59,7 @@ final class ImportController extends AbstractAdministrationController
             'seperateWithCommas' => Translation::get(languageKey: 'msgSeperateWithCommas'),
             'tags' => Translation::get(languageKey: 'msgTags'),
             'msgImportRecordsColumnStructure' => Translation::get(languageKey: 'msgImportRecordsColumnStructure'),
-            'csrfToken' => Token::getInstance($this->container->get('session'))->getTokenString('importfaqs'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('importfaqs'),
             'is_active' => Translation::get(languageKey: 'ad_entry_active'),
             'is_sticky' => Translation::get(languageKey: 'msgStickyFAQ'),
             'trueFalse' => Translation::get(languageKey: 'msgCSVImportTrueOrFalse'),

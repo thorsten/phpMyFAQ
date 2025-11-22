@@ -44,13 +44,16 @@ final class SessionController extends AbstractController
 
         $requestData = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get('session'))->verifyToken('export-sessions', $requestData->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            'export-sessions',
+            $requestData->csrf,
+        )) {
             return $this->json(['error' => Translation::get(
                 languageKey: 'msgNoPermission',
             )], Response::HTTP_UNAUTHORIZED);
         }
 
-        $session = $this->container->get('phpmyfaq.admin.session');
+        $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $data = $session->getSessionsByDate(
             strtotime((string) $requestData->firstHour),
             strtotime((string) $requestData->lastHour),
