@@ -530,7 +530,7 @@ $templateVars = [
     'msgExportAllFaqs' => Translation::get(languageKey: 'msgExportAllFaqs'),
     'languageBox' => Translation::get(languageKey: 'msgLanguageSubmit'),
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
-    'copyright' => System::getPoweredByString(true),
+    'copyright' => System::getPoweredByString(),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
     'msgRegisterUser' => Translation::get(languageKey: 'msgRegisterUser'),
     'sendPassword' => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'forgot-password">' . Translation::get(languageKey: 'lostPassword') . '</a>',

@@ -54,7 +54,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const string VERSION_PRE_RELEASE = 'beta';
+    private const string VERSION_PRE_RELEASE = 'RC';
 
     /**
      * API version.
@@ -153,12 +153,12 @@ class System
     /**
      * Returns the current version of phpMyFAQ for installation and
      * version in the database.
-     * Releases will be numbered with the follow format:
+     * Releases will be numbered with the following format:
      * <major>.<minor>.<patch>[-<prerelease>]
      */
     public static function getVersion(): string
     {
-        $version = sprintf('%d.%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR, self::VERSION_PATCH_LEVEL);
+        $version = self::VERSION_MAJOR . '.' . self::VERSION_MINOR . '.' . self::VERSION_PATCH_LEVEL;
         return $version . (self::isDevelopmentVersion() ? '-' . self::VERSION_PRE_RELEASE : '');
     }
 
@@ -167,7 +167,7 @@ class System
      */
     public static function getMajorVersion(): string
     {
-        return sprintf('%d.%d', self::VERSION_MAJOR, self::VERSION_MINOR);
+        return self::VERSION_MAJOR . '.' . self::VERSION_MINOR;
     }
 
     /**
@@ -187,18 +187,17 @@ class System
         return self::PLUGIN_VERSION;
     }
 
-    public static function getPoweredByString(bool $withLink = false): string
+    public static function getPoweredByString(): string
     {
-        if ($withLink) {
-            return sprintf(
-                'powered with ❤️ and ☕️ by <a class="%s" target="_blank" href="%s">phpMyFAQ</a> %s',
-                'link-light text-decoration-none',
-                self::PHPMYFAQ_URL,
-                self::getVersion(),
-            );
-        }
+        return 'powered with ❤️ and ☕️ by <a class="link-light text-decoration-none" target="_blank" href="'
+        . self::PHPMYFAQ_URL
+        . '">phpMyFAQ</a> '
+        . self::getVersion();
+    }
 
-        return sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', self::getVersion());
+    public static function getPoweredByPlainString(): string
+    {
+        return 'powered with ❤️ and ☕️ by phpMyFAQ ' . self::getVersion();
     }
 
     /**
@@ -206,7 +205,7 @@ class System
      */
     public static function getDocumentationUrl(): string
     {
-        return sprintf('%sdocs/%s', self::PHPMYFAQ_URL, self::getMajorVersion());
+        return self::PHPMYFAQ_URL . 'docs/' . self::getMajorVersion();
     }
 
     public static function getGitHubIssuesUrl(): string
@@ -260,7 +259,7 @@ class System
                 continue;
             }
 
-            if (in_array($basename, $systemFolder)) {
+            if (in_array($basename, $systemFolder, strict: true)) {
                 continue;
             }
 
@@ -310,11 +309,15 @@ class System
     {
         $mainUrl = $configuration->getDefaultUrl();
 
-        if (Request::createFromGlobals()->isSecure() && !str_contains($mainUrl, 'https')) {
-            $mainUrl = str_replace('http://', 'https://', $mainUrl);
+        if (Request::createFromGlobals()->isSecure() && !str_contains($mainUrl, needle: 'https')) {
+            $mainUrl = str_replace(
+                search: 'http://',
+                replace: 'https://',
+                subject: $mainUrl,
+            );
         }
 
-        if (!str_ends_with($mainUrl, '/')) {
+        if (!str_ends_with($mainUrl, needle: '/')) {
             $mainUrl .= '/';
         }
 
@@ -322,7 +325,7 @@ class System
     }
 
     /**
-     * Returns true, if phpMyFAQ is running on HTTPS
+     * Returns true if phpMyFAQ is running on HTTPS
      */
     public function getHttpsStatus(): bool
     {
@@ -336,9 +339,11 @@ class System
     public function checkDatabase(): bool
     {
         foreach (array_keys($this->supportedDatabases) as $extension) {
-            if (extension_loaded($extension)) {
-                return true;
+            if (!extension_loaded($extension)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
@@ -350,9 +355,11 @@ class System
     public function checkRequiredExtensions(): bool
     {
         foreach ($this->requiredExtensions as $requiredExtension) {
-            if (!extension_loaded($requiredExtension)) {
-                $this->missingExtensions[] = $requiredExtension;
+            if (extension_loaded($requiredExtension)) {
+                continue;
             }
+
+            $this->missingExtensions[] = $requiredExtension;
         }
 
         return count($this->missingExtensions) <= 0;
@@ -367,8 +374,6 @@ class System
     }
 
     /**
-     * Returns all missing extensions.
-     *
      * @return array<string>
      */
     public function getMissingExtensions(): array
@@ -390,7 +395,7 @@ class System
         );
 
         $hashes = [
-            'created' => $dateTime->format('Y-m-d H:i:sP'),
+            'created' => $dateTime->format(format: 'Y-m-d H:i:sP'),
         ];
         $ignoredFiles = [
             '/content/core/config/azure.php' => false,
@@ -404,20 +409,29 @@ class System
 
         try {
             foreach ($files as $file) {
-                if (
-                    'php' === pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION)
-                    && !str_contains((string) $file->getPath(), '/tests/')
-                    && !str_contains((string) $file->getPath(), '/multisites/')
-                    && !str_contains((string) $file->getPath(), '/upgrades/')
-                ) {
-                    $current = str_replace(PMF_ROOT_DIR, '', (string) $file->getPathname());
-
-                    if (isset($ignoredFiles[$current])) {
-                        continue;
-                    }
-
-                    $hashes[$current] = sha1(file_get_contents($file->getPathname()));
+                if ('php' !== pathinfo((string) $file->getFilename(), PATHINFO_EXTENSION)) {
+                    continue;
                 }
+
+                if (str_contains((string) $file->getPath(), needle: '/tests/')) {
+                    continue;
+                }
+
+                if (str_contains((string) $file->getPath(), needle: '/multisites/')) {
+                    continue;
+                }
+
+                if (str_contains((string) $file->getPath(), needle: '/upgrades/')) {
+                    continue;
+                }
+
+                $current = str_replace(PMF_ROOT_DIR, replace: '', subject: (string) $file->getPathname());
+
+                if (isset($ignoredFiles[$current])) {
+                    continue;
+                }
+
+                $hashes[$current] = sha1(file_get_contents($file->getPathname()));
             }
         } catch (UnexpectedValueException $unexpectedValueException) {
             $hashes[$current . ' failed'] = $unexpectedValueException->getMessage();

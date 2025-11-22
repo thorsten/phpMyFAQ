@@ -98,7 +98,7 @@ class Pdf extends Export
 
         $this->wrapper->setCategory($categoryId);
         $this->wrapper->setCategories($this->category->getAllCategories());
-        $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
+        $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByPlainString());
 
         $faqData = $this->faq->get(
             queryType: 'faq_export_pdf',
@@ -211,7 +211,7 @@ class Pdf extends Export
 
         // Set any item
         $this->wrapper->SetTitle($faqData['title']);
-        $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByString());
+        $this->wrapper->SetCreator($this->config->getTitle() . ' - ' . System::getPoweredByPlainString());
 
         $this->wrapper->AddPage();
         $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 10);

@@ -7,19 +7,19 @@ use PHPUnit\Framework\TestCase;
 
 class SystemTest extends TestCase
 {
-    public function testGetPoweredByString(): void
+    public function testGetPoweredByPlainString(): void
     {
         $this->assertEquals(
             sprintf('powered with ❤️ and ☕️ by phpMyFAQ %s', System::getVersion()),
-            System::getPoweredByString()
+            System::getPoweredByPlainString()
         );
     }
 
-    public function testGetPoweredByStringWithLink(): void
+    public function testGetPoweredByString(): void
     {
         $this->assertEquals(
             sprintf('powered with ❤️ and ☕️ by <a class="link-light text-decoration-none" target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ</a> %s', System::getVersion()),
-            System::getPoweredByString(true)
+            System::getPoweredByString()
         );
     }
 

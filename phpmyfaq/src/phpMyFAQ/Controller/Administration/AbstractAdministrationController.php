@@ -51,7 +51,7 @@ abstract class AbstractAdministrationController extends AbstractController
         return [
             'metaLanguage' => Translation::get(languageKey: 'metaLanguage'),
             'layoutMode' => 'light',
-            'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByString(),
+            'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
             'version' => System::getVersion(),
             'currentYear' => date('Y'),
@@ -372,7 +372,7 @@ abstract class AbstractAdministrationController extends AbstractController
                 Translation::get(languageKey: 'ad_session_expiring'),
                 PMF_AUTH_TIMEOUT_WARNING,
             ),
-            'msgPoweredBy' => System::getPoweredByString(),
+            'msgPoweredBy' => System::getPoweredByPlainString(),
             'documentationUrl' => System::getDocumentationUrl(),
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,
             'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
