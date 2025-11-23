@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for phpMyFAQ categories.
  *
@@ -17,8 +15,11 @@ declare(strict_types=1);
  * @since     2009-09-07
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Helper;
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Category\Language\CategoryLanguageService;
 use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Core\Exception;
@@ -234,7 +235,7 @@ class CategoryHelper extends AbstractHelper
 
         // Ensure we have a valid Category instance before proceeding
         $categoryInstance = $this->Category;
-        if (!$categoryInstance instanceof \phpMyFAQ\Category) {
+        if (!$categoryInstance instanceof Category) {
             return $recipients;
         }
 
@@ -244,8 +245,8 @@ class CategoryHelper extends AbstractHelper
         $seen = [];
 
         foreach ($categories as $category) {
-            $userId = $categoryInstance->getOwner($category);
-            $groupId = $categoryInstance->getModeratorGroupId($category);
+            $userId = $categoryInstance->getOwner((int) $category);
+            $groupId = $categoryInstance->getModeratorGroupId((int) $category);
 
             $user->getUserById($userId);
             $emailCategoryOwner = $user->getUserData('email');
@@ -284,7 +285,6 @@ class CategoryHelper extends AbstractHelper
     {
         $options = '';
 
-        // Use new CategoryLanguageService to fetch existing translation languages
         $languageService = new CategoryLanguageService();
         $existingTranslations = $languageService->getExistingTranslations($this->configuration, $categoryId);
 
