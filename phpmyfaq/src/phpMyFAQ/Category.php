@@ -113,13 +113,13 @@ class Category
     public function __construct(
         private readonly Configuration $configuration,
         array $groups = [],
-        bool $withPerm = true,
+        bool $withPermission = true,
     ) {
         $this->cache = new CategoryCache();
         $this->permissionContext = new CategoryPermissionContext($groups);
         $this->setLanguage($this->configuration->getLanguage()->getLanguage());
 
-        $this->getOrderedCategories($withPerm);
+        $this->getOrderedCategories($withPermission);
 
         // Sync deprecated properties for backward compatibility
         $this->syncDeprecatedProperties();

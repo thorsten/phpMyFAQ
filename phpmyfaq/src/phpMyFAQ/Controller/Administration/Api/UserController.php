@@ -52,21 +52,21 @@ final class UserController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $filtered = Filter::filterVar($request->query->get('filter'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $filtered = Filter::filterVar($request->query->get(key: 'filter'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ('' === $filtered) {
-            $allUsers = $currentUser->getAllUsers(false);
+            $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
             $userData = [];
             foreach ($allUsers as $allUser) {
-                $currentUser->getUserById($allUser, true);
+                $currentUser->getUserById($allUser, allowBlockedUsers: true);
                 $user = new stdClass();
                 $user->id = $currentUser->getUserId();
                 $user->status = $currentUser->getStatus();
                 $user->isSuperAdmin = $currentUser->isSuperAdmin();
-                $user->isVisible = $currentUser->getUserData('is_visible');
-                $user->displayName = Report::sanitize($currentUser->getUserData('display_name'));
+                $user->isVisible = $currentUser->getUserData(field: 'is_visible');
+                $user->displayName = Report::sanitize($currentUser->getUserData(field: 'display_name'));
                 $user->userName = Report::sanitize($currentUser->getLogin());
-                $user->email = $currentUser->getUserData('email');
+                $user->email = $currentUser->getUserData(field: 'email');
                 $user->authSource = $currentUser->getUserAuthSource();
                 $userData[] = $user;
             }
@@ -94,36 +94,39 @@ final class UserController extends AbstractController
         $this->userHasUserPermission();
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
-        $allUsers = $currentUser->getAllUsers(false);
+        $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
 
-        $handle = fopen('php://temp', 'r+');
+        $handle = fopen(
+            filename: 'php://temp',
+            mode: 'r+',
+        );
         fputcsv(
             $handle,
             ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source'],
-            ',',
-            '"',
-            '\\',
-            PHP_EOL,
+            separator: ',',
+            enclosure: '"',
+            escape: '\\',
+            eol: PHP_EOL,
         );
 
         foreach ($allUsers as $allUser) {
-            $currentUser->getUserById($allUser, true);
+            $currentUser->getUserById($allUser, allowBlockedUsers: true);
             fputcsv(
                 $handle,
                 [
                     $currentUser->getUserId(),
                     $currentUser->getStatus(),
                     $currentUser->isSuperAdmin() ? 'true' : 'false',
-                    $currentUser->getUserData('is_visible') ? 'true' : 'false',
-                    Report::sanitize($currentUser->getUserData('display_name')),
+                    $currentUser->getUserData(field: 'is_visible') ? 'true' : 'false',
+                    Report::sanitize($currentUser->getUserData(field: 'display_name')),
                     Report::sanitize($currentUser->getLogin()),
-                    $currentUser->getUserData('email'),
+                    $currentUser->getUserData(field: 'email'),
                     $currentUser->getUserAuthSource(),
                 ],
-                ',',
-                '"',
-                '\\',
-                PHP_EOL,
+                separator: ',',
+                enclosure: '"',
+                escape: '\\',
+                eol: PHP_EOL,
             );
         }
 
@@ -134,8 +137,14 @@ final class UserController extends AbstractController
         fclose($handle);
 
         $response = new Response($content);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="users.csv"');
+        $response->headers->set(
+            key: 'Content-Type',
+            values: 'text/csv',
+        );
+        $response->headers->set(
+            key: 'Content-Disposition',
+            values: 'attachment; filename="users.csv"',
+        );
 
         return $response;
     }
@@ -150,10 +159,13 @@ final class UserController extends AbstractController
 
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
 
-        $user->getUserById((int) $request->get('userId'), true);
+        $user->getUserById((int) $request->get(key: 'userId'), allowBlockedUsers: true);
 
-        $userData = $user->userdata->get('*');
-        if (is_array($userData)) {
+        $userData = [];
+
+        $data = $user->userdata->get(field: '*');
+        if (is_array($data)) {
+            $userData = $data;
             $userData['userId'] = $user->getUserId();
             $userData['status'] = $user->getStatus();
             $userData['login'] = $user->getLogin();
@@ -163,8 +175,6 @@ final class UserController extends AbstractController
             $userData['isVisible'] = $userData['is_visible'];
             $userData['twoFactorEnabled'] = $userData['twofactor_enabled'];
             $userData['lastModified'] = $userData['last_modified'];
-        } else {
-            $userData = [];
         }
 
         return $this->json($userData, Response::HTTP_OK);
@@ -180,8 +190,8 @@ final class UserController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $userId = $request->get('userId');
-        $currentUser->getUserById((int) $userId, true);
+        $userId = $request->get(key: 'userId');
+        $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
 
         return $this->json($currentUser->perm->getUserRights((int) $userId), Response::HTTP_OK);
     }
@@ -198,13 +208,16 @@ final class UserController extends AbstractController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
         $data = json_decode($request->getContent());
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('activate-user', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'activate-user',
+            requestToken: $data->csrfToken,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
-        $currentUser->getUserById((int) $userId, true);
+        $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
         try {
             if ($currentUser->activateUser()) {
                 return $this->json(['success' => $currentUser->getStatus()], Response::HTTP_OK);
@@ -234,7 +247,10 @@ final class UserController extends AbstractController
         $newPassword = Filter::filterVar($data->newPassword, FILTER_SANITIZE_SPECIAL_CHARS);
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('overwrite-password', $csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'overwrite-password',
+            requestToken: $csrfToken,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -242,13 +258,13 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgPasswordTooShort')], Response::HTTP_BAD_REQUEST);
         }
 
-        $currentUser->getUserById((int) $userId, true);
+        $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
 
         $auth = new Auth($this->configuration);
-        $authSource = $auth->selectAuth($currentUser->getAuthSource('name'));
-        $authSource->getEncryptionContainer($currentUser->getAuthData('encType'));
+        $authSource = $auth->selectAuth($currentUser->getAuthSource(key: 'name'));
+        $authSource->getEncryptionContainer($currentUser->getAuthData(key: 'encType'));
 
-        if ($newPassword === $retypedPassword) {
+        if (hash_equals($newPassword, $retypedPassword)) {
             if (!$currentUser->changePassword($newPassword)) {
                 return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
@@ -261,6 +277,8 @@ final class UserController extends AbstractController
 
     /**
      * @throws Exception
+     * *@throws \Exception
+     *
      */
     #[Route(path: 'admin/api/user/delete')]
     public function deleteUser(Request $request): JsonResponse
@@ -271,16 +289,19 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-user', $data->csrfToken)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'delete-user',
+            requestToken: $data->csrfToken,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
 
-        $currentUser->getUserById($userId, true);
+        $currentUser->getUserById($userId, allowBlockedUsers: true);
         if ($currentUser->getStatus() === 'protected' || $userId === 1) {
             return $this->json(['error' => Translation::get(
-                'ad_user_error_protectedAccount',
+                key: 'ad_user_error_protectedAccount',
             )], Response::HTTP_BAD_REQUEST);
         }
 
@@ -288,12 +309,15 @@ final class UserController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         }
 
-        $category = new Category($this->configuration, [], false);
-        $category->moveOwnership((int) $userId, 1);
+        $category = new Category($this->configuration, [], withPermission: false);
+        $category->moveOwnership((int) $userId, newOwner: 1);
 
         // Remove the user from groups
         if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
-            $permissions = Permission::create('medium', $this->configuration);
+            $permissions = Permission::create(
+                permLevel: 'medium',
+                configuration: $this->configuration,
+            );
             $permissions->removeFromAllGroups($userId);
         }
 
@@ -302,6 +326,7 @@ final class UserController extends AbstractController
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/user/add')]
     public function addUser(Request $request): JsonResponse
@@ -310,7 +335,10 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-user', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'add-user',
+            requestToken: $data->csrf,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -330,7 +358,7 @@ final class UserController extends AbstractController
             $errorMessage[] = Translation::get(key: 'ad_user_error_loginInvalid');
         }
 
-        if ($newUser->getUserByLogin($userName, false)) {
+        if ($newUser->getUserByLogin($userName, raiseError: false)) {
             $errorMessage[] = Translation::get(key: 'ad_adus_exerr');
         }
 
@@ -342,29 +370,35 @@ final class UserController extends AbstractController
             $errorMessage[] = Translation::get(key: 'ad_user_error_noEmail');
         }
 
-        if (!$automaticPassword) {
-            if (strlen((string) $userPassword) <= 7 || strlen((string) $userPasswordConfirm) <= 7) {
-                $errorMessage[] = Translation::get(key: 'ad_passwd_fail');
-            }
-        } else {
-            $userPassword = $newUser->createPassword(8, false);
+        if (
+            !$automaticPassword
+            && (strlen((string) $userPassword) <= 7 || strlen((string) $userPasswordConfirm) <= 7)
+        ) {
+            $errorMessage[] = Translation::get(key: 'ad_passwd_fail');
+        }
+
+        if ($automaticPassword) {
+            $userPassword = $newUser->createPassword(
+                minimumLength: 8,
+                allowUnderscore: false,
+            );
         }
 
         if ($errorMessage === []) {
             if (!$newUser->createUser($userName, $userPassword)) {
                 $errorMessage[] = $newUser->error();
-            } else {
-                $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
-                $newUser->setStatus('active');
-                $newUser->setSuperAdmin((bool) $userIsSuperAdmin);
-                $mailHelper = new MailHelper($this->configuration);
-                try {
-                    $mailHelper->sendMailToNewUser($newUser, $userPassword);
-                } catch (Exception|TransportExceptionInterface) {
-                    // @todo catch exception
-                }
+                return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
+            }
 
-                return $this->json(['success' => Translation::get(key: 'ad_adus_suc')], Response::HTTP_OK);
+            $newUser->userdata->set(['display_name', 'email', 'is_visible'], [$userRealName, $userEmail, 0]);
+            $newUser->setStatus(status: 'active');
+            $newUser->setSuperAdmin((bool) $userIsSuperAdmin);
+
+            $mailHelper = new MailHelper($this->configuration);
+            try {
+                $mailHelper->sendMailToNewUser($newUser, $userPassword);
+            } catch (Exception|TransportExceptionInterface) {
+                /* @mago-expect lint:no-empty-catch-clause */
             }
         }
 
@@ -382,13 +416,13 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'update-user-data',
-            $data->csrfToken,
+            page: 'update-user-data',
+            requestToken: $data->csrfToken,
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, default: 0);
         if ($userId === 0) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
@@ -397,13 +431,13 @@ final class UserController extends AbstractController
         $userData['display_name'] = trim(strip_tags((string) $data->display_name));
         $userData['email'] = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
         $userData['last_modified'] = Filter::filterVar($data->last_modified, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, 'active');
+        $userStatus = Filter::filterVar($data->user_status, FILTER_SANITIZE_SPECIAL_CHARS, default: 'active');
         $isSuperAdmin = Filter::filterVar($data->is_superadmin, FILTER_SANITIZE_SPECIAL_CHARS);
         $deleteTwoFactor = Filter::filterVar($data->overwrite_twofactor, FILTER_SANITIZE_SPECIAL_CHARS);
         $deleteTwoFactor = $deleteTwoFactor === 'on';
 
         $user = new User($this->configuration);
-        $user->getUserById($userId, true);
+        $user->getUserById($userId, allowBlockedUsers: true);
 
         $stats = $user->getStatus();
 
@@ -412,13 +446,13 @@ final class UserController extends AbstractController
             $user->setUserData(['secret' => '', 'twofactor_enabled' => 0]);
         }
 
-        // set new password and sent email if a user is switched to active
-        if ($stats === 'blocked' && $userStatus == 'active' && !$user->activateUser()) {
+        // set a new password and sent email if a user is switched to active
+        if ($stats === 'blocked' && $userStatus === 'active' && !$user->activateUser()) {
             $userStatus = 'invalid_status';
         }
 
-        // Set super-admin flag
-        $user->setSuperAdmin($isSuperAdmin);
+        // Set the super-admin flag
+        $user->setSuperAdmin((bool) $isSuperAdmin);
 
         if (!$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus)) {
             return $this->json(['error' => 'ad_msg_mysqlerr'], Response::HTTP_BAD_REQUEST);
@@ -426,9 +460,9 @@ final class UserController extends AbstractController
 
         $success =
             Translation::get(key: 'ad_msg_savedsuc_1')
-            . ' '
+            . ' "'
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
-            . ' '
+            . '" '
             . Translation::get(key: 'ad_msg_savedsuc_2');
         return $this->json(['success' => $success], Response::HTTP_OK);
     }
@@ -445,13 +479,13 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'update-user-rights',
-            $data->csrfToken,
+            page: 'update-user-rights',
+            requestToken: $data->csrfToken,
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, default: 0);
 
         if (0 === (int) $userId) {
             return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
@@ -466,15 +500,15 @@ final class UserController extends AbstractController
         }
 
         foreach ($userRights as $userRight) {
-            $user->perm->grantUserRight($userId, $userRight);
+            $user->perm->grantUserRight($userId, (int) $userRight);
         }
 
         $user->terminateSessionId();
         $success =
             Translation::get(key: 'ad_msg_savedsuc_1')
-            . ' '
+            . ' "'
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
-            . ' '
+            . '" '
             . Translation::get(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
