@@ -76,15 +76,15 @@ final class FaqController extends AbstractController
         $categoryPermission = new CategoryPermission($this->configuration);
         $faqPermission = new FaqPermission($this->configuration);
 
-        $category = new Category($this->configuration, [], false);
+        $category = new Category($this->configuration, [], withPermission: false);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
         $data = json_decode($request->getContent())->data;
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'pmf-csrf-token',
-            $data->{'pmf-csrf-token'},
+            page: 'pmf-csrf-token',
+            requestToken: $data->{'pmf-csrf-token'},
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -105,7 +105,7 @@ final class FaqController extends AbstractController
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
+        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $notes = Filter::filterVar($data->notes, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -116,9 +116,9 @@ final class FaqController extends AbstractController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($this->currentUser, 'admin-save-new-faq');
+        $logging->log($this->currentUser, message: 'admin-save-new-faq');
 
-        if (empty($question) && empty($content)) {
+        if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
@@ -130,12 +130,12 @@ final class FaqController extends AbstractController
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 (string) $question,
                 ENT_QUOTES | ENT_HTML5,
-                'UTF-8',
+                encoding: 'UTF-8',
             )))
             ->setAnswer(Filter::removeAttributes(html_entity_decode(
                 (string) $content,
                 ENT_QUOTES | ENT_HTML5,
-                'UTF-8',
+                encoding: 'UTF-8',
             )))
             ->setKeywords($keywords)
             ->setAuthor($author)
@@ -164,7 +164,10 @@ final class FaqController extends AbstractController
 
             // Insert the tags
             if ($tags !== '') {
-                $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
+                $tagging->create($faqData->getId(), explode(
+                    separator: ',',
+                    string: trim((string) $tags),
+                ));
             }
 
             // Add user permissions
@@ -283,15 +286,15 @@ final class FaqController extends AbstractController
         $seo = $this->container->get(id: 'phpmyfaq.seo');
         $faqPermission = new FaqPermission($this->configuration);
 
-        $category = new Category($this->configuration, [], false);
+        $category = new Category($this->configuration, [], withPermission: false);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
 
         $data = json_decode($request->getContent())->data;
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
-            'pmf-csrf-token',
-            $data->{'pmf-csrf-token'},
+            page: 'pmf-csrf-token',
+            requestToken: $data->{'pmf-csrf-token'},
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
@@ -314,7 +317,7 @@ final class FaqController extends AbstractController
         $content = Filter::filterVar($data->answer, FILTER_SANITIZE_SPECIAL_CHARS);
         $keywords = Filter::filterVar($data->keywords, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, '');
+        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL, default: '');
         $comment = Filter::filterVar($data->comment ?? 'n', FILTER_SANITIZE_SPECIAL_CHARS);
         $changed = Filter::filterVar($data->changed, FILTER_SANITIZE_SPECIAL_CHARS);
         $date = Filter::filterVar($data->date, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -325,7 +328,7 @@ final class FaqController extends AbstractController
         $serpTitle = Filter::filterVar($data->serpTitle, FILTER_SANITIZE_SPECIAL_CHARS);
         $serpDescription = Filter::filterVar($data->serpDescription, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (empty($question) && empty($content)) {
+        if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
         }
 
@@ -354,12 +357,12 @@ final class FaqController extends AbstractController
             ->setQuestion(Filter::removeAttributes(html_entity_decode(
                 (string) $question,
                 ENT_QUOTES | ENT_HTML5,
-                'UTF-8',
+                encoding: 'UTF-8',
             )))
             ->setAnswer(Filter::removeAttributes(html_entity_decode(
                 (string) $content,
                 ENT_QUOTES | ENT_HTML5,
-                'UTF-8',
+                encoding: 'UTF-8',
             )))
             ->setKeywords($keywords)
             ->setAuthor($author)
@@ -407,7 +410,10 @@ final class FaqController extends AbstractController
 
         // Insert the tags
         if ($tags !== '') {
-            $tagging->create($faqData->getId(), explode(',', trim((string) $tags)));
+            $tagging->create($faqData->getId(), explode(
+                separator: ',',
+                string: trim((string) $tags),
+            ));
         } else {
             $tagging->deleteByRecordId($faqData->getId());
         }
@@ -484,7 +490,7 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
+        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -502,11 +508,15 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $language = Filter::filterVar($request->get('language'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $language = Filter::filterVar($request->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $onlyInactive = Filter::filterVar($request->query->get('only-inactive'), FILTER_VALIDATE_BOOLEAN, false);
-        $onlyNew = Filter::filterVar($request->query->get('only-new'), FILTER_VALIDATE_BOOLEAN, false);
+        $onlyInactive = Filter::filterVar(
+            $request->query->get(key: 'only-inactive'),
+            FILTER_VALIDATE_BOOLEAN,
+            default: false,
+        );
+        $onlyNew = Filter::filterVar($request->query->get(key: 'only-new'), FILTER_VALIDATE_BOOLEAN, default: false);
 
         $faq = new FaqAdministration($this->configuration);
         $faq->setLanguage($language);
@@ -534,7 +544,10 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: $data->csrf,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -547,7 +560,7 @@ final class FaqController extends AbstractController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, 'active');
+                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, type: 'active');
             }
 
             if ($success) {
@@ -574,7 +587,10 @@ final class FaqController extends AbstractController
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
         $checked = Filter::filterVar($data->checked, FILTER_VALIDATE_BOOLEAN);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: $data->csrf,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -587,7 +603,7 @@ final class FaqController extends AbstractController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, 'sticky');
+                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, type: 'sticky');
             }
 
             if ($success) {
@@ -615,7 +631,10 @@ final class FaqController extends AbstractController
         $faqId = Filter::filterVar($data->faqId, FILTER_VALIDATE_INT);
         $faqLanguage = Filter::filterVar($data->faqLanguage, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: $data->csrf,
+        )) {
             return $this->json([
                 'error' => 'CSRF Token - ' . Translation::get(key: 'msgNoPermission'),
             ], Response::HTTP_UNAUTHORIZED);
@@ -643,7 +662,10 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('pmf-csrf-token', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'pmf-csrf-token',
+            requestToken: $data->csrf,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -655,7 +677,7 @@ final class FaqController extends AbstractController
         $searchString = Filter::filterVar($data->search, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!is_null($searchString)) {
-            $searchResult = $faqSearch->search($searchString, false);
+            $searchResult = $faqSearch->search($searchString, allLanguages: false);
 
             $searchResultSet->reviewResultSet($searchResult);
 
@@ -679,7 +701,10 @@ final class FaqController extends AbstractController
 
         $data = json_decode($request->getContent());
 
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('order-stickyfaqs', $data->csrf)) {
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'order-stickyfaqs',
+            requestToken: $data->csrf,
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -699,12 +724,15 @@ final class FaqController extends AbstractController
 
         $session = $this->container->get(id: 'session');
 
-        $file = $request->files->get('file');
+        $file = $request->files->get(key: 'file');
         if (!isset($file)) {
             return $this->json(['error' => 'Bad request: There is no file submitted.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!Token::getInstance($session)->verifyToken('importfaqs', $request->request->get('csrf'))) {
+        if (!Token::getInstance($session)->verifyToken(
+            page: 'importfaqs',
+            requestToken: $request->request->get(key: 'csrf'),
+        )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -713,7 +741,10 @@ final class FaqController extends AbstractController
         $errors = [];
 
         if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
-            $handle = fopen($file->getRealPath(), 'r');
+            $handle = fopen(
+                filename: $file->getRealPath(),
+                mode: 'r',
+            );
             $csvData = $faqImport->parseCSV($handle);
 
             if (!$faqImport->validateCSV($csvData)) {
