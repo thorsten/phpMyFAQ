@@ -7,11 +7,16 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\DownloadHostType;
 use phpMyFAQ\System;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class UpgradeTest extends TestCase
 {
     private Upgrade $upgrade;
+    private HttpClientInterface|MockObject $httpClientMock;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,30 +24,50 @@ class UpgradeTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
-        $this->upgrade = new Upgrade(new System(), $configuration);
+
+        $this->httpClientMock = $this->createMock(HttpClientInterface::class);
+        $this->upgrade = new Upgrade(new System(), $configuration, $this->httpClientMock);
         $this->upgrade->setUpgradeDirectory(PMF_CONTENT_DIR . '/upgrades');
     }
 
     /**
      * @throws Exception
      */
-    public function testDownloadPackage(): void
+    public function testDownloadPackageSuccessful(): void
     {
-        if (!$this->isNetworkAvailable()) {
-            $this->markTestSkipped('Network not available');
-        }
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(200);
+        $response->method('getContent')->willReturn('zip-binary-content');
 
-        try {
-            $actual = $this->upgrade->downloadPackage('3.1.15');
-            $this->assertIsString($actual);
-        } catch (Exception $e) {
-            if (str_contains($e->getMessage(), 'timeout') || str_contains($e->getMessage(), 'connection')) {
-                $this->markTestSkipped('Network timeout: ' . $e->getMessage());
-            }
-            throw $e;
-        }
+        $this->httpClientMock
+            ->expects($this->once())
+            ->method('request')
+            ->with('GET', $this->isString())
+            ->willReturn($response);
 
-        $this->expectException('phpMyFAQ\Core\Exception');
+        $path = $this->upgrade->downloadPackage('3.1.15');
+
+        $this->assertIsString($path);
+        $this->assertFileExists($path);
+        $this->assertSame('zip-binary-content', file_get_contents($path));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testDownloadPackageThrowsOnHttpError(): void
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn(404);
+
+        $this->httpClientMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($response);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot download package (HTTP Status: 404).');
+
         $this->upgrade->downloadPackage('1.2.3');
     }
 
@@ -63,7 +88,7 @@ class UpgradeTest extends TestCase
      */
     public function testCheckFilesystemMissingConfigFiles(): void
     {
-        $this->expectException('phpMyFAQ\Core\Exception');
+        $this->expectException('phpMyFAQ\\Core\\Exception');
         $this->expectExceptionMessage(
             'The files /content/core/config/constant.php and /content/core/config/database.php are missing.'
         );
@@ -97,14 +122,5 @@ class UpgradeTest extends TestCase
         $this->upgrade->setIsNightly(false);
 
         $this->assertEquals('', $this->upgrade->getPath());
-    }
-
-    private function isNetworkAvailable(): bool
-    {
-        $context = stream_context_create([
-            'http' => ['timeout' => 5]
-        ]);
-
-        return @file_get_contents('https://download.phpmyfaq.de', false, $context) !== false;
     }
 }

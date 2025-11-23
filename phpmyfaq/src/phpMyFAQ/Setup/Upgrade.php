@@ -34,6 +34,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use ZipArchive;
 
 class Upgrade extends AbstractSetup
@@ -48,14 +49,19 @@ class Upgrade extends AbstractSetup
 
     private bool $isNightly;
 
+    private HttpClientInterface $httpClient;
+
     public function __construct(
         protected System $system,
         private readonly Configuration $configuration,
+        ?HttpClientInterface $httpClient = null,
     ) {
         parent::__construct($this->system);
 
         $this->isNightly =
             $this->configuration->get(item: 'upgrade.releaseEnvironment') === ReleaseType::NIGHTLY->value;
+
+        $this->httpClient = $httpClient ?? HttpClient::create(['timeout' => 60]);
     }
 
     /**
@@ -125,25 +131,40 @@ class Upgrade extends AbstractSetup
     {
         $url = $this->getDownloadHost() . $this->getPath() . $this->getFilename($version);
 
-        $httpClient = HttpClient::create(['timeout' => 60]);
+        $attempts = 3;
+        $lastExceptionMessage = null;
 
-        try {
-            $response = $httpClient->request('GET', $url);
+        for ($i = 0; $i < $attempts; $i++) {
+            try {
+                $response = $this->httpClient->request('GET', $url);
 
-            if ($response->getStatusCode() !== 200) {
-                throw new Exception('Cannot download package (HTTP Status: ' . $response->getStatusCode() . ').');
+                if ($response->getStatusCode() !== 200) {
+                    throw new Exception('Cannot download package (HTTP Status: ' . $response->getStatusCode() . ').');
+                }
+
+                $package = $response->getContent();
+
+                $targetPath = $this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version);
+                file_put_contents($targetPath, $package);
+
+                return $targetPath;
+            } catch (
+                TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $exception
+            ) {
+                $lastExceptionMessage = $exception->getMessage();
+
+                // After the last attempt, throw the exception outward
+                if ($i === ($attempts - 1)) {
+                    throw new Exception('Download failed after ' . $attempts . ' attempts: ' . $lastExceptionMessage);
+                }
+
+                // Short sleep to mitigate transient network issues
+                usleep(250000); // 250ms
             }
-
-            $package = $response->getContent();
-
-            file_put_contents($this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version), $package);
-
-            return $this->upgradeDirectory . DIRECTORY_SEPARATOR . $this->getFilename($version);
-        } catch (
-            TransportExceptionInterface|ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e
-        ) {
-            throw new Exception($e->getMessage());
         }
+
+        // Should not be reached, but for safety
+        throw new Exception('Download failed: ' . ($lastExceptionMessage ?? 'unknown error'));
     }
 
     /**
@@ -155,8 +176,7 @@ class Upgrade extends AbstractSetup
      */
     public function verifyPackage(string $path, string $version): bool
     {
-        $httpClient = HttpClient::create(['timeout' => 30]);
-        $response = $httpClient->request('GET', DownloadHostType::PHPMYFAQ->value . 'info/' . $version);
+        $response = $this->httpClient->request('GET', DownloadHostType::PHPMYFAQ->value . 'info/' . $version);
 
         try {
             $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -267,8 +287,9 @@ class Upgrade extends AbstractSetup
         $currentFile = 0;
 
         foreach ($sourceDirIterator as $item) {
-            $source = $item->getPathName();
-            $destination = $destinationDir . DIRECTORY_SEPARATOR . $sourceDirIterator->getSubPathName();
+            $source = $item->getRealPath();
+            $relativePath = str_replace($sourceDir, '', $source);
+            $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
 
             if ($item->isDir()) {
                 if (!is_dir($destination)) {
