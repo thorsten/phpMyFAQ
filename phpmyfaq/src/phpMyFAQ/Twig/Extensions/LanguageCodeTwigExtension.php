@@ -28,6 +28,6 @@ class LanguageCodeTwigExtension extends AbstractExtension
     #[AsTwigFilter(name: 'getFromLanguageCode')]
     public static function getFromLanguageCode(string $languageCode): string
     {
-        return LanguageCodes::get($languageCode);
+        return LanguageCodes::get($languageCode) ?? 'Unknown';
     }
 }

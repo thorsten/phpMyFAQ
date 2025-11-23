@@ -1520,5 +1520,9 @@ $PMF_LANG['msgNewestUsers'] = 'Newest users';
 $PMF_LANG['msgMemberSince'] = 'Member since';
 $PMF_LANG['msgNumberRegisteredUsers'] = 'Registered users';
 $PMF_LANG['msgConfirmDeleteFAQ'] = 'Do you really want to delete this FAQ? This action cannot be undone.';
+$PMF_LANG['msgTotalKeys'] = 'Total number of translation keys';
+$PMF_LANG['msgTranslatedKeys'] = 'Number of translated keys';
+$PMF_LANG['msgMissingKeys'] = 'Missing translation keys';
+$PMF_LANG['msgCompletionPercentage'] = 'Completion percentage';
 
 return $PMF_LANG;

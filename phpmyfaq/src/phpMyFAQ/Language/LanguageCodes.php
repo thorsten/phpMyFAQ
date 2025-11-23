@@ -59,6 +59,7 @@ class LanguageCodes
         'bn' => 'Bengali',
         'bo' => 'Tibetan',
         'br' => 'Breton',
+        'bs' => 'Bosnian',
         'ca' => 'Catalan',
         'co' => 'Corsican',
         'cs' => 'Czech',

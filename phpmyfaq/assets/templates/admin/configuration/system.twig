@@ -9,18 +9,73 @@
     </h1>
   </div>
 
-  <div class="row">
-    <div class="col-lg-12">
-      <table class="table table-striped align-middle border shadow">
-        <tbody>
-        {% for key, info in systemInformation %}
-          <tr>
-            <td class="col-3 align-text-top"><strong>{{ key }}</strong></td>
-            <td>{{ info }}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" id="pmf-system-information" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="system-tab" data-bs-toggle="tab" data-bs-target="#system" type="button"
+              role="tab" aria-controls="home" aria-selected="true">{{ adminHeaderSystemInfo }}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="translation-tab" data-bs-toggle="tab" data-bs-target="#translation" type="button"
+              role="tab" aria-controls="profile" aria-selected="false">{{ 'ad_stat_report_translations' | translate }}</button>
+    </li>
+  </ul>
+
+  <div class="tab-content border-start border-end border-bottom">
+    <div class="tab-pane active" id="system" role="tabpanel" aria-labelledby="system-tab" tabindex="0">
+      <div class="row p-2">
+        <div class="col-lg-12">
+          <table class="table table-striped align-middle border shadow">
+            <tbody>
+            {% for key, info in systemInformation %}
+              <tr>
+                <td class="col-3 align-text-top"><strong>{{ key }}</strong></td>
+                <td>{{ info }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="translation" role="tabpanel" aria-labelledby="translation-tab" tabindex="0">
+      <div class="row p-2">
+        <div class="col-lg-12">
+          <table class="table table-striped align-middle border shadow">
+            <thead>
+            <tr>
+              <th>{{ 'msgLanguage' | translate }}</th>
+              <th>{{ 'msgTotalKeys' | translate }}</th>
+              <th>{{ 'msgTranslatedKeys' | translate }}</th>
+              <th>{{ 'msgMissingKeys' | translate }}</th>
+              <th>{{ 'msgCompletionPercentage' | translate }}</th>
+            </tr>
+            <tbody>
+            {% for key, info in translationInformation %}
+              <tr>
+                <td class="col-3 align-text-top"><strong>{{ key | getFromLanguageCode }}</strong></td>
+                <td>{{ info.total_keys }}</td>
+                <td>{{ info.translated_keys }}</td>
+                <td>{{ info.missing_keys }}</td>
+                <td>
+                  <div class="progress" role="progressbar" aria-label="{{ 'msgCompletionPercentage' | translate }}"
+                       aria-valuenow="{{ info.completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         style="width: {{ info.completion_percentage }}%">
+                      {{ info.completion_percentage }}%
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
+
+
+
+
 {% endblock %}

@@ -21,13 +21,16 @@ namespace phpMyFAQ\Controller\Administration;
 
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
+use phpMyFAQ\Administration\TranslationStatistics;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\Extensions\LanguageCodeTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Twig\Extension\AttributeExtension;
 
 final class SystemInformationController extends AbstractAdministrationController
 {
@@ -61,6 +64,10 @@ final class SystemInformationController extends AbstractAdministrationController
             $openSearchInformation = 'n/a';
         }
 
+        $translationInformation = new TranslationStatistics($this->configuration);
+        $translationStatistics = $translationInformation->getStatistics();
+
+        $this->addExtension(new AttributeExtension(LanguageCodeTwigExtension::class));
         return $this->render('@admin/configuration/system.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
@@ -81,6 +88,7 @@ final class SystemInformationController extends AbstractAdministrationController
                 'Elasticsearch Version' => $esInformation,
                 'OpenSearch Version' => $openSearchInformation,
             ],
+            'translationInformation' => $translationStatistics,
         ]);
     }
 }
