@@ -85,9 +85,11 @@ readonly class Notification
         if ($this->configuration->get(item: 'main.enableNotifications')) {
             $this->mail->addTo($this->configuration->getAdminEmail());
             foreach ($emails as $email) {
-                if ($email !== $this->configuration->getAdminEmail()) {
-                    $this->mail->addCc($email);
+                if ($email === $this->configuration->getAdminEmail()) {
+                    continue;
                 }
+
+                $this->mail->addCc($email);
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';

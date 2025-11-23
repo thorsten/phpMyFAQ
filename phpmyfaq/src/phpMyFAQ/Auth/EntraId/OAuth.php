@@ -115,7 +115,7 @@ class OAuth
         return $this->token;
     }
 
-    public function setToken(stdClass $token): OAuth
+    public function setToken(#[\SensitiveParameter] stdClass $token): OAuth
     {
         try {
             $parts = explode('.', (string) $token->id_token);
@@ -155,7 +155,7 @@ class OAuth
         return $this->refreshToken;
     }
 
-    public function setRefreshToken(?string $refreshToken): OAuth
+    public function setRefreshToken(#[\SensitiveParameter] ?string $refreshToken): OAuth
     {
         $this->refreshToken = $refreshToken;
         return $this;
@@ -166,7 +166,7 @@ class OAuth
         return $this->accessToken;
     }
 
-    public function setAccessToken(?string $accessToken): OAuth
+    public function setAccessToken(#[\SensitiveParameter] ?string $accessToken): OAuth
     {
         $this->accessToken = $accessToken;
         return $this;

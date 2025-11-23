@@ -142,9 +142,11 @@ class RegistrationHelper extends AbstractHelper
         $hostnameToCheck = trim(substr($email, $atPos + 1));
 
         foreach ($whitelistedDomainList as $hostname) {
-            if ($hostnameToCheck === trim($hostname)) {
-                return true;
+            if ($hostnameToCheck !== trim($hostname)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;

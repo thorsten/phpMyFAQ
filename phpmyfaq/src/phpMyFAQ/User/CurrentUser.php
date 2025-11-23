@@ -686,7 +686,7 @@ class CurrentUser extends User
      * @param array<string> $token
      * @throws \JsonException
      */
-    public function setTokenData(array $token): bool
+    public function setTokenData(#[\SensitiveParameter] array $token): bool
     {
         $update = sprintf(
             "
@@ -780,7 +780,7 @@ class CurrentUser extends User
      */
     protected function sortAuthContainer(array $authContainer): array
     {
-        uksort($authContainer, function ($first, $second): int {
+        uksort($authContainer, static function ($first, $second): int {
             if ($first === 'local') {
                 return 1;
             }

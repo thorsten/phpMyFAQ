@@ -80,15 +80,17 @@ final class FormsController extends AbstractAdministrationController
         // Get supported languages for adding new translations
         $languages = [];
         foreach (LanguageCodes::getAllSupported() as $code => $language) {
-            if (!in_array($code, $forms->getTranslatedLanguages($formId, $inputId))) {
-                $languages[] = $language;
+            if (in_array($code, $forms->getTranslatedLanguages($formId, $inputId))) {
+                continue;
             }
+
+            $languages[] = $language;
         }
 
         // Twig filter for language codes
         // Not seperated as TwigExtension because of a special function and handling of 'default'
         // value in this context
-        $twigFilter = new TwigFilter('languageCode', function ($string): ?string {
+        $twigFilter = new TwigFilter('languageCode', static function ($string): ?string {
             if ($string === 'default') {
                 return $string;
             }

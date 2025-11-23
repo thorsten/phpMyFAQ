@@ -192,18 +192,20 @@ readonly class Session
 
         foreach ($visits as $visitDate) {
             if (
-                isset(
+                !isset(
                     $stats[date(
                         format: 'Y-m-d',
                         timestamp: (int) $visitDate,
                     )],
                 )
             ) {
-                ++$stats[date(
-                    format: 'Y-m-d',
-                    timestamp: (int) $visitDate,
-                )];
+                continue;
             }
+
+            ++$stats[date(
+                format: 'Y-m-d',
+                timestamp: (int) $visitDate,
+            )];
         }
 
         foreach (array_keys($stats) as $date) {

@@ -39,9 +39,11 @@ final class LinkQueryParser
             $tmp = [];
             parse_str($rawQuery, $tmp);
             foreach ($tmp as $k => $v) {
-                if (is_scalar($v)) {
-                    $parameters[(string) $k] = (string) $v;
+                if (!is_scalar($v)) {
+                    continue;
                 }
+
+                $parameters[(string) $k] = (string) $v;
             }
         }
         if (isset($parsed['fragment'])) {

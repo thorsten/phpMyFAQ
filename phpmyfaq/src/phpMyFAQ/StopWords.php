@@ -213,9 +213,11 @@ class StopWords
         // We just search a match of, at least, one banned word into $content
         foreach ($bannedWords as $bannedWord) {
             foreach ($checkWords as $checkWord) {
-                if (Strings::strtolower($checkWord) === Strings::strtolower($bannedWord)) {
-                    return false;
+                if (Strings::strtolower($checkWord) !== Strings::strtolower($bannedWord)) {
+                    continue;
                 }
+
+                return false;
             }
         }
 

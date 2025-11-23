@@ -75,7 +75,7 @@ class Token
         return $this->sessionToken;
     }
 
-    public function setSessionToken(string $sessionToken): Token
+    public function setSessionToken(#[\SensitiveParameter] string $sessionToken): Token
     {
         $this->sessionToken = $sessionToken;
         return $this;
@@ -86,7 +86,7 @@ class Token
         return $this->cookieToken;
     }
 
-    public function setCookieToken(string $cookieToken): Token
+    public function setCookieToken(#[\SensitiveParameter] string $cookieToken): Token
     {
         $this->cookieToken = $cookieToken;
         return $this;
@@ -129,8 +129,11 @@ class Token
         return $token->sessionToken;
     }
 
-    public function verifyToken(string $page, ?string $requestToken = null, bool $removeToken = false): bool
-    {
+    public function verifyToken(
+        string $page,
+        #[\SensitiveParameter] ?string $requestToken = null,
+        #[\SensitiveParameter] bool $removeToken = false,
+    ): bool {
         $requestToken ??= Request::createFromGlobals()->request->get(self::PMF_SESSION_NAME) ?? null;
 
         if (is_null($requestToken)) {

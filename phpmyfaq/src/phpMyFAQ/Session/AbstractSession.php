@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Session;
 
-use phpMyFAQ\Configuration;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class AbstractSession

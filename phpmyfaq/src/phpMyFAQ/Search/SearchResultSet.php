@@ -93,9 +93,11 @@ class SearchResultSet
             if ('medium' === $this->configuration->get(item: 'security.permLevel')) {
                 $groupPermissions = $this->faqPermission->get(Permission::GROUP, (int) $result->id);
                 foreach ($groupPermissions as $groupPermission) {
-                    if (in_array($groupPermission, $currentGroupIds)) {
-                        $permission = true;
+                    if (!in_array($groupPermission, $currentGroupIds)) {
+                        continue;
                     }
+
+                    $permission = true;
                 }
             }
 

@@ -19,9 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
-use stdClass;
 
 /**
  * Class SearchDatabase

@@ -153,9 +153,11 @@ readonly class StatisticsHelper
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         $trackingDates = [];
         while (false !== ($dat = readdir($dir))) {
-            if ($dat !== '.' && $dat !== '..' && strlen($dat) === 16 && !is_dir($dat)) {
-                $trackingDates[] = $this->date->getTrackingFileDateStart($dat);
+            if (!($dat !== '.' && $dat !== '..' && strlen($dat) === 16 && !is_dir($dat))) {
+                continue;
             }
+
+            $trackingDates[] = $this->date->getTrackingFileDateStart($dat);
         }
 
         closedir($dir);
@@ -172,19 +174,21 @@ readonly class StatisticsHelper
         while ($trackingFile = readdir($dir)) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
-            if ($trackingFile !== '.' && $trackingFile !== '..' && 10 === strpos($trackingFile, $month)) {
-                $candidateFirst = $this->date->getTrackingFileDateStart($trackingFile);
-                $candidateLast = $this->date->getTrackingFileDateEnd($trackingFile);
-                if ($candidateLast > 0 && $candidateLast > $last) {
-                    $last = $candidateLast;
-                }
-
-                if ($candidateFirst > 0 && $candidateFirst < $first) {
-                    $first = $candidateFirst;
-                }
-
-                unlink(PMF_CONTENT_DIR . '/core/data/' . $trackingFile);
+            if (!($trackingFile !== '.' && $trackingFile !== '..' && 10 === strpos($trackingFile, $month))) {
+                continue;
             }
+
+            $candidateFirst = $this->date->getTrackingFileDateStart($trackingFile);
+            $candidateLast = $this->date->getTrackingFileDateEnd($trackingFile);
+            if ($candidateLast > 0 && $candidateLast > $last) {
+                $last = $candidateLast;
+            }
+
+            if ($candidateFirst > 0 && $candidateFirst < $first) {
+                $first = $candidateFirst;
+            }
+
+            unlink(PMF_CONTENT_DIR . '/core/data/' . $trackingFile);
         }
 
         closedir($dir);
@@ -198,9 +202,11 @@ readonly class StatisticsHelper
 
         $files = glob(PMF_CONTENT_DIR . '/core/data/*');
         foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
+            if (!is_file($file)) {
+                continue;
             }
+
+            unlink($file);
         }
 
         return $this->session->deleteAllSessions();
@@ -217,26 +223,26 @@ readonly class StatisticsHelper
                 date(
                     format: 'Y-m',
                     timestamp: $oldValue,
-                ) !== date(
+                ) === date(
                     format: 'Y-m',
                     timestamp: (int) $trackingDate,
                 )
             ) {
-                // The filename format is: trackingDDMMYYYY
-                // e.g.: tracking02042006
-                $renderedHtml .= sprintf(
-                    '<option value="%s">%s</option>',
-                    date(
-                        format: 'mY',
-                        timestamp: (int) $trackingDate,
-                    ),
-                    date(
-                        format: 'Y-m',
-                        timestamp: (int) $trackingDate,
-                    ),
-                );
-                $oldValue = $trackingDate;
+                continue;
             }
+
+            $renderedHtml .= sprintf(
+                '<option value="%s">%s</option>',
+                date(
+                    format: 'mY',
+                    timestamp: (int) $trackingDate,
+                ),
+                date(
+                    format: 'Y-m',
+                    timestamp: (int) $trackingDate,
+                ),
+            );
+            $oldValue = $trackingDate;
         }
 
         return $renderedHtml;

@@ -263,14 +263,16 @@ class MediumPermission extends BasicPermission implements PermissionInterface
         $allGroups = $this->getAllGroups($currentUser);
 
         foreach ($allGroups as $allGroup) {
-            if (-1 !== $allGroup) {
-                $options .= sprintf(
-                    '<option value="%d" %s>%s</option>',
-                    $allGroup,
-                    in_array($allGroup, $groups) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
-                    $this->getGroupName($allGroup),
-                );
+            if (-1 === $allGroup) {
+                continue;
             }
+
+            $options .= sprintf(
+                '<option value="%d" %s>%s</option>',
+                $allGroup,
+                in_array($allGroup, $groups) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
+                $this->getGroupName($allGroup),
+            );
         }
 
         return $options;

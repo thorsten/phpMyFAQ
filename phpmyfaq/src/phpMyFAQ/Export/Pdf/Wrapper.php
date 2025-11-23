@@ -913,9 +913,11 @@ class Wrapper extends TCPDF
 
         foreach ($signatures as $signature) {
             foreach ($signature as $sig) {
-                if (str_starts_with($data, $sig)) {
-                    return true;
+                if (!str_starts_with($data, $sig)) {
+                    continue;
                 }
+
+                return true;
             }
         }
 

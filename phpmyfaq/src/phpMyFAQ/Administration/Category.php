@@ -132,9 +132,11 @@ class Category
 
             // Ensure level is set for each entry in categoryName
             foreach ($this->categoryName as $cid => $row) {
-                if (is_array($row) && isset($row['id'])) {
-                    $this->categoryName[$cid]['level'] = $this->getLevelOf((int) $row['id']);
+                if (!(is_array($row) && isset($row['id']))) {
+                    continue;
                 }
+
+                $this->categoryName[$cid]['level'] = $this->getLevelOf((int) $row['id']);
             }
         }
 
@@ -149,11 +151,13 @@ class Category
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parent_id'] == $parentId) {
-                $categoryId = $category['id'];
-                $children = $this->buildAdminCategoryTree($categories, $categoryId);
-                $result[$categoryId] = [];
+            if ($category['parent_id'] != $parentId) {
+                continue;
             }
+
+            $categoryId = $category['id'];
+            $children = $this->buildAdminCategoryTree($categories, $categoryId);
+            $result[$categoryId] = [];
         }
 
         return $result;

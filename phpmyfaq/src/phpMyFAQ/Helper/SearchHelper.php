@@ -24,7 +24,6 @@ use League\CommonMark\Exception\CommonMarkException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Link;
-use phpMyFAQ\Pagination;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
@@ -197,10 +196,12 @@ class SearchHelper extends AbstractHelper
                     && Strings::strlen($searchItems[0]) > 1
                 ) {
                     foreach ($searchItems as $searchItem) {
-                        if (Strings::strlen($searchItem) > 2) {
-                            $question = Utils::setHighlightedString($question, $searchItem);
-                            $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
+                        if (Strings::strlen($searchItem) <= 2) {
+                            continue;
                         }
+
+                        $question = Utils::setHighlightedString($question, $searchItem);
+                        $answerPreview = Utils::setHighlightedString($answerPreview, $searchItem);
                     }
                 }
 

@@ -160,9 +160,11 @@ class PluginManager
         }
 
         foreach ($plugin->getDependencies() as $dependency) {
-            if (!in_array($dependency, $this->loadedPlugins)) {
-                return false;
+            if (in_array($dependency, $this->loadedPlugins)) {
+                continue;
             }
+
+            return false;
         }
 
         return true;

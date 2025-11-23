@@ -108,9 +108,11 @@ class Tracking
     {
         $bots = 0;
         foreach ($this->getBotIgnoreList() as $bot) {
-            if (Strings::strstr($this->getRequestHeaders()->get('user-agent') ?? '1', $bot)) {
-                ++$bots;
+            if (!Strings::strstr($this->getRequestHeaders()->get('user-agent') ?? '1', $bot)) {
+                continue;
             }
+
+            ++$bots;
         }
 
         return $bots;

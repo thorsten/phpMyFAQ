@@ -101,7 +101,7 @@ final class QuestionController extends AbstractController
                 $faqPermission = new Permission($this->configuration);
                 $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-                $searchResult = array_merge(...array_map(fn($word) => $faqSearch->search(
+                $searchResult = array_merge(...array_map(static fn($word) => $faqSearch->search(
                     $word,
                     false,
                 ), array_filter($cleanQuestion)));

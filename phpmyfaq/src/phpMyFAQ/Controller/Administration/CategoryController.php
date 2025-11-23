@@ -435,9 +435,11 @@ final class CategoryController extends AbstractAdministrationController
         // Build language codes list: current first
         $languageCodes = [$currentLangCode];
         foreach (array_keys($languages) as $code) {
-            if ($code !== $currentLangCode) {
-                $languageCodes[] = $code;
+            if ($code === $currentLangCode) {
+                continue;
             }
+
+            $languageCodes[] = $code;
         }
 
         return $this->render('@admin/content/category.hierarchy.twig', [

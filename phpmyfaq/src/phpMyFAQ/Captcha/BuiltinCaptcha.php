@@ -433,9 +433,11 @@ class BuiltinCaptcha implements CaptchaInterface
 
         // Check
         for ($i = 0; $i < Strings::strlen($captchaCode); ++$i) {
-            if (!in_array($captchaCode[$i], $this->letters)) {
-                return false;
+            if (in_array($captchaCode[$i], $this->letters)) {
+                continue;
             }
+
+            return false;
         }
 
         // Search for this Captcha in the db

@@ -113,10 +113,12 @@ class LanguageDetector
     {
         $languages = Request::createFromGlobals()->getLanguages();
         foreach ($languages as $language) {
-            if (Language::isASupportedLanguage(strtoupper($language))) {
-                $this->acceptLanguage = strtolower($language);
-                break;
+            if (!Language::isASupportedLanguage(strtoupper($language))) {
+                continue;
             }
+
+            $this->acceptLanguage = strtolower($language);
+            break;
         }
         if ($this->acceptLanguage === '') {
             foreach ($languages as $language) {

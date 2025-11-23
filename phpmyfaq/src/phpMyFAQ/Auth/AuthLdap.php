@@ -236,10 +236,12 @@ class AuthLdap extends Auth implements AuthDriverInterface
                 $hasAllowedGroup = false;
                 foreach ($userGroups as $userGroup) {
                     foreach ($allowedGroups as $allowedGroup) {
-                        if (str_contains($userGroup, trim((string) $allowedGroup))) {
-                            $hasAllowedGroup = true;
-                            break 2;
+                        if (!str_contains($userGroup, trim((string) $allowedGroup))) {
+                            continue;
                         }
+
+                        $hasAllowedGroup = true;
+                        break 2;
                     }
                 }
 

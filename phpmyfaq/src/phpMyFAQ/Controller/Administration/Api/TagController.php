@@ -25,7 +25,6 @@ use phpMyFAQ\Entity\Tag;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
-use phpMyFAQ\Tags;
 use phpMyFAQ\Translation;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;

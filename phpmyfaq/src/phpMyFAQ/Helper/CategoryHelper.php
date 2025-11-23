@@ -67,9 +67,11 @@ class CategoryHelper extends AbstractHelper
                 $categories .= ' selected';
             } else {
                 foreach ($categoryId as $categorised) {
-                    if ($cat['id'] == $categorised['category_id']) {
-                        $categories .= ' selected';
+                    if ($cat['id'] != $categorised['category_id']) {
+                        continue;
                     }
+
+                    $categories .= ' selected';
                 }
             }
 
@@ -127,47 +129,51 @@ class CategoryHelper extends AbstractHelper
 
         $html = '';
         foreach ($categoryTree as $categoryId => $node) {
-            if ($node['parent_id'] === $parentId) {
-                $number = 0;
-                foreach ($aggregatedNumbers as $key => $numFaqs) {
-                    if ($key === $node['id']) {
-                        $number = $numFaqs;
-                        break;
-                    }
-                }
-
-                if ($categoryNumbers[$categoryId]['faqs'] > 0) {
-                    $url = sprintf(
-                        '%sindex.php?%saction=show&cat=%d',
-                        $this->configuration->getDefaultUrl(),
-                        $sids,
-                        $node['id'],
-                    );
-
-                    $link = new Link($url, $this->configuration);
-                    $link->setTitle(Strings::htmlentities($node['name']));
-                    $link->text = Strings::htmlentities($node['name']);
-                    $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
-                    $name = $link->toHtmlAnchor();
-                } else {
-                    $name = Strings::htmlentities($node['name']);
-                }
-
-                $html .= sprintf(
-                    '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span><br><small>%s</small>',
-                    $node['id'],
-                    $name,
-                    $this->plurals->getMsg('plmsgEntries', $number),
-                    $node['description'],
-                );
-                $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
-                    $categoryTree,
-                    $node['id'],
-                    $aggregatedNumbers,
-                    $categoryNumbers,
-                ));
-                $html .= '</li>';
+            if ($node['parent_id'] !== $parentId) {
+                continue;
             }
+
+            $number = 0;
+            foreach ($aggregatedNumbers as $key => $numFaqs) {
+                if ($key !== $node['id']) {
+                    continue;
+                }
+
+                $number = $numFaqs;
+                break;
+            }
+
+            if ($categoryNumbers[$categoryId]['faqs'] > 0) {
+                $url = sprintf(
+                    '%sindex.php?%saction=show&cat=%d',
+                    $this->configuration->getDefaultUrl(),
+                    $sids,
+                    $node['id'],
+                );
+
+                $link = new Link($url, $this->configuration);
+                $link->setTitle(Strings::htmlentities($node['name']));
+                $link->text = Strings::htmlentities($node['name']);
+                $link->tooltip = is_null($node['description']) ? '' : Strings::htmlentities($node['description']);
+                $name = $link->toHtmlAnchor();
+            } else {
+                $name = Strings::htmlentities($node['name']);
+            }
+
+            $html .= sprintf(
+                '<li data-category-id="%d">%s <span class="badge text-bg-primary">%s</span><br><small>%s</small>',
+                $node['id'],
+                $name,
+                $this->plurals->getMsg('plmsgEntries', $number),
+                $node['description'],
+            );
+            $html .= sprintf('<ul>%s</ul>', $this->buildCategoryList(
+                $categoryTree,
+                $node['id'],
+                $aggregatedNumbers,
+                $categoryNumbers,
+            ));
+            $html .= '</li>';
         }
 
         return $html;

@@ -91,13 +91,15 @@ class Ldap
 
         // Set LDAP options
         foreach ($this->configuration->getLdapOptions() as $key => $ldapOption) {
-            if (!ldap_set_option($this->ds, constant($key), $ldapOption)) {
-                $this->errno = ldap_errno($this->ds);
-                $errorMessage = 'Unable to set LDAP option "%s" to "%s" (Error: %s).';
-                $this->error = sprintf($errorMessage, $key, $ldapOption, ldap_error($this->ds));
-
-                return false;
+            if (ldap_set_option($this->ds, constant($key), $ldapOption)) {
+                continue;
             }
+
+            $this->errno = ldap_errno($this->ds);
+            $errorMessage = 'Unable to set LDAP option "%s" to "%s" (Error: %s).';
+            $this->error = sprintf($errorMessage, $key, $ldapOption, ldap_error($this->ds));
+
+            return false;
         }
 
         // Default: user binding without RDN.
@@ -224,9 +226,11 @@ class Ldap
 
         $entries = ldap_get_entries($this->ds, $searchResult);
         for ($i = 0; $i < $entries['count']; ++$i) {
-            if (isset($entries[$i][$fields[0]][0])) {
-                return $entries[$i][$fields[0]][0];
+            if (!isset($entries[$i][$fields[0]][0])) {
+                continue;
             }
+
+            return $entries[$i][$fields[0]][0];
         }
 
         return false;

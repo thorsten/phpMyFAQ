@@ -543,9 +543,11 @@ final class FaqController extends AbstractController
             $success = false;
 
             foreach ($faqIds as $faqId) {
-                if (Language::isASupportedLanguage($faqLanguage)) {
-                    $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
+                if (!Language::isASupportedLanguage($faqLanguage)) {
+                    continue;
                 }
+
+                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
             }
 
             if ($success) {
@@ -581,9 +583,11 @@ final class FaqController extends AbstractController
             $success = false;
 
             foreach ($faqIds as $faqId) {
-                if (Language::isASupportedLanguage($faqLanguage)) {
-                    $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
+                if (!Language::isASupportedLanguage($faqLanguage)) {
+                    continue;
                 }
+
+                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
             }
 
             if ($success) {

@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 
-use stdClass;
-
 /**
  * Interface SearchInterface
  *

@@ -151,9 +151,11 @@ class UserSession
         }
 
         foreach ($this->getBotIgnoreList() as $bot) {
-            if (Strings::strstr($request->headers->get('user-agent'), $bot)) {
-                ++$bots;
+            if (!Strings::strstr($request->headers->get('user-agent'), $bot)) {
+                continue;
             }
+
+            ++$bots;
         }
 
         // if we're running behind a reverse proxy like nginx/varnish, fix the client IP

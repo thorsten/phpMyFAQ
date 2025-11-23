@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class UnauthorizedUserController
 {
-    protected ?Configuration $configuration = null;
+    private ?Configuration $configuration = null;
 
     /**
      * Check if the FAQ should be secured.

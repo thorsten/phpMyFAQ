@@ -52,14 +52,16 @@ class LanguageHelper
 
         if ($languages !== []) {
             foreach ($languages as $lang => $value) {
-                if (!in_array($lang, $excludedLanguages)) {
-                    $output .= sprintf(
-                        '<option value="%s" %s>%s</option>',
-                        $lang,
-                        $lang === $default ? 'selected' : '',
-                        $value,
-                    );
+                if (in_array($lang, $excludedLanguages)) {
+                    continue;
                 }
+
+                $output .= sprintf(
+                    '<option value="%s" %s>%s</option>',
+                    $lang,
+                    $lang === $default ? 'selected' : '',
+                    $value,
+                );
             }
         } else {
             $output .= sprintf('<option value="en">%s</option>', LanguageCodes::get('en'));
@@ -81,9 +83,11 @@ class LanguageHelper
 
         $dir = new DirectoryIterator(PMF_TRANSLATION_DIR);
         foreach ($dir as $fileInfo) {
-            if (!$fileInfo->isDot()) {
-                $languageFiles[] = strtoupper(str_replace($search, '', trim($fileInfo->getFilename())));
+            if ($fileInfo->isDot()) {
+                continue;
             }
+
+            $languageFiles[] = strtoupper(str_replace($search, '', trim($fileInfo->getFilename())));
         }
 
         foreach ($languageFiles as $languageFile) {

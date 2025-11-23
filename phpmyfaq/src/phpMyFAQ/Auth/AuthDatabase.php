@@ -177,9 +177,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->databaseDriver->fetchArray($check)) {
-            if ($user['pass'] === $this->encContainer->setSalt($user['login'])->encrypt($password)) {
-                return true;
+            if ($user['pass'] !== $this->encContainer->setSalt($user['login'])->encrypt($password)) {
+                continue;
             }
+
+            return true;
         }
 
         throw new AuthException(User::ERROR_USER_INCORRECT_PASSWORD);

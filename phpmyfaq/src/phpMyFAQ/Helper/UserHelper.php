@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
-use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 
 /**

@@ -641,27 +641,29 @@ class Link
     private function ensureDefaultStrategies(StrategyRegistry $registry): void
     {
         $defaults = [
-            self::LINK_GET_ACTION_FAQ => fn() => new FaqStrategy(),
-            self::LINK_GET_ACTION_SEARCH => fn() => new SearchStrategy(),
-            self::LINK_GET_ACTION_SITEMAP => fn() => new SitemapStrategy(),
-            self::LINK_GET_ACTION_SHOW => fn() => new ShowStrategy(),
-            self::LINK_GET_ACTION_NEWS => fn() => new NewsStrategy(),
+            self::LINK_GET_ACTION_FAQ => static fn() => new FaqStrategy(),
+            self::LINK_GET_ACTION_SEARCH => static fn() => new SearchStrategy(),
+            self::LINK_GET_ACTION_SITEMAP => static fn() => new SitemapStrategy(),
+            self::LINK_GET_ACTION_SHOW => static fn() => new ShowStrategy(),
+            self::LINK_GET_ACTION_NEWS => static fn() => new NewsStrategy(),
             // Simple path-based strategies
-            self::LINK_GET_ACTION_ADD => fn() => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
-            self::LINK_GET_ACTION_ASK => fn() => new GenericPathStrategy(self::LINK_HTML_ASK),
-            self::LINK_GET_ACTION_CONTACT => fn() => new GenericPathStrategy(self::LINK_HTML_CONTACT),
-            self::LINK_GET_ACTION_GLOSSARY => fn() => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
-            self::LINK_GET_ACTION_HELP => fn() => new GenericPathStrategy(self::LINK_HTML_HELP),
-            self::LINK_GET_ACTION_OPEN => fn() => new GenericPathStrategy(self::LINK_HTML_OPEN),
-            self::LINK_GET_ACTION_LOGIN => fn() => new GenericPathStrategy(self::LINK_HTML_LOGIN),
-            self::LINK_GET_ACTION_PASSWORD => fn() => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
-            self::LINK_GET_ACTION_BOOKMARKS => fn() => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
-            self::LINK_GET_ACTION_REGISTER => fn() => new GenericPathStrategy(self::LINK_HTML_REGISTER),
+            self::LINK_GET_ACTION_ADD => static fn() => new GenericPathStrategy(self::LINK_HTML_ADDCONTENT),
+            self::LINK_GET_ACTION_ASK => static fn() => new GenericPathStrategy(self::LINK_HTML_ASK),
+            self::LINK_GET_ACTION_CONTACT => static fn() => new GenericPathStrategy(self::LINK_HTML_CONTACT),
+            self::LINK_GET_ACTION_GLOSSARY => static fn() => new GenericPathStrategy(self::LINK_HTML_GLOSSARY),
+            self::LINK_GET_ACTION_HELP => static fn() => new GenericPathStrategy(self::LINK_HTML_HELP),
+            self::LINK_GET_ACTION_OPEN => static fn() => new GenericPathStrategy(self::LINK_HTML_OPEN),
+            self::LINK_GET_ACTION_LOGIN => static fn() => new GenericPathStrategy(self::LINK_HTML_LOGIN),
+            self::LINK_GET_ACTION_PASSWORD => static fn() => new GenericPathStrategy(self::LINK_HTML_FORGOT_PASSWORD),
+            self::LINK_GET_ACTION_BOOKMARKS => static fn() => new GenericPathStrategy(self::LINK_HTML_BOOKMARKS),
+            self::LINK_GET_ACTION_REGISTER => static fn() => new GenericPathStrategy(self::LINK_HTML_REGISTER),
         ];
         foreach ($defaults as $action => $factory) {
-            if (!$registry->has($action)) {
-                $registry->register($action, $factory());
+            if ($registry->has($action)) {
+                continue;
             }
+
+            $registry->register($action, $factory());
         }
     }
 }

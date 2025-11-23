@@ -64,7 +64,7 @@ class TwoFactor
     /**
      * Saves a given secret to the current user from the session.
      */
-    public function saveSecret(string $secret): bool
+    public function saveSecret(#[\SensitiveParameter] string $secret): bool
     {
         if ($secret === '') {
             return false;
@@ -84,7 +84,7 @@ class TwoFactor
     /**
      * Validates a given token. Returns true if the token is correct.
      */
-    public function validateToken(string $token, int $userId): bool
+    public function validateToken(#[\SensitiveParameter] string $token, int $userId): bool
     {
         if (strlen($token) !== 6) {
             return false;
@@ -98,7 +98,7 @@ class TwoFactor
     /**
      * Returns a QR-Code to a given secret for transmitting the secret to the Authenticator-App
      */
-    public function getQrCode(string $secret): string
+    public function getQrCode(#[\SensitiveParameter] string $secret): string
     {
         $label = $this->configuration->getTitle() . ':' . $this->currentUser->getUserData('email');
         $qrCodeText = sprintf(

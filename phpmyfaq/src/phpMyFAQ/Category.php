@@ -125,11 +125,13 @@ class Category
         $this->syncDeprecatedProperties();
 
         foreach ($this->cache->getCategoryNames() as $row) {
-            if (is_array($row) && isset($row['id'])) {
-                $id = (int) $row['id'];
-                $level = $this->getLevelOf($id);
-                $this->cache->addCategoryName($id, array_merge($row, ['level' => $level]));
+            if (!(is_array($row) && isset($row['id']))) {
+                continue;
             }
+
+            $id = (int) $row['id'];
+            $level = $this->getLevelOf($id);
+            $this->cache->addCategoryName($id, array_merge($row, ['level' => $level]));
         }
 
         // Sync again after updates
@@ -523,9 +525,11 @@ class Category
         $categories = $this->getCategoriesFromFaq($faqId);
         $result = [];
         foreach ($categories as $category) {
-            if (isset($category['id'])) {
-                $result[] = (int) $category['id'];
+            if (!isset($category['id'])) {
+                continue;
             }
+
+            $result[] = (int) $category['id'];
         }
 
         return $result;

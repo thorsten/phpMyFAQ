@@ -70,9 +70,11 @@ final class CategoryValidator
     {
         $children = [];
         foreach ($categories as $categoryId => $category) {
-            if ($this->isDirectChild($category, $categoryId, $parentId)) {
-                $children[] = $categoryId;
+            if (!$this->isDirectChild($category, $categoryId, $parentId)) {
+                continue;
             }
+
+            $children[] = $categoryId;
         }
         return $children;
     }

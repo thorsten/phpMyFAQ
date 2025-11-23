@@ -143,13 +143,15 @@ class PdoPgsql extends SearchDatabase implements DatabaseInterface
 
         foreach ($list as $field) {
             // Only add to ORDER BY if this relevance column was actually added to SELECT
-            if (in_array($field, $this->addedRelevanceColumns)) {
-                $string = sprintf('relevance_%s DESC', $field);
-                if ($order === '' || $order === '0') {
-                    $order .= $string;
-                } else {
-                    $order .= ', ' . $string;
-                }
+            if (!in_array($field, $this->addedRelevanceColumns)) {
+                continue;
+            }
+
+            $string = sprintf('relevance_%s DESC', $field);
+            if ($order === '' || $order === '0') {
+                $order .= $string;
+            } else {
+                $order .= ', ' . $string;
             }
         }
 

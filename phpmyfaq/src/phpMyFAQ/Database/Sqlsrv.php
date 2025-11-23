@@ -331,7 +331,7 @@ class Sqlsrv implements DatabaseDriver
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      */
-    private function setConnectionOptions(string $user, string $password, string $database): void
+    private function setConnectionOptions(string $user, #[\SensitiveParameter] string $password, string $database): void
     {
         $this->connectionOptions = [
             'UID' => $user,

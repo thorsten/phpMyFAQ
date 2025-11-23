@@ -89,10 +89,12 @@ class Helper
         } elseif (str_contains($restrictions, '*')) {
             $hasPermission = true;
             foreach (explode('*', $restrictions) as $restriction) {
-                if (!isset($this->permission[$restriction]) || !$this->permission[$restriction]) {
-                    $hasPermission = false;
-                    break;
+                if (!(!isset($this->permission[$restriction]) || !$this->permission[$restriction])) {
+                    continue;
                 }
+
+                $hasPermission = false;
+                break;
             }
         } else {
             $hasPermission =
@@ -118,9 +120,11 @@ class Helper
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         foreach ($allRights as $allRight) {
-            if (in_array($allRight['right_id'], $allUserRights, true)) {
-                $this->permission[$allRight['name']] = true;
+            if (!in_array($allRight['right_id'], $allUserRights, true)) {
+                continue;
             }
+
+            $this->permission[$allRight['name']] = true;
         }
 
         // If a user is super admin, give all rights

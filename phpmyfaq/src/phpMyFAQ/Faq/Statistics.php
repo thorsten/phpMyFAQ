@@ -20,14 +20,12 @@ declare(strict_types=1);
 namespace phpMyFAQ\Faq;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Utils;
 use stdClass;

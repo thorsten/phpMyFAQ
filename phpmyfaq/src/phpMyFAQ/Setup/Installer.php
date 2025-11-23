@@ -826,9 +826,8 @@ class Installer extends Setup
 
         $configuration = new Configuration($db);
 
-        //
         // Check LDAP if enabled
-        //
+
         $ldapEnabled = Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
             // check LDAP entries
@@ -857,9 +856,11 @@ class Installer extends Setup
 
             // set LDAP Config to prevent DB query
             foreach ($this->mainConfig as $configKey => $configValue) {
-                if (str_contains($configKey, 'ldap.')) {
-                    $configuration->set($configKey, $configValue);
+                if (!str_contains($configKey, 'ldap.')) {
+                    continue;
                 }
+
+                $configuration->set($configKey, $configValue);
             }
 
             // check LDAP connection
@@ -877,9 +878,8 @@ class Installer extends Setup
             }
         }
 
-        //
         // Check Elasticsearch if enabled
-        //
+
         $esEnabled = Filter::filterInput(INPUT_POST, 'elasticsearch_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_null($esEnabled)) {
             $esSetup = [];
@@ -922,9 +922,8 @@ class Installer extends Setup
             $esSetup = [];
         }
 
-        //
         // Check OpenSearch if enabled
-        //
+
         $openSearchEnabled = Filter::filterInput(INPUT_POST, 'opensearch_enabled', FILTER_SANITIZE_SPECIAL_CHARS);
         if (!is_null($openSearchEnabled)) {
             $osSetup = [];

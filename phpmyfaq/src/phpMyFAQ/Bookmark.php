@@ -70,9 +70,11 @@ class Bookmark
         }
 
         foreach ($bookmarks as $bookmark) {
-            if (isset($bookmark->faqid) && (int) $bookmark->faqid === $faqId) {
-                return true;
+            if (!(isset($bookmark->faqid) && (int) $bookmark->faqid === $faqId)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;

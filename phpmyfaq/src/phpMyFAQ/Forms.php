@@ -91,9 +91,11 @@ readonly class Forms
         $translations = $this->repository->fetchTranslationsByFormAndInput($formId, $inputId);
 
         foreach ($translations as $translation) {
-            if ($translation->input_lang === 'default') {
-                $translation->input_label = Translation::get($translation->input_label);
+            if ($translation->input_lang !== 'default') {
+                continue;
             }
+
+            $translation->input_label = Translation::get($translation->input_label);
         }
 
         return $translations;

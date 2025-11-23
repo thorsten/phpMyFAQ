@@ -52,15 +52,17 @@ class LdapConfiguration
         $this->mainBase = $PMF_LDAP['ldap_base'];
 
         foreach ($PMF_LDAP as $key => $server) {
-            if (is_array($server)) {
-                $this->servers[$key] = [
-                    'server' => $server['ldap_server'],
-                    'port' => (int) $server['ldap_port'],
-                    'user' => $server['ldap_user'],
-                    'password' => $server['ldap_password'],
-                    'base' => $server['ldap_base'],
-                ];
+            if (!is_array($server)) {
+                continue;
             }
+
+            $this->servers[$key] = [
+                'server' => $server['ldap_server'],
+                'port' => (int) $server['ldap_port'],
+                'user' => $server['ldap_user'],
+                'password' => $server['ldap_password'],
+                'base' => $server['ldap_base'],
+            ];
         }
     }
 

@@ -182,9 +182,11 @@ class User
         // additionally, set given $auth objects
         /** @phpstan-ignore-next-line */
         foreach ($this->authContainer as $name => $authObject) {
-            if (!$this->addAuth($authObject, $name)) {
-                break;
+            if ($this->addAuth($authObject, $name)) {
+                continue;
             }
+
+            break;
         }
 
         // user data object

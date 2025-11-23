@@ -439,13 +439,17 @@ class Configuration
 
         foreach ($newConfigs as $name => $value) {
             if (
-                !hash_equals((string) $name, user_string: 'main.phpMyFAQToken')
-                && !in_array($name, $runtimeConfigs, strict: true)
+                !(
+                    !hash_equals((string) $name, user_string: 'main.phpMyFAQToken')
+                    && !in_array($name, $runtimeConfigs, strict: true)
+                )
             ) {
-                $this->repository->updateConfigValue((string) $name, $value ?? '');
-                if (isset($this->config[$name])) {
-                    unset($this->config[$name]);
-                }
+                continue;
+            }
+
+            $this->repository->updateConfigValue((string) $name, $value ?? '');
+            if (isset($this->config[$name])) {
+                unset($this->config[$name]);
             }
         }
 

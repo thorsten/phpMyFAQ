@@ -132,12 +132,14 @@ readonly class Backup
             separator: ' ',
             string: $tableNames,
         ) as $tableName) {
-            if ('' !== $tableName) {
-                $backup .= implode(
-                    separator: "\r\n",
-                    array: $this->databaseHelper->buildInsertQueries('SELECT * FROM ' . $tableName, $tableName),
-                );
+            if ('' === $tableName) {
+                continue;
             }
+
+            $backup .= implode(
+                separator: "\r\n",
+                array: $this->databaseHelper->buildInsertQueries('SELECT * FROM ' . $tableName, $tableName),
+            );
         }
 
         return $backup;
@@ -168,11 +170,15 @@ readonly class Backup
             case BackupType::BACKUP_TYPE_LOGS:
                 foreach ($tables as $table) {
                     if (
-                        Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)
-                        || Database::getTablePrefix() . 'faqsessions' === trim((string) $table)
+                        !(
+                            Database::getTablePrefix() . 'faqadminlog' === trim((string) $table)
+                            || Database::getTablePrefix() . 'faqsessions' === trim((string) $table)
+                        )
                     ) {
-                        $tableNames .= $table . ' ';
+                        continue;
                     }
+
+                    $tableNames .= $table . ' ';
                 }
 
                 break;
@@ -218,11 +224,13 @@ readonly class Backup
         );
 
         foreach ($files as $file) {
-            if (!$file->isDir()) {
-                $filePath = $file->getRealPath();
-                $relativePath = substr((string) $filePath, strlen(PMF_CONTENT_DIR) + 1);
-                $zipArchive->addFile($filePath, $relativePath);
+            if ($file->isDir()) {
+                continue;
             }
+
+            $filePath = $file->getRealPath();
+            $relativePath = substr((string) $filePath, strlen(PMF_CONTENT_DIR) + 1);
+            $zipArchive->addFile($filePath, $relativePath);
         }
 
         $zipArchive->close();

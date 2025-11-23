@@ -27,9 +27,11 @@ final class FormsHelper
     public function filterAndSortFormData(array $formData, Translation $translation): array
     {
         foreach ($formData as $input) {
-            if ($input->input_lang === 'default') {
-                $input->input_label = Translation::get($input->input_label);
+            if ($input->input_lang !== 'default') {
+                continue;
             }
+
+            $input->input_label = Translation::get($input->input_label);
         }
 
         $filteredEntries = [];
@@ -46,9 +48,11 @@ final class FormsHelper
         }
 
         foreach ($fallbackCandidates as $candidate) {
-            if ($candidate->input_lang === 'default' && !in_array($candidate->input_id, $seenIds, strict: true)) {
-                $filteredEntries[] = $candidate;
+            if (!($candidate->input_lang === 'default' && !in_array($candidate->input_id, $seenIds, strict: true))) {
+                continue;
             }
+
+            $filteredEntries[] = $candidate;
         }
 
         usort($filteredEntries, static fn(object $a, object $b) => $a->input_id <=> $b->input_id);
