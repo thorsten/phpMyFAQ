@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @since     2005-11-01
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 /**
@@ -30,11 +30,14 @@ class Utils
     /**
      * Check if a given string could be a language.
      *
-     * @param string $lang Language
+     * @param string $language Language
      */
-    public static function isLanguage(string $lang): bool
+    public static function isLanguage(string $language): bool
     {
-        return (bool) preg_match('/^[a-zA-Z\-]+$/', $lang);
+        return (bool) preg_match(
+            pattern: '/^[a-zA-Z\-]+$/',
+            subject: $language,
+        );
     }
 
     /**
@@ -47,13 +50,17 @@ class Utils
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $dateToTest = $date;
         // Suppress first occurrences of '%'
-        if (str_starts_with($dateToTest, '%')) {
-            $dateToTest = substr($dateToTest, 1);
+        if (str_starts_with($dateToTest, needle: '%')) {
+            $dateToTest = substr($dateToTest, offset: 1);
         }
 
         // Suppress last occurrences of '%'
-        if (str_ends_with($dateToTest, '%')) {
-            $dateToTest = substr($dateToTest, 0, strlen($dateToTest) - 1);
+        if (str_ends_with($dateToTest, needle: '%')) {
+            $dateToTest = substr(
+                string: $dateToTest,
+                offset: 0,
+                length: strlen($dateToTest) - 1,
+            );
         }
 
         // PMF date consists of numbers only: YYYYMMDDhhmmss
@@ -65,16 +72,32 @@ class Utils
      *
      * @param string $string String
      * @param int    $characters Characters
-     * @todo This function doesn't work with Chinese, Japanese, Korean and Thai
-     *       because they don't have spaces as word delimiters
+     * @todo This function doesn't work with Chinese, Japanese, Korean and Thai because they don't have spaces as word
+     *       delimiters
      */
     public static function makeShorterText(string $string, int $characters): string
     {
-        $string = Strings::preg_replace('/\s+/u', ' ', $string);
-        $arrStr = explode(' ', $string);
+        $string = Strings::preg_replace(
+            pattern: '/\s+/u',
+            replacement: ' ',
+            subject: $string,
+        );
+        $arrStr = explode(
+            separator: ' ',
+            string: $string,
+        );
 
         if (count($arrStr) > $characters) {
-            return implode(' ', array_slice($arrStr, 0, $characters)) . ' ...';
+            return (
+                implode(
+                    separator: ' ',
+                    array: array_slice(
+                        array: $arrStr,
+                        offset: 0,
+                        length: $characters,
+                    ),
+                ) . ' ...'
+            );
         }
 
         return $string;
@@ -105,7 +128,10 @@ class Utils
     public static function chopString(string $string, int $words): string
     {
         $str = '';
-        $pieces = explode(' ', $string);
+        $pieces = explode(
+            separator: ' ',
+            string: $string,
+        );
         $num = count($pieces);
         if ($words > $num) {
             $words = $num;
@@ -222,7 +248,10 @@ class Utils
             . $highlight
             . '="[^"]*")|'
             . '(('
-            . implode('|', $attributes)
+            . implode(
+                separator: '|',
+                array: $attributes,
+            )
             . ')="[^"]*'
             . $highlight
             . '[^"]*")|'
@@ -237,7 +266,7 @@ class Utils
     /**
      * Callback function for filtering HTML from URLs and images.
      *
-     * @param array<int, string> $matches Array of matches from regex pattern
+     * @param array<int, string> $matches Array of matches from a regex pattern
      */
     public static function highlightNoLinks(array $matches): string
     {
@@ -245,8 +274,8 @@ class Utils
         $item = $matches[4] ?? '';
         $postfix = $matches[5] ?? '';
 
-        if (!empty($item) && !self::isForbiddenElement($item)) {
-            return sprintf('<mark class="pmf-highlighted-string">%s</mark>', $prefix . $item . $postfix);
+        if ($item !== '' && !self::isForbiddenElement($item)) {
+            return '<mark class="pmf-highlighted-string">' . $prefix . $item . $postfix . '</mark>';
         }
 
         // Fallback: the original matched string
@@ -265,29 +294,14 @@ class Utils
         ];
 
         foreach ($forbiddenElements as $forbiddenElement) {
-            if (str_starts_with($forbiddenElement, $string)) {
-                return true;
+            if (!str_starts_with($forbiddenElement, $string)) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
-    }
-
-    /**
-     * debug_backtrace() wrapper function.
-     */
-    public static function debug(string $string): string
-    {
-        $debug = debug_backtrace();
-        $ret = '';
-        if (isset($debug[2]['class'])) {
-            $ret = $debug[2]['file'] . ': ';
-            $ret .= $debug[2]['class'] . $debug[1]['type'];
-            $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-            $ret .= ':<br><code>' . Strings::htmlentities($string) . "</code><br>\n";
-        }
-
-        return $ret;
     }
 
     /**
@@ -297,8 +311,16 @@ class Utils
     {
         $protocols = ['http://', 'https://'];
 
-        $string = str_replace($protocols, '', $string);
-        $string = str_replace('www.', 'https://www.', $string);
+        $string = str_replace(
+            search: $protocols,
+            replace: '',
+            subject: $string,
+        );
+        $string = str_replace(
+            search: 'www.',
+            replace: 'https://www.',
+            subject: $string,
+        );
 
         $pattern = '/(https?:\/\/[^\s]+)/i';
         $replacement = '<a href="$1">$1</a>';
@@ -324,7 +346,7 @@ class Utils
     }
 
     /**
-     * Moves given key of an array to the top
+     * Moves the given key of an array to the top
      *
      * @param array<string, array<string, string>> $array
      */
@@ -345,7 +367,7 @@ class Utils
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
-        $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(1024));
+        $pow = floor(($bytes !== 0 ? log($bytes) : 0) / log(num: 1024));
         $pow = min($pow, count($units) - 1);
 
         $bytes /= 1 << (10 * $pow);
