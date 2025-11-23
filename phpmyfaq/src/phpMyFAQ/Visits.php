@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Handles all the stuff for visits.
  *
@@ -17,8 +15,12 @@ declare(strict_types=1);
  * @since 2009-03-08
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
+use phpMyFAQ\Visits\VisitsRepository;
+use phpMyFAQ\Visits\VisitsRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,12 +30,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class Visits
 {
+    private VisitsRepositoryInterface $repository;
+
     /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
+        $this->repository = new VisitsRepository($configuration);
     }
 
     /**
@@ -43,21 +48,10 @@ readonly class Visits
      */
     public function logViews(int $faqId): void
     {
-        $nVisits = 0;
-        $query = sprintf(
-            "SELECT visits FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
+        $language = $this->configuration->getLanguage()->getLanguage();
+        $visitCount = $this->repository->getVisitCount($faqId, $language);
 
-        $result = $this->configuration->getDb()->query($query);
-        if ($this->configuration->getDb()->numRows($result) !== 0) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-            $nVisits = $row->visits;
-        }
-
-        if ($nVisits === 0) {
+        if ($visitCount === 0) {
             $this->add($faqId);
             return;
         }
@@ -72,37 +66,16 @@ readonly class Visits
      */
     public function add(int $faqId): bool
     {
+        $language = $this->configuration->getLanguage()->getLanguage();
+        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+
         // If a row already exists for this (id, lang), update it instead of inserting to avoid unique constraint errors
-        $checkQuery = sprintf(
-            "SELECT COUNT(*) AS cnt FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
-
-        $checkResult = $this->configuration->getDb()->query($checkQuery);
-        $exists = 0;
-
-        if ($checkResult) {
-            $row = $this->configuration->getDb()->fetchObject($checkResult);
-            $exists = (int) ($row->cnt ?? 0);
-        }
-
-        if ($exists > 0) {
+        if ($this->repository->exists($faqId, $language)) {
             $this->update($faqId);
             return true;
         }
 
-        $query = sprintf(
-            "INSERT INTO %sfaqvisits VALUES (%d, '%s', %d, %d)",
-            Database::getTablePrefix(),
-            $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
-            1,
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->insert($faqId, $language, $timestamp);
     }
 
     /**
@@ -112,15 +85,10 @@ readonly class Visits
      */
     private function update(int $faqId): void
     {
-        $query = sprintf(
-            "UPDATE %sfaqvisits SET visits = visits+1, last_visit = %d WHERE id = %d AND lang = '%s'",
-            Database::getTablePrefix(),
-            Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            $faqId,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
+        $language = $this->configuration->getLanguage()->getLanguage();
+        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
 
-        $this->configuration->getDb()->query($query);
+        $this->repository->update($faqId, $language, $timestamp);
     }
 
     /**
@@ -130,21 +98,7 @@ readonly class Visits
      */
     public function getAllData(): array
     {
-        $data = [];
-
-        $query = sprintf('SELECT * FROM %sfaqvisits ORDER BY visits DESC', Database::getTablePrefix());
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $data[] = [
-                'id' => $row->id,
-                'lang' => $row->lang,
-                'visits' => $row->visits,
-                'last_visit' => $row->last_visit,
-            ];
-        }
-
-        return $data;
+        return $this->repository->getAll();
     }
 
     /**
@@ -152,12 +106,7 @@ readonly class Visits
      */
     public function resetAll(): bool
     {
-        return (bool) $this->configuration
-            ->getDb()
-            ->query(sprintf(
-                'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
-                Database::getTablePrefix(),
-                Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            ));
+        $timestamp = Request::createFromGlobals()->server->get(key: 'REQUEST_TIME');
+        return $this->repository->resetAll($timestamp);
     }
 }
