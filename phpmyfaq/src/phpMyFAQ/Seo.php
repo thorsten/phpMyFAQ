@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * All SEO relevant stuff.
  *
@@ -18,11 +16,14 @@ declare(strict_types=1);
  * @since     2014-08-31
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
-use DateTime;
 use Exception;
 use phpMyFAQ\Entity\SeoEntity;
+use phpMyFAQ\Seo\SeoRepository;
+use phpMyFAQ\Seo\SeoRepositoryInterface;
 
 /**
  * Class Seo
@@ -31,9 +32,13 @@ use phpMyFAQ\Entity\SeoEntity;
  */
 readonly class Seo
 {
+    private SeoRepositoryInterface $repository;
+
     public function __construct(
         private Configuration $configuration,
+        ?SeoRepositoryInterface $repository = null,
     ) {
+        $this->repository = $repository ?? new SeoRepository($this->configuration);
     }
 
     /**
@@ -41,19 +46,7 @@ readonly class Seo
      */
     public function create(SeoEntity $seoEntity): bool
     {
-        $query = sprintf(
-            "INSERT INTO %sfaqseo (id, type, reference_id, reference_language, title, description) 
-                VALUES (%d, '%s', %d, '%s', '%s', '%s')",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqseo', 'id'),
-            $seoEntity->getSeoType()->value,
-            $seoEntity->getReferenceId(),
-            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
-            $this->configuration->getDb()->escape($seoEntity->getTitle()),
-            $this->configuration->getDb()->escape($seoEntity->getDescription()),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->create($seoEntity);
     }
 
     /**
@@ -61,27 +54,7 @@ readonly class Seo
      */
     public function get(SeoEntity $seoEntity): SeoEntity
     {
-        $query = sprintf(
-            "SELECT * FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
-            Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
-            $seoEntity->getReferenceId(),
-            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($this->configuration->getDb()->numRows($result) > 0) {
-            while ($row = $this->configuration->getDb()->fetchObject($result)) {
-                $seoEntity
-                    ->setId((int) $row->id)
-                    ->setTitle($row->title)
-                    ->setDescription($row->description)
-                    ->setCreated(new DateTime($row->created));
-            }
-        }
-
-        return $seoEntity;
+        return $this->repository->get($seoEntity);
     }
 
     /**
@@ -89,18 +62,7 @@ readonly class Seo
      */
     public function update(SeoEntity $seoEntity): bool
     {
-        $query = sprintf(
-            "UPDATE %sfaqseo SET title = '%s', description = '%s' 
-                WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
-            Database::getTablePrefix(),
-            $this->configuration->getDb()->escape($seoEntity->getTitle()),
-            $this->configuration->getDb()->escape($seoEntity->getDescription()),
-            $seoEntity->getSeoType()->value,
-            $seoEntity->getReferenceId(),
-            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->update($seoEntity);
     }
 
     /**
@@ -108,15 +70,7 @@ readonly class Seo
      */
     public function delete(SeoEntity $seoEntity): bool
     {
-        $query = sprintf(
-            "DELETE FROM %sfaqseo WHERE type = '%s' AND reference_id = %d AND reference_language = '%s'",
-            Database::getTablePrefix(),
-            $seoEntity->getSeoType()->value,
-            $seoEntity->getReferenceId(),
-            $this->configuration->getDb()->escape($seoEntity->getReferenceLanguage()),
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->delete($seoEntity);
     }
 
     public function getMetaRobots(string $action): string
