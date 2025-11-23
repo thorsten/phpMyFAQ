@@ -547,7 +547,7 @@ final class FaqController extends AbstractController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'active');
+                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, 'active');
             }
 
             if ($success) {
@@ -587,7 +587,7 @@ final class FaqController extends AbstractController
                     continue;
                 }
 
-                $success = $faq->updateRecordFlag($faqId, $faqLanguage, $checked ?? false, 'sticky');
+                $success = $faq->updateRecordFlag((int) $faqId, $faqLanguage, $checked ?? false, 'sticky');
             }
 
             if ($success) {

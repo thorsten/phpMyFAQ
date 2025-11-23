@@ -21,7 +21,6 @@ namespace phpMyFAQ\Controller\Administration\Api;
 
 use DateTime;
 use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -36,7 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class NewsController extends AbstractController
 {
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/news/create')]
     public function create(Request $request): JsonResponse
@@ -87,7 +86,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/news/delete')]
     public function delete(Request $request): JsonResponse
@@ -115,7 +114,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/news/update')]
     public function update(Request $request): JsonResponse
@@ -168,7 +167,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/news/activate')]
     public function activate(Request $request): JsonResponse
