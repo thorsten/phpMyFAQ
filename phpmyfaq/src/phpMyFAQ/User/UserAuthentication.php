@@ -86,10 +86,12 @@ class UserAuthentication
                 $this->currentUser->setLoggedIn(true);
             } else {
                 $this->currentUser->setLoggedIn(false);
-                throw new UserException(Translation::get(key: 'ad_auth_fail') . ' (' . $username . ')');
+                throw new UserException(
+                    (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
+                );
             }
         } else {
-            throw new UserException(Translation::get(key: 'ad_auth_fail'));
+            throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
         }
 
         return $this->currentUser;
