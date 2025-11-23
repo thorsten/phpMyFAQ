@@ -140,11 +140,10 @@ final class UserController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $payload = $request->getContent();
-        $data = json_decode($payload ?? '', false);
+        $data = $request->getPayload();
 
-        $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
-        $userIdInput = Filter::filterVar($data->userid ?? null, FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($data->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $userIdInput = Filter::filterVar($data->get('userid') ?? null, FILTER_VALIDATE_INT);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('export-userdata', $csrfToken)) {
             return $this->json(['error' => Translation::get(
