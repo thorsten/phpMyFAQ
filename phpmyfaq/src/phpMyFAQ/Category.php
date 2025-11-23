@@ -294,6 +294,7 @@ class Category
             $id = (int) $row['id'];
 
             $this->cache->addCategory($id, $row);
+            $this->cache->addCategoryName($id, $row);
             $categories[$id] = $row
             + [
                 'level' => $this->getLevelOf($id),
