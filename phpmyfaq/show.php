@@ -20,8 +20,8 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,7 +45,7 @@ if ($selectedCategoryId === 0) {
     $selectedCategoryId = null;
 }
 
-if (!is_null($selectedCategoryId)) {
+if (is_null($selectedCategoryId)) {
     $response = new Response();
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
@@ -63,40 +63,45 @@ if (!is_null($selectedCategoryId)) {
     $records = $faq->renderFaqsByCategoryId(
         $selectedCategoryId,
         $faqConfig->get('records.orderby'),
-        $faqConfig->get('records.sortby')
+        $faqConfig->get('records.sortby'),
     );
 
     if (empty($records) || $category->getChildNodes((int) $selectedCategoryId)) {
         $subCategory = new Category($faqConfig, $currentGroups, true);
         $subCategory->setUser($currentUser);
         $subCategory->transform($selectedCategoryId);
-        $categoryHelper
-            ->setConfiguration($faqConfig)
-            ->setCategory($subCategory);
+        $categoryHelper->setConfiguration($faqConfig)->setCategory($subCategory);
 
         if (empty($records)) {
-            $records = sprintf('<div class="mb-5 alert alert-info">%s</div>', Translation::get(languageKey: 'msgErrorNoRecords'));
+            $records = sprintf(
+                '<div class="mb-5 alert alert-info">%s</div>',
+                Translation::get(languageKey: 'msgErrorNoRecords'),
+            );
         }
 
-        if ((is_countable($category->getChildNodes((int) $selectedCategoryId)) ? count($category->getChildNodes((int) $selectedCategoryId)) : 0) !== 0) {
+        if (
+            (
+                is_countable($category->getChildNodes((int) $selectedCategoryId))
+                    ? count($category->getChildNodes((int) $selectedCategoryId))
+                    : 0
+            ) !== 0
+        ) {
             $categoryFaqsHeader = Translation::get(languageKey: 'msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
             $templateVars = [
-                ... $templateVars,
-                'categorySubsHeader' => $categoryFaqsHeader
+                ...$templateVars,
+                'categorySubsHeader' => $categoryFaqsHeader,
             ];
         }
     }
 
     $up = '';
     if ($categoryData->getId() !== 0) {
-        $url = sprintf(
-            '%sindex.php?%saction=show&cat=%d',
-            $faqConfig->getDefaultUrl(),
-            $sids,
-            $categoryData->getParentId()
-        );
-        $text = $category->getCategoryName($categoryData->getParentId()) ?? Translation::get(languageKey: 'msgCategoryUp');
+        $url = sprintf('%sindex.php?action=show&cat=%d', $faqConfig->getDefaultUrl(), $categoryData->getParentId());
+
+        $text = $category->getCategoryName($categoryData->getParentId()) === ''
+            ? Translation::get(languageKey: 'msgCategoryUp')
+            : $category->getCategoryName($categoryData->getParentId());
 
         $link = new Link($url, $faqConfig);
         $link->setTitle($text);
@@ -114,7 +119,7 @@ if (!is_null($selectedCategoryId)) {
 
     // Twig template variables
     $templateVars = [
-        ... $templateVars,
+        ...$templateVars,
         'categoryFaqsHeader' => $categoryData->getName(),
         'categoryDescription' => $categoryData->getDescription() ?? '',
         'categorySubsHeader' => Translation::get(languageKey: 'msgSubCategories'),
@@ -127,15 +132,13 @@ if (!is_null($selectedCategoryId)) {
     $selectedCategoryId = 0;
     $faqSession->userTracking('show_all_categories', 0);
 
-    $categoryHelper
-        ->setConfiguration($faqConfig)
-        ->setCategory($category);
+    $categoryHelper->setConfiguration($faqConfig)->setCategory($category);
 
     $categoryHeader = Translation::get(languageKey: 'msgFullCategories');
 
     // Twig template variables
     $templateVars = [
-        ... $templateVars,
+        ...$templateVars,
         'categoryFaqsHeader' => Translation::get(languageKey: 'msgShowAllCategories'),
         'categoryDescription' => Translation::get(languageKey: 'msgCategoryDescription'),
         'categorySubsHeader' => Translation::get(languageKey: 'msgSubCategories'),
@@ -146,7 +149,7 @@ if (!is_null($selectedCategoryId)) {
 }
 
 $templateVars = [
-    ... $templateVars,
+    ...$templateVars,
     'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get(languageKey: 'msgCategoryMetaDesc'), $faqConfig->getTitle()),
     'categoryHeader' => $categoryHeader,

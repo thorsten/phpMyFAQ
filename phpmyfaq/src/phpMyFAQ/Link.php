@@ -385,6 +385,7 @@ class Link
         $html .= '>';
 
         $body = $this->text;
+
         if ($body === '' || $body === '0') {
             $body = $this->name !== '' && $this->name !== '0' ? $this->name : $url;
         }
