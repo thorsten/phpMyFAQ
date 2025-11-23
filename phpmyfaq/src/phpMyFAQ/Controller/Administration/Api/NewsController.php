@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin News Controller
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-04-20
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
@@ -36,7 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class NewsController extends AbstractController
 {
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: 'admin/api/news/create')]
     public function create(Request $request): JsonResponse
@@ -72,8 +72,8 @@ final class NewsController extends AbstractController
             ->setMessage(html_entity_decode((string) $content))
             ->setAuthor($author)
             ->setEmail($email)
-            ->setActive($active)
-            ->setComment($comment)
+            ->setActive((bool) $active)
+            ->setComment((bool) $comment)
             ->setLink($link ?? '')
             ->setLinkTitle($linkTitle ?? '')
             ->setLinkTarget($target ?? '')
@@ -87,7 +87,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: 'admin/api/news/delete')]
     public function delete(Request $request): JsonResponse
@@ -115,7 +115,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: 'admin/api/news/update')]
     public function update(Request $request): JsonResponse
@@ -168,7 +168,7 @@ final class NewsController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\Exception
      */
     #[Route(path: 'admin/api/news/activate')]
     public function activate(Request $request): JsonResponse
