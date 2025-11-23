@@ -40,7 +40,7 @@ class NotificationTest extends TestCase
         Strings::init();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -48,20 +48,16 @@ class NotificationTest extends TestCase
         $this->configuration = $this->createMock(Configuration::class);
 
         // Mock configuration methods
-        $this->configuration
-            ->method('getNoReplyEmail')
-            ->willReturn('noreply@example.com');
+        $this->configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');
 
-        $this->configuration
-            ->method('getTitle')
-            ->willReturn('phpMyFAQ Test');
+        $this->configuration->method('getTitle')->willReturn('phpMyFAQ Test');
 
         $this->configuration
             ->method('get')
             ->willReturnMap([
                 ['main.administrationMail', 'admin@example.com'],
-                ['main.languageDetection', true],
-                ['mail.remoteSMTP', false],
+                ['main.languageDetection',  true],
+                ['mail.remoteSMTP',         false],
             ]);
 
         $this->notification = new Notification($this->configuration);

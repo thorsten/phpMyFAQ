@@ -42,7 +42,7 @@ final class QuestionController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         if (!$this->isAddingQuestionsAllowed()) {
-            return $this->json(['error' => Translation::get(languageKey: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_FORBIDDEN);
         }
 
         $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
@@ -70,7 +70,7 @@ final class QuestionController extends AbstractController
 
         // Validate captcha if we can store the question after displaying the smart answer
         if ($storeNow !== 'now' && !$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
         // Check if all necessary fields are provided and not empty
@@ -119,10 +119,10 @@ final class QuestionController extends AbstractController
             $notification = $this->container->get(id: 'phpmyfaq.notification');
             $notification->sendQuestionSuccessMail($questionEntity, $categories);
 
-            return $this->json(['success' => Translation::get(languageKey: 'msgAskThx4Mail')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'msgAskThx4Mail')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(languageKey: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'errSaveEntries')], Response::HTTP_BAD_REQUEST);
     }
 
     /**

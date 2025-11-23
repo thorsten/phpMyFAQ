@@ -43,11 +43,11 @@ final class ConfigurationController extends AbstractAdministrationController
         return $this->render('@admin/configuration/main.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderConfiguration' => Translation::get(languageKey: 'ad_config_edit'),
+            'adminHeaderConfiguration' => Translation::get(key: 'ad_config_edit'),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('configuration'),
             'language' => $this->configuration->getLanguage()->getLanguage(),
-            'adminConfigurationButtonReset' => Translation::get(languageKey: 'ad_config_reset'),
-            'adminConfigurationButtonSave' => Translation::get(languageKey: 'ad_config_save'),
+            'adminConfigurationButtonReset' => Translation::get(key: 'ad_config_reset'),
+            'adminConfigurationButtonSave' => Translation::get(key: 'ad_config_save'),
         ]);
     }
 }

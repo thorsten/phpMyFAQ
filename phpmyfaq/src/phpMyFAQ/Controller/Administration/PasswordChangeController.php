@@ -83,18 +83,18 @@ final class PasswordChangeController extends AbstractAdministrationController
         $successMessage = '';
         $errorMessage = '';
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
-            $errorMessage = Translation::get(languageKey: 'ad_passwd_fail');
+            $errorMessage = Translation::get(key: 'ad_passwd_fail');
         } elseif (
             $authSource->checkCredentials($this->currentUser->getLogin(), $oldPassword)
             && $newPassword == $retypedPassword
         ) {
             if (!$this->currentUser->changePassword($newPassword)) {
-                $errorMessage = Translation::get(languageKey: 'ad_passwd_fail');
+                $errorMessage = Translation::get(key: 'ad_passwd_fail');
             }
 
-            $successMessage = Translation::get(languageKey: 'ad_passwdsuc');
+            $successMessage = Translation::get(key: 'ad_passwdsuc');
         } else {
-            $errorMessage = Translation::get(languageKey: 'ad_passwd_fail');
+            $errorMessage = Translation::get(key: 'ad_passwd_fail');
         }
 
         return $this->render('@admin/user/password.twig', [
@@ -113,12 +113,12 @@ final class PasswordChangeController extends AbstractAdministrationController
     private function getBaseTemplateVars(): array
     {
         return [
-            'adminHeaderPasswordChange' => Translation::get(languageKey: 'ad_passwd_cop'),
+            'adminHeaderPasswordChange' => Translation::get(key: 'ad_passwd_cop'),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('password'),
-            'adminMsgOldPassword' => Translation::get(languageKey: 'ad_passwd_old'),
-            'adminMsgNewPassword' => Translation::get(languageKey: 'ad_passwd_new'),
-            'adminMsgNewPasswordConfirm' => Translation::get(languageKey: 'ad_passwd_con'),
-            'adminMsgButtonNewPassword' => Translation::get(languageKey: 'ad_passwd_change'),
+            'adminMsgOldPassword' => Translation::get(key: 'ad_passwd_old'),
+            'adminMsgNewPassword' => Translation::get(key: 'ad_passwd_new'),
+            'adminMsgNewPasswordConfirm' => Translation::get(key: 'ad_passwd_con'),
+            'adminMsgButtonNewPassword' => Translation::get(key: 'ad_passwd_change'),
         ];
     }
 }

@@ -45,8 +45,8 @@ use phpMyFAQ\Services;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
@@ -63,9 +63,7 @@ $user = $container->get('phpmyfaq.user.current_user');
 
 $glossary = new Glossary($faqConfig);
 $tagging = new Tags($faqConfig);
-$tagging
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$tagging->setUser($currentUser)->setGroups($currentGroups);
 $relation = new Relation($faqConfig);
 $rating = new Rating($faqConfig);
 $comment = new Comments($faqConfig);
@@ -93,7 +91,7 @@ if (is_null($user)) {
 }
 
 $templateVars = [
-    ... $templateVars
+    ...$templateVars,
 ];
 
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
@@ -119,7 +117,7 @@ if ($bookmarkAction === 'remove' && isset($faqId)) {
 }
 
 // Get all data from the FAQ record
-if (0 === (int)$solutionId) {
+if (0 === (int) $solutionId) {
     $faq->getFaq($faqId);
 } else {
     $faq->getFaqBySolutionId($solutionId);
@@ -158,9 +156,11 @@ $answer = $glossary->insertItemsIntoContent($answer);
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
 if (
-    !is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
-        $highlight
-    ) > 3
+    !is_null($highlight)
+    && $highlight != '/'
+    && $highlight != '<'
+    && $highlight != '>'
+    && Strings::strlen($highlight) > 3
 ) {
     $highlight = str_replace("'", '´', (string) $highlight);
     $highlight = str_replace(['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'], '', $highlight);
@@ -201,9 +201,10 @@ if ((is_countable($multiCategories) ? count($multiCategories) : 0) > 1) {
 
 // Related FAQs
 try {
-    $faqSearchResult->reviewResultSet(
-        $relation->getAllRelatedByQuestion($faq->faqRecord['title'], $faq->faqRecord['keywords'])
-    );
+    $faqSearchResult->reviewResultSet($relation->getAllRelatedByQuestion(
+        $faq->faqRecord['title'],
+        $faq->faqRecord['keywords'],
+    ));
 } catch (Exception) {
     // handle exception
 }
@@ -212,7 +213,7 @@ $searchHelper = new SearchHelper($faqConfig);
 $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $faqId);
 
 // Is the faq expired?
-$expired = (date(format: 'YmdHis') > $faq->faqRecord['dateEnd']);
+$expired = date(format: 'YmdHis') > $faq->faqRecord['dateEnd'];
 
 // Number of comments
 $numComments = $comment->getNumberOfComments();
@@ -223,20 +224,22 @@ $commentHelper->setConfiguration($faqConfig);
 
 // Does the user have the right to add a comment?
 if (
-    (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired
+    -1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')
+    || $faq->faqRecord['active'] === 'no'
+    || 'n' === $faq->faqRecord['comment']
+    || $expired
 ) {
-    $commentMessage = Translation::get(languageKey: 'msgWriteNoComment');
+    $commentMessage = Translation::get(key: 'msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
         '%s<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-        Translation::get(languageKey: 'msgYouCan'),
-        Translation::get(languageKey: 'msgWriteComment')
+        Translation::get(key: 'msgYouCan'),
+        Translation::get(key: 'msgWriteComment'),
     );
     $templateVars = [
-        ... $templateVars,
-        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get(languageKey: 'msgComments')),
-        'writeCommentMsg' => $commentMessage
+        ...$templateVars,
+        'numberOfComments' => sprintf('%d %s', $numComments[$faqId] ?? 0, Translation::get(key: 'msgComments')),
+        'writeCommentMsg' => $commentMessage,
     ];
 }
 
@@ -245,9 +248,10 @@ if (-1 !== $user->getUserId()) {
     $templateVars = [
         ...$templateVars,
         'bookmarkIcon' => $bookmark->isFaqBookmark($faqId) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark',
-        'msgAddBookmark' =>
-            $bookmark->isFaqBookmark($faqId) ? Translation::get(languageKey: 'removeBookmark') : Translation::get(languageKey: 'msgAddBookmark'),
-        'isFaqBookmark' => $bookmark->isFaqBookmark($faqId)
+        'msgAddBookmark' => $bookmark->isFaqBookmark($faqId)
+            ? Translation::get(key: 'removeBookmark')
+            : Translation::get(key: 'msgAddBookmark'),
+        'isFaqBookmark' => $bookmark->isFaqBookmark($faqId),
     ];
 }
 
@@ -256,33 +260,33 @@ $availableLanguages = $faqConfig->getLanguage()->isLanguageAvailable($faq->faqRe
 if (!empty($availableLanguages) && (is_countable($availableLanguages) ? count($availableLanguages) : 0) > 1) {
     $templateVars = [
         ...$templateVars,
-        'msgChangeLanguage' => Translation::get(languageKey: 'msgLanguageSubmit')
+        'msgChangeLanguage' => Translation::get(key: 'msgLanguageSubmit'),
     ];
 }
 
 if (
-    $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value) &&
-    !empty($faq->faqRecord['notes'])
+    $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value)
+    && !empty($faq->faqRecord['notes'])
 ) {
     $templateVars = [
         ...$templateVars,
-        'notesHeader' => Translation::get(languageKey: 'ad_admin_notes'),
-        'notes' => $faq->faqRecord['notes']
+        'notesHeader' => Translation::get(key: 'ad_admin_notes'),
+        'notes' => $faq->faqRecord['notes'],
     ];
 }
 
 if ('-' !== $tagging->getAllLinkTagsById($faqId)) {
     $templateVars = [
         ...$templateVars,
-        'renderTagsHeader' => Translation::get(languageKey: 'msg_tags'),
-        'renderTags' =>  $tagging->getAllLinkTagsById($faqId),
+        'renderTagsHeader' => Translation::get(key: 'msg_tags'),
+        'renderTags' => $tagging->getAllLinkTagsById($faqId),
     ];
 }
 
 if ('' !== $renderedCategoryPath) {
     $templateVars = [
         ...$templateVars,
-        'renderRelatedCategoriesHeader' => Translation::get(languageKey: 'msgArticleCategories'),
+        'renderRelatedCategoriesHeader' => Translation::get(key: 'msgArticleCategories'),
         'renderRelatedCategories' => $renderedCategoryPath,
     ];
 }
@@ -290,7 +294,7 @@ if ('' !== $renderedCategoryPath) {
 if ('' !== $relatedFaqs) {
     $templateVars = [
         ...$templateVars,
-        'renderRelatedArticlesHeader' => Translation::get(languageKey: 'msg_related_articles'),
+        'renderRelatedArticlesHeader' => Translation::get(key: 'msg_related_articles'),
         'renderRelatedArticles' => $relatedFaqs,
     ];
 }
@@ -336,48 +340,48 @@ $templateVars = [
     'attachmentList' => $attachmentList,
     'faqDate' => $date->format($faq->faqRecord['date']),
     'faqAuthor' => $author,
-    'msgPdf' => Translation::get(languageKey: 'msgPDF'),
-    'msgPrintFaq' => Translation::get(languageKey: 'msgPrintArticle'),
+    'msgPdf' => Translation::get(key: 'msgPDF'),
+    'msgPrintFaq' => Translation::get(key: 'msgPrintArticle'),
     'enableSendToFriend' => $faqConfig->get('main.enableSendToFriend'),
-    'msgShareText' => Translation::get(languageKey: 'msgShareText'),
-    'msgShareViaWhatsapp' => Translation::get(languageKey: 'msgShareViaWhatsapp'),
-    'msgShareFAQ' => Translation::get(languageKey: 'msgShareFAQ'),
+    'msgShareText' => Translation::get(key: 'msgShareText'),
+    'msgShareViaWhatsapp' => Translation::get(key: 'msgShareViaWhatsapp'),
+    'msgShareFAQ' => Translation::get(key: 'msgShareFAQ'),
     'linkToPdf' => $faqServices->getPdfLink(),
-    'msgAverageVote' => Translation::get(languageKey: 'msgAverageVote'),
+    'msgAverageVote' => Translation::get(key: 'msgAverageVote'),
     'renderVotingResult' => $rating->get($faqId),
     'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
-    'msgVoteBad' => Translation::get(languageKey: 'msgVoteBad'),
-    'msgVoteGood' => Translation::get(languageKey: 'msgVoteGood'),
-    'msgVoteSubmit' => Translation::get(languageKey: 'msgVoteSubmit'),
-    'msgWriteComment' => Translation::get(languageKey: 'msgWriteComment'),
+    'msgVoteBad' => Translation::get(key: 'msgVoteBad'),
+    'msgVoteGood' => Translation::get(key: 'msgVoteGood'),
+    'msgVoteSubmit' => Translation::get(key: 'msgVoteSubmit'),
+    'msgWriteComment' => Translation::get(key: 'msgWriteComment'),
     'id' => $faqId,
     'lang' => $lang,
-    'msgCommentHeader' => Translation::get(languageKey: 'msgCommentHeader'),
-    'msgNewContentName' => Translation::get(languageKey: 'msgNewContentName'),
-    'msgNewContentMail' => Translation::get(languageKey: 'msgNewContentMail'),
-    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
-    'msgYourComment' => Translation::get(languageKey: 'msgYourComment'),
-    'msgCancel' => Translation::get(languageKey: 'ad_gen_cancel'),
-    'msgNewContentSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
+    'msgCommentHeader' => Translation::get(key: 'msgCommentHeader'),
+    'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
+    'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
+    'defaultContentMail' => $user->getUserId() > 0 ? $user->getUserData('email') : '',
+    'defaultContentName' => $user->getUserId() > 0 ? $user->getUserData('display_name') : '',
+    'msgYourComment' => Translation::get(key: 'msgYourComment'),
+    'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
+    'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'csrfTokenAddComment' => Token::getInstance($container->get('session'))->getTokenString('add-comment'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
-        Translation::get(languageKey: 'msgCaptcha'),
-        $user->isLoggedIn()
+        Translation::get(key: 'msgCaptcha'),
+        $user->isLoggedIn(),
     ),
     'renderComments' => $commentHelper->getComments($comments),
-    'msg_about_faq' => Translation::get(languageKey: 'msg_about_faq'),
+    'msg_about_faq' => Translation::get(key: 'msg_about_faq'),
     'userId' => $user->getUserId(),
     'permissionEditFaq' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_EDIT->value),
-    'ad_entry_edit_1' => Translation::get(languageKey: 'ad_entry_edit_1'),
-    'ad_entry_edit_2' => Translation::get(languageKey: 'ad_entry_edit_2'),
+    'ad_entry_edit_1' => Translation::get(key: 'ad_entry_edit_1'),
+    'ad_entry_edit_2' => Translation::get(key: 'ad_entry_edit_2'),
     'bookmarkAction' => $bookmarkAction ?? '',
-    'msgBookmarkAdded' => Translation::get(languageKey: 'msgBookmarkAdded'),
-    'msgBookmarkRemoved' => Translation::get(languageKey: 'msgBookmarkRemoved'),
+    'msgBookmarkAdded' => Translation::get(key: 'msgBookmarkAdded'),
+    'msgBookmarkRemoved' => Translation::get(key: 'msgBookmarkRemoved'),
     'csrfTokenRemoveBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
-    'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark')
+    'csrfTokenAddBookmark' => Token::getInstance($container->get('session'))->getTokenString('add-bookmark'),
 ];
 
 return $templateVars;

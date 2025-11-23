@@ -49,7 +49,7 @@ abstract class AbstractAdministrationController extends AbstractController
         $gravatarImage = $this->getGravatarImage();
 
         return [
-            'metaLanguage' => Translation::get(languageKey: 'metaLanguage'),
+            'metaLanguage' => Translation::get(key: 'metaLanguage'),
             'layoutMode' => 'light',
             'pageTitle' => $this->configuration->getTitle() . ' - ' . System::getPoweredByPlainString(),
             'baseHref' => $this->configuration->getDefaultUrl() . 'admin/',
@@ -57,9 +57,9 @@ abstract class AbstractAdministrationController extends AbstractController
             'currentYear' => date(format: 'Y'),
             'metaRobots' => $this->configuration->get(item: 'seo.metaTagsAdmin'),
             'templateSetName' => TwigWrapper::getTemplateSetName(),
-            'pageDirection' => Translation::get(languageKey: 'direction'),
+            'pageDirection' => Translation::get(key: 'direction'),
             'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
-            'msgSessionExpiration' => Translation::get(languageKey: 'ad_session_expiration'),
+            'msgSessionExpiration' => Translation::get(key: 'ad_session_expiration'),
             'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
             'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
                 $this->configuration->getLanguage()->getLanguage(),
@@ -68,16 +68,16 @@ abstract class AbstractAdministrationController extends AbstractController
             'userName' => $this->currentUser->getUserData('display_name'),
             'hasGravatarSupport' => $this->configuration->get(item: 'main.enableGravatarSupport'),
             'gravatarImage' => $gravatarImage,
-            'msgChangePassword' => Translation::get(languageKey: 'ad_menu_passwd'),
+            'msgChangePassword' => Translation::get(key: 'ad_menu_passwd'),
             'csrfTokenLogout' => Token::getInstance($session)->getTokenString('admin-logout'),
-            'msgLogout' => Translation::get(languageKey: 'admin_mainmenu_logout'),
+            'msgLogout' => Translation::get(key: 'admin_mainmenu_logout'),
             'secondLevelEntries' => $secLevelEntries,
-            'menuUsers' => Translation::get(languageKey: 'admin_mainmenu_users'),
-            'menuContent' => Translation::get(languageKey: 'admin_mainmenu_content'),
-            'menuStatistics' => Translation::get(languageKey: 'admin_mainmenu_statistics'),
-            'menuImportsExports' => Translation::get(languageKey: 'admin_mainmenu_imports_exports'),
-            'menuBackup' => Translation::get(languageKey: 'admin_mainmenu_backup'),
-            'menuConfiguration' => Translation::get(languageKey: 'admin_mainmenu_configuration'),
+            'menuUsers' => Translation::get(key: 'admin_mainmenu_users'),
+            'menuContent' => Translation::get(key: 'admin_mainmenu_content'),
+            'menuStatistics' => Translation::get(key: 'admin_mainmenu_statistics'),
+            'menuImportsExports' => Translation::get(key: 'admin_mainmenu_imports_exports'),
+            'menuBackup' => Translation::get(key: 'admin_mainmenu_backup'),
+            'menuConfiguration' => Translation::get(key: 'admin_mainmenu_configuration'),
             'isSessionTimeoutCounterEnabled' => $this->configuration->get(
                 item: 'security.enableAdminSessionTimeoutCounter',
             ),
@@ -368,10 +368,7 @@ abstract class AbstractAdministrationController extends AbstractController
     protected function getFooter(): array
     {
         return [
-            'msgModalSessionWarning' => sprintf(
-                Translation::get(languageKey: 'ad_session_expiring'),
-                PMF_AUTH_TIMEOUT_WARNING,
-            ),
+            'msgModalSessionWarning' => sprintf(Translation::get(key: 'ad_session_expiring'), PMF_AUTH_TIMEOUT_WARNING),
             'msgPoweredBy' => System::getPoweredByPlainString(),
             'documentationUrl' => System::getDocumentationUrl(),
             'phpMyFaqUrl' => System::PHPMYFAQ_URL,

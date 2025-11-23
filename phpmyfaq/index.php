@@ -39,8 +39,8 @@ use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
@@ -83,7 +83,6 @@ $response = new Response();
 $response->headers->set('Content-Type', 'text/html');
 $csrfLogoutToken = Token::getInstance($container->get('session'))->getTokenString('logout');
 
-
 //
 // Get language (default: English)
 //
@@ -102,7 +101,7 @@ if (!Language::isASupportedLanguage($faqLangCode)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setTranslationsDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode)
         ->setMultiByteLanguage();
@@ -125,7 +124,7 @@ TwigWrapper::setTemplateSetName($faqConfig->getTemplateSet());
  */
 AttachmentFactory::init(
     $faqConfig->get('records.defaultAttachmentEncKey'),
-    $faqConfig->get('records.enableAttachmentEncryption')
+    $faqConfig->get('records.enableAttachmentEncryption'),
 );
 
 //
@@ -143,7 +142,7 @@ $faqusername = Filter::filterVar($request->request->get('faqusername'), FILTER_S
 $faqpassword = Filter::filterVar(
     $request->request->get('faqpassword'),
     FILTER_SANITIZE_SPECIAL_CHARS,
-    FILTER_FLAG_NO_ENCODE_QUOTES
+    FILTER_FLAG_NO_ENCODE_QUOTES,
 );
 $faqaction = Filter::filterVar($request->request->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
 $rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
@@ -172,13 +171,13 @@ if ($csrfToken !== '' && Token::getInstance($container->get('session'))->verifyT
 // Validating token from 2FA if given; else: returns an error message
 //
 if ($token !== '' && !is_null($userId)) {
-    if (strlen((string) $token) === 6 && is_numeric((string)$token)) {
+    if (strlen((string) $token) === 6 && is_numeric((string) $token)) {
         $user = new CurrentUser($faqConfig);
         $user->getUserById($userId);
         $tfa = new TwoFactor($faqConfig, $user);
         $res = $tfa->validateToken($token, $userId);
         if (!$res) {
-            $error = Translation::get(languageKey: 'msgTwofactorErrorToken');
+            $error = Translation::get(key: 'msgTwofactorErrorToken');
             $action = 'twofactor';
         } else {
             $user->twoFactorSuccess();
@@ -186,7 +185,7 @@ if ($token !== '' && !is_null($userId)) {
             $redirect->send();
         }
     } else {
-        $error = Translation::get(languageKey: 'msgTwofactorErrorToken');
+        $error = Translation::get(key: 'msgTwofactorErrorToken');
         $action = 'twofactor';
     }
 }
@@ -260,7 +259,7 @@ $faqSession->setCurrentUser($user);
 $internal = false;
 
 if ($request->headers->get('user-agent') !== null) {
-    $internal = (str_starts_with($request->headers->get('user-agent'), 'phpMyFAQ%2F'));
+    $internal = str_starts_with($request->headers->get('user-agent'), 'phpMyFAQ%2F');
 }
 
 if (!$internal) {
@@ -293,7 +292,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     $faqSession->setCookie(
         UserSession::COOKIE_NAME_SESSION_ID,
         $faqSession->getCurrentSessionId(),
-        $request->server->get('REQUEST_TIME') + 3600
+        $request->server->get('REQUEST_TIME') + 3600,
     );
     $sids = sprintf('lang=%s&', $faqLangCode);
 }
@@ -325,25 +324,19 @@ $searchTerm = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
-$faq
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$faq->setUser($currentUser)->setGroups($currentGroups);
 
 //
 // Create a new Category object
 //
 $category = new Category($faqConfig, $currentGroups, true);
-$category
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$category->setUser($currentUser)->setGroups($currentGroups);
 
 //
 // Create a new Tags object
 //
 $oTag = new Tags($faqConfig);
-$oTag
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$oTag->setUser($currentUser)->setGroups($currentGroups);
 
 //
 // Create new SEO objects
@@ -365,9 +358,7 @@ $id = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
 if ($id !== 0) {
     $faq->getFaq($id);
 
-    $seoEntity
-        ->setSeoType(SeoType::FAQ)
-        ->setReferenceId($id);
+    $seoEntity->setSeoType(SeoType::FAQ)->setReferenceId($id);
     $seoData = $seo->get($seoEntity);
 
     $title = $seoData->getTitle();
@@ -378,7 +369,7 @@ if ($id !== 0) {
         $sids,
         $category->getCategoryIdFromFaq($id),
         $id,
-        $lang
+        $lang,
     );
     $faqLink = new Link($url, $faqConfig);
     $faqLink->setTitle($faq->faqRecord['title']);
@@ -396,10 +387,7 @@ if ($solutionId) {
     $id = $faqData['id'];
     $lang = $faqData['lang'];
 
-    $seoEntity
-        ->setSeoType(SeoType::FAQ)
-        ->setReferenceId($id)
-        ->setReferenceLanguage($lang);
+    $seoEntity->setSeoType(SeoType::FAQ)->setReferenceId($id)->setReferenceLanguage($lang);
     $seoData = $seo->get($seoEntity);
 
     $title = $seoData->getTitle();
@@ -410,7 +398,7 @@ if ($solutionId) {
         $sids,
         $faqData['category_id'],
         $id,
-        $lang
+        $lang,
     );
     $faqLink = new Link($url, $faqConfig);
     $faqLink->setTitle(Strings::htmlentities($faqData['question']));
@@ -443,10 +431,8 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 
-if (isset($cat) && ($cat !== 0) && ($id === 0) && $category->getCategoryName($cat) !== null) {
-    $seoEntity
-        ->setSeoType(SeoType::CATEGORY)
-        ->setReferenceId($cat);
+if (isset($cat) && $cat !== 0 && $id === 0 && $category->getCategoryName($cat) !== null) {
+    $seoEntity->setSeoType(SeoType::CATEGORY)->setReferenceId($cat);
     $seoData = $seo->get($seoEntity);
     $title = $seoData->getTitle() ?? $category->getCategoryName($cat);
     $metaDescription = $seoData->getDescription() ?? $category->getCategoryDescription($cat);
@@ -478,8 +464,9 @@ if ($action !== 'main') {
 // Check if the FAQ should be secured
 //
 if (
-    $faqConfig->get('security.enableLoginOnly') &&
-    (!$user->isLoggedIn() && ($action !== 'login' && $action !== 'password'))
+    $faqConfig->get('security.enableLoginOnly') && (
+        !$user->isLoggedIn() && ($action !== 'login' && $action !== 'password')
+    )
 ) {
     $redirect = new RedirectResponse($faqSystem->getSystemUri($faqConfig) . 'login');
     $redirect->send();
@@ -504,7 +491,7 @@ $templateVars = [
     'isDebugEnabled' => Environment::isDebugMode(),
     'richSnippetsEnabled' => $faqConfig->get('seo.enableRichSnippets'),
     'tplSetName' => TwigWrapper::getTemplateSetName(),
-    'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get(languageKey: 'msgLoginUser'),
+    'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : Translation::get(key: 'msgLoginUser'),
     'isUserLoggedIn' => $user->isLoggedIn(),
     'isUserHasAdminRights' => $isUserHasAdminRights || $user->isSuperAdmin(),
     'title' => $title,
@@ -514,96 +501,104 @@ $templateVars = [
     'header' => str_replace('"', '', $faqConfig->getTitle()),
     'metaDescription' => $metaDescription ?? $faqConfig->get('seo.description'),
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
-    'metaLanguage' => Translation::get(languageKey: 'metaLanguage'),
+    'metaLanguage' => Translation::get(key: 'metaLanguage'),
     'metaRobots' => $seo->getMetaRobots($action),
     'phpmyfaqVersion' => $faqConfig->getVersion(),
-    'stylesheet' => Translation::get(languageKey: 'direction') == 'rtl' ? 'style.rtl' : 'style',
+    'stylesheet' => Translation::get(key: 'direction') == 'rtl' ? 'style.rtl' : 'style',
     'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
     'action' => $action,
-    'dir' => Translation::get(languageKey: 'direction'),
+    'dir' => Translation::get(key: 'direction'),
     'formActionUrl' => '?' . $sids . 'action=search',
-    'searchBox' => Translation::get(languageKey: 'msgSearch'),
+    'searchBox' => Translation::get(key: 'msgSearch'),
     'searchTerm' => Strings::htmlentities($searchTerm, ENT_QUOTES),
-    'categoryId' => ($cat === 0) ? '%' : (int)$cat,
-    'headerCategories' => Translation::get(languageKey: 'msgFullCategories'),
-    'msgCategory' => Translation::get(languageKey: 'msgCategory'),
-    'msgExportAllFaqs' => Translation::get(languageKey: 'msgExportAllFaqs'),
-    'languageBox' => Translation::get(languageKey: 'msgLanguageSubmit'),
+    'categoryId' => $cat === 0 ? '%' : (int) $cat,
+    'headerCategories' => Translation::get(key: 'msgFullCategories'),
+    'msgCategory' => Translation::get(key: 'msgCategory'),
+    'msgExportAllFaqs' => Translation::get(key: 'msgExportAllFaqs'),
+    'languageBox' => Translation::get(key: 'msgLanguageSubmit'),
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
-    'msgRegisterUser' => Translation::get(languageKey: 'msgRegisterUser'),
-    'sendPassword' => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'forgot-password">' . Translation::get(languageKey: 'lostPassword') . '</a>',
-    'msgFullName' => Translation::get(languageKey: 'ad_user_loggedin') . $user->getLogin(),
+    'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
+    'sendPassword' =>
+        '<a href="'
+        . $faqSystem->getSystemUri($faqConfig)
+        . 'forgot-password">'
+        . Translation::get(key: 'lostPassword')
+        . '</a>',
+    'msgFullName' => Translation::get(key: 'ad_user_loggedin') . $user->getLogin(),
     'msgLoginName' => $user->getUserData('display_name'),
-    'loginHeader' => Translation::get(languageKey: 'msgLoginUser'),
+    'loginHeader' => Translation::get(key: 'msgLoginUser'),
     'loginMessage' => $loginMessage,
     'writeLoginPath' => $faqSystem->getSystemUri($faqConfig) . '?' . Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
-    'login' => Translation::get(languageKey: 'ad_auth_ok'),
-    'username' => Translation::get(languageKey: 'ad_auth_user'),
-    'realname' => Translation::get(languageKey: 'msgRealname'),
-    'password' => Translation::get(languageKey: 'ad_auth_passwd'),
-    'rememberMe' => Translation::get(languageKey: 'rememberMe'),
-    'submitRegister' => Translation::get(languageKey: 'submitRegister'),
-    'headerChangePassword' => Translation::get(languageKey: 'ad_passwd_cop'),
-    'msgUsername' => Translation::get(languageKey: 'ad_auth_user'),
-    'msgEmail' => Translation::get(languageKey: 'msgEmail'),
-    'msgSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
-    'loginPageMessage' => Translation::get(languageKey: 'loginPageMessage'),
-    'msgAdvancedSearch' => Translation::get(languageKey: 'msgAdvancedSearch'),
-    'currentYear' => date(format: 'Y', timestamp: time()),
-    'cookieConsentEnabled' =>  $faqConfig->get('layout.enableCookieConsent'),
+    'login' => Translation::get(key: 'ad_auth_ok'),
+    'username' => Translation::get(key: 'ad_auth_user'),
+    'realname' => Translation::get(key: 'msgRealname'),
+    'password' => Translation::get(key: 'ad_auth_passwd'),
+    'rememberMe' => Translation::get(key: 'rememberMe'),
+    'submitRegister' => Translation::get(key: 'submitRegister'),
+    'headerChangePassword' => Translation::get(key: 'ad_passwd_cop'),
+    'msgUsername' => Translation::get(key: 'ad_auth_user'),
+    'msgEmail' => Translation::get(key: 'msgEmail'),
+    'msgSubmit' => Translation::get(key: 'msgNewContentSubmit'),
+    'loginPageMessage' => Translation::get(key: 'loginPageMessage'),
+    'msgAdvancedSearch' => Translation::get(key: 'msgAdvancedSearch'),
+    'currentYear' => date(
+        format: 'Y',
+        timestamp: time(),
+    ),
+    'cookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
 ];
 
 $topNavigation = [
     [
-        'name' => Translation::get(languageKey: 'msgShowAllCategories'),
+        'name' => Translation::get(key: 'msgShowAllCategories'),
         'link' => './show-categories.html',
-        'active' => ('show' === $action) ? 'active' : '',
+        'active' => 'show' === $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'msgAddContent'),
+        'name' => Translation::get(key: 'msgAddContent'),
         'link' => './add-faq.html',
-        'active' => ('add' === $action) ? 'active' : '',
+        'active' => 'add' === $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'msgQuestion'),
+        'name' => Translation::get(key: 'msgQuestion'),
         'link' => './add-question.html',
-        'active' => ('ask' == $action) ? 'active' : '',
+        'active' => 'ask' == $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'msgOpenQuestions'),
+        'name' => Translation::get(key: 'msgOpenQuestions'),
         'link' => './open-questions.html',
-        'active' => ('open-questions' == $action) ? 'active' : '',
+        'active' => 'open-questions' == $action ? 'active' : '',
     ],
 ];
 
 $footerNavigation = [
     [
-        'name' => Translation::get(languageKey: 'faqOverview'),
+        'name' => Translation::get(key: 'faqOverview'),
         'link' => './overview.html',
-        'active' => ('faq-overview' == $action) ? 'active' : '',
+        'active' => 'faq-overview' == $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'msgSitemap'),
+        'name' => Translation::get(key: 'msgSitemap'),
         'link' => './sitemap/A/' . $faqLangCode . '.html',
-        'active' => ('sitemap' == $action) ? 'active' : '',
+        'active' => 'sitemap' == $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'ad_menu_glossary'),
+        'name' => Translation::get(key: 'ad_menu_glossary'),
         'link' => './glossary.html',
-        'active' => ('glossary' == $action) ? 'active' : '',
+        'active' => 'glossary' == $action ? 'active' : '',
     ],
     [
-        'name' => Translation::get(languageKey: 'msgContact'),
+        'name' => Translation::get(key: 'msgContact'),
         'link' => './contact.html',
-        'active' => ('contact' == $action) ? 'active' : '',
+        'active' => 'contact' == $action ? 'active' : '',
     ],
 ];
 
 $templateVars = [
-    ... $templateVars,
+    ...$templateVars,
     'faqHome' => $faqConfig->getDefaultUrl(),
     'topNavigation' => $topNavigation,
     'isAskQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
@@ -611,10 +606,13 @@ $templateVars = [
     'footerNavigation' => $footerNavigation,
     'isPrivacyLinkEnabled' => $faqConfig->get('layout.enablePrivacyLink'),
     'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
-    'msgPrivacyNote' => Translation::get(languageKey: 'msgPrivacyNote'),
+    'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
     'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
-    'cookiePreferences' => Translation::get(languageKey: 'cookiePreferences'),
-    'currentYear' => date(format: 'Y', timestamp: time()),
+    'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
+    'currentYear' => date(
+        format: 'Y',
+        timestamp: time(),
+    ),
 ];
 
 //
@@ -622,21 +620,21 @@ $templateVars = [
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if (
-        $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value) ||
-        $user->isSuperAdmin()
+        $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value)
+        || $user->isSuperAdmin()
     ) {
         $templateVars = [
-            ... $templateVars,
-            'msgAdmin' => Translation::get(languageKey: 'adminSection'),
+            ...$templateVars,
+            'msgAdmin' => Translation::get(key: 'adminSection'),
         ];
     }
 
     $templateVars = [
-        ... $templateVars,
-        'msgUserControlDropDown' => Translation::get(languageKey: 'headerUserControlPanel'),
-        'msgBookmarks' => Translation::get(languageKey: 'msgBookmarks'),
-        'msgUserRemoval' => Translation::get(languageKey: 'ad_menu_RequestRemove'),
-        'msgLogoutUser' => Translation::get(languageKey: 'ad_menu_logout'),
+        ...$templateVars,
+        'msgUserControlDropDown' => Translation::get(key: 'headerUserControlPanel'),
+        'msgBookmarks' => Translation::get(key: 'msgBookmarks'),
+        'msgUserRemoval' => Translation::get(key: 'ad_menu_RequestRemove'),
+        'msgLogoutUser' => Translation::get(key: 'ad_menu_logout'),
         'csrfLogout' => $csrfLogoutToken,
     ];
 }
@@ -682,7 +680,7 @@ $response->setCache([
     'stale_if_error' => 86400,
     'stale_while_revalidate' => 60,
     'immutable' => true,
-    'last_modified' => new DateTime()
+    'last_modified' => new DateTime(),
 ]);
 
 //

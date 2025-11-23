@@ -15,8 +15,8 @@
  * @since     2012-02-12
  */
 
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -45,24 +45,24 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate($templateFile);
 
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgLoginUser'), $faqConfig->getTitle()),
-    'loginHeader' => Translation::get(languageKey: 'msgLoginUser'),
-    'sendPassword' => Translation::get(languageKey: 'lostPassword'),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgLoginUser'), $faqConfig->getTitle()),
+    'loginHeader' => Translation::get(key: 'msgLoginUser'),
+    'sendPassword' => Translation::get(key: 'lostPassword'),
     'loginMessage' => $loginMessage,
     'writeLoginPath' => $faqConfig->getDefaultUrl(),
     'faqloginaction' => $action,
-    'login' => Translation::get(languageKey: 'ad_auth_ok'),
-    'username' => Translation::get(languageKey: 'ad_auth_user'),
-    'password' => Translation::get(languageKey: 'ad_auth_passwd'),
-    'rememberMe' => Translation::get(languageKey: 'rememberMe'),
-    'msgTwofactorEnabled' => Translation::get(languageKey: 'msgTwofactorEnabled'),
-    'msgTwofactorTokenModelTitle' => Translation::get(languageKey: 'msgTwofactorTokenModelTitle'),
-    'msgEnterTwofactorToken' => Translation::get(languageKey: 'msgEnterTwofactorToken'),
-    'msgTwofactorCheck' => Translation::get(languageKey: 'msgTwofactorCheck'),
+    'login' => Translation::get(key: 'ad_auth_ok'),
+    'username' => Translation::get(key: 'ad_auth_user'),
+    'password' => Translation::get(key: 'ad_auth_passwd'),
+    'rememberMe' => Translation::get(key: 'rememberMe'),
+    'msgTwofactorEnabled' => Translation::get(key: 'msgTwofactorEnabled'),
+    'msgTwofactorTokenModelTitle' => Translation::get(key: 'msgTwofactorTokenModelTitle'),
+    'msgEnterTwofactorToken' => Translation::get(key: 'msgEnterTwofactorToken'),
+    'msgTwofactorCheck' => Translation::get(key: 'msgTwofactorCheck'),
     'userid' => $userId,
     'enableRegistration' => $faqConfig->get('security.enableRegistration'),
-    'registerUser' => Translation::get(languageKey: 'msgRegistration'),
+    'registerUser' => Translation::get(key: 'msgRegistration'),
     'useSignInWithMicrosoft' => $faqConfig->isSignInWithMicrosoftActive(),
     'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
 ];

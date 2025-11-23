@@ -62,10 +62,7 @@ readonly class MailHelper
         );
 
         $this->mail->addTo($user->getUserData('email'), $user->getUserData('display_name'));
-        $this->mail->subject = Utils::resolveMarkers(
-            Translation::get(languageKey: 'emailRegSubject'),
-            $this->configuration,
-        );
+        $this->mail->subject = Utils::resolveMarkers(Translation::get(key: 'emailRegSubject'), $this->configuration);
         $this->mail->message = $text;
 
         return (bool) $this->mail->send();

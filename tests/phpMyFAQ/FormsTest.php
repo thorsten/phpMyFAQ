@@ -20,7 +20,7 @@ class FormsTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -41,16 +41,16 @@ class FormsTest extends TestCase
         $this->forms->saveActivateInputStatus(1, 1, 1);
         $result = $this->forms->getFormData(1);
         foreach ($result as $input) {
-            if ((int)$input->input_id === 1) {
-                $this->assertEquals(1, (int)$input->input_active);
+            if ((int) $input->input_id === 1) {
+                $this->assertEquals(1, (int) $input->input_active);
             }
         }
         // Test deactivation
         $this->forms->saveActivateInputStatus(1, 1, 0);
         $result = $this->forms->getFormData(1);
         foreach ($result as $input) {
-            if ((int)$input->input_id === 1) {
-                $this->assertEquals(0, (int)$input->input_active);
+            if ((int) $input->input_id === 1) {
+                $this->assertEquals(0, (int) $input->input_active);
             }
         }
     }
@@ -66,8 +66,8 @@ class FormsTest extends TestCase
 
         $formData = $this->forms->getFormData(1);
         foreach ($formData as $input) {
-            if ((int)$input->input_id === 1) {
-                $this->assertEquals(1, (int)$input->input_required);
+            if ((int) $input->input_id === 1) {
+                $this->assertEquals(1, (int) $input->input_required);
             }
         }
 
@@ -233,7 +233,10 @@ class FormsTest extends TestCase
                 break;
             }
         }
-        $this->assertTrue($found, "Updated translation not found for formId=$formId, inputId=$inputId, language=$language");
+        $this->assertTrue(
+            $found,
+            "Updated translation not found for formId=$formId, inputId=$inputId, language=$language",
+        );
     }
 
     /**
@@ -278,9 +281,8 @@ class FormsTest extends TestCase
         // Verify language filtering works
         foreach ($formData as $input) {
             $this->assertTrue(
-                $input->input_lang === 'en' ||
-                $input->input_lang === 'default',
-                'Form data should only contain current language or default entries'
+                $input->input_lang === 'en' || $input->input_lang === 'default',
+                'Form data should only contain current language or default entries',
             );
         }
     }
@@ -320,9 +322,9 @@ class FormsTest extends TestCase
             // Verify ascending order by input_id
             for ($i = 1; $i < count($formData); $i++) {
                 $this->assertGreaterThanOrEqual(
-                    $formData[$i-1]->input_id,
+                    $formData[$i - 1]->input_id,
                     $formData[$i]->input_id,
-                    'Form data should be sorted by input_id in ascending order'
+                    'Form data should be sorted by input_id in ascending order',
                 );
             }
         }

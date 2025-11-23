@@ -50,7 +50,7 @@ final class ImageController extends AbstractController
             return $this->json([
                 'success' => false,
                 'data' => ['code' => Response::HTTP_UNAUTHORIZED],
-                'messages' => [Translation::get(languageKey: 'msgNoPermission')],
+                'messages' => [Translation::get(key: 'msgNoPermission')],
             ], Response::HTTP_UNAUTHORIZED);
         }
 

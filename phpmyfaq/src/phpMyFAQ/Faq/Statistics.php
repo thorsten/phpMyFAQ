@@ -137,7 +137,7 @@ class Statistics
                 $entry->voted = sprintf(
                     '%s %s 5 - %s',
                     round($row['avg'], 2),
-                    Translation::get(languageKey: 'msgVoteFrom'),
+                    Translation::get(key: 'msgVoteFrom'),
                     $this->plurals->GetMsg('plmsgVotes', $row['user']),
                 );
             }

@@ -38,6 +38,7 @@ define('PMF_ROOT_DIR', dirname(__FILE__, 2));
 define('PMF_TRANSLATION_DIR', dirname(__DIR__) . '/translations');
 
 const PMF_SRC_DIR = PMF_ROOT_DIR . '/src';
+
 const IS_VALID_PHPMYFAQ = null;
 
 if (version_compare(PHP_VERSION, '8.1.0') < 0) {
@@ -73,7 +74,7 @@ Strings::init();
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setTranslationsDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage('en')
         ->setMultiByteLanguage();
@@ -84,7 +85,7 @@ try {
 $routes = new RouteCollection();
 
 $routeDefinitions = [
-    'public.setup.index'   => ['/', SetupController::class, 'index'],
+    'public.setup.index' => ['/', SetupController::class, 'index'],
     'public.setup.install' => ['/install', SetupController::class, 'install'],
 ];
 

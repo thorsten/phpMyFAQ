@@ -67,16 +67,16 @@ final class AttachmentsController extends AbstractAdministrationController
         return $this->render('@admin/content/attachments.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderAttachments' => Translation::get(languageKey: 'ad_menu_attachment_admin'),
-            'adminMsgAttachmentsFilename' => Translation::get(languageKey: 'msgAttachmentsFilename'),
-            'adminMsgTransToolLanguage' => Translation::get(languageKey: 'msgTransToolLanguage'),
-            'adminMsgAttachmentsFilesize' => Translation::get(languageKey: 'msgAttachmentsFilesize'),
-            'adminMsgAttachmentsMimeType' => Translation::get(languageKey: 'msgAttachmentsMimeType'),
+            'adminHeaderAttachments' => Translation::get(key: 'ad_menu_attachment_admin'),
+            'adminMsgAttachmentsFilename' => Translation::get(key: 'msgAttachmentsFilename'),
+            'adminMsgTransToolLanguage' => Translation::get(key: 'msgTransToolLanguage'),
+            'adminMsgAttachmentsFilesize' => Translation::get(key: 'msgAttachmentsFilesize'),
+            'adminMsgAttachmentsMimeType' => Translation::get(key: 'msgAttachmentsMimeType'),
             'csrfTokenDeletion' => Token::getInstance($session)->getTokenString('delete-attachment'),
             'csrfTokenRefresh' => Token::getInstance($session)->getTokenString('refresh-attachment'),
             'attachments' => $crumbs,
-            'adminMsgButtonDelete' => Translation::get(languageKey: 'ad_gen_delete'),
-            'adminMsgFaqTitle' => Translation::get(languageKey: 'ad_entry_faq_record'),
+            'adminMsgButtonDelete' => Translation::get(key: 'ad_gen_delete'),
+            'adminMsgFaqTitle' => Translation::get(key: 'ad_entry_faq_record'),
             'adminAttachmentPagination' => $pagination->render(),
         ]);
     }

@@ -50,9 +50,7 @@ final class UserController extends AbstractController
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('ucp', $csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_msg_noauth',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userid, FILTER_VALIDATE_INT);
@@ -79,9 +77,7 @@ final class UserController extends AbstractController
             }
 
             if ((strlen($password) <= 7 || strlen($confirm) <= 7) && !$isWebAuthnUser) {
-                return $this->json(['error' => Translation::get(
-                    languageKey: 'ad_passwd_fail',
-                )], Response::HTTP_CONFLICT);
+                return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_CONFLICT);
             }
 
             if ($isWebAuthnUser) {
@@ -122,12 +118,10 @@ final class UserController extends AbstractController
         }
 
         if ($success) {
-            return $this->json(['success' => Translation::get(languageKey: 'ad_entry_savedsuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_entry_savedsuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'ad_entry_savedfail',
-        )], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'ad_entry_savedfail')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -146,9 +140,7 @@ final class UserController extends AbstractController
         $userIdInput = Filter::filterVar($data->get('userid') ?? null, FILTER_VALIDATE_INT);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('export-userdata', $csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_msg_noauth',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (null !== $userIdInput && $userIdInput !== $this->currentUser->getUserId()) {
@@ -208,9 +200,7 @@ final class UserController extends AbstractController
 
         $csrfToken = Filter::filterVar($data->{'pmf-csrf-token'}, FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('request-removal', $csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_msg_noauth',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -227,7 +217,7 @@ final class UserController extends AbstractController
             || $email !== $this->currentUser->getUserData('email')
         ) {
             return $this->json(['error' => Translation::get(
-                languageKey: 'ad_user_error_loginInvalid',
+                key: 'ad_user_error_loginInvalid',
             )], Response::HTTP_BAD_REQUEST);
         }
 
@@ -243,11 +233,11 @@ final class UserController extends AbstractController
         ) {
             $question = sprintf(
                 '%s %s<br>%s %s<br>%s %s<br><br>%s',
-                Translation::get(languageKey: 'msgUsername'),
+                Translation::get(key: 'msgUsername'),
                 $loginName,
-                Translation::get(languageKey: 'msgNewContentName'),
+                Translation::get(key: 'msgNewContentName'),
                 $author,
-                Translation::get(languageKey: 'msgNewContentMail'),
+                Translation::get(key: 'msgNewContentMail'),
                 $email,
                 $question,
             );
@@ -262,13 +252,13 @@ final class UserController extends AbstractController
                 $mailer->send();
                 unset($mailer);
 
-                return $this->json(['success' => Translation::get(languageKey: 'msgMailContact')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);
             } catch (Exception|TransportExceptionInterface $exception) {
                 return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
             }
         }
 
-        return $this->json(['error' => Translation::get(languageKey: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -282,9 +272,7 @@ final class UserController extends AbstractController
 
         $csrfToken = Filter::filterVar($data->csrfToken, FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('remove-twofactor', $csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_msg_noauth',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_noauth')], Response::HTTP_UNAUTHORIZED);
         }
 
         if ($this->currentUser->isLoggedIn()) {
@@ -296,9 +284,7 @@ final class UserController extends AbstractController
                 )], Response::HTTP_OK);
             }
 
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgErrorOccurred',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
         }
 
         throw new Exception('The user is not logged in.');

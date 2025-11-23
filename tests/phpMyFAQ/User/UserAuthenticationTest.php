@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Configuration;
 
 class UserAuthenticationTest extends TestCase
 {
@@ -23,11 +23,10 @@ class UserAuthenticationTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
-
 
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

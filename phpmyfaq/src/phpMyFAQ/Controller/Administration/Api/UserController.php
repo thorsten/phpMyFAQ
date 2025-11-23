@@ -199,9 +199,7 @@ final class UserController extends AbstractController
 
         $data = json_decode($request->getContent());
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('activate-user', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -237,15 +235,11 @@ final class UserController extends AbstractController
         $retypedPassword = Filter::filterVar($data->passwordRepeat, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('overwrite-password', $csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         if (strlen((string) $newPassword) <= 7 || strlen((string) $retypedPassword) <= 7) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgPasswordTooShort',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgPasswordTooShort')], Response::HTTP_BAD_REQUEST);
         }
 
         $currentUser->getUserById((int) $userId, true);
@@ -256,17 +250,13 @@ final class UserController extends AbstractController
 
         if ($newPassword === $retypedPassword) {
             if (!$currentUser->changePassword($newPassword)) {
-                return $this->json(['error' => Translation::get(
-                    languageKey: 'ad_passwd_fail',
-                )], Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => Translation::get(key: 'ad_passwd_fail')], Response::HTTP_BAD_REQUEST);
             }
 
-            return $this->json(['success' => Translation::get(languageKey: 'ad_passwdsuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_passwdsuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'msgPasswordsMustBeEqual',
-        )], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'msgPasswordsMustBeEqual')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -282,9 +272,7 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-user', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT);
@@ -297,9 +285,7 @@ final class UserController extends AbstractController
         }
 
         if (!$currentUser->deleteUser()) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_user_error_delete',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_delete')], Response::HTTP_BAD_REQUEST);
         }
 
         $category = new Category($this->configuration, [], false);
@@ -311,7 +297,7 @@ final class UserController extends AbstractController
             $permissions->removeFromAllGroups($userId);
         }
 
-        return $this->json(['success' => Translation::get(languageKey: 'ad_user_deleted')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(key: 'ad_user_deleted')], Response::HTTP_OK);
     }
 
     /**
@@ -325,9 +311,7 @@ final class UserController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-user', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $errorMessage = [];
@@ -343,24 +327,24 @@ final class UserController extends AbstractController
         $newUser = new User($this->configuration);
 
         if (!$newUser->isValidLogin($userName)) {
-            $errorMessage[] = Translation::get(languageKey: 'ad_user_error_loginInvalid');
+            $errorMessage[] = Translation::get(key: 'ad_user_error_loginInvalid');
         }
 
         if ($newUser->getUserByLogin($userName, false)) {
-            $errorMessage[] = Translation::get(languageKey: 'ad_adus_exerr');
+            $errorMessage[] = Translation::get(key: 'ad_adus_exerr');
         }
 
         if ($userRealName === '') {
-            $errorMessage[] = Translation::get(languageKey: 'ad_user_error_noRealName');
+            $errorMessage[] = Translation::get(key: 'ad_user_error_noRealName');
         }
 
         if (is_null($userEmail)) {
-            $errorMessage[] = Translation::get(languageKey: 'ad_user_error_noEmail');
+            $errorMessage[] = Translation::get(key: 'ad_user_error_noEmail');
         }
 
         if (!$automaticPassword) {
             if (strlen((string) $userPassword) <= 7 || strlen((string) $userPasswordConfirm) <= 7) {
-                $errorMessage[] = Translation::get(languageKey: 'ad_passwd_fail');
+                $errorMessage[] = Translation::get(key: 'ad_passwd_fail');
             }
         } else {
             $userPassword = $newUser->createPassword(8, false);
@@ -380,7 +364,7 @@ final class UserController extends AbstractController
                     // @todo catch exception
                 }
 
-                return $this->json(['success' => Translation::get(languageKey: 'ad_adus_suc')], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(key: 'ad_adus_suc')], Response::HTTP_OK);
             }
         }
 
@@ -401,16 +385,12 @@ final class UserController extends AbstractController
             'update-user-data',
             $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
         if ($userId === 0) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_user_error_noId',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
         $userData = [];
@@ -445,11 +425,11 @@ final class UserController extends AbstractController
         }
 
         $success =
-            Translation::get(languageKey: 'ad_msg_savedsuc_1')
+            Translation::get(key: 'ad_msg_savedsuc_1')
             . ' '
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
             . ' '
-            . Translation::get(languageKey: 'ad_msg_savedsuc_2');
+            . Translation::get(key: 'ad_msg_savedsuc_2');
         return $this->json(['success' => $success], Response::HTTP_OK);
     }
 
@@ -468,17 +448,13 @@ final class UserController extends AbstractController
             'update-user-rights',
             $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $userId = Filter::filterVar($data->userId, FILTER_VALIDATE_INT, 0);
 
         if (0 === (int) $userId) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_user_error_noId',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'ad_user_error_noId')], Response::HTTP_BAD_REQUEST);
         }
 
         $user = new User($this->configuration);
@@ -486,9 +462,7 @@ final class UserController extends AbstractController
 
         $userRights = Filter::filterVar($data->userRights, FILTER_SANITIZE_SPECIAL_CHARS, []);
         if (!$user->perm->refuseAllUserRights($userId)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_msg_mysqlerr',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'ad_msg_mysqlerr')], Response::HTTP_BAD_REQUEST);
         }
 
         foreach ($userRights as $userRight) {
@@ -497,11 +471,11 @@ final class UserController extends AbstractController
 
         $user->terminateSessionId();
         $success =
-            Translation::get(languageKey: 'ad_msg_savedsuc_1')
+            Translation::get(key: 'ad_msg_savedsuc_1')
             . ' '
             . Strings::htmlentities($user->getLogin(), ENT_QUOTES)
             . ' '
-            . Translation::get(languageKey: 'ad_msg_savedsuc_2');
+            . Translation::get(key: 'ad_msg_savedsuc_2');
 
         return $this->json(['success' => $success], Response::HTTP_OK);
     }

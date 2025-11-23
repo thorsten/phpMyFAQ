@@ -105,7 +105,7 @@ class CategoryHelper extends AbstractHelper
         $languagesAvailable = $this->getCategory()->getCategoryLanguagesTranslated($parentId);
         return sprintf(
             '<p>%s</p><ul class="pmf-category-overview">%s</ul>',
-            Translation::get(languageKey: 'msgCategoryMissingButTranslationAvailable'),
+            Translation::get(key: 'msgCategoryMissingButTranslationAvailable'),
             $this->buildAvailableCategoryTranslationsList($languagesAvailable),
         );
     }

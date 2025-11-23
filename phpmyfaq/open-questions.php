@@ -18,8 +18,8 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\QuestionHelper;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -35,28 +35,26 @@ $faqSession->userTracking('open_questions', 0);
 
 $category = new Category($faqConfig);
 $questionHelper = new QuestionHelper();
-$questionHelper
-    ->setConfiguration($faqConfig)
-    ->setCategory($category);
+$questionHelper->setConfiguration($faqConfig)->setCategory($category);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./open-questions.twig');
 
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgOpenQuestions'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get(languageKey: 'msgOpenQuestions'),
-    'msgQuestionText' => Translation::get(languageKey: 'msgQuestionText'),
-    'msgDate_User' => Translation::get(languageKey: 'msgDate_User'),
-    'msgQuestion2' => Translation::get(languageKey: 'msgQuestion2'),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgOpenQuestions'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgOpenQuestionsMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(key: 'msgOpenQuestions'),
+    'msgQuestionText' => Translation::get(key: 'msgQuestionText'),
+    'msgDate_User' => Translation::get(key: 'msgDate_User'),
+    'msgQuestion2' => Translation::get(key: 'msgQuestion2'),
     'openQuestions' => $questionHelper->getOpenQuestions(),
     'isCloseQuestionEnabled' => $faqConfig->get('records.enableCloseQuestion'),
     'userHasPermissionToAnswer' => $user->perm->hasPermission($user->getUserId(), PermissionType::FAQ_ADD->value),
-    'msgQuestionsWaiting' => Translation::get(languageKey: 'msgQuestionsWaiting'),
-    'msgNoQuestionsAvailable' => Translation::get(languageKey: 'msgNoQuestionsAvailable'),
-    'msg2answerFAQ' => Translation::get(languageKey: 'msg2answerFAQ'),
-    'msg2answer' => Translation::get(languageKey: 'msg2answer')
+    'msgQuestionsWaiting' => Translation::get(key: 'msgQuestionsWaiting'),
+    'msgNoQuestionsAvailable' => Translation::get(key: 'msgNoQuestionsAvailable'),
+    'msg2answerFAQ' => Translation::get(key: 'msg2answerFAQ'),
+    'msg2answer' => Translation::get(key: 'msg2answer'),
 ];
 
 return $templateVars;

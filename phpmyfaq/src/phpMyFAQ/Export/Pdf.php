@@ -154,7 +154,7 @@ class Pdf extends Export
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
                     h: 5,
-                    txt: Translation::get(languageKey: 'msgNewContentKeywords') . ' ' . $faq['keywords'],
+                    txt: Translation::get(key: 'msgNewContentKeywords') . ' ' . $faq['keywords'],
                 );
             }
 
@@ -162,7 +162,7 @@ class Pdf extends Export
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
                     h: 5,
-                    txt: Translation::get(languageKey: 'msgTags')
+                    txt: Translation::get(key: 'msgTags')
                     . ': '
                     . implode(
                         separator: ', ',
@@ -175,7 +175,7 @@ class Pdf extends Export
             $this->wrapper->Ln();
             $this->wrapper->Write(
                 h: 5,
-                txt: Translation::get(languageKey: 'msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
+                txt: Translation::get(key: 'msgLastUpdateArticle') . Date::createIsoDate($faq['lastmodified']),
             );
 
             $currentCategory = $faq['category_id'];
@@ -232,7 +232,7 @@ class Pdf extends Export
             $this->wrapper->Ln();
             $this->wrapper->Write(
                 h: 5,
-                txt: Translation::get(languageKey: 'msgAttachedFiles') . ':',
+                txt: Translation::get(key: 'msgAttachedFiles') . ':',
             );
             $this->wrapper->Ln(h: 5);
             $this->wrapper->Ln();
@@ -251,7 +251,7 @@ class Pdf extends Export
         $this->wrapper->SetFont($this->wrapper->getCurrentFont(), style: '', size: 9);
         $this->wrapper->Write(
             h: 5,
-            txt: Translation::get(languageKey: 'ad_entry_solution_id') . ': #' . $faqData['solution_id'],
+            txt: Translation::get(key: 'ad_entry_solution_id') . ': #' . $faqData['solution_id'],
         );
 
         // Check if the author name should be visible, according to the GDPR option
@@ -262,12 +262,12 @@ class Pdf extends Export
         $this->wrapper->Ln();
         $this->wrapper->Write(
             h: 5,
-            txt: Translation::get(languageKey: 'msgAuthor') . ': ' . $author,
+            txt: Translation::get(key: 'msgAuthor') . ': ' . $author,
         );
         $this->wrapper->Ln();
         $this->wrapper->Write(
             h: 5,
-            txt: Translation::get(languageKey: 'msgLastUpdateArticle') . $date->format($faqData['date']),
+            txt: Translation::get(key: 'msgLastUpdateArticle') . $date->format($faqData['date']),
         );
 
         return $this->wrapper->Output($filename);

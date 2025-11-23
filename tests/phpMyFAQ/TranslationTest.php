@@ -1,97 +1,110 @@
 <?php
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
+use FilesystemIterator;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class TranslationTest extends TestCase
 {
-    private Translation $translation;
-
-    protected function setUp(): void
+    /**
+     * @throws Exception
+     */ protected function setUp(): void
     {
         parent::setUp();
 
-        $this->translation = Translation::create();
-    }
+        // Prepare a custom translations directory before creating the instance
+        $translationsDir = __DIR__ . '/_translations';
+        if (!is_dir($translationsDir)) {
+            mkdir($translationsDir, 0777, true);
+        }
 
-    /**
-     * @throws Exception
-     */
-    public function testSetLanguagesDir(): void
-    {
-        $this->assertEquals(
-            $this->translation,
-            $this->translation->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+        file_put_contents(
+            $translationsDir . '/language_en.php',
+            "<?php\n\nreturn [\n" . "    'test.key' => 'Default Label',\n" . "];\n",
         );
-    }
 
-    public function testSetLanguagesDirWithException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->assertEquals(
-            $this->translation,
-            $this->translation->setLanguagesDir(__DIR__ . '/foo/bar')
+        file_put_contents(
+            $translationsDir . '/language_de.php',
+            "<?php\n\nreturn [\n" . "    'test.key' => '',\n" . "    'test.zero' => '0',\n" . "];\n",
         );
-    }
 
-    /**
-     * @throws Exception
-     */
-    public function testGet(): void
-    {
+        Translation::resetInstance();
+
+        // Now create and configure the instance so that init() sees our test directory
         Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
+            ->setTranslationsDir($translationsDir)
+            ->setDefaultLanguage('en')
             ->setCurrentLanguage('de');
-        $this->assertEquals('deutsch', Translation::get(languageKey: 'language'));
     }
 
-    public function testCreate(): void
+    public static function tearDownAfterClass(): void
     {
-        $this->assertEquals(
-            $this->translation,
-            Translation::create()
+        $translationsDir = __DIR__ . '/_translations';
+
+        if (!is_dir($translationsDir)) {
+            return;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($translationsDir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isDir()) {
+                rmdir($fileInfo->getPathname());
+            } else {
+                unlink($fileInfo->getPathname());
+            }
+        }
+
+        rmdir($translationsDir);
+    }
+
+    public function testGetFallsBackToDefaultWhenCurrentIsEmptyString(): void
+    {
+        $value = Translation::get('test.key');
+
+        $this->assertSame(
+            'Default Label',
+            $value,
+            'Should fall back to default language when the current language value is an empty string.',
         );
     }
 
-    public function testGetInstance(): void
+    public function testGetAcceptsZeroStringAndDoesNotFallback(): void
     {
-        $this->assertEquals(
-            Translation::create(),
-            Translation::getInstance()
+        $value = Translation::get('test.zero');
+
+        $this->assertSame('0', $value, 'String "0" must not be treated as empty and must not trigger a fallback.');
+    }
+
+    public function testGetReturnsNullForUnknownKey(): void
+    {
+        $value = Translation::get('unknown.key');
+
+        $this->assertNull($value, 'Unknown translation keys should return null.');
+    }
+
+    public function testHasReturnsTrueForExistingKey(): void
+    {
+        $this->assertTrue(
+            Translation::has('test.key'),
+            'has() should return true for keys defined in the current or default language.',
         );
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testGetCurrentLanguage(): void
+    public function testHasReturnsFalseForUnknownKey(): void
     {
-        Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
-            ->setCurrentLanguage('de');
-        $this->assertEquals(
-            'de',
-            Translation::create()
-                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
-                ->getCurrentLanguage()
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testSetDefaultLanguage(): void
-    {
-        Translation::create()
-            ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
-            ->setDefaultLanguage('fi');
-        $this->assertEquals(
-            'fi',
-            Translation::create()
-                ->setLanguagesDir(__DIR__ . '/../../phpmyfaq/translations')
-                ->getDefaultLanguage()
+        $this->assertFalse(
+            Translation::has('unknown.key'),
+            'has() should return false for keys that are not defined in any language.',
         );
     }
 }

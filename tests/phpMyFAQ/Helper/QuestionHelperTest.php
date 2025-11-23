@@ -30,7 +30,7 @@ final class QuestionHelperTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -45,9 +45,7 @@ final class QuestionHelperTest extends TestCase
 
         $this->category = new Category($this->configuration);
         $this->questionHelper = new QuestionHelper();
-        $this->questionHelper
-            ->setConfiguration($this->configuration)
-            ->setCategory($this->category);
+        $this->questionHelper->setConfiguration($this->configuration)->setCategory($this->category);
     }
 
     protected function tearDown(): void
@@ -61,10 +59,10 @@ final class QuestionHelperTest extends TestCase
     {
         // Create a test question with a category ID that exists
         $query = sprintf(
-            "INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) " .
-            "VALUES (1, 'Test User', 'test@example.com', 1, 'Test Question?', '%s', 'en', 'Y')",
+            'INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) '
+            . "VALUES (1, 'Test User', 'test@example.com', 1, 'Test Question?', '%s', 'en', 'Y')",
             Database::getTablePrefix(),
-            date('YmdHis')
+            date('YmdHis'),
         );
         $this->configuration->getDb()->query($query);
 
@@ -86,10 +84,10 @@ final class QuestionHelperTest extends TestCase
     {
         // Create an invisible question
         $query = sprintf(
-            "INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) " .
-            "VALUES (2, 'Test User', 'test@example.com', 1, 'Invisible Question?', '%s', 'en', 'N')",
+            'INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) '
+            . "VALUES (2, 'Test User', 'test@example.com', 1, 'Invisible Question?', '%s', 'en', 'N')",
             Database::getTablePrefix(),
-            date('YmdHis')
+            date('YmdHis'),
         );
         $this->configuration->getDb()->query($query);
 
@@ -104,10 +102,10 @@ final class QuestionHelperTest extends TestCase
     {
         // Create a test question
         $query = sprintf(
-            "INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) " .
-            "VALUES (3, 'Test User', 'test@example.com', 1, 'Structure Test?', '%s', 'en', 'Y')",
+            'INSERT INTO %sfaqquestions (id, username, email, category_id, question, created, lang, is_visible) '
+            . "VALUES (3, 'Test User', 'test@example.com', 1, 'Structure Test?', '%s', 'en', 'Y')",
             Database::getTablePrefix(),
-            date('YmdHis')
+            date('YmdHis'),
         );
         $this->configuration->getDb()->query($query);
 

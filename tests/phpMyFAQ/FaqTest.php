@@ -28,7 +28,7 @@ class FaqTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -106,7 +106,6 @@ class FaqTest extends TestCase
         $faqEntity->setQuestion('Updated question');
         $faqEntity->setAnswer('Updated answer');
 
-
         $result = $this->faq->update($faqEntity);
 
         $this->assertInstanceOf(FaqEntity::class, $result);
@@ -162,13 +161,13 @@ class FaqTest extends TestCase
         $record = $this->faq->getIdFromSolutionId(42);
         $this->assertNotEmpty($record);
         $this->assertIsArray($record);
-        $this->assertGreaterThan(0, (int)$record['id']);
-        $this->assertEquals($faqEntity->getId(), (int)$record['id']);
+        $this->assertGreaterThan(0, (int) $record['id']);
+        $this->assertEquals($faqEntity->getId(), (int) $record['id']);
 
         // Also verify the solution_id is actually 42 via getFaqBySolutionId
         $this->faq->getFaqBySolutionId(42);
         $this->assertArrayHasKey('solution_id', $this->faq->faqRecord);
-        $this->assertEquals(42, (int)$this->faq->faqRecord['solution_id']);
+        $this->assertEquals(42, (int) $this->faq->faqRecord['solution_id']);
     }
 
     private function getFaqEntity(): FaqEntity

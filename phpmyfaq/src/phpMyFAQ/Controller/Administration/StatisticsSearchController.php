@@ -65,20 +65,18 @@ final class StatisticsSearchController extends AbstractAdministrationController
         return $this->render('@admin/statistics/search.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'msgAdminElasticsearchStats' => Translation::get(languageKey: 'msgAdminElasticsearchStats'),
+            'msgAdminElasticsearchStats' => Translation::get(key: 'msgAdminElasticsearchStats'),
             'csrfToken' => Token::getInstance($session)->getTokenString('truncate-search-terms'),
-            'ad_searchterm_del' => Translation::get(languageKey: 'ad_searchterm_del'),
-            'ad_searchstats_search_term' => Translation::get(languageKey: 'ad_searchstats_search_term'),
-            'ad_searchstats_search_term_count' => Translation::get(languageKey: 'ad_searchstats_search_term_count'),
-            'ad_searchstats_search_term_lang' => Translation::get(languageKey: 'ad_searchstats_search_term_lang'),
-            'ad_searchstats_search_term_percentage' => Translation::get(
-                languageKey: 'ad_searchstats_search_term_percentage',
-            ),
+            'ad_searchterm_del' => Translation::get(key: 'ad_searchterm_del'),
+            'ad_searchstats_search_term' => Translation::get(key: 'ad_searchstats_search_term'),
+            'ad_searchstats_search_term_count' => Translation::get(key: 'ad_searchstats_search_term_count'),
+            'ad_searchstats_search_term_lang' => Translation::get(key: 'ad_searchstats_search_term_lang'),
+            'ad_searchstats_search_term_percentage' => Translation::get(key: 'ad_searchstats_search_term_percentage'),
             'pagination' => $pagination->render(),
             'searchesCount' => $searchesCount,
             'searchesList' => $searchesList,
             'csrfTokenDelete' => Token::getInstance($session)->getTokenString('delete-searchterm'),
-            'ad_news_delete' => Translation::get(languageKey: 'ad_news_delete'),
+            'ad_news_delete' => Translation::get(key: 'ad_news_delete'),
         ]);
     }
 }

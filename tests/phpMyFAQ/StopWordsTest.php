@@ -21,7 +21,7 @@ class StopWordsTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -38,9 +38,7 @@ class StopWordsTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->dbHandle->query(
-            sprintf("DELETE FROM %s WHERE lang = '%s'", $this->stopWords->getTableName(), 'test')
-        );
+        $this->dbHandle->query(sprintf("DELETE FROM %s WHERE lang = '%s'", $this->stopWords->getTableName(), 'test'));
     }
 
     public function testSetLanguage(): void
@@ -120,5 +118,4 @@ class StopWordsTest extends TestCase
         $this->stopWords->add('test');
         $this->assertTrue($this->stopWords->checkBannedWord(''));
     }
-
 }

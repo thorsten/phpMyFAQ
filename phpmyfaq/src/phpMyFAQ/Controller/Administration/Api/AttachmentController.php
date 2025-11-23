@@ -49,21 +49,15 @@ final class AttachmentController extends AbstractController
                 'delete-attachment',
                 $deleteData->csrf,
             )) {
-                return $this->json(['error' => Translation::get(
-                    languageKey: 'msgNoPermission',
-                )], Response::HTTP_UNAUTHORIZED);
+                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
             $attachment = AttachmentFactory::create($deleteData->attId);
             if ($attachment->delete()) {
-                return $this->json(['success' => Translation::get(
-                    languageKey: 'msgAttachmentsDeleted',
-                )], Response::HTTP_OK);
+                return $this->json(['success' => Translation::get(key: 'msgAttachmentsDeleted')], Response::HTTP_OK);
             }
 
-            return $this->json(['error' => Translation::get(
-                languageKey: 'ad_att_delfail',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'ad_att_delfail')], Response::HTTP_BAD_REQUEST);
         } catch (AttachmentException $attachmentException) {
             $result = ['error' => $attachmentException->getMessage()];
             return $this->json($result, Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -88,18 +82,16 @@ final class AttachmentController extends AbstractController
                 'refresh-attachment',
                 $dataToCheck->csrf,
             )) {
-                return $this->json(['error' => Translation::get(
-                    languageKey: 'msgNoPermission',
-                )], Response::HTTP_UNAUTHORIZED);
+                return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
             }
 
             $attachment = AttachmentFactory::create($dataToCheck->attId);
             if (!$attachment->isStorageOk()) {
                 $attachment->deleteMeta();
-                $result = ['success' => Translation::get(languageKey: 'ad_att_delsuc'), 'delete' => true];
+                $result = ['success' => Translation::get(key: 'ad_att_delsuc'), 'delete' => true];
             } else {
                 $result = [
-                    'success' => Translation::get(languageKey: 'msgAdminAttachmentRefreshed'),
+                    'success' => Translation::get(key: 'msgAdminAttachmentRefreshed'),
                     'delete' => false,
                 ];
             }
@@ -129,9 +121,7 @@ final class AttachmentController extends AbstractController
         $files = $request->files->get('filesToUpload');
 
         if (!$files) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoImagesForUpload',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgNoImagesForUpload')], Response::HTTP_BAD_REQUEST);
         }
 
         $uploadedFiles = [];
@@ -162,9 +152,7 @@ final class AttachmentController extends AbstractController
                     'faqLanguage' => $request->request->get('record_lang'),
                 ];
             } else {
-                return $this->json(['error' => Translation::get(
-                    languageKey: 'msgImageTooLarge',
-                )], Response::HTTP_BAD_REQUEST);
+                return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);
             }
         }
 

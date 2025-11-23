@@ -23,8 +23,8 @@ use phpMyFAQ\Forms;
 use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\TwigFilter;
@@ -96,47 +96,51 @@ $twigTemplate = $twig->loadTemplate('./add.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgAddContent'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf('%s | %s', Translation::get(languageKey: 'msgNewContentHeader'), $faqConfig->getTitle()),
-    'msgNewContentHeader' => Translation::get(languageKey: 'msgNewContentHeader'),
-    'msgNewContentAddon' => Translation::get(languageKey: 'msgNewContentAddon'),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgAddContent'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf('%s | %s', Translation::get(key: 'msgNewContentHeader'), $faqConfig->getTitle()),
+    'msgNewContentHeader' => Translation::get(key: 'msgNewContentHeader'),
+    'msgNewContentAddon' => Translation::get(key: 'msgNewContentAddon'),
     'lang' => $Language->getLanguage(),
     'openQuestionID' => $selectedQuestion,
-    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
-    'msgNewContentName' => Translation::get(languageKey: 'msgNewContentName'),
-    'msgNewContentMail' => Translation::get(languageKey: 'msgNewContentMail'),
-    'msgNewContentCategory' => Translation::get(languageKey: 'msgNewContentCategory'),
+    'defaultContentMail' => $user->getUserId() > 0 ? $user->getUserData('email') : '',
+    'defaultContentName' => $user->getUserId() > 0 ? $user->getUserData('display_name') : '',
+    'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
+    'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
+    'msgNewContentCategory' => Translation::get(key: 'msgNewContentCategory'),
     'selectedCategory' => $selectedCategory,
     'categories' => $category->getCategoryTree(),
-    'msgNewContentTheme' => Translation::get(languageKey: 'msgNewContentTheme'),
+    'msgNewContentTheme' => Translation::get(key: 'msgNewContentTheme'),
     'readonly' => $readonly,
     'printQuestion' => $question,
-    'msgNewContentArticle' => Translation::get(languageKey: 'msgNewContentArticle'),
-    'msgNewContentKeywords' => Translation::get(languageKey: 'msgNewContentKeywords'),
-    'msgNewContentLink' => Translation::get(languageKey: 'msgNewContentLink'),
-    'captchaFieldset' =>
-        $captchaHelper->renderCaptcha($captcha, 'add', Translation::get(languageKey: 'msgCaptcha'), $user->isLoggedIn()),
-    'msgNewContentSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
+    'msgNewContentArticle' => Translation::get(key: 'msgNewContentArticle'),
+    'msgNewContentKeywords' => Translation::get(key: 'msgNewContentKeywords'),
+    'msgNewContentLink' => Translation::get(key: 'msgNewContentLink'),
+    'captchaFieldset' => $captchaHelper->renderCaptcha(
+        $captcha,
+        'add',
+        Translation::get(key: 'msgCaptcha'),
+        $user->isLoggedIn(),
+    ),
+    'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'enableWysiwygEditor' => $faqConfig->get('main.enableWysiwygEditorFrontend'),
     'currentTimestamp' => $request->server->get('REQUEST_TIME'),
-    'msgSeparateKeywordsWithCommas' => Translation::get(languageKey: 'msgSeparateKeywordsWithCommas'),
+    'msgSeparateKeywordsWithCommas' => Translation::get(key: 'msgSeparateKeywordsWithCommas'),
     'noCategories' => $categories === [],
-    'msgFormDisabledDueToMissingCategories' => Translation::get(languageKey: 'msgFormDisabledDueToMissingCategories'),
+    'msgFormDisabledDueToMissingCategories' => Translation::get(key: 'msgFormDisabledDueToMissingCategories'),
     'displayFullForm' => $displayFullForm,
 ];
 
 // Collect data for displaying form
 foreach ($formData as $input) {
-    $active = sprintf('id%d_active', (int)$input->input_id);
-    $label = sprintf('id%d_label', (int)$input->input_id);
-    $required = sprintf('id%d_required', (int)$input->input_id);
+    $active = sprintf('id%d_active', (int) $input->input_id);
+    $label = sprintf('id%d_label', (int) $input->input_id);
+    $required = sprintf('id%d_required', (int) $input->input_id);
     $templateVars = [
         ...$templateVars,
-        $active => (bool)$input->input_active,
+        $active => (bool) $input->input_active,
         $label => $input->input_label,
-        $required => ((int)$input->input_required !== 0) ? 'required' : ''
+        $required => (int) $input->input_required !== 0 ? 'required' : '',
     ];
 }
 

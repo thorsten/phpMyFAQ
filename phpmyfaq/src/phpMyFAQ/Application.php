@@ -102,7 +102,7 @@ class Application
     {
         try {
             Translation::create()
-                ->setLanguagesDir(PMF_TRANSLATION_DIR)
+                ->setTranslationsDir(PMF_TRANSLATION_DIR)
                 ->setDefaultLanguage(defaultLanguage: 'en')
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();

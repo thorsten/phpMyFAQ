@@ -90,7 +90,7 @@ class CommentHelper extends AbstractHelper
                     $commentId,
                     $commentId,
                     $commentId,
-                    Translation::get(languageKey: 'msgShowMore'),
+                    Translation::get(key: 'msgShowMore'),
                     $commentId,
                 );
             }

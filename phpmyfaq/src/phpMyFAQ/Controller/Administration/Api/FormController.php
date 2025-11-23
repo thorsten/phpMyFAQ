@@ -44,16 +44,12 @@ final class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('activate-input', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
             $forms->saveActivateInputStatus($formId, $inputId, $checked);
-            return $this->json(['success' => Translation::get(
-                languageKey: 'msgEditFormsSuccessful',
-            )], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'msgEditFormsSuccessful')], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
@@ -70,16 +66,12 @@ final class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('require-input', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
             $forms->saveRequiredInputStatus($formId, $inputId, $checked);
-            return $this->json(['success' => Translation::get(
-                languageKey: 'msgEditFormsSuccessful',
-            )], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'msgEditFormsSuccessful')], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
@@ -97,15 +89,13 @@ final class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('edit-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
             $forms->editTranslation($label, $formId, $inputId, $lang);
             return $this->json(['success' => Translation::get(
-                languageKey: 'msgFormsEditTranslationSuccessful',
+                key: 'msgFormsEditTranslationSuccessful',
             )], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -126,9 +116,7 @@ final class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
@@ -155,15 +143,13 @@ final class FormController extends AbstractController
 
         $forms = new Forms($this->configuration);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('add-translation', $data->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         try {
             $forms->addTranslation($formId, $inputId, $lang, $translation);
             return $this->json(['success' => Translation::get(
-                languageKey: 'msgFormsAddTranslationSuccessful',
+                key: 'msgFormsAddTranslationSuccessful',
             )], Response::HTTP_OK);
         } catch (Exception $exception) {
             return $this->json(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);

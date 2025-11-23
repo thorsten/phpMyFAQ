@@ -44,13 +44,13 @@ final class TagController extends AbstractAdministrationController
         return $this->render('@admin/content/tags.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'adminHeaderTags' => Translation::get(languageKey: 'msgTags'),
+            'adminHeaderTags' => Translation::get(key: 'msgTags'),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenInput('tags'),
             'tags' => $tagData,
-            'noTags' => Translation::get(languageKey: 'ad_news_nodata'),
-            'buttonEdit' => Translation::get(languageKey: 'ad_user_edit'),
-            'msgConfirm' => Translation::get(languageKey: 'ad_user_del_3'),
-            'buttonDelete' => Translation::get(languageKey: 'msgDelete'),
+            'noTags' => Translation::get(key: 'ad_news_nodata'),
+            'buttonEdit' => Translation::get(key: 'ad_user_edit'),
+            'msgConfirm' => Translation::get(key: 'ad_user_del_3'),
+            'buttonDelete' => Translation::get(key: 'msgDelete'),
         ]);
     }
 }

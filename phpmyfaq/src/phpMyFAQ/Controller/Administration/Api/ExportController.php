@@ -86,59 +86,57 @@ final class ExportController extends AbstractController
             'create-report',
             $data->{'pmf-csrf-token'},
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $text = [];
         $text[0] = [];
         if (isset($data->category)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_category');
+            $text[0][] = Translation::get(key: 'ad_stat_report_category');
         }
 
         if (isset($data->sub_category)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_sub_category');
+            $text[0][] = Translation::get(key: 'ad_stat_report_sub_category');
         }
 
         if (isset($data->translations)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_translations');
+            $text[0][] = Translation::get(key: 'ad_stat_report_translations');
         }
 
         if (isset($data->language)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_language');
+            $text[0][] = Translation::get(key: 'ad_stat_report_language');
         }
 
         if (isset($data->id)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_id');
+            $text[0][] = Translation::get(key: 'ad_stat_report_id');
         }
 
         if (isset($data->sticky)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_sticky');
+            $text[0][] = Translation::get(key: 'ad_stat_report_sticky');
         }
 
         if (isset($data->title)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_title');
+            $text[0][] = Translation::get(key: 'ad_stat_report_title');
         }
 
         if (isset($data->creation_date)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_creation_date');
+            $text[0][] = Translation::get(key: 'ad_stat_report_creation_date');
         }
 
         if (isset($data->owner)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_owner');
+            $text[0][] = Translation::get(key: 'ad_stat_report_owner');
         }
 
         if (isset($data->last_modified_person)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_last_modified_person');
+            $text[0][] = Translation::get(key: 'ad_stat_report_last_modified_person');
         }
 
         if (isset($data->url)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_url');
+            $text[0][] = Translation::get(key: 'ad_stat_report_url');
         }
 
         if (isset($data->visits)) {
-            $text[0][] = Translation::get(languageKey: 'ad_stat_report_visits');
+            $text[0][] = Translation::get(key: 'ad_stat_report_visits');
         }
 
         $report = new Report($this->configuration);

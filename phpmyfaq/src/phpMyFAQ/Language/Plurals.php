@@ -47,8 +47,8 @@ readonly class Plurals
 
     public function __construct()
     {
-        $this->nPlurals = (int) Translation::get(languageKey: 'nplurals');
-        $this->lang = Translation::get(languageKey: 'metaLanguage');
+        $this->nPlurals = (int) Translation::get(key: 'nplurals');
+        $this->lang = Translation::get(key: 'metaLanguage');
 
         $this->useDefaultPluralForm =
             $this->plural(

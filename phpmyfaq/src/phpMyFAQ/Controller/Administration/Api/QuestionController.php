@@ -46,9 +46,7 @@ final class QuestionController extends AbstractController
             'delete-questions',
             $data->data->{'pmf-csrf-token'},
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $questionIds = $data->data->{'questions[]'};
@@ -63,12 +61,10 @@ final class QuestionController extends AbstractController
                 $question->delete((int) $questionId);
             }
 
-            return $this->json(['success' => Translation::get(
-                languageKey: 'ad_open_question_deleted',
-            )], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_open_question_deleted')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(languageKey: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
     }
 
     #[Route(path: 'admin/api/question/toggle')]
@@ -82,9 +78,7 @@ final class QuestionController extends AbstractController
         $data = json_decode($request->getContent());
 
         if (!Token::getInstance($session)->verifyToken('toggle-question-visibility', $data->csrfToken)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $questionId = $data->questionId;
@@ -93,8 +87,8 @@ final class QuestionController extends AbstractController
             $isVisible = $question->getVisibility($questionId);
             $question->setVisibility($questionId, $isVisible === 'N' ? 'Y' : 'N');
             $translation = $isVisible === 'N'
-                ? Translation::get(languageKey: 'ad_gen_yes')
-                : Translation::get(languageKey: 'ad_gen_no');
+                ? Translation::get(key: 'ad_gen_yes')
+                : Translation::get(key: 'ad_gen_no');
             return $this->json(['success' => $translation], Response::HTTP_OK);
         }
 

@@ -26,7 +26,7 @@ class CategoryHelperTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -47,15 +47,17 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderOptionsWithIntCategoryId(): void
     {
-        $this->mockCategory->method('getCategoryTree')->willReturn([
-            ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
-            ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
-        ]);
+        $this->mockCategory
+            ->method('getCategoryTree')
+            ->willReturn([
+                ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
+                ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
+            ]);
 
         $output = $this->categoryHelper->renderOptions(1);
 
-        $expectedOutput = '<option value="1" selected> Category 1 </option>'
-            . '<option value="2">.... Category 2 </option>';
+        $expectedOutput =
+            '<option value="1" selected> Category 1 </option>' . '<option value="2">.... Category 2 </option>';
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -65,15 +67,17 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderOptionsWithArrayCategoryId(): void
     {
-        $this->mockCategory->method('getCategoryTree')->willReturn([
-            ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
-            ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
-            ['id' => 3, 'name' => 'Category 3', 'indent' => 0],
-        ]);
+        $this->mockCategory
+            ->method('getCategoryTree')
+            ->willReturn([
+                ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
+                ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
+                ['id' => 3, 'name' => 'Category 3', 'indent' => 0],
+            ]);
 
         $categoryIds = [
             ['category_id' => 2, 'category_lang' => 'en'],
-            ['category_id' => 3, 'category_lang' => 'en']
+            ['category_id' => 3, 'category_lang' => 'en'],
         ];
 
         $output = $this->categoryHelper->renderOptions($categoryIds);
@@ -88,10 +92,12 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderOptionsWithSingleArrayCategoryId(): void
     {
-        $this->mockCategory->method('getCategoryTree')->willReturn([
-            ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
-            ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
-        ]);
+        $this->mockCategory
+            ->method('getCategoryTree')
+            ->willReturn([
+                ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
+                ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
+            ]);
 
         $categoryId = ['category_id' => 2, 'category_lang' => 'en'];
 
@@ -106,10 +112,12 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderOptionsWithEmptyArray(): void
     {
-        $this->mockCategory->method('getCategoryTree')->willReturn([
-            ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
-            ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
-        ]);
+        $this->mockCategory
+            ->method('getCategoryTree')
+            ->willReturn([
+                ['id' => 1, 'name' => 'Category 1', 'indent' => 0],
+                ['id' => 2, 'name' => 'Category 2', 'indent' => 1],
+            ]);
 
         $output = $this->categoryHelper->renderOptions([]);
 
@@ -132,10 +140,12 @@ class CategoryHelperTest extends TestCase
 
         // Mock Relation
         $mockRelation = $this->createMock(Relation::class);
-        $mockRelation->method('getCategoryWithFaqs')->willReturn([
-            1 => ['faqs' => 5],
-            2 => ['faqs' => 3]
-        ]);
+        $mockRelation
+            ->method('getCategoryWithFaqs')
+            ->willReturn([
+                1 => ['faqs' => 5],
+                2 => ['faqs' => 3],
+            ]);
         $mockRelation->method('getAggregatedFaqNumbers')->willReturn([1 => 8, 2 => 3]);
 
         $categoryHelper = $this->getMockBuilder(CategoryHelper::class)
@@ -144,10 +154,24 @@ class CategoryHelperTest extends TestCase
 
         $categoryHelper->method('getCategory')->willReturn($this->mockCategory);
         $categoryHelper->method('getConfiguration')->willReturn($this->mockConfiguration);
-        $categoryHelper->method('normalizeCategoryTree')->willReturn([
-            1 => ['category_id' => 1, 'parent_id' => 0, 'name' => 'Root Category', 'description' => 'Root description', 'faqs' => 5],
-            2 => ['category_id' => 2, 'parent_id' => 1, 'name' => 'Sub Category', 'description' => 'Sub description', 'faqs' => 3]
-        ]);
+        $categoryHelper
+            ->method('normalizeCategoryTree')
+            ->willReturn([
+                1 => [
+                    'category_id' => 1,
+                    'parent_id' => 0,
+                    'name' => 'Root Category',
+                    'description' => 'Root description',
+                    'faqs' => 5,
+                ],
+                2 => [
+                    'category_id' => 2,
+                    'parent_id' => 1,
+                    'name' => 'Sub Category',
+                    'description' => 'Sub description',
+                    'faqs' => 3,
+                ],
+            ]);
         $categoryHelper->method('buildCategoryList')->willReturn('<li>Category List Content</li>');
 
         $result = $categoryHelper->renderCategoryTree();
@@ -162,10 +186,12 @@ class CategoryHelperTest extends TestCase
     public function testRenderCategoryTreeWithoutCategories(): void
     {
         $this->mockCategory->method('getOrderedCategories')->willReturn([]);
-        $this->mockCategory->method('getCategoryLanguagesTranslated')->willReturn([
-            'German' => 'Deutsche Kategorie',
-            'French' => 'Catégorie française'
-        ]);
+        $this->mockCategory
+            ->method('getCategoryLanguagesTranslated')
+            ->willReturn([
+                'German' => 'Deutsche Kategorie',
+                'French' => 'Catégorie française',
+            ]);
 
         $categoryHelper = $this->getMockBuilder(CategoryHelper::class)
             ->onlyMethods(['getCategory', 'getConfiguration', 'buildAvailableCategoryTranslationsList'])
@@ -173,7 +199,8 @@ class CategoryHelperTest extends TestCase
 
         $categoryHelper->method('getCategory')->willReturn($this->mockCategory);
         $categoryHelper->method('getConfiguration')->willReturn($this->mockConfiguration);
-        $categoryHelper->method('buildAvailableCategoryTranslationsList')
+        $categoryHelper
+            ->method('buildAvailableCategoryTranslationsList')
             ->willReturn('<li>Translation List Content</li>');
 
         $result = $categoryHelper->renderCategoryTree();
@@ -204,7 +231,7 @@ class CategoryHelperTest extends TestCase
 
         $categoryNumbers = [
             1 => ['faqs' => 5],
-            2 => ['faqs' => 3]
+            2 => ['faqs' => 3],
         ];
 
         $result = $this->categoryHelper->normalizeCategoryTree($categoryTree, $categoryNumbers);
@@ -264,7 +291,7 @@ class CategoryHelperTest extends TestCase
 
         $availableTranslations = [
             'German' => 'Deutsche Kategorie',
-            'French' => 'Catégorie française'
+            'French' => 'Catégorie française',
         ];
 
         $result = $categoryHelper->buildAvailableCategoryTranslationsList($availableTranslations);

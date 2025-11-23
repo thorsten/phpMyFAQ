@@ -5,8 +5,8 @@ namespace phpMyFAQ\Faq;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Translation;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class PermissionTest
@@ -24,7 +24,7 @@ class PermissionTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -55,7 +55,8 @@ class PermissionTest extends TestCase
 
     public function testAddUserPermissionSuccessfully(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('INSERT INTO'))
             ->willReturn(true);
@@ -66,7 +67,8 @@ class PermissionTest extends TestCase
 
     public function testAddGroupPermissionSuccessfully(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('INSERT INTO'))
             ->willReturn(true);
@@ -77,7 +79,8 @@ class PermissionTest extends TestCase
 
     public function testAddMultipleIdsSuccessfully(): void
     {
-        $this->dbMock->expects($this->exactly(3))
+        $this->dbMock
+            ->expects($this->exactly(3))
             ->method('query')
             ->with($this->stringContains('INSERT INTO'))
             ->willReturn(true);
@@ -88,8 +91,7 @@ class PermissionTest extends TestCase
 
     public function testAddWithInvalidModeReturnsFalse(): void
     {
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->add('invalid_mode', 123, [456]);
         $this->assertFalse($result);
@@ -97,8 +99,7 @@ class PermissionTest extends TestCase
 
     public function testAddWithEmptyIdsArrayDoesNothing(): void
     {
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->add(Permission::USER, 123, []);
         $this->assertTrue($result);
@@ -108,7 +109,8 @@ class PermissionTest extends TestCase
     {
         $expectedQuery = 'INSERT INTO faqdata_user (record_id, user_id) VALUES (123, 456)';
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('faqdata_user'))
             ->willReturn(true);
@@ -118,7 +120,8 @@ class PermissionTest extends TestCase
 
     public function testAddGeneratesCorrectGroupQuery(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('faqdata_group'))
             ->willReturn(true);
@@ -132,7 +135,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteUserPermissionSuccessfully(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -143,7 +147,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteGroupPermissionSuccessfully(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -154,8 +159,7 @@ class PermissionTest extends TestCase
 
     public function testDeleteWithInvalidModeReturnsFalse(): void
     {
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->delete('invalid_mode', 123);
         $this->assertFalse($result);
@@ -163,7 +167,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteGeneratesCorrectUserQuery(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM faqdata_user WHERE record_id = 123'))
             ->willReturn(true);
@@ -173,7 +178,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteGeneratesCorrectGroupQuery(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM faqdata_group WHERE record_id = 123'))
             ->willReturn(true);
@@ -183,7 +189,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteWithDatabaseErrorReturnsFalse(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn(false);
 
@@ -200,12 +207,14 @@ class PermissionTest extends TestCase
         // Create proper SQLite3Result mock
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT user_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(2);
@@ -216,7 +225,8 @@ class PermissionTest extends TestCase
         $permission2->permission = '789';
 
         // The while loop continues until fetchObject returns null (not false)
-        $this->dbMock->expects($this->exactly(3))
+        $this->dbMock
+            ->expects($this->exactly(3))
             ->method('fetchObject')
             ->with($resultMock)
             ->willReturnOnConsecutiveCalls($permission1, $permission2, null);
@@ -230,12 +240,14 @@ class PermissionTest extends TestCase
         // Create proper SQLite3Result mock
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT group_id'))
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(1);
@@ -244,7 +256,8 @@ class PermissionTest extends TestCase
         $permission->permission = '789';
 
         // The while loop continues until fetchObject returns null (not false)
-        $this->dbMock->expects($this->exactly(2))
+        $this->dbMock
+            ->expects($this->exactly(2))
             ->method('fetchObject')
             ->with($resultMock)
             ->willReturnOnConsecutiveCalls($permission, null);
@@ -255,8 +268,7 @@ class PermissionTest extends TestCase
 
     public function testGetWithInvalidModeReturnsEmptyArray(): void
     {
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->get('invalid_mode', 123);
         $this->assertEquals([], $result);
@@ -264,8 +276,7 @@ class PermissionTest extends TestCase
 
     public function testGetWithFaqIdZeroReturnsMinusOne(): void
     {
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->get(Permission::USER, 0);
         $this->assertEquals([-1], $result);
@@ -275,17 +286,18 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(0);
 
-        $this->dbMock->expects($this->never())
-            ->method('fetchObject');
+        $this->dbMock->expects($this->never())->method('fetchObject');
 
         $result = $this->permission->get(Permission::USER, 123);
         $this->assertEquals([], $result);
@@ -295,7 +307,8 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT user_id AS permission FROM faqdata_user WHERE record_id = 123'))
             ->willReturn($resultMock);
@@ -309,7 +322,8 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT group_id AS permission FROM faqdata_group WHERE record_id = 123'))
             ->willReturn($resultMock);
@@ -325,7 +339,8 @@ class PermissionTest extends TestCase
 
     public function testAddWithNegativeFaqIdIsHandled(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('VALUES (-123, 456)'))
             ->willReturn(true);
@@ -336,7 +351,8 @@ class PermissionTest extends TestCase
 
     public function testDeleteWithNegativeFaqIdIsHandled(): void
     {
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('WHERE record_id = -123'))
             ->willReturn(true);
@@ -349,7 +365,8 @@ class PermissionTest extends TestCase
     {
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('WHERE record_id = -123'))
             ->willReturn($resultMock);
@@ -368,7 +385,8 @@ class PermissionTest extends TestCase
     {
         $largeIdArray = range(1, 100);
 
-        $this->dbMock->expects($this->exactly(100))
+        $this->dbMock
+            ->expects($this->exactly(100))
             ->method('query')
             ->willReturn(true);
 
@@ -385,8 +403,7 @@ class PermissionTest extends TestCase
     public function testModeCaseSensitivity(): void
     {
         // Test uppercase mode strings
-        $this->dbMock->expects($this->never())
-            ->method('query');
+        $this->dbMock->expects($this->never())->method('query');
 
         $result = $this->permission->add('USER', 123, [456]);
         $this->assertFalse($result);

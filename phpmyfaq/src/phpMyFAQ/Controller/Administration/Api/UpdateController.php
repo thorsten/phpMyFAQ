@@ -55,7 +55,7 @@ final class UpdateController extends AbstractController
 
         if (!$upgrade->isMaintenanceEnabled()) {
             return $this->json([
-                'warning' => Translation::get(languageKey: 'msgNotInMaintenanceMode'),
+                'warning' => Translation::get(key: 'msgNotInMaintenanceMode'),
                 'dateLastChecked' => $dateLastChecked,
             ], Response::HTTP_CONFLICT);
         }
@@ -63,7 +63,7 @@ final class UpdateController extends AbstractController
         try {
             $upgrade->checkFilesystem();
             return $this->json([
-                'success' => Translation::get(languageKey: 'healthCheckOkay'),
+                'success' => Translation::get(key: 'healthCheckOkay'),
                 'dateLastChecked' => $dateLastChecked,
             ], Response::HTTP_OK);
         } catch (Exception $exception) {
@@ -108,14 +108,14 @@ final class UpdateController extends AbstractController
             if (version_compare($versions['installed'], $versions[$branch], '<')) {
                 return $this->json([
                     'version' => $versions[$branch],
-                    'message' => Translation::get(languageKey: 'msgCurrentVersion') . $versions[$branch],
+                    'message' => Translation::get(key: 'msgCurrentVersion') . $versions[$branch],
                     'dateLastChecked' => $dateLastChecked,
                 ], Response::HTTP_OK);
             }
 
             return $this->json([
                 'version' => $versions['installed'],
-                'message' => Translation::get(languageKey: 'versionIsUpToDate'),
+                'message' => Translation::get(key: 'versionIsUpToDate'),
                 'dateLastChecked' => $dateLastChecked,
             ], Response::HTTP_OK);
         } catch (TransportExceptionInterface|DecodingExceptionInterface $e) {
@@ -146,23 +146,21 @@ final class UpdateController extends AbstractController
         }
 
         if ($pathToPackage === false) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'downloadFailure',
-            )], Response::HTTP_BAD_GATEWAY);
+            return $this->json(['error' => Translation::get(key: 'downloadFailure')], Response::HTTP_BAD_GATEWAY);
         }
 
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $versionNumber);
             if ($result === false) {
                 return $this->json(['error' => Translation::get(
-                    languageKey: 'verificationFailure',
+                    key: 'verificationFailure',
                 )], Response::HTTP_BAD_GATEWAY);
             }
         }
 
         $this->configuration->set('upgrade.lastDownloadedPackage', urlencode($pathToPackage));
 
-        return $this->json(['success' => Translation::get(languageKey: 'downloadSuccessful')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(key: 'downloadSuccessful')], Response::HTTP_OK);
     }
 
     #[Route(path: 'admin/api/extract-package')]
@@ -180,9 +178,9 @@ final class UpdateController extends AbstractController
                 flush();
             };
             if ($upgrade->extractPackage($pathToPackage, $progressCallback)) {
-                echo json_encode(['message' => Translation::get(languageKey: 'extractSuccessful')]);
+                echo json_encode(['message' => Translation::get(key: 'extractSuccessful')]);
             } else {
-                echo json_encode(['message' => Translation::get(languageKey: 'extractFailure')]);
+                echo json_encode(['message' => Translation::get(key: 'extractFailure')]);
             }
         });
     }

@@ -55,7 +55,7 @@ final class ConfigurationTabController extends AbstractController
 
         try {
             Translation::create()
-                ->setLanguagesDir(PMF_LANGUAGE_DIR)
+                ->setTranslationsDir(PMF_LANGUAGE_DIR)
                 ->setDefaultLanguage(defaultLanguage: 'en')
                 ->setCurrentLanguage($currentLanguage)
                 ->setMultiByteLanguage();
@@ -99,9 +99,7 @@ final class ConfigurationTabController extends AbstractController
             page: 'configuration',
             requestToken: $csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         // Set the new values
@@ -170,7 +168,7 @@ final class ConfigurationTabController extends AbstractController
 
         $this->configuration->update($newConfigValues);
 
-        return $this->json(['success' => Translation::get(languageKey: 'ad_config_saved')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(key: 'ad_config_saved')], Response::HTTP_OK);
     }
 
     /**

@@ -16,11 +16,11 @@
  */
 
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\CategoryNameTwigExtension;
 use phpMyFAQ\Twig\Extensions\CreateLinkTwigExtension;
 use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
 use phpMyFAQ\Twig\TwigWrapper;
-use phpMyFAQ\Translation;
 use Twig\Extension\AttributeExtension;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -47,13 +47,13 @@ $twig->addExtension(new AttributeExtension(FaqTwigExtension::class));
 $twigTemplate = $twig->loadTemplate('./overview.twig');
 
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'faqOverview'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgOverviewMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get(languageKey: 'faqOverview'),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'faqOverview'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgOverviewMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(key: 'faqOverview'),
     'faqOverview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
-    'msgAuthor' => Translation::get(languageKey: 'msgAuthor'),
-    'msgLastUpdateArticle' => Translation::get(languageKey: 'msgLastUpdateArticle')
+    'msgAuthor' => Translation::get(key: 'msgAuthor'),
+    'msgLastUpdateArticle' => Translation::get(key: 'msgLastUpdateArticle'),
 ];
 
 return $templateVars;

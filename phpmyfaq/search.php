@@ -28,9 +28,9 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\TagNameTwigExtension;
 use phpMyFAQ\Twig\TwigWrapper;
-use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AttributeExtension;
@@ -90,9 +90,7 @@ $faqSearch = new Search($faqConfig);
 $faqPermission = new Permission($faqConfig);
 $faqSearchResult = new SearchResultSet($user, $faqPermission, $faqConfig);
 $tagging = new Tags($faqConfig);
-$tagging
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$tagging->setUser($currentUser)->setGroups($currentGroups);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
 $numOfResults = 0;
@@ -237,12 +235,12 @@ if ($inputSearchTerm !== '' || $searchTerm !== '') {
         urlencode($inputSearchTerm),
         $page,
         $languages,
-        $inputCategory
+        $inputCategory,
     );
 }
 
 // Change a little the $searchCategory value;
-$inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
+$inputCategory = '%' == $inputCategory ? 0 : $inputCategory;
 
 $faqSession->userTracking('fulltext_search', $inputSearchTerm);
 
@@ -252,10 +250,10 @@ if ($numOfResults === 0) {
 }
 
 if (
-    is_numeric($inputSearchTerm) &&
-    PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm &&
-    0 < $numOfResults &&
-    $faqConfig->get('search.searchForSolutionId')
+    is_numeric($inputSearchTerm)
+    && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm
+    && 0 < $numOfResults
+    && $faqConfig->get('search.searchForSolutionId')
 ) {
     $response = new RedirectResponse($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     $response->send();
@@ -286,54 +284,56 @@ $searchHelper->setSessionId($sids);
 if ($numOfResults > 0 && $inputSearchTerm !== '') {
     try {
         $searchResults = $searchHelper->getSearchResult($faqSearchResult, $page);
-    } catch (Exception | CommonMarkException) {
+    } catch (Exception|CommonMarkException) {
         // @todo handle exception
     }
 }
 
 $confPerPage = $faqConfig->get('records.numberOfRecordsPerPage');
-$totalPages = (int)ceil($numOfResults / $confPerPage);
+$totalPages = (int) ceil($numOfResults / $confPerPage);
 
 $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twig->addExtension(new AttributeExtension(TagNameTwigExtension::class));
 $twig->addFilter(new TwigFilter('repeat', fn($string, $times): string => str_repeat((string) $string, $times)));
 $twigTemplate = $twig->loadTemplate('./search.twig');
 
-$pageHeader = ($tagSearch ? Translation::get(languageKey: 'msgTagSearch') : Translation::get(languageKey: 'msgAdvancedSearch'));
+$pageHeader = $tagSearch ? Translation::get(key: 'msgTagSearch') : Translation::get(key: 'msgAdvancedSearch');
 
 $templateVars = [
-    ... $templateVars,
+    ...$templateVars,
     'title' => sprintf('%s - %s', $pageHeader, $faqConfig->getTitle()),
     'pageHeader' => $pageHeader,
     'isTagSearch' => $tagSearch,
     'selectedCategory' => $inputCategory,
     'categories' => $category->getCategoryTree(),
-    'msgSearch' => Translation::get(languageKey: 'msgSearch'),
-    'msgAdvancedSearch' => ($tagSearch ? Translation::get(languageKey: 'msgTagSearch') : Translation::get(languageKey: 'msgAdvancedSearch')),
-    'msgCurrentTags' => Translation::get(languageKey: 'msg_tags'),
+    'msgSearch' => Translation::get(key: 'msgSearch'),
+    'msgAdvancedSearch' => $tagSearch
+        ? Translation::get(key: 'msgTagSearch')
+        : Translation::get(key: 'msgAdvancedSearch'),
+    'msgCurrentTags' => Translation::get(key: 'msg_tags'),
     'numberOfSearchResults' => $numOfResults,
     'totalPages' => $totalPages,
-    'msgPage' => Translation::get(languageKey: 'msgPage'),
+    'msgPage' => Translation::get(key: 'msgPage'),
     'currentPage' => $page,
-    'from' => Translation::get(languageKey: 'msgVoteFrom'),
+    'from' => Translation::get(key: 'msgVoteFrom'),
     'msgSearchResults' => $plurals->GetMsg('plmsgSearchAmount', $numOfResults ?? 0),
     'searchTerm' => $searchTerm,
-    'searchTags' =>  ($tagSearch ? $tagHelper->renderTagList($tags) : ''),
-    'msgSearchWord' => Translation::get(languageKey: 'msgSearchWord'),
+    'searchTags' => $tagSearch ? $tagHelper->renderTagList($tags) : '',
+    'msgSearchWord' => Translation::get(key: 'msgSearchWord'),
     'searchResults' => $searchResults,
     'formActionUrl' => '?action=search',
     'searchString' => $inputSearchTerm,
-    'searchOnAllLanguages' => Translation::get(languageKey: 'msgSearchOnAllLanguages'),
+    'searchOnAllLanguages' => Translation::get(key: 'msgSearchOnAllLanguages'),
     'checkedAllLanguages' => $allLanguages ? ' checked' : '',
-    'selectCategories' => Translation::get(languageKey: 'msgSelectCategories'),
-    'allCategories' => Translation::get(languageKey: 'msgAllCategories'),
-    'noSearchResults' => Translation::get(languageKey: 'msgErrorNoRecords'),
+    'selectCategories' => Translation::get(key: 'msgSelectCategories'),
+    'allCategories' => Translation::get(key: 'msgAllCategories'),
+    'noSearchResults' => Translation::get(key: 'msgErrorNoRecords'),
     'pagination' => $faqPagination->render(),
-    'msgMostPopularSearches' => Translation::get(languageKey: 'msgMostPopularSearches'),
+    'msgMostPopularSearches' => Translation::get(key: 'msgMostPopularSearches'),
     'mostPopularSearches' => $mostPopularSearchData,
-    'relatedTagsHeader' => Translation::get(languageKey: 'msgRelatedTags'),
+    'relatedTagsHeader' => Translation::get(key: 'msgRelatedTags'),
     'relatedTags' => $relTags,
-    'msgTags' => Translation::get(languageKey: 'msgPopularTags'),
+    'msgTags' => Translation::get(key: 'msgPopularTags'),
     'tagList' => $tagging->getPopularTags(),
 ];
 

@@ -70,15 +70,15 @@ final class AdminLogController extends AbstractAdministrationController
         return $this->render('@admin/statistics/admin-log.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'headerAdminLog' => Translation::get(languageKey: 'ad_menu_adminlog'),
-            'buttonDeleteAdminLog' => Translation::get(languageKey: 'ad_adminlog_del_older_30d'),
+            'headerAdminLog' => Translation::get(key: 'ad_menu_adminlog'),
+            'buttonDeleteAdminLog' => Translation::get(key: 'ad_adminlog_del_older_30d'),
             'csrfDeleteAdminLogToken' => Token::getInstance($session)->getTokenString('delete-adminlog'),
             'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
             'pagination' => $pagination->render(),
-            'msgId' => Translation::get(languageKey: 'ad_categ_id'),
-            'msgDate' => Translation::get(languageKey: 'ad_adminlog_date'),
-            'msgUser' => Translation::get(languageKey: 'ad_adminlog_user'),
-            'msgIp' => Translation::get(languageKey: 'ad_adminlog_ip'),
+            'msgId' => Translation::get(key: 'ad_categ_id'),
+            'msgDate' => Translation::get(key: 'ad_adminlog_date'),
+            'msgUser' => Translation::get(key: 'ad_adminlog_user'),
+            'msgIp' => Translation::get(key: 'ad_adminlog_ip'),
             'loggingData' => $currentItems,
         ]);
     }

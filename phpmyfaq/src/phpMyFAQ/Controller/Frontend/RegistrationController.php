@@ -46,7 +46,7 @@ final class RegistrationController extends AbstractController
         $isVisible = Filter::filterVar($data->isVisible, FILTER_SANITIZE_SPECIAL_CHARS) ?? false;
 
         if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get(languageKey: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
         }
 
         if (!$registrationHelper->isDomainAllowed($email)) {
@@ -69,6 +69,6 @@ final class RegistrationController extends AbstractController
             }
         }
 
-        return $this->json(['error' => Translation::get(languageKey: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
     }
 }

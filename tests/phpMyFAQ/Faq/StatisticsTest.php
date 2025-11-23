@@ -6,8 +6,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Translation;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -26,7 +26,7 @@ class StatisticsTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -39,14 +39,16 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('getDb')->willReturn($this->dbMock);
 
         // Default to basic security level
-        $this->configurationMock->method('get')
+        $this->configurationMock
+            ->method('get')
             ->with('security.permLevel')
             ->willReturn('basic');
     }
 
     public function testConstructorWithBasicSecurityLevel(): void
     {
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('security.permLevel')
             ->willReturn('basic');
@@ -68,10 +70,7 @@ class StatisticsTest extends TestCase
     {
         $configMock = $this->createMock(Configuration::class);
         $configMock->method('getDb')->willReturn($this->dbMock);
-        $configMock->expects($this->once())
-            ->method('get')
-            ->with('security.permLevel')
-            ->willReturn('medium');
+        $configMock->expects($this->once())->method('get')->with('security.permLevel')->willReturn('medium');
 
         $statistics = new Statistics($configMock);
 
@@ -207,10 +206,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $result = $statistics
-            ->setUser(999)
-            ->setGroups([10, 20, 30])
-            ->setUser(888);
+        $result = $statistics->setUser(999)->setGroups([10, 20, 30])->setUser(888);
 
         $this->assertInstanceOf(Statistics::class, $result);
 
@@ -228,16 +224,23 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $expectedQuery = "SELECT id FROM faqdata WHERE active = 'yes'  AND date_start <= '" . date(format: 'YmdHis') . "' AND date_end >= '" . date(format: 'YmdHis') . "'";
+        $expectedQuery =
+            "SELECT id FROM faqdata WHERE active = 'yes'  AND date_start <= '"
+            . date(format: 'YmdHis')
+            . "' AND date_end >= '"
+            . date(format: 'YmdHis')
+            . "'";
 
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("SELECT id FROM faqdata WHERE active = 'yes'"))
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(5);
@@ -254,17 +257,20 @@ class StatisticsTest extends TestCase
 
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('escape')
             ->with('en')
             ->willReturn('en');
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("AND lang = 'en'"))
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(3);
@@ -281,11 +287,13 @@ class StatisticsTest extends TestCase
 
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(0);
@@ -302,11 +310,13 @@ class StatisticsTest extends TestCase
 
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn($resultMock);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('numRows')
             ->with($resultMock)
             ->willReturn(-1);
@@ -324,11 +334,12 @@ class StatisticsTest extends TestCase
         $now = date(format: 'YmdHis');
         $resultMock = $this->createMock(\SQLite3Result::class);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains("date_start <= '$now'"),
-                $this->stringContains("date_end >= '$now'")
+                $this->stringContains("date_end >= '$now'"),
             ))
             ->willReturn($resultMock);
 
@@ -345,12 +356,14 @@ class StatisticsTest extends TestCase
         $maliciousLanguage = "en'; DROP TABLE faqdata; --";
         $escapedLanguage = "en\\'; DROP TABLE faqdata; --";
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('escape')
             ->with($maliciousLanguage)
             ->willReturn($escapedLanguage);
 
-        $this->dbMock->expects($this->once())
+        $this->dbMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains($escapedLanguage))
             ->willReturn($this->createMock(\SQLite3Result::class));

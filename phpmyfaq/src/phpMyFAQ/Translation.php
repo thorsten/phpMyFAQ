@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Translation class provides methods and functions for the
  * translation file handling.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @since     2022-03-20
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
@@ -25,7 +25,7 @@ use phpMyFAQ\Core\Exception;
 class Translation
 {
     /**  @var string The directory with the language files */
-    protected string $languagesDir = 'translations';
+    protected string $translationsDir = 'translations';
 
     /** @var string The default fallback language */
     protected string $defaultLanguage = 'en';
@@ -51,25 +51,36 @@ class Translation
     }
 
     /**
+     * @internal Only for tests to reset the static instance.
+     */
+    public static function resetInstance(): void
+    {
+        self::$translation = null;
+    }
+
+    /**
      * Returns the translation of a specific key from the current language
      *
      * @return string|string[][]|null
      */
-    public static function get(string $languageKey): string|array|null
+    public static function get(string $key): string|array|null
     {
         try {
             self::$translation->checkInit();
             self::$translation->checkLanguageLoaded();
 
-            if (!empty(self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey])) {
-                return self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey];
+            if (
+                isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])
+                && self::$translation->loadedLanguages[self::$translation->currentLanguage][$key] !== ''
+            ) {
+                return self::$translation->loadedLanguages[self::$translation->currentLanguage][$key];
             }
 
-            return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey];
+            return self::$translation->loadedLanguages[self::$translation->defaultLanguage][$key] ?? null;
         } catch (Exception) {
             Configuration::getConfigurationInstance()
                 ->getLogger()
-                ->error('Error while fetching translation key: ' . $languageKey);
+                ->error('Error while fetching translation key: ' . $key);
         }
 
         return null;
@@ -78,20 +89,20 @@ class Translation
     /**
      * Checks if a specific translation key exists in the current or default language.
      */
-    public static function has(string $languageKey): bool
+    public static function has(string $key): bool
     {
         try {
             self::$translation->checkInit();
             self::$translation->checkLanguageLoaded();
 
-            if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$languageKey])) {
+            if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])) {
                 return true;
             }
 
-            if (isset(self::$translation->loadedLanguages[self::$translation->defaultLanguage][$languageKey])) {
+            if (isset(self::$translation->loadedLanguages[self::$translation->defaultLanguage][$key])) {
                 return true;
             }
-        } catch (Exception) {
+        } catch (Exception) { /* @mago-expect lint:no-empty-catch-clause */
         }
 
         return false;
@@ -113,10 +124,10 @@ class Translation
     /**
      * @throws Exception
      */
-    public function setLanguagesDir(string $languagesDir): Translation
+    public function setTranslationsDir(string $translationsDir): Translation
     {
-        self::$translation->languagesDir = $languagesDir;
-        self::$translation->checkLanguageDirectory();
+        self::$translation->translationsDir = $translationsDir;
+        self::$translation->checkTranslationsDirectory();
 
         return self::$translation;
     }
@@ -160,7 +171,7 @@ class Translation
      */
     public static function getInstance(): Translation
     {
-        if (null == self::$translation) {
+        if (null === self::$translation) {
             $className = self::class;
             self::$translation = new $className();
         }
@@ -174,10 +185,13 @@ class Translation
     public function setMultiByteLanguage(): void
     {
         $validMultiByteStrings = ['ja', 'en', 'uni'];
-        $multiByteLanguage = self::get('metaLanguage') != 'ja' ? 'uni' : self::get('metaLanguage');
-        if (function_exists('mb_language') && in_array($multiByteLanguage, $validMultiByteStrings)) {
+        $multiByteLanguage = self::get(key: 'metaLanguage') !== 'ja' ? 'uni' : self::get(key: 'metaLanguage');
+        if (
+            function_exists(function: 'mb_language')
+            && in_array($multiByteLanguage, $validMultiByteStrings, strict: true)
+        ) {
             mb_language($multiByteLanguage);
-            mb_internal_encoding('utf-8');
+            mb_internal_encoding(encoding: 'utf-8');
         }
     }
 
@@ -191,73 +205,86 @@ class Translation
         $configuration = [];
 
         foreach (self::fetchTranslationFile() as $key => $value) {
-            if (str_starts_with($key, $section)) {
-                $configuration[$key] = [
-                    'element' => $value[0] ?? '',
-                    'label' => $value[1] ?? '',
-                    'description' => $value[2] ?? '',
-                ];
+            if (!str_starts_with($key, $section)) {
+                continue;
+            }
 
-                switch ($key) {
-                    case 'records.maxAttachmentSize':
-                        /** @phpstan-ignore-next-line */
-                        $configuration[$key]['label'] = sprintf(
-                            $configuration[$key]['label'],
-                            ini_get('upload_max_filesize'),
-                        );
-                        break;
-                    case 'main.dateFormat':
-                        $configuration[$key]['label'] = sprintf(
-                            '<a target="_blank" href="https://www.php.net/manual/en/function.date.php">%s</a>',
-                            $configuration[$key]['label'],
-                        );
-                        break;
-                }
+            $configuration[$key] = [
+                'element' => $value[0] ?? '',
+                'label' => $value[1] ?? '',
+                'description' => $value[2] ?? '',
+            ];
+
+            switch ($key) {
+                case 'records.maxAttachmentSize':
+                    /** @phpstan-ignore-next-line */
+                    $configuration[$key]['label'] = sprintf(
+                        $configuration[$key]['label'],
+                        ini_get(option: 'upload_max_filesize'),
+                    );
+                    break;
+                case 'main.dateFormat':
+                    $configuration[$key]['label'] =
+                        '<a target="_blank" href="https://www.php.net/manual/en/function.date.php">'
+                        . $configuration[$key]['label']
+                        . '</a>';
+                    break;
             }
         }
 
-        Utils::moveToTop($configuration, 'main.maintenanceMode');
+        Utils::moveToTop($configuration, key: 'main.maintenanceMode');
 
         return $configuration;
     }
+
+    // ---------------------------------------------------------------------
+    // Internal helpers (initialization, loading, filesystem checks)
+    // ---------------------------------------------------------------------
 
     /**
      * Checks if the default language is already loaded.
      */
     protected function checkDefaultLanguageLoaded(): void
     {
-        if (empty(self::$translation->loadedLanguages[self::$translation->defaultLanguage])) {
-            self::$translation->checkCurrentLanguage();
-            self::$translation->loadedLanguages[self::$translation->defaultLanguage] = require
-                self::$translation->filename(self::$translation->defaultLanguage);
-        }
+        $this->ensureLanguageLoaded(self::$translation->defaultLanguage);
     }
 
     /**
-     * Checks if current language is already loaded. Loading new language only when needed.
+     * Checks if the current language is already loaded. Loading new language only when needed.
      */
     protected function checkLanguageLoaded(): void
     {
-        if (empty(self::$translation->loadedLanguages[self::$translation->currentLanguage])) {
-            self::$translation->checkCurrentLanguage();
-            self::$translation->loadedLanguages[self::$translation->currentLanguage] = require
-                self::$translation->filename(self::$translation->currentLanguage);
-        }
+        $this->ensureLanguageLoaded(self::$translation->currentLanguage);
     }
 
     /**
-     * Checks if language directory exists. If not, throw an exception.
+     * Ensures that the given language is loaded in the cache.
+     */
+    private function ensureLanguageLoaded(string $language): void
+    {
+        $loadedLanguages = &self::$translation->loadedLanguages;
+
+        if (isset($loadedLanguages[$language]) && $loadedLanguages[$language] !== []) {
+            return;
+        }
+
+        self::$translation->checkCurrentLanguage();
+        $loadedLanguages[$language] = require self::$translation->filename($language);
+    }
+
+    /**
+     * Checks if the translations directory exists. If not, throw an exception.
      * @throws Exception
      */
-    protected function checkLanguageDirectory(): void
+    protected function checkTranslationsDirectory(): void
     {
-        if (!is_dir(self::$translation->languagesDir)) {
-            throw new Exception('The directory ' . self::$translation->languagesDir . ' was not found!');
+        if (!is_dir(self::$translation->translationsDir)) {
+            throw new Exception('The directory ' . self::$translation->translationsDir . ' was not found!');
         }
     }
 
     /**
-     * Checks if default language exists. If not, throw an exception.
+     * Checks if the default language exists. If not, throw an exception.
      * @throws Exception
      */
     protected function checkDefaultLanguage(): void
@@ -274,16 +301,18 @@ class Translation
     protected function checkInit(): void
     {
         if (!self::$translation->isReady) {
-            static::init();
+            self::performInit();
         }
     }
 
     /**
+     * Performs the actual initialization logic.
+     *
      * @throws Exception
      */
-    protected function init(): void
+    private static function performInit(): void
     {
-        self::$translation->checkLanguageDirectory();
+        self::$translation->checkTranslationsDirectory();
         self::$translation->checkDefaultLanguage();
 
         self::$translation->currentLanguage = self::$translation->getCurrentLanguage();
@@ -291,7 +320,7 @@ class Translation
     }
 
     /**
-     * Checks if locale for current language exists. If not, start using the default language.
+     * Checks if locale for the current language exists. If not, start using the default language.
      */
     protected function checkCurrentLanguage(): void
     {
@@ -305,7 +334,7 @@ class Translation
      */
     protected function filename(string $language): string
     {
-        return self::$translation->languagesDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php';
+        return self::$translation->translationsDir . DIRECTORY_SEPARATOR . 'language_' . strtolower($language) . '.php';
     }
 
     /**
@@ -315,7 +344,7 @@ class Translation
     private static function fetchTranslationFile(): array
     {
         $LANG_CONF = [];
-        include self::$translation->filename('en');
+        include self::$translation->filename(language: 'en');
         include self::$translation->filename(self::$translation->currentLanguage);
 
         return $LANG_CONF;

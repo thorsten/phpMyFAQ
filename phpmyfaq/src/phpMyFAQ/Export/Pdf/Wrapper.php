@@ -385,13 +385,13 @@ class Wrapper extends TCPDF
         $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // Check on RTL
-        if ('rtl' === Translation::get(languageKey: 'direction')) {
+        if ('rtl' === Translation::get(key: 'direction')) {
             $this->setRTL(enable: true);
         }
 
         // Set font
-        if (array_key_exists(Translation::get(languageKey: 'metaLanguage'), $this->fontFiles)) {
-            $this->currentFont = (string) $this->fontFiles[Translation::get(languageKey: 'metaLanguage')];
+        if (array_key_exists(Translation::get(key: 'metaLanguage'), $this->fontFiles)) {
+            $this->currentFont = (string) $this->fontFiles[Translation::get(key: 'metaLanguage')];
         }
     }
 
@@ -534,7 +534,7 @@ class Wrapper extends TCPDF
         $this->Cell(
             w: 0,
             h: 10,
-            txt: Translation::get(languageKey: 'ad_gen_page')
+            txt: Translation::get(key: 'ad_gen_page')
             . ' '
             . $this->getAliasNumPage()
             . ' / '
@@ -617,7 +617,7 @@ class Wrapper extends TCPDF
         $this->MultiCell(
             w: 0,
             h: 0,
-            txt: Translation::get(languageKey: 'msgTableOfContent'),
+            txt: Translation::get(key: 'msgTableOfContent'),
             border: 0,
             align: 'C',
         );
@@ -629,7 +629,7 @@ class Wrapper extends TCPDF
             page: 1,
             numbersfont: $this->currentFont,
             filler: '.',
-            toc_name: Translation::get(languageKey: 'msgTableOfContent'),
+            toc_name: Translation::get(key: 'msgTableOfContent'),
             style: 'B',
             color: [128, 0, 0],
         );

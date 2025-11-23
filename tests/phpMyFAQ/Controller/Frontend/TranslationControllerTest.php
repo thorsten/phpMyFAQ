@@ -3,11 +3,11 @@
 namespace phpMyFAQ\Controller\Frontend;
 
 use phpMyFAQ\Strings;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Translation;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class TranslationControllerTest extends TestCase
@@ -22,11 +22,12 @@ class TranslationControllerTest extends TestCase
         Strings::init();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
     }
+
     /**
      * @throws Exception
      * @throws \phpMyFAQ\Core\Exception

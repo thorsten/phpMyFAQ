@@ -61,7 +61,7 @@ final class DashboardController extends AbstractAdministrationController
             'isDevelopmentVersion' => System::isDevelopmentVersion(),
             'currentVersionApp' => System::getVersion(),
             'msgAdminWarningDevelopmentVersion' => sprintf(
-                Translation::get(languageKey: 'msgAdminWarningDevelopmentVersion'),
+                Translation::get(key: 'msgAdminWarningDevelopmentVersion'),
                 System::getVersion(),
                 System::getGitHubIssuesUrl(),
             ),
@@ -69,13 +69,13 @@ final class DashboardController extends AbstractAdministrationController
             'adminDashboardInfoNumFaqs' => $faqTableInfo[Database::getTablePrefix() . 'faqdata'],
             'adminDashboardInfoNumComments' => $faqTableInfo[Database::getTablePrefix() . 'faqcomments'],
             'adminDashboardInfoNumQuestions' => $faqTableInfo[Database::getTablePrefix() . 'faqquestions'],
-            'adminDashboardInfoUser' => Translation::get(languageKey: 'msgNews'),
+            'adminDashboardInfoUser' => Translation::get(key: 'msgNews'),
             'adminDashboardInfoNumUser' => $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1,
-            'adminDashboardHeaderUsersOnline' => Translation::get(languageKey: 'msgUserOnline'),
+            'adminDashboardHeaderUsersOnline' => Translation::get(key: 'msgUserOnline'),
             'adminDashboardInfoNumUsersOnline' => $session->getNumberOfOnlineUsers(windowSeconds: 600),
-            'adminDashboardHeaderVisits' => Translation::get(languageKey: 'ad_stat_report_visits'),
+            'adminDashboardHeaderVisits' => Translation::get(key: 'ad_stat_report_visits'),
             'hasUserTracking' => $this->configuration->get(item: 'main.enableUserTracking'),
-            'adminDashboardHeaderInactiveFaqs' => Translation::get(languageKey: 'ad_record_inactive'),
+            'adminDashboardHeaderInactiveFaqs' => Translation::get(key: 'ad_record_inactive'),
             'adminDashboardInactiveFaqs' => $faq->getInactiveFaqsData(),
             'hasPermissionEditConfig' => $this->currentUser->perm->hasPermission(
                 $userId,
@@ -104,7 +104,7 @@ final class DashboardController extends AbstractAdministrationController
                     $templateVars = [
                         ...$templateVars,
                         'adminDashboardShouldUpdateMessage' => false,
-                        'adminDashboardLatestVersionMessage' => Translation::get(languageKey: 'ad_xmlrpc_latest'),
+                        'adminDashboardLatestVersionMessage' => Translation::get(key: 'ad_xmlrpc_latest'),
                         'adminDashboardVersions' => $versions,
                     ];
 
@@ -112,9 +112,7 @@ final class DashboardController extends AbstractAdministrationController
                         $templateVars = [
                             ...$templateVars,
                             'adminDashboardShouldUpdateMessage' => true,
-                            'adminDashboardLatestVersionMessage' => Translation::get(
-                                languageKey: 'ad_you_should_update',
-                            ),
+                            'adminDashboardLatestVersionMessage' => Translation::get(key: 'ad_you_should_update'),
                             'adminDashboardVersions' => $versions,
                         ];
                     }

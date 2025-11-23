@@ -29,8 +29,8 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -57,7 +57,7 @@ $oNews = new News($faqConfig);
 $faqSession->userTracking('news_view', $newsId);
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->getTitle() . Translation::get(languageKey: 'msgNews');
+$newsMainHeader = $faqConfig->getTitle() . Translation::get(key: 'msgNews');
 
 // Get all data from the news record
 $news = $oNews->get($newsId);
@@ -77,10 +77,10 @@ $newsContent = $helper->cleanUpContent($newsContent);
 if (strlen((string) $news['link']) > 0) {
     $newsContent .= sprintf(
         '</p><p>%s<a href="%s" target="%s">%s</a>',
-        Translation::get(languageKey: 'msgInfo'),
+        Translation::get(key: 'msgInfo'),
         Strings::htmlentities($news['link']),
         $news['target'],
-        Strings::htmlentities($news['linkTitle'])
+        Strings::htmlentities($news['linkTitle']),
     );
 }
 
@@ -90,20 +90,21 @@ if ($user->perm->hasPermission($user->getUserId(), PermissionType::NEWS_EDIT->va
     $editThisEntry = sprintf(
         '<a href="./admin/news/edit/%d">%s</a>',
         $newsId,
-        Translation::get(languageKey: 'ad_menu_news_edit')
+        Translation::get(key: 'ad_menu_news_edit'),
     );
 }
 
 // Does the user have the right to add a comment?
 if (
-    (-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    (!$news['active']) || (!$news['allowComments'])
+    -1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')
+    || !$news['active']
+    || !$news['allowComments']
 ) {
-    $commentMessage = Translation::get(languageKey: 'msgWriteNoComment');
+    $commentMessage = Translation::get(key: 'msgWriteNoComment');
 } else {
     $commentMessage = sprintf(
         '<a href="#" data-bs-toggle="modal" data-bs-target="#pmf-modal-add-comment">%s</a>',
-        Translation::get(languageKey: 'newsWriteComment')
+        Translation::get(key: 'newsWriteComment'),
     );
 }
 
@@ -112,8 +113,8 @@ if ($news['active']) {
     $date = new Date($faqConfig);
     $newsDate = sprintf(
         '%s<span id="newsLastUpd">%s</span>',
-        Translation::get(languageKey: 'msgLastUpdateArticle'),
-        $date->format($news['date'])
+        Translation::get(key: 'msgLastUpdateArticle'),
+        $date->format($news['date']),
     );
 } else {
     $newsDate = '';
@@ -131,32 +132,32 @@ $twig = new TwigWrapper(PMF_ROOT_DIR . '/assets/templates/');
 $twigTemplate = $twig->loadTemplate('./news.twig');
 
 $templateVars = [
-    ... $templateVars,
+    ...$templateVars,
     'writeNewsHeader' => $newsMainHeader,
     'newsHeader' => $newsHeader,
     'mainPageContent' => $newsContent,
     'writeDateMsg' => $newsDate,
-    'msgAboutThisNews' => Translation::get(languageKey: 'msgAboutThisNews'),
-    'writeAuthor' => ($news['active']) ? Translation::get(languageKey: 'msgAuthor') . ': ' . $news['authorName'] : '',
+    'msgAboutThisNews' => Translation::get(key: 'msgAboutThisNews'),
+    'writeAuthor' => $news['active'] ? Translation::get(key: 'msgAuthor') . ': ' . $news['authorName'] : '',
     'editThisEntry' => $editThisEntry,
     'writeCommentMsg' => $commentMessage,
-    'msgWriteComment' => Translation::get(languageKey: 'newsWriteComment'),
+    'msgWriteComment' => Translation::get(key: 'newsWriteComment'),
     'newsId' => $newsId,
     'newsLang' => $news['lang'],
-    'msgCommentHeader' => Translation::get(languageKey: 'msgCommentHeader'),
-    'msgNewContentName' => Translation::get(languageKey: 'msgNewContentName'),
-    'msgNewContentMail' => Translation::get(languageKey: 'msgNewContentMail'),
-    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
-    'msgYourComment' => Translation::get(languageKey: 'msgYourComment'),
+    'msgCommentHeader' => Translation::get(key: 'msgCommentHeader'),
+    'msgNewContentName' => Translation::get(key: 'msgNewContentName'),
+    'msgNewContentMail' => Translation::get(key: 'msgNewContentMail'),
+    'defaultContentMail' => $user->getUserId() > 0 ? $user->getUserData('email') : '',
+    'defaultContentName' => $user->getUserId() > 0 ? $user->getUserData('display_name') : '',
+    'msgYourComment' => Translation::get(key: 'msgYourComment'),
     'csrfInput' => Token::getInstance($container->get('session'))->getTokenInput('add-comment'),
-    'msgCancel' => Translation::get(languageKey: 'ad_gen_cancel'),
-    'msgNewContentSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
+    'msgCancel' => Translation::get(key: 'ad_gen_cancel'),
+    'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'writecomment',
-        Translation::get(languageKey: 'msgCaptcha'),
-        $user->isLoggedIn()
+        Translation::get(key: 'msgCaptcha'),
+        $user->isLoggedIn(),
     ),
     'renderComments' => $commentHelper->getComments($comments),
 ];

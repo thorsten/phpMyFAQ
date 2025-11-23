@@ -22,7 +22,7 @@ class SearchTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -68,13 +68,14 @@ class SearchTest extends TestCase
     public function testSearchWithNumericTermWhenSolutionIdSearchEnabled(): void
     {
         $this->setConfigValue('search.searchForSolutionId', 'true');
-        
+
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search->expects($this->once())
+        $this->search
+            ->expects($this->once())
             ->method('searchDatabase')
             ->with('123', true)
             ->willReturn([]);
@@ -96,13 +97,14 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'false');
-        
+
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search->expects($this->once())
+        $this->search
+            ->expects($this->once())
             ->method('searchDatabase')
             ->with('123', true)
             ->willReturn([]);
@@ -117,13 +119,14 @@ class SearchTest extends TestCase
     {
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'true');
-        
+
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchElasticsearch'])
             ->getMock();
 
-        $this->search->expects($this->once())
+        $this->search
+            ->expects($this->once())
             ->method('searchElasticsearch')
             ->with('123', true)
             ->willReturn([]);
@@ -139,13 +142,14 @@ class SearchTest extends TestCase
         $this->setConfigValue('search.searchForSolutionId', 'false');
         $this->setConfigValue('search.enableElasticsearch', 'false');
         $this->setConfigValue('search.enableOpenSearch', 'true');
-        
+
         $this->search = $this->getMockBuilder(Search::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['searchOpenSearch'])
             ->getMock();
 
-        $this->search->expects($this->once())
+        $this->search
+            ->expects($this->once())
             ->method('searchOpenSearch')
             ->with('123', true)
             ->willReturn([]);
@@ -163,7 +167,8 @@ class SearchTest extends TestCase
             ->onlyMethods(['searchDatabase'])
             ->getMock();
 
-        $this->search->expects($this->once())
+        $this->search
+            ->expects($this->once())
             ->method('searchDatabase')
             ->with('test', true)
             ->willReturn([]);
@@ -191,7 +196,7 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearches(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')"
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')",
         );
 
         $actualSearches = $this->search->getMostPopularSearches(2);
@@ -204,7 +209,7 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesWithLimit(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'baz', '2023-01-01 12:00:00'), (4, 'en', 'foo', '2023-01-01 12:00:00')"
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'baz', '2023-01-01 12:00:00'), (4, 'en', 'foo', '2023-01-01 12:00:00')",
         );
 
         $actualSearches = $this->search->getMostPopularSearches(1);
@@ -217,7 +222,7 @@ class SearchTest extends TestCase
     public function testGetMostPopularSearchesBackwardCompatibility(): void
     {
         $this->dbHandle->query(
-            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')"
+            "INSERT INTO faqsearches VALUES (1, 'en', 'foo', '2023-01-01 12:00:00'), (2, 'en', 'bar', '2023-01-01 12:00:00'), (3, 'en', 'foo', '2023-01-01 12:00:00')",
         );
 
         // Test existing signature still works (backward compatibility)
@@ -239,9 +244,7 @@ class SearchTest extends TestCase
 
     public function testSetAndGetCategory(): void
     {
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
         $this->search->setCategory($categoryMock);
 
         $this->assertEquals($categoryMock, $this->search->getCategory());

@@ -47,9 +47,7 @@ final class TagController extends AbstractController
         $postData = json_decode($request->getContent());
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('tags', $postData->csrf)) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $id = Filter::filterVar($postData->id, FILTER_VALIDATE_INT);
@@ -60,10 +58,10 @@ final class TagController extends AbstractController
         $tag->setName($newTag);
 
         if ($this->container->get(id: 'phpmyfaq.tags')->update($tag)) {
-            return $this->json(['updated' => Translation::get(languageKey: 'ad_entryins_suc')], Response::HTTP_OK);
+            return $this->json(['updated' => Translation::get(key: 'ad_entryins_suc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(languageKey: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'msgErrorOccurred')], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -122,13 +120,9 @@ final class TagController extends AbstractController
         $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
 
         if ($this->container->get(id: 'phpmyfaq.tags')->delete($tagId)) {
-            return $this->json(['success' => Translation::get(
-                languageKey: 'ad_tag_delete_success',
-            )], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_tag_delete_success')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'ad_tag_delete_error',
-        )], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'ad_tag_delete_error')], Response::HTTP_BAD_REQUEST);
     }
 }

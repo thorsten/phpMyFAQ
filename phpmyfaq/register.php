@@ -16,8 +16,8 @@
  * @since     2008-01-25
  */
 
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -49,15 +49,15 @@ $twigTemplate = $twig->loadTemplate('./register.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgRegistration'), $faqConfig->getTitle()),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgRegistration'), $faqConfig->getTitle()),
     'lang' => $faqLangCode,
     'isWebAuthnEnabled' => $faqConfig->get('security.enableWebAuthnSupport'),
     'captchaFieldset' => $captchaHelper->renderCaptcha(
         $captcha,
         'register',
-        Translation::get(languageKey: 'msgCaptcha'),
-        $user->isLoggedIn()
+        Translation::get(key: 'msgCaptcha'),
+        $user->isLoggedIn(),
     ),
 ];
 

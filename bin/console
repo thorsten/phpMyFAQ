@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_LANGUAGE_DIR)
+        ->setTranslationsDir(PMF_LANGUAGE_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage('en')
         ->setMultiByteLanguage();

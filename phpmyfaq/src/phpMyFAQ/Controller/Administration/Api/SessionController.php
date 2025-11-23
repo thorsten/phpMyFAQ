@@ -48,9 +48,7 @@ final class SessionController extends AbstractController
             'export-sessions',
             $requestData->csrf,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $session = $this->container->get(id: 'phpmyfaq.admin.session');

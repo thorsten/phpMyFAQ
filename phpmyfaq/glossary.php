@@ -18,8 +18,8 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Pagination;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -42,11 +42,7 @@ $glossaryItems = $glossary->fetchAll();
 $numItems = is_countable($glossaryItems) ? count($glossaryItems) : 0;
 $itemsPerPage = 8;
 
-$baseUrl = sprintf(
-    '%sindex.php?action=glossary&page=%d',
-    $faqConfig->getDefaultUrl(),
-    $page
-);
+$baseUrl = sprintf('%sindex.php?action=glossary&page=%d', $faqConfig->getDefaultUrl(), $page);
 
 // Pagination options
 $options = [
@@ -62,10 +58,10 @@ $twigTemplate = $twig->loadTemplate('./glossary.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'ad_menu_glossary'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgGlossaryMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => Translation::get(languageKey: 'ad_menu_glossary'),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'ad_menu_glossary'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgGlossaryMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => Translation::get(key: 'ad_menu_glossary'),
     'glossaryItems' => array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage),
     'pagination' => $pagination->render(),
 ];

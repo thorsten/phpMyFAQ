@@ -15,14 +15,13 @@
  * @since     2002-09-16
  */
 
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
-
 
 $faqConfig = $container->get('phpmyfaq.configuration');
 $user = $container->get('phpmyfaq.user.current_user');
@@ -46,16 +45,20 @@ $twigTemplate = $twig->loadTemplate('./contact.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgContact'), $faqConfig->getTitle()),
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgContact'), $faqConfig->getTitle()),
     'msgContactOwnText' => $contactText,
     'privacyURL' => $faqConfig->get('main.privacyURL'),
     'lang' => $Language->getLanguage(),
-    'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
-    'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
+    'defaultContentMail' => $user->getUserId() > 0 ? $user->getUserData('email') : '',
+    'defaultContentName' => $user->getUserId() > 0 ? $user->getUserData('display_name') : '',
     'version' => $faqConfig->getVersion(),
-    'captchaFieldset' =>
-        $captchaHelper->renderCaptcha($captcha, 'contact', Translation::get(languageKey: 'msgCaptcha'), $user->isLoggedIn()),
+    'captchaFieldset' => $captchaHelper->renderCaptcha(
+        $captcha,
+        'contact',
+        Translation::get(key: 'msgCaptcha'),
+        $user->isLoggedIn(),
+    ),
 ];
 
-return $templateVars;#
+return $templateVars; //

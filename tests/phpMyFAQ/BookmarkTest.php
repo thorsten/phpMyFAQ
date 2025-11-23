@@ -6,7 +6,8 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;use Symfony\Component\HttpFoundation\Request;
+use ReflectionClass;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class BookmarkTest extends TestCase
@@ -24,7 +25,7 @@ class BookmarkTest extends TestCase
         Strings::init();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();

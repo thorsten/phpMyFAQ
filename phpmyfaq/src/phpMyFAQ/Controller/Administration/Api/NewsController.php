@@ -51,9 +51,7 @@ final class NewsController extends AbstractController
             page: 'save-news',
             requestToken: $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $header = Filter::filterVar($data->newsHeader, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -82,12 +80,10 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->create($newsMessage)) {
-            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'ad_news_insertfail',
-        )], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(key: 'ad_news_insertfail')], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -106,20 +102,16 @@ final class NewsController extends AbstractController
             page: 'delete-news',
             requestToken: $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $deleteId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
 
         if ($news->delete((int) $deleteId)) {
-            return $this->json(['success' => Translation::get(languageKey: 'ad_news_delsuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_news_delsuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'ad_news_updatefail',
-        )], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -138,9 +130,7 @@ final class NewsController extends AbstractController
             page: 'update-news',
             requestToken: $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -171,12 +161,10 @@ final class NewsController extends AbstractController
             ->setCreated(new DateTime());
 
         if ($news->update($newsMessage)) {
-            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
-        return $this->json(['error' => Translation::get(
-            languageKey: 'ad_news_updatefail',
-        )], Response::HTTP_BAD_GATEWAY);
+        return $this->json(['error' => Translation::get(key: 'ad_news_updatefail')], Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -194,9 +182,7 @@ final class NewsController extends AbstractController
             page: 'activate-news',
             requestToken: $data->csrfToken,
         )) {
-            return $this->json(['error' => Translation::get(
-                languageKey: 'msgNoPermission',
-            )], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
         $newsId = Filter::filterVar($data->id, FILTER_VALIDATE_INT);
@@ -204,10 +190,10 @@ final class NewsController extends AbstractController
 
         if ($status) {
             $news->activate($newsId);
-            return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
+            return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
         }
 
         $news->deactivate($newsId);
-        return $this->json(['success' => Translation::get(languageKey: 'ad_news_updatesuc')], Response::HTTP_OK);
+        return $this->json(['success' => Translation::get(key: 'ad_news_updatesuc')], Response::HTTP_OK);
     }
 }

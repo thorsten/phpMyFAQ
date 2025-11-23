@@ -13,11 +13,10 @@ class AttachmentHelperTest extends TestCase
     protected function setUp(): void
     {
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
-
 
         $this->attachmentHelper = new AttachmentHelper();
     }

@@ -18,8 +18,8 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,7 +36,7 @@ $faqSession->userTracking('sitemap', 0);
 
 $request = Request::createFromGlobals();
 $letter = Filter::filterVar($request->query->get('letter'), FILTER_SANITIZE_SPECIAL_CHARS);
-if (!is_null($letter) && (1 == Strings::strlen($letter))) {
+if (!is_null($letter) && 1 == Strings::strlen($letter)) {
     $currLetter = strtoupper(Strings::substr($letter, 0, 1));
 } else {
     $currLetter = '';
@@ -51,13 +51,14 @@ $twigTemplate = $twig->loadTemplate('./sitemap.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgSitemap'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgSitemapMetaDesc'), $faqConfig->getTitle()),
-    'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get(languageKey: 'msgSitemap') : $currLetter,
+    ...$templateVars,
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgSitemap'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgSitemapMetaDesc'), $faqConfig->getTitle()),
+    'pageHeader' => $currLetter === '' || $currLetter === '0' ? Translation::get(key: 'msgSitemap') : $currLetter,
     'letters' => $siteMap->getAllFirstLetters(),
     'faqs' => $siteMap->getFaqsFromLetter($currLetter),
-    'writeCurrentLetter' => $currLetter === '' || $currLetter === '0' ? Translation::get(languageKey: 'msgSitemap') : $currLetter,
+    'writeCurrentLetter' =>
+        $currLetter === '' || $currLetter === '0' ? Translation::get(key: 'msgSitemap') : $currLetter,
 ];
 
 return $templateVars;

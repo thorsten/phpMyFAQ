@@ -17,7 +17,7 @@ class FormsHelperTest extends TestCase
         parent::setUp();
         $this->helper = new FormsHelper();
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -106,11 +106,35 @@ class FormsHelperTest extends TestCase
     public function testSortingAscending(): void
     {
         $data = [
-            (object) ['form_id' => 1, 'input_id' => 3, 'input_type' => 'text', 'input_label' => 'X', 'input_active' => 1, 'input_required' => 0, 'input_lang' => 'en'],
-            (object) ['form_id' => 1, 'input_id' => 1, 'input_type' => 'text', 'input_label' => 'A', 'input_active' => 1, 'input_required' => 0, 'input_lang' => 'en'],
-            (object) ['form_id' => 1, 'input_id' => 2, 'input_type' => 'text', 'input_label' => 'B', 'input_active' => 1, 'input_required' => 0, 'input_lang' => 'en'],
+            (object) [
+                'form_id' => 1,
+                'input_id' => 3,
+                'input_type' => 'text',
+                'input_label' => 'X',
+                'input_active' => 1,
+                'input_required' => 0,
+                'input_lang' => 'en',
+            ],
+            (object) [
+                'form_id' => 1,
+                'input_id' => 1,
+                'input_type' => 'text',
+                'input_label' => 'A',
+                'input_active' => 1,
+                'input_required' => 0,
+                'input_lang' => 'en',
+            ],
+            (object) [
+                'form_id' => 1,
+                'input_id' => 2,
+                'input_type' => 'text',
+                'input_label' => 'B',
+                'input_active' => 1,
+                'input_required' => 0,
+                'input_lang' => 'en',
+            ],
         ];
         $result = $this->helper->filterAndSortFormData($data, $this->translation);
-        $this->assertSame([1,2,3], array_map(static fn($o) => $o->input_id, $result));
+        $this->assertSame([1, 2, 3], array_map(static fn($o) => $o->input_id, $result));
     }
 }

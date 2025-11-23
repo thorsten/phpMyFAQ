@@ -18,7 +18,7 @@ class WrapperTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -139,7 +139,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithInvalidData(): void
     {
-        $invalidData = "This is not image data";
+        $invalidData = 'This is not image data';
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -148,7 +148,7 @@ class WrapperTest extends TestCase
 
     public function testValidateImageDataWithTooShortData(): void
     {
-        $shortData = "short";
+        $shortData = 'short';
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('validateImageData');
 
@@ -177,14 +177,14 @@ class WrapperTest extends TestCase
         $testDir = __DIR__ . '/../../../content/user/images';
         $testFile = $testDir . '/image with spaces.jpg';
 
-        $this->assertTrue(file_exists($testFile), "Test image should exist: " . $testFile);
+        $this->assertTrue(file_exists($testFile), 'Test image should exist: ' . $testFile);
 
         $urlEncodedPath = '/content/user/images/image%20with%20spaces.jpg';
         $decodedPath = urldecode($urlEncodedPath);
 
         $fullPath = $this->wrapper->concatenatePaths($testDir . '/../../..', $decodedPath);
 
-        $this->assertTrue(file_exists($fullPath), "File should exist: " . $fullPath);
+        $this->assertTrue(file_exists($fullPath), 'File should exist: ' . $fullPath);
     }
 
     // Phase 1: Core Methods Tests
@@ -202,32 +202,28 @@ class WrapperTest extends TestCase
     public function testConstructorSetsCorrectFontForDifferentLanguages(): void
     {
         $testCases = [
-            'zh' => 'arialunicid0',  // Chinese
-            'tw' => 'arialunicid0',  // Traditional Chinese
-            'ja' => 'arialunicid0',  // Japanese
-            'ko' => 'arialunicid0',  // Korean
-            'cs' => 'dejavusans',    // Czech
-            'sk' => 'dejavusans',    // Slovak
-            'el' => 'arialunicid0',  // Greek
-            'he' => 'arialunicid0',  // Hebrew
-            'tr' => 'dejavusans',    // Turkish
-            'de' => 'dejavusans',    // German (default)
+            'zh' => 'arialunicid0', // Chinese
+            'tw' => 'arialunicid0', // Traditional Chinese
+            'ja' => 'arialunicid0', // Japanese
+            'ko' => 'arialunicid0', // Korean
+            'cs' => 'dejavusans', // Czech
+            'sk' => 'dejavusans', // Slovak
+            'el' => 'arialunicid0', // Greek
+            'he' => 'arialunicid0', // Hebrew
+            'tr' => 'dejavusans', // Turkish
+            'de' => 'dejavusans', // German (default)
         ];
 
         foreach ($testCases as $language => $expectedFont) {
             // Mock Translation to return specific language
             Translation::create()
-                ->setLanguagesDir(PMF_TRANSLATION_DIR)
+                ->setTranslationsDir(PMF_TRANSLATION_DIR)
                 ->setDefaultLanguage($language)
                 ->setCurrentLanguage($language)
                 ->setMultiByteLanguage();
 
             $wrapper = new Wrapper();
-            $this->assertEquals(
-                $expectedFont,
-                $wrapper->getCurrentFont(),
-                "Font mismatch for language: $language"
-            );
+            $this->assertEquals($expectedFont, $wrapper->getCurrentFont(), "Font mismatch for language: $language");
         }
     }
 
@@ -279,7 +275,7 @@ class WrapperTest extends TestCase
         $categories = [
             1 => ['id' => 1, 'name' => 'General'],
             2 => ['id' => 2, 'name' => 'Technical'],
-            3 => ['id' => 3, 'name' => 'FAQ']
+            3 => ['id' => 3, 'name' => 'FAQ'],
         ];
 
         $this->wrapper->setCategories($categories);
@@ -308,7 +304,7 @@ class WrapperTest extends TestCase
             'id' => 123,
             'lang' => 'en',
             'question' => 'Test question?',
-            'answer' => 'Test answer.'
+            'answer' => 'Test answer.',
         ];
 
         $this->wrapper->setFaq($faq);
@@ -334,7 +330,7 @@ class WrapperTest extends TestCase
         $this->assertEquals('dejavusans', $this->wrapper->getCurrentFont());
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('zh')
             ->setCurrentLanguage('zh')
             ->setMultiByteLanguage();
@@ -346,7 +342,8 @@ class WrapperTest extends TestCase
     public function testSetCustomHeaderWithConfig(): void
     {
         $customHeader = '<h1>Custom PDF Header</h1>';
-        $this->mockConfig->expects($this->once())
+        $this->mockConfig
+            ->expects($this->once())
             ->method('get')
             ->with('main.customPdfHeader')
             ->willReturn($customHeader);
@@ -365,7 +362,8 @@ class WrapperTest extends TestCase
         $htmlHeader = '&lt;h1&gt;Header &amp; Footer&lt;/h1&gt;';
         $expectedHeader = '<h1>Header & Footer</h1>';
 
-        $this->mockConfig->expects($this->once())
+        $this->mockConfig
+            ->expects($this->once())
             ->method('get')
             ->with('main.customPdfHeader')
             ->willReturn($htmlHeader);
@@ -382,7 +380,8 @@ class WrapperTest extends TestCase
     public function testSetCustomFooterWithConfig(): void
     {
         $customFooter = 'Custom PDF Footer Text';
-        $this->mockConfig->expects($this->once())
+        $this->mockConfig
+            ->expects($this->once())
             ->method('get')
             ->with('main.customPdfFooter')
             ->willReturn($customFooter);
@@ -402,7 +401,9 @@ class WrapperTest extends TestCase
     public function testCheckBase64ImageWithValidJpegData(): void
     {
         // Create a simple 1x1 JPEG image data
-        $jpegData = base64_decode('/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=');
+        $jpegData = base64_decode(
+            '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDX4A=',
+        );
 
         $reflection = new ReflectionClass($this->wrapper);
         $method = $reflection->getMethod('checkBase64Image');
@@ -428,7 +429,7 @@ class WrapperTest extends TestCase
     {
         try {
             Translation::create()
-                ->setLanguagesDir(PMF_TRANSLATION_DIR)
+                ->setTranslationsDir(PMF_TRANSLATION_DIR)
                 ->setDefaultLanguage('ar')
                 ->setCurrentLanguage('ar')
                 ->setMultiByteLanguage();

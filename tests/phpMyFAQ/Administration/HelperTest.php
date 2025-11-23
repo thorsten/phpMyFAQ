@@ -29,7 +29,7 @@ class HelperTest extends TestCase
         Strings::init();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -68,11 +68,7 @@ class HelperTest extends TestCase
 
         $this->instance->setUser($user);
         $expected = '<a class="nav-link" href="./faq/add">Add new FAQ</a>' . "\n";
-        $actual = $this->instance->addMenuEntry(
-            PermissionType::FAQ_ADD->value,
-            'msgAddFAQ',
-            'faq/add'
-        );
+        $actual = $this->instance->addMenuEntry(PermissionType::FAQ_ADD->value, 'msgAddFAQ', 'faq/add');
 
         $this->assertEquals($expected, $actual);
 
@@ -94,7 +90,7 @@ class HelperTest extends TestCase
         $actual = $this->instance->addMenuEntry(
             'add_user+edit_user+delete_user',
             'ad_menu_user_administration',
-            'user'
+            'user',
         );
 
         $this->assertEquals($expected, $actual);
@@ -104,8 +100,9 @@ class HelperTest extends TestCase
 
     public function testRenderMetaRobotsDropdown(): void
     {
-        $expected = '<option selected>index, follow</option><option>index, nofollow</option>' .
-            '<option>noindex, follow</option><option>noindex, nofollow</option>';
+        $expected =
+            '<option selected>index, follow</option><option>index, nofollow</option>'
+            . '<option>noindex, follow</option><option>noindex, nofollow</option>';
         $actual = $this->instance->renderMetaRobotsDropdown('index, follow');
 
         $this->assertEquals($expected, $actual);
@@ -113,9 +110,10 @@ class HelperTest extends TestCase
 
     public function testSortingKeyOptions(): void
     {
-        $expected = '<option value="id" selected>ID (default)</option><option value="thema">Title</option>' .
-            '<option value="visits">Number of visitors</option><option value="updated">Date</option>' .
-            '<option value="author">Author</option>';
+        $expected =
+            '<option value="id" selected>ID (default)</option><option value="thema">Title</option>'
+            . '<option value="visits">Number of visitors</option><option value="updated">Date</option>'
+            . '<option value="author">Author</option>';
         $actual = Helper::sortingKeyOptions('id');
 
         $this->assertEquals($expected, $actual);
@@ -131,8 +129,9 @@ class HelperTest extends TestCase
 
     public function testSortingPopularFaqsOptions(): void
     {
-        $expected = '<option value="visits" selected>list most visited entries</option>' .
-            '<option value="voting">list most voted entries</option>';
+        $expected =
+            '<option value="visits" selected>list most visited entries</option>'
+            . '<option value="voting">list most voted entries</option>';
         $actual = Helper::sortingPopularFaqsOptions('visits');
 
         $this->assertEquals($expected, $actual);
@@ -140,12 +139,13 @@ class HelperTest extends TestCase
 
     public function testSearchRelevanceOptions(): void
     {
-        $expected = '<option value="thema,content,keywords">Question - Answer - Keywords</option>' .
-            '<option value="thema,keywords,content">Question - Keywords - Answer</option>' .
-            '<option value="content,thema,keywords">Answer - Question - Keywords</option>' .
-            '<option value="content,keywords,thema">Answer - Keywords - Question</option>' .
-            '<option value="keywords,content,thema">Keywords - Answer - Question</option>' .
-            '<option value="keywords,thema,content">Keywords - Question - Answer</option>';
+        $expected =
+            '<option value="thema,content,keywords">Question - Answer - Keywords</option>'
+            . '<option value="thema,keywords,content">Question - Keywords - Answer</option>'
+            . '<option value="content,thema,keywords">Answer - Question - Keywords</option>'
+            . '<option value="content,keywords,thema">Answer - Keywords - Question</option>'
+            . '<option value="keywords,content,thema">Keywords - Answer - Question</option>'
+            . '<option value="keywords,thema,content">Keywords - Question - Answer</option>';
         $actual = Helper::searchRelevanceOptions(0);
 
         $this->assertEquals($expected, $actual);
@@ -158,15 +158,18 @@ class HelperTest extends TestCase
         $optionsNightly = Helper::renderReleaseTypeOptions(ReleaseType::NIGHTLY->value);
 
         // Assert the HTML output for each release type
-        $expectedDevelopment = '<option value="development" selected>Development</option>' .
-            '<option value="stable">Stable</option>' .
-            '<option value="nightly">Nightly</option>';
-        $expectedStable = '<option value="development">Development</option>' .
-            '<option value="stable" selected>Stable</option>' .
-            '<option value="nightly">Nightly</option>';
-        $expectedNightly = '<option value="development">Development</option>' .
-            '<option value="stable">Stable</option>' .
-            '<option value="nightly" selected>Nightly</option>';
+        $expectedDevelopment =
+            '<option value="development" selected>Development</option>'
+            . '<option value="stable">Stable</option>'
+            . '<option value="nightly">Nightly</option>';
+        $expectedStable =
+            '<option value="development">Development</option>'
+            . '<option value="stable" selected>Stable</option>'
+            . '<option value="nightly">Nightly</option>';
+        $expectedNightly =
+            '<option value="development">Development</option>'
+            . '<option value="stable">Stable</option>'
+            . '<option value="nightly" selected>Nightly</option>';
 
         $this->assertEquals($expectedDevelopment, $optionsDevelopment);
         $this->assertEquals($expectedStable, $optionsStable);

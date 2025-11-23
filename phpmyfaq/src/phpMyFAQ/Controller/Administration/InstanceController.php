@@ -68,14 +68,14 @@ final class InstanceController extends AbstractAdministrationController
         return $this->render('@admin/configuration/instances.edit.twig', [
             ...$this->getHeader($request),
             ...$this->getFooter(),
-            'ad_menu_instances' => Translation::get(languageKey: 'ad_menu_instances'),
+            'ad_menu_instances' => Translation::get(key: 'ad_menu_instances'),
             'instanceConfig' => $instance->getInstanceConfig((int) $instanceData->id),
-            'ad_instance_url' => Translation::get(languageKey: 'ad_instance_url'),
-            'ad_instance_button' => Translation::get(languageKey: 'ad_instance_button'),
-            'ad_instance_path' => Translation::get(languageKey: 'ad_instance_path'),
-            'ad_instance_name' => Translation::get(languageKey: 'ad_instance_name'),
-            'ad_instance_config' => Translation::get(languageKey: 'ad_instance_config'),
-            'ad_entry_back' => Translation::get(languageKey: 'ad_entry_back'),
+            'ad_instance_url' => Translation::get(key: 'ad_instance_url'),
+            'ad_instance_button' => Translation::get(key: 'ad_instance_button'),
+            'ad_instance_path' => Translation::get(key: 'ad_instance_path'),
+            'ad_instance_name' => Translation::get(key: 'ad_instance_name'),
+            'ad_instance_config' => Translation::get(key: 'ad_instance_config'),
+            'ad_entry_back' => Translation::get(key: 'ad_entry_back'),
             'instance' => $instanceData,
         ]);
     }
@@ -123,7 +123,7 @@ final class InstanceController extends AbstractAdministrationController
                 $updatedClient->deleteClientFolder($originalData->url);
             }
 
-            $result = ['updateSuccess' => Translation::get(languageKey: 'ad_config_saved')];
+            $result = ['updateSuccess' => Translation::get(key: 'ad_config_saved')];
         } else {
             $result = ['updateError' => $this->configuration->getDb()->error()];
         }
@@ -159,22 +159,22 @@ final class InstanceController extends AbstractAdministrationController
         return [
             'userPermInstanceAdd' => $userPermInstanceAdd,
             'multisiteFolderIsWritable' => is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite'),
-            'ad_instance_add' => Translation::get(languageKey: 'ad_instance_add'),
+            'ad_instance_add' => Translation::get(key: 'ad_instance_add'),
             'allInstances' => $instance->getAll(),
             'csrfTokenDeleteInstance' => Token::getInstance($session)->getTokenString('delete-instance'),
             'csrfTokenAddInstance' => Token::getInstance($session)->getTokenString('add-instance'),
             'mainConfig' => $mainConfig,
             'requestHost' => Request::createFromGlobals()->getHost(),
-            'ad_instance_button' => Translation::get(languageKey: 'ad_instance_button'),
-            'ad_instance_hint' => Translation::get(languageKey: 'ad_instance_hint'),
-            'ad_instance_admin' => Translation::get(languageKey: 'ad_instance_admin'),
-            'ad_instance_password' => Translation::get(languageKey: 'ad_instance_password'),
-            'ad_instance_email' => Translation::get(languageKey: 'ad_instance_email'),
-            'ad_instance_name' => Translation::get(languageKey: 'ad_instance_name'),
-            'ad_instance_path' => Translation::get(languageKey: 'ad_instance_path'),
-            'ad_instance_url' => Translation::get(languageKey: 'ad_instance_url'),
-            'ad_instance_error_notwritable' => Translation::get(languageKey: 'ad_instance_error_notwritable'),
-            'ad_menu_instances' => Translation::get(languageKey: 'ad_menu_instances'),
+            'ad_instance_button' => Translation::get(key: 'ad_instance_button'),
+            'ad_instance_hint' => Translation::get(key: 'ad_instance_hint'),
+            'ad_instance_admin' => Translation::get(key: 'ad_instance_admin'),
+            'ad_instance_password' => Translation::get(key: 'ad_instance_password'),
+            'ad_instance_email' => Translation::get(key: 'ad_instance_email'),
+            'ad_instance_name' => Translation::get(key: 'ad_instance_name'),
+            'ad_instance_path' => Translation::get(key: 'ad_instance_path'),
+            'ad_instance_url' => Translation::get(key: 'ad_instance_url'),
+            'ad_instance_error_notwritable' => Translation::get(key: 'ad_instance_error_notwritable'),
+            'ad_menu_instances' => Translation::get(key: 'ad_menu_instances'),
         ];
     }
 }

@@ -20,8 +20,8 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -70,7 +70,8 @@ try {
     $userPermission = $faqPermission->get(Permission::USER, $attachment->getRecordId());
     $groupPermission = $faqPermission->get(Permission::GROUP, $attachment->getRecordId());
 } catch (AttachmentException $attachmentException) {
-    $attachmentErrors[] = Translation::get(languageKey: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
+    $attachmentErrors[] =
+        Translation::get(key: 'msgAttachmentInvalid') . ' (' . $attachmentException->getMessage() . ')';
 }
 
 // Check on group permissions
@@ -111,8 +112,13 @@ if ($user->isLoggedIn()) {
 }
 
 if (
-    $attachment && $attachment->getRecordId() > 0 && ($faqConfig->get('records.allowDownloadsForGuests') ||
-        (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))
+    $attachment
+    && $attachment->getRecordId() > 0
+    && (
+        $faqConfig->get('records.allowDownloadsForGuests')
+        || ($groupPermission || $groupPermission && $userPermission)
+        && isset($permission['dlattachment'])
+    )
 ) {
     $response = new StreamedResponse(function () use ($attachment) {
         $attachment->rawOut();
@@ -124,19 +130,19 @@ if (
     if ($attachment->getMimeType() === 'application/pdf') {
         $response->headers->set(
             'Content-Disposition',
-            'inline; filename="' . rawurlencode($attachment->getFilename()) . '"'
+            'inline; filename="' . rawurlencode($attachment->getFilename()) . '"',
         );
     } else {
         $response->headers->set(
             'Content-Disposition',
-            'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"'
+            'attachment; filename="' . rawurlencode($attachment->getFilename()) . '"',
         );
     }
 
     $response->headers->set('Content-MD5', $attachment->getRealHash());
     $response->send();
 } else {
-    $attachmentErrors[] = Translation::get(languageKey: 'msgAttachmentInvalid');
+    $attachmentErrors[] = Translation::get(key: 'msgAttachmentInvalid');
 }
 
 // If we're here, there was an error with file download
@@ -145,7 +151,7 @@ $twigTemplate = $twig->loadTemplate('./attachment.twig');
 
 // Twig template variables
 $templateVars = [
-    ... $templateVars,
+    ...$templateVars,
     'attachmentErrors' => $attachmentErrors,
 ];
 

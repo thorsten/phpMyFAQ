@@ -75,7 +75,7 @@ if (!is_null($selectedCategoryId)) {
         if (empty($records)) {
             $records = sprintf(
                 '<div class="mb-5 alert alert-info">%s</div>',
-                Translation::get(languageKey: 'msgErrorNoRecords'),
+                Translation::get(key: 'msgErrorNoRecords'),
             );
         }
 
@@ -86,7 +86,7 @@ if (!is_null($selectedCategoryId)) {
                     : 0
             ) !== 0
         ) {
-            $categoryFaqsHeader = Translation::get(languageKey: 'msgSubCategories');
+            $categoryFaqsHeader = Translation::get(key: 'msgSubCategories');
             $subCategoryContent = $categoryHelper->renderCategoryTree($selectedCategoryId);
             $templateVars = [
                 ...$templateVars,
@@ -100,13 +100,13 @@ if (!is_null($selectedCategoryId)) {
         $url = sprintf('%sindex.php?action=show&cat=%d', $faqConfig->getDefaultUrl(), $categoryData->getParentId());
 
         $text = $category->getCategoryName($categoryData->getParentId()) === ''
-            ? Translation::get(languageKey: 'msgCategoryUp')
+            ? Translation::get(key: 'msgCategoryUp')
             : $category->getCategoryName($categoryData->getParentId());
 
         $link = new Link($url, $faqConfig);
         $link->setTitle($text);
         $link->text = $text;
-        $link->tooltip = Translation::get(languageKey: 'msgCategoryUp');
+        $link->tooltip = Translation::get(key: 'msgCategoryUp');
 
         $up = sprintf('<i class="bi bi-arrow-90deg-up"></i> %s', $link->toHtmlAnchor());
     }
@@ -115,14 +115,14 @@ if (!is_null($selectedCategoryId)) {
         $categoryImage = $faqConfig->getDefaultUrl() . 'content/user/images/' . $categoryData->getImage();
     }
 
-    $categoryHeader = Translation::get(languageKey: 'msgEntriesIn') . $categoryData->getName();
+    $categoryHeader = Translation::get(key: 'msgEntriesIn') . $categoryData->getName();
 
     // Twig template variables
     $templateVars = [
         ...$templateVars,
         'categoryFaqsHeader' => $categoryData->getName(),
         'categoryDescription' => $categoryData->getDescription() ?? '',
-        'categorySubsHeader' => Translation::get(languageKey: 'msgSubCategories'),
+        'categorySubsHeader' => Translation::get(key: 'msgSubCategories'),
         'categoryImage' => $categoryImage ?? null,
         'categoryContent' => $records,
         'subCategoryContent' => $subCategoryContent,
@@ -134,16 +134,16 @@ if (!is_null($selectedCategoryId)) {
 
     $categoryHelper->setConfiguration($faqConfig)->setCategory($category);
 
-    $categoryHeader = Translation::get(languageKey: 'msgFullCategories');
+    $categoryHeader = Translation::get(key: 'msgFullCategories');
 
     // Twig template variables
     $templateVars = [
         ...$templateVars,
-        'categoryFaqsHeader' => Translation::get(languageKey: 'msgShowAllCategories'),
-        'categoryDescription' => Translation::get(languageKey: 'msgCategoryDescription'),
-        'categorySubsHeader' => Translation::get(languageKey: 'msgSubCategories'),
+        'categoryFaqsHeader' => Translation::get(key: 'msgShowAllCategories'),
+        'categoryDescription' => Translation::get(key: 'msgCategoryDescription'),
+        'categorySubsHeader' => Translation::get(key: 'msgSubCategories'),
         'categoryContent' => $categoryHelper->renderCategoryTree($selectedCategoryId),
-        'subCategoryContent' => Translation::get(languageKey: 'msgSubCategoryContent'),
+        'subCategoryContent' => Translation::get(key: 'msgSubCategoryContent'),
         'categoryLevelUp' => '',
     ];
 }
@@ -151,7 +151,7 @@ if (!is_null($selectedCategoryId)) {
 $templateVars = [
     ...$templateVars,
     'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgCategoryMetaDesc'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgCategoryMetaDesc'), $faqConfig->getTitle()),
     'categoryHeader' => $categoryHeader,
 ];
 

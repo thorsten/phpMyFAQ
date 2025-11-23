@@ -164,7 +164,7 @@ readonly class News
         $active = 'y' === $row->active;
         $allowComments = 'y' === $row->comment;
         if (!$admin && !$active) {
-            $content = Translation::get(languageKey: 'err_inactiveNews');
+            $content = Translation::get(key: 'err_inactiveNews');
         }
         return [
             'id' => $row->id,

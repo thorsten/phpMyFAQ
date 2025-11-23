@@ -28,7 +28,7 @@ class FaqHelperTest extends TestCase
         Strings::init();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -53,35 +53,31 @@ class FaqHelperTest extends TestCase
         $content = '<a href="#Foobar">Hello, World</a>';
         $result = $this->faqHelper->rewriteUrlFragments($content, 'https://localhost:443/');
 
-        $this->assertEquals(
-            '<a href="https://localhost:443/#Foobar">Hello, World</a>',
-            $result
-        );
+        $this->assertEquals('<a href="https://localhost:443/#Foobar">Hello, World</a>', $result);
     }
+
     public function testCreateFaqUrl(): void
     {
         $faqEntity = new FaqEntity();
-        $faqEntity
-            ->setId(42)
-            ->setLanguage('de');
+        $faqEntity->setId(42)->setLanguage('de');
 
-        $this->assertEquals(
-            'https://localhost:443/index.php?action=faq&cat=1&id=42&artlang=de',
-            $this->faqHelper->createFaqUrl($faqEntity, 1)
-        );
+        $this->assertEquals('https://localhost:443/index.php?action=faq&cat=1&id=42&artlang=de', $this->faqHelper->createFaqUrl(
+            $faqEntity,
+            1,
+        ));
     }
 
     public function testCleanUpContent(): void
     {
-        $content = '<p>Some text <script>alert("Hello, world!");' .
-            '</script><img src=foo onerror=alert(document.cookie)></p>';
+        $content =
+            '<p>Some text <script>alert("Hello, world!");'
+            . '</script><img src=foo onerror=alert(document.cookie)></p>';
         $expectedOutput = '<p>Some text <img src="foo" /></p>';
 
         $actualOutput = $this->faqHelper->cleanUpContent($content);
 
         $this->assertEquals($expectedOutput, $actualOutput);
     }
-
 
     public function testCleanUpContentWithUmlauts(): void
     {
@@ -211,12 +207,14 @@ class FaqHelperTest extends TestCase
         $expected5 = '<a href="https://example.org/index.php?action=search&q=test">Search</a>';
 
         // Test case 6: Multiple links in one text
-        $content6 = 'Here are two links: ' .
-            '<a href="http://example.org/index.php?action=artikel&cat=1&id=42">Link 1</a> and ' .
-            '<a href="http://example.org/index.php?action=faq&cat=2&id=43&artlang=en">Link 2</a>';
-        $expected6 = 'Here are two links: ' .
-            '<a href="https://localhost:443/content/1/42/en/how-can-i-create-an-account.html">Link 1</a> and ' .
-            '<a href="https://localhost:443/content/2/43/en/how-can-i-create-an-account.html">Link 2</a>';
+        $content6 =
+            'Here are two links: '
+            . '<a href="http://example.org/index.php?action=artikel&cat=1&id=42">Link 1</a> and '
+            . '<a href="http://example.org/index.php?action=faq&cat=2&id=43&artlang=en">Link 2</a>';
+        $expected6 =
+            'Here are two links: '
+            . '<a href="https://localhost:443/content/1/42/en/how-can-i-create-an-account.html">Link 1</a> and '
+            . '<a href="https://localhost:443/content/2/43/en/how-can-i-create-an-account.html">Link 2</a>';
 
         // Test case 7: Test with special characters in question
         $question3 = 'How to install PHP 8.1? (Quick & Easy)';
@@ -233,9 +231,9 @@ class FaqHelperTest extends TestCase
         $this->assertEquals($expected7, $this->faqHelper->convertOldInternalLinks($question3, $content7));
 
         // Test with different question text
-        $this->assertEquals(
-            'See <a href="https://localhost:443/content/42/123/en/software-installation-guide.html">this link</a>',
-            $this->faqHelper->convertOldInternalLinks($question2, $content1)
-        );
+        $this->assertEquals('See <a href="https://localhost:443/content/42/123/en/software-installation-guide.html">this link</a>', $this->faqHelper->convertOldInternalLinks(
+            $question2,
+            $content1,
+        ));
     }
 }

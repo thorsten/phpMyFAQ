@@ -85,7 +85,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 //
 try {
     Translation::create()
-        ->setLanguagesDir(PMF_TRANSLATION_DIR)
+        ->setTranslationsDir(PMF_TRANSLATION_DIR)
         ->setDefaultLanguage('en')
         ->setCurrentLanguage($faqLangCode);
 } catch (Exception $exception) {
@@ -101,7 +101,7 @@ Strings::init($faqLangCode);
 $user = $container->get('phpmyfaq.user.current_user');
 
 // Get current user and group id - default: -1
-[ $currentUser, $currentGroups ] = CurrentUser::getCurrentUserGroupId($user);
+[$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($user);
 
 $request = Request::createFromGlobals();
 $currentCategory = Filter::filterVar($request->query->get('cat'), FILTER_VALIDATE_INT);
@@ -128,9 +128,7 @@ if (true === $getAll) {
 }
 
 $tags = new Tags($faqConfig);
-$tags
-    ->setUser($currentUser)
-    ->setGroups($currentGroups);
+$tags->setUser($currentUser)->setGroups($currentGroups);
 
 $response->setExpires(new DateTime());
 

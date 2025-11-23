@@ -23,7 +23,7 @@ class RatingTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -46,10 +46,7 @@ class RatingTest extends TestCase
     public function testCreate(): void
     {
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(5)
-            ->setIp('127.0.0.1');
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
 
         $this->assertTrue($this->rating->create($votingData));
     }
@@ -57,10 +54,7 @@ class RatingTest extends TestCase
     public function testGet(): void
     {
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(5)
-            ->setIp('127.0.0.1');
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
 
         $this->rating->create($votingData);
 
@@ -70,10 +64,7 @@ class RatingTest extends TestCase
     public function testCheck(): void
     {
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(5)
-            ->setIp('127.0.0.1');
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
 
         $this->rating->create($votingData);
 
@@ -83,18 +74,12 @@ class RatingTest extends TestCase
     public function testGetNumberOfVotings(): void
     {
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(5)
-            ->setIp('127.0.0.1');
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
 
         $this->rating->create($votingData);
 
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(4)
-            ->setIp('127.0.0.2');
+        $votingData->setFaqId(1)->setVote(4)->setIp('127.0.0.2');
 
         $this->rating->update($votingData);
 
@@ -109,18 +94,12 @@ class RatingTest extends TestCase
     public function testUpdate(): void
     {
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(5)
-            ->setIp('127.0.0.1');
+        $votingData->setFaqId(1)->setVote(5)->setIp('127.0.0.1');
 
         $this->rating->create($votingData);
 
         $votingData = new Vote();
-        $votingData
-            ->setFaqId(1)
-            ->setVote(4)
-            ->setIp('127.0.0.2');
+        $votingData->setFaqId(1)->setVote(4)->setIp('127.0.0.2');
 
         $this->assertTrue($this->rating->update($votingData));
     }

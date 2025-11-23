@@ -16,10 +16,10 @@
  * @since     2023-07-20
  */
 
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\Bookmark;
-use phpMyFAQ\Translation;
 use phpMyFAQ\Session\Token;
+use phpMyFAQ\Translation;
+use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -38,11 +38,13 @@ if ($user->isLoggedIn()) {
 
     // Twig template variables
     $templateVars = [
-        ... $templateVars,
-        'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgBookmarks'), $faqConfig->getTitle()),
+        ...$templateVars,
+        'title' => sprintf('%s - %s', Translation::get(key: 'msgBookmarks'), $faqConfig->getTitle()),
         'bookmarksList' => $bookmark->getBookmarkList(),
         'csrfTokenDeleteBookmark' => Token::getInstance($container->get('session'))->getTokenString('delete-bookmark'),
-        'csrfTokenDeleteAllBookmarks' => Token::getInstance($container->get('session'))->getTokenString('delete-all-bookmarks')
+        'csrfTokenDeleteAllBookmarks' => Token::getInstance($container->get('session'))->getTokenString(
+            'delete-all-bookmarks',
+        ),
     ];
 
     return $templateVars;

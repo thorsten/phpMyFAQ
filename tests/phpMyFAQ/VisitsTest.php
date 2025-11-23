@@ -23,7 +23,7 @@ class VisitsTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -57,11 +57,7 @@ class VisitsTest extends TestCase
         $id = 1;
         $this->visits->logViews($id);
 
-        $query = sprintf(
-            "SELECT COUNT(*) AS count FROM %sfaqvisits WHERE id = %d",
-            Database::getTablePrefix(),
-            $id
-        );
+        $query = sprintf('SELECT COUNT(*) AS count FROM %sfaqvisits WHERE id = %d', Database::getTablePrefix(), $id);
 
         $result = $this->configuration->getDb()->query($query);
         $row = $this->configuration->getDb()->fetchObject($result);

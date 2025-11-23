@@ -148,7 +148,7 @@ final class CategoryController extends AbstractAdministrationController
             'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [(int) $parentId])[0] ?? -1,
             'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [(int) $parentId]),
             'categoryName' => $category->categoryName[$parentId]['name'],
-            'msgMainCategory' => Translation::get(languageKey: 'msgMainCategory'),
+            'msgMainCategory' => Translation::get(key: 'msgMainCategory'),
             ...$templateVars,
         ]);
     }
@@ -232,14 +232,14 @@ final class CategoryController extends AbstractAdministrationController
         }
 
         $templateVars = [
-            'msgHeaderCategoryMain' => Translation::get(languageKey: 'msgHeaderCategoryOverview'),
+            'msgHeaderCategoryMain' => Translation::get(key: 'msgHeaderCategoryOverview'),
         ];
 
         if ($category->checkIfCategoryExists($categoryEntity) > 0) {
             $templateVars = [
                 ...$templateVars,
                 'isError' => true,
-                'errorMessage' => Translation::get(languageKey: 'ad_categ_existing'),
+                'errorMessage' => Translation::get(key: 'ad_categ_existing'),
             ];
         }
 
@@ -278,7 +278,7 @@ final class CategoryController extends AbstractAdministrationController
             $templateVars = [
                 ...$templateVars,
                 'isSuccess' => true,
-                'successMessage' => Translation::get(languageKey: 'ad_categ_added'),
+                'successMessage' => Translation::get(key: 'ad_categ_added'),
             ];
         } else {
             $templateVars = [
@@ -349,11 +349,11 @@ final class CategoryController extends AbstractAdministrationController
         }
 
         $header =
-            Translation::get(languageKey: 'ad_categ_edit_1')
+            Translation::get(key: 'ad_categ_edit_1')
             . ' "'
             . $categoryEntity->getName()
             . '" '
-            . Translation::get(languageKey: 'ad_categ_edit_2');
+            . Translation::get(key: 'ad_categ_edit_2');
 
         $allGroupsOptions = '';
         $restrictedGroupOptions = '';
@@ -381,22 +381,22 @@ final class CategoryController extends AbstractAdministrationController
             'categoryDescription' => $categoryEntity->getDescription(),
             'categoryActive' => 1 === (int) $categoryEntity->getActive() ? 'checked' : '',
             'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
-            'categoryImageReset' => Translation::get(languageKey: 'msgCategoryImageReset'),
+            'categoryImageReset' => Translation::get(key: 'msgCategoryImageReset'),
             'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
             'isMediumPermission' => $this->configuration->get(item: 'security.permLevel') !== 'basic',
             'allGroupsOptions' => $allGroupsOptions,
             'allGroups' => $allGroups ? 'checked' : '',
             'restrictedGroups' => $restrictedGroups ? 'checked' : '',
-            'restrictedGroupsLabel' => Translation::get(languageKey: 'ad_entry_restricted_groups'),
+            'restrictedGroupsLabel' => Translation::get(key: 'ad_entry_restricted_groups'),
             'restrictedGroupsOptions' => $restrictedGroupOptions,
-            'userPermissionLabel' => Translation::get(languageKey: 'ad_entry_userpermission'),
+            'userPermissionLabel' => Translation::get(key: 'ad_entry_userpermission'),
             'allUsers' => $allUsers ? 'checked' : '',
             'restrictedUsers' => $restrictedUsers ? 'checked' : '',
-            'restrictedUsersLabel' => Translation::get(languageKey: 'ad_entry_restricted_users'),
+            'restrictedUsersLabel' => Translation::get(key: 'ad_entry_restricted_users'),
             'serpTitle' => $seoData->getTitle(),
             'serpDescription' => $seoData->getDescription(),
-            'buttonCancel' => Translation::get(languageKey: 'ad_gen_cancel'),
-            'buttonUpdate' => Translation::get(languageKey: 'ad_gen_save'),
+            'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
+            'buttonUpdate' => Translation::get(key: 'ad_gen_save'),
         ]);
     }
 
@@ -449,15 +449,15 @@ final class CategoryController extends AbstractAdministrationController
             'categoryTree' => $category->getCategoryTree(),
             'basePath' => $request->getBasePath(),
             'faqlangcode' => $currentLangCode,
-            'msgCategoryRemark_overview' => Translation::get(languageKey: 'msgCategoryRemark_overview'),
-            'categoryNameLabel' => Translation::get(languageKey: 'categoryNameLabel'),
-            'ad_categ_translate' => Translation::get(languageKey: 'ad_categ_translate'),
-            'ad_menu_categ_structure' => Translation::get(languageKey: 'ad_menu_categ_structure'),
-            'msgAddCategory' => Translation::get(languageKey: 'msgAddCategory'),
-            'msgHeaderCategoryOverview' => Translation::get(languageKey: 'msgHeaderCategoryOverview'),
-            'msgCategory' => Translation::get(languageKey: 'msgCategory'),
+            'msgCategoryRemark_overview' => Translation::get(key: 'msgCategoryRemark_overview'),
+            'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
+            'ad_categ_translate' => Translation::get(key: 'ad_categ_translate'),
+            'ad_menu_categ_structure' => Translation::get(key: 'ad_menu_categ_structure'),
+            'msgAddCategory' => Translation::get(key: 'msgAddCategory'),
+            'msgHeaderCategoryOverview' => Translation::get(key: 'msgHeaderCategoryOverview'),
+            'msgCategory' => Translation::get(key: 'msgCategory'),
             'translations' => $translations,
-            'ad_categ_translated' => Translation::get(languageKey: 'ad_categ_translated'),
+            'ad_categ_translated' => Translation::get(key: 'ad_categ_translated'),
         ]);
     }
 
@@ -505,23 +505,23 @@ final class CategoryController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'categoryName' => $category->getCategoryName($categoryId),
-            'ad_categ_trans_1' => Translation::get(languageKey: 'ad_categ_trans_1'),
-            'ad_categ_trans_2' => Translation::get(languageKey: 'ad_categ_trans_2'),
+            'ad_categ_trans_1' => Translation::get(key: 'ad_categ_trans_1'),
+            'ad_categ_trans_2' => Translation::get(key: 'ad_categ_trans_2'),
             'categoryId' => $categoryId,
             'category' => $category->getCategoryName($categoryId),
             'permLevel' => $this->configuration->get(item: 'security.permLevel'),
             'groupPermission' => $groupPermission[0] ?? -1,
             'userPermission' => $userPermission[0] ?? -1,
             'csrfInputToken' => Token::getInstance($session)->getTokenInput('update-category'),
-            'categoryNameLabel' => Translation::get(languageKey: 'categoryNameLabel'),
-            'ad_categ_lang' => Translation::get(languageKey: 'ad_categ_lang'),
+            'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
+            'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
             'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
-            'categoryDescriptionLabel' => Translation::get(languageKey: 'categoryDescriptionLabel'),
-            'categoryOwnerLabel' => Translation::get(languageKey: 'categoryOwnerLabel'),
+            'categoryDescriptionLabel' => Translation::get(key: 'categoryDescriptionLabel'),
+            'categoryOwnerLabel' => Translation::get(key: 'categoryOwnerLabel'),
             'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId)),
-            'ad_categ_transalready' => Translation::get(languageKey: 'ad_categ_transalready'),
+            'ad_categ_transalready' => Translation::get(key: 'ad_categ_transalready'),
             'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
-            'ad_categ_translatecateg' => Translation::get(languageKey: 'ad_categ_translatecateg'),
+            'ad_categ_translatecateg' => Translation::get(key: 'ad_categ_translatecateg'),
         ]);
     }
 
@@ -608,7 +608,7 @@ final class CategoryController extends AbstractAdministrationController
         }
 
         $templateVars = [
-            'msgHeaderCategoryMain' => Translation::get(languageKey: 'msgHeaderCategoryOverview'),
+            'msgHeaderCategoryMain' => Translation::get(key: 'msgHeaderCategoryOverview'),
         ];
 
         if (!$category->hasLanguage($categoryEntity->getId(), $categoryEntity->getLang())) {
@@ -644,7 +644,7 @@ final class CategoryController extends AbstractAdministrationController
                 $templateVars = [
                     ...$templateVars,
                     'isSuccess' => true,
-                    'successMessage' => Translation::get(languageKey: 'ad_categ_translated'),
+                    'successMessage' => Translation::get(key: 'ad_categ_translated'),
                 ];
             } else {
                 $templateVars = [
@@ -698,7 +698,7 @@ final class CategoryController extends AbstractAdministrationController
             $templateVars = [
                 ...$templateVars,
                 'isSuccess' => true,
-                'successMessage' => Translation::get(languageKey: 'ad_categ_updated'),
+                'successMessage' => Translation::get(key: 'ad_categ_updated'),
             ];
         } else {
             $templateVars = [
@@ -729,15 +729,15 @@ final class CategoryController extends AbstractAdministrationController
             'csrfTokenInput' => Token::getInstance($session)->getTokenInput('save-category'),
             'userSelection' => $userHelper->getAllUsersForTemplate(),
             'permLevel' => $this->configuration->get(item: 'security.permLevel'),
-            'msgAccessAllUsers' => Translation::get(languageKey: 'msgAccessAllUsers'),
-            'ad_entry_restricted_users' => Translation::get(languageKey: 'ad_entry_restricted_users'),
-            'ad_entry_userpermission' => Translation::get(languageKey: 'ad_entry_userpermission'),
-            'ad_categ_add' => Translation::get(languageKey: 'ad_categ_add'),
-            'ad_entry_restricted_groups' => Translation::get(languageKey: 'ad_entry_restricted_groups'),
+            'msgAccessAllUsers' => Translation::get(key: 'msgAccessAllUsers'),
+            'ad_entry_restricted_users' => Translation::get(key: 'ad_entry_restricted_users'),
+            'ad_entry_userpermission' => Translation::get(key: 'ad_entry_userpermission'),
+            'ad_categ_add' => Translation::get(key: 'ad_categ_add'),
+            'ad_entry_restricted_groups' => Translation::get(key: 'ad_entry_restricted_groups'),
             'restricted_groups' => $this->configuration->get(item: 'security.permLevel') === 'medium'
                 ? $this->currentUser->perm->getAllGroupsOptions([], $this->currentUser)
                 : '',
-            'buttonCancel' => Translation::get(languageKey: 'ad_gen_cancel'),
+            'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
         ];
     }
 }

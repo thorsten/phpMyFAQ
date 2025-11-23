@@ -22,7 +22,7 @@ class QueryHelperTest extends TestCase
         parent::setUp();
 
         Translation::create()
-            ->setLanguagesDir(PMF_TRANSLATION_DIR)
+            ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
@@ -92,7 +92,8 @@ class QueryHelperTest extends TestCase
         $result = $queryHelper->getQuery($queryType, $categoryId, $bDownwards, $lang, $date, $faqId);
 
         // Define the expected SQL query string
-        $expectedQuery = "
+        $expectedQuery =
+            '
             SELECT
                 fd.id AS id,
                 fd.solution_id AS solution_id,
@@ -112,9 +113,15 @@ class QueryHelperTest extends TestCase
                 fv.visits AS visits,
                 fv.last_visit AS last_visit
             FROM
-                " . Database::getTablePrefix() . "faqdata fd,
-                " . Database::getTablePrefix() . "faqvisits fv,
-                " . Database::getTablePrefix() . "faqcategoryrelations fcr
+                '
+            . Database::getTablePrefix()
+            . 'faqdata fd,
+                '
+            . Database::getTablePrefix()
+            . 'faqvisits fv,
+                '
+            . Database::getTablePrefix()
+            . "faqcategoryrelations fcr
             WHERE
                 fd.id = fcr.record_id
             AND

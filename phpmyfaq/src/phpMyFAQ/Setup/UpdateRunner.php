@@ -68,7 +68,7 @@ final class UpdateRunner
     {
         $upgrade = new Upgrade($this->system, $this->configuration);
         if (!$upgrade->isMaintenanceEnabled()) {
-            $io->warning(Translation::get(languageKey: 'msgNotInMaintenanceMode'));
+            $io->warning(Translation::get(key: 'msgNotInMaintenanceMode'));
         }
 
         try {
@@ -103,10 +103,10 @@ final class UpdateRunner
 
             if ($available) {
                 $this->version = $versions[$branch];
-                $io->success(message: Translation::get(languageKey: 'msgCurrentVersion') . $versions[$branch]);
+                $io->success(message: Translation::get(key: 'msgCurrentVersion') . $versions[$branch]);
             } else {
                 $this->version = $versions['installed'];
-                $io->success(message: Translation::get(languageKey: 'versionIsUpToDate') . ' (' . $this->version . ')');
+                $io->success(message: Translation::get(key: 'versionIsUpToDate') . ' (' . $this->version . ')');
             }
         } catch (Exception|TransportExceptionInterface|DecodingExceptionInterface $exception) {
             $io->error(message: 'Error during update check: ' . $exception->getMessage());
@@ -123,7 +123,7 @@ final class UpdateRunner
         if (!$upgrade->isNightly()) {
             $result = $upgrade->verifyPackage($pathToPackage, $this->version);
             if (!$result) {
-                $io->error(message: Translation::get(languageKey: 'verificationFailure'));
+                $io->error(message: Translation::get(key: 'verificationFailure'));
                 return Command::FAILURE;
             }
         }
@@ -133,7 +133,7 @@ final class UpdateRunner
             value: urlencode($pathToPackage),
         );
 
-        $io->success(message: Translation::get(languageKey: 'downloadSuccessful'));
+        $io->success(message: Translation::get(key: 'downloadSuccessful'));
         return Command::SUCCESS;
     }
 
@@ -154,11 +154,11 @@ final class UpdateRunner
         });
 
         if ($result) {
-            $io->success(message: Translation::get(languageKey: 'extractSuccessful'));
+            $io->success(message: Translation::get(key: 'extractSuccessful'));
             return Command::SUCCESS;
         }
 
-        $io->error(message: Translation::get(languageKey: 'extractFailure'));
+        $io->error(message: Translation::get(key: 'extractFailure'));
         return Command::FAILURE;
     }
 
