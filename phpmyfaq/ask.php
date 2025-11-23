@@ -67,20 +67,20 @@ $twigTemplate = $twig->loadTemplate('./ask.twig');
 
 $templateVars = [
     ... $templateVars,
-    'title' => sprintf('%s - %s', Translation::get(languageKey: 'msgQuestion'), $faqConfig->getTitle()),
-    'metaDescription' => sprintf(Translation::get(languageKey: 'msgQuestionMetaDesc'), $faqConfig->getTitle()),
-    'msgMatchingQuestions' => Translation::get(languageKey: 'msgMatchingQuestions'),
-    'msgFinishSubmission' => Translation::get(languageKey: 'msgFinishSubmission'),
+    'title' => sprintf('%s - %s', Translation::get(key: 'msgQuestion'), $faqConfig->getTitle()),
+    'metaDescription' => sprintf(Translation::get(key: 'msgQuestionMetaDesc'), $faqConfig->getTitle()),
+    'msgMatchingQuestions' => Translation::get(key: 'msgMatchingQuestions'),
+    'msgFinishSubmission' => Translation::get(key: 'msgFinishSubmission'),
     'lang' => $Language->getLanguage(),
     'defaultContentMail' => ($user->getUserId() > 0) ? $user->getUserData('email') : '',
     'defaultContentName' => ($user->getUserId() > 0) ? $user->getUserData('display_name') : '',
     'selectedCategory' => $categoryId,
     'categories' => $category->getCategoryTree(),
     'captchaFieldset' =>
-        $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get(languageKey: 'msgCaptcha'), $user->isLoggedIn()),
-    'msgNewContentSubmit' => Translation::get(languageKey: 'msgNewContentSubmit'),
+        $captchaHelper->renderCaptcha($captcha, 'ask', Translation::get(key: 'msgCaptcha'), $user->isLoggedIn()),
+    'msgNewContentSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'noCategories' => $categories === [],
-    'msgFormDisabledDueToMissingCategories' => Translation::get(languageKey: 'msgFormDisabledDueToMissingCategories')
+    'msgFormDisabledDueToMissingCategories' => Translation::get(key: 'msgFormDisabledDueToMissingCategories')
 ];
 
 // Collect data for displaying form

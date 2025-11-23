@@ -58,19 +58,17 @@ final class VotingController extends AbstractController
             }
 
             return $this->json([
-                'success' => Translation::get(languageKey: 'msgVoteThanks'),
+                'success' => Translation::get(key: 'msgVoteThanks'),
                 'rating' => $rating->get($faqId),
             ], Response::HTTP_OK);
         }
 
         if (!$rating->check($faqId, $userIp)) {
             $session->userTracking('error_save_voting', $faqId);
-            return $this->json(['error' => Translation::get(
-                languageKey: 'err_VoteTooMuch',
-            )], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => Translation::get(key: 'err_VoteTooMuch')], Response::HTTP_BAD_REQUEST);
         }
 
         $session->userTracking('error_save_voting', $faqId);
-        return $this->json(['error' => Translation::get(languageKey: 'err_noVote')], Response::HTTP_BAD_REQUEST);
+        return $this->json(['error' => Translation::get(key: 'err_noVote')], Response::HTTP_BAD_REQUEST);
     }
 }

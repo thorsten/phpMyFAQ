@@ -64,10 +64,10 @@ readonly class Notification
         if ($this->configuration->get(item: 'main.enableNotifications')) {
             $this->mail->addTo($email, $userName);
             $this->mail->subject =
-                $this->configuration->getTitle() . ' - ' . Translation::get(languageKey: 'msgQuestionAnswered');
+                $this->configuration->getTitle() . ' - ' . Translation::get(key: 'msgQuestionAnswered');
             $this->mail->message = sprintf(
                 '%s' . "\n\r" . '%s',
-                sprintf(Translation::get(languageKey: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
+                sprintf(Translation::get(key: 'msgMessageQuestionAnswered'), $this->configuration->getTitle()),
                 $url,
             );
             $this->mail->send();
@@ -108,14 +108,14 @@ readonly class Notification
             $link->setTitle($this->faq->getQuestion($faqEntity->getId()));
 
             $this->mail->message =
-                html_entity_decode((string) Translation::get(languageKey: 'msgMailCheck'))
+                html_entity_decode((string) Translation::get(key: 'msgMailCheck'))
                 . '<p><strong>'
-                . Translation::get(languageKey: 'msgAskYourQuestion')
+                . Translation::get(key: 'msgAskYourQuestion')
                 . ':</strong> '
                 . $this->faq->getQuestion($faqEntity->getId())
                 . '</p>'
                 . '<p><strong>'
-                . Translation::get(languageKey: 'msgNewContentArticle')
+                . Translation::get(key: 'msgNewContentArticle')
                 . ':</strong> '
                 . $this->faq->faqRecord['content']
                 . '</p>'
@@ -166,15 +166,15 @@ readonly class Notification
         $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s:<br>%s';
         $commentMail = sprintf(
             $format,
-            Translation::get(languageKey: 'ad_stat_report_owner'),
+            Translation::get(key: 'ad_stat_report_owner'),
             $comment->getUsername(),
             $comment->getEmail(),
             $comment->getEmail(),
-            Translation::get(languageKey: 'msgQuestion'),
+            Translation::get(key: 'msgQuestion'),
             $title,
-            Translation::get(languageKey: 'ad_news_link_url'),
+            Translation::get(key: 'ad_news_link_url'),
             $urlToContent,
-            Translation::get(languageKey: 'msgYourComment'),
+            Translation::get(key: 'msgYourComment'),
             strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
 
@@ -229,13 +229,13 @@ readonly class Notification
         $format = '%s: %s, <a href="mailto:%s">%s</a><br>%s: %s<br>%s: %s<br><br>%s';
         $commentMail = sprintf(
             $format,
-            Translation::get(languageKey: 'ad_stat_report_owner'),
+            Translation::get(key: 'ad_stat_report_owner'),
             $comment->getUsername(),
             $comment->getEmail(),
             $comment->getEmail(),
-            Translation::get(languageKey: 'msgYourComment'),
+            Translation::get(key: 'msgYourComment'),
             $title,
-            Translation::get(languageKey: 'ad_news_link_url'),
+            Translation::get(key: 'ad_news_link_url'),
             $urlToContent,
             strip_tags(wordwrap($comment->getComment(), width: 72)),
         );
@@ -256,12 +256,12 @@ readonly class Notification
         $mailText = '%s<br><br>User: %s, %s<br>%s: %s<br><br>%s: %s<br><br>%s';
         $questionMail = sprintf(
             $mailText,
-            Translation::get(languageKey: 'msgNewQuestionAdded'),
+            Translation::get(key: 'msgNewQuestionAdded'),
             $questionEntity->getUsername(),
             $questionEntity->getEmail(),
-            Translation::get(languageKey: 'msgCategory'),
+            Translation::get(key: 'msgCategory'),
             $categories[$questionEntity->getCategoryId()]['name'],
-            Translation::get(languageKey: 'msgAskYourQuestion'),
+            Translation::get(key: 'msgAskYourQuestion'),
             wordwrap($questionEntity->getQuestion(), width: 72),
             $this->configuration->getDefaultUrl() . 'admin/',
         );
