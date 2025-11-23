@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Startpage category class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-04-01
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Category;
 

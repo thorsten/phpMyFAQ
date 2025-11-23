@@ -12,7 +12,7 @@
  * @copyright 2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2026-10-18
+ * @since     2025-10-18
  */
 
 declare(strict_types=1);
