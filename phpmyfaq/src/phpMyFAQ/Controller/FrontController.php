@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Front Controller for future use
  *
@@ -17,17 +15,19 @@ declare(strict_types=1);
  * @since     2024-06-16
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class FrontController extends AbstractController
+final class FrontController extends AbstractController
 {
     #[Route(path: '/{path}', name: 'front_controller', requirements: ['path' => '.+'])]
     public function handle(Request $request, string $path): Response
     {
-        return new Response('Handled by FrontController: ' . $path);
+        return new Response(content: 'Handled by FrontController: ' . $path);
     }
 }

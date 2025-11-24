@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The WebAuthn Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
@@ -32,11 +32,6 @@ use Twig\Error\LoaderError;
 
 final class WebAuthnController extends AbstractController
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * @throws Exception|LoaderError
      */
@@ -91,39 +86,49 @@ final class WebAuthnController extends AbstractController
             ],
         ];
 
-        return $this->render('/webauthn.twig', [
-            'isMaintenanceMode' => $this->configuration->get(item: 'main.maintenanceMode'),
-            'isCompletelySecured' => $this->configuration->get(item: 'security.enableLoginOnly'),
-            'isDebugEnabled' => Environment::isDebugMode(),
-            'richSnippetsEnabled' => $this->configuration->get(item: 'seo.enableRichSnippets'),
-            'tplSetName' => TwigWrapper::getTemplateSetName(),
-            'msgLoginUser' => Translation::get(key: 'msgLoginUser'),
-            'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
-            'title' => Translation::get(key: 'msgLoginUser'),
-            'baseHref' => $system->getSystemUri($this->configuration),
-            'customCss' => $this->configuration->getCustomCss(),
-            'version' => $this->configuration->getVersion(),
-            'header' => str_replace('"', '', $this->configuration->getTitle()),
-            'metaPublisher' => $this->configuration->get(item: 'main.metaPublisher'),
-            'metaLanguage' => Translation::get(key: 'metaLanguage'),
-            'phpmyfaqVersion' => $this->configuration->getVersion(),
-            'stylesheet' => Translation::get(key: 'direction') == 'rtl' ? 'style.rtl' : 'style',
-            'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
-            'dir' => Translation::get(key: 'direction'),
-            'searchBox' => Translation::get(key: 'msgSearch'),
-            'faqHome' => $this->configuration->getDefaultUrl(),
-            'topNavigation' => $topNavigation,
-            'footerNavigation' => $footerNavigation,
-            'languageBox' => Translation::get(key: 'msgLanguageSubmit'),
-            'switchLanguages' => LanguageHelper::renderSelectLanguage($this->configuration->getDefaultLanguage(), true),
-            'copyright' => System::getPoweredByString(true),
-            'isUserRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
-            'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
-            'isPrivacyLinkEnabled' => $this->configuration->get(item: 'layout.enablePrivacyLink'),
-            'urlPrivacyLink' => $this->configuration->get(item: 'main.privacyURL'),
-            'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
-            'isCookieConsentEnabled' => $this->configuration->get(item: 'layout.enableCookieConsent'),
-            'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
-        ]);
+        return $this->render(
+            file: '/webauthn.twig',
+            context: [
+                'isMaintenanceMode' => $this->configuration->get(item: 'main.maintenanceMode'),
+                'isCompletelySecured' => $this->configuration->get(item: 'security.enableLoginOnly'),
+                'isDebugEnabled' => Environment::isDebugMode(),
+                'richSnippetsEnabled' => $this->configuration->get(item: 'seo.enableRichSnippets'),
+                'tplSetName' => TwigWrapper::getTemplateSetName(),
+                'msgLoginUser' => Translation::get(key: 'msgLoginUser'),
+                'isUserLoggedIn' => $this->currentUser->isLoggedIn(),
+                'title' => Translation::get(key: 'msgLoginUser'),
+                'baseHref' => $system->getSystemUri($this->configuration),
+                'customCss' => $this->configuration->getCustomCss(),
+                'version' => $this->configuration->getVersion(),
+                'header' => str_replace(
+                    search: '"',
+                    replace: '',
+                    subject: $this->configuration->getTitle(),
+                ),
+                'metaPublisher' => $this->configuration->get(item: 'main.metaPublisher'),
+                'metaLanguage' => Translation::get(key: 'metaLanguage'),
+                'phpmyfaqVersion' => $this->configuration->getVersion(),
+                'stylesheet' => Translation::get(key: 'direction') === 'rtl' ? 'style.rtl' : 'style',
+                'currentPageUrl' => $request->getSchemeAndHttpHost() . $request->getRequestUri(),
+                'dir' => Translation::get(key: 'direction'),
+                'searchBox' => Translation::get(key: 'msgSearch'),
+                'faqHome' => $this->configuration->getDefaultUrl(),
+                'topNavigation' => $topNavigation,
+                'footerNavigation' => $footerNavigation,
+                'languageBox' => Translation::get(key: 'msgLanguageSubmit'),
+                'switchLanguages' => LanguageHelper::renderSelectLanguage(
+                    $this->configuration->getDefaultLanguage(),
+                    submitOnChange: true,
+                ),
+                'copyright' => System::getPoweredByString(),
+                'isUserRegistrationEnabled' => $this->configuration->get(item: 'security.enableRegistration'),
+                'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
+                'isPrivacyLinkEnabled' => $this->configuration->get(item: 'layout.enablePrivacyLink'),
+                'urlPrivacyLink' => $this->configuration->get(item: 'main.privacyURL'),
+                'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
+                'isCookieConsentEnabled' => $this->configuration->get(item: 'layout.enableCookieConsent'),
+                'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
+            ],
+        );
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Abstract Controller for phpMyFAQ
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-24
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
@@ -146,7 +146,7 @@ abstract class AbstractController
     {
         $request = Request::createFromGlobals();
         if ($this->configuration->get(item: 'api.apiClientToken') !== $request->headers->get(key: 'x-pmf-token')) {
-            throw new UnauthorizedHttpException('"x-pmf-token" is not valid.');
+            throw new UnauthorizedHttpException(challenge: '"x-pmf-token" is not valid.');
         }
     }
 
@@ -156,7 +156,7 @@ abstract class AbstractController
     protected function isSecured(): void
     {
         if (!$this->currentUser->isLoggedIn() && $this->configuration->get(item: 'security.enableLoginOnly')) {
-            throw new UnauthorizedHttpException('You are not allowed to view this content.');
+            throw new UnauthorizedHttpException(challenge: 'You are not allowed to view this content.');
         }
     }
 
@@ -231,12 +231,11 @@ abstract class AbstractController
         $captcha = Captcha::getInstance($this->configuration);
         $captcha->setUserIsLoggedIn($this->currentUser->isLoggedIn());
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
+        $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->configuration->get(item: 'security.enableGoogleReCaptchaV2')) {
             $code = Filter::filterVar($data->{'g-recaptcha-response'} ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else {
-            $code = Filter::filterVar($data->captcha ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
         }
 
         return $captcha->checkCaptchaCode($code);
@@ -262,7 +261,7 @@ abstract class AbstractController
         $containerBuilder = new ContainerBuilder();
         $phpFileLoader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__));
         try {
-            $phpFileLoader->load('../../services.php');
+            $phpFileLoader->load(resource: '../../services.php');
         } catch (\Exception $exception) {
             echo $exception->getMessage();
         }
