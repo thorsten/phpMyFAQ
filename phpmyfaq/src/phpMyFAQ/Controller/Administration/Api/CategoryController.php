@@ -60,28 +60,28 @@ final class CategoryController extends AbstractController
         $categoryRelation = new Relation($this->configuration, $category);
 
         $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
-        $categoryImage->setFileName($category->getCategoryData($data->categoryId)->getImage());
+        $categoryImage->setFileName($category->getCategoryData((int) $data->categoryId)->getImage());
 
         $categoryOrder = $this->container->get(id: 'phpmyfaq.category.order');
-        $categoryOrder->remove($data->categoryId);
+        $categoryOrder->remove((int) $data->categoryId);
 
         $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
         if (
             (
-                is_countable($category->getCategoryLanguagesTranslated($data->categoryId))
-                    ? count($category->getCategoryLanguagesTranslated($data->categoryId))
+                is_countable($category->getCategoryLanguagesTranslated((int) $data->categoryId))
+                    ? count($category->getCategoryLanguagesTranslated((int) $data->categoryId))
                     : 0
             ) === 1
         ) {
-            $categoryPermission->delete(Permission::USER, [$data->categoryId]);
-            $categoryPermission->delete(Permission::GROUP, [$data->categoryId]);
+            $categoryPermission->delete(Permission::USER, [(int) $data->categoryId]);
+            $categoryPermission->delete(Permission::GROUP, [(int) $data->categoryId]);
             $categoryImage->delete();
         }
 
         if (
-            $category->delete($data->categoryId, $data->language)
-            && $categoryRelation->delete($data->categoryId, $data->language)
+            $category->delete((int) $data->categoryId, $data->language)
+            && $categoryRelation->delete((int) $data->categoryId, $data->language)
         ) {
             return $this->json(['success' => Translation::get(key: 'ad_categ_deleted')], Response::HTTP_OK);
         }

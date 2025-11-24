@@ -223,12 +223,12 @@ final class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
-            $permissions += Filter::filterArray([
-                'restricted_groups' => [
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                ],
-            ]);
+            $restrictedGroups = $request->get('restricted_groups');
+            $permissions += [
+                'restricted_groups' => is_array($restrictedGroups)
+                    ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)
+                    : [],
+            ];
         }
 
         $templateVars = [
@@ -601,12 +601,12 @@ final class CategoryController extends AbstractAdministrationController
                 ],
             ];
         } else {
-            $permissions += Filter::filterArray([
-                'restricted_groups' => [
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                ],
-            ]);
+            $restrictedGroups = $request->get('restricted_groups');
+            $permissions += [
+                'restricted_groups' => is_array($restrictedGroups)
+                    ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)
+                    : [],
+            ];
         }
 
         $templateVars = [

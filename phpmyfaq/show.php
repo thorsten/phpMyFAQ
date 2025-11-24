@@ -45,11 +45,6 @@ if ($selectedCategoryId === 0) {
     $selectedCategoryId = null;
 }
 
-if (is_null($selectedCategoryId)) {
-    $response = new Response();
-    $response->setStatusCode(Response::HTTP_NOT_FOUND);
-}
-
 $categoryHelper = new CategoryHelper();
 $categoryHelper->setPlurals(new Plurals());
 
@@ -132,7 +127,9 @@ if (!is_null($selectedCategoryId)) {
     $selectedCategoryId = 0;
     $faqSession->userTracking('show_all_categories', 0);
 
-    $categoryHelper->setConfiguration($faqConfig)->setCategory($category);
+    $categoryHelper
+        ->setConfiguration($faqConfig)
+        ->setCategory($category);
 
     $categoryHeader = Translation::get(key: 'msgFullCategories');
 

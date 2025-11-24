@@ -421,8 +421,6 @@ class Faq
 
             $output .= implode("\n", $renderedItems);
             $output .= '</ul>';
-        } else {
-            return false;
         }
 
         if ($pages > 1) {
