@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Question & Smart Answer Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-03
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -53,7 +53,7 @@ final class QuestionController extends AbstractController
 
         $categories = $category->getAllCategories();
 
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
         $email = trim((string) Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL));
@@ -103,7 +103,7 @@ final class QuestionController extends AbstractController
 
                 $searchResult = array_merge(...array_map(static fn($word) => $faqSearch->search(
                     $word,
-                    false,
+                    allLanguages: false,
                 ), array_filter($cleanQuestion)));
 
                 $searchResultSet->reviewResultSet($searchResult);

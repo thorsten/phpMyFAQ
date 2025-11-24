@@ -50,14 +50,6 @@ class GoogleRecaptcha implements CaptchaInterface
         return $response['success'] === true;
     }
 
-    /**
-     * Setter for session id.
-     */
-    public function setSessionId(string $sessionId): GoogleRecaptcha
-    {
-        return $this;
-    }
-
     public function isUserIsLoggedIn(): bool
     {
         return $this->userIsLoggedIn;

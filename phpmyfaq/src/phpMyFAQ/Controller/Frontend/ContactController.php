@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Contact Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-09
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -35,6 +35,8 @@ final class ContactController extends AbstractController
     /**
      * @throws Exception
      * @throws \JsonException
+     * @throws \Exception
+     *
      */
     #[Route(path: 'api/contact', methods: ['POST'])]
     public function create(Request $request): JsonResponse
@@ -54,7 +56,7 @@ final class ContactController extends AbstractController
         if (
             $author !== ''
             && $author !== '0'
-            && !empty($email)
+            && $email !== ''
             && $question !== ''
             && $question !== '0'
             && $stopWords->checkBannedWord($question)
@@ -73,7 +75,10 @@ final class ContactController extends AbstractController
                 $mailer->setReplyTo($email, $author);
                 $mailer->addTo($this->configuration->getAdminEmail());
                 $mailer->setReplyTo($this->configuration->getNoReplyEmail());
-                $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $this->configuration);
+                $mailer->subject = Utils::resolveMarkers(
+                    text: 'Feedback: %sitename%',
+                    configuration: $this->configuration,
+                );
                 $mailer->message = $question;
                 $mailer->send();
                 unset($mailer);
@@ -82,8 +87,8 @@ final class ContactController extends AbstractController
             } catch (Exception|TransportExceptionInterface $e) {
                 return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
             }
-        } else {
-            return $this->json(['error' => Translation::get(key: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
         }
+
+        return $this->json(['error' => Translation::get(key: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
     }
 }

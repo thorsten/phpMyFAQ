@@ -45,7 +45,6 @@ $faqSession = $container->get('phpmyfaq.user.session');
 $faqSession->setCurrentUser($user);
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $comment = new Comments($faqConfig);
 

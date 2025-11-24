@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Autocomplete Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-07-29
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -37,14 +37,14 @@ final class AutoCompleteController extends AbstractController
     #[Route(path: 'api/autocomplete')]
     public function search(Request $request): JsonResponse
     {
-        $searchString = Filter::filterVar($request->query->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->query->get(key: 'search'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
         $category = new Category($this->configuration, $currentGroups);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
-        $category->transform(0);
+        $category->transform(categoryId: 0);
         $category->buildCategoryTree();
 
         $faqPermission = $this->container->get(id: 'phpmyfaq.faq.permission');

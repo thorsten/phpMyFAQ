@@ -102,44 +102,12 @@ class GoogleRecaptchaTest extends TestCase
     }
 
     /**
-     * Test setSessionId method
-     */
-    public function testSetSessionId(): void
-    {
-        $sessionId = 'test-session-123';
-        $result = $this->googleRecaptcha->setSessionId($sessionId);
-
-        $this->assertInstanceOf(GoogleRecaptcha::class, $result); // Fluent interface
-        // Note: The method currently doesn't store the session ID, just returns $this
-    }
-
-    /**
-     * Test setSessionId with various session ID formats
-     */
-    public function testSetSessionIdWithVariousFormats(): void
-    {
-        $sessionIds = [
-            'simple-session',
-            'session_with_underscores',
-            'session123456',
-            'very-long-session-id-with-many-characters-and-hyphens',
-            ''
-        ];
-
-        foreach ($sessionIds as $sessionId) {
-            $result = $this->googleRecaptcha->setSessionId($sessionId);
-            $this->assertInstanceOf(GoogleRecaptcha::class, $result);
-        }
-    }
-
-    /**
      * Test fluent interface chaining
      */
     public function testFluentInterface(): void
     {
         $result = $this->googleRecaptcha
             ->setUserIsLoggedIn(true)
-            ->setSessionId('test-session')
             ->setUserIsLoggedIn(false);
 
         $this->assertInstanceOf(GoogleRecaptcha::class, $result);
@@ -175,11 +143,11 @@ class GoogleRecaptchaTest extends TestCase
 
         $this->googleRecaptcha->setUserIsLoggedIn(false);
 
-        // This will attempt to make HTTP request and fail, but we verify config is called
+        // This will attempt to make an HTTP request and fail, but we verify config is called
         try {
             $this->googleRecaptcha->checkCaptchaCode('test-token');
         } catch (\Error $e) {
-            // Expected - file_get_contents will fail in test environment
+            // Expected - file_get_contents will fail in the test environment
             $this->assertStringContainsString('file_get_contents', $e->getMessage());
         }
     }
@@ -214,20 +182,6 @@ class GoogleRecaptchaTest extends TestCase
         // Verify independence
         $this->assertTrue($recaptcha1->isUserIsLoggedIn());
         $this->assertFalse($recaptcha2->isUserIsLoggedIn());
-    }
-
-    /**
-     * Test session ID method behavior
-     */
-    public function testSessionIdMethodBehavior(): void
-    {
-        // Test that setSessionId always returns the same instance
-        $instance1 = $this->googleRecaptcha->setSessionId('session1');
-        $instance2 = $this->googleRecaptcha->setSessionId('session2');
-
-        $this->assertSame($this->googleRecaptcha, $instance1);
-        $this->assertSame($this->googleRecaptcha, $instance2);
-        $this->assertSame($instance1, $instance2);
     }
 
     /**
