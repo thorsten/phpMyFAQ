@@ -113,7 +113,7 @@ class UpgradeTest extends TestCase
     {
         $this->upgrade->setIsNightly(true);
 
-        $expectedPath = sprintf(Upgrade::GITHUB_PATH, date(format: 'Y-m-d', timestamp: strtotime('-1 days')));
+        $expectedPath = sprintf(Upgrade::GITHUB_PATH, date(format: 'Y-m-d'));
         $this->assertEquals($expectedPath, $this->upgrade->getPath());
     }
 

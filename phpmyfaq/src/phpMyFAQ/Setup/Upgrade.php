@@ -72,53 +72,53 @@ class Upgrade extends AbstractSetup
     public function checkFilesystem(): bool
     {
         if (!is_dir($this->upgradeDirectory) && !mkdir($this->upgradeDirectory)) {
-            throw new Exception('The folder ' . $this->upgradeDirectory . ' is missing.');
+            throw new Exception(message: 'The folder ' . $this->upgradeDirectory . ' is missing.');
         }
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/attachments')) {
-            throw new Exception('The folder /content/user/attachments is missing.');
+            throw new Exception(message: 'The folder /content/user/attachments is missing.');
         }
 
         if (!is_dir(PMF_CONTENT_DIR . '/user/images')) {
-            throw new Exception('The folder /content/user/images is missing.');
+            throw new Exception(message: 'The folder /content/user/images is missing.');
         }
 
         if (!is_dir(PMF_CONTENT_DIR . '/core/data')) {
-            throw new Exception('The folder /content/core/data is missing.');
+            throw new Exception(message: 'The folder /content/core/data is missing.');
         }
 
         if (!is_dir(PMF_ROOT_DIR . '/assets/templates')) {
-            throw new Exception('The folder /phpmyfaq/assets/templates is missing.');
+            throw new Exception(message: 'The folder /phpmyfaq/assets/templates is missing.');
         }
 
         if (
-            is_file(PMF_CONTENT_DIR . '/core/config/constants.php')
-            && is_file(PMF_CONTENT_DIR . '/core/config/database.php')
+            !is_file(PMF_CONTENT_DIR . '/core/config/constants.php')
+            || !is_file(PMF_CONTENT_DIR . '/core/config/database.php')
         ) {
-            if (
-                $this->configuration->isElasticsearchActive()
-                && !is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')
-            ) {
-                throw new Exception('The file /content/core/config/elasticsearch.php is missing.');
-            }
-
-            if ($this->configuration->isLdapActive() && !is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
-                throw new Exception('The file /content/core/config/ldap.php is missing.');
-            }
-
-            if (
-                $this->configuration->isSignInWithMicrosoftActive()
-                && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
-            ) {
-                throw new Exception('The file /content/core/config/azure.php is missing.');
-            }
-
-            return true;
+            throw new Exception(
+                message: 'The files /content/core/config/constant.php and /content/core/config/database.php are missing.',
+            );
         }
 
-        throw new Exception(
-            'The files /content/core/config/constant.php and /content/core/config/database.php are missing.',
-        );
+        if (
+            $this->configuration->isElasticsearchActive()
+            && !is_file(PMF_CONTENT_DIR . '/core/config/elasticsearch.php')
+        ) {
+            throw new Exception(message: 'The file /content/core/config/elasticsearch.php is missing.');
+        }
+
+        if ($this->configuration->isLdapActive() && !is_file(PMF_CONTENT_DIR . '/core/config/ldap.php')) {
+            throw new Exception(message: 'The file /content/core/config/ldap.php is missing.');
+        }
+
+        if (
+            $this->configuration->isSignInWithMicrosoftActive()
+            && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
+        ) {
+            throw new Exception(message: 'The file /content/core/config/azure.php is missing.');
+        }
+
+        return true;
     }
 
     /**
@@ -136,10 +136,15 @@ class Upgrade extends AbstractSetup
 
         for ($i = 0; $i < $attempts; $i++) {
             try {
-                $response = $this->httpClient->request('GET', $url);
+                $response = $this->httpClient->request(
+                    method: 'GET',
+                    url: $url,
+                );
 
                 if ($response->getStatusCode() !== 200) {
-                    throw new Exception('Cannot download package (HTTP Status: ' . $response->getStatusCode() . ').');
+                    throw new Exception(message: 'Cannot download package (HTTP Status: '
+                    . $response->getStatusCode()
+                    . ').');
                 }
 
                 $package = $response->getContent();
@@ -159,7 +164,7 @@ class Upgrade extends AbstractSetup
                 }
 
                 // Short sleep to mitigate transient network issues
-                usleep(250000); // 250ms
+                usleep(microseconds: 250000); // 250ms
             }
         }
 
@@ -176,10 +181,18 @@ class Upgrade extends AbstractSetup
      */
     public function verifyPackage(string $path, string $version): bool
     {
-        $response = $this->httpClient->request('GET', DownloadHostType::PHPMYFAQ->value . 'info/' . $version);
+        $response = $this->httpClient->request(
+            method: 'GET',
+            url: DownloadHostType::PHPMYFAQ->value . 'info/' . $version,
+        );
 
         try {
-            $responseContent = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $responseContent = json_decode(
+                $response->getContent(),
+                associative: true,
+                depth: 512,
+                flags: JSON_THROW_ON_ERROR,
+            );
 
             return md5_file($path) === $responseContent['zip']['md5'];
         } catch (
@@ -202,22 +215,25 @@ class Upgrade extends AbstractSetup
         $zipArchive = new ZipArchive();
 
         if (!is_file($path)) {
-            throw new Exception('Given path to download package is not valid.');
+            throw new Exception(message: 'Given path to download package is not valid.');
         }
 
         $zipFile = $zipArchive->open($path);
 
-        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback): void {
-            $progress = sprintf('%d%%', $rate * 100);
-            $progressCallback($progress);
-        });
+        $zipArchive->registerProgressCallback(
+            rate: 0.05,
+            callback: static function ($rate) use ($progressCallback): void {
+                $progress = (int) ($rate * 100) . '%';
+                $progressCallback($progress);
+            },
+        );
 
         if ($zipFile) {
             $zipArchive->extractTo($this->upgradeDirectory . '/new/');
             return $zipArchive->close();
         }
 
-        throw new Exception('Cannot open zipped download package.');
+        throw new Exception(message: 'Cannot open zipped download package.');
     }
 
     /**
@@ -231,12 +247,12 @@ class Upgrade extends AbstractSetup
         $outputZipFile = $this->upgradeDirectory . DIRECTORY_SEPARATOR . $backupName;
 
         if (file_exists($outputZipFile)) {
-            throw new Exception('Backup file already exists.');
+            throw new Exception(message: 'Backup file already exists.');
         }
 
         $zipArchive = new ZipArchive();
         if ($zipArchive->open($outputZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            throw new Exception('Cannot create backup file.');
+            throw new Exception(message: 'Cannot create backup file.');
         }
 
         $sourceDir = PMF_ROOT_DIR;
@@ -245,10 +261,13 @@ class Upgrade extends AbstractSetup
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        $zipArchive->registerProgressCallback(0.05, static function ($rate) use ($progressCallback): void {
-            $progress = sprintf('%d%%', $rate * 100);
-            $progressCallback($progress);
-        });
+        $zipArchive->registerProgressCallback(
+            rate: 0.05,
+            callback: static function ($rate) use ($progressCallback): void {
+                $progress = (int) ($rate * 100) . '%';
+                $progressCallback($progress);
+            },
+        );
 
         foreach ($files as $file) {
             $file = $file->getRealPath();
@@ -256,11 +275,15 @@ class Upgrade extends AbstractSetup
                 if (is_dir($file)) {
                     $zipArchive->addEmptyDir(str_replace(
                         $sourceDir . DIRECTORY_SEPARATOR,
-                        '',
-                        $file . DIRECTORY_SEPARATOR,
+                        replace: '',
+                        subject: $file . DIRECTORY_SEPARATOR,
                     ));
                 } elseif (is_file($file)) {
-                    $zipArchive->addFile($file, str_replace($sourceDir . DIRECTORY_SEPARATOR, '', $file));
+                    $zipArchive->addFile($file, str_replace(
+                        $sourceDir . DIRECTORY_SEPARATOR,
+                        replace: '',
+                        subject: $file,
+                    ));
                 }
             }
         }
@@ -288,22 +311,28 @@ class Upgrade extends AbstractSetup
 
         foreach ($sourceDirIterator as $item) {
             $source = $item->getRealPath();
-            $relativePath = str_replace($sourceDir, '', $source);
+            $relativePath = str_replace($sourceDir, replace: '', subject: $source);
             $destination = $destinationDir . DIRECTORY_SEPARATOR . $relativePath;
 
             if ($item->isDir()) {
                 if (!is_dir($destination)) {
-                    mkdir($destination, 0755, true);
+                    mkdir($destination, permissions: 0o755, recursive: true);
                 }
             } else {
                 copy($source, $destination);
             }
 
             ++$currentFile;
-            if (($currentFile % 10) === 0) {
-                $progress = $totalFiles > 0 ? sprintf('%d%%', ($currentFile / $totalFiles) * 100) : 100;
-                call_user_func($progressCallback, $progress);
+            if (($currentFile % 10) !== 0) {
+                continue;
             }
+
+            $progress = 100;
+            if ($totalFiles > 0) {
+                $progress = (int) (($currentFile / $totalFiles) * 100) . '%';
+            }
+
+            $progressCallback($progress);
         }
 
         return true;
@@ -350,10 +379,7 @@ class Upgrade extends AbstractSetup
     public function getPath(): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_PATH, date(
-                format: 'Y-m-d',
-                timestamp: strtotime('-1 days'),
-            ));
+            return sprintf(self::GITHUB_PATH, date(format: 'Y-m-d'));
         }
 
         return '';
@@ -365,10 +391,7 @@ class Upgrade extends AbstractSetup
     public function getFilename(string $version): string
     {
         if ($this->isNightly()) {
-            return sprintf(self::GITHUB_FILENAME, date(
-                format: 'Y-m-d',
-                timestamp: strtotime('-1 days'),
-            ));
+            return sprintf(self::GITHUB_FILENAME, date(format: 'Y-m-d'));
         }
 
         return sprintf(self::PHPMYFAQ_FILENAME, $version);
