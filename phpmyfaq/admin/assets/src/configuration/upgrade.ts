@@ -14,7 +14,7 @@
  * @since     2023-07-11
  */
 
-import { addElement } from '../../../../assets/src/utils';
+import { addElement, versionCompare } from '../../../../assets/src/utils';
 import {
   activateMaintenanceMode,
   checkForUpdates,
@@ -157,27 +157,49 @@ export const handleCheckForUpdates = (): void => {
       try {
         const response = (await checkForUpdates()) as ResponseData;
         const dateLastChecked = document.getElementById('dateLastChecked') as HTMLElement;
+        const versionCurrent = document.getElementById('versionCurrent') as HTMLElement;
         const versionLastChecked = document.getElementById('versionLastChecked') as HTMLElement;
         const card = document.getElementById('pmf-update-step-check-versions') as HTMLElement;
 
-        if (dateLastChecked) {
-          const date = new Date(response.dateLastChecked!);
+        if (dateLastChecked && response.dateLastChecked) {
+          const date = new Date(response.dateLastChecked);
           dateLastChecked.innerText = `${date.toLocaleString()}`;
         }
 
-        if (versionLastChecked) {
-          versionLastChecked.innerText = response.version!;
-        }
+        if (versionCurrent && versionLastChecked && response.version) {
+          const installedVersion = versionCurrent.innerText.trim();
+          const availableVersion = response.version.trim();
 
-        const result = document.getElementById('result-check-versions') as HTMLElement;
-        if (result) {
-          card.classList.add('text-bg-success');
-          result.replaceWith(addElement('p', { innerText: response.message! }));
+          versionLastChecked.innerText = availableVersion;
+
+          const result = document.getElementById('result-check-versions') as HTMLElement | null;
+          if (result) {
+            card.classList.remove('text-bg-success', 'text-bg-warning', 'text-bg-danger');
+
+            const isNewer = versionCompare(availableVersion, installedVersion, '>=');
+
+            if (isNewer) {
+              card.classList.add('text-bg-success');
+            } else {
+              card.classList.add('text-bg-danger');
+              downloadButton.disabled = true;
+            }
+
+            result.replaceWith(addElement('p', { innerText: response.message! }));
+            spinner.classList.add('d-none');
+            checkUpdateButton.disabled = true;
+          }
+        } else {
+          const result = document.getElementById('result-check-versions') as HTMLElement | null;
+          if (result && response.message) {
+            card.classList.add('text-bg-danger');
+            result.replaceWith(addElement('p', { innerText: response.message }));
+          }
           spinner.classList.add('d-none');
-          checkUpdateButton.disabled = true;
         }
       } catch (error) {
         console.error(error);
+        spinner.classList.add('d-none');
       }
     });
   }

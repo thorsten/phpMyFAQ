@@ -107,7 +107,7 @@
           <p class="card-text">
             {{ 'msgExtractPackage' | translate }}
           </p>
-          <!-- Step 4: Extract downloaded package -->
+          <!-- Step 4: Extract the downloaded package -->
           <div>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <button type="button" class="btn btn-primary mb-2" id="pmf-button-extract-package">
@@ -130,7 +130,7 @@
           <p class="card-text">
             {{ 'msgExtractToFileSystem' | translate }}
           </p>
-          <!-- Step 5: Install downloaded package -->
+          <!-- Step 5: Install the downloaded package -->
           <div>
             <div class="d-grid gap-2 d-md-flex justify-content-between">
               <div>
@@ -189,18 +189,20 @@
         {% endif %}
         <output id="dateLastChecked">{{ lastCheck }}</output>
       </div>
-      <div>
-        {{ 'msgCurrentVersion' | translate }}
-        <output id="versionCurrent">{{ versionCurrent }}</output>
-      </div>
-      <div>
-        {{ 'msgLastVersionAvailable' | translate }}
-        <output id="versionLastChecked">n/a</output>
-      </div>
-      <div>
-        {{ 'msgReleaseEnvironment' | translate }}
-        <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
-      </div>
+      <dl>
+        <dt>{{ 'msgCurrentVersion' | translate }}</dt>
+        <dd>
+          <output id="versionCurrent">{{ versionCurrent }}</output>
+        </dd>
+        <dt>{{ 'msgLastVersionAvailable' | translate }}</dt>
+        <dd>
+          <output id="versionLastChecked">n/a</output>
+        </dd>
+        <dt>{{ 'msgReleaseEnvironment' | translate }}</dt>
+        <dd>
+          <output id="releaseEnvironment">{{ releaseEnvironment }}</output>
+        </dd>
+      </dl>
     </div>
   </div>
 {% endblock %}

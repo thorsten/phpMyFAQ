@@ -6,3 +6,4 @@ export * from './reading-time';
 export * from './tooltip';
 export * from './TranslationService';
 export * from './theme-switcher';
+export * from './version-compare';

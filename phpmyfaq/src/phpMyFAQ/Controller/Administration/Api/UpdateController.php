@@ -105,16 +105,27 @@ final class UpdateController extends AbstractController
             $versions = $this->container->get(id: 'phpmyfaq.admin.api')->getVersions();
             $this->configuration->set('upgrade.dateLastChecked', $dateLastChecked);
 
-            if (version_compare($versions['installed'], $versions[$branch], '<')) {
+            $installed = $versions['installed'];
+            $available = $versions[$branch];
+
+            if (version_compare($installed, $available, '<')) {
                 return $this->json([
-                    'version' => $versions[$branch],
-                    'message' => Translation::get(key: 'msgCurrentVersion') . $versions[$branch],
+                    'version' => $available,
+                    'message' => Translation::get(key: 'msgCurrentVersion') . $available,
                     'dateLastChecked' => $dateLastChecked,
                 ], Response::HTTP_OK);
             }
 
+            if ($branch !== 'nightly' && version_compare($installed, $available, '>')) {
+                return $this->json([
+                    'version' => $available,
+                    'message' => Translation::get(key: 'msgInstalledNewerThanAvailable'),
+                    'dateLastChecked' => $dateLastChecked,
+                ], Response::HTTP_CONFLICT);
+            }
+
             return $this->json([
-                'version' => $versions['installed'],
+                'version' => $installed,
                 'message' => Translation::get(key: 'versionIsUpToDate'),
                 'dateLastChecked' => $dateLastChecked,
             ], Response::HTTP_OK);
