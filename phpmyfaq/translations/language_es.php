@@ -21,7 +21,7 @@
 
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'es';
-$PMF_LANG['language'] = 'Spanish';
+$PMF_LANG['language'] = 'Español';
 $PMF_LANG['direction']= 'ltr';
 $PMF_LANG['nplurals'] = '2';
 
@@ -122,7 +122,7 @@ $PMF_LANG['msgMailCheck'] = "Hay una nueva entrada en la FAQ. ¡Por favor, compr
 $PMF_LANG['msgMailContact'] = "Tu mensaje ha sido enviado al administrador";
 
 // Mensajes de error
-$PMF_LANG['err_noDatabase'] = "!No hay conexión con la base de datos!";
+$PMF_LANG['err_noDatabase'] = "¡No hay conexión con la base de datos!";
 $PMF_LANG['err_noHeaders'] = "¡No se encontró ninguna categoría!";
 $PMF_LANG['msgErrorNoRecords'] = "Aún no hay FAQs.";
 $PMF_LANG['err_badID'] = "¡ID incorrecto!";
@@ -187,6 +187,7 @@ $PMF_LANG['ad_user_delete'] = 'Eliminar';
 $PMF_LANG['ad_user_add'] = 'Añadir usuario';
 $PMF_LANG['ad_user_profou'] = 'Perfil del usuario';
 $PMF_LANG['ad_user_name'] = 'Nombre';
+$PMF_LANG['ad_user_password'] = 'Contraseña';
 $PMF_LANG['ad_user_contraseña'] = 'Contraseña';
 $PMF_LANG['ad_user_confirm'] = 'Confirmar';
 $PMF_LANG['ad_user_del_1'] = '¿El usuario ';
@@ -304,6 +305,7 @@ $PMF_LANG['ad_passwd_fail'] = 'La contraseña anterior debe ser introducida corr
 // Adduser
 $PMF_LANG['ad_adus_adduser'] = 'Añadir usuario';
 $PMF_LANG['ad_adus_name'] = 'Nombre';
+$PMF_LANG['ad_adus_password'] = 'Contraseña';
 $PMF_LANG['ad_adus_contraseña'] = 'Contraseña';
 $PMF_LANG['ad_adus_add'] = 'Añadir';
 $PMF_LANG['ad_adus_suc'] = 'Usuario añadido correctamente.';
@@ -366,7 +368,7 @@ $PMF_LANG['msgAddAttachment'] = 'Adjuntar archivo';
 $PMF_LANG['ad_entryins_suc'] = 'Registro guardado con éxito.';
 $PMF_LANG['msgErrorOccurred'] = 'Ha ocurrido un error.';
 $PMF_LANG['ad_att_del'] = 'Eliminar';
-$PMF_LANG['ad_att_nope'] = 'Los archivos adjuntos sólo puden añadirse durante la edición.';
+$PMF_LANG['ad_att_nope'] = 'Los archivos adjuntos sólo pueden añadirse durante la edición.';
 $PMF_LANG['ad_att_delsuc'] = 'Adjunto eliminado correctamente.';
 $PMF_LANG['ad_att_delfail'] = 'Ha ocurrido un error al eliminar el archivo adjunto.';
 $PMF_LANG['msgAddFAQ'] = 'Crear FAQ';
@@ -390,12 +392,12 @@ $PMF_LANG['ad_csv_ok'] = 'Subir e importar archivo';
 $PMF_LANG['ad_csv_linklog'] = 'Backup de LOGs';
 $PMF_LANG['ad_csv_linkdat'] = 'Backup de datos';
 $PMF_LANG['ad_csv_head2'] = 'Importar backup';
-$PMF_LANG['ad_csv_no'] = 'Esto no parece un backup de phpmyfaq.';
+$PMF_LANG['ad_csv_no'] = 'Esto no parece una copia de seguridad de phpMyFAQ.';
 $PMF_LANG['ad_csv_prepare'] = 'Preparando consultas de la base de datos...';
 $PMF_LANG['ad_csv_process'] = 'Ejecutando consultas...';
 $PMF_LANG['ad_csv_of'] = 'de';
 $PMF_LANG['ad_csv_suc'] = 'fueron correctas.';
-$PMF_LANG['ad_csv_respaldo'] = 'Backup';
+$PMF_LANG['ad_csv_respaldo'] = 'Copia de seguridad';
 $PMF_LANG['ad_csv_rest'] = 'Restaurar un backup';
 
 // Añadido v0.8 - 25.05.2001 - Bastian - Admin
@@ -1414,5 +1416,46 @@ $PMF_LANG['msgImageTooLarge'] = 'La imagen es demasiado grande.';
 $PMF_LANG['msgNoImagesForUpload'] = 'No hay imágenes para subir.';
 $PMF_LANG['msgFetchingHashes'] = 'Obteniendo hashes de verificación de api.phpmyfaq.de...';
 $PMF_LANG['msgCheckHashes'] = 'Verificando hashes con los archivos de instalación...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Autenticación cancelada por el usuario.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activar contador de tiempo de espera de sesión de administrador', 'Predeterminado: habilitado'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Habilitar soporte OpenSearch', 'Estándar: deshabilitado'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Ventana de tiempo para búsquedas populares (días)', 'Estándar: 180 días'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'Configuración de OpenSearch';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Crear índice de búsqueda';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Eliminar índice de búsqueda';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Importación completa';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'El índice de búsqueda de OpenSearch se creó correctamente.';
+$PMF_LANG['ad_os_create_import_success'] = 'La importación de OpenSearch fue exitosa.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'El índice de búsqueda de OpenSearch se eliminó correctamente.';
+$PMF_LANG['permission::translate_faq'] = 'Traducir FAQs';
+
+// añadido v4.1.0-alpha.3 - 2025-08-02 por Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Escribe para buscar categorías';
+$PMF_LANG['msgLoadingText'] = 'Cargando...';
+$PMF_LANG['msgNoResultsText'] = 'No se encontraron resultados';
+$PMF_LANG['msgNoChoicesText'] = 'No hay opciones para elegir';
+$PMF_LANG['msgItemSelectText'] = 'Presione para seleccionar';
+$PMF_LANG['msgUniqueItemText'] = 'Solo se pueden agregar valores únicos';
+$PMF_LANG['msgCustomAddItemText'] = 'Solo se pueden agregar valores que coincidan con condiciones específicas';
+$PMF_LANG['msgDownloadYourData'] = 'Descargar tus datos';
+$PMF_LANG['msgDataExportDescription'] = 'Descarga un archivo ZIP que contiene tus datos de usuario almacenados.';
+$PMF_LANG['msgDownload'] = 'Descargar';
+$PMF_LANG['msgToggleTheme'] = 'Cambiar tema';
+
+// añadido v4.1.0-beta - 2025-10-31 por Thorsten
+$PMF_LANG['msgBackupLast'] = 'Fecha de la última copia de seguridad';
+$PMF_LANG['msgBackupNoneFound'] = 'No se encontraron copias de seguridad.';
+$PMF_LANG['msgBackupTooOld'] = 'La última copia de seguridad tiene más de 30 días.';
+$PMF_LANG['msgBackupRecent'] = 'La copia de seguridad actual es reciente.';
+$PMF_LANG['msgBackupGoTo'] = 'Ir a la página de copias de seguridad';
+$PMF_LANG['msgNewestUsers'] = 'Usuarios más recientes';
+$PMF_LANG['msgMemberSince'] = 'Miembro desde';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Usuarios registrados';
+$PMF_LANG['msgConfirmDeleteFAQ'] = '¿Realmente desea eliminar esta FAQ? Esta acción no se puede deshacer.';
+$PMF_LANG['msgTotalKeys'] = 'Número total de claves de traducción';
+$PMF_LANG['msgTranslatedKeys'] = 'Número de claves traducidas';
+$PMF_LANG['msgMissingKeys'] = 'Claves de traducción faltantes';
+$PMF_LANG['msgCompletionPercentage'] = 'Porcentaje de finalización';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'La versión instalada es más reciente que la última versión disponible.';
 
 return $PMF_LANG;
