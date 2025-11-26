@@ -32,6 +32,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental support for PHP 8.6 (Thorsten)
 - improved online update feature (Thorsten)
 - updated Spanish translation (Thorsten)
+- updated Polish translation (Thorsten)
 - updated Japanese translation (Kamo Tomoyuki)
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
