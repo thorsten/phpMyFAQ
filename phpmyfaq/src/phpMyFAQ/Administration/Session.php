@@ -77,14 +77,14 @@ readonly class Session
 
         if ($result) {
             $res = $this->configuration->getDb()->fetchObject($result);
-            $timestamp = $res->time;
+            $timestamp = (int) $res->time;
         }
 
         return $timestamp;
     }
 
     /**
-     * Returns all session from a date.
+     * Returns all sessions from a date.
      *
      * @param int $firstHour First hour
      * @param int $lastHour Last hour

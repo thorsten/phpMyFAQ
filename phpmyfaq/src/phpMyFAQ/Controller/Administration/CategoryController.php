@@ -570,7 +570,7 @@ final class CategoryController extends AbstractAdministrationController
         $categoryEntity
             ->setId($categoryId)
             ->setLang($categoryLang)
-            ->setParentId($parentId)
+            ->setParentId((int) $parentId)
             ->setName(Filter::filterVar($request->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
             ->setDescription(Filter::filterVar($request->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
             ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
