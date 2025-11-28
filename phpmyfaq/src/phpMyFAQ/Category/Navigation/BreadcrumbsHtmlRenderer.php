@@ -35,13 +35,10 @@ final class BreadcrumbsHtmlRenderer
     {
         $items = [];
         foreach ($segments as $index => $segment) {
-            $url = strtr(
-                string: '{base}index.php?action=show&cat={id}',
-                replace_pairs: [
-                    '{base}' => $configuration->getDefaultUrl(),
-                    '{id}' => (string) $segment['id'],
-                ],
-            );
+            $url = strtr('{base}index.php?action=show&cat={id}', [
+                '{base}' => $configuration->getDefaultUrl(),
+                '{id}' => (string) $segment['id'],
+            ]);
             $oLink = new Link($url, $configuration);
             $oLink->text = Strings::htmlentities($segment['name']);
             $oLink->setTitle(Strings::htmlentities($segment['name']));
@@ -49,21 +46,15 @@ final class BreadcrumbsHtmlRenderer
             if (0 === $index) {
                 $oLink->setRelation(rel: 'index');
             }
-            $items[] = sprintf(
-                format: '<li class="breadcrumb-item">%s</li>',
-                values: $oLink->toHtmlAnchor(),
-            );
+            $items[] = sprintf('<li class="breadcrumb-item">%s</li>', $oLink->toHtmlAnchor());
         }
 
-        return strtr(
-            string: '<ul class="{class}">{items}</ul>',
-            replace_pairs: [
-                '{class}' => $useCssClass,
-                '{items}' => implode(
-                    separator: '',
-                    array: $items,
-                ),
-            ],
-        );
+        return strtr('<ul class="{class}">{items}</ul>', [
+            '{class}' => $useCssClass,
+            '{items}' => implode(
+                separator: '',
+                array: $items,
+            ),
+        ]);
     }
 }
