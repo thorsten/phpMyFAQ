@@ -171,6 +171,7 @@ readonly class StatisticsHelper
         $dir = opendir(PMF_ROOT_DIR . '/content/core/data');
         $first = PHP_INT_MAX;
         $last = 0;
+
         while ($trackingFile = readdir($dir)) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006

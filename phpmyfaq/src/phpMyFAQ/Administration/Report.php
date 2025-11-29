@@ -150,11 +150,12 @@ readonly class Report
 
     /**
      * Sanitizes input to avoid CSV injection.
-     * @param string|int $value
+     * @param int|string $value
+     * @return string|int
      */
-    public static function sanitize($value): string
+    public static function sanitize(int|string $value): string|int
     {
-        if (preg_match('/[=\+\-\@\|]/', $value)) {
+        if (preg_match('/[=\+\-\@\|]/', (string) $value)) {
             return '"' . str_replace('"', '""', $value) . '"';
         }
 

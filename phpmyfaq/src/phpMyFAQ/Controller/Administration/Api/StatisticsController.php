@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Statistics Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-04-21
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
@@ -78,7 +78,8 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $month = Filter::filterVar($request->attributes->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $month = Filter::filterVar($request->getPayload()->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+
         if ($this->container->get(id: 'phpmyfaq.helper.statistics')->deleteTrackingFiles($month)) {
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
         }
