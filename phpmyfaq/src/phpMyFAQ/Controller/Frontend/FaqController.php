@@ -133,7 +133,7 @@ final class FaqController extends AbstractController
                 if ($this->configuration->get(item: 'records.enableDeleteQuestion')) {
                     $question->delete($openQuestionId);
                 } else { // adds this faq record id to the related open question
-                    $question->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
+                    $question->updateQuestionAnswer((int) $openQuestionId, (int) $recordId, (int) $categories[0]);
                 }
             }
 

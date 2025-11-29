@@ -56,7 +56,7 @@
         <select name="rubrik" class="form-control" id="rubrik" multiple="multiple" size="5" {{ id5_required }}>
           {% for cat in categories %}
             {% set indent = '...' | repeat(cat.indent) %}
-            <option value="{{ cat.id }}" {% if cat.id in categories %}selected{% endif %}>
+            <option value="{{ cat.id }}" {% if cat.id == selectedCategory %}selected{% endif %}>
               {{ indent }} {{ cat.name }}
             </option>
           {% endfor %}
