@@ -97,7 +97,7 @@ final class DashboardController extends AbstractAdministrationController
         }
 
         if ($this->currentUser->perm->hasPermission($userId, PermissionType::CONFIGURATION_EDIT->value)) {
-            $version = Filter::filterVar($request->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
+            $version = Filter::filterVar($request->attributes->get(key: 'param'), FILTER_SANITIZE_SPECIAL_CHARS);
             if (!$this->configuration->get(item: 'main.enableAutoUpdateHint') && $version === 'version') {
                 try {
                     $versions = $this->container->get(id: 'phpmyfaq.admin.api')->getVersions();

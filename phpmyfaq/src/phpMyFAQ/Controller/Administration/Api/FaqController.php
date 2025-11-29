@@ -144,7 +144,7 @@ final class FaqController extends AbstractController
             ->setCreatedDate(new DateTime())
             ->setNotes(Filter::removeAttributes($notes));
 
-        // Add new record and get that ID
+        // Add a new record and get that ID
         $faqData = $faq->create($faqData);
 
         if ($faqData->getId()) {
@@ -490,7 +490,7 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
+        $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         $faqPermission = new FaqPermission($this->configuration);
 
@@ -508,8 +508,8 @@ final class FaqController extends AbstractController
     {
         $this->userHasPermission(PermissionType::FAQ_EDIT);
 
-        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
-        $language = Filter::filterVar($request->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $language = Filter::filterVar($request->attributes->get(key: 'language'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $onlyInactive = Filter::filterVar(
             $request->query->get(key: 'only-inactive'),
@@ -731,7 +731,7 @@ final class FaqController extends AbstractController
 
         if (!Token::getInstance($session)->verifyToken(
             page: 'importfaqs',
-            requestToken: $request->request->get(key: 'csrf'),
+            requestToken: $request->attributes->get(key: 'csrf'),
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }

@@ -116,7 +116,7 @@ final class TagController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        $tagId = Filter::filterVar($request->get('tagId'), FILTER_VALIDATE_INT);
+        $tagId = (int) Filter::filterVar($request->attributes->get('tagId'), FILTER_VALIDATE_INT);
 
         if ($this->container->get(id: 'phpmyfaq.tags')->delete($tagId)) {
             return $this->json(['success' => Translation::get(key: 'ad_tag_delete_success')], Response::HTTP_OK);

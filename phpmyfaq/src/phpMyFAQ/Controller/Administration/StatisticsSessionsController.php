@@ -94,7 +94,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $day = Filter::filterVar($request->get('day'), FILTER_VALIDATE_INT);
+        $day = (int) Filter::filterVar($request->attributes->get('day'), FILTER_VALIDATE_INT);
 
         $firstHour = strtotime('midnight', $day);
         $lastHour = strtotime('tomorrow', $firstHour) - 1;
@@ -127,7 +127,7 @@ final class StatisticsSessionsController extends AbstractAdministrationControlle
     {
         $this->userHasPermission(PermissionType::STATISTICS_VIEWLOGS);
 
-        $sessionId = Filter::filterVar($request->get('sessionId'), FILTER_VALIDATE_INT);
+        $sessionId = (int) Filter::filterVar($request->attributes->get('sessionId'), FILTER_VALIDATE_INT);
 
         $session = $this->container->get(id: 'phpmyfaq.admin.session');
         $time = $session->getTimeFromSessionId($sessionId);

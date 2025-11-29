@@ -149,7 +149,7 @@ readonly class Order
             }
 
             if (!empty($category->children)) {
-                $foundParentId = $this->getParentId($category->children, $categoryId, $category->id);
+                $foundParentId = $this->getParentId($category->children, $categoryId, (int) $category->id);
                 if ($foundParentId !== null) {
                     return $foundParentId;
                 }

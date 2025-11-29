@@ -111,7 +111,7 @@ final class SetupController
     #[Route(path: '/update', name: 'public.setup.update')]
     public function update(Request $request): Response
     {
-        $currentStep = Filter::filterVar($request->get('step'), FILTER_VALIDATE_INT);
+        $currentStep = (int) Filter::filterVar($request->query->get('step'), FILTER_VALIDATE_INT);
 
         $configuration = Configuration::getConfigurationInstance();
 

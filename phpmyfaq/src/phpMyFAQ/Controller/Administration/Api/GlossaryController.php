@@ -40,8 +40,11 @@ final class GlossaryController extends AbstractController
     {
         $this->userHasPermission(PermissionType::GLOSSARY_EDIT);
 
-        $glossaryId = Filter::filterVar($request->get('glossaryId'), FILTER_VALIDATE_INT);
-        $glossaryLanguage = Filter::filterVar($request->get('glossaryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $glossaryId = (int) Filter::filterVar($request->attributes->get('glossaryId'), FILTER_VALIDATE_INT);
+        $glossaryLanguage = Filter::filterVar(
+            $request->attributes->get('glossaryLanguage'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
 
         $glossary = $this->container->get(id: 'phpmyfaq.glossary');
         $glossary->setLanguage($glossaryLanguage);

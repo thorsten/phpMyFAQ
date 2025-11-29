@@ -98,7 +98,7 @@ final class CategoryController extends AbstractController
 
         $categoryPermission = $this->container->get(id: 'phpmyfaq.category.permission');
 
-        $categoryData = $request->get('categories');
+        $categoryData = $request->attributes->get('categories');
 
         if (empty($categoryData)) {
             $categories = [-1]; // Access for all users and groups
@@ -123,7 +123,7 @@ final class CategoryController extends AbstractController
 
         $category = new Category($this->configuration, [], false);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
 
         $translations = $category->getCategoryLanguagesTranslated($categoryId);
 
@@ -154,7 +154,7 @@ final class CategoryController extends AbstractController
         $category = new Category($this->configuration, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $category->updateParentCategory($data->categoryId, $parentId);
+        $category->updateParentCategory((int) $data->categoryId, $parentId);
 
         return $this->json(['success' => Translation::get(key: 'ad_categ_save_order')], Response::HTTP_OK);
     }

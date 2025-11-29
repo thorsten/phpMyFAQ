@@ -83,7 +83,7 @@ final class SearchController extends AbstractController
         $faqPermission = new Permission($this->configuration);
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
-        $searchString = Filter::filterVar($request->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $searchString = Filter::filterVar($request->attributes->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
         $searchResults = $search->search(
             searchTerm: $searchString,
             allLanguages: false,

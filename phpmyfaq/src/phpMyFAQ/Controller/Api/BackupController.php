@@ -89,7 +89,7 @@ final class BackupController extends AbstractController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        $type = Filter::filterVar($request->get(key: 'type'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = Filter::filterVar($request->attributes->get(key: 'type'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'data':

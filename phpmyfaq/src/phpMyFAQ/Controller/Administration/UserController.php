@@ -65,7 +65,7 @@ final class UserController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::USER_DELETE);
         $this->userHasPermission(PermissionType::USER_EDIT);
 
-        $userId = Filter::filterVar($request->get('userId'), FILTER_VALIDATE_INT);
+        $userId = (int) Filter::filterVar($request->attributes->get('userId'), FILTER_VALIDATE_INT);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
         return $this->render('@admin/user/user.twig', [

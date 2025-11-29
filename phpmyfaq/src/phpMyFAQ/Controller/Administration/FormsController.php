@@ -71,8 +71,8 @@ final class FormsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::FORMS_EDIT);
 
-        $formId = Filter::filterVar($request->get('formId'), FILTER_VALIDATE_INT);
-        $inputId = Filter::filterVar($request->get('inputId'), FILTER_VALIDATE_INT);
+        $formId = (int) Filter::filterVar($request->attributes->get('formId'), FILTER_VALIDATE_INT);
+        $inputId = (int) Filter::filterVar($request->attributes->get('inputId'), FILTER_VALIDATE_INT);
 
         $forms = $this->container->get(id: 'phpmyfaq.forms');
         $session = $this->container->get(id: 'session');

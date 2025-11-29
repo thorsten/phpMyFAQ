@@ -90,8 +90,8 @@ final class PdfController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
-        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
 
         $faq->getFaq($faqId);
         $result = $faq->faqRecord;

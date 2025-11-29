@@ -68,7 +68,7 @@ final class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        $type = $request->get('type');
+        $type = $request->attributes->get('type');
         $backup = $this->container->get(id: 'phpmyfaq.backup');
 
         switch ($type) {

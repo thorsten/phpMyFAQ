@@ -133,8 +133,8 @@ final class AttachmentController extends AbstractController
                 && $file->getMimeType() !== 'text/html'
             ) {
                 $attachment = AttachmentFactory::create();
-                $attachment->setRecordId($request->request->get('record_id'));
-                $attachment->setRecordLang($request->request->get('record_lang'));
+                $attachment->setRecordId($request->attributes->get('record_id'));
+                $attachment->setRecordLang($request->attributes->get('record_lang'));
                 try {
                     if (!$attachment->save($file->getPathname(), $file->getClientOriginalName())) {
                         return $this->json(['error' => Translation::get(
@@ -148,8 +148,8 @@ final class AttachmentController extends AbstractController
                 $uploadedFiles[] = [
                     'attachmentId' => $attachment->getId(),
                     'fileName' => $attachment->getFilename(),
-                    'faqId' => $request->request->get('record_id'),
-                    'faqLanguage' => $request->request->get('record_lang'),
+                    'faqId' => $request->attributes->get('record_id'),
+                    'faqLanguage' => $request->attributes->get('record_lang'),
                 ];
             } else {
                 return $this->json(['error' => Translation::get(key: 'msgImageTooLarge')], Response::HTTP_BAD_REQUEST);

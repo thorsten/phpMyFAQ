@@ -80,7 +80,7 @@ final class CommentController extends AbstractController
     #[OA\Response(response: 404, description: 'If the FAQ has no comments.', content: new OA\JsonContent(example: []))]
     public function list(Request $request): JsonResponse
     {
-        $recordId = Filter::filterVar($request->get(key: 'recordId'), FILTER_VALIDATE_INT);
+        $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);
 
         /** @var Comments $comments */
         $comments = $this->container->get(id: 'phpmyfaq.comments');

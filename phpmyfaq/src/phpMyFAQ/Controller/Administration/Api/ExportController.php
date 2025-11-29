@@ -48,10 +48,10 @@ final class ExportController extends AbstractController
     {
         $this->userHasPermission(PermissionType::EXPORT);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $downwards = Filter::filterVar($request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
-        $inlineDisposition = Filter::filterVar($request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $type = Filter::filterVar($request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
+        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
+        $downwards = Filter::filterVar($request->attributes->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
+        $inlineDisposition = Filter::filterVar($request->attributes->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = Filter::filterVar($request->attributes->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $category = new Category($this->configuration, [], false);

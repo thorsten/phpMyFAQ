@@ -38,8 +38,7 @@ class TranslationControllerTest extends TestCase
         Translation::getInstance()->setCurrentLanguage($language);
         $translations = Translation::getAll();
 
-        $request = $this->createMock(Request::class);
-        $request->method('get')->with('language')->willReturn($language);
+        $request = new Request([], [], ['language' => $language]);
 
         $controller = new TranslationController();
         $response = $controller->translations($request);
@@ -55,8 +54,7 @@ class TranslationControllerTest extends TestCase
     {
         $language = 'unsupported';
 
-        $request = $this->createMock(Request::class);
-        $request->method('get')->with('language')->willReturn($language);
+        $request = new Request([], [], ['language' => $language]);
 
         $controller = new TranslationController();
         $response = $controller->translations($request);

@@ -63,7 +63,7 @@ final class ConfigurationTabController extends AbstractController
             throw new BadRequestException($exception->getMessage());
         }
 
-        $mode = $request->get(key: 'mode');
+        $mode = $request->attributes->get(key: 'mode');
         $configurationList = Translation::getConfigurationItems($mode);
 
         return $this->render(
@@ -91,8 +91,9 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $csrfToken = $request->get(key: 'pmf-csrf-token');
-        $configurationData = $request->get(key: 'edit');
+        $csrfToken = $request->request->get(key: 'pmf-csrf-token');
+        $configurationData = $request->getPayload()->all(key: 'edit');
+
         $oldConfigurationData = $this->configuration->getAll();
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
@@ -231,7 +232,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingKeyOptions($request->get(key: 'current')));
+        return new Response(Helper::sortingKeyOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -243,7 +244,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingOrderOptions($request->get(key: 'current')));
+        return new Response(Helper::sortingOrderOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -255,7 +256,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::sortingPopularFaqsOptions($request->get(key: 'current')));
+        return new Response(Helper::sortingPopularFaqsOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(path: 'admin/api/configuration/perm-level', name: 'admin.api.configuration.perm-level', methods: ['GET'])]
@@ -263,7 +264,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(PermissionHelper::permOptions($request->get(key: 'current')));
+        return new Response(PermissionHelper::permOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -275,7 +276,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderReleaseTypeOptions($request->get(key: 'current')));
+        return new Response(Helper::renderReleaseTypeOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -287,7 +288,7 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::searchRelevanceOptions($request->get(key: 'current')));
+        return new Response(Helper::searchRelevanceOptions($request->attributes->get(key: 'current')));
     }
 
     #[Route(
@@ -299,6 +300,6 @@ final class ConfigurationTabController extends AbstractController
     {
         $this->userIsAuthenticated();
 
-        return new Response(Helper::renderMetaRobotsDropdown($request->get(key: 'current')));
+        return new Response(Helper::renderMetaRobotsDropdown($request->attributes->get(key: 'current')));
     }
 }

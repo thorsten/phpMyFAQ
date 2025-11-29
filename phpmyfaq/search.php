@@ -69,7 +69,7 @@ if (!is_null($inputTag)) {
     $inputTag = str_replace(',,', ',', $inputTag);
 }
 
-$searchTerm = Filter::filterVar($request->request->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
+$searchTerm = Filter::filterVar($request->attributes->get('search'), FILTER_SANITIZE_SPECIAL_CHARS);
 $searchTerm = Strings::substr($searchTerm, 0, 255);
 $page = Filter::filterVar($request->query->get('seite'), FILTER_VALIDATE_INT, 1);
 

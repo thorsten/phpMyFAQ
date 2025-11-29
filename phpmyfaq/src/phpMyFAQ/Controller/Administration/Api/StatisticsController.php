@@ -78,7 +78,7 @@ final class StatisticsController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $month = Filter::filterVar($request->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $month = Filter::filterVar($request->attributes->get('month'), FILTER_SANITIZE_SPECIAL_CHARS);
         if ($this->container->get(id: 'phpmyfaq.helper.statistics')->deleteTrackingFiles($month)) {
             return $this->json(['success' => Translation::get(key: 'ad_adminlog_delete_success')], Response::HTTP_OK);
         }

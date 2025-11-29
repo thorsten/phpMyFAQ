@@ -88,7 +88,7 @@ final class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = (int) $request->get('groupId');
+        $groupId = (int) $request->attributes->get('groupId');
 
         return $this->json($currentUser->perm->getGroupData($groupId), Response::HTTP_OK);
     }
@@ -103,7 +103,7 @@ final class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = (int) $request->get('groupId');
+        $groupId = (int) $request->attributes->get('groupId');
 
         $members = [];
         foreach ($currentUser->perm->getGroupMembers($groupId) as $groupMember) {
@@ -127,7 +127,7 @@ final class GroupController extends AbstractController
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $groupId = (int) $request->get('groupId');
+        $groupId = (int) $request->attributes->get('groupId');
 
         return $this->json($currentUser->perm->getGroupRights($groupId), Response::HTTP_OK);
     }

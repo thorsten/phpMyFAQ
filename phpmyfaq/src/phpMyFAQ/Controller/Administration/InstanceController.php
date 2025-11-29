@@ -60,7 +60,7 @@ final class InstanceController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);
 
-        $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
+        $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
         $instance = $this->container->get(id: 'phpmyfaq.instance');
         $instanceData = $instance->getById($instanceId, 'array');
@@ -90,7 +90,7 @@ final class InstanceController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::INSTANCE_EDIT);
 
-        $instanceId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
+        $instanceId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
 
         $fileSystem = new Filesystem(PMF_ROOT_DIR);
         $currentClient = $this->container->get(id: 'phpmyfaq.instance.client');
@@ -104,9 +104,15 @@ final class InstanceController extends AbstractAdministrationController
 
         // Collect updated data for database
         $instanceEntity = new InstanceEntity();
-        $instanceEntity->setUrl(Filter::filterVar($request->get('url'), FILTER_VALIDATE_URL));
-        $instanceEntity->setInstance(Filter::filterVar($request->get('instance'), FILTER_SANITIZE_SPECIAL_CHARS));
-        $instanceEntity->setComment(Filter::filterVar($request->get('comment'), FILTER_SANITIZE_SPECIAL_CHARS));
+        $instanceEntity->setUrl(Filter::filterVar($request->attributes->get('url'), FILTER_VALIDATE_URL));
+        $instanceEntity->setInstance(Filter::filterVar(
+            $request->attributes->get('instance'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        ));
+        $instanceEntity->setComment(Filter::filterVar(
+            $request->attributes->get('comment'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        ));
 
         // Original data
         $originalData = $currentClient->getById($instanceId);

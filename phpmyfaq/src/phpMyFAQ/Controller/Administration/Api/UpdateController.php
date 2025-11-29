@@ -147,7 +147,7 @@ final class UpdateController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $versionNumber = Filter::filterVar($request->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $versionNumber = Filter::filterVar($request->attributes->get('versionNumber'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $upgrade = $this->container->get(id: 'phpmyfaq.setup.upgrade');
         try {

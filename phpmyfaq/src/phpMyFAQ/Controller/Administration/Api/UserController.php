@@ -152,14 +152,14 @@ final class UserController extends AbstractController
     /**
      * @throws Exception|\Exception
      */
-    #[Route(path: 'admin/api/user/data')]
+    #[Route(path: 'admin/api/user/data/:userId')]
     public function userData(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
 
-        $user->getUserById((int) $request->get(key: 'userId'), allowBlockedUsers: true);
+        $user->getUserById((int) $request->attributes->get(key: 'userId'), allowBlockedUsers: true);
 
         $userData = [];
 
@@ -183,14 +183,14 @@ final class UserController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: 'admin/api/user/permissions')]
+    #[Route(path: 'admin/api/user/permissions/:userId')]
     public function userPermissions(Request $request): JsonResponse
     {
         $this->userHasUserPermission();
 
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
 
-        $userId = $request->get(key: 'userId');
+        $userId = $request->attributes->get(key: 'userId');
         $currentUser->getUserById((int) $userId, allowBlockedUsers: true);
 
         return $this->json($currentUser->perm->getUserRights((int) $userId), Response::HTTP_OK);

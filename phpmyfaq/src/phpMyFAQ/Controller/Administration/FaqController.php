@@ -168,8 +168,11 @@ final class FaqController extends AbstractAdministrationController
         $category->setGroups($currentAdminGroups);
         $category->buildCategoryTree();
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
-        $categoryLanguage = Filter::filterVar($request->get('categoryLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryLanguage = Filter::filterVar(
+            $request->attributes->get('categoryLanguage'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+        );
 
         $categoryHelper = $this->container->get(id: 'phpmyfaq.helper.category-helper');
         $categoryHelper->setCategory($category);
@@ -250,9 +253,9 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $selectedRevisionId = Filter::filterVar($request->get('selectedRevisionId'), FILTER_VALIDATE_INT);
+        $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $selectedRevisionId = Filter::filterVar($request->attributes->get('selectedRevisionId'), FILTER_VALIDATE_INT);
 
         $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-edit-faq ' . $faqId);
 
@@ -378,8 +381,8 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-copy-faq ' . $faqId);
 
@@ -452,8 +455,8 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $faqId = Filter::filterVar($request->get('faqId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqId = (int) Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $this->container->get(id: 'phpmyfaq.admin.admin-log')->log($this->currentUser, 'admin-translate-faq ' . $faqId);
 
@@ -526,8 +529,8 @@ final class FaqController extends AbstractAdministrationController
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
 
-        $questionId = Filter::filterVar($request->get('questionId'), FILTER_VALIDATE_INT);
-        $faqLanguage = Filter::filterVar($request->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $questionId = (int) Filter::filterVar($request->attributes->get('questionId'), FILTER_VALIDATE_INT);
+        $faqLanguage = Filter::filterVar($request->attributes->get('faqLanguage'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $this->container->get(id: 'phpmyfaq.admin.admin-log')->log(
             $this->currentUser,

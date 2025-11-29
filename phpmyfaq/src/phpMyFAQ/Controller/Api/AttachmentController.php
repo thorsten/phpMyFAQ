@@ -78,7 +78,7 @@ class AttachmentController extends AbstractController
     )]
     public function list(Request $request): JsonResponse
     {
-        $recordId = Filter::filterVar($request->get(key: 'recordId'), FILTER_VALIDATE_INT);
+        $recordId = (int) Filter::filterVar($request->attributes->get(key: 'recordId'), FILTER_VALIDATE_INT);
         $result = [];
 
         try {

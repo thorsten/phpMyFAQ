@@ -49,7 +49,7 @@ final class AdminLogController extends AbstractAdministrationController
         $session = $this->container->get(id: 'session');
 
         $itemsPerPage = 15;
-        $page = Filter::filterVar($request->get('page'), FILTER_VALIDATE_INT, 1);
+        $page = Filter::filterVar($request->attributes->get('page'), FILTER_VALIDATE_INT, 1);
 
         // Pagination options
         $options = [

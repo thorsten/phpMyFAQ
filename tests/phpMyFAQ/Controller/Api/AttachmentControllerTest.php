@@ -30,7 +30,7 @@ class TestableAttachmentController extends AttachmentController
 
     public function list(Request $request): JsonResponse
     {
-        $recordId = $request->get('recordId');
+        $recordId = $request->attributes->get('recordId');
         $result = [];
 
         try {
@@ -128,10 +128,7 @@ class AttachmentControllerTest extends TestCase
      */
     public function testListWithAttachmentsFound(): void
     {
-        $request = $this->createMock(Request::class);
-        $request->method('get')
-            ->with('recordId')
-            ->willReturn('123');
+        $request = new Request([], [], ['recordId' => '123']);
 
         $file1 = $this->createMock(File::class);
         $file1->method('getFilename')->willReturn('attachment-1.pdf');
@@ -167,10 +164,7 @@ class AttachmentControllerTest extends TestCase
      */
     public function testListWithNoAttachmentsFound(): void
     {
-        $request = $this->createMock(Request::class);
-        $request->method('get')
-            ->with('recordId')
-            ->willReturn('123');
+        $request = new Request([], [], ['recordId' => '123']);
 
         $attachmentController = $this->createAttachmentControllerTestDouble([]);
 
@@ -185,10 +179,7 @@ class AttachmentControllerTest extends TestCase
      */
     public function testListWithExceptionThrown(): void
     {
-        $request = $this->createMock(Request::class);
-        $request->method('get')
-            ->with('recordId')
-            ->willReturn('123');
+        $request = new Request([], [], ['recordId' => '123']);
 
         $attachmentController = $this->createAttachmentControllerTestDouble(new AttachmentException('Test exception'));
 

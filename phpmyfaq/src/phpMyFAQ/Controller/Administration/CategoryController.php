@@ -129,7 +129,7 @@ final class CategoryController extends AbstractAdministrationController
         $category->setLanguage($this->configuration->getLanguage()->getLanguage());
         $category->loadCategories();
 
-        $parentId = Filter::filterVar($request->get('parentId'), FILTER_VALIDATE_INT);
+        $parentId = (int) Filter::filterVar($request->attributes->get('parentId'), FILTER_VALIDATE_INT);
 
         $templateVars = [];
         if ($this->configuration->get(item: 'security.permLevel') !== 'basic') {
@@ -163,7 +163,7 @@ final class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_ADD);
 
-        $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($request->attributes->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('save-category', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
@@ -177,9 +177,9 @@ final class CategoryController extends AbstractAdministrationController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $parentId = Filter::filterVar($request->get('parent_id'), FILTER_VALIDATE_INT);
+        $parentId = (int) Filter::filterVar($request->attributes->get('parent_id'), FILTER_VALIDATE_INT);
         $categoryId = $this->configuration->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
-        $categoryLang = Filter::filterVar($request->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $categoryLang = Filter::filterVar($request->attributes->get('lang'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $uploadedFile = $request->files->get('image') ?? [];
         $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
@@ -192,17 +192,17 @@ final class CategoryController extends AbstractAdministrationController
         $categoryEntity
             ->setParentId($parentId)
             ->setLang($categoryLang)
-            ->setName(Filter::filterVar($request->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setDescription(Filter::filterVar($request->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
-            ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
-            ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
+            ->setName(Filter::filterVar($request->attributes->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setDescription(Filter::filterVar($request->attributes->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setUserId(Filter::filterVar($request->attributes->get('user_id'), FILTER_VALIDATE_INT))
+            ->setGroupId(Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
+            ->setActive((bool) Filter::filterVar($request->attributes->get('active'), FILTER_VALIDATE_INT))
             ->setImage($hasUploadedImage ? $categoryImage->getFileName($categoryId, $categoryLang) : '')
             ->setParentId($parentId)
-            ->setShowHome(Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
+            ->setShowHome(Filter::filterVar($request->attributes->get('show_home'), FILTER_VALIDATE_INT));
 
         $permissions = [];
-        if ('all' === Filter::filterVar($request->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($request->attributes->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_user' => [
                     -1,
@@ -211,19 +211,19 @@ final class CategoryController extends AbstractAdministrationController
         } else {
             $permissions += [
                 'restricted_user' => [
-                    Filter::filterVar($request->get('restricted_users'), FILTER_VALIDATE_INT),
+                    Filter::filterVar($request->attributes->get('restricted_users'), FILTER_VALIDATE_INT),
                 ],
             ];
         }
 
-        if ('all' === Filter::filterVar($request->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($request->attributes->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_groups' => [
                     -1,
                 ],
             ];
         } else {
-            $restrictedGroups = $request->get('restricted_groups');
+            $restrictedGroups = $request->attributes->get('restricted_groups');
             $permissions += [
                 'restricted_groups' => is_array($restrictedGroups)
                     ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)
@@ -271,8 +271,11 @@ final class CategoryController extends AbstractAdministrationController
                 ->setSeoType(SeoType::CATEGORY)
                 ->setReferenceId($categoryId)
                 ->setReferenceLanguage($categoryLang)
-                ->setTitle(Filter::filterVar($request->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
-                ->setDescription(Filter::filterVar($request->get('serpDescription'), FILTER_SANITIZE_SPECIAL_CHARS));
+                ->setTitle(Filter::filterVar($request->attributes->get('serpTitle'), FILTER_SANITIZE_SPECIAL_CHARS))
+                ->setDescription(Filter::filterVar(
+                    $request->attributes->get('serpDescription'),
+                    FILTER_SANITIZE_SPECIAL_CHARS,
+                ));
             $seo->create($seoEntity);
 
             $templateVars = [
@@ -308,7 +311,7 @@ final class CategoryController extends AbstractAdministrationController
 
         [$currentAdminUser, $currentAdminGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT, 0);
+        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
 
         $session = $this->container->get(id: 'session');
         $userHelper = $this->container->get(id: 'phpmyfaq.helper.user-helper');
@@ -484,7 +487,7 @@ final class CategoryController extends AbstractAdministrationController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryId = Filter::filterVar($request->get('categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
         $translateTo = Filter::filterVar($request->query->get('translateTo'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Re-add permission arrays used in the template
@@ -537,7 +540,7 @@ final class CategoryController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::CATEGORY_EDIT);
 
-        $csrfToken = Filter::filterVar($request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($request->attributes->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('update-category', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
         }
@@ -551,10 +554,10 @@ final class CategoryController extends AbstractAdministrationController
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $parentId = Filter::filterVar($request->get('parent_id'), FILTER_VALIDATE_INT);
-        $categoryId = Filter::filterVar($request->get('id'), FILTER_VALIDATE_INT);
-        $categoryLang = Filter::filterVar($request->get('catlang'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $existingImage = Filter::filterVar($request->get('existing_image'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $parentId = (int) Filter::filterVar($request->attributes->get('parent_id'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get('id'), FILTER_VALIDATE_INT);
+        $categoryLang = Filter::filterVar($request->attributes->get('catlang'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $existingImage = Filter::filterVar($request->attributes->get('existing_image'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         $uploadedFile = $request->files->get('image') ?? [];
         $categoryImage = $this->container->get(id: 'phpmyfaq.category.image');
@@ -570,17 +573,17 @@ final class CategoryController extends AbstractAdministrationController
         $categoryEntity
             ->setId($categoryId)
             ->setLang($categoryLang)
-            ->setParentId((int) $parentId)
-            ->setName(Filter::filterVar($request->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setDescription(Filter::filterVar($request->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
-            ->setUserId(Filter::filterVar($request->get('user_id'), FILTER_VALIDATE_INT))
-            ->setGroupId(Filter::filterVar($request->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
-            ->setActive((bool) Filter::filterVar($request->get('active'), FILTER_VALIDATE_INT))
+            ->setParentId($parentId)
+            ->setName(Filter::filterVar($request->attributes->get('name'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setDescription(Filter::filterVar($request->attributes->get('description'), FILTER_SANITIZE_SPECIAL_CHARS))
+            ->setUserId((int) Filter::filterVar($request->attributes->get('user_id'), FILTER_VALIDATE_INT))
+            ->setGroupId((int) Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT) ?? -1)
+            ->setActive((bool) Filter::filterVar($request->attributes->get('active'), FILTER_VALIDATE_INT))
             ->setImage($image)
-            ->setShowHome((bool) Filter::filterVar($request->get('show_home'), FILTER_VALIDATE_INT));
+            ->setShowHome((bool) Filter::filterVar($request->attributes->get('show_home'), FILTER_VALIDATE_INT));
 
         $permissions = [];
-        if ('all' === Filter::filterVar($request->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($request->attributes->get('userpermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_user' => [
                     -1,
@@ -589,19 +592,19 @@ final class CategoryController extends AbstractAdministrationController
         } else {
             $permissions += [
                 'restricted_user' => [
-                    Filter::filterVar($request->get('restricted_users'), FILTER_VALIDATE_INT),
+                    Filter::filterVar($request->attributes->get('restricted_users'), FILTER_VALIDATE_INT),
                 ],
             ];
         }
 
-        if ('all' === Filter::filterVar($request->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
+        if ('all' === Filter::filterVar($request->attributes->get('grouppermission'), FILTER_SANITIZE_SPECIAL_CHARS)) {
             $permissions += [
                 'restricted_groups' => [
                     -1,
                 ],
             ];
         } else {
-            $restrictedGroups = $request->get('restricted_groups');
+            $restrictedGroups = $request->attributes->get('restricted_groups');
             $permissions += [
                 'restricted_groups' => is_array($restrictedGroups)
                     ? Filter::filterArray($restrictedGroups, FILTER_VALIDATE_INT)

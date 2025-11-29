@@ -90,7 +90,7 @@ final class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
         try {
             $result = $faq->getAllAvailableFaqsByCategoryId($categoryId);
@@ -162,8 +162,8 @@ final class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $faqId = Filter::filterVar($request->get(key: 'faqId'), FILTER_VALIDATE_INT);
-        $categoryId = Filter::filterVar($request->get(key: 'categoryId'), FILTER_VALIDATE_INT);
+        $faqId = (int) Filter::filterVar($request->attributes->get(key: 'faqId'), FILTER_VALIDATE_INT);
+        $categoryId = (int) Filter::filterVar($request->attributes->get(key: 'categoryId'), FILTER_VALIDATE_INT);
 
         $result = $faq->getFaqByIdAndCategoryId($faqId, $categoryId);
 
@@ -222,7 +222,7 @@ final class FaqController extends AbstractController
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
 
-        $tagId = Filter::filterVar($request->get(key: 'tagId'), FILTER_VALIDATE_INT);
+        $tagId = (int) Filter::filterVar($request->attributes->get(key: 'tagId'), FILTER_VALIDATE_INT);
 
         $tags = $this->container->get(id: 'phpmyfaq.tags');
         $recordIds = $tags->getFaqsByTagId($tagId);
