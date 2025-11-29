@@ -77,7 +77,7 @@ class RegistrationHelper extends AbstractHelper
             ];
         }
 
-        $user->userdata->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible === 'on' ? 1 : 0]);
+        $user->userdata->set(['display_name', 'email', 'is_visible'], [$fullName, $email, $isVisible ? 1 : 0]);
         $user->setStatus('blocked');
 
         $isNowActive = !$this->configuration->get(item: 'spam.manualActivation') && $user->activateUser();
@@ -95,7 +95,7 @@ class RegistrationHelper extends AbstractHelper
             $fullName,
             $userName,
             $adminMessage,
-            $this->configuration->getDefaultUrl(),
+            $this->configuration->getDefaultUrl() . '/admin/',
         );
         $mail = new Mail($this->configuration);
         $mail->setReplyTo($email, $fullName);

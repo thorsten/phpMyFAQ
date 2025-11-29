@@ -40,7 +40,6 @@ $faqSession->setCurrentUser($user);
 $faqSession->userTracking('registration', 0);
 
 $captcha = $container->get('phpmyfaq.captcha');
-$captcha->setSessionId($sids);
 
 $captchaHelper = $container->get('phpmyfaq.captcha.helper.captcha_helper');
 
