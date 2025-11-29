@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for phpMyFAQ search.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-07
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
@@ -92,7 +92,7 @@ class SearchHelper extends AbstractHelper
                 $link = new Link($currentUrl, $this->configuration);
                 $link->setTitle($result->question);
                 $faq = new stdClass();
-                $faq->category = $this->Category->getPath($result->category_id ?? 0);
+                $faq->category = $this->Category->getPath((int) $result->category_id ?? 0);
                 $faq->question = Utils::chopString($question, 15);
                 $faq->url = $link->toString();
 

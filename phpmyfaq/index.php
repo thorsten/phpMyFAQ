@@ -138,16 +138,16 @@ $action = Filter::filterVar($request->query->get('action'), FILTER_SANITIZE_SPEC
 $error = null;
 $loginVisibility = 'hidden';
 
-$faqusername = Filter::filterVar($request->attributes->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+$faqusername = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
 $faqpassword = Filter::filterVar(
-    $request->attributes->get('faqpassword'),
+    $request->request->get('faqpassword'),
     FILTER_SANITIZE_SPECIAL_CHARS,
     FILTER_FLAG_NO_ENCODE_QUOTES,
 );
-$faqaction = Filter::filterVar($request->attributes->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
-$rememberMe = Filter::filterVar($request->attributes->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
-$token = Filter::filterVar($request->attributes->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
-$userId = Filter::filterVar($request->attributes->get('userid'), FILTER_VALIDATE_INT);
+$faqaction = Filter::filterVar($request->request->get('faqloginaction'), FILTER_SANITIZE_SPECIAL_CHARS);
+$rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+$token = Filter::filterVar($request->request->get('token'), FILTER_SANITIZE_SPECIAL_CHARS);
+$userId = (int) Filter::filterVar($request->request->get('userid'), FILTER_VALIDATE_INT);
 
 //
 // Set username via SSO

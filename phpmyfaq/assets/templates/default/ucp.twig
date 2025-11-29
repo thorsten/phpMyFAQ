@@ -306,9 +306,14 @@
           <form action="{{ exportUserDataUrl }}" method="post">
             {{ csrfExportUserData | raw }}
             <input type="hidden" name="userid" value="{{ userid }}" />
-            <button type="submit" class="btn btn-success">
-              <i aria-hidden="true" class="bi bi-download"></i> {{ msgDownload }}
-            </button>
+
+            <div class="row">
+              <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">
+                  <i aria-hidden="true" class="bi bi-download"></i> {{ msgDownload }}
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

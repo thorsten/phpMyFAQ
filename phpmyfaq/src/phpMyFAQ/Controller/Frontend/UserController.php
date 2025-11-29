@@ -60,7 +60,7 @@ final class UserController extends AbstractController
         $password = trim((string) Filter::filterVar($data->faqpassword, FILTER_SANITIZE_SPECIAL_CHARS));
         $confirm = trim((string) Filter::filterVar($data->faqpassword_confirm, FILTER_SANITIZE_SPECIAL_CHARS));
         $twoFactorEnabled = Filter::filterVar($data->twofactor_enabled ?? 'off', FILTER_SANITIZE_SPECIAL_CHARS);
-        $secret = Filter::filterVar($data->secret, FILTER_SANITIZE_SPECIAL_CHARS);
+        $secret = Filter::filterVar($data->secret ?? '', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $isAzureAdUser = $this->currentUser->getUserAuthSource() === 'azure';
         $isWebAuthnUser = $this->currentUser->getUserAuthSource() === 'webauthn';
