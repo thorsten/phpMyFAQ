@@ -1,6 +1,21 @@
 #!/usr/bin/env php
 <?php
 
+/**
+ * phpMyFAQ Console Application
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2025 phpMyFAQ Team
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2025-06-25
+ */
+
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
 
@@ -33,8 +48,7 @@ try {
     echo $e->getMessage();
 }
 
-
 $application = new Application();
-$application->add(new UpdateCommand());
-$application->add(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
+$application->addCommand(new UpdateCommand());
+$application->addCommand(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
 $application->run();
