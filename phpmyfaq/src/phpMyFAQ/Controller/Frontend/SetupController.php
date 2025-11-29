@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Setup Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-06-01
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -111,7 +111,7 @@ final class SetupController
     #[Route(path: '/update', name: 'public.setup.update')]
     public function update(Request $request): Response
     {
-        $currentStep = (int) Filter::filterVar($request->query->get('step'), FILTER_VALIDATE_INT);
+        $currentStep = (int) Filter::filterVar($request->query->get('step') ?? 1, FILTER_VALIDATE_INT);
 
         $configuration = Configuration::getConfigurationInstance();
 
@@ -125,7 +125,7 @@ final class SetupController
         }
 
         return $this->render('@setup/update.twig', [
-            'currentStep' => $currentStep ?? 1,
+            'currentStep' => $currentStep,
             'installedVersion' => $configuration->getVersion(),
             'newVersion' => System::getVersion(),
             'checkBasicError' => $checkBasicError,
@@ -136,7 +136,7 @@ final class SetupController
     }
 
     /**
-     * Returns a Twig rendered template as response.
+     * Returns a Twig-rendered template as a response.
      *
      * @param string[] $templateVars
      * @throws Exception|LoaderError

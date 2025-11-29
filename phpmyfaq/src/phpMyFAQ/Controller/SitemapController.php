@@ -33,6 +33,14 @@ final class SitemapController extends AbstractController
     public function index(): Response
     {
         $response = new Response();
+
+        $siteMapEnabled = $this->configuration->get(item: 'seo.enableXMLSitemap');
+        if (!$siteMapEnabled) {
+            $response->setStatusCode(Response::HTTP_NOT_FOUND);
+            $response->setContent('XML Sitemap is disabled.');
+            return $response;
+        }
+
         $faqStatistics = $this->container->get(id: 'phpmyfaq.faq.statistics');
 
         $items = $faqStatistics->getTopTenData(self::PMF_SITEMAP_GOOGLE_MAX_URLS - 1);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The WebAuthn Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
@@ -55,13 +55,13 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/prepare', name: 'api.private.webauthn.prepare', methods: ['POST'])]
     public function prepare(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $username = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if (!$this->user->getUserByLogin($username, false)) {
+        if (!$this->user->getUserByLogin($username, raiseError: false)) {
             try {
                 $this->user->createUser($username);
-                $this->user->setStatus('active');
+                $this->user->setStatus(status: 'active');
                 $this->user->setAuthSource(AuthenticationSourceType::AUTH_WEB_AUTHN->value);
                 $this->user->setUserData([
                     'display_name' => $username,
@@ -73,7 +73,7 @@ final class WebAuthnController extends AbstractController
         }
 
         $webAuthnUser = new WebAuthnUser();
-        $webAuthnUser->setName($username)->setId((string) $this->user->getUserId())->setWebAuthnKeys('');
+        $webAuthnUser->setName($username)->setId((string) $this->user->getUserId())->setWebAuthnKeys(webAuthnKeys: '');
 
         $this->authWebAuthn->storeUserInSession($webAuthnUser);
 
@@ -92,7 +92,7 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/register', name: 'api.private.webauthn.register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $register = Filter::filterVar($data->register, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $webAuthnUser = $this->authWebAuthn->getUserFromSession();
@@ -121,7 +121,7 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/prepare-login', name: 'api.private.webauthn.prepare-login', methods: ['POST'])]
     public function prepareLogin(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
 
         try {
@@ -143,7 +143,7 @@ final class WebAuthnController extends AbstractController
     #[Route(path: 'api/webauthn/login', name: 'api.private.webauthn.login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $login = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
         $loginData = $data->login;
 
@@ -159,9 +159,9 @@ final class WebAuthnController extends AbstractController
                 return $this->json(['error' => Translation::get(key: 'ad_auth_fail')], Response::HTTP_UNAUTHORIZED);
             }
 
-            $currentUser->setLoggedIn(true);
-            $currentUser->setSuccess(true);
-            $currentUser->updateSessionId(true);
+            $currentUser->setLoggedIn(loggedIn: true);
+            $currentUser->setSuccess(success: true);
+            $currentUser->updateSessionId(updateLastLogin: true);
             $currentUser->saveToSession();
             return $this->json([
                 'success' => 'ok',
