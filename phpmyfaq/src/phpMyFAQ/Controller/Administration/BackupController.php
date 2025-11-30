@@ -36,6 +36,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
+use function in_array;
+
 final class BackupController extends AbstractAdministrationController
 {
     /**
@@ -75,73 +77,41 @@ final class BackupController extends AbstractAdministrationController
         $this->userHasPermission(PermissionType::BACKUP);
 
         $type = $request->attributes->get(key: 'type');
+        if (!in_array($type, ['content', 'logs'], true)) {
+            return new Response(status: Response::HTTP_BAD_REQUEST);
+        }
+
         $backup = $this->container->get(id: 'phpmyfaq.backup');
 
-        switch ($type) {
-            case 'content':
-                $tableNames = $backup->getBackupTableNames(BackupType::BACKUP_TYPE_DATA);
-                break;
-            case 'logs':
-                $tableNames = $backup->getBackupTableNames(BackupType::BACKUP_TYPE_LOGS);
-                break;
+        $tableNames = match ($type) {
+            'content' => $backup->getBackupTableNames(BackupType::BACKUP_TYPE_DATA),
+            'logs' => $backup->getBackupTableNames(BackupType::BACKUP_TYPE_LOGS),
+        };
+
+        $backupType = $type === 'content' ? BackupType::BACKUP_TYPE_DATA : BackupType::BACKUP_TYPE_LOGS;
+
+        $backupQueries = $backup->generateBackupQueries($tableNames);
+
+        try {
+            $backupFileName = $backup->createBackup($backupType->value, $backupQueries);
+        } catch (SodiumException) {
+            return new Response(status: Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        switch ($type) {
-            case 'content':
-                $backupQueries = $backup->generateBackupQueries($tableNames);
-                try {
-                    $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
+        $response = new Response($backupQueries);
 
-                    $response = new Response($backupQueries);
+        $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, urlencode($backupFileName));
 
-                    $disposition = HeaderUtils::makeDisposition(
-                        HeaderUtils::DISPOSITION_ATTACHMENT,
-                        urlencode($backupFileName),
-                    );
+        $response->headers->set(
+            key: 'Content-Type',
+            values: 'application/octet-stream; charset=UTF-8',
+        );
+        $response->headers->set(
+            key: 'Content-Disposition',
+            values: $disposition,
+        );
 
-                    $response->headers->set(
-                        key: 'Content-Type',
-                        values: 'application/octet-stream; charset=UTF-8',
-                    );
-                    $response->headers->set(
-                        key: 'Content-Disposition',
-                        values: $disposition,
-                    );
-
-                    return $response;
-                } catch (SodiumException) {
-                    // Handle exception
-                }
-
-                break;
-            case 'logs':
-                $backupQueries = $backup->generateBackupQueries($tableNames);
-                try {
-                    $backupFileName = $backup->createBackup(BackupType::BACKUP_TYPE_LOGS->value, $backupQueries);
-
-                    $response = new Response($backupQueries);
-
-                    $disposition = HeaderUtils::makeDisposition(
-                        HeaderUtils::DISPOSITION_ATTACHMENT,
-                        urlencode($backupFileName),
-                    );
-
-                    $response->headers->set(
-                        key: 'Content-Type',
-                        values: 'application/octet-stream; charset=UTF-8',
-                    );
-                    $response->headers->set(
-                        key: 'Content-Disposition',
-                        values: $disposition,
-                    );
-
-                    return $response;
-                } catch (SodiumException) {
-                    // Handle exception
-                }
-
-                break;
-        }
+        return $response;
     }
 
     /**
@@ -171,165 +141,7 @@ final class BackupController extends AbstractAdministrationController
             'adminHeaderRestore' => Translation::get(key: 'ad_csv_rest'),
         ];
 
-        if ($file->isValid()) {
-            $backup = $this->container->get(id: 'phpmyfaq.backup');
-
-            $handle = fopen($file->getPathname(), mode: 'r');
-            $backupData = fgets($handle, length: 65536);
-            $versionFound = Strings::substr(
-                string: $backupData,
-                start: 0,
-                length: 9,
-            );
-            $versionExpected = '-- pmf'
-            . substr(
-                string: $this->configuration->getVersion(),
-                offset: 0,
-                length: 3,
-            );
-            $queries = [];
-
-            $fileName = $file->getClientOriginalName();
-
-            try {
-                $verification = $backup->verifyBackup(file_get_contents($file->getPathname()), $fileName);
-                if ($verification) {
-                    $ok = 1;
-                } else {
-                    $templateVars = [
-                        ...$templateVars,
-                        'errorMessageNoVerification' => 'This file is not a verified backup file.',
-                    ];
-                    $ok = 0;
-                }
-            } catch (SodiumException) {
-                $templateVars = ['errorMessageNoVerification' => 'This file cannot be verified.'];
-                $ok = 0;
-            }
-
-            if ($versionFound !== $versionExpected) {
-                $templateVars = [
-                    ...$templateVars,
-                    'errorMessageVersionMisMatch' => sprintf(
-                        '%s (Version check failure: "%s" found, "%s" expected)',
-                        Translation::get(key: 'ad_csv_no'),
-                        $versionFound,
-                        $versionExpected,
-                    ),
-                ];
-                $ok = 0;
-            }
-
-            if ($ok === 1) {
-                // @todo: Start transaction for better recovery if something really bad happens
-                $backupData = trim(Strings::substr(
-                    string: $backupData,
-                    start: 11,
-                ));
-                $tables = explode(
-                    separator: ' ',
-                    string: $backupData,
-                );
-                $numTables = count($tables);
-                for ($h = 0; $h < $numTables; ++$h) {
-                    $queries[] = sprintf('DELETE FROM %s', $tables[$h]);
-                }
-
-                $ok = 1;
-            }
-
-            if ($ok === 1) {
-                $tablePrefix = '';
-                $templateVars = [
-                    ...$templateVars,
-                    'prepareMessage' => Translation::get(key: 'ad_csv_prepare'),
-                ];
-                while ($backupData = fgets($handle, length: 65536)) {
-                    $backupData = trim($backupData);
-                    $backupPrefixPattern = '-- pmftableprefix:';
-                    $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
-                    if (
-                        Strings::substr(
-                            string: $backupData,
-                            start: 0,
-                            length: $backupPrefixPatternLength,
-                        ) === $backupPrefixPattern
-                    ) {
-                        $tablePrefix = trim(Strings::substr(
-                            string: $backupData,
-                            start: $backupPrefixPatternLength,
-                        ));
-                    }
-
-                    if (
-                        Strings::substr(
-                                string: $backupData,
-                                start: 0,
-                                length: 2,
-                            ) !== '--'
-                        && $backupData !== ''
-                    ) {
-                        $queries[] = trim(Strings::substr(
-                            string: $backupData,
-                            start: 0,
-                            length: -1,
-                        ));
-                    }
-                }
-
-                $k = 0;
-                $g = 0;
-
-                $templateVars = [
-                    ...$templateVars,
-                    'processMessage' => Translation::get(key: 'ad_csv_process'),
-                ];
-
-                $numTables = count($queries);
-                $kg = '';
-                for ($i = 0; $i < $numTables; ++$i) {
-                    $queries[$i] = DatabaseHelper::alignTablePrefix(
-                        $queries[$i],
-                        $tablePrefix,
-                        Database::getTablePrefix(),
-                    );
-
-                    $kg = $this->configuration->getDb()->query($queries[$i]);
-                    if (!$kg) {
-                        $templateVars = [
-                            ...$templateVars,
-                            'errorMessageQueryFailed' => sprintf(
-                                '<strong>Query</strong>: "%s" failed (Reason: %s)',
-                                Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
-                                $this->configuration->getDb()->error(),
-                            ),
-                        ];
-
-                        ++$k;
-                    } else {
-                        printf(
-                            '<!-- Query: "%s" okay</div> -->%s',
-                            Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
-                            "\n",
-                        );
-                        ++$g;
-                    }
-                }
-
-                $templateVars = [
-                    ...$templateVars,
-                    'successMessage' => sprintf(
-                        '%d %s %d %s',
-                        $g,
-                        Translation::get(key: 'ad_csv_of'),
-                        $numTables,
-                        Translation::get(key: 'ad_csv_suc'),
-                    ),
-                ];
-            } else {
-                $templateVars = ['errorMessageImportNotPossible' => Translation::get(key: 'ad_csv_no')];
-            }
-        } else {
+        if (!$file->isValid()) {
             $errorMessage = match ($file->getError()) {
                 1 => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
                 2 => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
@@ -340,12 +152,203 @@ final class BackupController extends AbstractAdministrationController
                 8 => 'A PHP extension stopped the file upload.',
                 default => 'Undefined error.',
             };
+
             $templateVars = [
                 ...$templateVars,
                 'errorMessageUpload' => Translation::get(key: 'ad_csv_no'),
                 'errorMessageUploadDetails' => $errorMessage,
             ];
+
+            return $this->render(
+                file: '@admin/backup/import.twig',
+                context: [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$templateVars,
+                ],
+            );
         }
+
+        $backup = $this->container->get(id: 'phpmyfaq.backup');
+
+        $handle = fopen($file->getPathname(), mode: 'r');
+        $backupData = fgets($handle, length: 65536);
+        $versionFound = Strings::substr(
+            string: $backupData,
+            start: 0,
+            length: 9,
+        );
+        $versionExpected = '-- pmf'
+        . substr(
+            string: $this->configuration->getVersion(),
+            offset: 0,
+            length: 3,
+        );
+        $queries = [];
+
+        $fileName = $file->getClientOriginalName();
+
+        try {
+            $verification = $backup->verifyBackup(file_get_contents($file->getPathname()), $fileName);
+            if (!$verification) {
+                $templateVars = [
+                    ...$templateVars,
+                    'errorMessageNoVerification' => 'This file is not a verified backup file.',
+                ];
+
+                return $this->render(
+                    file: '@admin/backup/import.twig',
+                    context: [
+                        ...$this->getHeader($request),
+                        ...$this->getFooter(),
+                        ...$templateVars,
+                    ],
+                );
+            }
+        } catch (SodiumException) {
+            $templateVars = ['errorMessageNoVerification' => 'This file cannot be verified.'];
+
+            return $this->render(
+                file: '@admin/backup/import.twig',
+                context: [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$templateVars,
+                ],
+            );
+        }
+
+        if ($versionFound !== $versionExpected) {
+            $templateVars = [
+                ...$templateVars,
+                'errorMessageVersionMisMatch' => sprintf(
+                    '%s (Version check failure: "%s" found, "%s" expected)',
+                    Translation::get(key: 'ad_csv_no'),
+                    $versionFound,
+                    $versionExpected,
+                ),
+            ];
+
+            return $this->render(
+                file: '@admin/backup/import.twig',
+                context: [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$templateVars,
+                ],
+            );
+        }
+
+        // @todo: Start transaction for better recovery if something really bad happens
+        $backupData = trim(Strings::substr(
+            string: $backupData,
+            start: 11,
+        ));
+        $tables = explode(
+            separator: ' ',
+            string: $backupData,
+        );
+        $numTables = count($tables);
+        for ($h = 0; $h < $numTables; ++$h) {
+            $queries[] = sprintf('DELETE FROM %s', $tables[$h]);
+        }
+
+        $tablePrefix = '';
+        $templateVars = [
+            ...$templateVars,
+            'prepareMessage' => Translation::get(key: 'ad_csv_prepare'),
+        ];
+        while ($backupData = fgets($handle, length: 65536)) {
+            $backupData = trim($backupData);
+            $backupPrefixPattern = '-- pmftableprefix:';
+            $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
+            if (
+                Strings::substr(
+                    string: $backupData,
+                    start: 0,
+                    length: $backupPrefixPatternLength,
+                ) === $backupPrefixPattern
+            ) {
+                $tablePrefix = trim(Strings::substr(
+                    string: $backupData,
+                    start: $backupPrefixPatternLength,
+                ));
+            }
+
+            if (
+                Strings::substr(
+                        string: $backupData,
+                        start: 0,
+                        length: 2,
+                    ) !== '--'
+                && $backupData !== ''
+            ) {
+                $queries[] = trim(Strings::substr(
+                    string: $backupData,
+                    start: 0,
+                    length: -1,
+                ));
+            }
+        }
+
+        $k = 0;
+        $g = 0;
+
+        $templateVars = [
+            ...$templateVars,
+            'processMessage' => Translation::get(key: 'ad_csv_process'),
+        ];
+
+        $numTables = count($queries);
+        $kg = '';
+        for ($i = 0; $i < $numTables; ++$i) {
+            $queries[$i] = DatabaseHelper::alignTablePrefix($queries[$i], $tablePrefix, Database::getTablePrefix());
+
+            $kg = $this->configuration->getDb()->query($queries[$i]);
+            if (!$kg) {
+                $templateVars = [
+                    ...$templateVars,
+                    'errorMessageQueryFailed' => sprintf(
+                        '<strong>Query</strong>: "%s" failed (Reason: %s)',
+                        Strings::htmlspecialchars($queries[$i], ENT_QUOTES),
+                        $this->configuration->getDb()->error(),
+                    ),
+                ];
+
+                ++$k;
+                continue;
+            }
+
+            printf('<!-- Query: "%s" okay</div> -->%s', Strings::htmlspecialchars($queries[$i], ENT_QUOTES), "\n");
+            ++$g;
+        }
+
+        if ($k > 0) {
+            $templateVars = [
+                ...$templateVars,
+                'errorMessageImportNotPossible' => Translation::get(key: 'ad_csv_no'),
+            ];
+
+            return $this->render(
+                file: '@admin/backup/import.twig',
+                context: [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$templateVars,
+                ],
+            );
+        }
+
+        $templateVars = [
+            ...$templateVars,
+            'successMessage' => sprintf(
+                '%d %s %d %s',
+                $g,
+                Translation::get(key: 'ad_csv_of'),
+                $numTables,
+                Translation::get(key: 'ad_csv_suc'),
+            ),
+        ];
 
         return $this->render(
             file: '@admin/backup/import.twig',
