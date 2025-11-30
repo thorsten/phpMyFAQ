@@ -69,7 +69,6 @@ $PMF_LANG["msgCommentBy"] = "Komentarz od ";
 $PMF_LANG["msgCommentHeader"] = "Skomentuj ten FAQ";
 $PMF_LANG["msgYourComment"] = "Twój komentarz";
 $PMF_LANG["msgCommentThanks"] = "Dziękujemy za komentarz!";
-$PMF_LANG["msgSeeXMLFile"] = "otwórz plik XML";
 $PMF_LANG["msgShareFAQ"] = "Wyślij FAQ do znajomego";
 $PMF_LANG["msgS2FButton"] = "Wyślij wiadomość";
 
@@ -463,31 +462,6 @@ $PMF_LANG["msgLanguageSubmit"] = "Zmień język";
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "Załączony plik musi być mniejszy niż %s bajtów.";
 $PMF_LANG["ad_menu_export"] = "Eksportuj swój FAQ";
-
-$PMF_LANG['rightsLanguage::add_user'] = "Dodaj użytkownika";
-$PMF_LANG['rightsLanguage::edit_user'] = "Edytuj użytkownika";
-$PMF_LANG['rightsLanguage::delete_user'] = "Usuń użytkownika";
-$PMF_LANG['rightsLanguage::add_faq'] = "Dodaj rekord";
-$PMF_LANG['rightsLanguage::edit_faq'] = "Edytuj rekord";
-$PMF_LANG['rightsLanguage::delete_faq'] = "Usuń rekord";
-$PMF_LANG['rightsLanguage::viewlog'] = "Zobacz dzienniki";
-$PMF_LANG['rightsLanguage::adminlog'] = "Wyświetl dziennik administratora";
-$PMF_LANG['rightsLanguage::delcomment'] = "Usuń komentarz";
-$PMF_LANG['rightsLanguage::addnews'] = "Dodaj wiadomości";
-$PMF_LANG['rightsLanguage::editnews'] = "Edytuj wiadomości";
-$PMF_LANG['rightsLanguage::delnews'] = "Usuń wiadomości";
-$PMF_LANG['rightsLanguage::addcateg'] = "Dodaj kategorię";
-$PMF_LANG['rightsLanguage::editcateg'] = "Edytuj kategorię";
-$PMF_LANG['rightsLanguage::delcateg'] = "Usuń kategorię";
-$PMF_LANG['rightsLanguage::passwd'] = "Zmień hasła";
-$PMF_LANG['rightsLanguage::editconfig'] = "Edytuj konfigurację";
-$PMF_LANG['rightsLanguage::addatt'] = "Dodaj załączniki";
-$PMF_LANG['rightsLanguage::delatt'] = "Usuń załączniki";
-$PMF_LANG['rightsLanguage::backup'] = "Twórz kopie zapasowe";
-$PMF_LANG['rightsLanguage::restore'] = "Przywróć kopię zapasową";
-$PMF_LANG['rightsLanguage::delquestion'] = "Usuń otwarte pytania";
-$PMF_LANG['rightsLanguage::changebtrevs'] = "Edytuj wersje";
-
 $PMF_LANG["msgAttachedFiles"] = "Załączone pliki";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
@@ -610,9 +584,6 @@ $PMF_LANG['ad_user_deleteUser'] = "Usuń użytkownika";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "ostatnia modyfikacja";
 $PMF_LANG['ad_gen_cancel'] = "Anuluj";
-$PMF_LANG['rightsLanguage::addglossary'] = "Dodaj pozycję słownika";
-$PMF_LANG['rightsLanguage::editglossary'] = "Edytuj pozycję słownika";
-$PMF_LANG['rightsLanguage::delglossary'] = "Usuń pozycję słownika";
 $PMF_LANG["ad_menu_group_administration"] = "Grupy";
 $PMF_LANG['ad_user_loggedin'] = 'Zalogowany jako ';
 $PMF_LANG['ad_group_details'] = "Szczegóły grupy";
@@ -666,7 +637,6 @@ $PMF_LANG['adminHeaderDashboard'] = 'Panel';
 $PMF_LANG['admin_mainmenu_users'] = 'Użytkownicy';
 $PMF_LANG['admin_mainmenu_content'] = 'Treść';
 $PMF_LANG['admin_mainmenu_statistics'] = 'Statystyki';
-$PMF_LANG['admin_mainmenu_exports'] = 'Eksport';
 $PMF_LANG['admin_mainmenu_backup'] = 'Kopia zapasowa';
 $PMF_LANG['admin_mainmenu_configuration'] = 'Konfiguracja';
 $PMF_LANG['admin_mainmenu_logout'] = 'Wyloguj';
@@ -743,11 +713,6 @@ $PMF_LANG['msgNewTranslationSubmit'] = 'Prześlij swoją propozycję';
 $PMF_LANG['msgTranslate'] = 'Przetłumacz to FAQ';
 $PMF_LANG['msgTranslateSubmit'] = 'Rozpocznij tłumaczenie...';
 $PMF_LANG['msgNewTranslationThanks'] = "Dziękujemy za propozycję tłumaczenia!";
-
-// added v2.0.0 - 2007-02-27 by Matteo
-$PMF_LANG['rightsLanguage::addgroup'] = "Dodaj konta grup";
-$PMF_LANG['rightsLanguage::editgroup'] = "Edytowanie kont grup";
-$PMF_LANG['rightsLanguage::delgroup'] = "Usuń konta grup";
 
 // added v2.0.0 - 2007-02-27 by Thorsten
 $PMF_LANG['ad_news_link_parent'] = 'Link otwiera się w oknie nadrzędnym';
@@ -886,12 +851,6 @@ $PMF_LANG["plmsgVotes"][1] = "%d Głosów";
 $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
-// added 2.6.0-alpha - 2009-09-06 by Aurimas FiĹˇeras
-$PMF_LANG['rightsLanguage::addtranslation'] = "Dodaj tłumaczenie";
-$PMF_LANG['rightsLanguage::edittranslation'] = "Edytuj tłumaczenie";
-$PMF_LANG['rightsLanguage::deltranslation'] = "Usuń tłumaczenie";
-$PMF_LANG['rightsLanguage::approverec'] = "Zatwierdź wpisy";
-
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Włącz szyfrowanie załączników  Ignorowane, gdy załączniki są wyłączone"];
 $LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Domyślny klucz szyfrowania załączników>Ignorowany, jeśli szyfrowanie załączników jest wyłączone OSTRZEŻENIE: Nie zmieniaj tego po ustawieniu i włączeniu szyfrowania plików! !'];
@@ -944,7 +903,6 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Słowa kluczowe – Pyta
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Zaloguj się';
-$PMF_LANG['socialNetworksControlCenter'] = 'Sieci społecznościowe';
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = ['checkbox', 'X (Twitter) wsparcie'];
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = ['input', 'X (Twitter) Klucz Klienta'];
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = ['input', 'X (Twitter) Consumer Secret'];
@@ -1037,20 +995,6 @@ $PMF_LANG['msgOnlineMode'] = "FAQ jest on-line";
 $PMF_LANG['msgShowMore'] = "pokaż więcej";
 $PMF_LANG['msgQuestionAnswered'] = "Odpowiedź na pytanie";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Odpowiedź na Twoje pytanie w %s została udzielona. Sprawdź to tutaj";
-
-// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
-$PMF_LANG['rightsLanguage::addattachment'] = "Dodaj załączniki";
-$PMF_LANG['rightsLanguage::editattachment'] = "Edytuj załączniki";
-$PMF_LANG['rightsLanguage::delattachment'] = "Usuń załączniki";
-$PMF_LANG['rightsLanguage::dlattachment'] = "Pobierz załączniki";
-$PMF_LANG['rightsLanguage::reports'] = "Generuj raporty";
-$PMF_LANG['rightsLanguage::addfaq'] = "Dodaj FAQs w serwisie";
-$PMF_LANG['rightsLanguage::addquestion'] = "Dodaj pytania w serwisie";
-$PMF_LANG['rightsLanguage::addcomment'] = "Dodaj komentarze w serwisie";
-$PMF_LANG['rightsLanguage::editinstances'] = "Edytuj Multisites";
-$PMF_LANG['rightsLanguage::addinstances'] = "Dodaj Multisites";
-$PMF_LANG['rightsLanguage::delinstances'] = "Usuń Multisites";
-$PMF_LANG['rightsLanguage::export'] = "Eksport FAQs";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = ["checkbox", "Sortuj losowo FAQs"];
@@ -1191,22 +1135,7 @@ $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatyczne sprawdzenie
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
 $PMF_LANG['ad_user_overwrite_passwd'] = 'Nadpisz hasło';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Zezwól na wersjonowanie zmian w FAQ'];
-$PMF_LANG['rightsLanguage::view_faqs'] = 'Zobacz FAQs';
-$PMF_LANG['rightsLanguage::view_categories'] = 'Zobacz kategorie';
-$PMF_LANG['rightsLanguage::view_sections'] = 'Zobacz sekcje';
-$PMF_LANG['rightsLanguage::view_news'] = 'Zobacz wiadomości';
-$PMF_LANG['rightsLanguage::administrate_groups'] = 'Zarządzaj grupami';
 $PMF_LANG['ad_group_rights'] = 'Uprawnienia grupy';
-$PMF_LANG['ad_menu_meta'] = 'Metadane Szablonu';
-$PMF_LANG['ad_meta_add'] = 'Dodaj metadane szablonu';
-$PMF_LANG['ad_meta_page_id'] = 'Typ strony';
-$PMF_LANG['ad_meta_type'] = 'Typ zawartości';
-$PMF_LANG['ad_meta_content'] = 'Zawartość';
-$PMF_LANG['ad_meta_copy_snippet'] = 'Kopiuj fragment kodu szablonów';
-
-// added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "Sekcje";
-$PMF_LANG['rightsLanguage::viewadminlink'] = 'Zobacz link administratora';
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = ['input', 'Port serwera SMTP'];
@@ -1580,5 +1509,6 @@ $LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'Mapowanie JSON grup AD na gru
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Adres do odpowiedzi dla e-maili'];
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Dozwolone zewnętrzne hosty dla treści multimedialnych (oddziel przecinkami)'];
 $LANG_CONF['layout.customCss'] = ['area', 'Niestandardowy CSS', 'Proszę używać tylko CSS.'];
+$PMF_LANG['ad_quick_sub_category'] = "Dodaj nową podkategorię";
 
 return $PMF_LANG;
