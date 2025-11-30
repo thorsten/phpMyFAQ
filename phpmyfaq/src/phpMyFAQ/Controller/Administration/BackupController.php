@@ -48,20 +48,25 @@ final class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        return $this->render('@admin/backup/main.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            'adminHeaderBackup' => Translation::get(key: 'msgBackup'),
-            'adminBackupCardHeader' => Translation::get(key: 'ad_csv_head'),
-            'adminBackupCardBody' => Translation::get(key: 'ad_csv_make'),
-            'adminBackupLinkData' => Translation::get(key: 'ad_csv_linkdat'),
-            'adminBackupLinkLogs' => Translation::get(key: 'ad_csv_linklog'),
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('restore'),
-            'adminRestoreCardHeader' => Translation::get(key: 'ad_csv_head2'),
-            'adminRestoreCardBody' => Translation::get(key: 'ad_csv_restore'),
-            'adminRestoreLabel' => Translation::get(key: 'ad_csv_file'),
-            'adminRestoreButton' => Translation::get(key: 'ad_csv_ok'),
-        ]);
+        return $this->render(
+            file: '@admin/backup/main.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                'adminHeaderBackup' => Translation::get(key: 'msgBackup'),
+                'adminBackupCardHeader' => Translation::get(key: 'ad_csv_head'),
+                'adminBackupCardBody' => Translation::get(key: 'ad_csv_make'),
+                'adminBackupLinkData' => Translation::get(key: 'ad_csv_linkdat'),
+                'adminBackupLinkLogs' => Translation::get(key: 'ad_csv_linklog'),
+                'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
+                    page: 'restore',
+                ),
+                'adminRestoreCardHeader' => Translation::get(key: 'ad_csv_head2'),
+                'adminRestoreCardBody' => Translation::get(key: 'ad_csv_restore'),
+                'adminRestoreLabel' => Translation::get(key: 'ad_csv_file'),
+                'adminRestoreButton' => Translation::get(key: 'ad_csv_ok'),
+            ],
+        );
     }
 
     #[Route(path: '/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
@@ -69,7 +74,7 @@ final class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        $type = $request->attributes->get('type');
+        $type = $request->attributes->get(key: 'type');
         $backup = $this->container->get(id: 'phpmyfaq.backup');
 
         switch ($type) {
@@ -94,8 +99,14 @@ final class BackupController extends AbstractAdministrationController
                         urlencode($backupFileName),
                     );
 
-                    $response->headers->set('Content-Type', 'application/octet-stream; charset=UTF-8');
-                    $response->headers->set('Content-Disposition', $disposition);
+                    $response->headers->set(
+                        key: 'Content-Type',
+                        values: 'application/octet-stream; charset=UTF-8',
+                    );
+                    $response->headers->set(
+                        key: 'Content-Disposition',
+                        values: $disposition,
+                    );
 
                     return $response;
                 } catch (SodiumException) {
@@ -115,8 +126,14 @@ final class BackupController extends AbstractAdministrationController
                         urlencode($backupFileName),
                     );
 
-                    $response->headers->set('Content-Type', 'application/octet-stream; charset=UTF-8');
-                    $response->headers->set('Content-Disposition', $disposition);
+                    $response->headers->set(
+                        key: 'Content-Type',
+                        values: 'application/octet-stream; charset=UTF-8',
+                    );
+                    $response->headers->set(
+                        key: 'Content-Disposition',
+                        values: $disposition,
+                    );
 
                     return $response;
                 } catch (SodiumException) {
@@ -136,28 +153,40 @@ final class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::RESTORE);
 
-        $csrfToken = $request->query->get('csrf');
-        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('restore', $csrfToken)) {
-            throw new UnauthorizedHttpException('Invalid CSRF token');
+        $csrfToken = $request->query->get(key: 'csrf');
+        if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
+            page: 'restore',
+            requestToken: $csrfToken,
+        )) {
+            throw new UnauthorizedHttpException(challenge: 'Invalid CSRF token');
         }
 
-        $file = $request->files->get('userfile');
+        $file = $request->files->get(key: 'userfile');
 
         if (!$file) {
-            throw new RuntimeException('No file uploaded');
+            throw new RuntimeException(message: 'No file uploaded');
         }
 
         $templateVars = [
             'adminHeaderRestore' => Translation::get(key: 'ad_csv_rest'),
         ];
 
-        if ($file && $file->isValid()) {
+        if ($file->isValid()) {
             $backup = $this->container->get(id: 'phpmyfaq.backup');
 
-            $handle = fopen($file->getPathname(), 'r');
-            $backupData = fgets($handle, 65536);
-            $versionFound = Strings::substr($backupData, 0, 9);
-            $versionExpected = '-- pmf' . substr($this->configuration->getVersion(), 0, 3);
+            $handle = fopen($file->getPathname(), mode: 'r');
+            $backupData = fgets($handle, length: 65536);
+            $versionFound = Strings::substr(
+                string: $backupData,
+                start: 0,
+                length: 9,
+            );
+            $versionExpected = '-- pmf'
+            . substr(
+                string: $this->configuration->getVersion(),
+                offset: 0,
+                length: 3,
+            );
             $queries = [];
 
             $fileName = $file->getClientOriginalName();
@@ -193,8 +222,14 @@ final class BackupController extends AbstractAdministrationController
 
             if ($ok === 1) {
                 // @todo: Start transaction for better recovery if something really bad happens
-                $backupData = trim(Strings::substr($backupData, 11));
-                $tables = explode(' ', $backupData);
+                $backupData = trim(Strings::substr(
+                    string: $backupData,
+                    start: 11,
+                ));
+                $tables = explode(
+                    separator: ' ',
+                    string: $backupData,
+                );
                 $numTables = count($tables);
                 for ($h = 0; $h < $numTables; ++$h) {
                     $queries[] = sprintf('DELETE FROM %s', $tables[$h]);
@@ -209,16 +244,36 @@ final class BackupController extends AbstractAdministrationController
                     ...$templateVars,
                     'prepareMessage' => Translation::get(key: 'ad_csv_prepare'),
                 ];
-                while ($backupData = fgets($handle, 65536)) {
+                while ($backupData = fgets($handle, length: 65536)) {
                     $backupData = trim($backupData);
                     $backupPrefixPattern = '-- pmftableprefix:';
                     $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
-                    if (Strings::substr($backupData, 0, $backupPrefixPatternLength) === $backupPrefixPattern) {
-                        $tablePrefix = trim(Strings::substr($backupData, $backupPrefixPatternLength));
+                    if (
+                        Strings::substr(
+                            string: $backupData,
+                            start: 0,
+                            length: $backupPrefixPatternLength,
+                        ) === $backupPrefixPattern
+                    ) {
+                        $tablePrefix = trim(Strings::substr(
+                            string: $backupData,
+                            start: $backupPrefixPatternLength,
+                        ));
                     }
 
-                    if (Strings::substr($backupData, 0, 2) !== '--' && $backupData !== '') {
-                        $queries[] = trim(Strings::substr($backupData, 0, -1));
+                    if (
+                        Strings::substr(
+                                string: $backupData,
+                                start: 0,
+                                length: 2,
+                            ) !== '--'
+                        && $backupData !== ''
+                    ) {
+                        $queries[] = trim(Strings::substr(
+                            string: $backupData,
+                            start: 0,
+                            length: -1,
+                        ));
                     }
                 }
 
@@ -292,10 +347,13 @@ final class BackupController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render('@admin/backup/import.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            ...$templateVars,
-        ]);
+        return $this->render(
+            file: '@admin/backup/import.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ],
+        );
     }
 }
