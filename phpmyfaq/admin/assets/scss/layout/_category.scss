@@ -70,3 +70,61 @@
     display: block;
   }
 }
+
+// Drop zone styling for empty nested-sortable containers
+.nested-sortable {
+  transition: all 0.2s ease;
+
+  &:empty {
+    min-height: 0;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 0;
+      border: 0 dashed transparent;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      opacity: 0;
+    }
+  }
+
+  // Show drop zone when dragging
+  &.sortable-drag-active:empty {
+    min-height: 50px;
+    height: 50px;
+    margin: 8px 0;
+
+    &::after {
+      top: 8px;
+      left: 30px;
+      right: 30px;
+      height: 34px;
+      border: 3px dashed var(--bs-primary);
+      background: linear-gradient(135deg, rgba(13, 110, 253, 0.08) 0%, rgba(13, 110, 253, 0.15) 100%);
+      box-shadow: inset 0 0 20px rgba(13, 110, 253, 0.1);
+      opacity: 1;
+    }
+  }
+}
+
+// Visual feedback during drag
+.sortable-ghost {
+  opacity: 0.3;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sortable-drag {
+  opacity: 1;
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}

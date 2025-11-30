@@ -37,7 +37,21 @@ export const handleCategories = (): void => {
       fallbackOnBody: true,
       swapThreshold: 0.65,
       dataIdAttr: identifier,
+      emptyInsertThreshold: 10,
+      onStart: (): void => {
+        // Add class to all empty drop zones when drag starts
+        const emptySortables = document.querySelectorAll<HTMLElement>(`${nestedQuery}:empty`);
+        emptySortables.forEach((sortable: HTMLElement): void => {
+          sortable.classList.add('sortable-drag-active');
+        });
+      },
       onEnd: async (event: SortableEvent): Promise<void> => {
+        // Remove class from all drop zones when drag ends
+        const allSortables = document.querySelectorAll<HTMLElement>(nestedQuery);
+        allSortables.forEach((sortable: HTMLElement): void => {
+          sortable.classList.remove('sortable-drag-active');
+        });
+
         const categoryId = event.item.getAttribute('data-pmf-catid') as string;
         const csrf: string = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
         const data: SerializedTree[] = serializedTree(root);

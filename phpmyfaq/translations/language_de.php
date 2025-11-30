@@ -1524,5 +1524,6 @@ $PMF_LANG['msgTranslatedKeys'] = 'Zahl der Übersetzungen';
 $PMF_LANG['msgMissingKeys'] = 'Fehlende Übersetzungen';
 $PMF_LANG['msgCompletionPercentage'] = 'Umsetzung in %';
 $PMF_LANG['msgInstalledNewerThanAvailable'] = 'Die installierte Version ist neuer als die verfügbare Version.';
+$PMF_LANG['ad_quick_sub_category'] = "Neue Sub-Kategorie hinzufügen";
 
 return $PMF_LANG;
