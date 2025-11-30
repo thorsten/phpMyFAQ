@@ -829,7 +829,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = '¿La respuesta que buscas está en l
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Por favor, seleccione el idioma a traducir';
-$PMF_LANG['msgLangDirIsntWritable'] = 'El directorio con los archivos de traducción no es escribible.';
 $PMF_LANG['ad_menu_translations'] = 'Traducción';
 $PMF_LANG['ad_start_notactive'] = 'Esperando activación';
 

@@ -646,7 +646,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Добавить новое стоп-с
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Нет, нужного ответа нет (будет отправлен на email)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Вы нашли то, что искали?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Выберите язык для локализации';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Папка с языковыми файлами не имеет прав на запись';
 $PMF_LANG['ad_menu_translations'] = 'Локализация интерфейса';
 $PMF_LANG['ad_start_notactive'] = 'Ожидают активации';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Добавить новую локализацию';

@@ -846,7 +846,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Je hľadaná odpoveď zobrazená vo 
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Prosím vyberte jazyk prekladu';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Preklady dir nie sú zapisovateľné';
 $PMF_LANG['ad_menu_translations'] = 'Rozhranie prekladu';
 $PMF_LANG['ad_start_notactive'] = 'Čaká sa na aktiváciu';
 

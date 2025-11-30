@@ -646,7 +646,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Voeg nieuw stopwoord toe';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Nee, er is nog steeds geen adequaat antwoord (het e-mailbericht wordt verzonden)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is het gewenste antwoord vermeld in de bovenstaande resultaten?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Kies de taal voor vertaling';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Vertalingen map is niet beschrijfbaar';
 $PMF_LANG['ad_menu_translations'] = 'Programma vertaling';
 $PMF_LANG['ad_start_notactive'] = 'Wachten op activering';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Toevoegen van nieuwe vertaling';

@@ -847,7 +847,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Apakah jawaban yang diinginkan sudah
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Silakan pilih bahasa untuk terjemahan';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Direktori terjemahan tidak bisa ditulisi';
 $PMF_LANG['ad_menu_translations'] = 'Antarmuka terjemahan';
 $PMF_LANG['ad_start_notactive'] = 'Menunggu aktivasi';
 

@@ -676,7 +676,6 @@ $PMF_LANG['ad_config_stopword_input'] = '新規ストップワードの追加';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the results above?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = '翻訳する言語を選んでください';
-$PMF_LANG['msgLangDirIsntWritable'] = '翻訳ディレクトリーを書き込めません';
 $PMF_LANG['ad_menu_translations'] = '翻訳インターフェース';
 $PMF_LANG['ad_start_notactive'] = '有効化待ち';
 $PMF_LANG['msgTransToolAddNewTranslation'] = '新規翻訳の追加';

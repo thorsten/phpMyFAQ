@@ -675,7 +675,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Tambah kata henti baru';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Tidak, jawapan tidak mencukupi (akan hantar mel)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Adakah jawapan yang diperlukan tersenarai dalam keputusan di atas?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Sila pilih bahasa untuk terjemahan';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Dir terjemahan tidak boleh ditulis';
 $PMF_LANG['ad_menu_translations'] = 'Antaramuka Penterjemahan';
 $PMF_LANG['ad_start_notactive'] = 'Menunggu untuk pengaktifan';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Tambah terjemahan baru';

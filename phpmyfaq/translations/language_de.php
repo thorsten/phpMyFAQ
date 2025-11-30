@@ -826,7 +826,6 @@ $PMF_LANG['msgSendMailIfNothingIsFound'] = "Ist die gesuchte Antwort oben gelist
 
 // added 2.5.0-RC - 2009-05-11 by Anatoliy & Thorsten
 $PMF_LANG['msgChooseLanguageToTranslate'] = "Bitte wählen Sie die zu übersetzende Sprache aus";
-$PMF_LANG['msgLangDirIsntWritable'] = "Das Verzeichnis mit den Übersetzungsdateien ist nicht beschreibbar.";
 $PMF_LANG['ad_menu_translations'] = "Übersetzung";
 $PMF_LANG['ad_start_notactive'] = "Wartend auf Freischaltung";
 

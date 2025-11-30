@@ -663,7 +663,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Adicionar uma nova stop word';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Não; ainda não existe uma resposta adequada (enviá-la-ei no e-mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'A resposta pretendida encontra-se na lista anterior?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Escolha p.f. o idioma para tradução';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Não é possível efetuar gravações na pasta de Traduções.';
 $PMF_LANG['ad_menu_translations'] = 'Interface de Tradução';
 $PMF_LANG['ad_start_notactive'] = 'À espera de ser ativada(o)';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Adicionar um novo idioma de tradução';

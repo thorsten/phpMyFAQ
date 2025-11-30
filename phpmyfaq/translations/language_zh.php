@@ -647,7 +647,6 @@ $PMF_LANG['ad_config_stopword_input'] = '添加禁用词';
 $PMF_LANG['msgSendMailDespiteEverything'] = '不, 还没有匹配的答案 (将发送邮件)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = '想要的答案在以上结果中吗?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = '请选择要翻译的语言';
-$PMF_LANG['msgLangDirIsntWritable'] = '翻译目录不能写入';
 $PMF_LANG['ad_menu_translations'] = '界面翻译';
 $PMF_LANG['ad_start_notactive'] = '等待激活';
 $PMF_LANG['msgTransToolAddNewTranslation'] = '添加翻译';

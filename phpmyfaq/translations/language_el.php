@@ -678,7 +678,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Προσθήκη νέου stop word';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Όχι. Δεν υπάρχει κατάλληλη απάντηση (θα σταλθεί e-mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Υπάρχει η αναζητούμενη απάντηση στα παρακάτω αποτελέσματα;';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Παρακαλώ επιλέξτε μια γλώσσα για μετάφραση';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Ο κατάλογος μεταφράσεων δεν είναι προσβάσιμος';
 $PMF_LANG['ad_menu_translations'] = 'Μεταφραστής επιφάνειας';
 $PMF_LANG['ad_start_notactive'] = 'Αναμονή για ενεργοποίηση';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Προσθήκη νέας μετάφρασης';

@@ -614,7 +614,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Adauga cuvinte cenzurate';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Acest raspuns nu este adecvat (voi trimite mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Este raspunsul cautat de tine printre rezultatele existente?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Te rog alege o limba pentru traducere';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Directorul traducerii nu se poate scrie';
 $PMF_LANG['ad_menu_translations'] = 'Traducerea interfetei';
 $PMF_LANG['ad_start_notactive'] = 'Asteptati activarea';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Adauga traducere noua';

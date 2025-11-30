@@ -647,7 +647,6 @@ $PMF_LANG['ad_config_stopword_input'] = 'Legg til nytt stoppeord';
 $PMF_LANG['msgSendMailDespiteEverything'] = 'Nei, er det fortsatt ingen tilstrekkelige svar (sender mail)';
 $PMF_LANG['msgSendMailIfNothingIsFound'] = 'Er ønsket svar oppført i resultatene ovenfor?';
 $PMF_LANG['msgChooseLanguageToTranslate'] = 'Velg språk for oversettelse';
-$PMF_LANG['msgLangDirIsntWritable'] = 'Mappen for oversettelser er ikke skrivbart';
 $PMF_LANG['ad_menu_translations'] = 'Oversettelser av menyer';
 $PMF_LANG['ad_start_notactive'] = 'Venter på aktivering';
 $PMF_LANG['msgTransToolAddNewTranslation'] = 'Legg til ny oversettelse';
