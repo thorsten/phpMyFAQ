@@ -447,17 +447,8 @@
         <div class="card-header text-end" role="tab" id="pmf-heading-date">
           {% if selectedRevisionId == faqData['revision_id'] %}
             <button class="btn btn-info" type="reset">
-              {{ ad_gen_reset }}
+              <i class="bi bi-x-circle" aria-hidden="true"></i> {{ ad_gen_reset }}
             </button>
-
-            {% if editExistingFaq %}
-            <button class="btn btn-danger" type="button" id="faqEditorDelete" data-bs-toggle="modal"
-                    data-bs-target="#deleteFaqModal" data-faq-id="{{ faqData['id'] }}"
-                    data-faq-language="{{ faqData['lang'] }}"
-                    data-pmf-csrf-token="{{ csrfToken }}">
-              <i class="bi bi-trash" aria-hidden="true"></i> {{ 'msgDelete' | translate }}
-            </button>
-            {% endif %}
 
             <button class="btn btn-primary" type="submit" id="faqEditorSubmit">
               <i class="bi bi-save" aria-hidden="true"></i> {{ ad_entry_save }}
@@ -465,7 +456,7 @@
           {% endif %}
         </div>
         <div class="card-body">
-          <h5 class="mb-0">
+          <h5 class="mb-2">
             {{ 'msgDate' | translate }}
           </h5>
           <div class="form-group">
@@ -496,10 +487,10 @@
             </div>
           </div>
 
-          <h5 class="mb-0">
-            {{ ad_entry_status }}
-          </h5>
-          <div class="form-group">
+          <div class="form-group border-top mb-2">
+            <h5 class="my-2">
+              {{ ad_entry_status }}
+            </h5>
             <!-- active or not -->
             {% if hasPermissionForApprove %}
               <div class="form-check">
@@ -525,10 +516,10 @@
           </div>
 
           {% if canBeNewRevision %}
-            <h5 class="mt-2">
-              {{ ad_entry_new_revision }}
-            </h5>
-            <div class="form-group">
+            <div class="form-group border-top mb-2">
+              <h5 class="my-2">
+                {{ ad_entry_new_revision }}
+              </h5>
               <div class="form-check">
                 <input type="radio" name="revision" id="revision" value="yes" class="form-check-input">
                 <label class="form-check-label" for="revision">{{ ad_gen_yes }}</label>
@@ -540,11 +531,9 @@
             </div>
           {% endif %}
 
-          <hr>
-
-          <div class="form-group">
+          <div class="form-group border-top mb-2">
             <!-- sticky or not -->
-            <div class="form-check">
+            <div class="form-check mt-2">
               <input type="checkbox" id="sticky" name="sticky" class="form-check-input"
                 {{ faqData['sticky'] ? 'checked' : '' }}>
               <label class="form-check-label" for="sticky">{{ 'msgStickyFAQ' | translate }}</label>
@@ -558,9 +547,7 @@
             </div>
           </div>
 
-          <hr>
-
-          <div class="form-group">
+          <div class="form-group border-top mb-2">
             <!-- solution id -->
             <label class="col-form-label" for="solutionId">
               {{ ad_entry_solution_id }}
@@ -568,6 +555,18 @@
             <input type="number" name="solutionId" id="solutionId" size="5" class="form-control"
                    value="{{ faqData['solution_id'] ?? nextSolutionId }}" readonly>
           </div>
+
+          {% if editExistingFaq %}
+          <div class="form-group border-top mb-2">
+            <button class="btn btn-danger mt-2 w-100" type="button" id="faqEditorDelete" data-bs-toggle="modal"
+                    data-bs-target="#deleteFaqModal" data-faq-id="{{ faqData['id'] }}"
+                    data-faq-language="{{ faqData['lang'] }}"
+                    data-pmf-csrf-token="{{ csrfToken }}">
+              <i class="bi bi-trash" aria-hidden="true"></i> {{ 'msgDelete' | translate }}
+            </button>
+          </div>
+          {% endif %}
+
         </div>
       </div>
       </form>
