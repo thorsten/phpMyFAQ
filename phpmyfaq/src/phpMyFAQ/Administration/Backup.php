@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Provides methods for phpMyFAQ backups
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-10-08
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 

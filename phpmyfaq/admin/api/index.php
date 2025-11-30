@@ -30,8 +30,8 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../../src/services.php');
-} catch (\Exception $e) {
-    echo $e->getMessage();
+} catch (Exception $exception) {
+    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }
 
 $routes = include PMF_SRC_DIR  . '/admin-api-routes.php';

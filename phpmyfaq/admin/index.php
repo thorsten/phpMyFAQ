@@ -34,7 +34,7 @@ $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }
 
 $routes = include PMF_SRC_DIR  . '/admin-routes.php';
@@ -43,5 +43,5 @@ $app = new Application($container);
 try {
     $app->run($routes);
 } catch (Exception $exception) {
-    echo $exception->getMessage();
+    echo sprintf('Error: %s at line %d at %s', $exception->getMessage(), $exception->getLine(), $exception->getFile());
 }

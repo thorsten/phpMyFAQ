@@ -93,7 +93,7 @@ class Faq
             $onlyNew
                 ? sprintf("AND fd.created > '%s'", date(
                     format: 'Y-m-d H:i:s',
-                    timestamp: strtotime('-1 month'),
+                    timestamp: strtotime(datetime: '-1 month'),
                 ))
                 : '',
         );
@@ -250,11 +250,10 @@ class Faq
 
         $result = $this->configuration->getDb()->query($query);
         $orphaned = [];
-        $data = [];
 
         $oldId = 0;
         while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($oldId != $row->id) {
+            if ($oldId !== $row->id) {
                 $data = new stdClass();
                 $data->faqId = $row->id;
                 $data->language = $row->lang;

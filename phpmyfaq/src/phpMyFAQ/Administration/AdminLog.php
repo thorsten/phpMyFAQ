@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The main Logging class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2006-08-15
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
@@ -69,7 +69,7 @@ readonly class AdminLog
     public function log(User $user, string $logText = ''): bool
     {
         if (!$this->configuration->get(item: 'main.enableAdminLog')) {
-            return false; // early return, avoids else
+            return false;
         }
 
         $request = Request::createFromGlobals();
@@ -81,7 +81,7 @@ readonly class AdminLog
      */
     public function delete(): bool
     {
-        $timestamp = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - (30 * 86400);
+        $timestamp = (int) Request::createFromGlobals()->server->get(key: 'REQUEST_TIME') - (30 * 86400);
         return $this->repository->deleteOlderThan($timestamp);
     }
 }

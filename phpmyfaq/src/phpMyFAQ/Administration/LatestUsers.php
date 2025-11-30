@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Service to fetch latest users for admin dashboard widgets.
+ * Service to fetch the latest users for admin dashboard widgets.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

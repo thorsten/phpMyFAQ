@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Simple HTTP Streamer based on Symfony HttpFoundation.
  * This class manages the stream of a generic content
@@ -24,6 +22,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 

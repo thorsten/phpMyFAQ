@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The reporting class for simple report generation.
  *
@@ -18,10 +16,11 @@ declare(strict_types=1);
  * @since     2011-02-04
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Date;
 
 /**
@@ -31,12 +30,15 @@ use phpMyFAQ\Date;
  */
 readonly class Report
 {
+    private ReportRepository $repository;
+
     /**
      * Constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
+        $this->repository = new ReportRepository($configuration);
     }
 
     /**
@@ -47,59 +49,11 @@ readonly class Report
     public function getReportingData(): array
     {
         $report = [];
-
-        $query = sprintf(
-            '
-            SELECT
-                fd.id AS id,
-                fd.lang AS lang,
-                fcr.category_id AS category_id,
-                c.name as category_name,
-                c.parent_id as parent_id,
-                fd.sticky AS sticky,
-                fd.thema AS question,
-                fd.author AS original_author,
-                fd.updated AS updated,
-                fv.visits AS visits,
-                u.display_name AS last_author
-            FROM
-                %sfaqdata fd
-            LEFT JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                (fd.id = fcr.record_id AND fd.lang = fcr.record_lang)
-            LEFT JOIN
-                %sfaqvisits fv
-            ON
-                (fd.id = fv.id AND fd.lang = fv.lang)
-            LEFT JOIN
-                %sfaqchanges as fc
-            ON
-                (fd.id = fc.id AND fd.lang = fc.lang)
-            LEFT JOIN
-                %sfaquserdata as u
-            ON
-                (u.user_id = fc.usr)
-            LEFT JOIN
-                %sfaqcategories as c
-            ON
-                (c.id = fcr.category_id AND c.lang = fcr.record_lang)
-            ORDER BY
-                fd.id
-            ASC',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-        );
-
-        $result = $this->configuration->getDb()->query($query);
+        $rows = $this->repository->fetchAllReportData();
 
         $lastId = 0;
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            if ($row->id == $lastId) {
+        foreach ($rows as $row) {
+            if ($row->id === $lastId) {
                 ++$report[$row->id]['faq_translations'];
             }
 
@@ -133,19 +87,27 @@ readonly class Report
      */
     public function convertEncoding(string $outputString = ''): string
     {
-        $outputString = html_entity_decode($outputString, ENT_QUOTES, 'utf-8');
-        $outputString = str_replace(',', ' ', $outputString);
+        $outputString = html_entity_decode($outputString, ENT_QUOTES, encoding: 'utf-8');
+        $outputString = str_replace(
+            search: ',',
+            replace: ' ',
+            subject: $outputString,
+        );
 
-        if (extension_loaded('mbstring')) {
+        if (extension_loaded(extension: 'mbstring')) {
             $detected = mb_detect_encoding($outputString);
 
             if ($detected !== 'ASCII') {
-                $outputString = mb_convert_encoding($outputString, 'UTF-16', $detected);
+                $outputString = mb_convert_encoding($outputString, to_encoding: 'UTF-16', from_encoding: $detected);
             }
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        return str_replace($toBeRemoved, '', $outputString);
+        return str_replace(
+            search: $toBeRemoved,
+            replace: '',
+            subject: $outputString,
+        );
     }
 
     /**
@@ -155,8 +117,19 @@ readonly class Report
      */
     public static function sanitize(int|string $value): string|int
     {
-        if (preg_match('/[=\+\-\@\|]/', (string) $value)) {
-            return '"' . str_replace('"', '""', $value) . '"';
+        if (preg_match(
+            pattern: '/[=\+\-\@\|]/',
+            subject: (string) $value,
+        )) {
+            return (
+                '"'
+                . str_replace(
+                    search: '"',
+                    replace: '""',
+                    subject: $value,
+                )
+                . '"'
+            );
         }
 
         return $value;

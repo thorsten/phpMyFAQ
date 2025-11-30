@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for Administration backend.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-19
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 

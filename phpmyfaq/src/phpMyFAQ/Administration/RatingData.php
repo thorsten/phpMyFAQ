@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Rating data class for the administration.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-29
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Administration;
 
