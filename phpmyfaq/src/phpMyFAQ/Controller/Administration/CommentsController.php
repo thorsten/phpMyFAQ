@@ -22,6 +22,8 @@ namespace phpMyFAQ\Controller\Administration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Pagination;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Twig\Extensions\FaqTwigExtension;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,20 +45,48 @@ final class CommentsController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::COMMENT_DELETE);
 
+        $page = Filter::filterVar($request->query->get(key: 'page'), FILTER_VALIDATE_INT);
+        $page = max(1, $page);
+
         $comment = $this->container->get(id: 'phpmyfaq.comments');
 
-        $faqComments = $comment->getAllComments();
-        $newsComments = $comment->getAllComments(CommentType::NEWS);
+        $itemsPerPage = 10;
+        $allFaqComments = $comment->getAllComments();
+        $allNewsComments = $comment->getAllComments(CommentType::NEWS);
+
+        $faqComments = array_slice($allFaqComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
+        $newsComments = array_slice($allNewsComments, ($page - 1) * $itemsPerPage, $itemsPerPage);
+
+        $baseUrl = sprintf('%sadmin/comments?page=%d', $this->configuration->getDefaultUrl(), $page);
+
+        $faqCommentsPagination = new Pagination([
+            'baseUrl' => $baseUrl,
+            'total' => is_countable($allFaqComments) ? count($allFaqComments) : 0,
+            'perPage' => $itemsPerPage,
+        ]);
+
+        $newsCommentsPagination = new Pagination([
+            'baseUrl' => $baseUrl,
+            'total' => is_countable($allNewsComments) ? count($allNewsComments) : 0,
+            'perPage' => $itemsPerPage,
+        ]);
 
         $this->addExtension(new IntlExtension());
         $this->addExtension(new AttributeExtension(FaqTwigExtension::class));
-        return $this->render('@admin/content/comments.twig', [
-            ...$this->getHeader($request),
-            ...$this->getFooter(),
-            'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
-            'faqComments' => $faqComments,
-            'newsComments' => $newsComments,
-            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('delete-comment'),
-        ]);
+        return $this->render(
+            file: '@admin/content/comments.twig',
+            context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                'currentLocale' => $this->configuration->getLanguage()->getLanguage(),
+                'faqComments' => $faqComments,
+                'newsComments' => $newsComments,
+                'faqCommentsPagination' => $faqCommentsPagination->render(),
+                'newsCommentsPagination' => $newsCommentsPagination->render(),
+                'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
+                    page: 'delete-comment',
+                ),
+            ],
+        );
     }
 }

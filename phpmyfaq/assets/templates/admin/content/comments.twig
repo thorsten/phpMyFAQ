@@ -63,6 +63,11 @@
               </td>
             </tr>
           {% endfor %}
+          <tfoot>
+          <tr>
+            <td colspan="2">{{ faqCommentsPagination | raw }}</td>
+          </tr>
+          </tfoot>
         </table>
 
       </form>
@@ -107,6 +112,11 @@
               </td>
             </tr>
           {% endfor %}
+          <tfoot>
+          <tr>
+            <td colspan="2">{{ newsCommentsPagination | raw }}</td>
+          </tr>
+          </tfoot>
         </table>
 
       </form>
