@@ -27,6 +27,7 @@ use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use RuntimeException;
 use SodiumException;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,6 +142,10 @@ final class BackupController extends AbstractAdministrationController
         }
 
         $file = $request->files->get('userfile');
+
+        if (!$file) {
+            throw new RuntimeException('No file uploaded');
+        }
 
         $templateVars = [
             'adminHeaderRestore' => Translation::get(key: 'ad_csv_rest'),
