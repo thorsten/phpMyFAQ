@@ -95,6 +95,23 @@ export const handleSaveConfiguration = async (): Promise<void> => {
       const form = document.getElementById('configuration-list') as HTMLFormElement;
       const formData = new FormData(form);
 
+      // Collect all configuration field names that are currently in the form
+      const availableFields: string[] = [];
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach((input: Element): void => {
+        const name = (input as HTMLInputElement).name;
+        if (name && name.startsWith('edit[')) {
+          // Extract the config key from a name like "edit[main.language]"
+          const match = name.match(/edit\[([^\]]+)\]/);
+          if (match) {
+            availableFields.push(match[1]);
+          }
+        }
+      });
+
+      // Add the available fields list to the form data
+      formData.append('availableFields', JSON.stringify(availableFields));
+
       const response = (await saveConfiguration(formData)) as unknown as Response;
 
       if (typeof response.success === 'string') {

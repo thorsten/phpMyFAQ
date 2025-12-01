@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin Configuration Tab Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
@@ -93,6 +93,7 @@ final class ConfigurationTabController extends AbstractController
 
         $csrfToken = $request->request->get(key: 'pmf-csrf-token');
         $configurationData = $request->getPayload()->all(key: 'edit');
+        $availableFieldsJson = $request->request->get(key: 'availableFields');
 
         $oldConfigurationData = $this->configuration->getAll();
 
@@ -101,6 +102,15 @@ final class ConfigurationTabController extends AbstractController
             requestToken: $csrfToken,
         )) {
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Parse the list of available fields from the form
+        $availableFields = [];
+        if ($availableFieldsJson) {
+            $availableFields = json_decode($availableFieldsJson, true);
+            if (!is_array($availableFields)) {
+                $availableFields = [];
+            }
         }
 
         // Set the new values
@@ -152,10 +162,24 @@ final class ConfigurationTabController extends AbstractController
             }
         }
 
+        // Only process fields that were available in the current form
+        // For checkboxes: if field is available but not in configurationData, set to false
+        // For other fields: keep original value if not in configurationData
+        if (!empty($availableFields)) {
+            foreach ($availableFields as $fieldKey) {
+                if (!array_key_exists($fieldKey, $newConfigValues)) {
+                    // Field was in the form but not submitted (unchecked checkbox)
+                    if (isset($oldConfigurationData[$fieldKey]) && $oldConfigurationData[$fieldKey] === 'true') {
+                        $newConfigValues[$fieldKey] = 'false';
+                    }
+                }
+            }
+        }
+
+        // Keep all values that were not in the available fields (from other tabs)
         foreach ($oldConfigurationData as $key => $value) {
-            $newValueExists = array_key_exists($key, $newConfigValues);
-            if (!$newValueExists) {
-                $newConfigValues[$key] = $value === 'true' ? 'false' : $value;
+            if (!array_key_exists($key, $newConfigValues)) {
+                $newConfigValues[$key] = $value;
             }
         }
 
