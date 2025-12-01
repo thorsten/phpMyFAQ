@@ -20,11 +20,16 @@ declare(strict_types=1);
 namespace phpMyFAQ\Administration;
 
 use DateTimeImmutable;
+use phpMyFAQ\Administration\Backup\BackupExecuteResult;
+use phpMyFAQ\Administration\Backup\BackupExportResult;
+use phpMyFAQ\Administration\Backup\BackupParseResult;
+use phpMyFAQ\Administration\Backup\BackupRepository;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Enums\BackupType;
+use phpMyFAQ\Strings;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SodiumException;
@@ -64,10 +69,13 @@ readonly class Backup
 
             if ($lastBackup !== null && isset($lastBackup->created)) {
                 $createdRaw = (string) $lastBackup->created;
-                $createdDate = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $createdRaw) ?: null;
+                $createdDate = DateTimeImmutable::createFromFormat(
+                    format: 'Y-m-d H:i:s',
+                    datetime: $createdRaw,
+                ) ?: null;
                 if ($createdDate !== null) {
-                    $lastBackupDateFormatted = $createdDate->format('Y-m-d H:i:s');
-                    $threshold = new DateTimeImmutable('-30 days');
+                    $lastBackupDateFormatted = $createdDate->format(format: 'Y-m-d H:i:s');
+                    $threshold = new DateTimeImmutable(datetime: '-30 days');
                     $isBackupOlderThan30Days = $createdDate < $threshold;
                 } else {
                     $isBackupOlderThan30Days = true;
@@ -196,7 +204,15 @@ readonly class Backup
     private function getBackupHeader(string $tableNames): array
     {
         return [
-            sprintf('-- pmf%s: %s', substr($this->configuration->getVersion(), 0, 3), $tableNames),
+            sprintf(
+                '-- pmf%s: %s',
+                substr(
+                    string: $this->configuration->getVersion(),
+                    offset: 0,
+                    length: 3,
+                ),
+                $tableNames,
+            ),
             '-- DO NOT REMOVE THE FIRST LINE!',
             '-- pmftableprefix: ' . Database::getTablePrefix(),
             '-- DO NOT REMOVE THE LINES ABOVE!',
@@ -236,6 +252,157 @@ readonly class Backup
         $zipArchive->close();
 
         return $zipFile;
+    }
+
+    /**
+     * Creates a backup for the given type and returns filename + content.
+     *
+     * @throws SodiumException
+     * @throws \Exception
+     *
+     */
+    public function export(BackupType $type): BackupExportResult
+    {
+        $tableNames = $this->getBackupTableNames($type);
+
+        $backupContent = $this->generateBackupQueries($tableNames);
+
+        $fileName = $this->createBackup($type->value, $backupContent);
+
+        return new BackupExportResult($fileName, $backupContent);
+    }
+
+    /**
+     * Parses a backup file, checks the version and creates SQL queries + table prefix.
+     *
+     * @throws Exception
+     */
+    public function parseBackupFile(string $filePath, string $currentVersion): BackupParseResult
+    {
+        $handle = fopen($filePath, mode: 'r');
+        if (false === $handle) {
+            throw new Exception(message: sprintf('Cannot open backup file "%s".', $filePath));
+        }
+
+        $firstLine = fgets($handle, length: 65536);
+        if (false === $firstLine) {
+            fclose($handle);
+            throw new Exception(message: 'Empty backup file.');
+        }
+
+        $versionFound = Strings::substr(
+            string: $firstLine,
+            start: 0,
+            length: 9,
+        );
+
+        $versionExpected = '-- pmf'
+        . substr(
+            string: $currentVersion,
+            offset: 0,
+            length: 3,
+        );
+
+        // Tabellen aus der ersten Zeile extrahieren
+        $tablesLine = trim(Strings::substr(
+            string: $firstLine,
+            start: 11,
+        ));
+        $tables = explode(
+            separator: ' ',
+            string: $tablesLine,
+        );
+
+        $queries = [];
+        foreach ($tables as $tableName) {
+            if ('' === $tableName) {
+                continue;
+            }
+
+            $queries[] = sprintf('DELETE FROM %s', $tableName);
+        }
+
+        $tablePrefix = '';
+
+        while ($line = fgets($handle, length: 65536)) {
+            $line = trim($line);
+            $backupPrefixPattern = '-- pmftableprefix:';
+            $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
+
+            if (
+                Strings::substr(
+                    string: $line,
+                    start: 0,
+                    length: $backupPrefixPatternLength,
+                ) === $backupPrefixPattern
+            ) {
+                $tablePrefix = trim(Strings::substr($line, $backupPrefixPatternLength));
+
+                continue;
+            }
+
+            if (
+                Strings::substr(
+                        string: $line,
+                        start: 0,
+                        length: 2,
+                    ) !== '--'
+                && $line !== ''
+            ) {
+                $queries[] = trim(Strings::substr(
+                    string: $line,
+                    start: 0,
+                    length: -1,
+                ));
+            }
+        }
+
+        fclose($handle);
+
+        $versionMatches = $versionFound === $versionExpected;
+
+        return new BackupParseResult(
+            versionMatches: $versionMatches,
+            versionFound: $versionFound,
+            versionExpected: $versionExpected,
+            queries: $queries,
+            tablePrefix: $tablePrefix,
+        );
+    }
+
+    /**
+     * Executes the given backup queries with the correct table prefix.
+     */
+    public function executeBackupQueries(array $queries, string $tablePrefix): BackupExecuteResult
+    {
+        $db = $this->configuration->getDb();
+
+        $ok = 0;
+        $failed = 0;
+        $lastErrorQuery = null;
+        $lastErrorReason = null;
+
+        foreach ($queries as $query) {
+            $alignedQuery = $this->databaseHelper::alignTablePrefix($query, $tablePrefix, Database::getTablePrefix());
+
+            $result = $db->query($alignedQuery);
+            if (!$result) {
+                ++$failed;
+                $lastErrorQuery = $alignedQuery;
+                $lastErrorReason = $db->error();
+
+                continue;
+            }
+
+            ++$ok;
+        }
+
+        return new BackupExecuteResult(
+            queriesOk: $ok,
+            queriesFailed: $failed,
+            lastErrorQuery: $lastErrorQuery,
+            lastErrorReason: $lastErrorReason,
+        );
     }
 
     private function getRepository(): BackupRepository

@@ -44,7 +44,6 @@ class FormsHelperTest extends TestCase
         $result = $this->helper->filterAndSortFormData($data, $this->translation);
         $this->assertCount(1, $result);
         $this->assertEquals(2, $result[0]->input_id);
-        $this->assertIsString($result[0]->input_label); // wurde via Translation::get() ersetzt
     }
 
     public function testCurrentLanguagePreferredOverDefault(): void

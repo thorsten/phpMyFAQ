@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Administration;
+namespace phpMyFAQ\Administration\Backup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
