@@ -27,8 +27,10 @@ describe('cookie-consent', () => {
       autoShow: true,
       mode: 'opt-in',
       cookie: {
-        name: 'phpmyfaq_cc_cookie',
+        domain: 'localhost',
+        name: 'pmf_cc_cookie',
         expiresAfterDays: 182,
+        sameSite: 'Strict',
       },
       guiOptions: {
         consentModal: {

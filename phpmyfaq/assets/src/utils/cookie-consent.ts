@@ -21,13 +21,11 @@ cc.run({
   // disablePageInteraction: true,
   // hideFromBots: true,
   mode: 'opt-in',
-  // revision: 0,
 
   cookie: {
-    name: 'phpmyfaq_cc_cookie',
-    // domain: location.hostname,
-    // path: '/',
-    // sameSite: "Lax",
+    name: 'pmf_cc_cookie',
+    domain: location.hostname,
+    sameSite: 'Strict',
     expiresAfterDays: 182,
   },
   guiOptions: {

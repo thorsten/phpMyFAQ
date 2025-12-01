@@ -179,7 +179,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 //
-// Connect to LDAP server, when LDAP support is enabled
+// Connect to the LDAP server when LDAP support is enabled
 //
 if ($faqConfig->isLdapActive() && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
     $ldapConfig = new LdapConfiguration(PMF_CONFIG_DIR . '/ldap.php');
