@@ -79,7 +79,10 @@ readonly class BackupRepository
         }
 
         $table = Database::getTablePrefix() . 'faqbackup';
-        $id = $this->configuration->getDb()->nextId($table, 'id');
+        $id = $this->configuration->getDb()->nextId(
+            table: $table,
+            column: 'id',
+        );
 
         $filenameEscaped = $this->configuration->getDb()->escape($filename);
         $authKeyEscaped = $this->configuration->getDb()->escape($authKeyHex);
