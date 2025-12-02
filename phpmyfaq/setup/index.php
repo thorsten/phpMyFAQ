@@ -2,8 +2,10 @@
 
 /**
  * The main phpMyFAQ Setup.
+ *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -70,7 +72,7 @@ Environment::init();
 Strings::init();
 
 //
-// Set translation class
+// Set a translation class
 //
 try {
     Translation::create()

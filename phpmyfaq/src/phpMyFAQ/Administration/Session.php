@@ -20,16 +20,18 @@ declare(strict_types=1);
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
 readonly class Session
 {
+    private SessionRepository $repository;
+
     public function __construct(
         private Configuration $configuration,
     ) {
+        $this->repository = new SessionRepository($configuration);
     }
 
     /**
@@ -42,23 +44,9 @@ readonly class Session
         try {
             $minTimestamp = (int) Request::createFromGlobals()->server->get('REQUEST_TIME') - $windowSeconds;
             if ($this->configuration->get(item: 'main.enableUserTracking')) {
-                $query = sprintf(
-                    'SELECT COUNT(DISTINCT user_id) AS cnt FROM %sfaqsessions WHERE time >= %d AND user_id > 0',
-                    Database::getTablePrefix(),
-                    $minTimestamp - (PMF_AUTH_TIMEOUT * 60),
-                );
+                $count = $this->repository->countOnlineUsersFromSessions($minTimestamp - (PMF_AUTH_TIMEOUT * 60));
             } else {
-                $query = sprintf(
-                    'SELECT COUNT(*) AS cnt FROM %sfaquser WHERE session_id IS NOT NULL AND session_timestamp >= %d AND success = 1',
-                    Database::getTablePrefix(),
-                    $minTimestamp,
-                );
-            }
-
-            $result = $this->configuration->getDb()->query($query);
-            if ($result) {
-                $row = $this->configuration->getDb()->fetchObject($result);
-                $count = isset($row->cnt) ? (int) $row->cnt : 0;
+                $count = $this->repository->countOnlineUsersFromFaqUser($minTimestamp);
             }
         } catch (Throwable) {
             $count = 0;
@@ -69,18 +57,7 @@ readonly class Session
 
     public function getTimeFromSessionId(int $sessionId): int
     {
-        $timestamp = 0;
-
-        $query = sprintf('SELECT time FROM %sfaqsessions WHERE sid = %d', Database::getTablePrefix(), $sessionId);
-
-        $result = $this->configuration->getDb()->query($query);
-
-        if ($result) {
-            $res = $this->configuration->getDb()->fetchObject($result);
-            $timestamp = (int) $res->time;
-        }
-
-        return $timestamp;
+        return $this->repository->getTimeBySessionId($sessionId);
     }
 
     /**
@@ -94,16 +71,9 @@ readonly class Session
     public function getSessionsByDate(int $firstHour, int $lastHour): array
     {
         $sessions = [];
+        $rows = $this->repository->getSessionsByDateRange($firstHour, $lastHour);
 
-        $query = sprintf(
-            'SELECT sid, ip, time FROM %sfaqsessions WHERE time > %d AND time < %d ORDER BY time',
-            Database::getTablePrefix(),
-            $firstHour,
-            $lastHour,
-        );
-
-        $result = $this->configuration->getDb()->query($query);
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
+        foreach ($rows as $row) {
             $sessions[$row->sid] = [
                 'ip' => $row->ip,
                 'time' => $row->time,
@@ -118,17 +88,7 @@ readonly class Session
      */
     public function getNumberOfSessions(): int
     {
-        $num = 0;
-
-        $query = sprintf('SELECT COUNT(sid) as num_sessions FROM %sfaqsessions', Database::getTablePrefix());
-
-        $result = $this->configuration->getDb()->query($query);
-        if ($result) {
-            $row = $this->configuration->getDb()->fetchObject($result);
-            $num = (int) $row->num_sessions;
-        }
-
-        return $num;
+        return $this->repository->countTotalSessions();
     }
 
     /**
@@ -139,14 +99,7 @@ readonly class Session
      */
     public function deleteSessions(int $first, int $last): bool
     {
-        $query = sprintf(
-            'DELETE FROM %sfaqsessions WHERE time >= %d AND time <= %d',
-            Database::getTablePrefix(),
-            $first,
-            $last,
-        );
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->deleteSessionsByTimeRange($first, $last);
     }
 
     /**
@@ -154,9 +107,7 @@ readonly class Session
      */
     public function deleteAllSessions(): bool
     {
-        $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
-
-        return (bool) $this->configuration->getDb()->query($query);
+        return $this->repository->deleteAllSessions();
     }
 
     /**
@@ -167,21 +118,10 @@ readonly class Session
     public function getLast30DaysVisits(int $endDate): array
     {
         $stats = [];
-        $visits = [];
         $completeData = [];
         $startDate = strtotime(datetime: '-1 month');
 
-        $query = sprintf(
-            'SELECT time FROM %sfaqsessions WHERE time > %d AND time < %d;',
-            Database::getTablePrefix(),
-            $startDate,
-            $endDate,
-        );
-        $result = $this->configuration->getDb()->query($query);
-
-        while ($row = $this->configuration->getDb()->fetchObject($result)) {
-            $visits[] = $row->time;
-        }
+        $visits = $this->repository->getSessionTimestamps($startDate, $endDate);
 
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $stats[date(
@@ -195,7 +135,7 @@ readonly class Session
                 !isset(
                     $stats[date(
                         format: 'Y-m-d',
-                        timestamp: (int) $visitDate,
+                        timestamp: $visitDate,
                     )],
                 )
             ) {
@@ -204,7 +144,7 @@ readonly class Session
 
             ++$stats[date(
                 format: 'Y-m-d',
-                timestamp: (int) $visitDate,
+                timestamp: $visitDate,
             )];
         }
 

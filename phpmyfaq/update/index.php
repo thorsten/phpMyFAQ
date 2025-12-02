@@ -1,10 +1,10 @@
 <?php
 
 /**
- * The main phpMyFAQ Setup.
+ * The main phpMyFAQ Update.
  *
- * This script checks the complete environment, writes the database connection
- * parameters into the file config/database.php and the configuration into the database.
+ * This script updates an existing phpMyFAQ installation to the latest version.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
@@ -34,7 +34,7 @@ $container = new ContainerBuilder();
 $loader = new PhpFileLoader($container, new FileLocator(__DIR__));
 try {
     $loader->load('../src/services.php');
-} catch (\Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }
 
