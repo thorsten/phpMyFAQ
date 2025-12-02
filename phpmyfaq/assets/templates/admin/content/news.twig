@@ -51,7 +51,8 @@
               </td>
               <td>
                 {% if permissionEditNews == true %}
-                <input type="checkbox" id="activate" data-pmf-id="{{ newsItem.id }}" data-pmf-csrf-token="{{ csrfToken_activateNews }}"
+                <input class="form-check-input"  type="checkbox" id="activate" data-pmf-id="{{ newsItem.id }}"
+                       data-pmf-csrf-token="{{ csrfToken_activateNews }}"
                        {% if newsItem.active == 'y' %} checked {% endif %} />
                 {% endif %}
               </td>
