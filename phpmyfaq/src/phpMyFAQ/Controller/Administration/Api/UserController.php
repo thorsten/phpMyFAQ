@@ -386,6 +386,7 @@ final class UserController extends AbstractController
 
         if ($errorMessage === []) {
             if (!$newUser->createUser($userName, $userPassword)) {
+                var_dump($errorMessage);
                 $errorMessage[] = $newUser->error();
                 return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
             }
@@ -400,6 +401,8 @@ final class UserController extends AbstractController
             } catch (Exception|TransportExceptionInterface) {
                 /* @mago-expect lint:no-empty-catch-clause */
             }
+
+            return $this->json(['success' => Translation::get(key: 'ad_adus_suc')], Response::HTTP_OK);
         }
 
         return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
