@@ -343,10 +343,10 @@ readonly class Backup
 
             if (
                 Strings::substr(
-                        string: $line,
-                        start: 0,
-                        length: 2,
-                    ) !== '--'
+                    string: $line,
+                    start: 0,
+                    length: 2,
+                ) !== '--'
                 && $line !== ''
             ) {
                 $queries[] = trim(Strings::substr(

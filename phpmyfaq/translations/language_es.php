@@ -229,7 +229,6 @@ $PMF_LANG['ad_entry_del_2'] = 'de';
 $PMF_LANG['ad_entry_del_3'] = 'debería ser eliminado?';
 $PMF_LANG['ad_entry_delsuc'] = 'Entrada de la FAQ eliminado correctamente.';
 $PMF_LANG['ad_entry_delfail'] = 'Entrada de la FAQ no ha sido eliminada!';
-$PMF_LANG['ad_entry_back'] = "Volver";
 
 // Gestión de noticias
 $PMF_LANG['ad_news_header'] = 'Cabecera';
@@ -306,7 +305,6 @@ $PMF_LANG['ad_passwd_fail'] = 'La contraseña anterior debe ser introducida corr
 $PMF_LANG['ad_adus_adduser'] = 'Añadir usuario';
 $PMF_LANG['ad_adus_name'] = 'Nombre';
 $PMF_LANG['ad_adus_password'] = 'Contraseña';
-$PMF_LANG['ad_adus_contraseña'] = 'Contraseña';
 $PMF_LANG['ad_adus_add'] = 'Añadir';
 $PMF_LANG['ad_adus_suc'] = 'Usuario añadido correctamente.';
 $PMF_LANG['ad_adus_edit'] = 'Editar perfil';
@@ -397,11 +395,9 @@ $PMF_LANG['ad_csv_prepare'] = 'Preparando consultas de la base de datos...';
 $PMF_LANG['ad_csv_process'] = 'Ejecutando consultas...';
 $PMF_LANG['ad_csv_of'] = 'de';
 $PMF_LANG['ad_csv_suc'] = 'fueron correctas.';
-$PMF_LANG['ad_csv_respaldo'] = 'Copia de seguridad';
 $PMF_LANG['ad_csv_rest'] = 'Restaurar un backup';
 
 // Añadido v0.8 - 25.05.2001 - Bastian - Admin
-$PMF_LANG['ad_menu_respaldo'] = 'Backup';
 $PMF_LANG['ad_logout'] = 'Sesión terminada correctamente.';
 $PMF_LANG["ad_news_add"] = "Añadir noticias";
 $PMF_LANG['ad_news_edit'] = 'Editar noticias';
@@ -648,8 +644,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Por favor, seleccione uno de los formatos 
 $PMF_LANG['ad_export_download_view'] = '¿Descargar o ver en línea?';
 $PMF_LANG['ad_export_download'] = 'Descargar';
 $PMF_LANG['ad_export_view'] = 'ver en línea';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Exportar como archivo XHTML';
-$PMF_LANG['ad_export_gen_docbook'] = 'Crear un archivo DocBook XML';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Mensaje';
@@ -1199,7 +1193,6 @@ $PMF_LANG['permission::administrate_groups'] = 'Administrar grupos';
 $PMF_LANG['ad_group_rights'] = 'Permisos de grupo';
 
 // añadido v3.0.0-alpha.3 - 2018-09-20 por Timo
-$PMF_LANG['ad_menu_section_administration'] = "Secciones";
 $PMF_LANG['permission::viewadminlink'] = 'Ver enlace a la administración';
 
 // añadido v3.0.0-beta.3 - 2019-09-22 por Thorsten
@@ -1456,5 +1449,86 @@ $PMF_LANG['msgTranslatedKeys'] = 'Número de claves traducidas';
 $PMF_LANG['msgMissingKeys'] = 'Claves de traducción faltantes';
 $PMF_LANG['msgCompletionPercentage'] = 'Porcentaje de finalización';
 $PMF_LANG['msgInstalledNewerThanAvailable'] = 'La versión instalada es más reciente que la última versión disponible.';
+
+// Traducciones faltantes - añadido 2025-12-02
+// Interfaz de administración
+$PMF_LANG['ad_add_user_change_password'] = 'El usuario debe cambiar la contraseña después del primer inicio de sesión';
+$PMF_LANG['ad_categ_save_order'] = 'El nuevo orden se guardó correctamente.';
+$PMF_LANG['ad_entry_not_visibility'] = 'no publicado';
+$PMF_LANG['ad_es_create_import_success'] = 'La importación fue exitosa.';
+$PMF_LANG['ad_menu_backup'] = 'Copia de seguridad';
+$PMF_LANG['ad_quick_sub_category'] = 'Añadir nueva subcategoría';
+$PMF_LANG['ad_user_is_visible'] = 'Visible';
+$PMF_LANG['ad_xml_gen'] = 'Crear exportación XML';
+
+// Diseño y metadatos
+$PMF_LANG['layoutControlCenter'] = 'Diseño';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ está actualmente en desarrollo (%s). Y por lo tanto no está listo para producción. Por favor <a target="_blank" href="%s" class="alert-link">reporte todos los problemas en GitHub</a>. ¡Muchas gracias!';
+$PMF_LANG['msgBackup'] = 'Copia de seguridad';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Vista general de todas las categorías y temas | Vista general de categorías de %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'En el glosario de %s encontrará explicaciones de todos los términos técnicos importantes sobre el tema';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Preguntas abiertas esperando respuestas | %s';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Vea una descripción general de todos los temas importantes | Descripción general de FAQ de %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Agregar una nueva pregunta | %s';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Encuentre las FAQs que está buscando en la descripción general de todas las entradas | Mapa del sitio - %s';
+
+// Autenticación de dos factores
+$PMF_LANG['msgConfirmTwofactorConfig'] = '¿Está seguro de que desea eliminar su configuración actual de autenticación de dos factores?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar no está habilitado actualmente.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'La eliminación de la configuración actual de 2 factores fue exitosa.';
+
+// Errores y mensajes
+$PMF_LANG['msgError'] = 'Ocurrió un error.';
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'No se encontró pregunta y respuesta.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'La FAQ no está en modo de mantenimiento.';
+
+// Exportación de sesiones
+$PMF_LANG['msgExportSessions'] = 'Exportar sesiones';
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Exportar sesiones como archivo CSV';
+$PMF_LANG['msgExportSessionsFrom'] = 'Desde';
+$PMF_LANG['msgExportSessionsTo'] = 'Hasta';
+
+// Metadatos de FAQ
+$PMF_LANG['msgFAQMetaData'] = 'Metadatos de FAQ';
+
+// Formularios
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'No puede usar este formulario debido a la falta de categorías configuradas. Por favor informe al <a class="alert-link" href="./contact.html">administrador</a>.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'La nueva traducción se guardó correctamente.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'La traducción se eliminó correctamente.';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'La traducción se guardó correctamente.';
+$PMF_LANG['msgHintDeactivateForms'] = 'Los formularios se pueden desactivar completamente en la <a class="alert-link" href="./configuration">administración</a>.';
+
+// API y tokens
+$PMF_LANG['msgGenerateApiClientToken'] = 'Generar token de cliente API';
+
+// Importación
+$PMF_LANG['msgImportCSVFileBody'] = 'Puede importar un archivo CSV con sus datos de registro y la estructura dada (ver arriba) aquí.';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'El archivo CSV que se va a importar debe contener las siguientes columnas en este orden, sin encabezados de columna. Cada fila está destinada a definir una entrada de FAQ. Todas las celdas en columnas marcadas con un asterisco * deben contener un valor.';
+
+// Enlaces y compartir
+$PMF_LANG['msgLinkToFAQ'] = 'Enlace a la FAQ';
+$PMF_LANG['msgShareText'] = 'Descubrí un artículo de FAQ interesante para ti:';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Enviar a un amigo por WhatsApp';
+
+// Sesión y autenticación
+$PMF_LANG['msgNoLogMeOut'] = 'No, cerrar sesión';
+$PMF_LANG['msgSessionExpiringSoon'] = 'La sesión expirará pronto';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Sí, mantenerme conectado';
+
+// Filtros de FAQ
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Solo FAQs inactivas';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Solo FAQs nuevas';
+$PMF_LANG['msgTrendingFAQs'] = 'FAQs en tendencia';
+
+// Palabras clave
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Las palabras clave múltiples deben estar separadas por comas.';
+
+// SERP (Search Engine Result Page)
+$PMF_LANG['msgSerp'] = 'SERP es la abreviatura de Search Engine Result Page. Aquí puede definir el título y la descripción para el SERP.';
+$PMF_LANG['msgSerpDescription'] = 'Descripción SERP';
+$PMF_LANG['msgSerpTitle'] = 'Título SERP';
+
+// Permisos
+$PMF_LANG['permission::forms_edit'] = 'Editar formularios';
 
 return $PMF_LANG;

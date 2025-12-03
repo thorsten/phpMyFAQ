@@ -1184,7 +1184,6 @@ $PMF_LANG['permission::administrate_groups'] = "Grupları yönet";
 $PMF_LANG['ad_group_rights'] = "Grup izinleri";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "Bölüm";
 $PMF_LANG['permission::viewadminlink'] = "Yönetici bağlantısını görüntüle";
 
 return $PMF_LANG;

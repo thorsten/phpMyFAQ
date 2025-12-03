@@ -672,8 +672,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Parinkite vieną iš palaikomų formatų:'
 $PMF_LANG['ad_export_download_view'] = 'Atsiųsti ar peržiūrėti tiesiogiai?';
 $PMF_LANG['ad_export_download'] = 'atsiųsti';
 $PMF_LANG['ad_export_view'] = 'peržiūrėti tiesiogiai';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Sukurti XHTML failą';
-$PMF_LANG['ad_export_gen_docbook'] = 'Sukurti Docbook failą';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Naujienos data';

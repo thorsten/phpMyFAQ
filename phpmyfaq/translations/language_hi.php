@@ -666,8 +666,6 @@ $PMF_LANG['ad_export_type_choose'] = 'फॉर्मेट चुने :';
 $PMF_LANG['ad_export_download_view'] = 'डाउनलोड करें या इन लाइन देखें?';
 $PMF_LANG['ad_export_download'] = 'डाउनलोड';
 $PMF_LANG['ad_export_view'] = 'इन लाइन देखें';
-$PMF_LANG['ad_export_gen_xhtml'] = 'XHTML फाइल बनाएं';
-$PMF_LANG['ad_export_gen_docbook'] = 'Docbook फाइल बनाएं';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'समाचार';

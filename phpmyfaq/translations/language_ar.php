@@ -538,8 +538,6 @@ $PMF_LANG['ad_export_type_choose'] = 'إختار واحد من التنسيقا�
 $PMF_LANG['ad_export_download_view'] = 'تحميل أو فتحها مباشرة ؟';
 $PMF_LANG['ad_export_download'] = 'تحميل';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = ' XHTML إنشاء ملف ';
-$PMF_LANG['ad_export_gen_docbook'] = 'Docbook إنشاء ملف ';
 $PMF_LANG['ad_news_data'] = 'بيانات الأخبار';
 $PMF_LANG['ad_news_author_name'] = 'اسم الكاتب :';
 $PMF_LANG['ad_news_author_email'] = 'البريد الإلكتروني للكاتب :';

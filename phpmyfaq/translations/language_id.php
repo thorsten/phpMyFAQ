@@ -667,8 +667,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Pilih salah satu format yang didukung:';
 $PMF_LANG['ad_export_download_view'] = 'Unduh atau tampilkan saja?';
 $PMF_LANG['ad_export_download'] = 'unduh';
 $PMF_LANG['ad_export_view'] = 'tampilkan saja';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Buat berkas XHTML';
-$PMF_LANG['ad_export_gen_docbook'] = 'Buat berkas Docbook';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Data berita';

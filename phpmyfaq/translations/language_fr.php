@@ -903,7 +903,7 @@ $PMF_LANG["permission::approverec"] = "Approuver l'enregistrement";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Activer les pièces-jointes cryptées<br/>Ignoré si les pièces-jointes sont désactivés"];
-$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", "Clé de cryptage par défaut<br/>Ignoré si le cryptage des pièces-jointes est désactivé<br/><font color='red'>ATTENTION : Ne pas modifier une fois que le cryptage des fichiers a été activé !!!"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", "Clé de cryptage par défaut<br/>Ignoré si le cryptage des pièces-jointes est désactivé", 'ATTENTION: Ne pas modifier une fois que le cryptage des fichiers a été activé !!!'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG["msgAdminHeaderUpdate"] = "phpMyFAQ Mise à jour";
@@ -1200,7 +1200,6 @@ $PMF_LANG["permission::administrate_groups"] = "Administrer les groupes";
 $PMF_LANG["ad_group_rights"] = "Permissions de groupe";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG["ad_menu_section_administration"] = "Sections";
 $PMF_LANG["permission::viewadminlink"] = "Voir le lien vers l'administration";
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
@@ -1476,8 +1475,60 @@ $PMF_LANG['msgOrphanedFAQsDescription'] = 'Les FAQ orphelines sont des FAQ qui n
 $PMF_LANG['msgPreview'] = 'Aperçu';
 $PMF_LANG['msgInsertImage'] = 'Insérer une image';
 $PMF_LANG['msgImageUpload'] = 'Télécharger une image';
-$PMF_LANG['msgImageCouldNotBeUploaded'] = 'L’image n’a pas pu être téléchargée.';
-$PMF_LANG['msgImageTooLarge'] = 'L’image est trop grande.';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'L\'image n\'a pas pu être téléchargée.';
+$PMF_LANG['msgImageTooLarge'] = 'L\'image est trop grande.';
 $PMF_LANG['msgNoImagesForUpload'] = 'Les images ne peuvent pas être téléchargées.';
+
+// Missing translations - added 2025-12-02
+// OpenSearch Configuration
+$PMF_LANG['ad_os_create_import_success'] = 'L\'importation OpenSearch a été effectuée avec succès.';
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'Configuration OpenSearch';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Créer un index de recherche';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'L\'index de recherche OpenSearch a été créé avec succès.';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Supprimer l\'index de recherche';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'L\'index de recherche OpenSearch a été supprimé avec succès.';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Importation complète';
+
+// Backup
+$PMF_LANG['msgBackupGoTo'] = 'Aller à la page de sauvegarde';
+$PMF_LANG['msgBackupLast'] = 'Date de la dernière sauvegarde';
+$PMF_LANG['msgBackupNoneFound'] = 'Aucune sauvegarde trouvée.';
+$PMF_LANG['msgBackupRecent'] = 'La sauvegarde actuelle est récente.';
+$PMF_LANG['msgBackupTooOld'] = 'La dernière sauvegarde date de plus de 30 jours.';
+
+// User Interface Elements
+$PMF_LANG['ad_quick_sub_category'] = 'Ajouter une nouvelle sous-catégorie';
+$PMF_LANG['msgAuthenticationAborted'] = 'Authentification abandonnée par l\'utilisateur.';
+$PMF_LANG['msgCompletionPercentage'] = 'Pourcentage de complétion';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Voulez-vous vraiment supprimer cette FAQ ? Cette action ne peut pas être annulée.';
+$PMF_LANG['msgCustomAddItemText'] = 'Seules les valeurs correspondant à des conditions spécifiques peuvent être ajoutées';
+$PMF_LANG['msgDownload'] = 'Télécharger';
+$PMF_LANG['msgItemSelectText'] = 'Appuyez pour sélectionner';
+$PMF_LANG['msgLoadingText'] = 'Chargement...';
+$PMF_LANG['msgNoChoicesText'] = 'Aucun choix disponible';
+$PMF_LANG['msgNoResultsText'] = 'Aucun résultat trouvé';
+$PMF_LANG['msgToggleTheme'] = 'Changer de thème';
+$PMF_LANG['msgTypeSearchCategories'] = 'Tapez pour rechercher des catégories';
+$PMF_LANG['msgUniqueItemText'] = 'Seules les valeurs uniques peuvent être ajoutées';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Envoyer à un ami via WhatsApp';
+
+// User & Data
+$PMF_LANG['msgDataExportDescription'] = 'Téléchargez un fichier ZIP contenant vos données utilisateur stockées.';
+$PMF_LANG['msgDownloadYourData'] = 'Télécharger vos données';
+$PMF_LANG['msgMemberSince'] = 'Membre depuis';
+$PMF_LANG['msgNewestUsers'] = 'Nouveaux utilisateurs';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Utilisateurs enregistrés';
+$PMF_LANG['msgShareText'] = 'J\'ai découvert un article FAQ intéressant pour vous :';
+
+// Translation & System
+$PMF_LANG['msgCheckHashes'] = 'Vérification des hachages avec les fichiers d\'installation...';
+$PMF_LANG['msgDatabaseUpdate'] = 'Mise à jour de la base de données';
+$PMF_LANG['msgFetchingHashes'] = 'Récupération des hachages de vérification depuis api.phpmyfaq.de...';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'La version installée est plus récente que la dernière version disponible.';
+$PMF_LANG['msgMissingKeys'] = 'Clés de traduction manquantes';
+$PMF_LANG['msgTotalKeys'] = 'Nombre total de clés de traduction';
+$PMF_LANG['msgTranslatedKeys'] = 'Nombre de clés traduites';
+$PMF_LANG['noteNightlyBuild'] = 'Veuillez noter que la version de la veille sera téléchargée (enregistrée dans /content/upgrades). Chaque nouvelle version n\'est créée par GitHub qu\'à partir de 2h00 (UTC).';
+$PMF_LANG['permission::translate_faq'] = 'Traduire les FAQs';
 
 return $PMF_LANG;

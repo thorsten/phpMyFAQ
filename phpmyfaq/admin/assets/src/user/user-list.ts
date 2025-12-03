@@ -51,11 +51,16 @@ export const handleUserList = (): void => {
   }
 
   if (deleteButtons) {
-    deleteButtons.forEach((button) => {
-      button.addEventListener('click', (event) => {
+    deleteButtons.forEach((button: Element): void => {
+      button.addEventListener('click', (event: Event): void => {
         event.preventDefault();
 
-        const deleteModal = new Modal(document.getElementById('pmf-modal-user-confirm-delete') as HTMLElement);
+        const modalElement = document.getElementById('pmf-modal-user-confirm-delete') as HTMLElement;
+        if (!modalElement) {
+          pushErrorNotification('Fehler: Löschdialog nicht gefunden.');
+          return;
+        }
+        const deleteModal = Modal.getOrCreateInstance(modalElement);
         deleteModal.show();
         const usernameDelete = document.getElementById('pmf-username-delete') as HTMLElement;
         usernameDelete.innerText = button.getAttribute('data-username')!;
@@ -66,9 +71,9 @@ export const handleUserList = (): void => {
       });
     });
 
-    const deleteUserConfirm = document.getElementById('pmf-delete-user-yes');
+    const deleteUserConfirm = document.getElementById('pmf-delete-user-yes') as HTMLElement;
     if (deleteUserConfirm) {
-      deleteUserConfirm.addEventListener('click', async (event) => {
+      deleteUserConfirm.addEventListener('click', async (event: PointerEvent): Promise<void> => {
         event.preventDefault();
         const source = document.getElementById('source_page') as HTMLInputElement;
         if (source.value === 'user-list') {

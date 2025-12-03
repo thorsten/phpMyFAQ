@@ -666,8 +666,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Zvoľte jeden z podporovaných formátov:'
 $PMF_LANG['ad_export_download_view'] = 'Stiahnuť alebo zobraziť in-line?';
 $PMF_LANG['ad_export_download'] = 'stiahnuť';
 $PMF_LANG['ad_export_view'] = 'zobraziť in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Vytvoriť XHTML súbor';
-$PMF_LANG['ad_export_gen_docbook'] = 'Vytvoriť Docbook súbor';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Dáta noviniek';

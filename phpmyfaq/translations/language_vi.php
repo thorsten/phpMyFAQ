@@ -660,8 +660,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Chọn một trong những định dạng 
 $PMF_LANG['ad_export_download_view'] = 'Tải về hay xem in-line?';
 $PMF_LANG['ad_export_download'] = 'tải về';
 $PMF_LANG['ad_export_view'] = 'xem in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Tạo tập tin XHTML';
-$PMF_LANG['ad_export_gen_docbook'] = 'Tạo tập tin Docbook';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Dữ liệu mới';

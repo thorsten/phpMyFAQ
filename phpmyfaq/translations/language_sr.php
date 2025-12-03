@@ -665,8 +665,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Izaberite jedan od formata:';
 $PMF_LANG['ad_export_download_view'] = 'Preuzmite ili pogledajte in-line?';
 $PMF_LANG['ad_export_download'] = 'preuzmi';
 $PMF_LANG['ad_export_view'] = 'pogledaj in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'Napravi XHTML fajl';
-$PMF_LANG['ad_export_gen_docbook'] = 'Napravi Docbook fajl';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'Podaci novosti';

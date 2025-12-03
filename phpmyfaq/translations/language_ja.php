@@ -546,8 +546,6 @@ $PMF_LANG['ad_export_type_choose'] = 'サポートされる形式をひとつ選
 $PMF_LANG['ad_export_download_view'] = 'インライン表示かダウンロードしますか?';
 $PMF_LANG['ad_export_download'] = 'ダウンロード';
 $PMF_LANG['ad_export_view'] = 'インライン表示';
-$PMF_LANG['ad_export_gen_xhtml'] = 'XHTML ファイルを作成する';
-$PMF_LANG['ad_export_gen_docbook'] = 'Docbook ファイルを作成する';
 $PMF_LANG['ad_news_data'] = 'お知らせデータ';
 $PMF_LANG['ad_news_author_name'] = '制作者名:';
 $PMF_LANG['ad_news_author_email'] = 'メールアドレス:';
@@ -964,7 +962,6 @@ $PMF_LANG['permission::administrate_groups'] = 'グループ管理';
 $PMF_LANG['ad_group_rights'] = 'グループ権限';
 
 // added v3.0.0-alpha.3
-$PMF_LANG['ad_menu_section_administration'] = "セクションの管理";
 $PMF_LANG['permission::viewadminlink'] = '管理リンクを表示';
 
 // added v3.0.0-beta.3

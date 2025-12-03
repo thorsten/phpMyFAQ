@@ -667,7 +667,6 @@ $PMF_LANG['ad_export_download_view'] = 'Download or view in-line?';
 $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
 $PMF_LANG['ad_export_gen_xhtml'] = 'Make XHTML file';
-$PMF_LANG['ad_export_gen_docbook'] = 'Make Docbook file';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'News data';

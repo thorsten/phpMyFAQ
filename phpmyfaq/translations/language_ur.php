@@ -1181,7 +1181,6 @@ $PMF_LANG['permission::administrate_groups'] = 'گروپس کا انتظام ک�
 $PMF_LANG['ad_group_rights'] = 'گروپ کی اجازتیں';
 
 // شامل کیا گیا v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "حصوں کا انتظام";
 $PMF_LANG['permission::viewadminlink'] = 'ایڈمن لنک دیکھیں';
 
 // شامل کیا گیا v3.0.0-beta.3 - 2019-09-22 by Thorsten
