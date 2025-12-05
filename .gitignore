@@ -67,7 +67,6 @@ phpmyfaq/.env.*.local
 phpmyfaq/admin/assets/css
 phpmyfaq/admin/assets/fonts
 phpmyfaq/admin/assets/js/editor/*
-phpmyfaq/assets/public
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/svg/*.svg
 !phpmyfaq/assets/templates/admin
@@ -105,3 +104,4 @@ nbproject/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+composer.phar
