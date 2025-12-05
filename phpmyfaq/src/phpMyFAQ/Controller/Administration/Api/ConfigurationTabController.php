@@ -167,20 +167,23 @@ final class ConfigurationTabController extends AbstractController
         // For other fields: keep original value if not in configurationData
         if (!empty($availableFields)) {
             foreach ($availableFields as $fieldKey) {
-                if (!array_key_exists($fieldKey, $newConfigValues)) {
-                    // Field was in the form but not submitted (unchecked checkbox)
-                    if (isset($oldConfigurationData[$fieldKey]) && $oldConfigurationData[$fieldKey] === 'true') {
-                        $newConfigValues[$fieldKey] = 'false';
-                    }
+                if (array_key_exists($fieldKey, $newConfigValues)) {
+                    continue;
+                }
+
+                if (isset($oldConfigurationData[$fieldKey]) && $oldConfigurationData[$fieldKey] === 'true') {
+                    $newConfigValues[$fieldKey] = 'false';
                 }
             }
         }
 
         // Keep all values that were not in the available fields (from other tabs)
         foreach ($oldConfigurationData as $key => $value) {
-            if (!array_key_exists($key, $newConfigValues)) {
-                $newConfigValues[$key] = $value;
+            if (array_key_exists($key, $newConfigValues)) {
+                continue;
             }
+
+            $newConfigValues[$key] = $value;
         }
 
         // Replace main.referenceUrl in FAQs
