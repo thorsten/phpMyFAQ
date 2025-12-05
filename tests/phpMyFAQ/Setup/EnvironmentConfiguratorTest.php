@@ -16,7 +16,7 @@ class EnvironmentConfiguratorTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
         $this->configuration->method('getDefaultUrl')->willReturn('https://localhost/');
         $this->configurator = new EnvironmentConfigurator($this->configuration);
@@ -53,7 +53,7 @@ class EnvironmentConfiguratorTest extends TestCase
      */
     public function testGetServerPathWithSubdirectoryPath(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2) . '/path/info');
         $configuration->method('getDefaultUrl')->willReturn('https://localhost/path/info');
         $configurator = new EnvironmentConfigurator($configuration);
@@ -65,7 +65,7 @@ class EnvironmentConfiguratorTest extends TestCase
      */
     public function testAdjustRewriteBaseHtaccessThrowsExceptionForMissingFile(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2). '/path/to');
         $configuration->method('getDefaultUrl')->willReturn('https://localhost/path/to');
         $configurator = new EnvironmentConfigurator($configuration);
@@ -80,7 +80,7 @@ class EnvironmentConfiguratorTest extends TestCase
      */
     public function testAdjustRewriteBaseHtaccess(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
         $configuration->method('getDefaultUrl')->willReturn('https://localhost/path/info');
         $configurator = new EnvironmentConfigurator($configuration);

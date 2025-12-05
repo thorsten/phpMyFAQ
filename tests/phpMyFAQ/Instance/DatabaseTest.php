@@ -17,7 +17,7 @@ class DatabaseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
     }
 
     public function testFactoryWithValidType(): void

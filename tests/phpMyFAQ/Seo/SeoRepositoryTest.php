@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class SeoRepositoryTest extends TestCase
 {
-    private Configuration&MockObject $configuration;
+    private Configuration $configuration;
     private DatabaseDriver&MockObject $database;
     private SeoRepository $repository;
 
@@ -22,7 +22,7 @@ class SeoRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->database = $this->createMock(DatabaseDriver::class);
 
         $this->configuration

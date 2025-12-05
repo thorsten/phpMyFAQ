@@ -53,7 +53,7 @@ class RatingRepositoryTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.referenceURL', 'https://example.com');
 
-        $language = new Language($this->configuration, $this->createMock(Session::class));
+        $language = new Language($this->configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $this->configuration->setLanguage($language);
 

@@ -15,7 +15,7 @@ class SessionRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockDb = $this->createMock(DatabaseDriver::class);
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
 
@@ -27,7 +27,7 @@ class SessionRepositoryTest extends TestCase
         $minTimestamp = 1609459200;
         $expectedCount = 5;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->cnt = $expectedCount;
 
         $this->mockDb->method('query')->willReturn(true);
@@ -54,7 +54,7 @@ class SessionRepositoryTest extends TestCase
         $minTimestamp = 1609459200;
         $expectedCount = 3;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->cnt = $expectedCount;
 
         $this->mockDb->method('query')->willReturn(true);
@@ -70,7 +70,7 @@ class SessionRepositoryTest extends TestCase
         $sessionId = 123;
         $expectedTime = 1609459200;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->time = $expectedTime;
 
         $this->mockDb->method('query')->willReturn(true);
@@ -97,7 +97,7 @@ class SessionRepositoryTest extends TestCase
         $firstHour = 1609459200;
         $lastHour = 1609545600;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->sid = 1;
         $resultMock->ip = '127.0.0.1';
         $resultMock->time = 1609462800;
@@ -130,7 +130,7 @@ class SessionRepositoryTest extends TestCase
     {
         $expectedCount = 42;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->num_sessions = $expectedCount;
 
         $this->mockDb->method('query')->willReturn(true);
@@ -203,10 +203,10 @@ class SessionRepositoryTest extends TestCase
         $startDate = 1609459200;
         $endDate = 1609545600;
 
-        $resultMock1 = $this->createMock(stdClass::class);
+        $resultMock1 = $this->createStub(stdClass::class);
         $resultMock1->time = 1609462800;
 
-        $resultMock2 = $this->createMock(stdClass::class);
+        $resultMock2 = $this->createStub(stdClass::class);
         $resultMock2->time = 1609476000;
 
         $this->mockDb->method('query')->willReturn(true);
@@ -247,7 +247,7 @@ class SessionRepositoryTest extends TestCase
                 return true;
             });
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->cnt = 5;
         $this->mockDb->method('fetchObject')->willReturn($resultMock);
 
@@ -269,7 +269,7 @@ class SessionRepositoryTest extends TestCase
                 return true;
             });
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->cnt = 3;
         $this->mockDb->method('fetchObject')->willReturn($resultMock);
 

@@ -19,7 +19,7 @@ class SearchHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->categoryMock = $this->createMock(Category::class);
         $this->searchResultSetMock = $this->createMock(SearchResultSet::class);
 

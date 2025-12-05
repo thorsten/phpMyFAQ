@@ -74,7 +74,7 @@ class ApplicationTest extends TestCase
     public function testSetLanguageWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))
@@ -261,7 +261,7 @@ class ApplicationTest extends TestCase
     public function testRunMethodWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))

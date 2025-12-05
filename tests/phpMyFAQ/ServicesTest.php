@@ -9,7 +9,7 @@ class ServicesTest extends TestCase
     public function testSetQuestion(): void
     {
         // Create a mock Configuration object
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
 
         // Create a Services object
         $services = new Services($configuration);
@@ -22,7 +22,7 @@ class ServicesTest extends TestCase
     public function testGetPdfLink(): void
     {
         // Create a mock Configuration object
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDefaultUrl')->willReturn('http://example.com/');
 
         // Create a Services object
@@ -39,7 +39,7 @@ class ServicesTest extends TestCase
     public function testGetPdfApiLink(): void
     {
         // Create a mock Configuration object
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDefaultUrl')->willReturn('http://example.com/');
 
         // Create a Services object

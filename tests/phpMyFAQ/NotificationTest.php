@@ -45,7 +45,7 @@ class NotificationTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
 
         // Mock configuration methods
         $this->configuration->method('getNoReplyEmail')->willReturn('noreply@example.com');

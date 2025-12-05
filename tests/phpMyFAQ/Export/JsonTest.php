@@ -28,7 +28,7 @@ class JsonTest extends TestCase
 
         $this->faqMock = $this->createMock(Faq::class);
         $this->categoryMock = $this->createMock(Category::class);
-        $this->configMock = $this->createMock(Configuration::class);
+        $this->configMock = $this->createStub(Configuration::class);
 
         $this->jsonExport = new Json($this->faqMock, $this->categoryMock, $this->configMock);
     }

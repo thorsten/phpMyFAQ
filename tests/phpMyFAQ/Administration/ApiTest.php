@@ -28,7 +28,7 @@ class ApiTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->system = $this->createMock(System::class);
         $this->httpClient = $this->createMock(HttpClientInterface::class);
 
@@ -125,7 +125,7 @@ class ApiTest extends TestCase
      */
     public function testGetVerificationIssues(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $mockSystem = $this->getMockBuilder(System::class)
             ->onlyMethods(['createHashes'])
             ->getMock();

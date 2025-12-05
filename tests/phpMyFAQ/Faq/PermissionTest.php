@@ -33,7 +33,7 @@ class PermissionTest extends TestCase
         $this->dbMock = $this->createMock(Sqlite3::class);
 
         // Create configuration with mocked database
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->configuration->method('getDb')->willReturn($this->dbMock);
 
         $this->permission = new Permission($this->configuration);

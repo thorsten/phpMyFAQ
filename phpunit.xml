@@ -5,6 +5,8 @@
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
          failOnWarning="true"
+         failOnNotice="true"
+         colors="true"
          testdox="false"
          cacheDirectory=".phpunit.cache"
          requireCoverageMetadata="false"

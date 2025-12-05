@@ -11,12 +11,12 @@ use ReflectionClass;
 
 class AuthLdapTest extends TestCase
 {
-    private Configuration&MockObject $configurationMock;
+    private Configuration $configurationMock;
     private Logger&MockObject $loggerMock;
 
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->loggerMock = $this->createMock(Logger::class);
 
         // Setup default configuration returns

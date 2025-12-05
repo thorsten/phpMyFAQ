@@ -52,7 +52,7 @@ class BackupTest extends TestCase
         $this->backup = new Backup($this->configuration, $this->databaseHelper);
 
         // Mock Configuration class
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock DatabaseHelper class
         $this->mockDatabaseHelper = $this->createMock(DatabaseHelper::class);

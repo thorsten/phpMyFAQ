@@ -40,7 +40,7 @@ class RelationTest extends TestCase
         $configuration = new Configuration($this->db);
         $configuration->set('search.enableRelevance', false);
 
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 

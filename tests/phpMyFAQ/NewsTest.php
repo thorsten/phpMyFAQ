@@ -24,7 +24,7 @@ class NewsTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
 
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $configuration->setLanguage($language);
 
         $this->news = new News($configuration);

@@ -29,7 +29,7 @@ class OAuthTest extends TestCase
     {
         $this->mockClient = $this->createMock(HttpClientInterface::class);
         $this->mockSession = $this->createMock(EntraIdSession::class);
-        $mockConfiguration = $this->createMock(Configuration::class);
+        $mockConfiguration = $this->createStub(Configuration::class);
 
         $this->oAuth = new OAuth($mockConfiguration, $this->mockSession);
     }

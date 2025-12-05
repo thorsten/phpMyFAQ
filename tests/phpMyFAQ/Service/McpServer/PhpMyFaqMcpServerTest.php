@@ -21,7 +21,7 @@ class PhpMyFaqMcpServerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(Configuration::class);
+        $this->configMock = $this->createStub(Configuration::class);
         $languageMock = $this->createMock(Language::class);
         $this->searchMock = $this->createMock(Search::class);
         $this->faqMock = $this->createMock(Faq::class);

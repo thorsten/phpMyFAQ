@@ -4,7 +4,7 @@ import { handleStreamingProgress } from './upgrade';
 /**
  * Helper to create a mock readable stream with progress updates
  */
-function createMockStream(progressValues: string[]): ReadableStream<Uint8Array> {
+function createStubStream(progressValues: string[]): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder();
   let index = 0;
 
@@ -24,8 +24,8 @@ function createMockStream(progressValues: string[]): ReadableStream<Uint8Array> 
 /**
  * Helper to create a mock Response with a readable stream
  */
-function createMockResponse(progressValues: string[]): Response {
-  const stream = createMockStream(progressValues);
+function createStubResponse(progressValues: string[]): Response {
+  const stream = createStubStream(progressValues);
   return new Response(stream);
 }
 
@@ -50,7 +50,7 @@ describe('handleStreamingProgress', () => {
   });
 
   it('should update progress bar with streaming values', async () => {
-    const response = createMockResponse(['10%', '25%', '50%', '75%', '90%']);
+    const response = createStubResponse(['10%', '25%', '50%', '75%', '90%']);
 
     await handleStreamingProgress(response, progressBarId);
 
@@ -63,7 +63,7 @@ describe('handleStreamingProgress', () => {
   });
 
   it('should handle empty stream and complete with 100%', async () => {
-    const response = createMockResponse([]);
+    const response = createStubResponse([]);
 
     await handleStreamingProgress(response, progressBarId);
 
@@ -96,7 +96,7 @@ describe('handleStreamingProgress', () => {
   });
 
   it('should handle missing progress bar element', async () => {
-    const response = createMockResponse(['50%']);
+    const response = createStubResponse(['50%']);
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     await handleStreamingProgress(response, 'non-existent-id');
@@ -119,7 +119,7 @@ describe('handleStreamingProgress', () => {
 
   it('should update progress bar incrementally', async () => {
     const progressValues = ['25%', '50%', '75%'];
-    const response = createMockResponse(progressValues);
+    const response = createStubResponse(progressValues);
 
     // We need to intercept the updates as they happen
     const updates: string[] = [];
@@ -170,7 +170,7 @@ describe('handleStreamingProgress', () => {
   });
 
   it('should remove animation classes when complete', async () => {
-    const response = createMockResponse(['50%']);
+    const response = createStubResponse(['50%']);
 
     // Verify initial state has animation classes
     expect(progressBar.classList.contains('progress-bar-animated')).toBe(true);
@@ -187,7 +187,7 @@ describe('handleStreamingProgress', () => {
   it('should handle rapid progress updates', async () => {
     // Create many rapid updates
     const progressValues = Array.from({ length: 20 }, (_, i) => `${(i + 1) * 5}%`);
-    const response = createMockResponse(progressValues);
+    const response = createStubResponse(progressValues);
 
     await handleStreamingProgress(response, progressBarId);
 
@@ -255,7 +255,7 @@ describe('Progress bar integration scenarios', () => {
       </div>
     `;
 
-    const response = createMockResponse(['33%', '66%', '99%']);
+    const response = createStubResponse(['33%', '66%', '99%']);
     await handleStreamingProgress(response, 'integration-test-bar');
 
     const progressBar = document.getElementById('integration-test-bar') as HTMLElement;

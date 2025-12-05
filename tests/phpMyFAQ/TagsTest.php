@@ -27,7 +27,7 @@ class TagsTest extends TestCase
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.referenceURL', 'http://example.com');
 
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 

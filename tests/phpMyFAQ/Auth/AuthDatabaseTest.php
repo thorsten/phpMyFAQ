@@ -30,8 +30,8 @@ class AuthDatabaseTest extends TestCase
      */
     public function testCreate(): void
     {
-        $login = 'testUser';
-        $password = 'testPassword';
+        $login = 'testUser2';
+        $password = 'testPassword2';
 
         $this->assertTrue($this->authDatabase->create($login, $password));
     }

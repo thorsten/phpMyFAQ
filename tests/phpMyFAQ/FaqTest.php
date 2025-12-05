@@ -38,7 +38,7 @@ class FaqTest extends TestCase
         $this->configuration = new Configuration($dbHandle);
         $this->configuration->set('main.currentVersion', System::getVersion());
 
-        $language = new Language($this->configuration, $this->createMock(Session::class));
+        $language = new Language($this->configuration, $this->createStub(Session::class));
         $this->configuration->setLanguage($language);
 
         $this->faq = new Faq($this->configuration);

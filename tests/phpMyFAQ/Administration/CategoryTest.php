@@ -39,7 +39,7 @@ class CategoryTest extends TestCase
         parent::setUp();
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->configurationMock
             ->method('getDb')
             ->willReturn($this->databaseMock);

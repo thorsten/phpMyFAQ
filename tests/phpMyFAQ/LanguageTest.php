@@ -24,7 +24,7 @@ class LanguageTest extends TestCase
 
         Strings::init();
 
-        $this->session = $this->createMock(Session::class);
+        $this->session = $this->createStub(Session::class);
 
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');

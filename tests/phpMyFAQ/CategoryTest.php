@@ -23,7 +23,7 @@ class CategoryTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $configuration = new Configuration($dbHandle);
         $configuration->set('main.currentVersion', System::getVersion());
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 

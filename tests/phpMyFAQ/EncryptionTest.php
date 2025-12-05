@@ -33,7 +33,7 @@ class EncryptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(Configuration::class);
+        $this->config = $this->createStub(Configuration::class);
         $this->encryption = Encryption::getInstance('bcrypt', $this->config);
     }
 

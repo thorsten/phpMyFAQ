@@ -15,7 +15,7 @@ class PermissionTest extends TestCase
      */
     public function testSelectPermReturnsCorrectClass(): void
     {
-        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig = $this->createStub(Configuration::class);
 
         $basicPermission = Permission::create('basic', $mockConfig);
         $this->assertInstanceOf(BasicPermission::class, $basicPermission);
@@ -29,7 +29,7 @@ class PermissionTest extends TestCase
      */
     public function testSelectPermClassDoesNotExist(): void
     {
-        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig = $this->createStub(Configuration::class);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid permission level: nonexistent');

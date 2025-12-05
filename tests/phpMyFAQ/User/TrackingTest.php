@@ -24,7 +24,7 @@ class TrackingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->requestMock = $this->createMock(Request::class);
         $this->requestMock->headers = new HeaderBag([
             'X-Forwarded-For' => '192.168.1.1'

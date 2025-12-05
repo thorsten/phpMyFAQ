@@ -42,8 +42,8 @@ final class ConfigurationTabController extends AbstractController
     /**
      * @throws TemplateException
      * @throws Exception
-     * @throws LoaderError*@throws \Exception
-     *
+     * @throws LoaderError
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/configuration/list/{mode}')]
     public function list(Request $request): Response
@@ -84,7 +84,7 @@ final class ConfigurationTabController extends AbstractController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/configuration')]
     public function save(Request $request): JsonResponse

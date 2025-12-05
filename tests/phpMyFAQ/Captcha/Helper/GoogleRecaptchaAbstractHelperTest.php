@@ -32,7 +32,7 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->helper = new GoogleRecaptchaAbstractHelper($this->configuration);
         $this->captcha = $this->createMock(CaptchaInterface::class);
     }

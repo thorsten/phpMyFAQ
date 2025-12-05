@@ -31,7 +31,7 @@ class CategoryHelperTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockCategory = $this->createMock(Category::class);
 
         $this->categoryHelper = $this->getMockBuilder(CategoryHelper::class)
