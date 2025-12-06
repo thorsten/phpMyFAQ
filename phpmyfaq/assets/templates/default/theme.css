@@ -13,6 +13,9 @@
  * @since     2024-09-01
  */
 
+ /* Font -Atkinson Hyperlegible Next- from Braille Institute for high-contrast mode to achieve better A11y */
+ @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap');
+
 :root,
 [data-bs-theme='light'] {
   --bs-light: #eceff9;
@@ -69,4 +72,14 @@
   --bs-border-color: #ffffff;
   --bs-link-color: #ffff00;
   --bs-link-hover-color: #ffff66;
+
+  /* Individual high-contrast adjustments */
+
+  body{
+  font-family: "Atkinson Hyperlegible Next" !important;
+  font-size: 1.3rem;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  }
 }
