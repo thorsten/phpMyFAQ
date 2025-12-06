@@ -143,7 +143,7 @@ class Application
                 status: Response::HTTP_NOT_FOUND,
             );
         } catch (UnauthorizedHttpException) {
-            $response = new RedirectResponse(url: '/login');
+            $response = new RedirectResponse(url: './login');
             if (str_contains(
                 haystack: $urlMatcher->getContext()->getBaseUrl(),
                 needle: '/api',
