@@ -30,7 +30,7 @@ class LlmsControllerTest extends TestCase
             ->setCurrentLanguage('en')
             ->setMultiByteLanguage();
 
-        $this->twig = $this->createMock(Environment::class);
+        $this->twig = $this->createStub(Environment::class);
         $this->controller = new LlmsController();
     }
 

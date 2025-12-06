@@ -17,7 +17,7 @@ class PermissionTest extends TestCase
 {
     private Permission $permission;
     private Configuration $configuration;
-    private Sqlite3|MockObject $dbMock;
+    private Sqlite3 $dbMock;
 
     protected function setUp(): void
     {
@@ -205,7 +205,7 @@ class PermissionTest extends TestCase
     public function testGetUserPermissionsSuccessfully(): void
     {
         // Create proper SQLite3Result mock
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -238,7 +238,7 @@ class PermissionTest extends TestCase
     public function testGetGroupPermissionsSuccessfully(): void
     {
         // Create proper SQLite3Result mock
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -284,7 +284,7 @@ class PermissionTest extends TestCase
 
     public function testGetWithNoResultsReturnsEmptyArray(): void
     {
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -305,7 +305,7 @@ class PermissionTest extends TestCase
 
     public function testGetGeneratesCorrectUserQuery(): void
     {
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -320,7 +320,7 @@ class PermissionTest extends TestCase
 
     public function testGetGeneratesCorrectGroupQuery(): void
     {
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -363,7 +363,7 @@ class PermissionTest extends TestCase
 
     public function testGetWithNegativeFaqIdIsHandled(): void
     {
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())

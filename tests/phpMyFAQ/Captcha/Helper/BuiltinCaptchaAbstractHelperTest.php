@@ -33,7 +33,7 @@ class BuiltinCaptchaAbstractHelperTest extends TestCase
     {
         $this->configuration = $this->createStub(Configuration::class);
         $this->helper = new BuiltinCaptchaAbstractHelper($this->configuration);
-        $this->captcha = $this->createMock(BuiltinCaptcha::class);
+        $this->captcha = $this->createStub(BuiltinCaptcha::class);
     }
 
     /**

@@ -28,8 +28,8 @@ use phpMyFAQ\Database\DatabaseDriver;
 class StartpageTest extends TestCase
 {
     private Startpage $startpage;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     protected function setUp(): void
     {

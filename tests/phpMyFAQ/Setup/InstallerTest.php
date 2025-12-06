@@ -17,7 +17,7 @@ class InstallerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->system = $this->createMock(System::class);
+        $this->system = $this->createStub(System::class);
         $this->installer = new Installer($this->system);
     }
     public function testCheckBasicStuffThrowsExceptionForMissingDatabase(): void

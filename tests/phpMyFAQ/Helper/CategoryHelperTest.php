@@ -32,7 +32,7 @@ class CategoryHelperTest extends TestCase
             ->setMultiByteLanguage();
 
         $this->mockConfiguration = $this->createStub(Configuration::class);
-        $this->mockCategory = $this->createMock(Category::class);
+        $this->mockCategory = $this->createStub(Category::class);
 
         $this->categoryHelper = $this->getMockBuilder(CategoryHelper::class)
             ->onlyMethods(['getCategory', 'getConfiguration'])
@@ -139,7 +139,7 @@ class CategoryHelperTest extends TestCase
         $this->mockCategory->method('getGroups')->willReturn([]);
 
         // Mock Relation
-        $mockRelation = $this->createMock(Relation::class);
+        $mockRelation = $this->createStub(Relation::class);
         $mockRelation
             ->method('getCategoryWithFaqs')
             ->willReturn([
@@ -308,7 +308,7 @@ class CategoryHelperTest extends TestCase
      */
     public function testRenderAvailableTranslationsOptions(): void
     {
-        $mockLanguage = $this->createMock(Language::class);
+        $mockLanguage = $this->createStub(Language::class);
         $mockLanguage->method('isLanguageAvailable')->willReturn(['en', 'de']);
 
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);

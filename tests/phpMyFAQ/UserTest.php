@@ -11,10 +11,10 @@ use ReflectionClass;
 
 class UserTest extends TestCase
 {
-    private Configuration|MockObject $configuration;
-    private Sqlite3|MockObject $database;
+    private Configuration $configuration;
+    private Sqlite3 $database;
     private User $user;
-    private UserData|MockObject $userData;
+    private UserData $userData;
 
     protected function setUp(): void
     {

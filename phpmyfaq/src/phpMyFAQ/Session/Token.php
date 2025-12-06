@@ -38,7 +38,7 @@ class Token
 
     private ?string $cookieToken = null;
 
-    private static ?Token $token = null;
+    private static ?Token $instance = null;
 
     /**
      * Constructor.
@@ -97,11 +97,11 @@ class Token
      */
     public static function getInstance(SessionInterface $session): Token
     {
-        if (!self::$token instanceof Token) {
-            self::$token = new self($session);
+        if (!self::$instance instanceof Token) {
+            self::$instance = new self($session);
         }
 
-        return self::$token;
+        return self::$instance;
     }
 
     /**
@@ -212,5 +212,10 @@ class Token
     private function getCookieName(string $page): string
     {
         return sprintf('%s-%s', self::PMF_SESSION_NAME, substr(md5($page), 0, 10));
+    }
+
+    public static function resetInstanceForTests(): void
+    {
+        self::$instance = null;
     }
 }

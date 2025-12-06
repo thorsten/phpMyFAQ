@@ -13,9 +13,9 @@ use stdClass;
 class SearchHelperTest extends TestCase
 {
     private SearchHelper $searchHelper;
-    private MockObject|Configuration $configurationMock;
-    private MockObject|Category $categoryMock;
-    private MockObject|SearchResultSet $searchResultSetMock;
+    private Configuration $configurationMock;
+    private Category $categoryMock;
+    private SearchResultSet $searchResultSetMock;
 
     protected function setUp(): void
     {

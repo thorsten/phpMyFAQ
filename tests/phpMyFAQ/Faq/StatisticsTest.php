@@ -18,8 +18,8 @@ use ReflectionClass;
 class StatisticsTest extends TestCase
 {
     private Statistics $statistics;
-    private Configuration|MockObject $configurationMock;
-    private Sqlite3|MockObject $dbMock;
+    private Configuration $configurationMock;
+    private Sqlite3 $dbMock;
 
     protected function setUp(): void
     {
@@ -231,7 +231,7 @@ class StatisticsTest extends TestCase
             . date(format: 'YmdHis')
             . "'";
 
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -255,7 +255,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -285,7 +285,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -308,7 +308,7 @@ class StatisticsTest extends TestCase
         $this->configurationMock->method('get')->willReturn('basic');
         $statistics = new Statistics($this->configurationMock);
 
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())
@@ -332,7 +332,7 @@ class StatisticsTest extends TestCase
         $statistics = new Statistics($this->configurationMock);
 
         $now = date(format: 'YmdHis');
-        $resultMock = $this->createMock(\SQLite3Result::class);
+        $resultMock = $this->createStub(\SQLite3Result::class);
 
         $this->dbMock
             ->expects($this->once())

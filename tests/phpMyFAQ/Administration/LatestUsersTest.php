@@ -12,8 +12,8 @@ use PHPUnit\Framework\TestCase;
 class LatestUsersTest extends TestCase
 {
     private LatestUsers $latestUsers;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     protected function setUp(): void
     {

@@ -14,7 +14,7 @@ use Symfony\Component\Mime\Email;
 class SmtpTest extends TestCase
 {
     private Smtp $smtp;
-    private MockObject|MailerInterface $mockMailer;
+    private MailerInterface $mockMailer;
 
     protected function setUp(): void
     {

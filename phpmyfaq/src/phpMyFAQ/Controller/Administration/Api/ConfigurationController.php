@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin Configuration Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-26
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 

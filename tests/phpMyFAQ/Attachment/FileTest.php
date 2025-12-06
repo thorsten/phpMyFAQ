@@ -28,7 +28,7 @@ class FileTest extends TestCase
         $this->vfsRoot = vfsStream::setup('attachments', 0777);
 
         // Mock database driver
-        $this->mockDb = $this->createMock(DatabaseDriver::class);
+        $this->mockDb = $this->createStub(DatabaseDriver::class);
 
         // Create File instance with mocked database
         $this->file = new class($this->mockDb) extends File {

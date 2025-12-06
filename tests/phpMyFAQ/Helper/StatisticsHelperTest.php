@@ -14,9 +14,9 @@ use stdClass;
 class StatisticsHelperTest extends TestCase
 {
     private StatisticsHelper $statisticsHelper;
-    private MockObject|Session $sessionMock;
-    private MockObject|Visits $visitsMock;
-    private MockObject|Date $dateMock;
+    private Session $sessionMock;
+    private Visits $visitsMock;
+    private Date $dateMock;
 
     protected function setUp(): void
     {

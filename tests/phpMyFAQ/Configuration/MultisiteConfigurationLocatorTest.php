@@ -13,7 +13,7 @@ class MultisiteConfigurationLocatorTest extends TestCase
      */
     public function testLocateConfigurationDirectoryReturnsConfigDirIfExists(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $request->method('isSecure')->willReturn(false);
         $request->method('getHost')->willReturn('example.com');
         $request->method('getScriptName')->willReturn('/index.php');
@@ -35,7 +35,7 @@ class MultisiteConfigurationLocatorTest extends TestCase
      */
     public function testLocateConfigurationDirectoryReturnsNullIfDirDoesNotExist(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $request->method('isSecure')->willReturn(false);
         $request->method('getHost')->willReturn('notfound.com');
         $request->method('getScriptName')->willReturn('/index.php');
@@ -50,7 +50,7 @@ class MultisiteConfigurationLocatorTest extends TestCase
      */
     public function testLocateConfigurationDirectoryReturnsNullIfHostIsEmpty(): void
     {
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $request->method('isSecure')->willReturn(false);
         $request->method('getHost')->willReturn('');
         $request->method('getScriptName')->willReturn('/index.php');

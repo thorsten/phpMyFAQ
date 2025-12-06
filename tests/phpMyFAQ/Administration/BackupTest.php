@@ -58,7 +58,7 @@ class BackupTest extends TestCase
         $this->mockDatabaseHelper = $this->createMock(DatabaseHelper::class);
 
         // Mock Database class
-        $this->mockDb = $this->createMock(DatabaseDriver::class);
+        $this->mockDb = $this->createStub(DatabaseDriver::class);
 
         // Setup Configuration to return mocked database
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);

@@ -28,8 +28,8 @@ use phpMyFAQ\Database\DatabaseDriver;
 class CategoryTest extends TestCase
 {
     private Category $category;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     /**
      * @throws \PHPUnit\Framework\MockObject\Exception

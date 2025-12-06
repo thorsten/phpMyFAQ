@@ -19,8 +19,8 @@ class FaqSearchToolExecutorTest extends TestCase
     protected function setUp(): void
     {
         $configMock = $this->createStub(Configuration::class);
-        $this->searchMock = $this->createMock(Search::class);
-        $this->faqMock = $this->createMock(Faq::class);
+        $this->searchMock = $this->createStub(Search::class);
+        $this->faqMock = $this->createStub(Faq::class);
 
         $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
 

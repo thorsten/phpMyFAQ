@@ -21,9 +21,9 @@ use Twig\TwigFilter;
 class AbstractControllerTest extends TestCase
 {
     private AbstractController $abstractController;
-    private Configuration|MockObject $configurationMock;
-    private CurrentUser|MockObject $currentUserMock;
-    private BasicPermission|MockObject $permissionMock;
+    private Configuration $configurationMock;
+    private CurrentUser $currentUserMock;
+    private BasicPermission $permissionMock;
 
     protected function setUp(): void
     {
@@ -179,7 +179,7 @@ class AbstractControllerTest extends TestCase
 
     public function testAddExtension(): void
     {
-        $extension = $this->createMock(ExtensionInterface::class);
+        $extension = $this->createStub(ExtensionInterface::class);
 
         $this->abstractController->addExtension($extension);
 

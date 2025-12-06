@@ -18,7 +18,7 @@ class TokenTest extends TestCase
     protected function setUp(): void
     {
         // Mock the SessionInterface
-        $this->sessionMock = $this->createMock(SessionInterface::class);
+        $this->sessionMock = $this->createStub(SessionInterface::class);
         $this->token = Token::getInstance($this->sessionMock);
     }
 

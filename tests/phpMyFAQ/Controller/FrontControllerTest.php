@@ -14,7 +14,7 @@ class FrontControllerTest extends TestCase
      */
     public function testHandle()
     {
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $path = 'some/test/path';
 
         $controller = new FrontController();

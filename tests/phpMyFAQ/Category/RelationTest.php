@@ -31,10 +31,10 @@ use stdClass;
 class RelationTest extends TestCase
 {
     private Relation $relation;
-    private Configuration|MockObject $configurationMock;
-    private Category|MockObject $categoryMock;
-    private DatabaseDriver|MockObject $databaseMock;
-    private Language|MockObject $languageMock;
+    private Configuration $configurationMock;
+    private Category $categoryMock;
+    private DatabaseDriver $databaseMock;
+    private Language $languageMock;
 
     protected function setUp(): void
     {

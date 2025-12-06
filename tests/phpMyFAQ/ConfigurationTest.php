@@ -90,7 +90,7 @@ class ConfigurationTest extends TestCase
      */
     public function testSetDatabase(): void
     {
-        $database = $this->createMock(DatabaseDriver::class);
+        $database = $this->createStub(DatabaseDriver::class);
 
         $config = new Configuration($database);
         $config->setDatabase($database);

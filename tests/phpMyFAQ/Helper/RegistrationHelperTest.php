@@ -13,10 +13,10 @@ use ReflectionClass;
 class RegistrationHelperTest extends TestCase
 {
     private RegistrationHelper $registrationHelper;
-    private MockObject|Configuration $configurationMock;
-    private MockObject|User $userMock;
-    private MockObject|UserData $userDataMock;
-    private MockObject|Mail $mailMock;
+    private Configuration $configurationMock;
+    private User $userMock;
+    private UserData $userDataMock;
+    private Mail $mailMock;
 
     protected function setUp(): void
     {

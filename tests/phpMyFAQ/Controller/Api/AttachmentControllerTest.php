@@ -130,11 +130,11 @@ class AttachmentControllerTest extends TestCase
     {
         $request = new Request([], [], ['recordId' => '123']);
 
-        $file1 = $this->createMock(File::class);
+        $file1 = $this->createStub(File::class);
         $file1->method('getFilename')->willReturn('attachment-1.pdf');
         $file1->method('buildUrl')->willReturn('index.php?action=attachment&id=1');
 
-        $file2 = $this->createMock(File::class);
+        $file2 = $this->createStub(File::class);
         $file2->method('getFilename')->willReturn('attachment-2.pdf');
         $file2->method('buildUrl')->willReturn('index.php?action=attachment&id=2');
 
