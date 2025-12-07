@@ -13,8 +13,22 @@
  * @since     2024-09-01
  */
 
- /* Font -Atkinson Hyperlegible Next- from Braille Institute for high-contrast mode to achieve better A11y */
- @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap');
+/* Font -Atkinson Hyperlegible Next- from Braille Institute for high-contrast mode to achieve better A11y */
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    src: url('../../fonts/AtkinsonHyperlegibleNext-VariableFont_wght.ttf') format('truetype-variations');
+    font-weight: 200 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Atkinson Hyperlegible Next';
+    src: url('../../fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.ttf') format('truetype-variations');
+    font-weight: 200 800;
+    font-style: italic;
+    font-display: swap;
+}
 
 :root,
 [data-bs-theme='light'] {
