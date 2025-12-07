@@ -256,6 +256,35 @@
     color: #ffffff !important;
   }
 
+  //Theme Switcher Button for high contrast mode
+  .pmf-theme-switcher {
+  button {
+    color: var(--bs-light) !important;
+    border: none;
+    background: transparent;
+    transition: all 0.3s ease;
+    opacity: 1;
+
+    &:hover {
+      color: var(--bs-dark) !important;
+      background: #ffffff !important;
+      opacity: 1;
+    }
+
+    &.active {
+      color: var(--bs-dark) !important;
+      opacity: 1;
+      background: #ffff00 !important;
+    }
+
+    i {
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
+    }
+
+  }
+}
+
   // Navigation adjustments for high contrast mode
   .text-bg-pmf-nav {
     background-color: #000000 !important;
@@ -332,9 +361,10 @@
   // Form elements
   .form-control,
   .form-select {
-    background-color: #000000;
-    border: 2px solid #ffffff;
-    color: #ffffff;
+    background-color: #ffff00;
+    border: 2px solid #ffff00;
+    color: #000000;
+    font-size: 1.3rem;
 
     &:focus {
       background-color: #000000;
@@ -347,13 +377,14 @@
   .dropdown-menu {
     background-color: #000000;
     border: 2px solid #ffffff;
-
+    font-size: 1.3rem;
+    
     .dropdown-item {
       color: #ffffff;
 
       &:hover,
       &:focus {
-        background-color: #ffffff;
+        background-color: #ffff00;
         color: #000000;
       }
     }
@@ -490,7 +521,9 @@
     color: #ffffff !important;
 
     &:hover {
-      background-color: #333333;
+      background-color: #ffff00;
+      color: #000!important;
+      border-radius: 5px;
     }
   }
 }
