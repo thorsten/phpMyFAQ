@@ -16,9 +16,7 @@ class ReportTest extends TestCase
     protected function setUp(): void
     {
         // Mock Configuration class
-        $this->mockConfiguration = $this->getMockBuilder(Configuration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
         $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)

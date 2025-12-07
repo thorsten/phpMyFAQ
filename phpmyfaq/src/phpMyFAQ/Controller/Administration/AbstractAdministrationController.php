@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration;
 use Exception;
 use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Service\Gravatar;
@@ -30,6 +31,7 @@ use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAdministrationController extends AbstractController
 {
@@ -60,7 +62,6 @@ abstract class AbstractAdministrationController extends AbstractController
             'pageDirection' => Translation::get(key: 'direction'),
             'userHasAccessPermission' => $adminHelper->canAccessContent($this->currentUser),
             'msgSessionExpiration' => Translation::get(key: 'ad_session_expiration'),
-            'pageAction' => $request->query->get('action') ? '?action=' . $request->query->get('action') : '',
             'renderedLanguageSelection' => LanguageHelper::renderSelectLanguage(
                 $this->configuration->getLanguage()->getLanguage(),
                 true,
@@ -360,6 +361,32 @@ abstract class AbstractAdministrationController extends AbstractController
         }
 
         return '';
+    }
+
+    protected function userHasPermission(PermissionType $permissionType): void
+    {
+        try {
+            parent::userHasPermission($permissionType);
+        } catch (ForbiddenException $exception) {
+            $response = $this->getForbiddenPage($exception->getMessage());
+            $response->send();
+        } catch (Exception $exception) {
+            $this->configuration->getLogger()->error($exception->getMessage());
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getForbiddenPage(string $message = ''): Response
+    {
+        return $this->render(
+            file: '@admin/error/forbidden.twig',
+            context: [
+                ...$this->getHeader(Request::createFromGlobals()),
+                ...$this->getFooter(),
+            ],
+        );
     }
 
     /**

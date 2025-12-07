@@ -18,10 +18,10 @@ const AAD_OAUTH_SCOPE = 'test-scope';
 
 class AuthEntraIdTest extends TestCase
 {
-    private Configuration&MockObject $configurationMock;
-    private OAuth&MockObject $oAuthMock;
-    private EntraIdSession&MockObject $sessionMock;
-    private Logger&MockObject $loggerMock;
+    private Configuration $configurationMock;
+    private OAuth $oAuthMock;
+    private EntraIdSession $sessionMock;
+    private Logger $loggerMock;
     private AuthEntraId $authEntraId;
 
     protected function setUp(): void
@@ -29,7 +29,7 @@ class AuthEntraIdTest extends TestCase
         $this->configurationMock = $this->createMock(Configuration::class);
         $this->oAuthMock = $this->createMock(OAuth::class);
         $this->sessionMock = $this->createMock(EntraIdSession::class);
-        $this->loggerMock = $this->createMock(Logger::class);
+        $this->loggerMock = $this->createStub(Logger::class);
 
         $this->configurationMock->method('getLogger')->willReturn($this->loggerMock);
         $this->oAuthMock->method('getEntraIdSession')->willReturn($this->sessionMock);

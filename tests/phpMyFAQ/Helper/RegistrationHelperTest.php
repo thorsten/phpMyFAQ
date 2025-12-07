@@ -21,9 +21,9 @@ class RegistrationHelperTest extends TestCase
     protected function setUp(): void
     {
         $this->configurationMock = $this->createMock(Configuration::class);
-        $this->userMock = $this->createMock(User::class);
-        $this->userDataMock = $this->createMock(UserData::class);
-        $this->mailMock = $this->createMock(Mail::class);
+        $this->userMock = $this->createStub(User::class);
+        $this->userDataMock = $this->createStub(UserData::class);
+        $this->mailMock = $this->createStub(Mail::class);
 
         $this->registrationHelper = new RegistrationHelper($this->configurationMock);
     }

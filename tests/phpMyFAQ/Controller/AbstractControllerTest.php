@@ -3,17 +3,15 @@
 namespace phpMyFAQ\Controller;
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Permission\BasicPermission;
-use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Twig\Extension\ExtensionInterface;
 use Twig\TwigFilter;
@@ -36,7 +34,8 @@ class AbstractControllerTest extends TestCase
         $this->currentUserMock->perm = $this->permissionMock;
 
         // Create a simplified test implementation that bypasses container creation
-        $this->abstractController = new class ($this->configurationMock, $this->currentUserMock) extends AbstractController {
+        $this->abstractController = new class($this->configurationMock, $this->currentUserMock) extends
+            AbstractController {
             private Configuration $testConfiguration;
             private CurrentUser $testCurrentUser;
 
@@ -246,18 +245,18 @@ class AbstractControllerTest extends TestCase
     public function testUserHasGroupPermissionThrowsExceptionWhenMissingPermissions(): void
     {
         $this->currentUserMock
-            ->expects($this->once()) // Only called once since exception is thrown on first check
+            ->expects($this->once()) // Only called once since the exception is thrown on the first check
             ->method('getUserId')
             ->willReturn(1);
 
-        // Mock that user lacks the first required permission (USER_ADD)
+        // Mock that the user lacks the first required permission (USER_ADD)
         $this->permissionMock
             ->expects($this->once())
             ->method('hasPermission')
             ->with(1, PermissionType::USER_ADD->value)
             ->willReturn(false);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->abstractController->userHasGroupPermissionPublic();
     }
@@ -279,7 +278,7 @@ class AbstractControllerTest extends TestCase
                     PermissionType::USER_ADD->value,
                     PermissionType::USER_EDIT->value,
                     PermissionType::USER_DELETE->value,
-                    PermissionType::GROUP_EDIT->value
+                    PermissionType::GROUP_EDIT->value,
                 ]);
                 return true;
             });
@@ -302,7 +301,7 @@ class AbstractControllerTest extends TestCase
             ->with(1, PermissionType::USER_ADD->value)
             ->willReturn(false);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->abstractController->userHasUserPermissionPublic();
     }
@@ -323,7 +322,7 @@ class AbstractControllerTest extends TestCase
                 $this->assertContains($permission, [
                     PermissionType::USER_ADD->value,
                     PermissionType::USER_EDIT->value,
-                    PermissionType::USER_DELETE->value
+                    PermissionType::USER_DELETE->value,
                 ]);
                 return true;
             });
@@ -346,7 +345,7 @@ class AbstractControllerTest extends TestCase
             ->with(1, $permissionType->value)
             ->willReturn(false);
 
-        $this->expectException(UnauthorizedHttpException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->abstractController->userHasPermissionPublic($permissionType);
     }
@@ -474,12 +473,12 @@ class AbstractControllerTest extends TestCase
         $complexData = [
             'users' => [
                 ['id' => 1, 'name' => 'John'],
-                ['id' => 2, 'name' => 'Jane']
+                ['id' => 2, 'name' => 'Jane'],
             ],
             'metadata' => [
                 'total' => 2,
-                'page' => 1
-            ]
+                'page' => 1,
+            ],
         ];
 
         $response = $this->abstractController->json($complexData, 201, ['Custom-Header' => 'value']);

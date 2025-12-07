@@ -1431,7 +1431,7 @@ $LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Enable Rich Snippets'];
 
 // added v4.0.0-alpha.4 - 2024-07-29 by Jan
 $PMF_LANG['msgDeleteAllVotings'] = 'Statistics successfully deleted.';
-$PMF_LANG['msgDeleteAllVotingsError'] = 'An error occured while deleting the statistics.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'An error occurred while deleting the statistics.';
 $PMF_LANG['msgPasswordTooShort'] = 'The new password is required to have at least 8 characters.';
 $PMF_LANG['msgPasswordsMustBeEqual'] = 'Both passwords do not match.';
 $PMF_LANG['msgPrivateNotesOfEditor'] = 'There are private notes of other editors:';
@@ -1520,11 +1520,16 @@ $PMF_LANG['msgNewestUsers'] = 'Newest users';
 $PMF_LANG['msgMemberSince'] = 'Member since';
 $PMF_LANG['msgNumberRegisteredUsers'] = 'Registered users';
 $PMF_LANG['msgConfirmDeleteFAQ'] = 'Do you really want to delete this FAQ? This action cannot be undone.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
 $PMF_LANG['msgTotalKeys'] = 'Total number of translation keys';
 $PMF_LANG['msgTranslatedKeys'] = 'Number of translated keys';
 $PMF_LANG['msgMissingKeys'] = 'Missing translation keys';
 $PMF_LANG['msgCompletionPercentage'] = 'Completion percentage';
 $PMF_LANG['msgInstalledNewerThanAvailable'] = 'The installed version is newer than the latest available version.';
 $PMF_LANG['ad_quick_sub_category'] = "Add new sub-category";
+$PMF_LANG['msgError403'] = 'Error 403';
+$PMF_LANG['msgError403Description'] = 'You are authenticated, but you do not have permission to access this resource.';
+$PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact an administrator.';
 
 return $PMF_LANG;

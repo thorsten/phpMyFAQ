@@ -10,7 +10,7 @@ use phpMyFAQ\Entity\CategoryEntity;
 
 class CategoryServiceTest extends TestCase
 {
-    private CategoryRepositoryInterface&MockObject $repository;
+    private CategoryRepositoryInterface $repository;
     private CategoryService $service;
 
     protected function setUp(): void

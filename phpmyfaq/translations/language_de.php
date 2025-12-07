@@ -1518,11 +1518,16 @@ $PMF_LANG['msgNewestUsers'] = 'Neueste Benutzer';
 $PMF_LANG['msgMemberSince'] = 'Mitglied seit';
 $PMF_LANG['msgNumberRegisteredUsers'] = 'Benutzer';
 $PMF_LANG['msgConfirmDeleteFAQ'] = 'Möchten Sie diese FAQ wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
 $PMF_LANG['msgTotalKeys'] = 'Gesamtanzahl';
 $PMF_LANG['msgTranslatedKeys'] = 'Zahl der Übersetzungen';
 $PMF_LANG['msgMissingKeys'] = 'Fehlende Übersetzungen';
 $PMF_LANG['msgCompletionPercentage'] = 'Umsetzung in %';
 $PMF_LANG['msgInstalledNewerThanAvailable'] = 'Die installierte Version ist neuer als die verfügbare Version.';
 $PMF_LANG['ad_quick_sub_category'] = "Neue Sub-Kategorie hinzufügen";
+$PMF_LANG['msgError403'] = 'Fehler 403';
+$PMF_LANG['msgError403Description'] = 'Du hast keine Berechtigung, auf diese Seite zuzugreifen.';
+$PMF_LANG['msgError403Hint'] = 'Wenn du denkst, dass dies ein Fehler ist, kontaktiere bitte den Administrator.';
 
 return $PMF_LANG;

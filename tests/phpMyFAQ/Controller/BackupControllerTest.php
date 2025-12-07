@@ -32,8 +32,8 @@ final class BackupControllerTest extends TestCase
     protected function setUp(): void
     {
         $this->configurationMock = $this->createStub(Configuration::class);
-        $this->currentUserMock = $this->createMock(CurrentUser::class);
-        $this->permissionMock = $this->createMock(BasicPermission::class);
+        $this->currentUserMock = $this->createStub(CurrentUser::class);
+        $this->permissionMock = $this->createStub(BasicPermission::class);
         $this->backupServiceMock = $this->createMock(Backup::class);
         $this->session = new Session(new MockArraySessionStorage());
 

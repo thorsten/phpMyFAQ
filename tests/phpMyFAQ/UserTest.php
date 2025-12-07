@@ -19,7 +19,7 @@ class UserTest extends TestCase
     protected function setUp(): void
     {
         $this->configuration = $this->createStub(Configuration::class);
-        $this->database = $this->createMock(Sqlite3::class);
+        $this->database = $this->createStub(Sqlite3::class);
         $this->userData = $this->createMock(UserData::class);
 
         $this->configuration->method('getDb')->willReturn($this->database);

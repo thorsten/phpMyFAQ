@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class SeoRepositoryTest extends TestCase
 {
     private Configuration $configuration;
-    private DatabaseDriver&MockObject $database;
+    private DatabaseDriver $database;
     private SeoRepository $repository;
 
     protected function setUp(): void

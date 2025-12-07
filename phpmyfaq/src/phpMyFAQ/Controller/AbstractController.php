@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller;
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Captcha\Captcha;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Filter;
@@ -151,7 +152,7 @@ abstract class AbstractController
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     protected function isSecured(): void
     {
@@ -181,7 +182,7 @@ abstract class AbstractController
     }
 
     /**
-     * @throws UnauthorizedHttpException
+     * @throws ForbiddenException
      */
     protected function userHasGroupPermission(): void
     {
@@ -192,12 +193,12 @@ abstract class AbstractController
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::GROUP_EDIT->value)
         ) {
-            throw new UnauthorizedHttpException(challenge: 'User has no group permission.');
+            throw new ForbiddenException(message: 'User has no group permission.');
         }
     }
 
     /**
-     * @throws UnauthorizedHttpException
+     * @throws ForbiddenException
      */
     protected function userHasUserPermission(): void
     {
@@ -207,18 +208,18 @@ abstract class AbstractController
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_EDIT->value)
             || !$currentUser->perm->hasPermission($currentUser->getUserId(), PermissionType::USER_DELETE->value)
         ) {
-            throw new UnauthorizedHttpException(challenge: 'User has no user permission.');
+            throw new ForbiddenException(message: 'User has no user permission.');
         }
     }
 
     /**
-     * @throws UnauthorizedHttpException
+     * @throws ForbiddenException
      */
     protected function userHasPermission(PermissionType $permissionType): void
     {
         $currentUser = $this->currentUser;
         if (!$currentUser->perm->hasPermission($currentUser->getUserId(), $permissionType->value)) {
-            throw new UnauthorizedHttpException(sprintf('User has no "%s" permission.', $permissionType->value));
+            throw new ForbiddenException(message: sprintf('User has no "%s" permission.', $permissionType->name));
         }
     }
 

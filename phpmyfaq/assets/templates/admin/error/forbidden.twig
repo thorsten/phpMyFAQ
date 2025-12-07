@@ -1,0 +1,18 @@
+{% extends '@admin/index.twig' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="bi bi-exclamation-triangle"></i>
+      {{ 'msgError403' | translate }}
+    </h1>
+  </div>
+
+  <p class="alert alert-danger">
+    {{ 'msgError403Description' | translate }}
+  </p>
+
+  <p class="small">
+   {{ 'msgError403Hint' | translate }}
+  </p>
+{% endblock %}
