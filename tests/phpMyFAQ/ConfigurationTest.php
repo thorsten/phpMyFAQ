@@ -90,7 +90,7 @@ class ConfigurationTest extends TestCase
      */
     public function testSetDatabase(): void
     {
-        $database = $this->createMock(DatabaseDriver::class);
+        $database = $this->createStub(DatabaseDriver::class);
 
         $config = new Configuration($database);
         $config->setDatabase($database);
@@ -259,7 +259,7 @@ class ConfigurationTest extends TestCase
      */
     public function testLanguageConfiguration(): void
     {
-        $language = new Language($this->configuration, $this->createMock(Session::class));
+        $language = new Language($this->configuration, $this->createStub(Session::class));
 
         $this->configuration->setLanguage($language);
         $retrievedLanguage = $this->configuration->getLanguage();

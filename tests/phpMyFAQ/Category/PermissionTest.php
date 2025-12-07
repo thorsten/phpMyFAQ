@@ -29,8 +29,8 @@ use stdClass;
 class PermissionTest extends TestCase
 {
     private Permission $permission;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     protected function setUp(): void
     {

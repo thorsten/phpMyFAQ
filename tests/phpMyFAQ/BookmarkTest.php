@@ -36,7 +36,7 @@ class BookmarkTest extends TestCase
         $configuration->set('main.referenceURL', 'https://example.com');
 
         $user = CurrentUser::getCurrentUser($configuration);
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageFromConfiguration('en');
         $configuration->setLanguage($language);
 

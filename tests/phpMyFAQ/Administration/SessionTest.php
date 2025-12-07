@@ -20,7 +20,7 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->session = new Session($this->configurationMock);
@@ -34,7 +34,7 @@ class SessionTest extends TestCase
         $sessionId = 123;
         $expectedTime = 1609459200; // Example timestamp
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->time = $expectedTime;
 
         $this->databaseMock->method('query')->willReturn(true);
@@ -53,7 +53,7 @@ class SessionTest extends TestCase
         $firstHour = 1609459200;
         $lastHour = 1609545600;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->sid = 1;
         $resultMock->ip = '127.0.0.1';
         $resultMock->time = 1609462800;
@@ -80,7 +80,7 @@ class SessionTest extends TestCase
     {
         $expectedNumSessions = 5;
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->num_sessions = $expectedNumSessions;
 
         $this->databaseMock->method('query')->willReturn(true);
@@ -126,7 +126,7 @@ class SessionTest extends TestCase
         $startDate = strtotime('-1 month');
         $endDate = time();
 
-        $resultMock = $this->createMock(stdClass::class);
+        $resultMock = $this->createStub(stdClass::class);
         $resultMock->time = $startDate + 86400; // Example timestamp within the range
 
         $this->databaseMock->method('query')->willReturn(true);

@@ -22,7 +22,7 @@ class TwoFactorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->currentUser = $this->createMock(CurrentUser::class);
         $this->twoFactor = new TwoFactor($this->configuration, $this->currentUser);
     }
@@ -79,7 +79,7 @@ class TwoFactorTest extends TestCase
             ->with(1)
             ->willReturn(true);
 
-        $twoFactorAuth = $this->createMock(TwoFactorAuth::class);
+        $twoFactorAuth = $this->createStub(TwoFactorAuth::class);
         $twoFactorAuth->method('verifyCode')
             ->with('testsecret', '123456')
             ->willReturn(true);
@@ -108,7 +108,7 @@ class TwoFactorTest extends TestCase
         $this->configuration->method('getDefaultUrl')
             ->willReturn('https://example.com/');
 
-        $qrCodeProvider = $this->createMock(EndroidQrCodeProvider::class);
+        $qrCodeProvider = $this->createStub(EndroidQrCodeProvider::class);
         $qrCodeProvider->method('getMimeType')
             ->willReturn('image/png');
         $qrCodeProvider->method('getQRCodeImage')

@@ -24,7 +24,7 @@ class ClientTest extends TestCase
         parent::setUp();
 
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->client = new Client($this->configuration);
         $this->client->setFileSystem($this->filesystem);
     }

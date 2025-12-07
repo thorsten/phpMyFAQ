@@ -14,9 +14,9 @@ use stdClass;
 class StatisticsHelperTest extends TestCase
 {
     private StatisticsHelper $statisticsHelper;
-    private MockObject|Session $sessionMock;
-    private MockObject|Visits $visitsMock;
-    private MockObject|Date $dateMock;
+    private Session $sessionMock;
+    private Visits $visitsMock;
+    private Date $dateMock;
 
     protected function setUp(): void
     {
@@ -289,9 +289,9 @@ class StatisticsHelperTest extends TestCase
      */
     public function testDependencyInjection(): void
     {
-        $session = $this->createMock(Session::class);
-        $visits = $this->createMock(Visits::class);
-        $date = $this->createMock(Date::class);
+        $session = $this->createStub(Session::class);
+        $visits = $this->createStub(Visits::class);
+        $date = $this->createStub(Date::class);
 
         $helper = new StatisticsHelper($session, $visits, $date);
         $this->assertInstanceOf(StatisticsHelper::class, $helper);

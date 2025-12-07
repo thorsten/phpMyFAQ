@@ -47,7 +47,7 @@ class TwigWrapperTest extends TestCase
 
     public function testAddExtension(): void
     {
-        $extensionMock = $this->createMock(ExtensionInterface::class);
+        $extensionMock = $this->createStub(ExtensionInterface::class);
         $this->twigWrapper->addExtension($extensionMock);
 
         $reflection = new ReflectionClass($this->twigWrapper);
@@ -73,7 +73,7 @@ class TwigWrapperTest extends TestCase
 
     public function testGetExtension(): void
     {
-        $extensionMock = $this->createMock(ExtensionInterface::class);
+        $extensionMock = $this->createStub(ExtensionInterface::class);
         $this->twigWrapper->addExtension($extensionMock);
 
         $this->assertInstanceOf(ExtensionInterface::class, $this->twigWrapper->getExtension(get_class($extensionMock)));

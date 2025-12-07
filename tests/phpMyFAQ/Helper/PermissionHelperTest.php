@@ -16,7 +16,7 @@ class PermissionHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $this->permissionHelper = new PermissionHelper();
     }
 

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -143,7 +144,7 @@ class Application
                 status: Response::HTTP_NOT_FOUND,
             );
         } catch (UnauthorizedHttpException) {
-            $response = new RedirectResponse(url: '/login');
+            $response = new RedirectResponse(url: './login');
             if (str_contains(
                 haystack: $urlMatcher->getContext()->getBaseUrl(),
                 needle: '/api',
@@ -154,6 +155,17 @@ class Application
                     headers: ['Content-Type' => 'application/json'],
                 );
             }
+        } catch (ForbiddenException $exception) {
+            $message = Environment::isDebugMode()
+                ? $this->formatExceptionMessage(
+                    template: 'An error occurred: :message at line :line at :file',
+                    exception: $exception,
+                )
+                : 'Bad Request';
+            $response = new Response(
+                content: $message,
+                status: Response::HTTP_FORBIDDEN,
+            );
         } catch (BadRequestException $exception) {
             $message = Environment::isDebugMode()
                 ? $this->formatExceptionMessage(

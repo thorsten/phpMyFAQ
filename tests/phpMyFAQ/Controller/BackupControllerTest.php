@@ -22,18 +22,18 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 final class BackupControllerTest extends TestCase
 {
-    private Configuration|MockObject $configurationMock;
-    private CurrentUser|MockObject $currentUserMock;
-    private BasicPermission|MockObject $permissionMock;
-    private Backup|MockObject $backupServiceMock;
+    private Configuration $configurationMock;
+    private CurrentUser $currentUserMock;
+    private BasicPermission $permissionMock;
+    private Backup $backupServiceMock;
 
     private Session $session;
 
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createMock(Configuration::class);
-        $this->currentUserMock = $this->createMock(CurrentUser::class);
-        $this->permissionMock = $this->createMock(BasicPermission::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
+        $this->currentUserMock = $this->createStub(CurrentUser::class);
+        $this->permissionMock = $this->createStub(BasicPermission::class);
         $this->backupServiceMock = $this->createMock(Backup::class);
         $this->session = new Session(new MockArraySessionStorage());
 

@@ -12,15 +12,15 @@ use PHPUnit\Framework\TestCase;
 class LatestUsersTest extends TestCase
 {
     private LatestUsers $latestUsers;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->configurationMock
             ->method('getDb')
             ->willReturn($this->databaseMock);

@@ -28,8 +28,8 @@ use phpMyFAQ\Database\DatabaseDriver;
 class CategoryTest extends TestCase
 {
     private Category $category;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     /**
      * @throws \PHPUnit\Framework\MockObject\Exception
@@ -39,7 +39,7 @@ class CategoryTest extends TestCase
         parent::setUp();
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
-        $this->configurationMock = $this->createMock(Configuration::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
         $this->configurationMock
             ->method('getDb')
             ->willReturn($this->databaseMock);

@@ -11,7 +11,7 @@ class UtilsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
     }
 
     public function testIsLanguageWithValidLanguages(): void

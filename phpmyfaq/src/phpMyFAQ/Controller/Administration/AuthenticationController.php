@@ -41,13 +41,13 @@ final class AuthenticationController extends AbstractAdministrationController
 
         $logging = $this->container->get(id: 'phpmyfaq.admin.admin-log');
 
-        $username = Filter::filterVar($request->attributes->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $username = Filter::filterVar($request->request->get(key: 'faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
         $password = Filter::filterVar(
-            $request->attributes->get(key: 'faqpassword'),
+            $request->request->get(key: 'faqpassword'),
             FILTER_SANITIZE_SPECIAL_CHARS,
             FILTER_FLAG_NO_ENCODE_QUOTES,
         );
-        $rememberMe = Filter::filterVar($request->attributes->get(key: 'faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+        $rememberMe = Filter::filterVar($request->request->get(key: 'faqrememberme'), FILTER_VALIDATE_BOOLEAN);
 
         // Set username via SSO
         if (
@@ -144,7 +144,8 @@ final class AuthenticationController extends AbstractAdministrationController
 
         $redirectResponse = new RedirectResponse(url: $this->configuration->getDefaultUrl() . 'admin/login');
 
-        $csrfToken = Filter::filterVar($request->attributes->get(key: 'csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($request->query->get(key: 'csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
+
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken(
             page: 'admin-logout',
             requestToken: $csrfToken,
@@ -173,7 +174,7 @@ final class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse(url: './');
         }
 
-        $userId = (int) Filter::filterVar($request->attributes->get(key: 'user-id'), FILTER_VALIDATE_INT);
+        $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         return $this->render(
             file: '@admin/user/twofactor.twig',
@@ -204,8 +205,8 @@ final class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse(url: './');
         }
 
-        $token = Filter::filterVar($request->attributes->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $userId = (int) Filter::filterVar($request->attributes->get(key: 'user-id'), FILTER_VALIDATE_INT);
+        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         $user = $this->container->get(id: 'phpmyfaq.user.current_user');
         $user->getUserById($userId);

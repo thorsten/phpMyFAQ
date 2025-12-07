@@ -32,7 +32,7 @@ class UserAuthenticationTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
 
-        $this->currentUser = $this->createMock(CurrentUser::class);
+        $this->currentUser = $this->createStub(CurrentUser::class);
         $this->userAuth = new UserAuthentication($this->configuration, $this->currentUser);
     }
 

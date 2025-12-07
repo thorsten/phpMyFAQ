@@ -22,8 +22,8 @@ class SetupTest extends TestCase
         parent::setUp();
 
         $this->setup = new Setup();
-        $this->configuration = $this->createMock(Configuration::class);
-        $this->user = $this->createMock(User::class);
+        $this->configuration = $this->createStub(Configuration::class);
+        $this->user = $this->createStub(User::class);
     }
 
     public function testSetRootDir(): void

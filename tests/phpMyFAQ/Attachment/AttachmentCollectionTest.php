@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 class AttachmentCollectionTest extends TestCase
 {
     /**
-     * @var MockObject|Configuration
+     * @var Configuration
      */
     protected $mockConfiguration;
 
     /**
-     * @var MockObject|DatabaseDriver
+     * @var DatabaseDriver
      */
     protected $mockDatabase;
 
@@ -27,10 +27,10 @@ class AttachmentCollectionTest extends TestCase
     protected function setUp(): void
     {
         // Mock the Configuration object
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock the Database object
-        $this->mockDatabase = $this->createMock(DatabaseDriver::class);
+        $this->mockDatabase = $this->createStub(DatabaseDriver::class);
 
         // Set up the configuration to return the mock Database
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDatabase);

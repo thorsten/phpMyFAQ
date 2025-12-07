@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Admin User Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-10-27
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration\Api;
 
@@ -386,7 +386,6 @@ final class UserController extends AbstractController
 
         if ($errorMessage === []) {
             if (!$newUser->createUser($userName, $userPassword)) {
-                var_dump($errorMessage);
                 $errorMessage[] = $newUser->error();
                 return $this->json($errorMessage, Response::HTTP_BAD_REQUEST);
             }

@@ -15,7 +15,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class UpgradeTest extends TestCase
 {
     private Upgrade $upgrade;
-    private HttpClientInterface|MockObject $httpClientMock;
+    private HttpClientInterface $httpClientMock;
 
     protected function setUp(): void
     {
@@ -35,7 +35,7 @@ class UpgradeTest extends TestCase
      */
     public function testDownloadPackageSuccessful(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(200);
         $response->method('getContent')->willReturn('zip-binary-content');
 
@@ -57,7 +57,7 @@ class UpgradeTest extends TestCase
      */
     public function testDownloadPackageThrowsOnHttpError(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(404);
 
         $this->httpClientMock

@@ -10,7 +10,7 @@ use phpMyFAQ\Category\Tree\TreeBuilder;
 
 class CategoryTreeFacadeTest extends TestCase
 {
-    private TreeBuilder&MockObject $treeBuilder;
+    private TreeBuilder $treeBuilder;
     private CategoryTreeFacade $facade;
 
     protected function setUp(): void

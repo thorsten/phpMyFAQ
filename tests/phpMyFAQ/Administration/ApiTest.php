@@ -28,8 +28,8 @@ class ApiTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
-        $this->system = $this->createMock(System::class);
+        $this->configuration = $this->createStub(Configuration::class);
+        $this->system = $this->createStub(System::class);
         $this->httpClient = $this->createMock(HttpClientInterface::class);
 
         $this->api = new Api($this->configuration, $this->system);
@@ -50,7 +50,7 @@ class ApiTest extends TestCase
             'nightly' => '5.2.0',
         ];
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('toArray')->willReturn($versions);
 
@@ -78,7 +78,7 @@ class ApiTest extends TestCase
      */
     public function testIsVerifiedSuccess(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('{"hash1": "abc", "hash2": "def"}');
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
 
@@ -95,7 +95,7 @@ class ApiTest extends TestCase
      */
     public function testIsVerifiedFailure(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_INTERNAL_SERVER_ERROR);
 
         $this->httpClient->expects($this->once())
@@ -125,7 +125,7 @@ class ApiTest extends TestCase
      */
     public function testGetVerificationIssues(): void
     {
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
         $mockSystem = $this->getMockBuilder(System::class)
             ->onlyMethods(['createHashes'])
             ->getMock();
@@ -158,7 +158,7 @@ class ApiTest extends TestCase
      */
     public function testGetVersionsWithHttpError(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_NOT_FOUND);
 
         $this->httpClient->expects($this->once())
@@ -202,7 +202,7 @@ class ApiTest extends TestCase
      */
     public function testIsVerifiedWithInvalidJson(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('invalid json content');
 
         $this->httpClient->expects($this->once())
@@ -219,7 +219,7 @@ class ApiTest extends TestCase
      */
     public function testIsVerifiedWithEmptyResponse(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('');
 
         $this->httpClient->expects($this->once())
@@ -232,7 +232,7 @@ class ApiTest extends TestCase
 
     public function testIsVerifiedWithNonArrayJson(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn('"just a string"');
 
         $this->httpClient->expects($this->once())
@@ -246,7 +246,7 @@ class ApiTest extends TestCase
 
     public function testIsVerifiedWithServerException(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willThrowException(
             $this->createMock(ServerExceptionInterface::class)
         );
@@ -320,7 +320,7 @@ class ApiTest extends TestCase
         $this->api->setHttpClient($newHttpClient);
 
         // Verify the client was set by making a request
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('toArray')->willReturn(['stable' => '1.0.0', 'development' => '1.1.0', 'nightly' => '1.2.0']);
 
@@ -380,7 +380,7 @@ class ApiTest extends TestCase
     {
         $expectedHashes = '{"hash1": "abc", "hash2": "def"}';
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $response->method('getContent')->willReturn($expectedHashes);
 
         $this->httpClient->expects($this->once())

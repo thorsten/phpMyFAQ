@@ -201,7 +201,7 @@ class MailTest extends TestCase
 
     public function testSafeEmailWithSafeEmailEnabled(): void
     {
-        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock = $this->createStub(Configuration::class);
         $configurationMock->method('get')->willReturn(true);
 
         $instance = new Mail($configurationMock);
@@ -212,7 +212,7 @@ class MailTest extends TestCase
 
     public function testSafeEmailWithSafeEmailDisabled(): void
     {
-        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock = $this->createStub(Configuration::class);
         $configurationMock->method('get')->willReturn(false);
 
         $instance = new Mail($configurationMock);

@@ -29,8 +29,8 @@ use stdClass;
 class OrderTest extends TestCase
 {
     private Order $order;
-    private Configuration|MockObject $configurationMock;
-    private DatabaseDriver|MockObject $databaseMock;
+    private Configuration $configurationMock;
+    private DatabaseDriver $databaseMock;
 
     protected function setUp(): void
     {

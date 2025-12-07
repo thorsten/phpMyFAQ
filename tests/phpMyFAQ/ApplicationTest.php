@@ -48,7 +48,7 @@ class ApplicationTest extends TestCase
 
     public function testSetUrlMatcher(): void
     {
-        $urlMatcher = $this->createMock(UrlMatcher::class);
+        $urlMatcher = $this->createStub(UrlMatcher::class);
         $this->application->setUrlMatcher($urlMatcher);
 
         $reflection = new ReflectionClass(Application::class);
@@ -59,7 +59,7 @@ class ApplicationTest extends TestCase
 
     public function testSetControllerResolver(): void
     {
-        $controllerResolver = $this->createMock(ControllerResolver::class);
+        $controllerResolver = $this->createStub(ControllerResolver::class);
         $this->application->setControllerResolver($controllerResolver);
 
         $reflection = new ReflectionClass(Application::class);
@@ -74,7 +74,7 @@ class ApplicationTest extends TestCase
     public function testSetLanguageWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))
@@ -261,7 +261,7 @@ class ApplicationTest extends TestCase
     public function testRunMethodWithContainer(): void
     {
         $configuration = $this->createMock(Configuration::class);
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $language = new Language($configuration, $session);
 
         $configuration->expects($this->exactly(2))

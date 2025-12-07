@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class ImageTest extends TestCase
 {
     private Image $image;
-    private Configuration|MockObject $configurationMock;
+    private Configuration $configurationMock;
 
     protected function setUp(): void
     {

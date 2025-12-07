@@ -17,7 +17,7 @@ class DatabaseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
     }
 
     public function testFactoryWithValidType(): void
@@ -48,7 +48,7 @@ class DatabaseTest extends TestCase
      */
     public function testDropTables(): void
     {
-        $dbMock = $this->createMock(DatabaseDriver::class);
+        $dbMock = $this->createStub(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
         $dbMock->method('query')->willReturn(true);
@@ -61,7 +61,7 @@ class DatabaseTest extends TestCase
 
     public function testDropTablesWithFailure(): void
     {
-        $dbMock = $this->createMock(DatabaseDriver::class);
+        $dbMock = $this->createStub(DatabaseDriver::class);
         $this->configuration->method('getDb')->willReturn($dbMock);
 
         $dbMock->method('query')->willReturn(false);

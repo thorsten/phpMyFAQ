@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class AuthSsoTest extends TestCase
 {
-    private Configuration&MockObject $configurationMock;
+    private Configuration $configurationMock;
 
     protected function setUp(): void
     {

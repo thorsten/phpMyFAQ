@@ -17,7 +17,7 @@ class LanguageControllerTest extends TestCase
     public function testIndex(): void
     {
         $configuration = Configuration::getConfigurationInstance();
-        $language = new Language($configuration, $this->createMock(Session::class));
+        $language = new Language($configuration, $this->createStub(Session::class));
         $language->setLanguageWithDetection('language_en.php');
 
         $configuration->setLanguage($language);

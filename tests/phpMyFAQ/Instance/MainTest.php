@@ -19,9 +19,9 @@ class MainTest extends TestCase
     {
         parent::setUp();
 
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $this->main = new Main($configuration);
-        $this->instance = $this->createMock(Instance::class);
+        $this->instance = $this->createStub(Instance::class);
     }
 
     public function testCreateMain(): void

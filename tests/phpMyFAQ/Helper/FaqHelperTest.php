@@ -41,7 +41,7 @@ class FaqHelperTest extends TestCase
         $this->configuration->set('main.enableMarkdownEditor', true);
         $this->configuration->set('records.allowedMediaHosts', 'www.youtube.com,example.com,phpmyfaq.de');
 
-        $session = $this->createMock(Session::class);
+        $session = $this->createStub(Session::class);
         $language = new Language($this->configuration, $session);
         $this->configuration->setLanguage($language);
 

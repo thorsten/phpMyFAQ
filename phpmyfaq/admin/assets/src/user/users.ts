@@ -223,7 +223,8 @@ export const handleUsers = async (): Promise<void> => {
             location.reload();
           }, 1500);
         } else {
-          pushErrorNotification(response.error as string);
+          const errorMessage = Array.isArray(response) ? response.join('\n') : (response as unknown as string);
+          pushErrorNotification(errorMessage);
         }
       } catch (error) {
         console.error('Error adding user: ', error);
@@ -261,7 +262,10 @@ export const handleUsers = async (): Promise<void> => {
         modal.hide();
       }
       if (response.error) {
-        pushErrorNotification(response.error);
+        const errorMessage: string = Array.isArray(response.error)
+          ? response.error.join('\n')
+          : (response.error as string);
+        pushErrorNotification(errorMessage);
       }
     });
   }
@@ -295,7 +299,8 @@ export const handleUsers = async (): Promise<void> => {
           await clearUserForm();
         }
         if (response.error) {
-          pushErrorNotification(response.error);
+          const errorMessage = Array.isArray(response.error) ? response.error.join('\n') : (response.error as string);
+          pushErrorNotification(errorMessage);
         }
       }
     });
@@ -323,7 +328,8 @@ export const handleUsers = async (): Promise<void> => {
         pushNotification(response.success);
       }
       if (response.error) {
-        pushErrorNotification(response.error);
+        const errorMessage = Array.isArray(response.error) ? response.error.join('\n') : (response.error as string);
+        pushErrorNotification(errorMessage);
       }
       await updateUser(userId);
     });
@@ -350,7 +356,8 @@ export const handleUsers = async (): Promise<void> => {
         pushNotification(response.success);
       }
       if (response.error) {
-        pushErrorNotification(response.error);
+        const errorMessage = Array.isArray(response.error) ? response.error.join('\n') : (response.error as string);
+        pushErrorNotification(errorMessage);
       }
       await updateUser(userId);
     });

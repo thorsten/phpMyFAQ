@@ -30,7 +30,7 @@ class AttachmentHelperTest extends TestCase
 
     public function testGetAttachmentListWithAttachments()
     {
-        $attachmentMock = $this->createMock(AbstractAttachment::class);
+        $attachmentMock = $this->createStub(AbstractAttachment::class);
         $attachmentMock->method('getMimeType')->willReturn('application/pdf');
         $attachmentMock->method('buildUrl')->willReturn('https://example.com/file.pdf');
         $attachmentMock->method('getFilename')->willReturn('file.pdf');

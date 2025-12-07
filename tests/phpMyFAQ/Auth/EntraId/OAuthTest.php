@@ -29,7 +29,7 @@ class OAuthTest extends TestCase
     {
         $this->mockClient = $this->createMock(HttpClientInterface::class);
         $this->mockSession = $this->createMock(EntraIdSession::class);
-        $mockConfiguration = $this->createMock(Configuration::class);
+        $mockConfiguration = $this->createStub(Configuration::class);
 
         $this->oAuth = new OAuth($mockConfiguration, $this->mockSession);
     }
@@ -41,7 +41,7 @@ class OAuthTest extends TestCase
      */
     public function testGetOAuthTokenSuccess(): void
     {
-        $mockResponse = $this->createMock(ResponseInterface::class);
+        $mockResponse = $this->createStub(ResponseInterface::class);
         $mockResponse->method('getContent')->willReturn(json_encode([
             'access_token' => 'fake_access_token',
             'id_token' => 'fake_id_token'
@@ -74,7 +74,7 @@ class OAuthTest extends TestCase
      */
     public function testRefreshTokenSuccess(): void
     {
-        $mockResponse = $this->createMock(ResponseInterface::class);
+        $mockResponse = $this->createStub(ResponseInterface::class);
         $mockResponse->method('getContent')->willReturn(json_encode([
             'access_token' => 'new_access_token',
             'refresh_token' => 'new_refresh_token',

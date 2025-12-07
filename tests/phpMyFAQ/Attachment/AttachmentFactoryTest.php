@@ -26,7 +26,7 @@ class AttachmentFactoryTest extends TestCase
         $this->resetFactoryState();
 
         // Mock Configuration and Database
-        $this->mockConfiguration = $this->createMock(Configuration::class);
+        $this->mockConfiguration = $this->createStub(Configuration::class);
         $this->mockDb = $this->createMock(DatabaseDriver::class);
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
 

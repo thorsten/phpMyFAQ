@@ -73,7 +73,7 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithEmptyAllowedHosts(): void
     {
-        $config = $this->createMock(Configuration::class);
+        $config = $this->createStub(Configuration::class);
         $config->method('getAllowedMediaHosts')->willReturn(['']);
         $this->wrapper->setConfig($config);
 
@@ -85,7 +85,7 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithDisallowedHost(): void
     {
-        $config = $this->createMock(Configuration::class);
+        $config = $this->createStub(Configuration::class);
         $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
         $this->wrapper->setConfig($config);
 
@@ -97,7 +97,7 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithLocalImage(): void
     {
-        $config = $this->createMock(Configuration::class);
+        $config = $this->createStub(Configuration::class);
         $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
         $this->wrapper->setConfig($config);
 
@@ -109,7 +109,7 @@ class WrapperTest extends TestCase
 
     public function testConvertExternalImagesToBase64WithMalformedUrl(): void
     {
-        $config = $this->createMock(Configuration::class);
+        $config = $this->createStub(Configuration::class);
         $config->method('getAllowedMediaHosts')->willReturn(['www.youtube.com']);
         $this->wrapper->setConfig($config);
 

@@ -13,15 +13,15 @@ use stdClass;
 class SearchHelperTest extends TestCase
 {
     private SearchHelper $searchHelper;
-    private MockObject|Configuration $configurationMock;
-    private MockObject|Category $categoryMock;
-    private MockObject|SearchResultSet $searchResultSetMock;
+    private Configuration $configurationMock;
+    private Category $categoryMock;
+    private SearchResultSet $searchResultSetMock;
 
     protected function setUp(): void
     {
-        $this->configurationMock = $this->createMock(Configuration::class);
-        $this->categoryMock = $this->createMock(Category::class);
-        $this->searchResultSetMock = $this->createMock(SearchResultSet::class);
+        $this->configurationMock = $this->createStub(Configuration::class);
+        $this->categoryMock = $this->createStub(Category::class);
+        $this->searchResultSetMock = $this->createStub(SearchResultSet::class);
 
         $this->searchHelper = new SearchHelper($this->configurationMock);
         $this->searchHelper->setCategory($this->categoryMock);

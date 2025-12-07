@@ -25,7 +25,7 @@ class LdapTest extends TestCase
         $this->dbHandle = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
 
-        $this->configuration = $this->createMock(Configuration::class);
+        $this->configuration = $this->createStub(Configuration::class);
 
         // Mock der LDAP-Konfiguration
         $this->configuration->method('getLdapConfig')->willReturn([
@@ -44,7 +44,7 @@ class LdapTest extends TestCase
 
     public function testConstructor(): void
     {
-        $configuration = $this->createMock(Configuration::class);
+        $configuration = $this->createStub(Configuration::class);
         $ldap = new Ldap($configuration);
         $this->assertInstanceOf(Ldap::class, $ldap);
     }
@@ -303,7 +303,7 @@ class LdapTest extends TestCase
      */
     public function testConfigurationInjection(): void
     {
-        $mockConfig = $this->createMock(Configuration::class);
+        $mockConfig = $this->createStub(Configuration::class);
         $mockConfig->method('getLdapConfig')->willReturn([
             'ldap_mapping' => [
                 'username' => 'sAMAccountName',

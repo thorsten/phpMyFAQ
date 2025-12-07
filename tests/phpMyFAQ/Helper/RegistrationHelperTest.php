@@ -13,17 +13,17 @@ use ReflectionClass;
 class RegistrationHelperTest extends TestCase
 {
     private RegistrationHelper $registrationHelper;
-    private MockObject|Configuration $configurationMock;
-    private MockObject|User $userMock;
-    private MockObject|UserData $userDataMock;
-    private MockObject|Mail $mailMock;
+    private Configuration $configurationMock;
+    private User $userMock;
+    private UserData $userDataMock;
+    private Mail $mailMock;
 
     protected function setUp(): void
     {
         $this->configurationMock = $this->createMock(Configuration::class);
-        $this->userMock = $this->createMock(User::class);
-        $this->userDataMock = $this->createMock(UserData::class);
-        $this->mailMock = $this->createMock(Mail::class);
+        $this->userMock = $this->createStub(User::class);
+        $this->userDataMock = $this->createStub(UserData::class);
+        $this->mailMock = $this->createStub(Mail::class);
 
         $this->registrationHelper = new RegistrationHelper($this->configurationMock);
     }
