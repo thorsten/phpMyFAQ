@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Exception;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -31,7 +32,7 @@ class ForbiddenException extends HttpException
         array $headers = [],
     ) {
         parent::__construct(
-            statusCode: 403,
+            statusCode: Response::HTTP_FORBIDDEN,
             message: $message,
             previous: $previous,
             headers: $headers,
