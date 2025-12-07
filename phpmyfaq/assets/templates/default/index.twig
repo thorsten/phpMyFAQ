@@ -17,7 +17,7 @@
 
   <link href="{{ baseHref }}assets/public/styles.css" rel="stylesheet" media="screen">
   <link href="{{ baseHref }}assets/templates/{{ tplSetName }}/theme.css" rel="stylesheet" media="screen">
-{% if customCss %}
+{% if customCss is not empty %}
   <style type="text/css" media="screen">
     {{ customCss | raw }}
   </style>
