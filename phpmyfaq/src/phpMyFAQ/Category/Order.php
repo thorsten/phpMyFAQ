@@ -130,11 +130,14 @@ readonly class Order
             $categoryId = (int) $category['category_id'];
             $categoryParentId = (int) $category['parent_id'];
 
+            // First check if this category belongs at this level (parent_id matches)
             if ($categoryParentId !== $parentId) {
                 continue;
             }
 
-            // Prevent infinite recursion by checking if we've already processed this category
+            // Then prevent infinite recursion by checking if we've already processed this category
+            // This check must come after the parent_id check to ensure we only mark categories
+            // as visited when they're actually being added to the tree at the correct level
             if (isset($visited[$categoryId])) {
                 continue;
             }
