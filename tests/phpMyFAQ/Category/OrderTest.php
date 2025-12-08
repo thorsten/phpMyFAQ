@@ -233,36 +233,44 @@ class OrderTest extends TestCase
 
     public function testGetCategoryTreeWithCircularReference(): void
     {
-        // Test case where categories have circular references: 1 -> 2 -> 1
+        // Test case where categories have circular references: 2 -> 1 and 1 -> 2
+        // This simulates corrupt data where two categories reference each other as parent
         $categories = [
-            ['category_id' => '1', 'parent_id' => '0'],
-            ['category_id' => '2', 'parent_id' => '1'],
-            ['category_id' => '1', 'parent_id' => '2'], // Circular reference
+            ['category_id' => '1', 'parent_id' => '2'], // Category 1's parent is 2
+            ['category_id' => '2', 'parent_id' => '1'], // Category 2's parent is 1 (circular!)
+            ['category_id' => '3', 'parent_id' => '0'],
         ];
 
         $result = $this->order->getCategoryTree($categories, 0);
 
         // Should handle the circular reference gracefully
-        $this->assertArrayHasKey('1', $result);
-        // Category 1 should have category 2 as a child
-        $this->assertArrayHasKey('2', $result['1']);
+        // Only category 3 should appear at root level since 1 and 2 are in a circular loop
+        $this->assertArrayHasKey('3', $result);
+        $this->assertCount(1, $result);
     }
 
     public function testGetCategoryTreeWithComplexCircularReference(): void
     {
-        // Test case: A -> B -> C -> A (circular)
+        // Test case: Category chain where the last one references an earlier one in the chain
+        // 1 (root) -> 2 -> 3 -> 4, but then 4 -> 2 (creates a loop: 2 -> 3 -> 4 -> 2)
         $categories = [
             ['category_id' => '1', 'parent_id' => '0'],
             ['category_id' => '2', 'parent_id' => '1'],
             ['category_id' => '3', 'parent_id' => '2'],
-            ['category_id' => '1', 'parent_id' => '3'], // Creates circle back to 1
+            ['category_id' => '4', 'parent_id' => '3'],
+            ['category_id' => '5', 'parent_id' => '2'], // Another child of 2 (valid)
+            // Simulate someone incorrectly updating category 3 to make it a child of 4
+            // In real DB this would be an update, but we simulate by having it appear again
+            ['category_id' => '3', 'parent_id' => '4'], // This creates: 3 -> 4 -> (back to 3 via next entry)
         ];
 
         $result = $this->order->getCategoryTree($categories, 0);
 
         // Should handle gracefully and not cause infinite recursion
+        // The tree should build up to the point where the circular reference is detected
         $this->assertArrayHasKey('1', $result);
         $this->assertArrayHasKey('2', $result['1']);
+        // Category 3 should be under 2, and when we try to add it again under 4, it's skipped
         $this->assertArrayHasKey('3', $result['1']['2']);
     }
 
