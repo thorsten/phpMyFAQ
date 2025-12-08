@@ -138,12 +138,12 @@ readonly class Order
             
             if ($categoryParentId === $parentId) {
                 // Check if this category has already been visited to prevent cycles
-                if (in_array($categoryId, $visited, true)) {
+                if (isset($visited[$categoryId])) {
                     continue;
                 }
                 
                 // Add current category to visited list
-                $visited[] = $categoryId;
+                $visited[$categoryId] = true;
                 
                 $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
                 $result[$categoryId] = $childCategories;
