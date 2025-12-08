@@ -21,7 +21,7 @@ namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Instance\Database\Driver;
+use phpMyFAQ\Instance\Database\DriverInterface;
 
 /**
  * Class Database
@@ -33,7 +33,7 @@ class Database
     /**
      * Instance.
      */
-    private static ?Driver $driver = null;
+    private static ?DriverInterface $driver = null;
 
     /**
      * DROP TABLE statements.
@@ -91,7 +91,7 @@ class Database
      * @param string        $type Database management system type
      * @throws Exception
      */
-    public static function factory(Configuration $configuration, string $type): ?Driver
+    public static function factory(Configuration $configuration, string $type): ?DriverInterface
     {
         if (str_starts_with($type, 'pdo_')) {
             $class = 'phpMyFAQ\Instance\Database\Pdo' . ucfirst(substr($type, 4));
@@ -111,9 +111,9 @@ class Database
     /**
      * Returns the single instance.
      */
-    public static function getInstance(): ?Driver
+    public static function getInstance(): ?DriverInterface
     {
-        if (!self::$driver instanceof Driver) {
+        if (!self::$driver instanceof DriverInterface) {
             $className = self::class;
             self::$driver = new $className();
         }

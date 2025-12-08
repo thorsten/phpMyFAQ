@@ -1,9 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * The phpMyFAQ instances basic Elasticsearch class.
+ * The phpMyFAQ instances a basic Elasticsearch class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2015-12-25
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Instance;
 
@@ -261,7 +261,7 @@ class Elasticsearch
                 'category_id' => $faq['category_id'],
             ];
 
-            if (($i % 1000) == 0) {
+            if (($i % 1000) === 0) {
                 try {
                     $responses = $this->client->bulk($params);
                 } catch (ClientResponseException|ServerResponseException $e) {

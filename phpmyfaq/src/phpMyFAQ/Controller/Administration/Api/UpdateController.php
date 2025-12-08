@@ -108,7 +108,7 @@ final class UpdateController extends AbstractController
             $installed = $versions['installed'];
             $available = $versions[$branch];
 
-            if (version_compare($installed, $available, '<')) {
+            if (version_compare($installed, $available, operator: '<')) {
                 return $this->json([
                     'version' => $available,
                     'message' => Translation::get(key: 'msgCurrentVersion') . $available,
@@ -116,7 +116,7 @@ final class UpdateController extends AbstractController
                 ], Response::HTTP_OK);
             }
 
-            if ($branch !== 'nightly' && version_compare($installed, $available, '>')) {
+            if ($branch !== 'nightly' && version_compare($installed, $available, operator: '>')) {
                 return $this->json([
                     'version' => $available,
                     'message' => Translation::get(key: 'msgInstalledNewerThanAvailable'),

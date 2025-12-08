@@ -1,8 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-// phpcs:ignoreFile
 /**
  * The string wrapper class using single byte string functions.
  *
@@ -18,6 +15,8 @@ declare(strict_types=1);
  * @since     2009-04-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Strings;
 
 use phpMyFAQ\Language;
@@ -27,7 +26,7 @@ use phpMyFAQ\Language;
  *
  * @package phpMyFAQ\Strings
  */
-class StringBasic extends StringsAbstract
+class StringBasic extends AbstractString
 {
     /**
      * Default encoding.

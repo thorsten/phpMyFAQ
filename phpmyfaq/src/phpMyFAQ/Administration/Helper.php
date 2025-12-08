@@ -120,7 +120,7 @@ class Helper
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         foreach ($allRights as $allRight) {
-            if (!in_array($allRight['right_id'], $allUserRights, true)) {
+            if (!in_array((int) $allRight['right_id'], $allUserRights, true)) {
                 continue;
             }
 

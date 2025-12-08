@@ -27,7 +27,7 @@ use phpMyFAQ\Instance\Database;
  *
  * @package phpMyFAQ\Instance\Database
  */
-class Sqlite3 extends Database implements Driver
+class Sqlite3 extends Database implements DriverInterface
 {
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (

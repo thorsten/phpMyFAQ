@@ -97,7 +97,7 @@ final class TitleSlugifier
         $itemTitle = trim($title);
         $itemTitle = Strings::strtolower($itemTitle);
         // replace apostrophe and slash with underscore
-        $itemTitle = str_replace(["'", '/', '&#39'], '_', $itemTitle);
+        $itemTitle = str_replace(["'", '/', '&#39'], replace: '_', subject: $itemTitle);
         // collapse multiple dashes to a space (will become '-')
         $itemTitle = Strings::preg_replace(self::REGEX_MULTI_DASH, ' ', $itemTitle);
         // replace single inner dashes with underscores (legacy: HD-Ready => hd_ready)
@@ -105,14 +105,13 @@ final class TitleSlugifier
         // whitespace to '-'
         $itemTitle = Strings::preg_replace(self::REGEX_WHITESPACE, '-', $itemTitle);
         // strip punctuation
-        $itemTitle = str_replace(self::PUNCTUATION, '', $itemTitle);
+        $itemTitle = str_replace(self::PUNCTUATION, replace: '', subject: $itemTitle);
         // map umlauts and accents
         $itemTitle = str_replace(self::UMLAUTS, self::UMLAUTS_REPLACEMENTS, $itemTitle);
         // reduce multiple separators
         $itemTitle = Strings::preg_replace('/_{2,}/m', '_', $itemTitle);
         $itemTitle = Strings::preg_replace(self::REGEX_MULTI_DASH, '-', $itemTitle);
         // trim edge separators
-        $itemTitle = trim($itemTitle, '-_');
-        return $itemTitle;
+        return trim($itemTitle, characters: '-_');
     }
 }

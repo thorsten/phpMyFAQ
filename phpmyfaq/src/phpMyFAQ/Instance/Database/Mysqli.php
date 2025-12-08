@@ -28,7 +28,7 @@ use phpMyFAQ\Instance\Database;
  *
  * @package phpMyFAQ\Instance\Database
  */
-class Mysqli extends Database implements Driver
+class Mysqli extends Database implements DriverInterface
 {
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
