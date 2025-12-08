@@ -141,7 +141,10 @@
       color: var(--bs-light);
     }
   }
-
+  // required-asterisk
+  .pmf-required-asterisk {
+    color: var(--bs-danger);
+  }
   // Dropdowns
   .dropdown-menu {
     background-color: var(--bs-gray-800);
@@ -372,7 +375,11 @@
       color: #ffffff;
     }
   }
-
+  // required-asterisk
+  .pmf-required-asterisk {
+    color: #ffff00;
+    font-weight: bold;
+  }
   // Dropdowns
   .dropdown-menu {
     background-color: #000000;

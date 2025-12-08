@@ -32,7 +32,7 @@
 
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="name">
-        {{ id3_label }}*:
+        {{ id3_label }}:<span class="pmf-required-asterisk"> *</span>
       </label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" required>
@@ -41,7 +41,7 @@
 
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="email">
-        {{ id4_label }}*:
+        {{ id4_label }}:<span class="pmf-required-asterisk"> *</span>
       </label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" required>
@@ -51,7 +51,7 @@
     {% if id5_label is defined %}
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="category">
-        {{ id5_label }}{% if id5_required == 'required' %}*{% endif %}:
+        {{ id5_label }}{% if id5_required == 'required' %}{% endif %}:<span class="pmf-required-asterisk"> *</span>
       </label>
       <div class="col-sm-9">
         <select name="category" class="form-select" id="category" {{ id5_required }}>
@@ -70,7 +70,7 @@
 
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="question">
-        {{ id6_label }}*:
+        {{ id6_label }}:<span class="pmf-required-asterisk"> *</span>
       </label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="45" rows="5" name="question" id="question" required></textarea>
