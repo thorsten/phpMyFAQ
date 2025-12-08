@@ -28,7 +28,7 @@
     {% if id3_label is defined %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="name">{{ id3_label }}:
-        {% if id3_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id3_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" {{ id3_required }}>
@@ -39,7 +39,7 @@
     {% if id4_label is defined %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="email">{{ id4_label }}:
-        {% if id4_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id4_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" {{ id4_required }}>
@@ -50,7 +50,7 @@
     {% if (id5_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="rubrik">{{ id5_label }}:
-        {% if id5_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id5_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <select name="rubrik" class="form-control" id="rubrik" multiple="multiple" size="5" {{ id5_required }}>
@@ -68,7 +68,7 @@
     {% if id6_label is defined %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="question">{{ id6_label }}:
-        {% if id6_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id6_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="37" rows="3" name="question" id="question" {{ id6_required }} {{ readonly }}>
@@ -81,7 +81,7 @@
     {% if (id7_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="answer">{{ id7_label }}:
-        {% if id7_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id7_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <textarea class="form-control" cols="37" rows="10" name="answer" id="answer" {{ id7_required }}></textarea>
@@ -92,7 +92,7 @@
     {% if (id8_active == true) or (displayFullForm == true) %}
     <div class="row mb-2">
       <label class="col-sm-3 form-control-label" for="keywords">{{ id8_label }}:
-        {% if id8_required == 'required' %}<span style="color: red"> *</span>{% endif %}
+        {% if id8_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <input type="text" class="form-control" name="keywords" id="keywords" {{ id8_required }}>

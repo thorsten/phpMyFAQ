@@ -69,3 +69,8 @@ body {
   background-color: var(--bs-info);
   border-color: var(--bs-info);
 }
+
+// required-asterisk
+.pmf-required-asterisk {
+  color: var(--bs-danger);
+}
