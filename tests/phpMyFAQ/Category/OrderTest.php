@@ -129,4 +129,78 @@ class OrderTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Test that getCategoryTree handles self-referencing categories without infinite recursion
+     */
+    public function testGetCategoryTreeWithSelfReference(): void
+    {
+        // Simulate a category that references itself as parent
+        $categories = [
+            [
+                'category_id' => 1,
+                'parent_id' => 1, // Self-reference
+                'position' => 1,
+            ],
+            [
+                'category_id' => 2,
+                'parent_id' => 0,
+                'position' => 2,
+            ],
+        ];
+
+        $result = $this->categoryOrder->getCategoryTree($categories);
+
+        // Category 1 should be skipped due to self-reference
+        // Only category 2 should be in the result
+        $expected = [
+            2 => [],
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test that getCategoryTree handles circular references without infinite recursion
+     */
+    public function testGetCategoryTreeWithCircularReference(): void
+    {
+        // Simulate circular reference: 1 -> 2 -> 3 -> 2 (cycle)
+        $categories = [
+            [
+                'category_id' => 1,
+                'parent_id' => 0,
+                'position' => 1,
+            ],
+            [
+                'category_id' => 2,
+                'parent_id' => 1,
+                'position' => 2,
+            ],
+            [
+                'category_id' => 3,
+                'parent_id' => 2,
+                'position' => 3,
+            ],
+            [
+                'category_id' => 2, // Duplicate entry creating circular reference
+                'parent_id' => 3,
+                'position' => 4,
+            ],
+        ];
+
+        $result = $this->categoryOrder->getCategoryTree($categories);
+
+        // Should handle circular reference gracefully
+        // Category 2 should only be visited once
+        $expected = [
+            1 => [
+                2 => [
+                    3 => [],
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
 }

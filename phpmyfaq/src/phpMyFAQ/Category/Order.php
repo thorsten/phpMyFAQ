@@ -120,15 +120,33 @@ readonly class Order
      * Returns the category tree.
      *
      * @param stdClass[] $categories
+     * @param int $parentId
+     * @param array $visited Track visited categories to prevent infinite recursion
      */
-    public function getCategoryTree(array $categories, int $parentId = 0): array
+    public function getCategoryTree(array $categories, int $parentId = 0, array &$visited = []): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if ((int)$category['parent_id'] === $parentId) {
-                $childCategories = $this->getCategoryTree($categories, (int)$category['category_id']);
-                $result[$category['category_id']] = $childCategories;
+            $categoryId = (int)$category['category_id'];
+            $categoryParentId = (int)$category['parent_id'];
+            
+            // Skip if category is its own parent or creates a cycle
+            if ($categoryId === $categoryParentId) {
+                continue;
+            }
+            
+            if ($categoryParentId === $parentId) {
+                // Check if this category has already been visited to prevent cycles
+                if (in_array($categoryId, $visited, true)) {
+                    continue;
+                }
+                
+                // Add current category to visited list
+                $visited[] = $categoryId;
+                
+                $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
+                $result[$categoryId] = $childCategories;
             }
         }
 
