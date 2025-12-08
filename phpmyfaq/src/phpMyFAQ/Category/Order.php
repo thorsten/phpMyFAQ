@@ -118,7 +118,7 @@ readonly class Order
     /**
      * Returns the category tree.
      *
-     * @param stdClass[] $categories
+     * @param array<array{category_id: string, parent_id: string}> $categories
      * @param int $parentId
      * @param array<int, bool> $visited Array to track visited category IDs to prevent infinite recursion
      */
@@ -143,7 +143,7 @@ readonly class Order
             $visited[$categoryId] = true;
 
             $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
-            $result[$category['category_id']] = $childCategories;
+            $result[$categoryId] = $childCategories;
         }
 
         return $result;

@@ -193,10 +193,10 @@ class OrderTest extends TestCase
 
         $result = $this->order->getCategoryTree($categories, 0);
 
-        $this->assertArrayHasKey('1', $result);
-        $this->assertArrayHasKey('3', $result);
-        $this->assertArrayHasKey('2', $result['1']);
-        $this->assertArrayHasKey('4', $result['1']['2']);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(3, $result);
+        $this->assertArrayHasKey(2, $result[1]);
+        $this->assertArrayHasKey(4, $result[1][2]);
     }
 
     public function testGetCategoryTreeWithSpecificParent(): void
@@ -209,9 +209,9 @@ class OrderTest extends TestCase
 
         $result = $this->order->getCategoryTree($categories, 1);
 
-        $this->assertArrayHasKey('2', $result);
-        $this->assertArrayHasKey('3', $result);
-        $this->assertArrayNotHasKey('1', $result);
+        $this->assertArrayHasKey(2, $result);
+        $this->assertArrayHasKey(3, $result);
+        $this->assertArrayNotHasKey(1, $result);
     }
 
     public function testGetCategoryTreeWithSelfReference(): void
@@ -226,9 +226,9 @@ class OrderTest extends TestCase
         $result = $this->order->getCategoryTree($categories, 0);
 
         // Should contain categories 1 and 3, but not 2 (self-referencing)
-        $this->assertArrayHasKey('1', $result);
-        $this->assertArrayHasKey('3', $result);
-        $this->assertArrayNotHasKey('2', $result);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(3, $result);
+        $this->assertArrayNotHasKey(2, $result);
     }
 
     public function testGetCategoryTreeWithCircularReference(): void
@@ -245,7 +245,7 @@ class OrderTest extends TestCase
 
         // Should handle the circular reference gracefully
         // Only category 3 should appear at root level since 1 and 2 are in a circular loop
-        $this->assertArrayHasKey('3', $result);
+        $this->assertArrayHasKey(3, $result);
         $this->assertCount(1, $result);
     }
 
@@ -268,10 +268,10 @@ class OrderTest extends TestCase
 
         // Should handle gracefully and not cause infinite recursion
         // The tree should build up to the point where the circular reference is detected
-        $this->assertArrayHasKey('1', $result);
-        $this->assertArrayHasKey('2', $result['1']);
+        $this->assertArrayHasKey(1, $result);
+        $this->assertArrayHasKey(2, $result[1]);
         // Category 3 should be under 2, and when we try to add it again under 4, it's skipped
-        $this->assertArrayHasKey('3', $result['1']['2']);
+        $this->assertArrayHasKey(3, $result[1][2]);
     }
 
     public function testGetParentIdFound(): void
