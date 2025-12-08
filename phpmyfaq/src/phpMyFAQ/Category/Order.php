@@ -118,19 +118,35 @@ readonly class Order
     /**
      * Returns the category tree.
      *
-     * @param stdClass[] $categories
+     * @param array<array{category_id: string, parent_id: string}> $categories
+     * @param int $parentId
+     * @param array<int, bool> $visited Array to track visited category IDs to prevent infinite recursion
      */
-    public function getCategoryTree(array $categories, int $parentId = 0): array
+    public function getCategoryTree(array $categories, int $parentId = 0, array &$visited = []): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if ((int) $category['parent_id'] !== $parentId) {
+            $categoryId = (int) $category['category_id'];
+            $categoryParentId = (int) $category['parent_id'];
+
+            // First check if this category belongs at this level (parent_id matches)
+            if ($categoryParentId !== $parentId) {
                 continue;
             }
 
-            $childCategories = $this->getCategoryTree($categories, (int) $category['category_id']);
-            $result[$category['category_id']] = $childCategories;
+            // Then prevent infinite recursion by checking if we've already processed this category
+            // This check must come after the parent_id check to ensure we only mark categories
+            // as visited when they're actually being added to the tree at the correct level
+            if (isset($visited[$categoryId])) {
+                continue;
+            }
+
+            // Mark this category as visited
+            $visited[$categoryId] = true;
+
+            $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
+            $result[$categoryId] = $childCategories;
         }
 
         return $result;
