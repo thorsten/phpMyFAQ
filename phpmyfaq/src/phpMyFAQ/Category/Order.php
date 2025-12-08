@@ -119,17 +119,29 @@ readonly class Order
      * Returns the category tree.
      *
      * @param stdClass[] $categories
+     * @param array<int, bool> $visited
      */
-    public function getCategoryTree(array $categories, int $parentId = 0): array
+    public function getCategoryTree(array $categories, int $parentId = 0, array &$visited = []): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if ((int) $category['parent_id'] !== $parentId) {
+            $categoryId = (int) $category['category_id'];
+            $categoryParentId = (int) $category['parent_id'];
+
+            if ($categoryParentId !== $parentId) {
                 continue;
             }
 
-            $childCategories = $this->getCategoryTree($categories, (int) $category['category_id']);
+            // Prevent infinite recursion by checking if we've already processed this category
+            if (isset($visited[$categoryId])) {
+                continue;
+            }
+
+            // Mark this category as visited
+            $visited[$categoryId] = true;
+
+            $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
             $result[$category['category_id']] = $childCategories;
         }
 

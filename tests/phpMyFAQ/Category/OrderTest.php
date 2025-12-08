@@ -214,6 +214,58 @@ class OrderTest extends TestCase
         $this->assertArrayNotHasKey('1', $result);
     }
 
+    public function testGetCategoryTreeWithSelfReference(): void
+    {
+        // Test case where a category references itself as parent
+        $categories = [
+            ['category_id' => '1', 'parent_id' => '0'],
+            ['category_id' => '2', 'parent_id' => '2'], // Self-reference
+            ['category_id' => '3', 'parent_id' => '0'],
+        ];
+
+        $result = $this->order->getCategoryTree($categories, 0);
+
+        // Should contain categories 1 and 3, but not 2 (self-referencing)
+        $this->assertArrayHasKey('1', $result);
+        $this->assertArrayHasKey('3', $result);
+        $this->assertArrayNotHasKey('2', $result);
+    }
+
+    public function testGetCategoryTreeWithCircularReference(): void
+    {
+        // Test case where categories have circular references: 1 -> 2 -> 1
+        $categories = [
+            ['category_id' => '1', 'parent_id' => '0'],
+            ['category_id' => '2', 'parent_id' => '1'],
+            ['category_id' => '1', 'parent_id' => '2'], // Circular reference
+        ];
+
+        $result = $this->order->getCategoryTree($categories, 0);
+
+        // Should handle the circular reference gracefully
+        $this->assertArrayHasKey('1', $result);
+        // Category 1 should have category 2 as a child
+        $this->assertArrayHasKey('2', $result['1']);
+    }
+
+    public function testGetCategoryTreeWithComplexCircularReference(): void
+    {
+        // Test case: A -> B -> C -> A (circular)
+        $categories = [
+            ['category_id' => '1', 'parent_id' => '0'],
+            ['category_id' => '2', 'parent_id' => '1'],
+            ['category_id' => '3', 'parent_id' => '2'],
+            ['category_id' => '1', 'parent_id' => '3'], // Creates circle back to 1
+        ];
+
+        $result = $this->order->getCategoryTree($categories, 0);
+
+        // Should handle gracefully and not cause infinite recursion
+        $this->assertArrayHasKey('1', $result);
+        $this->assertArrayHasKey('2', $result['1']);
+        $this->assertArrayHasKey('3', $result['1']['2']);
+    }
+
     public function testGetParentIdFound(): void
     {
         $childCategory = new stdClass();
