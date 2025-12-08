@@ -15,6 +15,8 @@
  * @since     2023-07-08
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Controller\Administration\Api\AttachmentController;
 use phpMyFAQ\Controller\Administration\Api\CategoryController;
 use phpMyFAQ\Controller\Administration\Api\CommentController;

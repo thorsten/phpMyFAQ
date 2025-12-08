@@ -15,6 +15,8 @@
  * @since     2021-03-22
  */
 
+declare(strict_types=1);
+
 //
 // The phpMyFAQ root directory
 //

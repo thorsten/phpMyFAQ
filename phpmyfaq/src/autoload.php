@@ -15,6 +15,8 @@
  * @since     2021-04-05
  */
 
+declare(strict_types=1);
+
 use Composer\Autoload\ClassLoader;
 
 /** @var ClassLoader $loader */

@@ -22,6 +22,11 @@
 {% block content %}
   <div class="row g-5">
     <div class="col-md-8">
+
+      <div class="breadcrumb-wrapper">
+        {{ breadcrumb | raw }}
+      </div>
+
       <h2 class="mb-4 border-bottom">{{ question | raw }}</h2>
 
       <article class="pmf-faq-body pb-4 mb-4 border-bottom">{{ answer|raw }}</article>

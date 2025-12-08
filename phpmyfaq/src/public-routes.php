@@ -15,6 +15,8 @@
  * @since     2024-05-31
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Controller\FrontController;
 use phpMyFAQ\Controller\WebAuthnController;
 use Symfony\Component\Routing\Route;

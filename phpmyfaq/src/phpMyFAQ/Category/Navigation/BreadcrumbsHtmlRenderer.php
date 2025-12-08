@@ -23,9 +23,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
-/**
- * Renders breadcrumb segments as HTML using existing Link + Strings utilities.
- */
 final class BreadcrumbsHtmlRenderer
 {
     /**
@@ -49,7 +46,7 @@ final class BreadcrumbsHtmlRenderer
             $items[] = sprintf('<li class="breadcrumb-item">%s</li>', $oLink->toHtmlAnchor());
         }
 
-        return strtr('<ul class="{class}">{items}</ul>', [
+        return strtr('<ol class="{class}">{items}</ol>', [
             '{class}' => $useCssClass,
             '{items}' => implode(
                 separator: '',

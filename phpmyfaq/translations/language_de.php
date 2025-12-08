@@ -897,7 +897,7 @@ $PMF_LANG['plmsgEntries'][1] = "%d FAQs";
 $PMF_LANG['permission::addtranslation'] = "Übersetzung hinzufügen";
 $PMF_LANG['permission::edittranslation'] = "Übersetzung bearbeiten";
 $PMF_LANG['permission::deltranslation'] = "Übersetzung löschen";
-$PMF_LANG['permission::approverec'] = "Eintrag freigeben";
+$PMF_LANG['permission::approverec'] = "FAQ-Eintrag freigeben";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF['records.enableAttachmentEncryption'] = ['checkbox', "Verschlüsselung der Anhänge"];

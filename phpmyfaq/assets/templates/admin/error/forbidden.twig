@@ -15,4 +15,9 @@
   <p class="small">
    {{ 'msgError403Hint' | translate }}
   </p>
+
+  {% if debugMode == true and errorMessage is not empty %}
+  <pre class="code-block">{{ errorMessage }}</pre>
+  {% endif %}
+
 {% endblock %}

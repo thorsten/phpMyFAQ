@@ -15,6 +15,8 @@
  * @since     2023-07-29
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Controller\Api\AttachmentController;
 use phpMyFAQ\Controller\Api\BackupController;
 use phpMyFAQ\Controller\Api\CategoryController;

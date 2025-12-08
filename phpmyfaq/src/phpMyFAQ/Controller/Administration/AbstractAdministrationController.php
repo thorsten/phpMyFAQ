@@ -24,6 +24,7 @@ use phpMyFAQ\Administration\Helper;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Controller\Exception\ForbiddenException;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Environment;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Service\Gravatar;
 use phpMyFAQ\Session\Token;
@@ -385,6 +386,8 @@ abstract class AbstractAdministrationController extends AbstractController
             context: [
                 ...$this->getHeader(Request::createFromGlobals()),
                 ...$this->getFooter(),
+                'debugMode' => Environment::isDebugMode(),
+                'errorMessage' => $message,
             ],
         );
     }

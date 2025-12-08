@@ -15,6 +15,8 @@
  * @since     2012-03-07
  */
 
+declare(strict_types=1);
+
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use OpenSearch\SymfonyClientFactory;
