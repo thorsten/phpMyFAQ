@@ -255,8 +255,8 @@
   // Global background with maximum contrast
   html,
   body {
-    background: #000000 !important;
-    color: #ffffff !important;
+    background: var(--bs-dark) !important;
+    color: var(--bs-light) !important;
   }
 
   //Theme Switcher Button for high contrast mode
@@ -270,14 +270,14 @@
 
     &:hover {
       color: var(--bs-dark) !important;
-      background: #ffffff !important;
+      background: var(--bs-light) !important;
       opacity: 1;
     }
 
     &.active {
       color: var(--bs-dark) !important;
       opacity: 1;
-      background: #ffff00 !important;
+      background: var(--bs-primary) !important;
     }
 
     i {
@@ -290,31 +290,31 @@
 
   // Navigation adjustments for high contrast mode
   .text-bg-pmf-nav {
-    background-color: #000000 !important;
-    border: 2px solid #ffffff !important;
+    background-color: var(--bs-dark) !important;
+    border: 2px solid var(--bs-light) !important;
   }
 
   // Search form high contrast mode
   .search {
     .form-control {
-      background-color: #000000;
-      border: 2px solid #ffffff;
-      color: #ffffff;
+      background-color: var(--bs-dark);
+      border: 2px solid var(--bs-light);
+      color: var(--bs-light);
 
       &:focus {
-        background-color: #000000;
-        border: 2px solid #ffff00;
-        color: #ffffff;
+        background-color: var(--bs-dark);
+        border: 2px solid var(--bs-primary);
+        color: var(--bs-light);
         box-shadow: 0 0 0 0.25rem rgba(255, 255, 0, 0.5);
       }
 
       &::placeholder {
-        color: #ffffff;
+        color: var(--bs-light);
       }
     }
 
     .bi-search {
-      color: #ffffff;
+      color: var(--bs-light);
     }
   }
 
@@ -351,88 +351,126 @@
 
   // Links in high contrast mode - yellow for maximum visibility
   a {
-    color: #ffff00;
+    color: var(--bs-primary);
     text-decoration: underline;
+    font-size: 1.3rem;
+    font-weight: 800;
 
     &:hover {
-      color: #ffff00;
+      color: var(--bs-dark);
       text-decoration: none;
-      background-color: #333333;
+      background-color: var(--bs-primary);
+      border-radius: 4px;
     }
+  }
+  //Logo link exception - yellow border on hover instead of background
+  #phpmyfaq-logo {
+    border: 5px solid transparent;
+    border-radius: 8px;
+    padding: 2px;
+    display: inline-block;
+
+    &:hover {
+      background-color: transparent !important;
+      text-decoration: none;
+      border-color: var(--bs-primary) !important;
+    }
+  }
+  #phpmyfaq-logo img {
+    filter: brightness(0) invert(1) saturate(2);
+    transform: scale(1.3);
+    display: block;
+    border: 3px solid var(--bs-primary);
+    border-radius: 6px;
+    padding: 3px;
+  }
+
+  #phpmyfaq-logo:hover img {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 2px var(--bs-primary);
+  }
+  // Heading style exceptions
+  h1.pmf-start-page,
+  .pmf-start-page.h1 {
+    background:var(--bs-primary);
+    -webkit-background-clip:text;
+    background-clip: text;
+    border: 3px dashed var(--bs-primary);
+    border-radius: 8px;
   }
 
   // Form elements
   .form-control,
   .form-select {
-    background-color: #ffff00;
-    border: 2px solid #ffff00;
-    color: #000000;
+    background-color: var(--bs-primary);
+    border: 2px solid var(--bs-primary);
+    color: var(--bs-dark);
     font-size: 1.3rem;
 
     &:focus {
-      background-color: #000000;
-      border: 2px solid #ffff00;
-      color: #ffffff;
+      background-color: var(--bs-dark);
+      border: 2px solid var(--bs-primary);
+      color: var(--bs-light);
     }
   }
   // required-asterisk
   .pmf-required-asterisk {
-    color: #ffff00;
+    color: var(--bs-primary);
     font-weight: bold;
   }
   // Dropdowns
   .dropdown-menu {
-    background-color: #000000;
-    border: 2px solid #ffffff;
+    background-color: var(--bs-dark);
+    border: 2px solid var(--bs-light);
     font-size: 1.3rem;
     
     .dropdown-item {
-      color: #ffffff;
+      color: var(--bs-light);
 
       &:hover,
       &:focus {
-        background-color: #ffff00;
+        background-color: var(--bs-primary);
         color: #000000;
       }
     }
 
     .dropdown-divider {
-      border-color: #ffffff;
+      border-color: var(--bs-light);
     }
   }
 
   // Buttons
   .btn {
-    border: 2px solid #ffffff;
+    border: 2px solid var(--bs-light);
   }
 
   .btn-outline-primary {
-    color: #ffff00;
-    border: 2px solid #ffff00;
+    color: var(--bs-primary);
+    border: 2px solid var(--bs-primary);
 
     &:hover {
-      background-color: #ffff00;
+      background-color: var(--bs-primary);
       color: #000000;
     }
   }
 
   .btn-primary {
-    background-color: #ffff00;
+    background-color: var(--bs-primary);
     color: #000000;
-    border: 2px solid #ffff00;
+    border: 2px solid var(--bs-primary);
 
     &:hover {
-      background-color: #ffff66;
-      border-color: #ffff66;
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
     }
   }
 
   // Improve readability of badges
   .badge {
-    border: 1px solid #ffffff;
+    border: 3px solid var(--bs-light);
 
     &.bg-info {
-      background-color: #00ffff !important;
+      background-color: var(--bs-primary) !important;
       color: #000000;
     }
 
@@ -519,7 +557,7 @@
 
   // Text muted still needs to be visible
   .text-muted {
-    color: #cccccc !important;
+    color: #e0e0e0 !important;
   }
 
   // Navigation text
@@ -528,7 +566,7 @@
     color: #ffffff !important;
 
     &:hover {
-      background-color: #ffff00;
+      background-color: var(--bs-primary);
       color: #000!important;
       border-radius: 5px;
     }
