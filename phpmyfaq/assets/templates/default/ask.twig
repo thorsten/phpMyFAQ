@@ -51,7 +51,7 @@
     {% if id5_label is defined %}
     <div class="row mb-2">
       <label class="col-sm-3 col-form-label" for="category">
-        {{ id5_label }}{% if id5_required == 'required' %}{% endif %}:<span class="pmf-required-asterisk"> *</span>
+        {{ id5_label }}:{% if id5_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
         <select name="category" class="form-select" id="category" {{ id5_required }}>
