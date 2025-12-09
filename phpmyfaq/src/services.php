@@ -15,6 +15,8 @@
  * @since     2024-10-07
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Administration\AdminLog;
 use phpMyFAQ\Administration\Api;
 use phpMyFAQ\Administration\Backup;

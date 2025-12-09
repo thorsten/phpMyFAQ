@@ -27,7 +27,7 @@ use phpMyFAQ\Instance\Database;
  *
  * @package phpMyFAQ\Instance\Database
  */
-class PdoSqlsrv extends Database implements Driver
+class PdoSqlsrv extends Database implements DriverInterface
 {
     private array $createTableStatements = [
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Abstract attachment class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment;
 
@@ -231,7 +231,7 @@ abstract class AbstractAttachment
     {
         $attachmentTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
-        if (null == $this->id) {
+        if (null === $this->id) {
             $this->id = $this->databaseDriver->nextId($attachmentTableName, 'id');
 
             $sql = sprintf(

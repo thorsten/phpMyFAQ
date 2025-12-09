@@ -335,6 +335,7 @@ $templateVars = [
     'metaDescription' => $seoData->getDescription(),
     'solutionId' => $faq->faqRecord['solution_id'],
     'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
+    'breadcrumb' => $category->getPath($cat, '/', true),
     'question' => $question,
     'answer' => $answer,
     'attachmentList' => $attachmentList,

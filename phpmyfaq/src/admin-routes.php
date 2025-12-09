@@ -15,6 +15,8 @@
  * @since     2024-11-22
  */
 
+declare(strict_types=1);
+
 use phpMyFAQ\Controller\Administration\AdminLogController;
 use phpMyFAQ\Controller\Administration\AttachmentsController;
 use phpMyFAQ\Controller\Administration\AuthenticationController;

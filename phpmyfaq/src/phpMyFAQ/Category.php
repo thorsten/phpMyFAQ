@@ -486,11 +486,9 @@ class Category
 
     public function getCategoryData(int $categoryId): CategoryEntity
     {
-        $entity = $this->language !== null
+        return $this->language !== null
             ? $this->getCategoryService()->getCategoryData($categoryId, $this->language)
             : new CategoryEntity();
-
-        return $entity;
     }
 
     public function getPath(

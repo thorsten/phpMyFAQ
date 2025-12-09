@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * phpMyFAQ OpenSearch instance class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-11-20
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Instance;
 
@@ -90,7 +90,7 @@ readonly class OpenSearch
     }
 
     /**
-     * Returns the basic phpMyFAQ index structure as raw array.
+     * Returns the basic phpMyFAQ index structure as a raw array.
      *
      * @return array<string, mixed>
      */

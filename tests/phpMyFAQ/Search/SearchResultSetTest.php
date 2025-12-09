@@ -25,8 +25,7 @@ class SearchResultSetTest extends TestCase
         $configuration = new Configuration($dbHandle);
 
         $userMock = $this->getMockBuilder('phpMyFAQ\User\CurrentUser')->disableOriginalConstructor()->getMock();
-        $faqPermissionMock = $this->getMockBuilder('phpMyFAQ\Faq\Permission')->disableOriginalConstructor()->getMock(
-        );
+        $faqPermissionMock = $this->getMockBuilder('phpMyFAQ\Faq\Permission')->disableOriginalConstructor()->getMock();
 
         $this->SearchResultSet = new SearchResultSet($userMock, $faqPermissionMock, $configuration);
     }

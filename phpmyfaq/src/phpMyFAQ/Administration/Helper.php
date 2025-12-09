@@ -43,7 +43,7 @@ class Helper
      *
      * @param string $restrictions Restrictions
      * @param string $caption      Caption
-     * @param string|null $route   Route, will be used if it's not empty
+     * @param string|null $route   Route will be used if it's not empty
      * @param bool   $checkPerm    Check permission (default: true)
      */
     public function addMenuEntry(
@@ -81,7 +81,7 @@ class Helper
         if (str_contains($restrictions, '+')) {
             $hasPermission = false;
             foreach (explode('+', $restrictions) as $restriction) {
-                $hasPermission = $hasPermission || $this->evaluatePermission($restriction);
+                $hasPermission = $this->evaluatePermission($restriction);
                 if ($hasPermission) {
                     break;
                 }
@@ -120,7 +120,7 @@ class Helper
         // check user rights, set them TRUE
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         foreach ($allRights as $allRight) {
-            if (!in_array($allRight['right_id'], $allUserRights, true)) {
+            if (!in_array((int) $allRight['right_id'], $allUserRights, true)) {
                 continue;
             }
 

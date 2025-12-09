@@ -24,7 +24,7 @@ namespace phpMyFAQ\Instance\Database;
  *
  * @package phpMyFAQ\Instance\Database
  */
-interface Driver
+interface DriverInterface
 {
     /**
      * Executes all CREATE TABLE and CREATE INDEX statements.

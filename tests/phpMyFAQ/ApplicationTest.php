@@ -35,7 +35,7 @@ class ApplicationTest extends TestCase
      */
     public function testConstructorWithContainer(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $application = new Application($container);
         $this->assertInstanceOf(Application::class, $application);
     }

@@ -1,8 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-// phpcs:ignoreFile
 /**
  * Abstract parent for the string wrapper classes.
  *
@@ -18,6 +15,8 @@ declare(strict_types=1);
  * @since     2009-04-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Strings;
 
 /**
@@ -25,7 +24,7 @@ namespace phpMyFAQ\Strings;
  *
  * @package phpMyFAQ\Strings
  */
-abstract class StringsAbstract
+abstract class AbstractString
 {
     /**
      * Default encoding.
@@ -57,7 +56,7 @@ abstract class StringsAbstract
     public static function isUTF8(string $str): bool
     {
         if (function_exists('mb_detect_encoding')) {
-            return (bool) mb_detect_encoding($str, self::DEFAULT_ENCODING, true);
+            return (bool) mb_detect_encoding($str, self::DEFAULT_ENCODING, strict: true);
         }
 
         $regex =

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances setup class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Instance;
 

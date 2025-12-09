@@ -88,13 +88,16 @@ class AttachmentControllerTest extends TestCase
             ->onlyMethods(['isApiEnabled'])
             ->getMock();
 
-        $attachmentController->method('isApiEnabled')
+        // Expect isApiEnabled to be called exactly once during constructor
+        $attachmentController->expects($this->once())
+            ->method('isApiEnabled')
             ->willReturn(true);
 
         $reflection = new ReflectionClass(AttachmentController::class);
         $constructor = $reflection->getConstructor();
         $constructor->invoke($attachmentController);
 
+        // Test passes if no exception is thrown and expectations are met
         $this->assertTrue(true);
     }
 
@@ -113,7 +116,9 @@ class AttachmentControllerTest extends TestCase
             ->onlyMethods(['isApiEnabled'])
             ->getMock();
 
-        $attachmentController->method('isApiEnabled')
+        // Expect isApiEnabled to be called exactly once during constructor
+        $attachmentController->expects($this->once())
+            ->method('isApiEnabled')
             ->willReturn(false);
 
         $this->expectException(UnauthorizedHttpException::class);

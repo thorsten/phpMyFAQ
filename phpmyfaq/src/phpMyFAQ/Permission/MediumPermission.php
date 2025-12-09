@@ -270,7 +270,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
             $options .= sprintf(
                 '<option value="%d" %s>%s</option>',
                 $allGroup,
-                in_array($allGroup, $groups) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
+                in_array($allGroup, $groups, strict: true) || isset($groups[0]) && $groups[0] === -1 ? 'selected' : '',
                 $this->getGroupName($allGroup),
             );
         }

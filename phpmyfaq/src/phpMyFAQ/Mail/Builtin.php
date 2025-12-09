@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Mail;
 
@@ -41,8 +41,12 @@ class Builtin implements MailUserAgentInterface
         unset($headers['Subject']);
 
         $sender = '';
-        if ('WIN' !== strtoupper(substr(PHP_OS, 0, 3)) && !ini_get('safe_mode') && isset($headers['Return-Path'])) {
-            $sender = str_replace(['<', '>'], '', $headers['Return-Path']);
+        if (
+            'WIN' !== strtoupper(substr(PHP_OS, offset: 0, length: 3))
+            && !ini_get('safe_mode')
+            && isset($headers['Return-Path'])
+        ) {
+            $sender = str_replace(['<', '>'], replace: '', subject: $headers['Return-Path']);
             unset($headers['Return-Path']);
         }
 

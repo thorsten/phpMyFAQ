@@ -85,7 +85,7 @@ class AbstractAttachmentTest extends TestCase
             'filename' => 'test.pdf',
             'filesize' => 1024,
             'encrypted' => '1',
-            'mime_type' => 'application/pdf'
+            'mime_type' => 'application/pdf',
         ];
 
         $this->mockDb->method('query')->willReturn(true);
@@ -121,7 +121,7 @@ class AbstractAttachmentTest extends TestCase
             'filename' => 'document.docx',
             'filesize' => 2048,
             'encrypted' => '0',
-            'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            'mime_type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
 
         $this->mockDb->method('query')->willReturn(true);
@@ -242,7 +242,9 @@ class AbstractAttachmentTest extends TestCase
         $this->assertFalse($encryptedProperty->getValue($this->attachment));
     }
 
-    public function testSaveMetaNewAttachment(): void
+    /**
+     * @throws \ReflectionException
+     */ public function testSaveMetaNewAttachment(): void
     {
         // Setup properties
         $reflection = new ReflectionClass($this->attachment);
@@ -255,7 +257,7 @@ class AbstractAttachmentTest extends TestCase
             'filename' => 'test.pdf',
             'filesize' => 1024,
             'encrypted' => true,
-            'mimeType' => 'application/pdf'
+            'mimeType' => 'application/pdf',
         ];
 
         foreach ($properties as $prop => $value) {
@@ -263,7 +265,9 @@ class AbstractAttachmentTest extends TestCase
             $property->setValue($this->attachment, $value);
         }
 
-        // Don't set id property to null, let it remain as 0 (default)
+        // Set id property to null to simulate a new attachment
+        $idProperty = $reflection->getProperty('id');
+        $idProperty->setValue($this->attachment, null);
 
         // Mock database operations
         $this->mockDb->method('nextId')->willReturn(42);
@@ -313,7 +317,7 @@ class AbstractAttachmentTest extends TestCase
             'realHash' => 'real123',
             'filename' => 'test.pdf',
             'key' => 'secret',
-            'encrypted' => true
+            'encrypted' => true,
         ];
 
         foreach ($properties as $prop => $value) {
@@ -335,7 +339,7 @@ class AbstractAttachmentTest extends TestCase
 
         $this->expectException(AttachmentException::class);
         $this->expectExceptionMessage(
-            'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files'
+            'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files',
         );
 
         $this->attachment->testMkVirtualHash();
@@ -384,7 +388,8 @@ class AbstractAttachmentTest extends TestCase
     {
         $this->attachment->setId(99);
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -402,7 +407,7 @@ class AbstractAttachmentTest extends TestCase
         $properties = [
             'id' => 42,
             'virtualHash' => 'virtual123',
-            'filename' => 'test.pdf'
+            'filename' => 'test.pdf',
         ];
 
         foreach ($properties as $prop => $value) {
@@ -411,7 +416,8 @@ class AbstractAttachmentTest extends TestCase
         }
 
         $this->mockDb->method('escape')->willReturnArgument(0);
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('UPDATE'))
             ->willReturn(true);
