@@ -92,8 +92,8 @@ devDependencies:
     specifier: ^9.1.7
     version: 9.1.7
   jsdom:
-    specifier: ^27.2.0
-    version: 27.2.0
+    specifier: ^27.3.0
+    version: 27.3.0(postcss@8.5.6)
   postcss:
     specifier: ^8.5.6
     version: 8.5.6
@@ -129,15 +129,15 @@ devDependencies:
     version: 3.1.4(vite@7.2.7)
   vitest:
     specifier: ^3.2.4
-    version: 3.2.4(@types/node@24.10.1)(jsdom@27.2.0)(sass@1.94.2)
+    version: 3.2.4(@types/node@24.10.1)(jsdom@27.3.0)(sass@1.94.2)
   vitest-fetch-mock:
     specifier: ^0.4.5
     version: 0.4.5(vitest@3.2.4)
 
 packages:
 
-  /@acemir/cssom@0.9.26:
-    resolution: {integrity: sha512-UMFbL3EnWH/eTvl21dz9s7Td4wYDMtxz/56zD8sL9IZGYyi48RxmdgPMiyT7R6Vn3rjMTwYZ42bqKa7ex74GEQ==}
+  /@acemir/cssom@0.9.28:
+    resolution: {integrity: sha512-LuS6IVEivI75vKN8S04qRD+YySP0RmU/cV8UNukhQZvprxF+76Z43TNo/a08eCodaGhT1Us8etqS1ZRY9/Or0A==}
     dev: true
 
   /@ampproject/remapping@2.3.0:
@@ -158,8 +158,8 @@ packages:
       lru-cache: 11.2.4
     dev: true
 
-  /@asamuzakjp/dom-selector@6.7.5:
-    resolution: {integrity: sha512-Eks6dY8zau4m4wNRQjRVaKQRTalNcPcBvU1ZQ35w5kKRk1gUeNCkVLsRiATurjASTp3TKM4H10wsI50nx3NZdw==}
+  /@asamuzakjp/dom-selector@6.7.6:
+    resolution: {integrity: sha512-hBaJER6A9MpdG3WgdlOolHmbOYvSk46y7IQN/1+iqiCuUu6iWdQrs9DGKF8ocqsEqWujWf/V7b7vaDgiUmIvUg==}
     dependencies:
       '@asamuzakjp/nwsapi': 2.3.9
       bidi-js: 1.0.3
@@ -1431,9 +1431,13 @@ packages:
       '@csstools/css-tokenizer': 3.0.4
     dev: true
 
-  /@csstools/css-syntax-patches-for-csstree@1.0.20:
-    resolution: {integrity: sha512-8BHsjXfSciZxjmHQOuVdW2b8WLUPts9a+mfL13/PzEviufUEW2xnvQuOlKs9dRBHgRqJ53SF/DUoK9+MZk72oQ==}
+  /@csstools/css-syntax-patches-for-csstree@1.0.14(postcss@8.5.6):
+    resolution: {integrity: sha512-zSlIxa20WvMojjpCSy8WrNpcZ61RqfTfX3XTaOeVlGJrt/8HF3YbzgFZa01yTbT4GWQLwfTcC3EB8i3XnB647Q==}
     engines: {node: '>=18'}
+    peerDependencies:
+      postcss: ^8.4
+    dependencies:
+      postcss: 8.5.6
     dev: true
 
   /@csstools/css-tokenizer@3.0.4:
@@ -2184,7 +2188,7 @@ packages:
       magicast: 0.3.5
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.2.0)(sass@1.94.2)
+      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.3.0)(sass@1.94.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2211,7 +2215,7 @@ packages:
       std-env: 3.10.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.2.0)(sass@1.94.2)
+      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.3.0)(sass@1.94.2)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2737,13 +2741,15 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /cssstyle@5.3.3:
-    resolution: {integrity: sha512-OytmFH+13/QXONJcC75QNdMtKpceNk3u8ThBjyyYjkEcy/ekBwR1mMAuNvi3gdBPW3N5TlCzQ0WZw8H0lN/bDw==}
+  /cssstyle@5.3.4(postcss@8.5.6):
+    resolution: {integrity: sha512-KyOS/kJMEq5O9GdPnaf82noigg5X5DYn0kZPJTaAsCUaBizp6Xa1y9D4Qoqf/JazEXWuruErHgVXwjN5391ZJw==}
     engines: {node: '>=20'}
     dependencies:
       '@asamuzakjp/css-color': 4.1.0
-      '@csstools/css-syntax-patches-for-csstree': 1.0.20
+      '@csstools/css-syntax-patches-for-csstree': 1.0.14(postcss@8.5.6)
       css-tree: 3.1.0
+    transitivePeerDependencies:
+      - postcss
     dev: true
 
   /dargs@8.1.0:
@@ -3406,8 +3412,8 @@ packages:
       argparse: 2.0.1
     dev: true
 
-  /jsdom@27.2.0:
-    resolution: {integrity: sha512-454TI39PeRDW1LgpyLPyURtB4Zx1tklSr6+OFOipsxGUH1WMTvk6C65JQdrj455+DP2uJ1+veBEHTGFKWVLFoA==}
+  /jsdom@27.3.0(postcss@8.5.6):
+    resolution: {integrity: sha512-GtldT42B8+jefDUC4yUKAvsaOrH7PDHmZxZXNgF2xMmymjUbRYJvpAybZAKEmXDGTM0mCsz8duOa4vTm5AY2Kg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -3415,9 +3421,9 @@ packages:
       canvas:
         optional: true
     dependencies:
-      '@acemir/cssom': 0.9.26
-      '@asamuzakjp/dom-selector': 6.7.5
-      cssstyle: 5.3.3
+      '@acemir/cssom': 0.9.28
+      '@asamuzakjp/dom-selector': 6.7.6
+      cssstyle: 5.3.4(postcss@8.5.6)
       data-urls: 6.0.0
       decimal.js: 10.6.0
       html-encoding-sniffer: 4.0.0
@@ -3437,6 +3443,7 @@ packages:
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - bufferutil
+      - postcss
       - supports-color
       - utf-8-validate
     dev: true
@@ -4428,10 +4435,10 @@ packages:
     peerDependencies:
       vitest: '>=2.0.0'
     dependencies:
-      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.2.0)(sass@1.94.2)
+      vitest: 3.2.4(@types/node@24.10.1)(jsdom@27.3.0)(sass@1.94.2)
     dev: true
 
-  /vitest@3.2.4(@types/node@24.10.1)(jsdom@27.2.0)(sass@1.94.2):
+  /vitest@3.2.4(@types/node@24.10.1)(jsdom@27.3.0)(sass@1.94.2):
     resolution: {integrity: sha512-LUCP5ev3GURDysTWiP47wRRUpLKMOfPh+yKTx3kVIEiu5KOMeqzpnYNsKyOoVrULivR8tLcks4+lga33Whn90A==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
@@ -4471,7 +4478,7 @@ packages:
       chai: 5.3.3
       debug: 4.4.3
       expect-type: 1.2.2
-      jsdom: 27.2.0
+      jsdom: 27.3.0(postcss@8.5.6)
       magic-string: 0.30.21
       pathe: 2.0.3
       picomatch: 4.0.3
