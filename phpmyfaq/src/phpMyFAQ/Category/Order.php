@@ -130,21 +130,21 @@ readonly class Order
         foreach ($categories as $category) {
             $categoryId = (int)$category['category_id'];
             $categoryParentId = (int)$category['parent_id'];
-            
+
             // Skip if category is its own parent or creates a cycle
             if ($categoryId === $categoryParentId) {
                 continue;
             }
-            
+
             if ($categoryParentId === $parentId) {
                 // Check if this category has already been visited to prevent cycles
                 if (isset($visited[$categoryId])) {
                     continue;
                 }
-                
+
                 // Add current category to visited list
                 $visited[$categoryId] = true;
-                
+
                 $childCategories = $this->getCategoryTree($categories, $categoryId, $visited);
                 $result[$categoryId] = $childCategories;
             }
