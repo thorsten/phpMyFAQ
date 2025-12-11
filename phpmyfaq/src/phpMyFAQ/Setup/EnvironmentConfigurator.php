@@ -69,9 +69,9 @@ readonly class EnvironmentConfigurator
 
     /**
      * Adjusts the RewriteBase and ErrorDocument 404 in the .htaccess file for the user's environment.
-     * 
+     *
      * This method ensures that URL routing works correctly and 404 errors are properly handled.
-     * 
+     *
      * - RewriteBase is set to the application's installation path (e.g., /faq/)
      * - ErrorDocument 404 is configured to route errors to the application's error handler (e.g., /faq/index.php?action=404)
      *
