@@ -261,32 +261,31 @@
 
   //Theme Switcher Button for high contrast mode
   .pmf-theme-switcher {
-  button {
-    color: var(--bs-light) !important;
-    border: none;
-    background: transparent;
-    transition: all 0.3s ease;
-    opacity: 1;
-
-    &:hover {
-      color: var(--bs-dark) !important;
-      background: var(--bs-light) !important;
+    button {
+      color: var(--bs-light) !important;
+      border: none;
+      background: transparent;
+      transition: all 0.3s ease;
       opacity: 1;
-    }
 
-    &.active {
-      color: var(--bs-dark) !important;
-      opacity: 1;
-      background: var(--bs-primary) !important;
-    }
+      &:hover {
+        color: var(--bs-dark) !important;
+        background: var(--bs-light) !important;
+        opacity: 1;
+      }
 
-    i {
-      font-size: 1.3rem;
-      transition: transform 0.3s ease;
-    }
+      &.active {
+        color: var(--bs-dark) !important;
+        opacity: 1;
+        background: var(--bs-primary) !important;
+      }
 
+      i {
+        font-size: 1.3rem;
+        transition: transform 0.3s ease;
+      }
+    }
   }
-}
 
   // Navigation adjustments for high contrast mode
   .text-bg-pmf-nav {
@@ -385,8 +384,8 @@
   // Heading style exceptions
   h1.pmf-start-page,
   .pmf-start-page.h1 {
-    background:var(--bs-primary);
-    -webkit-background-clip:text;
+    background: var(--bs-primary);
+    -webkit-background-clip: text;
     background-clip: text;
     border: 3px dashed var(--bs-primary);
     border-radius: 8px;
@@ -416,7 +415,7 @@
     background-color: var(--bs-dark);
     border: 2px solid var(--bs-light);
     font-size: 1.3rem;
-    
+
     .dropdown-item {
       color: var(--bs-light);
 
@@ -560,14 +559,21 @@
 
     &:hover {
       background-color: var(--bs-primary);
-      color: #000!important;
+      color: #000 !important;
       border-radius: 5px;
     }
   }
 }
 
 // Smooth transitions for theme switching
-* {
+body,
+.card,
+.btn,
+.form-control,
+.alert,
+a,
+.navbar,
+.dropdown-menu {
   transition:
     background-color 0.3s ease,
     border-color 0.3s ease,
