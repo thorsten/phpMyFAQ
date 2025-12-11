@@ -300,6 +300,7 @@
       background-color: var(--bs-dark);
       border: 2px solid var(--bs-light);
       color: var(--bs-light);
+      font-weight: 800;
 
       &:focus {
         background-color: var(--bs-dark);
@@ -460,7 +461,8 @@
 
   // Improve readability of badges
   .badge {
-    border: 3px solid var(--bs-light);
+    border: 4px solid var(--bs-dark);
+    font-weight: 800;
 
     &.bg-info {
       background-color: var(--bs-primary) !important;
