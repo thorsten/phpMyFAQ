@@ -101,7 +101,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
-    ErrorDocument 404 /index.php?action=404
+    ErrorDocument 404 index.php?action=404
     # General pages
     RewriteRule ^add-faq.html$ index.php?action=add [L,QSA]
     RewriteRule ^add-question.html$ index.php?action=ask [L,QSA]
@@ -110,7 +110,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^(search|open-questions|contact|glossary|overview|login|privacy)\.html$ index.php?action=$1 [L,QSA]
     RewriteRule ^(login) index.php?action=login [L,QSA]
     # start page
-    RewriteRule ^index.html$ index.php [PT]
+    RewriteRule ^index.html$ index.php [L,QSA]
     # a solution ID page
     RewriteCond %{REQUEST_URI} solution_id_([0-9]+)\.html$ [NC]
     RewriteRule ^solution_id_(.*)\.html$ index.php?solution_id=$1 [L,QSA]
@@ -125,7 +125,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ news page
     RewriteRule ^news/([0-9]+)/([a-z\-_]+)/(.+)\.htm(l?)$ index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
     # phpMyFAQ sitemap
-    RewriteRule ^sitemap/([^\/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+    RewriteRule ^sitemap/([^/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
     RewriteRule ^sitemap.xml$ sitemap.xml.php [L,QSA]
     RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L,QSA]
@@ -137,7 +137,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
-    RewriteRule ^tags/([0-9]+)/([^\/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
+    RewriteRule ^tags/([0-9]+)/([^/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
     # Authentication services
     RewriteRule ^services/webauthn(.*) services/webauthn/index.php [L,QSA]
     # User pages

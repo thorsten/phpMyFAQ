@@ -297,7 +297,7 @@
   // Search form high contrast mode
   .search {
     .form-control {
-      background-color: var(--bs-dark);
+      background-color: var(--bs-dark);*
       border: 2px solid var(--bs-light);
       color: var(--bs-light);
       font-weight: 800;
@@ -463,6 +463,7 @@
   .badge {
     border: 4px solid var(--bs-dark);
     font-weight: 800;
+    border: 3px solid var(--bs-light);
 
     &.bg-info {
       background-color: var(--bs-primary) !important;
