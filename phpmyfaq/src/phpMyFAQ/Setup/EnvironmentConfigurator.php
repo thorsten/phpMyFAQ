@@ -68,10 +68,15 @@ readonly class EnvironmentConfigurator
     }
 
     /**
-     * Adjusts the RewriteBase in the .htaccess file for the user's environment to avoid errors with controllers.
-     * Returns true, if the file was successfully changed.
+     * Adjusts the RewriteBase and ErrorDocument 404 in the .htaccess file for the user's environment.
+     * 
+     * This method ensures that URL routing works correctly and 404 errors are properly handled.
+     * 
+     * - RewriteBase is set to the application's installation path (e.g., /faq/)
+     * - ErrorDocument 404 is configured to route errors to the application's error handler (e.g., /faq/index.php?action=404)
      *
-     * @throws Exception
+     * @return bool Returns true if the .htaccess file was successfully modified, false otherwise.
+     * @throws Exception If the .htaccess file does not exist or contains syntax errors during parsing.
      */
     public function adjustRewriteBaseHtaccess(): bool
     {
@@ -89,10 +94,19 @@ readonly class EnvironmentConfigurator
             throw new Exception('Error parsing .htaccess file: ' . $e->getMessage());
         }
 
+        // Adjust RewriteBase
         $rewriteBase = $htaccess->search('RewriteBase', TOKEN_DIRECTIVE);
+        if ($rewriteBase) {
+            $rewriteBase->removeArgument($this->getRewriteBase());
+            $rewriteBase->setArguments((array) $this->getServerPath());
+        }
 
-        $rewriteBase->removeArgument($this->getRewriteBase());
-        $rewriteBase->setArguments((array) $this->getServerPath());
+        // Adjust ErrorDocument 404
+        $errorDocument404 = $htaccess->search('ErrorDocument 404', TOKEN_DIRECTIVE);
+        if ($errorDocument404) {
+            $new404Path = rtrim($this->getServerPath(), '/') . '/index.php?action=404';
+            $errorDocument404->setArguments([(string) $new404Path]);
+        }
 
         $output = (string) $htaccess;
         return (bool) file_put_contents($this->htaccessPath, $output);
