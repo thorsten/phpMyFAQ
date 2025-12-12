@@ -16,6 +16,7 @@
 import { create, update, deleteFaq } from '../api';
 import { pushErrorNotification, pushNotification, serialize } from '../../../../assets/src/utils';
 import { Response } from '../interfaces';
+import { getJoditEditor } from './editor';
 
 interface SerializedData {
   faqId: string;
@@ -115,9 +116,39 @@ export const handleResetButton = (): void => {
     resetButton.addEventListener('click', (event: Event): void => {
       event.preventDefault();
       const form = document.getElementById('faqEditor') as HTMLFormElement;
-      form.reset();
-      const revisionSelect = document.getElementById('selectedRevisionId') as HTMLSelectElement | null;
 
+      // Store original values before reset
+      const editorTextarea = document.getElementById('editor') as HTMLTextAreaElement | null;
+      const markdownTextarea = document.getElementById('answer-markdown') as HTMLTextAreaElement | null;
+      const questionInput = document.getElementById('question') as HTMLInputElement | null;
+      const questionOutput = document.getElementById('pmf-admin-question-output') as HTMLElement | null;
+      const originalEditorContent = editorTextarea?.defaultValue || '';
+      const originalMarkdownContent = markdownTextarea?.defaultValue || '';
+      const originalQuestionValue = questionInput?.defaultValue || '';
+
+      // Reset the form
+      form.reset();
+
+      // Reset Jodit editor if it exists
+      const joditEditor = getJoditEditor();
+      if (joditEditor && editorTextarea) {
+        joditEditor.value = originalEditorContent;
+      }
+
+      // Reset markdown editor if it exists
+      if (markdownTextarea) {
+        markdownTextarea.value = originalMarkdownContent;
+      }
+
+      // Reset question output span
+      if (questionOutput && originalQuestionValue) {
+        questionOutput.innerText = `: ${originalQuestionValue}`;
+      } else if (questionOutput) {
+        questionOutput.innerText = '';
+      }
+
+      // Handle revision select dropdown
+      const revisionSelect = document.getElementById('selectedRevisionId') as HTMLSelectElement | null;
       if (revisionSelect && revisionSelect.options.length > 0) {
         const lastOption = revisionSelect.options[revisionSelect.options.length - 1] as HTMLOptionElement;
         revisionSelect.value = lastOption.value;

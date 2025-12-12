@@ -44,6 +44,10 @@ import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
 import hljs from 'highlight.js';
 
+let joditEditorInstance: any = null;
+
+export const getJoditEditor = () => joditEditorInstance;
+
 export const renderEditor = () => {
   const editor = document.getElementById('editor') as HTMLElement | null;
   if (!editor) {
@@ -311,4 +315,7 @@ export const renderEditor = () => {
       hljs.highlightElement(block as HTMLElement);
     });
   });
+
+  // Store the editor instance so it can be accessed by other modules
+  joditEditorInstance = joditEditor;
 };

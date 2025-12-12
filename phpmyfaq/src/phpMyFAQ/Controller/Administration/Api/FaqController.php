@@ -116,7 +116,7 @@ final class FaqController extends AbstractController
         // Permissions
         $permissions = $faqPermission->createPermissionArray();
 
-        $logging->log($this->currentUser, message: 'admin-save-new-faq');
+        $logging->log($this->currentUser, 'admin-save-new-faq');
 
         if ($question === '' && $content === '') {
             return $this->json(['error' => Translation::get(key: 'msgNoQuestionAndAnswer')], Response::HTTP_CONFLICT);
