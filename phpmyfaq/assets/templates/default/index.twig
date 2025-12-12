@@ -100,7 +100,8 @@
 </nav>
 
 <!-- SEARCH -->
-{% if not isMaintenanceMode %}
+{% set isSearchPage = (currentPageUrl matches '/\\/search\\.html([?#]|$)/') or (currentPageUrl matches '/[?&]action=search(&|$)/') %}
+{% if not isMaintenanceMode and not isSearchPage %}
 <div class="container my-5">
   <div class="row height d-flex justify-content-center align-items-center">
     <div class="col-md-8">
