@@ -102,10 +102,16 @@ readonly class EnvironmentConfigurator
         }
 
         // Adjust ErrorDocument 404
-        $errorDocument404 = $htaccess->search('ErrorDocument 404', TOKEN_DIRECTIVE);
+        $errorDocument404 = $htaccess->search('ErrorDocument', TOKEN_DIRECTIVE);
         if ($errorDocument404) {
+            // Get current arguments and clear them
+            $currentArgs = $errorDocument404->getArguments();
+            foreach ($currentArgs as $arg) {
+                $errorDocument404->removeArgument($arg);
+            }
+            // Set new arguments: error code and path
             $new404Path = rtrim($this->getServerPath(), '/') . '/index.php?action=404';
-            $errorDocument404->setArguments([(string) $new404Path]);
+            $errorDocument404->setArguments(['404', $new404Path]);
         }
 
         $output = (string) $htaccess;

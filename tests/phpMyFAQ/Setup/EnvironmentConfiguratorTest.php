@@ -87,4 +87,60 @@ class EnvironmentConfiguratorTest extends TestCase
         $this->assertTrue($configurator->adjustRewriteBaseHtaccess());
         $this->assertEquals('/path/info', $configurator->getRewriteBase());
     }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdjustRewriteBaseHtaccessUpdatesErrorDocumentWithRootPath(): void
+    {
+        // Set up a proper .htaccess file with ErrorDocument directive
+        $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
+        $htaccessContent = <<<'HTACCESS'
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /phpmyfaq-test/
+    ErrorDocument 404 /phpmyfaq-test/index.php?action=404
+</IfModule>
+HTACCESS;
+        file_put_contents($htaccessPath, $htaccessContent);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost/');
+        $configurator = new EnvironmentConfigurator($configuration);
+        $this->assertTrue($configurator->adjustRewriteBaseHtaccess());
+
+        // Read the .htaccess file and verify ErrorDocument 404 is set correctly
+        $htaccessContent = file_get_contents($htaccessPath);
+        $this->assertStringContainsString('ErrorDocument 404 /index.php?action=404', $htaccessContent);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdjustRewriteBaseHtaccessUpdatesErrorDocumentWithSubdirectoryPath(): void
+    {
+        // Set up a proper .htaccess file with ErrorDocument directive
+        $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
+        $htaccessContent = <<<'HTACCESS'
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    ErrorDocument 404 /index.php?action=404
+</IfModule>
+HTACCESS;
+        file_put_contents($htaccessPath, $htaccessContent);
+
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2));
+        $configuration->method('getDefaultUrl')->willReturn('https://localhost/faq/');
+        $configurator = new EnvironmentConfigurator($configuration);
+        $this->assertTrue($configurator->adjustRewriteBaseHtaccess());
+
+        // Read the .htaccess file and verify ErrorDocument 404 is set correctly
+        $htaccessContent = file_get_contents($htaccessPath);
+        $this->assertStringContainsString('ErrorDocument 404 /faq/index.php?action=404', $htaccessContent);
+    }
 }
