@@ -6,12 +6,14 @@ use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class AbstractAttachmentTest
  *
  * @package phpMyFAQ\Attachment
  */
+#[AllowMockObjectsWithoutExpectations]
 class AbstractAttachmentTest extends TestCase
 {
     private AbstractAttachment $attachment;

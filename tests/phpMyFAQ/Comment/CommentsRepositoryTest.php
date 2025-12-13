@@ -11,7 +11,9 @@ use phpMyFAQ\Entity\CommentType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use phpMyFAQ\Language;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class CommentsRepositoryTest extends TestCase
 {
     private Configuration $configuration;

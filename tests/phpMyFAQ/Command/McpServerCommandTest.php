@@ -7,7 +7,9 @@ use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class McpServerCommandTest extends TestCase
 {
     private PhpMyFaqMcpServer $serverMock;

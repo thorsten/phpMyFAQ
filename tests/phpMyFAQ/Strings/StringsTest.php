@@ -3,8 +3,10 @@
 namespace phpMyFAQ\Strings;
 
 use phpMyFAQ\Strings;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class StringsTest extends TestCase
 {
     protected function setUp(): void

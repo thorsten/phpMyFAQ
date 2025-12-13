@@ -10,12 +10,14 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class FileTest
  *
  * @package phpMyFAQ\Attachment
  */
+#[AllowMockObjectsWithoutExpectations]
 class FileTest extends TestCase
 {
     private File $file;

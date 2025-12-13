@@ -22,10 +22,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class OrderTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class OrderTest extends TestCase
 {
     private Order $order;

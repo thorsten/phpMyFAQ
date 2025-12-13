@@ -11,8 +11,10 @@ use phpMyFAQ\Entity\NewsMessage;
 use phpMyFAQ\News\NewsRepository;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class NewsRepositoryTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class NewsRepositoryTest extends TestCase
 {
     private Configuration $configuration;
 

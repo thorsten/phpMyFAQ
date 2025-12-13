@@ -8,7 +8,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Language as PmfLanguage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CategoryLanguageServiceTest extends TestCase
 {
     /** @var Configuration&MockObject */

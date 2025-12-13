@@ -11,7 +11,9 @@ use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\MockObject\Exception as MockException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class BookmarkRepositoryTest extends TestCase
 {
     private Configuration $configuration;

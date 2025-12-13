@@ -5,7 +5,9 @@ namespace phpMyFAQ\Session;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SessionWrapperTest extends TestCase
 {
     private Session $sessionMock;

@@ -24,9 +24,11 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception as MockException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+#[AllowMockObjectsWithoutExpectations]
 class RatingRepositoryTest extends TestCase
 {
     private Configuration $configuration;

@@ -12,10 +12,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for UpdateCommand
  */
+#[AllowMockObjectsWithoutExpectations]
 class UpdateCommandTest extends TestCase
 {
     private UpdateCommand $command;

@@ -9,12 +9,14 @@ use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class StatisticsTest
  *
  * @package phpMyFAQ\Faq
  */
+#[AllowMockObjectsWithoutExpectations]
 class StatisticsTest extends TestCase
 {
     private Statistics $statistics;

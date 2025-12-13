@@ -9,10 +9,12 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class SearchFactoryTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class SearchFactoryTest extends TestCase
 {
     /** @var Configuration */

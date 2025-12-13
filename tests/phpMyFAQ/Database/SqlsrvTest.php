@@ -19,10 +19,12 @@ namespace phpMyFAQ\Database;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class SqlsrvTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class SqlsrvTest extends TestCase
 {
     private Sqlsrv $sqlsrv;

@@ -12,12 +12,14 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use SodiumException;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class BackupTest
  *
  * @package phpMyFAQ
  */
+#[AllowMockObjectsWithoutExpectations]
 class BackupTest extends TestCase
 {
     /** @var Configuration */

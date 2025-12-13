@@ -20,10 +20,12 @@ use mysqli_result;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class MysqliTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class MysqliTest extends TestCase
 {
     private Mysqli $mysqli;

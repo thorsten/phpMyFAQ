@@ -6,8 +6,10 @@ namespace phpMyFAQ\Link\Util;
 
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class TitleSlugifierTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class TitleSlugifierTest extends TestCase
 {
     protected function setUp(): void
     {

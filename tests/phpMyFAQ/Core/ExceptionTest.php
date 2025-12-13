@@ -17,10 +17,12 @@
 namespace phpMyFAQ\Core;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class ExceptionTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class ExceptionTest extends TestCase
 {
     /**

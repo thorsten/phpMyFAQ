@@ -7,7 +7,9 @@ namespace phpMyFAQ\Category;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use phpMyFAQ\Category\Tree\TreeBuilder;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class CategoryTreeFacadeTest extends TestCase
 {
     private TreeBuilder $treeBuilder;

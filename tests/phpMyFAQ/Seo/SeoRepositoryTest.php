@@ -11,7 +11,9 @@ use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SeoRepositoryTest extends TestCase
 {
     private Configuration $configuration;

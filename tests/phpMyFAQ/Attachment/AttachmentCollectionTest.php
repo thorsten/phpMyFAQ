@@ -6,7 +6,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class AttachmentCollectionTest extends TestCase
 {
     /**

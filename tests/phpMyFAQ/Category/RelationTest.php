@@ -24,10 +24,12 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Language;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class RelationTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class RelationTest extends TestCase
 {
     private Relation $relation;

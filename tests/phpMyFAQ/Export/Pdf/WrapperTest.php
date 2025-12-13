@@ -7,7 +7,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class WrapperTest extends TestCase
 {
     private Wrapper $wrapper;

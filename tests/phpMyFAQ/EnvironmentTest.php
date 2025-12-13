@@ -19,11 +19,13 @@ namespace phpMyFAQ;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class EnvironmentTest
  */
 #[CoversClass(Environment::class)]
+#[AllowMockObjectsWithoutExpectations]
 class EnvironmentTest extends TestCase
 {
     protected function setUp(): void

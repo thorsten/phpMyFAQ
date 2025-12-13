@@ -24,10 +24,12 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class WebAuthnControllerTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class WebAuthnControllerTest extends TestCase
 {
     private WebAuthnController $controller;

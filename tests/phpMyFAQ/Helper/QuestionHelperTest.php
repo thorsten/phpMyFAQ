@@ -14,8 +14,10 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class QuestionHelperTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class QuestionHelperTest extends TestCase
 {
     private Configuration $configuration;
     private QuestionHelper $questionHelper;

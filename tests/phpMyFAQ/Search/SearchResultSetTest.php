@@ -6,10 +6,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class ResultsetTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class SearchResultSetTest extends TestCase
 {
     /** @var SearchResultSet */

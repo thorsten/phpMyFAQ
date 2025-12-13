@@ -6,10 +6,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class ClientTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class ClientTest extends TestCase
 {
     private Client $client;

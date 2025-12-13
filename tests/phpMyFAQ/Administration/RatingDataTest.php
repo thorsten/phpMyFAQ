@@ -8,7 +8,9 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Link;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class RatingDataTest extends TestCase
 {
     private RatingData $ratingData;

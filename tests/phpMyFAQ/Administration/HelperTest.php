@@ -10,10 +10,12 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class HelperTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class HelperTest extends TestCase
 {
     /** @var Helper */

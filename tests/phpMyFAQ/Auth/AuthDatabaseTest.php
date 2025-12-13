@@ -5,7 +5,9 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class AuthDatabaseTest extends TestCase
 {
     private AuthDatabase $authDatabase;

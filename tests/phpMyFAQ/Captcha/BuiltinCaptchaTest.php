@@ -8,12 +8,14 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class CaptchaTest
  *
  * @package phpMyFAQ
  */
+#[AllowMockObjectsWithoutExpectations]
 class BuiltinCaptchaTest extends TestCase
 {
     /** @var BuiltinCaptcha */

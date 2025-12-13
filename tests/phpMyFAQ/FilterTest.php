@@ -2,8 +2,10 @@
 
 namespace phpMyFAQ;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class FilterTest extends TestCase
 {
     protected function setUp(): void

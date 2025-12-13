@@ -8,7 +8,9 @@ use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class TagsTest extends TestCase
 {
     private Tags $tags;

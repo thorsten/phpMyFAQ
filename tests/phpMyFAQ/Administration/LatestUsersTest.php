@@ -8,7 +8,9 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Date;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class LatestUsersTest extends TestCase
 {
     private LatestUsers $latestUsers;

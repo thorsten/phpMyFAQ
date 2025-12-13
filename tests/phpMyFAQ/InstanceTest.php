@@ -5,7 +5,9 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\InstanceEntity;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class InstanceTest extends TestCase
 {
     private Instance $instance;

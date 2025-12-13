@@ -7,7 +7,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SearchTest extends TestCase
 {
     private Configuration $configuration;

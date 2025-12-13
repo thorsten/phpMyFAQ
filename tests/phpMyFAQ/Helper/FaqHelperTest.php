@@ -12,7 +12,9 @@ use phpMyFAQ\System;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class FaqHelperTest extends TestCase
 {
     /** @var Configuration */

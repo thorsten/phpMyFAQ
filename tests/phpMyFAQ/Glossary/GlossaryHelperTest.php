@@ -20,7 +20,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\Glossary;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class GlossaryHelperTest extends TestCase
 {
     private GlossaryHelper $helper;

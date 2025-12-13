@@ -7,7 +7,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Vote;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class RatingTest extends TestCase
 {
     private Sqlite3 $dbHandle;

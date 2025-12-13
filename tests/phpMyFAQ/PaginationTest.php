@@ -3,7 +3,9 @@
 namespace phpMyFAQ;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class PaginationTest extends TestCase
 {
     public function testRender(): void

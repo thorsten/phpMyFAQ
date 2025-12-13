@@ -4,10 +4,12 @@ namespace phpMyFAQ\Plugin;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 require 'MockPlugin.php';
 require 'MockPluginEvent.php';
 
+#[AllowMockObjectsWithoutExpectations]
 class PluginManagerTest extends TestCase
 {
     private $pluginManager;

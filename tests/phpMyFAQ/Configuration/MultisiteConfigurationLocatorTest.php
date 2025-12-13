@@ -5,7 +5,9 @@ namespace phpMyFAQ\Configuration;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class MultisiteConfigurationLocatorTest extends TestCase
 {
     /**

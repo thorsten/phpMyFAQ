@@ -9,7 +9,9 @@ use phpMyFAQ\Search;
 use phpMyFAQ\Faq;
 use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
 use Symfony\AI\McpSdk\Capability\Tool\ToolCallResult;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class FaqSearchToolExecutorTest extends TestCase
 {
     private FaqSearchToolExecutor $executor;

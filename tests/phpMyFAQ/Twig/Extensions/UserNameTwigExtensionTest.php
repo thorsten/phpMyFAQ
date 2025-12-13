@@ -5,10 +5,12 @@ namespace phpMyFAQ\Twig\Extensions;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for UserNameTwigExtension
  */
+#[AllowMockObjectsWithoutExpectations]
 class UserNameTwigExtensionTest extends TestCase
 {
     private UserNameTwigExtension $extension;

@@ -5,7 +5,9 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class VanillaFileTest extends TestCase
 {
     private VanillaFile $mockFile;

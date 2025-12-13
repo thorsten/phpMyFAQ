@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class ServicesConfigurationTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class ServicesConfigurationTest extends TestCase
 {
     /** @var string */
     private string $servicesFile;

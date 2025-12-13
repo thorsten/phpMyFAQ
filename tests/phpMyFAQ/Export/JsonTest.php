@@ -9,12 +9,14 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class JsonTest
  *
  * @package phpMyFAQ\Export
  */
+#[AllowMockObjectsWithoutExpectations]
 class JsonTest extends TestCase
 {
     private Json $jsonExport;

@@ -3,12 +3,13 @@
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Language;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
+#[AllowMockObjectsWithoutExpectations]
 class FaqTest extends TestCase
 {
     private Faq $faq;
@@ -21,9 +22,7 @@ class FaqTest extends TestCase
         $this->mockConfiguration = $this->createStub(Configuration::class);
 
         // Mock Database class
-        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mockDb = $this->getMockBuilder(DatabaseDriver::class)->disableOriginalConstructor()->getMock();
 
         // Stub the getDb method of Configuration to return the mockDb object
         $this->mockConfiguration->method('getDb')->willReturn($this->mockDb);
@@ -64,8 +63,7 @@ class FaqTest extends TestCase
         $this->mockDb->method('numRows')->willReturn(1);
 
         // Simulate fetchObject being called twice: once returning the mock result, then false to stop
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         // Set language for the FAQ
         $this->faq->setLanguage('en');
@@ -86,7 +84,7 @@ class FaqTest extends TestCase
                 'updated' => '2023-01-01 12:00:00',
                 'visits' => 100,
                 'created' => '2022-01-01 12:00:00',
-            ]
+            ],
         ];
 
         // Assert the expected result
@@ -104,6 +102,8 @@ class FaqTest extends TestCase
 
     public function testSetAndGetLanguage(): void
     {
+        $this->mockDb->expects($this->never())->method('query');
+
         $this->faq->setLanguage('de');
 
         $this->assertEquals('de', $this->faq->getLanguage());
@@ -121,8 +121,9 @@ class FaqTest extends TestCase
     public function testSetStickyFaqOrderWithSingleFaq(): void
     {
         // Expect one database query
-        $expectedQuery = "UPDATE faqdata SET sticky_order=1 WHERE id=123";
-        $this->mockDb->expects($this->once())
+        $expectedQuery = 'UPDATE faqdata SET sticky_order=1 WHERE id=123';
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($expectedQuery)
             ->willReturn(true);
@@ -139,15 +140,16 @@ class FaqTest extends TestCase
         // Create a matcher to track query calls
         $callCount = 0;
         $expectedQueries = [
-            "UPDATE faqdata SET sticky_order=1 WHERE id=456",
-            "UPDATE faqdata SET sticky_order=2 WHERE id=789",
-            "UPDATE faqdata SET sticky_order=3 WHERE id=123"
+            'UPDATE faqdata SET sticky_order=1 WHERE id=456',
+            'UPDATE faqdata SET sticky_order=2 WHERE id=789',
+            'UPDATE faqdata SET sticky_order=3 WHERE id=123',
         ];
 
         // Expect three database queries in sequence
-        $this->mockDb->expects($this->exactly(3))
+        $this->mockDb
+            ->expects($this->exactly(3))
             ->method('query')
-            ->willReturnCallback(function($query) use (&$callCount, $expectedQueries) {
+            ->willReturnCallback(function ($query) use (&$callCount, $expectedQueries) {
                 $this->assertEquals($expectedQueries[$callCount], $query);
                 $callCount++;
                 return true;
@@ -172,7 +174,8 @@ class FaqTest extends TestCase
                     id = 123 
                 AND 
                     lang = 'en'";
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($expectedQuery)
             ->willReturn(true);
@@ -196,7 +199,8 @@ class FaqTest extends TestCase
                     id = 456 
                 AND 
                     lang = 'de'";
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($expectedQuery)
             ->willReturn(true);
@@ -209,12 +213,11 @@ class FaqTest extends TestCase
     public function testGetInactiveFaqsDataReturnsEmptyArrayWhenNoResults(): void
     {
         // Mock the configuration language
-        $mockLanguage = $this->getMockBuilder(Language::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
 
+        $this->mockDb->expects($this->once())->method('query');
         $this->mockDb->method('query')->willReturn(true);
         $this->mockDb->method('fetchObject')->willReturn(false);
 
@@ -226,9 +229,7 @@ class FaqTest extends TestCase
     public function testGetInactiveFaqsDataReturnsInactiveFaqs(): void
     {
         // Mock the configuration language and default URL
-        $mockLanguage = $this->getMockBuilder(Language::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');
@@ -240,16 +241,15 @@ class FaqTest extends TestCase
         $mockResult->thema = 'Inactive FAQ Question';
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->faq->getInactiveFaqsData();
 
         $expected = [
             [
                 'question' => 'Inactive FAQ Question',
-                'url' => 'http://example.com/admin/faq/edit/1/en'
-            ]
+                'url' => 'http://example.com/admin/faq/edit/1/en',
+            ],
         ];
 
         $this->assertEquals($expected, $result);
@@ -258,9 +258,7 @@ class FaqTest extends TestCase
     public function testGetOrphanedFaqsReturnsEmptyArrayWhenNoResults(): void
     {
         // Mock the configuration language
-        $mockLanguage = $this->getMockBuilder(Language::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
 
@@ -275,9 +273,7 @@ class FaqTest extends TestCase
     public function testGetOrphanedFaqsReturnsOrphanedFaqs(): void
     {
         // Mock the configuration language and default URL
-        $mockLanguage = $this->getMockBuilder(Language::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockLanguage = $this->getMockBuilder(Language::class)->disableOriginalConstructor()->getMock();
         $mockLanguage->method('getLanguage')->willReturn('en');
         $this->mockConfiguration->method('getLanguage')->willReturn($mockLanguage);
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://example.com/');
@@ -289,8 +285,7 @@ class FaqTest extends TestCase
         $mockResult->question = 'Orphaned FAQ Question';
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturn($mockResult, false);
+        $this->mockDb->method('fetchObject')->willReturn($mockResult, false);
 
         $result = $this->faq->getOrphanedFaqs();
 

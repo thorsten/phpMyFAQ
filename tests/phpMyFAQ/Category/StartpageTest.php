@@ -21,10 +21,12 @@ use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class StartpageTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class StartpageTest extends TestCase
 {
     private Startpage $startpage;

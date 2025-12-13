@@ -4,9 +4,11 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+#[AllowMockObjectsWithoutExpectations]
 class VisitsTest extends TestCase
 {
     /** @var Configuration */

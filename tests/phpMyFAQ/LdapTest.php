@@ -5,6 +5,7 @@ namespace phpMyFAQ;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use TypeError;
@@ -12,6 +13,7 @@ use TypeError;
 /**
  * Test class for Ldap functionality
  */
+#[AllowMockObjectsWithoutExpectations]
 class LdapTest extends TestCase
 {
     private Sqlite3 $dbHandle;

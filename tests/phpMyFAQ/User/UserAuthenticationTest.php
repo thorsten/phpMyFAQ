@@ -7,7 +7,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class UserAuthenticationTest extends TestCase
 {
     private CurrentUser $currentUser;

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Link\Util;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class LinkQueryParserTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class LinkQueryParserTest extends TestCase
 {
     public function testParseSimpleQuery(): void
     {

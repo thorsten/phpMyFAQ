@@ -5,7 +5,9 @@ namespace phpMyFAQ\Auth\EntraId;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SessionTest extends TestCase
 {
     private Configuration $configurationMock;

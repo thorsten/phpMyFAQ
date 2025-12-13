@@ -7,12 +7,14 @@ use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Plugin\PluginManager;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class ConfigurationTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class ConfigurationTest extends TestCase
 {
     /** @var Configuration */

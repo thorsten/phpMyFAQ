@@ -6,7 +6,9 @@ use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class UserDataTest extends TestCase
 {
     private Sqlite3 $database;

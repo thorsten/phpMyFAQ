@@ -6,7 +6,9 @@ namespace phpMyFAQ\Category\Navigation;
 
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Category\CategoryCache;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class CategoryTreeNavigatorTest extends TestCase
 {
     private CategoryTreeNavigator $navigator;

@@ -5,7 +5,9 @@ namespace phpMyFAQ\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class BasicPermissionRepositoryTest extends TestCase
 {
     private Sqlite3 $dbHandle;

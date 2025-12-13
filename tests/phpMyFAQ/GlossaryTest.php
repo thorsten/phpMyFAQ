@@ -6,7 +6,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Glossary\GlossaryRepository;use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class GlossaryTest extends TestCase
 {
     private Configuration $configuration;

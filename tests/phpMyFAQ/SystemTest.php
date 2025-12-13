@@ -4,7 +4,9 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SystemTest extends TestCase
 {
     public function testGetPoweredByPlainString(): void

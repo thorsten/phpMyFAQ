@@ -10,7 +10,9 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Translation;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class QueryHelperTest extends TestCase
 {
     /**

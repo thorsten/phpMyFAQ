@@ -8,7 +8,9 @@ use phpMyFAQ\Entity\NewsMessage;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class NewsTest extends TestCase
 {
     private News $news;

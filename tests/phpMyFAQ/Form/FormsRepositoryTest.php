@@ -20,10 +20,12 @@ namespace phpMyFAQ\Form;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use phpMyFAQ\Language;
 
+#[AllowMockObjectsWithoutExpectations]
 class FormsRepositoryTest extends TestCase
 {
     private Configuration $configuration;

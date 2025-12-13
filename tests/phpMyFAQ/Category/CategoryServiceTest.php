@@ -7,7 +7,9 @@ namespace phpMyFAQ\Category;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use phpMyFAQ\Entity\CategoryEntity;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class CategoryServiceTest extends TestCase
 {
     private CategoryRepositoryInterface $repository;

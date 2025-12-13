@@ -21,10 +21,12 @@ use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class ImageTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class ImageTest extends TestCase
 {
     private Image $image;

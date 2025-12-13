@@ -5,7 +5,9 @@ namespace phpMyFAQ\Setup;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class InstallerTest extends TestCase
 {
     private System $system;

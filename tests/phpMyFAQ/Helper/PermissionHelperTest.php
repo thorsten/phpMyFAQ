@@ -5,7 +5,9 @@ namespace phpMyFAQ\Helper;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class PermissionHelperTest extends TestCase
 {
     private PermissionHelper $permissionHelper;

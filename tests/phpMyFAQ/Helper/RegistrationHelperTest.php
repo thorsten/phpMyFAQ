@@ -9,7 +9,9 @@ use phpMyFAQ\User\UserData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class RegistrationHelperTest extends TestCase
 {
     private RegistrationHelper $registrationHelper;

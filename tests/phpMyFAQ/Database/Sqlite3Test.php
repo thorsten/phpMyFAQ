@@ -21,10 +21,12 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
 use SQLite3Result;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class Sqlite3Test
  */
+#[AllowMockObjectsWithoutExpectations]
 class Sqlite3Test extends TestCase
 {
     private Sqlite3 $sqlite3;

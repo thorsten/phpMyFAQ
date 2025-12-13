@@ -4,7 +4,9 @@ namespace phpMyFAQ;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class DateTest extends TestCase
 {
     private Configuration $mockConfiguration;

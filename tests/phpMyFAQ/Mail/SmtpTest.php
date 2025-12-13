@@ -4,6 +4,7 @@ namespace phpMyFAQ\Mail;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Mail\Smtp;
 use ReflectionClass;
@@ -11,6 +12,7 @@ use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
+#[AllowMockObjectsWithoutExpectations]
 class SmtpTest extends TestCase
 {
     private Smtp $smtp;

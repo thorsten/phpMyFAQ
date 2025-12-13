@@ -20,10 +20,12 @@ use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Captcha\GoogleRecaptcha;
 use phpMyFAQ\Captcha\CaptchaInterface;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class GoogleRecaptchaTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class GoogleRecaptchaTest extends TestCase
 {
     private Configuration $configuration;

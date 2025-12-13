@@ -8,7 +8,9 @@ use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\Smtp;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class MailTest extends TestCase
 {
     private Mail $mail;

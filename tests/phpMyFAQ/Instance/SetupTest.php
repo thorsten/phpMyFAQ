@@ -7,7 +7,9 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\User;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SetupTest extends TestCase
 {
     private Setup $setup;

@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Helper;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class TagsHelperTest extends TestCase
 {
     private TagsHelper $tagsHelper;

@@ -9,7 +9,9 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\AttributeExtension;
 use Twig\Loader\ArrayLoader;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class IsoDateTwigExtensionTest extends TestCase
 {
     /**

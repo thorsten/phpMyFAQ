@@ -5,10 +5,12 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test case for UserHelper class
  */
+#[AllowMockObjectsWithoutExpectations]
 class UserHelperTest extends TestCase
 {
     private MockObject $userMock;

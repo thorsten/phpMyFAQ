@@ -17,10 +17,12 @@
 namespace phpMyFAQ\Entity;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class CommentTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class CommentTest extends TestCase
 {
     private Comment $comment;

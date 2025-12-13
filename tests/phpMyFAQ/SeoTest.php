@@ -5,8 +5,10 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class SeoTest extends TestCase
 {
     private Seo $seo;

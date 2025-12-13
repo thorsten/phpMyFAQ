@@ -2,9 +2,11 @@
 
 namespace phpMyFAQ\Mail;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 
+#[AllowMockObjectsWithoutExpectations]
 class BuiltinTest extends TestCase
 {
     private Builtin $builtin;

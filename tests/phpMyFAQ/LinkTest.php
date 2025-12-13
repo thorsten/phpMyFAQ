@@ -5,10 +5,12 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class LinkTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class LinkTest extends TestCase
 {
     private Link $link;

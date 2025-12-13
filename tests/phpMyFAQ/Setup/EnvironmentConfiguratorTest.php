@@ -5,7 +5,9 @@ namespace phpMyFAQ\Setup;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class EnvironmentConfiguratorTest extends TestCase
 {
     private Configuration $configuration;

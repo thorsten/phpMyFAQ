@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Category\Permission;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class CategoryPermissionServiceTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class CategoryPermissionServiceTest extends TestCase
 {
     public function testBuildWhereClauseWithInactiveFalseAddsActiveFilter(): void
     {

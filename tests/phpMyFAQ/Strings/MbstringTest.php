@@ -2,8 +2,10 @@
 
 namespace phpMyFAQ\Strings;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class MbstringTest extends TestCase
 {
     private Mbstring $mbString;

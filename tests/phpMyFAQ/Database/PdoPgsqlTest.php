@@ -22,10 +22,12 @@ use PDOStatement;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PdoPgsqlTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class PdoPgsqlTest extends TestCase
 {
     private PdoPgsql $pdoPgsql;

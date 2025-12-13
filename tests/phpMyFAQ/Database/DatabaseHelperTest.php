@@ -5,12 +5,14 @@ namespace phpMyFAQ\Database;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class DatabaseHelperTest
  *
  * @package phpMyFAQ
  */
+#[AllowMockObjectsWithoutExpectations]
 class DatabaseHelperTest extends TestCase
 {
     /** @var DatabaseHelper */

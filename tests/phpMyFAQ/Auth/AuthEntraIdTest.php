@@ -11,11 +11,13 @@ use PHPUnit\Framework\TestCase;
 use Monolog\Logger;
 use ReflectionClass;
 use TypeError;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 const AAD_OAUTH_TENANTID = 'test-tenant-id';
 const AAD_OAUTH_CLIENTID = 'test-client-id';
 const AAD_OAUTH_SCOPE = 'test-scope';
 
+#[AllowMockObjectsWithoutExpectations]
 class AuthEntraIdTest extends TestCase
 {
     private Configuration $configurationMock;

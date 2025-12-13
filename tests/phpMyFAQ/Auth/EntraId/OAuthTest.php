@@ -10,12 +10,14 @@ use stdClass;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 const AAD_OAUTH_TENANTID = 'fake_tenant_id';
 const AAD_OAUTH_CLIENTID = 'fake_client_id';
 const AAD_OAUTH_SECRET = 'fake_secret';
 const AAD_OAUTH_SCOPE = 'fake_scope';
 
+#[AllowMockObjectsWithoutExpectations]
 class OAuthTest extends TestCase
 {
     private HttpClientInterface $mockClient;

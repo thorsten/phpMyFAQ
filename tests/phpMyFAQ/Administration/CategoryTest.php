@@ -21,10 +21,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class CategoryTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class CategoryTest extends TestCase
 {
     private Category $category;

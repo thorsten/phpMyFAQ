@@ -20,12 +20,14 @@ namespace phpMyFAQ;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\EncryptionTypes\Bcrypt;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class EncryptionTest
  */
 #[CoversClass(Encryption::class)]
 #[CoversClass(Bcrypt::class)]
+#[AllowMockObjectsWithoutExpectations]
 class EncryptionTest extends TestCase
 {
     private Configuration $config;

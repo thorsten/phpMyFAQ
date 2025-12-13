@@ -17,11 +17,13 @@
 namespace phpMyFAQ\Entity;
 
 use DateTime;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class VoteTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class VoteTest extends TestCase
 {
     private Vote $vote;

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test-specific subclass of AttachmentController that allows us to control the behavior
@@ -71,6 +72,7 @@ class TestableAttachmentController extends AttachmentController
     }
 }
 
+#[AllowMockObjectsWithoutExpectations]
 class AttachmentControllerTest extends TestCase
 {
     /**

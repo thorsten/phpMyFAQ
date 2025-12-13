@@ -4,7 +4,9 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class HtaccessUpdaterTest extends TestCase
 {
     private string $testHtaccessPath;

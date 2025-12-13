@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Form; // Test namespace für direkte Klassenreferenz
 
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class FormsHelperTest extends TestCase
 {
     private FormsHelper $helper;

@@ -22,10 +22,12 @@ use PDOStatement;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PdoSqliteTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class PdoSqliteTest extends TestCase
 {
     private PdoSqlite $pdoSqlite;

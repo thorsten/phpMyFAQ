@@ -10,7 +10,9 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\FaqEntity;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class FaqTest extends TestCase
 {
     /** @var Configuration */

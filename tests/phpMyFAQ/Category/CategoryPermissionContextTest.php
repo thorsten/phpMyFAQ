@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace phpMyFAQ\Category;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class CategoryPermissionContextTest extends TestCase
 {
     public function testConstructorWithDefaultValues(): void

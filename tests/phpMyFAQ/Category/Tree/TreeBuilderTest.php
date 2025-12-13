@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace phpMyFAQ\Category\Tree;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class TreeBuilderTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class TreeBuilderTest extends TestCase
 {
     public function testBuildAdminCategoryTreeFlat(): void
     {

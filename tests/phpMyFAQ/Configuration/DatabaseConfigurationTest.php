@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Configuration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class DatabaseConfigurationTest extends TestCase
 {
     public function testDBConfigProperties(): void

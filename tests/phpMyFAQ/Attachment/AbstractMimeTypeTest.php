@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Attachment;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class AbstractMimeTypeTest extends TestCase
 {
     public function testGuessByExt(): void

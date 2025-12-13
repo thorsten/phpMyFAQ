@@ -9,7 +9,9 @@ use phpMyFAQ\Entity\AdminLog as AdminLogEntity;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class AdminLogTest extends TestCase
 {
     /** @var Configuration */

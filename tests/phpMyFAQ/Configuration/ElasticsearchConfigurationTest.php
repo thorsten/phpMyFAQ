@@ -3,10 +3,12 @@
 namespace phpMyFAQ\Configuration;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for ElasticsearchConfiguration
  */
+#[AllowMockObjectsWithoutExpectations]
 class ElasticsearchConfigurationTest extends TestCase
 {
     private string $testConfigDir;

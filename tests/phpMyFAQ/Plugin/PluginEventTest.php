@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Plugin;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class PluginEventTest extends TestCase
 {
     public function testConstructorSetsData(): void

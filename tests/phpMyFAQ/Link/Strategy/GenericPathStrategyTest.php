@@ -9,8 +9,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class GenericPathStrategyTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class GenericPathStrategyTest extends TestCase
 {
     private Configuration $configuration;
 

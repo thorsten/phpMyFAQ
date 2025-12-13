@@ -18,7 +18,9 @@
 namespace phpMyFAQ\Language;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class LanguageCodesTest extends TestCase
 {
     public function testGetSupportedReturnsNullForUnknownKey(): void

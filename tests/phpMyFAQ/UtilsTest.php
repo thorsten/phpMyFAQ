@@ -3,7 +3,9 @@
 namespace phpMyFAQ;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class UtilsTest extends TestCase
 {
     private Configuration $mockConfiguration;

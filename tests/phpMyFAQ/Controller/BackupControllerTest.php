@@ -19,8 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class BackupControllerTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class BackupControllerTest extends TestCase
 {
     private Configuration $configurationMock;
     private CurrentUser $currentUserMock;

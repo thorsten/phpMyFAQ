@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Filesystem;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class FilesystemTest extends TestCase
 {
     private Filesystem $filesystem;

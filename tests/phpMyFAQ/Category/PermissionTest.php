@@ -22,10 +22,12 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PermissionTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class PermissionTest extends TestCase
 {
     private Permission $permission;

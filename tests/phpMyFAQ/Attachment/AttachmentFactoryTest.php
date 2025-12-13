@@ -9,12 +9,14 @@ use phpMyFAQ\Language;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class AttachmentFactoryTest
  *
  * @package phpMyFAQ\Attachment
  */
+#[AllowMockObjectsWithoutExpectations]
 class AttachmentFactoryTest extends TestCase
 {
     private Configuration $mockConfiguration;

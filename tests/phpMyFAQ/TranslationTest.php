@@ -9,7 +9,9 @@ use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class TranslationTest extends TestCase
 {
     /**

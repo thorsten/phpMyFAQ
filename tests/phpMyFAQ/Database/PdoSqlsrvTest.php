@@ -23,10 +23,12 @@ use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Core\Exception;
 use ReflectionMethod;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PdoSqlsrvTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class PdoSqlsrvTest extends TestCase
 {
     private PdoSqlsrv $pdoSqlsrv;

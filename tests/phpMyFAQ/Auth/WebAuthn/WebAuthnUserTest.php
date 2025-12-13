@@ -3,7 +3,9 @@
 namespace phpMyFAQ\Auth\WebAuthn;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class WebAuthnUserTest extends TestCase
 {
     public function testSetAndGetId(): void

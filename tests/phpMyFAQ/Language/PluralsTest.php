@@ -5,7 +5,9 @@ namespace phpMyFAQ\Language;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class PluralsTest extends TestCase
 {
     private Plurals $plurals;

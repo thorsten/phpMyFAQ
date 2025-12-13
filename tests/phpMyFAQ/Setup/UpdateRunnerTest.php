@@ -6,7 +6,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class UpdateRunnerTest extends TestCase
 {
     public function testClassNamespaceAndConstruction(): void

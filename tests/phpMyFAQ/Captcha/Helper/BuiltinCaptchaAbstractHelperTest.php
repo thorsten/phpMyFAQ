@@ -19,10 +19,12 @@ namespace phpMyFAQ\Captcha\Helper;
 use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Captcha\BuiltinCaptcha;
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class BuiltinCaptchaAbstractHelperTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class BuiltinCaptchaAbstractHelperTest extends TestCase
 {
     private Configuration $configuration;

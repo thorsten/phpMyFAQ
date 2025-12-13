@@ -9,8 +9,10 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Database\Sqlite3;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class NewsStrategyTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class NewsStrategyTest extends TestCase
 {
     private Configuration $configuration;
 

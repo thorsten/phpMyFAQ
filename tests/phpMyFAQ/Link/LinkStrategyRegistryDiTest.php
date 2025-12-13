@@ -11,8 +11,10 @@ use phpMyFAQ\Link\Strategy\StrategyInterface;
 use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class LinkStrategyRegistryDiTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class LinkStrategyRegistryDiTest extends TestCase
 {
     private Configuration $configuration;
 

@@ -7,7 +7,9 @@ use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class SessionTest extends TestCase
 {
     private Configuration $configurationMock;

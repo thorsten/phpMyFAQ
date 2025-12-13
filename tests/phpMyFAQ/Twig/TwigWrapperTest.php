@@ -9,7 +9,9 @@ use Twig\Extension\ExtensionInterface;
 use Twig\TemplateWrapper;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class TwigWrapperTest extends TestCase
 {
     private TwigWrapper $twigWrapper;

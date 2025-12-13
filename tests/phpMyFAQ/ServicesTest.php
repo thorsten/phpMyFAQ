@@ -2,8 +2,10 @@
 
 namespace phpMyFAQ;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class ServicesTest extends TestCase
 {
     public function testSetQuestion(): void

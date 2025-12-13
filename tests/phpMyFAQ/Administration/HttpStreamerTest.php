@@ -6,7 +6,9 @@ use phpMyFAQ\Core\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class HttpStreamerTest extends TestCase
 {
     public function testSend(): void

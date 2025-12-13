@@ -23,10 +23,12 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
 use stdClass;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class PgsqlTest
  */
+#[AllowMockObjectsWithoutExpectations]
 class PgsqlTest extends TestCase
 {
     private Pgsql $pgsql;

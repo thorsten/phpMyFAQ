@@ -11,7 +11,9 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Search;
 use Symfony\AI\McpSdk\Server\JsonRpcHandler;
 use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
+#[AllowMockObjectsWithoutExpectations]
 class PhpMyFaqMcpServerTest extends TestCase
 {
     private PhpMyFaqMcpServer $server;

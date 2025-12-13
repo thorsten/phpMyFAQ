@@ -9,8 +9,10 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Visits\VisitsRepository;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
-final class VisitsRepositoryTest extends TestCase
+#[AllowMockObjectsWithoutExpectations]
+class VisitsRepositoryTest extends TestCase
 {
     private Configuration $configuration;
     private VisitsRepository $repository;
