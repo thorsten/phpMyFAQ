@@ -150,6 +150,7 @@ $templateVars = [
     'title' => sprintf('%s - %s', $categoryHeader, $faqConfig->getTitle()),
     'metaDescription' => sprintf(Translation::get(key: 'msgCategoryMetaDesc'), $faqConfig->getTitle()),
     'categoryHeader' => $categoryHeader,
+    'breadcrumb' => $category->getPath($selectedCategoryId, '/', true),
 ];
 
 return $templateVars;
