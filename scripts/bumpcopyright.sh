@@ -15,7 +15,7 @@
 # @since     2012-03-07
 
 # List of file extensions to process
-extensions=("php" "js" "scss" "html" "twig" "md" "sh")
+extensions=("php" "ts" "js" "scss" "html" "twig" "md" "sh")
 
 # List of directories to ignore
 ignore_dirs=("libs" "node_modules")
