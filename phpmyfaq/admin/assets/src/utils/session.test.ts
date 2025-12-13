@@ -2,10 +2,10 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { handleSessionTimeout } from './session';
 
 vi.mock('bootstrap', () => ({
-  Modal: vi.fn().mockImplementation(() => ({
-    show: vi.fn(),
-    hide: vi.fn(),
-  })),
+  Modal: class {
+    show = vi.fn();
+    hide = vi.fn();
+  },
 }));
 
 describe('Session Utils', () => {
@@ -26,7 +26,9 @@ describe('Session Utils', () => {
         disconnect: vi.fn(),
         takeRecords: vi.fn(),
       };
-      global.MutationObserver = vi.fn(() => mockObserver) as unknown as typeof MutationObserver;
+      global.MutationObserver = function () {
+        return mockObserver;
+      } as unknown as typeof MutationObserver;
 
       const mockReload = vi.fn();
       Object.defineProperty(global, 'location', {

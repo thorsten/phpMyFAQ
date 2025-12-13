@@ -45,7 +45,7 @@ We’ll provide periodic updates while triage and remediation are in progress.
 ## Coordinated Disclosure
 
 - Please do not publish or share details publicly until a fix is available and users have had a reasonable time to update.
-- We coordinate on a release date with you; our default disclosure window is up to 90 days from report, adjusted by severity and complexity.
+- We coordinate on a release date with you; our default disclosure window is up to 90 days from a report, adjusted by severity and complexity.
 - We will credit reporters in release notes and/or advisories unless you prefer to remain anonymous.
 
 ## Scope Guidance

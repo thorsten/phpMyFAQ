@@ -4,24 +4,18 @@ import { TranslationService } from '../utils';
 import { handleCategorySelection } from './category';
 
 // Mock Choices.js
-vi.mock('choices.js', () => {
-  return {
-    default: vi.fn(),
-  };
-});
+vi.mock('choices.js', () => ({
+  default: vi.fn(),
+}));
 
 // Mock TranslationService
-vi.mock('../utils', () => {
-  const mockTranslationService = {
-    translations: new Map(),
-    loadTranslations: vi.fn().mockResolvedValue(undefined),
-    translate: vi.fn().mockImplementation((key: string) => `translated_${key}`),
-  };
-
-  return {
-    TranslationService: vi.fn(() => mockTranslationService),
-  };
-});
+vi.mock('../utils', () => ({
+  TranslationService: vi.fn(function () {
+    this.translations = new Map();
+    this.loadTranslations = vi.fn().mockResolvedValue(undefined);
+    this.translate = vi.fn().mockImplementation((key: string) => `translated_${key}`);
+  }),
+}));
 
 describe('handleCategorySelection', () => {
   const mockChoices = vi.mocked(Choices);
@@ -72,7 +66,11 @@ describe('handleCategorySelection', () => {
       loadTranslations: vi.fn().mockResolvedValue(undefined),
       translate: vi.fn().mockReturnValue('translated'),
     };
-    mockTranslationService.mockReturnValue(mockInstance);
+    mockTranslationService.mockImplementation(function () {
+      this.translations = mockInstance.translations;
+      this.loadTranslations = mockInstance.loadTranslations;
+      this.translate = mockInstance.translate;
+    });
 
     await handleCategorySelection();
 

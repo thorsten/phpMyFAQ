@@ -19,11 +19,11 @@ import * as api from '../api/instance';
 
 // Mock Bootstrap Modal globally
 vi.mock('bootstrap', () => ({
-  Modal: vi.fn().mockImplementation((element: HTMLElement) => ({
-    element,
-    hide: vi.fn(),
-    show: vi.fn(),
-  })),
+  Modal: vi.fn(function (this: any, element: HTMLElement) {
+    this.element = element;
+    this.hide = vi.fn();
+    this.show = vi.fn();
+  }),
 }));
 
 describe('handleInstances - Initialization', () => {
