@@ -1530,5 +1530,8 @@ $PMF_LANG['msgTotalKeys'] = 'Nombre total de clés de traduction';
 $PMF_LANG['msgTranslatedKeys'] = 'Nombre de clés traduites';
 $PMF_LANG['noteNightlyBuild'] = 'Veuillez noter que la version de la veille sera téléchargée (enregistrée dans /content/upgrades). Chaque nouvelle version n\'est créée par GitHub qu\'à partir de 2h00 (UTC).';
 $PMF_LANG['permission::translate_faq'] = 'Traduire les FAQs';
+$PMF_LANG['msgError403'] = 'Erreur 403';
+$PMF_LANG['msgError403Description'] = 'Vous êtes authentifié, mais vous n\'avez pas la permission d\'accéder à cette ressource.';
+$PMF_LANG['msgError403Hint'] = 'Si vous pensez qu\'il s\'agit d\'une erreur, veuillez contacter un administrateur.';
 
 return $PMF_LANG;

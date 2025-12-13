@@ -1510,5 +1510,8 @@ $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Adres do odpowiedzi dla e-m
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Dozwolone zewnętrzne hosty dla treści multimedialnych (oddziel przecinkami)'];
 $LANG_CONF['layout.customCss'] = ['area', 'Niestandardowy CSS', 'Proszę używać tylko CSS.'];
 $PMF_LANG['ad_quick_sub_category'] = "Dodaj nową podkategorię";
+$PMF_LANG['msgError403'] = 'Błąd 403';
+$PMF_LANG['msgError403Description'] = 'Jesteś uwierzytelniony, ale nie masz uprawnień do dostępu do tego zasobu.';
+$PMF_LANG['msgError403Hint'] = 'Jeśli uważasz, że to błąd, skontaktuj się z administratorem.';
 
 return $PMF_LANG;
