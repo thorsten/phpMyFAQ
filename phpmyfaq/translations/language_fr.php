@@ -1532,5 +1532,7 @@ $PMF_LANG['permission::translate_faq'] = 'Traduire les FAQs';
 $PMF_LANG['msgError403'] = 'Erreur 403';
 $PMF_LANG['msgError403Description'] = 'Vous êtes authentifié, mais vous n\'avez pas la permission d\'accéder à cette ressource.';
 $PMF_LANG['msgError403Hint'] = 'Si vous pensez qu\'il s\'agit d\'une erreur, veuillez contacter un administrateur.';
+$PMF_LANG['msgCreateDate'] = 'Créé le';
+$PMF_LANG['msgUpdateDate'] = 'Dernière mise à jour le';
 
 return $PMF_LANG;

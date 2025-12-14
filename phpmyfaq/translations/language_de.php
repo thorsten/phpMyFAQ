@@ -1528,5 +1528,7 @@ $PMF_LANG['ad_quick_sub_category'] = "Neue Sub-Kategorie hinzufügen";
 $PMF_LANG['msgError403'] = 'Fehler 403';
 $PMF_LANG['msgError403Description'] = 'Du hast keine Berechtigung, auf diese Seite zuzugreifen.';
 $PMF_LANG['msgError403Hint'] = 'Wenn du denkst, dass dies ein Fehler ist, kontaktiere bitte den Administrator.';
+$PMF_LANG['msgCreateDate'] = 'Erstellt am';
+$PMF_LANG['msgUpdateDate'] = 'Aktualisiert am';
 
 return $PMF_LANG;

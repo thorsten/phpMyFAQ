@@ -1530,5 +1530,7 @@ $PMF_LANG['ad_quick_sub_category'] = "Add new sub-category";
 $PMF_LANG['msgError403'] = 'Error 403';
 $PMF_LANG['msgError403Description'] = 'You are authenticated, but you do not have permission to access this resource.';
 $PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact an administrator.';
+$PMF_LANG['msgCreateDate'] = 'Created on';
+$PMF_LANG['msgUpdateDate'] = 'Last updated on';
 
 return $PMF_LANG;

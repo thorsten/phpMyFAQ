@@ -66,7 +66,11 @@
             </li>
             <li class="list-group-item bg-transparent">
               <i aria-hidden="true" class="bi bi-calendar-date"></i>
-              <span class="data">{{ faqDate }}</span>
+              <span class="data">{{ 'msgCreateDate' | translate }} {{ faqDate }}</span>
+            </li>
+            <li class="list-group-item bg-transparent">
+              <i aria-hidden="true" class="bi bi-calendar-check"></i>
+              <span class="data">{{ 'msgUpdateDate' | translate }} {{ faqLastChangeDate }}</span>
             </li>
             {% if numberOfComments is defined %}
               <li class="list-group-item bg-transparent">
