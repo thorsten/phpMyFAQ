@@ -651,7 +651,6 @@ $PMF_LANG['ad_export_type_choose'] = "支援格式 Supported formats";
 $PMF_LANG['ad_export_download_view'] = '下載或是檢視? Download or view inline?';
 $PMF_LANG['ad_export_download'] = "下載 download";
 $PMF_LANG['ad_export_view'] = "檢視 view in-line";
-$PMF_LANG['ad_export_gen_xhtml'] = "建立 XHTML 檔案 create XHTML file";
 
 // added v2.0.0 - 2006-07-22 by Matteo 開發者
 $PMF_LANG['ad_news_data'] = "FAQ 新聞 News";

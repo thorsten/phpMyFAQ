@@ -644,7 +644,6 @@ $PMF_LANG['ad_export_type_choose'] = 'مددگار فارمیٹس:';
 $PMF_LANG['ad_export_download_view'] = 'ڈاؤن لوڈ کریں یا ان لائن دیکھیں؟';
 $PMF_LANG['ad_export_download'] = 'ڈاؤن لوڈ کریں';
 $PMF_LANG['ad_export_view'] = 'ان لائن دیکھیں';
-$PMF_LANG['ad_export_gen_xhtml'] = 'XHTML فائل بنائیں';
 
 // شامل کیا گیا v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'FAQ خبریں';

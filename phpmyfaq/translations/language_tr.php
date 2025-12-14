@@ -650,7 +650,6 @@ $PMF_LANG['ad_export_type_choose'] = "Desteklenen biçimler";
 $PMF_LANG['ad_export_download_view'] = "İndir veya görüntüle?";
 $PMF_LANG['ad_export_download'] = "İndir";
 $PMF_LANG['ad_export_view'] = "Online görüntüle";
-$PMF_LANG['ad_export_gen_xhtml'] = "XHTML dosyası oluştur";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = "Duyurular";

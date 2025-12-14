@@ -557,7 +557,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Tuetut muodot:';
 $PMF_LANG['ad_export_download_view'] = 'Lataa vai näytä?';
 $PMF_LANG['ad_export_download'] = ' Lataa ';
 $PMF_LANG['ad_export_view'] = ' Näytä ';
-$PMF_LANG['ad_export_gen_xhtml'] = 'luo XHTML-tiedosto';
 $PMF_LANG['ad_news_data'] = 'Uutisen tiedot';
 $PMF_LANG['ad_news_author_name'] = 'Kirjoittajan nimi:';
 $PMF_LANG['ad_news_author_email'] = 'Kirjoittajan sähköpostiosoite:';

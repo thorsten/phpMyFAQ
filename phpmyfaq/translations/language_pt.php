@@ -534,7 +534,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Formato';
 $PMF_LANG['ad_export_download_view'] = 'Transferir ("descarregar") ou ver no browser?';
 $PMF_LANG['ad_export_download'] = ' transferir';
 $PMF_LANG['ad_export_view'] = ' ver no browser';
-$PMF_LANG['ad_export_gen_xhtml'] = ' XHTML';
 $PMF_LANG['ad_news_data'] = 'Conteúdo da Notícia';
 $PMF_LANG['ad_news_author_name'] = 'Autor (nome):';
 $PMF_LANG['ad_news_author_email'] = 'Autor (e-mail):';

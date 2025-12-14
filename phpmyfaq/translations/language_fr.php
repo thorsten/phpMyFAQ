@@ -648,7 +648,6 @@ $PMF_LANG["ad_export_type_choose"] = "Formats supportés : ";
 $PMF_LANG["ad_export_download_view"] = "Télécharger ou visualiser en ligne ?";
 $PMF_LANG["ad_export_download"] = "Télécharger";
 $PMF_LANG["ad_export_view"] = "Visualiser en ligne";
-$PMF_LANG["ad_export_gen_xhtml"] = "Créer un fichier XHTML";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG["ad_news_data"] = "Contenu de l'actualité";

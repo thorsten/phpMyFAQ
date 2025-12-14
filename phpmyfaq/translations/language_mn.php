@@ -655,7 +655,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Дэмжих форматууд:';
 $PMF_LANG['ad_export_download_view'] = 'Download or view inline?';
 $PMF_LANG['ad_export_download'] = 'татах';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = ' XHTML файл үүсгэх';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'FAQ Мэдээ';

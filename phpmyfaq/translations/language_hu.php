@@ -759,7 +759,6 @@ $PMF_LANG['ad_export_type_choose'] = 'Támogatott formátumok:';
 $PMF_LANG['ad_export_download_view'] = 'Letöltöd vagy megnézed?';
 $PMF_LANG['ad_export_download'] = 'letöltés';
 $PMF_LANG['ad_export_view'] = 'megnézem';
-$PMF_LANG['ad_export_gen_xhtml'] = 'XHTML file létrehozása';
 $PMF_LANG['ad_news_data'] = 'FAQ hírek';
 $PMF_LANG['ad_news_author_name'] = 'Szerző neve:';
 $PMF_LANG['ad_news_author_email'] = 'Szerző e-mail címe:';

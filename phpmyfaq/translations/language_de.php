@@ -646,7 +646,6 @@ $PMF_LANG['ad_export_type_choose'] = "Bitte wählen Sie eines der unterstützten
 $PMF_LANG['ad_export_download_view'] = "Herunterladen oder Inline ansehen?";
 $PMF_LANG['ad_export_download'] = "Herunterladen";
 $PMF_LANG['ad_export_view'] = "Inline ansehen";
-$PMF_LANG['ad_export_gen_xhtml'] = "Als XHTML-Datei exportieren";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = "Nachricht";
