@@ -518,9 +518,13 @@ Follow these steps to create an App Registration in Microsoft Azure:
 2. Add the Tenant ID, the client ID, and the secret from Step 7 and save the file
 3. Then, activate Microsoft Entra ID support in the administration under "Security"
 
-## 5.8 Troubleshooting
+## 5.8 Command Line Interface (CLI)
 
-### 5.8.1 Hard password reset
+phpMyFAQ offers a command line interface (CLI) for administrators.
+
+## 5.9 Troubleshooting
+
+### 5.9.1 Hard password reset
 
 If you can't log into your phpMyFAQ installation,
 and your password reset doesn't work, you can reset your password on this page:

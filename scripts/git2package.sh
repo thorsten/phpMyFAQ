@@ -139,7 +139,7 @@ strip_tcpdf_assets() {
 
 generate_hash_manifest() {
     log "Generating hash manifest ${HASH_MANIFEST}"
-    (cd "${CHECKOUT_DIR}" && "${PHP_BIN}" scripts/createHashes.php > "${HASH_MANIFEST}")
+    (cd "${CHECKOUT_DIR}" && "${PHP_BIN}" bin/console phpmyfaq:hashes:create --out="${HASH_MANIFEST}")
 }
 
 stage_for_packaging() {

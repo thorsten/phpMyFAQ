@@ -35,6 +35,7 @@ use phpMyFAQ\Captcha\Helper\CaptchaHelper;
 use phpMyFAQ\Category\Image;
 use phpMyFAQ\Category\Order;
 use phpMyFAQ\Category\Permission;
+use phpMyFAQ\Command\CreateHashesCommand;
 use phpMyFAQ\Comment\CommentsRepository;
 use phpMyFAQ\Comments;
 use phpMyFAQ\Configuration;
@@ -80,6 +81,7 @@ use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserSession;
 use phpMyFAQ\Visits;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -96,6 +98,7 @@ return static function (ContainerConfigurator $container): void {
     $services->defaults()->autowire()->autoconfigure();
 
     // ========== Core Symfony framework services ==========
+    $services->set('filesystem', Filesystem::class);
     $services->set('session', Session::class);
     $services->alias(SessionInterface::class, 'session');
 
@@ -373,5 +376,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.language'),
         service('phpmyfaq.search'),
         service('phpmyfaq.faq'),
+    ]);
+
+    $services->set(CreateHashesCommand::class)->args([
+        service('phpmyfaq.system'),
+        service('filesystem'),
     ]);
 };

@@ -19,7 +19,7 @@
 require __DIR__ . '/../phpmyfaq/src/Bootstrap.php';
 require __DIR__ . '/../phpmyfaq/src/libs/autoload.php';
 
-use phpMyFAQ\Command\McpServerCommand;
+use phpMyFAQ\Command\CreateHashesCommand;use phpMyFAQ\Command\McpServerCommand;
 use phpMyFAQ\Translation;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application;
@@ -49,6 +49,7 @@ try {
 }
 
 $application = new Application();
-$application->addCommand(new UpdateCommand());
+$application->addCommand(new CreateHashesCommand($container->get('phpmyfaq.system'), $container->get('filesystem')));
 $application->addCommand(new McpServerCommand($container->get('phpmyfaq.service.mcp-server')));
+$application->addCommand(new UpdateCommand());
 $application->run();
