@@ -81,7 +81,7 @@ final class QuestionController extends AbstractController
             return $this->json(['error' => Translation::get(key: 'msgNoPermission')], Response::HTTP_UNAUTHORIZED);
         }
 
-        $questionId = $data->questionId;
+        $questionId = (int) $data->questionId;
 
         if (!is_null($questionId)) {
             $isVisible = $question->getVisibility($questionId);
