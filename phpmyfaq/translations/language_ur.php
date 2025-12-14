@@ -1425,5 +1425,57 @@ $PMF_LANG['msgOrphanedFAQs'] = ' یتیم FAQs';
 $PMF_LANG['msgPreview'] = 'پیش نظارہ';
 $PMF_LANG['msgInsertImage'] = 'تصویر شامل کریں';
 $PMF_LANG['msgImageUpload'] = 'تصویر اپ لوڈ کریں';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'تصویر اپ لوڈ نہیں کی جا سکی۔';
+$PMF_LANG['msgImageTooLarge'] = 'تصویر بہت بڑی ہے۔';
+$PMF_LANG['msgNoImagesForUpload'] = 'اپ لوڈ کے لیے کوئی تصاویر نہیں ہیں۔';
+$PMF_LANG['msgFetchingHashes'] = 'api.phpmyfaq.de سے تصدیقی ہیشز حاصل کیے جا رہے ہیں...';
+$PMF_LANG['msgCheckHashes'] = 'انسٹالیشن فائلوں کے ساتھ ہیشز کی جانچ کی جا رہی ہے...';
+$PMF_LANG['msgAuthenticationAborted'] = 'صارف کی طرف سے تصدیق منسوخ کر دی گئی۔';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'ایڈمن سیشن ٹائم آؤٹ کاؤنٹر کو فعال کریں', 'ڈیفالٹ: فعال'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'OpenSearch سپورٹ کو فعال کریں', 'معیاری: غیر فعال'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'مقبول تلاشوں کے لیے وقت کی ونڈو (دن)', 'معیاری: 180 دن'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch ترتیب';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'تلاش کا انڈیکس بنائیں';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'تلاش کا انڈیکس حذف کریں';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'مکمل درآمد';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch تلاش کا انڈیکس کامیابی سے بنایا گیا۔';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearch درآمد کامیاب رہی۔';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch تلاش کا انڈیکس کامیابی سے حذف کر دیا گیا۔';
+$PMF_LANG['permission::translate_faq'] = 'FAQs کا ترجمہ کریں';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'زمرے تلاش کرنے کے لیے ٹائپ کریں';
+$PMF_LANG['msgLoadingText'] = 'لوڈ ہو رہا ہے...';
+$PMF_LANG['msgNoResultsText'] = 'کوئی نتائج نہیں ملے';
+$PMF_LANG['msgNoChoicesText'] = 'منتخب کرنے کے لیے کوئی اختیارات نہیں ہیں';
+$PMF_LANG['msgItemSelectText'] = 'منتخب کرنے کے لیے دبائیں';
+$PMF_LANG['msgUniqueItemText'] = 'صرف منفرد اقدار شامل کی جا سکتی ہیں';
+$PMF_LANG['msgCustomAddItemText'] = 'صرف مخصوص شرائط سے مماثل اقدار شامل کی جا سکتی ہیں';
+$PMF_LANG['msgDownloadYourData'] = 'اپنا ڈیٹا ڈاؤن لوڈ کریں';
+$PMF_LANG['msgDataExportDescription'] = 'اپنے محفوظ شدہ صارف ڈیٹا پر مشتمل ZIP فائل ڈاؤن لوڈ کریں۔';
+$PMF_LANG['msgDownload'] = 'ڈاؤن لوڈ کریں';
+$PMF_LANG['msgToggleTheme'] = 'تھیم تبدیل کریں';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'آخری بیک اپ کی تاریخ';
+$PMF_LANG['msgBackupNoneFound'] = 'کوئی بیک اپ نہیں ملے۔';
+$PMF_LANG['msgBackupTooOld'] = 'آخری بیک اپ 30 دن سے زیادہ پرانا ہے۔';
+$PMF_LANG['msgBackupRecent'] = 'موجودہ بیک اپ حالیہ ہے۔';
+$PMF_LANG['msgBackupGoTo'] = 'بیک اپ صفحے پر جائیں';
+$PMF_LANG['msgNewestUsers'] = 'نئے ترین صارفین';
+$PMF_LANG['msgMemberSince'] = 'ممبر بننے کی تاریخ';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'رجسٹرڈ صارفین';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'کیا آپ واقعی اس FAQ کو حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں کیا جا سکتا۔';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'ترجمے کی کلیدوں کی کل تعداد';
+$PMF_LANG['msgTranslatedKeys'] = 'ترجمہ شدہ کلیدوں کی تعداد';
+$PMF_LANG['msgMissingKeys'] = 'گمشدہ ترجمے کی کلیدیں';
+$PMF_LANG['msgCompletionPercentage'] = 'تکمیل کی فیصد';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'نصب شدہ ورژن دستیاب تازہ ترین ورژن سے نیا ہے۔';
+$PMF_LANG['ad_quick_sub_category'] = "نیا ذیلی زمرہ شامل کریں";
+$PMF_LANG['msgError403'] = 'خرابی 403';
+$PMF_LANG['msgError403Description'] = 'آپ کی تصدیق ہو چکی ہے، لیکن آپ کو اس وسیلے تک رسائی کی اجازت نہیں ہے۔';
+$PMF_LANG['msgError403Hint'] = 'اگر آپ کو لگتا ہے کہ یہ ایک خرابی ہے، تو براہ کرم کسی منتظم سے رابطہ کریں۔';
 
 return $PMF_LANG;

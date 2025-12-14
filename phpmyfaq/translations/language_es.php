@@ -1531,4 +1531,8 @@ $PMF_LANG['msgSerpTitle'] = 'Título SERP';
 // Permisos
 $PMF_LANG['permission::forms_edit'] = 'Editar formularios';
 
+$PMF_LANG['msgError403'] = 'Error 403';
+$PMF_LANG['msgError403Description'] = 'Está autenticado, pero no tiene permiso para acceder a este recurso.';
+$PMF_LANG['msgError403Hint'] = 'Si cree que esto es un error, póngase en contacto con un administrador.';
+
 return $PMF_LANG;
