@@ -1,4 +1,5 @@
 #!/bin/sh
+
 #
 # This is the shell script for building:
 # 1. a TAR.GZ package;
@@ -27,64 +28,163 @@
 # @link      https://www.phpmyfaq.de
 # @version   2008-09-10
 
-# phpMyFAQ Version
-. scripts/version.sh
+set -eu
+if (set -o pipefail 2>/dev/null); then
+    set -o pipefail
+fi
+IFS=$(printf ' \t\n')
 
-# Determine md5 binary
-if [ -z "${MD5BIN}" ]; then
-    if command -v md5 > /dev/null; then
-        MD5BIN=$(command -v md5)
-    else
-        MD5BIN=$(command -v md5sum)
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+REPO_ROOT=$(CDPATH= cd -- "${SCRIPT_DIR}/.." && pwd)
+ORIGINAL_DIR=$(pwd)
+cd "${REPO_ROOT}" || exit 1
+
+. "${REPO_ROOT}/scripts/version.sh"
+: "${PMF_PACKAGE_FOLDER:=phpmyfaq-${PMF_VERSION}}"
+: "${PHP_BIN:=php}"
+
+BUILD_DIR="${REPO_ROOT}/build"
+CHECKOUT_DIR="${BUILD_DIR}/checkout/${PMF_PACKAGE_FOLDER}"
+PACKAGE_DIR="${BUILD_DIR}/package/${PMF_PACKAGE_FOLDER}"
+ARTIFACT_TAR="${REPO_ROOT}/${PMF_PACKAGE_FOLDER}.tar.gz"
+ARTIFACT_ZIP="${REPO_ROOT}/${PMF_PACKAGE_FOLDER}.zip"
+HASH_MANIFEST="${REPO_ROOT}/hashes-${PMF_VERSION}.json"
+TCPDF_PATH="${CHECKOUT_DIR}/phpmyfaq/src/libs/tecnickcom/tcpdf"
+
+log() {
+    printf '\n[%s] %s\n' "$(date '+%H:%M:%S')" "$*"
+}
+
+warn() {
+    printf '\n[WARN] %s\n' "$*" >&2
+}
+
+fail() {
+    printf '\n[ERROR] %s\n' "$*" >&2
+    exit 1
+}
+
+cleanup() {
+    cd "${ORIGINAL_DIR}" || true
+    if [ "${KEEP_BUILD:-0}" = "1" ]; then
+        warn "KEEP_BUILD=1 set; leaving ${BUILD_DIR} in place"
+        return
     fi
-fi
+    if [ -d "${BUILD_DIR}" ]; then
+        rm -rf "${BUILD_DIR}"
+        log "Removed build directory ${BUILD_DIR}"
+    fi
+}
 
-# Package Folder
-if [ -z "${PMF_PACKAGE_FOLDER}" ]; then
-    PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
-fi
+trap cleanup EXIT
 
-current_dir=$(pwd) || exit
+require_command() {
+    command -v "$1" >/dev/null 2>&1 || fail "Required command '$1' not found in PATH"
+}
 
-printf "\n 🚀 Checkout code into build/ folder\n"
-git checkout-index -f -a --prefix="${current_dir}/build/checkout/${PMF_PACKAGE_FOLDER}/"
+check_prerequisites() {
+    for cmd in git composer pnpm tar zip "${PHP_BIN}"; do
+        require_command "$cmd"
+    done
 
-printf "\n 🚀 Add missing directories\n"
-mkdir -p "${current_dir}/build/package/${PMF_PACKAGE_FOLDER}/"
+    if [ -z "${MD5BIN:-}" ]; then
+        if command -v md5 >/dev/null 2>&1; then
+            MD5BIN=$(command -v md5)
+        elif command -v md5sum >/dev/null 2>&1; then
+            MD5BIN=$(command -v md5sum)
+        else
+            fail "Neither md5 nor md5sum available; install one or set MD5BIN"
+        fi
+    fi
 
-cd "${current_dir}/build/checkout/${PMF_PACKAGE_FOLDER}/" || exit
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        fail "This script must be run inside a git repository"
+    fi
+}
 
-printf "\n 🚀 Add PHP dependencies\n"
-composer install --no-dev --prefer-dist
+prepare_directories() {
+    log "Preparing workspace under ${BUILD_DIR}"
+    rm -rf "${BUILD_DIR}"
+    mkdir -p "${CHECKOUT_DIR}" "${PACKAGE_DIR}"
+}
 
-printf "\n 🚀 Install JS dependencies\n"
-pnpm install
+checkout_sources() {
+    log "Checking out current index into ${CHECKOUT_DIR}"
+    git checkout-index -f -a --prefix="${CHECKOUT_DIR}/"
+}
 
-printf "\n 🚀 Run \"pnpm build:prod\" to build frontend production build\n"
-pnpm build:prod
+install_php_dependencies() {
+    log "Installing PHP dependencies"
+    (cd "${CHECKOUT_DIR}" && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --prefer-dist --no-progress --no-interaction)
+}
 
-printf "\n 🚀 Remove fonts and examples from TCPDF\n"
-rm -rf "${current_dir}/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/tecnickcom/tcpdf/fonts"
-rm -rf "${current_dir}/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/tecnickcom/tcpdf/examples"
+install_js_dependencies() {
+    log "Installing JS dependencies"
+    (cd "${CHECKOUT_DIR}" && pnpm install --frozen-lockfile)
+}
 
-printf "\n 🚀 Create md5 hashes for file verification\n"
-php scripts/createHashes.php > "${current_dir}/hashes-${PMF_VERSION}.json"
+build_frontend() {
+    log "Running pnpm build:prod"
+    (cd "${CHECKOUT_DIR}" && pnpm build:prod)
+}
 
-printf "\n 🚀 Prepare packaging\n"
-cd "${current_dir}" || exit
-mv "${current_dir}/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq" "${current_dir}/build/package/${PMF_PACKAGE_FOLDER}"
+strip_tcpdf_assets() {
+    if [ -d "${TCPDF_PATH}" ]; then
+        log "Removing TCPDF fonts and examples"
+        rm -rf "${TCPDF_PATH}/fonts" "${TCPDF_PATH}/examples"
+    else
+        warn "TCPDF path ${TCPDF_PATH} not found; skipping font cleanup"
+    fi
+}
 
-printf "\n 🚀 Build packages\n"
-tar cfvz "${PMF_PACKAGE_FOLDER}.tar.gz" -C "${current_dir}/build/package/${PMF_PACKAGE_FOLDER}" phpmyfaq
-cd "${current_dir}/build/package/${PMF_PACKAGE_FOLDER}" || exit
-zip -r "${current_dir}/${PMF_PACKAGE_FOLDER}.zip" phpmyfaq
-cd "${current_dir}" || exit
+generate_hash_manifest() {
+    log "Generating hash manifest ${HASH_MANIFEST}"
+    (cd "${CHECKOUT_DIR}" && "${PHP_BIN}" scripts/createHashes.php > "${HASH_MANIFEST}")
+}
 
-printf "\n 🚀 Create md5sum\n"
-$MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
-$MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
+stage_for_packaging() {
+    log "Staging files for packaging"
+    rm -rf "${PACKAGE_DIR}/phpmyfaq"
+    mv "${CHECKOUT_DIR}/phpmyfaq" "${PACKAGE_DIR}/phpmyfaq"
+}
 
-printf "\n 🚀 Clean up\n"
-rm -rf "${current_dir}/build"
+create_packages() {
+    log "Building ${ARTIFACT_TAR}"
+    tar czf "${ARTIFACT_TAR}" -C "${PACKAGE_DIR}" phpmyfaq
 
-printf "\n 🚀 done.\n"
+    log "Building ${ARTIFACT_ZIP}"
+    (cd "${PACKAGE_DIR}" && zip -rq "${ARTIFACT_ZIP}" phpmyfaq)
+}
+
+write_checksums() {
+    log "Creating checksum files"
+    ${MD5BIN} "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.md5"
+    ${MD5BIN} "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.md5"
+
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
+        sha256sum "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 "${ARTIFACT_TAR}" > "${ARTIFACT_TAR}.sha256"
+        shasum -a 256 "${ARTIFACT_ZIP}" > "${ARTIFACT_ZIP}.sha256"
+    else
+        warn "No SHA256 tool found; skipping .sha256 files"
+    fi
+}
+
+main() {
+    check_prerequisites
+    prepare_directories
+    checkout_sources
+    install_php_dependencies
+    install_js_dependencies
+    build_frontend
+    strip_tcpdf_assets
+    generate_hash_manifest
+    stage_for_packaging
+    create_packages
+    write_checksums
+    log "Packages created: ${ARTIFACT_TAR} and ${ARTIFACT_ZIP}"
+}
+
+main
