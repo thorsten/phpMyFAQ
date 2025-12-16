@@ -188,7 +188,6 @@ $PMF_LANG['ad_user_add'] = 'Añadir usuario';
 $PMF_LANG['ad_user_profou'] = 'Perfil del usuario';
 $PMF_LANG['ad_user_name'] = 'Nombre';
 $PMF_LANG['ad_user_password'] = 'Contraseña';
-$PMF_LANG['ad_user_contraseña'] = 'Contraseña';
 $PMF_LANG['ad_user_confirm'] = 'Confirmar';
 $PMF_LANG['ad_user_del_1'] = '¿El usuario ';
 $PMF_LANG['ad_user_del_2'] = 'debería eliminarse?';
