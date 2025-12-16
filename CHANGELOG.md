@@ -35,6 +35,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Polish translation (Thorsten)
 - updated French translation (Thorsten)
 - updated Japanese translation (Kamo Tomoyuki)
+- updated Brazilian Portuguese translation (Thorsten)
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
