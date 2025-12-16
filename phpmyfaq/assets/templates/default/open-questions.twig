@@ -19,9 +19,9 @@
           <td>
             <strong>{{ question.categoryName }}:</strong><br>{{ question.question }}
           </td>
-          {% if isCloseQuestionEnabled %}
-            <td>
-              <a href="?action=faq&cat={{ question.categoryId }}&id={{ question.answerId }}">
+          {% if isCloseQuestionEnabled and question.answerId > 0 %}
+            <td class="text-end">
+              <a class="btn btn-primary"  href="?action=faq&cat={{ question.categoryId }}&id={{ question.answerId }}">
                 {{ msg2answerFAQ }}
               </a>
             </td>

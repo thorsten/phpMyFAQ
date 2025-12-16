@@ -58,3 +58,4 @@ $templateVars = [
 ];
 
 return $templateVars;
+
