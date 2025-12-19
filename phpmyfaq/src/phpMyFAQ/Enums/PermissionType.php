@@ -46,7 +46,7 @@ enum PermissionType: string
 
     case EXPORT = 'export';
 
-    case FAQ_ADD = 'addfaq';
+    case FAQ_ADD = 'add_faq';
 
     case FAQ_APPROVE = 'approverec';
 
