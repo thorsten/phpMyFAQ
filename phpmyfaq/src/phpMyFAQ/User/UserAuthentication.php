@@ -97,9 +97,6 @@ class UserAuthentication
         return $this->currentUser;
     }
 
-    /**
-     * @throws UserException
-     */
     private function authenticateLdap(): void
     {
         if ($this->configuration->isLdapActive() && function_exists('ldap_connect')) {
@@ -107,7 +104,10 @@ class UserAuthentication
                 $authLdap = new AuthLdap($this->configuration);
                 $this->currentUser->addAuth($authLdap, 'ldap');
             } catch (Exception $exception) {
-                throw new UserException($exception->getMessage());
+                // LDAP initialization failed - log error and continue with local auth fallback
+                $this->configuration
+                    ->getLogger()
+                    ->error('LDAP authentication initialization failed: ' . $exception->getMessage());
             }
         }
     }

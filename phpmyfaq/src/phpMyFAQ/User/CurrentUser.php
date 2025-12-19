@@ -162,15 +162,15 @@ class CurrentUser extends User
             $login = strtok($login, '@\\');
         }
 
-        // Attempt to authenticate user by login and password
+        // Attempt to authenticate a user by login and password
         $this->authContainer = $this->sortAuthContainer($this->authContainer);
         foreach ($this->authContainer as $authSource => $auth) {
             if ($auth->isValidLogin($login, $optData ?? []) === 0) {
-                continue; // Login does not exist, try next auth method
+                continue; // Login does not exist, try the next auth method
             }
 
             if (!$auth->checkCredentials($login, $password, $optData ?? [])) {
-                continue; // Incorrect password, try next auth method
+                continue; // Incorrect password, try the next auth method
             }
 
             // Login successful, proceed with post-login actions
@@ -231,7 +231,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Sets loggedIn to true if the 2FA-auth was successfully and saves the login to session.
+     * Sets loggedIn to true if the 2FA-auth was successful and saves the login to session.
      */
     public function twoFactorSuccess(): bool
     {
@@ -370,7 +370,7 @@ class CurrentUser extends User
 
         $requestTime = Request::createFromGlobals()->server->get('REQUEST_TIME');
 
-        // save session information in user table
+        // save session information in the user table
         $update = sprintf(
             "
             UPDATE
@@ -618,7 +618,7 @@ class CurrentUser extends User
     }
 
     /**
-     * Enables to remember me decision.
+     * Enables to "remember me" decision.
      */
     public function enableRememberMe(): void
     {
