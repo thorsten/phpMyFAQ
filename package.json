@@ -1,6 +1,6 @@
 {
   "name": "@thorsten/phpmyfaq",
-  "version": "4.1.0-beta.2",
+  "version": "4.1.0-RC",
   "description": "phpMyFAQ",
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
@@ -15,7 +15,7 @@
   ],
   "homepage": "https://www.phpmyfaq.de/",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=24.0.0"
   },
   "type": "module",
   "scripts": {
@@ -55,10 +55,10 @@
     "@types/highlightjs": "^9.12.6",
     "@types/jsdom": "^27.0.0",
     "@types/masonry-layout": "^4.2.8",
-    "@types/node": "^24.10.3",
+    "@types/node": "^24.10.4",
     "@types/sortablejs": "^1.15.9",
-    "@vitest/coverage-istanbul": "4.0.15",
-    "@vitest/coverage-v8": "4.0.15",
+    "@vitest/coverage-istanbul": "4.0.16",
+    "@vitest/coverage-v8": "4.0.16",
     "autoprefixer": "^10.4.23",
     "husky": "^9.1.7",
     "jsdom": "^27.3.0",
@@ -73,7 +73,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-minify": "^2.1.0",
     "vite-plugin-static-copy": "^3.1.4",
-    "vitest": "^4.0.15",
+    "vitest": "^4.0.16",
     "vitest-fetch-mock": "^0.4.5"
   },
   "husky": {
