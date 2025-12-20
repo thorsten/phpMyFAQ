@@ -1,4 +1,4 @@
-# 4. Use phpMyFAQ
+# 6. Use phpMyFAQ
 
 The public phpMyFAQ frontend has a simple, HTML5 / CCS3-based default layout based on
 [Bootstrap v5.3](https://getbootstrap.com/docs/5.3/).

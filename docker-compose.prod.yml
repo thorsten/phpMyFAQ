@@ -1,0 +1,397 @@
+# Production Docker Compose for phpMyFAQ
+# For use with Portainer or production deployments
+#
+# IMPORTANT: Before deploying:
+# 1. Copy .env.example to .env and configure all variables
+# 2. Choose your database service (mariadb OR postgres)
+# 3. Choose your web server (apache OR nginx+php-fpm OR frankenphp)
+# 4. Configure SSL certificates
+# 5. Review and adjust resource limits based on your needs
+#
+# Deploy with: docker-compose -f docker-compose.prod.yml up -d
+
+version: '3.8'
+
+services:
+  # ========================================
+  # Database Services (Choose ONE)
+  # ========================================
+
+  mariadb:
+    image: mariadb:11.6
+    container_name: phpmyfaq-mariadb
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-phpmyfaq}
+      - MYSQL_USER=${MYSQL_USER:-phpmyfaq}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_HOST=172.%.%.%
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - phpmyfaq-network
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Security: Don't expose database port to host in production
+    # ports:
+    #   - '3306:3306'
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: phpmyfaq-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-phpmyfaq}
+      - POSTGRES_USER=${POSTGRES_USER:-phpmyfaq}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - phpmyfaq-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-phpmyfaq}']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # Security: Don't expose database port to host in production
+    # ports:
+    #   - '5432:5432'
+
+  # ========================================
+  # Web Server Services (Choose ONE)
+  # ========================================
+
+  # Option 1: Apache with mod_php
+  apache:
+    image: phpmyfaq/phpmyfaq:${PMF_VERSION:-latest}
+    container_name: phpmyfaq-apache
+    restart: unless-stopped
+    environment:
+      # Database Configuration
+      - PMF_DB_HOST=${PMF_DB_HOST:-mariadb}
+      - PMF_DB_NAME=${PMF_DB_NAME:-phpmyfaq}
+      - PMF_DB_USER=${PMF_DB_USER:-phpmyfaq}
+      - PMF_DB_PASS=${PMF_DB_PASS}
+      - PMF_DB_TYPE=${PMF_DB_TYPE:-mysqli}
+
+      # phpMyFAQ Configuration
+      - PMF_TIMEZONE=${PMF_TIMEZONE:-UTC}
+      - PMF_ENABLE_UPLOADS=${PMF_ENABLE_UPLOADS:-On}
+      - PMF_DISABLE_HTACCESS=${PMF_DISABLE_HTACCESS:-}
+      - PMF_MEMORY_LIMIT=${PMF_MEMORY_LIMIT:-512M}
+
+      # PHP Production Settings
+      - PHP_LOG_ERRORS=On
+      - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+      - PHP_DISPLAY_ERRORS=Off
+      - PHP_DISPLAY_STARTUP_ERRORS=Off
+
+      # Search Engine Configuration (Optional)
+      - ELASTICSEARCH_BASE_URI=${ELASTICSEARCH_BASE_URI:-}
+      - OPENSEARCH_BASE_URI=${OPENSEARCH_BASE_URI:-}
+      - SEARCH_WAIT_TIMEOUT=${SEARCH_WAIT_TIMEOUT:-30}
+    volumes:
+      # Data persistence
+      - phpmyfaq_data:/var/www/html/data
+      - phpmyfaq_images:/var/www/html/images
+      - phpmyfaq_attachments:/var/www/html/attachments
+
+      # Configuration (optional - for persistent config)
+      - phpmyfaq_config:/var/www/html/content/core/config
+
+      # Custom SSL certificates (if needed)
+      # - ./ssl/cert.pem:/etc/ssl/certs/phpmyfaq.pem:ro
+      # - ./ssl/cert-key.pem:/etc/ssl/private/phpmyfaq-key.pem:ro
+    ports:
+      - '${PMF_HTTP_PORT:-80}:80'
+      - '${PMF_HTTPS_PORT:-443}:443'
+    networks:
+      - phpmyfaq-network
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      # postgres:
+      #   condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/api/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Option 2: Nginx + PHP-FPM (uncomment to use)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: phpmyfaq-nginx
+  #   restart: unless-stopped
+  #   volumes:
+  #     - phpmyfaq_data:/var/www/html
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/conf.d:/etc/nginx/conf.d:ro
+  #     - ./ssl/cert.pem:/etc/ssl/certs/phpmyfaq.pem:ro
+  #     - ./ssl/cert-key.pem:/etc/ssl/private/phpmyfaq-key.pem:ro
+  #     - nginx_logs:/var/log/nginx
+  #   ports:
+  #     - "${PMF_HTTP_PORT:-80}:80"
+  #     - "${PMF_HTTPS_PORT:-443}:443"
+  #   networks:
+  #     - phpmyfaq-network
+  #   depends_on:
+  #     - php-fpm
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 512M
+  #
+  # php-fpm:
+  #   image: phpmyfaq/phpmyfaq:${PMF_VERSION:-latest}-fpm
+  #   container_name: phpmyfaq-php-fpm
+  #   restart: unless-stopped
+  #   environment:
+  #     # Same environment variables as Apache service
+  #     - PMF_DB_HOST=${PMF_DB_HOST:-mariadb}
+  #     - PMF_DB_NAME=${PMF_DB_NAME:-phpmyfaq}
+  #     - PMF_DB_USER=${PMF_DB_USER:-phpmyfaq}
+  #     - PMF_DB_PASS=${PMF_DB_PASS}
+  #     - PMF_DB_TYPE=${PMF_DB_TYPE:-mysqli}
+  #     - PMF_TIMEZONE=${PMF_TIMEZONE:-UTC}
+  #     - PMF_ENABLE_UPLOADS=${PMF_ENABLE_UPLOADS:-On}
+  #     - PMF_MEMORY_LIMIT=${PMF_MEMORY_LIMIT:-512M}
+  #     - PHP_LOG_ERRORS=On
+  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+  #     - PHP_DISPLAY_ERRORS=Off
+  #   volumes:
+  #     - phpmyfaq_data:/var/www/html
+  #   networks:
+  #     - phpmyfaq-network
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "php-fpm-healthcheck"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '2'
+  #         memory: 2G
+  #       reservations:
+  #         cpus: '0.5'
+  #         memory: 512M
+
+  # Option 3: FrankenPHP (modern PHP server with HTTP/3 support)
+  # frankenphp:
+  #   image: phpmyfaq/phpmyfaq:${PMF_VERSION:-latest}-frankenphp
+  #   container_name: phpmyfaq-frankenphp
+  #   restart: unless-stopped
+  #   environment:
+  #     # Same environment variables as Apache service
+  #     - PMF_DB_HOST=${PMF_DB_HOST:-mariadb}
+  #     - PMF_DB_NAME=${PMF_DB_NAME:-phpmyfaq}
+  #     - PMF_DB_USER=${PMF_DB_USER:-phpmyfaq}
+  #     - PMF_DB_PASS=${PMF_DB_PASS}
+  #     - PMF_DB_TYPE=${PMF_DB_TYPE:-mysqli}
+  #     - PMF_TIMEZONE=${PMF_TIMEZONE:-UTC}
+  #     - PMF_ENABLE_UPLOADS=${PMF_ENABLE_UPLOADS:-On}
+  #     - PMF_MEMORY_LIMIT=${PMF_MEMORY_LIMIT:-512M}
+  #     - PHP_LOG_ERRORS=On
+  #     - PHP_ERROR_REPORTING=E_ALL & ~E_DEPRECATED & ~E_STRICT
+  #     - PHP_DISPLAY_ERRORS=Off
+  #     - SERVER_NAME=${SERVER_NAME:-:80}
+  #   volumes:
+  #     - phpmyfaq_data:/var/www/html
+  #     - caddy_data:/data
+  #     - caddy_config:/config
+  #     # Custom SSL certificates (if needed)
+  #     # - ./ssl/cert.pem:/etc/ssl/certs/phpmyfaq.pem:ro
+  #     # - ./ssl/cert-key.pem:/etc/ssl/private/phpmyfaq-key.pem:ro
+  #   ports:
+  #     - "${PMF_HTTP_PORT:-80}:80"
+  #     - "${PMF_HTTPS_PORT:-443}:443"
+  #     - "${PMF_HTTP3_PORT:-443}:443/udp"
+  #   networks:
+  #     - phpmyfaq-network
+  #   depends_on:
+  #     mariadb:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost/api/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '2'
+  #         memory: 2G
+  #       reservations:
+  #         cpus: '0.5'
+  #         memory: 512M
+
+  # ========================================
+  # Search Engine Services (Optional)
+  # ========================================
+
+  elasticsearch:
+    image: elasticsearch:8.16.5
+    container_name: phpmyfaq-elasticsearch
+    restart: unless-stopped
+    environment:
+      - cluster.name=phpmyfaq-cluster
+      - node.name=phpmyfaq-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=${ES_SECURITY_ENABLED:-false}
+      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - phpmyfaq-network
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:9200/_cluster/health || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    # Security: Don't expose Elasticsearch port to host in production
+    # ports:
+    #   - '9200:9200'
+
+  # Alternative: OpenSearch (uncomment to use instead of Elasticsearch)
+  # opensearch:
+  #   image: opensearchproject/opensearch:2.19.2
+  #   container_name: phpmyfaq-opensearch
+  #   restart: unless-stopped
+  #   environment:
+  #     - cluster.name=phpmyfaq-cluster
+  #     - node.name=phpmyfaq-node
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - DISABLE_INSTALL_DEMO_CONFIG=true
+  #     - DISABLE_SECURITY_PLUGIN=${OPENSEARCH_DISABLE_SECURITY:-true}
+  #     - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+  #   volumes:
+  #     - opensearch_data:/usr/share/opensearch/data
+  #   networks:
+  #     - phpmyfaq-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '2'
+  #         memory: 2G
+  #       reservations:
+  #         cpus: '1'
+  #         memory: 1G
+
+# ========================================
+# Networks
+# ========================================
+networks:
+  phpmyfaq-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ========================================
+# Volumes
+# ========================================
+volumes:
+  # Database volumes
+  mariadb_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+  # phpMyFAQ data volumes
+  phpmyfaq_data:
+    driver: local
+  phpmyfaq_images:
+    driver: local
+  phpmyfaq_attachments:
+    driver: local
+  phpmyfaq_config:
+    driver: local
+
+  # Search engine volumes
+  elasticsearch_data:
+    driver: local
+  opensearch_data:
+    driver: local
+
+  # Web server-specific volumes
+  nginx_logs:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local

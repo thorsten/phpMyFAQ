@@ -1,4 +1,4 @@
-# 5. Manage phpMyFAQ
+# 7. Manage phpMyFAQ
 
 The administration of phpMyFAQ is completely browser-based. The admin area can be found under this URL:
 

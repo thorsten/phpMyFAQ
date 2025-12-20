@@ -1,4 +1,4 @@
-# 3. Update
+# 5. Updating phpMyFAQ
 
 First, please download the latest package of phpMyFAQ. Upgrading to phpMyFAQ 4.1 is possible from the following
 versions:
