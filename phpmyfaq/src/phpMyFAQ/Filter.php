@@ -127,11 +127,7 @@ class Filter
             encoding: 'UTF-8',
             double_encode: true,
         );
-        $string = preg_replace(
-            pattern: '/\x00|<[^>]*>?/',
-            replacement: '',
-            subject: $string,
-        );
+        $string = preg_replace(pattern: '/\x00|<[^>]*>?/', replacement: '', subject: $string);
         return str_replace(["'", '"'], ['&#39;', '&#34;'], (string) $string);
     }
 
@@ -160,17 +156,9 @@ class Filter
         ];
 
         // remove broken stuff
-        $html = str_replace(
-            search: '&#13;',
-            replace: '',
-            subject: $html,
-        );
+        $html = str_replace(search: '&#13;', replace: '', subject: $html);
 
-        preg_match_all(
-            pattern: '/[a-z]+=".+"/iU',
-            subject: $html,
-            matches: $attributes,
-        );
+        preg_match_all(pattern: '/[a-z]+=".+"/iU', subject: $html, matches: $attributes);
 
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr($attribute, needle: '=', before_needle: true);

@@ -52,14 +52,14 @@ readonly class Date
 
         $timestamp = strtotime(
             substr($date, offset: 0, length: 4)
-            . '-'
-            . substr($date, offset: 4, length: 2)
-            . '-'
-            . substr($date, offset: 6, length: 2)
-            . ' '
-            . substr($date, offset: 8, length: 2)
-            . ':'
-            . substr($date, offset: 10, length: 2),
+                . '-'
+                . substr($date, offset: 4, length: 2)
+                . '-'
+                . substr($date, offset: 6, length: 2)
+                . ' '
+                . substr($date, offset: 8, length: 2)
+                . ':'
+                . substr($date, offset: 10, length: 2),
         );
 
         return date($format, (int) $timestamp);
@@ -88,14 +88,7 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return gmmktime(
-                hour: 0,
-                minute: 0,
-                second: 0,
-                month: (int) $month,
-                day: (int) $day,
-                year: (int) $year,
-            );
+            return gmmktime(hour: 0, minute: 0, second: 0, month: (int) $month, day: (int) $day, year: (int) $year);
         }
 
         return -1;
@@ -111,14 +104,7 @@ readonly class Date
             $month = Strings::substr($file, start: 10, length: 2);
             $year = Strings::substr($file, start: 12, length: 4);
 
-            return gmmktime(
-                hour: 23,
-                minute: 59,
-                second: 59,
-                month: (int) $month,
-                day: (int) $day,
-                year: (int) $year,
-            );
+            return gmmktime(hour: 23, minute: 59, second: 59, month: (int) $month, day: (int) $day, year: (int) $year);
         }
 
         return -1;

@@ -76,10 +76,7 @@ final class BackupController extends AbstractController
     #[OA\Response(
         response: 400,
         description: 'If the backup type is wrong or an internal error occurred',
-        content: new OA\MediaType(
-            mediaType: 'application/octet-stream',
-            schema: new OA\Schema(type: 'string'),
-        ),
+        content: new OA\MediaType(mediaType: 'application/octet-stream', schema: new OA\Schema(type: 'string')),
     )]
     #[OA\Response(
         response: 401,
@@ -102,10 +99,7 @@ final class BackupController extends AbstractController
                 $backupType = BackupType::BACKUP_TYPE_CONTENT;
                 break;
             default:
-                return new Response(
-                    content: 'Invalid backup type.',
-                    status: Response::HTTP_BAD_REQUEST,
-                );
+                return new Response(content: 'Invalid backup type.', status: Response::HTTP_BAD_REQUEST);
         }
 
         $databaseHelper = new DatabaseHelper($this->configuration);
@@ -116,24 +110,15 @@ final class BackupController extends AbstractController
             $backupFile = $backup->createContentFolderBackup();
             $response = new Response(file_get_contents($backupFile));
 
-            $backupFileName = sprintf(
-                format: 'content_%s.zip',
-                values: date(format: 'dmY_H-i'),
-            );
+            $backupFileName = sprintf(format: 'content_%s.zip', values: date(format: 'dmY_H-i'));
 
             $disposition = HeaderUtils::makeDisposition(
                 HeaderUtils::DISPOSITION_ATTACHMENT,
                 urlencode($backupFileName),
             );
 
-            $response->headers->set(
-                key: 'Content-Type',
-                values: 'application/zip',
-            );
-            $response->headers->set(
-                key: 'Content-Disposition',
-                values: $disposition,
-            );
+            $response->headers->set(key: 'Content-Type', values: 'application/zip');
+            $response->headers->set(key: 'Content-Disposition', values: $disposition);
             $response->setStatusCode(Response::HTTP_OK);
             // Remove temporary ZipArchive
             unlink($backupFile);
@@ -153,14 +138,8 @@ final class BackupController extends AbstractController
                 urlencode($backupFileName),
             );
 
-            $response->headers->set(
-                key: 'Content-Type',
-                values: 'application/octet-stream',
-            );
-            $response->headers->set(
-                key: 'Content-Disposition',
-                values: $disposition,
-            );
+            $response->headers->set(key: 'Content-Type', values: 'application/octet-stream');
+            $response->headers->set(key: 'Content-Disposition', values: $disposition);
             $response->setStatusCode(Response::HTTP_OK);
             return $response->send();
         } catch (SodiumException) {

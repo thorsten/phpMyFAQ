@@ -91,10 +91,7 @@ final class MediaBrowserController extends AbstractController
                 'size' => Utils::formatBytes($file->getSize()),
                 'isImage' => true,
                 'thumb' => $file->getFilename(),
-                'changed' => date(
-                    format: 'Y-m-d H:i:s',
-                    timestamp: $file->getMTime(),
-                ),
+                'changed' => date(format: 'Y-m-d H:i:s', timestamp: $file->getMTime()),
             ];
         }
 

@@ -46,10 +46,7 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
 
         $result = $db->query($query);
         if ($result === false) {
-            $this->logger->error(
-                message: 'Glossary fetchAll query failed',
-                context: ['language' => $language],
-            );
+            $this->logger->error(message: 'Glossary fetchAll query failed', context: ['language' => $language]);
             return [];
         }
         $row = $db->fetchObject($result);
@@ -75,10 +72,7 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
 
         $result = $db->query($query);
         if ($result === false) {
-            $this->logger->warning(
-                message: 'Glossary fetch failed',
-                context: ['id' => $id, 'language' => $language],
-            );
+            $this->logger->warning(message: 'Glossary fetch failed', context: ['id' => $id, 'language' => $language]);
             return [];
         }
         $item = [];
@@ -105,21 +99,17 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedLanguage = $db->escape($language);
 
         $id = $db->nextId(Database::getTablePrefix() . 'faqglossary', column: 'id');
-        $safeItem = Strings::htmlspecialchars(substr(
-            string: $escapedItem,
-            offset: 0,
-            length: 254,
-        ));
+        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
         $safeDef = Strings::htmlspecialchars($escapedDefinition);
         $sql = "INSERT INTO %sfaqglossary (id, lang, item, definition) VALUES (%d, '%s', '%s', '%s')";
         $query = sprintf($sql, Database::getTablePrefix(), $id, $escapedLanguage, $safeItem, $safeDef);
 
         $ok = (bool) $db->query($query);
         if (!$ok) {
-            $this->logger->error(
-                message: 'Glossary create failed',
-                context: ['language' => $language, 'item' => $item],
-            );
+            $this->logger->error(message: 'Glossary create failed', context: [
+                'language' => $language,
+                'item' => $item,
+            ]);
         }
         return $ok;
     }
@@ -132,21 +122,14 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
         $escapedDefinition = $db->escape($definition);
         $escapedLanguage = $db->escape($language);
 
-        $safeItem = Strings::htmlspecialchars(substr(
-            string: $escapedItem,
-            offset: 0,
-            length: 254,
-        ));
+        $safeItem = Strings::htmlspecialchars(substr(string: $escapedItem, offset: 0, length: 254));
         $safeDef = Strings::htmlspecialchars($escapedDefinition);
         $sql = "UPDATE %sfaqglossary SET item = '%s', definition = '%s' WHERE id = %d AND lang = '%s'";
         $query = sprintf($sql, Database::getTablePrefix(), $safeItem, $safeDef, $id, $escapedLanguage);
 
         $ok = (bool) $db->query($query);
         if (!$ok) {
-            $this->logger->error(
-                message: 'Glossary update failed',
-                context: ['id' => $id, 'language' => $language],
-            );
+            $this->logger->error(message: 'Glossary update failed', context: ['id' => $id, 'language' => $language]);
         }
         return $ok;
     }
@@ -160,10 +143,7 @@ readonly class GlossaryRepository implements GlossaryRepositoryInterface
 
         $ok = (bool) $db->query($query);
         if (!$ok) {
-            $this->logger->warning(
-                message: 'Glossary delete failed',
-                context: ['id' => $id, 'language' => $language],
-            );
+            $this->logger->warning(message: 'Glossary delete failed', context: ['id' => $id, 'language' => $language]);
         }
         return $ok;
     }

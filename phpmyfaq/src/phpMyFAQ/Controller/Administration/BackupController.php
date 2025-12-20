@@ -48,25 +48,20 @@ class BackupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::BACKUP);
 
-        return $this->render(
-            file: '@admin/backup/main.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                'adminHeaderBackup' => Translation::get(key: 'msgBackup'),
-                'adminBackupCardHeader' => Translation::get(key: 'ad_csv_head'),
-                'adminBackupCardBody' => Translation::get(key: 'ad_csv_make'),
-                'adminBackupLinkData' => Translation::get(key: 'ad_csv_linkdat'),
-                'adminBackupLinkLogs' => Translation::get(key: 'ad_csv_linklog'),
-                'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(
-                    page: 'restore',
-                ),
-                'adminRestoreCardHeader' => Translation::get(key: 'ad_csv_head2'),
-                'adminRestoreCardBody' => Translation::get(key: 'ad_csv_restore'),
-                'adminRestoreLabel' => Translation::get(key: 'ad_csv_file'),
-                'adminRestoreButton' => Translation::get(key: 'ad_csv_ok'),
-            ],
-        );
+        return $this->render(file: '@admin/backup/main.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'adminHeaderBackup' => Translation::get(key: 'msgBackup'),
+            'adminBackupCardHeader' => Translation::get(key: 'ad_csv_head'),
+            'adminBackupCardBody' => Translation::get(key: 'ad_csv_make'),
+            'adminBackupLinkData' => Translation::get(key: 'ad_csv_linkdat'),
+            'adminBackupLinkLogs' => Translation::get(key: 'ad_csv_linklog'),
+            'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString(page: 'restore'),
+            'adminRestoreCardHeader' => Translation::get(key: 'ad_csv_head2'),
+            'adminRestoreCardBody' => Translation::get(key: 'ad_csv_restore'),
+            'adminRestoreLabel' => Translation::get(key: 'ad_csv_file'),
+            'adminRestoreButton' => Translation::get(key: 'ad_csv_ok'),
+        ]);
     }
 
     #[Route(path: '/backup/export/:type', name: 'admin.backup.export', methods: ['GET'])]
@@ -93,14 +88,8 @@ class BackupController extends AbstractAdministrationController
 
         $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, urlencode($result->fileName));
 
-        $response->headers->set(
-            key: 'Content-Type',
-            values: 'application/octet-stream; charset=UTF-8',
-        );
-        $response->headers->set(
-            key: 'Content-Disposition',
-            values: $disposition,
-        );
+        $response->headers->set(key: 'Content-Type', values: 'application/octet-stream; charset=UTF-8');
+        $response->headers->set(key: 'Content-Disposition', values: $disposition);
 
         return $response;
     }
@@ -149,14 +138,11 @@ class BackupController extends AbstractAdministrationController
                 'errorMessageUploadDetails' => $errorMessage,
             ];
 
-            return $this->render(
-                file: '@admin/backup/import.twig',
-                context: [
-                    ...$this->getHeader($request),
-                    ...$this->getFooter(),
-                    ...$templateVars,
-                ],
-            );
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
         }
 
         $backup = $this->container->get(id: 'phpmyfaq.backup');
@@ -171,26 +157,20 @@ class BackupController extends AbstractAdministrationController
                     'errorMessageNoVerification' => 'This file is not a verified backup file.',
                 ];
 
-                return $this->render(
-                    file: '@admin/backup/import.twig',
-                    context: [
-                        ...$this->getHeader($request),
-                        ...$this->getFooter(),
-                        ...$templateVars,
-                    ],
-                );
+                return $this->render(file: '@admin/backup/import.twig', context: [
+                    ...$this->getHeader($request),
+                    ...$this->getFooter(),
+                    ...$templateVars,
+                ]);
             }
         } catch (SodiumException) {
             $templateVars = ['errorMessageNoVerification' => 'This file cannot be verified.'];
 
-            return $this->render(
-                file: '@admin/backup/import.twig',
-                context: [
-                    ...$this->getHeader($request),
-                    ...$this->getFooter(),
-                    ...$templateVars,
-                ],
-            );
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
         }
 
         try {
@@ -201,14 +181,11 @@ class BackupController extends AbstractAdministrationController
                 'errorMessageImportNotPossible' => $e->getMessage(),
             ];
 
-            return $this->render(
-                file: '@admin/backup/import.twig',
-                context: [
-                    ...$this->getHeader($request),
-                    ...$this->getFooter(),
-                    ...$templateVars,
-                ],
-            );
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
         }
 
         if (!$parseResult->versionMatches) {
@@ -222,14 +199,11 @@ class BackupController extends AbstractAdministrationController
                 ),
             ];
 
-            return $this->render(
-                file: '@admin/backup/import.twig',
-                context: [
-                    ...$this->getHeader($request),
-                    ...$this->getFooter(),
-                    ...$templateVars,
-                ],
-            );
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
         }
 
         $templateVars = [
@@ -255,14 +229,11 @@ class BackupController extends AbstractAdministrationController
                 'errorMessageImportNotPossible' => Translation::get(key: 'ad_csv_no'),
             ];
 
-            return $this->render(
-                file: '@admin/backup/import.twig',
-                context: [
-                    ...$this->getHeader($request),
-                    ...$this->getFooter(),
-                    ...$templateVars,
-                ],
-            );
+            return $this->render(file: '@admin/backup/import.twig', context: [
+                ...$this->getHeader($request),
+                ...$this->getFooter(),
+                ...$templateVars,
+            ]);
         }
 
         $templateVars = [
@@ -276,13 +247,10 @@ class BackupController extends AbstractAdministrationController
             ),
         ];
 
-        return $this->render(
-            file: '@admin/backup/import.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$templateVars,
-            ],
-        );
+        return $this->render(file: '@admin/backup/import.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$templateVars,
+        ]);
     }
 }

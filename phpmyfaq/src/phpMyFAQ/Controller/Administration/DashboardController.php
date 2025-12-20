@@ -130,13 +130,10 @@ final class DashboardController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            file: '@admin/dashboard.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$templateVars,
-            ],
-        );
+        return $this->render(file: '@admin/dashboard.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$templateVars,
+        ]);
     }
 }

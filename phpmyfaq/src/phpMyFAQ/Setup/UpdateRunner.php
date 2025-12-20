@@ -90,16 +90,9 @@ final class UpdateRunner
         try {
             $api = new Api($this->configuration, $this->system);
             $versions = $api->getVersions();
-            $this->configuration->set(
-                key: 'upgrade.dateLastChecked',
-                value: $dateLastChecked,
-            );
+            $this->configuration->set(key: 'upgrade.dateLastChecked', value: $dateLastChecked);
 
-            $available = version_compare(
-                version1: $versions['installed'],
-                version2: $versions[$branch],
-                operator: '<',
-            );
+            $available = version_compare(version1: $versions['installed'], version2: $versions[$branch], operator: '<');
 
             if ($available) {
                 $this->version = $versions[$branch];
@@ -128,10 +121,7 @@ final class UpdateRunner
             }
         }
 
-        $this->configuration->set(
-            key: 'upgrade.lastDownloadedPackage',
-            value: urlencode($pathToPackage),
-        );
+        $this->configuration->set(key: 'upgrade.lastDownloadedPackage', value: urlencode($pathToPackage));
 
         $io->success(message: Translation::get(key: 'downloadSuccessful'));
         return Command::SUCCESS;
@@ -225,10 +215,7 @@ final class UpdateRunner
             $io->newLine(count: 2);
 
             if ($result) {
-                $this->configuration->set(
-                    key: 'main.maintenanceMode',
-                    value: 'false',
-                );
+                $this->configuration->set(key: 'main.maintenanceMode', value: 'false');
                 $io->success(message: 'Database successfully updated.');
                 return Command::SUCCESS;
             }

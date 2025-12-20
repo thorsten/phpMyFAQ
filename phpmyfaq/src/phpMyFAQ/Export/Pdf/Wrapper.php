@@ -30,277 +30,172 @@ use phpMyFAQ\Translation;
 use TCPDF;
 
 if (!defined(constant_name: 'PMF_ROOT_DIR')) {
-    define(
-        constant_name: 'PMF_ROOT_DIR',
-        value: __DIR__ . '/../../../',
-    );
+    define(constant_name: 'PMF_ROOT_DIR', value: __DIR__ . '/../../../');
 }
 
 if (!defined(constant_name: 'PMF_SRC_DIR')) {
-    define(
-        constant_name: 'PMF_SRC_DIR',
-        value: __DIR__ . '/../../',
-    );
+    define(constant_name: 'PMF_SRC_DIR', value: __DIR__ . '/../../');
 }
 
-define(
-    constant_name: 'K_TCPDF_EXTERNAL_CONFIG',
-    value: true,
-);
+define(constant_name: 'K_TCPDF_EXTERNAL_CONFIG', value: true);
 
-define(
-    constant_name: 'K_PATH_URL',
-    value: '',
-);
+define(constant_name: 'K_PATH_URL', value: '');
 
 /*
  * path to TCPDF
  *
  */
-define(
-    constant_name: 'K_PATH_MAIN',
-    value: PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/',
-);
+define(constant_name: 'K_PATH_MAIN', value: PMF_SRC_DIR . '/libs/tecnickcom/tcpdf/');
 
 /*
  * path for PDF fonts
  */
-define(
-    constant_name: 'K_PATH_FONTS',
-    value: PMF_SRC_DIR . '/fonts/',
-);
+define(constant_name: 'K_PATH_FONTS', value: PMF_SRC_DIR . '/fonts/');
 
 /*
  * cache directory for temporary files (full path)
  */
-define(
-    constant_name: 'K_PATH_CACHE',
-    value: PMF_ROOT_DIR . '/content/user/images/',
-);
+define(constant_name: 'K_PATH_CACHE', value: PMF_ROOT_DIR . '/content/user/images/');
 
 /*
  * cache directory for temporary files (url path)
  */
-define(
-    constant_name: 'K_PATH_URL_CACHE',
-    value: K_PATH_CACHE,
-);
+define(constant_name: 'K_PATH_URL_CACHE', value: K_PATH_CACHE);
 
 /*
  * images directory
  */
-define(
-    constant_name: 'K_PATH_IMAGES',
-    value: PMF_ROOT_DIR . '/content/user/images/',
-);
+define(constant_name: 'K_PATH_IMAGES', value: PMF_ROOT_DIR . '/content/user/images/');
 
 /*
  * blank image
  */
-define(
-    constant_name: 'K_BLANK_IMAGE',
-    value: K_PATH_IMAGES . '_blank.png',
-);
+define(constant_name: 'K_BLANK_IMAGE', value: K_PATH_IMAGES . '_blank.png');
 
 /*
  * page format
  */
-define(
-    constant_name: 'PDF_PAGE_FORMAT',
-    value: 'A4',
-);
+define(constant_name: 'PDF_PAGE_FORMAT', value: 'A4');
 
 /*
  * page orientation (P=portrait, L=landscape)
  */
-define(
-    constant_name: 'PDF_PAGE_ORIENTATION',
-    value: 'P',
-);
+define(constant_name: 'PDF_PAGE_ORIENTATION', value: 'P');
 
 /*
  * document creator
  */
-define(
-    constant_name: 'PDF_CREATOR',
-    value: 'TCPDF',
-);
+define(constant_name: 'PDF_CREATOR', value: 'TCPDF');
 
 /*
  * document author
  */
-define(
-    constant_name: 'PDF_AUTHOR',
-    value: 'TCPDF',
-);
+define(constant_name: 'PDF_AUTHOR', value: 'TCPDF');
 
 /*
  * header title
  */
-define(
-    constant_name: 'PDF_HEADER_TITLE',
-    value: 'phpMyFAQ',
-);
+define(constant_name: 'PDF_HEADER_TITLE', value: 'phpMyFAQ');
 
 /*
  * header description string
  */
-define(
-    constant_name: 'PDF_HEADER_STRING',
-    value: 'by phpMyFAQ - www.phpmyfaq.de',
-);
+define(constant_name: 'PDF_HEADER_STRING', value: 'by phpMyFAQ - www.phpmyfaq.de');
 
 /*
  * image logo
  */
-define(
-    constant_name: 'PDF_HEADER_LOGO',
-    value: 'tcpdf_logo.jpg',
-);
+define(constant_name: 'PDF_HEADER_LOGO', value: 'tcpdf_logo.jpg');
 
 /*
  * header logo image width [mm]
  */
-define(
-    constant_name: 'PDF_HEADER_LOGO_WIDTH',
-    value: 30,
-);
+define(constant_name: 'PDF_HEADER_LOGO_WIDTH', value: 30);
 
 /*
  * document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
  */
-define(
-    constant_name: 'PDF_UNIT',
-    value: 'mm',
-);
+define(constant_name: 'PDF_UNIT', value: 'mm');
 
 /*
  * header margin
  */
-define(
-    constant_name: 'PDF_MARGIN_HEADER',
-    value: 5,
-);
+define(constant_name: 'PDF_MARGIN_HEADER', value: 5);
 
 /*
  * footer margin
  */
-define(
-    constant_name: 'PDF_MARGIN_FOOTER',
-    value: 10,
-);
+define(constant_name: 'PDF_MARGIN_FOOTER', value: 10);
 
 /*
  * top margin
  */
-define(
-    constant_name: 'PDF_MARGIN_TOP',
-    value: 27,
-);
+define(constant_name: 'PDF_MARGIN_TOP', value: 27);
 
 /*
  * bottom margin
  */
-define(
-    constant_name: 'PDF_MARGIN_BOTTOM',
-    value: 25,
-);
+define(constant_name: 'PDF_MARGIN_BOTTOM', value: 25);
 
 /*
  * left margin
  */
-define(
-    constant_name: 'PDF_MARGIN_LEFT',
-    value: 15,
-);
+define(constant_name: 'PDF_MARGIN_LEFT', value: 15);
 
 /*
  * right margin
  */
-define(
-    constant_name: 'PDF_MARGIN_RIGHT',
-    value: 15,
-);
+define(constant_name: 'PDF_MARGIN_RIGHT', value: 15);
 
 /*
  * default main font name
  */
-define(
-    constant_name: 'PDF_FONT_NAME_MAIN',
-    value: 'arialunicid0',
-);
+define(constant_name: 'PDF_FONT_NAME_MAIN', value: 'arialunicid0');
 
 /*
  * default main font size
  */
-define(
-    constant_name: 'PDF_FONT_SIZE_MAIN',
-    value: 10,
-);
+define(constant_name: 'PDF_FONT_SIZE_MAIN', value: 10);
 
 /*
  * default data font name
  */
-define(
-    constant_name: 'PDF_FONT_NAME_DATA',
-    value: 'arialunicid0',
-);
+define(constant_name: 'PDF_FONT_NAME_DATA', value: 'arialunicid0');
 
 /*
  * default data font size
  */
-define(
-    constant_name: 'PDF_FONT_SIZE_DATA',
-    value: 8,
-);
+define(constant_name: 'PDF_FONT_SIZE_DATA', value: 8);
 
 /*
  * default monospaced font name
  */
-define(
-    constant_name: 'PDF_FONT_MONOSPACED',
-    value: 'DejaVuSansMono',
-);
+define(constant_name: 'PDF_FONT_MONOSPACED', value: 'DejaVuSansMono');
 
 /*
  * ratio used to adjust the conversion of pixels to user units
  */
-define(
-    constant_name: 'PDF_IMAGE_SCALE_RATIO',
-    value: 1,
-);
+define(constant_name: 'PDF_IMAGE_SCALE_RATIO', value: 1);
 
 /*
  * magnification factor for titles
  */
-define(
-    constant_name: 'HEAD_MAGNIFICATION',
-    value: 1.1,
-);
+define(constant_name: 'HEAD_MAGNIFICATION', value: 1.1);
 
 /*
  * height of cell respect font height
  */
-define(
-    constant_name: 'K_CELL_HEIGHT_RATIO',
-    value: 1.25,
-);
+define(constant_name: 'K_CELL_HEIGHT_RATIO', value: 1.25);
 
 /*
  * title magnification respect main font size
  */
-define(
-    constant_name: 'K_TITLE_MAGNIFICATION',
-    value: 1.3,
-);
+define(constant_name: 'K_TITLE_MAGNIFICATION', value: 1.3);
 
 /*
  * reduction factor for a small font
  */
-define(
-    constant_name: 'K_SMALL_RATIO',
-    value: 2 / 3,
-);
+define(constant_name: 'K_SMALL_RATIO', value: 2 / 3);
 
 /**
  * Class Wrapper
@@ -441,21 +336,11 @@ class Wrapper extends TCPDF
 
         $title = array_key_exists($this->category, $this->categories) ? $this->categories[$this->category]['name'] : '';
 
-        $this->SetTextColor(
-            col1: 0,
-            col2: 0,
-            col3: 0,
-        );
+        $this->SetTextColor(col1: 0, col2: 0, col3: 0);
         $this->SetFont($this->currentFont, style: 'B', size: 14);
 
         if (0 < Strings::strlen($this->customHeader)) {
-            $this->writeHTMLCell(
-                w: 0,
-                h: 0,
-                x: 0,
-                y: 0,
-                html: $this->customHeader,
-            );
+            $this->writeHTMLCell(w: 0, h: 0, x: 0, y: 0, html: $this->customHeader);
             $this->Ln();
             $this->writeHTMLCell(
                 w: 0,
@@ -514,45 +399,25 @@ class Wrapper extends TCPDF
         );
 
         if (0 < Strings::strlen($this->customFooter)) {
-            $this->writeHTMLCell(
-                w: 0,
-                h: 0,
-                x: null,
-                y: null,
-                html: $this->customFooter,
-            );
+            $this->writeHTMLCell(w: 0, h: 0, x: null, y: null, html: $this->customFooter);
         }
 
         $currentTextColor = $this->TextColor;
-        $this->SetTextColor(
-            col1: 0,
-            col2: 0,
-            col3: 0,
-        );
+        $this->SetTextColor(col1: 0, col2: 0, col3: 0);
         $this->SetY(-25);
         $this->SetFont($this->currentFont, style: '', size: 10);
         $this->Cell(
             w: 0,
             h: 10,
-            txt: Translation::get(key: 'ad_gen_page')
-            . ' '
-            . $this->getAliasNumPage()
-            . ' / '
-            . $this->getAliasNbPages(),
+            txt: Translation::get(key: 'ad_gen_page') . ' ' . $this->getAliasNumPage() . ' / '
+                . $this->getAliasNbPages(),
             border: 0,
             ln: 0,
             align: 'C',
         );
         $this->SetY(-20);
         $this->SetFont($this->currentFont, style: 'B', size: 8);
-        $this->Cell(
-            w: 0,
-            h: 10,
-            txt: $footer,
-            border: 0,
-            ln: 1,
-            align: 'C',
-        );
+        $this->Cell(w: 0, h: 10, txt: $footer, border: 0, ln: 1, align: 'C');
         if (!$this->enableBookmarks) {
             $this->SetY(-15);
             $this->SetFont($this->currentFont, style: '', size: 8);
@@ -603,24 +468,12 @@ class Wrapper extends TCPDF
 
         // Title
         $this->SetFont($this->currentFont, style: 'B', size: 24);
-        $this->MultiCell(
-            w: 0,
-            h: 0,
-            txt: $this->config->getTitle(),
-            border: 0,
-            align: 'C',
-        );
+        $this->MultiCell(w: 0, h: 0, txt: $this->config->getTitle(), border: 0, align: 'C');
         $this->Ln();
 
         // TOC
         $this->SetFont($this->currentFont, style: 'B', size: 16);
-        $this->MultiCell(
-            w: 0,
-            h: 0,
-            txt: Translation::get(key: 'msgTableOfContent'),
-            border: 0,
-            align: 'C',
-        );
+        $this->MultiCell(w: 0, h: 0, txt: Translation::get(key: 'msgTableOfContent'), border: 0, align: 'C');
         $this->Ln();
         $this->SetFont($this->currentFont, style: '', size: 12);
 
@@ -763,11 +616,7 @@ class Wrapper extends TCPDF
 
     public function concatenatePaths(string $path, string $file): string
     {
-        $trimmedPath = rtrim(str_replace(
-            search: '\\',
-            replace: '/',
-            subject: $path,
-        ), characters: '/');
+        $trimmedPath = rtrim(str_replace(search: '\\', replace: '/', subject: $path), characters: '/');
         $trimmedFile = ltrim($file, characters: '/');
 
         $pos = strpos($trimmedFile, needle: 'content');

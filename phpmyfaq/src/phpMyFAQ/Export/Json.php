@@ -26,10 +26,7 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 
-define(
-    constant_name: 'FAQ_QUERY_TYPE_EXPORT_JSON',
-    value: 'faq_export_json',
-);
+define(constant_name: 'FAQ_QUERY_TYPE_EXPORT_JSON', value: 'faq_export_json');
 
 /**
  * Class JSON

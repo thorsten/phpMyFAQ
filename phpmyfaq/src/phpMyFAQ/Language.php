@@ -96,10 +96,7 @@ class Language
     {
         $detected = $this->detector->detectAllWithBrowser($configLanguage);
         self::$language = $this->detector->selectLanguage($detected);
-        $this->session->set(
-            name: 'lang',
-            value: self::$language,
-        );
+        $this->session->set(name: 'lang', value: self::$language);
         return strtolower(self::$language);
     }
 
@@ -110,10 +107,7 @@ class Language
     {
         $detected = $this->detector->detectAllFromConfig($configLanguage);
         self::$language = $this->detector->selectLanguage($detected);
-        $this->session->set(
-            name: 'lang',
-            value: self::$language,
-        );
+        $this->session->set(name: 'lang', value: self::$language);
         return strtolower(self::$language);
     }
 

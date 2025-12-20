@@ -133,36 +133,15 @@ class HttpStreamer
         ]);
 
         // 2. Set the correct values for file streaming
-        $this->response->headers->set(
-            key: 'Content-Type',
-            values: $mimeType,
-        );
+        $this->response->headers->set(key: 'Content-Type', values: $mimeType);
 
         // 3. RFC2616, §19.5.1: $filename must be a quoted-string
-        $disposition = HeaderUtils::makeDisposition(
-            disposition: $this->disposition,
-            filename: $filename,
-        );
-        $this->response->headers->set(
-            key: 'Content-Disposition',
-            values: $disposition,
-        );
-        $this->response->headers->set(
-            key: 'Content-Description',
-            values: $description,
-        );
-        $this->response->headers->set(
-            key: 'Content-Transfer-Encoding',
-            values: 'binary',
-        );
-        $this->response->headers->set(
-            key: 'Accept-Ranges',
-            values: 'none',
-        );
-        $this->response->headers->set(
-            key: 'Content-Length',
-            values: (string) $this->size,
-        );
+        $disposition = HeaderUtils::makeDisposition(disposition: $this->disposition, filename: $filename);
+        $this->response->headers->set(key: 'Content-Disposition', values: $disposition);
+        $this->response->headers->set(key: 'Content-Description', values: $description);
+        $this->response->headers->set(key: 'Content-Transfer-Encoding', values: 'binary');
+        $this->response->headers->set(key: 'Accept-Ranges', values: 'none');
+        $this->response->headers->set(key: 'Content-Length', values: (string) $this->size);
     }
 
     /**

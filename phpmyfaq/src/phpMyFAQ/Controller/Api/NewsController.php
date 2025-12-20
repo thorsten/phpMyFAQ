@@ -71,11 +71,7 @@ final class NewsController extends AbstractController
     public function list(): JsonResponse
     {
         $news = new News($this->configuration);
-        $result = $news->getLatestData(
-            showArchive: false,
-            active: true,
-            forceConfLimit: true,
-        );
+        $result = $news->getLatestData(showArchive: false, active: true, forceConfLimit: true);
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json($result, Response::HTTP_NOT_FOUND);
         }

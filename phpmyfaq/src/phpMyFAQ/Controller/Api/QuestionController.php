@@ -69,22 +69,10 @@ final class QuestionController extends AbstractController
                 'email',
             ],
             properties: [
-                new OA\Property(
-                    property: 'category-id',
-                    type: 'integer',
-                ),
-                new OA\Property(
-                    property: 'question',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'author',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'email',
-                    type: 'string',
-                ),
+                new OA\Property(property: 'category-id', type: 'integer'),
+                new OA\Property(property: 'question', type: 'string'),
+                new OA\Property(property: 'author', type: 'string'),
+                new OA\Property(property: 'email', type: 'string'),
             ],
             type: 'object',
         ),
@@ -105,12 +93,7 @@ final class QuestionController extends AbstractController
     {
         $this->hasValidToken();
 
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
         $categoryId = Filter::filterVar($data->{'category-id'}, FILTER_VALIDATE_INT);
         $question = Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS);
         $author = Filter::filterVar($data->author, FILTER_SANITIZE_SPECIAL_CHARS);

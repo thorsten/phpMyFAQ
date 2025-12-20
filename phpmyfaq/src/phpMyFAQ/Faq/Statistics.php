@@ -530,10 +530,7 @@ class Statistics
                 $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_SPECIAL_CHARS);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ATOM);
-                $data['last_visit'] = date(
-                    format: 'c',
-                    timestamp: (int) $row->last_visit,
-                );
+                $data['last_visit'] = date(format: 'c', timestamp: (int) $row->last_visit);
 
                 $title = $row->question;
                 $url = sprintf(

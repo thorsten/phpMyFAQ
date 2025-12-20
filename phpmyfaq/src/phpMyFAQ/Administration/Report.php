@@ -88,11 +88,7 @@ readonly class Report
     public function convertEncoding(string $outputString = ''): string
     {
         $outputString = html_entity_decode($outputString, ENT_QUOTES, encoding: 'utf-8');
-        $outputString = str_replace(
-            search: ',',
-            replace: ' ',
-            subject: $outputString,
-        );
+        $outputString = str_replace(search: ',', replace: ' ', subject: $outputString);
 
         if (extension_loaded(extension: 'mbstring')) {
             $detected = mb_detect_encoding($outputString);
@@ -103,11 +99,7 @@ readonly class Report
         }
 
         $toBeRemoved = ['=', '+', '-', 'HYPERLINK'];
-        return str_replace(
-            search: $toBeRemoved,
-            replace: '',
-            subject: $outputString,
-        );
+        return str_replace(search: $toBeRemoved, replace: '', subject: $outputString);
     }
 
     /**
@@ -117,19 +109,8 @@ readonly class Report
      */
     public static function sanitize(int|string $value): string|int
     {
-        if (preg_match(
-            pattern: '/[=\+\-\@\|]/',
-            subject: (string) $value,
-        )) {
-            return (
-                '"'
-                . str_replace(
-                    search: '"',
-                    replace: '""',
-                    subject: $value,
-                )
-                . '"'
-            );
+        if (preg_match(pattern: '/[=\+\-\@\|]/', subject: (string) $value)) {
+            return '"' . str_replace(search: '"', replace: '""', subject: $value) . '"';
         }
 
         return $value;

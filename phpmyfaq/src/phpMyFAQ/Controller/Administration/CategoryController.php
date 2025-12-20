@@ -70,16 +70,13 @@ final class CategoryController extends AbstractAdministrationController
             $categoryTree = $category->buildAdminCategoryTree($categoryInfo);
         }
 
-        return $this->render(
-            file: '@admin/content/category.overview.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'category'),
-                'categoryTree' => $categoryTree,
-                'categoryInfo' => $categoryInfo,
-            ],
-        );
+        return $this->render(file: '@admin/content/category.overview.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'category'),
+            'categoryTree' => $categoryTree,
+            'categoryInfo' => $categoryInfo,
+        ]);
     }
 
     /**
@@ -102,17 +99,14 @@ final class CategoryController extends AbstractAdministrationController
 
         $session = $this->container->get(id: 'session');
 
-        return $this->render(
-            file: '@admin/content/category.add.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$this->getBaseTemplateVars(),
-                'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'save-category'),
-                'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
-                'parentId' => 0,
-            ],
-        );
+        return $this->render(file: '@admin/content/category.add.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'csrfTokenInput' => Token::getInstance($session)->getTokenInput(page: 'save-category'),
+            'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
+            'parentId' => 0,
+        ]);
     }
 
     /**
@@ -144,22 +138,19 @@ final class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            file: '@admin/content/category.add.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$this->getBaseTemplateVars(),
-                'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
-                'parentId' => $parentId,
-                'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
-                'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [(int) $parentId])[0] ?? -1,
-                'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [(int) $parentId]),
-                'categoryName' => $category->categoryName[$parentId]['name'],
-                'msgMainCategory' => Translation::get(key: 'msgMainCategory'),
-                ...$templateVars,
-            ],
-        );
+        return $this->render(file: '@admin/content/category.add.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            'faqLangCode' => $this->configuration->getLanguage()->getLanguage(),
+            'parentId' => $parentId,
+            'categoryNameLangCode' => LanguageCodes::get($category->categoryName[$parentId]['lang'] ?? 'en'),
+            'userAllowed' => $categoryPermission->get(CategoryPermission::USER, [(int) $parentId])[0] ?? -1,
+            'groupsAllowed' => $categoryPermission->get(CategoryPermission::GROUP, [(int) $parentId]),
+            'categoryName' => $category->categoryName[$parentId]['name'],
+            'msgMainCategory' => Translation::get(key: 'msgMainCategory'),
+            ...$templateVars,
+        ]);
     }
 
     /**
@@ -308,15 +299,12 @@ final class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            file: '@admin/content/category.main.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$this->getBaseTemplateVars(),
-                ...$templateVars,
-            ],
-        );
+        return $this->render(file: '@admin/content/category.main.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            ...$templateVars,
+        ]);
     }
 
     /**
@@ -395,39 +383,36 @@ final class CategoryController extends AbstractAdministrationController
             );
         }
 
-        return $this->render(
-            file: '@admin/content/category.edit.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                'header' => $header,
-                'categoryId' => $categoryId,
-                'categoryLanguage' => $categoryEntity->getLang(),
-                'parentId' => $categoryEntity->getParentId(),
-                'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
-                'categoryImage' => $categoryEntity->getImage(),
-                'categoryName' => $categoryEntity->getName(),
-                'categoryDescription' => $categoryEntity->getDescription(),
-                'categoryActive' => 1 === (int) $categoryEntity->getActive() ? 'checked' : '',
-                'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
-                'categoryImageReset' => Translation::get(key: 'msgCategoryImageReset'),
-                'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
-                'isMediumPermission' => $this->configuration->get(item: 'security.permLevel') !== 'basic',
-                'allGroupsOptions' => $allGroupsOptions,
-                'allGroups' => $allGroups ? 'checked' : '',
-                'restrictedGroups' => $restrictedGroups ? 'checked' : '',
-                'restrictedGroupsLabel' => Translation::get(key: 'ad_entry_restricted_groups'),
-                'restrictedGroupsOptions' => $restrictedGroupOptions,
-                'userPermissionLabel' => Translation::get(key: 'ad_entry_userpermission'),
-                'allUsers' => $allUsers ? 'checked' : '',
-                'restrictedUsers' => $restrictedUsers ? 'checked' : '',
-                'restrictedUsersLabel' => Translation::get(key: 'ad_entry_restricted_users'),
-                'serpTitle' => $seoData->getTitle(),
-                'serpDescription' => $seoData->getDescription(),
-                'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
-                'buttonUpdate' => Translation::get(key: 'ad_gen_save'),
-            ],
-        );
+        return $this->render(file: '@admin/content/category.edit.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'header' => $header,
+            'categoryId' => $categoryId,
+            'categoryLanguage' => $categoryEntity->getLang(),
+            'parentId' => $categoryEntity->getParentId(),
+            'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
+            'categoryImage' => $categoryEntity->getImage(),
+            'categoryName' => $categoryEntity->getName(),
+            'categoryDescription' => $categoryEntity->getDescription(),
+            'categoryActive' => 1 === (int) $categoryEntity->getActive() ? 'checked' : '',
+            'categoryShowHome' => 1 === (int) $categoryEntity->getShowHome() ? 'checked' : '',
+            'categoryImageReset' => Translation::get(key: 'msgCategoryImageReset'),
+            'userSelection' => $userHelper->getAllUsersForTemplate($categoryEntity->getUserId()),
+            'isMediumPermission' => $this->configuration->get(item: 'security.permLevel') !== 'basic',
+            'allGroupsOptions' => $allGroupsOptions,
+            'allGroups' => $allGroups ? 'checked' : '',
+            'restrictedGroups' => $restrictedGroups ? 'checked' : '',
+            'restrictedGroupsLabel' => Translation::get(key: 'ad_entry_restricted_groups'),
+            'restrictedGroupsOptions' => $restrictedGroupOptions,
+            'userPermissionLabel' => Translation::get(key: 'ad_entry_userpermission'),
+            'allUsers' => $allUsers ? 'checked' : '',
+            'restrictedUsers' => $restrictedUsers ? 'checked' : '',
+            'restrictedUsersLabel' => Translation::get(key: 'ad_entry_restricted_users'),
+            'serpTitle' => $seoData->getTitle(),
+            'serpDescription' => $seoData->getDescription(),
+            'buttonCancel' => Translation::get(key: 'ad_gen_cancel'),
+            'buttonUpdate' => Translation::get(key: 'ad_gen_save'),
+        ]);
     }
 
     /**
@@ -472,28 +457,25 @@ final class CategoryController extends AbstractAdministrationController
             $languageCodes[] = $code;
         }
 
-        return $this->render(
-            file: '@admin/content/category.hierarchy.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                'currentLanguage' => $currentLanguage,
-                'allLangs' => $languages,
-                'allLangCodes' => $languageCodes,
-                'categoryTree' => $category->getCategoryTree(),
-                'basePath' => $request->getBasePath(),
-                'faqlangcode' => $currentLangCode,
-                'msgCategoryRemark_overview' => Translation::get(key: 'msgCategoryRemark_overview'),
-                'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
-                'ad_categ_translate' => Translation::get(key: 'ad_categ_translate'),
-                'ad_menu_categ_structure' => Translation::get(key: 'ad_menu_categ_structure'),
-                'msgAddCategory' => Translation::get(key: 'msgAddCategory'),
-                'msgHeaderCategoryOverview' => Translation::get(key: 'msgHeaderCategoryOverview'),
-                'msgCategory' => Translation::get(key: 'msgCategory'),
-                'translations' => $translations,
-                'ad_categ_translated' => Translation::get(key: 'ad_categ_translated'),
-            ],
-        );
+        return $this->render(file: '@admin/content/category.hierarchy.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'currentLanguage' => $currentLanguage,
+            'allLangs' => $languages,
+            'allLangCodes' => $languageCodes,
+            'categoryTree' => $category->getCategoryTree(),
+            'basePath' => $request->getBasePath(),
+            'faqlangcode' => $currentLangCode,
+            'msgCategoryRemark_overview' => Translation::get(key: 'msgCategoryRemark_overview'),
+            'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
+            'ad_categ_translate' => Translation::get(key: 'ad_categ_translate'),
+            'ad_menu_categ_structure' => Translation::get(key: 'ad_menu_categ_structure'),
+            'msgAddCategory' => Translation::get(key: 'msgAddCategory'),
+            'msgHeaderCategoryOverview' => Translation::get(key: 'msgHeaderCategoryOverview'),
+            'msgCategory' => Translation::get(key: 'msgCategory'),
+            'translations' => $translations,
+            'ad_categ_translated' => Translation::get(key: 'ad_categ_translated'),
+        ]);
     }
 
     /**
@@ -536,31 +518,28 @@ final class CategoryController extends AbstractAdministrationController
             $langOptions .= '>' . $name . '</option>';
         }
 
-        return $this->render(
-            file: '@admin/content/category.translate.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                'categoryName' => $category->getCategoryName($categoryId),
-                'ad_categ_trans_1' => Translation::get(key: 'ad_categ_trans_1'),
-                'ad_categ_trans_2' => Translation::get(key: 'ad_categ_trans_2'),
-                'categoryId' => $categoryId,
-                'category' => $category->getCategoryName($categoryId),
-                'permLevel' => $this->configuration->get(item: 'security.permLevel'),
-                'groupPermission' => $groupPermission[0] ?? -1,
-                'userPermission' => $userPermission[0] ?? -1,
-                'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
-                'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
-                'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
-                'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
-                'categoryDescriptionLabel' => Translation::get(key: 'categoryDescriptionLabel'),
-                'categoryOwnerLabel' => Translation::get(key: 'categoryOwnerLabel'),
-                'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId)),
-                'ad_categ_transalready' => Translation::get(key: 'ad_categ_transalready'),
-                'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
-                'ad_categ_translatecateg' => Translation::get(key: 'ad_categ_translatecateg'),
-            ],
-        );
+        return $this->render(file: '@admin/content/category.translate.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            'categoryName' => $category->getCategoryName($categoryId),
+            'ad_categ_trans_1' => Translation::get(key: 'ad_categ_trans_1'),
+            'ad_categ_trans_2' => Translation::get(key: 'ad_categ_trans_2'),
+            'categoryId' => $categoryId,
+            'category' => $category->getCategoryName($categoryId),
+            'permLevel' => $this->configuration->get(item: 'security.permLevel'),
+            'groupPermission' => $groupPermission[0] ?? -1,
+            'userPermission' => $userPermission[0] ?? -1,
+            'csrfInputToken' => Token::getInstance($session)->getTokenInput(page: 'update-category'),
+            'categoryNameLabel' => Translation::get(key: 'categoryNameLabel'),
+            'ad_categ_lang' => Translation::get(key: 'ad_categ_lang'),
+            'langToTranslate' => $langOptions, // deprecated in the future; generated from data service now
+            'categoryDescriptionLabel' => Translation::get(key: 'categoryDescriptionLabel'),
+            'categoryOwnerLabel' => Translation::get(key: 'categoryOwnerLabel'),
+            'userSelection' => $userHelper->getAllUsersForTemplate($category->getOwner($categoryId)),
+            'ad_categ_transalready' => Translation::get(key: 'ad_categ_transalready'),
+            'langTranslated' => $category->getCategoryLanguagesTranslated($categoryId),
+            'ad_categ_translatecateg' => Translation::get(key: 'ad_categ_translatecateg'),
+        ]);
     }
 
     /**
@@ -773,15 +752,12 @@ final class CategoryController extends AbstractAdministrationController
             ];
         }
 
-        return $this->render(
-            file: '@admin/content/category.main.twig',
-            context: [
-                ...$this->getHeader($request),
-                ...$this->getFooter(),
-                ...$this->getBaseTemplateVars(),
-                ...$templateVars,
-            ],
-        );
+        return $this->render(file: '@admin/content/category.main.twig', context: [
+            ...$this->getHeader($request),
+            ...$this->getFooter(),
+            ...$this->getBaseTemplateVars(),
+            ...$templateVars,
+        ]);
     }
 
     /**

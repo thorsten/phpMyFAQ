@@ -66,21 +66,18 @@ final class ConfigurationTabController extends AbstractController
         $mode = $request->attributes->get(key: 'mode');
         $configurationList = Translation::getConfigurationItems($mode);
 
-        return $this->render(
-            file: '@admin/configuration/tab-list.twig',
-            context: [
-                'mode' => $mode,
-                'configurationList' => $configurationList,
-                'configurationData' => $this->configuration->getAll(),
-                'specialCases' => [
-                    'ldapSupport' => extension_loaded(extension: 'ldap'),
-                    'useSslForLogins' => Request::createFromGlobals()->isSecure(),
-                    'useSslOnly' => Request::createFromGlobals()->isSecure(),
-                    'ssoSupport' => Request::createFromGlobals()->server->get(key: 'REMOTE_USER'),
-                    'buttonTes',
-                ],
+        return $this->render(file: '@admin/configuration/tab-list.twig', context: [
+            'mode' => $mode,
+            'configurationList' => $configurationList,
+            'configurationData' => $this->configuration->getAll(),
+            'specialCases' => [
+                'ldapSupport' => extension_loaded(extension: 'ldap'),
+                'useSslForLogins' => Request::createFromGlobals()->isSecure(),
+                'useSslOnly' => Request::createFromGlobals()->isSecure(),
+                'ssoSupport' => Request::createFromGlobals()->server->get(key: 'REMOTE_USER'),
+                'buttonTes',
             ],
-        );
+        ]);
     }
 
     /**

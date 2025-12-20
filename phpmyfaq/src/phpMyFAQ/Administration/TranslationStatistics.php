@@ -132,11 +132,7 @@ readonly class TranslationStatistics
      */
     private function extractLanguageCode(string $filePath): ?string
     {
-        if (preg_match(
-            pattern: '/language_([a-z_]+)\.php$/',
-            subject: $filePath,
-            matches: $matches,
-        )) {
+        if (preg_match(pattern: '/language_([a-z_]+)\.php$/', subject: $filePath, matches: $matches)) {
             return $matches[1];
         }
 

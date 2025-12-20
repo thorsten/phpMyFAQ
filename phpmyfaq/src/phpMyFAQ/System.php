@@ -310,11 +310,7 @@ class System
         $mainUrl = $configuration->getDefaultUrl();
 
         if (Request::createFromGlobals()->isSecure() && !str_contains($mainUrl, needle: 'https')) {
-            $mainUrl = str_replace(
-                search: 'http://',
-                replace: 'https://',
-                subject: $mainUrl,
-            );
+            $mainUrl = str_replace(search: 'http://', replace: 'https://', subject: $mainUrl);
         }
 
         if (!str_ends_with($mainUrl, needle: '/')) {

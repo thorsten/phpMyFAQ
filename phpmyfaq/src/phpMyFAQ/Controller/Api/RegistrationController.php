@@ -68,22 +68,10 @@ final class RegistrationController extends AbstractController
                 'is-visible',
             ],
             properties: [
-                new OA\Property(
-                    property: 'username',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'fullname',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'email',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'is-visible',
-                    type: 'boolean',
-                ),
+                new OA\Property(property: 'username', type: 'string'),
+                new OA\Property(property: 'fullname', type: 'string'),
+                new OA\Property(property: 'email', type: 'string'),
+                new OA\Property(property: 'is-visible', type: 'boolean'),
             ],
             type: 'object',
         ),
@@ -120,12 +108,7 @@ final class RegistrationController extends AbstractController
 
         $registrationHelper = new RegistrationHelper($this->configuration);
 
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $userName = trim((string) Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS));
         $fullName = trim((string) Filter::filterVar($data->fullname, FILTER_SANITIZE_SPECIAL_CHARS));

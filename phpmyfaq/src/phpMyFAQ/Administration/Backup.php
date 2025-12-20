@@ -69,10 +69,8 @@ readonly class Backup
 
             if ($lastBackup !== null && isset($lastBackup->created)) {
                 $createdRaw = (string) $lastBackup->created;
-                $createdDate = DateTimeImmutable::createFromFormat(
-                    format: 'Y-m-d H:i:s',
-                    datetime: $createdRaw,
-                ) ?: null;
+                $createdDate = DateTimeImmutable::createFromFormat(format: 'Y-m-d H:i:s', datetime: $createdRaw)
+                ?: null;
                 if ($createdDate !== null) {
                     $lastBackupDateFormatted = $createdDate->format(format: 'Y-m-d H:i:s');
                     $threshold = new DateTimeImmutable(datetime: '-30 days');
@@ -131,23 +129,17 @@ readonly class Backup
 
     public function generateBackupQueries(string $tableNames): string
     {
-        $backup = implode(
-            separator: "\r\n",
-            array: $this->getBackupHeader($tableNames),
-        );
+        $backup = implode(separator: "\r\n", array: $this->getBackupHeader($tableNames));
 
-        foreach (explode(
-            separator: ' ',
-            string: $tableNames,
-        ) as $tableName) {
+        foreach (explode(separator: ' ', string: $tableNames) as $tableName) {
             if ('' === $tableName) {
                 continue;
             }
 
-            $backup .= implode(
-                separator: "\r\n",
-                array: $this->databaseHelper->buildInsertQueries('SELECT * FROM ' . $tableName, $tableName),
-            );
+            $backup .= implode(separator: "\r\n", array: $this->databaseHelper->buildInsertQueries(
+                'SELECT * FROM ' . $tableName,
+                $tableName,
+            ));
         }
 
         return $backup;
@@ -206,11 +198,7 @@ readonly class Backup
         return [
             sprintf(
                 '-- pmf%s: %s',
-                substr(
-                    string: $this->configuration->getVersion(),
-                    offset: 0,
-                    length: 3,
-                ),
+                substr(string: $this->configuration->getVersion(), offset: 0, length: 3),
                 $tableNames,
             ),
             '-- DO NOT REMOVE THE FIRST LINE!',
@@ -290,28 +278,13 @@ readonly class Backup
             throw new Exception(message: 'Empty backup file.');
         }
 
-        $versionFound = Strings::substr(
-            string: $firstLine,
-            start: 0,
-            length: 9,
-        );
+        $versionFound = Strings::substr(string: $firstLine, start: 0, length: 9);
 
-        $versionExpected = '-- pmf'
-        . substr(
-            string: $currentVersion,
-            offset: 0,
-            length: 3,
-        );
+        $versionExpected = '-- pmf' . substr(string: $currentVersion, offset: 0, length: 3);
 
         // Tabellen aus der ersten Zeile extrahieren
-        $tablesLine = trim(Strings::substr(
-            string: $firstLine,
-            start: 11,
-        ));
-        $tables = explode(
-            separator: ' ',
-            string: $tablesLine,
-        );
+        $tablesLine = trim(Strings::substr(string: $firstLine, start: 11));
+        $tables = explode(separator: ' ', string: $tablesLine);
 
         $queries = [];
         foreach ($tables as $tableName) {
@@ -329,31 +302,14 @@ readonly class Backup
             $backupPrefixPattern = '-- pmftableprefix:';
             $backupPrefixPatternLength = Strings::strlen($backupPrefixPattern);
 
-            if (
-                Strings::substr(
-                    string: $line,
-                    start: 0,
-                    length: $backupPrefixPatternLength,
-                ) === $backupPrefixPattern
-            ) {
+            if (Strings::substr(string: $line, start: 0, length: $backupPrefixPatternLength) === $backupPrefixPattern) {
                 $tablePrefix = trim(Strings::substr($line, $backupPrefixPatternLength));
 
                 continue;
             }
 
-            if (
-                Strings::substr(
-                    string: $line,
-                    start: 0,
-                    length: 2,
-                ) !== '--'
-                && $line !== ''
-            ) {
-                $queries[] = trim(Strings::substr(
-                    string: $line,
-                    start: 0,
-                    length: -1,
-                ));
+            if (Strings::substr(string: $line, start: 0, length: 2) !== '--' && $line !== '') {
+                $queries[] = trim(Strings::substr(string: $line, start: 0, length: -1));
             }
         }
 

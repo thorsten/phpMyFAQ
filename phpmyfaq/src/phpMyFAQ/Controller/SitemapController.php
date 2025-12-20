@@ -54,15 +54,9 @@ final class SitemapController extends AbstractController
             ];
         }
 
-        $xml = $this->renderView(
-            pathToTwigFile: './sitemap.xml.twig',
-            templateVars: ['urls' => $urls],
-        );
+        $xml = $this->renderView(pathToTwigFile: './sitemap.xml.twig', templateVars: ['urls' => $urls]);
 
-        $response->headers->set(
-            key: 'Content-Type',
-            values: 'text/xml',
-        );
+        $response->headers->set(key: 'Content-Type', values: 'text/xml');
         $response->setStatusCode(Response::HTTP_OK);
         $response->setContent($xml);
 

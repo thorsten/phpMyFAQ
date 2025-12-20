@@ -47,10 +47,7 @@ readonly class Network
      */
     public function isBanned(string $ipAddress): bool
     {
-        $bannedIps = explode(
-            separator: ' ',
-            string: (string) $this->configuration->get(item: 'security.bannedIPs'),
-        );
+        $bannedIps = explode(separator: ' ', string: (string) $this->configuration->get(item: 'security.bannedIPs'));
         return IpUtils::checkIp($ipAddress, $bannedIps);
     }
 }

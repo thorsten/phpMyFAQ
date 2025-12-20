@@ -51,7 +51,8 @@ class UpdateCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setName(self::$defaultName)
+        $this
+            ->setName(self::$defaultName)
             ->setDescription(description: 'Executes the phpMyFAQ update process')
             ->addArgument(
                 name: 'version',
@@ -74,13 +75,10 @@ class UpdateCommand extends Command
                 return Command::FAILURE;
             }
 
-            $io->success(message: strtr(
-                string: 'phpMyFAQ was successfully updated to version version: on date:.',
-                replace_pairs: [
-                    'version:' => System::getVersion(),
-                    'date:' => (new DateTime())->format(format: 'Y-m-d H:i:s'),
-                ],
-            ));
+            $io->success(message: strtr(string: 'phpMyFAQ was successfully updated to version version: on date:.', replace_pairs: [
+                'version:' => System::getVersion(),
+                'date:' => (new DateTime())->format(format: 'Y-m-d H:i:s'),
+            ]));
 
             return Command::SUCCESS;
         } catch (Throwable $throwable) {

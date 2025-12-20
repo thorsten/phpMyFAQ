@@ -78,10 +78,11 @@ readonly class RelationRepository implements RelationRepositoryInterface
 
         $result = $db->query($query);
         if ($result === false) {
-            $this->logger->error(
-                message: 'Relation getAllRelatedByQuestion query failed',
-                context: ['question' => $question, 'keywords' => $keywords, 'language' => $language],
-            );
+            $this->logger->error(message: 'Relation getAllRelatedByQuestion query failed', context: [
+                'question' => $question,
+                'keywords' => $keywords,
+                'language' => $language,
+            ]);
             return [];
         }
 

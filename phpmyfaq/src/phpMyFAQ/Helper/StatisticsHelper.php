@@ -74,19 +74,9 @@ readonly class StatisticsHelper
         $requestTime = $request->server->get('REQUEST_TIME');
         $date = 0;
 
-        if (is_file(PMF_ROOT_DIR
-        . '/content/core/data/tracking'
-        . date(
-            format: 'dmY',
-            timestamp: $firstDate,
-        ))) {
+        if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate))) {
             $fp = @fopen(
-                PMF_ROOT_DIR
-                . '/content/core/data/tracking'
-                . date(
-                    format: 'dmY',
-                    timestamp: $firstDate,
-                ),
+                PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate),
                 'r',
             );
             while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
@@ -94,10 +84,7 @@ readonly class StatisticsHelper
             }
 
             fclose($fp);
-            return $this->date->format(date(
-                format: 'Y-m-d H:i',
-                timestamp: (int) $date,
-            ));
+            return $this->date->format(date(format: 'Y-m-d H:i', timestamp: (int) $date));
         }
 
         return Translation::get(key: 'ad_sess_noentry');
@@ -108,21 +95,8 @@ readonly class StatisticsHelper
         $request = Request::createFromGlobals();
         $requestTime = $request->server->get('REQUEST_TIME');
 
-        if (is_file(PMF_ROOT_DIR
-        . '/content/core/data/tracking'
-        . date(
-            format: 'dmY',
-            timestamp: $lastDate,
-        ))) {
-            $fp = fopen(
-                PMF_ROOT_DIR
-                . '/content/core/data/tracking'
-                . date(
-                    format: 'dmY',
-                    timestamp: $lastDate,
-                ),
-                'r',
-            );
+        if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate))) {
+            $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate), 'r');
 
             while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
@@ -134,10 +108,7 @@ readonly class StatisticsHelper
                 $date = $request->server->get('REQUEST_TIME');
             }
 
-            return $this->date->format(date(
-                format: 'Y-m-d H:i',
-                timestamp: (int) $date,
-            ));
+            return $this->date->format(date(format: 'Y-m-d H:i', timestamp: (int) $date));
         }
 
         return Translation::get(key: 'ad_sess_noentry');
@@ -220,28 +191,14 @@ readonly class StatisticsHelper
 
         $trackingDates = $this->getAllTrackingDates();
         foreach ($trackingDates as $trackingDate) {
-            if (
-                date(
-                    format: 'Y-m',
-                    timestamp: $oldValue,
-                ) === date(
-                    format: 'Y-m',
-                    timestamp: (int) $trackingDate,
-                )
-            ) {
+            if (date(format: 'Y-m', timestamp: $oldValue) === date(format: 'Y-m', timestamp: (int) $trackingDate)) {
                 continue;
             }
 
             $renderedHtml .= sprintf(
                 '<option value="%s">%s</option>',
-                date(
-                    format: 'mY',
-                    timestamp: (int) $trackingDate,
-                ),
-                date(
-                    format: 'Y-m',
-                    timestamp: (int) $trackingDate,
-                ),
+                date(format: 'mY', timestamp: (int) $trackingDate),
+                date(format: 'Y-m', timestamp: (int) $trackingDate),
             );
             $oldValue = $trackingDate;
         }
@@ -263,10 +220,7 @@ readonly class StatisticsHelper
         foreach ($trackingDates as $trackingDate) {
             $renderedHtml .= sprintf('<option value="%d"', $trackingDate);
             if (
-                date(
-                    format: 'Y-m-d',
-                    timestamp: (int) $trackingDate,
-                ) === date(
+                date(format: 'Y-m-d', timestamp: (int) $trackingDate) === date(
                     format: 'Y-m-d',
                     timestamp: $request->server->get('REQUEST_TIME'),
                 )
@@ -275,10 +229,7 @@ readonly class StatisticsHelper
             }
 
             $renderedHtml .= '>';
-            $renderedHtml .= $this->date->format(date(
-                format: 'Y-m-d H:i',
-                timestamp: (int) $trackingDate,
-            ));
+            $renderedHtml .= $this->date->format(date(format: 'Y-m-d H:i', timestamp: (int) $trackingDate));
             $renderedHtml .= "</option>\n";
         }
 

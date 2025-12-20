@@ -164,10 +164,7 @@ final class FaqController extends AbstractController
 
             // Insert the tags
             if ($tags !== '') {
-                $tagging->create($faqData->getId(), explode(
-                    separator: ',',
-                    string: trim((string) $tags),
-                ));
+                $tagging->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
             }
 
             // Add user permissions
@@ -410,10 +407,7 @@ final class FaqController extends AbstractController
 
         // Insert the tags
         if ($tags !== '') {
-            $tagging->create($faqData->getId(), explode(
-                separator: ',',
-                string: trim((string) $tags),
-            ));
+            $tagging->create($faqData->getId(), explode(separator: ',', string: trim((string) $tags)));
         } else {
             $tagging->deleteByRecordId($faqData->getId());
         }
@@ -741,10 +735,7 @@ final class FaqController extends AbstractController
         $errors = [];
 
         if (0 === $file->getError() && $faqImport->isCSVFile($file)) {
-            $handle = fopen(
-                filename: $file->getRealPath(),
-                mode: 'r',
-            );
+            $handle = fopen(filename: $file->getRealPath(), mode: 'r');
             $csvData = $faqImport->parseCSV($handle);
 
             if (!$faqImport->validateCSV($csvData)) {

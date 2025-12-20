@@ -34,10 +34,7 @@ class Utils
      */
     public static function isLanguage(string $language): bool
     {
-        return (bool) preg_match(
-            pattern: '/^[a-zA-Z\-]+$/',
-            subject: $language,
-        );
+        return (bool) preg_match(pattern: '/^[a-zA-Z\-]+$/', subject: $language);
     }
 
     /**
@@ -56,11 +53,7 @@ class Utils
 
         // Suppress last occurrences of '%'
         if (str_ends_with($dateToTest, needle: '%')) {
-            $dateToTest = substr(
-                string: $dateToTest,
-                offset: 0,
-                length: strlen($dateToTest) - 1,
-            );
+            $dateToTest = substr(string: $dateToTest, offset: 0, length: strlen($dateToTest) - 1);
         }
 
         // PMF date consists of numbers only: YYYYMMDDhhmmss
@@ -77,27 +70,11 @@ class Utils
      */
     public static function makeShorterText(string $string, int $characters): string
     {
-        $string = Strings::preg_replace(
-            pattern: '/\s+/u',
-            replacement: ' ',
-            subject: $string,
-        );
-        $arrStr = explode(
-            separator: ' ',
-            string: $string,
-        );
+        $string = Strings::preg_replace(pattern: '/\s+/u', replacement: ' ', subject: $string);
+        $arrStr = explode(separator: ' ', string: $string);
 
         if (count($arrStr) > $characters) {
-            return (
-                implode(
-                    separator: ' ',
-                    array: array_slice(
-                        array: $arrStr,
-                        offset: 0,
-                        length: $characters,
-                    ),
-                ) . ' ...'
-            );
+            return implode(separator: ' ', array: array_slice(array: $arrStr, offset: 0, length: $characters)) . ' ...';
         }
 
         return $string;
@@ -128,10 +105,7 @@ class Utils
     public static function chopString(string $string, int $words): string
     {
         $str = '';
-        $pieces = explode(
-            separator: ' ',
-            string: $string,
-        );
+        $pieces = explode(separator: ' ', string: $string);
         $num = count($pieces);
         if ($words > $num) {
             $words = $num;
@@ -248,10 +222,7 @@ class Utils
             . $highlight
             . '="[^"]*")|'
             . '(('
-            . implode(
-                separator: '|',
-                array: $attributes,
-            )
+            . implode(separator: '|', array: $attributes)
             . ')="[^"]*'
             . $highlight
             . '[^"]*")|'
@@ -311,16 +282,8 @@ class Utils
     {
         $protocols = ['http://', 'https://'];
 
-        $string = str_replace(
-            search: $protocols,
-            replace: '',
-            subject: $string,
-        );
-        $string = str_replace(
-            search: 'www.',
-            replace: 'https://www.',
-            subject: $string,
-        );
+        $string = str_replace(search: $protocols, replace: '', subject: $string);
+        $string = str_replace(search: 'www.', replace: 'https://www.', subject: $string);
 
         $pattern = '/(https?:\/\/[^\s]+)/i';
         $replacement = '<a href="$1">$1</a>';

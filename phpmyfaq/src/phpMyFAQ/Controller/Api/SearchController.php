@@ -84,10 +84,7 @@ final class SearchController extends AbstractController
         $searchResultSet = new SearchResultSet($this->currentUser, $faqPermission, $this->configuration);
 
         $searchString = Filter::filterVar($request->attributes->get(key: 'q'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $searchResults = $search->search(
-            searchTerm: $searchString,
-            allLanguages: false,
-        );
+        $searchResults = $search->search(searchTerm: $searchString, allLanguages: false);
         $searchResultSet->reviewResultSet($searchResults);
 
         if ($searchResultSet->getNumberOfResults() > 0) {
@@ -95,10 +92,7 @@ final class SearchController extends AbstractController
             $result = [];
             foreach ($searchResultSet->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags((string) $data->answer), ENT_COMPAT, encoding: 'utf-8');
-                $data->answer = Utils::makeShorterText(
-                    string: $data->answer,
-                    characters: 12,
-                );
+                $data->answer = Utils::makeShorterText(string: $data->answer, characters: 12);
                 $url = sprintf($url, $data->category_id, $data->id, $data->lang);
                 $link = new Link($url, $this->configuration);
                 $link->setTitle($data->question);
@@ -144,10 +138,7 @@ final class SearchController extends AbstractController
     )]
     public function popular(): JsonResponse
     {
-        $result = $this->container->get(id: 'phpmyfaq.search')->getMostPopularSearches(
-            numResults: 7,
-            withLang: true,
-        );
+        $result = $this->container->get(id: 'phpmyfaq.search')->getMostPopularSearches(numResults: 7, withLang: true);
 
         if ((is_countable($result) ? count($result) : 0) === 0) {
             return $this->json([], Response::HTTP_NOT_FOUND);

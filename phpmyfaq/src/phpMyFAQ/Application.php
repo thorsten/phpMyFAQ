@@ -139,16 +139,10 @@ class Application
                 )
                 : 'Not Found';
 
-            $response = new Response(
-                content: $message,
-                status: Response::HTTP_NOT_FOUND,
-            );
+            $response = new Response(content: $message, status: Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedHttpException) {
             $response = new RedirectResponse(url: './login');
-            if (str_contains(
-                haystack: $urlMatcher->getContext()->getBaseUrl(),
-                needle: '/api',
-            )) {
+            if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
                 $response = new Response(
                     content: json_encode(value: ['error' => 'Unauthorized access']),
                     status: Response::HTTP_UNAUTHORIZED,
@@ -162,10 +156,7 @@ class Application
                     exception: $exception,
                 )
                 : 'Bad Request';
-            $response = new Response(
-                content: $message,
-                status: Response::HTTP_FORBIDDEN,
-            );
+            $response = new Response(content: $message, status: Response::HTTP_FORBIDDEN);
         } catch (BadRequestException $exception) {
             $message = Environment::isDebugMode()
                 ? $this->formatExceptionMessage(
@@ -173,10 +164,7 @@ class Application
                     exception: $exception,
                 )
                 : 'Bad Request';
-            $response = new Response(
-                content: $message,
-                status: Response::HTTP_BAD_REQUEST,
-            );
+            $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
         }
 
         $response->send();
@@ -187,13 +175,10 @@ class Application
      */
     private function formatExceptionMessage(string $template, Throwable $exception): string
     {
-        return strtr(
-            string: $template,
-            from: [
-                ':message' => $exception->getMessage(),
-                ':line' => (string) $exception->getLine(),
-                ':file' => $exception->getFile(),
-            ],
-        );
+        return strtr(string: $template, from: [
+            ':message' => $exception->getMessage(),
+            ':line' => (string) $exception->getLine(),
+            ':file' => $exception->getFile(),
+        ]);
     }
 }

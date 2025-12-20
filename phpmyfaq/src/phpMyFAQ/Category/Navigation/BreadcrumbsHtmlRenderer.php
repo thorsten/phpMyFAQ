@@ -48,10 +48,7 @@ final class BreadcrumbsHtmlRenderer
 
         return strtr('<ol class="{class}">{items}</ol>', [
             '{class}' => $useCssClass,
-            '{items}' => implode(
-                separator: '',
-                array: $items,
-            ),
+            '{items}' => implode(separator: '', array: $items),
         ]);
     }
 }

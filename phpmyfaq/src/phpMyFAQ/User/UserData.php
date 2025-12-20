@@ -229,10 +229,7 @@ class UserData
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
-            date(
-                format: 'YmdHis',
-                timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME'),
-            ),
+            date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
             $this->configuration->getDb()->escape($this->data['display_name']),
             $this->configuration->getDb()->escape($this->data['email'] ?? ''),
             $this->data['is_visible'],
@@ -258,15 +255,17 @@ class UserData
         }
 
         $this->userId = $userId;
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaquserdata
             (user_id, last_modified, is_visible, twofactor_enabled, secret)
                 VALUES
-            (%d, '%s', 1, 0, '')", Database::getTablePrefix(), $this->userId, date(
-            format: 'YmdHis',
-            timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME'),
-        ));
+            (%d, '%s', 1, 0, '')",
+            Database::getTablePrefix(),
+            $this->userId,
+            date(format: 'YmdHis', timestamp: Request::createFromGlobals()->server->get('REQUEST_TIME')),
+        );
 
         $res = $this->configuration->getDb()->query($insert);
         return (bool) $res;

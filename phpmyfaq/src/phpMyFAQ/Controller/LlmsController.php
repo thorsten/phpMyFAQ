@@ -30,10 +30,7 @@ final class LlmsController extends AbstractController
     {
         $response = new Response();
 
-        $response->headers->set(
-            key: 'Content-Type',
-            values: 'text/plain',
-        );
+        $response->headers->set(key: 'Content-Type', values: 'text/plain');
         $response->setStatusCode(Response::HTTP_OK);
         $response->setContent($this->configuration->get(item: 'seo.contentLlmsText'));
 

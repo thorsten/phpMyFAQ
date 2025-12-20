@@ -71,13 +71,7 @@ class CategoryRepository implements CategoryRepositoryInterface
                 : $perm->buildWhereClause($groups, $userId);
         }
 
-        if (
-            $language !== null
-            && preg_match(
-                pattern: '/^[a-z\-]{2,}$/',
-                subject: $language,
-            )
-        ) {
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
             $where .= $where === '' ? ' WHERE' : ' AND';
             $where .= " fc.lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
@@ -132,13 +126,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $categories = [];
         $prefix = Database::getTablePrefix();
         $query = "SELECT id, lang, parent_id, name, description, user_id, group_id, active, show_home, image FROM {$prefix}faqcategories";
-        if (
-            $language !== null
-            && preg_match(
-                pattern: '/^[a-z\-]{2,}$/',
-                subject: $language,
-            )
-        ) {
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
             $query .= " WHERE lang = '" . $this->configuration->getDb()->escape($language) . "'";
         }
 
@@ -163,13 +151,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $query = sprintf('SELECT id FROM %sfaqcategories', Database::getTablePrefix());
 
-        if (
-            $language !== null
-            && preg_match(
-                pattern: '/^[a-z\-]{2,}$/',
-                subject: $language,
-            )
-        ) {
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
             $query .= sprintf(" WHERE lang = '%s'", $this->configuration->getDb()->escape($language));
         }
 
@@ -391,10 +373,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             $query = sprintf(
                 'SELECT name, description FROM %sfaqcategories WHERE %s',
                 Database::getTablePrefix(),
-                implode(
-                    separator: ' AND ',
-                    array: $whereParts,
-                ),
+                implode(separator: ' AND ', array: $whereParts),
             );
 
             $result = $this->configuration->getDb()->query($query);
@@ -415,13 +394,7 @@ class CategoryRepository implements CategoryRepositoryInterface
             'SELECT id, lang, parent_id, name, description, user_id, group_id, active FROM %sfaqcategories',
             Database::getTablePrefix(),
         );
-        if (
-            $language !== null
-            && preg_match(
-                pattern: '/^[a-z\-]{2,}$/',
-                subject: $language,
-            )
-        ) {
+        if ($language !== null && preg_match(pattern: '/^[a-z\-]{2,}$/', subject: $language)) {
             $query .= " WHERE lang != '" . $this->configuration->getDb()->escape($language) . "'";
         }
 

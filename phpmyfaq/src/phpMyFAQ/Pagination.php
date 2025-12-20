@@ -185,10 +185,7 @@ class Pagination
         $content = $this->renderPageNumbers($pages);
         $content = $this->addNavigationButtons($content, $pages);
 
-        return $this->renderLayout(implode(
-            separator: '&nbsp;&nbsp;',
-            array: $content,
-        ));
+        return $this->renderLayout(implode(separator: '&nbsp;&nbsp;', array: $content));
     }
 
     /**

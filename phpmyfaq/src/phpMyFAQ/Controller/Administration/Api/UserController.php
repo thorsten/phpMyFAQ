@@ -96,10 +96,7 @@ final class UserController extends AbstractController
         $currentUser = CurrentUser::getCurrentUser($this->configuration);
         $allUsers = $currentUser->getAllUsers(withoutAnonymous: false);
 
-        $handle = fopen(
-            filename: 'php://temp',
-            mode: 'r+',
-        );
+        $handle = fopen(filename: 'php://temp', mode: 'r+');
         fputcsv(
             $handle,
             ['ID', 'Status', 'Super Admin', 'Visible', 'Display Name', 'Username', 'Email', 'Auth Source'],
@@ -137,14 +134,8 @@ final class UserController extends AbstractController
         fclose($handle);
 
         $response = new Response($content);
-        $response->headers->set(
-            key: 'Content-Type',
-            values: 'text/csv',
-        );
-        $response->headers->set(
-            key: 'Content-Disposition',
-            values: 'attachment; filename="users.csv"',
-        );
+        $response->headers->set(key: 'Content-Type', values: 'text/csv');
+        $response->headers->set(key: 'Content-Disposition', values: 'attachment; filename="users.csv"');
 
         return $response;
     }
@@ -314,10 +305,7 @@ final class UserController extends AbstractController
 
         // Remove the user from groups
         if ('basic' !== $this->configuration->get(item: 'security.permLevel')) {
-            $permissions = Permission::create(
-                permLevel: 'medium',
-                configuration: $this->configuration,
-            );
+            $permissions = Permission::create(permLevel: 'medium', configuration: $this->configuration);
             $permissions->removeFromAllGroups($userId);
         }
 
@@ -378,10 +366,7 @@ final class UserController extends AbstractController
         }
 
         if ($automaticPassword) {
-            $userPassword = $newUser->createPassword(
-                minimumLength: 8,
-                allowUnderscore: false,
-            );
+            $userPassword = $newUser->createPassword(minimumLength: 8, allowUnderscore: false);
         }
 
         if ($errorMessage === []) {

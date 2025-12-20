@@ -76,10 +76,7 @@ final class CategoryLanguageService
      */
     public function getLanguagesInUse(Configuration $configuration): array
     {
-        $all = $configuration->getLanguage()->isLanguageAvailable(
-            identifier: 0,
-            table: 'faqcategories',
-        );
+        $all = $configuration->getLanguage()->isLanguageAvailable(identifier: 0, table: 'faqcategories');
         $result = [];
         foreach ($all as $code) {
             $codeLower = strtolower($code);

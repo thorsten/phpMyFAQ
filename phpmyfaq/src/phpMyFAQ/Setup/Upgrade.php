@@ -136,15 +136,12 @@ class Upgrade extends AbstractSetup
 
         for ($i = 0; $i < $attempts; $i++) {
             try {
-                $response = $this->httpClient->request(
-                    method: 'GET',
-                    url: $url,
-                );
+                $response = $this->httpClient->request(method: 'GET', url: $url);
 
                 if ($response->getStatusCode() !== 200) {
-                    throw new Exception(message: 'Cannot download package (HTTP Status: '
-                    . $response->getStatusCode()
-                    . ').');
+                    throw new Exception(
+                        message: 'Cannot download package (HTTP Status: ' . $response->getStatusCode() . ').',
+                    );
                 }
 
                 $package = $response->getContent();
@@ -220,13 +217,12 @@ class Upgrade extends AbstractSetup
 
         $zipFile = $zipArchive->open($path);
 
-        $zipArchive->registerProgressCallback(
-            rate: 0.05,
-            callback: static function ($rate) use ($progressCallback): void {
-                $progress = (int) ($rate * 100) . '%';
-                $progressCallback($progress);
-            },
-        );
+        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function ($rate) use (
+            $progressCallback,
+        ): void {
+            $progress = (int) ($rate * 100) . '%';
+            $progressCallback($progress);
+        });
 
         if ($zipFile) {
             $zipArchive->extractTo($this->upgradeDirectory . '/new/');
@@ -261,13 +257,12 @@ class Upgrade extends AbstractSetup
             RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        $zipArchive->registerProgressCallback(
-            rate: 0.05,
-            callback: static function ($rate) use ($progressCallback): void {
-                $progress = (int) ($rate * 100) . '%';
-                $progressCallback($progress);
-            },
-        );
+        $zipArchive->registerProgressCallback(rate: 0.05, callback: static function ($rate) use (
+            $progressCallback,
+        ): void {
+            $progress = (int) ($rate * 100) . '%';
+            $progressCallback($progress);
+        });
 
         foreach ($files as $file) {
             $file = $file->getRealPath();

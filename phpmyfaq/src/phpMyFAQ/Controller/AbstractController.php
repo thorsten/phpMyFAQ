@@ -45,10 +45,7 @@ use Twig\TwigFilter;
     description: 'phpMyFAQ includes a REST API and offers APIs for various services like fetching the phpMyFAQ '
     . 'version or doing a search against the phpMyFAQ installation.',
     title: 'REST API for phpMyFAQ 4.1',
-    contact: new OA\Contact(
-        name: 'phpMyFAQ Team',
-        email: 'support@phpmyfaq.de',
-    ),
+    contact: new OA\Contact(name: 'phpMyFAQ Team', email: 'support@phpmyfaq.de'),
 )]
 #[OA\Server(url: 'https://localhost', description: 'Local dockerized server')]
 #[OA\License(name: 'Mozilla Public Licence 2.0', url: 'https://www.mozilla.org/MPL/2.0/')]

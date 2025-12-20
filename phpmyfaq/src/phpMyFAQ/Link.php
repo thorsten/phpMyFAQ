@@ -291,11 +291,7 @@ class Link
     {
         $request = Request::createFromGlobals();
         $host = $request->getHost();
-        $host = preg_replace(
-            pattern: ['/:80$/', '/:443$/'],
-            replacement: '',
-            subject: $host,
-        );
+        $host = preg_replace(pattern: ['/:80$/', '/:443$/'], replacement: '', subject: $host);
 
         $sysUri = $this->getSystemScheme() . $host;
 
@@ -325,18 +321,10 @@ class Link
         $scriptName = $request->getScriptName();
 
         if (isset($path)) {
-            return str_replace(
-                search: $path,
-                replace: '',
-                subject: $scriptName,
-            );
+            return str_replace(search: $path, replace: '', subject: $scriptName);
         }
 
-        return str_replace(
-            search: '/src/Link.php',
-            replace: '',
-            subject: $scriptName,
-        );
+        return str_replace(search: '/src/Link.php', replace: '', subject: $scriptName);
     }
 
     /**
@@ -353,34 +341,16 @@ class Link
             }
         };
 
-        $add(
-            attribute: 'class',
-            value: $this->class,
-        );
-        $add(
-            attribute: 'id',
-            value: $this->id,
-        );
-        $add(
-            attribute: 'title',
-            value: $this->tooltip ?? '',
-        );
-        $add(
-            attribute: 'name',
-            value: $this->name,
-        );
+        $add(attribute: 'class', value: $this->class);
+        $add(attribute: 'id', value: $this->id);
+        $add(attribute: 'title', value: $this->tooltip ?? '');
+        $add(attribute: 'name', value: $this->name);
 
         if (($this->name === '' || $this->name === '0') && $this->url !== '' && $this->url !== '0') {
             $html .= sprintf(' href="%s"', $this->escapeUrl($url));
-            $add(
-                attribute: 'target',
-                value: $this->target,
-            );
+            $add(attribute: 'target', value: $this->target);
         }
-        $add(
-            attribute: 'rel',
-            value: $this->rel,
-        );
+        $add(attribute: 'rel', value: $this->rel);
 
         $html .= '>';
 

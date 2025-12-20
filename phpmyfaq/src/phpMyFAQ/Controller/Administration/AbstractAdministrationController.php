@@ -381,15 +381,12 @@ abstract class AbstractAdministrationController extends AbstractController
      */
     protected function getForbiddenPage(string $message = ''): Response
     {
-        return $this->render(
-            file: '@admin/error/forbidden.twig',
-            context: [
-                ...$this->getHeader(Request::createFromGlobals()),
-                ...$this->getFooter(),
-                'debugMode' => Environment::isDebugMode(),
-                'errorMessage' => $message,
-            ],
-        );
+        return $this->render(file: '@admin/error/forbidden.twig', context: [
+            ...$this->getHeader(Request::createFromGlobals()),
+            ...$this->getFooter(),
+            'debugMode' => Environment::isDebugMode(),
+            'errorMessage' => $message,
+        ]);
     }
 
     /**

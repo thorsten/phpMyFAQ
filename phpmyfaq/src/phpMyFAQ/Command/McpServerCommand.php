@@ -46,7 +46,8 @@ class McpServerCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription(description: 'Run the phpMyFAQ MCP server for LLM integration')
+        $this
+            ->setDescription(description: 'Run the phpMyFAQ MCP server for LLM integration')
             ->setHelp(
                 help: 'This command starts the MCP server that allows LLM models to search and query phpMyFAQ installations.',
             )
@@ -89,10 +90,7 @@ class McpServerCommand extends Command
         $io->definitionList(
             ['Version' => $serverInfo['version']],
             ['Description' => $serverInfo['description']],
-            ['Capabilities' => implode(
-                separator: ', ',
-                array: array_keys(array_filter($serverInfo['capabilities'])),
-            )],
+            ['Capabilities' => implode(separator: ', ', array: array_keys(array_filter($serverInfo['capabilities'])))],
         );
 
         $io->section(message: 'Available Tools');

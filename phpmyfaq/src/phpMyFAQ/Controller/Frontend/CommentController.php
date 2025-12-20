@@ -108,10 +108,7 @@ final class CommentController extends AbstractController
             && $comment->isCommentAllowed($commentId, $languageCode, $type)
             && $faq->isActive($commentId, $languageCode, $type)
         ) {
-            $session->userTracking(
-                action: 'save_comment',
-                data: $commentId,
-            );
+            $session->userTracking(action: 'save_comment', data: $commentId);
             $commentEntity = new Comment();
             $commentEntity
                 ->setRecordId((int) $commentId)
@@ -147,10 +144,7 @@ final class CommentController extends AbstractController
                 ], Response::HTTP_OK);
             }
 
-            $session->userTracking(
-                action: 'error_save_comment',
-                data: $commentId,
-            );
+            $session->userTracking(action: 'error_save_comment', data: $commentId);
             return $this->json(['error' => Translation::get(key: 'errSaveComment')], Response::HTTP_BAD_REQUEST);
         }
 

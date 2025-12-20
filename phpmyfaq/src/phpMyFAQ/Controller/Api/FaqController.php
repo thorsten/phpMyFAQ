@@ -523,46 +523,16 @@ final class FaqController extends AbstractController
                     'is-sticky',
                 ],
                 properties: [
-                    new OA\Property(
-                        property: 'language',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'category-id',
-                        type: 'integer',
-                    ),
-                    new OA\Property(
-                        property: 'category-name',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'question',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'answer',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'keywords',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'author',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'email',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'is-active',
-                        type: 'boolean',
-                    ),
-                    new OA\Property(
-                        property: 'is-sticky',
-                        type: 'boolean',
-                    ),
+                    new OA\Property(property: 'language', type: 'string'),
+                    new OA\Property(property: 'category-id', type: 'integer'),
+                    new OA\Property(property: 'category-name', type: 'string'),
+                    new OA\Property(property: 'question', type: 'string'),
+                    new OA\Property(property: 'answer', type: 'string'),
+                    new OA\Property(property: 'keywords', type: 'string'),
+                    new OA\Property(property: 'author', type: 'string'),
+                    new OA\Property(property: 'email', type: 'string'),
+                    new OA\Property(property: 'is-active', type: 'boolean'),
+                    new OA\Property(property: 'is-sticky', type: 'boolean'),
                 ],
                 type: 'object',
             ),
@@ -605,12 +575,7 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 
@@ -722,46 +687,16 @@ final class FaqController extends AbstractController
                 'is-sticky',
             ],
             properties: [
-                new OA\Property(
-                    property: 'faq-id',
-                    type: 'integer',
-                ),
-                new OA\Property(
-                    property: 'language',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'category-id',
-                    type: 'integer',
-                ),
-                new OA\Property(
-                    property: 'question',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'answer',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'keywords',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'author',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'email',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'is-active',
-                    type: 'boolean',
-                ),
-                new OA\Property(
-                    property: 'is-sticky',
-                    type: 'boolean',
-                ),
+                new OA\Property(property: 'faq-id', type: 'integer'),
+                new OA\Property(property: 'language', type: 'string'),
+                new OA\Property(property: 'category-id', type: 'integer'),
+                new OA\Property(property: 'question', type: 'string'),
+                new OA\Property(property: 'answer', type: 'string'),
+                new OA\Property(property: 'keywords', type: 'string'),
+                new OA\Property(property: 'author', type: 'string'),
+                new OA\Property(property: 'email', type: 'string'),
+                new OA\Property(property: 'is-active', type: 'boolean'),
+                new OA\Property(property: 'is-sticky', type: 'boolean'),
             ],
             type: 'object',
         ),
@@ -798,12 +733,7 @@ final class FaqController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 

@@ -52,23 +52,21 @@ final class LoginController extends AbstractController
         description: 'The language code for the login.',
         schema: new OA\Schema(type: 'string'),
     )]
-    #[OA\RequestBody(description: 'The username and password for the login.', required: true, content: new OA\MediaType(
-        mediaType: 'application/json',
-        schema: new OA\Schema(
-            required: ['username', 'password'],
-            properties: [
-                new OA\Property(
-                    property: 'username',
-                    type: 'string',
-                ),
-                new OA\Property(
-                    property: 'password',
-                    type: 'string',
-                ),
-            ],
-            type: 'object',
+    #[OA\RequestBody(
+        description: 'The username and password for the login.',
+        required: true,
+        content: new OA\MediaType(
+            mediaType: 'application/json',
+            schema: new OA\Schema(
+                required: ['username', 'password'],
+                properties: [
+                    new OA\Property(property: 'username', type: 'string'),
+                    new OA\Property(property: 'password', type: 'string'),
+                ],
+                type: 'object',
+            ),
         ),
-    ))]
+    )]
     #[OA\Response(
         response: 200,
         description: 'If "username" and "password" combination are correct.',
@@ -81,12 +79,7 @@ final class LoginController extends AbstractController
     )]
     public function login(Request $request): JsonResponse
     {
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $faqUsername = Filter::filterVar($data->username, FILTER_SANITIZE_SPECIAL_CHARS);
         $faqPassword = Filter::filterVar($data->password, FILTER_SANITIZE_SPECIAL_CHARS);

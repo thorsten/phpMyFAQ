@@ -133,42 +133,15 @@ final class CategoryController extends AbstractController
                     'show-on-homepage',
                 ],
                 properties: [
-                    new OA\Property(
-                        property: 'language',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'parent-id',
-                        type: 'integer',
-                    ),
-                    new OA\Property(
-                        property: 'parent-category-name',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'category-name',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'description',
-                        type: 'string',
-                    ),
-                    new OA\Property(
-                        property: 'user-id',
-                        type: 'integer',
-                    ),
-                    new OA\Property(
-                        property: 'group-id',
-                        type: 'integer',
-                    ),
-                    new OA\Property(
-                        property: 'is-active',
-                        type: 'boolean',
-                    ),
-                    new OA\Property(
-                        property: 'show-on-homepage',
-                        type: 'boolean',
-                    ),
+                    new OA\Property(property: 'language', type: 'string'),
+                    new OA\Property(property: 'parent-id', type: 'integer'),
+                    new OA\Property(property: 'parent-category-name', type: 'string'),
+                    new OA\Property(property: 'category-name', type: 'string'),
+                    new OA\Property(property: 'description', type: 'string'),
+                    new OA\Property(property: 'user-id', type: 'integer'),
+                    new OA\Property(property: 'group-id', type: 'integer'),
+                    new OA\Property(property: 'is-active', type: 'boolean'),
+                    new OA\Property(property: 'show-on-homepage', type: 'boolean'),
                 ],
                 type: 'object',
             ),
@@ -209,12 +182,7 @@ final class CategoryController extends AbstractController
 
         [$currentUser, $currentGroups] = CurrentUser::getCurrentUserGroupId($this->currentUser);
 
-        $data = json_decode(
-            json: $request->getContent(),
-            associative: false,
-            depth: 512,
-            flags: JSON_THROW_ON_ERROR,
-        );
+        $data = json_decode(json: $request->getContent(), associative: false, depth: 512, flags: JSON_THROW_ON_ERROR);
 
         $currentLanguage = $this->configuration->getLanguage()->getLanguage();
 

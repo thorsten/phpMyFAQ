@@ -32,16 +32,7 @@ final class CategoryValidator
         if (!is_array($category)) {
             return false;
         }
-        return (
-            array_key_exists(
-                key: 'parent_id',
-                array: $category,
-            )
-            && array_key_exists(
-                key: 'id',
-                array: $category,
-            )
-        );
+        return array_key_exists(key: 'parent_id', array: $category) && array_key_exists(key: 'id', array: $category);
     }
 
     /**

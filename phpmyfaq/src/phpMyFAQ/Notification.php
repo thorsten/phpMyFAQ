@@ -93,11 +93,7 @@ readonly class Notification
             }
 
             $this->mail->subject = $this->configuration->getTitle() . ': New FAQ was added.';
-            $this->faq->getFaq(
-                faqId: $faqEntity->getId(),
-                faqRevisionId: null,
-                isAdmin: true,
-            );
+            $this->faq->getFaq(faqId: $faqEntity->getId(), faqRevisionId: null, isAdmin: true);
 
             $linkToAdmin = '%sadmin/faq/edit/%d/%s';
             $url = sprintf(

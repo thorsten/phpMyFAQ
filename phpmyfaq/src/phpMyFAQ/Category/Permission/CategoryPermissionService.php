@@ -50,13 +50,7 @@ final class CategoryPermissionService
     {
         $groupsList = $groups === []
             ? '-1'
-            : implode(
-                separator: ', ',
-                array: array_map(
-                    callback: 'intval',
-                    array: $groups,
-                ),
-            );
+            : implode(separator: ', ', array: array_map(callback: 'intval', array: $groups));
         return strtr('WHERE ( fg.group_id IN ({groups}) OR (fu.user_id = {userId} AND fg.group_id IN ({groups}))) {active}', [
             '{groups}' => $groupsList,
             '{userId}' => (string) $userId,

@@ -162,12 +162,7 @@ class Pdf extends Export
                 $this->wrapper->Ln();
                 $this->wrapper->Write(
                     h: 5,
-                    txt: Translation::get(key: 'msgTags')
-                    . ': '
-                    . implode(
-                        separator: ', ',
-                        array: $tags,
-                    ),
+                    txt: Translation::get(key: 'msgTags') . ': ' . implode(separator: ', ', array: $tags),
                 );
             }
 
@@ -230,10 +225,7 @@ class Pdf extends Export
         if (isset($faqData['attachmentList'])) {
             $this->wrapper->Ln(h: 10);
             $this->wrapper->Ln();
-            $this->wrapper->Write(
-                h: 5,
-                txt: Translation::get(key: 'msgAttachedFiles') . ':',
-            );
+            $this->wrapper->Write(h: 5, txt: Translation::get(key: 'msgAttachedFiles') . ':');
             $this->wrapper->Ln(h: 5);
             $this->wrapper->Ln();
             $listItems = '<ul class="pb-4 mb-4 border-bottom">';
@@ -260,10 +252,7 @@ class Pdf extends Export
 
         $this->wrapper->SetAuthor($author);
         $this->wrapper->Ln();
-        $this->wrapper->Write(
-            h: 5,
-            txt: Translation::get(key: 'msgAuthor') . ': ' . $author,
-        );
+        $this->wrapper->Write(h: 5, txt: Translation::get(key: 'msgAuthor') . ': ' . $author);
         $this->wrapper->Ln();
         $this->wrapper->Write(
             h: 5,

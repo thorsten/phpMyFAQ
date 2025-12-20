@@ -111,12 +111,7 @@ readonly class LdapSettings
 
         return [
             'use_group_restriction' => $this->configuration->get(item: 'ldap.ldap_use_group_restriction'),
-            'allowed_groups' => $allowedGroups
-                ? explode(
-                    separator: ',',
-                    string: (string) $allowedGroups,
-                )
-                : [],
+            'allowed_groups' => $allowedGroups ? explode(separator: ',', string: (string) $allowedGroups) : [],
             'auto_assign' => $this->configuration->get(item: 'ldap.ldap_group_auto_assign'),
             'group_mapping' => $groupMapping ? json_decode((string) $groupMapping, associative: true) : [],
         ];
