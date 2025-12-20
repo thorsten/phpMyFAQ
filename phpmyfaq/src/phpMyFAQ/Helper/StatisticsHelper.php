@@ -75,11 +75,8 @@ readonly class StatisticsHelper
         $date = 0;
 
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate))) {
-            $fp = @fopen(
-                PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate),
-                'r',
-            );
-            while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
+            $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $firstDate), 'r');
+            while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
@@ -98,7 +95,7 @@ readonly class StatisticsHelper
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate))) {
             $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate), 'r');
 
-            while (($data = fgetcsv($fp, 1024, ';', '"', '\\')) !== false) {
+            while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
@@ -186,7 +183,7 @@ readonly class StatisticsHelper
 
     public function renderMonthSelector(): string
     {
-        $oldValue = mktime(0, 0, 0, 1, 1, 1970);
+        $oldValue = mktime(hour: 0, minute: 0, second: 0, month: 1, day: 1, year: 1970);
         $renderedHtml = sprintf('<option value="" selected>%s</option>', Translation::get(key: 'ad_stat_choose'));
 
         $trackingDates = $this->getAllTrackingDates();
@@ -213,8 +210,11 @@ readonly class StatisticsHelper
         $renderedHtml = '';
 
         if ($trackingDates === []) {
-            return $renderedHtml
-            . sprintf('<option value="" selected>%s</option>', Translation::get(key: 'ad_stat_choose'));
+            return sprintf(
+                '%s<option value="" selected>%s</option>',
+                $renderedHtml,
+                Translation::get(key: 'ad_stat_choose'),
+            );
         }
 
         foreach ($trackingDates as $trackingDate) {

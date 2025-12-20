@@ -32,7 +32,7 @@ use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 class File extends AbstractAttachment implements AttachmentInterface
 {
     /**
-     * Build a file path under which the attachment, file is accessible in filesystem
+     * Build a file path under which the attachment file is accessible in filesystem
      *
      * @throws AttachmentException
      */
@@ -62,7 +62,7 @@ class File extends AbstractAttachment implements AttachmentInterface
         clearstatcache();
         $attDir = dirname($filepath);
 
-        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, 0777, true);
+        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, 0o777, true);
     }
 
     /**
@@ -85,7 +85,7 @@ class File extends AbstractAttachment implements AttachmentInterface
     }
 
     /**
-     * Save current attachment to the appropriate storage.
+     * Save the current attachment to the appropriate storage.
      * The filepath given will be processed and moved to the appropriate location.
      *
      * @param string $filePath full path to the attachment file
