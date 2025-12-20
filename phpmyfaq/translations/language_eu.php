@@ -464,7 +464,7 @@ $PMF_LANG["ad_categ_process"] = "Kategoriak prozesatzen...";
 $PMF_LANG["msgNoPermission"] = "Ez duzu baimenik, barkatu eragozpenak.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "aurreko orria";
+$PMF_LANG["msgPreviousPage"] = "aurreko orria";
 $PMF_LANG["msgNextPage"] = "hurrengoa orria";
 $PMF_LANG["msgPageDoublePoint"] = "Orrialdea: ";
 $PMF_LANG["msgMainCategory"] = "Kategoria nagusia";

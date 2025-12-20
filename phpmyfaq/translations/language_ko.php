@@ -461,7 +461,7 @@ $PMF_LANG["ad_categ_process"] = "카테고리 처리중......";
 $PMF_LANG["msgNoPermission"] = "사용 권한이 없습니다.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "이전 페이지";
+$PMF_LANG["msgPreviousPage"] = "이전 페이지";
 $PMF_LANG["msgNextPage"] = "다음 페이지";
 $PMF_LANG["msgPageDoublePoint"] = "페이지: ";
 $PMF_LANG["msgMainCategory"] = "메인 카테고리";

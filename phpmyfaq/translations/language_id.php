@@ -461,7 +461,7 @@ $PMF_LANG["ad_categ_process"] = "Memproses kategori...";
 $PMF_LANG["msgNoPermission"] = "Anda tidak memiliki kewenangan.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "halaman sebelumnya";
+$PMF_LANG["msgPreviousPage"] = "halaman sebelumnya";
 $PMF_LANG["msgNextPage"] = "halaman selanjutnya";
 $PMF_LANG["msgPageDoublePoint"] = "Halaman: ";
 $PMF_LANG["msgMainCategory"] = "Kategori utama";

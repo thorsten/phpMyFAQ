@@ -456,7 +456,7 @@ $PMF_LANG["ad_categ_process"] = "Ангилал боловсруулж байн�
 $PMF_LANG["msgNoPermission"] = "Та зөвшөөрөлгүй байна.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "өмнөх хуудас";
+$PMF_LANG["msgPreviousPage"] = "өмнөх хуудас";
 $PMF_LANG["msgNextPage"] = "дараагийн хуудас";
 $PMF_LANG["msgPageDoublePoint"] = "Хуудас: ";
 $PMF_LANG["msgMainCategory"] = "Үндсэн ангилал";

@@ -460,7 +460,7 @@ $PMF_LANG["ad_categ_process"] = "Apdorojamos grupės...";
 $PMF_LANG["msgNoPermission"] = "Jūs nesate sankcionuotas.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "ankstesnis tinklalapis";
+$PMF_LANG["msgPreviousPage"] = "ankstesnis tinklalapis";
 $PMF_LANG["msgNextPage"] = "tolesnis tinklalapis";
 $PMF_LANG["msgPageDoublePoint"] = "Tinklalapis: ";
 $PMF_LANG["msgMainCategory"] = "Pagrindinė grupė";

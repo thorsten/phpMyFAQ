@@ -463,7 +463,7 @@ $PMF_LANG["ad_categ_process"] = "Procesiram kategorije...";
 $PMF_LANG["msgNoPermission"] = "Niste autorizovani.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "prethodna strana";
+$PMF_LANG["msgPreviousPage"] = "prethodna strana";
 $PMF_LANG["msgNextPage"] = "slede&#263;a strana";
 $PMF_LANG["msgPageDoublePoint"] = "Strana: ";
 $PMF_LANG["msgMainCategory"] = "Glavna kategorija";

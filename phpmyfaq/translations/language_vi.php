@@ -459,7 +459,7 @@ $PMF_LANG["ad_categ_process"] = "Đang tiến hành với mục...";
 $PMF_LANG["msgNoPermission"] = "Bạn không được phép thực hiện điều này.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "trang trước";
+$PMF_LANG["msgPreviousPage"] = "trang trước";
 $PMF_LANG["msgNextPage"] = "trang sau";
 $PMF_LANG["msgPageDoublePoint"] = "Trang: ";
 $PMF_LANG["msgMainCategory"] = "Mục";

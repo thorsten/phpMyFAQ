@@ -458,7 +458,7 @@ $PMF_LANG["ad_categ_process"] = "Prosesu categorïau...";
 $PMF_LANG["msgNoPermission"] = "Nid oes caniatâd gennych.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "tudalen blaenorol";
+$PMF_LANG["msgPreviousPage"] = "tudalen blaenorol";
 $PMF_LANG["msgNextPage"] = "tudalen nesaf";
 $PMF_LANG["msgPageDoublePoint"] = "tudalen: ";
 $PMF_LANG["msgMainCategory"] = "Prif gategori";

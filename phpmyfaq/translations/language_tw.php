@@ -458,7 +458,7 @@ $PMF_LANG["ad_categ_process"] = "處理類別中...";
 $PMF_LANG["msgNoPermission"] = "您沒有足夠的權限。";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten 開發者
-$PMF_LANG["msgPreviusPage"] = "前一頁";
+$PMF_LANG["msgPreviousPage"] = "前一頁";
 $PMF_LANG["msgNextPage"] = "下一頁";
 $PMF_LANG["msgPageDoublePoint"] = "頁: ";
 $PMF_LANG["msgMainCategory"] = "主類別";

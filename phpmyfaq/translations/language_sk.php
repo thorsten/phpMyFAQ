@@ -460,7 +460,7 @@ $PMF_LANG["ad_categ_process"] = "Spracovanie kategórií...";
 $PMF_LANG["msgNoPermission"] = "Nemáte oprávnenie.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "predchádzajúca stránka";
+$PMF_LANG["msgPreviousPage"] = "predchádzajúca stránka";
 $PMF_LANG["msgNextPage"] = "ďalšia stránka";
 $PMF_LANG["msgPageDoublePoint"] = "Strana: ";
 $PMF_LANG["msgMainCategory"] = "Hlavná kategória";

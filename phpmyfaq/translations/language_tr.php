@@ -457,7 +457,7 @@ $PMF_LANG["ad_categ_process"] = "Kategoriler işleniyor...";
 $PMF_LANG["msgNoPermission"] = "Yetkiniz bulunmuyor.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "Önceki sayfa";
+$PMF_LANG["msgPreviousPage"] = "Önceki sayfa";
 $PMF_LANG["msgNextPage"] = "Sonraki sayfa";
 $PMF_LANG["msgPageDoublePoint"] = "Sayfa: ";
 $PMF_LANG["msgMainCategory"] = "Ana kategori";

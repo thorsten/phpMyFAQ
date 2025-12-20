@@ -460,7 +460,7 @@ $PMF_LANG["ad_categ_process"] = "Processing categories...";
 $PMF_LANG["msgNoPermission"] = "আপনার অনুমতি নেই।";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "আগের পাতা";
+$PMF_LANG["msgPreviousPage"] = "আগের পাতা";
 $PMF_LANG["msgNextPage"] = "পরের পাতা";
 $PMF_LANG["msgPageDoublePoint"] = "পাতা: ";
 $PMF_LANG["msgMainCategory"] = "প্রধান বিভাগ";

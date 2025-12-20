@@ -121,7 +121,7 @@ $PMF_LANG['msgMailCheck'] = "Es ist ein neuer FAQ-Beitrag vorhanden. Sie können
 $PMF_LANG['msgMailContact'] = "Die Anfrage wurde erfolgreich versendet!";
 
 // Fehlermeldungen
-$PMF_LANG['err_noDatabase'] = "Es ist kein Datenbankverbindung möglich.";
+$PMF_LANG['err_noDatabase'] = "Es ist keine Datenbankverbindung möglich.";
 $PMF_LANG['err_noHeaders'] = "Keine Kategorie gefunden";
 $PMF_LANG['msgErrorNoRecords'] = "Es gibt noch keine Einträge.";
 $PMF_LANG['err_badID'] = "Fehlerhafte ID!";
@@ -222,11 +222,11 @@ $PMF_LANG['ad_entry_back'] = "Zurück zur FAQ";
 $PMF_LANG['ad_entry_commentdelfail'] = "Der Kommentar wurde nicht gelöscht.";
 $PMF_LANG['ad_entry_savedsuc'] = "Die Änderungen wurden erfolgreich gespeichert.";
 $PMF_LANG['ad_entry_savedfail'] = "Ein Datenbankfehler ist aufgetreten.";
-$PMF_LANG['ad_entry_del_1'] = "Bist du sicher, dass die FAQ";
+$PMF_LANG['ad_entry_del_1'] = "Sind Sie sicher, dass die FAQ";
 $PMF_LANG['ad_entry_del_2'] = "des Benutzers";
 $PMF_LANG['ad_entry_del_3'] = "gelöscht werden soll?";
-$PMF_LANG['ad_entry_delsuc'] = "Der FAQ-Eintrag erfolgreich gelöscht.";
-$PMF_LANG['ad_entry_delfail'] = "Die FAQ-Eintrag wurde nicht gelöscht!";
+$PMF_LANG['ad_entry_delsuc'] = "Der FAQ-Eintrag wurde erfolgreich gelöscht.";
+$PMF_LANG['ad_entry_delfail'] = "Der FAQ-Eintrag wurde nicht gelöscht!";
 
 // Newsverwaltung
 $PMF_LANG['ad_news_header'] = "Überschrift";
@@ -371,7 +371,7 @@ $PMF_LANG['msgAddFAQ'] = "FAQ erstellen";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
 $PMF_LANG['ad_csv_make'] = "Eine Datensicherung stellt im Grunde ein komplettes Abbild der SQL-Tabellen der FAQ dar. Diese Sicherung stellt immer eine Momentaufnahme dar. Das Format der Sicherung ist eine normale SQL-Datei, man kann eine Rücksicherung also notfalls auch mit Hilfe von Tools wie phpMyAdmin oder ähnlichen Tools vornehmen.";
-$PMF_LANG["ad_csv_link"] = "Herunterladen der sicherung";
+$PMF_LANG["ad_csv_link"] = "Herunterladen der Sicherung";
 $PMF_LANG['ad_csv_head'] = "Datensicherung erstellen";
 $PMF_LANG['ad_att_addto'] = "Anhang zur FAQ";
 $PMF_LANG['ad_att_addto_2'] = "hinzufügen";
@@ -453,7 +453,7 @@ $PMF_LANG['ad_categ_process'] = "Bearbeite Kategorien...";
 $PMF_LANG['msgNoPermission'] = "Sie haben keine ausreichende Berechtigung hierfür.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG['msgPreviusPage'] = "vorherige Seite";
+$PMF_LANG['msgPreviousPage'] = "vorherige Seite";
 $PMF_LANG['msgNextPage'] = "nächste Seite";
 $PMF_LANG['msgPageDoublePoint'] = "Seite: ";
 $PMF_LANG['msgMainCategory'] = "Übergeordnete Kategorie";
@@ -541,7 +541,7 @@ $PMF_LANG['ad_categ_change'] = "Austauschen mit";
 $PMF_LANG['lostPassword'] = "Passwort vergessen?";
 $PMF_LANG['lostpwd_err_1'] = "Fehler: Loginname und E-Mailadresse nicht gefunden.";
 $PMF_LANG['lostpwd_err_2'] = "Fehler: Falsche Eingaben!";
-$PMF_LANG['lostpwd_text_1'] = "Vielen Dank für die Abfrage deiner Account Informationen.";
+$PMF_LANG['lostpwd_text_1'] = "Vielen Dank für die Abfrage Ihrer Account-Informationen.";
 $PMF_LANG['lostpwd_text_2'] = "Bitte ein neues Passwort im Adminbereich der FAQ setzen.";
 $PMF_LANG['lostpwd_mail_okay'] = "E-Mail wurde gesendet.";
 
@@ -679,7 +679,7 @@ $PMF_LANG['categoryOwnerLabel'] = "Kategorieverwalter";
 $PMF_LANG['adminSection'] = "Administration";
 $PMF_LANG['err_expiredArticle'] = "Diese FAQ ist abgelaufen und kann nicht angezeigt werden";
 $PMF_LANG['err_expiredNews'] = "Diese Nachricht ist abgelaufen und kann nicht angezeigt werden";
-$PMF_LANG['err_inactiveNews'] = "Diese Nachricht werden überarbeitet und kann nicht angezeigt werden";
+$PMF_LANG['err_inactiveNews'] = "Diese Nachricht wird überarbeitet und kann nicht angezeigt werden";
 $PMF_LANG['msgSearchOnAllLanguages'] = "alle Sprachen durchsuchen";
 $PMF_LANG['msgTags'] = "Tags";
 $PMF_LANG['msg_tags'] = "Tags";
@@ -1033,7 +1033,7 @@ $PMF_LANG['msgOnlineMode'] = "FAQ ist online";
 // added v2.8.0-alpha3 - 2012-08-30 by Thorsten
 $PMF_LANG['msgShowMore'] = "mehr zeigen";
 $PMF_LANG['msgQuestionAnswered'] = "Frage beantwortet";
-$PMF_LANG['msgMessageQuestionAnswered'] = "Deine Frage bei %s wurde beantwortet. Hier kommst du zur Antwort";
+$PMF_LANG['msgMessageQuestionAnswered'] = "Ihre Frage bei %s wurde beantwortet. Hier kommen Sie zur Antwort";
 
 // added v2.8.0-alpha3 - 2012-11-03 by Thorsten
 $PMF_LANG['permission::addattachment'] = "Anhänge hinzufügen";
@@ -1155,7 +1155,7 @@ $PMF_LANG['ad_quick_entry'] = 'Neue FAQ in dieser Kategorie anlegen';
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
 $LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP Mapping für den Namen', '"cn" bei Nutzung eines ADS'];
 $LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP Mapping für den Usernamen', '"samAccountName" bei Nutzung eines ADS'];
-$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP Mapping für E-Mmail', '"mail" bei Nutzung eines ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP Mapping für E-Mail', '"mail" bei Nutzung eines ADS'];
 $LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP Mapping für "member of" bei Nutzung von LDAP Gruppen'];
 $LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP Domänenprefix', 'z.B. "DOMAIN\username"'];
 $LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP Protokoll Version', 'Standard: 3'];
@@ -1246,7 +1246,7 @@ $PMF_LANG['msgTwofactorErrorToken'] = "Der eingegebene Code war falsch!";
 $PMF_LANG['ad_user_overwrite_twofactor'] = "2-Faktor-Authentifizierung überschreiben";
 
 // added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
-$PMF_LANG['msgRedirect'] = 'Du wirst in 5 Sekunden automatisch weitergeleitet.';
+$PMF_LANG['msgRedirect'] = 'Sie werden in 5 Sekunden automatisch weitergeleitet.';
 $PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Es wurde keine Kategorie in der gewählten Sprache gefunden, aber du kannst folgende Sprachen auswählen:';
 $PMF_LANG['msgCategoryDescription'] = 'Hier findest du eine Übersicht aller Kategorien mit der Anzahl der FAQs.';
 $PMF_LANG['msgSubCategoryContent'] = 'Wähle eine Hauptkategorie aus.';
@@ -1324,13 +1324,13 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'Diese Bots beim Tracking ignorieren
 $PMF_LANG['msgGravatar'] = 'Bild von Gravatar';
 
 // added v4.0.0-alpha - 2023-12-27 by Jan
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn du diese Funktion nutzen möchtest, aktiviere sie in der <a class="alert-link" href="././configuration">Konfiguration</a> -> FAQs.';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Die benutzerdefinierte Sortierung von wichtigen FAQs ist in der Konfiguration deaktiviert. Wenn Sie diese Funktion nutzen möchten, aktivieren Sie sie in der <a class="alert-link" href="./configuration">Konfiguration</a> → FAQs.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Benutzerdefinierte Sortierung von wichtigen FAQs'];
 $PMF_LANG['msgNoStickyFaqs'] = 'Du hast noch keine wichtigen FAQs. Gehe in die <a href="./faqs" class="alert-link">FAQ-Verwaltung</a>, um FAQs als wichtig zu markieren.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktiviere Cookie Consent'];
-$PMF_LANG['msgSessionExpired'] = 'Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.';
+$PMF_LANG['msgSessionExpired'] = 'Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.';
 
 // added v4.0.0-alpha - 2023-01-12 by Jan
 $PMF_LANG['msgLanguageCode'] = 'Sprachcode (z. B. de, en ...)';
@@ -1384,7 +1384,7 @@ $PMF_LANG['msgNotInMaintenanceMode'] = '⚠️ Die FAQ ist nicht im Wartungs-Mod
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
 $PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Mehrere Suchbegriffe müssen mit Kommas getrennt werden.';
-$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kannst nichts einreichen, weil keine Kategorien eingerichtet sind. Wende dich bitte an den <a class="alert-link" href="contact.html">Administrator</a>.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Sie können nichts einreichen, weil keine Kategorien eingerichtet sind. Wenden Sie sich bitte an den <a class="alert-link" href="./contact.html">Administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
 $LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No-Reply-Adresse für E-Mails'];
@@ -1401,7 +1401,7 @@ $LANG_CONF['seo.description'] = ['area', 'SERP Beschreibung'];
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
 $LANG_CONF['records.allowedMediaHosts'] = ['area', 'Erlaubte externe Hosts für Medieninhalte', 'Mit Kommas trennen'];
-$PMF_LANG['msgConfirmTwofactorConfig'] = 'Bist du sicher, dass du deine aktuelle Konfiguration der 2-Faktor-Authentifizierung löschen möchtest?';
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Sind sie sicher, dass sie ihre aktuelle Konfiguration der 2-Faktor-Authentifizierung löschen möchten?';
 $PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ist aktuell nicht aktiviert.';
 $PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Das Löschen der aktuellen 2-Faktor-Konfiguration war erfolgreich.';
 $PMF_LANG['msgShareViaWhatsapp'] = 'Per WhatsApp empfehlen';
@@ -1434,7 +1434,7 @@ $PMF_LANG['msgPasswordsMustBeEqual'] = 'Die angegebenen Passwörter stimmen nich
 $PMF_LANG['msgPrivateNotesOfEditor'] = 'Es liegen private Notizen eines Editors vor:';
 
 // added v4.0.0-beta - 2024-08-11 by Thorsten
-$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Fehlenden Anhänge bereinigen';
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Fehlende Anhänge bereinigen';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Anhang wurde erfolgreich aktualisiert.';
 $PMF_LANG['msgRemoveAll'] = 'Alles löschen';
 $PMF_LANG['msgError404'] = 'Fehler 404';
@@ -1455,7 +1455,7 @@ $PMF_LANG['msgLinkCopied'] = 'Link in die Zwischenablage kopiert.';
 $PMF_LANG['msgDocumentation'] = 'Dokumentation';
 
 // added v4.0.6 - 2025-02-22 by Thorsten
-$PMF_LANG['msgCategoryImageReset'] = 'Katgeoriebild zurücksetzen';
+$PMF_LANG['msgCategoryImageReset'] = 'Kategoriebild zurücksetzen';
 
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Inhalt für die robots.txt', ''];
@@ -1472,7 +1472,7 @@ $PMF_LANG['msgPluginDescription'] = 'Beschreibung';
 $PMF_LANG['msgReportABug'] = 'Melde einen Fehler';
 $PMF_LANG['msgDashboard'] = 'Dashboard';
 $PMF_LANG['msgOrphanedFAQs'] = 'Verwaiste FAQs';
-$PMF_LANG['msgOrphanedFAQsDescription'] = 'Verwaiste FAQs sind FAQs, die keiner Kategorie zugeordnet sind. Ihr könnt sie hier bearbeiten und einer Kategorie zuweisen.';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Verwaiste FAQs sind FAQs, die keiner Kategorie zugeordnet sind. Sie können sie hier bearbeiten und einer Kategorie zuweisen.';
 $PMF_LANG['msgPreview'] = 'Vorschau';
 $PMF_LANG['msgInsertImage'] = 'Bild einfügen';
 $PMF_LANG['msgImageUpload'] = 'Bild hochladen';
@@ -1526,8 +1526,8 @@ $PMF_LANG['msgCompletionPercentage'] = 'Umsetzung in %';
 $PMF_LANG['msgInstalledNewerThanAvailable'] = 'Die installierte Version ist neuer als die verfügbare Version.';
 $PMF_LANG['ad_quick_sub_category'] = "Neue Sub-Kategorie hinzufügen";
 $PMF_LANG['msgError403'] = 'Fehler 403';
-$PMF_LANG['msgError403Description'] = 'Du hast keine Berechtigung, auf diese Seite zuzugreifen.';
-$PMF_LANG['msgError403Hint'] = 'Wenn du denkst, dass dies ein Fehler ist, kontaktiere bitte den Administrator.';
+$PMF_LANG['msgError403Description'] = 'Sie haben keine Berechtigung, auf diese Seite zuzugreifen.';
+$PMF_LANG['msgError403Hint'] = 'Wenn Sie denken, dass dies ein Fehler ist, kontaktieren Sie bitte den Administrator.';
 $PMF_LANG['msgCreateDate'] = 'Erstellt am';
 $PMF_LANG['msgUpdateDate'] = 'Aktualisiert am';
 

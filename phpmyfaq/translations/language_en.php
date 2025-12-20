@@ -279,7 +279,7 @@ $PMF_LANG["ad_categ_deleted"] = "Category deleted.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was successfully set.";
-$PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options";
+$PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following the options";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
 $PMF_LANG["ad_cookie_delete"] = "Delete cookie";
 $PMF_LANG["ad_cookie_no"] = "Currently, there is no cookie saved. With a cookie you could save your login session, thus no need to remember your login details each visit. You now have following options";
@@ -453,7 +453,7 @@ $PMF_LANG["ad_categ_process"] = "Processing categories...";
 $PMF_LANG["msgNoPermission"] = "You are not authorized.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "previous page";
+$PMF_LANG["msgPreviousPage"] = "previous page";
 $PMF_LANG["msgNextPage"] = "next page";
 $PMF_LANG["msgPageDoublePoint"] = "Page: ";
 $PMF_LANG["msgMainCategory"] = "Main category";
@@ -470,19 +470,19 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
 $PMF_LANG["ad_menu_export"] = "FAQ Export";
 
-$PMF_LANG['permission::add_user'] = "Add a user";
+$PMF_LANG['permission::add_user'] = "Add users";
 $PMF_LANG['permission::edit_user'] = "Edit users";
 $PMF_LANG['permission::delete_user'] = "Delete users";
-$PMF_LANG['permission::add_faq'] = "Add FAQs";
+$PMF_LANG['permission::add_faq'] = "Add new FAQs";
 $PMF_LANG['permission::edit_faq'] = "Edit FAQs";
 $PMF_LANG['permission::delete_faq'] = "Delete FAQs";
 $PMF_LANG['permission::viewlog'] = "View user tracking logs";
 $PMF_LANG['permission::adminlog'] = "View administration logs";
-$PMF_LANG['permission::delcomment'] = "Delete comment";
+$PMF_LANG['permission::delcomment'] = "Delete comments";
 $PMF_LANG['permission::addnews'] = "Add news";
 $PMF_LANG['permission::editnews'] = "Edit news";
 $PMF_LANG['permission::delnews'] = "Delete news";
-$PMF_LANG['permission::addcateg'] = "Add category";
+$PMF_LANG['permission::addcateg'] = "Add categories";
 $PMF_LANG['permission::editcateg'] = "Edit categories";
 $PMF_LANG['permission::delcateg'] = "Delete categories";
 $PMF_LANG['permission::passwd'] = "Change passwords";
@@ -591,13 +591,13 @@ $PMF_LANG['ad_glossary_item'] = 'Title';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save glossary';
 $PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
-$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occurred.';
+$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not be saved because an error occurred.';
 $PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
-$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occurred.';
+$PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not be updated because an error occurred.';
 $PMF_LANG['ad_glossary_delete'] = 'Delete entry';
 $PMF_LANG['ad_glossary_delete_success'] = 'Glossary entry successfully deleted!';
-$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not deleted because an error occurred.';
-$PMF_LANG['msgNewQuestionVisible'] = 'The question have to be reviewed first before getting public.';
+$PMF_LANG['ad_glossary_delete_error'] = 'The glossary entry could not be deleted because an error occurred.';
+$PMF_LANG['msgNewQuestionVisible'] = 'The question has to be reviewed first before getting public.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators: ';
 $PMF_LANG['ad_entry_visibility'] = 'published';
 $PMF_LANG['ad_entry_not_visibility'] = "not published";
@@ -633,7 +633,7 @@ $PMF_LANG['ad_group_deleted'] = "The group was successfully deleted.";
 $PMF_LANG['ad_group_deleteGroup'] = "Delete group";
 $PMF_LANG['ad_group_deleteQuestion'] = "Are you sure you want to delete this group?";
 $PMF_LANG['ad_user_uncheckall'] = "Unselect all";
-$PMF_LANG['ad_group_membership'] = "Group Membership";
+$PMF_LANG['ad_group_membership'] = "Group membership";
 $PMF_LANG['ad_group_members'] = "Members";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
@@ -893,10 +893,10 @@ $PMF_LANG["plmsgEntries"][0] = "%d FAQ";
 $PMF_LANG["plmsgEntries"][1] = "%d FAQs";
 
 // added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
-$PMF_LANG['permission::addtranslation'] = "Add translation";
-$PMF_LANG['permission::edittranslation'] = "Edit translation";
-$PMF_LANG['permission::deltranslation'] = "Delete translation";
-$PMF_LANG['permission::approverec'] = "Approve records";
+$PMF_LANG['permission::addtranslation'] = "Add translations";
+$PMF_LANG['permission::edittranslation'] = "Edit translations";
+$PMF_LANG['permission::deltranslation'] = "Delete translations";
+$PMF_LANG['permission::approverec'] = "Approve FAQs";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Enable attachment encryption", "Ignored when attachments is disabled"];
@@ -999,7 +999,7 @@ $PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 // added 2.7.1 - 2011-09-30 by Thorsten
 $PMF_LANG['msg_about_faq'] = 'About this FAQ';
 $LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ with SSL only'];
-$PMF_LANG['msgTableOfContent'] = 'Table of Content';
+$PMF_LANG['msgTableOfContent'] = 'Table of Contents';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
@@ -1044,9 +1044,9 @@ $PMF_LANG['permission::reports'] = "Generate reports";
 $PMF_LANG['permission::addfaq'] = "Add FAQs in the frontend";
 $PMF_LANG['permission::addquestion'] = "Add questions in the frontend";
 $PMF_LANG['permission::addcomment'] = "Add comments in the frontend";
-$PMF_LANG['permission::editinstances'] = "Edit Multisites";
-$PMF_LANG['permission::addinstances'] = "Add a new Multisite";
-$PMF_LANG['permission::delinstances'] = "Delete Multisites";
+$PMF_LANG['permission::editinstances'] = "Edit multi-site instances";
+$PMF_LANG['permission::addinstances'] = "Add new multi-site instances";
+$PMF_LANG['permission::delinstances'] = "Delete multi-site instances";
 $PMF_LANG['permission::export'] = "Export FAQs";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
@@ -1102,14 +1102,14 @@ $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occ
 $PMF_LANG["msgSeoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = ["select", "Robots Meta Tags start page"];
 $LANG_CONF["seo.metaTagsFaqs"] = ["select", "Robots Meta Tags FAQs"];
-$LANG_CONF["seo.metaTagsCategories"] = ["select", "vMeta Tags category pages"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "Meta Tags category pages"];
 $LANG_CONF["seo.metaTagsPages"] = ["select", "Robots Meta Tags static pages"];
 $LANG_CONF["seo.metaTagsAdmin"] = ["select", "Robots Meta Tags Admin"];
 $PMF_LANG["msgMatchingQuestions"] = "The following results closely matched your question";
 $PMF_LANG["msgFinishSubmission"] = "If none of the suggestions above match your question, click the button below to finish submitting your question.";
 $LANG_CONF['spam.manualActivation'] = ['checkbox', 'Manually activate new users (default: activated)'];
 
-// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews
 $PMF_LANG['mailControlCenter'] = 'Mail setup';
 $LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Use remote SMTP server (default: deactivated)'];
 $LANG_CONF['mail.remoteSMTPServer'] = ['input', 'Server address'];
@@ -1245,7 +1245,7 @@ $PMF_LANG['msgTwofactorTokenModelTitle'] = "Two Factor Authentication - Enter to
 $PMF_LANG['msgEnterTwofactorToken'] = "Enter 6-digits code from your authenticator app.";
 $PMF_LANG['msgTwofactorCheck'] = "Check";
 $PMF_LANG['msgTwofactorErrorToken'] = "You entered a wrong code!";
-$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset two-factor-authentication";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset Two-Factor-authentication";
 
 // added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
 $PMF_LANG['msgRedirect'] = 'You will be automatically redirected in 5 seconds.';
@@ -1299,7 +1299,7 @@ $PMF_LANG['versionIsUpToDate'] = 'Your installed version is up-to-date!';
 $PMF_LANG['healthCheckOkay'] = 'Your installed version is healthy!';
 $PMF_LANG['downloadSuccessful'] = 'Package successfully downloaded!';
 $PMF_LANG['extractSuccessful'] = 'Package successfully extracted!';
-$PMF_LANG['downloadFailure'] = 'Could not download download package.';
+$PMF_LANG['downloadFailure'] = 'Could not download package.';
 $PMF_LANG['verificationFailure'] = 'Could not verify downloaded package.';
 $PMF_LANG['extractFailure'] = 'Could not extract downloaded package.';
 $PMF_LANG['msgCurrentVersion'] = 'Current Version: ';
@@ -1320,7 +1320,7 @@ $PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
 $PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
 
 // added v4.0.0-alpha - 2023-12-24 by Jan
-$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Seperate with commas)'];
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Separate with commas)'];
 
 // added v4.0.0-alpha - 2023-12-26 by Thorsten
 $PMF_LANG['msgGravatar'] = 'Gravatar image';
@@ -1328,7 +1328,7 @@ $PMF_LANG['msgGravatar'] = 'Gravatar image';
 // added v4.0.0-alpha - 2023-12-27 by Jan
 $PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky records is deactivated in the main configuration. If you would like to use it, please activate it in the <a href="././configuration">main configuration</a> -> records.';
 $LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of sticky records'];
-$PMF_LANG['msgNoStickyFaqs'] = 'You dont have any sticky records yet. You can mark records as stick in the <a href="./faqs" class="alert-link">FAQ Overview</a>.';
+$PMF_LANG['msgNoStickyFaqs'] = 'You don\'t have any sticky records yet. You can mark records as sticky in the <a href="./faqs" class="alert-link">FAQ Overview</a>.';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
 $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
@@ -1340,10 +1340,10 @@ $PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
 $PMF_LANG['msgImportRecords'] = 'FAQ Import';
 $PMF_LANG['msgImportCSVFile'] = 'Import CSV file';
-$PMF_LANG['msgImportCSVFileBody'] = 'You can import an CSV File with your record data and the given structure (see above) here.';
+$PMF_LANG['msgImportCSVFileBody'] = 'You can import a CSV file with your record data and the given structure (see above) here.';
 $PMF_LANG['msgImport'] = 'Import';
-$PMF_LANG['msgColumnStructure'] = 'Coloumn structure';
-$PMF_LANG['msgImportSuccessful'] = 'Import successfull!';
+$PMF_LANG['msgColumnStructure'] = 'Column structure';
+$PMF_LANG['msgImportSuccessful'] = 'Import successful!';
 $PMF_LANG['msgCSVImportTrueOrFalse'] = '(true or false)';
 $PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
 $PMF_LANG['msgCSVFileNotValidated'] = 'It seems that the file does not have the right structure. Please check the structure based on the given requirements again.';
@@ -1357,7 +1357,7 @@ $PMF_LANG['msgExportSessionsTo'] = 'To';
 // added v4.0.0-alpha - 2024-03-21 by Jan
 $PMF_LANG['msgEditForms'] = 'Edit forms';
 $PMF_LANG['msgEditFormsSuccessful'] = 'The modification was successfully changed.';
-$PMF_LANG['msgInputType'] = 'Typ';
+$PMF_LANG['msgInputType'] = 'Type';
 $PMF_LANG['msgRequiredInputField'] = 'Required input';
 $PMF_LANG['permission::forms_edit'] = 'Edit forms';
 $PMF_LANG['msgInputLabel'] = 'Label';
@@ -1385,7 +1385,7 @@ $PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
 $PMF_LANG['msgNotInMaintenanceMode'] = 'The FAQ is not in maintenance mode.';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
-$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Multiple keywords have to separated with commas.';
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Multiple keywords have to be separated with commas.';
 $PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You can not use this form due to missing configured categories. Please inform the <a class="alert-link" href="./contact.html">administrator</a>.';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
@@ -1440,7 +1440,7 @@ $PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Cleanup missing attachments';
 $PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshed';
 $PMF_LANG['msgRemoveAll'] = 'Remove all';
 $PMF_LANG['msgError404'] = 'Error 404';
-$PMF_LANG['msgError404Description'] = 'The page you are looking for was moved, removed or might never existed.';
+$PMF_LANG['msgError404Description'] = 'The page you are looking for was moved, removed or may never have existed.';
 $PMF_LANG['msgAlreadyHaveAccount'] = 'Already have an account?';
 $PMF_LANG['msgSignInHere'] = 'Sign in here.';
 $PMF_LANG['msgRegistrationWithPasskeys'] = 'When registering with Passkeys, users only need to enter a name or e-mail address, while authentication is carried out securely using biometric data or a device-based password.';

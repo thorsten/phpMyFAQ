@@ -452,7 +452,7 @@ $PMF_LANG['ad_categ_process'] = 'Procesando categorías...';
 $PMF_LANG['msgNoPermission'] = 'No tienes autorización.';
 
 // Añadido v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG['msgPreviusPage'] = 'página anterior';
+$PMF_LANG['msgPreviousPage'] = 'página anterior';
 $PMF_LANG['msgNextPage'] = 'página siguiente';
 $PMF_LANG['msgPageDoublePoint'] = 'Página: ';
 $PMF_LANG['msgMainCategory'] = 'Categoría Principal';

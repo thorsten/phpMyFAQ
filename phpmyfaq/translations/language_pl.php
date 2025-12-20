@@ -446,7 +446,7 @@ $PMF_LANG["ad_categ_process"] = "Przetwarzanie kategorii...";
 $PMF_LANG["msgNoPermission"] = "Nie masz uprawnień.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "poprzednia strona";
+$PMF_LANG["msgPreviousPage"] = "poprzednia strona";
 $PMF_LANG["msgNextPage"] = "następna strona";
 $PMF_LANG["msgPageDoublePoint"] = "Strona: ";
 $PMF_LANG["msgMainCategory"] = "Główna kategoria";

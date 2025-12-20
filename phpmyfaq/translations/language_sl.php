@@ -461,7 +461,7 @@ $PMF_LANG["ad_categ_process"] = "Proces za kategorije...";
 $PMF_LANG["msgNoPermission"] = "Nisi avtoriziran.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "prejšnja stran";
+$PMF_LANG["msgPreviousPage"] = "prejšnja stran";
 $PMF_LANG["msgNextPage"] = "naslednja stran";
 $PMF_LANG["msgPageDoublePoint"] = "Stran: ";
 $PMF_LANG["msgMainCategory"] = "Glavna kategorija";

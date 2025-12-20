@@ -460,7 +460,7 @@ $PMF_LANG["ad_categ_process"] = "वर्ग संसाधित हो र�
 $PMF_LANG["msgNoPermission"] = "आपके पास अधिकार नहीं है.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "पिछला पृष्ठ";
+$PMF_LANG["msgPreviousPage"] = "पिछला पृष्ठ";
 $PMF_LANG["msgNextPage"] = "अगला पृष्ठ";
 $PMF_LANG["msgPageDoublePoint"] = "पृष्ठ: ";
 $PMF_LANG["msgMainCategory"] = "मुख्य वर्ग";

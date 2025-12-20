@@ -465,7 +465,7 @@ $PMF_LANG["msgNoPermission"] = "Ви не авторизовані.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
 
-$PMF_LANG["msgPreviusPage"] = "попередня";
+$PMF_LANG["msgPreviousPage"] = "попередня";
 $PMF_LANG["msgNextPage"] = "наступна";
 $PMF_LANG["msgPageDoublePoint"] = "Сторінки: ";
 $PMF_LANG["msgMainCategory"] = "Основна категорія";

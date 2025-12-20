@@ -450,7 +450,7 @@ $PMF_LANG["ad_categ_process"] = "زمرے پر عمل درآمد ہو رہا ہ�
 $PMF_LANG["msgNoPermission"] = "آپ کو اجازت نہیں ہے۔";
 
 // شامل کیا گیا v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "پچھلا صفحہ";
+$PMF_LANG["msgPreviousPage"] = "پچھلا صفحہ";
 $PMF_LANG["msgNextPage"] = "اگلا صفحہ";
 $PMF_LANG["msgPageDoublePoint"] = "صفحہ: ";
 $PMF_LANG["msgMainCategory"] = "مرکزی زمرہ";

@@ -457,7 +457,7 @@ $PMF_LANG["ad_categ_process"] = "Sada&iuml;u apstr&acirc;de...";
 $PMF_LANG["msgNoPermission"] = "Neuatoriz&ccedil;ta piek&iuml;uve.";
 
 // Added v1.2.3 - 29.11.2002 - Thorsten
-$PMF_LANG["msgPreviusPage"] = "&laquo;";
+$PMF_LANG["msgPreviousPage"] = "&laquo;";
 $PMF_LANG["msgNextPage"] = "&raquo;";
 $PMF_LANG["msgPageDoublePoint"] = "Lapa: ";
 $PMF_LANG["msgMainCategory"] = "Galven&acirc; sada&iuml;a";
