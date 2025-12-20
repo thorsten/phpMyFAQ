@@ -1263,8 +1263,8 @@ $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktywuj zgodę na pliki
 $PMF_LANG['msgSessionExpired'] = 'Twoja sesja wygasła. Proszę, zaloguj się ponownie.';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan
-$PMF_LANG['msgLanguageCode'] = 'Kod języka (np. en, de ...)';
-$PMF_LANG['msgSeperateWithCommas'] = '(oddziel przecinkami)';
+$PMF_LANG['msgLanguageCode'] = 'Kod języka';
+$PMF_LANG['msgSeparateWithCommas'] = '(oddziel przecinkami)';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'Plik CSV do zaimportowania musi zawierać następujące kolumny w tej kolejności, bez nagłówków kolumn. Każdy wiersz ma na celu zdefiniowanie wpisu FAQ. Wszystkie komórki w kolumnach oznaczonych gwiazdką * muszą zawierać wartość.';
 $PMF_LANG['msgImportRecords'] = 'FAQ Import';
 $PMF_LANG['msgImportCSVFile'] = 'Zaimportuj plik CSV';

@@ -1315,8 +1315,8 @@ $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activar consentimiento 
 $PMF_LANG['msgSessionExpired'] = 'Su sesión ha expirado. Por favor, inicie sesión de nuevo.';
 
 // añadido v4.0.0-alpha - 2024-01-12 por Jan
-$PMF_LANG['msgLanguageCode'] = 'Código de idioma (por ejemplo, en, es, fr ...)';
-$PMF_LANG['msgSeperateWithCommas'] = '(separar con comas)';
+$PMF_LANG['msgLanguageCode'] = 'Código de idioma';
+$PMF_LANG['msgSeparateWithCommas'] = '(separar con comas)';
 $PMF_LANG['msgImportRecords'] = 'Importar preguntas frecuentes';
 $PMF_LANG['msgImportCSVFile'] = 'Importar archivo CSV';
 $PMF_LANG['msgImport'] = 'Importar';

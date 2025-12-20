@@ -51,17 +51,10 @@ final class ImportController extends AbstractAdministrationController
             'adminHeaderCSVImportColumns' => Translation::get(key: 'msgColumnStructure'),
             'categoryId' => Translation::get(key: 'ad_categ_categ'),
             'question' => Translation::get(key: 'ad_entry_topic'),
-            'answer' => Translation::get(key: 'msgAnswer'),
-            'keywords' => Translation::get(key: 'msgKeywords'),
-            'author' => Translation::get(key: 'msgAuthor'),
-            'email' => Translation::get(key: 'msgEmail'),
             'languageCode' => Translation::get(key: 'msgLanguageCode'),
-            'seperateWithCommas' => Translation::get(key: 'msgSeperateWithCommas'),
-            'tags' => Translation::get(key: 'msgTags'),
             'msgImportRecordsColumnStructure' => Translation::get(key: 'msgImportRecordsColumnStructure'),
             'csrfToken' => Token::getInstance($this->container->get(id: 'session'))->getTokenString('importfaqs'),
             'is_active' => Translation::get(key: 'ad_entry_active'),
-            'is_sticky' => Translation::get(key: 'msgStickyFAQ'),
             'trueFalse' => Translation::get(key: 'msgCSVImportTrueOrFalse'),
         ]);
     }

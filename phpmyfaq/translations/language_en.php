@@ -1335,8 +1335,8 @@ $LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent
 $PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan
-$PMF_LANG['msgLanguageCode'] = 'Language code (e.g. en, de ...)';
-$PMF_LANG['msgSeperateWithCommas'] = '(seperate with commas)';
+$PMF_LANG['msgLanguageCode'] = 'Language code';
+$PMF_LANG['msgSeparateWithCommas'] = '(seperate with commas)';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
 $PMF_LANG['msgImportRecords'] = 'FAQ Import';
 $PMF_LANG['msgImportCSVFile'] = 'Import CSV file';

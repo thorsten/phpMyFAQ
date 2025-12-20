@@ -1304,8 +1304,8 @@ $LANG_CONF['main.botIgnoreList'] = ['area', 'بوٹ نظرانداز فہرست 
 $PMF_LANG['msgGravatar'] = 'Gravatar تصویر';
 
 // شامل کیا گیا v4.0.0-alpha - 2024-01-12 by Jan
-$PMF_LANG['msgLanguageCode'] = 'زبان کا کوڈ (مثلاً en, de ...)';
-$PMF_LANG['msgSeperateWithCommas'] = '(کاما سے الگ کریں)';
+$PMF_LANG['msgLanguageCode'] = 'زبان کا کوڈ';
+$PMF_LANG['msgSeparateWithCommas'] = '(کاما سے الگ کریں)';
 $PMF_LANG['msgImportRecords'] = 'FAQ درآمد کریں';
 $PMF_LANG['msgImportCSVFile'] = 'CSV فائل درآمد کریں';
 $PMF_LANG['msgImportCSVFileBody'] = 'آپ یہاں اپنی ریکارڈ ڈیٹا کے ساتھ CSV فائل درآمد کر سکتے ہیں۔';
