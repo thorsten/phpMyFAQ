@@ -112,6 +112,44 @@ class PluralsTest extends TestCase
     }
 
     /**
+     * Test Arabic plural edge cases including numbers ending in 01-02
+     * @throws \ReflectionException
+     */
+    public function testArabicPluralEdgeCases(): void
+    {
+        // Form 0: zero
+        $this->assertEquals(0, $this->pluralMethod->invoke($this->plurals, 'ar', 0));
+
+        // Form 1: one
+        $this->assertEquals(1, $this->pluralMethod->invoke($this->plurals, 'ar', 1));
+
+        // Form 2: two
+        $this->assertEquals(2, $this->pluralMethod->invoke($this->plurals, 'ar', 2));
+
+        // Form 3: 3-10 (last two digits)
+        $this->assertEquals(3, $this->pluralMethod->invoke($this->plurals, 'ar', 3));
+        $this->assertEquals(3, $this->pluralMethod->invoke($this->plurals, 'ar', 10));
+        $this->assertEquals(3, $this->pluralMethod->invoke($this->plurals, 'ar', 103));
+        $this->assertEquals(3, $this->pluralMethod->invoke($this->plurals, 'ar', 110));
+        $this->assertEquals(3, $this->pluralMethod->invoke($this->plurals, 'ar', 203));
+
+        // Form 4: 11-99 (last two digits)
+        $this->assertEquals(4, $this->pluralMethod->invoke($this->plurals, 'ar', 11));
+        $this->assertEquals(4, $this->pluralMethod->invoke($this->plurals, 'ar', 99));
+        $this->assertEquals(4, $this->pluralMethod->invoke($this->plurals, 'ar', 111));
+        $this->assertEquals(4, $this->pluralMethod->invoke($this->plurals, 'ar', 199));
+
+        // Form 5: 100, 101, 102, etc.
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 100));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 101));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 102));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 200));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 201));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 202));
+        $this->assertEquals(5, $this->pluralMethod->invoke($this->plurals, 'ar', 1001));
+    }
+
+    /**
      * @throws \ReflectionException
      */
     public function testPluralFormsCzech(): void

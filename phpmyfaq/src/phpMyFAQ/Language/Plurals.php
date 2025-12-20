@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /**
  * The plural class provides support for plural forms in phpMyFAQ translations.
@@ -64,6 +62,13 @@ readonly class Plurals
     {
         switch ($language) {
             case 'ar':
+                // Arabic has 6 plural forms following GNU gettext standard:
+                // Form 0: zero (n==0)
+                // Form 1: one (n==1)
+                // Form 2: two (n==2)
+                // Form 3: few (n%100>=3 && n%100<=10) - e.g., 3, 10, 103, 210
+                // Form 4: many (n%100>=11 && n%100<=99) - e.g., 11, 99, 111, 199
+                // Form 5: other (everything else) - e.g., 100, 101, 102, 200, 1000
                 if ($number === 0) {
                     return 0;
                 }
@@ -77,7 +82,7 @@ readonly class Plurals
                 if ($n100 >= 3 && $n100 <= 10) {
                     return 3;
                 }
-                if ($n100 >= 11 || $n100 === 1 || $n100 === 2) {
+                if ($n100 >= 11 && $n100 <= 99) {
                     return 4;
                 }
                 return 5;
