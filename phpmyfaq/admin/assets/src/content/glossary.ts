@@ -73,9 +73,9 @@ export const handleAddGlossary = (): void => {
               'button',
               {
                 classList: 'btn btn-danger pmf-admin-delete-glossary',
-                'data-pmf-glossary-id': glossaryItem,
-                'data-pmf-csrf-token': '',
-                'data-pmf-glossary-language': glossaryLanguage,
+                'dataset.pmfGlossaryId': glossaryItem,
+                'dataset.pmfCsrfToken': '',
+                'dataset.pmfGlossaryLanguage': glossaryLanguage,
                 type: 'button',
                 innerText: 'Delete',
               },
