@@ -28,7 +28,7 @@ jobs:
 
       - name: Get Release name
         run: |
-          echo "release_name=nightly-${{ env.date }}" >> $GITHUB_ENV
+          echo "release_name=4.1-nightly-${{ env.date }}" >> $GITHUB_ENV
 
       - name: Bump version and push tag
         id: tag_version

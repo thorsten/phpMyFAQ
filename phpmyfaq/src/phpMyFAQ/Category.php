@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * The main category class. Yes, it's huge.
@@ -17,8 +17,6 @@
  * @link      https://www.phpmyfaq.de
  * @since     2004-02-16
  */
-
-declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -499,6 +497,44 @@ class Category
     ): string {
         $ids = $this->getNodes($catId);
         $segments = $this->getBreadcrumbsBuilder()->buildFromIds($this->cache->getCategoryNames(), $ids);
+
+        if ($segments === []) {
+            return '';
+        }
+
+        if ($renderAsHtml) {
+            return $this->getBreadcrumbsHtmlRenderer()->render($this->configuration, $segments, $useCssClass);
+        }
+
+        $names = array_map(static fn(array $s): string => (string) $s['name'], $segments);
+        return implode($separator, $names);
+    }
+
+    /**
+     * Returns the breadcrumb path with startpage as the first segment.
+     *
+     * @param int $catId Category ID
+     * @param string $separator Separator for text mode
+     * @param bool $renderAsHtml Render as HTML or plain text
+     * @param string $useCssClass CSS class for HTML mode
+     * @param string|null $startpageName Optional startpage name (defaults to Translation msgHome)
+     * @param string $startpageDescription Optional startpage description
+     */
+    public function getPathWithStartpage(
+        int $catId,
+        string $separator = ' / ',
+        bool $renderAsHtml = false,
+        string $useCssClass = 'breadcrumb',
+        ?string $startpageName = null,
+        string $startpageDescription = '',
+    ): string {
+        $ids = $this->getNodes($catId);
+        $segments = $this->getBreadcrumbsBuilder()->buildFromIdsWithStartpage(
+            $this->cache->getCategoryNames(),
+            $ids,
+            $startpageName,
+            $startpageDescription,
+        );
 
         if ($segments === []) {
             return '';

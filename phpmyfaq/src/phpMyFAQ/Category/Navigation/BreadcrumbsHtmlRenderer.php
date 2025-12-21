@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Category breadcrumb HTML renderer class
@@ -15,8 +15,6 @@
  * @since     2025-10-18
  */
 
-declare(strict_types=1);
-
 namespace phpMyFAQ\Category\Navigation;
 
 use phpMyFAQ\Configuration;
@@ -32,10 +30,16 @@ final class BreadcrumbsHtmlRenderer
     {
         $items = [];
         foreach ($segments as $index => $segment) {
-            $url = strtr('{base}index.php?action=show&cat={id}', [
-                '{base}' => $configuration->getDefaultUrl(),
-                '{id}' => (string) $segment['id'],
-            ]);
+            // Handle startpage (ID -1) with homepage URL
+            if ($segment['id'] === -1) {
+                $url = $configuration->getDefaultUrl();
+            } else {
+                $url = strtr('{base}index.php?action=show&cat={id}', [
+                    '{base}' => $configuration->getDefaultUrl(),
+                    '{id}' => (string) $segment['id'],
+                ]);
+            }
+
             $oLink = new Link($url, $configuration);
             $oLink->text = Strings::htmlentities($segment['name']);
             $oLink->setTitle(Strings::htmlentities($segment['name']));
