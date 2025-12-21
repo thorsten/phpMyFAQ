@@ -244,28 +244,63 @@ class Relation
     public function getAggregatedFaqNumbers(array $categories): array
     {
         $aggregatedFaqs = [];
+        $childrenMap = [];
 
+        // Build children map and initialize aggregated counts
         foreach ($categories as $category) {
             $categoryId = $category['category_id'];
             $parentId = $category['parent_id'];
             $numFaqs = $category['faqs'];
 
-            if ($parentId !== 0) {
-                if (!isset($aggregatedFaqs[$parentId])) {
-                    $aggregatedFaqs[$parentId] = $numFaqs;
-                } else {
-                    $aggregatedFaqs[$parentId] += $numFaqs;
-                }
-            }
+            $aggregatedFaqs[$categoryId] = $numFaqs;
 
-            if (!isset($aggregatedFaqs[$categoryId])) {
-                $aggregatedFaqs[$categoryId] = $numFaqs;
-            } else {
-                $aggregatedFaqs[$categoryId] += $numFaqs;
+            if ($parentId !== 0) {
+                if (!isset($childrenMap[$parentId])) {
+                    $childrenMap[$parentId] = [];
+                }
+                $childrenMap[$parentId][] = $categoryId;
+            }
+        }
+
+        // Recursively aggregate FAQs from children to parents
+        $processedCategories = [];
+
+        foreach ($categories as $category) {
+            $categoryId = $category['category_id'];
+
+            if (!isset($processedCategories[$categoryId])) {
+                $this->aggregateRecursively($categoryId, $childrenMap, $aggregatedFaqs, $processedCategories);
             }
         }
 
         return $aggregatedFaqs;
+    }
+
+    /**
+     * Helper method for recursive aggregation
+     */
+    private function aggregateRecursively(
+        int $categoryId,
+        array $childrenMap,
+        array &$aggregatedFaqs,
+        array &$processedCategories,
+    ): int {
+        if (isset($processedCategories[$categoryId])) {
+            return $aggregatedFaqs[$categoryId];
+        }
+
+        $total = $aggregatedFaqs[$categoryId] ?? 0;
+
+        if (isset($childrenMap[$categoryId])) {
+            foreach ($childrenMap[$categoryId] as $childId) {
+                $total += $this->aggregateRecursively($childId, $childrenMap, $aggregatedFaqs, $processedCategories);
+            }
+        }
+
+        $aggregatedFaqs[$categoryId] = $total;
+        $processedCategories[$categoryId] = true;
+
+        return $total;
     }
 
     /**
