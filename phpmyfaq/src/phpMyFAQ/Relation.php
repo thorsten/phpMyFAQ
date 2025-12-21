@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * The Relation class for dynamic-related record linking.
@@ -16,11 +16,9 @@
  * @since     2006-06-18
  */
 
-declare(strict_types=1);
-
 namespace phpMyFAQ;
 
-use phpMyFAQ\Relation\RelationRepository;
+use phpMyFAQ\Search\SearchFactory;
 
 /**
  * Class Relation
@@ -28,15 +26,12 @@ use phpMyFAQ\Relation\RelationRepository;
  */
 readonly class Relation
 {
-    private RelationRepository $repository;
-
     /**
      * Relation constructor.
      */
     public function __construct(
         private Configuration $configuration,
     ) {
-        $this->repository = new RelationRepository($this->configuration);
     }
 
     /**
@@ -48,10 +43,33 @@ readonly class Relation
      */
     public function getAllRelatedByQuestion(string $question, string $keywords): array
     {
-        return $this->repository->getAllRelatedByQuestion(
-            $question,
-            $keywords,
-            $this->configuration->getLanguage()->getLanguage(),
-        );
+        $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
+        $search = SearchFactory::create($this->configuration, ['database' => Database::getType()]);
+
+        $search
+            ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
+            ->setResultColumns([
+                'fd.id AS id',
+                'fd.lang AS lang',
+                'fcr.category_id AS category_id',
+                'fd.thema AS question',
+                'fd.content AS answer',
+                'fd.keywords AS keywords',
+            ])
+            ->setJoinedTable(Database::getTablePrefix() . 'faqcategoryrelations AS fcr')
+            ->setJoinedColumns([
+                'fd.id = fcr.record_id',
+                'fd.lang = fcr.record_lang',
+            ])
+            ->setConditions([
+                'fd.active' => "'yes'",
+                'fd.lang' => "'" . $this->configuration->getLanguage()->getLanguage() . "'",
+            ])
+            ->setMatchingColumns(['fd.keywords', 'fd.thema', 'fd.content'])
+            ->disableRelevance();
+
+        $result = $search->search($terms);
+
+        return $this->configuration->getDb()->fetchAll($result);
     }
 }
