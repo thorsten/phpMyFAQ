@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 /**
  * The main Sitemap class.
@@ -195,7 +193,7 @@ class Sitemap
                     WHERE
                         fd.id = fcr.record_id
                     AND
-                        %s(fd.thema, 1, 1) = '%s'
+                        fd.thema LIKE '%s%%'
                     AND
                         fd.lang = '%s'
                     AND
@@ -206,7 +204,6 @@ class Sitemap
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->configuration->getDb() instanceof Sqlite3 ? 'SUBSTR' : 'SUBSTRING',
             $this->configuration->getDb()->escape($letter),
             $this->configuration->getLanguage()->getLanguage(),
             $permPart,
