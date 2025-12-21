@@ -103,7 +103,7 @@ class TwigWrapper
 
     public function getExtension(string $class): ExtensionInterface
     {
-        return $this->twigEnvironment->getExtension($class); /** @phpstan-ignore-line */
+        return $this->twigEnvironment->getExtension($class);
     }
 
     public function addFilter(TwigFilter $twigFilter): void

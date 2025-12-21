@@ -1,9 +1,0 @@
-parameters:
-	bootstrapFiles:
-		- phpmyfaq/content/core/config/constants.php
-		- phpmyfaq/src/constants.php
-		- phpmyfaq/src/autoload.php
-	level: 6
-	paths:
-		- phpmyfaq/src/phpMyFAQ
-	treatPhpDocTypesAsCertain: false

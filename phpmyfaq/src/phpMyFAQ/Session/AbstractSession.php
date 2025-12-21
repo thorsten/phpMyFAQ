@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Abstract session class to wrap the Symfony session class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-02-19
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Session;
 

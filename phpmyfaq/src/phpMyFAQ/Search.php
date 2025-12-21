@@ -143,7 +143,7 @@ class Search
                 $selectedCategory = [
                     $fcrTable . '.category_id' => array_merge((array) $this->getCategoryId(), $children),
                 ];
-            } else { // @phpstan-ignore-line
+            } else {
                 $selectedCategory = [
                     $fcrTable . '.category_id' => $this->getCategoryId(),
                 ];

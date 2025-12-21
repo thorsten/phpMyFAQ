@@ -180,7 +180,6 @@ class User
         }
 
         // additionally, set given $auth objects
-        /** @phpstan-ignore-next-line */
         foreach ($this->authContainer as $name => $authObject) {
             if ($this->addAuth($authObject, $name)) {
                 continue;
@@ -566,7 +565,6 @@ class User
             return false;
         }
 
-        /** @phpstan-ignore-next-line */
         $this->perm->refuseAllUserRights($this->userId);
 
         $delete = sprintf('DELETE FROM %sfaquser WHERE user_id = %d', Database::getTablePrefix(), $this->userId);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for phpMyFAQ FAQs.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2010-11-12
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
@@ -204,7 +204,7 @@ class FaqHelper extends AbstractHelper
     {
         $link = new Link($this->configuration->getDefaultUrl(), $this->configuration);
         // Optional artlang parameter; prevents an empty match (sets fallback later)
-        $pattern = '/(https?:\/\/[^\/]+)\/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(?:&artlang=([a-z]{2}))?/i';
+        $pattern = '#(https?://[^/]+)/index\.php\?action=(artikel|faq)&cat=(\d+)&id=(\d+)(?:&artlang=([a-z]{2}))?#i';
 
         $decodedAnswer = html_entity_decode($answer);
 

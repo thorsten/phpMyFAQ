@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Session wrapper to use Symfony Session instead of direct $_SESSION access.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-08-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Session;
 

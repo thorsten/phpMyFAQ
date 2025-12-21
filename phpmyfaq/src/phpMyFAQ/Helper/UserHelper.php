@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for phpMyFAQ user.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link       https://www.phpmyfaq.de
  * @since      2021-03-14
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 

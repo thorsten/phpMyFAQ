@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This class is a helper class for permission relevant methods.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-18
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 

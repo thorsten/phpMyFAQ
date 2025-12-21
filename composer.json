@@ -55,14 +55,12 @@
     "twig/twig": "^3.10"
   },
   "require-dev": {
-    "carthage-software/mago": "^1.0.0-beta.32",
+    "carthage-software/mago": "^1.0.1",
     "doctrine/instantiator": "2.*",
     "mikey179/vfsstream": "^1.6",
     "phpdocumentor/reflection-docblock": "5.*",
-    "phpstan/phpstan": "^2",
     "phpunit/phpunit": "^12.3",
     "rector/rector": "^2",
-    "squizlabs/php_codesniffer": "*",
     "symfony/yaml": "7.*",
     "zircote/swagger-php": "^5.0"
   },
@@ -96,12 +94,13 @@
   },
   "minimum-stability": "stable",
   "scripts": {
-    "check": "./phpmyfaq/src/libs/bin/phpstan analyse -c phpstan.neon --memory-limit 1G",
-    "lint": "./phpmyfaq/src/libs/bin/phpcs --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
-    "lint-fix": "./phpmyfaq/src/libs/bin/phpcbf --standard=PSR12 --extensions=php --ignore=./phpmyfaq/src/libs/* ./phpmyfaq/src/phpMyFAQ",
+    "analyze": "./phpmyfaq/src/libs/bin/mago analyze",
+    "format": "./phpmyfaq/src/libs/bin/mago format",
+    "format:fix": "./phpmyfaq/src/libs/bin/mago format --fix",
+    "lint": "./phpmyfaq/src/libs/bin/mago lint",
+    "lint:fix": "./phpmyfaq/src/libs/bin/mago lint --fix",
     "openapi:json": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php -f json ./phpmyfaq/src/phpMyFAQ -o docs/openapi.json",
     "openapi:yaml": "./phpmyfaq/src/libs/bin/openapi -b ./phpmyfaq/src/libs/autoload.php ./phpmyfaq/src/phpMyFAQ -o docs/openapi.yaml",
-    "phpstan": "./phpmyfaq/src/libs/bin/phpstan analyze --memory-limit=4G",
     "refactor": "./phpmyfaq/src/libs/bin/rector",
     "refactor:dryrun": "./phpmyfaq/src/libs/bin/rector --dry-run",
     "test": "./phpmyfaq/src/libs/bin/phpunit --no-coverage",

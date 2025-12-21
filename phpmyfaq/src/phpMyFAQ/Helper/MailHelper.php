@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This class is a helper class for sending mails.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2020-02-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 

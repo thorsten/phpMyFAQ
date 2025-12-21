@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * MUA (Mail User Agent) implementation using the Symfony Mailer class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-01-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Mail;
 

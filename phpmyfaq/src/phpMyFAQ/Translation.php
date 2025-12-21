@@ -217,7 +217,6 @@ class Translation
 
             switch ($key) {
                 case 'records.maxAttachmentSize':
-                    /** @phpstan-ignore-next-line */
                     $configuration[$key]['label'] = sprintf(
                         $configuration[$key]['label'],
                         ini_get(option: 'upload_max_filesize'),

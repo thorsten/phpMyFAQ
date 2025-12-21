@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The medium permission class provides group rights.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Permission;
 

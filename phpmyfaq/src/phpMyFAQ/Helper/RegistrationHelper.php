@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for registrations
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2020-10-28
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Helper;
 
