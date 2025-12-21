@@ -581,7 +581,7 @@ class Category
         foreach ($rows as $id => $row) {
             $this->cache->addCategory($id, $row);
         }
-        return $this->cache->getCategories();
+        return $rows;
     }
 
     public function create(CategoryEntity $categoryEntity): ?int
