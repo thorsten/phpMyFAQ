@@ -95,13 +95,14 @@ readonly class StatisticsHelper
         if (is_file(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate))) {
             $fp = fopen(PMF_ROOT_DIR . '/content/core/data/tracking' . date(format: 'dmY', timestamp: $lastDate), 'r');
 
+            $date = null;
             while (($data = fgetcsv($fp, length: 1024, separator: ';', enclosure: '"', escape: '\\')) !== false) {
                 $date = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $requestTime;
             }
 
             fclose($fp);
 
-            if (empty($date)) {
+            if ($date === null || $date === 0) {
                 $date = $request->server->get('REQUEST_TIME');
             }
 

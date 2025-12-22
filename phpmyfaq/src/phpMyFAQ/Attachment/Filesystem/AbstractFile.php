@@ -55,7 +55,7 @@ abstract class AbstractFile extends AbstractEntry
     ) {
         $this->path = $filepath;
 
-        $this->handle = @fopen($this->path, $this->mode);
+        $this->handle = fopen($this->path, $this->mode);
 
         if (!is_resource($this->handle)) {
             throw new FileException('Could not open file: ' . $this->path);

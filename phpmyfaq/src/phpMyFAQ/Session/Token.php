@@ -176,9 +176,7 @@ class Token
 
     private function getCookie(string $page): string
     {
-        $cookieValue = Request::createFromGlobals()->cookies->get($this->getCookieName($page), '');
-
-        return empty($cookieValue) ? '' : $cookieValue;
+        return Request::createFromGlobals()->cookies->get($this->getCookieName($page), '');
     }
 
     /**

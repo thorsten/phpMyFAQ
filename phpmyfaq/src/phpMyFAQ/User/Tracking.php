@@ -123,11 +123,14 @@ class Tracking
         $remoteAddress = $this->request->getClientIp();
         $localAddresses = ['127.0.0.1', '::1'];
 
-        if (in_array($remoteAddress, $localAddresses) && $this->getRequestHeaders()->has('X-Forwarded-For')) {
+        if (
+            in_array($remoteAddress, $localAddresses, strict: true)
+            && $this->getRequestHeaders()->has('X-Forwarded-For')
+        ) {
             $remoteAddress = $this->getRequestHeaders()->get('X-Forwarded-For');
         }
 
-        return preg_replace('([^0-9a-z:.]+)i', '', (string) $remoteAddress);
+        return preg_replace(pattern: '([^0-9a-z:.]+)i', replacement: '', subject: (string) $remoteAddress);
     }
 
     private function isBanned(string $remoteAddress): bool
@@ -147,7 +150,7 @@ class Tracking
                 'sid',
             );
 
-            if (!is_null($cookieId) && !$cookieId != $this->userSession->getCurrentSessionId()) {
+            if (!is_null($cookieId) && !$cookieId !== $this->userSession->getCurrentSessionId()) {
                 $this->userSession->setCookie(
                     UserSession::COOKIE_NAME_SESSION_ID,
                     $this->userSession->getCurrentSessionId(),
@@ -180,11 +183,15 @@ class Tracking
             . ';'
             . $remoteAddress
             . ';'
-            . str_replace(';', ',', $this->request->server->get('QUERY_STRING') ?? '')
+            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('QUERY_STRING') ?? '')
             . ';'
-            . str_replace(';', ',', $this->request->server->get('HTTP_REFERER') ?? '')
+            . str_replace(search: ';', replace: ',', subject: $this->request->server->get('HTTP_REFERER') ?? '')
             . ';'
-            . str_replace(';', ',', urldecode((string) $this->request->server->get('HTTP_USER_AGENT')))
+            . str_replace(
+                search: ';',
+                replace: ',',
+                subject: urldecode((string) $this->request->server->get('HTTP_USER_AGENT')),
+            )
             . ';'
             . $this->request->server->get('REQUEST_TIME')
             . ";\n";

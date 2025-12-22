@@ -57,7 +57,7 @@ class Builtin implements MailUserAgentInterface
         }
 
         // Send the email
-        if (empty($sender)) {
+        if ($sender === '') {
             return (int) mail($recipients, $subject, $body, $mailHeaders);
         }
 

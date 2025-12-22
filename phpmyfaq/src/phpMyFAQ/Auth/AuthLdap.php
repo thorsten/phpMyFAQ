@@ -126,7 +126,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             $groupName = $this->extractGroupNameFromDn($userGroup);
 
             // Check if there's a specific mapping for this AD group
-            if (!empty($groupMapping) && isset($groupMapping[$groupName])) {
+            if (count($groupMapping) > 0 && isset($groupMapping[$groupName])) {
                 $faqGroupName = $groupMapping[$groupName];
             } else {
                 // Default: use the AD group name
@@ -232,7 +232,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
             }
 
             $allowedGroups = $ldapGroupConfig['allowed_groups'];
-            if (!empty($allowedGroups)) {
+            if (count($allowedGroups) > 0) {
                 $hasAllowedGroup = false;
                 foreach ($userGroups as $userGroup) {
                     foreach ($allowedGroups as $allowedGroup) {

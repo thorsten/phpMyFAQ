@@ -16,3 +16,11 @@ null-type-hint = "question"
 
 [linter]
 integrations = ["symfony", "php-unit"]
+
+[linter.rules]
+cyclomatic-complexity = { threshold = 50 }
+halstead = { volume-threshold = 3000, effort-threshold = 20000 }
+kan-defect = { threshold = 3.0 }
+too-many-enum-cases = { threshold = 50 }
+too-many-methods = { threshold = 20 }
+too-many-properties = { threshold = 15 }

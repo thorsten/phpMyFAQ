@@ -104,17 +104,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      */
     public function getResultColumns(): string
     {
-        $resultColumns = '';
-
-        foreach ($this->resultColumns as $resultColumn) {
-            if (empty($resultColumns)) {
-                $resultColumns = $resultColumn;
-            } else {
-                $resultColumns .= ', ' . $resultColumn;
-            }
-        }
-
-        return $resultColumns;
+        return implode(', ', $this->resultColumns);
     }
 
     /**
@@ -262,7 +252,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         $where = '';
 
         for ($i = 0; $i < $numKeys; ++$i) {
-            if (strlen($where) != 0) {
+            if ($where !== '') {
                 $where .= ' OR';
             }
 

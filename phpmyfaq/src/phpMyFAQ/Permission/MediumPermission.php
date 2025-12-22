@@ -124,7 +124,7 @@ class MediumPermission extends BasicPermission implements PermissionInterface
     public function grantGroupRight(int $groupId, int $rightId): bool
     {
         $right_data = $this->getRightData($rightId);
-        if (empty($right_data) || !($right_data['for_groups'] ?? false)) {
+        if (count($right_data) === 0 || !($right_data['for_groups'] ?? false)) {
             return false;
         }
 
