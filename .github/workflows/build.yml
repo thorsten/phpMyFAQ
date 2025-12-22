@@ -41,9 +41,6 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      #- name: Lint with PHPCS
-      #  run: phpmyfaq/src/libs/bin/phpcs --standard=PSR12 ./phpmyfaq/src/phpMyFAQ
-
       - name: Setup Mago CLI
         uses: nhedger/setup-mago@v1
 
@@ -82,8 +79,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: Install Node.js dependencies
         run: pnpm install
+
+      - name: Run ESLint check
+        run: pnpm eslint .
 
       - name: Run Vitest tests
         run: pnpm test
