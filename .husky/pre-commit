@@ -1,1 +1,1 @@
-mago format --check && composer validate && composer test && pnpm pretty-quick --staged && pnpm test
+mago format --check && composer validate && composer test && pnpm pretty-quick --staged && pnpm eslint . && pnpm test
