@@ -21,7 +21,8 @@
     </div>
   </div>
 
-  <form id="pmf-add-faq-form" action="#" method="post" accept-charset="utf-8" class="needs-validation" novalidate>
+  <form id="pmf-add-faq-form" action="#" method="post" accept-charset="utf-8" class="needs-validation"
+        data-wysiwyg-enabled="{{ enableWysiwygEditor ? 'true' : 'false' }}" novalidate>
     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
     <input type="hidden" value="{{ openQuestionID }}" id="openQuestionID" name="openQuestionID">
 
@@ -31,7 +32,8 @@
         {% if id3_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" {{ id3_required }}>
+        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}"
+          {{ id3_required }}>
       </div>
     </div>
     {% endif %}
@@ -42,7 +44,8 @@
         {% if id4_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
-        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" {{ id4_required }}>
+        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}"
+          {{ id4_required }}>
       </div>
     </div>
     {% endif %}
@@ -71,9 +74,8 @@
         {% if id6_required == 'required' %}<span class="pmf-required-asterisk"> *</span>{% endif %}
       </label>
       <div class="col-sm-9">
-        <textarea class="form-control" cols="37" rows="3" name="question" id="question" {{ id6_required }} {{ readonly }}>
-{{ printQuestion }}</textarea
-        >
+        <textarea class="form-control" cols="37" rows="3" name="question" id="question" {{ id6_required }}
+          {{ readonly }}>{{ question }}</textarea>
       </div>
     </div>
     {% endif %}
@@ -113,9 +115,6 @@
   </form>
 </section>
 
-{% if enableWysiwygEditor == true %}
-<script src="{{ baseHref }}admin/assets/js/editor/tinymce.min.js?{{ currentTimestamp }}"></script>
-{% endif %}
 {% endif %}
 
 {% endblock %}

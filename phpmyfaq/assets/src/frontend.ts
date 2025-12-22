@@ -22,6 +22,7 @@ import {
   handleShareLinkButton,
   handleShowFaq,
   handleUserVoting,
+  renderFaqEditor,
 } from './faq';
 import { handleAutoComplete, handleCategorySelection, handleQuestion } from './search';
 import {
@@ -62,6 +63,12 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   // Handle Adds a FAQ
   handleAddFaq();
+
+  // Initialize Jodit editor for FAQ add form if WYSIWYG is enabled
+  const addFaqForm: HTMLFormElement | null = document.querySelector('#pmf-add-faq-form');
+  if (addFaqForm && addFaqForm.dataset.wysiwygEnabled === 'true') {
+    renderFaqEditor();
+  }
 
   // Handle show FAQ
   handleShowFaq();
