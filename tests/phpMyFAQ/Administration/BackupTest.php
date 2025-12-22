@@ -2,6 +2,7 @@
 
 namespace phpMyFAQ\Administration;
 
+use phpMyFAQ\Administration\Backup\BackupExportResult;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Database\DatabaseDriver;
@@ -41,17 +42,6 @@ class BackupTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $dbHandle = new Sqlite3();
-        $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
-
-        $this->configuration = new Configuration($dbHandle);
-        $this->configuration->set('main.currentVersion', System::getVersion());
-        $this->configuration->getAll();
-
-        $this->databaseHelper = new DatabaseHelper($this->configuration);
-
-        $this->backup = new Backup($this->configuration, $this->databaseHelper);
 
         // Mock Configuration class
         $this->mockConfiguration = $this->createStub(Configuration::class);
@@ -109,7 +99,7 @@ class BackupTest extends TestCase
 
         $dataBackup = $this->backup->createBackup(BackupType::BACKUP_TYPE_DATA->value, $backupQueries);
 
-        // Create mock database result for verification
+        // Create a mock database result for verification
         $mockResult = new stdClass();
         $mockResult->id = 1;
         $mockResult->filename = $dataBackup;
@@ -136,7 +126,9 @@ class BackupTest extends TestCase
         $this->assertStringContainsString('DO NOT REMOVE THE FIRST LINE!', $queries);
     }
 
-    public function testCreateBackupWithTablePrefix(): void
+    /**
+     * @throws SodiumException
+     */public function testCreateBackupWithTablePrefix(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')->willReturnArgument(0);
@@ -148,11 +140,11 @@ class BackupTest extends TestCase
         $this->assertStringEndsWith('.sql', $result);
     }
 
+    /**
+     * @throws SodiumException
+     */
     public function testCreateBackupWithoutTablePrefix(): void
     {
-        // Mock Database static methods
-        \phpMyFAQ\Database::setTablePrefix('');
-
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
@@ -163,7 +155,9 @@ class BackupTest extends TestCase
         $this->assertStringEndsWith('.sql', $result);
     }
 
-    public function testCreateBackupEscapesInput(): void
+    /**
+     * @throws SodiumException
+     */public function testCreateBackupEscapesInput(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')
@@ -178,7 +172,9 @@ class BackupTest extends TestCase
         $this->assertIsString($result);
     }
 
-    public function testVerifyBackupWithNonExistentFile(): void
+    /**
+     * @throws SodiumException
+     */public function testVerifyBackupWithNonExistentFile(): void
     {
         $this->mockDb->method('escape')->willReturnArgument(0);
         $this->mockDb->method('query')->willReturn(true);
@@ -189,7 +185,9 @@ class BackupTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testVerifyBackupWithValidData(): void
+    /**
+     * @throws SodiumException
+     */public function testVerifyBackupWithValidData(): void
     {
         // Create mock database result
         $mockResult = new stdClass();
@@ -244,7 +242,9 @@ class BackupTest extends TestCase
         $this->assertStringContainsString('4.0', $result); // Version should be in header
     }
 
-    public function testGetBackupTableNamesForDataBackup(): void
+    /**
+     * @throws \Exception
+     */public function testGetBackupTableNamesForDataBackup(): void
     {
         $mockTables = [
             'faqconfig',
@@ -265,7 +265,9 @@ class BackupTest extends TestCase
         $this->assertStringNotContainsString('faqsessions', $result);
     }
 
-    public function testGetBackupTableNamesForLogsBackup(): void
+    /**
+     * @throws \Exception
+     */public function testGetBackupTableNamesForLogsBackup(): void
     {
         $mockTables = [
             'faqconfig',
@@ -286,7 +288,9 @@ class BackupTest extends TestCase
         $this->assertStringNotContainsString('faqcategories', $result);
     }
 
-    public function testGetBackupTableNamesWithEmptyTableList(): void
+    /**
+     * @throws \Exception
+     */public function testGetBackupTableNamesWithEmptyTableList(): void
     {
         $this->mockDb->method('getTableNames')->willReturn([]);
 
@@ -295,7 +299,9 @@ class BackupTest extends TestCase
         $this->assertEquals('', $result);
     }
 
-    public function testGetBackupTableNamesWithWhitespaceInTableNames(): void
+    /**
+     * @throws \Exception
+     */public function testGetBackupTableNamesWithWhitespaceInTableNames(): void
     {
         $mockTables = [
             '  faqconfig  ', // With whitespace
@@ -332,7 +338,9 @@ class BackupTest extends TestCase
         }
     }
 
-    public function testCreateBackupDateFormat(): void
+    /**
+     * @throws SodiumException
+     */public function testCreateBackupDateFormat(): void
     {
         $this->mockDb->method('nextId')->willReturn(1);
         $this->mockDb->method('escape')->willReturnArgument(0);
@@ -364,5 +372,254 @@ class BackupTest extends TestCase
         foreach ($mockQueries as $query) {
             $this->assertStringContainsString($query, $result);
         }
+    }
+
+    public function testGetLastBackupInfoWithNoBackups(): void
+    {
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('numRows')->willReturn(0);
+        $this->mockDb->method('fetchAll')->willReturn([]);
+
+        $result = $this->backup->getLastBackupInfo();
+
+        $this->assertNull($result['lastBackupDate']);
+        $this->assertTrue($result['isBackupOlderThan30Days']);
+    }
+
+    public function testGetLastBackupInfoWithRecentBackup(): void
+    {
+        $recentDate = date('Y-m-d H:i:s');
+        $mockBackup = (object) [
+            'id' => 1,
+            'filename' => 'backup.sql',
+            'created' => $recentDate
+        ];
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('numRows')->willReturn(1);
+        $this->mockDb->method('fetchAll')->willReturn([$mockBackup]);
+
+        $result = $this->backup->getLastBackupInfo();
+
+        $this->assertEquals($recentDate, $result['lastBackupDate']);
+        $this->assertFalse($result['isBackupOlderThan30Days']);
+    }
+
+    public function testGetLastBackupInfoWithOldBackup(): void
+    {
+        $oldDate = date('Y-m-d H:i:s', strtotime('-35 days'));
+        $mockBackup = (object) [
+            'id' => 1,
+            'filename' => 'backup.sql',
+            'created' => $oldDate
+        ];
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('numRows')->willReturn(1);
+        $this->mockDb->method('fetchAll')->willReturn([$mockBackup]);
+
+        $result = $this->backup->getLastBackupInfo();
+
+        $this->assertEquals($oldDate, $result['lastBackupDate']);
+        $this->assertTrue($result['isBackupOlderThan30Days']);
+    }
+
+    public function testGetLastBackupInfoWithInvalidDate(): void
+    {
+        $mockBackup = (object) [
+            'id' => 1,
+            'filename' => 'backup.sql',
+            'created' => 'invalid-date'
+        ];
+
+        $this->mockDb->method('query')->willReturn(true);
+        $this->mockDb->method('numRows')->willReturn(1);
+        $this->mockDb->method('fetchAll')->willReturn([$mockBackup]);
+
+        $result = $this->backup->getLastBackupInfo();
+
+        $this->assertNull($result['lastBackupDate']);
+        $this->assertTrue($result['isBackupOlderThan30Days']);
+    }
+
+    public function testParseBackupFile(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup.sql';
+        $content = "-- pmf4.0: faqconfig faqdata\n" .
+                   "-- DO NOT REMOVE THE FIRST LINE!\n" .
+                   "-- pmftableprefix: pmf_\n" .
+                   "-- DO NOT REMOVE THE LINES ABOVE!\n" .
+                   "INSERT INTO faqconfig VALUES (1, 'test');\n" .
+                   "INSERT INTO faqdata VALUES (2, 'data');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        $this->assertTrue($result->versionMatches);
+        $this->assertEquals('-- pmf4.0', $result->versionFound);
+        $this->assertEquals('-- pmf4.0', $result->versionExpected);
+        $this->assertEquals('pmf_', $result->tablePrefix);
+        $this->assertGreaterThan(0, count($result->queries));
+
+        unlink($backupFile);
+    }
+
+    public function testParseBackupFileWithVersionMismatch(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/test-backup-old.sql';
+        $content = "-- pmf3.2: faqconfig\n" .
+                   "-- DO NOT REMOVE THE FIRST LINE!\n" .
+                   "-- pmftableprefix: \n" .
+                   "INSERT INTO faqconfig VALUES (1, 'test');";
+
+        file_put_contents($backupFile, $content);
+
+        $result = $this->backup->parseBackupFile($backupFile, '4.0.0');
+
+        $this->assertFalse($result->versionMatches);
+        $this->assertEquals('-- pmf3.2', $result->versionFound);
+        $this->assertEquals('-- pmf4.0', $result->versionExpected);
+
+        unlink($backupFile);
+    }
+
+    public function testParseBackupFileWithNonExistentFile(): void
+    {
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage('Cannot open backup file');
+
+        // Suppress expected fopen warning
+        @$this->backup->parseBackupFile('/nonexistent/file.sql', '4.0.0');
+    }
+
+    public function testParseBackupFileWithEmptyFile(): void
+    {
+        $backupFile = PMF_TEST_DIR . '/empty-backup.sql';
+        file_put_contents($backupFile, '');
+
+        $this->expectException(\phpMyFAQ\Core\Exception::class);
+        $this->expectExceptionMessage('Empty backup file');
+
+        try {
+            $this->backup->parseBackupFile($backupFile, '4.0.0');
+        } finally {
+            unlink($backupFile);
+        }
+    }
+
+    public function testExecuteBackupQueries(): void
+    {
+        $queries = [];
+
+        $result = $this->backup->executeBackupQueries($queries, 'pmf_');
+
+        $this->assertEquals(0, $result->queriesOk);
+        $this->assertEquals(0, $result->queriesFailed);
+    }
+
+    public function testExecuteBackupQueriesWithFailures(): void
+    {
+        // Mock the database to simulate query failures
+        $mockDb = $this->createMock(DatabaseDriver::class);
+        $mockDb->method('query')->willReturn(false);
+        $mockDb->method('error')->willReturn('Mocked SQL error');
+
+        $mockConfig = $this->createStub(Configuration::class);
+        $mockConfig->method('getDb')->willReturn($mockDb);
+
+        $databaseHelper = new DatabaseHelper($mockConfig);
+        $backup = new Backup($mockConfig, $databaseHelper);
+
+        $queries = ['SELECT 1', 'SELECT 2'];
+        $result = $backup->executeBackupQueries($queries, 'pmf_');
+
+        // All queries should fail with mocked error
+        $this->assertEquals(0, $result->queriesOk);
+        $this->assertEquals(2, $result->queriesFailed);
+        $this->assertNotNull($result->lastErrorQuery);
+        $this->assertEquals('Mocked SQL error', $result->lastErrorReason);
+    }
+
+    public function testExecuteBackupQueriesWithEmptyArray(): void
+    {
+        $result = $this->backup->executeBackupQueries([], 'pmf_');
+
+        $this->assertEquals(0, $result->queriesOk);
+        $this->assertEquals(0, $result->queriesFailed);
+    }
+
+    public function testExecuteBackupQueriesWithDifferentTablePrefix(): void
+    {
+        // Mock database to return success for queries
+        $mockDb = $this->createMock(DatabaseDriver::class);
+        $mockDb->method('query')->willReturn(true);
+
+        $mockConfig = $this->createStub(Configuration::class);
+        $mockConfig->method('getDb')->willReturn($mockDb);
+
+        $databaseHelper = new DatabaseHelper($mockConfig);
+        $backup = new Backup($mockConfig, $databaseHelper);
+
+        $queries = ['SELECT 1'];
+        $result = $backup->executeBackupQueries($queries, 'old_prefix_');
+
+        // Query should execute successfully with mocked database
+        $this->assertEquals(1, $result->queriesOk);
+        $this->assertEquals(0, $result->queriesFailed);
+    }
+
+    /**
+     * @throws SodiumException
+     */public function testExportForDataBackup(): void
+    {
+        $mockTables = ['faqconfig', 'faqdata'];
+        $mockQueries = ['INSERT INTO faqconfig VALUES (1);'];
+
+        $this->mockDb->method('getTableNames')->willReturn($mockTables);
+        $this->mockDb->method('nextId')->willReturn(1);
+        $this->mockDb->method('escape')->willReturnArgument(0);
+        $this->mockDb->method('query')->willReturn(true);
+
+        $this->mockDatabaseHelper->method('buildInsertQueries')->willReturn($mockQueries);
+
+        $result = $this->backup->export(BackupType::BACKUP_TYPE_DATA);
+
+        $this->assertInstanceOf(BackupExportResult::class, $result);
+        $this->assertStringContainsString('phpmyfaq-data', $result->fileName);
+        $this->assertStringContainsString('pmf4.0', $result->content);
+        $this->assertStringContainsString('DO NOT REMOVE', $result->content);
+    }
+
+    /**
+     * @throws SodiumException
+     */public function testExportForLogsBackup(): void
+    {
+        $mockTables = ['faqadminlog', 'faqsessions'];
+        $mockQueries = ['INSERT INTO faqadminlog VALUES (1);'];
+
+        $this->mockDb->method('getTableNames')->willReturn($mockTables);
+        $this->mockDb->method('nextId')->willReturn(1);
+        $this->mockDb->method('escape')->willReturnArgument(0);
+        $this->mockDb->method('query')->willReturn(true);
+
+        $this->mockDatabaseHelper->method('buildInsertQueries')->willReturn($mockQueries);
+
+        $result = $this->backup->export(BackupType::BACKUP_TYPE_LOGS);
+
+        $this->assertInstanceOf(BackupExportResult::class, $result);
+        $this->assertStringContainsString('phpmyfaq-logs', $result->fileName);
+    }
+
+    /**
+     * @throws SodiumException
+     */public function testExportForContentBackupThrowsException(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('To be implemented');
+
+        $this->mockDb->method('getTableNames')->willReturn([]);
+
+        $this->backup->export(BackupType::BACKUP_TYPE_CONTENT);
     }
 }
