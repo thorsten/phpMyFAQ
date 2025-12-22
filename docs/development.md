@@ -229,14 +229,14 @@ For development purposes, you can start a full stack to run your current phpMyFA
 
 The command above starts nine containers for ^multi-database development as follows.
 
-_Specific images started once to prepare the project:_
+_Specific images started at once to prepare the project:_
 
 - **composer**: update Composer dependencies
 - **pnpm**: update PNPM dependencies
 
 _Running using named volumes:_
 
-- **mariadb**: image with MariaD                B database with xtrabackup support
+- **mariadb**: image with MariaDB database with xtrabackup support
 - **phpmyadmin**: a PHP tool to have a look on your MariaDB database.
 - **postgres**: image with PostgreSQL database
 - **pgadmin**: a PHP tool to have a look on your PostgreSQL database.
@@ -292,7 +292,11 @@ To run the PHPUnit-based tests, you can use the following command:
 
     $ composer test
 
-To run the Jest-based tests, you can use the following command:
+To run the ESLint-based checks, you can use the following command:
+
+    $ pnpm eslint .
+
+To run the Vitest-based tests, you can use the following command:
 
     $ pnpm test
 
@@ -319,7 +323,7 @@ You can now make a pull request on the phpMyFAQ GitHub repository.
 
 ## 8.6 Builtin Twig Extensions
 
-phpMyFAQ v4 and later uses the Twig template engine for the frontend and the backend.
+phpMyFAQ v4 and later use the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
 
 ### Category Name Twig Extension

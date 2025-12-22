@@ -136,7 +136,7 @@ Then open http://www.example.org/phpmyfaq/setup/ in your browser.
 
 ### PHP
 
-To run our unit tests via PHPUnit v12.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v12.x, execute this command on your CLI
 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
@@ -144,9 +144,9 @@ To run our unit tests via PHPUnit v12.x, just execute this command on your CLI
 
 Please note that phpMyFAQ needs to be installed via Composer.
 
-### Javascript
+### TypeScript
 
-To run our JavaScript tests via Vitest, just execute this command on your CLI
+To run our TypeScript tests via Vitest, execute this command on your CLI
 
     $ curl -fsSL https://get.pnpm.io/install.sh | sh -
     $ pnpm install
