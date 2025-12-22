@@ -42,17 +42,17 @@ cc.run({
     },
   },
 
-  onFirstConsent: ({}) => {},
+  onFirstConsent: () => {},
 
-  onConsent: ({}) => {},
+  onConsent: () => {},
 
-  onChange: ({}) => {},
+  onChange: () => {},
 
-  onModalReady: ({}) => {},
+  onModalReady: () => {},
 
-  onModalShow: ({}) => {},
+  onModalShow: () => {},
 
-  onModalHide: ({}) => {},
+  onModalHide: () => {},
 
   categories: {
     necessary: {

@@ -54,7 +54,7 @@ const parseVersion = (version: string): ParsedVersion => {
   };
 
   // Extract special version identifier (dev, alpha, beta, rc, pl, etc.)
-  let specialMatch = version.match(/(dev|alpha|a|beta|b|rc|pl|p)(\d*)/);
+  const specialMatch = version.match(/(dev|alpha|a|beta|b|rc|pl|p)(\d*)/);
   if (specialMatch) {
     result.special = specialMatch[1];
     result.specialNumber = specialMatch[2] ? parseInt(specialMatch[2], 10) : 0;

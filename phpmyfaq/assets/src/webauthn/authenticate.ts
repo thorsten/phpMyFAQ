@@ -14,10 +14,9 @@ import { TranslationService } from '../utils';
  * @link      https://www.phpmyfaq.de
  * @since     2024-09-07
  */
-interface WebAuthnKey {
+interface WebAuthnKey extends Omit<PublicKeyCredentialRequestOptions, 'challenge' | 'allowCredentials'> {
   challenge: number[];
   allowCredentials: { id: number[] }[];
-  [key: string]: any;
 }
 
 interface AuthenticatorResponse {
@@ -26,7 +25,7 @@ interface AuthenticatorResponse {
   rawId: number[];
   response: {
     authenticatorData: number[];
-    clientData: any;
+    clientData: string[];
     clientDataJSONarray: number[];
     signature: number[];
   };
@@ -85,15 +84,15 @@ export const webauthnAuthenticate = async (webAuthnKey: WebAuthnKey, callback: C
     };
 
     callback(true, info);
-  } catch (error: any) {
+  } catch (error: unknown) {
     const abortErrors: string[] = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
     const Translator = new TranslationService();
     const language: string = document.documentElement.lang;
     await Translator.loadTranslations(language);
-    if (abortErrors.includes(error.name)) {
+    if (error instanceof Error && abortErrors.includes(error.name)) {
       callback(false, Translator.translate('msgAuthenticationAborted'));
     } else {
-      callback(false, error.toString());
+      callback(false, error instanceof Error ? error.toString() : String(error));
     }
   }
 };

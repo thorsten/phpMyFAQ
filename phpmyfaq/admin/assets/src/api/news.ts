@@ -14,85 +14,69 @@
  * @since     2024-04-21
  */
 
-export const addNews = async (data: Record<string, any> = {}): Promise<void> => {
-  try {
-    const response = await fetch('api/news/create', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data),
-    });
+export const addNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
+  const response = await fetch('api/news/create', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const deleteNews = async (csrfToken: string, id: string): Promise<void> => {
-  try {
-    const response = await fetch('api/news/delete', {
-      method: 'DELETE',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-        id: id,
-      }),
-    });
+export const deleteNews = async (csrfToken: string, id: string): Promise<unknown> => {
+  const response = await fetch('api/news/delete', {
+    method: 'DELETE',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      csrfToken: csrfToken,
+      id: id,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const updateNews = async (data: Record<string, any> = {}): Promise<void> => {
-  try {
-    const response = await fetch('api/news/update', {
-      method: 'PUT',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data),
-    });
+export const updateNews = async (data: Record<string, unknown> = {}): Promise<unknown> => {
+  const response = await fetch('api/news/update', {
+    method: 'PUT',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const activateNews = async (id: string, status: string, csrfToken: string): Promise<void> => {
-  try {
-    const response = await fetch('api/news/activate', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({
-        id: id,
-        status: status,
-        csrfToken: csrfToken,
-      }),
-    });
+export const activateNews = async (id: string, status: string, csrfToken: string): Promise<unknown> => {
+  const response = await fetch('api/news/activate', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      id: id,
+      status: status,
+      csrfToken: csrfToken,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

@@ -16,111 +16,91 @@
 import { Group, Member, User } from '../interfaces';
 
 export const fetchAllGroups = async (): Promise<Group[]> => {
-  try {
-    const response = await fetch('./api/group/groups', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch('./api/group/groups', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchAllUsersForGroups = async (): Promise<User[]> => {
-  try {
-    const response = await fetch('./api/group/users', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch('./api/group/users', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchAllMembers = async (groupId: string): Promise<Member[]> => {
-  try {
-    const response = await fetch(`./api/group/members/${groupId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/group/members/${groupId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchGroup = async (groupId: string): Promise<Group> => {
-  try {
-    const response = await fetch(`./api/group/data/${groupId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/group/data/${groupId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchGroupRights = async (groupId: string): Promise<string[]> => {
-  try {
-    const response = await fetch(`./api/group/permissions/${groupId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/group/permissions/${groupId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };

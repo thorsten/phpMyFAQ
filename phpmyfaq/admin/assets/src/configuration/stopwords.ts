@@ -15,7 +15,7 @@
 
 import { addElement } from '../../../../assets/src/utils';
 import { StopWord } from '../interfaces';
-import { fetchByLanguage, postStopWord, removeStopWord } from '../api/stop-words';
+import { fetchByLanguage, postStopWord, removeStopWord } from '../api';
 
 const maxCols = 4;
 
@@ -44,9 +44,8 @@ const fetchStopWordsByLanguage = async (language: string): Promise<void> => {
   try {
     const stopWordsList = (await fetchByLanguage(language)) as unknown as StopWord[];
     setContentAndHandler(stopWordsList);
-  } catch (error) {
-    const errorMessage = await (error as any).cause.response.json();
-    console.error(errorMessage);
+  } catch (error: unknown) {
+    console.error('Error fetching stop words:', error instanceof Error ? error.message : String(error));
   }
 };
 
@@ -156,8 +155,8 @@ const saveStopWord = async (elementId: string): Promise<void> => {
       element.style.backgroundRepeat = 'no-repeat';
       element.style.backgroundPosition = 'right calc(0.375em + 0.1875rem) center';
       element.style.backgroundSize = 'calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)';
-    } catch (error) {
-      const errorMessage = await (error as any).cause.response.json();
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Error saving stop word';
       const table = document.querySelector('.table') as HTMLElement;
       table.insertAdjacentElement(
         'beforebegin',
@@ -185,8 +184,8 @@ const deleteStopWord = async (elementId: string): Promise<void> => {
     await removeStopWord(csrfToken, info.id, info.lang);
     element.addEventListener('click', () => (element.style.opacity = '0'));
     element.addEventListener('transitionend', () => element.remove());
-  } catch (error) {
-    const errorMessage = (await (error as any).cause.response.json()) as string;
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Error deleting stop word';
     const table = document.querySelector('.table') as HTMLElement;
     table.insertAdjacentElement(
       'beforebegin',

@@ -48,21 +48,24 @@ export const handleFaqOverview = async (): Promise<void> => {
             event.preventDefault();
 
             const translations = (await fetchCategoryTranslations(categoryId)) as CategoryTranslations;
-            const dropdownMenu = element.parentElement.querySelector('.dropdown-menu') as HTMLElement;
+            const parentElement = element.parentElement;
+            if (!parentElement) return;
+
+            const dropdownMenu = parentElement.querySelector('.dropdown-menu') as HTMLElement;
             const faqId = element.getAttribute('data-pmf-faq-id') as string;
             const options: string[] = [];
 
             dropdownMenu.querySelectorAll('#dropdownTranslation').forEach((link) => {
-              options.push(link.innerText);
+              options.push((link as HTMLElement).innerText);
             });
 
-            for (let [languageCode] of Object.entries(translations as Record<string, unknown>)) {
+            for (const [languageCode] of Object.entries(translations as Record<string, unknown>)) {
               if (languageCode !== language) {
                 let displayName;
                 try {
                   const normalizedCode: string = normalizeLanguageCode(languageCode);
                   displayName = new Intl.DisplayNames([language], { type: 'language' }).of(normalizedCode);
-                } catch (e) {
+                } catch {
                   displayName = null;
                 }
 
@@ -202,10 +205,13 @@ const saveStatus = async (
         pushErrorNotification(result.error);
       }
     } else {
-      throw new Error('Network response was not ok: ' + (await response.text()));
+      const errorText = await response.text();
+      console.error('Network response was not ok:', errorText);
+      pushErrorNotification('Network response was not ok: ' + errorText);
     }
-  } catch (error: any) {
-    console.error(await error.cause.response.json());
+  } catch (error: unknown) {
+    console.error('Error saving status:', error instanceof Error ? error.message : String(error));
+    pushErrorNotification('An error occurred while saving the status.');
   }
 };
 

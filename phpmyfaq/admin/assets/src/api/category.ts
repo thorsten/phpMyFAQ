@@ -15,21 +15,17 @@
 import { CategoryTranslations, Response } from '../interfaces';
 
 export const fetchCategoryTranslations = async (categoryId: string): Promise<CategoryTranslations> => {
-  try {
-    const response = await fetch(`./api/category/translations/${categoryId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/category/translations/${categoryId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const deleteCategory = async (
@@ -37,51 +33,43 @@ export const deleteCategory = async (
   language: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch(`./api/category/delete`, {
-      method: 'DELETE',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        categoryId: categoryId,
-        language: language,
-        csrfToken: csrfToken,
-      }),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/category/delete`, {
+    method: 'DELETE',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      categoryId: categoryId,
+      language: language,
+      csrfToken: csrfToken,
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const setCategoryTree = async (
-  categoryTree: any,
+  categoryTree: unknown,
   categoryId: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/category/update-order', {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        categoryTree: categoryTree,
-        categoryId: categoryId,
-        csrfToken: csrfToken,
-      }),
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch('./api/category/update-order', {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      categoryTree: categoryTree,
+      categoryId: categoryId,
+      csrfToken: csrfToken,
+    }),
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

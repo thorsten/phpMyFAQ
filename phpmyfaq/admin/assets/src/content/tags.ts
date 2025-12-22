@@ -13,11 +13,11 @@
  * @since     2014-08-16
  */
 
-import autocomplete from 'autocompleter';
+import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { addElement, pushNotification } from '../../../../assets/src/utils';
 import { deleteTag, fetchTags } from '../api';
 
-interface Tag {
+interface Tag extends AutocompleteItem {
   tagName: string;
 }
 
@@ -68,8 +68,8 @@ export const handleTags = (): void => {
           pushNotification(response.success);
           const row = document.getElementById(`pmf-row-tag-id-${tagId}`) as HTMLElement;
           row.remove();
-        } else {
-          throw new Error('Network response was not ok: ' + JSON.stringify(response.error));
+        } else if (response.error) {
+          console.error('Network response was not ok:', response.error);
         }
       });
     });
@@ -136,7 +136,7 @@ export const handleTags = (): void => {
       minLength: 1,
       onSelect: async (item, input) => {
         let currentTags = input.value;
-        let currentTagsArray = currentTags.split(',');
+        const currentTagsArray = currentTags.split(',');
         if (currentTags.length === 0) {
           currentTags = item.tagName;
         } else {
@@ -148,20 +148,23 @@ export const handleTags = (): void => {
       fetch: async (text, callback) => {
         let match = text.toLowerCase();
         const tags = await fetchTags(match);
-        callback(
-          tags.filter((tag) => {
+        const tagItems: Tag[] = tags
+          .filter((tag) => {
             const lastCommaIndex = match.lastIndexOf(',');
             match = match.substring(lastCommaIndex + 1);
-            return tag.tagName.toLowerCase().indexOf(match) !== -1;
+            return tag.name.toLowerCase().indexOf(match) !== -1;
           })
-        );
+          .map((tag) => ({
+            tagName: tag.name,
+            label: tag.name,
+          }));
+        callback(tagItems);
       },
-      render: (item, value) => {
-        const regex = new RegExp(value, 'gi');
+      render: (item) => {
         return addElement('div', {
           classList: 'pmf-tag-list-result border',
           innerHTML: item.tagName,
-        });
+        }) as HTMLDivElement;
       },
       emptyMsg: 'No tags found.',
     });

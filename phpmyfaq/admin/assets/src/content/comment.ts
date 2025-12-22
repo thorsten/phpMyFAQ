@@ -58,14 +58,17 @@ const deleteComments = (type: 'faq' | 'news'): void => {
       if (response.success) {
         const commentsToDelete = document.querySelectorAll('tr td input:checked');
         commentsToDelete.forEach((toDelete) => {
-          toDelete.parentNode?.parentNode?.parentNode?.remove();
+          const row = toDelete.parentNode?.parentNode?.parentNode;
+          if (row instanceof HTMLElement) {
+            row.remove();
+          }
         });
       } else {
         responseMessage.append(addElement('div', { className: 'alert alert-danger', innerText: response.error }));
       }
     })
-    .catch(async (error) => {
-      const errorMessage = await (error as any).cause.response.json();
-      responseMessage.append(addElement('div', { className: 'alert alert-danger', innerText: errorMessage }));
+    .catch((error: unknown) => {
+      const errorMsg = error instanceof Error ? error.message : 'An error occurred while deleting comments';
+      responseMessage.append(addElement('div', { className: 'alert alert-danger', innerText: errorMsg }));
     });
 };

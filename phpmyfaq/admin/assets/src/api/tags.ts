@@ -19,37 +19,29 @@ interface TagResponse {
 }
 
 export const fetchTags = async (searchString: string): Promise<TagResponse[]> => {
-  try {
-    const response = await fetch(`./api/content/tags?search=${searchString}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/content/tags?search=${searchString}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const deleteTag = async (tagId: string): Promise<void> => {
-  try {
-    const response = await fetch(`./api/content/tags/${tagId}`, {
-      method: 'DELETE',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+export const deleteTag = async (tagId: string): Promise<{ success?: string; error?: string }> => {
+  const response = await fetch(`./api/content/tags/${tagId}`, {
+    method: 'DELETE',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

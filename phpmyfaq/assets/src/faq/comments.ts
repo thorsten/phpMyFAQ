@@ -15,7 +15,7 @@
 
 import { pushErrorNotification, pushNotification } from '../utils';
 import { createComment } from '../api';
-import { ApiResponse } from '../interfaces';
+import { ApiResponse, CommentData } from '../interfaces';
 
 export const handleSaveComment = (): void => {
   const saveButton = document.getElementById('pmf-button-save-comment') as HTMLButtonElement | null;
@@ -55,7 +55,7 @@ export const handleSaveComment = (): void => {
             modalBackdrop[0].parentNode?.removeChild(modalBackdrop[0]);
           }
           form.reset();
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Error: ', error);
         }
       }
@@ -63,7 +63,7 @@ export const handleSaveComment = (): void => {
   }
 };
 
-const addCommentToDOM = (commentData: any): void => {
+const addCommentToDOM = (commentData: CommentData): void => {
   const commentsContainer = document.getElementById('comments');
   if (!commentsContainer) {
     return;

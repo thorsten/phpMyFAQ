@@ -1,10 +1,21 @@
+interface ClientData {
+  type: string;
+  challenge: string;
+  origin: string;
+  crossOrigin?: boolean;
+  tokenBinding?: {
+    status: string;
+    id?: string;
+  };
+}
+
 export interface AuthenticatorResponse {
   type: string;
   originalChallenge: number[];
   rawId: number[];
   response: {
     authenticatorData: number[];
-    clientData: any;
+    clientData: ClientData;
     clientDataJSONarray: number[];
     signature: number[];
   };

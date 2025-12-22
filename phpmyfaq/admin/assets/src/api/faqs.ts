@@ -22,121 +22,101 @@ export const fetchAllFaqsByCategory = async (
   onlyInactive?: boolean,
   onlyNew?: boolean
 ): Promise<FaqList> => {
-  try {
-    let currentUrl: string = window.location.protocol + '//' + window.location.host;
-    let pathname: string = window.location.pathname;
+  let currentUrl: string = window.location.protocol + '//' + window.location.host;
+  let pathname: string = window.location.pathname;
 
-    if (pathname.endsWith('/faqs')) {
-      pathname = pathname.slice(0, -5);
-    }
-
-    currentUrl += pathname;
-    const url = new URL(`${currentUrl}/api/faqs/${categoryId}/${language}`);
-    if (onlyInactive) {
-      url.searchParams.set('only-inactive', onlyInactive as unknown as string);
-    }
-    if (onlyNew) {
-      url.searchParams.set('only-new', onlyNew as unknown as string);
-    }
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
-
-    return await response.json();
-  } catch (error) {
-    throw error;
+  if (pathname.endsWith('/faqs')) {
+    pathname = pathname.slice(0, -5);
   }
+
+  currentUrl += pathname;
+  const url = new URL(`${currentUrl}/api/faqs/${categoryId}/${language}`);
+  if (onlyInactive) {
+    url.searchParams.set('only-inactive', onlyInactive as unknown as string);
+  }
+  if (onlyNew) {
+    url.searchParams.set('only-new', onlyNew as unknown as string);
+  }
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  return await response.json();
 };
 
 export const fetchFaqsByAutocomplete = async (searchTerm: string, csrfToken: string): Promise<Response | undefined> => {
-  try {
-    const response = await fetch(`./api/faq/search`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        search: searchTerm,
-        csrf: csrfToken,
-      }),
-    });
+  const response = await fetch(`./api/faq/search`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      search: searchTerm,
+      csrf: csrfToken,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const deleteFaq = async (faqId: string, faqLanguage: string, token: string): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/faq/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: token,
-        faqId: faqId,
-        faqLanguage: faqLanguage,
-      }),
-    });
+  const response = await fetch('./api/faq/delete', {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: token,
+      faqId: faqId,
+      faqLanguage: faqLanguage,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
-export const create = async (formData: any): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/faq/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: formData,
-      }),
-    });
+export const create = async (formData: unknown): Promise<Response | undefined> => {
+  const response = await fetch('./api/faq/create', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: formData,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const update = async (formData: any): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/faq/update', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: formData,
-      }),
-    });
+export const update = async (formData: unknown): Promise<Response | undefined> => {
+  const response = await fetch('./api/faq/update', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: formData,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

@@ -19,30 +19,26 @@ export const fetchActivateInput = async (
   formId: string,
   inputId: string,
   checked: boolean
-): Promise<void> => {
-  try {
-    const response = await fetch('api/forms/activate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        formid: formId,
-        inputid: inputId,
-        checked: checked,
-      }),
-    });
+): Promise<unknown> => {
+  const response = await fetch('api/forms/activate', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      formid: formId,
+      inputid: inputId,
+      checked: checked,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchSetInputAsRequired = async (
@@ -50,30 +46,26 @@ export const fetchSetInputAsRequired = async (
   formId: string,
   inputId: string,
   checked: boolean
-): Promise<void> => {
-  try {
-    const response = await fetch('api/forms/required', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        formid: formId,
-        inputid: inputId,
-        checked: checked,
-      }),
-    });
+): Promise<unknown> => {
+  const response = await fetch('api/forms/required', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      formid: formId,
+      inputid: inputId,
+      checked: checked,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchEditTranslation = async (
@@ -82,31 +74,27 @@ export const fetchEditTranslation = async (
   inputId: string,
   label: string,
   lang: string
-): Promise<void> => {
-  try {
-    const response = await fetch('api/forms/translation-edit', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        formId: formId,
-        inputId: inputId,
-        lang: lang,
-        label: label,
-      }),
-    });
+): Promise<unknown> => {
+  const response = await fetch('api/forms/translation-edit', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      formId: formId,
+      inputId: inputId,
+      lang: lang,
+      label: label,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchDeleteTranslation = async (
@@ -114,30 +102,26 @@ export const fetchDeleteTranslation = async (
   formId: string,
   inputId: string,
   lang: string
-): Promise<void> => {
-  try {
-    const response = await fetch('api/forms/translation-delete', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        formId: formId,
-        inputId: inputId,
-        lang: lang,
-      }),
-    });
+): Promise<unknown> => {
+  const response = await fetch('api/forms/translation-delete', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      formId: formId,
+      inputId: inputId,
+      lang: lang,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const fetchAddTranslation = async (
@@ -146,29 +130,25 @@ export const fetchAddTranslation = async (
   inputId: string,
   lang: string,
   translation: string
-): Promise<void> => {
-  try {
-    const response = await fetch('api/forms/translation-add', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        formId: formId,
-        inputId: inputId,
-        lang: lang,
-        translation: translation,
-      }),
-    });
+): Promise<unknown> => {
+  const response = await fetch('api/forms/translation-add', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      formId: formId,
+      inputId: inputId,
+      lang: lang,
+      translation: translation,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };

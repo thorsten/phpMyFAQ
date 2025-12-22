@@ -70,8 +70,8 @@ describe('Utils', () => {
   describe('normalizeLanguageCode', () => {
     it('should return the same value for empty input', () => {
       expect(normalizeLanguageCode('')).toBe('');
-      expect(normalizeLanguageCode(undefined as any)).toBe(undefined);
-      expect(normalizeLanguageCode(null as any)).toBe(null);
+      expect(normalizeLanguageCode(undefined as unknown as string)).toBe(undefined);
+      expect(normalizeLanguageCode(null as unknown as string)).toBe(null);
     });
 
     it('should replace underscores with hyphens', () => {

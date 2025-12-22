@@ -120,7 +120,7 @@ export const onOpenUpdateGlossaryModal = (): void => {
 
         (document.getElementById('update-item') as HTMLInputElement).value = response?.item ?? '';
         (document.getElementById('update-definition') as HTMLInputElement).value = response?.definition ?? '';
-      } catch (e) {
+      } catch {
         pushNotification('Unable to load glossary item. Please try again.');
       }
     });

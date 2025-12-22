@@ -44,7 +44,12 @@ import '../plugins/phpmyfaq/phpmyfaq.js';
 import '../plugins/code-snippet/code-snippet.js';
 import hljs from 'highlight.js';
 
-let joditEditorInstance: any = null;
+interface UploaderResponse {
+  error?: string;
+  msg?: string;
+}
+
+let joditEditorInstance: Jodit | null = null;
 
 export const getJoditEditor = () => joditEditorInstance;
 
@@ -78,7 +83,7 @@ export const renderEditor = () => {
     tabIndex: -1,
     toolbar: true,
     enter: 'p',
-    defaultMode: Jodit.MODE_WYSIWYG,
+    defaultMode: 1, // MODE_WYSIWYG
     useSplitMode: false,
     askBeforePasteFromWord: true,
     processPasteFromWord: true,
@@ -235,10 +240,10 @@ export const renderEditor = () => {
     uploader: {
       url: '/admin/api/content/images?csrf=' + (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
       format: 'json',
-      isSuccess: (response: any) => {
+      isSuccess: (response: UploaderResponse) => {
         return !response.error;
       },
-      getMessage: (response: any) => {
+      getMessage: (response: UploaderResponse) => {
         return response.msg;
       },
     },
@@ -259,7 +264,7 @@ export const renderEditor = () => {
   // Automatically update the editor theme when the system color scheme changes
   const setJoditTheme = (theme: 'dark' | 'default'): void => {
     // Update Jodit option (kept for consistency)
-    (joditEditor as any).options.theme = theme;
+    joditEditor.options.theme = theme;
 
     // Toggle container theme classes explicitly to reflect the change immediately
     const container: HTMLDivElement = joditEditor.container;
@@ -273,9 +278,11 @@ export const renderEditor = () => {
 
   if (typeof prefersDark.addEventListener === 'function') {
     prefersDark.addEventListener('change', applyTheme);
-  } else if (typeof (prefersDark as any).addListener === 'function') {
+  } else if (
+    typeof (prefersDark as MediaQueryList & { addListener?: (listener: () => void) => void }).addListener === 'function'
+  ) {
     // Fallback for older Safari versions
-    (prefersDark as any).addListener(applyTheme);
+    (prefersDark as MediaQueryList & { addListener: (listener: () => void) => void }).addListener(applyTheme);
   }
 
   // Keep Jodit in sync with global Bootstrap theme toggles (manual light/dark)

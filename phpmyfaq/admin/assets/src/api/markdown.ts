@@ -15,18 +15,14 @@
 import { Response } from '../interfaces';
 
 export const fetchMarkdownContent = async (text: string): Promise<Response> => {
-  try {
-    const response = await fetch(`./api/content/markdown`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text }),
-    });
+  const response = await fetch(`./api/content/markdown`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

@@ -60,10 +60,11 @@ export const handleWebAuthn = (): void => {
                     successMessage.textContent = jsonResponse.message;
                     errorMessage.classList.add('d-none');
                   } else {
-                    throw new Error('Registration failed.');
+                    errorMessage.textContent = 'Registration failed.';
+                    errorMessage.classList.remove('d-none');
                   }
-                } catch (err: any) {
-                  errorMessage.textContent = `Registration failed: ${err.message}`;
+                } catch (error: unknown) {
+                  errorMessage.textContent = `Registration failed: ${error instanceof Error ? error.message : String(error)}`;
                   errorMessage.classList.remove('d-none');
                 }
               } else {
@@ -73,10 +74,11 @@ export const handleWebAuthn = (): void => {
             }
           );
         } else {
-          throw new Error("Couldn't initiate registration.");
+          errorMessage.textContent = "Couldn't initiate registration.";
+          errorMessage.classList.remove('d-none');
         }
-      } catch (error: any) {
-        errorMessage.textContent = error.message;
+      } catch (error: unknown) {
+        errorMessage.textContent = error instanceof Error ? error.message : String(error);
         errorMessage.classList.remove('d-none');
       }
     });
@@ -118,10 +120,11 @@ export const handleWebAuthn = (): void => {
                   window.location.href = result.redirect;
                 } else {
                   const result = await response.json();
-                  throw new Error(result.error);
+                  errorMessage.textContent = result.error;
+                  errorMessage.classList.remove('d-none');
                 }
-              } catch (error: any) {
-                errorMessage.textContent = error.message;
+              } catch (error: unknown) {
+                errorMessage.textContent = error instanceof Error ? error.message : String(error);
                 errorMessage.classList.remove('d-none');
               }
             } else {
@@ -131,10 +134,11 @@ export const handleWebAuthn = (): void => {
           });
         } else {
           const error = await response.json();
-          throw new Error(error.error);
+          errorMessage.textContent = error.error;
+          errorMessage.classList.remove('d-none');
         }
-      } catch (error: any) {
-        errorMessage.textContent = error.message;
+      } catch (error: unknown) {
+        errorMessage.textContent = error instanceof Error ? error.message : String(error);
         errorMessage.classList.remove('d-none');
       }
     });

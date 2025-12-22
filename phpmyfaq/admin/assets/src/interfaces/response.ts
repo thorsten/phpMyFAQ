@@ -6,3 +6,8 @@ export interface Response {
   status?: string;
   data?: string;
 }
+
+export interface GlossaryResponse {
+  item: string;
+  definition: string;
+}

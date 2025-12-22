@@ -25,6 +25,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added support for .env files (Thorsten)
 - added support for OpenSearch (Thorsten)
 - added support for Mago (Thorsten)
+- added ESLint configuration (Thorsten)
 - added experimental support for FrankenPHP (Thorsten)
 - added experimental support for LDAP group support (Thorsten)
 - added experimental MCP Server (Thorsten)

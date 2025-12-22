@@ -43,7 +43,14 @@ export const handleUpdateInformation = async (): Promise<void> => {
 
       if (!response.ok) {
         const errorMessage = await response.json();
-        throw new Error(errorMessage.message);
+        const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
+        const alertResult = document.getElementById('phpmyfaq-update-check-result') as HTMLElement | null;
+
+        if (alert && alertResult) {
+          alert.classList.remove('d-none');
+          alertResult.innerText = errorMessage.message || 'Update check failed';
+        }
+        return;
       }
 
       const button = document.getElementById('phpmyfaq-update-next-step-button') as HTMLButtonElement | null;
@@ -54,7 +61,7 @@ export const handleUpdateInformation = async (): Promise<void> => {
         button.classList.remove('disabled');
         button.disabled = false;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage: string;
       if (error instanceof SyntaxError) {
         errorMessage =
@@ -62,7 +69,7 @@ export const handleUpdateInformation = async (): Promise<void> => {
           'Please check your server configuration, if you use Apache, the RewriteBase in your .htaccess ' +
           'configuration. If you use nginx, please check your nginx rewrite configuration.';
       } else {
-        errorMessage = error.message;
+        errorMessage = error instanceof Error ? error.message : String(error);
       }
       const alert = document.getElementById('phpmyfaq-update-check-alert') as HTMLElement | null;
       const alertResult = document.getElementById('phpmyfaq-update-check-result') as HTMLElement | null;
@@ -92,7 +99,8 @@ export const handleConfigBackup = async (): Promise<void> => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        console.error('Network response was not ok');
+        return;
       }
 
       const data = await response.json();
@@ -100,10 +108,8 @@ export const handleConfigBackup = async (): Promise<void> => {
       if (downloadLink) {
         downloadLink.href = data.backupFile;
       }
-    } catch (error: any) {
-      const errorMessage =
-        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
-      console.error(errorMessage.error);
+    } catch (error: unknown) {
+      console.error('Backup error:', error instanceof Error ? error.message : String(error));
     }
   }
 };
@@ -151,12 +157,12 @@ export const handleDatabaseUpdate = async (): Promise<void> => {
           errorMessage.innerHTML = result.error;
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error details:', error);
       const alert = document.getElementById('phpmyfaq-update-database-error') as HTMLElement | null;
       if (alert) {
         alert.classList.remove('d-none');
-        alert.innerText = `Error: ${error.message}`;
+        alert.innerText = `Error: ${error instanceof Error ? error.message : String(error)}`;
       }
     }
   }

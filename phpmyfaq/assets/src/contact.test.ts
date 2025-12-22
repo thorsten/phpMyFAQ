@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
-import { handleContactForm } from '../src/contact';
+import { handleContactForm } from './contact';
 import * as api from '../src/api';
 import * as utils from '../src/utils';
 

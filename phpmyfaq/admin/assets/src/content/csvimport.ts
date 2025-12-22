@@ -16,6 +16,11 @@
 
 import { pushNotification, pushErrorNotification } from '../../../../assets/src/utils';
 
+interface ImportError {
+  storedAll?: boolean;
+  messages?: string[];
+}
+
 export const handleUploadCSVForm = async (): Promise<void> => {
   const submitButton = document.getElementById('submitButton') as HTMLButtonElement | null;
   if (submitButton) {
@@ -47,15 +52,18 @@ export const handleUploadCSVForm = async (): Promise<void> => {
           fileInput.value = '';
         } else {
           const errorResponse = await response.json();
-          throw new Error('Network response was not ok: ' + JSON.stringify(errorResponse));
+          console.error('Network response was not ok:', JSON.stringify(errorResponse));
+          pushErrorNotification('Network response was not ok: ' + JSON.stringify(errorResponse));
         }
-      } catch (error: any) {
-        if (error.storedAll === false) {
-          error.messages.forEach((message: string) => {
+      } catch (error: unknown) {
+        const importError = error as ImportError;
+        if (importError.storedAll === false && importError.messages) {
+          importError.messages.forEach((message: string) => {
             pushErrorNotification(message);
           });
         } else {
           console.error('An error occurred:', error);
+          pushErrorNotification('An error occurred during import');
         }
       }
     });

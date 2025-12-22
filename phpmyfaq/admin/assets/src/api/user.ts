@@ -16,75 +16,59 @@
 import { Response, UserData } from '../interfaces';
 
 export const fetchUsers = async (userName: string): Promise<Response> => {
-  try {
-    const response = await fetch(`./api/user/users?filter=${userName}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/user/users?filter=${userName}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const fetchUserData = async (userId: string): Promise<UserData> => {
-  try {
-    const response = await fetch(`./api/user/data/${userId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/user/data/${userId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const fetchUserRights = async (userId: string): Promise<number[]> => {
-  try {
-    const response = await fetch(`./api/user/permissions/${userId}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/user/permissions/${userId}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const fetchAllUsers = async (): Promise<Response> => {
-  try {
-    const response = await fetch('./api/user/users', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch('./api/user/users', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const overwritePassword = async (
@@ -93,84 +77,68 @@ export const overwritePassword = async (
   newPassword: string,
   passwordRepeat: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/user/overwrite-password', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        userId: userId,
-        newPassword: newPassword,
-        passwordRepeat: passwordRepeat,
-      }),
-    });
+  const response = await fetch('./api/user/overwrite-password', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      userId: userId,
+      newPassword: newPassword,
+      passwordRepeat: passwordRepeat,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
-export const postUserData = async (url: string = '', data: Record<string, any> = {}): Promise<Response> => {
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data),
-    });
+export const postUserData = async (url: string = '', data: Record<string, unknown> = {}): Promise<Response> => {
+  const response = await fetch(url, {
+    method: 'POST',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const activateUser = async (userId: string, csrfToken: string): Promise<Response> => {
-  try {
-    const response = await fetch('./api/user/activate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-        userId: userId,
-      }),
-    });
+  const response = await fetch('./api/user/activate', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrfToken: csrfToken,
+      userId: userId,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const deleteUser = async (userId: string, csrfToken: string): Promise<Response> => {
-  try {
-    const response = await fetch('./api/user/delete', {
-      method: 'DELETE',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({
-        csrfToken: csrfToken,
-        userId: userId,
-      }),
-    });
+  const response = await fetch('./api/user/delete', {
+    method: 'DELETE',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      csrfToken: csrfToken,
+      userId: userId,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

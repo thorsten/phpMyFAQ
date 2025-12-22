@@ -17,7 +17,7 @@ import { Callback } from '../interfaces';
 
 const arrayBufferToArray = (buffer: ArrayBuffer): number[] => Array.from(new Uint8Array(buffer));
 
-const decodeClientDataJSON = (buffer: ArrayBuffer): any => {
+const decodeClientDataJSON = (buffer: ArrayBuffer) => {
   const decodedString = new TextDecoder().decode(buffer);
   return JSON.parse(decodedString);
 };
@@ -74,12 +74,12 @@ export const webauthnRegister = async (
     };
 
     callback(true, JSON.stringify(registrationInfo));
-  } catch (error: any) {
+  } catch (error: unknown) {
     const abortErrors = ['AbortError', 'NS_ERROR_ABORT', 'NotAllowedError'];
-    if (abortErrors.includes(error.name)) {
+    if (error instanceof Error && abortErrors.includes(error.name)) {
       callback(false, 'Registration aborted by user.');
     } else {
-      callback(false, error.toString());
+      callback(false, error instanceof Error ? error.toString() : String(error));
     }
   }
 };

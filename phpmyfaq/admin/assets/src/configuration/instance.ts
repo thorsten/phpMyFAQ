@@ -15,7 +15,7 @@
 
 import { Modal } from 'bootstrap';
 import { addElement } from '../../../../assets/src/utils';
-import { InstanceResponse, Response } from '../interfaces';
+import { InstanceResponse } from '../interfaces';
 import { addInstance, deleteInstance } from '../api';
 
 export const handleInstances = (): void => {
@@ -90,13 +90,18 @@ export const handleInstances = (): void => {
           table.appendChild(row);
           modal.hide();
         } else {
-          throw new Error('Network response was not ok');
+          const table = document.querySelector('.table') as Element;
+          table.insertAdjacentElement(
+            'afterend',
+            addElement('div', { classList: 'alert alert-danger', innerText: 'Failed to add instance' })
+          );
         }
-      } catch (error) {
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'An error occurred while adding instance';
         const table = document.querySelector('.table') as Element;
         table.insertAdjacentElement(
           'afterend',
-          addElement('div', { classList: 'alert alert-danger', innerText: error })
+          addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
         );
       }
     });
@@ -119,14 +124,19 @@ export const handleInstances = (): void => {
               row.addEventListener('click', (): string => (row.style.opacity = '0'));
               row.addEventListener('transitionend', (): void => row.remove());
             } else {
-              throw new Error('Network response was not ok');
+              console.error('Failed to delete instance');
+              const table = document.querySelector('.table') as HTMLElement;
+              table.insertAdjacentElement(
+                'afterend',
+                addElement('div', { classList: 'alert alert-danger', innerText: 'Failed to delete instance' })
+              );
             }
-          } catch (error) {
+          } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'An error occurred while deleting instance';
             const table = document.querySelector('.table') as HTMLElement;
-            const errorMessage = (await (error as any).cause.response.json()) as Response;
             table.insertAdjacentElement(
               'afterend',
-              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage.error })
+              addElement('div', { classList: 'alert alert-danger', innerText: errorMessage })
             );
           }
         }

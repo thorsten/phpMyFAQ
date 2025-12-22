@@ -20,7 +20,7 @@ import { getJoditEditor } from './editor';
 
 interface SerializedData {
   faqId: string;
-  [key: string]: any;
+  [key: string]: FormDataEntryValue | FormDataEntryValue[];
 }
 
 export const handleSaveFaqData = (): void => {
@@ -84,7 +84,6 @@ export const handleDeleteFaqEditorModal = (): void => {
 
       if (response?.success) {
         pushNotification(response.success);
-        // Nach kurzer Verzögerung zur FAQ-Übersicht umleiten
         window.setTimeout(() => {
           window.location.href = './faqs';
         }, 1000);
@@ -135,7 +134,7 @@ export const handleResetButton = (): void => {
         joditEditor.value = originalEditorContent;
       }
 
-      // Reset markdown editor if it exists
+      // Reset Markdown editor if it exists
       if (markdownTextarea) {
         markdownTextarea.value = originalMarkdownContent;
       }

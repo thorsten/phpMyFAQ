@@ -15,7 +15,7 @@
 
 import { Response } from '../interfaces';
 
-export const createReport = async (data: any, csrfToken: string): Promise<Blob | Response | undefined> => {
+export const createReport = async (data: unknown, csrfToken: string): Promise<Blob | Response | undefined> => {
   try {
     const response = await fetch('./api/export/report', {
       method: 'POST',

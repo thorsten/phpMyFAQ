@@ -101,14 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const validateForm = (): boolean => {
-    let currentStep,
-      y,
-      i,
-      valid = true;
-    currentStep = document.getElementsByClassName('step') as HTMLCollectionOf<HTMLElement>;
-    y = currentStep[currentTab].querySelectorAll('input,select');
+    let valid = true;
+    const currentStep = document.getElementsByClassName('step') as HTMLCollectionOf<HTMLElement>;
+    const y = currentStep[currentTab].querySelectorAll('input,select');
 
-    for (i = 0; i < y.length; i++) {
+    for (let i = 0; i < y.length; i++) {
       if ((y[i] as HTMLInputElement).value === '' && y[i].hasAttribute('required')) {
         y[i].className += ' is-invalid';
         // and set the current valid status to false

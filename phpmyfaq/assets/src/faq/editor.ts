@@ -28,7 +28,7 @@ import 'jodit/esm/plugins/resizer/resizer.js';
 import 'jodit/esm/plugins/select/select.js';
 import 'jodit/esm/plugins/source/source.js';
 
-let joditEditorInstance: any = null;
+let joditEditorInstance: Jodit | null = null;
 
 export const getJoditEditor = () => joditEditorInstance;
 
@@ -147,7 +147,7 @@ export const renderFaqEditor = () => {
   });
 
   const setJoditTheme = (theme: 'dark' | 'default'): void => {
-    (joditEditor as any).options.theme = theme;
+    joditEditor.options.theme = theme;
 
     const container: HTMLDivElement = joditEditor.container;
     container.classList.remove('jodit_theme_default', 'jodit_theme_dark');
@@ -160,8 +160,10 @@ export const renderFaqEditor = () => {
 
   if (typeof prefersDark.addEventListener === 'function') {
     prefersDark.addEventListener('change', applyTheme);
-  } else if (typeof (prefersDark as any).addListener === 'function') {
-    (prefersDark as any).addListener(applyTheme);
+  } else if (
+    typeof (prefersDark as MediaQueryList & { addListener?: (listener: () => void) => void }).addListener === 'function'
+  ) {
+    (prefersDark as MediaQueryList & { addListener: (listener: () => void) => void }).addListener(applyTheme);
   }
 
   const applyThemeFromAttribute = (): void => {

@@ -13,7 +13,7 @@
  * @since     2024-01-27
  */
 
-import { Response } from '../interfaces';
+import { Response, GlossaryResponse } from '../interfaces';
 
 export const createGlossary = async (
   language: string,
@@ -21,29 +21,25 @@ export const createGlossary = async (
   definition: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/glossary/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrfToken,
-        language: language,
-        item: item,
-        definition: definition,
-      }),
-    });
+  const response = await fetch('./api/glossary/create', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrfToken,
+      language: language,
+      item: item,
+      definition: definition,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const deleteGlossary = async (
@@ -51,48 +47,43 @@ export const deleteGlossary = async (
   glossaryLang: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/glossary/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrfToken,
-        id: glossaryId,
-        lang: glossaryLang,
-      }),
-    });
+  const response = await fetch('./api/glossary/delete', {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrfToken,
+      id: glossaryId,
+      lang: glossaryLang,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
-export const getGlossary = async (glossaryId: string, glossaryLanguage: string): Promise<Response | undefined> => {
-  try {
-    const response = await fetch(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    });
+export const getGlossary = async (
+  glossaryId: string,
+  glossaryLanguage: string
+): Promise<GlossaryResponse | undefined> => {
+  const response = await fetch(`./api/glossary/${glossaryId}/${glossaryLanguage}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };
 
 export const updateGlossary = async (
@@ -102,28 +93,24 @@ export const updateGlossary = async (
   definition: string,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch('./api/glossary/update', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrfToken,
-        id: glossaryId,
-        lang: glossaryLanguage,
-        item: item,
-        definition: definition,
-      }),
-    });
+  const response = await fetch('./api/glossary/update', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrfToken,
+      id: glossaryId,
+      lang: glossaryLanguage,
+      item: item,
+      definition: definition,
+    }),
+  });
 
-    if (response.status === 200) {
-      return await response.json();
-    } else {
-      throw new Error('Network response was not ok.');
-    }
-  } catch (error) {
-    throw error;
+  if (response.status === 200) {
+    return await response.json();
   }
+
+  throw new Error('Network response was not ok.');
 };

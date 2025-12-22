@@ -48,19 +48,33 @@ const mockMatchMedia = {
   dispatchEvent: vi.fn(),
 };
 
+interface MockDocument {
+  getElementById: ReturnType<typeof vi.fn>;
+  documentElement: {
+    setAttribute: ReturnType<typeof vi.fn>;
+    getAttribute: ReturnType<typeof vi.fn>;
+  };
+  addEventListener: ReturnType<typeof vi.fn>;
+}
+
+interface MockWindow {
+  localStorage: Storage;
+  matchMedia: ReturnType<typeof vi.fn>;
+}
+
 describe('ThemeSwitcher', (): void => {
   let themeSwitcher: ThemeSwitcher;
   let originalDocument: Document;
   let originalWindow: Window & typeof globalThis;
   let originalLocalStorage: Storage;
-  let mockDocument: any;
-  let mockWindow: any;
+  let mockDocument: MockDocument;
+  let mockWindow: MockWindow;
 
   beforeEach((): void => {
     // Store original globals
-    originalDocument = global.document;
-    originalWindow = global.window;
-    originalLocalStorage = global.localStorage;
+    originalDocument = globalThis.document;
+    originalWindow = globalThis.window;
+    originalLocalStorage = globalThis.localStorage;
 
     // Reset all mocks
     vi.clearAllMocks();
@@ -94,9 +108,9 @@ describe('ThemeSwitcher', (): void => {
     };
 
     // Replace global objects
-    Object.defineProperty(global, 'document', { value: mockDocument, writable: true });
-    Object.defineProperty(global, 'window', { value: mockWindow, writable: true });
-    Object.defineProperty(global, 'localStorage', { value: mockLocalStorage, writable: true });
+    Object.defineProperty(globalThis, 'document', { value: mockDocument, writable: true });
+    Object.defineProperty(globalThis, 'window', { value: mockWindow, writable: true });
+    Object.defineProperty(globalThis, 'localStorage', { value: mockLocalStorage, writable: true });
 
     // Setup default DOM element returns
     mockDocument.getElementById.mockImplementation((id: string) => {
@@ -118,9 +132,9 @@ describe('ThemeSwitcher', (): void => {
 
   afterEach((): void => {
     // Restore original globals
-    Object.defineProperty(global, 'document', { value: originalDocument, writable: true });
-    Object.defineProperty(global, 'window', { value: originalWindow, writable: true });
-    Object.defineProperty(global, 'localStorage', { value: originalLocalStorage, writable: true });
+    Object.defineProperty(globalThis, 'document', { value: originalDocument, writable: true });
+    Object.defineProperty(globalThis, 'window', { value: originalWindow, writable: true });
+    Object.defineProperty(globalThis, 'localStorage', { value: originalLocalStorage, writable: true });
 
     vi.restoreAllMocks();
   });
@@ -247,7 +261,7 @@ describe('ThemeSwitcher', (): void => {
     expect(mockDarkButton.classList.remove).toHaveBeenCalledWith('active');
     expect(mockHighContrastButton.classList.remove).toHaveBeenCalledWith('active');
 
-    // Then add to dark button
+    // Then add to the dark button
     expect(mockDarkButton.classList.add).toHaveBeenCalledWith('active');
   });
 

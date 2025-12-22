@@ -17,9 +17,15 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { handleInstances } from './instance';
 import * as api from '../api/instance';
 
+interface MockModal {
+  element: HTMLElement;
+  hide: ReturnType<typeof vi.fn>;
+  show: ReturnType<typeof vi.fn>;
+}
+
 // Mock Bootstrap Modal globally
 vi.mock('bootstrap', () => ({
-  Modal: vi.fn(function (this: any, element: HTMLElement) {
+  Modal: vi.fn(function (this: MockModal, element: HTMLElement) {
     this.element = element;
     this.hide = vi.fn();
     this.show = vi.fn();
@@ -149,7 +155,7 @@ describe('handleInstances - Add Instance API Calls', () => {
 });
 
 describe('handleInstances - Delete Instance API Calls', () => {
-  let confirmSpy: any;
+  let confirmSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     document.body.innerHTML = '';

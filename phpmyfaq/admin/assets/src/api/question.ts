@@ -20,21 +20,17 @@ export const toggleQuestionVisibility = async (
   visibility: boolean,
   csrfToken: string
 ): Promise<Response | undefined> => {
-  try {
-    const response = await fetch(`./api/question/visibility/toggle`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        questionId: questionId,
-        visibility: visibility,
-        csrfToken: csrfToken,
-      }),
-    });
+  const response = await fetch(`./api/question/visibility/toggle`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      questionId: questionId,
+      visibility: visibility,
+      csrfToken: csrfToken,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

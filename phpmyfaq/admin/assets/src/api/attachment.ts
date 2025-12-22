@@ -16,49 +16,37 @@
 import { Response } from '../interfaces';
 
 export const deleteAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
-  try {
-    const response = await fetch('./api/content/attachments', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
-    });
+  const response = await fetch('./api/content/attachments', {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const refreshAttachments = async (attachmentId: string, csrfToken: string): Promise<Response> => {
-  try {
-    const response = await fetch('./api/content/attachments/refresh', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
-    });
+  const response = await fetch('./api/content/attachments/refresh', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ attId: attachmentId, csrf: csrfToken }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const uploadAttachments = async (formData: FormData): Promise<Response> => {
-  try {
-    const response = await fetch('./api/content/attachments/upload', {
-      method: 'POST',
-      cache: 'no-cache',
-      body: formData,
-    });
+  const response = await fetch('./api/content/attachments/upload', {
+    method: 'POST',
+    cache: 'no-cache',
+    body: formData,
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

@@ -300,7 +300,8 @@ To run the Jest-based tests, you can use the following command:
 
 The following coding standards are used in phpMyFAQ:
 
-- PHP: [PER Coding Style 2.0](https://www.php-fig.org/per/coding-style/)
+- PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
+- TypeScript with ESLint recommendations
 
 ### 8.5.8 Rebase your Patch
 

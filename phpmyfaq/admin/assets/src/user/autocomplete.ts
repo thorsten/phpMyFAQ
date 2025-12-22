@@ -13,7 +13,7 @@
  * @since     2022-03-23
  */
 
-import autocomplete, { AutocompleteItem, EventTrigger } from 'autocompleter';
+import autocomplete, { AutocompleteItem } from 'autocompleter';
 import { updateUser } from './users';
 import { fetchUsers } from '../api';
 import { addElement } from '../../../../assets/src/utils';
@@ -32,12 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.value = item.label;
         await updateUser(item.value);
       },
-      fetch: async (
-        text: string,
-        update: (items: UserSuggestion[] | false) => void,
-        _trigger: EventTrigger,
-        _cursorPos: number
-      ): Promise<void> => {
+      fetch: async (text: string, update: (items: UserSuggestion[] | false) => void): Promise<void> => {
         const match: string = text.toLowerCase();
         const users = (await fetchUsers(match)) as unknown as UserSuggestion[] | undefined;
         const list: UserSuggestion[] = (users ?? []).filter((n: UserSuggestion): boolean =>

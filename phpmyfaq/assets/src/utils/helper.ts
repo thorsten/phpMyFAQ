@@ -33,7 +33,7 @@ export const insertAfter = (referenceNode: Node, newNode: Node): void => {
  */
 export const addElement = (
   HTMLElement: string,
-  properties: Record<string, any> = {},
+  properties: Record<string, unknown> = {},
   children: Node[] = []
 ): HTMLElement => {
   const element = Object.assign(document.createElement(HTMLElement), properties);
@@ -41,7 +41,7 @@ export const addElement = (
   Object.keys(properties).forEach((key: string): void => {
     if (key.startsWith('data-')) {
       const dataKey: string = key.replace('data-', '');
-      element.dataset[dataKey] = properties[key];
+      element.dataset[dataKey] = properties[key] as string;
     }
   });
 
@@ -80,14 +80,14 @@ export const sort = (arr: number[]): number[] => arr.sort((a, b) => a - b);
  * @returns {{}}
  * @param formData
  */
-export function serialize(formData: FormData): Record<string, any> {
-  const obj: Record<string, any> = {};
+export function serialize(formData: FormData): Record<string, FormDataEntryValue | FormDataEntryValue[]> {
+  const obj: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
   formData.forEach((value, key) => {
     if (obj[key]) {
       if (Array.isArray(obj[key])) {
-        obj[key].push(value);
+        (obj[key] as FormDataEntryValue[]).push(value);
       } else {
-        obj[key] = [obj[key], value];
+        obj[key] = [obj[key] as FormDataEntryValue, value];
       }
     } else {
       obj[key] = value;

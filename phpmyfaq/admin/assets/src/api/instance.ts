@@ -24,46 +24,38 @@ export const addInstance = async (
   admin: string,
   password: string
 ): Promise<InstanceResponse> => {
-  try {
-    const response = await fetch(`./api/faq/search`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        url: url,
-        instance: instance,
-        comment: comment,
-        email: email,
-        admin: admin,
-        password: password,
-      }),
-    });
+  const response = await fetch(`./api/faq/search`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      url: url,
+      instance: instance,
+      comment: comment,
+      email: email,
+      admin: admin,
+      password: password,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const deleteInstance = async (csrf: string, instanceId: string): Promise<InstanceResponse> => {
-  try {
-    const response = await fetch('./api/instance/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        csrf: csrf,
-        instanceId: instanceId,
-      }),
-    });
+  const response = await fetch('./api/instance/delete', {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      csrf: csrf,
+      instanceId: instanceId,
+    }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

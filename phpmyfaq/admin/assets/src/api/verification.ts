@@ -17,35 +17,31 @@ interface RemoteHashes {
   [key: string]: string;
 }
 
-export const getRemoteHashes = async (version: string): Promise<RemoteHashes | undefined> => {
-  try {
-    const response = await fetch(`https://api.phpmyfaq.de/verify/${version}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    });
+interface VerificationResult {
+  [filename: string]: string;
+}
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+export const getRemoteHashes = async (version: string): Promise<RemoteHashes | undefined> => {
+  const response = await fetch(`https://api.phpmyfaq.de/verify/${version}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return await response.json();
 };
 
-export const verifyHashes = async (remoteHashes: RemoteHashes): Promise<any> => {
-  try {
-    const response = await fetch('./api/dashboard/verify', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(remoteHashes),
-    });
+export const verifyHashes = async (remoteHashes: RemoteHashes): Promise<VerificationResult> => {
+  const response = await fetch('./api/dashboard/verify', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(remoteHashes),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

@@ -17,6 +17,8 @@
  * @since     2022-02-19
  */
 
+/* global window, document, fetch, performance */
+
 /**
  * Generates a UUID Version 4 compatible universally unique identifier.
  * @returns {string} The generated UUID.
@@ -29,7 +31,7 @@ const generateUUID = () => {
   }
 
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
-    const random = (date + Math.random() * 16) % 16 | 0;
+    const random = ((date + Math.random() * 16) % 16) | 0;
     date = Math.floor(date / 16);
     return (char === 'x' ? random : (random & 0x3) | 0x8).toString(16);
   });
@@ -38,7 +40,7 @@ const generateUUID = () => {
 /**
  * Sends a test email to the admin.
  */
-const handleSendTestMail = async () => {
+export const handleSendTestMail = async () => {
   const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
   if (button) {
     const csrf = document.querySelector('#pmf-csrf-token').value;
@@ -54,7 +56,9 @@ const handleSendTestMail = async () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const result = await response.json();
+        displayResult(button, '👎 ' + (result.error || 'Network response was not ok'));
+        return;
       }
 
       const result = await response.json();
@@ -79,7 +83,7 @@ const displayResult = (button, message) => {
 /**
  * Generates an API token if the input field is empty.
  */
-const generateApiToken = () => {
+export const generateApiToken = () => {
   const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
   const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 

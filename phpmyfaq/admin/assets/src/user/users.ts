@@ -312,7 +312,7 @@ export const handleUsers = async (): Promise<void> => {
     editUserButton.addEventListener('click', async (event) => {
       event.preventDefault();
       const userId = (document.getElementById('update_user_id') as HTMLInputElement).value;
-      let userData = {
+      const userData = {
         csrfToken: (document.getElementById('pmf-csrf-token') as HTMLInputElement).value,
         display_name: (document.getElementById('display_name') as HTMLInputElement).value,
         email: (document.getElementById('email') as HTMLInputElement).value,
@@ -339,14 +339,14 @@ export const handleUsers = async (): Promise<void> => {
   document.querySelectorAll('#pmf-user-rights-save').forEach((item) => {
     item.addEventListener('click', async (event) => {
       event.preventDefault();
-      let rightData: string[] = [];
+      const rightData: string[] = [];
       document.querySelectorAll('.permission').forEach(async (checkbox) => {
         if ((checkbox as HTMLInputElement).checked) {
           rightData.push((checkbox as HTMLInputElement).value);
         }
       });
       const userId = (document.getElementById('rights_user_id') as HTMLInputElement).value;
-      let data = {
+      const data = {
         csrfToken: (document.getElementById('pmf-csrf-token-rights') as HTMLInputElement).value,
         userId: userId,
         userRights: rightData,

@@ -8,18 +8,25 @@ vi.mock('bootstrap', () => ({
   },
 }));
 
+interface MockToast {
+  show: ReturnType<typeof vi.fn>;
+  hide: ReturnType<typeof vi.fn>;
+  isShown: ReturnType<typeof vi.fn>;
+  dispose: ReturnType<typeof vi.fn>;
+}
+
 describe('notifications', (): void => {
-  const mockToast = {
+  const mockToast: MockToast = {
     show: vi.fn(),
     hide: vi.fn(),
     isShown: vi.fn(),
     dispose: vi.fn(),
-  } as any;
+  };
   const mockGetOrCreateInstance = vi.mocked(Toast.getOrCreateInstance);
 
   beforeEach((): void => {
     vi.clearAllMocks();
-    mockGetOrCreateInstance.mockReturnValue(mockToast as any);
+    mockGetOrCreateInstance.mockReturnValue(mockToast as unknown as Toast);
   });
 
   afterEach((): void => {

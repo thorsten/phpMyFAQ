@@ -118,8 +118,8 @@ export const renderVisitorCharts = async (): Promise<void> => {
       const c = getThemeColors();
       const ds = visitorChart.data.datasets[0];
       ds.borderColor = c.primary;
-      (ds as any).pointBackgroundColor = c.primary;
-      (ds as any).pointBorderColor = c.primary;
+      ds.pointBackgroundColor = c.primary;
+      ds.pointBorderColor = c.primary;
       visitorChart.options.plugins = visitorChart.options.plugins || {};
       visitorChart.options.plugins.legend = { display: false, labels: { color: c.bodyColor } };
       visitorChart.options.plugins.tooltip = {
@@ -130,13 +130,13 @@ export const renderVisitorCharts = async (): Promise<void> => {
         borderWidth: 1,
       };
       visitorChart.options.scales = visitorChart.options.scales || {};
-      (visitorChart.options.scales.x as any) = {
+      visitorChart.options.scales.x = {
         display: true,
         title: { display: false, color: c.bodyColor },
         ticks: { color: c.bodyColor },
         grid: { color: c.gridColor },
       };
-      (visitorChart.options.scales.y as any) = {
+      visitorChart.options.scales.y = {
         display: true,
         title: { display: true, text: 'Visitors', color: c.bodyColor },
         ticks: { color: c.bodyColor },
@@ -193,7 +193,7 @@ export const renderTopTenCharts = async (): Promise<void> => {
 
     const colorsForBars = getThemeColors();
 
-    let colors: string[] = [];
+    const colors: string[] = [];
 
     const doughnutChart = new Chart(context, {
       type: 'bar',
@@ -259,13 +259,13 @@ export const renderTopTenCharts = async (): Promise<void> => {
       const c = getThemeColors();
       if (!doughnutChart.options.plugins) doughnutChart.options.plugins = {};
       doughnutChart.options.plugins.legend = { display: false, labels: { color: c.bodyColor } };
-      (doughnutChart.options.scales!.x as any) = {
+      doughnutChart.options.scales!.x = {
         display: true,
         title: { display: false, color: c.bodyColor },
         ticks: { display: false, color: c.bodyColor },
         grid: { color: c.gridColor },
       };
-      (doughnutChart.options.scales!.y as any) = {
+      doughnutChart.options.scales!.y = {
         display: true,
         title: { display: false, color: c.bodyColor },
         ticks: { color: c.bodyColor },
@@ -372,7 +372,14 @@ export const getLatestVersion = async (): Promise<void> => {
           );
         }
       } else {
-        throw new Error('Network response was not ok');
+        loader.classList.add('d-none');
+        versionText.insertAdjacentElement(
+          'afterend',
+          addElement('div', {
+            classList: 'alert alert-danger',
+            innerText: 'Network response was not ok',
+          })
+        );
       }
     } catch (error) {
       const errorMessage = (error as Error).message || 'Unknown error';

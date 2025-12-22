@@ -16,18 +16,14 @@
 import { MediaBrowserApiResponse } from '../interfaces/';
 
 export const fetchMediaBrowserContent = async (): Promise<MediaBrowserApiResponse> => {
-  try {
-    const response = await fetch(`./api/media-browser`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ action: 'files' }),
-    });
+  const response = await fetch(`./api/media-browser`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ action: 'files' }),
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };

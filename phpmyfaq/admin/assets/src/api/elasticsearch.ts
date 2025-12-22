@@ -16,37 +16,29 @@
 import { ElasticsearchResponse, Response } from '../interfaces';
 
 export const fetchElasticsearchAction = async (action: string): Promise<Response> => {
-  try {
-    const response = await fetch(`./api/elasticsearch/${action}`, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch(`./api/elasticsearch/${action}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
 
 export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchResponse> => {
-  try {
-    const response = await fetch('./api/elasticsearch/statistics', {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-    });
+  const response = await fetch('./api/elasticsearch/statistics', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
 
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  return await response.json();
 };
