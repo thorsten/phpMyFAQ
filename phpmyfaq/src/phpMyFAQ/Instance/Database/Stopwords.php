@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements
  * for the stop words.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2015-09-05
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Instance\Database;
 

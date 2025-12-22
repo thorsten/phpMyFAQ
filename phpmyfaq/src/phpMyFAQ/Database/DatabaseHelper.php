@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for database drivers.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-12
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Database;
 

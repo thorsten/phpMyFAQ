@@ -21,7 +21,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\Vote;
 use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Rating\RatingRepository;
+use phpMyFAQ\Search\Rating\RatingRepository;
 
 /**
  * Class Rating

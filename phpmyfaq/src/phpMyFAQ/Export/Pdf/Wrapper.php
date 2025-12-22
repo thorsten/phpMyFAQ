@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2004-11-21
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Export\Pdf;
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ\Database\Pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -19,6 +17,8 @@ declare(strict_types=1);
  * @since     2005-12-13
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Database;
 
 use Exception;
@@ -30,6 +30,7 @@ use phpMyFAQ\Database;
  * Class Pgsql
  *
  * @package phpMyFAQ\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Pgsql implements DatabaseDriver
 {

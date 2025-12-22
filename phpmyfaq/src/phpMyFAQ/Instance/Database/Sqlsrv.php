@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL Server.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2015-04-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
@@ -26,6 +26,7 @@ use phpMyFAQ\Instance\Database;
  * Class Sqlsrv
  *
  * @package phpMyFAQ\Instance\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlsrv extends Database implements DriverInterface
 {

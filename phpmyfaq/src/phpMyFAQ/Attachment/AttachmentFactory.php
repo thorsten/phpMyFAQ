@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Attachment handler class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @copyright 2009-2025 phpMyFAQ Team
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment;
 

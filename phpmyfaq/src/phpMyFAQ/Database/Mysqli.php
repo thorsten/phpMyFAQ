@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ\Database\Mysqli class provides methods and functions for MySQL and
  * MariaDB databases.
@@ -19,6 +17,8 @@ declare(strict_types=1);
  * @since     2005-12-13
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Database;
 
 use mysqli_result;
@@ -31,6 +31,7 @@ use SensitiveParameter;
  * Class Mysqli
  *
  * @package phpMyFAQ\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Mysqli implements DatabaseDriver
 {

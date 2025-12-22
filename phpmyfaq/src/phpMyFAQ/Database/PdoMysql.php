@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ\Database\PdoMysql class provides methods and functions for MySQL and
  * MariaDB databases with PDO.
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-02-09
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Database;
 

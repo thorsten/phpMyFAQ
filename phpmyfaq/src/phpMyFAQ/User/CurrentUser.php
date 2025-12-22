@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages the authentication process using PHP sessions.
  * The CurrentUser class is an extension of the User class.
@@ -21,6 +19,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 

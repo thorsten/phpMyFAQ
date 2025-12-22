@@ -1,9 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * phpMyFAQ database based search classes.
+ * phpMyFAQ database-based search classes.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2010-06-06
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 

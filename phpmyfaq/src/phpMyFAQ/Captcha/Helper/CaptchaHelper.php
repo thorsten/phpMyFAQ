@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Helper class for the captchas.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-02-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Captcha\Helper;
 

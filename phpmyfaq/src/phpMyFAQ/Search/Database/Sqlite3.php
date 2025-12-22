@@ -1,9 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * phpMyFAQ SQlite based search classes.
+ * phpMyFAQ SQLite-based search classes.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -19,6 +17,8 @@ declare(strict_types=1);
  * @since 2012-12-26
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Search\Database;
 
 use Exception;
@@ -28,6 +28,7 @@ use phpMyFAQ\Search\SearchDatabase;
  * Class Sqlite3
  *
  * @package phpMyFAQ\Search\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlite3 extends SearchDatabase implements DatabaseInterface
 {

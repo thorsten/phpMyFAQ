@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances a database class with CREATE TABLE statements for MS SQL Server.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-10-26
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Instance\Database;
 

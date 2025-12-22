@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class for importing records from a csv file.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-01-05
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 

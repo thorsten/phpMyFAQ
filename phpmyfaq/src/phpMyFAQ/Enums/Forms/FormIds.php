@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Ids of phpMyFAQ-forms
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-03-09
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Enums\Forms;
 

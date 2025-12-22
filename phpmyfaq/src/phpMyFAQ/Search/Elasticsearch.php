@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * phpMyFAQ Elasticsearch based search classes.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2015-12-25
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 

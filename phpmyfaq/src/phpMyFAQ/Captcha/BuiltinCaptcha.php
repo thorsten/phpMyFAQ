@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ Captcha class.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2006-02-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Captcha;
 

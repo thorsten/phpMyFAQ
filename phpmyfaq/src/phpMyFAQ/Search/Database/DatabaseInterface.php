@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Interface for phpMyFAQ database-dependent search classes.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-12-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Search\Database;
 

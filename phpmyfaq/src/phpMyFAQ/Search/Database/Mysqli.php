@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * phpMyFAQ MySQL (ext/mysqli) search classes.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2010-06-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Search\Database;
 
 use Exception;
@@ -27,6 +27,7 @@ use phpMyFAQ\Search\SearchDatabase;
  * Class Mysqli
  *
  * @package phpMyFAQ\Search\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Mysqli extends SearchDatabase implements DatabaseInterface
 {

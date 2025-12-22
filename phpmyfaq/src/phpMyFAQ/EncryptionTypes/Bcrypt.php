@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Provides methods for password encryption using PHP 5.5+ password_hash().
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2014-03-29
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\EncryptionTypes;
 

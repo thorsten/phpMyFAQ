@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages all language stuff.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-05-14
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

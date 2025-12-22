@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Permission type enums
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-01-02
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Enums;
 

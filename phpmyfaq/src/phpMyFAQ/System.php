@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class for checking system requirements.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -129,19 +129,19 @@ class System
         ],
         'pdo_mysql' => [
             self::VERSION_MINIMUM_PHP,
-            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, experimental)',
+            'MySQL v8 / MariaDB v10 / Percona Server v8 / Galera Cluster v4 (PDO_MYSQL, preferred, experimental)',
         ],
         'pdo_pgsql' => [
             self::VERSION_MINIMUM_PHP,
-            'PostgreSQL v10 or later (PDO_PGSQL, experimental)',
+            'PostgreSQL v10 or later (PDO_PGSQL, preferred, experimental)',
         ],
         'pdo_sqlite' => [
             self::VERSION_MINIMUM_PHP,
-            'SQLite 3 (PDO_SQLITE, experimental)',
+            'SQLite 3 (PDO_SQLITE, preferred, experimental)',
         ],
         'pdo_sqlsrv' => [
             self::VERSION_MINIMUM_PHP,
-            'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, experimental)',
+            'MS SQL Server 2016 or later / SQL Azure (PDO_SQLSRV, preferred, experimental)',
         ],
     ];
 

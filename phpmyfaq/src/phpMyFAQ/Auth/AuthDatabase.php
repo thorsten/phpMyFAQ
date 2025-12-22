@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages user authentication with databases.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 

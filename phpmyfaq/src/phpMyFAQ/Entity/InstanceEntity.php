@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Instance entity class.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -15,6 +13,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-02-22
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Entity;
 

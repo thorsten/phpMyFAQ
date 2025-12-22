@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Authentication source type enum
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-09-23
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Enums;
 

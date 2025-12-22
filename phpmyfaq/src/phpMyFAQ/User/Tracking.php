@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class for User tracking handling.
  *
@@ -21,6 +19,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2024-10-29
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 

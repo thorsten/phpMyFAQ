@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages user authentication with Microsoft Entra ID.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-09-09
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 

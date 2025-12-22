@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Category entity class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2014-08-14
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Entity;
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * FAQ permissions class for phpMyFAQ.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -15,6 +13,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2020-11-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 

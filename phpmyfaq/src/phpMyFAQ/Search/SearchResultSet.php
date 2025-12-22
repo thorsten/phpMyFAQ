@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Implements result sets for phpMyFAQ search classes.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2010-06-06
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Search;
 

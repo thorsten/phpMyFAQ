@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Manages user authentication with LDAP server.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Auth;
 

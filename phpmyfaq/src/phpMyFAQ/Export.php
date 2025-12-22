@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * JSON, and PDF export
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

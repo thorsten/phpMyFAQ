@@ -1,9 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * phpMyFAQ SQL Server Driver for PHP based search classes.
+ * phpMyFAQ SQL Server Driver for PHP-based search classes.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2010-07-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Search\Database;
 
 use Exception;
@@ -26,6 +26,7 @@ use phpMyFAQ\Search\SearchDatabase;
  * Class Sqlsrv
  *
  * @package phpMyFAQ\Search\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlsrv extends SearchDatabase implements DatabaseInterface
 {

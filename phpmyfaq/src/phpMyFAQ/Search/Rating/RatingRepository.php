@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Rating;
+namespace phpMyFAQ\Search\Rating;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

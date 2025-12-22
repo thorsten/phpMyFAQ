@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * FAQ meta-data class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2020-11-04
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Faq;
 

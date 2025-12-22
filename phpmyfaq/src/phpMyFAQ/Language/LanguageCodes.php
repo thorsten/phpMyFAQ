@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The language codes class provides support for language codes in phpMyFAQ translations.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2022-03-22
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Language;
 

@@ -1,9 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
-// phpcs:ignoreFile
-
 /**
  * The main string wrapper class.
  *
@@ -23,6 +19,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-04-06
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

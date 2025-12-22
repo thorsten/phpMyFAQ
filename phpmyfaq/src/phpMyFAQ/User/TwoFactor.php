@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class for Two-Factor Authentication (2FA).
  *
@@ -21,6 +19,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2023-03-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 

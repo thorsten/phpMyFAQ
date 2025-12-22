@@ -58,7 +58,7 @@ readonly class LdapSettings
     }
 
     /**
-     * Erzeugt das core.ldapConfig-Array aus aktuellen Konfigwerten.
+     * Builds the core.ldapConfig array from current configuration values.
      * @return array<string, mixed>
      */
     public function buildConfig(): array

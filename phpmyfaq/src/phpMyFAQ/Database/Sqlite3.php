@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ\Database\Sqlite3 class provides methods and functions for a SQLite v3 database.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2012-03-02
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Core\Exception;
@@ -25,6 +25,7 @@ use phpMyFAQ\Core\Exception;
  * Class Sqlite3
  *
  * @package phpMyFAQ\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlite3 implements DatabaseDriver
 {

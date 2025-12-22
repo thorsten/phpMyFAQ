@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class for filesystem operations.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-02
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Filesystem;
 

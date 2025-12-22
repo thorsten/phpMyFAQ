@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ Search class.
  *
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2008-01-26
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * File handler class.
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Attachment\Filesystem;
 

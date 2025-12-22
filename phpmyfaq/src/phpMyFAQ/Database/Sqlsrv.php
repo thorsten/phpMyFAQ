@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ\Database\Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @since     2009-02-18
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Database;
 
 use Exception;
@@ -27,6 +27,7 @@ use phpMyFAQ\Database;
  * Class Sqlsrv
  *
  * @package phpMyFAQ\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlsrv implements DatabaseDriver
 {

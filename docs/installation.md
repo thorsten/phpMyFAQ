@@ -9,6 +9,7 @@ To install it, you will need a web server that meets the following requirements:
 
 - version 8.3 or later
 - memory_limit = 128M (the more the better)
+- PDO support
 - cURL support
 - GD support
 - XMLWriter support
@@ -52,6 +53,9 @@ Please be aware that modules like `mod_security` can cause problems with the ins
 - [MariaDB](http://montyprogram.com/mariadb/) (via MySQLi extension or PDO)
 - [Percona Server](http://www.percona.com) (via MySQLi extension or PDO)
 - [Azure SQL Database](https://azure.microsoft.com/en-us/products/azure-sql/database) (via PDO, experimental)
+
+The PDO extension is the preferred way to connect to your database server even though it's still marketed as 
+experimental for now.
 
 ### Optional Search engine
 

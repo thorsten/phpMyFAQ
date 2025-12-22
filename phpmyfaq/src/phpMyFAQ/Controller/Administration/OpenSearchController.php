@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The Administration Elasticsearch Controller
  *
@@ -16,6 +14,8 @@ declare(strict_types=1);
  * @link      https://www.phpmyfaq.de
  * @since     2025-05-09
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Administration;
 

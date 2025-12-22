@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances a database class with CREATE TABLE statements for MySQL, MariaBD, Percona Server and Galera
  * Cluster for MySQL.
@@ -18,6 +16,8 @@ declare(strict_types=1);
  * @since     2015-04-06
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
@@ -27,6 +27,7 @@ use phpMyFAQ\Instance\Database;
  * Class Mysqli
  *
  * @package phpMyFAQ\Instance\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Mysqli extends Database implements DriverInterface
 {

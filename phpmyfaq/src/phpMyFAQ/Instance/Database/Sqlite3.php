@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * The phpMyFAQ instances a database class with CREATE TABLE statements for SQLite3.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @since     2015-04-16
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
@@ -26,6 +26,7 @@ use phpMyFAQ\Instance\Database;
  * Class Sqlite3
  *
  * @package phpMyFAQ\Instance\Database
+ * @deprecated Use PDO instead. Will be removed in the v5.0 release.
  */
 class Sqlite3 extends Database implements DriverInterface
 {
