@@ -26,6 +26,4 @@ use Exception;
  *
  * @package phpMyFAQ\Attachment
  */
-class AttachmentException extends Exception
-{
-}
+class AttachmentException extends Exception {}

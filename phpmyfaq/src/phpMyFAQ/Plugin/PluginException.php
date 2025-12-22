@@ -21,6 +21,4 @@ namespace phpMyFAQ\Plugin;
 
 use phpMyFAQ\Core\Exception;
 
-class PluginException extends Exception
-{
-}
+class PluginException extends Exception {}

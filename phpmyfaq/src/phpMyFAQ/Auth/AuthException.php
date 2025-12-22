@@ -21,6 +21,4 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Core\Exception;
 
-class AuthException extends Exception
-{
-}
+class AuthException extends Exception {}

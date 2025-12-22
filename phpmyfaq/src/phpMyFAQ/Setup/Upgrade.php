@@ -95,9 +95,8 @@ class Upgrade extends AbstractSetup
             !is_file(PMF_CONTENT_DIR . '/core/config/constants.php')
             || !is_file(PMF_CONTENT_DIR . '/core/config/database.php')
         ) {
-            throw new Exception(
-                message: 'The files /content/core/config/constant.php and /content/core/config/database.php are missing.',
-            );
+            throw new Exception(message: 'The files /content/core/config/constant.php and'
+            . ' /content/core/config/database.php are missing.');
         }
 
         if (
@@ -112,8 +111,7 @@ class Upgrade extends AbstractSetup
         }
 
         if (
-            $this->configuration->isSignInWithMicrosoftActive()
-            && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
+            $this->configuration->isSignInWithMicrosoftActive() && !is_file(PMF_CONTENT_DIR . '/core/config/azure.php')
         ) {
             throw new Exception(message: 'The file /content/core/config/azure.php is missing.');
         }

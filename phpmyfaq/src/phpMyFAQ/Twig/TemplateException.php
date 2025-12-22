@@ -26,6 +26,4 @@ use phpMyFAQ\Core\Exception;
  *
  * @package phpMyFAQ\Template
  */
-class TemplateException extends Exception
-{
-}
+class TemplateException extends Exception {}
