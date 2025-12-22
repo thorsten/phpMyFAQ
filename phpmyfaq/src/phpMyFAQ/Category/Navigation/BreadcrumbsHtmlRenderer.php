@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * Category breadcrumb HTML renderer class
@@ -14,6 +14,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2025-10-18
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Navigation;
 

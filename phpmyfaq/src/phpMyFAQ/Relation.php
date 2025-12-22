@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * The Relation class for dynamic-related record linking.
@@ -15,6 +15,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-18
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

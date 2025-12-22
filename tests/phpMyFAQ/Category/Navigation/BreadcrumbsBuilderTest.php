@@ -119,12 +119,14 @@ class BreadcrumbsBuilderTest extends TestCase
         $categoryMap = [];
         $ids = [];
 
-        $result = $this->builder->buildFromIdsWithStartpage($categoryMap, $ids, 'Home');
+        $result = $this->builder->buildFromIdsWithStartPage($categoryMap, $ids, 'Home', '', 'All categories');
 
-        $this->assertCount(1, $result);
+        $this->assertCount(2, $result); // startpage + all categories
         $this->assertSame(-1, $result[0]['id']);
         $this->assertSame('Home', $result[0]['name']);
         $this->assertSame('', $result[0]['description']);
+        $this->assertSame(0, $result[1]['id']);
+        $this->assertSame('All categories', $result[1]['name']);
     }
 
     public function testBuildFromIdsWithStartpageIncludesCategorySegments(): void
@@ -143,15 +145,17 @@ class BreadcrumbsBuilderTest extends TestCase
         ];
         $ids = [1, 2];
 
-        $result = $this->builder->buildFromIdsWithStartpage($categoryMap, $ids, 'Home');
+        $result = $this->builder->buildFromIdsWithStartPage($categoryMap, $ids, 'Home', '', 'All categories');
 
-        $this->assertCount(3, $result); // startpage + 2 categories
+        $this->assertCount(4, $result); // startpage + all categories + 2 categories
         $this->assertSame(-1, $result[0]['id']); // startpage
         $this->assertSame('Home', $result[0]['name']);
-        $this->assertSame(1, $result[1]['id']);
-        $this->assertSame(2, $result[2]['id']);
-        $this->assertSame('Category 1', $result[1]['name']);
-        $this->assertSame('Category 2', $result[2]['name']);
+        $this->assertSame(0, $result[1]['id']); // all categories
+        $this->assertSame('All categories', $result[1]['name']);
+        $this->assertSame(1, $result[2]['id']);
+        $this->assertSame(2, $result[3]['id']);
+        $this->assertSame('Category 1', $result[2]['name']);
+        $this->assertSame('Category 2', $result[3]['name']);
     }
 
     public function testBuildFromIdsWithStartpageSkipsMissingCategories(): void
@@ -165,12 +169,14 @@ class BreadcrumbsBuilderTest extends TestCase
         ];
         $ids = [1, 999]; // ID 999 doesn't exist
 
-        $result = $this->builder->buildFromIdsWithStartpage($categoryMap, $ids, 'Home');
+        $result = $this->builder->buildFromIdsWithStartPage($categoryMap, $ids, 'Home', '', 'All categories');
 
-        $this->assertCount(2, $result); // startpage + 1 category (999 is skipped)
+        $this->assertCount(3, $result); // startpage + all categories + 1 category (999 is skipped)
         $this->assertSame(-1, $result[0]['id']);
         $this->assertSame('Home', $result[0]['name']);
-        $this->assertSame(1, $result[1]['id']);
+        $this->assertSame(0, $result[1]['id']);
+        $this->assertSame('All categories', $result[1]['name']);
+        $this->assertSame(1, $result[2]['id']);
     }
 
     public function testBuildFromIdsWithStartpageHandlesMissingFields(): void
@@ -183,12 +189,13 @@ class BreadcrumbsBuilderTest extends TestCase
         ];
         $ids = [1];
 
-        $result = $this->builder->buildFromIdsWithStartpage($categoryMap, $ids, 'Home');
+        $result = $this->builder->buildFromIdsWithStartPage($categoryMap, $ids, 'Home', '', 'All categories');
 
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result); // startpage + all categories + 1 category
         $this->assertSame('Home', $result[0]['name']);
-        $this->assertSame('', $result[1]['name']);
-        $this->assertSame('', $result[1]['description']);
+        $this->assertSame('All categories', $result[1]['name']);
+        $this->assertSame('', $result[2]['name']);
+        $this->assertSame('', $result[2]['description']);
     }
 
     public function testBuildFromIdsWithStartpageWithCustomDescription(): void
@@ -196,16 +203,19 @@ class BreadcrumbsBuilderTest extends TestCase
         $categoryMap = [];
         $ids = [];
 
-        $result = $this->builder->buildFromIdsWithStartpage(
+        $result = $this->builder->buildFromIdsWithStartPage(
             $categoryMap,
             $ids,
             'Home',
-            'Welcome to FAQ'
+            'Welcome to FAQ',
+            'All categories'
         );
 
-        $this->assertCount(1, $result);
+        $this->assertCount(2, $result); // startpage + all categories
         $this->assertSame(-1, $result[0]['id']);
         $this->assertSame('Home', $result[0]['name']);
         $this->assertSame('Welcome to FAQ', $result[0]['description']);
+        $this->assertSame(0, $result[1]['id']);
+        $this->assertSame('All categories', $result[1]['name']);
     }
 }

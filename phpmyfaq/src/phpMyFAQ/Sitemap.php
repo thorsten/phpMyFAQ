@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * The main Sitemap class.
@@ -14,6 +14,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2007-03-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 

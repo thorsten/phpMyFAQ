@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * The plural class provides support for plural forms in phpMyFAQ translations.
@@ -14,6 +14,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2009-07-30
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Language;
 

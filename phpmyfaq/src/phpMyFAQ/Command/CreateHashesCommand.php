@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * This command iterates recursively through the whole phpMyFAQ project and
@@ -15,6 +15,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-11
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Command;
 

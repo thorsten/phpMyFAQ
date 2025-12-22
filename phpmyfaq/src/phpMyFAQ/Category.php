@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * The main category class. Yes, it's huge.
@@ -17,6 +17,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2004-02-16
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ;
 
@@ -529,7 +531,7 @@ class Category
         string $startpageDescription = '',
     ): string {
         $ids = $this->getNodes($catId);
-        $segments = $this->getBreadcrumbsBuilder()->buildFromIdsWithStartpage(
+        $segments = $this->getBreadcrumbsBuilder()->buildFromIdsWithStartPage(
             $this->cache->getCategoryNames(),
             $ids,
             $startpageName,

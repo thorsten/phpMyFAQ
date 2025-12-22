@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * Category breadcrumb builder class
@@ -14,6 +14,8 @@
  * @link      https://www.phpmyfaq.de
  * @since     2025-10-18
  */
+
+declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Navigation;
 
@@ -35,26 +37,35 @@ final class BreadcrumbsBuilder
     }
 
     /**
-     * Builds breadcrumb segments with the startpage as the first segment.
+     * Builds breadcrumb segments with the start page as the first segment.
      *
      * @param array<int, array<string, mixed>> $categoryNameMap id => row (expects name, description)
      * @param array<int> $ids ordered list from root to leaf
-     * @param string|null $startpageName Optional startpage name (defaults to Translation msgHome)
-     * @param string $startpageDescription Optional startpage description
+     * @param string|null $startPageName Optional start page name (defaults to Translation msgHome)
+     * @param string $startPageDescription Optional start page description
+     * @param string|null $allCategoriesName Optional all categories name (defaults to Translation msgShowAllCategories)
+     * @param string $allCategoriesDescription Optional all categories description
      * @return array<int, array{id:int, name:string, description:string}>
      */
-    public function buildFromIdsWithStartpage(
+    public function buildFromIdsWithStartPage(
         array $categoryNameMap,
         array $ids,
-        ?string $startpageName = null,
-        string $startpageDescription = '',
+        ?string $startPageName = null,
+        string $startPageDescription = '',
+        ?string $allCategoriesName = null,
+        string $allCategoriesDescription = '',
     ): array {
-        // Add the startpage as the first segment
+        // Add the start page as the first segment
         $segments = [
             [
                 'id' => -1,
-                'name' => $startpageName ?? Translation::get('msgHome'),
-                'description' => $startpageDescription,
+                'name' => $startPageName ?? Translation::get('msgHome'),
+                'description' => $startPageDescription,
+            ],
+            [
+                'id' => 0,
+                'name' => $allCategoriesName ?? Translation::get('msgShowAllCategories'),
+                'description' => $allCategoriesDescription,
             ],
         ];
 
