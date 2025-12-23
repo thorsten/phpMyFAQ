@@ -7,14 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Tadashi Jokagi <https://poyo.jp/>
- * @author Minoru TODA <todam@netjapan.co.jp>
+ * @package   phpMyFAQ
+ * @author    Tadashi Jokagi <https://poyo.jp/>
+ * @author    Minoru TODA <todam@netjapan.co.jp>
  * @copyright 2004-2025 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-02-19
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';
@@ -170,11 +169,8 @@ $PMF_LANG['ad_entry_topic'] = 'トピック';
 $PMF_LANG['ad_entry_action'] = '操作';
 $PMF_LANG['ad_entry_edit_1'] = 'レコードの変更';
 $PMF_LANG['ad_entry_edit_2'] = '';
-$PMF_LANG['msgQuestion'] = '質問:';
 $PMF_LANG['msgAnswer'] = '回答:';
 $PMF_LANG['msgKeywords'] = 'キーワード:';
-$PMF_LANG['msgAuthor'] = '作成者:';
-$PMF_LANG['msgCategory'] = 'カテゴリー:';
 $PMF_LANG['ad_entry_active'] = '有効にする';
 $PMF_LANG['msgDate'] = '日付';
 $PMF_LANG['ad_entry_status'] = 'FAQ の状態';
@@ -671,8 +667,8 @@ $PMF_LANG['msgStickyFAQ'] = 'スティッキー';
 $PMF_LANG['stickyRecordsHeader'] = 'スティッキー FAQ';
 $PMF_LANG['ad_menu_stopwordsconfig'] = 'ストップワード';
 $PMF_LANG['ad_config_stopword_input'] = '新規ストップワードの追加';
-$PMF_LANG['msgSendMailDespiteEverything'] = 'No, there is still no adequate answer (will send the mail)';
-$PMF_LANG['msgSendMailIfNothingIsFound'] = 'Is the wanted answer listed in the results above?';
+$PMF_LANG['msgSendMailDespiteEverything'] = 'いいえ、まだ適切な回答がありません（メールを送信します）';
+$PMF_LANG['msgSendMailIfNothingIsFound'] = '探している回答は上記の結果にありますか？';
 $PMF_LANG['msgChooseLanguageToTranslate'] = '翻訳する言語を選んでください';
 $PMF_LANG['ad_menu_translations'] = '翻訳インターフェース';
 $PMF_LANG['ad_start_notactive'] = '有効化待ち';
@@ -681,7 +677,6 @@ $PMF_LANG['msgTransToolLanguage'] = '言語';
 $PMF_LANG['msgTransToolActions'] = '操作';
 $PMF_LANG['msgTransToolWritable'] = '書き込み可能';
 $PMF_LANG['msgEdit'] = '編集';
-$PMF_LANG['msgDelete'] = '削除';
 $PMF_LANG['msgYes'] = 'はい';
 $PMF_LANG['msgNo'] = 'いいえ';
 $PMF_LANG['msgVariable'] = '表示';
@@ -793,55 +788,55 @@ $LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'シングルサイン
 $LANG_CONF['main.dateFormat'] = array('input', '日付フォーマット (初期値: Y-m-d H:i)');
 $LANG_CONF['security.enableLoginOnly'] = array('checkbox', 'FAQ閲覧にログインを必要とする (初期値: 無効)');
 $PMF_LANG['securityControlCenter'] = 'セキュリティ構成';
-$PMF_LANG['ad_search_delsuc'] = 'The searchterm was successfully deleted.';
-$PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
+$PMF_LANG['ad_search_delsuc'] = '検索語句の削除に成功しました。';
+$PMF_LANG['ad_search_delfail'] = '検索語句を削除できませんでした。';
 $PMF_LANG['msg_about_faq'] = 'この FAQ について';
 $LANG_CONF['security.useSslOnly'] = array('checkbox', 'FAQ with SSL only (初期値: 無効)');
 $PMF_LANG['msgTableOfContent'] = '目次';
 $PMF_LANG['msgShowMore'] = 'さらに表示';
-$PMF_LANG['msgQuestionAnswered'] = 'Question answered';
-$PMF_LANG['msgMessageQuestionAnswered'] = 'Your question at %s was answered. Please check it here:';
-$PMF_LANG['ad_stopwords_desc'] = 'Please select a language to add or edit stopwords.';
+$PMF_LANG['msgQuestionAnswered'] = '質問に回答しました';
+$PMF_LANG['msgMessageQuestionAnswered'] = '%s での質問に回答がありました。こちらで確認してください:';
+$PMF_LANG['ad_stopwords_desc'] = 'ストップワードを追加または編集する言語を選択してください。';
 $PMF_LANG['ad_visits_per_day'] = '一日の訪問者数';
-$PMF_LANG['ad_instance_add'] = 'Add a new phpMyFAQ multi site instance';
-$PMF_LANG['ad_instance_error_notwritable'] = 'The folder /multisite isn\'t writable.';
+$PMF_LANG['ad_instance_add'] = '新しい phpMyFAQ マルチサイトインスタンスを追加';
+$PMF_LANG['ad_instance_error_notwritable'] = '/multisite フォルダーは書き込みできません。';
 $PMF_LANG['ad_instance_url'] = 'インスタンスURL';
 $PMF_LANG['ad_instance_path'] = 'インスタンスパス';
 $PMF_LANG['ad_instance_name'] = 'インスタンス名';
 $PMF_LANG['ad_instance_email'] = '管理者メール';
 $PMF_LANG['ad_instance_admin'] = '管理者ログイン名';
 $PMF_LANG['ad_instance_password'] = '管理者パスワード';
-$PMF_LANG['ad_instance_hint'] = 'Caution: It will take some seconds to create a new phpMyFAQ instance!';
+$PMF_LANG['ad_instance_hint'] = '注意: 新しい phpMyFAQ インスタンスの作成には数秒かかります!';
 $PMF_LANG['ad_instance_button'] = 'インスタンスを保存';
 $PMF_LANG['ad_instance_error_cannotdelete'] = 'インスタンスを削除できません';
 $PMF_LANG['ad_instance_config'] = 'インスタンスを編集';
 $PMF_LANG['msgAboutThisNews'] = 'このニュースについて';
 $PMF_LANG['msgAccessDenied'] = '許可されていません';
-$LANG_CONF['records.randomSort'] = array('checkbox', 'Sort FAQs randomly (default: deactivated)');
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', 'Enable bundled WYSIWYG editor in frontend (default: disabled)');
-$LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatar Support (default: disabled)');
+$LANG_CONF['records.randomSort'] = array('checkbox', 'FAQをランダムに並べ替え (デフォルト: 無効)');
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', 'フロントエンドでWYSIWYGエディタを有効化 (デフォルト: 無効)');
+$LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatarサポート (デフォルト: 無効)');
 $PMF_LANG['msgSeeFAQinFrontend'] = '現在のFAQページを確認';
 $PMF_LANG['records.orderingPopularFaqs.visits'] = '訪問者数順';
 $PMF_LANG['records.orderingPopularFaqs.voting'] = '投票数順';
-$LANG_CONF['records.orderingPopularFaqs'] = array('select', 'Sorting of the top FAQ\'s');
-$PMF_LANG['msgExportAllFaqs'] = 'Print all as PDF';
-$PMF_LANG['msgOnlineVerificationCheck'] = 'Online verification check';
-$PMF_LANG['msgOnlineVerificationCheckButton'] = 'Click to verify your phpMyFAQ installation';
-$PMF_LANG['ad_verification_notokay'] = 'Your version of phpMyFAQ has local changes:';
-$PMF_LANG['ad_verification_okay'] = 'Your version of phpMyFAQ was successfully verified.';
-$PMF_LANG['cacheControlCenter'] = 'Cache configuration';
+$LANG_CONF['records.orderingPopularFaqs'] = array('select', '人気FAQの並び替え');
+$PMF_LANG['msgExportAllFaqs'] = 'すべてPDFで印刷';
+$PMF_LANG['msgOnlineVerificationCheck'] = 'オンライン検証チェック';
+$PMF_LANG['msgOnlineVerificationCheckButton'] = 'クリックしてphpMyFAQインストールを検証';
+$PMF_LANG['ad_verification_notokay'] = 'phpMyFAQのバージョンにローカル変更があります:';
+$PMF_LANG['ad_verification_okay'] = 'phpMyFAQのバージョンが正常に検証されました。';
+$PMF_LANG['cacheControlCenter'] = 'キャッシュ設定';
 $PMF_LANG['msgAdminSearchFaqs'] = 'FAQ の検索';
-$PMF_LANG['msg2answerFAQ'] = 'Answered';
+$PMF_LANG['msg2answerFAQ'] = '回答済み';
 $PMF_LANG['headerUserControlPanel'] = 'ユーザー情報の編集';
 $PMF_LANG['rememberMe'] = 'ログイン情報を記憶する';
 $PMF_LANG['ad_menu_instances'] = 'FAQ マルチサイト';
 $PMF_LANG['ad_record_inactive'] = '非公開の FAQ';
-$PMF_LANG['msgMode'] = 'Modus';
+$PMF_LANG['msgMode'] = 'モード';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQ メンテナンス中';
 $PMF_LANG['msgOnlineMode'] = 'FAQ 稼働中';
-$LANG_CONF['records.enableCloseQuestion'] = array('checkbox', 'Close open question after answer?');
-$LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', 'Delete open question after answer?');
-$LANG_CONF['main.maintenanceMode'] = array('checkbox', 'Set FAQ in maintenance mode');
+$LANG_CONF['records.enableCloseQuestion'] = array('checkbox', '回答後に未回答の質問を閉じる');
+$LANG_CONF['records.enableDeleteQuestion'] = array('checkbox', '回答後に未回答の質問を削除する');
+$LANG_CONF['main.maintenanceMode'] = array('checkbox', 'FAQをメンテナンスモードに設定');
 $LANG_CONF['records.numberOfRecordsPerPage'] = array('input', 'ページ毎に表示するトピック数');
 $LANG_CONF['records.numberOfShownNewsEntries'] = array('input', 'お知らせの表示数');
 
@@ -916,20 +911,20 @@ $PMF_LANG['ad_admin_notes_hint'] = ' (編集者のみ閲覧可)';
 $PMF_LANG['ad_quick_entry'] = 'このカテゴリーにFAQを追加';
 
 // added 2.10.0-alpha
-$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP mapping for name, "cn" when using an ADS'];
-$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP mapping for username, "samAccountName" when using an ADS'];
-$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP mapping for email, "mail" when using an ADS'];
-$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP mapping for "member of" when using LDAP groups'];
-$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"'];
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP protocol version (default: 3)'];
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP referrals (default: 0)'];
-$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"'];
-$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Enable LDAP SASL support'];
-$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Enable multiple LDAP servers support'];
-$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Enable anonymous LDAP connections'];
-$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Enable LDAP dynamic user binding'];
-$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP attribute for dynamic user binding, "uid" when using an ADS'];
-$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Enable XML sitemap'];
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP名前マッピング、ADSを使用する場合は"cn"'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAPユーザー名マッピング、ADSを使用する場合は"samAccountName"'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAPメールマッピング、ADSを使用する場合は"mail"'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAPグループ使用時の"member of"マッピング'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAPドメインプレフィックス、例: "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAPプロトコルバージョン (デフォルト: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP参照 (デフォルト: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'LDAPグループサポートを有効化、例: "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'LDAP SASLサポートを有効化'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', '複数LDAPサーバーサポートを有効化'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', '匿名LDAP接続を有効化'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'LDAP動的ユーザーバインディングを有効化'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP動的ユーザーバインディング属性、ADSを使用する場合は"uid"'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'XMLサイトマップを有効化'];
 $PMF_LANG['categoryImageLabel'] = 'カテゴリー画像';
 $PMF_LANG["categoryShowHomeLabel"] = "トップページに表示";
 
@@ -938,7 +933,7 @@ $PMF_LANG['ad_view_faq'] = 'FAQを表示';
 
 // added 3.0.0-alpha
 $LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'カテゴリー制限を有効化'];
-$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Enable send to friends'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', '友達に送信機能を有効化'];
 $PMF_LANG['msgUserRemovalText'] = 'あなたのアカウント情報の削除を申請できます。あなたのアカウント情報（アカウント、コメント、質問）を削除するように、管理者宛にメールを送信します。手動での削除となるため、対応されるまで24時間ほどかかる場合があります。削除が完了した際は、メールにて完了通知が行われます。';
 $PMF_LANG["msgUserRemoval"] = "ユーザ削除申請";
 $PMF_LANG["ad_menu_RequestRemove"] = "ユーザ削除申請";
@@ -985,5 +980,315 @@ $LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API有効化'];
 $LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
 $LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'ユーザー登録の許可ホワイトリスト'];
 $LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'メールアドレスによるログインのみ許可'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Microsoftでサインイン';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Microsoft Entra IDでのサインインを有効化'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', '質問機能を有効化'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', '通知を有効化'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'SMTPで管理者にテストメールを送信'];
+$PMF_LANG['mail.sendTestEmail'] = '管理者にテストメールを送信';
+$PMF_LANG['msgGoToCategory'] = 'カテゴリーに移動';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Google ReCAPTCHA v2を有効化'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2サイトキー'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2シークレットキー'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "二要素認証が有効です";
+$PMF_LANG['msgTwofactorConfig'] = "二要素認証の設定";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "二要素認証の設定";
+$PMF_LANG['qr_code_secret_alt'] = "QRコード秘密鍵";
+$PMF_LANG['msgTwofactorNewSecret'] = "現在の二要素認証設定を削除";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "二要素認証 - トークンを入力してください：";
+$PMF_LANG['msgEnterTwofactorToken'] = "認証アプリから6桁のコードを入力してください。";
+$PMF_LANG['msgTwofactorCheck'] = "確認";
+$PMF_LANG['msgTwofactorErrorToken'] = "コードが正しくありません！";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "二要素認証をリセット";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = '5秒後に自動的にリダイレクトされます。';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = '選択した言語のカテゴリーが見つかりませんでしたが、以下の言語を選択できます：';
+$PMF_LANG['msgCategoryDescription'] = 'すべてのカテゴリーとFAQ数の概要を確認できます。';
+$PMF_LANG['msgSubCategoryContent'] = 'メインカテゴリーを選択してください。';
+$PMF_LANG['ad_open_question_deleted'] = '質問の削除に成功しました。';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'SMTP TLS相互検証を無効化（非推奨）'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', '連絡先情報をHTMLで表示'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = '認証サービス';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'エクスポートでメールアドレスを表示'];
+$PMF_LANG['msgNewQuestionAdded'] = '新しい質問が追加されました。こちらまたは管理セクションで確認できます：';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Cookie設定';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'オンラインアップデートを有効化'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'リリース環境'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', '最終更新確認日'];
+$PMF_LANG['upgradeControlCenter'] = 'オンラインアップデート';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. システムヘルスチェック';
+$PMF_LANG['headerCheckUpdates'] = '2. 更新の確認';
+$PMF_LANG['headerDownloadPackage'] = '3. phpMyFAQのダウンロード';
+$PMF_LANG['headerExtractPackage'] = '4. ダウンロードパッケージの展開';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. ダウンロードパッケージのインストール';
+$PMF_LANG['msgHealthCheck'] = 'phpMyFAQインストールのファイル権限とフォルダー構造の正確性を確認します。';
+$PMF_LANG['msgUpdateCheck'] = 'phpMyFAQの新しいバージョンを確認し、インストールを再インストールまたは更新できます。';
+$PMF_LANG['msgDownloadPackage'] = '設定されたリリース環境に応じて新しいphpMyFAQバージョンをダウンロードします。';
+$PMF_LANG['msgExtractPackage'] = 'ダウンロードしたパッケージをファイルシステムに展開します。時間がかかる場合があります。';
+$PMF_LANG['msgExtractToFileSystem'] = 'ダウンロードしたパッケージをファイルシステムに展開します。';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'ダウンロードしたパッケージをインストール';
+$PMF_LANG['msgBackupCurrentInstallation'] = '現在のインストールのバックアップ';
+$PMF_LANG['msgInstallationNewFiles'] = '新しいファイルのインストール';
+$PMF_LANG['msgDatabaseUpdate'] = 'データベースの更新';
+$PMF_LANG['alertNightlyBuild'] = 'phpMyFAQの開発版を使用しています。最新のナイトリービルドに更新できます。';
+$PMF_LANG['noteNightlyBuild'] = '前日のビルドがダウンロードされます（/content/upgradesに保存）。新しいビルドは毎日午前2時（UTC）にGitHubによって作成されるためです。';
+$PMF_LANG['buttonCheckHealth'] = 'システムヘルスを今すぐ確認';
+$PMF_LANG['buttonCheckUpdates'] = '今すぐ更新を確認';
+$PMF_LANG['buttonDownloadPackage'] = '今すぐダウンロード';
+$PMF_LANG['buttonExtractPackage'] = 'ダウンロードパッケージを今すぐ展開';
+$PMF_LANG['versionIsUpToDate'] = 'インストールされているバージョンは最新です！';
+$PMF_LANG['healthCheckOkay'] = 'インストールされているバージョンは正常です！';
+$PMF_LANG['downloadSuccessful'] = 'パッケージのダウンロードに成功しました！';
+$PMF_LANG['extractSuccessful'] = 'パッケージの展開に成功しました！';
+$PMF_LANG['downloadFailure'] = 'パッケージをダウンロードできませんでした。';
+$PMF_LANG['verificationFailure'] = 'ダウンロードしたパッケージを検証できませんでした。';
+$PMF_LANG['extractFailure'] = 'ダウンロードしたパッケージを展開できませんでした。';
+$PMF_LANG['msgCurrentVersion'] = '現在のバージョン：';
+$PMF_LANG['msgLastCheckDate'] = '最終更新確認日：';
+$PMF_LANG['msgLastVersionAvailable'] = '利用可能な最新バージョン：';
+$PMF_LANG['msgReleaseEnvironment'] = 'リリース環境：';
+$PMF_LANG['msgNoteManualUpdate'] = 'お好みの場合は、手動の<a href="../update">更新プロセス</a>を引き続き使用できます。';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'ブックマークを追加';
+$PMF_LANG['removeBookmark'] = 'ブックマークを削除';
+$PMF_LANG['msgBookmarks'] = 'ブックマーク';
+$PMF_LANG['msgMyBookmarks'] = 'マイブックマーク';
+$PMF_LANG['msgBookmarkAdded'] = 'ブックマークの追加に成功しました！';
+$PMF_LANG['msgBookmarkRemoved'] = 'ブックマークの削除に成功しました！';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "'#'の使用は許可されていません。";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'ボット無視リスト（カンマで区切る）'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar画像';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'スティッキーレコードのカスタム並び替えがメイン設定で無効になっています。使用する場合は、<a href="././configuration">メイン設定</a> -> レコードで有効化してください。';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'スティッキーレコードのカスタム並び替え'];
+$PMF_LANG['msgNoStickyFaqs'] = 'まだスティッキーレコードがありません。<a href="./faqs" class="alert-link">FAQ概要</a>でレコードをスティッキーとしてマークできます。';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Cookie同意を有効化'];
+$PMF_LANG['msgSessionExpired'] = 'セッションが期限切れになりました。再度ログインしてください。';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = '言語コード';
+$PMF_LANG['msgSeparateWithCommas'] = '(カンマで区切る)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'インポートするCSVファイルは、列ヘッダーなしで以下の列をこの順序で含む必要があります。各行はFAQエントリを定義することを意図しています。アスタリスク*が付いた列のすべてのセルには値が必要です。';
+$PMF_LANG['msgImportRecords'] = 'FAQインポート';
+$PMF_LANG['msgImportCSVFile'] = 'CSVファイルをインポート';
+$PMF_LANG['msgImportCSVFileBody'] = 'レコードデータと指定された構造（上記参照）を含むCSVファイルをここでインポートできます。';
+$PMF_LANG['msgImport'] = 'インポート';
+$PMF_LANG['msgColumnStructure'] = '列構造';
+$PMF_LANG['msgImportSuccessful'] = 'インポートが成功しました！';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(trueまたはfalse)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'インポート & エクスポート';
+$PMF_LANG['msgCSVFileNotValidated'] = 'ファイルが正しい構造を持っていないようです。指定された要件に基づいて構造を再度確認してください。';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'セッションをCSVファイルとしてエクスポート';
+$PMF_LANG['msgExportSessions'] = 'セッションをエクスポート';
+$PMF_LANG['msgExportSessionsFrom'] = '開始日';
+$PMF_LANG['msgExportSessionsTo'] = '終了日';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'フォームを編集';
+$PMF_LANG['msgEditFormsSuccessful'] = '変更が正常に保存されました。';
+$PMF_LANG['msgInputType'] = 'タイプ';
+$PMF_LANG['msgRequiredInputField'] = '必須入力';
+$PMF_LANG['permission::forms_edit'] = 'フォームを編集';
+$PMF_LANG['msgInputLabel'] = 'ラベル';
+$PMF_LANG['msgFormsEditTranslations'] = '翻訳を調整';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = '翻訳が正常に保存されました。';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = '翻訳が正常に削除されました。';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = '新しい翻訳が正常に保存されました。';
+$PMF_LANG['msgSelectLanguage'] = '言語を選択';
+$PMF_LANG['msgTranslationText'] = '翻訳テキスト';
+$PMF_LANG['msgAddTranslation'] = '翻訳を追加';
+$PMF_LANG['msgHintDeactivateForms'] = 'フォームは<a class="alert-link" href="./configuration">管理画面</a>で完全に無効化できます。';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = '非公開のFAQのみ';
+$PMF_LANG['msgOnlyNewFAQs'] = '新しいFAQのみ';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'ニュースを削除';
+$PMF_LANG['msgExportUsersAsCSV'] = 'ユーザーをCSVとしてエクスポート';
+$PMF_LANG['msgWarning'] = '警告';
+$PMF_LANG['msgUserList'] = 'ユーザー一覧';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = '質問と回答が見つかりません。';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'FAQはメンテナンスモードではありません。';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = '複数のキーワードはカンマで区切る必要があります。';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = '設定されたカテゴリーがないため、このフォームを使用できません。<a class="alert-link" href="./contact.html">管理者</a>にお知らせください。';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'メール送信元の返信不可アドレス'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'セッションがまもなく期限切れになります';
+$PMF_LANG['msgNoLogMeOut'] = 'いいえ、ログアウトします';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'はい、ログイン状態を維持します';
+$PMF_LANG['msgTrendingFAQs'] = 'トレンドFAQ';
+$PMF_LANG['msgGenerateApiClientToken'] = 'APIクライアントトークンを生成';
+$PMF_LANG['msgSerp'] = 'SERPは検索エンジン結果ページの略語です。ここでSERPのタイトルと説明を定義できます。';
+$PMF_LANG['msgSerpTitle'] = 'SERPタイトル';
+$PMF_LANG['msgSerpDescription'] = 'SERP説明';
+$LANG_CONF['seo.title'] = ['input', 'SERPタイトル'];
+$LANG_CONF['seo.description'] = ['area', 'SERP説明'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'メディアコンテンツの許可された外部ホスト（カンマで区切る）'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = '現在の二要素認証設定を削除してもよろしいですか？';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatarは現在有効になっていません。';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = '現在の二要素認証設定の削除に成功しました。';
+$PMF_LANG['msgShareViaWhatsapp'] = 'WhatsAppで友達に送信';
+$PMF_LANG['msgShareText'] = 'あなたにおすすめのFAQ記事を見つけました：';
+$PMF_LANG['msgError'] = 'エラーが発生しました。';
+$PMF_LANG['msgLinkToFAQ'] = 'FAQへのリンク';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'プライバシーポリシーへのリンクを有効化'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQは現在デバッグモードで実行されています。デバッグモードは機密情報を公開する可能性があり、開発目的にのみ使用されることを意図しています。セキュリティ上の理由から、デバッグモードを無効にすることを強くお勧めします。デバッグモードは<code>.env</code>ファイルで無効にできます。';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQは現在開発中です（%s）。そのため、本番環境での使用にはまだ対応していません。<a target="_blank" href="%s" class="alert-link">GitHubですべての問題を報告</a>してください。ありがとうございます！';
+$PMF_LANG['layoutControlCenter'] = 'レイアウト';
+$LANG_CONF['layout.customCss'] = ['area', 'カスタムCSS', 'CSSのみを使用してください。'];
+$PMF_LANG['msgSitemap'] = 'サイトマップ';
+$PMF_LANG['msgSitemapMetaDesc'] = 'すべてのエントリの概要からお探しのFAQを見つけることができます | サイトマップ - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = '%sの用語集では、トピックに関するすべての重要な技術用語の説明を見つけることができます';
+$PMF_LANG['msgOverviewMetaDesc'] = 'すべての重要なトピックの概要を表示 | %sのFAQ概要';
+$PMF_LANG['msgCategoryMetaDesc'] = 'すべてのカテゴリーとトピックの概要 | %sのカテゴリー概要';
+$PMF_LANG['msgQuestionMetaDesc'] = '新しい質問を追加 | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = '回答を待っている未解決の質問 | %s';
+$PMF_LANG['msgShareLinkVia'] = '共有';
+$PMF_LANG['msgCopyLink'] = 'またはリンクをコピー';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'リッチスニペットを有効化'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = '統計の削除に成功しました。';
+$PMF_LANG['msgDeleteAllVotingsError'] = '統計の削除中にエラーが発生しました。';
+$PMF_LANG['msgPasswordTooShort'] = '新しいパスワードは8文字以上である必要があります。';
+$PMF_LANG['msgPasswordsMustBeEqual'] = '両方のパスワードが一致しません。';
+$PMF_LANG['msgPrivateNotesOfEditor'] = '他の編集者のプライベートメモがあります：';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = '不足している添付ファイルをクリーンアップ';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = '添付ファイルの更新に成功しました';
+$PMF_LANG['msgRemoveAll'] = 'すべて削除';
+$PMF_LANG['msgError404'] = 'エラー404';
+$PMF_LANG['msgError404Description'] = 'お探しのページは移動、削除、または存在しない可能性があります。';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'すでにアカウントをお持ちですか？';
+$PMF_LANG['msgSignInHere'] = 'こちらからサインイン。';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'パスキーで登録する場合、ユーザーは名前またはメールアドレスを入力するだけで、認証は生体認証データまたはデバイスベースのパスワードを使用して安全に行われます。';
+$PMF_LANG['msgContinue'] = '続行';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'WebAuthnサポートを有効化（実験的）'];
+$PMF_LANG['msgSignInWithPasskey'] = 'パスキーでログイン';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = '登録に成功しました。パスキーでログインできます。';
+$PMF_LANG['msgSupportUs'] = 'phpMyFAQをサポート';
+$PMF_LANG['msgErrorEnterFullName'] = 'フルネームを入力してください！';
+$PMF_LANG['msgErrorEnterLoginName'] = 'ログイン名を入力してください！';
+$PMF_LANG['msgErrorEnterValidMail'] = '有効なメールアドレスを入力してください！';
+$PMF_LANG['msgErrorEnterMessage'] = 'メッセージを入力してください！';
+$PMF_LANG['msgLinkCopied'] = 'リンクをクリップボードにコピーしました';
+$PMF_LANG['msgDocumentation'] = 'ドキュメント';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'カテゴリー画像をリセット';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'robots.txtのコンテンツ', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'llms.txtのコンテンツ', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'メンテナンスモードを有効化';
+$PMF_LANG['msgPlugins'] = 'プラグイン';
+$PMF_LANG['msgPluginListing'] = 'インストールされているプラグインとそのバージョンの一覧';
+$PMF_LANG['msgPluginName'] = 'プラグイン名';
+$PMF_LANG['msgPluginVersion'] = 'バージョン';
+$PMF_LANG['msgPluginAuthor'] = '作成者';
+$PMF_LANG['msgPluginDescription'] = '説明';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'バグを報告';
+$PMF_LANG['msgDashboard'] = 'ダッシュボード';
+$PMF_LANG['msgOrphanedFAQs'] = '孤立したFAQ';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'これらのFAQはどのカテゴリーにも割り当てられていません。ここでカテゴリーに割り当てることができます。';
+$PMF_LANG['msgPreview'] = 'プレビュー';
+$PMF_LANG['msgInsertImage'] = '画像を挿入';
+$PMF_LANG['msgImageUpload'] = '画像アップロード';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = '画像をアップロードできませんでした。';
+$PMF_LANG['msgImageTooLarge'] = '画像が大きすぎます。';
+$PMF_LANG['msgNoImagesForUpload'] = 'アップロードする画像がありません。';
+$PMF_LANG['msgFetchingHashes'] = 'api.phpmyfaq.deから検証ハッシュを取得しています...';
+$PMF_LANG['msgCheckHashes'] = 'インストールファイルでハッシュを確認しています...';
+$PMF_LANG['msgAuthenticationAborted'] = 'ユーザーによって認証が中止されました。';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', '管理者セッションタイムアウトカウンターを有効化', 'デフォルト: 有効'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'OpenSearchサポートを有効化', '標準: 無効'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', '人気検索の時間枠（日数）', '標準: 180日'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch設定';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = '検索インデックスを作成';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = '検索インデックスを削除';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = '完全インポート';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch検索インデックスの作成に成功しました。';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearchインポートに成功しました。';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch検索インデックスの削除に成功しました。';
+$PMF_LANG['permission::translate_faq'] = 'FAQを翻訳';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'カテゴリーを検索するには入力してください';
+$PMF_LANG['msgLoadingText'] = '読み込み中...';
+$PMF_LANG['msgNoResultsText'] = '結果が見つかりません';
+$PMF_LANG['msgNoChoicesText'] = '選択肢がありません';
+$PMF_LANG['msgItemSelectText'] = '押して選択';
+$PMF_LANG['msgUniqueItemText'] = '一意の値のみ追加できます';
+$PMF_LANG['msgCustomAddItemText'] = '特定の条件に一致する値のみ追加できます';
+$PMF_LANG['msgDownloadYourData'] = 'データをダウンロード';
+$PMF_LANG['msgDataExportDescription'] = '保存されたユーザーデータを含むZIPファイルをダウンロードします。';
+$PMF_LANG['msgDownload'] = 'ダウンロード';
+$PMF_LANG['msgToggleTheme'] = 'テーマを切り替え';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = '最終バックアップ日';
+$PMF_LANG['msgBackupNoneFound'] = 'バックアップが見つかりません。';
+$PMF_LANG['msgBackupTooOld'] = '最終バックアップは30日以上前のものです。';
+$PMF_LANG['msgBackupRecent'] = '現在のバックアップは最新です。';
+$PMF_LANG['msgBackupGoTo'] = 'バックアップページへ移動';
+$PMF_LANG['msgNewestUsers'] = '最新のユーザー';
+$PMF_LANG['msgMemberSince'] = '登録日';
+$PMF_LANG['msgNumberRegisteredUsers'] = '登録ユーザー数';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'このFAQを本当に削除しますか？この操作は元に戻せません。';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = '翻訳キーの総数';
+$PMF_LANG['msgTranslatedKeys'] = '翻訳済みキー数';
+$PMF_LANG['msgMissingKeys'] = '不足している翻訳キー';
+$PMF_LANG['msgCompletionPercentage'] = '完成率';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'インストールされているバージョンは、利用可能な最新バージョンより新しいです。';
+$PMF_LANG['ad_quick_sub_category'] = '新しいサブカテゴリーを追加';
+$PMF_LANG['msgError403'] = 'エラー403';
+$PMF_LANG['msgError403Description'] = '認証されていますが、このリソースにアクセスする権限がありません。';
+$PMF_LANG['msgError403Hint'] = 'これがエラーだと思われる場合は、管理者にお問い合わせください。';
+$PMF_LANG['msgCreateDate'] = '作成日';
+$PMF_LANG['msgUpdateDate'] = '最終更新日';
 
 return $PMF_LANG;
