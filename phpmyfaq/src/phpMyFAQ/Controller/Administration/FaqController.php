@@ -32,6 +32,7 @@ use phpMyFAQ\Faq\Permission;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Link;
+use phpMyFAQ\Question;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\Extensions\FormatBytesTwigExtension;
@@ -537,12 +538,14 @@ final class FaqController extends AbstractAdministrationController
             'admin-answer-question ' . $questionId,
         );
 
-        $question = $this->container->get(id: 'phpmyfaq.question')->get($questionId);
+        /** @var Question $question */
+        $question = $this->container->get(id: 'phpmyfaq.question');
+        $questionData = $question->get($questionId);
 
         $faqData = [
             'id' => 0,
             'lang' => $this->configuration->getLanguage()->getLanguage(),
-            'title' => $question['question'],
+            'title' => $questionData['question'] ?? '',
             'revision_id' => 0,
             'author' => $this->currentUser->getUserData('display_name'),
             'email' => $this->currentUser->getUserData('email'),
@@ -550,7 +553,7 @@ final class FaqController extends AbstractAdministrationController
         ];
 
         $categories = [
-            'category_id' => $question['category_id'],
+            'category_id' => $questionData['category_id'] ?? [],
             'category_lang' => $faqLanguage,
         ];
 
@@ -568,8 +571,8 @@ final class FaqController extends AbstractAdministrationController
             'faqRevisionId' => 0,
             'faqData' => $faqData,
             'openQuestionId' => 0,
-            'notifyUser' => $question['username'],
-            'notifyEmail' => $question['email'],
+            'notifyUser' => $questionData['username'] ?? $this->currentUser->getUserData('display_name'),
+            'notifyEmail' => $questionData['email'] ?? $this->currentUser->getUserData('email'),
             'categoryOptions' => $categoryHelper->renderOptions($categories),
             'languageOptions' => LanguageHelper::renderSelectLanguage($faqLanguage, false, [], 'lang'),
             'attachments' => [],
