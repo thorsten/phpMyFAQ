@@ -85,7 +85,7 @@ phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are the
 (Windows/macOS/Linux), the latest Safari (macOS/iOS), the latest Chrome (Windows/macOS/Linux), the latest Opera
 (Windows/macOS/Linux) and Microsoft Edge (Windows/macOS/Linux).
 
-We recommend using the latest version of Firefox, Chrome, Safari, Opera or Microsoft Edge.
+We recommend using the latest version of Firefox, Chrome, Safari, Opera, or Microsoft Edge.
 
 ## 2.2 Preparations
 
@@ -125,7 +125,7 @@ All other directories shouldn't be world-writable for your own security.
 
 **Note**: If you're running SELinux, you may need further configuration, or you should completely disable it.
 
-The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all tables
+The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE, and SELECT on all tables
 in the database.
 
 ### 2.2.2 Cloud Hosting via Docker
@@ -198,7 +198,7 @@ You have to add at least one Elasticsearch or OpenSearch node and the index name
 ### Step 4: Admin user setup
 
 In addition, you can enter your language, the default here is English.
-Furthermore, you should register your name, your email address and - very importantly - your password.
+Furthermore, you should register your name, your email address, and - very importantly - your password.
 You must enter the password twice, and it has to be at least eight characters long.
 Then click the button **"install"** to initialize the tables in your database.
 
@@ -233,9 +233,9 @@ You can change
 
 ## 2.8 Notes regarding the search functionality
 
-- The boolean full-text search will only work with MySQL and if there are some entries in the database (5 or more).
+- The boolean full-text search will only work with MySQL/MariaDB and if there are some entries in the database (5 or more).
   The term you are looking for should also not be in more than 50% of all your entries, or it will automatically be
-  excluded from search. This is not a bug, but rather a feature of MySQL.
+  excluded from search. This is not a bug, but rather a feature of MySQL/MariaDB.
 - The search on other databases is using the LIKE operator currently.
 - To improve the search functionality, you should consider using Elasticsearch or OpenSearch.
 
@@ -251,15 +251,15 @@ How this is done depends on the browser you are using.
 
 ## 2.10 Enabling LDAP or Microsoft Active Directory support
 
-If you're entered the correct LDAP or Microsoft Active Directory information during the installation, you have to enable
+If you entered the correct LDAP or Microsoft Active Directory information during the installation, you have to enable
 the LDAP or Microsoft Active Directory support in the configuration in the admin backend. Now your user can authenticate
 themselves in phpMyFAQ against your LDAP server or a Microsoft Active Directory server.
 
 If you need special options for your LDAP or ADS configuration, you can change the LDAP configuration in the admin
 configuration panel.
 
-If you want to add LDAP support later, you can use the file **content/core/config/ldap.php.original** as template, and
-if you rename it to **content/core/config/ldap.php** you can use the LDAP features as well after you enabled it in the
+If you want to add LDAP support later, you can use the file **content/core/config/ldap.php.original** as a template. 
+If you rename it to **content/core/config/ldap.php** you can use the LDAP features as well after you enabled it in the
 administration backend.
 
 Please note that you have to use the correct LDAP attributes for your LDAP server. 
@@ -280,9 +280,9 @@ you have to add the following configuration to /etc/ldap/ldap.conf:
 Main features of the PDF export:
 
 - supports all ISO page formats;
-- supports custom page formats, margins and units of measure;
+- supports custom page formats, margins, and units of measure;
 - supports UTF-8 Unicode and Right-To-Left languages;
-- supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, Type1 and CID-0 fonts;
+- supports TrueTypeUnicode, OpenTypeUnicode, TrueType, OpenType, Type1, and CID-0 fonts;
 - includes methods to publish some HTML code;
 - includes graphic (geometric) and transformation methods;
 - includes methods to set Bookmarks and print a Table of Content;
@@ -318,7 +318,7 @@ support for Google Recaptcha by adding your site and secret key. You can get the
 ## 2.14 Attachments
 
 phpMyFAQ supports encrypted attachments. The encryption uses the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
-algorithm implemented in mcrypt extension (if available) or with native PHP Rijndael implementation. The key size vary
+algorithm implemented in mcrypt extension (if available) or with native PHP Rijndael implementation. The key size varies
 depending on the implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because
 of performance reasons, its availability is checked automatically at the run time.
 
@@ -327,7 +327,7 @@ Please be aware:
 - Disabling encryption will cause all files to be saved unencrypted.
   In this case, you'll benefit from sparing disk space because identical files are saved only once.
 - Do not change the default attachment encryption key once files were uploaded.
-  Doing so will cause all the previously uploaded files to be wrong decrypted.
+  Doing so will cause all the previously uploaded files to be wrongly decrypted.
   If you need to change the default key, you will have to re-upload all files.
 - Always memorize your encryption keys. There is no way to decrypt files without a correct key.
 - Files are always saved with names based on a virtual hash generated from several tokens (just like key and issue id
@@ -356,7 +356,7 @@ You need a running Elasticsearch instance accessible by phpMyFAQ via HTTP/REST.
 You can add the IP(s)/Domain(s) and port(s) of your Elasticsearch cluster during installation or later by renaming the
 Elasticsearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
-If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import and delete your
+If you enabled Elasticsearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
 
 ## 2.17 OpenSearch Support
@@ -366,7 +366,7 @@ You need a running OpenSearch instance accessible by phpMyFAQ via HTTP/REST.
 You can add the IP(s)/Domain(s) and port(s) of your OpenSearch cluster during installation or later by renaming the
 OpenSearch file located in the folder config/.
 If you choose to add this during installation, the file will be automatically written and the index will be built.
-If you enabled OpenSearch support in the admin configuration panel, you can create, re-import and delete your
+If you enabled OpenSearch support in the admin configuration panel, you can create, re-import, and delete your
 index with a user-friendly interface.
 
 ## 2.18 SSO (Single Sign-On) Support

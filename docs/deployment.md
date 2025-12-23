@@ -63,7 +63,7 @@ This guide explains how to deploy phpMyFAQ in production using Docker Compose wi
    - Go to **Stacks** → **Add stack**
    - Give it a name: `phpmyfaq`
 
-3. **Upload or paste the compose file**
+3. **Upload or paste the docker-compose file**
    - **Option A**: Use the Web editor
      - Paste the contents of `docker-compose.prod.yml`
 
@@ -98,14 +98,14 @@ This guide explains how to deploy phpMyFAQ in production using Docker Compose wi
 
 7. **Verify deployment**
    - Go to **Containers** to see running services
-   - Check health status of each container
+   - Check the health status of each container
    - Access the application at the configured port
 
 ### Method 2: Using Portainer Custom Templates
 
 1. **Create a Custom Template**
    - Go to **App Templates** → **Custom Templates**
-   - Create new template
+   - Create a new template
    - Name: `phpMyFAQ Production`
    - Platform: `Linux`
    - Type: `Stack`

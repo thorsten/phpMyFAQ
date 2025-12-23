@@ -25,7 +25,7 @@ This documentation serves as a guide to help you install, update, use, and admin
 ### Copyright
 
 phpMyFAQ is published under the [Mozilla Public License Version 2.0](http://www.mozilla.org/MPL/2.0/) (MPL).
-This license guarantees you the free usage of phpMyFAQ, access to the source code and the right to modify and distribute
+This license guarantees you the free usage of phpMyFAQ, access to the source code, and the right to modify and distribute
 phpMyFAQ.
 
 The only restrictions apply to the copyright, which remains at all times at Thorsten Rinne and the phpMyFAQ Team. Any
@@ -35,7 +35,7 @@ certain functions of phpMyFAQ is not affected by these restrictions and may be d
 A commercial usage or commercial distribution of phpMyFAQ is allowed, as long as the conditions mentioned above are
 met.
 
-We decided to use MPL as the licensing model for phpMyFAQ because we feel that it is a good compromise between the
+We decided to use MPL as the licensing model for phpMyFAQ. We feel that it is a good compromise between the
 protection of the openness and free distribution on the one hand and the interaction with other software regardless of
 its licensing model. When compared to other licensing models, its text is short and easily comprehensible, even for
 newcomers.

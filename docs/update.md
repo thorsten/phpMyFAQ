@@ -128,14 +128,14 @@ Click the button of the update script, your version will automatically be update
 If you're running phpMyFAQ 4.0.0 or later, you can use the built-in online update feature.
 Log in as admin into the admin section and enable the maintenance mode.
 (Configuration >> Edit Configuration >> Set FAQ in maintenance mode)
-Then go to the "phpMyFAQ Update" page in the configuration section click through the update wizard:
+Then go to the "phpMyFAQ Update" page in the configuration section and click through the update wizard:
 
 1. Check for System Health: this checks if your system is ready for the upgrade
 2. Check for Updates: this checks if there is a new version of phpMyFAQ available
 3. Download of phpMyFAQ: this downloads the latest version of phpMyFAQ in the background, this can take some seconds
 4. Extracting phpMyFAQ: this extracts the downloaded archive, this can take a while
 5. Install downloaded package: first, it creates a backup of your current installation, then it copies the downloaded
-   files into your installation and in the end, the database is updated
+   files into your installation, and in the end, the database is updated
 
 Note:
 The online update feature is experimental and might not work in all environments.
@@ -148,6 +148,6 @@ You have to compile the SCSS files into CSS using a SCSS compiler with Node.js.
 
 If you need help with theming phpMyFAQ, please don't hesitate to ask in our [forum](https://forum.phpmyfaq.de/).
 
-Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts, you
+Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g., German umlauts, you
 have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with
 \r\n.

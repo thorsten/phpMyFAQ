@@ -103,7 +103,7 @@ time with all the relevant data of the specific entry. The meaning of the fields
 - **Language**
   You can select the language of your FAQ. By default, the selected language saved in the configuration will be chosen.
   You can create entries in multiple languages like this: Write an article in English (or any other language) and save
-  it. Now choose _Edit FAQs_ and edit your English FAQ record. Change the question, answer and keywords and change
+  it. Now choose _Edit FAQs_ and edit your English FAQ record. Change the question, answer, and keywords and change
   language to, let's say Brazilian Portuguese. _Save_ the FAQ record. Now you can, when you click _edit records_, see
   both FAQs in your list, having the same id, yet different languages.
 
@@ -114,7 +114,7 @@ time with all the relevant data of the specific entry. The meaning of the fields
 
 - **Keywords**
   Keywords are relevant for searching through the database. In case you didn't include a specific word in the FAQ
-  itself, but it is closely related to the content you may wish to include it as a keyword, so the FAQ will come up as
+  itself, but it is closely related to the content, you may wish to include it as a keyword, so the FAQ will come up as
   a search result. It is also possible to use non-related keywords so that a wrongly entered search will also lead to
   the right results.
 
@@ -128,7 +128,7 @@ time with all the relevant data of the specific entry. The meaning of the fields
   It is possible to specify the author's email for your FAQ, but the email address won't be shown in the frontend.
 
 - **Solution ID**
-  Every FAQ generates automatically a so-called solution ID. All records can be accessed directly by putting this ID
+  Every FAQ automatically generates a so-called solution ID. All records can be accessed directly by putting this ID
   into the search box.
 
 - **Active?**
@@ -172,7 +172,7 @@ You can edit and delete all records as well. Please note that old revisions won'
 deleted.
 
 phpMyFAQ lets visitors contribute to the FAQ by asking questions. Every visitor is able to view these open questions in
-the public area, and may give an answer. If you wish to get rid of open questions, you can do so using this section.
+the public area and may give an answer. If you wish to get rid of open questions, you can do so using this section.
 Alternatively, you can take over a question and answer it yourself and hereby add it to the FAQ.
 
 ### 5.2.3 Sticky FAQs
@@ -218,8 +218,8 @@ You can edit existing tags, and if you need to, you can delete the tag.
 
 Below every FAQ, a visitor has the chance to rate the overall quality of a FAQ by giving ratings from one to five
 (whereas 1 is the worst, 5 the best rating).
-In the statistics, the average rating and number of votes becomes visible for every rated FAQ.
-To give you a quick overview, FAQs with an average rating of two or worse are displayed in red, an average
+In the statistics, the average rating and number of votes become visible for every rated FAQ.
+To give you a quick overview, FAQs with an average rating of two or worse are displayed in red; an average
 above 4 results in a green number.
 
 ### 5.3.2 View sessions
@@ -270,7 +270,7 @@ You can export your contents of your whole FAQ or just some selected categories 
 ### 5.4.3 Batch upload via phpMyAdmin
 
 > [!NOTE]
-> You should have a table ready with the data you want to import. The titles of your new FAQ's in one column, the HTML-formatted content in the next and the keywords in a third column.
+> You should have a table ready with the data you want to import. The titles of your new FAQ's in one column, the HTML-formatted content in the next, and the keywords in a third column.
 >
 > You should have access to phpMyAdmin via your web host.
 >
@@ -309,7 +309,7 @@ Save all 5 CSV-Files in a separate folder on your computer. Then you can close p
 #### 5.4.3.2 Edit the tables
 
 Open the first CSV file _faqdata.csv_ with the spreadsheet program of your choice.
-(You can use LibreOffice, OpenOffice or Excel, for example.)
+(You can use LibreOffice, OpenOffice, or Excel, for example.)
 Look at the table BEFORE you make any changes.
 Pay attention to the column headings and the contents of the individual fields.
 DO NOT change the column headings.
@@ -367,9 +367,9 @@ So we open phpMyAdmin again.
 Select the correct table on the left.
 Click on Import at the top.
 Select the correct one of our 4 CSV tables out of your folder.
-For Skip number of queries, select 1 so that our column headings are not created as a post.
+To Skip the number of queries, select 1 so that our column headings are not created as a post.
 The format must be CSV.
-Check also **update data when duplicate keys found on import**.
+Check also **update data when duplicate keys are found on import**.
 Otherwise, changes to existing entries won't be saved.
 Else everything should be fine.
 Now click on Import.
@@ -389,7 +389,7 @@ regular backups of your FAQ.
 - **backup data**
   A backup of all **data** will include all entries, users, comments, etc.
 - **backup logs**
-  The sessions of visits and the admin log will be saved (i.e. all **log** files). This information is not necessary
+  The sessions of visits and the admin log will be saved (i.e., all **log** files). This information is not necessary
   for running phpMyFAQ, they serve only statistical purposes.
 
 During the backup process, phpMyFAQ generates a hash on the whole backup file and stores this information. The hashes
@@ -434,7 +434,7 @@ For example, if you want to use _faq.example.org_ and _beta.faq.example.org_, it
 ### 5.6.3 Stop Words configuration
 
 We need stop words for the smart answering feature and the related answers. If a user is adding a new question to your
-FAQ the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
+FAQ, the words will be checked against all FAQs in your database but without the stop words. Stop words are words with a
 very low relevance like the English word _the_.
 
 ### 5.6.4 phpMyFAQ Update (Experimental feature)
