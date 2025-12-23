@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace phpMyFAQ;
 
 use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
@@ -91,7 +92,7 @@ class Environment
 
         $logger = new Logger(name: 'phpmyfaq');
         $logTarget = $_ENV['ERROR_LOG'] ?? 'php://stderr';
-        $logger->pushHandler(new StreamHandler($logTarget, Logger::WARNING));
+        $logger->pushHandler(new StreamHandler($logTarget, Level::Warning));
 
         $levelsMap = [
             E_DEPRECATED => null,
