@@ -80,7 +80,14 @@ export const handleTags = (): void => {
       event.preventDefault();
 
       const input = document.querySelector('input:focus') as HTMLInputElement;
-      const tagId = input.getAttribute('id')!.replace('tag-id-', '');
+      const inputId = input.getAttribute('id');
+
+      if (!inputId) {
+        console.error('Missing id attribute on input element');
+        return;
+      }
+
+      const tagId = inputId.replace('tag-id-', '');
       const tag = input.value;
       const csrf = (document.querySelector('input[name=pmf-csrf-token]') as HTMLInputElement).value;
 

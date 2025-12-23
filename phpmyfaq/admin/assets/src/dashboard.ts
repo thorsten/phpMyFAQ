@@ -170,7 +170,9 @@ export const renderVisitorCharts = async (): Promise<void> => {
           const visits: { date: string; number: number }[] = await response.json();
 
           visits.forEach((visit) => {
-            visitorChart.data.labels!.push(visit.date);
+            if (visitorChart.data.labels) {
+              visitorChart.data.labels.push(visit.date);
+            }
             (visitorChart.data.datasets[0].data as number[]).push(visit.number);
           });
 
@@ -259,13 +261,14 @@ export const renderTopTenCharts = async (): Promise<void> => {
       const c = getThemeColors();
       if (!doughnutChart.options.plugins) doughnutChart.options.plugins = {};
       doughnutChart.options.plugins.legend = { display: false, labels: { color: c.bodyColor } };
-      doughnutChart.options.scales!.x = {
+      if (!doughnutChart.options.scales) doughnutChart.options.scales = {};
+      doughnutChart.options.scales.x = {
         display: true,
         title: { display: false, color: c.bodyColor },
         ticks: { display: false, color: c.bodyColor },
         grid: { color: c.gridColor },
       };
-      doughnutChart.options.scales!.y = {
+      doughnutChart.options.scales.y = {
         display: true,
         title: { display: false, color: c.bodyColor },
         ticks: { color: c.bodyColor },
@@ -306,7 +309,9 @@ export const renderTopTenCharts = async (): Promise<void> => {
           const topTen: { question: string; visits: number }[] = await response.json();
 
           topTen.forEach((faq: { question: string; visits: number }): void => {
-            doughnutChart.data.labels!.push(faq.question);
+            if (doughnutChart.data.labels) {
+              doughnutChart.data.labels.push(faq.question);
+            }
             (doughnutChart.data.datasets[0].data as number[]).push(faq.visits);
             colors.push(dynamicColors());
           });

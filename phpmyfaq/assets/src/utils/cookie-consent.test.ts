@@ -73,11 +73,15 @@ describe('cookie-consent', () => {
     document.body.innerHTML = '<button id="showCookieConsent">Show Cookie Settings</button>';
 
     const element = document.getElementById('showCookieConsent');
-    const addEventListenerSpy = vi.spyOn(element!, 'addEventListener');
+    expect(element).not.toBeNull();
 
-    await import('./cookie-consent');
+    if (element) {
+      const addEventListenerSpy = vi.spyOn(element, 'addEventListener');
 
-    expect(addEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+      await import('./cookie-consent');
+
+      expect(addEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    }
   });
 
   it('should call showPreferences when showCookieConsent is clicked', async (): Promise<void> => {
@@ -86,7 +90,11 @@ describe('cookie-consent', () => {
     await import('./cookie-consent');
 
     const element = document.getElementById('showCookieConsent');
-    element!.click();
+    expect(element).not.toBeNull();
+
+    if (element) {
+      element.click();
+    }
 
     expect(mockShowPreferences).toHaveBeenCalledTimes(1);
   });

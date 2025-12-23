@@ -24,12 +24,18 @@ export const handleDeleteAdminLog = (): void => {
     buttonDeleteAdminLog.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const target = event.target as HTMLElement;
-      const csrf = target.getAttribute('data-pmf-csrf')!;
+      const csrf = target.getAttribute('data-pmf-csrf');
+
+      if (!csrf) {
+        pushErrorNotification('Missing CSRF token');
+        return;
+      }
+
       const response = (await deleteAdminLog(csrf)) as Response;
 
       if (response.success) {
         pushNotification(response.success);
-      } else {
+      } else if (response.error) {
         pushErrorNotification(response.error);
       }
     });

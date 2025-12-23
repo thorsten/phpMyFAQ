@@ -81,8 +81,10 @@ export const handleSessions = (): void => {
           const jsonResponse = await response.json();
           pushErrorNotification(jsonResponse.error);
         }
-      } catch (error) {
-        console.error(error.message);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'An error occurred during export';
+        console.error(errorMessage);
+        pushErrorNotification(errorMessage);
       }
     });
   }
@@ -95,12 +97,23 @@ export const handleClearVisits = (): void => {
     buttonClearVisits.addEventListener('click', async (event: Event): Promise<void> => {
       event.preventDefault();
       const target = event.target as HTMLElement;
-      const csrf = target.getAttribute('data-pmf-csrf')!;
+      const csrf = target.getAttribute('data-pmf-csrf');
+
+      if (!csrf) {
+        pushErrorNotification('Missing CSRF token');
+        return;
+      }
+
       const response = await clearVisits(csrf);
+
+      if (!response) {
+        pushErrorNotification('No response received');
+        return;
+      }
 
       if (response.success) {
         pushNotification(response.success);
-      } else {
+      } else if (response.error) {
         pushErrorNotification(response.error);
       }
     });
@@ -117,9 +130,14 @@ export const handleDeleteSessions = (): void => {
       const month = (document.getElementById('month') as HTMLInputElement).value;
       const response = await deleteSessions(csrf, month);
 
+      if (!response) {
+        pushErrorNotification('No response received');
+        return;
+      }
+
       if (response.success) {
         pushNotification(response.success);
-      } else {
+      } else if (response.error) {
         pushErrorNotification(response.error);
       }
     });

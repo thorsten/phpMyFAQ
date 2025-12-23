@@ -16,6 +16,6 @@ const ignoresConfig = globalIgnores([
 
 export default defineConfig([
   {
-    extends: [ignoresConfig, eslint.configs.recommended, tseslint.configs.recommended],
+    extends: [ignoresConfig, eslint.configs.recommended, tseslint.configs.strict],
   },
 ]);

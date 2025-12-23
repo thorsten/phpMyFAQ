@@ -28,8 +28,13 @@ export const handleUserList = (): void => {
         event.preventDefault();
 
         const target = event.target as HTMLElement;
-        const csrfToken = target.getAttribute('data-csrf-token')!;
-        const userId = target.getAttribute('data-user-id')!;
+        const csrfToken = target.getAttribute('data-csrf-token');
+        const userId = target.getAttribute('data-user-id');
+
+        if (!csrfToken || !userId) {
+          console.error('Missing data-csrf-token or data-user-id attribute');
+          return;
+        }
 
         const response = (await activateUser(userId, csrfToken)) as unknown as Response;
 
@@ -63,9 +68,17 @@ export const handleUserList = (): void => {
         const deleteModal = Modal.getOrCreateInstance(modalElement);
         deleteModal.show();
         const usernameDelete = document.getElementById('pmf-username-delete') as HTMLElement;
-        usernameDelete.innerText = button.getAttribute('data-username')!;
+        const username = button.getAttribute('data-username');
+        const userId = button.getAttribute('data-user-id');
+
+        if (!username || !userId) {
+          pushErrorNotification('Fehler: Benutzerdaten nicht gefunden.');
+          return;
+        }
+
+        usernameDelete.innerText = username;
         const userIdDelete = document.getElementById('pmf-user-id-delete') as HTMLInputElement;
-        userIdDelete.value = button.getAttribute('data-user-id')!;
+        userIdDelete.value = userId;
         const sourcePage = document.getElementById('source_page') as HTMLInputElement;
         sourcePage.value = 'user-list';
       });

@@ -142,9 +142,12 @@ export const handleFormTranslations = (): void => {
         if (typeof response.success === 'string') {
           pushNotification(response.success);
           document.getElementById('item_' + lang)?.remove();
-          const option = document.createElement('option') as HTMLOptionElement;
-          option.innerText = element.getAttribute('data-pmf-langname')!;
-          document.getElementById('languageSelect')?.appendChild(option);
+          const langName = element.getAttribute('data-pmf-langname');
+          if (langName) {
+            const option = document.createElement('option') as HTMLOptionElement;
+            option.innerText = langName;
+            document.getElementById('languageSelect')?.appendChild(option);
+          }
         } else {
           console.error(response.error);
         }

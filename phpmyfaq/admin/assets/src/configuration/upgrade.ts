@@ -185,7 +185,9 @@ export const handleCheckForUpdates = (): void => {
               downloadButton.disabled = true;
             }
 
-            result.replaceWith(addElement('p', { innerText: response.message! }));
+            if (response.message) {
+              result.replaceWith(addElement('p', { innerText: response.message }));
+            }
             spinner.classList.add('d-none');
             checkUpdateButton.disabled = true;
           }
@@ -215,10 +217,14 @@ export const handleCheckForUpdates = (): void => {
       const spinner = document.getElementById('spinner-download-new-version') as HTMLElement;
       spinner.classList.remove('d-none');
 
-      if (releaseEnvironment!.innerText.toLowerCase() === 'nightly') {
+      if (releaseEnvironment && releaseEnvironment.innerText.toLowerCase() === 'nightly') {
         version = 'nightly';
+      } else if (versionLastChecked) {
+        version = versionLastChecked.innerText;
       } else {
-        version = versionLastChecked!.innerText;
+        console.error('Version information not found');
+        spinner.classList.add('d-none');
+        return;
       }
 
       try {
@@ -229,15 +235,17 @@ export const handleCheckForUpdates = (): void => {
 
         if (response.success) {
           card.classList.add('text-bg-success');
-          divExtractPackage!.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: response.success! }));
+          if (divExtractPackage) {
+            divExtractPackage.classList.remove('d-none');
+          }
+          result.replaceWith(addElement('p', { innerText: response.success }));
           spinner.classList.add('d-none');
           downloadButton.disabled = true;
         }
 
         if (response.error) {
           card.classList.add('text-bg-danger');
-          result.replaceWith(addElement('p', { innerText: response.error! }));
+          result.replaceWith(addElement('p', { innerText: response.error }));
           spinner.classList.add('d-none');
         }
       } catch (error) {
@@ -264,8 +272,12 @@ export const handleCheckForUpdates = (): void => {
 
         if (result) {
           card.classList.add('text-bg-success');
-          divInstallPackage!.classList.remove('d-none');
-          result.replaceWith(addElement('p', { innerText: response.message! }));
+          if (divInstallPackage) {
+            divInstallPackage.classList.remove('d-none');
+          }
+          if (response.message) {
+            result.replaceWith(addElement('p', { innerText: response.message }));
+          }
           spinner.classList.add('d-none');
           extractButton.disabled = true;
         }

@@ -27,7 +27,12 @@ export const handleTruncateSearchTerms = (): void => {
       event.preventDefault();
 
       const target = event.target as HTMLElement;
-      const csrf = target.getAttribute('data-pmf-csrf-token')!;
+      const csrf = target.getAttribute('data-pmf-csrf-token');
+
+      if (!csrf) {
+        pushErrorNotification('Missing CSRF token');
+        return;
+      }
 
       if (confirm('Are you sure?')) {
         const response = (await truncateSearchTerms(csrf)) as Response;
@@ -36,7 +41,7 @@ export const handleTruncateSearchTerms = (): void => {
           const tableToDelete = document.getElementById('pmf-table-search-terms') as HTMLElement;
           tableToDelete.remove();
           pushNotification(response.success);
-        } else {
+        } else if (response.error) {
           pushErrorNotification(response.error);
         }
       }

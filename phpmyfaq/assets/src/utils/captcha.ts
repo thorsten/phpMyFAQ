@@ -22,8 +22,13 @@ export const handleReloadCaptcha = (reloadButton: HTMLElement): void => {
     const action = target.getAttribute('data-action');
     const timestamp = Math.floor(new Date().getTime() / 1000);
 
+    if (!action) {
+      console.error('Missing data-action attribute');
+      return;
+    }
+
     try {
-      await fetchCaptchaImage(action!, timestamp);
+      await fetchCaptchaImage(action, timestamp);
       const captcha = document.getElementById('captcha') as HTMLInputElement;
       const captchaImage = document.getElementById('captchaImage') as HTMLImageElement;
       captchaImage.setAttribute('src', './api/captcha?' + timestamp);

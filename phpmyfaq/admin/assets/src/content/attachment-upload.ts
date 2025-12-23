@@ -26,14 +26,18 @@ export const handleAttachmentUploads = (): void => {
       const fileSize = document.getElementById('filesize') as HTMLElement;
       const fileList = document.querySelector('.pmf-attachment-upload-files') as HTMLElement;
 
+      if (!files || files.length === 0) {
+        return;
+      }
+
       fileList.classList.remove('invisible');
 
       let bytes: number = 0;
-      const numFiles: number = files?.length || 0;
+      const numFiles: number = files.length;
       const fileItems: HTMLElement[] = [];
       for (let fileId: number = 0; fileId < numFiles; fileId++) {
-        bytes += files![fileId].size;
-        fileItems.push(addElement('li', { innerText: files![fileId].name }));
+        bytes += files[fileId].size;
+        fileItems.push(addElement('li', { innerText: files[fileId].name }));
       }
 
       let output: string = bytes + ' bytes';
