@@ -40,7 +40,7 @@ const generateUUID = () => {
 /**
  * Sends a test email to the admin.
  */
-export const handleSendTestMail = async () => {
+window.handleSendTestMail = async () => {
   const button = document.getElementById('btn-phpmyfaq-mail-sendTestEmail');
   if (button) {
     const csrf = document.querySelector('#pmf-csrf-token').value;
@@ -83,7 +83,7 @@ const displayResult = (button, message) => {
 /**
  * Generates an API token if the input field is empty.
  */
-export const generateApiToken = () => {
+window.generateApiToken = () => {
   const buttonGenerateApiToken = document.getElementById('pmf-generate-api-token');
   const inputConfigurationApiToken = document.getElementById('edit[api.apiClientToken]');
 
