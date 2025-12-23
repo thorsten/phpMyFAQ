@@ -21,6 +21,7 @@ namespace phpMyFAQ\Controller\Api;
 
 use OpenApi\Attributes as OA;
 use phpMyFAQ\Controller\AbstractController;
+use phpMyFAQ\Question;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -69,7 +70,8 @@ final class OpenQuestionController extends AbstractController
     )]
     public function list(): JsonResponse
     {
-        $question = $this->container->get(id: 'phpmyfaq.question');
+        /** @var Question $question */
+        $question = $this->container?->get(id: 'phpmyfaq.question');
         $result = $question->getAll();
 
         if ((is_countable($result) ? count($result) : 0) === 0) {

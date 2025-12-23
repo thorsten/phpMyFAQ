@@ -27,6 +27,7 @@ use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\CategoryEntity;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
 use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,6 +81,7 @@ final class CategoryController extends AbstractController
     )]
     public function list(): JsonResponse
     {
+        /** @var Language $language */
         $language = $this->container->get(id: 'phpmyfaq.language');
         $currentLanguage = $language->setLanguageByAcceptLanguage();
 

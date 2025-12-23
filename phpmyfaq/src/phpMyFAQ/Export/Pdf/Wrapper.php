@@ -700,7 +700,8 @@ class Wrapper extends TCPDF
                 return $fullMatch;
             },
             $html,
-        );
+        )
+        ?? '';
     }
 
     /**
@@ -784,24 +785,24 @@ class Wrapper extends TCPDF
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         if ($finfo === false) {
             // Fallback to header-based detection
-            if (str_starts_with($data, needle: "\xFF\xD8\xFF")) {
+            if (str_starts_with($data, "\xFF\xD8\xFF")) {
                 return 'image/jpeg';
             }
 
-            if (str_starts_with($data, needle: "\x89PNG\r\n\x1A\n")) {
+            if (str_starts_with($data, "\x89PNG\r\n\x1A\n")) {
                 return 'image/png';
             }
 
-            if (str_starts_with($data, needle: 'GIF87a') || str_starts_with($data, needle: 'GIF89a')) {
+            if (str_starts_with($data, 'GIF87a') || str_starts_with($data, 'GIF89a')) {
                 return 'image/gif';
             }
 
-            if (str_starts_with($data, needle: 'RIFF')) {
+            if (str_starts_with($data, 'RIFF')) {
                 return 'image/webp';
             }
 
             // Fallback to header-based detection
-            if (str_starts_with($data, needle: 'BM')) {
+            if (str_starts_with($data, 'BM')) {
                 return 'image/bmp';
             }
 
@@ -812,7 +813,7 @@ class Wrapper extends TCPDF
         finfo_close($finfo);
 
         // Ensure it's actually an image MIME type
-        if ($mimeType && str_starts_with($mimeType, needle: 'image/')) {
+        if ($mimeType && str_starts_with($mimeType, 'image/')) {
             return $mimeType;
         }
 

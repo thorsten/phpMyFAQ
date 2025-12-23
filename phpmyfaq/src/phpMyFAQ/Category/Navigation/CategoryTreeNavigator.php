@@ -63,7 +63,7 @@ class CategoryTreeNavigator
      * Recursively transforms tree structure into a flat list.
      *
      * @param array<string, mixed> $tree
-     * @param array<array<string, mixed>> &$entries
+     * @param array<array<string, mixed>> $entries
      */
     private function transformRecursive(CategoryCache $cache, array $tree, int $indent, array &$entries): void
     {

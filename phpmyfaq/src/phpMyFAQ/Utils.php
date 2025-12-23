@@ -47,7 +47,7 @@ class Utils
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $dateToTest = $date;
         // Suppress first occurrences of '%'
-        if (str_starts_with($dateToTest, needle: '%')) {
+        if (str_starts_with($dateToTest, '%')) {
             $dateToTest = substr($dateToTest, offset: 1);
         }
 

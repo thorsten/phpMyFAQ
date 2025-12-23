@@ -257,11 +257,11 @@ class AuthWebAuthn extends Auth
     }
 
     /**
-     * Generates a new key string for the physical key, fingerprint reader or whatever to respond to on login.
+     * Generates a new key string for the physical key, fingerprint reader, or whatever to respond to on login.
      * You should store the revised $userWebAuthn back to your database after calling this function
      * (to avoid replay attacks)
      *
-     * @param string &$userWebAuthn the existing webauthn field for the user from your database
+     * @param string $userWebAuthn the existing webauthn field for the user from your database
      * @throws RandomException
      */
     public function prepareForLogin(string &$userWebAuthn): stdClass

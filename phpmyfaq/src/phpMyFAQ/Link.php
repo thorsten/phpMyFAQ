@@ -470,7 +470,7 @@ class Link
             return false;
         }
 
-        return str_starts_with($this->url, needle: '#');
+        return str_starts_with($this->url, '#');
     }
 
     /**
