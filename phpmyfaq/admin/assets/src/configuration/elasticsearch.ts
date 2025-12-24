@@ -14,12 +14,35 @@
  */
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { fetchElasticsearchAction, fetchElasticsearchStatistics } from '../api';
+import { fetchElasticsearchAction, fetchElasticsearchHealthcheck, fetchElasticsearchStatistics } from '../api';
 import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
 export const handleElasticsearch = async (): Promise<void> => {
   const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-elasticsearch');
+
+  // Check health status on page load
+  const healthCheckAlert = async (): Promise<boolean> => {
+    const alertDiv = document.getElementById('pmf-elasticsearch-healthcheck-alert') as HTMLElement;
+    if (alertDiv) {
+      try {
+        await fetchElasticsearchHealthcheck();
+        alertDiv.style.display = 'none';
+        return true;
+      } catch (error) {
+        alertDiv.style.display = 'block';
+        const alertMessage = alertDiv.querySelector('.alert-message');
+        if (alertMessage) {
+          alertMessage.textContent = error instanceof Error ? error.message : 'Elasticsearch is unavailable';
+        }
+        return false;
+      }
+    }
+    return false;
+  };
+
+  // Run health check on page load
+  const isHealthy = await healthCheckAlert();
 
   if (buttons) {
     buttons.forEach((element: HTMLButtonElement): void => {
@@ -67,7 +90,10 @@ export const handleElasticsearch = async (): Promise<void> => {
         }
       };
 
-      elasticsearchStats();
+      // Only fetch stats if Elasticsearch is healthy
+      if (isHealthy) {
+        elasticsearchStats();
+      }
     });
   }
 };

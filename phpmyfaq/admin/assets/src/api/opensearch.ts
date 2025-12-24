@@ -42,3 +42,22 @@ export const fetchOpenSearchStatistics = async (): Promise<ElasticsearchResponse
 
   return await response.json();
 };
+
+export const fetchOpenSearchHealthcheck = async (): Promise<Response> => {
+  const response = await fetch('./api/opensearch/healthcheck', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'OpenSearch is unavailable');
+  }
+
+  return await response.json();
+};

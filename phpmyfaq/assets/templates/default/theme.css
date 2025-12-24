@@ -15,19 +15,19 @@
 
 /* Font -Atkinson Hyperlegible Next- from Braille Institute for high-contrast mode to achieve better A11y */
 @font-face {
-    font-family: 'Atkinson Hyperlegible Next';
-    src: url('../../fonts/AtkinsonHyperlegibleNext-VariableFont_wght.ttf') format('truetype-variations');
-    font-weight: 200 800;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('../../fonts/AtkinsonHyperlegibleNext-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Atkinson Hyperlegible Next';
-    src: url('../../fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.ttf') format('truetype-variations');
-    font-weight: 200 800;
-    font-style: italic;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible Next';
+  src: url('../../fonts/AtkinsonHyperlegibleNext-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
 }
 
 :root,
@@ -90,10 +90,10 @@
   /* Individual high-contrast adjustments */
 
   body {
-  font-family: "Atkinson Hyperlegible Next" !important;
-  font-size: 1.3rem;
-  font-optical-sizing: auto;
-  font-weight: 800;
-  font-style: normal;
+    font-family: 'Atkinson Hyperlegible Next' !important;
+    font-size: 1.3rem;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
   }
 }

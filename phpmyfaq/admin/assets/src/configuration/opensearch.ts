@@ -14,12 +14,35 @@
  */
 
 import { pushErrorNotification, pushNotification } from '../../../../assets/src/utils';
-import { fetchOpenSearchAction, fetchOpenSearchStatistics } from '../api';
+import { fetchOpenSearchAction, fetchOpenSearchHealthcheck, fetchOpenSearchStatistics } from '../api';
 import { ElasticsearchResponse, Response } from '../interfaces';
 import { formatBytes } from '../utils';
 
 export const handleOpenSearch = async (): Promise<void> => {
   const buttons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('button.pmf-opensearch');
+
+  // Check health status on page load
+  const healthCheckAlert = async (): Promise<boolean> => {
+    const alertDiv = document.getElementById('pmf-opensearch-healthcheck-alert') as HTMLElement;
+    if (alertDiv) {
+      try {
+        await fetchOpenSearchHealthcheck();
+        alertDiv.style.display = 'none';
+        return true;
+      } catch (error) {
+        alertDiv.style.display = 'block';
+        const alertMessage = alertDiv.querySelector('.alert-message');
+        if (alertMessage) {
+          alertMessage.textContent = error instanceof Error ? error.message : 'OpenSearch is unavailable';
+        }
+        return false;
+      }
+    }
+    return false;
+  };
+
+  // Run health check on page load
+  const isHealthy = await healthCheckAlert();
 
   if (buttons) {
     buttons.forEach((element: HTMLButtonElement): void => {
@@ -67,7 +90,10 @@ export const handleOpenSearch = async (): Promise<void> => {
         }
       };
 
-      openSearchStats();
+      // Only fetch stats if OpenSearch is healthy
+      if (isHealthy) {
+        openSearchStats();
+      }
     });
   }
 };

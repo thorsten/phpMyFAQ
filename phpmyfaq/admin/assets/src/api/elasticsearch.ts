@@ -42,3 +42,22 @@ export const fetchElasticsearchStatistics = async (): Promise<ElasticsearchRespo
 
   return await response.json();
 };
+
+export const fetchElasticsearchHealthcheck = async (): Promise<Response> => {
+  const response = await fetch('./api/elasticsearch/healthcheck', {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Elasticsearch is unavailable');
+  }
+
+  return await response.json();
+};

@@ -250,6 +250,11 @@ $routesConfig = [
         'controller' => [ElasticsearchController::class, 'statistics'],
         'methods' => 'GET'
     ],
+    'admin.api.elasticsearch.healthcheck' => [
+        'path' => '/elasticsearch/healthcheck',
+        'controller' => [ElasticsearchController::class, 'healthcheck'],
+        'methods' => 'GET'
+    ],
     // OpenSearch API
     'admin.api.opensearch.create' => [
         'path' => '/opensearch/create',
@@ -269,6 +274,11 @@ $routesConfig = [
     'admin.api.opensearch.statistics' => [
         'path' => '/opensearch/statistics',
         'controller' => [OpenSearchController::class, 'statistics'],
+        'methods' => 'GET'
+    ],
+    'admin.api.opensearch.healthcheck' => [
+        'path' => '/opensearch/healthcheck',
+        'controller' => [OpenSearchController::class, 'healthcheck'],
         'methods' => 'GET'
     ],
     // Export API
