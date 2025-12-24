@@ -54,6 +54,7 @@ use phpMyFAQ\Helper\StatisticsHelper;
 use phpMyFAQ\Helper\UserHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Instance\OpenSearch;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Mail;
@@ -266,6 +267,10 @@ return static function (ContainerConfigurator $container): void {
     ]);
 
     $services->set('phpmyfaq.instance.elasticsearch', Elasticsearch::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
+    $services->set('phpmyfaq.instance.opensearch', OpenSearch::class)->args([
         service('phpmyfaq.configuration'),
     ]);
 

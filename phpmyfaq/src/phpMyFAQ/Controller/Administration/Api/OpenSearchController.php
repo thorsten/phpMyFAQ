@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller\Administration\Api;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\OpenSearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +39,8 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $openSearch = new OpenSearch($this->configuration);
+        /* @var OpenSearch $openSearch */
+        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
 
         try {
             $openSearch->createIndex();
@@ -58,7 +60,8 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $openSearch = new OpenSearch($this->configuration);
+        /* @var OpenSearch $openSearch */
+        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
 
         try {
             $openSearch->dropIndex();
@@ -78,7 +81,10 @@ final class OpenSearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $openSearch = new OpenSearch($this->configuration);
+        /* @var OpenSearch $openSearch */
+        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
+
+        /* @var Faq $faq */
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 
@@ -91,7 +97,6 @@ final class OpenSearchController extends AbstractController
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     #[Route(path: './admin/api/opensearch/statistics', name: 'admin.api.opensearch.statistics', methods: ['GET'])]
@@ -110,5 +115,27 @@ final class OpenSearchController extends AbstractController
                 ->indices()
                 ->stats(['index' => $indexName]),
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route(path: './admin/api/opensearch/healthcheck', name: 'admin.api.opensearch.healthcheck', methods: ['GET'])]
+    public function healthcheck(): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        /* @var OpenSearch $openSearch */
+        $openSearch = $this->container->get(id: 'phpmyfaq.instance.opensearch');
+
+        $isAvailable = $openSearch->isAvailable();
+
+        return $this->json(
+            [
+                'available' => $isAvailable,
+                'status' => $isAvailable ? 'healthy' : 'unavailable',
+            ],
+            $isAvailable ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE,
+        );
     }
 }

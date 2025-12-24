@@ -24,6 +24,7 @@ use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,12 +33,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ElasticsearchController extends AbstractController
 {
+    /**
+     * @throws \Exception
+     */
     #[Route(path: './admin/api/elasticsearch/create', name: 'admin.api.elasticsearch.create', methods: ['POST'])]
     public function create(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
+        /** @var Elasticsearch $elasticsearch */
+        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
 
         try {
             $elasticsearch->createIndex();
@@ -50,14 +55,15 @@ final class ElasticsearchController extends AbstractController
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[Route(path: './admin/api/elasticsearch/drop', name: 'admin.api.elasticsearch.drop', methods: ['DELETE'])]
     public function drop(): JsonResponse
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
+        /** @var Elasticsearch $elasticsearch */
+        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
 
         try {
             $elasticsearch->dropIndex();
@@ -77,7 +83,10 @@ final class ElasticsearchController extends AbstractController
     {
         $this->userHasPermission(PermissionType::CONFIGURATION_EDIT);
 
-        $elasticsearch = new Elasticsearch($this->configuration);
+        /** @var Elasticsearch $elasticsearch */
+        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
+
+        /** @var Faq $faq */
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $faq->getAllFaqs();
 
@@ -112,5 +121,28 @@ final class ElasticsearchController extends AbstractController
         } catch (ClientResponseException|ServerResponseException $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route(
+        path: './admin/api/elasticsearch/healthcheck',
+        name: 'admin.api.elasticsearch.healthcheck',
+        methods: ['GET'],
+    )]
+    public function healthcheck(): JsonResponse
+    {
+        $this->userIsAuthenticated();
+
+        /** @var Elasticsearch $elasticsearch */
+        $elasticsearch = $this->container->get(id: 'phpmyfaq.instance.elasticsearch');
+
+        $isAvailable = $elasticsearch->isAvailable();
+
+        return $this->json(
+            [
+                'available' => $isAvailable,
+                'status' => $isAvailable ? 'healthy' : 'unavailable',
+            ],
+            $isAvailable ? Response::HTTP_OK : Response::HTTP_SERVICE_UNAVAILABLE,
+        );
     }
 }

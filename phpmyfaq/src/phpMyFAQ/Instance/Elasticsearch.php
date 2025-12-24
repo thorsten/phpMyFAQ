@@ -337,4 +337,19 @@ class Elasticsearch
             return ['error' => $e->getMessage()];
         }
     }
+
+    /**
+     * Checks if Elasticsearch is available
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        try {
+            return $this->client->ping()->asBool();
+        } catch (ClientResponseException|ServerResponseException $e) {
+            $this->configuration->getLogger()->error('Elasticsearch ping failed.', [$e->getMessage()]);
+            return false;
+        }
+    }
 }

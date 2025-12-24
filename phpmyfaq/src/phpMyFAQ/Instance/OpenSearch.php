@@ -298,4 +298,19 @@ readonly class OpenSearch
 
         return $this->client->delete($params);
     }
+
+    /**
+     * Checks if OpenSearch is available
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        try {
+            return $this->client->ping();
+        } catch (Exception $e) {
+            $this->configuration->getLogger()->error('OpenSearch ping failed.', [$e->getMessage()]);
+            return false;
+        }
+    }
 }
