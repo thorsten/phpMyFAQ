@@ -175,6 +175,7 @@ $PMF_LANG["ad_gen_no"] = "Hayır";
 $PMF_LANG["ad_gen_top"] = "Sayfa başı";
 $PMF_LANG["ad_gen_ncf"] = "Kategori bulunamadı!";
 $PMF_LANG["ad_gen_delete"] = "Sil";
+$PMF_LANG['ad_gen_or'] = "veya";
 
 // Benutzerverwaltung
 $PMF_LANG["ad_user"] = "Kullanıcı yönetimi";
@@ -605,6 +606,7 @@ $PMF_LANG['ad_glossary_delete_error'] = "Terim silinirken bir hata oluştu.";
 $PMF_LANG['msgNewQuestionVisible'] = "Soru yayınlanmadan önce editör onayından geçmelidir.";
 $PMF_LANG['msgQuestionsWaiting'] = "Yönetici tarafından yayına alınması beklenen: ";
 $PMF_LANG['ad_entry_visibility'] = "Yayında?";
+$PMF_LANG['ad_entry_not_visibility'] = "not published";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
@@ -1040,6 +1042,19 @@ $PMF_LANG['msgShowMore'] = "Daha fazlası";
 $PMF_LANG['msgQuestionAnswered'] = "Soru yanıtlandı";
 $PMF_LANG['msgMessageQuestionAnswered'] = "%s üzerinde sorduğunuz soru yanıtlandı. Lütfen şuradan kontrol edin";
 
+$PMF_LANG['permission::addattachment'] = "Ek dosyaları ekle";
+$PMF_LANG['permission::editattachment'] = "Ek dosyaları düzenle";
+$PMF_LANG['permission::delattachment'] = "Ek dosyaları sil";
+$PMF_LANG['permission::dlattachment'] = "Ek dosyaları indir";
+$PMF_LANG['permission::reports'] = "Rapor oluştur";
+$PMF_LANG['permission::addfaq'] = "Ön yüzde SSS ekle";
+$PMF_LANG['permission::addquestion'] = "Ön yüzde soru ekle";
+$PMF_LANG['permission::addcomment'] = "Ön yüzde yorum ekle";
+$PMF_LANG['permission::editinstances'] = "Çoklu site örneklerini düzenle";
+$PMF_LANG['permission::addinstances'] = "Yeni çoklu site örnekleri ekle";
+$PMF_LANG['permission::delinstances'] = "Çoklu site örneklerini sil";
+$PMF_LANG['permission::export'] = "SSS'leri dışa aktar";
+
 // added v2.8.0-beta - 2012-12-24 by Thorsten
 $LANG_CONF["records.randomSort"] = array("checkbox", "Sort FAQs randomly");
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array("checkbox", "Enable bundled WYSIWYG editor in frontend");
@@ -1131,6 +1146,7 @@ $PMF_LANG['msgAdminElasticsearchCreateIndex'] = "Index oluştur";
 $PMF_LANG['msgAdminElasticsearchDropIndex'] = "Index kaldır";
 $PMF_LANG['msgAdminElasticsearchImportIndex'] = "Tam içe aktarma";
 $PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = "Index başarıyla oluşturuldu.";
+$PMF_LANG['ad_es_create_import_success'] = 'İçe aktarma başarılı oldu.';
 $PMF_LANG['msgAdminElasticsearchDropIndex_success'] = "Index başarıyla kaldırıldı.";
 $PMF_LANG['ad_export_generate_json'] = "JSON dosyası oluştur";
 $PMF_LANG['ad_media_name_search'] = "Görsel adıyla ara";
@@ -1184,5 +1200,337 @@ $PMF_LANG['ad_group_rights'] = "Grup izinleri";
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['permission::viewadminlink'] = "Yönetici bağlantısını görüntüle";
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP sunucu portu'];
+$PMF_LANG['msgQuestionAnswer'] = 'Soru ve cevap';
+$PMF_LANG['msgPermissions'] = 'İzinler';
+$PMF_LANG['loginPageMessage'] = 'Giriş yap ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'SSS meta verisi';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'Gizlilik bildirimi URL\'si'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'Kullanıcı adı görünür olmalı';
+$PMF_LANG['ad_user_is_visible'] = 'Görünür';
+$PMF_LANG['ad_categ_save_order'] = 'Yeni sıralama başarıyla kaydedildi.';
+$PMF_LANG['ad_add_user_change_password'] = 'Kullanıcı ilk girişte şifresini değiştirmeli';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API etkin'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'API İstemci Jetonu'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Kayıt için izin verilen ana bilgisayarlar'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Yalnızca e-posta adresi ile giriş'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Microsoft ile giriş yap';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Microsoft Entra ID ile girişi etkinleştir'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', '"Soru sor" özelliğini etkinleştir'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Bildirimleri etkinleştir'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'SMTP aracılığıyla yöneticiye test e-postası gönder'];
+$PMF_LANG['mail.sendTestEmail'] = 'Yöneticiye test e-postası gönder';
+$PMF_LANG['msgGoToCategory'] = 'Kategoriye git';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Görünmez Google ReCAPTCHA v2\'yi etkinleştir'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 site anahtarı'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 gizli anahtarı'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "İki faktörlü kimlik doğrulama etkinleştirildi";
+$PMF_LANG['msgTwofactorConfig'] = "İki faktörlü kimlik doğrulamayı yapılandır";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "İki faktörlü kimlik doğrulama yapılandırması";
+$PMF_LANG['qr_code_secret_alt'] = "QR-Kod Gizli Anahtarı";
+$PMF_LANG['msgTwofactorNewSecret'] = "Mevcut iki faktörlü yapılandırmayı kaldır";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "İki faktörlü kimlik doğrulama - Jetonu girin:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Kimlik doğrulama uygulamanızdan 6 haneli kodu girin.";
+$PMF_LANG['msgTwofactorCheck'] = "Kontrol et";
+$PMF_LANG['msgTwofactorErrorToken'] = "Yanlış bir kod girdiniz!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "İki faktörlü kimlik doğrulamayı sıfırla";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = '5 saniye içinde otomatik olarak yönlendirileceksiniz.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Seçilen dilde kategori bulunamadı, ancak şu dilleri seçebilirsiniz:';
+$PMF_LANG['msgCategoryDescription'] = 'Burada tüm kategorilerin ve SSS sayılarının genel bir görünümünü bulacaksınız.';
+$PMF_LANG['msgSubCategoryContent'] = 'Bir ana kategori seçin.';
+$PMF_LANG['ad_open_question_deleted'] = 'Soru başarıyla silindi.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'SMTP TLS eş doğrulamasını devre dışı bırak (önerilmez)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'İletişim bilgileri HTML olarak?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Kimlik doğrulama hizmeti';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Dışa aktarmalarda e-posta adresini göster'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Yeni bir soru eklendi. Bunları burada veya yönetim bölümünde kontrol edebilirsiniz:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Çerez Tercihleri';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Çevrimiçi güncelleme etkin'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Yayın Ortamı'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Son güncelleme kontrolü'];
+$PMF_LANG['upgradeControlCenter'] = 'Çevrimiçi Güncelleme';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Sistem Sağlığı Kontrolü';
+$PMF_LANG['headerCheckUpdates'] = '2. Güncellemeleri Kontrol Et';
+$PMF_LANG['headerDownloadPackage'] = '3. phpMyFAQ İndirme';
+$PMF_LANG['headerExtractPackage'] = '4. İndirilen paketi ayıkla';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. İndirilen paketi kur';
+$PMF_LANG['msgHealthCheck'] = 'Bu, phpMyFAQ kurulumunuzun doğru dosya izinlerini ve klasör yapısını kontrol eder.';
+$PMF_LANG['msgUpdateCheck'] = 'phpMyFAQ\'ın yeni sürümlerini kontrol edebilir, kurulumunuzu yeniden yükleyebilir veya güncelleyebilirsiniz.';
+$PMF_LANG['msgDownloadPackage'] = 'Belirlenen yayın ortamına bağlı olarak yeni phpMyFAQ sürümlerinin indirilmesi.';
+$PMF_LANG['msgExtractPackage'] = 'Bu, indirilen paketi dosya sisteminize ayıklar, bu biraz zaman alabilir.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Bu, indirilen paketi dosya sisteminize ayıklar.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'İndirilen paketi kur';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Mevcut kurulumun yedeği';
+$PMF_LANG['msgInstallationNewFiles'] = 'Yeni dosyaların kurulumu';
+$PMF_LANG['msgDatabaseUpdate'] = 'Veritabanının güncellenmesi';
+$PMF_LANG['alertNightlyBuild'] = 'phpMyFAQ\'ın bir geliştirme sürümünü kullanıyorsunuz. En son gece derlemesine güncelleyebilirsiniz.';
+$PMF_LANG['noteNightlyBuild'] = 'Lütfen bir önceki günün derlemesinin indirileceğini unutmayın (/content/upgrades\'e kaydedilir). Çünkü her yeni derleme GitHub tarafından saat 02:00\'ye (UTC) kadar oluşturulmaz.';
+$PMF_LANG['buttonCheckHealth'] = 'Sistem sağlığını şimdi kontrol et';
+$PMF_LANG['buttonCheckUpdates'] = 'Güncellemeleri şimdi kontrol et';
+$PMF_LANG['buttonDownloadPackage'] = 'Şimdi indir';
+$PMF_LANG['buttonExtractPackage'] = 'İndirilen paketi şimdi ayıkla';
+$PMF_LANG['versionIsUpToDate'] = 'Yüklü sürümünüz güncel!';
+$PMF_LANG['healthCheckOkay'] = 'Yüklü sürümünüz sağlıklı!';
+$PMF_LANG['downloadSuccessful'] = 'Paket başarıyla indirildi!';
+$PMF_LANG['extractSuccessful'] = 'Paket başarıyla ayıklandı!';
+$PMF_LANG['downloadFailure'] = 'Paket indirilemedi.';
+$PMF_LANG['verificationFailure'] = 'İndirilen paket doğrulanamadı.';
+$PMF_LANG['extractFailure'] = 'İndirilen paket ayıklanamadı.';
+$PMF_LANG['msgCurrentVersion'] = 'Mevcut Sürüm: ';
+$PMF_LANG['msgLastCheckDate'] = 'Son güncelleme kontrolü: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Mevcut son sürüm: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Yayın Ortamı: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Tercih ederseniz manuel <a href="../update">güncelleme sürecini</a> kullanmaya devam edebilirsiniz.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Yer imi ekle';
+$PMF_LANG['removeBookmark'] = 'Yer imini kaldır';
+$PMF_LANG['msgBookmarks'] = 'Yer imleri';
+$PMF_LANG['msgMyBookmarks'] = 'Yer İmlerim';
+$PMF_LANG['msgBookmarkAdded'] = 'Yer imi başarıyla eklendi!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Yer imi başarıyla kaldırıldı!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "'#' karakteri kullanılamaz.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot yoksayma listesi (virgülle ayırın)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar resmi';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Yapışkan kayıtların özel sıralaması ana yapılandırmada devre dışı bırakıldı. Kullanmak isterseniz, lütfen <a href="././configuration">ana yapılandırma</a> -> kayıtlar bölümünde etkinleştirin.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Yapışkan kayıtların özel sıralaması'];
+$PMF_LANG['msgNoStickyFaqs'] = 'Henüz yapışkan kaydınız yok. <a href="./faqs" class="alert-link">SSS Genel Bakış</a> bölümünde kayıtları yapışkan olarak işaretleyebilirsiniz.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Çerez Onayını Etkinleştir'];
+$PMF_LANG['msgSessionExpired'] = 'Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Dil kodu';
+$PMF_LANG['msgSeparateWithCommas'] = '(virgülle ayırın)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'İçe aktarılacak CSV dosyası, sütun başlıkları olmadan bu sırada aşağıdaki sütunları içermelidir. Her satır bir SSS girişi tanımlamak için tasarlanmıştır. Yıldız * ile işaretlenmiş sütunlardaki tüm hücreler bir değer içermelidir.';
+$PMF_LANG['msgImportRecords'] = 'SSS İçe Aktarma';
+$PMF_LANG['msgImportCSVFile'] = 'CSV dosyasını içe aktar';
+$PMF_LANG['msgImportCSVFileBody'] = 'Kayıt verileriniz ve verilen yapı (yukarıya bakın) ile bir CSV dosyasını buradan içe aktarabilirsiniz.';
+$PMF_LANG['msgImport'] = 'İçe aktar';
+$PMF_LANG['msgColumnStructure'] = 'Sütun yapısı';
+$PMF_LANG['msgImportSuccessful'] = 'İçe aktarma başarılı!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true veya false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'İçe & Dışa Aktarma';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Dosyanın doğru yapıya sahip olmadığı görülüyor. Lütfen verilen gereksinimlere göre yapıyı tekrar kontrol edin.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Oturumları CSV dosyası olarak dışa aktar';
+$PMF_LANG['msgExportSessions'] = 'Oturumları Dışa Aktar';
+$PMF_LANG['msgExportSessionsFrom'] = 'Başlangıç';
+$PMF_LANG['msgExportSessionsTo'] = 'Bitiş';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Formları düzenle';
+$PMF_LANG['msgEditFormsSuccessful'] = 'Değişiklik başarıyla kaydedildi.';
+$PMF_LANG['msgInputType'] = 'Tür';
+$PMF_LANG['msgRequiredInputField'] = 'Zorunlu alan';
+$PMF_LANG['permission::forms_edit'] = 'Formları düzenle';
+$PMF_LANG['msgInputLabel'] = 'Etiket';
+$PMF_LANG['msgFormsEditTranslations'] = 'Çevirileri ayarla';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'Çeviri başarıyla kaydedildi.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'Çeviri başarıyla silindi.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Yeni çeviri başarıyla kaydedildi.';
+$PMF_LANG['msgSelectLanguage'] = 'Dil seç';
+$PMF_LANG['msgTranslationText'] = 'Çeviri metni';
+$PMF_LANG['msgAddTranslation'] = 'Çeviri ekle';
+$PMF_LANG['msgHintDeactivateForms'] = 'Formlar <a class="alert-link" href="./configuration">yönetim</a> bölümünde tamamen devre dışı bırakılabilir.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Yalnızca pasif SSS\'ler';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Yalnızca yeni SSS\'ler';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Haberi sil';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Kullanıcıları csv olarak dışa aktar';
+$PMF_LANG['msgWarning'] = 'Uyarı';
+$PMF_LANG['msgUserList'] = 'Kullanıcı listesi';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Soru ve cevap bulunamadı.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'SSS bakım modunda değil.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Birden fazla anahtar kelime virgülle ayrılmalıdır.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Yapılandırılmış kategoriler eksik olduğundan bu formu kullanamazsınız. Lütfen <a class="alert-link" href="./contact.html">yöneticiyi</a> bilgilendirin.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'E-postalar için yanıtlanamayan adres'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Oturum yakında sona erecek';
+$PMF_LANG['msgNoLogMeOut'] = 'Hayır, oturumu kapat';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Evet, oturumu açık tut';
+$PMF_LANG['msgTrendingFAQs'] = 'Trend SSS\'ler';
+$PMF_LANG['msgGenerateApiClientToken'] = 'API İstemci Jetonu Oluştur';
+$PMF_LANG['msgSerp'] = 'SERP, Arama Motoru Sonuç Sayfası\'nın kısaltmasıdır. Burada SERP için başlığı ve açıklamayı tanımlayabilirsiniz.';
+$PMF_LANG['msgSerpTitle'] = 'SERP başlığı';
+$PMF_LANG['msgSerpDescription'] = 'SERP açıklaması';
+$LANG_CONF['seo.title'] = ['input', 'SERP başlığı'];
+$LANG_CONF['seo.description'] = ['area', 'SERP açıklaması'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Medya içeriği için izin verilen harici sunucular (virgülle ayırın)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Mevcut İki Faktörlü Kimlik Doğrulama yapılandırmanızı kaldırmak istediğinizden emin misiniz?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar şu anda etkin değil.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Mevcut 2 faktörlü yapılandırmanın silinmesi başarılı oldu.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'WhatsApp ile bir arkadaşına gönder';
+$PMF_LANG['msgShareText'] = 'Senin için harika bir SSS makalesi keşfettim:';
+$PMF_LANG['msgError'] = 'Bir hata oluştu.';
+$PMF_LANG['msgLinkToFAQ'] = 'SSS\'ye bağlantı';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Gizlilik politikası bağlantısını etkinleştir'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ şu anda hata ayıklama modunda çalışıyor. Hata ayıklama modu hassas bilgileri açığa çıkarabilir ve yalnızca geliştirme amaçlıdır. Güvenlik nedenleriyle hata ayıklama modunu devre dışı bırakmanızı şiddetle öneririz. Hata ayıklama modunu <code>.env</code> dosyasından devre dışı bırakabilirsiniz.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ şu anda geliştirme aşamasında (%s). Bu nedenle henüz üretime hazır değil. Lütfen <a target="_blank" href="%s" class="alert-link">tüm sorunları GitHub\'da bildirin</a>. Çok teşekkür ederiz!';
+$PMF_LANG['layoutControlCenter'] = 'Düzen';
+$LANG_CONF['layout.customCss'] = ['area', 'Özel CSS', 'Lütfen yalnızca CSS kullanın.'];
+$PMF_LANG['msgSitemap'] = 'Site Haritası';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Tüm girişlerin genel bakışında aradığınız SSS\'leri bulun | Site Haritası - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = '%s sözlüğünde konuyla ilgili tüm önemli teknik terimlerin açıklamalarını bulacaksınız';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Tüm önemli konuların genel bakışını görün | %s SSS genel bakış';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Tüm kategorilerin ve konuların genel bakışı | %s kategori genel bakış';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Yeni bir soru ekleyin | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Yanıt bekleyen açık sorular | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Paylaş';
+$PMF_LANG['msgCopyLink'] = 'veya bağlantıyı kopyala';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Zengin Snippet\'leri Etkinleştir'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'İstatistikler başarıyla silindi.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'İstatistikler silinirken bir hata oluştu.';
+$PMF_LANG['msgPasswordTooShort'] = 'Yeni şifre en az 8 karakter içermelidir.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Her iki şifre de eşleşmiyor.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Diğer editörlerin özel notları var:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Eksik eklentileri temizle';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Eklenti başarıyla yenilendi';
+$PMF_LANG['msgRemoveAll'] = 'Tümünü kaldır';
+$PMF_LANG['msgError404'] = 'Hata 404';
+$PMF_LANG['msgError404Description'] = 'Aradığınız sayfa taşındı, kaldırıldı veya hiç var olmamış olabilir.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Zaten bir hesabınız var mı?';
+$PMF_LANG['msgSignInHere'] = 'Buradan giriş yapın.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Passkey ile kayıt olurken, kullanıcıların yalnızca bir ad veya e-posta adresi girmesi gerekir; kimlik doğrulama ise biyometrik veriler veya cihaz tabanlı şifre kullanılarak güvenli bir şekilde gerçekleştirilir.';
+$PMF_LANG['msgContinue'] = 'Devam et';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'WebAuthn desteğini etkinleştir (Deneysel)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Passkey ile giriş yap';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Kayıt başarılı oldu. Artık Passkey ile giriş yapabilirsiniz.';
+$PMF_LANG['msgSupportUs'] = 'phpMyFAQ\'ı destekleyin';
+$PMF_LANG['msgErrorEnterFullName'] = 'Lütfen tam adınızı girin!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Lütfen kullanıcı adınızı girin!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Lütfen geçerli bir e-posta adresi girin!';
+$PMF_LANG['msgErrorEnterMessage'] = 'Lütfen bir mesaj girin!';
+$PMF_LANG['msgLinkCopied'] = 'Bağlantı panoya kopyalandı';
+$PMF_LANG['msgDocumentation'] = 'Dokümantasyon';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Kategori görselini sıfırla';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'robots.txt için içerik', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'llms.txt için içerik', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Bakım modunu etkinleştir';
+$PMF_LANG['msgPlugins'] = 'Eklentiler';
+$PMF_LANG['msgPluginListing'] = 'Yüklü eklentilerin ve sürümlerinin listesi';
+$PMF_LANG['msgPluginName'] = 'Eklenti adı';
+$PMF_LANG['msgPluginVersion'] = 'Sürüm';
+$PMF_LANG['msgPluginAuthor'] = 'Yazar';
+$PMF_LANG['msgPluginDescription'] = 'Açıklama';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Hata bildir';
+$PMF_LANG['msgDashboard'] = 'Kontrol Paneli';
+$PMF_LANG['msgOrphanedFAQs'] = 'Sahipsiz SSS\'ler';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Bu SSS\'ler herhangi bir kategoriye atanmamış. Buradan bir kategoriye atayabilirsiniz.';
+$PMF_LANG['msgPreview'] = 'Önizleme';
+$PMF_LANG['msgInsertImage'] = 'Resim ekle';
+$PMF_LANG['msgImageUpload'] = 'Resim yükleme';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'Resim yüklenemedi.';
+$PMF_LANG['msgImageTooLarge'] = 'Resim çok büyük.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Yüklenecek resim yok.';
+$PMF_LANG['msgFetchingHashes'] = 'api.phpmyfaq.de\'den doğrulama hash\'leri alınıyor...';
+$PMF_LANG['msgCheckHashes'] = 'Kurulum dosyalarıyla hash\'ler kontrol ediliyor...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Kimlik doğrulama kullanıcı tarafından iptal edildi.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Yönetici oturum zaman aşımı sayacını etkinleştir', 'Varsayılan: etkin'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'OpenSearch desteğini etkinleştir', 'Standart: devre dışı'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Popüler aramalar için zaman aralığı (gün)', 'Standart: 180 gün'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch Yapılandırması';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Arama İndeksi Oluştur';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Arama İndeksini Sil';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Tam İçe Aktarma';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch arama indeksi başarıyla oluşturuldu.';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearch içe aktarma başarılı oldu.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch arama indeksi başarıyla silindi.';
+$PMF_LANG['permission::translate_faq'] = 'SSS\'leri çevir';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Kategori aramak için yazın';
+$PMF_LANG['msgLoadingText'] = 'Yükleniyor...';
+$PMF_LANG['msgNoResultsText'] = 'Sonuç bulunamadı';
+$PMF_LANG['msgNoChoicesText'] = 'Seçilecek seçenek yok';
+$PMF_LANG['msgItemSelectText'] = 'Seçmek için basın';
+$PMF_LANG['msgUniqueItemText'] = 'Yalnızca benzersiz değerler eklenebilir';
+$PMF_LANG['msgCustomAddItemText'] = 'Yalnızca belirli koşullara uyan değerler eklenebilir';
+$PMF_LANG['msgDownloadYourData'] = 'Verilerinizi indirin';
+$PMF_LANG['msgDataExportDescription'] = 'Saklanan kullanıcı verilerinizi içeren bir ZIP dosyası indirin.';
+$PMF_LANG['msgDownload'] = 'İndir';
+$PMF_LANG['msgToggleTheme'] = 'Temayı değiştir';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Son yedekleme tarihi';
+$PMF_LANG['msgBackupNoneFound'] = 'Yedek bulunamadı.';
+$PMF_LANG['msgBackupTooOld'] = 'Son yedekleme 30 günden eski.';
+$PMF_LANG['msgBackupRecent'] = 'Mevcut yedekleme güncel.';
+$PMF_LANG['msgBackupGoTo'] = 'Yedekleme sayfasına git';
+$PMF_LANG['msgNewestUsers'] = 'En yeni kullanıcılar';
+$PMF_LANG['msgMemberSince'] = 'Üyelik tarihi';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Kayıtlı kullanıcılar';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Bu SSS\'yi gerçekten silmek istiyor musunuz? Bu işlem geri alınamaz.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'Toplam çeviri anahtarı sayısı';
+$PMF_LANG['msgTranslatedKeys'] = 'Çevrilmiş anahtar sayısı';
+$PMF_LANG['msgMissingKeys'] = 'Eksik çeviri anahtarları';
+$PMF_LANG['msgCompletionPercentage'] = 'Tamamlanma yüzdesi';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'Yüklü sürüm, mevcut en son sürümden daha yeni.';
+$PMF_LANG['ad_quick_sub_category'] = "Yeni alt kategori ekle";
+$PMF_LANG['msgError403'] = 'Hata 403';
+$PMF_LANG['msgError403Description'] = 'Kimliğiniz doğrulandı, ancak bu kaynağa erişim izniniz yok.';
+$PMF_LANG['msgError403Hint'] = 'Bunun bir hata olduğunu düşünüyorsanız, lütfen bir yöneticiyle iletişime geçin.';
+$PMF_LANG['msgCreateDate'] = 'Oluşturulma tarihi';
+$PMF_LANG['msgUpdateDate'] = 'Son güncellenme tarihi';
 
 return $PMF_LANG;
