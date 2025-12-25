@@ -7,13 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Pedro Lineu Orso <pedro.orso@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Pedro Lineu Orso <pedro.orso@gmail.com>
  * @copyright 2006-2025 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-04-05
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-04-05
  */
 
 $PMF_LANG['metaCharset'] = 'utf-8';
@@ -91,7 +90,6 @@ $PMF_LANG['msgDate_User'] = 'Data / Usuário';
 $PMF_LANG['msgQuestion2'] = 'Pergunta';
 $PMF_LANG['msg2answer'] = 'Resposta';
 $PMF_LANG['msgQuestionText'] = 'Aqui você pode ver algumas perguntas de outros usuários. Se quiser contribuir com respostas para essas perguntas, elas serão inseridas no FAQ.';
-$PMF_LANG['msgHelpText'] = 'As FAQ (Frequently Asked Questions em inglês) tem uma estrutura bastante simples. Pode pesquisar nas <a href="?action=show">categorias</a> ou usar a <a href="?action=search">ferramenta de busca das FAQ</a>.';
 $PMF_LANG['msgContactEMail'] = 'E-mail ao administrador:';
 $PMF_LANG['msgMessage'] = 'Sua mensagem:';
 $PMF_LANG['msgTopTen'] = 'TOP 10';
@@ -379,19 +377,11 @@ $PMF_LANG['msgPageDoublePoint'] = 'Página: ';
 $PMF_LANG['msgMainCategory'] = 'Categoria principal';
 $PMF_LANG['ad_passwdsuc'] = 'A sua senha foi alterada';
 $PMF_LANG['msgPDF'] = 'Versão PDF';
-$PMF_LANG['ad_xml_head'] = 'Backup XML';
-$PMF_LANG['ad_xml_hint'] = 'Salvar todos os registros do seu FAQ num arquivo XML.';
 $PMF_LANG['ad_xml_gen'] = 'Criar arquivo XML';
 $PMF_LANG['msgLanguage'] = 'Idioma';
 $PMF_LANG['msgLanguageSubmit'] = 'Escolha o idioma';
-$PMF_LANG['ad_entry_preview'] = 'Pré-visualizar';
-$PMF_LANG['ad_attach_1'] = 'Escolha um diretório para anexos na configuração';
-$PMF_LANG['ad_attach_2'] = 'Escolha um link para anexos na configuração';
-$PMF_LANG['ad_attach_3'] = 'O arquivo attachment.php não pode ser acessado sem autenticação.';
 $PMF_LANG['ad_attach_4'] = 'O anexo deve ser inferior a %s Bytes.';
 $PMF_LANG['ad_menu_export'] = 'Exportar o seu FAQ';
-$PMF_LANG['ad_export_file'] = 'Erro: Impossível escrever arquivo.';
-$PMF_LANG['ad_export_pdf'] = 'Exportar todos os registros em PDF';
 $PMF_LANG['permission::add_user'] = 'Adicionar usuário';
 $PMF_LANG['permission::edit_user'] = 'Editar usuário';
 $PMF_LANG['permission::delete_user'] = 'Excluir usuário';
@@ -443,8 +433,6 @@ $PMF_LANG['ad_export_generate_pdf'] = 'Gerar arquivo PDF';
 $PMF_LANG['ad_export_full_faq'] = 'Exportar FAQ em PDF: ';
 $PMF_LANG['err_bannedIP'] = 'O seu IP está banido.';
 $PMF_LANG['err_SaveQuestion'] = 'Campos obrigatórios: Nome, e-mail e a sua pergunta!  <a href="nojavascript...history.back();">voltar</a>  ';
-$PMF_LANG['ad_entry_fontcolor'] = 'Cor da fonte:';
-$PMF_LANG['ad_entry_fontsize'] = 'Tamanho da fonte:';
 $PMF_LANG['msgNewCategory_main_cat'] = 'como a nova categoria principal';
 $PMF_LANG['ad_categ_paste_error'] = 'Impopssível mover esta categoria.';
 $PMF_LANG['ad_categ_move'] = 'mover categoria';
@@ -623,10 +611,7 @@ $PMF_LANG['ad_conf_desc'] = 'decrescente';
 $PMF_LANG['ad_conf_asc'] = 'crescente';
 $PMF_LANG['mainControlCenter'] = 'Configuração principal';
 $PMF_LANG['recordsControlCenter'] = 'Configuração de registros da FAQ';
-$PMF_LANG['msgInstantResponse'] = 'Pesquisa rápida';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Procurar abaixo o primeiro %d registros.';
 $PMF_LANG['msgAllCatArticles'] = 'Registros nesta categoria';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Basta digitar e encontrar as respostas ...';
 $PMF_LANG['msgTagSearch'] = 'Entradas tag';
 $PMF_LANG['ad_pmf_info'] = 'Estatísticas do phpMyFAQ';
 $PMF_LANG['msgOnlineVersionCheck'] = 'Verificação online da versão';
@@ -822,7 +807,6 @@ $PMF_LANG['msgOnlineVerificationCheck'] = 'Verificação online';
 $PMF_LANG['msgOnlineVerificationCheckButton'] = 'Clique para verificar sua instalação phpMyFAQ';
 $PMF_LANG['ad_verification_notokay'] = 'Sua versão do phpMyFAQ tem alterações locais';
 $PMF_LANG['ad_verification_okay'] = 'Sua versão do phpMyFAQ foi verificada com sucesso.';
-$PMF_LANG['cacheControlCenter'] = 'Configuração de Cache';
 $PMF_LANG['msgAdminSearchFaqs'] = 'Procurar por FAQs';
 $PMF_LANG['msg2answerFAQ'] = 'Respondido';
 $PMF_LANG['headerUserControlPanel'] = 'Sua Conta';
