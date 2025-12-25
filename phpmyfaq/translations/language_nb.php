@@ -7,13 +7,12 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
+ * @package   phpMyFAQ
+ * @author    Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
  * @copyright 2005-2025 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-08-31
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-08-31
  */
 
 $PMF_LANG['metaCharset'] = 'utf-8';
@@ -91,7 +90,6 @@ $PMF_LANG['msgDate_User'] = 'Dato / Bruker';
 $PMF_LANG['msgQuestion2'] = 'Spørsmål';
 $PMF_LANG['msg2answer'] = 'Svar';
 $PMF_LANG['msgQuestionText'] = 'Her kan du se spørsmål stilt av andre brukere. Hvis du besvarer et spørsmål, blir kanskje nettopp ditt svar brukt i OSSen.';
-$PMF_LANG['msgHelpText'] = 'Strukturen i denne OSS (Ofte Stilte Spøsrmål) / FAQ (Frequently Asked Questions) er virkelig enkel. Du kan enten søke i <a href="?action=show">kategoriene</a> eller etter <a href="?action=search">nøkkelord</a>.';
 $PMF_LANG['msgContactEMail'] = 'Send e-post til webmaster:';
 $PMF_LANG['msgMessage'] = 'Din melding:';
 $PMF_LANG['msgTopTen'] = 'TOPP 10';
@@ -148,6 +146,7 @@ $PMF_LANG['ad_gen_no'] = 'Nei';
 $PMF_LANG['ad_gen_top'] = 'Toppen av siden';
 $PMF_LANG['ad_gen_ncf'] = 'Ingen kategori funnet!';
 $PMF_LANG['ad_gen_delete'] = 'Slett';
+$PMF_LANG['ad_gen_or'] = "or";
 $PMF_LANG['ad_user'] = 'Brukeradministrasjon';
 $PMF_LANG['ad_user_username'] = 'Registrerede brukere';
 $PMF_LANG['ad_user_rights'] = 'Rettigheter';
@@ -391,14 +390,6 @@ $PMF_LANG['permission::delete_user'] = 'Slett bruker';
 $PMF_LANG['permission::add_faq'] = 'Legg til spørsmål/svar';
 $PMF_LANG['permission::edit_faq'] = 'Rediger spørsmål/svar';
 $PMF_LANG['msgPDF'] = 'Vis som PDF-fil';
-$PMF_LANG['ad_xml_head'] = 'XML-sikkerhetskopi';
-$PMF_LANG['ad_xml_hint'] = 'Gem alle spørsmål i FAQ i een XML-fil.';
-$PMF_LANG['ad_entry_preview'] = 'Forhåndsvisning';
-$PMF_LANG['ad_attach_1'] = 'Velg først et bibliotek for vedlegg i konfigurasjon.';
-$PMF_LANG['ad_attach_2'] = 'Velg først en lenke til vedlegg.';
-$PMF_LANG['ad_attach_3'] = 'Filen attachment.php kan ikke åpnes uten krevde rettigheter.';
-$PMF_LANG['ad_export_file'] = 'Feil: Kan ikke skrive til fil.';
-$PMF_LANG['ad_export_pdf'] = 'PDF-Eksport av alle spørsmål';
 $PMF_LANG['permission::delete_faq'] = 'Slett spørsmål/svar';
 $PMF_LANG['permission::viewlog'] = 'Vis logger';
 $PMF_LANG['permission::adminlog'] = 'Vis adminlogg';
@@ -433,8 +424,6 @@ $PMF_LANG['ad_export_generate_pdf'] = 'generer PDF-fil';
 $PMF_LANG['ad_export_full_faq'] = 'Din FAQ som en PDF-fil: ';
 $PMF_LANG['err_bannedIP'] = 'Din IP-address nektes adgang.';
 $PMF_LANG['err_SaveQuestion'] = 'Nødvendige felter: ditt navn, din e-postadresse og ditt spørsmål.  ';
-$PMF_LANG['ad_entry_fontcolor'] = 'Skrifttype farve: ';
-$PMF_LANG['ad_entry_fontsize'] = 'Skrifttype størrelse: ';
 $PMF_LANG['msgNewCategory_main_cat'] = 'som ny hovedkategori';
 $PMF_LANG['ad_categ_paste_error'] = 'Flytting av denne kategorien er ikke mulig.';
 $PMF_LANG['ad_categ_move'] = 'flytt kategori';
@@ -488,6 +477,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'Ordlisteoppføringen kunne ikke slettes
 $PMF_LANG['msgNewQuestionVisible'] = 'Spørsmålet må være gjennomgått før offentliggjøring.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Venter på at administrasjonen skal publisere';
 $PMF_LANG['ad_entry_visibility'] = 'Publisere?';
+$PMF_LANG['ad_entry_not_visibility'] = "ikke publisert";
 $PMF_LANG['ad_user_error_password'] = 'Vennligst oppgi et passord.';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = 'Passordene samsvarer ikke.';
 $PMF_LANG['ad_user_error_loginInvalid'] = 'Det angitte brukernavnet er ugyldig.';
@@ -782,7 +772,6 @@ $PMF_LANG['msgOnlineVerificationCheck'] = 'Online verifiseringssjekk';
 $PMF_LANG['msgOnlineVerificationCheckButton'] = 'Klikk for å verifisere din phpMyFAQ installasjon';
 $PMF_LANG['ad_verification_notokay'] = 'Din versjon av phpMyFAQ har lokale endringer:';
 $PMF_LANG['ad_verification_okay'] = 'Din versjon av phpMyFAQ ble vellykket verifisert.';
-$PMF_LANG['cacheControlCenter'] = 'Cache konfigurasjon';
 $PMF_LANG['msgAdminSearchFaqs'] = 'Søk etter OSSer';
 $PMF_LANG['msg2answerFAQ'] = 'Besvart';
 $PMF_LANG['headerUserControlPanel'] = 'Bruker Kontrollpanel';
@@ -820,9 +809,6 @@ $PMF_LANG['ad_stat_report_url'] = 'Adresse';
 $PMF_LANG['ad_stat_report_visits'] = 'Besøk';
 $PMF_LANG['ad_stat_report_make_report'] = 'Generer Rapport';
 $PMF_LANG['ad_stat_report_make_csv'] = 'Eksporter til CSV';
-$PMF_LANG['msgRegistration'] = 'Registrering';
-$PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, vennligst oppgi ditt navn, ønsket brukernavn og en gyldig epost adresse!';
-$PMF_LANG['msgRegistrationNote'] = 'Etter en vellykket registrering vil du snarlig motta en epost med påloggingsdata. Dette skjer såsnart administrator har autorisert registreringen din.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Endringslogg historikk';
 $LANG_CONF['security.ssoSupport'] = array('checkbox', 'Single Sign On Support (Standard: deaktivert)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array('input', 'Single Sign On utlogging videresendingsservice URL');
@@ -843,7 +829,555 @@ $PMF_LANG['msgRegistration'] = "Registrer ny bruker";
 $PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, angi ditt navn, brukernavn  og gyldig e-postadresse. ';
 $PMF_LANG['msgRegistrationNote'] = 'Du vil få en epost så snart en administrator har godkjent registreringen din.';
 
-//Experimental - 2019-10-25 Henrik Werkström
-$PMF_LANG['loginPageMessage'] = 'Logge inn på ';
+// added v2.7.0-beta - 2011-06-13 by Thorsten
+$PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
+
+// added v2.7.0-beta2 - 2011-06-22 by Thorsten
+$LANG_CONF['security.ssoSupport'] = ['checkbox', 'Enable Single Sign On Support'];
+$LANG_CONF['security.ssoLogoutRedirect'] = ['input', 'Single Sign On logout redirect service URL'];
+$LANG_CONF['main.dateFormat'] = ['input', 'Date format (default: Y-m-d H:i)'];
+$LANG_CONF['security.enableLoginOnly'] = ['checkbox', 'Complete secured FAQ'];
+
+// added v2.7.0-RC - 2011-08-18 by Thorsten
+$PMF_LANG['securityControlCenter'] = 'Security';
+$PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
+$PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
+
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ with SSL only'];
+$PMF_LANG['msgTableOfContent'] = 'Table of Contents';
+
+// added 2.7.5 - 2012-03-02 by Thorsten
+$PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Online verification check";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "Click to verify your phpMyFAQ installation";
+$PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes";
+$PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";
+
+// added v2.8.0-alpha - 2011-09-29 by Thorsten
+$PMF_LANG['msgAdminSearchFaqs'] = 'Search for FAQs';
+
+// added v2.8.0-alpha - 2012-01-13 by Peter
+$LANG_CONF["records.enableCloseQuestion"] = ["checkbox", "Close open question after answer?"];
+$LANG_CONF["records.enableDeleteQuestion"] = ["checkbox", "Delete open question after answer?"];
+$PMF_LANG["msg2answerFAQ"] = "Answered";
+
+// added v2.8.0-alpha - 2012-01-16 by Thorsten
+$PMF_LANG["headerUserControlPanel"] = 'User Control Panel';
+
+// added v2.8.0-alpha2 - 2012-03-15 by Thorsten
+$PMF_LANG["rememberMe"] = 'Log me on automatically next time';
+$PMF_LANG["ad_menu_instances"] = "FAQ Multisites";
+
+// added v2.8.0-alpha2 - 2012-08-06 by Thorsten
+$PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
+$LANG_CONF["main.maintenanceMode"] = ["checkbox", "Set FAQ in maintenance mode"];
+$PMF_LANG['msgMode'] = "Modus";
+$PMF_LANG['msgMaintenanceMode'] = "FAQ is in maintenance";
+$PMF_LANG['msgOnlineMode'] = "FAQ is online";
+
+// added v2.8.0-alpha3 - 2012-08-30 by Thorsten
+$PMF_LANG['msgShowMore'] = "show more";
+$PMF_LANG['msgQuestionAnswered'] = "Question answered";
+$PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Please check it here";
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['permission::addattachment'] = "Legg til vedlegg";
+$PMF_LANG['permission::editattachment'] = "Rediger vedlegg";
+$PMF_LANG['permission::delattachment'] = "Slett vedlegg";
+$PMF_LANG['permission::dlattachment'] = "Last ned vedlegg";
+$PMF_LANG['permission::reports'] = "Generer rapporter";
+$PMF_LANG['permission::addfaq'] = "Legg til FAQ i frontend";
+$PMF_LANG['permission::addquestion'] = "Legg til spørsmål i frontend";
+$PMF_LANG['permission::addcomment'] = "Legg til kommentarer i frontend";
+$PMF_LANG['permission::editinstances'] = "Rediger multi-site instanser";
+$PMF_LANG['permission::addinstances'] = "Legg til nye multi-site instanser";
+$PMF_LANG['permission::delinstances'] = "Slett multi-site instanser";
+$PMF_LANG['permission::export'] = "Eksporter FAQ";
+
+// added v2.8.0-beta - 2012-12-24 by Thorsten
+$LANG_CONF["records.randomSort"] = ["checkbox", "Sort FAQs randomly"];
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = ["checkbox", "Enable bundled WYSIWYG editor in frontend"];
+
+// added v2.8.0-beta3 - 2013-01-15 by Thorsten
+$LANG_CONF["main.enableGravatarSupport"] = ["checkbox", "Gravatar Support"];
+
+// added v2.8.0-RC - 2013-01-29 by Thorsten
+$PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stop words.";
+$PMF_LANG["ad_visits_per_day"] = "Visits per day";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "Legg til en ny phpMyFAQ multisite-instans";
+$PMF_LANG["ad_instance_error_notwritable"] = "The folder /multisite isn\'t writable.";
+$PMF_LANG["ad_instance_url"] = "Instance URL";
+$PMF_LANG["ad_instance_path"] = "Instance path";
+$PMF_LANG["ad_instance_name"] = "Instance name";
+$PMF_LANG["ad_instance_email"] = "Your admin email";
+$PMF_LANG["ad_instance_admin"] = "Admin username";
+$PMF_LANG["ad_instance_password"] = "Admin password";
+$PMF_LANG["ad_instance_hint"] = "Caution: It will take some seconds to create a new phpMyFAQ instance!";
+$PMF_LANG["ad_instance_button"] = "Save instance";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "Could not delete instance ";
+$PMF_LANG["ad_instance_config"] = "Instance configuration";
+
+// added v2.8.0-RC3 - 2013-03-03 by Thorsten
+$PMF_LANG["msgAboutThisNews"] = "About this news";
+
+// added v.2.8.1 - 2013-06-23 by Thorsten
+$PMF_LANG["msgAccessDenied"] = "Access denied.";
+
+// added v.2.8.21 - 2015-02-17 by Thorsten
+$PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'Legg til søkeord';
+$PMF_LANG["msgPopularTags"] = 'Most popular searches';
+$LANG_CONF["search.enableHighlighting"] = ["checkbox", "Highlight search terms"];
+$LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "Allow comments for guests"];
+$LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "Allow adding questions for guests"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = ["checkbox", "Allow adding new FAQs for guests"];
+$PMF_LANG["ad_searchterm_del"] = 'Slett alle loggede søketermer';
+$PMF_LANG["ad_searchterm_del_suc"] = 'Successfully deleted all search terms.';
+$PMF_LANG["ad_searchterm_del_err"] = 'Could not delete all search terms.';
+$LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Hide empty categories"];
+$LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Search for solution ID"];
+
+// added v2.9.0-alpha2 - 2014-08-16 by Thorsten
+$PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
+$PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occurred.";
+$PMF_LANG["msgSeoCenter"] = "SEO";
+$LANG_CONF["seo.metaTagsHome"] = ["select", "Robots Meta Tags start page"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "Robots Meta Tags FAQs"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "Meta Tags category pages"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "Robots Meta Tags static pages"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "Robots Meta Tags Admin"];
+$PMF_LANG["msgMatchingQuestions"] = "The following results closely matched your question";
+$PMF_LANG["msgFinishSubmission"] = "If none of the suggestions above match your question, click the button below to finish submitting your question.";
+$LANG_CONF['spam.manualActivation'] = ['checkbox', 'Manually activate new users (default: activated)'];
+
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews
+$PMF_LANG['mailControlCenter'] = 'Mail setup';
+$LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Use remote SMTP server (default: deactivated)'];
+$LANG_CONF['mail.remoteSMTPServer'] = ['input', 'Server address'];
+$LANG_CONF['mail.remoteSMTPUsername'] = ['input', 'Username'];
+$LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'Password'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'Enable registration for visitors'];
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = ['area', 'Custom PDF Header (HTML allowed)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Custom PDF Footer (HTML allowed)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Allow downloads for guests'];
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "Attention! If you enter a password, you overwrite the password of the user.";
+$PMF_LANG["ad_delete_all_votings"] = "Clear all voting";
+$PMF_LANG["categoryModeratorLabel"] = "Moderators";
+$PMF_LANG['ad_clear_all_visits'] = "Clear all visits";
+$PMF_LANG['ad_reset_visits_success'] = 'The reset of visits was successfully.';
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Enable bundled Markdown editor'];
+
+// added v2.9.0-beta - 2015-09-27 by Thorsten
+$PMF_LANG['faqOverview'] = 'FAQ Overview';
+$PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Enable smart answering for user questions'];
+
+// added v2.9.0-beta2 - 2015-12-23 by Thorsten
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Enable Elasticsearch support', 'Standard: disabled'];
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch configuration';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Create Index';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Drop Index';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Full import';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Index successfully created.';
+$PMF_LANG['ad_es_create_import_success'] = 'Import was successful.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Index successfully dropped.';
+$PMF_LANG['ad_export_generate_json'] = 'Create JSON file';
+$PMF_LANG['ad_media_name_search'] = 'Search for media name';
+
+// added v2.9.0-RC - 2016-02-19 by Thorsten
+$PMF_LANG['ad_admin_notes'] = 'Private Notes';
+$PMF_LANG['ad_admin_notes_hint'] = ' (only visible for editors)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Legg til ny FAQ i denne kategorien';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP-mapping for navn, "cn" ved bruk av ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP-mapping for brukernavn, "samAccountName" ved bruk av ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP-mapping for e-post, "mail" ved bruk av ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP-mapping for "medlem av" ved bruk av LDAP-grupper'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP-domeneprefiks, f.eks. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP-protokollversjon (standard: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP-referanser (standard: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Aktiver LDAP-gruppestøtte, f.eks. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Aktiver LDAP SASL-støtte'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Aktiver støtte for flere LDAP-servere'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Aktiver anonyme LDAP-tilkoblinger'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Aktiver dynamisk LDAP-brukerbinding'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP-attributt for dynamisk brukerbinding, "uid" ved bruk av ADS'];
+$LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Begrens pålogging til spesifikke Active Directory-grupper'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Kommaseparert liste over tillatte AD-grupper (delvise treff støttes)'];
+$LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'Tildel automatisk brukere til phpMyFAQ-grupper basert på AD-medlemskap'];
+$LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'JSON-mapping av AD-grupper til phpMyFAQ-grupper, f.eks. {"Domain Admins": "Administrators"}'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Aktiver XML-nettstedskart'];
+$PMF_LANG['categoryImageLabel'] = 'Kategoribilde';
+$PMF_LANG["categoryShowHomeLabel"] = "Vis på startsiden";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'Vis FAQ';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktiver kategori-begrensninger'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktiver send til venner'];
+$PMF_LANG['msgUserRemovalText'] = 'Du kan be om sletting av din konto og personlige data. En e-post vil bli sendt til admin-teamet. Teamet vil slette din konto, kommentarer og spørsmål. Siden dette er en manuell prosess, kan det ta opp til 24 timer. Etter dette vil du motta en bekreftelse på slettingen per e-post. ';
+$PMF_LANG["msgUserRemoval"] = "Be om sletting av bruker";
+$PMF_LANG["ad_menu_RequestRemove"] = "Be om sletting av bruker";
+$PMF_LANG["msgContactRemove"] = "Slettingsforespørsel fra admin-teamet";
+$PMF_LANG["msgContactPrivacyNote"] = "Vennligst merk vår";
+$PMF_LANG["msgPrivacyNote"] = "Personvernerklæring";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatisk kontroll etter nye versjoner'];
+$PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Overskriv passord';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Tillat versjonering av FAQ-endringer'];
+$PMF_LANG['permission::view_faqs'] = 'Vis FAQs';
+$PMF_LANG['permission::view_categories'] = 'Vis kategorier';
+$PMF_LANG['permission::view_news'] = 'Vis nyheter';
+$PMF_LANG['permission::administrate_groups'] = 'Administrer grupper';
+$PMF_LANG['ad_group_rights'] = 'Grupperettigheter';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['permission::viewadminlink'] = 'Vis admin-lenke';
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP-serverport'];
+$PMF_LANG['msgQuestionAnswer'] = 'Spørsmål og svar';
+$PMF_LANG['msgPermissions'] = 'Rettigheter';
+$PMF_LANG['loginPageMessage'] = 'Logg inn på ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'FAQ-metadata';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL for personvernerklæring'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'Brukernavn skal være synlig';
+$PMF_LANG['ad_user_is_visible'] = 'Synlig';
+$PMF_LANG['ad_categ_save_order'] = 'Den nye sorteringen ble lagret.';
+$PMF_LANG['ad_add_user_change_password'] = 'Bruker må endre passord etter første pålogging';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API aktivert'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Tillatte verter for registreringer'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Logg kun inn med e-postadresse'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Logg inn med Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktiver pålogging med Microsoft Entra ID'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktiver "Still spørsmål"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktiver varsler'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Send test-e-post til administrator via SMTP'];
+$PMF_LANG['mail.sendTestEmail'] = 'Send test-e-post til administrator';
+$PMF_LANG['msgGoToCategory'] = 'Gå til kategori';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Aktiver Invisible Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 nettstedsnøkkel'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 hemmelig nøkkel'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Tofaktorautentisering aktivert";
+$PMF_LANG['msgTwofactorConfig'] = "Konfigurer tofaktorautentisering";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Konfigurasjon av tofaktorautentisering";
+$PMF_LANG['qr_code_secret_alt'] = "QR-kode hemmelig nøkkel";
+$PMF_LANG['msgTwofactorNewSecret'] = "Fjern gjeldende tofaktorkonfigurasjon";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Tofaktorautentisering - Oppgi token:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Oppgi 6-sifret kode fra autentiseringsappen din.";
+$PMF_LANG['msgTwofactorCheck'] = "Sjekk";
+$PMF_LANG['msgTwofactorErrorToken'] = "Du oppga en feil kode!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Tilbakestill tofaktorautentisering";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'Du vil bli automatisk videresendt om 5 sekunder.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Ingen kategori ble funnet i det valgte språket, men du kan velge følgende språk:';
+$PMF_LANG['msgCategoryDescription'] = 'Her finner du en oversikt over alle kategorier med antall FAQ.';
+$PMF_LANG['msgSubCategoryContent'] = 'Velg en hovedkategori.';
+$PMF_LANG['ad_open_question_deleted'] = 'Spørsmålet ble slettet.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Deaktiver SMTP TLS peer-verifisering (anbefales ikke)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Kontaktinformasjon som HTML?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Autentiseringstjeneste';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Vis e-postadresse i eksporter'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Et nytt spørsmål ble lagt til. Du kan sjekke dem her eller i admin-seksjonen:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Cookie-preferanser';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Online oppdatering aktivert'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Utgavemiljø'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Siste sjekk for oppdateringer'];
+$PMF_LANG['upgradeControlCenter'] = 'Online Update';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Sjekk systemhelse';
+$PMF_LANG['headerCheckUpdates'] = '2. Sjekk for oppdateringer';
+$PMF_LANG['headerDownloadPackage'] = '3. Last ned phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Pakk ut nedlastet pakke';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Installer nedlastet pakke';
+$PMF_LANG['msgHealthCheck'] = 'Dette sjekker korrekte filtillatelser og mappestruktur for din phpMyFAQ-installasjon.';
+$PMF_LANG['msgUpdateCheck'] = 'Du kan sjekke for nye versjoner av phpMyFAQ, reinstallere eller oppdatere installasjonen din.';
+$PMF_LANG['msgDownloadPackage'] = 'Last ned nye phpMyFAQ-versjoner avhengig av det angitte utgavemiljøet.';
+$PMF_LANG['msgExtractPackage'] = 'Dette pakker ut den nedlastede pakken i filsystemet ditt, dette kan ta litt tid.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Dette pakker ut den nedlastede pakken i filsystemet ditt.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Installer nedlastet pakke';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Sikkerhetskopi av gjeldende installasjon';
+$PMF_LANG['msgInstallationNewFiles'] = 'Installasjon av nye filer';
+$PMF_LANG['msgDatabaseUpdate'] = 'Oppdatering av databasen';
+$PMF_LANG['alertNightlyBuild'] = 'Du bruker en utviklingsversjon av phpMyFAQ. Du kan oppdatere til den nyeste nattlige bygningen.';
+$PMF_LANG['noteNightlyBuild'] = 'Vær oppmerksom på at forrige dags bygg vil bli lastet ned (lagret i /content/upgrades). Fordi hver nye bygg ikke opprettes før kl. 02:00 (UTC) av GitHub.';
+$PMF_LANG['buttonCheckHealth'] = 'Sjekk systemhelse nå';
+$PMF_LANG['buttonCheckUpdates'] = 'Sjekk for oppdateringer nå';
+$PMF_LANG['buttonDownloadPackage'] = 'Last ned nå';
+$PMF_LANG['buttonExtractPackage'] = 'Pakk ut nedlastet pakke nå';
+$PMF_LANG['versionIsUpToDate'] = 'Din installerte versjon er oppdatert!';
+$PMF_LANG['healthCheckOkay'] = 'Din installerte versjon er frisk!';
+$PMF_LANG['downloadSuccessful'] = 'Pakken ble lastet ned!';
+$PMF_LANG['extractSuccessful'] = 'Pakken ble pakket ut!';
+$PMF_LANG['downloadFailure'] = 'Kunne ikke laste ned pakken.';
+$PMF_LANG['verificationFailure'] = 'Kunne ikke verifisere nedlastet pakke.';
+$PMF_LANG['extractFailure'] = 'Kunne ikke pakke ut nedlastet pakke.';
+$PMF_LANG['msgCurrentVersion'] = 'Gjeldende versjon: ';
+$PMF_LANG['msgLastCheckDate'] = 'Siste sjekk for oppdateringer: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Nyeste tilgjengelige versjon: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Utgavemiljø: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Du kan fortsatt bruke den manuelle <a href="../update">oppdateringsprosessen</a> hvis du foretrekker det.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Legg til bokmerke';
+$PMF_LANG['removeBookmark'] = 'Fjern bokmerke';
+$PMF_LANG['msgBookmarks'] = 'Bokmerker';
+$PMF_LANG['msgMyBookmarks'] = 'Mine bokmerker';
+$PMF_LANG['msgBookmarkAdded'] = 'Bokmerke lagt til!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bokmerke fjernet!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Det er ikke tillatt å bruke '#'.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignoreringsliste (separer med komma)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar-bilde';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Tilpasset sortering av festede poster er deaktivert i hovedkonfigurasjonen. Hvis du vil bruke den, vennligst aktiver den i <a href="././configuration">hovedkonfigurasjonen</a> -> records.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Tilpasset sortering av festede poster'];
+$PMF_LANG['msgNoStickyFaqs'] = 'Du har ingen festede poster ennå. Du kan merke poster som festede i <a href="./faqs" class="alert-link">FAQ-oversikten</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktiver Cookie-samtykke'];
+$PMF_LANG['msgSessionExpired'] = 'Økten din er utløpt. Vennligst logg inn igjen.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Språkkode';
+$PMF_LANG['msgSeparateWithCommas'] = '(separer med komma)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'CSV-filen som skal importeres må inneholde følgende kolonner i denne rekkefølgen, uten kolonneoverskrifter. Hver rad er ment å definere en FAQ-oppføring. Alle celler i kolonner merket med en asterisk * må inneholde en verdi.';
+$PMF_LANG['msgImportRecords'] = 'FAQ-import';
+$PMF_LANG['msgImportCSVFile'] = 'Importer CSV-fil';
+$PMF_LANG['msgImportCSVFileBody'] = 'Du kan importere en CSV-fil med postdata og den angitte strukturen (se ovenfor) her.';
+$PMF_LANG['msgImport'] = 'Importer';
+$PMF_LANG['msgColumnStructure'] = 'Kolonnestruktur';
+$PMF_LANG['msgImportSuccessful'] = 'Import vellykket!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true eller false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Eksport';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Det ser ut til at filen ikke har riktig struktur. Vennligst sjekk strukturen basert på de angitte kravene igjen.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Eksporter økter som CSV-fil';
+$PMF_LANG['msgExportSessions'] = 'Eksporter økter';
+$PMF_LANG['msgExportSessionsFrom'] = 'Fra';
+$PMF_LANG['msgExportSessionsTo'] = 'Til';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Rediger skjemaer';
+$PMF_LANG['msgEditFormsSuccessful'] = 'Endringen ble vellykket gjennomført.';
+$PMF_LANG['msgInputType'] = 'Type';
+$PMF_LANG['msgRequiredInputField'] = 'Obligatorisk felt';
+$PMF_LANG['permission::forms_edit'] = 'Rediger skjemaer';
+$PMF_LANG['msgInputLabel'] = 'Etikett';
+$PMF_LANG['msgFormsEditTranslations'] = 'Juster oversettelser';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'Oversettelsen ble lagret.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'Oversettelsen ble slettet.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Den nye oversettelsen ble lagret.';
+$PMF_LANG['msgSelectLanguage'] = 'Velg språk';
+$PMF_LANG['msgTranslationText'] = 'Oversettelsestekst';
+$PMF_LANG['msgAddTranslation'] = 'Legg til oversettelse';
+$PMF_LANG['msgHintDeactivateForms'] = 'Skjemaene kan deaktiveres fullstendig i <a class="alert-link" href="./configuration">administrasjonen</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Kun inaktive FAQs';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Kun nye FAQs';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Slett nyheter';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Eksporter brukere som CSV';
+$PMF_LANG['msgWarning'] = 'Advarsel';
+$PMF_LANG['msgUserList'] = 'Liste over brukere';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Ingen spørsmål og svar funnet.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'FAQ er ikke i vedlikeholdsmodus.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Flere nøkkelord må separeres med komma.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Du kan ikke bruke dette skjemaet på grunn av manglende konfigurerte kategorier. Vennligst informer <a class="alert-link" href="./contact.html">administratoren</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Ingen svar-adresse for e-poster'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Økten utløper snart';
+$PMF_LANG['msgNoLogMeOut'] = 'Nei, logg meg ut';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, hold meg innlogget';
+$PMF_LANG['msgTrendingFAQs'] = 'Populære FAQs';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Generer API Client Token';
+$PMF_LANG['msgSerp'] = 'SERP er forkortelsen for Search Engine Result Page. Her kan du definere tittelen og beskrivelsen for SERP.';
+$PMF_LANG['msgSerpTitle'] = 'SERP-tittel';
+$PMF_LANG['msgSerpDescription'] = 'SERP-beskrivelse';
+$LANG_CONF['seo.title'] = ['input', 'SERP-tittel'];
+$LANG_CONF['seo.description'] = ['area', 'SERP-beskrivelse'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Tillatte eksterne verter for medieinnhold (separer med komma)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Er du sikker på at du vil fjerne din gjeldende tofaktorautentisering-konfigurasjon?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar er for øyeblikket ikke aktivert.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Slettingen av den gjeldende 2-faktorkonfigurasjonen var vellykket.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Send til en venn via WhatsApp';
+$PMF_LANG['msgShareText'] = 'Jeg oppdaget en kul FAQ-artikkel for deg:';
+$PMF_LANG['msgError'] = 'En feil oppstod.';
+$PMF_LANG['msgLinkToFAQ'] = 'Lenke til FAQ';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Aktiver lenke til personvernerklæring'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ kjører for øyeblikket i feilsøkingsmodus. Feilsøkingsmodus kan eksponere sensitiv informasjon og er kun ment for utviklingsformål. Vi anbefaler sterkt å deaktivere feilsøkingsmodus av sikkerhetsgrunner. Du kan deaktivere feilsøkingsmodus i <code>.env</code>-filen.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ er for øyeblikket under utvikling (%s). Og derfor ikke klar for produksjon ennå. Vennligst <a target="_blank" href="%s" class="alert-link">rapporter alle problemer på GitHub</a>. Tusen takk!';
+$PMF_LANG['layoutControlCenter'] = 'Layout';
+$LANG_CONF['layout.customCss'] = ['area', 'Tilpasset CSS', 'Vennligst bruk kun CSS.'];
+$PMF_LANG['msgSitemap'] = 'Nettstedskart';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Finn FAQene du leter etter i oversikten over alle oppføringer | Nettstedskart - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'I ordlisten til %s finner du forklaringer av alle viktige fagtermer på temaet';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Se en oversikt over alle viktige temaer | FAQ-oversikt av %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Oversikt over alle kategorier og temaer | Kategorioversikt av %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Legg til et nytt spørsmål | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Åpne spørsmål som fortsatt venter på svar | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Del med';
+$PMF_LANG['msgCopyLink'] = 'eller kopier lenke';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Aktiver Rich Snippets'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Statistikk vellykket slettet.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'En feil oppstod ved sletting av statistikken.';
+$PMF_LANG['msgPasswordTooShort'] = 'Det nye passordet må ha minst 8 tegn.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Begge passordene stemmer ikke overens.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Det er private notater fra andre redaktører:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Rydd opp manglende vedlegg';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Vedlegget ble oppdatert';
+$PMF_LANG['msgRemoveAll'] = 'Fjern alle';
+$PMF_LANG['msgError404'] = 'Feil 404';
+$PMF_LANG['msgError404Description'] = 'Siden du leter etter ble flyttet, fjernet eller har kanskje aldri eksistert.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Har du allerede en konto?';
+$PMF_LANG['msgSignInHere'] = 'Logg inn her.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Ved registrering med Passkeys trenger brukere kun å oppgi et navn eller en e-postadresse, mens autentisering utføres sikkert ved hjelp av biometriske data eller et enhetsbasert passord.';
+$PMF_LANG['msgContinue'] = 'Fortsett';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktiver WebAuthn-støtte (Eksperimentell)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Logg inn med Passkey';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Registreringen var vellykket. Du kan nå logge inn med din Passkey.';
+$PMF_LANG['msgSupportUs'] = 'Støtt phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'Vennligst oppgi ditt fulle navn!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Vennligst oppgi ditt brukernavn!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Vennligst oppgi en gyldig e-postadresse!';
+$PMF_LANG['msgErrorEnterMessage'] = 'Vennligst skriv en melding!';
+$PMF_LANG['msgLinkCopied'] = 'Lenke kopiert til utklippstavle';
+$PMF_LANG['msgDocumentation'] = 'Dokumentasjon';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Tilbakestill kategoribilde';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Innhold for robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Innhold for llms.txt', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Aktiver vedlikeholdsmodus';
+$PMF_LANG['msgPlugins'] = 'Plugins';
+$PMF_LANG['msgPluginListing'] = 'Liste over installerte plugins og deres versjoner';
+$PMF_LANG['msgPluginName'] = 'Plugin-navn';
+$PMF_LANG['msgPluginVersion'] = 'Versjon';
+$PMF_LANG['msgPluginAuthor'] = 'Forfatter';
+$PMF_LANG['msgPluginDescription'] = 'Beskrivelse';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Rapporter en feil';
+$PMF_LANG['msgDashboard'] = 'Dashbord';
+$PMF_LANG['msgOrphanedFAQs'] = 'Foreldreløse FAQs';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Disse FAQene er ikke tilordnet noen kategori. Du kan tilordne dem til en kategori her.';
+$PMF_LANG['msgPreview'] = 'Forhåndsvisning';
+$PMF_LANG['msgInsertImage'] = 'Sett inn bilde';
+$PMF_LANG['msgImageUpload'] = 'Bildeopplasting';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'Bildet kunne ikke lastes opp.';
+$PMF_LANG['msgImageTooLarge'] = 'Bildet er for stort.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Ingen bilder for opplasting.';
+$PMF_LANG['msgFetchingHashes'] = 'Henter verifiseringshashes fra api.phpmyfaq.de...';
+$PMF_LANG['msgCheckHashes'] = 'Sjekker hashes med installasjonsfiler...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Autentisering avbrutt av bruker.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Aktiver admin-økt-tidsavbrudds-teller', 'Standard: aktivert'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Aktiver OpenSearch-støtte', 'Standard: deaktivert'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Tidsvindu for populære søk (dager)', 'Standard: 180 dager'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch-konfigurasjon';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Opprett søkeindeks';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Slett søkeindeks';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Fullstendig import';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch-søkeindeksen ble opprettet.';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearch-importen var vellykket.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch-søkeindeksen ble slettet.';
+$PMF_LANG['permission::translate_faq'] = 'Oversett FAQs';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Skriv for å søke i kategorier';
+$PMF_LANG['msgLoadingText'] = 'Laster...';
+$PMF_LANG['msgNoResultsText'] = 'Ingen resultater funnet';
+$PMF_LANG['msgNoChoicesText'] = 'Ingen valg å velge fra';
+$PMF_LANG['msgItemSelectText'] = 'Trykk for å velge';
+$PMF_LANG['msgUniqueItemText'] = 'Kun unike verdier kan legges til';
+$PMF_LANG['msgCustomAddItemText'] = 'Kun verdier som oppfyller spesifikke betingelser kan legges til';
+$PMF_LANG['msgDownloadYourData'] = 'Last ned dine data';
+$PMF_LANG['msgDataExportDescription'] = 'Last ned en ZIP-fil som inneholder dine lagrede brukerdata.';
+$PMF_LANG['msgDownload'] = 'Last ned';
+$PMF_LANG['msgToggleTheme'] = 'Bytt tema';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Dato for siste sikkerhetskopi';
+$PMF_LANG['msgBackupNoneFound'] = 'Ingen sikkerhetskopier funnet.';
+$PMF_LANG['msgBackupTooOld'] = 'Siste sikkerhetskopi er eldre enn 30 dager.';
+$PMF_LANG['msgBackupRecent'] = 'Den gjeldende sikkerhetskopien er nylig.';
+$PMF_LANG['msgBackupGoTo'] = 'Gå til sikkerhetskopi-siden';
+$PMF_LANG['msgNewestUsers'] = 'Nyeste brukere';
+$PMF_LANG['msgMemberSince'] = 'Medlem siden';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Registrerte brukere';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Vil du virkelig slette denne FAQ? Denne handlingen kan ikke angres.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'Totalt antall oversettelsesnøkler';
+$PMF_LANG['msgTranslatedKeys'] = 'Antall oversatte nøkler';
+$PMF_LANG['msgMissingKeys'] = 'Manglende oversettelsesnøkler';
+$PMF_LANG['msgCompletionPercentage'] = 'Fullføringsprosent';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'Den installerte versjonen er nyere enn den nyeste tilgjengelige versjonen.';
+$PMF_LANG['ad_quick_sub_category'] = "Legg til ny underkategori";
+$PMF_LANG['msgError403'] = 'Feil 403';
+$PMF_LANG['msgError403Description'] = 'Du er autentisert, men du har ikke tillatelse til å få tilgang til denne ressursen.';
+$PMF_LANG['msgError403Hint'] = 'Hvis du tror dette er en feil, vennligst kontakt en administrator.';
+$PMF_LANG['msgCreateDate'] = 'Opprettet den';
+$PMF_LANG['msgUpdateDate'] = 'Sist oppdatert den';
 
 return $PMF_LANG;
