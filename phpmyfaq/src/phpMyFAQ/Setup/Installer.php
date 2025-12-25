@@ -995,13 +995,17 @@ class Installer extends Setup
         }
 
         if (strlen((string) $password) <= 7 || strlen((string) $passwordRetyped) <= 7) {
-            throw new Exception('Installation Error: Your password and retyped password are too short. Please set your password '
-            . 'and your retyped password with a minimum of 8 characters.');
+            throw new Exception(
+                'Installation Error: Your password and retyped password are too short. Please set your password '
+                . 'and your retyped password with a minimum of 8 characters.',
+            );
         }
 
         if ($password !== $passwordRetyped) {
-            throw new Exception('Installation Error: Your password and retyped password are not equal. Please check your password '
-            . 'and your retyped password.');
+            throw new Exception(
+                'Installation Error: Your password and retyped password are not equal. Please check your password '
+                . 'and your retyped password.',
+            );
         }
 
         $language = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_SPECIAL_CHARS, 'en');

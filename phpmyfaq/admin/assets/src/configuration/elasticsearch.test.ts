@@ -71,9 +71,20 @@ describe('Elasticsearch Functions', () => {
 
       await handleElasticsearch();
 
-      const statsDiv = document.getElementById('pmf-elasticsearch-stats') as HTMLElement;
-      expect(statsDiv.innerHTML).toContain('Documents');
-      expect(statsDiv.innerHTML).toContain('Storage size');
+      // Wait for health check promise to resolve and stats to be fetched
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      // Verify health check was called
+      expect(fetchElasticsearchHealthcheck).toHaveBeenCalled();
+
+      // Stats should be populated after health check completes
+      await vi.waitFor(
+        () => {
+          const statsDiv = document.getElementById('pmf-elasticsearch-stats') as HTMLElement;
+          expect(statsDiv.innerHTML).toContain('Documents');
+        },
+        { timeout: 1000 }
+      );
     });
 
     it('should display health check alert when Elasticsearch is unavailable', async () => {

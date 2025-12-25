@@ -3,13 +3,14 @@ import { fetchOpenSearchAction, fetchOpenSearchStatistics, fetchOpenSearchHealth
 
 describe('OpenSearch API', () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
   describe('fetchOpenSearchAction', () => {
     it('should fetch OpenSearch action and return JSON response if successful', async () => {
       const mockResponse = { success: true, message: 'Action executed' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -20,7 +21,7 @@ describe('OpenSearch API', () => {
       const result = await fetchOpenSearchAction(action);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/opensearch/index', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/opensearch/index', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -33,7 +34,7 @@ describe('OpenSearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       await expect(fetchOpenSearchAction('index')).rejects.toThrow(mockError);
     });
@@ -48,7 +49,7 @@ describe('OpenSearch API', () => {
         size: '10GB',
       };
 
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -58,7 +59,7 @@ describe('OpenSearch API', () => {
       const result = await fetchOpenSearchStatistics();
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/opensearch/statistics', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/opensearch/statistics', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -71,7 +72,7 @@ describe('OpenSearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       await expect(fetchOpenSearchStatistics()).rejects.toThrow(mockError);
     });
@@ -80,7 +81,7 @@ describe('OpenSearch API', () => {
   describe('fetchOpenSearchHealthcheck', () => {
     it('should fetch OpenSearch healthcheck and return JSON response when available', async () => {
       const mockResponse = { available: true, status: 'healthy' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -90,20 +91,24 @@ describe('OpenSearch API', () => {
       const result = await fetchOpenSearchHealthcheck();
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/opensearch/healthcheck', {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-      });
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        './api/opensearch/healthcheck',
+        expect.objectContaining({
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          signal: expect.any(AbortSignal),
+        })
+      );
     });
 
     it('should throw an error when OpenSearch returns 503 Service Unavailable', async () => {
       const errorResponse = { available: false, status: 'unavailable' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
           status: 503,
@@ -116,7 +121,7 @@ describe('OpenSearch API', () => {
 
     it('should throw an error with custom message when error data is provided', async () => {
       const errorResponse = { error: 'Connection refused' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
           status: 503,
@@ -129,7 +134,7 @@ describe('OpenSearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Network error');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       await expect(fetchOpenSearchHealthcheck()).rejects.toThrow(mockError);
     });

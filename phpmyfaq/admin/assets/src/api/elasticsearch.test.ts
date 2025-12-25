@@ -3,13 +3,14 @@ import { fetchElasticsearchAction, fetchElasticsearchStatistics, fetchElasticsea
 
 describe('Elasticsearch API', () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
   describe('fetchElasticsearchAction', () => {
     it('should fetch Elasticsearch action and return JSON response if successful', async () => {
       const mockResponse = { success: true, message: 'Action executed' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -20,7 +21,7 @@ describe('Elasticsearch API', () => {
       const result = await fetchElasticsearchAction(action);
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/elasticsearch/some-action', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/elasticsearch/some-action', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -33,7 +34,7 @@ describe('Elasticsearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       const action = 'some-action';
 
@@ -60,7 +61,7 @@ describe('Elasticsearch API', () => {
           },
         },
       };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -70,7 +71,7 @@ describe('Elasticsearch API', () => {
       const result = await fetchElasticsearchStatistics();
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/elasticsearch/statistics', {
+      expect(globalThis.fetch).toHaveBeenCalledWith('./api/elasticsearch/statistics', {
         method: 'GET',
         cache: 'no-cache',
         headers: {
@@ -83,7 +84,7 @@ describe('Elasticsearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Fetch failed');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       await expect(fetchElasticsearchStatistics()).rejects.toThrow(mockError);
     });
@@ -92,7 +93,7 @@ describe('Elasticsearch API', () => {
   describe('fetchElasticsearchHealthcheck', () => {
     it('should fetch Elasticsearch healthcheck and return JSON response when available', async () => {
       const mockResponse = { available: true, status: 'healthy' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: true,
           json: () => Promise.resolve(mockResponse),
@@ -102,20 +103,24 @@ describe('Elasticsearch API', () => {
       const result = await fetchElasticsearchHealthcheck();
 
       expect(result).toEqual(mockResponse);
-      expect(global.fetch).toHaveBeenCalledWith('./api/elasticsearch/healthcheck', {
-        method: 'GET',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-      });
+      expect(globalThis.fetch).toHaveBeenCalledWith(
+        './api/elasticsearch/healthcheck',
+        expect.objectContaining({
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          signal: expect.any(AbortSignal),
+        })
+      );
     });
 
     it('should throw an error when Elasticsearch returns 503 Service Unavailable', async () => {
       const errorResponse = { available: false, status: 'unavailable' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
           status: 503,
@@ -128,7 +133,7 @@ describe('Elasticsearch API', () => {
 
     it('should throw an error with custom message when error data is provided', async () => {
       const errorResponse = { error: 'Connection refused' };
-      global.fetch = vi.fn(() =>
+      globalThis.fetch = vi.fn(() =>
         Promise.resolve({
           ok: false,
           status: 503,
@@ -141,7 +146,7 @@ describe('Elasticsearch API', () => {
 
     it('should throw an error if fetch fails', async () => {
       const mockError = new Error('Network error');
-      global.fetch = vi.fn(() => Promise.reject(mockError));
+      globalThis.fetch = vi.fn(() => Promise.reject(mockError));
 
       await expect(fetchElasticsearchHealthcheck()).rejects.toThrow(mockError);
     });
