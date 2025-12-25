@@ -95,7 +95,6 @@ $PMF_LANG['msgDate_User'] = 'Datum / Gebruiker';
 $PMF_LANG['msgQuestion2'] = 'Vraag';
 $PMF_LANG['msg2answer'] = 'Antwoord';
 $PMF_LANG['msgQuestionText'] = 'Hier kunt u vragen zien die gesteld zijn door andere gebruikers. Als u één van de vragen beantwoordt, kan uw antwoord in de FAQ worden opgenomen.';
-$PMF_LANG['msgHelpText'] = 'De structuur van de FAQ (Frequently Asked Questions) is erg simpel. U kunt of door de <a href="?action=show">categorieën</a> zoeken of de <a href="?action=search">FAQ zoekmachine</a> laten zoeken op sleutelwoorden.';
 $PMF_LANG['msgContactEMail'] = 'E-mail naar de beheerder:';
 $PMF_LANG['msgMessage'] = 'Uw bericht:';
 $PMF_LANG['msgTopTen'] = 'Meest bekeken';
@@ -152,6 +151,7 @@ $PMF_LANG['ad_gen_no'] = 'Nee';
 $PMF_LANG['ad_gen_top'] = 'Bovenkant van de pagina';
 $PMF_LANG['ad_gen_ncf'] = 'Geen categorie gevonden!';
 $PMF_LANG['ad_gen_delete'] = 'Verwijderen';
+$PMF_LANG['ad_gen_or'] = "or";
 $PMF_LANG['ad_user'] = 'Gebruikersbeheer';
 $PMF_LANG['ad_user_username'] = 'Geregistreerde gebruikers';
 $PMF_LANG['ad_user_rights'] = 'Rechten';
@@ -387,17 +387,11 @@ $PMF_LANG['ad_passwdsuc'] = 'Uw wachtwoord is gewijzigd.';
 $PMF_LANG['msgPDF'] = 'Geef dit weer als een PDF bestand';
 $PMF_LANG['msgLanguage'] = 'Taal';
 $PMF_LANG['msgLanguageSubmit'] = 'Wijzig taal:';
-$PMF_LANG['ad_entry_preview'] = 'Voorvertoning';
-$PMF_LANG['ad_attach_1'] = 'Kies eerst in de configuratie voor een map voor de bijlagen.';
-$PMF_LANG['ad_attach_2'] = 'Kies eerst in de configuratie voor een link voor de bijlagen.';
-$PMF_LANG['ad_attach_3'] = 'Het bestand attachment.php kan niet worden geopend zonder de juiste rechten.';
 $PMF_LANG['ad_attach_4'] = 'De bijlage moet kleiner zijn dan %s bytes.';
 $PMF_LANG['ad_menu_export'] = 'Exporteer uw FAQ';
-$PMF_LANG['ad_export_file'] = 'Fout: kan niet naar bestand schrijven.';
-$PMF_LANG['ad_export_pdf'] = 'PDF-Export van alle vragen';
 
-$PMF_LANG['permission::adduser'] = 'Gebruiker toevoegen';
-$PMF_LANG['permission::edituser'] = 'Bewerk gebruiker';
+$PMF_LANG['permission::add_user'] = 'Gebruiker toevoegen';
+$PMF_LANG['permission::edit_user'] = 'Bewerk gebruiker';
 $PMF_LANG['permission::delete_user'] = 'Verwijder gebruiker';
 $PMF_LANG['permission::add_faq'] = 'Vraag toevoegen';
 $PMF_LANG['permission::edit_faq'] = 'Vraag bewerken';
@@ -435,8 +429,6 @@ $PMF_LANG['ad_export_generate_pdf'] = 'genereer PDF-bestand';
 $PMF_LANG['ad_export_full_faq'] = 'Uw FAQ als een PDF-bestand: ';
 $PMF_LANG['err_bannedIP'] = 'Uw IP-adres is geblokkeerd.';
 $PMF_LANG['err_SaveQuestion'] = 'Verplichte velden zijn uw naam, uw e-mailadres en uw vraag.  <a href="nojavascript...history.back();">één pagina terug</a>  ';
-$PMF_LANG['ad_entry_fontcolor'] = 'Letter kleur:';
-$PMF_LANG['ad_entry_fontsize'] = 'Letter grootte:';
 $PMF_LANG['msgNewCategory_main_cat'] = 'als nieuwe hoofdcategorie';
 $PMF_LANG['ad_categ_paste_error'] = 'U kunt deze categorie niet verplaatsen.';
 $PMF_LANG['ad_categ_move'] = 'verplaats categorie';
@@ -487,6 +479,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'Verklarende woordenlijst-vraag werd nie
 $PMF_LANG['msgNewQuestionVisible'] = 'Daarvoor moet een beheerder deze eerst vrijgeven.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Wachtend op de vrijgave door een beheerder:';
 $PMF_LANG['ad_entry_visibility'] = 'Vraag publiceren?';
+$PMF_LANG['ad_entry_not_visibility'] = "niet gepubliceerd";
 $PMF_LANG['ad_user_error_password'] = 'Gelieve uw wachtwoord op te geven. ';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = 'Wachtwoorden komen niet overeen.';
 $PMF_LANG['ad_user_error_loginInvalid'] = 'De gekozen gebruiker is ongeldig.';
@@ -806,6 +799,21 @@ $PMF_LANG['ad_verification_okay'] = 'Uw versie van phpMyFAQ is met succes gecont
 $PMF_LANG['msgShowMore'] = 'lees mee';
 $PMF_LANG['msgQuestionAnswered'] = 'Vraag beantwoord';
 $PMF_LANG['msgMessageQuestionAnswered'] = 'Uw vraag %s is beantwoord, kijk a.u.b. hier:';
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['permission::addattachment'] = "Bijlagen toevoegen";
+$PMF_LANG['permission::editattachment'] = "Bijlagen bewerken";
+$PMF_LANG['permission::delattachment'] = "Bijlagen verwijderen";
+$PMF_LANG['permission::dlattachment'] = "Bijlagen downloaden";
+$PMF_LANG['permission::reports'] = "Rapporten genereren";
+$PMF_LANG['permission::addfaq'] = "FAQ's toevoegen in de frontend";
+$PMF_LANG['permission::addquestion'] = "Vragen toevoegen in de frontend";
+$PMF_LANG['permission::addcomment'] = "Reacties toevoegen in de frontend";
+$PMF_LANG['permission::editinstances'] = "Multi-site instanties bewerken";
+$PMF_LANG['permission::addinstances'] = "Nieuwe multi-site instanties toevoegen";
+$PMF_LANG['permission::delinstances'] = "Multi-site instanties verwijderen";
+$PMF_LANG['permission::export'] = "FAQ's exporteren";
+
 $PMF_LANG['ad_stopwords_desc'] = 'Selecteer de taal om stopwoorden toe te voegen of te wijzigen.';
 $PMF_LANG['ad_visits_per_day'] = 'Bezoekers per dag';
 $PMF_LANG['ad_instance_add'] = 'Voeg nieuw phpMyFAQ multi site exemplaar toe';
@@ -825,7 +833,6 @@ $PMF_LANG['msgAccessDenied'] = 'Toegang geweigerd';
 $LANG_CONF['records.randomSort'] = array('checkbox', 'Sorteer FAQs willekeurig (standaard: gedeactiveerd)');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', 'Activeer bijgevoegde WYSIWYG editor in het frontend (standaard: gedeactiveerd)');
 $LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatar Support (standaard: gedeactiveerd)');
-$PMF_LANG['cacheControlCenter'] = 'Cache configuratie';
 $PMF_LANG['msgAdminSearchFaqs'] = 'FAQs zoeken';
 $PMF_LANG['msg2answerFAQ'] = 'Beantwoord';
 $PMF_LANG['headerUserControlPanel'] = 'Gebruikersconfiguratie';
@@ -870,6 +877,7 @@ $PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Maak Index aan';
 $PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Wis Index';
 $PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Volledig importeren';
 $PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Index aangemaakt.';
+$PMF_LANG['ad_es_create_import_success'] = 'Import was successful.';
 $PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Index gewist.';
 $LANG_CONF['seo.metaTagsCategories'] = array('select', 'Meta Tags category pages');
 $LANG_CONF['seo.metaTagsPages'] = array('select', 'Meta Tags static pages');
@@ -890,6 +898,395 @@ $PMF_LANG['ad_export_generate_json'] = 'Maak JSON bestand aan';
 $PMF_LANG['ad_media_name_search'] = 'Zoeken op medianaam';
 $PMF_LANG['ad_admin_notes'] = 'Persoonlijke notities';
 $PMF_LANG['ad_admin_notes_hint'] = ' (alleen zichtbaar voor auteurs)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Nieuwe FAQ toevoegen in deze categorie';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP-mapping voor naam, "cn" bij gebruik van een ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP-mapping voor gebruikersnaam, "samAccountName" bij gebruik van een ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP-mapping voor e-mail, "mail" bij gebruik van een ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP-mapping voor "lid van" bij gebruik van LDAP-groepen'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP-domeinprefix, bijv. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP-protocolversie (standaard: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP-verwijzingen (standaard: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'LDAP-groepsondersteuning inschakelen, bijv. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'LDAP SASL-ondersteuning inschakelen'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Ondersteuning voor meerdere LDAP-servers inschakelen'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Anonieme LDAP-verbindingen inschakelen'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Dynamische LDAP-gebruikersbinding inschakelen'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP-attribuut voor dynamische gebruikersbinding, "uid" bij gebruik van een ADS'];
+$LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Inloggen beperken tot specifieke Active Directory-groepen'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Komma-gescheiden lijst van toegestane AD-groepen (gedeeltelijke matches ondersteund)'];
+$LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'Gebruikers automatisch toewijzen aan phpMyFAQ-groepen op basis van AD-lidmaatschap'];
+$LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'JSON-mapping van AD-groepen naar phpMyFAQ-groepen, bijv. {"Domain Admins": "Administrators"}'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'XML-sitemap inschakelen'];
+$PMF_LANG['categoryImageLabel'] = 'Categorie-afbeelding';
+$PMF_LANG["categoryShowHomeLabel"] = "Tonen op startpagina";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'FAQ bekijken';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Categoriebeperkingen inschakelen'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Doorsturen naar vrienden inschakelen'];
+$PMF_LANG['msgUserRemovalText'] = 'U kunt verwijdering van uw account en persoonlijke gegevens aanvragen. Er wordt een e-mail verzonden naar het beheerdersteam. Het team zal uw account, reacties en vragen verwijderen. Omdat dit een handmatig proces is, kan het tot 24 uur duren. Hierna ontvangt u een bevestiging van de verwijdering per e-mail. ';
+$PMF_LANG["msgUserRemoval"] = "Verwijdering gebruiker aanvragen";
+$PMF_LANG["ad_menu_RequestRemove"] = "Verwijdering gebruiker aanvragen";
+$PMF_LANG["msgContactRemove"] = "Verwijderingsverzoek van beheerdersteam";
+$PMF_LANG["msgContactPrivacyNote"] = "Let op onze";
+$PMF_LANG["msgPrivacyNote"] = "Privacyverklaring";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatisch controleren op nieuwe versies'];
+$PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Wachtwoord overschrijven';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versiebeheer van FAQ-wijzigingen toestaan'];
+$PMF_LANG['permission::view_faqs'] = 'FAQ\'s bekijken';
+$PMF_LANG['permission::view_categories'] = 'Categorieën bekijken';
+$PMF_LANG['permission::view_news'] = 'Nieuws bekijken';
+$PMF_LANG['permission::administrate_groups'] = 'Groepen beheren';
+$PMF_LANG['ad_group_rights'] = 'Groepsrechten';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['permission::viewadminlink'] = 'Beheerlink bekijken';
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP-serverpoort'];
+$PMF_LANG['msgQuestionAnswer'] = 'Vraag en antwoord';
+$PMF_LANG['msgPermissions'] = 'Rechten';
+$PMF_LANG['loginPageMessage'] = 'Inloggen bij ';
+
 $PMF_LANG['msgGoToCategory'] = 'Ga naar categorie';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Schakel Invisible Google ReCAPTCHA v2 in'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 sitesleutel'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 geheime sleutel'];
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'FAQ-metadata';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL voor privacyverklaring'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'Gebruikersnaam moet zichtbaar zijn';
+$PMF_LANG['ad_user_is_visible'] = 'Zichtbaar';
+$PMF_LANG['ad_categ_save_order'] = 'De nieuwe sortering is succesvol opgeslagen.';
+$PMF_LANG['ad_add_user_change_password'] = 'Gebruiker moet wachtwoord wijzigen na eerste login';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API ingeschakeld'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'API Client Token'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Toegestane hosts voor registraties'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Alleen inloggen met e-mailadres'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Inloggen met Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Inloggen met Microsoft Entra ID inschakelen'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', '"Stel een vraag" inschakelen'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Meldingen inschakelen'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Test-e-mail verzenden naar de beheerder via SMTP'];
+$PMF_LANG['mail.sendTestEmail'] = 'Test-e-mail verzenden naar de beheerder';
+$PMF_LANG['msgGoToCategory'] = 'Ga naar categorie';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Invisible Google ReCAPTCHA v2 inschakelen'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 sitesleutel'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 geheime sleutel'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Tweefactorauthenticatie ingeschakeld";
+$PMF_LANG['msgTwofactorConfig'] = "Configureer tweefactorauthenticatie";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Configuratie tweefactorauthenticatie";
+$PMF_LANG['qr_code_secret_alt'] = "QR-Code geheime sleutel";
+$PMF_LANG['msgTwofactorNewSecret'] = "Verwijder huidige tweefactorconfiguratie";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Tweefactorauthenticatie - Voer token in:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Voer de 6-cijferige code uit uw authenticatie-app in.";
+$PMF_LANG['msgTwofactorCheck'] = "Controleer";
+$PMF_LANG['msgTwofactorErrorToken'] = "U heeft een verkeerde code ingevoerd!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset tweefactorauthenticatie";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'U wordt automatisch doorgestuurd binnen 5 seconden.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Er is geen categorie gevonden in de geselecteerde taal, maar u kunt de volgende talen selecteren:';
+$PMF_LANG['msgCategoryDescription'] = 'Hier vindt u een overzicht van alle categorieën met het aantal FAQs.';
+$PMF_LANG['msgSubCategoryContent'] = 'Selecteer een hoofdcategorie.';
+$PMF_LANG['ad_open_question_deleted'] = 'De vraag is succesvol verwijderd.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Schakel SMTP TLS peer verificatie uit (niet aanbevolen)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Contactinformatie als HTML?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Authenticatieservice';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Toon e-mailadres in exports'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Een nieuwe vraag is toegevoegd. U kunt deze hier of in het admingedeelte controleren:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Cookievoorkeuren';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Online update ingeschakeld'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Release-omgeving'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Laatste controle op updates'];
+$PMF_LANG['upgradeControlCenter'] = 'Online Update';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Controleer systeemgezondheid';
+$PMF_LANG['headerCheckUpdates'] = '2. Controleer op updates';
+$PMF_LANG['headerDownloadPackage'] = '3. Download van phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Uitpakken gedownload pakket';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Installeer gedownload pakket';
+$PMF_LANG['msgHealthCheck'] = 'Dit controleert de juiste bestandsrechten en mapstructuur van uw phpMyFAQ-installatie.';
+$PMF_LANG['msgUpdateCheck'] = 'U kunt controleren op nieuwe versies van phpMyFAQ, uw installatie opnieuw installeren of bijwerken.';
+$PMF_LANG['msgDownloadPackage'] = 'Download van nieuwe phpMyFAQ-versies afhankelijk van de ingestelde release-omgeving.';
+$PMF_LANG['msgExtractPackage'] = 'Dit pakt het gedownloade pakket uit in uw bestandssysteem, dit kan even duren.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Dit pakt het gedownloade pakket uit in uw bestandssysteem.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Installeer gedownload pakket';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Backup van huidige installatie';
+$PMF_LANG['msgInstallationNewFiles'] = 'Installatie van nieuwe bestanden';
+$PMF_LANG['msgDatabaseUpdate'] = 'Update van de database';
+$PMF_LANG['alertNightlyBuild'] = 'U gebruikt een ontwikkelversie van phpMyFAQ. U kunt updaten naar de nieuwste nightly build.';
+$PMF_LANG['noteNightlyBuild'] = 'Let op: de build van de vorige dag wordt gedownload (opgeslagen in /content/upgrades). Omdat elke nieuwe build pas om 2 uur \'s nachts (UTC) door GitHub wordt aangemaakt.';
+$PMF_LANG['buttonCheckHealth'] = 'Controleer systeemgezondheid nu';
+$PMF_LANG['buttonCheckUpdates'] = 'Controleer nu op updates';
+$PMF_LANG['buttonDownloadPackage'] = 'Download nu';
+$PMF_LANG['buttonExtractPackage'] = 'Pak gedownload pakket nu uit';
+$PMF_LANG['versionIsUpToDate'] = 'Uw geïnstalleerde versie is up-to-date!';
+$PMF_LANG['healthCheckOkay'] = 'Uw geïnstalleerde versie is gezond!';
+$PMF_LANG['downloadSuccessful'] = 'Pakket succesvol gedownload!';
+$PMF_LANG['extractSuccessful'] = 'Pakket succesvol uitgepakt!';
+$PMF_LANG['downloadFailure'] = 'Kon pakket niet downloaden.';
+$PMF_LANG['verificationFailure'] = 'Kon gedownload pakket niet verifiëren.';
+$PMF_LANG['extractFailure'] = 'Kon gedownload pakket niet uitpakken.';
+$PMF_LANG['msgCurrentVersion'] = 'Huidige versie: ';
+$PMF_LANG['msgLastCheckDate'] = 'Laatste controle op updates: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Nieuwste beschikbare versie: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Release-omgeving: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'U kunt indien gewenst nog steeds het handmatige <a href="../update">updateproces</a> gebruiken.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Bladwijzer toevoegen';
+$PMF_LANG['removeBookmark'] = 'Bladwijzer verwijderen';
+$PMF_LANG['msgBookmarks'] = 'Bladwijzers';
+$PMF_LANG['msgMyBookmarks'] = 'Mijn bladwijzers';
+$PMF_LANG['msgBookmarkAdded'] = 'Bladwijzer succesvol toegevoegd!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bladwijzer succesvol verwijderd!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Het is niet toegestaan '#' te gebruiken.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-negeerlijst (scheiden met komma\'s)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar-afbeelding';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Aangepaste volgorde van vastgepinde records is gedeactiveerd in de hoofdconfiguratie. Als u dit wilt gebruiken, activeer het dan in de <a href="././configuration">hoofdconfiguratie</a> -> records.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Aangepaste volgorde van vastgepinde records'];
+$PMF_LANG['msgNoStickyFaqs'] = 'U heeft nog geen vastgepinde records. U kunt records als vastgepind markeren in het <a href="./faqs" class="alert-link">FAQ-overzicht</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activeer cookietoestemming'];
+$PMF_LANG['msgSessionExpired'] = 'Uw sessie is verlopen. Log opnieuw in.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG["ad_xml_gen"] = "XML-export maken";
+$PMF_LANG['msgLanguageCode'] = 'Taalcode';
+$PMF_LANG['msgSeparateWithCommas'] = '(scheiden met komma\'s)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'Het te importeren CSV-bestand moet de volgende kolommen in deze volgorde bevatten, zonder kolomkoppen. Elke rij is bedoeld om een FAQ-item te definiëren. Alle cellen in kolommen gemarkeerd met een sterretje * moeten een waarde bevatten.';
+$PMF_LANG['msgImportRecords'] = 'FAQ-import';
+$PMF_LANG['msgImportCSVFile'] = 'Importeer CSV-bestand';
+$PMF_LANG['msgImportCSVFileBody'] = 'U kunt hier een CSV-bestand importeren met uw recordgegevens en de gegeven structuur (zie hierboven).';
+$PMF_LANG['msgImport'] = 'Importeren';
+$PMF_LANG['msgColumnStructure'] = 'Kolomstructuur';
+$PMF_LANG['msgImportSuccessful'] = 'Import succesvol!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true of false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Het lijkt erop dat het bestand niet de juiste structuur heeft. Controleer de structuur op basis van de gegeven vereisten opnieuw.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Exporteer sessies als CSV-bestand';
+$PMF_LANG['msgExportSessions'] = 'Exporteer sessies';
+$PMF_LANG['msgExportSessionsFrom'] = 'Van';
+$PMF_LANG['msgExportSessionsTo'] = 'Tot';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Formulieren bewerken';
+$PMF_LANG['msgEditFormsSuccessful'] = 'De wijziging is succesvol opgeslagen.';
+$PMF_LANG['msgInputType'] = 'Type';
+$PMF_LANG['msgRequiredInputField'] = 'Verplicht veld';
+$PMF_LANG['permission::forms_edit'] = 'Formulieren bewerken';
+$PMF_LANG['msgInputLabel'] = 'Label';
+$PMF_LANG['msgFormsEditTranslations'] = 'Vertalingen aanpassen';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'De vertaling is succesvol opgeslagen.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'De vertaling is succesvol verwijderd.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'De nieuwe vertaling is succesvol opgeslagen.';
+$PMF_LANG['msgSelectLanguage'] = 'Selecteer taal';
+$PMF_LANG['msgTranslationText'] = 'Vertaaltekst';
+$PMF_LANG['msgAddTranslation'] = 'Vertaling toevoegen';
+$PMF_LANG['msgHintDeactivateForms'] = 'De formulieren kunnen volledig worden gedeactiveerd in de <a class="alert-link" href="./configuration">administratie</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Alleen inactieve FAQs';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Alleen nieuwe FAQs';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Nieuws verwijderen';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Exporteer gebruikers als csv';
+$PMF_LANG['msgWarning'] = 'Waarschuwing';
+$PMF_LANG['msgUserList'] = 'Lijst van gebruikers';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Geen vraag en antwoord gevonden.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'De FAQ is niet in onderhoudsmodus.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Meerdere trefwoorden moeten worden gescheiden met komma\'s.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'U kunt dit formulier niet gebruiken vanwege ontbrekende geconfigureerde categorieën. Informeer de <a class="alert-link" href="./contact.html">beheerder</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Noreply-adres voor e-mails'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Sessie verloopt binnenkort';
+$PMF_LANG['msgNoLogMeOut'] = 'Nee, meld me af';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ja, houd me aangemeld';
+$PMF_LANG['msgTrendingFAQs'] = 'Populaire FAQs';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Genereer API Client Token';
+$PMF_LANG['msgSerp'] = 'SERP is de afkorting voor Search Engine Result Page. Hier kunt u de titel en beschrijving voor de SERP definiëren.';
+$PMF_LANG['msgSerpTitle'] = 'SERP-titel';
+$PMF_LANG['msgSerpDescription'] = 'SERP-beschrijving';
+$LANG_CONF['seo.title'] = ['input', 'SERP-titel'];
+$LANG_CONF['seo.description'] = ['area', 'SERP-beschrijving'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Toegestane externe hosts voor media-inhoud (scheiden met komma\'s)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Weet u zeker dat u uw huidige tweefactorauthenticatie-configuratie wilt verwijderen?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is momenteel niet ingeschakeld.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Het verwijderen van de huidige 2-factor configuratie was succesvol.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Stuur naar een vriend via WhatsApp';
+$PMF_LANG['msgShareText'] = 'Ik heb een interessant FAQ-artikel voor je ontdekt:';
+$PMF_LANG['msgError'] = 'Er is een fout opgetreden.';
+$PMF_LANG['msgLinkToFAQ'] = 'Link naar FAQ';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activeer link naar privacybeleid'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ draait momenteel in debug-modus. Debug-modus kan gevoelige informatie blootstellen en is alleen bedoeld voor ontwikkelingsdoeleinden. We raden ten zeerste aan debug-modus uit veiligheidsoverwegingen uit te schakelen. U kunt debug-modus uitschakelen in het <code>.env</code>-bestand.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is momenteel in ontwikkeling (%s). En daarom nog niet klaar voor productie. Graag <a target="_blank" href="%s" class="alert-link">alle problemen melden op GitHub</a>. Hartelijk dank!';
+$PMF_LANG['layoutControlCenter'] = 'Layout';
+$LANG_CONF['layout.customCss'] = ['area', 'Aangepaste CSS', 'Gebruik alleen CSS.'];
+$PMF_LANG['msgSitemap'] = 'Sitemap';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Vind de FAQs die u zoekt in het overzicht van alle items | Sitemap - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'In de verklarende woordenlijst van %s vindt u uitleg over alle belangrijke technische termen over het onderwerp';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Bekijk een overzicht van alle belangrijke onderwerpen | FAQ-overzicht van %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Overzicht van alle categorieën en onderwerpen | Categorie-overzicht van %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Voeg een nieuwe vraag toe | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Openstaande vragen die nog op antwoorden wachten | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Deel met';
+$PMF_LANG['msgCopyLink'] = 'of kopieer link';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Schakel Rich Snippets in'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Statistieken succesvol verwijderd.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'Er is een fout opgetreden bij het verwijderen van de statistieken.';
+$PMF_LANG['msgPasswordTooShort'] = 'Het nieuwe wachtwoord moet minimaal 8 tekens bevatten.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Beide wachtwoorden komen niet overeen.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Er zijn privénotities van andere redacteuren:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Ontbrekende bijlagen opschonen';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Bijlage is succesvol vernieuwd';
+$PMF_LANG['msgRemoveAll'] = 'Verwijder alles';
+$PMF_LANG['msgError404'] = 'Fout 404';
+$PMF_LANG['msgError404Description'] = 'De pagina die u zoekt is verplaatst, verwijderd of heeft mogelijk nooit bestaan.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Heeft u al een account?';
+$PMF_LANG['msgSignInHere'] = 'Meld u hier aan.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Bij registratie met Passkeys hoeven gebruikers alleen een naam of e-mailadres in te voeren, terwijl authenticatie veilig wordt uitgevoerd met behulp van biometrische gegevens of een apparaatgebaseerd wachtwoord.';
+$PMF_LANG['msgContinue'] = 'Doorgaan';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Activeer WebAuthn-ondersteuning (Experimenteel)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Aanmelden met Passkey';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'De registratie is succesvol. U kunt nu inloggen met uw Passkey.';
+$PMF_LANG['msgSupportUs'] = 'Ondersteun phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'Voer uw volledige naam in!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Voer uw inlognaam in!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Geef een geldig e-mailadres op!';
+$PMF_LANG['msgErrorEnterMessage'] = 'Voer een bericht in!';
+$PMF_LANG['msgLinkCopied'] = 'Link gekopieerd naar klembord';
+$PMF_LANG['msgDocumentation'] = 'Documentatie';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Reset categorie-afbeelding';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Inhoud voor robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Inhoud voor llms.txt', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Activeer onderhoudsmodus';
+$PMF_LANG['msgPlugins'] = 'Plugins';
+$PMF_LANG['msgPluginListing'] = 'Lijst van geïnstalleerde plugins en hun versies';
+$PMF_LANG['msgPluginName'] = 'Plugin-naam';
+$PMF_LANG['msgPluginVersion'] = 'Versie';
+$PMF_LANG['msgPluginAuthor'] = 'Auteur';
+$PMF_LANG['msgPluginDescription'] = 'Beschrijving';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Meld een bug';
+$PMF_LANG['msgDashboard'] = 'Dashboard';
+$PMF_LANG['msgOrphanedFAQs'] = 'Losgekoppelde FAQs';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Deze FAQs zijn niet toegewezen aan een categorie. U kunt ze hier aan een categorie toewijzen.';
+$PMF_LANG['msgPreview'] = 'Voorbeeld';
+$PMF_LANG['msgInsertImage'] = 'Afbeelding invoegen';
+$PMF_LANG['msgImageUpload'] = 'Afbeelding uploaden';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'De afbeelding kon niet worden geüpload.';
+$PMF_LANG['msgImageTooLarge'] = 'De afbeelding is te groot.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Geen afbeeldingen om te uploaden.';
+$PMF_LANG['msgFetchingHashes'] = 'Verificatie-hashes ophalen van api.phpmyfaq.de...';
+$PMF_LANG['msgCheckHashes'] = 'Hashes controleren met installatiebestanden...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Authenticatie afgebroken door gebruiker.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activeer timeout-teller voor beheersessie', 'Standaard: ingeschakeld'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Schakel OpenSearch-ondersteuning in', 'Standaard: uitgeschakeld'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Tijdsvenster voor populaire zoekopdrachten (dagen)', 'Standaard: 180 dagen'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch-configuratie';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Zoekindex aanmaken';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Zoekindex verwijderen';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Volledige import';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'De OpenSearch-zoekindex is succesvol aangemaakt.';
+$PMF_LANG['ad_os_create_import_success'] = 'De OpenSearch-import was succesvol.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'De OpenSearch-zoekindex is succesvol verwijderd.';
+$PMF_LANG['permission::translate_faq'] = 'FAQs vertalen';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Typ om categorieën te zoeken';
+$PMF_LANG['msgLoadingText'] = 'Laden...';
+$PMF_LANG['msgNoResultsText'] = 'Geen resultaten gevonden';
+$PMF_LANG['msgNoChoicesText'] = 'Geen keuzes om uit te kiezen';
+$PMF_LANG['msgItemSelectText'] = 'Druk om te selecteren';
+$PMF_LANG['msgUniqueItemText'] = 'Alleen unieke waarden kunnen worden toegevoegd';
+$PMF_LANG['msgCustomAddItemText'] = 'Alleen waarden die aan specifieke voorwaarden voldoen, kunnen worden toegevoegd';
+$PMF_LANG['msgDownloadYourData'] = 'Download uw gegevens';
+$PMF_LANG['msgDataExportDescription'] = 'Download een ZIP-bestand met uw opgeslagen gebruikersgegevens.';
+$PMF_LANG['msgDownload'] = 'Downloaden';
+$PMF_LANG['msgToggleTheme'] = 'Thema wisselen';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Datum van laatste back-up';
+$PMF_LANG['msgBackupNoneFound'] = 'Geen back-ups gevonden.';
+$PMF_LANG['msgBackupTooOld'] = 'Laatste back-up is ouder dan 30 dagen.';
+$PMF_LANG['msgBackupRecent'] = 'De huidige back-up is recent.';
+$PMF_LANG['msgBackupGoTo'] = 'Ga naar back-uppagina';
+$PMF_LANG['msgNewestUsers'] = 'Nieuwste gebruikers';
+$PMF_LANG['msgMemberSince'] = 'Lid sinds';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Geregistreerde gebruikers';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Wilt u deze FAQ echt verwijderen? Deze actie kan niet ongedaan worden gemaakt.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'Totaal aantal vertalingssleutels';
+$PMF_LANG['msgTranslatedKeys'] = 'Aantal vertaalde sleutels';
+$PMF_LANG['msgMissingKeys'] = 'Ontbrekende vertalingssleutels';
+$PMF_LANG['msgCompletionPercentage'] = 'Voltooiingspercentage';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'De geïnstalleerde versie is nieuwer dan de laatst beschikbare versie.';
+$PMF_LANG['ad_quick_sub_category'] = "Nieuwe subcategorie toevoegen";
+$PMF_LANG['msgError403'] = 'Fout 403';
+$PMF_LANG['msgError403Description'] = 'U bent geauthenticeerd, maar u heeft geen toestemming om toegang te krijgen tot deze bron.';
+$PMF_LANG['msgError403Hint'] = 'Als u denkt dat dit een fout is, neem dan contact op met een beheerder.';
+$PMF_LANG['msgCreateDate'] = 'Aangemaakt op';
+$PMF_LANG['msgUpdateDate'] = 'Laatst bijgewerkt op';
 
 return $PMF_LANG;
