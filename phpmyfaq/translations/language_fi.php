@@ -468,6 +468,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'Sanaston poisto epäonnistui virheen ta
 $PMF_LANG['msgNewQuestionVisible'] = 'Kysymys täytyy tarkistaa ennen kuin se julkaistaan.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Odottaa administraattorin julkaisua: ';
 $PMF_LANG['ad_entry_visibility'] = 'Julkaise';
+$PMF_LANG['ad_entry_not_visibility'] = "ei julkaistu";
 $PMF_LANG['ad_user_error_password'] = 'Anna salasana. ';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = 'Salasanat eivät täsmää. ';
 $PMF_LANG['ad_user_error_loginInvalid'] = 'Käyttäjätunnus ei kelpaa.';
@@ -826,5 +827,497 @@ $PMF_LANG['msgAccessDenied'] = 'Pääsy evätty.';
 $LANG_CONF['records.randomSort'] = array('checkbox', 'Lajittele FAQ:it satunnaisesti (oletus: ei käytössä)');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array('checkbox', 'Salli WYSIWYG -editori asiakaspuolella (oletus: ei käytössä)');
 $LANG_CONF['main.enableGravatarSupport'] = array('checkbox', 'Gravatar -tuki (oletus: ei käytössä)');
+$PMF_LANG['ad_gen_or'] = "tai";
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['permission::addattachment'] = "Lisää liitteitä";
+$PMF_LANG['permission::editattachment'] = "Muokkaa liitteitä";
+$PMF_LANG['permission::delattachment'] = "Poista liitteitä";
+$PMF_LANG['permission::dlattachment'] = "Lataa liitteitä";
+$PMF_LANG['permission::reports'] = "Luo raportteja";
+$PMF_LANG['permission::addfaq'] = "Lisää UKK:ita etusivulla";
+$PMF_LANG['permission::addquestion'] = "Lisää kysymyksiä etusivulla";
+$PMF_LANG['permission::addcomment'] = "Lisää kommentteja etusivulla";
+$PMF_LANG['permission::editinstances'] = "Muokkaa monisivusto-instansseja";
+$PMF_LANG['permission::addinstances'] = "Lisää uusia monisivusto-instansseja";
+$PMF_LANG['permission::delinstances'] = "Poista monisivusto-instansseja";
+$PMF_LANG['permission::export'] = "Vie UKK:ita";
+
+// added v2.8.0-RC - 2013-01-29 by Thorsten
+$PMF_LANG["ad_stopwords_desc"] = "Valitse kieli lisätäksesi tai muokataksesi stop-sanoja.";
+$PMF_LANG["ad_visits_per_day"] = "Vierailua päivässä";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "Lisää uusi phpMyFAQ monisivusto-instanssi";
+$PMF_LANG["ad_instance_error_notwritable"] = "Kansio /multisite ei ole kirjoitettavissa.";
+$PMF_LANG["ad_instance_url"] = "Instanssin URL";
+$PMF_LANG["ad_instance_path"] = "Instanssin polku";
+$PMF_LANG["ad_instance_name"] = "Instanssin nimi";
+$PMF_LANG["ad_instance_email"] = "Ylläpitäjän sähköposti";
+$PMF_LANG["ad_instance_admin"] = "Ylläpitäjän käyttäjänimi";
+$PMF_LANG["ad_instance_password"] = "Ylläpitäjän salasana";
+$PMF_LANG["ad_instance_hint"] = "Varoitus: Uuden phpMyFAQ-instanssin luominen kestää muutaman sekunnin!";
+$PMF_LANG["ad_instance_button"] = "Tallenna instanssi";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "Instanssin poistaminen epäonnistui ";
+$PMF_LANG["ad_instance_config"] = "Instanssin määritykset";
+
+// added v2.8.0-RC3 - 2013-03-03 by Thorsten
+$PMF_LANG["msgAboutThisNews"] = "Tietoja tästä uutisesta";
+
+// added v.2.8.1 - 2013-06-23 by Thorsten
+$PMF_LANG["msgAccessDenied"] = "Pääsy evätty.";
+
+// added v.2.8.21 - 2015-02-17 by Thorsten
+$PMF_LANG['msgSeeFAQinFrontend'] = 'Näytä UKK etusivulla';
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'Lisää hakusana';
+$PMF_LANG["msgPopularTags"] = 'Suosituimmat haut';
+$LANG_CONF["search.enableHighlighting"] = ["checkbox", "Korosta hakutermit"];
+$LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "Salli kommentit vieraille"];
+$LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "Salli kysymysten lisääminen vieraille"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = ["checkbox", "Salli uusien UKK:iden lisääminen vieraille"];
+$PMF_LANG["ad_searchterm_del"] = 'Poista kaikki kirjatut hakutermit';
+$PMF_LANG["ad_searchterm_del_suc"] = 'Kaikki hakutermit poistettu onnistuneesti.';
+$PMF_LANG["ad_searchterm_del_err"] = 'Kaikkien hakutermien poistaminen epäonnistui.';
+$LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Piilota tyhjät kategoriat"];
+$LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Hae ratkaisutunnuksella"];
+
+// added v2.9.0-alpha2 - 2014-08-16 by Thorsten
+$PMF_LANG["ad_tag_delete_success"] = "Tunniste poistettiin onnistuneesti.";
+$PMF_LANG["ad_tag_delete_error"] = "Tunnistetta ei poistettu, koska tapahtui virhe.";
+$PMF_LANG["msgSeoCenter"] = "SEO";
+$LANG_CONF["seo.metaTagsHome"] = ["select", "Robots Meta Tags aloitussivulla"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "Robots Meta Tags UKK:issa"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "Meta Tags kategoriasivuilla"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "Robots Meta Tags staattisilla sivuilla"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "Robots Meta Tags ylläpidossa"];
+$PMF_LANG["msgMatchingQuestions"] = "Seuraavat tulokset vastaavat läheisesti kysymystäsi";
+$PMF_LANG["msgFinishSubmission"] = "Jos mikään yllä olevista ehdotuksista ei vastaa kysymystäsi, napsauta alla olevaa painiketta lähettääksesi kysymyksesi.";
+$LANG_CONF['spam.manualActivation'] = ['checkbox', 'Aktivoi uudet käyttäjät manuaalisesti (oletus: aktivoitu)'];
+
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews
+$PMF_LANG['mailControlCenter'] = 'Sähköpostin asetukset';
+$LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Käytä etä-SMTP-palvelinta (oletus: ei käytössä)'];
+$LANG_CONF['mail.remoteSMTPServer'] = ['input', 'Palvelimen osoite'];
+$LANG_CONF['mail.remoteSMTPUsername'] = ['input', 'Käyttäjänimi'];
+$LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'Salasana'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'Salli rekisteröityminen vierailijoille'];
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = ['area', 'Mukautettu PDF-otsikko (HTML sallittu)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Mukautettu PDF-alatunniste (HTML sallittu)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Salli lataukset vieraille'];
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "Huomio! Jos syötät salasanan, korvaat käyttäjän salasanan.";
+$PMF_LANG["ad_delete_all_votings"] = "Tyhjennä kaikki äänestykset";
+$PMF_LANG["categoryModeratorLabel"] = "Moderaattorit";
+$PMF_LANG['ad_clear_all_visits'] = "Tyhjennä kaikki vierailut";
+$PMF_LANG['ad_reset_visits_success'] = 'Vierailujen nollaus onnistui.';
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Ota käyttöön sisäänrakennettu Markdown-editori'];
+
+// added v2.9.0-beta - 2015-09-27 by Thorsten
+$PMF_LANG['faqOverview'] = 'UKK-yleiskatsaus';
+$PMF_LANG['ad_dir_missing'] = 'Hakemisto %s puuttuu.';
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Ota käyttöön älykäs vastaaminen käyttäjien kysymyksiin'];
+
+// added v2.9.0-beta2 - 2015-12-23 by Thorsten
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Ota käyttöön Elasticsearch-tuki', 'Oletus: ei käytössä'];
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Elasticsearch-määritykset';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Luo indeksi';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Poista indeksi';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Täysi tuonti';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Indeksi luotu onnistuneesti.';
+$PMF_LANG['ad_es_create_import_success'] = 'Tuonti onnistui.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Indeksi poistettu onnistuneesti.';
+$PMF_LANG['ad_export_generate_json'] = 'Luo JSON-tiedosto';
+$PMF_LANG['ad_media_name_search'] = 'Etsi median nimellä';
+
+// added v2.9.0-RC - 2016-02-19 by Thorsten
+$PMF_LANG['ad_admin_notes'] = 'Yksityiset muistiinpanot';
+$PMF_LANG['ad_admin_notes_hint'] = ' (näkyy vain toimittajille)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Lisää uusi UKK tähän kategoriaan';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'LDAP-kartoitus nimelle, "cn" kun käytät ADS:ää'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'LDAP-kartoitus käyttäjänimelle, "samAccountName" kun käytät ADS:ää'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'LDAP-kartoitus sähköpostille, "mail" kun käytät ADS:ää'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'LDAP-kartoitus "member of":lle LDAP-ryhmiä käytettäessä'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP-verkkotunnuksen etuliite, esim. "DOMAIN\käyttäjänimi"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'LDAP-protokollan versio (oletus: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'LDAP-viittaukset (oletus: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Ota käyttöön LDAP-ryhmätuki, esim. "DOMAIN\käyttäjänimi"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Ota käyttöön LDAP SASL -tuki'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Ota käyttöön useiden LDAP-palvelimien tuki'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Ota käyttöön nimettömät LDAP-yhteydet'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Ota käyttöön LDAP-dynaaminen käyttäjäsidonta'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'LDAP-attribuutti dynaamiselle käyttäjäsidonnalle, "uid" kun käytät ADS:ää'];
+$LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Rajoita kirjautuminen tiettyihin Active Directory -ryhmiin'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Pilkuilla erotettu lista sallituista AD-ryhmistä (osittaiset vastaavuudet tuettu)'];
+$LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'Määritä käyttäjät automaattisesti phpMyFAQ-ryhmiin AD-jäsenyyden perusteella'];
+$LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'JSON-kartoitus AD-ryhmistä phpMyFAQ-ryhmiin, esim. {"Domain Admins": "Administrators"}'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Ota käyttöön XML-sivukartta'];
+$PMF_LANG['categoryImageLabel'] = 'Kategorian kuva';
+$PMF_LANG["categoryShowHomeLabel"] = "Näytä aloitussivulla";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'Näytä UKK';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Ota käyttöön kategoriarajoitukset'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Ota käyttöön lähetä ystävälle'];
+$PMF_LANG['msgUserRemovalText'] = 'Voit pyytää tilisi ja henkilötietojesi poistamista. Ylläpitotiimille lähetetään sähköposti. Tiimi poistaa tilisi, kommenttisi ja kysymyksesi. Koska tämä on manuaalinen prosessi, se voi kestää jopa 24 tuntia. Tämän jälkeen saat vahvistuksen poistosta sähköpostitse. ';
+$PMF_LANG["msgUserRemoval"] = "Pyydä käyttäjän poistoa";
+$PMF_LANG["ad_menu_RequestRemove"] = "Pyydä käyttäjän poistoa";
+$PMF_LANG["msgContactRemove"] = "Poistopyyntö ylläpitotiimiltä";
+$PMF_LANG["msgContactPrivacyNote"] = "Huomioi";
+$PMF_LANG["msgPrivacyNote"] = "Tietosuojaseloste";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automaattinen uusien versioiden tarkistus'];
+$PMF_LANG['ad_user_is_superadmin'] = 'Pääylläpitäjä';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Korvaa salasana';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Salli UKK-muutosten versiointi'];
+$PMF_LANG['permission::view_faqs'] = 'Näytä UKK:t';
+$PMF_LANG['permission::view_categories'] = 'Näytä kategoriat';
+$PMF_LANG['permission::view_news'] = 'Näytä uutiset';
+$PMF_LANG['permission::administrate_groups'] = 'Hallinnoi ryhmiä';
+$PMF_LANG['ad_group_rights'] = 'Ryhmäoikeudet';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['permission::viewadminlink'] = 'Näytä ylläpitolinkki';
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'SMTP-palvelimen portti'];
+$PMF_LANG['msgQuestionAnswer'] = 'Kysymys ja vastaus';
+$PMF_LANG['msgPermissions'] = 'Oikeudet';
+$PMF_LANG['loginPageMessage'] = 'Kirjaudu sisään ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'UKK-metatiedot';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL tietosuojaselosteelle'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'Käyttäjänimen tulisi olla näkyvissä';
+$PMF_LANG['ad_user_is_visible'] = 'Näkyvissä';
+$PMF_LANG['ad_categ_save_order'] = 'Uusi lajittelu tallennettiin onnistuneesti.';
+$PMF_LANG['ad_add_user_change_password'] = 'Käyttäjän on vaihdettava salasana ensimmäisen kirjautumisen jälkeen';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API käytössä'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'API-asiakastunnus'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Sallitut isännät rekisteröitymisille'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Kirjautuminen vain sähköpostiosoitteella'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Kirjaudu sisään Microsoftilla';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Ota käyttöön kirjautuminen Microsoft Entra ID:llä'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Ota käyttöön "Kysy kysymys"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Ota käyttöön ilmoitukset'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Lähetä testisähköposti ylläpitäjälle SMTP:n kautta'];
+$PMF_LANG['mail.sendTestEmail'] = 'Lähetä testisähköposti ylläpitäjälle';
+$PMF_LANG['msgGoToCategory'] = 'Siirry kategoriaan';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Ota käyttöön näkymätön Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Google ReCAPTCHA v2 sivusto-avain'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Google ReCAPTCHA v2 salainen avain'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Kaksivaiheinen tunnistautuminen käytössä";
+$PMF_LANG['msgTwofactorConfig'] = "Määritä kaksivaiheinen tunnistautuminen";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Kaksivaiheisen tunnistautumisen määritys";
+$PMF_LANG['qr_code_secret_alt'] = "QR-koodi salainen avain";
+$PMF_LANG['msgTwofactorNewSecret'] = "Poista nykyinen kaksivaiheinen määritys";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Kaksivaiheinen tunnistautuminen - Syötä koodi:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Syötä 6-numeroinen koodi tunnistautumissovelluksestasi.";
+$PMF_LANG['msgTwofactorCheck'] = "Tarkista";
+$PMF_LANG['msgTwofactorErrorToken'] = "Syötit väärän koodin!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Nollaa kaksivaiheinen tunnistautuminen";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'Sinut ohjataan automaattisesti 5 sekunnin kuluttua.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Kategoriaa ei löytynyt valitulla kielellä, mutta voit valita seuraavat kielet:';
+$PMF_LANG['msgCategoryDescription'] = 'Täältä löydät yleiskatsauksen kaikista kategorioista UKK:iden määrän kanssa.';
+$PMF_LANG['msgSubCategoryContent'] = 'Valitse pääkategoria.';
+$PMF_LANG['ad_open_question_deleted'] = 'Kysymys poistettiin onnistuneesti.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Poista SMTP TLS -vertaistarkistus käytöstä (ei suositella)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Yhteystiedot HTML-muodossa?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Tunnistautumispalvelu';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Näytä sähköpostiosoite viennissä'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Uusi kysymys lisättiin. Voit tarkistaa sen täältä tai hallinta-osiosta:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Evästeasetukset';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Verkkopäivitys käytössä'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Julkaisuympäristö'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Viimeisin päivitystarkistus'];
+$PMF_LANG['upgradeControlCenter'] = 'Verkkopäivitys';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Tarkista järjestelmän kunto';
+$PMF_LANG['headerCheckUpdates'] = '2. Tarkista päivitykset';
+$PMF_LANG['headerDownloadPackage'] = '3. Lataa phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Pura ladattu paketti';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Asenna ladattu paketti';
+$PMF_LANG['msgHealthCheck'] = 'Tämä tarkistaa phpMyFAQ-asennuksesi tiedostooikeudet ja kansiorakenteen.';
+$PMF_LANG['msgUpdateCheck'] = 'Voit tarkistaa uudet phpMyFAQ-versiot, uudelleenasentaa tai päivittää asennuksesi.';
+$PMF_LANG['msgDownloadPackage'] = 'Uusien phpMyFAQ-versioiden lataus asetetun julkaisuympäristön mukaisesti.';
+$PMF_LANG['msgExtractPackage'] = 'Tämä purkaa ladatun paketin tiedostojärjestelmääsi, tämä voi kestää hetken.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Tämä purkaa ladatun paketin tiedostojärjestelmääsi.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Asenna ladattu paketti';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Nykyisen asennuksen varmuuskopio';
+$PMF_LANG['msgInstallationNewFiles'] = 'Uusien tiedostojen asennus';
+$PMF_LANG['msgDatabaseUpdate'] = 'Tietokannan päivitys';
+$PMF_LANG['alertNightlyBuild'] = 'Käytät phpMyFAQ:n kehitysversiota. Voit päivittää uusimpaan yölliseen versioon.';
+$PMF_LANG['noteNightlyBuild'] = 'Huomaa, että edellisen päivän versio ladataan (tallennetaan /content/upgrades-kansioon). Koska jokainen uusi versio luodaan GitHubissa vasta kello 2 (UTC).';
+$PMF_LANG['buttonCheckHealth'] = 'Tarkista järjestelmän kunto nyt';
+$PMF_LANG['buttonCheckUpdates'] = 'Tarkista päivitykset nyt';
+$PMF_LANG['buttonDownloadPackage'] = 'Lataa nyt';
+$PMF_LANG['buttonExtractPackage'] = 'Pura ladattu paketti nyt';
+$PMF_LANG['versionIsUpToDate'] = 'Asennettu versio on ajan tasalla!';
+$PMF_LANG['healthCheckOkay'] = 'Asennettu versio on kunnossa!';
+$PMF_LANG['downloadSuccessful'] = 'Paketti ladattu onnistuneesti!';
+$PMF_LANG['extractSuccessful'] = 'Paketti purettu onnistuneesti!';
+$PMF_LANG['downloadFailure'] = 'Paketin lataus epäonnistui.';
+$PMF_LANG['verificationFailure'] = 'Ladatun paketin vahvistus epäonnistui.';
+$PMF_LANG['extractFailure'] = 'Ladatun paketin purkaminen epäonnistui.';
+$PMF_LANG['msgCurrentVersion'] = 'Nykyinen versio: ';
+$PMF_LANG['msgLastCheckDate'] = 'Viimeisin päivitystarkistus: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Viimeisin saatavilla oleva versio: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Julkaisuympäristö: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Voit silti käyttää manuaalista <a href="../update">päivitysprosessia</a>, jos haluat.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Lisää kirjanmerkki';
+$PMF_LANG['removeBookmark'] = 'Poista kirjanmerkki';
+$PMF_LANG['msgBookmarks'] = 'Kirjanmerkit';
+$PMF_LANG['msgMyBookmarks'] = 'Omat kirjanmerkit';
+$PMF_LANG['msgBookmarkAdded'] = 'Kirjanmerkki lisätty onnistuneesti!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Kirjanmerkki poistettu onnistuneesti!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Merkin '#' käyttö ei ole sallittu.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Bottien estolistaus (Erottele pilkuilla)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gravatar-kuva';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Pysyvien tietueiden mukautettu järjestely on pois käytöstä pääasetuksissa. Jos haluat käyttää sitä, aktivoi se <a href="././configuration">pääasetuksissa</a> -> tietueet.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Pysyvien tietueiden mukautettu järjestely'];
+$PMF_LANG['msgNoStickyFaqs'] = 'Sinulla ei ole vielä yhtään pysyvää tietuetta. Voit merkitä tietueita pysyviksi <a href="./faqs" class="alert-link">UKK-yleiskatsauksessa</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktivoi evästeiden hyväksyntä'];
+$PMF_LANG['msgSessionExpired'] = 'Istuntosi on vanhentunut. Kirjaudu sisään uudelleen.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Kielikoodi';
+$PMF_LANG['msgSeparateWithCommas'] = '(erottele pilkuilla)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'Tuotavan CSV-tiedoston tulee sisältää seuraavat sarakkeet tässä järjestyksessä ilman sarakeotsikkoja. Jokainen rivi määrittelee yhden UKK-tietueen. Kaikkien tähdellä * merkittyjen sarakkeiden soluissa tulee olla arvo.';
+$PMF_LANG['msgImportRecords'] = 'UKK-tuonti';
+$PMF_LANG['msgImportCSVFile'] = 'Tuo CSV-tiedosto';
+$PMF_LANG['msgImportCSVFileBody'] = 'Voit tuoda CSV-tiedoston tietuetiedoillasi ja annetulla rakenteella (katso yllä) tässä.';
+$PMF_LANG['msgImport'] = 'Tuo';
+$PMF_LANG['msgColumnStructure'] = 'Sarakerakenne';
+$PMF_LANG['msgImportSuccessful'] = 'Tuonti onnistui!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true tai false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Tuonti ja vienti';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Näyttää siltä, että tiedostolla ei ole oikeaa rakennetta. Tarkista rakenne annettujen vaatimusten perusteella uudelleen.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Vie istunnot CSV-tiedostona';
+$PMF_LANG['msgExportSessions'] = 'Vie istunnot';
+$PMF_LANG['msgExportSessionsFrom'] = 'Alkaen';
+$PMF_LANG['msgExportSessionsTo'] = 'Päättyen';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Muokkaa lomakkeita';
+$PMF_LANG['msgEditFormsSuccessful'] = 'Muutos tallennettiin onnistuneesti.';
+$PMF_LANG['msgInputType'] = 'Tyyppi';
+$PMF_LANG['msgRequiredInputField'] = 'Pakollinen kenttä';
+$PMF_LANG['permission::forms_edit'] = 'Muokkaa lomakkeita';
+$PMF_LANG['msgInputLabel'] = 'Otsikko';
+$PMF_LANG['msgFormsEditTranslations'] = 'Muokkaa käännöksiä';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'Käännös tallennettiin onnistuneesti.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'Käännös poistettiin onnistuneesti.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Uusi käännös tallennettiin onnistuneesti.';
+$PMF_LANG['msgSelectLanguage'] = 'Valitse kieli';
+$PMF_LANG['msgTranslationText'] = 'Käännösteksti';
+$PMF_LANG['msgAddTranslation'] = 'Lisää käännös';
+$PMF_LANG['msgHintDeactivateForms'] = 'Lomakkeet voidaan poistaa kokonaan käytöstä <a class="alert-link" href="./configuration">hallinnassa</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Vain ei-aktiiviset UKK:t';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Vain uudet UKK:t';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Poista uutinen';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Vie käyttäjät CSV-tiedostona';
+$PMF_LANG['msgWarning'] = 'Varoitus';
+$PMF_LANG['msgUserList'] = 'Käyttäjälista';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Kysymystä ja vastausta ei löytynyt.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'UKK ei ole huoltotilassa.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Useat avainsanat on erotettava pilkuilla.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Et voi käyttää tätä lomaketta puuttuvien määritettyjen kategorioiden vuoksi. Ilmoita asiasta <a class="alert-link" href="./contact.html">ylläpitäjälle</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Ei vastaa -osoite sähköposteille'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Istunto vanhenee pian';
+$PMF_LANG['msgNoLogMeOut'] = 'Ei, kirjaa minut ulos';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Kyllä, pidä minut kirjautuneena';
+$PMF_LANG['msgTrendingFAQs'] = 'Suosituimmat UKK:t';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Luo API-asiakastunnus';
+$PMF_LANG['msgSerp'] = 'SERP on lyhenne sanoista Search Engine Result Page. Täällä voit määrittää otsikon ja kuvauksen SERP:lle.';
+$PMF_LANG['msgSerpTitle'] = 'SERP-otsikko';
+$PMF_LANG['msgSerpDescription'] = 'SERP-kuvaus';
+$LANG_CONF['seo.title'] = ['input', 'SERP-otsikko'];
+$LANG_CONF['seo.description'] = ['area', 'SERP-kuvaus'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Sallitut ulkoiset isännät mediasisällölle (erottele pilkuilla)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Haluatko varmasti poistaa nykyisen kaksivaiheisen tunnistautumisen määrityksen?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar ei ole tällä hetkellä käytössä.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Nykyisen kaksivaiheisen määrityksen poistaminen onnistui.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Lähetä ystävälle WhatsAppilla';
+$PMF_LANG['msgShareText'] = 'Löysin sinulle mielenkiintoisen UKK-artikkelin:';
+$PMF_LANG['msgError'] = 'Tapahtui virhe.';
+$PMF_LANG['msgLinkToFAQ'] = 'Linkki UKK:hon';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Aktivoi linkki tietosuojaselosteeseen'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ käyttää tällä hetkellä virheenkorjaustilaa. Virheenkorjaustila voi paljastaa arkaluonteista tietoa ja on tarkoitettu vain kehityskäyttöön. Suosittelemme vahvasti virheenkorjaustilan poistamista käytöstä turvallisuussyistä. Voit poistaa virheenkorjaustilan käytöstä <code>.env</code>-tiedostossa.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ on tällä hetkellä kehitysversiossa (%s). Ja siksi ei vielä valmis tuotantokäyttöön. <a target="_blank" href="%s" class="alert-link">Ilmoita kaikki ongelmat GitHubissa</a>. Kiitos paljon!';
+$PMF_LANG['layoutControlCenter'] = 'Ulkoasu';
+$LANG_CONF['layout.customCss'] = ['area', 'Mukautettu CSS', 'Käytä vain CSS:ää.'];
+$PMF_LANG['msgSitemap'] = 'Sivukartta';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Löydä etsimäsi UKK:t kaikkien merkintöjen yleiskatsauksesta | Sivukartta - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = '%s:n sanastosta löydät selitykset kaikista tärkeistä teknisistä termeistä aiheesta';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Katso yleiskatsaus kaikista tärkeistä aiheista | UKK-yleiskatsaus %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Yleiskatsaus kaikista kategorioista ja aiheista | Kategoriayleiskatsaus %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Lisää uusi kysymys | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Avoimet kysymykset odottavat vastauksia | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Jaa';
+$PMF_LANG['msgCopyLink'] = 'tai kopioi linkki';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Ota käyttöön Rich Snippets'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Tilastot poistettu onnistuneesti.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'Tilastojen poistamisen aikana tapahtui virhe.';
+$PMF_LANG['msgPasswordTooShort'] = 'Uuden salasanan tulee olla vähintään 8 merkkiä pitkä.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Molemmat salasanat eivät täsmää.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Muiden toimittajien yksityisiä muistiinpanoja:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Siivoa puuttuvat liitteet';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Liite päivitettiin onnistuneesti';
+$PMF_LANG['msgRemoveAll'] = 'Poista kaikki';
+$PMF_LANG['msgError404'] = 'Virhe 404';
+$PMF_LANG['msgError404Description'] = 'Etsimääsi sivua on siirretty, poistettu tai sitä ei ehkä koskaan ollut olemassa.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Onko sinulla jo tili?';
+$PMF_LANG['msgSignInHere'] = 'Kirjaudu sisään tästä.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Passkeys-rekisteröitymisessä käyttäjien tarvitsee vain syöttää nimi tai sähköpostiosoite, kun taas tunnistautuminen suoritetaan turvallisesti biometrisilla tiedoilla tai laitepohjainen salasanalla.';
+$PMF_LANG['msgContinue'] = 'Jatka';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktivoi WebAuthn-tuki (Kokeellinen)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Kirjaudu sisään Passkey-avaimella';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Rekisteröityminen onnistui. Voit nyt kirjautua sisään Passkey-avaimellasi.';
+$PMF_LANG['msgSupportUs'] = 'Tue phpMyFAQ:ta';
+$PMF_LANG['msgErrorEnterFullName'] = 'Syötä koko nimesi!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Syötä käyttäjätunnuksesi!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Anna kelvollinen sähköpostiosoite!';
+$PMF_LANG['msgErrorEnterMessage'] = 'Syötä viesti!';
+$PMF_LANG['msgLinkCopied'] = 'Linkki kopioitu leikepöydälle';
+$PMF_LANG['msgDocumentation'] = 'Dokumentaatio';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Nollaa kategoriakuva';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Sisältö robots.txt-tiedostolle', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Sisältö llms.txt-tiedostolle', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Aktivoi huoltotila';
+$PMF_LANG['msgPlugins'] = 'Liitännäiset';
+$PMF_LANG['msgPluginListing'] = 'Luettelo asennetuista liitännäisistä ja niiden versioista';
+$PMF_LANG['msgPluginName'] = 'Liitännäisen nimi';
+$PMF_LANG['msgPluginVersion'] = 'Versio';
+$PMF_LANG['msgPluginAuthor'] = 'Tekijä';
+$PMF_LANG['msgPluginDescription'] = 'Kuvaus';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Ilmoita virheestä';
+$PMF_LANG['msgDashboard'] = 'Hallintapaneeli';
+$PMF_LANG['msgOrphanedFAQs'] = 'Orpoutuneet UKK:t';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'Nämä UKK:t eivät ole määritetty mihinkään kategoriaan. Voit määrittää ne kategoriaan täällä.';
+$PMF_LANG['msgPreview'] = 'Esikatselu';
+$PMF_LANG['msgInsertImage'] = 'Lisää kuva';
+$PMF_LANG['msgImageUpload'] = 'Kuvan lataus';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'Kuvaa ei voitu ladata.';
+$PMF_LANG['msgImageTooLarge'] = 'Kuva on liian suuri.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Ei kuvia ladattavaksi.';
+$PMF_LANG['msgFetchingHashes'] = 'Haetaan vahvistustiivisteitä api.phpmyfaq.de:stä...';
+$PMF_LANG['msgCheckHashes'] = 'Tarkistetaan tiivisteet asennustiedostoilla...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Käyttäjä keskeytti tunnistautumisen.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Aktivoi ylläpidon istunnon aikakatkaisu', 'Oletus: käytössä'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Ota käyttöön OpenSearch-tuki', 'Oletus: ei käytössä'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Aikaikk una suosituille hauille (päivää)', 'Oletus: 180 päivää'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch-määritykset';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Luo hakuindeksi';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Poista hakuindeksi';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Täydellinen tuonti';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch-hakuindeksi luotiin onnistuneesti.';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearch-tuonti onnistui.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch-hakuindeksi poistettiin onnistuneesti.';
+$PMF_LANG['permission::translate_faq'] = 'Käännä UKK:ita';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Kirjoita hakeaksesi kategorioita';
+$PMF_LANG['msgLoadingText'] = 'Ladataan...';
+$PMF_LANG['msgNoResultsText'] = 'Tuloksia ei löytynyt';
+$PMF_LANG['msgNoChoicesText'] = 'Ei valintoja valittavaksi';
+$PMF_LANG['msgItemSelectText'] = 'Paina valitaksesi';
+$PMF_LANG['msgUniqueItemText'] = 'Vain yksilöllisiä arvoja voidaan lisätä';
+$PMF_LANG['msgCustomAddItemText'] = 'Vain tietyt ehdot täyttävät arvot voidaan lisätä';
+$PMF_LANG['msgDownloadYourData'] = 'Lataa tietosi';
+$PMF_LANG['msgDataExportDescription'] = 'Lataa ZIP-tiedosto, joka sisältää tallennetut käyttäjätietosi.';
+$PMF_LANG['msgDownload'] = 'Lataa';
+$PMF_LANG['msgToggleTheme'] = 'Vaihda teemaa';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Viimeisimmän varmuuskopion päivämäärä';
+$PMF_LANG['msgBackupNoneFound'] = 'Varmuuskopioita ei löytynyt.';
+$PMF_LANG['msgBackupTooOld'] = 'Viimeisin varmuuskopio on yli 30 päivää vanha.';
+$PMF_LANG['msgBackupRecent'] = 'Nykyinen varmuuskopio on tuore.';
+$PMF_LANG['msgBackupGoTo'] = 'Siirry varmuuskopio-sivulle';
+$PMF_LANG['msgNewestUsers'] = 'Uusimmat käyttäjät';
+$PMF_LANG['msgMemberSince'] = 'Jäsen alkaen';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Rekisteröityneet käyttäjät';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Haluatko varmasti poistaa tämän UKK:n? Tätä toimintoa ei voi peruuttaa.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'Käännösavaimien kokonaismäärä';
+$PMF_LANG['msgTranslatedKeys'] = 'Käännettyjen avaimien määrä';
+$PMF_LANG['msgMissingKeys'] = 'Puuttuvat käännösavaimet';
+$PMF_LANG['msgCompletionPercentage'] = 'Valmiusprosentti';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'Asennettu versio on uudempi kuin viimeisin saatavilla oleva versio.';
+$PMF_LANG['ad_quick_sub_category'] = "Lisää uusi alikategoria";
+$PMF_LANG['msgError403'] = 'Virhe 403';
+$PMF_LANG['msgError403Description'] = 'Olet tunnistautunut, mutta sinulla ei ole oikeutta käyttää tätä resurssia.';
+$PMF_LANG['msgError403Hint'] = 'Jos uskot tämän olevan virhe, ota yhteyttä ylläpitäjään.';
+$PMF_LANG['msgCreateDate'] = 'Luotu';
+$PMF_LANG['msgUpdateDate'] = 'Viimeksi päivitetty';
 
 return $PMF_LANG;
