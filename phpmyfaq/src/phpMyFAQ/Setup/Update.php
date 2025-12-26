@@ -29,6 +29,7 @@ use phpMyFAQ\Filesystem\Filesystem;
 use phpMyFAQ\Forms;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
+use Random\RandomException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -46,6 +47,8 @@ class Update extends AbstractSetup
 
     /** @var string[] */
     private array $dryRunQueries = [];
+
+    private ?string $backupFilename = null;
 
     public function __construct(
         protected System $system,
@@ -72,6 +75,7 @@ class Update extends AbstractSetup
     /**
      * Creates a backup of the current config files
      * @throws Exception
+     * @throws RandomException
      */
     public function createConfigBackup(string $configDir): string
     {
@@ -113,7 +117,7 @@ class Update extends AbstractSetup
                 continue;
             }
 
-            // Compute relative path inside archive
+            // Compute a relative path inside the archive
             $relativePath = str_replace($configDir . DIRECTORY_SEPARATOR, '', $filePath);
             $relativePath = ltrim($relativePath, DIRECTORY_SEPARATOR);
 
@@ -1187,8 +1191,15 @@ class Update extends AbstractSetup
         $this->configuration->update(['main.currentVersion' => System::getVersion()]);
     }
 
+    /**
+     * @throws RandomException
+     */
     private function getBackupFilename(): string
     {
-        return sprintf('phpmyfaq-config-backup.%s.zip', date(format: 'Y-m-d'));
+        if ($this->backupFilename === null) {
+            $randomHash = bin2hex(random_bytes(4)); // 8-character hex string
+            $this->backupFilename = sprintf('phpmyfaq-config-backup.%s.%s.zip', date(format: 'Y-m-d'), $randomHash);
+        }
+        return $this->backupFilename;
     }
 }
