@@ -244,7 +244,7 @@ class Wrapper extends TCPDF
      */
     private array $fontFiles = [
         'zh' => 'arialunicid0',
-        'tw' => 'arialunicid0',
+        'zh_tw' => 'arialunicid0',
         'ja' => 'arialunicid0',
         'ko' => 'arialunicid0',
         'cs' => 'dejavusans',

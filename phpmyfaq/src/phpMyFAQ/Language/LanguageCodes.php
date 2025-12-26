@@ -291,7 +291,7 @@ class LanguageCodes
         'sv' => 'Swedish',
         'th' => 'Thai',
         'tr' => 'Turkish',
-        'tw' => 'Twi',
+        'zh_tw' => 'Traditional Chinese',
         'uk' => 'Ukrainian',
         'ur' => 'Urdu',
         'vi' => 'Vietnamese',
