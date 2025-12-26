@@ -20,7 +20,11 @@ export const handleUpdateNextStepButton = (): void => {
   if (nextStepButton && nextStep) {
     nextStepButton.addEventListener('click', (event: MouseEvent): void => {
       event.preventDefault();
-      window.location.replace(`?step=${nextStep.value}`);
+      const stepValue = parseInt(nextStep.value, 10);
+      if (Number.isNaN(stepValue) || stepValue < 1) {
+        return;
+      }
+      window.location.replace(`?step=${stepValue}`);
     });
   }
 };
