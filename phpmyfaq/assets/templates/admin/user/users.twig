@@ -239,7 +239,7 @@
   <tbody>
   {% for user in users %}
   <tr class="row_user_id_{{ user.id }}" id="row_user_id_{{ user.id }}">
-    <td>{{ user.display_name|raw }}</td>
+    <td>{{ user.display_name }}</td>
     <td>
       <a href="mailto:{{ user.email|raw }}">
         {{ user.email|raw }}
