@@ -72,50 +72,60 @@ export const handleAttachmentUploads = (): void => {
 
       try {
         const response = (await uploadAttachments(formData)) as unknown as Attachment[];
-        const modal = document.getElementById('attachmentModal') as HTMLElement;
-        const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement;
-        const attachmentList = document.querySelector('.adminAttachments') as HTMLElement;
-        const fileSize = document.getElementById('filesize') as HTMLElement;
+        const modal = document.getElementById('attachmentModal') as HTMLElement | null;
+        const modalBackdrop = document.querySelector('.modal-backdrop.fade.show') as HTMLElement | null;
+        const attachmentList = document.querySelector('.adminAttachments') as HTMLElement | null;
+        const fileSize = document.getElementById('filesize') as HTMLElement | null;
         const fileList: NodeListOf<Element> = document.querySelectorAll('.pmf-attachment-upload-files li');
 
-        response.forEach((attachment: Attachment): void => {
-          const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
-          attachmentList.insertAdjacentElement(
-            'beforeend',
-            addElement('li', {}, [
-              addElement('a', {
-                className: 'me-2',
-                href: `../index.php?action=attachment&id=${attachment.attachmentId}`,
-                innerText: attachment.fileName,
-              }),
-              addElement(
-                'button',
-                {
-                  type: 'button',
-                  className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
-                  'data-pmfAttachmentId': attachment.attachmentId,
-                  'data-pmfCsrfToken': csrfToken,
-                },
-                [
-                  addElement('i', {
-                    className: 'bi bi-trash',
+        if (attachmentList) {
+          response.forEach((attachment: Attachment): void => {
+            const csrfToken = attachmentList.getAttribute('data-pmf-csrf-token') as string;
+            attachmentList.insertAdjacentElement(
+              'beforeend',
+              addElement('li', {}, [
+                addElement('a', {
+                  className: 'me-2',
+                  href: `../index.php?action=attachment&id=${attachment.attachmentId}`,
+                  innerText: attachment.fileName,
+                }),
+                addElement(
+                  'button',
+                  {
+                    type: 'button',
+                    className: 'btn btn-sm btn-danger pmf-delete-attachment-button',
                     'data-pmfAttachmentId': attachment.attachmentId,
                     'data-pmfCsrfToken': csrfToken,
-                  }),
-                ]
-              ),
-            ])
-          );
-        });
+                  },
+                  [
+                    addElement('i', {
+                      className: 'bi bi-trash',
+                      'data-pmfAttachmentId': attachment.attachmentId,
+                      'data-pmfCsrfToken': csrfToken,
+                    }),
+                  ]
+                ),
+              ])
+            );
+          });
+        }
 
-        fileSize.textContent = '';
+        if (fileSize) {
+          fileSize.textContent = '';
+        }
+
         fileList.forEach((li: Element): void => {
           li.remove();
         });
 
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        modalBackdrop.remove();
+        if (modal) {
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+        }
+
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
       } catch (error) {
         console.error('An error occurred:', error);
       }
