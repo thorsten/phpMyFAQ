@@ -98,6 +98,8 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     </IfModule>
     # the path to your phpMyFAQ installation
     RewriteBase /
+    # Block zip files in content directory
+    RewriteRule ^content/.*\.zip$ - [F,L]
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
