@@ -49,7 +49,7 @@ export const handleAttachmentUploads = (): void => {
         output = approx.toFixed(2) + ' ' + multiples[multiple] + ' (' + bytes + ' bytes)';
       }
 
-      fileSize.innerHTML = output;
+      fileSize.textContent = output;
       fileList.append(addElement('ul', { className: 'mt-2' }, fileItems));
     });
 
@@ -108,7 +108,7 @@ export const handleAttachmentUploads = (): void => {
           );
         });
 
-        fileSize.innerHTML = '';
+        fileSize.textContent = '';
         fileList.forEach((li: Element): void => {
           li.remove();
         });
