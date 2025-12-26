@@ -97,7 +97,7 @@ readonly class Plurals
             case 'ko':
             case 'th':
             case 'tr':
-            case 'tw':
+            case 'zh_tw':
             case 'vi':
             case 'zh':
                 return 0;

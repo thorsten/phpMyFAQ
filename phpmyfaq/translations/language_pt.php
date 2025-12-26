@@ -191,6 +191,7 @@ $PMF_LANG['ad_entry_commentdelsuc'] = 'O Comentário foi apagado.';
 $PMF_LANG['ad_entry_back'] = 'Voltar atrás';
 $PMF_LANG['ad_entry_commentdelfail'] = 'O Comentário não foi apagado.';
 $PMF_LANG['ad_entry_savedsuc'] = 'As alterações foram gravadas.';
+$PMF_LANG["ad_entry_savedfail"] = "Infelizmente, ocorreu um erro na base de dados.";
 $PMF_LANG['ad_entry_del_1'] = 'Tem a certeza que o tópico ';
 $PMF_LANG['ad_entry_del_2'] = ' de ';
 $PMF_LANG['ad_entry_del_3'] = ' deve ser apagado?';

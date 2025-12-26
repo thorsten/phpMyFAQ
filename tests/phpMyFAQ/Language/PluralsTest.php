@@ -239,7 +239,7 @@ class PluralsTest extends TestCase
     public function testPluralFormsNoPlural(): void
     {
         // Languages with no plural forms (always return 0)
-        $noPluralLanguages = ['bn', 'he', 'hi', 'id', 'ja', 'ko', 'th', 'tr', 'tw', 'vi', 'zh'];
+        $noPluralLanguages = ['bn', 'he', 'hi', 'id', 'ja', 'ko', 'th', 'tr', 'zh_tw', 'vi', 'zh'];
 
         foreach ($noPluralLanguages as $lang) {
             $this->assertEquals(0, $this->pluralMethod->invoke($this->plurals, $lang, 0));

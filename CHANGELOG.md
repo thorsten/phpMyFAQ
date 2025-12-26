@@ -32,15 +32,15 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental update via command line (Thorsten)
 - added experimental support for PHP 8.6 (Thorsten)
 - improved online update feature (Thorsten)
-- updated Spanish translation (Thorsten)
-- updated Polish translation (Thorsten)
-- updated French translation (Thorsten)
+- updated Spanish translation
+- updated Polish translation
+- updated French translation
 - updated Japanese translation (Kamo Tomoyuki)
-- updated Portuguese and Brazilian Portuguese translation (Thorsten)
-- updated Turkish translation (Thorsten)
-- updated Dutch translation (Thorsten)
-- updated Norwegian (Bokmål) translation (Thorsten)
-- updated Italian translation (Thorsten)
+- updated Portuguese and Brazilian Portuguese translation
+- updated Turkish translation
+- updated Dutch translation
+- updated Norwegian (Bokmål) translation
+- updated Italian translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)

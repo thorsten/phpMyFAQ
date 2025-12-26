@@ -205,7 +205,7 @@ class WrapperTest extends TestCase
     {
         $testCases = [
             'zh' => 'arialunicid0', // Chinese
-            'tw' => 'arialunicid0', // Traditional Chinese
+            'zh_tw' => 'arialunicid0', // Traditional Chinese
             'ja' => 'arialunicid0', // Japanese
             'ko' => 'arialunicid0', // Korean
             'cs' => 'dejavusans', // Czech
