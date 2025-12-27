@@ -31,6 +31,8 @@ class SetupController extends AbstractController
 {
     public function check(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
@@ -67,6 +69,8 @@ class SetupController extends AbstractController
 
     public function backup(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }
@@ -92,6 +96,8 @@ class SetupController extends AbstractController
 
     public function updateDatabase(Request $request): JsonResponse
     {
+        $this->userIsAuthenticated();
+
         if (empty($request->getContent())) {
             return $this->json(['message' => 'No version given.'], Response::HTTP_BAD_REQUEST);
         }

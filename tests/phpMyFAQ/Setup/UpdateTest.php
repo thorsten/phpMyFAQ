@@ -7,6 +7,7 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
 use PHPUnit\Framework\TestCase;
+use Random\RandomException;
 
 class UpdateTest extends TestCase
 {
@@ -27,19 +28,40 @@ class UpdateTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws RandomException
      */
     public function testCreateConfigBackup(): void
     {
         $this->update->setVersion('4.0.0');
         $configPath = PMF_TEST_DIR . '/content/core/config';
 
+        // Clean up any existing backup files before test
+        $existingFiles = glob($configPath . '/phpmyfaq-config-backup.*.zip');
+        foreach ($existingFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+
         $this->update->createConfigBackup($configPath);
 
-        $this->assertFileExists(
-            PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date('Y-m-d') . '.zip'
+        // Find a backup file with a pattern: phpmyfaq-config-backup.YYYY-MM-DD.XXXXXXXX.zip
+        $pattern = PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date(format: 'Y-m-d') . '.*.zip';
+        $files = glob($pattern);
+
+        $this->assertNotEmpty($files, 'Backup file should exist with random hash');
+        $this->assertCount(1, $files, 'Exactly one backup file should exist');
+
+        // Verify filename format: date.hash.zip where hash is 8 hex characters
+        $filename = basename($files[0]);
+        $this->assertMatchesRegularExpression(
+            '/^phpmyfaq-config-backup\.\d{4}-\d{2}-\d{2}\.[0-9a-f]{8}\.zip$/',
+            $filename,
+            'Backup filename should contain 8-character hexadecimal hash'
         );
 
-        unlink(PMF_TEST_DIR . '/content/core/config/phpmyfaq-config-backup.' . date('Y-m-d') . '.zip');
+        // Cleanup
+        unlink($files[0]);
     }
 
     public function testIsConfigTableNotAvailable(): void

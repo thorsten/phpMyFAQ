@@ -27,8 +27,10 @@ use phpMyFAQ\Forms;
 use phpMyFAQ\Setup;
 use phpMyFAQ\System;
 use phpMyFAQ\User;
+use Random\RandomException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 use SplFileObject;
 use Symfony\Component\HttpFoundation\Request;
 use Tivie\HtaccessParser\Exception\SyntaxException;
@@ -48,6 +50,8 @@ class Update extends Setup
 
     /** @var string[] */
     private array $dryRunQueries = [];
+
+    private ?string $backupFilename = null;
 
     public function __construct(protected System $system, private readonly Configuration $configuration)
     {
@@ -72,6 +76,7 @@ class Update extends Setup
     /**
      * Creates a backup of the current config files
      * @throws Exception
+     * @throws RandomException
      */
     public function createConfigBackup(string $configDir): string
     {
@@ -84,19 +89,44 @@ class Update extends Setup
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($configDir),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
-        foreach ($files as $file) {
-            $file = realpath($file);
-            if (str_contains($file, $configDir . DIRECTORY_SEPARATOR)) {
-                if (is_dir($file)) {
-                    $zipArchive->addEmptyDir(
-                        str_replace($configDir . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR)
-                    );
-                } elseif (is_file($file)) {
-                    $zipArchive->addFile($file, str_replace($configDir . DIRECTORY_SEPARATOR, '', $file));
-                }
+        foreach ($files as $fileInfo) {
+            if ($fileInfo instanceof SplFileInfo) {
+                $filePath = $fileInfo->getRealPath() ?: $fileInfo->getPathname();
+                $isDir = $fileInfo->isDir();
+                $isFile = $fileInfo->isFile();
+            } else {
+                $filePath = is_string($fileInfo) ? $fileInfo : (string) $fileInfo;
+                $filePath = realpath($filePath) ?: $filePath;
+                $isDir = is_dir($filePath);
+                $isFile = is_file($filePath);
+            }
+
+            if ($filePath === false || $filePath === null || $filePath === '') {
+                continue;
+            }
+
+            // Exclude the zip we are currently writing
+            if ($filePath === $outputZipFile) {
+                continue;
+            }
+
+            // Only include entries inside the config directory
+            if (!str_contains($filePath, $configDir . DIRECTORY_SEPARATOR) && $filePath !== $configDir) {
+                continue;
+            }
+
+            // Compute a relative path inside the archive
+            $relativePath = str_replace($configDir . DIRECTORY_SEPARATOR, '', $filePath);
+            $relativePath = ltrim($relativePath, DIRECTORY_SEPARATOR);
+
+            if ($isDir) {
+                // Ensure directory entries end with a slash
+                $zipArchive->addEmptyDir(rtrim($relativePath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
+            } elseif ($isFile) {
+                $zipArchive->addFile($filePath, $relativePath);
             }
         }
 
@@ -1096,8 +1126,15 @@ class Update extends Setup
         $this->configuration->update(['main.currentVersion' => System::getVersion()]);
     }
 
+    /**
+     * @throws RandomException
+     */
     private function getBackupFilename(): string
     {
-        return sprintf('phpmyfaq-config-backup.%s.zip', date('Y-m-d'));
+        if ($this->backupFilename === null) {
+            $randomHash = bin2hex(random_bytes(4)); // 8-character hex string
+            $this->backupFilename = sprintf('phpmyfaq-config-backup.%s.%s.zip', date(format: 'Y-m-d'), $randomHash);
+        }
+        return $this->backupFilename;
     }
 }
