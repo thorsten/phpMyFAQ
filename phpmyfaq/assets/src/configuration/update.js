@@ -87,9 +87,7 @@ export const handleConfigBackup = async () => {
         throw new Error('Network response was not ok');
       }
 
-      const data = await response.json();
-      const downloadLink = document.getElementById('phpmyfaq-update-backup-download-link');
-      downloadLink.href = data.backupFile;
+      await response.json();
     } catch (error) {
       const errorMessage =
         error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
