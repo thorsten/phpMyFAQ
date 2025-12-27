@@ -107,13 +107,11 @@ export const handleConfigBackup = async (): Promise<void> => {
         return;
       }
 
-      const data = await response.json();
-      const downloadLink = document.getElementById('phpmyfaq-update-backup-download-link') as HTMLAnchorElement | null;
-      if (downloadLink) {
-        downloadLink.href = data.backupFile;
-      }
-    } catch (error: unknown) {
-      console.error('Backup error:', error instanceof Error ? error.message : String(error));
+      await response.json();
+    } catch (error) {
+      const errorMessage =
+        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
+      return errorMessage.error;
     }
   }
 };
