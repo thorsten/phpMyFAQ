@@ -108,10 +108,8 @@ export const handleConfigBackup = async (): Promise<void> => {
       }
 
       await response.json();
-    } catch (error) {
-      const errorMessage =
-        error.cause && error.cause.response ? await error.cause.response.json() : { error: 'Unknown error' };
-      return errorMessage.error;
+    } catch (error: unknown) {
+      console.error('Backup creation failed:', error);
     }
   }
 };
