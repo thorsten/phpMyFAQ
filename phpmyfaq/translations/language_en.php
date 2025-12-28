@@ -7,22 +7,21 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at https://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matthias Sommerfeld <mso@bluebirdy.de>
- * @author Henning Schulzrinne <hgs@cs.columbia.edu>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matthias Sommerfeld <mso@bluebirdy.de>
+ * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
  * @copyright 2004-2025 phpMyFAQ Team
- * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-02-19
- * @codingStandardsIgnoreFile
+ * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-02-19
  */
 
-$PMF_LANG["metaCharset"] = "UTF-8";
-$PMF_LANG["metaLanguage"] = "en";
-$PMF_LANG["language"] = "english";
-$PMF_LANG['direction'] = "ltr";
-$PMF_LANG["nplurals"] = "2";
+$PMF_LANG['metaCharset'] = 'UTF-8';
+$PMF_LANG['metaLanguage'] = 'en';
+$PMF_LANG['language'] = 'English';
+$PMF_LANG['direction'] = 'ltr';
+$PMF_LANG['nplurals'] = '2';
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
