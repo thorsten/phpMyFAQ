@@ -67,11 +67,11 @@ LANG_KEYS="${TEMP_DIR}/lang_keys.txt"
 MISSING_KEYS="${TEMP_DIR}/missing_keys.txt"
 OBSOLETE_KEYS="${TEMP_DIR}/obsolete_keys.txt"
 
-# Extract keys from English file (handle both single and double quotes)
-grep -E "\\\$PMF_LANG\[" "$ENGLISH_FILE" | sed -E "s/.*\\\$PMF_LANG\[['\"]([^'\"]+)['\"]\].*/\1/" | sort -u > "$EN_KEYS"
+# Extract keys from English file (handle both single and double quotes, trim whitespace)
+grep -E "\\\$PMF_LANG\[" "$ENGLISH_FILE" | sed -E "s/.*\\\$PMF_LANG\[['\"]([^'\"]+)['\"]\].*/\1/" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | sort -u > "$EN_KEYS"
 
-# Extract keys from target language file (handle both single and double quotes)
-grep -E "\\\$PMF_LANG\[" "$LANGUAGE_FILE" | sed -E "s/.*\\\$PMF_LANG\[['\"]([^'\"]+)['\"]\].*/\1/" | sort -u > "$LANG_KEYS"
+# Extract keys from target language file (handle both single and double quotes, trim whitespace)
+grep -E "\\\$PMF_LANG\[" "$LANGUAGE_FILE" | sed -E "s/.*\\\$PMF_LANG\[['\"]([^'\"]+)['\"]\].*/\1/" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | sort -u > "$LANG_KEYS"
 
 # Find missing keys (in English but not in target language)
 comm -23 "$EN_KEYS" "$LANG_KEYS" > "$MISSING_KEYS"
