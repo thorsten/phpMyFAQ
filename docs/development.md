@@ -62,6 +62,32 @@ Create a `.env` file in the project root based on `.env.example`:
 
     cp .env.example .env
 
+### 8.1.3 Adding new language strings and translations
+
+Please add at least the English translation for your new language string, the translation files are located in the folder **phpmyfaq/translations**.
+
+The English translation file is named **language_en.php**.
+
+To add new language strings and translations to phpMyFAQ, follow these steps:
+
+1. Open the English translation file **language_en.php** in a text editor.
+2. Add your new language string in the following format:
+   `$PMF_LANG['your_new_language_string_key'] = 'Your new language string value';`
+3. Save the file.
+4. If you want to add translations for other languages, open the corresponding translation file (e.g., 
+   **language_de.php** for German) and add the translation in the same format as above.
+
+English is always the fallback language in phpMyFAQ, so make sure to add the English translation first.
+Every translation file must contain some language description variables at the beginning of the file:
+
+```php
+$PMF_LANG['metaCharset'] = 'UTF-8';  // Character set, only use 'UTF-8'
+$PMF_LANG['metaLanguage'] = 'en';    // Language code, e.g., 'en' for English, 'de' for German
+$PMF_LANG['language'] = 'English';   // Language name in English
+$PMF_LANG['direction'] = 'ltr';      // Text direction, 'ltr' for left-to-right, 'rtl' for right-to-left
+$PMF_LANG['nplurals'] = '2';         // Number of plural forms, e.g., '2' for English
+```
+
 ## 8.2 Templating
 
 ### 8.2.1 Introduction
@@ -155,7 +181,7 @@ tab.
 This way, you can customize the look and feel of your phpMyFAQ installation, and you don't want to modify the SCSS
 files.
 
-## 8.4 REST APIs
+## 8.5 REST APIs
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 REST API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the
@@ -163,7 +189,7 @@ phpMyFAQ installation.
 
 The API documentation can be found at [https://api-docs.phpmyfaq.de/](https://api-docs.phpmyfaq.de/).
 
-## 8.5 phpMyFAQ development
+## 8.6 phpMyFAQ development
 
 Since phpMyFAQ is an Open Source project, we encourage developers to contribute patches and code for us to include in
 the main package of phpMyFAQ.
@@ -177,12 +203,12 @@ These basic rules make it possible for us to earn a living of the phpMyFAQ proje
 remains Open Source and under the MPL 2.0 license.
 All contributions will be added to the changelog and on the phpMyFAQ website.
 
-### 8.5.1 How to contribute?
+### 8.6.1 How to contribute?
 
 Contributing to phpMyFAQ is quite easy: just fork the [project on GitHub](https://github.com/thorsten/phpMyFAQ),
 work on your copy and send pull requests.
 
-### 8.5.2 Setup a local phpMyFAQ development environment
+### 8.6.2 Setup a local phpMyFAQ development environment
 
 Before working on phpMyFAQ, set up a local environment with the following software:
 
@@ -195,7 +221,7 @@ Before working on phpMyFAQ, set up a local environment with the following softwa
 - PNPM
 - Docker
 
-### 8.5.3 Configure your Git installation
+### 8.6.3 Configure your Git installation
 
 Set up your user information with your real name and a working e-mail address:
 
@@ -203,7 +229,7 @@ Set up your user information with your real name and a working e-mail address:
     $ git config --global user.email you@example.com
     $ git config core.autocrlf # if you're on Windows
 
-### 8.5.4 How to get the phpMyFAQ source code?
+### 8.6.4 How to get the phpMyFAQ source code?
 
 Clone your forked phpMyFAQ repository locally:
 
@@ -217,7 +243,7 @@ Add the upstream repository as remote:
 Please check our [coding standards](https://www.phpmyfaq.de/docs/standards) before sending patches or pull requests.
 Every PR on GitHub will check the coding standards and tests as well.
 
-### 8.5.5 Run Docker Compose
+### 8.6.5 Run Docker Compose
 
 The Dockerfile provided in the phpMyFAQ repository only builds an environment
 to run any release for development purposes.
@@ -244,16 +270,16 @@ _Running using named volumes:_
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **opensearch**: OpenSearch image (it means it does not have XPack installed)
 
-_Running apache web server with PHP 8.4 support:_
+_Running apache web server with PHP 8.5 support:_
 
 - **apache**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-_Running nginx web server with PHP 8.4 support:_
+_Running nginx web server with PHP 8.5 support:_
 
 - **nginx**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
-- **php-fpm**: PHP-FPM image with PHP 8.4 support
+- **php-fpm**: PHP-FPM image with PHP 8.5 support
 
-_Running FrankenPHP with PHP 8.4 support:_
+_Running FrankenPHP with PHP 8.5 support:_
 
 - **frankenphp**: mounts the `phpmyfaq` folder in place of `/var/www/html`. Modern PHP application server built on Caddy with worker mode for better performance.
 
@@ -264,7 +290,7 @@ Then services will be available at the following addresses:
 - phpMyAdmin: (http://localhost:8000)
 - pgAdmin: (http://localhost:8008)
 
-### 8.5.6 Fetch third party libraries and install phpMyFAQ
+### 8.6.6 Fetch third party libraries and install phpMyFAQ
 
 After cloning your forked repository, you have to fetch the 3rd party libraries used in phpMyFAQ:
 
@@ -300,14 +326,14 @@ To run the Vitest-based tests, you can use the following command:
 
     $ pnpm test
 
-### 8.5.7 Coding standards
+### 8.6.7 Coding standards
 
 The following coding standards are used in phpMyFAQ:
 
 - PHP: [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/)
 - TypeScript with ESLint recommendations
 
-### 8.5.8 Rebase your Patch
+### 8.6.8 Rebase your Patch
 
 Before submitting your patch, please update your local branch:
 
@@ -317,11 +343,11 @@ Before submitting your patch, please update your local branch:
     $ git checkout YOUR_BRANCH_NAME
     $ git rebase main
 
-### 8.5.9 Make a Pull Request
+### 8.6.9 Make a Pull Request
 
 You can now make a pull request on the phpMyFAQ GitHub repository.
 
-## 8.6 Builtin Twig Extensions
+## 8.7 Builtin Twig Extensions
 
 phpMyFAQ v4 and later use the Twig template engine for the frontend and the backend.
 We have added some custom extensions to Twig to make it easier to work with phpMyFAQ.
@@ -410,9 +436,9 @@ Example:
 
     {{ userId | userName }}
 
-## 8.7 Working with the Docker container
+## 8.8 Working with the Docker containers
 
-### 8.7.1 Create a new SSL certificate
+### 8.8.1 Create a new SSL certificate
 
 To create a new SSL certificate, you can use the following command:
 
@@ -420,7 +446,7 @@ To create a new SSL certificate, you can use the following command:
 
 For more information, please visit the [mkcert](https://github.com/FiloSottile/mkcert) website.
 
-### 8.7.2 Using an OpenLDAP docker container for testing
+### 8.8.2 Using an OpenLDAP docker container for testing
 
 To test phpMyFAQ during development with an OpenLDAP docker container, you can use the following test setup:
 
