@@ -83,6 +83,7 @@ abstract class AbstractAdministrationController extends AbstractController
             'isSessionTimeoutCounterEnabled' => $this->configuration->get(
                 item: 'security.enableAdminSessionTimeoutCounter',
             ),
+            'pluginStylesheets' => $this->configuration->getPluginManager()->getAllPluginStylesheets(),
         ] + $pageFlags;
     }
 

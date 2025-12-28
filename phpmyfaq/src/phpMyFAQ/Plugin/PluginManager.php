@@ -19,7 +19,9 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Plugin;
 
+use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
+use phpMyFAQ\Translation;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -39,6 +41,9 @@ class PluginManager
     /** @var string[] */
     private array $loadedPlugins = [];
 
+    /** @var array<string, string[]> Plugin stylesheets: [pluginName => [css paths]] */
+    private array $pluginStylesheets = [];
+
     private readonly ContainerBuilder $containerBuilder;
 
     public function __construct()
@@ -49,7 +54,6 @@ class PluginManager
 
     /**
      * Registers a plugin
-     *
      * @throws PluginException
      */
     public function registerPlugin(string $pluginClass): void
@@ -65,8 +69,7 @@ class PluginManager
 
     /**
      * Loads and registers all plugins
-     *
-     * @throws PluginException
+     * @throws PluginException|Exception
      */
     public function loadPlugins(): void
     {
@@ -87,6 +90,26 @@ class PluginManager
                 $plugin->registerEvents($this->eventDispatcher);
                 if (!empty($plugin->getConfig())) {
                     $this->loadPluginConfig($plugin->getName(), $plugin->getConfig());
+                }
+
+                // Register plugin translations
+                $translationsPath = $plugin->getTranslationsPath();
+                if ($translationsPath !== null) {
+                    $pluginDir = $this->getPluginDirectory($plugin->getName());
+                    $absoluteTranslationsPath = $pluginDir . '/' . $translationsPath;
+
+                    if (is_dir($absoluteTranslationsPath)) {
+                        Translation::getInstance()->registerPluginTranslations(
+                            $plugin->getName(),
+                            $absoluteTranslationsPath,
+                        );
+                    }
+                }
+
+                // Register plugin stylesheets
+                $stylesheets = $plugin->getStylesheets();
+                if (!empty($stylesheets)) {
+                    $this->registerPluginStylesheets($plugin->getName(), $stylesheets);
                 }
             } else {
                 throw new PluginException(sprintf('Dependencies for plugin %s are not met.', $plugin->getName()));
@@ -170,5 +193,67 @@ class PluginManager
         }
 
         return true;
+    }
+
+    /**
+     * Gets the absolute directory path for a plugin
+     */
+    private function getPluginDirectory(string $pluginName): string
+    {
+        return PMF_ROOT_DIR . '/content/plugins/' . $pluginName;
+    }
+
+    /**
+     * Registers stylesheets for a plugin
+     *
+     * @param string $pluginName
+     * @param string[] $stylesheets Relative paths to CSS files
+     */
+    private function registerPluginStylesheets(string $pluginName, array $stylesheets): void
+    {
+        $pluginDir = $this->getPluginDirectory($pluginName);
+        $validatedStylesheets = [];
+
+        foreach ($stylesheets as $stylesheet) {
+            // Security: Validate a path to prevent directory traversal
+            $absolutePath = realpath($pluginDir . '/' . $stylesheet);
+
+            if ($absolutePath && str_starts_with($absolutePath, $pluginDir) && file_exists($absolutePath)) {
+                // Store relative path from web root for use in templates
+                $webPath = 'content/plugins/' . $pluginName . '/' . $stylesheet;
+                $validatedStylesheets[] = $webPath;
+            }
+        }
+
+        if (!empty($validatedStylesheets)) {
+            $this->pluginStylesheets[$pluginName] = $validatedStylesheets;
+        }
+    }
+
+    /**
+     * Returns all registered plugin stylesheets for template injection
+     *
+     * @return string[] Array of CSS paths ready for <link> tags
+     */
+    public function getAllPluginStylesheets(): array
+    {
+        $allStylesheets = [];
+
+        foreach ($this->pluginStylesheets as $stylesheets) {
+            $allStylesheets = array_merge($allStylesheets, $stylesheets);
+        }
+
+        return $allStylesheets;
+    }
+
+    /**
+     * Returns stylesheets for a specific plugin
+     *
+     * @param string $pluginName
+     * @return string[]
+     */
+    public function getPluginStylesheets(string $pluginName): array
+    {
+        return $this->pluginStylesheets[$pluginName] ?? [];
     }
 }

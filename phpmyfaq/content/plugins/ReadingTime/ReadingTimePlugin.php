@@ -9,7 +9,7 @@
  *
  *      {{ phpMyFAQPlugin('reading.time', answer) | raw }}
  *
- * into the FAQ template.
+ * into the Twig template.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -46,7 +46,7 @@ class ReadingTimePlugin implements PluginInterface
      */
     public function getName(): string
     {
-        return 'ReadingTimePlugin';
+        return 'ReadingTime';
     }
 
     /**
@@ -62,7 +62,7 @@ class ReadingTimePlugin implements PluginInterface
      */
     public function getDescription(): string
     {
-        return 'Shows estimated reading time for FAQ articles';
+        return 'Example plugin that shows estimated reading time for FAQ articles with plugin configuration example.';
     }
 
     /**
@@ -87,6 +87,22 @@ class ReadingTimePlugin implements PluginInterface
     public function getConfig(): ?ReadingTimePluginConfiguration
     {
         return $this->config;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStylesheets(): array
+    {
+        return []; // No stylesheets for this plugin
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTranslationsPath(): ?string
+    {
+        return null; // No translations for this plugin
     }
 
     /**

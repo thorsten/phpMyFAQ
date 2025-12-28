@@ -37,6 +37,16 @@ class MockPlugin implements PluginInterface
         return null; // No configuration needed for mock plugin
     }
 
+    public function getStylesheets(): array
+    {
+        return [];
+    }
+
+    public function getTranslationsPath(): ?string
+    {
+        return null;
+    }
+
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('mock.event', [$this, 'onMockEvent']);

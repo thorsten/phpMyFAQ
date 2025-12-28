@@ -1,0 +1,41 @@
+/**
+ * Enhanced Example Plugin - Frontend Styles
+ *
+ * This stylesheet demonstrates how plugins can provide their own CSS styling
+ * for frontend pages.
+ */
+
+.pmf-plugin-enhanced-greeting {
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.pmf-plugin-enhanced-greeting h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pmf-plugin-enhanced-greeting p {
+  margin: 0;
+  opacity: 0.95;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

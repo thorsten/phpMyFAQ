@@ -24,6 +24,7 @@ class RatingTest extends TestCase
     {
         parent::setUp();
 
+        Translation::resetInstance();
         Translation::create()
             ->setTranslationsDir(PMF_TRANSLATION_DIR)
             ->setDefaultLanguage('en')

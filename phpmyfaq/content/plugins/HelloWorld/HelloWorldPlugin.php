@@ -59,6 +59,16 @@ class HelloWorldPlugin implements PluginInterface
         return null; // No configuration needed for this simple plugin
     }
 
+    public function getStylesheets(): array
+    {
+        return []; // No stylesheets for this simple plugin
+    }
+
+    public function getTranslationsPath(): ?string
+    {
+        return null; // No translations for this simple plugin
+    }
+
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('hello.world', [$this, 'onContentLoaded']);
@@ -67,7 +77,7 @@ class HelloWorldPlugin implements PluginInterface
     public function onContentLoaded(PluginEvent $event): void
     {
         $content = $event->getData();
-        $output = 'phpMyFAQ says: Content Loaded: ' . $content . '<br>';
+        $output = 'phpMyFAQ says ' . $content . '<br>';
         $event->setOutput($output);
     }
 }

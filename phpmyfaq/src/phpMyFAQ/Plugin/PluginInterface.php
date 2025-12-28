@@ -57,4 +57,20 @@ interface PluginInterface
      * Register the events
      */
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void;
+
+    /**
+     * Returns an array of CSS file paths (relative to plugin directory)
+     * Plugins should provide pre-compiled CSS files
+     *
+     * @return string[] Array of CSS file paths, e.g., ['assets/style.css']
+     */
+    public function getStylesheets(): array;
+
+    /**
+     * Returns the path to the translations directory (relative to plugin directory)
+     * Returns null if the plugin doesn't provide translations
+     *
+     * @return string|null Path to the translations directory, e.g., 'translations'
+     */
+    public function getTranslationsPath(): ?string;
 }

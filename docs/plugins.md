@@ -120,7 +120,143 @@ class MyPlugin implements PluginInterface
 </div>
 ```
 
-## 9.6 Plugin version history
+## 9.6 Plugin stylesheets
+
+Plugins can provide pre-compiled CSS files that will be automatically injected into both frontend and admin pages.
+
+### 9.6.1 Adding stylesheets to your plugin
+
+Implement the `getStylesheets()` method in your plugin class:
+
+```php
+public function getStylesheets(): array
+{
+    return [
+        'assets/style.css',        // Frontend styles
+        'assets/admin-style.css'   // Admin-specific styles
+    ];
+}
+```
+
+**Important notes:**
+- Paths are relative to your plugin directory
+- Provide **pre-compiled CSS files** only (not SCSS)
+- CSS files are loaded after core styles (can override if needed)
+- Stylesheets are automatically injected into page `<head>`
+- Works in both frontend and admin areas
+
+### 9.6.2 Plugin directory structure for CSS
+
+```
+/content/plugins/YourPlugin/
+├── YourPluginPlugin.php
+└── assets/
+    ├── style.css
+    └── admin-style.css
+```
+
+## 9.7 Plugin translations
+
+Plugins can provide translations in multiple languages that integrate seamlessly with phpMyFAQ's translation system.
+
+### 9.7.1 Adding translations to your plugin
+
+1. Implement the `getTranslationsPath()` method:
+
+```php
+public function getTranslationsPath(): ?string
+{
+    return 'translations';  // Path relative to plugin directory
+}
+```
+
+2. Create translation files following phpMyFAQ's naming convention:
+
+**File**: `/content/plugins/YourPlugin/translations/language_en.php`
+```php
+<?php
+$PMF_LANG['greeting'] = 'Hello';
+$PMF_LANG['message'] = 'Welcome to my plugin!';
+```
+
+**File**: `/content/plugins/YourPlugin/translations/language_de.php`
+```php
+<?php
+$PMF_LANG['greeting'] = 'Hallo';
+$PMF_LANG['message'] = 'Willkommen zu meinem Plugin!';
+```
+
+### 9.7.2 Using plugin translations
+
+**In PHP code:**
+```php
+use phpMyFAQ\Translation;
+
+$greeting = Translation::get('plugin.YourPlugin.greeting');
+$message = Translation::get('plugin.YourPlugin.message');
+```
+
+**In Twig templates:**
+```twig
+{{ 'plugin.YourPlugin.greeting' | translate }}
+{{ 'plugin.YourPlugin.message' | translate }}
+```
+
+### 9.7.3 Translation key format
+
+Plugin translations use a namespaced format:
+```
+plugin.{PluginName}.{messageKey}
+```
+
+- `plugin.` - Fixed namespace prefix
+- `{PluginName}` - Your plugin's name from `getName()`
+- `{messageKey}` - Key from your translation file's `$PMF_LANG` array
+
+**Important:**
+- Plugin translations **cannot override** core phpMyFAQ translations
+- Translations are isolated per plugin
+- Automatic fallback to English if translation missing in current language
+- Support all 45+ phpMyFAQ languages
+
+### 9.7.4 Plugin directory structure for translations
+
+```
+/content/plugins/YourPlugin/
+├── YourPluginPlugin.php
+└── translations/
+    ├── language_en.php
+    ├── language_de.php
+    ├── language_fr.php
+    └── language_es.php
+```
+
+## 9.8 Complete plugin example with CSS and translations
+
+See the `EnhancedExample` plugin for a complete working example demonstrating both features:
+
+```
+/content/plugins/EnhancedExample/
+├── EnhancedExamplePlugin.php
+├── assets/
+│   ├── style.css
+│   └── admin-style.css
+└── translations/
+    ├── language_en.php
+    ├── language_de.php
+    └── language_fr.php
+```
+
+**Usage in Twig templates:**
+```twig
+{# Use the plugin event #}
+{{ phpMyFAQPlugin('enhanced.greeting', 'John') | raw }}
+
+{# Access plugin translations directly #}
+<p>{{ 'plugin.EnhancedExample.adminMessage' | translate }}</p>
+```
+
+## 9.9 Plugin version history
 
 - 0.1.0: Initial version, shipped with phpMyFAQ 4.0.0
-- 0.2.0: Added support for plugin configuration options, shipped with phpMyFAQ 4.1.0
+- 0.2.0: Added support for plugin configuration options, plugin stylesheets and translations, shipped with phpMyFAQ 4.1.0

@@ -1,0 +1,28 @@
+/**
+ * Enhanced Example Plugin - Admin Styles
+ *
+ * This stylesheet demonstrates admin-specific styling for plugins.
+ * Admin styles are typically more subtle and professional.
+ */
+
+.pmf-plugin-enhanced-greeting {
+  padding: 1rem;
+  margin: 1rem 0;
+  background: #f8f9fa;
+  border-left: 4px solid #667eea;
+  color: #333;
+  border-radius: 4px;
+}
+
+.pmf-plugin-enhanced-greeting h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.pmf-plugin-enhanced-greeting p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}

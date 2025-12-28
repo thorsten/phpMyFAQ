@@ -22,6 +22,11 @@
     {{ customCss | raw }}
   </style>
   {% endif %}
+  {% if pluginStylesheets is defined and pluginStylesheets is not empty %}
+    {% for stylesheet in pluginStylesheets %}
+  <link href="{{ baseHref }}{{ stylesheet }}" rel="stylesheet" media="screen">
+    {% endfor %}
+  {% endif %}
   <link href="{{ baseHref }}assets/images/favicon.ico" rel="shortcut icon">
   <link href="{{ currentPageUrl }}" rel="canonical">
 

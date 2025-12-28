@@ -519,6 +519,7 @@ $templateVars = [
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     'copyright' => System::getPoweredByString(),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
+    'pluginStylesheets' => $faqConfig->getPluginManager()->getAllPluginStylesheets(),
     'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
     'sendPassword' =>
         '<a href="'

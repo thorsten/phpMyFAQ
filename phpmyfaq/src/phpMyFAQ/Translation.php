@@ -36,6 +36,9 @@ class Translation
     /** @var string[][] The loaded languages */
     protected array $loadedLanguages = [];
 
+    /** @var array<string, array<string, array<string, string>>> Plugin translations: [pluginName][language][key] */
+    protected array $pluginTranslations = [];
+
     /** @var bool Translation already initialized? */
     protected bool $isReady = false;
 
@@ -69,6 +72,35 @@ class Translation
             self::$translation->checkInit();
             self::$translation->checkLanguageLoaded();
 
+            // Check if key uses plugin namespace format: plugin.PluginName.messageKey
+            if (str_starts_with($key, 'plugin.')) {
+                $parts = explode('.', $key, 3);
+
+                if (count($parts) === 3) {
+                    [$namespace, $pluginName, $messageKey] = $parts;
+
+                    // Try the current language first
+                    if (
+                        isset(
+                            self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey],
+                        )
+                    ) {
+                        return self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey];
+                    }
+
+                    // Fallback to the default language
+                    if (
+                        isset(
+                            self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
+                        )
+                    ) {
+                        return self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey];
+                    }
+
+                    return null;
+                }
+            }
+
             if (
                 isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])
                 && self::$translation->loadedLanguages[self::$translation->currentLanguage][$key] !== ''
@@ -95,6 +127,34 @@ class Translation
             self::$translation->checkInit();
             self::$translation->checkLanguageLoaded();
 
+            // Check plugin namespace
+            if (str_starts_with($key, 'plugin.')) {
+                $parts = explode('.', $key, 3);
+
+                if (count($parts) === 3) {
+                    [$namespace, $pluginName, $messageKey] = $parts;
+
+                    if (
+                        isset(
+                            self::$translation->pluginTranslations[$pluginName][self::$translation->currentLanguage][$messageKey],
+                        )
+                    ) {
+                        return true;
+                    }
+
+                    if (
+                        isset(
+                            self::$translation->pluginTranslations[$pluginName][self::$translation->defaultLanguage][$messageKey],
+                        )
+                    ) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            // Original core logic
             if (isset(self::$translation->loadedLanguages[self::$translation->currentLanguage][$key])) {
                 return true;
             }
@@ -234,6 +294,45 @@ class Translation
         Utils::moveToTop($configuration, key: 'main.maintenanceMode');
 
         return $configuration;
+    }
+
+    /**
+     * Registers translations for a plugin from its translations directory
+     *
+     * @param string $pluginName The plugin name (for namespace)
+     * @param string $translationsDir Absolute path to plugin's translations directory
+     * @throws Exception
+     */
+    public function registerPluginTranslations(string $pluginName, string $translationsDir): void
+    {
+        if (!is_dir($translationsDir)) {
+            return; // Silently skip if no translations directory
+        }
+
+        // Load all language files from plugin translations directory
+        $languageFiles = glob($translationsDir . '/language_*.php');
+
+        if ($languageFiles === false) {
+            return; // Silently skip if glob fails
+        }
+
+        foreach ($languageFiles as $file) {
+            // Extract language code from filename: language_en.php -> en
+            if (preg_match('/language_([a-z]{2,3}(_[a-z]{2})?)\.php$/i', basename($file), $matches)) {
+                $langCode = strtolower($matches[1]);
+
+                // Include the file and extract the $PMF_LANG array
+                $PMF_LANG = [];
+                include $file;
+
+                // Store in namespaced structure
+                if (!isset($this->pluginTranslations[$pluginName])) {
+                    $this->pluginTranslations[$pluginName] = [];
+                }
+
+                $this->pluginTranslations[$pluginName][$langCode] = $PMF_LANG;
+            }
+        }
     }
 
     // ---------------------------------------------------------------------

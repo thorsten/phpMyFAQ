@@ -16,6 +16,11 @@
 
   <link rel="stylesheet" href="../assets/public/admin.css">
   <link rel="stylesheet" href="../assets/templates/default/theme.css">
+  {% if pluginStylesheets is defined and pluginStylesheets is not empty %}
+    {% for stylesheet in pluginStylesheets %}
+  <link href="../{{ stylesheet }}" rel="stylesheet" media="screen">
+    {% endfor %}
+  {% endif %}
 
   <script src="./assets/js/configuration.js"></script>
   <link rel="shortcut icon" href="../assets/images/favicon.ico">
