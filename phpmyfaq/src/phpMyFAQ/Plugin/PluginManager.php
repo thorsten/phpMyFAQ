@@ -44,6 +44,9 @@ class PluginManager
     /** @var array<string, string[]> Plugin stylesheets: [pluginName => [css paths]] */
     private array $pluginStylesheets = [];
 
+    /** @var array<string, string[]> Plugin scripts: [pluginName => [js paths]] */
+    private array $pluginScripts = [];
+
     private readonly ContainerBuilder $containerBuilder;
 
     public function __construct()
@@ -110,6 +113,12 @@ class PluginManager
                 $stylesheets = $plugin->getStylesheets();
                 if (!empty($stylesheets)) {
                     $this->registerPluginStylesheets($plugin->getName(), $stylesheets);
+                }
+
+                // Register plugin scripts
+                $scripts = $plugin->getScripts();
+                if (!empty($scripts)) {
+                    $this->registerPluginScripts($plugin->getName(), $scripts);
                 }
             } else {
                 throw new PluginException(sprintf('Dependencies for plugin %s are not met.', $plugin->getName()));
@@ -255,5 +264,59 @@ class PluginManager
     public function getPluginStylesheets(string $pluginName): array
     {
         return $this->pluginStylesheets[$pluginName] ?? [];
+    }
+
+    /**
+     * Registers scripts for a plugin
+     *
+     * @param string $pluginName
+     * @param string[] $scripts Relative paths to JavaScript files
+     */
+    private function registerPluginScripts(string $pluginName, array $scripts): void
+    {
+        $pluginDir = $this->getPluginDirectory($pluginName);
+        $validatedScripts = [];
+
+        foreach ($scripts as $script) {
+            // Security: Validate path to prevent directory traversal
+            $absolutePath = realpath($pluginDir . '/' . $script);
+
+            if ($absolutePath && str_starts_with($absolutePath, $pluginDir) && file_exists($absolutePath)) {
+                // Store relative path from web root for use in templates
+                $webPath = 'content/plugins/' . $pluginName . '/' . $script;
+                $validatedScripts[] = $webPath;
+            }
+        }
+
+        if (!empty($validatedScripts)) {
+            $this->pluginScripts[$pluginName] = $validatedScripts;
+        }
+    }
+
+    /**
+     * Returns all registered plugin scripts for template injection
+     *
+     * @return string[] Array of JavaScript paths ready for <script> tags
+     */
+    public function getAllPluginScripts(): array
+    {
+        $allScripts = [];
+
+        foreach ($this->pluginScripts as $scripts) {
+            $allScripts = array_merge($allScripts, $scripts);
+        }
+
+        return $allScripts;
+    }
+
+    /**
+     * Returns scripts for a specific plugin
+     *
+     * @param string $pluginName
+     * @return string[]
+     */
+    public function getPluginScripts(string $pluginName): array
+    {
+        return $this->pluginScripts[$pluginName] ?? [];
     }
 }

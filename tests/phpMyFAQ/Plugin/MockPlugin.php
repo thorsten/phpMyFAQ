@@ -47,6 +47,11 @@ class MockPlugin implements PluginInterface
         return null;
     }
 
+    public function getScripts(): array
+    {
+        return [];
+    }
+
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('mock.event', [$this, 'onMockEvent']);

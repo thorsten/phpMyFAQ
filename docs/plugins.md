@@ -231,16 +231,80 @@ plugin.{PluginName}.{messageKey}
     └── language_es.php
 ```
 
-## 9.8 Complete plugin example with CSS and translations
+## 9.8 Plugin JavaScript
 
-See the `EnhancedExample` plugin for a complete working example demonstrating both features:
+Plugins can provide pre-compiled JavaScript files that will be automatically injected into both frontend and admin pages.
+
+### 9.8.1 Adding JavaScript to your plugin
+
+Implement the `getScripts()` method in your plugin class:
+
+```php
+public function getScripts(): array
+{
+    return [
+        'assets/script.js',        // Frontend script
+        'assets/admin-script.js'   // Admin-specific script
+    ];
+}
+```
+
+**Important notes:**
+- Paths are relative to your plugin directory
+- Provide **pre-compiled JavaScript files** only (not TypeScript source)
+- JavaScript files are loaded before core scripts
+- Scripts are automatically injected at the end of `<body>`
+- Works in both frontend and admin areas
+
+### 9.8.2 Plugin directory structure for JavaScript
+
+```
+/content/plugins/YourPlugin/
+├── YourPluginPlugin.php
+└── assets/
+    ├── script.js
+    └── admin-script.js
+```
+
+### 9.8.3 JavaScript best practices
+
+**Example frontend script:**
+```javascript
+(function() {
+    'use strict';
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    function init() {
+        console.log('My Plugin: Loaded');
+        // Your plugin functionality here
+    }
+})();
+```
+
+**Security notes:**
+- Always use strict mode (`'use strict'`)
+- Wrap code in IIFE to avoid global namespace pollution
+- Validate and sanitize user input
+- Use DOM API safely
+
+## 9.9 Complete plugin example with CSS, JavaScript, and translations
+
+See the `EnhancedExample` plugin for a complete working example demonstrating all features:
 
 ```
 /content/plugins/EnhancedExample/
 ├── EnhancedExamplePlugin.php
 ├── assets/
 │   ├── style.css
-│   └── admin-style.css
+│   ├── admin-style.css
+│   ├── script.js
+│   └── admin-script.js
 └── translations/
     ├── language_en.php
     ├── language_de.php
@@ -256,7 +320,7 @@ See the `EnhancedExample` plugin for a complete working example demonstrating bo
 <p>{{ 'plugin.EnhancedExample.adminMessage' | translate }}</p>
 ```
 
-## 9.9 Plugin version history
+## 9.10 Plugin version history
 
 - 0.1.0: Initial version, shipped with phpMyFAQ 4.0.0
-- 0.2.0: Added support for plugin configuration options, plugin stylesheets and translations, shipped with phpMyFAQ 4.1.0
+- 0.2.0: Added support for plugin configuration, stylesheets, JavaScript, and translations, shipped with phpMyFAQ 4.1.0

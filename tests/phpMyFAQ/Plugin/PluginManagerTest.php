@@ -13,7 +13,7 @@ require 'MockPluginEvent.php';
 #[AllowMockObjectsWithoutExpectations]
 class PluginManagerTest extends TestCase
 {
-    private $pluginManager;
+    private PluginManager $pluginManager;
 
     protected function setUp(): void
     {
@@ -151,5 +151,91 @@ class PluginManagerTest extends TestCase
         $stylesheets = $this->pluginManager->getPluginStylesheets('NonExistentPlugin');
         $this->assertIsArray($stylesheets);
         $this->assertEmpty($stylesheets);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testRegisterPluginScripts(): void
+    {
+        if (!defined('PMF_ROOT_DIR')) {
+            define('PMF_ROOT_DIR', sys_get_temp_dir() . '/phpmyfaq_root_' . uniqid());
+        }
+        $testPluginDir = PMF_ROOT_DIR . '/content/plugins/ScriptTestPlugin';
+        mkdir($testPluginDir . '/assets', 0777, true);
+        file_put_contents($testPluginDir . '/assets/script.js', '/* test js */');
+
+        $reflection = new ReflectionClass($this->pluginManager);
+        $method = $reflection->getMethod('registerPluginScripts');
+
+        $method->invokeArgs($this->pluginManager, ['ScriptTestPlugin', ['assets/script.js']]);
+
+        $getAllMethod = $reflection->getMethod('getAllPluginScripts');
+        $scripts = $getAllMethod->invoke($this->pluginManager);
+
+        $this->assertContains('content/plugins/ScriptTestPlugin/assets/script.js', $scripts);
+
+        // Cleanup
+        unlink($testPluginDir . '/assets/script.js');
+        rmdir($testPluginDir . '/assets');
+        rmdir($testPluginDir);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testRegisterPluginScriptsWithInvalidPath(): void
+    {
+        $reflection = new ReflectionClass($this->pluginManager);
+        $method = $reflection->getMethod('registerPluginScripts');
+
+        // Try to register with a path traversal attempt
+        $method->invokeArgs($this->pluginManager, ['ScriptTestPlugin', ['../../../etc/passwd']]);
+
+        $getAllMethod = $reflection->getMethod('getAllPluginScripts');
+        $scripts = $getAllMethod->invoke($this->pluginManager);
+
+        $this->assertEmpty($scripts, 'Should not register scripts with invalid/traversal paths');
+    }
+
+    public function testGetAllPluginScriptsReturnsEmpty(): void
+    {
+        $scripts = $this->pluginManager->getAllPluginScripts();
+        $this->assertIsArray($scripts);
+        $this->assertEmpty($scripts);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testGetPluginScriptsForSpecificPlugin(): void
+    {
+        if (!defined('PMF_ROOT_DIR')) {
+            define('PMF_ROOT_DIR', sys_get_temp_dir() . '/phpmyfaq_root_' . uniqid());
+        }
+        $testPluginDir = PMF_ROOT_DIR . '/content/plugins/SpecificScriptPlugin';
+        mkdir($testPluginDir . '/assets', 0777, true);
+        file_put_contents($testPluginDir . '/assets/custom.js', '/* custom js */');
+
+        $reflection = new ReflectionClass($this->pluginManager);
+        $method = $reflection->getMethod('registerPluginScripts');
+        $method->invokeArgs($this->pluginManager, ['SpecificScriptPlugin', ['assets/custom.js']]);
+
+        $scripts = $this->pluginManager->getPluginScripts('SpecificScriptPlugin');
+
+        $this->assertIsArray($scripts);
+        $this->assertContains('content/plugins/SpecificScriptPlugin/assets/custom.js', $scripts);
+
+        // Cleanup
+        unlink($testPluginDir . '/assets/custom.js');
+        rmdir($testPluginDir . '/assets');
+        rmdir($testPluginDir);
+    }
+
+    public function testGetPluginScriptsForNonExistentPlugin(): void
+    {
+        $scripts = $this->pluginManager->getPluginScripts('NonExistentPlugin');
+        $this->assertIsArray($scripts);
+        $this->assertEmpty($scripts);
     }
 }

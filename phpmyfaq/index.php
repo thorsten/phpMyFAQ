@@ -520,6 +520,7 @@ $templateVars = [
     'copyright' => System::getPoweredByString(),
     'isUserRegistrationEnabled' => $faqConfig->get('security.enableRegistration'),
     'pluginStylesheets' => $faqConfig->getPluginManager()->getAllPluginStylesheets(),
+    'pluginScripts' => $faqConfig->getPluginManager()->getAllPluginScripts(),
     'msgRegisterUser' => Translation::get(key: 'msgRegisterUser'),
     'sendPassword' =>
         '<a href="'

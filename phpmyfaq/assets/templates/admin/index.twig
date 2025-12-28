@@ -314,6 +314,11 @@
           style="display: none;" name="keep-phpmyfaq-session-alive"></iframe>
 {% endif %}
 
+{% if pluginScripts is defined and pluginScripts is not empty %}
+  {% for script in pluginScripts %}
+<script src="../{{ script }}"></script>
+  {% endfor %}
+{% endif %}
 <script type="module" src="../assets/public/backend.js?{{ currentTimeStamp}}"></script>
 </body>
 </html>

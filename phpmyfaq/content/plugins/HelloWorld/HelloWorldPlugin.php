@@ -69,6 +69,11 @@ class HelloWorldPlugin implements PluginInterface
         return null; // No translations for this simple plugin
     }
 
+    public function getScripts(): array
+    {
+        return []; // No scripts for this simple plugin
+    }
+
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('hello.world', [$this, 'onContentLoaded']);

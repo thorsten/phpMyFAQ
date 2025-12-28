@@ -108,6 +108,14 @@ class ReadingTimePlugin implements PluginInterface
     /**
      * @inheritDoc
      */
+    public function getScripts(): array
+    {
+        return []; // No scripts for this plugin
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('reading.time', [$this, 'addReadingTime']);

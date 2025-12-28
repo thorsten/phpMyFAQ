@@ -76,6 +76,14 @@ class EnhancedExamplePlugin implements PluginInterface
         return 'translations';
     }
 
+    public function getScripts(): array
+    {
+        return [
+            'assets/script.js',       // Frontend script
+            'assets/admin-script.js'  // Admin script
+        ];
+    }
+
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
         $eventDispatcher->addListener('enhanced.greeting', [$this, 'onGreeting']);

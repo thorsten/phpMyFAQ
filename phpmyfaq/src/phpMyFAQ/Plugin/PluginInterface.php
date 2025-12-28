@@ -73,4 +73,12 @@ interface PluginInterface
      * @return string|null Path to the translations directory, e.g., 'translations'
      */
     public function getTranslationsPath(): ?string;
+
+    /**
+     * Returns an array of JavaScript file paths (relative to plugin directory)
+     * Plugins should provide pre-compiled JavaScript files (not TypeScript source)
+     *
+     * @return string[] Array of JavaScript file paths, e.g., ['assets/script.js']
+     */
+    public function getScripts(): array;
 }

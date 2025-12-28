@@ -225,6 +225,11 @@
 {% if isCookieConsentEnabled %}
 <script type="module" src="./assets/public/cookieConsent.js"></script>
 {% endif %}
+{% if pluginScripts is defined and pluginScripts is not empty %}
+  {% for script in pluginScripts %}
+<script src="{{ baseHref }}{{ script }}"></script>
+  {% endfor %}
+{% endif %}
 <script type="module" src="./assets/public/frontend.js"></script>
 </body>
 </html>

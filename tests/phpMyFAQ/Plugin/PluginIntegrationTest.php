@@ -38,6 +38,17 @@ class PluginIntegrationTest extends TestCase
             '.test-plugin-admin { color: red; }'
         );
 
+        // Create JavaScript files
+        file_put_contents(
+            $this->testPluginDir . '/IntegrationTestPlugin/assets/script.js',
+            'console.log("Test plugin loaded");'
+        );
+
+        file_put_contents(
+            $this->testPluginDir . '/IntegrationTestPlugin/assets/admin-script.js',
+            'console.log("Test plugin admin loaded");'
+        );
+
         // Create translation files
         file_put_contents(
             $this->testPluginDir . '/IntegrationTestPlugin/translations/language_en.php',
@@ -99,6 +110,11 @@ class IntegrationTestPluginPlugin implements PluginInterface
     public function getTranslationsPath(): ?string
     {
         return 'translations';
+    }
+
+    public function getScripts(): array
+    {
+        return ['assets/script.js', 'assets/admin-script.js'];
     }
 
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
@@ -181,6 +197,12 @@ PHP;
         $this->assertCount(2, $stylesheets);
         $this->assertContains('assets/style.css', $stylesheets);
         $this->assertContains('assets/admin-style.css', $stylesheets);
+
+        // Test script registration
+        $scripts = $plugin->getScripts();
+        $this->assertCount(2, $scripts);
+        $this->assertContains('assets/script.js', $scripts);
+        $this->assertContains('assets/admin-script.js', $scripts);
 
         // Test translations path
         $translationsPath = $plugin->getTranslationsPath();
