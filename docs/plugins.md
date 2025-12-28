@@ -1,6 +1,6 @@
 # 9. Plugins
 
-Starting with phpMyFAQ 4.0, we have a new, currently experimental plugin system.
+With phpMyFAQ 4.0 and later, we have a new, currently experimental plugin system.
 This system allows you to extend phpMyFAQ with new features.
 The plugin system is based on the Symfony Dependency Injection component.
 
@@ -9,6 +9,7 @@ The plugin system is based on the Symfony Dependency Injection component.
 Plugins are installed in the `content/plugins` directory of your phpMyFAQ installation.
 The plugin directory should contain a subdirectory for each plugin, e.g. `content/plugins/HelloWorld`.
 The plugin directory should contain a `HelloWorldPlugin.php` file that implements the `PluginInterface` interface.
+If you want to remove a plugin, you can delete the plugin in the plugin directory.
 
 ## 9.2 Plugin configuration
 
@@ -118,3 +119,8 @@ class MyPlugin implements PluginInterface
     {{ phpMyFAQPlugin('user.login', 'John Doe') | raw }}
 </div>
 ```
+
+## 9.6 Plugin version history
+
+- 0.1.0: Initial version, shipped with phpMyFAQ 4.0.0
+- 0.2.0: Added support for plugin configuration options, shipped with phpMyFAQ 4.1.0
