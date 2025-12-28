@@ -49,9 +49,9 @@ interface PluginInterface
     public function getDependencies(): array;
 
     /**
-     * Returns the configuration of the plugin
+     * Returns the configuration of the plugin (optional)
      */
-    public function getConfig(): array;
+    public function getConfig(): ?PluginConfigurationInterface;
 
     /**
      * Register the events

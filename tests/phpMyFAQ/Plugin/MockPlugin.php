@@ -6,12 +6,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MockPlugin implements PluginInterface
 {
-    private PluginManager $manager;
-
-    public function __construct($manager)
-    {
-        $this->manager = $manager;
-    }
 
     public function getName(): string
     {
@@ -38,11 +32,9 @@ class MockPlugin implements PluginInterface
         return [];
     }
 
-    public function getConfig(): array
+    public function getConfig(): ?PluginConfigurationInterface
     {
-        return [
-            'option1' => 'value1'
-        ];
+        return null; // No configuration needed for mock plugin
     }
 
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void

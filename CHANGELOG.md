@@ -32,6 +32,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - added experimental update via command line (Thorsten)
 - added experimental support for PHP 8.6 (Thorsten)
 - improved online update feature (Thorsten)
+- improved experimental plugin manager (Thorsten)
 - updated Spanish translation
 - updated Polish translation
 - updated French translation

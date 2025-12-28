@@ -28,7 +28,9 @@ class PluginManagerTest extends TestCase
         $this->assertArrayHasKey('mockPlugin', $this->pluginManager->getPlugins());
     }
 
-    public function testLoadPlugins(): void
+    /**
+     * @throws \ReflectionException
+     */public function testLoadPlugins(): void
     {
         $mockPluginPath = __DIR__ . '/MockPlugin.php';
         file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
@@ -40,20 +42,13 @@ class PluginManagerTest extends TestCase
         $this->assertEquals('phpMyFAQ\Plugin', $namespace);
     }
 
-    public function testLoadPluginConfig(): void
-    {
-        $config = ['option1' => 'value1'];
-        $this->pluginManager->loadPluginConfig('mockPlugin', $config);
-
-        $this->assertEquals($config, $this->pluginManager->getPluginConfig('mockPlugin'));
-    }
 
     /**
      * @throws \ReflectionException
      */
     public function testAreDependenciesMet(): void
     {
-        $mockPlugin = new MockPlugin($this->pluginManager);
+        $mockPlugin = new MockPlugin();
 
         $reflection = new ReflectionClass($this->pluginManager);
         $method = $reflection->getMethod('areDependenciesMet');

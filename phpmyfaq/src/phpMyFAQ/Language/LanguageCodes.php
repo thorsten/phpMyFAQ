@@ -256,6 +256,7 @@ class LanguageCodes
         'ar' => 'Arabic',
         'eu' => 'Basque',
         'bn' => 'Bengali',
+        'bs' => 'Bosnian',
         'zh' => 'Chinese',
         'cs' => 'Czech',
         'da' => 'Danish',

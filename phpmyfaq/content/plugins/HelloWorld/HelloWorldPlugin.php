@@ -17,14 +17,18 @@
  * @since     2024-07-10
  */
 
+declare(strict_types=1);
+
 namespace phpMyFAQ\Plugin\HelloWorld;
 
 use phpMyFAQ\Plugin\PluginEvent;
 use phpMyFAQ\Plugin\PluginInterface;
+use phpMyFAQ\Plugin\PluginConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class HelloWorldPlugin implements PluginInterface
 {
+
     public function getName(): string
     {
         return 'HelloWorld';
@@ -50,20 +54,20 @@ class HelloWorldPlugin implements PluginInterface
         return [];
     }
 
-    public function getConfig(): array
+    public function getConfig(): ?PluginConfigurationInterface
     {
-        return [];
+        return null; // No configuration needed for this simple plugin
     }
 
     public function registerEvents(EventDispatcherInterface $eventDispatcher): void
     {
-        $eventDispatcher->addListener('content.loaded', [$this, 'onContentLoaded']);
+        $eventDispatcher->addListener('hello.world', [$this, 'onContentLoaded']);
     }
 
     public function onContentLoaded(PluginEvent $event): void
     {
         $content = $event->getData();
-        $output = "phpMyFAQ says: Content Loaded: " . $content . "<br>";
+        $output = 'phpMyFAQ says: Content Loaded: ' . $content . '<br>';
         $event->setOutput($output);
     }
 }

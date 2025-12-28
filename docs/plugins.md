@@ -12,7 +12,22 @@ The plugin directory should contain a `HelloWorldPlugin.php` file that implement
 
 ## 9.2 Plugin configuration
 
-Plugins can have configuration options.
+Plugins can have configuration options, implemented via the `PluginConfigurationInterface` interface.
+Configuration options can be defined in the plugin configuration class with Constructor Property Promotion by adding 
+public properties.
+
+### 9.3.1 Example configuration class
+
+```php
+class MyPluginConfiguration implements PluginConfigurationInterface
+{
+    public function __construct(
+        public int $hooraysPerMinute = 200,
+        public bool $showIcon = true,
+    ) {
+    }
+}
+```
 
 ## 9.3 Plugin development
 
@@ -55,7 +70,7 @@ class MyPlugin implements PluginInterface
 
     public function getVersion(): string
     {
-        return '0.1.0';
+        return '0.2.0';
     }
 
     public function getDependencies(): array
@@ -63,16 +78,14 @@ class MyPlugin implements PluginInterface
         return [];
     }
 
-    public function getConfig(): array
+    public function getConfig(): ?PluginConfigurationInterface
     {
-        return [
-            'option1' => 'value1'
-        ];
+        return null;
     }
 
     public function registerEvents(EventDispatcherInterface $dispatcher): void
     {
-        $dispatcher->addListener('content.loaded', [$this, 'onContentLoaded']);
+        $dispatcher->addListener('hello.world', [$this, 'onContentLoaded']);
         $dispatcher->addListener('user.login', [$this, 'onUserLogin']);
     }
 
@@ -98,7 +111,7 @@ class MyPlugin implements PluginInterface
 
 <div>
     <h2>Content Loaded Event</h2>
-    {{ phpMyFAQPlugin('content.loaded', 'Hello, World!') | raw }}
+    {{ phpMyFAQPlugin('hello.world', 'Hello, World!') | raw }}
 </div>
 <div>
     <h2>User Login Event</h2>

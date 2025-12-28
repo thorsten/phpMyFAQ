@@ -33,6 +33,7 @@ class PluginManager
 
     private readonly EventDispatcher $eventDispatcher;
 
+    /** @var PluginConfigurationInterface[] */
     private array $config = [];
 
     /** @var string[] */
@@ -53,10 +54,10 @@ class PluginManager
      */
     public function registerPlugin(string $pluginClass): void
     {
-        $plugin = new $pluginClass($this);
+        $plugin = new $pluginClass();
         if ($this->isCompatible($plugin)) {
             $this->plugins[$plugin->getName()] = $plugin;
-            $this->containerBuilder->register($plugin->getName(), $pluginClass)->setArguments([$this]);
+            $this->containerBuilder->register($plugin->getName(), $pluginClass);
         } else {
             throw new PluginException(sprintf('Plugin %s is not compatible.', $plugin->getName()));
         }
@@ -109,9 +110,10 @@ class PluginManager
     /**
      * Loads the configuration for a plugin
      *
-     * @param string[] $config
+     * @param string $pluginName
+     * @param PluginConfigurationInterface $config
      */
-    public function loadPluginConfig(string $pluginName, array $config): void
+    public function loadPluginConfig(string $pluginName, PluginConfigurationInterface $config): void
     {
         $this->config[$pluginName] = $config;
     }
@@ -119,9 +121,9 @@ class PluginManager
     /**
      * Returns the configuration for a plugin
      */
-    public function getPluginConfig(string $pluginName): array
+    public function getPluginConfig(string $pluginName): ?PluginConfigurationInterface
     {
-        return $this->config[$pluginName] ?? [];
+        return $this->config[$pluginName] ?? null;
     }
 
     public function getPlugins(): array
