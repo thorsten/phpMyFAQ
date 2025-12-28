@@ -148,6 +148,8 @@ $PMF_LANG['ad_gen_no'] = '否';
 $PMF_LANG['ad_gen_top'] = '页面顶部';
 $PMF_LANG['ad_gen_ncf'] = '没有找到类别！';
 $PMF_LANG['ad_gen_delete'] = '删除';
+$PMF_LANG['ad_gen_or'] = "或";
+
 $PMF_LANG['ad_user'] = '用户管理';
 $PMF_LANG['ad_user_username'] = '用户列表';
 $PMF_LANG['ad_user_rights'] = '权限';
@@ -475,6 +477,7 @@ $PMF_LANG['ad_glossary_delete_error'] = '术语删除失败.';
 $PMF_LANG['msgNewQuestionVisible'] = '问答必须通过过审查才会被发布。';
 $PMF_LANG['msgQuestionsWaiting'] = '等待管理员发布：';
 $PMF_LANG['ad_entry_visibility'] = '发布';
+$PMF_LANG['ad_entry_not_visibility'] = "未发布";
 $PMF_LANG['ad_user_error_password'] = '请输入密码。';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = '密码不正确。';
 $PMF_LANG['ad_user_error_loginInvalid'] = '用户名无效。';
