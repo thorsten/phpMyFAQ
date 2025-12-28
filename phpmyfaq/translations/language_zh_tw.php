@@ -173,6 +173,7 @@ $PMF_LANG["ad_gen_no"] = "否";
 $PMF_LANG["ad_gen_top"] = "頁首";
 $PMF_LANG["ad_gen_ncf"] = "沒有找到類別!";
 $PMF_LANG["ad_gen_delete"] = "刪除";
+$PMF_LANG['ad_gen_or'] = "或";
 
 // Benutzerverwaltung / User Administration / 使用者管理
 $PMF_LANG["ad_user"] = "使用者管理";
@@ -602,6 +603,7 @@ $PMF_LANG['ad_glossary_delete_error'] = "辭典項目無法刪除,因為有錯�
 $PMF_LANG['msgNewQuestionVisible'] = "問題必須先經過審查才能公開。";
 $PMF_LANG['msgQuestionsWaiting'] = "等待管理員開放公開:";
 $PMF_LANG['ad_entry_visibility'] = "公開發佈?";
+$PMF_LANG['ad_entry_not_visibility'] = "未發佈";
 
 // added v2.0.0 - 2006-01-02 by Lars 開發者
 $PMF_LANG['ad_user_error_password'] = "請輸入密碼。";
