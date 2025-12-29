@@ -226,7 +226,7 @@ services:
 
   opensearch:
     image: opensearchproject/opensearch:2.19.2
-    container_name: opensearch
+    container_name: phpmyfaq-42_opensearch
     environment:
       - cluster.name=phpmyfaq-cluster
       - node.name=phpmyfaq
