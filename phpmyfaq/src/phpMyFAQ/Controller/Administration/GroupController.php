@@ -92,12 +92,12 @@ final class GroupController extends AbstractAdministrationController
 
         $user = $this->container->get(id: 'phpmyfaq.user');
 
-        $groupName = Filter::filterVar($request->attributes->get('group_name'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $groupName = Filter::filterVar($request->request->get('group_name'), FILTER_SANITIZE_SPECIAL_CHARS);
         $groupDescription = Filter::filterVar(
-            $request->attributes->get('group_description'),
+            $request->request->get('group_description'),
             FILTER_SANITIZE_SPECIAL_CHARS,
         );
-        $groupAutoJoin = Filter::filterVar($request->attributes->get('group_auto_join'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $groupAutoJoin = Filter::filterVar($request->request->get('group_auto_join'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         // check group name
         if ($groupName === '') {
@@ -137,7 +137,7 @@ final class GroupController extends AbstractAdministrationController
 
         $session = $this->container->get(id: 'session');
 
-        $groupId = (int) Filter::filterVar($request->attributes->get('group_list_select'), FILTER_VALIDATE_INT);
+        $groupId = (int) Filter::filterVar($request->request->get('group_list_select'), FILTER_VALIDATE_INT);
         $groupData = $this->currentUser->perm->getGroupData($groupId);
 
         $this->addExtension(new AttributeExtension(PermissionTranslationTwigExtension::class));
@@ -159,8 +159,8 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_DELETE);
 
-        $groupId = (int) Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT);
-        $csrfToken = Filter::filterVar($request->attributes->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('delete-group', $csrfToken)) {
             throw new UnauthorizedHttpException('Invalid CSRF token');
@@ -194,7 +194,7 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $groupId = (int) Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT);
+        $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
 
         $groupData = [];
         $dataFields = ['name', 'description', 'auto_join'];
@@ -242,7 +242,7 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $groupId = (int) Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT);
+        $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
         $groupMembers = $request->request->all()['group_members'];
 
         $user = $this->container->get(id: 'phpmyfaq.user');
@@ -280,7 +280,7 @@ final class GroupController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::GROUP_EDIT);
 
-        $groupId = (int) Filter::filterVar($request->attributes->get('group_id'), FILTER_VALIDATE_INT);
+        $groupId = (int) Filter::filterVar($request->request->get('group_id'), FILTER_VALIDATE_INT);
         $groupPermissions = $request->request->all()['group_rights'];
 
         $user = $this->container->get(id: 'phpmyfaq.user');
