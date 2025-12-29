@@ -468,7 +468,6 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
 $PMF_LANG["ad_menu_export"] = "FAQ Export";
-
 $PMF_LANG['permission::add_user'] = "Add users";
 $PMF_LANG['permission::edit_user'] = "Edit users";
 $PMF_LANG['permission::delete_user'] = "Delete users";
@@ -492,7 +491,6 @@ $PMF_LANG['permission::backup'] = "Create backups";
 $PMF_LANG['permission::restore'] = "Restore backups";
 $PMF_LANG['permission::delquestion'] = "Delete open questions";
 $PMF_LANG['permission::changebtrevs'] = "Edit revisions";
-
 $PMF_LANG["msgAttachedFiles"] = "Attached files";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
