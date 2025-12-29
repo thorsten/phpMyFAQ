@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f17f23f54ec4d34ac6b5ba022c67abab",
+    "content-hash": "ea3708f9748ee1c9e9afd78261871e84",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -4963,16 +4963,16 @@
         },
         {
             "name": "tivie/htaccess-parser",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tivie/php-htaccess-parser.git",
-                "reference": "14e14d066533c340851172ba1019ff52890b30b3"
+                "reference": "0b6252a36b8ac0586306fd2db3dac78985c48589"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tivie/php-htaccess-parser/zipball/14e14d066533c340851172ba1019ff52890b30b3",
-                "reference": "14e14d066533c340851172ba1019ff52890b30b3",
+                "url": "https://api.github.com/repos/tivie/php-htaccess-parser/zipball/0b6252a36b8ac0586306fd2db3dac78985c48589",
+                "reference": "0b6252a36b8ac0586306fd2db3dac78985c48589",
                 "shasum": ""
             },
             "require": {
@@ -5005,9 +5005,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tivie/php-htaccess-parser/issues",
-                "source": "https://github.com/tivie/php-htaccess-parser/tree/0.3.0"
+                "source": "https://github.com/tivie/php-htaccess-parser/tree/0.4.0"
             },
-            "time": "2024-03-17T05:33:05+00:00"
+            "time": "2025-08-13T07:38:02+00:00"
         },
         {
             "name": "twig/intl-extra",
