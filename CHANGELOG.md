@@ -6,8 +6,9 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-RC - unreleased
+### phpMyFAQ v4.1.0-RC - 2025-12-29
 
+- fixed security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added configuration to edit llms.txt (Thorsten)
