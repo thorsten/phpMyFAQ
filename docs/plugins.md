@@ -4,18 +4,18 @@ With phpMyFAQ 4.0 and later, we have a new, currently experimental plugin system
 This system allows you to extend phpMyFAQ with new features.
 The plugin system is based on the Symfony Dependency Injection component.
 
-## 9.1 Plugin installation
+## 9.1 Installation
 
 Plugins are installed in the `content/plugins` directory of your phpMyFAQ installation.
 The plugin directory should contain a subdirectory for each plugin, e.g. `content/plugins/HelloWorld`.
 The plugin directory should contain a `HelloWorldPlugin.php` file that implements the `PluginInterface` interface.
 If you want to remove a plugin, you can delete the plugin in the plugin directory.
 
-## 9.2 Plugin configuration
+## 9.2 Configuration
 
 Plugins can have configuration options, implemented via the `PluginConfigurationInterface` interface.
 Configuration options can be defined in the plugin configuration class with Constructor Property Promotion by adding 
-public properties.
+public properties. There are no other options to configure plugins at this time.
 
 ### 9.3.1 Example configuration class
 
@@ -41,7 +41,7 @@ The plugin manager is an instance of the `PluginManager` class.
 
 To uninstall a plugin, you can delete the plugin directory from the `content/plugins` directory.
 
-## 9.5 Plugin examples
+## 9.5 Examples
 
 phpMyFAQ comes with an example plugin that demonstrates how to use the plugin system called `HelloWorldPlugin`.
 
@@ -50,9 +50,14 @@ phpMyFAQ comes with an example plugin that demonstrates how to use the plugin sy
 ```php
 <?php
 
-namespace App\Plugins\Plugin1;
+declare(strict_types=1);
 
-use App\Core\PluginInterface;
+namespace phpMyFAQ\Plugin\MyPlugin;
+
+use phpMyFAQ\Plugin\PluginEvent;
+use phpMyFAQ\Plugin\PluginInterface;
+use phpMyFAQ\Plugin\PluginConfigurationInterface;
+use phpMyFAQ\Translation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MyPlugin implements PluginInterface
@@ -82,6 +87,21 @@ class MyPlugin implements PluginInterface
     public function getConfig(): ?PluginConfigurationInterface
     {
         return null;
+    }
+
+    public function getStylesheets(): array
+    {
+        return [];
+    }
+
+    public function getTranslationsPath(): ?string
+    {
+        return null;
+    }
+
+    public function getScripts(): array
+    {
+        return [];
     }
 
     public function registerEvents(EventDispatcherInterface $dispatcher): void
@@ -120,7 +140,7 @@ class MyPlugin implements PluginInterface
 </div>
 ```
 
-## 9.6 Plugin stylesheets
+## 9.6 Stylesheets
 
 Plugins can provide pre-compiled CSS files that will be automatically injected into both frontend and admin pages.
 
@@ -155,7 +175,7 @@ public function getStylesheets(): array
     └── admin-style.css
 ```
 
-## 9.7 Plugin translations
+## 9.7 Translations
 
 Plugins can provide translations in multiple languages that integrate seamlessly with phpMyFAQ's translation system.
 
@@ -166,7 +186,7 @@ Plugins can provide translations in multiple languages that integrate seamlessly
 ```php
 public function getTranslationsPath(): ?string
 {
-    return 'translations';  // Path relative to plugin directory
+    return 'translations';  // Path relative to the plugin directory
 }
 ```
 
@@ -231,7 +251,7 @@ plugin.{PluginName}.{messageKey}
     └── language_es.php
 ```
 
-## 9.8 Plugin JavaScript
+## 9.8 JavaScript
 
 Plugins can provide pre-compiled JavaScript files that will be automatically injected into both frontend and admin pages.
 
@@ -289,6 +309,7 @@ public function getScripts(): array
 
 **Security notes:**
 - Always use strict mode (`'use strict'`)
+- Lint your code with ESLint, you can run `npx eslint phpmyfaq/content/plugins/YourPlugin//assets/` from the phpMyFAQ root
 - Wrap code in IIFE to avoid global namespace pollution
 - Validate and sanitize user input
 - Use DOM API safely
