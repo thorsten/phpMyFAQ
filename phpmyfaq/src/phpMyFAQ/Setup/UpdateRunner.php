@@ -249,7 +249,6 @@ final class UpdateRunner
         };
 
         try {
-            /** @var bool $result */
             $result = (bool) $fn($setProgress);
         } finally {
             $progressBar->finish();

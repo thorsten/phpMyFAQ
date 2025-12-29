@@ -148,7 +148,7 @@ services:
       - pnpm
 
   pnpm:
-    image: node:22-alpine
+    image: node:24-alpine
     restart: 'no'
     command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build"
     working_dir: /app
@@ -195,7 +195,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:8.16.5
-    container_name: phpmyfaq-41_elasticsearch-v8
+    container_name: phpmyfaq-42_elasticsearch-v8
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster

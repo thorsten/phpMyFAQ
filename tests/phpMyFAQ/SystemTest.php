@@ -66,7 +66,7 @@ class SystemTest extends TestCase
 
     public function testGetDocumentationUrl(): void
     {
-        $expectedUrl = 'https://www.phpmyfaq.de/docs/4.1';
+        $expectedUrl = 'https://www.phpmyfaq.de/docs/4.2';
         $actualUrl = System::getDocumentationUrl();
 
         $this->assertEquals($expectedUrl, $actualUrl);

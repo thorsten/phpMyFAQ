@@ -268,7 +268,7 @@ class Installer extends Setup
         'main.enableUserTracking' => 'true',
         'main.metaDescription' => 'phpMyFAQ should be the answer for all questions in life',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
-        'main.titleFAQ' => 'phpMyFAQ Codename Porus',
+        'main.titleFAQ' => 'phpMyFAQ Codename Palaimon',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
         'main.enableMarkdownEditor' => 'false',

@@ -158,12 +158,6 @@ class Update extends AbstractSetup
      */
     public function applyUpdates(): bool
     {
-        // 3.1 updates
-        $this->applyUpdates310Alpha();
-        $this->applyUpdates310Alpha3();
-        $this->applyUpdates310Beta();
-        $this->applyUpdates310RC();
-
         // 3.2 updates
         $this->applyUpdates320Alpha();
         $this->applyUpdates320Beta();
@@ -240,68 +234,6 @@ class Update extends AbstractSetup
                     throw new Exception($exception->getMessage());
                 }
             }
-        }
-    }
-
-    private function applyUpdates310Alpha(): void
-    {
-        if (version_compare($this->version, '3.1.0-alpha', '<')) {
-            // Add is_visible flag for user data
-            if ('sqlite3' === Database::getType()) {
-                $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaquserdata ADD COLUMN is_visible INT(1) DEFAULT 0',
-                    Database::getTablePrefix(),
-                );
-            } else {
-                $this->queries[] = sprintf(
-                    'ALTER TABLE %sfaquserdata ADD is_visible INTEGER DEFAULT 0',
-                    Database::getTablePrefix(),
-                );
-            }
-
-            // Remove RSS support
-            $this->configuration->delete('main.enableRssFeeds');
-
-            // Add API-related configuration
-            $this->configuration->add('api.enableAccess', true);
-            $this->configuration->add('api.apiClientToken', '');
-
-            // Add passlist for domains
-            $this->configuration->add('security.domainWhiteListForRegistrations', '');
-        }
-    }
-
-    private function applyUpdates310Alpha3(): void
-    {
-        if (version_compare($this->version, '3.1.0-alpha.3', '<')) {
-            // Add "Login with email address" configuration
-            $this->configuration->add('main.loginWithEmailAddress', false);
-        }
-    }
-
-    private function applyUpdates310Beta(): void
-    {
-        if (version_compare($this->version, '3.1.0-beta', '<')) {
-            $this->queries[] = match (Database::getType()) {
-                'mysqli' => sprintf(
-                    'CREATE TABLE %sfaqcategory_order
-                    (category_id int(11) NOT NULL, position int(11) NOT NULL, PRIMARY KEY (category_id))',
-                    Database::getTablePrefix(),
-                ),
-                'pgsql', 'sqlite3', 'sqlsrv' => sprintf(
-                    'CREATE TABLE %sfaqcategory_order
-                    (category_id INTEGER NOT NULL, position INTEGER NOT NULL, PRIMARY KEY (category_id))',
-                    Database::getTablePrefix(),
-                ),
-            };
-        }
-    }
-
-    private function applyUpdates310RC(): void
-    {
-        if (version_compare($this->version, '3.1.0-RC', '<')) {
-            $this->configuration->delete('records.autosaveActive');
-            $this->configuration->delete('records.autosaveSecs');
         }
     }
 
