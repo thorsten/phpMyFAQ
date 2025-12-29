@@ -65,6 +65,10 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - migrated from Webpack to Vite v7 (Thorsten)
 - migrated from Jest to Vitest v4 (Thorsten)
 
+### phpMyFAQ v4.0.17 - unreleased
+
+- updated third party dependencies (Thorsten)
+
 ### phpMyFAQ v4.0.16 - 2025-12-29
 
 - fixed security vulnerabilities (Thorsten)
