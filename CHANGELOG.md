@@ -57,6 +57,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Greek translation
 - updated Farsi translation
 - updated Canadian French translation
+- updated Hebrew translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
