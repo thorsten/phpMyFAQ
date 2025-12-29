@@ -1224,6 +1224,9 @@ $PMF_LANG['msgPluginName'] = 'プラグイン名';
 $PMF_LANG['msgPluginVersion'] = 'バージョン';
 $PMF_LANG['msgPluginAuthor'] = '作成者';
 $PMF_LANG['msgPluginDescription'] = '説明';
+$PMF_LANG['msgPluginReason'] = '理由';
+$PMF_LANG['msgIncompatiblePlugins'] = '互換性のないプラグイン';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = '互換性の問題により、次のプラグインを読み込めませんでした。';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'バグを報告';

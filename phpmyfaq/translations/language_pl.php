@@ -1433,6 +1433,9 @@ $PMF_LANG['msgPluginName'] = 'Nazwa wtyczki';
 $PMF_LANG['msgPluginVersion'] = 'Wersja';
 $PMF_LANG['msgPluginAuthor'] = 'Autor';
 $PMF_LANG['msgPluginDescription'] = 'Opis';
+$PMF_LANG['msgPluginReason'] = 'Powód';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Niekompatybilne wtyczki';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Następujące wtyczki nie mogły zostać załadowane z powodu problemów z kompatybilnością.';
 $LANG_CONF['seo.contentRobotsText'] = ['area', 'Zawartość dla robots.txt', ''];
 $LANG_CONF['seo.contentLlmsText'] = ['area', 'Zawartość dla llms.txt', ''];
 

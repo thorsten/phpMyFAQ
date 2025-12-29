@@ -1472,6 +1472,9 @@ $PMF_LANG['msgPluginName'] = 'Plugin izena';
 $PMF_LANG['msgPluginVersion'] = 'Bertsioa';
 $PMF_LANG['msgPluginAuthor'] = 'Egilea';
 $PMF_LANG['msgPluginDescription'] = 'Deskribapena';
+$PMF_LANG['msgPluginReason'] = 'Arrazoia';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Plugin bateraezinак';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Hurrengo pluginak ezin izan dira kargatu bateragarritasun arazoengatik.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Eman akats baten berri';

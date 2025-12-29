@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace phpMyFAQ\Controller\Administration;
 
 use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Plugin\PluginException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,7 +28,6 @@ use Twig\Error\LoaderError;
 final class PluginController extends AbstractAdministrationController
 {
     /**
-     * @throws PluginException
      * @throws LoaderError
      * @throws Exception
      * @throws \Exception
@@ -44,6 +42,7 @@ final class PluginController extends AbstractAdministrationController
             ...$this->getHeader($request),
             ...$this->getFooter(),
             'pluginList' => $pluginManager->getPlugins(),
+            'incompatiblePlugins' => $pluginManager->getIncompatiblePlugins(),
         ]);
     }
 }

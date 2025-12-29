@@ -1466,6 +1466,9 @@ $PMF_LANG['msgPluginName'] = 'Bővítmény neve';
 $PMF_LANG['msgPluginVersion'] = 'Verzió';
 $PMF_LANG['msgPluginAuthor'] = 'Szerző';
 $PMF_LANG['msgPluginDescription'] = 'Leírás';
+$PMF_LANG['msgPluginReason'] = 'Ok';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Nem kompatibilis bővítmények';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'A következő bővítményeket nem sikerült betölteni kompatibilitási problémák miatt.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Hiba bejelentése';

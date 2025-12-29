@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Plugin;
 
-use phpMyFAQ\Translation;
 use phpMyFAQ\Core\Exception;
-use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Translation;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class PluginIntegrationTest extends TestCase
@@ -176,7 +176,6 @@ PHP;
     }
 
     /**
-     * @throws PluginException
      * @throws Exception
      */
     public function testPluginWithBothCssAndTranslations(): void

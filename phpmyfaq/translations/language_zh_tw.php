@@ -1474,6 +1474,9 @@ $PMF_LANG['msgPluginName'] = '外掛程式名稱';
 $PMF_LANG['msgPluginVersion'] = '版本';
 $PMF_LANG['msgPluginAuthor'] = '作者';
 $PMF_LANG['msgPluginDescription'] = '描述';
+$PMF_LANG['msgPluginReason'] = '原因';
+$PMF_LANG['msgIncompatiblePlugins'] = '不相容的外掛程式';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = '由於相容性問題，以下外掛程式無法載入。';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = '回報錯誤';
