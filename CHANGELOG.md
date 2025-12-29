@@ -6,7 +6,7 @@
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-### phpMyFAQ v4.1.0-RC - 2025-12-29
+### phpMyFAQ v4.1.0-RC.2 - unreleased
 
 - fixed security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
@@ -51,6 +51,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Basque translation
 - updated Bengali translation
 - updated Bosnian translation
+- updated Ukrainian translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
