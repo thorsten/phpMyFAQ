@@ -145,7 +145,8 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # User pages
     RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
     # Setup and update pages
-    RewriteRule ^setup/(.*) setup/index.php [L,QSA]
+    RewriteCond %{REQUEST_URI} ^(.*/)setup/
+    RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
     RewriteRule ^update/(.*) update/index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
