@@ -34,7 +34,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         pdo_pgsql \
         pgsql \
         zip \
-        opcache \
         bz2 \
         sodium
 
