@@ -52,6 +52,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Bengali translation
 - updated Bosnian translation
 - updated Ukrainian translation
+- updated Czech translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
