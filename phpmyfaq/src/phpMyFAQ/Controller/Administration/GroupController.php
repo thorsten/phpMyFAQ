@@ -200,7 +200,7 @@ final class GroupController extends AbstractAdministrationController
         $dataFields = ['name', 'description', 'auto_join'];
         foreach ($dataFields as $dataField) {
             $groupData[$dataField] = Filter::filterVar(
-                $request->attributes->get($dataField),
+                $request->request->get($dataField),
                 FILTER_SANITIZE_SPECIAL_CHARS,
                 '',
             );
