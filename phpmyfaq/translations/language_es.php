@@ -1393,6 +1393,9 @@ $PMF_LANG['msgPluginName'] = 'Nombre del plugin';
 $PMF_LANG['msgPluginVersion'] = 'Versión';
 $PMF_LANG['msgPluginAuthor'] = 'Autor';
 $PMF_LANG['msgPluginDescription'] = 'Descripción';
+$PMF_LANG['msgPluginReason'] = 'Razón';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Plugins incompatibles';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Los siguientes plugins no se pudieron cargar debido a problemas de compatibilidad.';
 
 // añadido v4.1.0-alpha.2 - 2025-02-23 por Thorsten
 $PMF_LANG['msgReportABug'] = 'Informar un error';
@@ -1529,7 +1532,6 @@ $PMF_LANG['msgSerpTitle'] = 'Título SERP';
 
 // Permisos
 $PMF_LANG['permission::forms_edit'] = 'Editar formularios';
-
 $PMF_LANG['msgError403'] = 'Error 403';
 $PMF_LANG['msgError403Description'] = 'Está autenticado, pero no tiene permiso para acceder a este recurso.';
 $PMF_LANG['msgError403Hint'] = 'Si cree que esto es un error, póngase en contacto con un administrador.';

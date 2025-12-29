@@ -1256,6 +1256,9 @@ $PMF_LANG['msgPluginName'] = 'Liitännäisen nimi';
 $PMF_LANG['msgPluginVersion'] = 'Versio';
 $PMF_LANG['msgPluginAuthor'] = 'Tekijä';
 $PMF_LANG['msgPluginDescription'] = 'Kuvaus';
+$PMF_LANG['msgPluginReason'] = 'Syy';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Yhteensopimattomat laajennukset';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Seuraavia laajennuksia ei voitu ladata yhteensopivuusongelmien vuoksi.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Ilmoita virheestä';

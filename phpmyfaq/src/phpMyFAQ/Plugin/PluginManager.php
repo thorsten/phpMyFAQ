@@ -41,7 +41,10 @@ class PluginManager
     /** @var string[] */
     private array $loadedPlugins = [];
 
-    /** @var array<string, string[]> Plugin stylesheets: [pluginName => [css paths]] */
+    /** @var array<string, array{plugin: PluginInterface, reason: string}> */
+    private array $incompatiblePlugins = [];
+
+    /** @var array<string, string[]> Plugin stylesheets: [pluginName => [CSS paths]] */
     private array $pluginStylesheets = [];
 
     /** @var array<string, string[]> Plugin scripts: [pluginName => [js paths]] */
@@ -57,7 +60,6 @@ class PluginManager
 
     /**
      * Registers a plugin
-     * @throws PluginException
      */
     public function registerPlugin(string $pluginClass): void
     {
@@ -66,13 +68,20 @@ class PluginManager
             $this->plugins[$plugin->getName()] = $plugin;
             $this->containerBuilder->register($plugin->getName(), $pluginClass);
         } else {
-            throw new PluginException(sprintf('Plugin %s is not compatible.', $plugin->getName()));
+            $this->incompatiblePlugins[$plugin->getName()] = [
+                'plugin' => $plugin,
+                'reason' => sprintf(
+                    'Plugin version %s is not compatible with system version %s',
+                    $plugin->getVersion(),
+                    System::getPluginVersion(),
+                ),
+            ];
         }
     }
 
     /**
      * Loads and registers all plugins
-     * @throws PluginException|Exception
+     * @throws Exception
      */
     public function loadPlugins(): void
     {
@@ -121,7 +130,13 @@ class PluginManager
                     $this->registerPluginScripts($plugin->getName(), $scripts);
                 }
             } else {
-                throw new PluginException(sprintf('Dependencies for plugin %s are not met.', $plugin->getName()));
+                $missingDeps = $this->getMissingDependencies($plugin);
+                $this->incompatiblePlugins[$plugin->getName()] = [
+                    'plugin' => $plugin,
+                    'reason' => sprintf('Missing dependencies: %s', implode(', ', $missingDeps)),
+                ];
+                // Remove plugin from the plugins array since it's incompatible
+                unset($this->plugins[$plugin->getName()]);
             }
         }
     }
@@ -318,5 +333,32 @@ class PluginManager
     public function getPluginScripts(string $pluginName): array
     {
         return $this->pluginScripts[$pluginName] ?? [];
+    }
+
+    /**
+     * Returns all incompatible plugins with their reasons
+     *
+     * @return array<string, array{plugin: PluginInterface, reason: string}>
+     */
+    public function getIncompatiblePlugins(): array
+    {
+        return $this->incompatiblePlugins;
+    }
+
+    /**
+     * Gets the missing dependencies for a plugin
+     *
+     * @return string[]
+     */
+    private function getMissingDependencies(PluginInterface $plugin): array
+    {
+        $missingDeps = [];
+        foreach ($plugin->getDependencies() as $dependency) {
+            if (!in_array($dependency, $this->loadedPlugins)) {
+                $missingDeps[] = $dependency;
+            }
+        }
+
+        return $missingDeps;
     }
 }

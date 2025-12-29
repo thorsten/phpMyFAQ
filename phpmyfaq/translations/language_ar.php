@@ -1471,6 +1471,9 @@ $PMF_LANG['msgPluginName'] = 'اسم الإضافة';
 $PMF_LANG['msgPluginVersion'] = 'الإصدار';
 $PMF_LANG['msgPluginAuthor'] = 'المؤلف';
 $PMF_LANG['msgPluginDescription'] = 'الوصف';
+$PMF_LANG['msgPluginReason'] = 'السبب';
+$PMF_LANG['msgIncompatiblePlugins'] = 'إضافات غير متوافقة';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'تعذر تحميل الإضافات التالية بسبب مشكلات التوافق.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'الإبلاغ عن خطأ';

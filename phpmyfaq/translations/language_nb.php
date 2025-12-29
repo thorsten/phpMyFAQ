@@ -1316,6 +1316,9 @@ $PMF_LANG['msgPluginName'] = 'Plugin-navn';
 $PMF_LANG['msgPluginVersion'] = 'Versjon';
 $PMF_LANG['msgPluginAuthor'] = 'Forfatter';
 $PMF_LANG['msgPluginDescription'] = 'Beskrivelse';
+$PMF_LANG['msgPluginReason'] = 'Årsak';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Inkompatible programtillegg';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Følgende programtillegg kunne ikke lastes på grunn av kompatibilitetsproblemer.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Rapporter en feil';

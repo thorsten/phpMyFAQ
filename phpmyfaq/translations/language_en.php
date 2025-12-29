@@ -468,7 +468,6 @@ $PMF_LANG["msgLanguageSubmit"] = "Change language";
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s bytes.";
 $PMF_LANG["ad_menu_export"] = "FAQ Export";
-
 $PMF_LANG['permission::add_user'] = "Add users";
 $PMF_LANG['permission::edit_user'] = "Edit users";
 $PMF_LANG['permission::delete_user'] = "Delete users";
@@ -492,7 +491,6 @@ $PMF_LANG['permission::backup'] = "Create backups";
 $PMF_LANG['permission::restore'] = "Restore backups";
 $PMF_LANG['permission::delquestion'] = "Delete open questions";
 $PMF_LANG['permission::changebtrevs'] = "Edit revisions";
-
 $PMF_LANG["msgAttachedFiles"] = "Attached files";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
@@ -1468,6 +1466,9 @@ $PMF_LANG['msgPluginName'] = 'Plugin name';
 $PMF_LANG['msgPluginVersion'] = 'Version';
 $PMF_LANG['msgPluginAuthor'] = 'Author';
 $PMF_LANG['msgPluginDescription'] = 'Description';
+$PMF_LANG['msgPluginReason'] = 'Reason';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Incompatible Plugins';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'The following plugins could not be loaded due to compatibility issues.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Report a bug';

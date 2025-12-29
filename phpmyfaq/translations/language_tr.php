@@ -1469,6 +1469,9 @@ $PMF_LANG['msgPluginName'] = 'Eklenti adı';
 $PMF_LANG['msgPluginVersion'] = 'Sürüm';
 $PMF_LANG['msgPluginAuthor'] = 'Yazar';
 $PMF_LANG['msgPluginDescription'] = 'Açıklama';
+$PMF_LANG['msgPluginReason'] = 'Sebep';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Uyumsuz eklentiler';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Aşağıdaki eklentiler uyumluluk sorunları nedeniyle yüklenemedi.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Hata bildir';

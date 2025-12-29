@@ -10,9 +10,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 - changed PHP requirement to PHP 8.4 or later (Thorsten)
 
-### phpMyFAQ v4.1.0-RC - 2025-12-29
+### phpMyFAQ v4.1.0-RC.2 - unreleased
 
-- fixed security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added configuration to edit llms.txt (Thorsten)
@@ -55,12 +54,24 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Basque translation
 - updated Bengali translation
 - updated Bosnian translation
+- updated Ukrainian translation
+- updated Czech translation
+- updated Welsh translation
+- updated Danish translation
+- updated Greek translation
+- updated Farsi translation
+- updated Canadian French translation
+- updated Hebrew translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
 - migrated from JavaScript to TypeScript (Thorsten)
 - migrated from Webpack to Vite v7 (Thorsten)
 - migrated from Jest to Vitest v4 (Thorsten)
+
+### phpMyFAQ v4.0.17 - unreleased
+
+- updated third party dependencies (Thorsten)
 
 ### phpMyFAQ v4.0.16 - 2025-12-29
 

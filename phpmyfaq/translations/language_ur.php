@@ -1496,7 +1496,7 @@ $PMF_LANG['msgExportSessionsTo'] = 'تک';
 $PMF_LANG['msgImportRecordsColumnStructure'] = 'درآمد کی جانے والی CSV فائل میں اس ترتیب میں مندرجہ ذیل کالم ہونے چاہئیں، کالم ہیڈرز کے بغیر۔ ہر قطار کا مقصد ایک FAQ اندراج کی تعریف کرنا ہے۔ ستارے * سے نشان زد کالموں میں تمام خانوں میں قدر ہونی چاہیے۔';
 $PMF_LANG['msgNoHashAllowed'] = "'#' کا استعمال جائز نہیں ہے۔";
 $PMF_LANG['msgNoStickyFaqs'] = 'آپ کے پاس ابھی تک کوئی چسپاں ریکارڈز نہیں ہیں۔ آپ <a href="./faqs" class="alert-link">FAQ کے جائزے</a> میں ریکارڈز کو چسپاں کے طور پر نشان زد کر سکتے ہیں۔';
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'چسپاں ریکارڈز کی حسب ضرورت ترتیب مرکزی ترتیبات میں غیر فعال ہے۔ اگر آپ اسے استعمال کرنا چاہتے ہیں تو براہ کرم اسے <a href="././configuration">مرکزی ترتیبات</a> -> ریکارڈز میں فعال کریں۔';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'چسپاں ریکارڈز کی حسب ضرورت ترتیب مرکزی ترتیبات میں غیر فعال ہے۔ اگر آپ اسے استعمال کرنا چاہتے ہیں تو براہ کرم اسے <a href="./configuration">مرکزی ترتیبات</a> -> ریکارڈز میں فعال کریں۔';
 $PMF_LANG['msgOrphanedFAQsDescription'] = 'یہ FAQs کسی بھی زمرے سے منسلک نہیں ہیں۔ آپ انہیں یہاں کسی زمرے سے منسلک کر سکتے ہیں۔';
 $PMF_LANG['msgPluginAuthor'] = 'مصنف';
 $PMF_LANG['msgPluginDescription'] = 'تفصیل';
@@ -1504,6 +1504,9 @@ $PMF_LANG['msgPluginListing'] = 'نصب شدہ پلگ انز اور ان کے و
 $PMF_LANG['msgPluginName'] = 'پلگ ان کا نام';
 $PMF_LANG['msgPluginVersion'] = 'ورژن';
 $PMF_LANG['msgPlugins'] = 'پلگ انز';
+$PMF_LANG['msgPluginReason'] = 'وجہ';
+$PMF_LANG['msgIncompatiblePlugins'] = 'غیر مطابقت پذیر پلگ انز';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'مطابقت کے مسائل کی وجہ سے درج ذیل پلگ انز لوڈ نہیں ہو سکے۔';
 $PMF_LANG['msgSessionExpired'] = 'آپ کا سیشن ختم ہو گیا۔ براہ کرم دوبارہ لاگ ان کریں۔';
 $PMF_LANG['msgUpdateDate'] = 'آخری اپ ڈیٹ';
 $PMF_LANG['recordsControlCenter'] = 'FAQs';

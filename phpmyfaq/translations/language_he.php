@@ -26,7 +26,6 @@ $PMF_LANG['nplurals'] = '2';
 $PMF_LANG['msgCategory'] = 'קטגוריות';
 $PMF_LANG['msgShowAllCategories'] = 'הראה את כל הקטגוריות';
 $PMF_LANG['msgSearch'] = 'חפש';
-$PMF_LANG['msgSearch1'] = 'חיפוש';
 $PMF_LANG['msgAddContent'] = 'הוסף תוכן';
 $PMF_LANG['msgQuestion'] = 'שאל שאלה';
 $PMF_LANG['msgOpenQuestions'] = 'שאלות פתוחות';
@@ -94,7 +93,6 @@ $PMF_LANG['msgDate_User'] = 'תאריך / משתמש';
 $PMF_LANG['msgQuestion2'] = 'שאלה';
 $PMF_LANG['msg2answer'] = 'תשובה';
 $PMF_LANG['msgQuestionText'] = 'כאן תוכל לראות שאלות שנשאלו על ידי משתמשים אחרים. אם הינך יודע את התשובה לשאלה, אנא שלח אותה והשאלה והתשובה יתווספו כערך לאתר.';
-$PMF_LANG['msgHelpText'] = 'מבנה השאלה הנפוצה הינו די פשוט אתה יכול לחפש את ה<a href=\"?action=show\">קטגוריה</a>או לאפשר ל<a href=\"?action=search\">מנוע חיפוש השאלות הנפוצות</a> לחפש מילת מפתח.';
 $PMF_LANG['msgContactEMail'] = 'שלח דואל לעורך האתר:';
 $PMF_LANG['msgMessage'] = 'הודעתך:';
 $PMF_LANG['msgTopTen'] = 'השאלות הנצפות ביותר';
@@ -151,6 +149,8 @@ $PMF_LANG['ad_gen_no'] = 'לא';
 $PMF_LANG['ad_gen_top'] = 'ראש העמוד';
 $PMF_LANG['ad_gen_ncf'] = 'לא נמצאו קטגוריות!';
 $PMF_LANG['ad_gen_delete'] = 'מחק';
+$PMF_LANG['ad_gen_or'] = "or";
+$PMF_LANG['ad_entry_not_visibility'] = "לא פורסם";
 $PMF_LANG['ad_user'] = 'ניהול משתמשים';
 $PMF_LANG['ad_user_username'] = 'משתמשים רשומים';
 $PMF_LANG['ad_user_rights'] = 'הרשאות';
@@ -308,7 +308,6 @@ $PMF_LANG['ad_config_edit'] = 'ערוך הגדרות';
 $PMF_LANG['ad_config_save'] = 'שמור הגדרות';
 $PMF_LANG['ad_config_reset'] = 'אפס';
 $PMF_LANG['ad_config_saved'] = 'ההגדרות נשמרו בהצלחה.';
-$PMF_LANG['ad_config_file'] = 'config_english.dat';
 $PMF_LANG['ad_menu_editconfig'] = 'עריכת הגדרות';
 $PMF_LANG['ad_att_none'] = 'אין קבצים מצורפים זמינים';
 $PMF_LANG['ad_att_att'] = 'קובץ';
@@ -385,16 +384,11 @@ $PMF_LANG['msgPageDoublePoint'] = 'עמוד: ';
 $PMF_LANG['msgMainCategory'] = 'קטגוריה ראשית';
 $PMF_LANG['ad_passwdsuc'] = 'סיסמתך שונתה.';
 $PMF_LANG['msgPDF'] = 'הראה זאת כקובץ PDF';
+$PMF_LANG["ad_xml_gen"] = "צור ייצוא XML";
 $PMF_LANG['msgLanguage'] = 'שפה';
 $PMF_LANG['msgLanguageSubmit'] = 'שנה שפה';
-$PMF_LANG['ad_entry_preview'] = 'תצוגה מקדימה';
-$PMF_LANG['ad_attach_1'] = 'אתה צריך לבחור תיקייה לקבצים המצורפים באזור ההגדרות.';
-$PMF_LANG['ad_attach_2'] = 'אתה צריך לבחור קישור לתיקיית הקבצים המצורפים באזור ההגדרות.';
-$PMF_LANG['ad_attach_3'] = 'הקובץ attachment.php בלי בדיקת אוטנטיות.';
 $PMF_LANG['ad_attach_4'] = 'הקובץ המצורף חייב להיות קטן מ %s Bytes.';
 $PMF_LANG['ad_menu_export'] = 'יצא את הערכים שלך';
-$PMF_LANG['ad_export_file'] = 'שגיאה: לא ניתן לייצור את הקובץ.';
-$PMF_LANG['ad_export_pdf'] = 'יצא ב PDF את כל הערכים';
 $PMF_LANG['permission::add_user'] = 'הוסף משתמש';
 $PMF_LANG['permission::edit_user'] = 'ערוך משתמש';
 $PMF_LANG['permission::delete_user'] = 'מחק משתמש';
@@ -417,6 +411,7 @@ $PMF_LANG['permission::delatt'] = 'מחק קובץ';
 $PMF_LANG['permission::backup'] = 'צור גיבוי';
 $PMF_LANG['permission::restore'] = 'שחזר גיבוי';
 $PMF_LANG['permission::delquestion'] = 'מחק שאלות פתוחות';
+$PMF_LANG['permission::changebtrevs'] = "ערוך גרסאות";
 $PMF_LANG['msgAttachedFiles'] = 'קבצים מצורפים:';
 $PMF_LANG['ad_user_action'] = 'פעולה';
 $PMF_LANG['msgEmail'] = 'כתובת דואל:';
@@ -426,9 +421,7 @@ $PMF_LANG['msgRealname'] = 'שם אמיתי:';
 $PMF_LANG['ad_export_generate_pdf'] = 'צור קובץ PDF';
 $PMF_LANG['ad_export_full_faq'] = 'שאלותייך בפורמט PDF';
 $PMF_LANG['err_bannedIP'] = 'כתובת הIP שלך נחסמה.';
-$PMF_LANG['err_SaveQuestion'] = 'שדות נחוצים  שמך, כתובת אמייל והשאלה שלך.  <a href=\"javascript:history.back();\">הקודם</a>  ';
-$PMF_LANG['ad_entry_fontcolor'] = 'צבע פונט: ';
-$PMF_LANG['ad_entry_fontsize'] = 'גודל פונט: ';
+$PMF_LANG['err_SaveQuestion'] = 'שדות נחוצים  שמך, כתובת אמייל והשאלה שלך.';
 $LANG_CONF['main.language'] = array("checkbox", "קובץ שפה");
 $LANG_CONF['main.languageDetection'] = array("checkbox", "אפשר העברת נתונים אוטומטית");
 $LANG_CONF['main.titleFAQ'] = array("input", "כותרת הערך");
@@ -503,6 +496,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'המונח לא נמחק בעקבות �
 $PMF_LANG['msgNewQuestionVisible'] = 'יש לערוך את השאלה לפני פרסומה.';
 $PMF_LANG['msgQuestionsWaiting'] = 'ממתין לפרסום על ידי עורך האתר: ';
 $PMF_LANG['ad_entry_visibility'] = 'פרסם?';
+$PMF_LANG['ad_entry_not_visibility'] = "לא פורסם";
 $PMF_LANG['ad_user_error_password'] = 'אנא הכנס סיסמה. ';
 $PMF_LANG['ad_user_error_passwordsDontMatch'] = 'הסיסמאות אינן זהות. ';
 $PMF_LANG['ad_user_error_loginInvalid'] = 'שם המשתמש שצוין לא תקין.';
@@ -723,16 +717,644 @@ $PMF_LANG['plmsgVotes']['0'] = '%d הצבעה';
 $PMF_LANG['plmsgVotes']['1'] = '%d הצבעות';
 $PMF_LANG['plmsgEntries']['0'] = '%d שאלה';
 $PMF_LANG['plmsgEntries']['1'] = '%d שאלות';
-$PMF_LANG['permission::addtranslation'] = 'add translation';
-$PMF_LANG['permission::edittranslation'] = 'edit translation';
-$PMF_LANG['permission::deltranslation'] = 'delete translation';
-$PMF_LANG['permission::approverec'] = 'approve records';
-$PMF_LANG['msgAdminHeaderUpdate'] = 'phpMyFAQ Upgrade';
-$PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
-$PMF_LANG['msgSecureSwitch'] = 'Switch to secure mode to login!';
-$LANG_CONF['layout.templateSet'] = array('select', 'Template set to be used');
-$LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'Enable attachment encryption  Ignored when attachments is disabled');
-$LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'Default attachment encryption key  Ignored if attachment encryption is disabled WARNING: Do not change this once set and enabled file encryption!!!');
-$LANG_CONF['security.useSslForLogins'] = array('checkbox', 'Only allow logins over SSL connection? (default: disabled)');
+$PMF_LANG['permission::addtranslation'] = 'הוסף תרגום';
+$PMF_LANG['permission::edittranslation'] = 'ערוך תרגום';
+$PMF_LANG['permission::deltranslation'] = 'מחק תרגום';
+$PMF_LANG['permission::approverec'] = 'אשר רשומות';
+$PMF_LANG['msgAdminHeaderUpdate'] = 'שדרוג phpMyFAQ';
+$PMF_LANG['ad_you_shouldnt_update'] = 'יש לך את הגרסה האחרונה של phpMyFAQ. אין צורך לשדרג.';
+$PMF_LANG['msgSecureSwitch'] = 'עבור למצב מאובטח כדי להתחבר!';
+$LANG_CONF['layout.templateSet'] = array('select', 'ערכת תבנית לשימוש');
+$LANG_CONF['records.enableAttachmentEncryption'] = array('checkbox', 'הפעל הצפנת קבצים מצורפים  מתעלם כאשר קבצים מצורפים מושבתים');
+$LANG_CONF['records.defaultAttachmentEncKey'] = array('input', 'מפתח הצפנה ברירת מחדל לקבצים מצורפים  מתעלם אם הצפנת קבצים מצורפים מושבתת אזהרה: אל תשנה זאת לאחר ההגדרה והפעלת הצפנת הקבצים!!!');
+$LANG_CONF['security.useSslForLogins'] = array('checkbox', 'אפשר כניסה רק דרך חיבור SSL? (ברירת מחדל: מושבת)');
+
+// added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'שים לב שלא ייכתבו קבצים עד שתלחץ על כפתור השמירה';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'חוצץ עמוד %d נשמר בהצלחה';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'שגיאה בשמירת חוצץ עמוד %d';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'שומר חוצץ עמוד %d';
+
+// added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
+$PMF_LANG['ad_record_active'] = 'פעיל';
+
+// added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
+$PMF_LANG['msgAttachmentInvalid'] = 'הקובץ המצורף לא חוקי, אנא הודע למנהל מערכת';
+
+// added 2.6.0-alpha - 2009-11-02 by max
+$LANG_CONF['search.numberSearchTerms'] = ['input', 'מספר מונחי החיפוש המוצגים'];
+$LANG_CONF['records.orderingPopularFaqs'] = ["select", "מיון של שאלות נפוצות מובילות"];
+$PMF_LANG['list_all_users'] = 'הצג את כל המשתמשים';
+
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "הצג רשומות עם הכי הרבה ביקורים";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "הצג רשומות עם הכי הרבה הצבעות";
+
+// added 2.6.0-alpha - 2009-11-05 by Thorsten
+$PMF_LANG['msgShowHelp'] = 'אנא הפרד מילים בפסיק.';
+
+// added 2.6.0-RC - 2009-11-30 by Thorsten
+$PMF_LANG['msgUpdateFaqDate'] = 'עדכן';
+$PMF_LANG['msgKeepFaqDate'] = 'שמור';
+$PMF_LANG['msgEditFaqDate'] = 'ערוך';
+
+// added v2.6.99 - 2010-11-24 by Gustavo Solt
+$LANG_CONF['search.relevance'] = ['select', 'מיין לפי רלוונטיות'];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "הפעל תמיכה ברלוונטיות?"];
+$PMF_LANG['searchControlCenter'] = 'חיפוש';
+$PMF_LANG['search.relevance.thema-content-keywords'] = 'שאלה - תשובה - מילות מפתח';
+$PMF_LANG['search.relevance.thema-keywords-content'] = 'שאלה - מילות מפתח - תשובה';
+$PMF_LANG['search.relevance.content-thema-keywords'] = 'תשובה - שאלה - מילות מפתח';
+$PMF_LANG['search.relevance.content-keywords-thema'] = 'תשובה - מילות מפתח - שאלה';
+$PMF_LANG['search.relevance.keywords-content-thema'] = 'מילות מפתח - תשובה - שאלה';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'מילות מפתח - שאלה - תשובה';
+
+// added 2.7.0-alpha - 2010-09-13 by Thorsten
+$PMF_LANG['msgLoginUser'] = 'כניסה';
+
+// added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
+$PMF_LANG["msgAttachments"] = "קבצים מצורפים לשאלות נפוצות";
+$PMF_LANG["ad_menu_attachment_admin"] = "ניהול קבצים מצורפים";
+$PMF_LANG['msgAttachmentsFilename'] = 'שם קובץ';
+$PMF_LANG['msgAttachmentsFilesize'] = 'גודל קובץ';
+$PMF_LANG['msgAttachmentsMimeType'] = 'סוג MIME';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'האם אתה בטוח שברצונך למחוק קובץ מצורף זה?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'הקובץ המצורף נמחק בהצלחה.';
+
+// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+$PMF_LANG['ad_menu_reports'] = 'דוחות';
+$PMF_LANG["ad_stat_report_fields"] = "שדות";
+$PMF_LANG["ad_stat_report_category"] = "קטגוריה";
+$PMF_LANG["ad_stat_report_sub_category"] = "תת-קטגוריה";
+$PMF_LANG["ad_stat_report_translations"] = "תרגומים";
+$PMF_LANG["ad_stat_report_language"] = "שפה";
+$PMF_LANG["ad_stat_report_id"] = "מזהה שאלה נפוצה";
+$PMF_LANG["ad_stat_report_sticky"] = "שאלה נפוצה נעוצה";
+$PMF_LANG["ad_stat_report_title"] = "שאלה";
+$PMF_LANG["ad_stat_report_creation_date"] = "תאריך";
+$PMF_LANG["ad_stat_report_owner"] = "מחבר מקורי";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "מחבר אחרון";
+$PMF_LANG["ad_stat_report_url"] = "כתובת URL";
+$PMF_LANG["ad_stat_report_visits"] = "ביקורים";
+$PMF_LANG["ad_stat_report_make_report"] = "צור דוח";
+$PMF_LANG["ad_stat_report_make_csv"] = "ייצא ל-CSV";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+$PMF_LANG['msgRegistration'] = 'הרשמה';
+$PMF_LANG['msgRegistrationCredentials'] = 'כדי להירשם אנא הזן את שמך, שם המשתמש שלך וכתובת דוא"ל תקינה!';
+$PMF_LANG['msgRegistrationNote'] = 'לאחר שליחת טופס זה בהצלחה, תקבל דוא"ל לאחר שמנהל מערכת יאשר את הרשמתך.';
+
+// added v2.7.0-beta - 2011-06-13 by Thorsten
+$PMF_LANG['ad_entry_changelog_history'] = "היסטוריית יומן שינויים";
+
+// added v2.7.0-beta2 - 2011-06-22 by Thorsten
+$LANG_CONF['security.ssoSupport'] = ['checkbox', 'הפעל תמיכה בכניסה חד-פעמית (SSO)'];
+$LANG_CONF['security.ssoLogoutRedirect'] = ['input', 'כתובת URL של שירות הפניית יציאה מכניסה חד-פעמית (SSO)'];
+$LANG_CONF['main.dateFormat'] = ['input', 'פורמט תאריך (ברירת מחדל: Y-m-d H:i)'];
+$LANG_CONF['security.enableLoginOnly'] = ['checkbox', 'שאלות נפוצות מאובטחות לחלוטין'];
+
+// added v2.7.0-RC - 2011-08-18 by Thorsten
+$PMF_LANG['securityControlCenter'] = 'אבטחה';
+$PMF_LANG['ad_search_delsuc'] = 'מונח החיפוש נמחק בהצלחה.';
+$PMF_LANG['ad_search_delfail'] = 'מונח החיפוש לא נמחק.';
+
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'אודות שאלות נפוצות אלו';
+$LANG_CONF['security.useSslOnly'] = ['checkbox', 'שאלות נפוצות עם SSL בלבד'];
+$PMF_LANG['msgTableOfContent'] = 'תוכן עניינים';
+
+// added 2.7.5 - 2012-03-02 by Thorsten
+$PMF_LANG["msgExportAllFaqs"] = "הדפס הכל כ-PDF";
+$PMF_LANG["msgOnlineVerificationCheck"] = "בדיקת אימות מקוונת";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "לחץ כדי לאמת את התקנת phpMyFAQ שלך";
+$PMF_LANG["ad_verification_notokay"] = "לגרסה שלך של phpMyFAQ יש שינויים מקומיים";
+$PMF_LANG["ad_verification_okay"] = "הגרסה שלך של phpMyFAQ אומתה בהצלחה.";
+
+// added v2.8.0-alpha - 2011-09-29 by Thorsten
+$PMF_LANG['msgAdminSearchFaqs'] = 'חפש שאלות נפוצות';
+
+// added v2.8.0-alpha - 2012-01-13 by Peter
+$LANG_CONF["records.enableCloseQuestion"] = ["checkbox", "סגור שאלה פתוחה לאחר תשובה?"];
+$LANG_CONF["records.enableDeleteQuestion"] = ["checkbox", "מחק שאלה פתוחה לאחר תשובה?"];
+$PMF_LANG["msg2answerFAQ"] = "נענתה";
+
+// added v2.8.0-alpha - 2012-01-16 by Thorsten
+$PMF_LANG["headerUserControlPanel"] = 'לוח בקרת משתמש';
+
+// added v2.8.0-alpha2 - 2012-03-15 by Thorsten
+$PMF_LANG["rememberMe"] = 'התחבר אותי אוטומטית בפעם הבאה';
+$PMF_LANG["ad_menu_instances"] = "אתרים מרובים של שאלות נפוצות";
+
+// added v2.8.0-alpha2 - 2012-08-06 by Thorsten
+$PMF_LANG['ad_record_inactive'] = 'שאלות נפוצות לא פעילות';
+$LANG_CONF["main.maintenanceMode"] = ["checkbox", "הגדר שאלות נפוצות במצב תחזוקה"];
+$PMF_LANG['msgMode'] = "מצב";
+$PMF_LANG['msgMaintenanceMode'] = "שאלות נפוצות במצב תחזוקה";
+$PMF_LANG['msgOnlineMode'] = "שאלות נפוצות מקוונות";
+
+// added v2.8.0-alpha3 - 2012-08-30 by Thorsten
+$PMF_LANG['msgShowMore'] = "הצג עוד";
+$PMF_LANG['msgQuestionAnswered'] = "השאלה נענתה";
+$PMF_LANG['msgMessageQuestionAnswered'] = "השאלה שלך ב-%s נענתה. אנא בדוק אותה כאן";
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['permission::addattachment'] = "הוסף קבצים מצורפים";
+$PMF_LANG['permission::editattachment'] = "ערוך קבצים מצורפים";
+$PMF_LANG['permission::delattachment'] = "מחק קבצים מצורפים";
+$PMF_LANG['permission::dlattachment'] = "הורד קבצים מצורפים";
+$PMF_LANG['permission::reports'] = "צור דוחות";
+$PMF_LANG['permission::addfaq'] = "הוסף שאלות נפוצות בממשק הקדמי";
+$PMF_LANG['permission::addquestion'] = "הוסף שאלות בממשק הקדמי";
+$PMF_LANG['permission::addcomment'] = "הוסף תגובות בממשק הקדמי";
+$PMF_LANG['permission::editinstances'] = "ערוך מופעי אתרים מרובים";
+$PMF_LANG['permission::addinstances'] = "הוסף מופעי אתרים מרובים חדשים";
+$PMF_LANG['permission::delinstances'] = "מחק מופעי אתרים מרובים";
+$PMF_LANG['permission::export'] = "ייצא שאלות נפוצות";
+
+// added v2.8.0-beta - 2012-12-24 by Thorsten
+$LANG_CONF["records.randomSort"] = ["checkbox", "מיין שאלות נפוצות באקראי"];
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = ["checkbox", "הפעל עורך WYSIWYG מובנה בממשק הקדמי"];
+
+// added v2.8.0-beta3 - 2013-01-15 by Thorsten
+$LANG_CONF["main.enableGravatarSupport"] = ["checkbox", "תמיכה ב-Gravatar"];
+
+// added v2.8.0-RC - 2013-01-29 by Thorsten
+$PMF_LANG["ad_stopwords_desc"] = "אנא בחר שפה להוספה או עריכה של מילות עצירה.";
+$PMF_LANG["ad_visits_per_day"] = "ביקורים ליום";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "הוסף מופע חדש של phpMyFAQ לאתרים מרובים";
+$PMF_LANG["ad_instance_error_notwritable"] = "התיקייה /multisite אינה ניתנת לכתיבה.";
+$PMF_LANG["ad_instance_url"] = "כתובת URL של מופע";
+$PMF_LANG["ad_instance_path"] = "נתיב מופע";
+$PMF_LANG["ad_instance_name"] = "שם מופע";
+$PMF_LANG["ad_instance_email"] = "דוא\"ל מנהל מערכת שלך";
+$PMF_LANG["ad_instance_admin"] = "שם משתמש מנהל";
+$PMF_LANG["ad_instance_password"] = "סיסמת מנהל";
+$PMF_LANG["ad_instance_hint"] = "זהירות: ייקח כמה שניות ליצור מופע phpMyFAQ חדש!";
+$PMF_LANG["ad_instance_button"] = "שמור מופע";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "לא ניתן למחוק מופע ";
+$PMF_LANG["ad_instance_config"] = "תצורת מופע";
+
+// added v2.8.0-RC3 - 2013-03-03 by Thorsten
+$PMF_LANG["msgAboutThisNews"] = "אודות חדשות אלו";
+
+// added v.2.8.1 - 2013-06-23 by Thorsten
+$PMF_LANG["msgAccessDenied"] = "הגישה נדחתה.";
+
+// added v.2.8.21 - 2015-02-17 by Thorsten
+$PMF_LANG['msgSeeFAQinFrontend'] = 'צפה בשאלה נפוצה בממשק הקדמי';
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'הוסף מילת חיפוש';
+$PMF_LANG["msgPopularTags"] = 'החיפושים הפופולריים ביותר';
+$LANG_CONF["search.enableHighlighting"] = ["checkbox", "הדגש מונחי חיפוש"];
+$LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "אפשר תגובות לאורחים"];
+$LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "אפשר הוספת שאלות לאורחים"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = ["checkbox", "אפשר הוספת שאלות נפוצות חדשות לאורחים"];
+$PMF_LANG["ad_searchterm_del"] = 'מחק את כל מונחי החיפוש הרשומים';
+$PMF_LANG["ad_searchterm_del_suc"] = 'כל מונחי החיפוש נמחקו בהצלחה.';
+$PMF_LANG["ad_searchterm_del_err"] = 'לא ניתן למחוק את כל מונחי החיפוש.';
+$LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "הסתר קטגוריות ריקות"];
+$LANG_CONF["search.searchForSolutionId"] = ["checkbox", "חפש לפי מזהה פתרון"];
+
+// added v2.9.0-alpha2 - 2014-08-16 by Thorsten
+$PMF_LANG["ad_tag_delete_success"] = "התג נמחק בהצלחה.";
+$PMF_LANG["ad_tag_delete_error"] = "התג לא נמחק מכיוון שהתרחשה שגיאה.";
+$PMF_LANG["msgSeoCenter"] = "קידום אתרים (SEO)";
+$LANG_CONF["seo.metaTagsHome"] = ["select", "תגי מטא של רובוטים לעמוד הבית"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "תגי מטא של רובוטים לשאלות נפוצות"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "תגי מטא לעמודי קטגוריות"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "תגי מטא של רובוטים לעמודים סטטיים"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "תגי מטא של רובוטים למנהל מערכת"];
+$PMF_LANG["msgMatchingQuestions"] = "התוצאות הבאות תואמות קרוב לשאלה שלך";
+$PMF_LANG["msgFinishSubmission"] = "אם אף אחת מההצעות למעלה לא תואמת את השאלה שלך, לחץ על הכפתור למטה כדי לסיים את שליחת השאלה שלך.";
+$LANG_CONF['spam.manualActivation'] = ['checkbox', 'הפעל משתמשים חדשים באופן ידני (ברירת מחדל: מופעל)'];
+
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews
+$PMF_LANG['mailControlCenter'] = 'הגדרת דואר';
+$LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'השתמש בשרת SMTP מרוחק (ברירת מחדל: מושבת)'];
+$LANG_CONF['mail.remoteSMTPServer'] = ['input', 'כתובת שרת'];
+$LANG_CONF['mail.remoteSMTPUsername'] = ['input', 'שם משתמש'];
+$LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'סיסמה'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'הפעל הרשמה למבקרים'];
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = ['area', 'כותרת PDF מותאמת אישית (HTML מותר)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'כותרת תחתונה של PDF מותאמת אישית (HTML מותר)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'אפשר הורדות לאורחים'];
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "שים לב! אם תזין סיסמה, תחליף את הסיסמה של המשתמש.";
+$PMF_LANG["ad_delete_all_votings"] = "נקה את כל ההצבעות";
+$PMF_LANG["categoryModeratorLabel"] = "מנחים";
+$PMF_LANG['ad_clear_all_visits'] = "נקה את כל הביקורים";
+$PMF_LANG['ad_reset_visits_success'] = 'איפוס הביקורים הצליח.';
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'הפעל עורך Markdown מובנה'];
+
+// added v2.9.0-beta - 2015-09-27 by Thorsten
+$PMF_LANG['faqOverview'] = 'סקירת שאלות נפוצות';
+$PMF_LANG['ad_dir_missing'] = 'התיקייה %s חסרה.';
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'הפעל מענה חכם לשאלות משתמשים'];
+
+// added v2.9.0-beta2 - 2015-12-23 by Thorsten
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'הפעל תמיכה ב-Elasticsearch', 'ברירת מחדל: מושבת'];
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'תצורת Elasticsearch';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'צור אינדקס';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'מחק אינדקס';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'ייבוא מלא';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'האינדקס נוצר בהצלחה.';
+$PMF_LANG['ad_es_create_import_success'] = 'הייבוא הצליח.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'האינדקס נמחק בהצלחה.';
+$PMF_LANG['ad_export_generate_json'] = 'צור קובץ JSON';
+$PMF_LANG['ad_media_name_search'] = 'חפש לפי שם מדיה';
+
+// added v2.9.0-RC - 2016-02-19 by Thorsten
+$PMF_LANG['ad_admin_notes'] = 'הערות פרטיות';
+$PMF_LANG['ad_admin_notes_hint'] = ' (גלוי רק לעורכים)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'הוסף שאלה נפוצה חדשה בקטגוריה זו';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'מיפוי LDAP לשם, "cn" בעת שימוש ב-ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'מיפוי LDAP לשם משתמש, "samAccountName" בעת שימוש ב-ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'מיפוי LDAP לדוא"ל, "mail" בעת שימוש ב-ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'מיפוי LDAP ל-"חבר ב-" בעת שימוש בקבוצות LDAP'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'קידומת תחום LDAP, למשל "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'גרסת פרוטוקול LDAP (ברירת מחדל: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'הפניות LDAP (ברירת מחדל: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'הפעל תמיכה בקבוצות LDAP, למשל "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'הפעל תמיכה ב-LDAP SASL'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'הפעל תמיכה במספר שרתי LDAP'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'הפעל חיבורי LDAP אנונימיים'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'הפעל קישור משתמש דינמי ב-LDAP'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'תכונת LDAP לקישור משתמש דינמי, "uid" בעת שימוש ב-ADS'];
+$LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'הגבל כניסה לקבוצות Active Directory ספציפיות'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'רשימת קבוצות AD מותרות מופרדות בפסיק (תואמות חלקיות נתמכות)'];
+$LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'הקצה משתמשים אוטומטית לקבוצות phpMyFAQ על סמך חברות ב-AD'];
+$LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'מיפוי JSON של קבוצות AD לקבוצות phpMyFAQ, למשל {"Domain Admins": "Administrators"}'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'הפעל מפת אתר XML'];
+$PMF_LANG['categoryImageLabel'] = 'תמונת קטגוריה';
+$PMF_LANG["categoryShowHomeLabel"] = "הצג בעמוד הבית";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'צפה בשאלה נפוצה';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'הפעל הגבלות קטגוריות'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'הפעל שליחה לחברים'];
+$PMF_LANG['msgUserRemovalText'] = 'באפשרותך לבקש את מחיקת החשבון והנתונים האישיים שלך. דוא"ל יישלח לצוות המנהלים. הצוות ימחק את החשבון, התגובות והשאלות שלך. מכיוון שזהו תהליך ידני, זה יכול לקחת עד 24 שעות. לאחר מכן תקבל אישור מחיקה בדוא"ל. ';
+$PMF_LANG["msgUserRemoval"] = "בקש הסרת משתמש";
+$PMF_LANG["ad_menu_RequestRemove"] = "בקש הסרת משתמש";
+$PMF_LANG["msgContactRemove"] = "בקשת מחיקה מצוות המנהלים";
+$PMF_LANG["msgContactPrivacyNote"] = "אנא שים לב ל";
+$PMF_LANG["msgPrivacyNote"] = "הצהרת פרטיות";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'בדיקה אוטומטית לגרסאות חדשות'];
+$PMF_LANG['ad_user_is_superadmin'] = 'מנהל-על';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'החלף סיסמה';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'אפשר ניהול גרסאות של שינויי שאלות נפוצות'];
+$PMF_LANG['permission::view_faqs'] = 'צפה בשאלות נפוצות';
+$PMF_LANG['permission::view_categories'] = 'צפה בקטגוריות';
+$PMF_LANG['permission::view_news'] = 'צפה בחדשות';
+$PMF_LANG['permission::administrate_groups'] = 'נהל קבוצות';
+$PMF_LANG['ad_group_rights'] = 'הרשאות קבוצה';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['permission::viewadminlink'] = 'צפה בקישור מנהל';
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'פורט שרת SMTP'];
+$PMF_LANG['msgQuestionAnswer'] = 'שאלה ותשובה';
+$PMF_LANG['msgPermissions'] = 'הרשאות';
+$PMF_LANG['loginPageMessage'] = 'התחבר ל- ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'מטא-נתונים של שאלות נפוצות';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'כתובת URL להצהרת פרטיות'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'שם משתמש צריך להיות גלוי';
+$PMF_LANG['ad_user_is_visible'] = 'גלוי';
+$PMF_LANG['ad_categ_save_order'] = 'המיון החדש נשמר בהצלחה.';
+$PMF_LANG['ad_add_user_change_password'] = 'המשתמש חייב לשנות סיסמה לאחר הכניסה הראשונה';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API מופעל'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'אסימון לקוח API'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'מארחים מורשים להרשמות'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'כניסה רק עם כתובת דוא"ל'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'התחבר עם Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'הפעל כניסה עם Microsoft Entra ID'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'הפעל "שאל שאלה"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'הפעל התראות'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'שלח דוא"ל בדיקה למנהל המערכת דרך SMTP'];
+$PMF_LANG['mail.sendTestEmail'] = 'שלח דוא"ל בדיקה למנהל המערכת';
+$PMF_LANG['msgGoToCategory'] = 'עבור לקטגוריה';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'הפעל Google ReCAPTCHA v2 בלתי נראה'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'מפתח אתר Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'מפתח סודי Google ReCAPTCHA v2'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "אימות דו-שלבי מופעל";
+$PMF_LANG['msgTwofactorConfig'] = "הגדר אימות דו-שלבי";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "תצורת אימות דו-שלבי";
+$PMF_LANG['qr_code_secret_alt'] = "QR-Code Secret-Key";
+$PMF_LANG['msgTwofactorNewSecret'] = "הסר תצורת אימות דו-שלבי נוכחית";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "אימות דו-שלבי - הזן אסימון:";
+$PMF_LANG['msgEnterTwofactorToken'] = "הזן קוד בן 6 ספרות מאפליקציית האימות שלך.";
+$PMF_LANG['msgTwofactorCheck'] = "בדוק";
+$PMF_LANG['msgTwofactorErrorToken'] = "הזנת קוד שגוי!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "אפס אימות דו-שלבי";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'תועבר אוטומטית תוך 5 שניות.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'לא נמצאה קטגוריה בשפה הנבחרת, אך באפשרותך לבחור בשפות הבאות:';
+$PMF_LANG['msgCategoryDescription'] = 'כאן תמצא סקירה של כל הקטגוריות עם מספר השאלות הנפוצות.';
+$PMF_LANG['msgSubCategoryContent'] = 'בחר קטגוריה ראשית.';
+$PMF_LANG['ad_open_question_deleted'] = 'השאלה נמחקה בהצלחה.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'השבת אימות עמית TLS של SMTP (לא מומלץ)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'מידע יצירת קשר כ-HTML?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'שירות אימות';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'הצג כתובת דוא"ל בייצואים'];
+$PMF_LANG['msgNewQuestionAdded'] = 'נוספה שאלה חדשה. אתה יכול לבדוק אותה כאן או בקטע הניהול:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'העדפות עוגיות';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'עדכון מקוון מופעל'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'סביבת שחרור'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'בדיקה אחרונה לעדכונים'];
+$PMF_LANG['upgradeControlCenter'] = 'עדכון מקוון';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. בדיקת תקינות מערכת';
+$PMF_LANG['headerCheckUpdates'] = '2. בדיקת עדכונים';
+$PMF_LANG['headerDownloadPackage'] = '3. הורדת phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. חילוץ חבילה שהורדה';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. התקנת חבילה שהורדה';
+$PMF_LANG['msgHealthCheck'] = 'זה בודק את הרשאות הקבצים הנכונות ומבנה התיקיות של התקנת phpMyFAQ שלך.';
+$PMF_LANG['msgUpdateCheck'] = 'אתה יכול לבדוק גרסאות חדשות של phpMyFAQ, להתקין מחדש או לעדכן את ההתקנה שלך.';
+$PMF_LANG['msgDownloadPackage'] = 'הורדת גרסאות חדשות של phpMyFAQ בהתאם לסביבת השחרור שנקבעה.';
+$PMF_LANG['msgExtractPackage'] = 'זה מחלץ את החבילה שהורדה למערכת הקבצים שלך, זה עשוי לקחת זמן מה.';
+$PMF_LANG['msgExtractToFileSystem'] = 'זה מחלץ את החבילה שהורדה למערכת הקבצים שלך.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'התקן חבילה שהורדה';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'גיבוי של ההתקנה הנוכחית';
+$PMF_LANG['msgInstallationNewFiles'] = 'התקנת קבצים חדשים';
+$PMF_LANG['msgDatabaseUpdate'] = 'עדכון מסד הנתונים';
+$PMF_LANG['alertNightlyBuild'] = 'אתה משתמש בגרסת פיתוח של phpMyFAQ. אתה יכול לעדכן לבניית הלילה האחרונה.';
+$PMF_LANG['noteNightlyBuild'] = 'שים לב שתורד הבנייה מהיום הקודם (נשמר ב-/content/upgrades). מכיוון שכל בנייה חדשה לא נוצרת עד השעה 2:00 בבוקר (UTC) על ידי GitHub.';
+$PMF_LANG['buttonCheckHealth'] = 'בדוק תקינות מערכת כעת';
+$PMF_LANG['buttonCheckUpdates'] = 'בדוק עדכונים כעת';
+$PMF_LANG['buttonDownloadPackage'] = 'הורד כעת';
+$PMF_LANG['buttonExtractPackage'] = 'חלץ חבילה שהורדה כעת';
+$PMF_LANG['versionIsUpToDate'] = 'הגרסה המותקנת שלך מעודכנת!';
+$PMF_LANG['healthCheckOkay'] = 'הגרסה המותקנת שלך תקינה!';
+$PMF_LANG['downloadSuccessful'] = 'החבילה הורדה בהצלחה!';
+$PMF_LANG['extractSuccessful'] = 'החבילה חולצה בהצלחה!';
+$PMF_LANG['downloadFailure'] = 'לא ניתן להוריד חבילה.';
+$PMF_LANG['verificationFailure'] = 'לא ניתן לאמת חבילה שהורדה.';
+$PMF_LANG['extractFailure'] = 'לא ניתן לחלץ חבילה שהורדה.';
+$PMF_LANG['msgCurrentVersion'] = 'גרסה נוכחית: ';
+$PMF_LANG['msgLastCheckDate'] = 'בדיקה אחרונה לעדכונים: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'גרסה אחרונה זמינה: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'סביבת שחרור: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'אתה עדיין יכול להשתמש ב<a href="../update">תהליך העדכון הידני</a> אם תעדיף.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'הוסף סימנייה';
+$PMF_LANG['removeBookmark'] = 'הסר סימנייה';
+$PMF_LANG['msgBookmarks'] = 'סימניות';
+$PMF_LANG['msgMyBookmarks'] = 'הסימניות שלי';
+$PMF_LANG['msgBookmarkAdded'] = 'הסימנייה נוספה בהצלחה!';
+$PMF_LANG['msgBookmarkRemoved'] = 'הסימנייה הוסרה בהצלחה!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "לא מותר להשתמש ב-'#'.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'רשימת בוטים להתעלמות (הפרד בפסיקים)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'תמונת Gravatar';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'מיון מותאם אישית של רשומות נעוצות מושבת בתצורה הראשית. אם תרצה להשתמש בו, אנא הפעל אותו ב<a href="./configuration">תצורה הראשית</a> -> רשומות.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'מיון מותאם אישית של רשומות נעוצות'];
+$PMF_LANG['msgNoStickyFaqs'] = 'אין לך עדיין רשומות נעוצות. אתה יכול לסמן רשומות כנעוצות ב<a href="./faqs" class="alert-link">סקירת שאלות נפוצות</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'הפעל הסכמת עוגיות'];
+$PMF_LANG['msgSessionExpired'] = 'תוקף ההפעלה שלך פג. אנא התחבר שוב.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'קוד שפה';
+$PMF_LANG['msgSeparateWithCommas'] = '(הפרד בפסיקים)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'קובץ ה-CSV שיש לייבא חייב להכיל את העמודות הבאות בסדר זה, ללא כותרות עמודות. כל שורה מיועדת להגדיר ערך שאלה נפוצה. כל התאים בעמודות המסומנות בכוכבית * חייבים להכיל ערך.';
+$PMF_LANG['msgImportRecords'] = 'ייבוא שאלות נפוצות';
+$PMF_LANG['msgImportCSVFile'] = 'ייבא קובץ CSV';
+$PMF_LANG['msgImportCSVFileBody'] = 'אתה יכול לייבא קובץ CSV עם נתוני הרשומות שלך והמבנה הנתון (ראה למעלה) כאן.';
+$PMF_LANG['msgImport'] = 'ייבוא';
+$PMF_LANG['msgColumnStructure'] = 'מבנה עמודות';
+$PMF_LANG['msgImportSuccessful'] = 'הייבוא הצליח!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true או false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'ייבוא וייצוא';
+$PMF_LANG['msgCSVFileNotValidated'] = 'נראה שלקובץ אין את המבנה הנכון. אנא בדוק את המבנה על סמך הדרישות הנתונות שוב.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'ייצא הפעלות כקובץ CSV';
+$PMF_LANG['msgExportSessions'] = 'ייצוא הפעלות';
+$PMF_LANG['msgExportSessionsFrom'] = 'מ-';
+$PMF_LANG['msgExportSessionsTo'] = 'עד';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'ערוך טפסים';
+$PMF_LANG['msgEditFormsSuccessful'] = 'השינוי שונה בהצלחה.';
+$PMF_LANG['msgInputType'] = 'סוג';
+$PMF_LANG['msgRequiredInputField'] = 'קלט נדרש';
+$PMF_LANG['permission::forms_edit'] = 'ערוך טפסים';
+$PMF_LANG['msgInputLabel'] = 'תווית';
+$PMF_LANG['msgFormsEditTranslations'] = 'התאם תרגומים';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'התרגום נשמר בהצלחה.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'התרגום נמחק בהצלחה.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'התרגום החדש נשמר בהצלחה.';
+$PMF_LANG['msgSelectLanguage'] = 'בחר שפה';
+$PMF_LANG['msgTranslationText'] = 'טקסט תרגום';
+$PMF_LANG['msgAddTranslation'] = 'הוסף תרגום';
+$PMF_LANG['msgHintDeactivateForms'] = 'ניתן להשבית את הטפסים לחלוטין ב<a class="alert-link" href="./configuration">ניהול</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'רק שאלות נפוצות לא פעילות';
+$PMF_LANG['msgOnlyNewFAQs'] = 'רק שאלות נפוצות חדשות';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'מחק חדשות';
+$PMF_LANG['msgExportUsersAsCSV'] = 'ייצא משתמשים כ-csv';
+$PMF_LANG['msgWarning'] = 'אזהרה';
+$PMF_LANG['msgUserList'] = 'רשימת משתמשים';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'לא נמצאה שאלה ותשובה.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'השאלות הנפוצות אינן במצב תחזוקה.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'יש להפריד מילות מפתח מרובות בפסיקים.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'אינך יכול להשתמש בטופס זה עקב חוסר בקטגוריות מוגדרות. אנא הודע ל<a class="alert-link" href="./contact.html">מנהל מערכת</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'כתובת ללא מענה לדוא"ל'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'תוקף ההפעלה עומד לפוג בקרוב';
+$PMF_LANG['msgNoLogMeOut'] = 'לא, נתק אותי';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'כן, השאר אותי מחובר';
+$PMF_LANG['msgTrendingFAQs'] = 'שאלות נפוצות נפוצות';
+$PMF_LANG['msgGenerateApiClientToken'] = 'צור אסימון לקוח API';
+$PMF_LANG['msgSerp'] = 'SERP הוא קיצור של Search Engine Result Page. כאן אתה יכול להגדיר את הכותרת והתיאור עבור SERP.';
+$PMF_LANG['msgSerpTitle'] = 'כותרת SERP';
+$PMF_LANG['msgSerpDescription'] = 'תיאור SERP';
+$LANG_CONF['seo.title'] = ['input', 'כותרת SERP'];
+$LANG_CONF['seo.description'] = ['area', 'תיאור SERP'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'מארחים חיצוניים מורשים לתוכן מדיה (הפרד בפסיקים)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'האם אתה בטוח שברצונך להסיר את תצורת האימות הדו-שלבי הנוכחית שלך?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar אינו מופעל כרגע.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'מחיקת תצורת האימות הדו-שלבי הנוכחית הצליחה.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'שלח לחבר דרך WhatsApp';
+$PMF_LANG['msgShareText'] = 'גיליתי מאמר שאלות נפוצות מגניב בשבילך:';
+$PMF_LANG['msgError'] = 'אירעה שגיאה.';
+$PMF_LANG['msgLinkToFAQ'] = 'קישור לשאלה נפוצה';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'הפעל קישור למדיניות פרטיות'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ פועל כעת במצב ניפוי באגים. מצב ניפוי באגים עלול לחשוף מידע רגיש ומיועד למטרות פיתוח בלבד. אנו ממליצים בחום להשבית מצב ניפוי באגים מסיבות אבטחה. אתה יכול להשבית מצב ניפוי באגים בקובץ <code>.env</code>.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ נמצא כעת בפיתוח (%s). ולכן עדיין לא מוכן לייצור. אנא <a target="_blank" href="%s" class="alert-link">דווח על כל הבעיות ב-GitHub</a>. תודה רבה!';
+$PMF_LANG['layoutControlCenter'] = 'עיצוב';
+$LANG_CONF['layout.customCss'] = ['area', 'CSS מותאם אישית', 'אנא השתמש ב-CSS בלבד.'];
+$PMF_LANG['msgSitemap'] = 'מפת אתר';
+$PMF_LANG['msgSitemapMetaDesc'] = 'מצא את השאלות הנפוצות שאתה מחפש בסקירה של כל הערכים | מפת אתר - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'במילון של %s תמצא הסברים לכל המונחים הטכניים החשובים בנושא';
+$PMF_LANG['msgOverviewMetaDesc'] = 'ראה סקירה של כל הנושאים החשובים | סקירת שאלות נפוצות של %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'סקירה של כל הקטגוריות והנושאים | סקירת קטגוריות של %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'הוסף שאלה חדשה | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'שאלות פתוחות שעדיין ממתינות לתשובות | %s';
+$PMF_LANG['msgShareLinkVia'] = 'שתף עם';
+$PMF_LANG['msgCopyLink'] = 'או העתק קישור';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'הפעל קטעי עשיר (Rich Snippets)'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'הסטטיסטיקה נמחקה בהצלחה.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'אירעה שגיאה במהלך מחיקת הסטטיסטיקה.';
+$PMF_LANG['msgPasswordTooShort'] = 'הסיסמה החדשה נדרשת להיות באורך של לפחות 8 תווים.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'שתי הסיסמאות אינן תואמות.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'ישנן הערות פרטיות של עורכים אחרים:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'נקה קבצים מצורפים חסרים';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'הקובץ המצורף רוענן בהצלחה';
+$PMF_LANG['msgRemoveAll'] = 'הסר הכל';
+$PMF_LANG['msgError404'] = 'שגיאה 404';
+$PMF_LANG['msgError404Description'] = 'העמוד שאתה מחפש הועבר, הוסר או שאולי מעולם לא היה קיים.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'כבר יש לך חשבון?';
+$PMF_LANG['msgSignInHere'] = 'התחבר כאן.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'בעת הרשמה עם Passkeys, משתמשים צריכים להזין רק שם או כתובת דוא"ל, בעוד שהאימות מתבצע בצורה מאובטחת באמצעות נתונים ביומטריים או סיסמה מבוססת מכשיר.';
+$PMF_LANG['msgContinue'] = 'המשך';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'הפעל תמיכה ב-WebAuthn (ניסיוני)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'התחבר עם Passkey';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'ההרשמה הצליחה. אתה יכול כעת להתחבר עם ה-Passkey שלך.';
+$PMF_LANG['msgSupportUs'] = 'תמכו ב-phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'אנא הזן את שמך המלא!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'אנא הזן את שם המשתמש שלך!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'אנא ספק כתובת דוא"ל חוקית!';
+$PMF_LANG['msgErrorEnterMessage'] = 'אנא הזן הודעה!';
+$PMF_LANG['msgLinkCopied'] = 'הקישור הועתק ללוח';
+$PMF_LANG['msgDocumentation'] = 'תיעוד';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'אפס תמונת קטגוריה';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'תוכן עבור robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'תוכן עבור llms.txt', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'הפעל מצב תחזוקה';
+$PMF_LANG['msgPlugins'] = 'תוספים';
+$PMF_LANG['msgPluginListing'] = 'רשימת התוספים המותקנים והגרסאות שלהם';
+$PMF_LANG['msgPluginName'] = 'שם תוסף';
+$PMF_LANG['msgPluginVersion'] = 'גרסה';
+$PMF_LANG['msgPluginAuthor'] = 'מחבר';
+$PMF_LANG['msgPluginDescription'] = 'תיאור';
+$PMF_LANG['msgPluginReason'] = 'סיבה';
+$PMF_LANG['msgIncompatiblePlugins'] = 'תוספים לא תואמים';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'התוספים הבאים לא יכלו להיטען עקב בעיות תאימות.';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'דווח על באג';
+$PMF_LANG['msgDashboard'] = 'לוח בקרה';
+$PMF_LANG['msgOrphanedFAQs'] = 'שאלות נפוצות יתומות';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'שאלות נפוצות אלו אינן מוקצות לקטגוריה כלשהי. אתה יכול להקצות אותן לקטגוריה כאן.';
+$PMF_LANG['msgPreview'] = 'תצוגה מקדימה';
+$PMF_LANG['msgInsertImage'] = 'הכנס תמונה';
+$PMF_LANG['msgImageUpload'] = 'העלאת תמונה';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'לא ניתן להעלות את התמונה.';
+$PMF_LANG['msgImageTooLarge'] = 'התמונה גדולה מדי.';
+$PMF_LANG['msgNoImagesForUpload'] = 'אין תמונות להעלאה.';
+$PMF_LANG['msgFetchingHashes'] = 'מביא hash-י אימות מ-api.phpmyfaq.de...';
+$PMF_LANG['msgCheckHashes'] = 'בודק hash-ים עם קבצי התקנה...';
+$PMF_LANG['msgAuthenticationAborted'] = 'האימות בוטל על ידי המשתמש.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'הפעל מונה זמן קצוב לסשן מנהל', 'ברירת מחדל: מופעל'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'הפעל תמיכה ב-OpenSearch', 'ברירת מחדל: מושבת'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'חלון זמן לחיפושים פופולריים (ימים)', 'ברירת מחדל: 180 ימים'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'הגדרות OpenSearch';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'צור אינדקס חיפוש';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'מחק אינדקס חיפוש';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'יבוא מלא';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'אינדקס החיפוש של OpenSearch נוצר בהצלחה.';
+$PMF_LANG['ad_os_create_import_success'] = 'היבוא של OpenSearch הצליח.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'אינדקס החיפוש של OpenSearch נמחק בהצלחה.';
+$PMF_LANG['permission::translate_faq'] = 'תרגם שאלות נפוצות';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'הקלד לחיפוש קטגוריות';
+$PMF_LANG['msgLoadingText'] = 'טוען...';
+$PMF_LANG['msgNoResultsText'] = 'לא נמצאו תוצאות';
+$PMF_LANG['msgNoChoicesText'] = 'אין אפשרויות לבחירה';
+$PMF_LANG['msgItemSelectText'] = 'לחץ לבחירה';
+$PMF_LANG['msgUniqueItemText'] = 'ניתן להוסיף רק מזהים ייחודיים';
+$PMF_LANG['msgCustomAddItemText'] = 'ניתן להוסיף רק ערכים התואמים תנאים ספציפיים';
+$PMF_LANG['msgDownloadYourData'] = 'הורד את הנתונים שלך';
+$PMF_LANG['msgDataExportDescription'] = 'הורד קובץ ZIP המכיל את נתוני המשתמש השמורים שלך.';
+$PMF_LANG['msgDownload'] = 'הורד';
+$PMF_LANG['msgToggleTheme'] = 'החלף ערכת נושא';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'תאריך הגיבוי האחרון';
+$PMF_LANG['msgBackupNoneFound'] = 'לא נמצאו גיבויים.';
+$PMF_LANG['msgBackupTooOld'] = 'הגיבוי האחרון ישן מ-30 יום.';
+$PMF_LANG['msgBackupRecent'] = 'הגיבוי הנוכחי עדכני.';
+$PMF_LANG['msgBackupGoTo'] = 'עבור לעמוד הגיבוי';
+$PMF_LANG['msgNewestUsers'] = 'משתמשים חדשים';
+$PMF_LANG['msgMemberSince'] = 'חבר מאז';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'משתמשים רשומים';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'האם אתה באמת רוצה למחוק את השאלה הנפוצה הזו? פעולה זו אינה ניתנת לביטול.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'מספר כולל של מפתחות תרגום';
+$PMF_LANG['msgTranslatedKeys'] = 'מספר מפתחות מתורגמים';
+$PMF_LANG['msgMissingKeys'] = 'מפתחות תרגום חסרים';
+$PMF_LANG['msgCompletionPercentage'] = 'אחוז השלמה';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'הגרסה המותקנת חדשה יותר מהגרסה האחרונה הזמינה.';
+$PMF_LANG['ad_quick_sub_category'] = "הוסף תת-קטגוריה חדשה";
+$PMF_LANG['msgError403'] = 'שגיאה 403';
+$PMF_LANG['msgError403Description'] = 'אתה מאומת, אך אין לך הרשאה לגשת למשאב זה.';
+$PMF_LANG['msgError403Hint'] = 'אם אתה מאמין שזו שגיאה, אנא פנה למנהל.';
+$PMF_LANG['msgCreateDate'] = 'נוצר בתאריך';
+$PMF_LANG['msgUpdateDate'] = 'עודכן לאחרונה בתאריך';
 
 return $PMF_LANG;

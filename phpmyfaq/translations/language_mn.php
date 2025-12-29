@@ -1498,6 +1498,9 @@ $PMF_LANG['msgPluginName'] = 'Бүтээмжийн нэр';
 $PMF_LANG['msgPluginVersion'] = 'Хувилбар';
 $PMF_LANG['msgPluginAuthor'] = 'Зохиогч';
 $PMF_LANG['msgPluginDescription'] = 'Тайлбар';
+$PMF_LANG['msgPluginReason'] = 'Шалтгаан';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Нийцэхгүй бүтээмжүүд';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Нийцлийн асуудлаас болж дараах бүтээмжүүдийг ачаалж чадсангүй.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Алдааны мэдээлэл өгөх';

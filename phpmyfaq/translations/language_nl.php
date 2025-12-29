@@ -1225,6 +1225,9 @@ $PMF_LANG['msgPluginName'] = 'Plugin-naam';
 $PMF_LANG['msgPluginVersion'] = 'Versie';
 $PMF_LANG['msgPluginAuthor'] = 'Auteur';
 $PMF_LANG['msgPluginDescription'] = 'Beschrijving';
+$PMF_LANG['msgPluginReason'] = 'Reden';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Incompatibele plug-ins';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'De volgende plug-ins konden niet worden geladen vanwege compatibiliteitsproblemen.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Meld een bug';

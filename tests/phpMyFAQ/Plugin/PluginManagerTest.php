@@ -20,9 +20,6 @@ class PluginManagerTest extends TestCase
         $this->pluginManager = new PluginManager();
     }
 
-    /**
-     * @throws PluginException
-     */
     public function testRegisterPlugin(): void
     {
         $this->pluginManager->registerPlugin(MockPlugin::class);
@@ -237,5 +234,81 @@ class PluginManagerTest extends TestCase
         $scripts = $this->pluginManager->getPluginScripts('NonExistentPlugin');
         $this->assertIsArray($scripts);
         $this->assertEmpty($scripts);
+    }
+
+    public function testGetIncompatiblePluginsReturnsEmpty(): void
+    {
+        $incompatiblePlugins = $this->pluginManager->getIncompatiblePlugins();
+        $this->assertIsArray($incompatiblePlugins);
+        $this->assertEmpty($incompatiblePlugins);
+    }
+
+    public function testIncompatiblePluginIsTracked(): void
+    {
+        // Create a mock plugin class that is incompatible
+        $incompatiblePluginClass = new class () implements PluginInterface {
+            public function getName(): string
+            {
+                return 'IncompatiblePlugin';
+            }
+
+            public function getVersion(): string
+            {
+                return '0.0.1'; // Very old version, likely incompatible
+            }
+
+            public function getDescription(): string
+            {
+                return 'An incompatible test plugin';
+            }
+
+            public function getAuthor(): string
+            {
+                return 'Test Author';
+            }
+
+            public function getDependencies(): array
+            {
+                return [];
+            }
+
+            public function getConfig(): ?PluginConfigurationInterface
+            {
+                return null;
+            }
+
+            public function registerEvents(\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher): void
+            {
+            }
+
+            public function getStylesheets(): array
+            {
+                return [];
+            }
+
+            public function getTranslationsPath(): ?string
+            {
+                return null;
+            }
+
+            public function getScripts(): array
+            {
+                return [];
+            }
+        };
+
+        $className = $incompatiblePluginClass::class;
+        $this->pluginManager->registerPlugin($className);
+
+        // Plugin should not be in the regular plugins list
+        $plugins = $this->pluginManager->getPlugins();
+        $this->assertArrayNotHasKey('IncompatiblePlugin', $plugins);
+
+        // Plugin should be in the incompatible plugins list
+        $incompatiblePlugins = $this->pluginManager->getIncompatiblePlugins();
+        $this->assertArrayHasKey('IncompatiblePlugin', $incompatiblePlugins);
+        $this->assertArrayHasKey('plugin', $incompatiblePlugins['IncompatiblePlugin']);
+        $this->assertArrayHasKey('reason', $incompatiblePlugins['IncompatiblePlugin']);
+        $this->assertStringContainsString('not compatible', $incompatiblePlugins['IncompatiblePlugin']['reason']);
     }
 }

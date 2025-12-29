@@ -1465,6 +1465,9 @@ $PMF_LANG['msgPluginName'] = 'Nom du plugin';
 $PMF_LANG['msgPluginVersion'] = 'Version';
 $PMF_LANG['msgPluginAuthor'] = 'Auteur';
 $PMF_LANG['msgPluginDescription'] = 'Description';
+$PMF_LANG['msgPluginReason'] = 'Raison';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Plugins incompatibles';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Les plugins suivants n\'ont pas pu être chargés en raison de problèmes de compatibilité.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Rapporter un bug';

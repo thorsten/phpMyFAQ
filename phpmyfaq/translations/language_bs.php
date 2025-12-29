@@ -1472,6 +1472,9 @@ $PMF_LANG['msgPluginName'] = 'Naziv dodatka';
 $PMF_LANG['msgPluginVersion'] = 'Verzija';
 $PMF_LANG['msgPluginAuthor'] = 'Autor';
 $PMF_LANG['msgPluginDescription'] = 'Opis';
+$PMF_LANG['msgPluginReason'] = 'Razlog';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Nekompatibilni dodaci';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Sljedeći dodaci nisu mogli biti učitani zbog problema s kompatibilnošću.';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'Prijavi grešku';

@@ -1475,6 +1475,9 @@ $PMF_LANG['msgPluginName'] = 'প্লাগইন নাম';
 $PMF_LANG['msgPluginVersion'] = 'সংস্করণ';
 $PMF_LANG['msgPluginAuthor'] = 'লেখক';
 $PMF_LANG['msgPluginDescription'] = 'বিবরণ';
+$PMF_LANG['msgPluginReason'] = 'কারণ';
+$PMF_LANG['msgIncompatiblePlugins'] = 'অসামঞ্জস্যপূর্ণ প্লাগইন';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'সামঞ্জস্যের সমস্যার কারণে নিম্নলিখিত প্লাগইনগুলি লোড করা যায়নি।';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
 $PMF_LANG['msgReportABug'] = 'একটি বাগ রিপোর্ট করুন';

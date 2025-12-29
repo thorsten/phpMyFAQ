@@ -1122,262 +1122,265 @@ $LANG_CONF['upgrade.dateLastChecked'] = ['print', '上次检查更新'];
 $PMF_LANG['upgradeControlCenter'] = '在线更新';
 
 // added v4.0.0-alpha - 2023-07-11 by Jan
-$PMF_LANG['headerCheckHealth'] = '1. Check for System Health';
-$PMF_LANG['headerCheckUpdates'] = '2. Check for Updates';
-$PMF_LANG['headerDownloadPackage'] = '3. Download of phpMyFAQ';
-$PMF_LANG['headerExtractPackage'] = '4. Extract downloaded package';
-$PMF_LANG['headerInstallDownloadedPackage'] = '5. Install downloaded package';
-$PMF_LANG['msgHealthCheck'] = 'This checks the correct file permissions and folder structure of your phpMyFAQ installation.';
-$PMF_LANG['msgUpdateCheck'] = 'You can check for new versions of phpMyFAQ, re-install or update your installation.';
-$PMF_LANG['msgDownloadPackage'] = 'Download of new phpMyFAQ versions depending on the set release environment.';
-$PMF_LANG['msgExtractPackage'] = 'This extracts the downloaded package into your filesystem, this may take a while.';
-$PMF_LANG['msgExtractToFileSystem'] = 'This extracts the downloaded package into your filesystem.';
-$PMF_LANG['msgInstallDownloadedPackage'] = 'Install downloaded package';
-$PMF_LANG['msgBackupCurrentInstallation'] = 'Backup of current installation';
-$PMF_LANG['msgInstallationNewFiles'] = 'Installation of new files';
-$PMF_LANG['msgDatabaseUpdate'] = 'Update of the database';
-$PMF_LANG['alertNightlyBuild'] = 'You are using a development version of phpMyFAQ. You can update to the latest nightly build.';
-$PMF_LANG['noteNightlyBuild'] = 'Please note that the previous day build will be downloaded (saved in /content/upgrades). Because each new build is not created until 2am (UTC) by GitHub.';
-$PMF_LANG['buttonCheckHealth'] = 'Check System health now';
-$PMF_LANG['buttonCheckUpdates'] = 'Check for Updates now';
-$PMF_LANG['buttonDownloadPackage'] = 'Download now';
-$PMF_LANG['buttonExtractPackage'] = 'Extract downloaded package now';
-$PMF_LANG['versionIsUpToDate'] = 'Your installed version is up-to-date!';
-$PMF_LANG['healthCheckOkay'] = 'Your installed version is healthy!';
-$PMF_LANG['downloadSuccessful'] = 'Package successfully downloaded!';
-$PMF_LANG['extractSuccessful'] = 'Package successfully extracted!';
-$PMF_LANG['downloadFailure'] = 'Could not download package.';
-$PMF_LANG['verificationFailure'] = 'Could not verify downloaded package.';
-$PMF_LANG['extractFailure'] = 'Could not extract downloaded package.';
-$PMF_LANG['msgCurrentVersion'] = 'Current Version: ';
-$PMF_LANG['msgLastCheckDate'] = 'Last check for updates: ';
-$PMF_LANG['msgLastVersionAvailable'] = 'Latest version available: ';
-$PMF_LANG['msgReleaseEnvironment'] = 'Release-Environment: ';
-$PMF_LANG['msgNoteManualUpdate'] = 'You can still use the manual <a href="../update">update process</a> if you prefer.';
+$PMF_LANG['headerCheckHealth'] = '1. 检查系统健康状态';
+$PMF_LANG['headerCheckUpdates'] = '2. 检查更新';
+$PMF_LANG['headerDownloadPackage'] = '3. 下载 phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. 解压下载的软件包';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. 安装下载的软件包';
+$PMF_LANG['msgHealthCheck'] = '检查 phpMyFAQ 安装的文件权限和文件夹结构是否正确。';
+$PMF_LANG['msgUpdateCheck'] = '您可以检查 phpMyFAQ 的新版本，重新安装或更新您的安装。';
+$PMF_LANG['msgDownloadPackage'] = '根据设置的发布环境下载新的 phpMyFAQ 版本。';
+$PMF_LANG['msgExtractPackage'] = '将下载的软件包解压到您的文件系统，这可能需要一段时间。';
+$PMF_LANG['msgExtractToFileSystem'] = '将下载的软件包解压到您的文件系统。';
+$PMF_LANG['msgInstallDownloadedPackage'] = '安装下载的软件包';
+$PMF_LANG['msgBackupCurrentInstallation'] = '备份当前安装';
+$PMF_LANG['msgInstallationNewFiles'] = '安装新文件';
+$PMF_LANG['msgDatabaseUpdate'] = '更新数据库';
+$PMF_LANG['alertNightlyBuild'] = '您正在使用 phpMyFAQ 的开发版本。您可以更新到最新的每日构建版本。';
+$PMF_LANG['noteNightlyBuild'] = '请注意，将下载前一天的构建版本（保存在 /content/upgrades）。因为 GitHub 每天凌晨2点（UTC）才会创建新的构建版本。';
+$PMF_LANG['buttonCheckHealth'] = '立即检查系统健康状态';
+$PMF_LANG['buttonCheckUpdates'] = '立即检查更新';
+$PMF_LANG['buttonDownloadPackage'] = '立即下载';
+$PMF_LANG['buttonExtractPackage'] = '立即解压下载的软件包';
+$PMF_LANG['versionIsUpToDate'] = '您安装的版本已是最新！';
+$PMF_LANG['healthCheckOkay'] = '您安装的版本状态良好！';
+$PMF_LANG['downloadSuccessful'] = '软件包下载成功！';
+$PMF_LANG['extractSuccessful'] = '软件包解压成功！';
+$PMF_LANG['downloadFailure'] = '无法下载软件包。';
+$PMF_LANG['verificationFailure'] = '无法验证下载的软件包。';
+$PMF_LANG['extractFailure'] = '无法解压下载的软件包。';
+$PMF_LANG['msgCurrentVersion'] = '当前版本：';
+$PMF_LANG['msgLastCheckDate'] = '上次检查更新时间：';
+$PMF_LANG['msgLastVersionAvailable'] = '最新可用版本：';
+$PMF_LANG['msgReleaseEnvironment'] = '发布环境：';
+$PMF_LANG['msgNoteManualUpdate'] = '如果您愿意，仍然可以使用手动<a href="../update">更新流程</a>。';
 
 // added v4.0.0-alpha - 2023-07-19 by Jan
-$PMF_LANG['msgAddBookmark'] = 'Add bookmark';
-$PMF_LANG['removeBookmark'] = 'Remove bookmark';
-$PMF_LANG['msgBookmarks'] = 'Bookmarks';
-$PMF_LANG['msgMyBookmarks'] = 'My Bookmarks';
-$PMF_LANG['msgBookmarkAdded'] = 'Bookmark successfully added!';
-$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark successfully removed!';
+$PMF_LANG['msgAddBookmark'] = '添加书签';
+$PMF_LANG['removeBookmark'] = '移除书签';
+$PMF_LANG['msgBookmarks'] = '书签';
+$PMF_LANG['msgMyBookmarks'] = '我的书签';
+$PMF_LANG['msgBookmarkAdded'] = '书签添加成功！';
+$PMF_LANG['msgBookmarkRemoved'] = '书签移除成功！';
 
 // added v4.0.0-alpha - 2023-09-20 by Jan
-$PMF_LANG['msgNoHashAllowed'] = "It is not allowed to use '#'.";
+$PMF_LANG['msgNoHashAllowed'] = "不允许使用 '#'。";
 
 // added v4.0.0-alpha - 2023-12-24 by Jan
-$LANG_CONF['main.botIgnoreList'] = ['area', 'Bot-ignore-list (Separate with commas)'];
+$LANG_CONF['main.botIgnoreList'] = ['area', '机器人忽略列表（用逗号分隔）'];
 
 // added v4.0.0-alpha - 2023-12-26 by Thorsten
-$PMF_LANG['msgGravatar'] = 'Gravatar image';
+$PMF_LANG['msgGravatar'] = 'Gravatar 头像';
 
 // added v4.0.0-alpha - 2023-12-27 by Jan
-$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Custom ordering of sticky records is deactivated in the main configuration. If you would like to use it, please activate it in the <a href="././configuration">main configuration</a> -> records.';
-$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Custom ordering of sticky records'];
-$PMF_LANG['msgNoStickyFaqs'] = 'You don\'t have any sticky records yet. You can mark records as sticky in the <a href="./faqs" class="alert-link">FAQ Overview</a>.';
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = '置顶记录的自定义排序在主配置中已停用。如果您想使用它，请在<a href="././configuration">主配置</a> -> 记录中激活。';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', '置顶记录的自定义排序'];
+$PMF_LANG['msgNoStickyFaqs'] = '您还没有任何置顶记录。您可以在<a href="./faqs" class="alert-link">FAQ 概览</a>中将记录标记为置顶。';
 
 // added v4.0.0-alpha - 2023-12-29 by Thorsten
-$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Activate Cookie Consent'];
-$PMF_LANG['msgSessionExpired'] = 'Your session expired. Please login again.';
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', '激活 Cookie 同意'];
+$PMF_LANG['msgSessionExpired'] = '您的会话已过期。请重新登录。';
 
 // added v4.0.0-alpha - 2024-01-12 by Jan
-$PMF_LANG['msgLanguageCode'] = 'Language code';
-$PMF_LANG['msgSeparateWithCommas'] = '(seperate with commas)';
-$PMF_LANG['msgImportRecordsColumnStructure'] = 'The CSV file to be imported must contain the following columns in this order, without column headers. Each row is intended to define a FAQ entry. All cells in columns marked with an asterisk * must contain a value.';
-$PMF_LANG['msgImportRecords'] = 'FAQ Import';
-$PMF_LANG['msgImportCSVFile'] = 'Import CSV file';
-$PMF_LANG['msgImportCSVFileBody'] = 'You can import a CSV file with your record data and the given structure (see above) here.';
-$PMF_LANG['msgImport'] = 'Import';
-$PMF_LANG['msgColumnStructure'] = 'Column structure';
-$PMF_LANG['msgImportSuccessful'] = 'Import successful!';
-$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true or false)';
-$PMF_LANG['admin_mainmenu_imports_exports'] = 'Import & Export';
-$PMF_LANG['msgCSVFileNotValidated'] = 'It seems that the file does not have the right structure. Please check the structure based on the given requirements again.';
+$PMF_LANG['msgLanguageCode'] = '语言代码';
+$PMF_LANG['msgSeparateWithCommas'] = '（用逗号分隔）';
+$PMF_LANG['msgImportRecordsColumnStructure'] = '要导入的 CSV 文件必须按此顺序包含以下列，不包含列标题。每行用于定义一个 FAQ 条目。标有星号 * 的列中的所有单元格都必须包含值。';
+$PMF_LANG['msgImportRecords'] = 'FAQ 导入';
+$PMF_LANG['msgImportCSVFile'] = '导入 CSV 文件';
+$PMF_LANG['msgImportCSVFileBody'] = '您可以在此处导入包含记录数据和指定结构（见上文）的 CSV 文件。';
+$PMF_LANG['msgImport'] = '导入';
+$PMF_LANG['msgColumnStructure'] = '列结构';
+$PMF_LANG['msgImportSuccessful'] = '导入成功！';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '（true 或 false）';
+$PMF_LANG['admin_mainmenu_imports_exports'] = '导入 & 导出';
+$PMF_LANG['msgCSVFileNotValidated'] = '文件似乎没有正确的结构。请根据给定的要求再次检查结构。';
 
 // added v4.0.0-alpha - 2024-01-13 by Jan
-$PMF_LANG['msgExportSessionsAsCSV'] = 'Export Sessions as CSV-file';
-$PMF_LANG['msgExportSessions'] = 'Export Sessions';
-$PMF_LANG['msgExportSessionsFrom'] = 'From';
-$PMF_LANG['msgExportSessionsTo'] = 'To';
+$PMF_LANG['msgExportSessionsAsCSV'] = '将会话导出为 CSV 文件';
+$PMF_LANG['msgExportSessions'] = '导出会话';
+$PMF_LANG['msgExportSessionsFrom'] = '从';
+$PMF_LANG['msgExportSessionsTo'] = '到';
 
 // added v4.0.0-alpha - 2024-03-21 by Jan
-$PMF_LANG['msgEditForms'] = 'Edit forms';
-$PMF_LANG['msgEditFormsSuccessful'] = 'The modification was successfully changed.';
-$PMF_LANG['msgInputType'] = 'Type';
-$PMF_LANG['msgRequiredInputField'] = 'Required input';
-$PMF_LANG['permission::forms_edit'] = 'Edit forms';
-$PMF_LANG['msgInputLabel'] = 'Label';
-$PMF_LANG['msgFormsEditTranslations'] = 'Adjust translations';
-$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'The translation was successfully saved.';
-$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'The translation was successfully deleted.';
-$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'The new translation was successfully saved.';
-$PMF_LANG['msgSelectLanguage'] = 'Select language';
-$PMF_LANG['msgTranslationText'] = 'Translation text';
-$PMF_LANG['msgAddTranslation'] = 'Add translation';
-$PMF_LANG['msgHintDeactivateForms'] = 'The forms can be deactivated completely in the <a class="alert-link" href="./configuration">administration</a>.';
+$PMF_LANG['msgEditForms'] = '编辑表单';
+$PMF_LANG['msgEditFormsSuccessful'] = '修改已成功保存。';
+$PMF_LANG['msgInputType'] = '类型';
+$PMF_LANG['msgRequiredInputField'] = '必填项';
+$PMF_LANG['permission::forms_edit'] = '编辑表单';
+$PMF_LANG['msgInputLabel'] = '标签';
+$PMF_LANG['msgFormsEditTranslations'] = '调整翻译';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = '翻译已成功保存。';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = '翻译已成功删除。';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = '新翻译已成功保存。';
+$PMF_LANG['msgSelectLanguage'] = '选择语言';
+$PMF_LANG['msgTranslationText'] = '翻译文本';
+$PMF_LANG['msgAddTranslation'] = '添加翻译';
+$PMF_LANG['msgHintDeactivateForms'] = '可以在<a class="alert-link" href="./configuration">管理</a>中完全停用表单。';
 
 // added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
-$PMF_LANG['msgOnlyInactiveFAQs'] = 'Only inactive FAQs';
-$PMF_LANG['msgOnlyNewFAQs'] = 'Only new FAQs';
+$PMF_LANG['msgOnlyInactiveFAQs'] = '仅非活动的 FAQ';
+$PMF_LANG['msgOnlyNewFAQs'] = '仅新的 FAQ';
 
 // added v4.0.0-alpha.2 - 2024-04-21 by Jan
-$PMF_LANG['msgDeleteNews'] = 'Delete news';
-$PMF_LANG['msgExportUsersAsCSV'] = 'Export users as csv';
-$PMF_LANG['msgWarning'] = 'Warning';
-$PMF_LANG['msgUserList'] = 'List of users';
+$PMF_LANG['msgDeleteNews'] = '删除新闻';
+$PMF_LANG['msgExportUsersAsCSV'] = '将用户导出为 CSV';
+$PMF_LANG['msgWarning'] = '警告';
+$PMF_LANG['msgUserList'] = '用户列表';
 
 // added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
-$PMF_LANG['msgNoQuestionAndAnswer'] = 'No question and answer found.';
-$PMF_LANG['msgNotInMaintenanceMode'] = 'The FAQ is not in maintenance mode.';
+$PMF_LANG['msgNoQuestionAndAnswer'] = '未找到问题和答案。';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'FAQ 未处于维护模式。';
 
 // added v4.0.0-alpha.3 - 2024-06-03 by Jan
-$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Multiple keywords have to be separated with commas.';
-$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'You can not use this form due to missing configured categories. Please inform the <a class="alert-link" href="./contact.html">administrator</a>.';
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = '多个关键词必须用逗号分隔。';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = '由于缺少配置的分类，您无法使用此表单。请通知<a class="alert-link" href="./contact.html">管理员</a>。';
 
 // added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
-$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'No reply address for emails'];
-$PMF_LANG['msgSessionExpiringSoon'] = 'Session expiring soon';
-$PMF_LANG['msgNoLogMeOut'] = 'No, log me out';
-$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Yes, keep me logged in';
-$PMF_LANG['msgTrendingFAQs'] = 'Trending FAQs';
-$PMF_LANG['msgGenerateApiClientToken'] = 'Generate API Client Token';
-$PMF_LANG['msgSerp'] = 'SERP is the abbreviation for Search Engine Result Page. Here you can define the title and description for the SERP.';
-$PMF_LANG['msgSerpTitle'] = 'SERP title';
-$PMF_LANG['msgSerpDescription'] = 'SERP description';
-$LANG_CONF['seo.title'] = ['input', 'SERP title'];
-$LANG_CONF['seo.description'] = ['area', 'SERP description'];
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', '电子邮件的无回复地址'];
+$PMF_LANG['msgSessionExpiringSoon'] = '会话即将过期';
+$PMF_LANG['msgNoLogMeOut'] = '否，退出登录';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = '是，保持登录状态';
+$PMF_LANG['msgTrendingFAQs'] = '热门 FAQ';
+$PMF_LANG['msgGenerateApiClientToken'] = '生成 API 客户端令牌';
+$PMF_LANG['msgSerp'] = 'SERP 是搜索引擎结果页面的缩写。您可以在此定义 SERP 的标题和描述。';
+$PMF_LANG['msgSerpTitle'] = 'SERP 标题';
+$PMF_LANG['msgSerpDescription'] = 'SERP 描述';
+$LANG_CONF['seo.title'] = ['input', 'SERP 标题'];
+$LANG_CONF['seo.description'] = ['area', 'SERP 描述'];
 
 // added v4.0.0-alpha.3 - 2024-06-19 by Jan
-$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Allowed external hosts for media content (separate with commas)'];
-$PMF_LANG['msgConfirmTwofactorConfig'] = 'Are you sure that you want to remove your current Two Factor Authentication-configuration?';
-$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar is currently not enabled.';
-$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'The deletion of the current 2-factor configuration was successful.';
-$PMF_LANG['msgShareViaWhatsapp'] = 'Send to a friend via WhatsApp';
-$PMF_LANG['msgShareText'] = 'I discovered a cool faq-article for you:';
-$PMF_LANG['msgError'] = 'An error occurred.';
-$PMF_LANG['msgLinkToFAQ'] = 'Link to FAQ';
+$LANG_CONF['records.allowedMediaHosts'] = ['area', '允许的媒体内容外部主机（用逗号分隔）'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = '您确定要删除当前的双因素身份验证配置吗？';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar 当前未启用。';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = '删除当前的双因素配置成功。';
+$PMF_LANG['msgShareViaWhatsapp'] = '通过 WhatsApp 发送给朋友';
+$PMF_LANG['msgShareText'] = '我为您发现了一篇很酷的 FAQ 文章：';
+$PMF_LANG['msgError'] = '发生错误。';
+$PMF_LANG['msgLinkToFAQ'] = 'FAQ 链接';
 
 // added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
-$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Activate link to privacy policy'];
-$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ is currently running in debug mode. Debug mode may expose sensitive information and is intended for development purposes only. We strongly recommend disabling debug mode for security reasons. You can disable debug mode in the <code>.env</code> file.';
-$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ is currently in development (%s). And therefore not yet ready for production. Please <a target="_blank" href="%s" class="alert-link">report all issues on GitHub</a>. Thank you very much!';
-$PMF_LANG['layoutControlCenter'] = 'Layout';
-$LANG_CONF['layout.customCss'] = ['area', 'Custom CSS', 'Please use CSS only.'];
-$PMF_LANG['msgSitemap'] = 'Sitemap';
-$PMF_LANG['msgSitemapMetaDesc'] = 'Find the FAQs you are looking for in the overview of all entries | Sitemap - %s';
-$PMF_LANG['msgGlossaryMetaDesc'] = 'In the glossary of %s you will find explanations of all important technical terms on the topic';
-$PMF_LANG['msgOverviewMetaDesc'] = 'See an overview of all important topics | FAQ overview of %s';
-$PMF_LANG['msgCategoryMetaDesc'] = 'Overview of all categories and topics | Category overview of %s';
-$PMF_LANG['msgQuestionMetaDesc'] = 'Add a new question | %s';
-$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Open questions still waiting for answers | %s';
-$PMF_LANG['msgShareLinkVia'] = 'Share with';
-$PMF_LANG['msgCopyLink'] = 'or copy link';
-$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Enable Rich Snippets'];
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', '激活隐私政策链接'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ 当前正在以调试模式运行。调试模式可能会暴露敏感信息，仅用于开发目的。出于安全考虑，我们强烈建议禁用调试模式。您可以在 <code>.env</code> 文件中禁用调试模式。';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ 当前处于开发阶段（%s）。因此尚未准备好用于生产环境。请<a target="_blank" href="%s" class="alert-link">在 GitHub 上报告所有问题</a>。非常感谢！';
+$PMF_LANG['layoutControlCenter'] = '布局';
+$LANG_CONF['layout.customCss'] = ['area', '自定义 CSS', '请仅使用 CSS。'];
+$PMF_LANG['msgSitemap'] = '网站地图';
+$PMF_LANG['msgSitemapMetaDesc'] = '在所有条目的概览中查找您要查找的 FAQ | 网站地图 - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = '在 %s 的术语表中，您将找到有关该主题的所有重要技术术语的解释';
+$PMF_LANG['msgOverviewMetaDesc'] = '查看所有重要主题的概览 | %s 的 FAQ 概览';
+$PMF_LANG['msgCategoryMetaDesc'] = '所有分类和主题的概览 | %s 的分类概览';
+$PMF_LANG['msgQuestionMetaDesc'] = '添加新问题 | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = '仍在等待答案的未解决问题 | %s';
+$PMF_LANG['msgShareLinkVia'] = '分享到';
+$PMF_LANG['msgCopyLink'] = '或复制链接';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', '启用富代码段'];
 
 // added v4.0.0-alpha.4 - 2024-07-29 by Jan
-$PMF_LANG['msgDeleteAllVotings'] = 'Statistics successfully deleted.';
-$PMF_LANG['msgDeleteAllVotingsError'] = 'An error occurred while deleting the statistics.';
-$PMF_LANG['msgPasswordTooShort'] = 'The new password is required to have at least 8 characters.';
-$PMF_LANG['msgPasswordsMustBeEqual'] = 'Both passwords do not match.';
-$PMF_LANG['msgPrivateNotesOfEditor'] = 'There are private notes of other editors:';
+$PMF_LANG['msgDeleteAllVotings'] = '统计数据已成功删除。';
+$PMF_LANG['msgDeleteAllVotingsError'] = '删除统计数据时发生错误。';
+$PMF_LANG['msgPasswordTooShort'] = '新密码至少需要 8 个字符。';
+$PMF_LANG['msgPasswordsMustBeEqual'] = '两个密码不匹配。';
+$PMF_LANG['msgPrivateNotesOfEditor'] = '有其他编辑者的私人备注：';
 
 // added v4.0.0-beta - 2024-08-11 by Thorsten
-$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Cleanup missing attachments';
-$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Attachment was successfully refreshed';
-$PMF_LANG['msgRemoveAll'] = 'Remove all';
-$PMF_LANG['msgError404'] = 'Error 404';
-$PMF_LANG['msgError404Description'] = 'The page you are looking for was moved, removed or may never have existed.';
-$PMF_LANG['msgAlreadyHaveAccount'] = 'Already have an account?';
-$PMF_LANG['msgSignInHere'] = 'Sign in here.';
-$PMF_LANG['msgRegistrationWithPasskeys'] = 'When registering with Passkeys, users only need to enter a name or e-mail address, while authentication is carried out securely using biometric data or a device-based password.';
-$PMF_LANG['msgContinue'] = 'Continue';
-$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Activate WebAuthn support (Experimental)'];
-$PMF_LANG['msgSignInWithPasskey'] = 'Login with Passkey';
-$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'The registration was successful. You can now log in with your Passkey.';
-$PMF_LANG['msgSupportUs'] = 'Support phpMyFAQ';
-$PMF_LANG['msgErrorEnterFullName'] = 'Please enter your full name!';
-$PMF_LANG['msgErrorEnterLoginName'] = 'Please enter your login name!';
-$PMF_LANG['msgErrorEnterValidMail'] = 'Please provide a valid email address!';
-$PMF_LANG['msgErrorEnterMessage'] = 'Please enter a message!';
-$PMF_LANG['msgLinkCopied'] = 'Link copied to clipboard';
-$PMF_LANG['msgDocumentation'] = 'Documentation';
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = '清理缺失的附件';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = '附件已成功刷新';
+$PMF_LANG['msgRemoveAll'] = '移除全部';
+$PMF_LANG['msgError404'] = '错误 404';
+$PMF_LANG['msgError404Description'] = '您要查找的页面已移动、删除或可能从未存在。';
+$PMF_LANG['msgAlreadyHaveAccount'] = '已有账户？';
+$PMF_LANG['msgSignInHere'] = '在此登录。';
+$PMF_LANG['msgRegistrationWithPasskeys'] = '使用 Passkeys 注册时，用户只需输入姓名或电子邮件地址，而身份验证则使用生物识别数据或基于设备的密码安全进行。';
+$PMF_LANG['msgContinue'] = '继续';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', '激活 WebAuthn 支持（实验性）'];
+$PMF_LANG['msgSignInWithPasskey'] = '使用 Passkey 登录';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = '注册成功。您现在可以使用 Passkey 登录。';
+$PMF_LANG['msgSupportUs'] = '支持 phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = '请输入您的全名！';
+$PMF_LANG['msgErrorEnterLoginName'] = '请输入您的登录名！';
+$PMF_LANG['msgErrorEnterValidMail'] = '请提供有效的电子邮件地址！';
+$PMF_LANG['msgErrorEnterMessage'] = '请输入消息！';
+$PMF_LANG['msgLinkCopied'] = '链接已复制到剪贴板';
+$PMF_LANG['msgDocumentation'] = '文档';
 
 // added v4.0.6 - 2025-02-22 by Thorsten
-$PMF_LANG['msgCategoryImageReset'] = 'Reset category image';
+$PMF_LANG['msgCategoryImageReset'] = '重置分类图片';
 
 // added v4.1.0-alpha - 2024-11-17 by Thorsten
-$LANG_CONF['seo.contentRobotsText'] = ['area', 'Content for robots.txt', ''];
-$LANG_CONF['seo.contentLlmsText'] = ['area', 'Content for llms.txt', ''];
-$PMF_LANG['msgActivateMaintenanceMode'] = 'Activate maintenance mode';
-$PMF_LANG['msgPlugins'] = 'Plugins';
-$PMF_LANG['msgPluginListing'] = 'List of the installed plugins and their versions';
-$PMF_LANG['msgPluginName'] = 'Plugin name';
-$PMF_LANG['msgPluginVersion'] = 'Version';
-$PMF_LANG['msgPluginAuthor'] = 'Author';
-$PMF_LANG['msgPluginDescription'] = 'Description';
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'robots.txt 的内容', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'llms.txt 的内容', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = '激活维护模式';
+$PMF_LANG['msgPlugins'] = '插件';
+$PMF_LANG['msgPluginListing'] = '已安装插件及其版本的列表';
+$PMF_LANG['msgPluginName'] = '插件名称';
+$PMF_LANG['msgPluginVersion'] = '版本';
+$PMF_LANG['msgPluginAuthor'] = '作者';
+$PMF_LANG['msgPluginDescription'] = '描述';
+$PMF_LANG['msgPluginReason'] = '原因';
+$PMF_LANG['msgIncompatiblePlugins'] = '不兼容的插件';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = '由于兼容性问题，以下插件无法加载。';
 
 // added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
-$PMF_LANG['msgReportABug'] = 'Report a bug';
-$PMF_LANG['msgDashboard'] = 'Dashboard';
-$PMF_LANG['msgOrphanedFAQs'] = 'Orphaned FAQs';
-$PMF_LANG['msgOrphanedFAQsDescription'] = 'These FAQs are not assigned to any category. You can assign them to a category here.';
-$PMF_LANG['msgPreview'] = 'Preview';
-$PMF_LANG['msgInsertImage'] = 'Insert image';
-$PMF_LANG['msgImageUpload'] = 'Image upload';
-$PMF_LANG['msgImageCouldNotBeUploaded'] = 'The image could not be uploaded.';
-$PMF_LANG['msgImageTooLarge'] = 'The image is too large.';
-$PMF_LANG['msgNoImagesForUpload'] = 'No images for upload.';
-$PMF_LANG['msgFetchingHashes'] = 'Fetching verification hashes from api.phpmyfaq.de...';
-$PMF_LANG['msgCheckHashes'] = 'Checking hashes with installation files...';
-$PMF_LANG['msgAuthenticationAborted'] = 'Authentication aborted by user.';
-$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Activate admin session timeout counter', 'Default: enabled'];
-$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Enable OpenSearch support', 'Standard: disabled'];
-$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Time window for popular searches (days)', 'Standard: 180 days'];
-$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch Configuration';
-$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Create Search Index';
-$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Delete Search Index';
-$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Complete Import';
-$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'The OpenSearch search index was successfully created.';
-$PMF_LANG['ad_os_create_import_success'] = 'The OpenSearch import was successful.';
-$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'The OpenSearch search index was successfully deleted.';
-$PMF_LANG['permission::translate_faq'] = 'Translate FAQs';
+$PMF_LANG['msgReportABug'] = '报告错误';
+$PMF_LANG['msgDashboard'] = '仪表板';
+$PMF_LANG['msgOrphanedFAQs'] = '孤立的 FAQ';
+$PMF_LANG['msgOrphanedFAQsDescription'] = '这些 FAQ 未分配到任何分类。您可以在此将它们分配到分类。';
+$PMF_LANG['msgPreview'] = '预览';
+$PMF_LANG['msgInsertImage'] = '插入图片';
+$PMF_LANG['msgImageUpload'] = '图片上传';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = '无法上传图片。';
+$PMF_LANG['msgImageTooLarge'] = '图片太大。';
+$PMF_LANG['msgNoImagesForUpload'] = '没有要上传的图片。';
+$PMF_LANG['msgFetchingHashes'] = '正在从 api.phpmyfaq.de 获取验证哈希...';
+$PMF_LANG['msgCheckHashes'] = '正在检查安装文件的哈希值...';
+$PMF_LANG['msgAuthenticationAborted'] = '身份验证已被用户中止。';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', '激活管理员会话超时计数器', '默认：启用'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', '启用 OpenSearch 支持', '标准：禁用'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', '热门搜索的时间窗口（天）', '标准：180 天'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'OpenSearch 配置';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = '创建搜索索引';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = '删除搜索索引';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = '完整导入';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'OpenSearch 搜索索引已成功创建。';
+$PMF_LANG['ad_os_create_import_success'] = 'OpenSearch 导入成功。';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'OpenSearch 搜索索引已成功删除。';
+$PMF_LANG['permission::translate_faq'] = '翻译 FAQ';
 
 // added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
-$PMF_LANG['msgTypeSearchCategories'] = 'Type to search categories';
-$PMF_LANG['msgLoadingText'] = 'Loading...';
-$PMF_LANG['msgNoResultsText'] = 'No results found';
-$PMF_LANG['msgNoChoicesText'] = 'No choices to choose from';
-$PMF_LANG['msgItemSelectText'] = 'Press to select';
-$PMF_LANG['msgUniqueItemText'] = 'Only unique values can be added';
-$PMF_LANG['msgCustomAddItemText'] = 'Only values matching specific conditions can be added';
-$PMF_LANG['msgDownloadYourData'] = 'Download your data';
-$PMF_LANG['msgDataExportDescription'] = 'Download a ZIP file containing your stored user data.';
-$PMF_LANG['msgDownload'] = 'Download';
-$PMF_LANG['msgToggleTheme'] = 'Toggle theme';
+$PMF_LANG['msgTypeSearchCategories'] = '输入以搜索分类';
+$PMF_LANG['msgLoadingText'] = '加载中...';
+$PMF_LANG['msgNoResultsText'] = '未找到结果';
+$PMF_LANG['msgNoChoicesText'] = '没有可选项';
+$PMF_LANG['msgItemSelectText'] = '按下以选择';
+$PMF_LANG['msgUniqueItemText'] = '只能添加唯一值';
+$PMF_LANG['msgCustomAddItemText'] = '只能添加符合特定条件的值';
+$PMF_LANG['msgDownloadYourData'] = '下载您的数据';
+$PMF_LANG['msgDataExportDescription'] = '下载包含您存储的用户数据的 ZIP 文件。';
+$PMF_LANG['msgDownload'] = '下载';
+$PMF_LANG['msgToggleTheme'] = '切换主题';
 
 // added v4.1.0-beta - 2025-10-31 by Thorsten
-$PMF_LANG['msgBackupLast'] = 'Date of last backup';
-$PMF_LANG['msgBackupNoneFound'] = 'No backups found.';
-$PMF_LANG['msgBackupTooOld'] = 'Last backup is older than 30 days.';
-$PMF_LANG['msgBackupRecent'] = 'The current backup is recent.';
-$PMF_LANG['msgBackupGoTo'] = 'Go to Backup page';
-$PMF_LANG['msgNewestUsers'] = 'Newest users';
-$PMF_LANG['msgMemberSince'] = 'Member since';
-$PMF_LANG['msgNumberRegisteredUsers'] = 'Registered users';
-$PMF_LANG['msgConfirmDeleteFAQ'] = 'Do you really want to delete this FAQ? This action cannot be undone.';
+$PMF_LANG['msgBackupLast'] = '上次备份日期';
+$PMF_LANG['msgBackupNoneFound'] = '未找到备份。';
+$PMF_LANG['msgBackupTooOld'] = '上次备份已超过 30 天。';
+$PMF_LANG['msgBackupRecent'] = '当前备份是最新的。';
+$PMF_LANG['msgBackupGoTo'] = '转到备份页面';
+$PMF_LANG['msgNewestUsers'] = '最新用户';
+$PMF_LANG['msgMemberSince'] = '注册时间';
+$PMF_LANG['msgNumberRegisteredUsers'] = '注册用户';
+$PMF_LANG['msgConfirmDeleteFAQ'] = '您真的要删除此 FAQ 吗？此操作无法撤销。';
 
 // added v4.1.0-beta.2 - 2025-11-23 by Thorsten
-$PMF_LANG['msgTotalKeys'] = 'Total number of translation keys';
-$PMF_LANG['msgTranslatedKeys'] = 'Number of translated keys';
-$PMF_LANG['msgMissingKeys'] = 'Missing translation keys';
-$PMF_LANG['msgCompletionPercentage'] = 'Completion percentage';
-$PMF_LANG['msgInstalledNewerThanAvailable'] = 'The installed version is newer than the latest available version.';
-$PMF_LANG['ad_quick_sub_category'] = "Add new sub-category";
-$PMF_LANG['msgError403'] = 'Error 403';
-$PMF_LANG['msgError403Description'] = 'You are authenticated, but you do not have permission to access this resource.';
-$PMF_LANG['msgError403Hint'] = 'If you believe this is an error, please contact an administrator.';
-$PMF_LANG['msgCreateDate'] = 'Created on';
-$PMF_LANG['msgUpdateDate'] = 'Last updated on';
+$PMF_LANG['msgTotalKeys'] = '翻译键的总数';
+$PMF_LANG['msgTranslatedKeys'] = '已翻译键的数量';
+$PMF_LANG['msgMissingKeys'] = '缺少的翻译键';
+$PMF_LANG['msgCompletionPercentage'] = '完成百分比';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = '已安装的版本比最新可用版本更新。';
+$PMF_LANG['ad_quick_sub_category'] = "添加新子分类";
+$PMF_LANG['msgError403'] = '错误 403';
+$PMF_LANG['msgError403Description'] = '您已通过身份验证，但无权访问此资源。';
+$PMF_LANG['msgError403Hint'] = '如果您认为这是一个错误，请联系管理员。';
+$PMF_LANG['msgCreateDate'] = '创建于';
+$PMF_LANG['msgUpdateDate'] = '最后更新于';
 
 return $PMF_LANG;
