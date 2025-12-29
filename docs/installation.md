@@ -7,7 +7,7 @@ To install it, you will need a web server that meets the following requirements:
 
 ### PHP requirements
 
-- version 8.3 or later
+- version 8.4 or later
 - memory_limit = 128M (the more the better)
 - PDO support
 - cURL support
@@ -77,7 +77,7 @@ content: `<?php phpinfo();`
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you're running PHP before 8.3, you cannot use phpMyFAQ 4.1.
+In case you're running PHP before 8.4, you cannot use phpMyFAQ 4.2.
 
 ### Browser requirements
 
@@ -96,7 +96,7 @@ download it and unzip the archive on your hard disk.
 
 If you want to use Git, please run the following commands on your shell:
 
-    $ git clone git@github.com:thorsten/phpMyFAQ.git 4.0
+    $ git clone git@github.com:thorsten/phpMyFAQ.git 4.2
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install

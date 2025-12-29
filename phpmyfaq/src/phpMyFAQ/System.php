@@ -69,7 +69,7 @@ class System
     /**
      * Minimum required PHP version.
      */
-    final public const string VERSION_MINIMUM_PHP = '8.3.0';
+    final public const string VERSION_MINIMUM_PHP = '8.4.0';
 
     /**
      * phpMyFAQ homepage URL

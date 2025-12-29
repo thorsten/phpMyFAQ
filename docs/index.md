@@ -1,7 +1,7 @@
 # phpMyFAQ Manual
 
 phpMyFAQ is a comprehensive, multilingual FAQ system that is entirely database-driven.
-It is compatible with a variety of databases for data storage and requires PHP 8.3+ for data access.
+It is compatible with a variety of databases for data storage and requires PHP 8.4+ for data access.
 The system features a multi-language Content Management System equipped with a WYSIWYG editor and an Image Manager.
 It also provides real-time search capabilities with Elasticsearch or OpenSearch.
 

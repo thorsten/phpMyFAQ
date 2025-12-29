@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "php": ">=8.3.0",
+    "php": ">=8.4.0",
     "ext-curl": "*",
     "ext-fileinfo": "*",
     "ext-filter": "*",
@@ -35,20 +35,20 @@
     "opensearch-project/opensearch-php": "^2.4",
     "phpseclib/phpseclib": "~3.0",
     "robthree/twofactorauth": "^3.0.0",
-    "symfony/config": "^7.3",
-    "symfony/console": "^7.3",
-    "symfony/dependency-injection": "^7.3",
-    "symfony/dotenv": "^7.3",
-    "symfony/event-dispatcher": "^7.3",
-    "symfony/error-handler": "^7.3",
-    "symfony/html-sanitizer": "^7.3",
-    "symfony/http-client": "^7.3",
-    "symfony/http-foundation": "^7.3",
-    "symfony/http-kernel": "^7.3",
-    "symfony/mailer": "^7.3",
+    "symfony/config": "^8.0",
+    "symfony/console": "^8.0",
+    "symfony/dependency-injection": "^8.0",
+    "symfony/dotenv": "^8.0",
+    "symfony/event-dispatcher": "^8.0",
+    "symfony/error-handler": "^8.0",
+    "symfony/html-sanitizer": "^8.0",
+    "symfony/http-client": "^8.0",
+    "symfony/http-foundation": "^8.0",
+    "symfony/http-kernel": "^8.0",
+    "symfony/mailer": "^8.0",
     "symfony/mcp-sdk": "dev-main",
-    "symfony/routing": "^7.3",
-    "symfony/uid": "^7.3",
+    "symfony/routing": "^8.0",
+    "symfony/uid": "^8.0",
     "tecnickcom/tcpdf": "~6.0",
     "tivie/htaccess-parser": "0.4.0",
     "twig/intl-extra": "^3.10",
@@ -61,7 +61,7 @@
     "phpdocumentor/reflection-docblock": "5.*",
     "phpunit/phpunit": "^12.3",
     "rector/rector": "^2",
-    "symfony/yaml": "7.*",
+    "symfony/yaml": "8.*",
     "zircote/swagger-php": "^5.0"
   },
   "suggest": {
@@ -74,7 +74,7 @@
   },
   "config": {
     "platform": {
-      "php": "8.3.0"
+      "php": "8.4.0"
     },
     "process-timeout": 0,
     "secure-http": true,

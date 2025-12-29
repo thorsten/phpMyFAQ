@@ -15,7 +15,7 @@ Please note that the requirements of phpMyFAQ have to be fulfilled.
 
 ## Before you upgrade
 
-Please make sure that you're running at least PHP 8.3, otherwise the upgrade won't work.
+Please make sure that you're running at least PHP 8.4, otherwise the upgrade won't work.
 
 ## Upgrading from phpMyFAQ 3.1.x
 

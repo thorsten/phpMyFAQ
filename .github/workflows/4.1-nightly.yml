@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: 'main' #'4.1'
+          ref: '4.1'
 
       - name: Get current date
         id: date

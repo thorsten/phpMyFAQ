@@ -213,10 +213,10 @@ work on your copy and send pull requests.
 Before working on phpMyFAQ, set up a local environment with the following software:
 
 - Git
-- PHP 8.3 up to 8.6
+- PHP 8.4 up to 8.6
 - PHPUnit 12.x
 - Composer
-- Node.js 22+
+- Node.js 24+
 - TypeScript 5.x
 - PNPM
 - Docker

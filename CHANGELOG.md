@@ -8,7 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.2.0-dev - unreleased
 
-- n/a
+- changed PHP requirement to PHP 8.4 or later (Thorsten)
 
 ### phpMyFAQ v4.1.0-RC - 2025-12-29
 
