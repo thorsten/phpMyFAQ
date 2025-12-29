@@ -8,7 +8,6 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 ### phpMyFAQ v4.1.0-RC.2 - unreleased
 
-- fixed security vulnerabilities (Thorsten)
 - changed PHP requirement to PHP 8.3 or later (Thorsten)
 - added configuration to edit robots.txt (Thorsten)
 - added configuration to edit llms.txt (Thorsten)
@@ -53,6 +52,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 - updated Bosnian translation
 - updated Ukrainian translation
 - updated Czech translation
+- updated Welsh translation
 - updated to PHPUnit v12 (Thorsten)
 - migrated codebase to use PHP 8.3 language features (Thorsten)
 - migrated from WYSIWYG editor from TinyMCE to Jodit Editor (Thorsten)
