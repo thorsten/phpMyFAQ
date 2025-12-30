@@ -18,7 +18,7 @@
 
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'id';
-$PMF_LANG['language'] = 'indonesian';
+$PMF_LANG['language'] = 'Indonesian';
 $PMF_LANG['direction']= 'ltr';
 $PMF_LANG["nplurals"] = "1";
 
@@ -66,7 +66,6 @@ $PMF_LANG["msgCommentBy"] = "Komentar atas ";
 $PMF_LANG["msgCommentHeader"] = "Komentar pada materi ini";
 $PMF_LANG["msgYourComment"] = "Komentar anda";
 $PMF_LANG["msgCommentThanks"] = "Terima kasih atas komentar anda!";
-$PMF_LANG["msgSeeXMLFile"] = "buka Berkas XML";
 $PMF_LANG["msgShareFAQ"] = "Kirim materi ke e-mail";
 $PMF_LANG["msgS2FButton"] = "kirim e-mail";
 
@@ -102,9 +101,6 @@ $PMF_LANG["msgDate_User"] = "Tanggal / Pengguna";
 $PMF_LANG["msgQuestion2"] = "Pertanyaan";
 $PMF_LANG["msg2answer"] = "Jawaban";
 $PMF_LANG["msgQuestionText"] = "Di sini anda bisa bertanya pada pengguna lainnya. Jika anda menjawab pertanyaan ini dengan baik, jawaban anda mungkin akan dimasukkan ke dalam materi.";
-
-// Help
-$PMF_LANG["msgHelpText"] = "Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <a href=\"?action=show\">kategori</a> atau gunakan <a href=\"?action=search\">mesin pencari</a> untuk melakukan pencarian atas kata kunci tertentu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Kirim pesan ke pengelola";
@@ -178,6 +174,7 @@ $PMF_LANG["ad_gen_no"] = "Tidak";
 $PMF_LANG["ad_gen_top"] = "Atas halaman";
 $PMF_LANG["ad_gen_ncf"] = "Tidak ada kategori yang ditemukan!";
 $PMF_LANG["ad_gen_delete"] = "Hapus";
+$PMF_LANG['ad_gen_or'] = "atau";
 
 // Benutzerverwaltung
 $PMF_LANG["ad_user"] = "Pengaturan Pengguna";
@@ -471,21 +468,13 @@ $PMF_LANG["ad_passwdsuc"] = "Kata sandi anda sudah diganti.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "Tampilkan sebagai PDF";
-$PMF_LANG["ad_xml_head"] = "XML-Backup";
-$PMF_LANG["ad_xml_hint"] = "Simpan semua data materi dalam satu berkas.";
 $PMF_LANG["ad_xml_gen"] = "buat berkas XML";
 $PMF_LANG["msgLanguage"] = "Bahasa";
 $PMF_LANG["msgLanguageSubmit"] = "Pilih bahasa";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
-$PMF_LANG["ad_entry_preview"] = "Pratinjau";
-$PMF_LANG["ad_attach_1"] = "Silakan pilih direktori untuk lampiran dalam konfigurasi pertama.";
-$PMF_LANG["ad_attach_2"] = "Silakan pilih link untuk lampiran dalam konfigurasi pertama.";
-$PMF_LANG["ad_attach_3"] = "Berkas attachment.php tidak bisa dibuka tanpa otentifikasi yang benar.";
 $PMF_LANG["ad_attach_4"] = "Berkas yang ingin dilampirkan harus lebih kecil dari %s byte.";
 $PMF_LANG["ad_menu_export"] = "Ekspor isi materi anda";
-$PMF_LANG["ad_export_file"] = "Error: Tidak bisa membuat berkas.";
-$PMF_LANG["ad_export_pdf"] = "Ekspor semua data ke PDF";
 
 $PMF_LANG['permission::add_user'] = "tambah pengguna";
 $PMF_LANG['permission::edit_user'] = "edit pengguna";
@@ -523,10 +512,6 @@ $PMF_LANG["ad_export_generate_pdf"] = "buat berkas PDF";
 $PMF_LANG["ad_export_full_faq"] = "Materi anda dalam format PDF: ";
 $PMF_LANG["err_bannedIP"] = "Alamat IP anda sudah diblokir.";
 $PMF_LANG["err_SaveQuestion"] = "Bagian yang harus diisi adalah nama anda, alamat email, pertanyaan anda dan, jika diminta, kode <a href=\"https://id.wikipedia.org/wiki/CAPTCHA\" title=\"Lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a>.  <a href=\"javascript:history.back();\">mundur satu halaman</a>  ";
-
-// added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "Warna huruf: ";
-$PMF_LANG["ad_entry_fontsize"] = "Ukuran huruf: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Berkas-Bahasa");
@@ -621,6 +606,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'Entri istilah tidak bisa dihapus karena
 $PMF_LANG['msgNewQuestionVisible'] = 'Pertanyaan akan ditinjau dulu sebelum diterbitkan.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Menunggu aktivasi oleh pengelola: ';
 $PMF_LANG['ad_entry_visibility'] = 'Terbitkan?';
+$PMF_LANG['ad_entry_not_visibility'] = "tidak dipublikasikan";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Silakan masukkan kata sandi. ";
@@ -884,5 +870,677 @@ $LANG_CONF['records.attachmentsPath'] = array("input", "Lokasi dimana lampiran a
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "berkas yang ingin anda unduh tidak ditemukan dalam server ini";
 $PMF_LANG['ad_sess_noentry'] = "Tidak ada entri";
+
+// added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras
+//P.S. "One User online" is also possible, since sprintf just ignores extra args
+$PMF_LANG["plmsgUserOnline"][0] = "%d pengguna online";
+$PMF_LANG["plmsgUserOnline"][1] = "%d pengguna online";
+
+// added 2.6.0-alpha - 2009-08-02 by Anatoliy
+$LANG_CONF['layout.templateSet'] = ["select", "Set templat yang akan digunakan"];
+
+// added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
+$PMF_LANG["plmsgHomeArticlesOnline"][0] = "Ada %d FAQ online";
+$PMF_LANG["plmsgHomeArticlesOnline"][1] = "Ada %d FAQ online";
+$PMF_LANG["plmsgViews"][0] = "%d tampilan";
+$PMF_LANG["plmsgViews"][1] = "%d tampilan";
+
+// added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
+$PMF_LANG['plmsgGuestOnline'][0] = '%d Tamu';
+$PMF_LANG['plmsgGuestOnline'][1] = '%d Tamu';
+$PMF_LANG['plmsgRegisteredOnline'][0] = ' dan %d Terdaftar';
+$PMF_LANG['plmsgRegisteredOnline'][1] = ' dan %d Terdaftar';
+$PMF_LANG["plmsgSearchAmount"][0] = "%d hasil pencarian";
+$PMF_LANG["plmsgSearchAmount"][1] = "%d hasil pencarian";
+$PMF_LANG["plmsgPagesTotal"][0] = " %d Halaman";
+$PMF_LANG["plmsgPagesTotal"][1] = " %d Halaman";
+$PMF_LANG["plmsgVotes"][0] = "%d Suara";
+$PMF_LANG["plmsgVotes"][1] = "%d Suara";
+$PMF_LANG["plmsgEntries"][0] = "%d FAQ";
+$PMF_LANG["plmsgEntries"][1] = "%d FAQ";
+
+// added 2.6.0-alpha - 2009-09-06 by Aurimas Fišeras
+$PMF_LANG['permission::addtranslation'] = "Tambah terjemahan";
+$PMF_LANG['permission::edittranslation'] = "Edit terjemahan";
+$PMF_LANG['permission::deltranslation'] = "Hapus terjemahan";
+$PMF_LANG['permission::approverec'] = "Setujui FAQ";
+
+// added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
+$LANG_CONF["records.enableAttachmentEncryption"] = ["checkbox", "Aktifkan enkripsi lampiran", "Diabaikan saat lampiran dinonaktifkan"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = ["input", 'Kunci enkripsi lampiran default", "Diabaikan jika enkripsi lampiran dinonaktifkan PERINGATAN: Jangan ubah ini setelah diatur dan enkripsi file diaktifkan!!!'];
+
+// added 2.6.0-alpha - 2009-09-06 by Thorsten
+$PMF_LANG['msgAdminHeaderUpdate'] = 'Upgrade phpMyFAQ';
+$PMF_LANG['ad_you_shouldnt_update'] = 'Anda memiliki versi terbaru phpMyFAQ. Anda tidak perlu upgrade.';
+$LANG_CONF['security.useSslForLogins'] = ['checkbox', "Hanya izinkan login melalui koneksi SSL?"];
+$PMF_LANG['msgSecureSwitch'] = "Beralih ke mode aman untuk login!";
+
+// added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Harap dicatat bahwa tidak ada file yang akan ditulis sampai Anda mengklik tombol simpan';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Buffer halaman %d berhasil direkam';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Kesalahan merekam buffer halaman %d';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Merekam buffer halaman %d';
+
+// added 2.6.0-alpha - 2009-11-02 by Anatoliy Belsky
+$PMF_LANG['ad_record_active'] = 'Aktif';
+
+// added 2.6.0-alpha - 2009-11-01 by Anatoliy Belsky
+$PMF_LANG['msgAttachmentInvalid'] = 'Lampiran tidak valid, silakan beritahu administrator';
+
+// added 2.6.0-alpha - 2009-11-02 by max
+$LANG_CONF['search.numberSearchTerms'] = ['input', 'Jumlah istilah pencarian yang ditampilkan'];
+$LANG_CONF['records.orderingPopularFaqs'] = ["select", "Pengurutan FAQ teratas"];
+$PMF_LANG['list_all_users'] = 'Daftar semua pengguna';
+
+$PMF_LANG['records.orderingPopularFaqs.visits'] = "daftar entri paling banyak dikunjungi";
+$PMF_LANG['records.orderingPopularFaqs.voting'] = "daftar entri paling banyak dipilih";
+
+// added 2.6.0-alpha - 2009-11-05 by Thorsten
+$PMF_LANG['msgShowHelp'] = 'Silakan pisahkan kata dengan koma.';
+
+// added 2.6.0-RC - 2009-11-30 by Thorsten
+$PMF_LANG['msgUpdateFaqDate'] = 'perbarui';
+$PMF_LANG['msgKeepFaqDate'] = 'simpan';
+$PMF_LANG['msgEditFaqDate'] = 'edit';
+
+// added v2.6.99 - 2010-11-24 by Gustavo Solt
+$LANG_CONF['search.relevance'] = ['select', 'Urutkan berdasarkan relevansi'];
+$LANG_CONF["search.enableRelevance"] = ["checkbox", "Aktifkan dukungan relevansi?"];
+$PMF_LANG['searchControlCenter'] = 'Pencarian';
+$PMF_LANG['search.relevance.thema-content-keywords'] = 'Pertanyaan - Jawaban - Kata Kunci';
+$PMF_LANG['search.relevance.thema-keywords-content'] = 'Pertanyaan - Kata Kunci - Jawaban';
+$PMF_LANG['search.relevance.content-thema-keywords'] = 'Jawaban - Pertanyaan - Kata Kunci';
+$PMF_LANG['search.relevance.content-keywords-thema'] = 'Jawaban - Kata Kunci - Pertanyaan';
+$PMF_LANG['search.relevance.keywords-content-thema'] = 'Kata Kunci - Jawaban - Pertanyaan';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'Kata Kunci - Pertanyaan - Jawaban';
+
+// added 2.7.0-alpha - 2010-09-13 by Thorsten
+$PMF_LANG['msgLoginUser'] = 'Masuk';
+
+// added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
+$PMF_LANG["msgAttachments"] = "Lampiran FAQ";
+$PMF_LANG["ad_menu_attachment_admin"] = "Administrasi lampiran";
+$PMF_LANG['msgAttachmentsFilename'] = 'Nama file';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Ukuran file';
+$PMF_LANG['msgAttachmentsMimeType'] = 'Tipe MIME';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'Apakah Anda yakin ingin menghapus lampiran ini?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Lampiran berhasil dihapus.';
+
+// added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
+$PMF_LANG['ad_menu_reports'] = 'Laporan';
+$PMF_LANG["ad_stat_report_fields"] = "Bidang";
+$PMF_LANG["ad_stat_report_category"] = "Kategori";
+$PMF_LANG["ad_stat_report_sub_category"] = "Subkategori";
+$PMF_LANG["ad_stat_report_translations"] = "Terjemahan";
+$PMF_LANG["ad_stat_report_language"] = "Bahasa";
+$PMF_LANG["ad_stat_report_id"] = "ID FAQ";
+$PMF_LANG["ad_stat_report_sticky"] = "FAQ Tersemat";
+$PMF_LANG["ad_stat_report_title"] = "Pertanyaan";
+$PMF_LANG["ad_stat_report_creation_date"] = "Tanggal";
+$PMF_LANG["ad_stat_report_owner"] = "Penulis asli";
+$PMF_LANG["ad_stat_report_last_modified_person"] = "Penulis terakhir";
+$PMF_LANG["ad_stat_report_url"] = "URL";
+$PMF_LANG["ad_stat_report_visits"] = "Kunjungan";
+$PMF_LANG["ad_stat_report_make_report"] = "Buat Laporan";
+$PMF_LANG["ad_stat_report_make_csv"] = "Ekspor ke CSV";
+
+// added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
+$PMF_LANG['msgRegistration'] = 'Pendaftaran';
+$PMF_LANG['msgRegistrationCredentials'] = 'Untuk mendaftar silakan masukkan nama, nama pengguna, dan alamat email yang valid!';
+$PMF_LANG['msgRegistrationNote'] = 'Setelah berhasil mengirimkan formulir ini, Anda akan menerima email setelah administrator menyetujui pendaftaran Anda.';
+
+// added v2.7.0-beta - 2011-06-13 by Thorsten
+$PMF_LANG['ad_entry_changelog_history'] = "Riwayat perubahan";
+
+// added v2.7.0-beta2 - 2011-06-22 by Thorsten
+$LANG_CONF['security.ssoSupport'] = ['checkbox', 'Aktifkan Dukungan Single Sign On'];
+$LANG_CONF['security.ssoLogoutRedirect'] = ['input', 'URL layanan pengalihan logout Single Sign On'];
+$LANG_CONF['main.dateFormat'] = ['input', 'Format tanggal (default: Y-m-d H:i)'];
+$LANG_CONF['security.enableLoginOnly'] = ['checkbox', 'FAQ yang sepenuhnya diamankan'];
+
+// added v2.7.0-RC - 2011-08-18 by Thorsten
+$PMF_LANG['securityControlCenter'] = 'Keamanan';
+$PMF_LANG['ad_search_delsuc'] = 'Istilah pencarian berhasil dihapus.';
+$PMF_LANG['ad_search_delfail'] = 'Istilah pencarian tidak dihapus.';
+
+// added 2.7.1 - 2011-09-30 by Thorsten
+$PMF_LANG['msg_about_faq'] = 'Tentang FAQ ini';
+$LANG_CONF['security.useSslOnly'] = ['checkbox', 'FAQ hanya dengan SSL'];
+$PMF_LANG['msgTableOfContent'] = 'Daftar Isi';
+
+// added 2.7.5 - 2012-03-02 by Thorsten
+$PMF_LANG["msgExportAllFaqs"] = "Cetak semua sebagai PDF";
+$PMF_LANG["msgOnlineVerificationCheck"] = "Pemeriksaan verifikasi online";
+$PMF_LANG["msgOnlineVerificationCheckButton"] = "Klik untuk memverifikasi instalasi phpMyFAQ Anda";
+$PMF_LANG["ad_verification_notokay"] = "Versi phpMyFAQ Anda memiliki perubahan lokal";
+$PMF_LANG["ad_verification_okay"] = "Versi phpMyFAQ Anda berhasil diverifikasi.";
+
+// added v2.8.0-alpha - 2011-09-29 by Thorsten
+$PMF_LANG['msgAdminSearchFaqs'] = 'Cari FAQ';
+
+// added v2.8.0-alpha - 2012-01-13 by Peter
+$LANG_CONF["records.enableCloseQuestion"] = ["checkbox", "Tutup pertanyaan terbuka setelah dijawab?"];
+$LANG_CONF["records.enableDeleteQuestion"] = ["checkbox", "Hapus pertanyaan terbuka setelah dijawab?"];
+$PMF_LANG["msg2answerFAQ"] = "Terjawab";
+
+// added v2.8.0-alpha - 2012-01-16 by Thorsten
+$PMF_LANG["headerUserControlPanel"] = 'Panel Kontrol Pengguna';
+
+// added v2.8.0-alpha2 - 2012-03-15 by Thorsten
+$PMF_LANG["rememberMe"] = 'Masuk otomatis untuk kunjungan berikutnya';
+$PMF_LANG["ad_menu_instances"] = "Multisite FAQ";
+
+// added v2.8.0-alpha2 - 2012-08-06 by Thorsten
+$PMF_LANG['ad_record_inactive'] = 'FAQ tidak aktif';
+$LANG_CONF["main.maintenanceMode"] = ["checkbox", "Setel FAQ dalam mode pemeliharaan"];
+$PMF_LANG['msgMode'] = "Modus";
+$PMF_LANG['msgMaintenanceMode'] = "FAQ dalam pemeliharaan";
+$PMF_LANG['msgOnlineMode'] = "FAQ sedang online";
+
+// added v2.8.0-alpha3 - 2012-08-30 by Thorsten
+$PMF_LANG['msgShowMore'] = "tampilkan lebih banyak";
+$PMF_LANG['msgQuestionAnswered'] = "Pertanyaan terjawab";
+$PMF_LANG['msgMessageQuestionAnswered'] = "Pertanyaan Anda di %s telah dijawab. Silakan periksa di sini";
+
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['permission::addattachment'] = "Tambah lampiran";
+$PMF_LANG['permission::editattachment'] = "Edit lampiran";
+$PMF_LANG['permission::delattachment'] = "Hapus lampiran";
+$PMF_LANG['permission::dlattachment'] = "Unduh lampiran";
+$PMF_LANG['permission::reports'] = "Buat laporan";
+$PMF_LANG['permission::addfaq'] = "Tambah FAQ di frontend";
+$PMF_LANG['permission::addquestion'] = "Tambah pertanyaan di frontend";
+$PMF_LANG['permission::addcomment'] = "Tambah komentar di frontend";
+$PMF_LANG['permission::editinstances'] = "Edit instance multi-site";
+$PMF_LANG['permission::addinstances'] = "Tambah instance multi-site baru";
+$PMF_LANG['permission::delinstances'] = "Hapus instance multi-site";
+$PMF_LANG['permission::export'] = "Ekspor FAQ";
+
+// added v2.8.0-beta - 2012-12-24 by Thorsten
+$LANG_CONF["records.randomSort"] = ["checkbox", "Urutkan FAQ secara acak"];
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = ["checkbox", "Aktifkan editor WYSIWYG bawaan di frontend"];
+
+// added v2.8.0-beta3 - 2013-01-15 by Thorsten
+$LANG_CONF["main.enableGravatarSupport"] = ["checkbox", "Dukungan Gravatar"];
+
+// added v2.8.0-RC - 2013-01-29 by Thorsten
+$PMF_LANG["ad_stopwords_desc"] = "Silakan pilih bahasa untuk menambah atau mengedit kata berhenti.";
+$PMF_LANG["ad_visits_per_day"] = "Kunjungan per hari";
+
+// added v2.8.0-RC2 - 2013-02-17 by Thorsten
+$PMF_LANG["ad_instance_add"] = "Tambah instance multisite phpMyFAQ baru";
+$PMF_LANG["ad_instance_error_notwritable"] = "Folder /multisite tidak dapat ditulis.";
+$PMF_LANG["ad_instance_url"] = "URL Instance";
+$PMF_LANG["ad_instance_path"] = "Path Instance";
+$PMF_LANG["ad_instance_name"] = "Nama Instance";
+$PMF_LANG["ad_instance_email"] = "Email admin Anda";
+$PMF_LANG["ad_instance_admin"] = "Nama pengguna admin";
+$PMF_LANG["ad_instance_password"] = "Kata sandi admin";
+$PMF_LANG["ad_instance_hint"] = "Perhatian: Membuat instance phpMyFAQ baru akan memakan waktu beberapa detik!";
+$PMF_LANG["ad_instance_button"] = "Simpan instance";
+$PMF_LANG["ad_instance_error_cannotdelete"] = "Tidak dapat menghapus instance ";
+$PMF_LANG["ad_instance_config"] = "Konfigurasi instance";
+
+// added v2.8.0-RC3 - 2013-03-03 by Thorsten
+$PMF_LANG["msgAboutThisNews"] = "Tentang berita ini";
+
+// added v.2.8.1 - 2013-06-23 by Thorsten
+$PMF_LANG["msgAccessDenied"] = "Akses ditolak.";
+
+// added v.2.8.21 - 2015-02-17 by Thorsten
+$PMF_LANG['msgSeeFAQinFrontend'] = 'Lihat FAQ di Frontend';
+
+// added v.2.9.0-alpha - 2013-12-26 by Thorsten
+$PMF_LANG["msgRelatedTags"] = 'Tambah Kata Pencarian';
+$PMF_LANG["msgPopularTags"] = 'Pencarian terpopuler';
+$LANG_CONF["search.enableHighlighting"] = ["checkbox", "Sorot istilah pencarian"];
+$LANG_CONF["records.allowCommentsForGuests"] = ["checkbox", "Izinkan komentar untuk tamu"];
+$LANG_CONF["records.allowQuestionsForGuests"] = ["checkbox", "Izinkan menambah pertanyaan untuk tamu"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = ["checkbox", "Izinkan menambah FAQ baru untuk tamu"];
+$PMF_LANG["ad_searchterm_del"] = 'Hapus semua istilah pencarian yang tercatat';
+$PMF_LANG["ad_searchterm_del_suc"] = 'Berhasil menghapus semua istilah pencarian.';
+$PMF_LANG["ad_searchterm_del_err"] = 'Tidak dapat menghapus semua istilah pencarian.';
+$LANG_CONF["records.hideEmptyCategories"] = ["checkbox", "Sembunyikan kategori kosong"];
+$LANG_CONF["search.searchForSolutionId"] = ["checkbox", "Cari berdasarkan ID solusi"];
+
+// added v2.9.0-alpha2 - 2014-08-16 by Thorsten
+$PMF_LANG["ad_tag_delete_success"] = "Tag berhasil dihapus.";
+$PMF_LANG["ad_tag_delete_error"] = "Tag tidak dihapus karena terjadi kesalahan.";
+$PMF_LANG["msgSeoCenter"] = "SEO";
+$LANG_CONF["seo.metaTagsHome"] = ["select", "Meta Tags Robots halaman awal"];
+$LANG_CONF["seo.metaTagsFaqs"] = ["select", "Meta Tags Robots FAQ"];
+$LANG_CONF["seo.metaTagsCategories"] = ["select", "Meta Tags halaman kategori"];
+$LANG_CONF["seo.metaTagsPages"] = ["select", "Meta Tags Robots halaman statis"];
+$LANG_CONF["seo.metaTagsAdmin"] = ["select", "Meta Tags Robots Admin"];
+$PMF_LANG["msgMatchingQuestions"] = "Hasil berikut sangat cocok dengan pertanyaan Anda";
+$PMF_LANG["msgFinishSubmission"] = "Jika tidak ada saran di atas yang sesuai dengan pertanyaan Anda, klik tombol di bawah untuk menyelesaikan pengiriman pertanyaan Anda.";
+$LANG_CONF['spam.manualActivation'] = ['checkbox', 'Aktifkan pengguna baru secara manual (default: diaktifkan)'];
+
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews
+$PMF_LANG['mailControlCenter'] = 'Pengaturan email';
+$LANG_CONF['mail.remoteSMTP'] = ['checkbox', 'Gunakan server SMTP remote (default: dinonaktifkan)'];
+$LANG_CONF['mail.remoteSMTPServer'] = ['input', 'Alamat server'];
+$LANG_CONF['mail.remoteSMTPUsername'] = ['input', 'Nama pengguna'];
+$LANG_CONF['mail.remoteSMTPPassword'] = ['password', 'Kata sandi'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'Aktifkan pendaftaran untuk pengunjung'];
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = ['area', 'Header PDF Kustom (HTML diizinkan)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Footer PDF Kustom (HTML diizinkan)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Izinkan unduhan untuk tamu'];
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "Perhatian! Jika Anda memasukkan kata sandi, Anda akan menimpa kata sandi pengguna.";
+$PMF_LANG["ad_delete_all_votings"] = "Hapus semua voting";
+$PMF_LANG["categoryModeratorLabel"] = "Moderator";
+$PMF_LANG['ad_clear_all_visits'] = "Hapus semua kunjungan";
+$PMF_LANG['ad_reset_visits_success'] = 'Reset kunjungan berhasil.';
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Aktifkan editor Markdown bawaan'];
+
+// added v2.9.0-beta - 2015-09-27 by Thorsten
+$PMF_LANG['faqOverview'] = 'Ikhtisar FAQ';
+$PMF_LANG['ad_dir_missing'] = 'Direktori %s tidak ditemukan.';
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Aktifkan penjawaban cerdas untuk pertanyaan pengguna'];
+
+// added v2.9.0-beta2 - 2015-12-23 by Thorsten
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Aktifkan dukungan Elasticsearch', 'Standar: dinonaktifkan'];
+$PMF_LANG['msgAdminHeaderElasticsearch'] = 'Konfigurasi Elasticsearch';
+$PMF_LANG['msgAdminElasticsearchCreateIndex'] = 'Buat Indeks';
+$PMF_LANG['msgAdminElasticsearchDropIndex'] = 'Hapus Indeks';
+$PMF_LANG['msgAdminElasticsearchImportIndex'] = 'Impor penuh';
+$PMF_LANG['msgAdminElasticsearchCreateIndex_success'] = 'Indeks berhasil dibuat.';
+$PMF_LANG['ad_es_create_import_success'] = 'Impor berhasil.';
+$PMF_LANG['msgAdminElasticsearchDropIndex_success'] = 'Indeks berhasil dihapus.';
+$PMF_LANG['ad_export_generate_json'] = 'Buat file JSON';
+$PMF_LANG['ad_media_name_search'] = 'Cari nama media';
+
+// added v2.9.0-RC - 2016-02-19 by Thorsten
+$PMF_LANG['ad_admin_notes'] = 'Catatan Pribadi';
+$PMF_LANG['ad_admin_notes_hint'] = ' (hanya terlihat oleh editor)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Tambah FAQ baru di kategori ini';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = ['input', 'Pemetaan LDAP untuk nama, "cn" saat menggunakan ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = ['input', 'Pemetaan LDAP untuk nama pengguna, "samAccountName" saat menggunakan ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = ['input', 'Pemetaan LDAP untuk email, "mail" saat menggunakan ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = ['input', 'Pemetaan LDAP untuk "member of" saat menggunakan grup LDAP'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'Prefix domain LDAP, misalnya "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = ['input', 'Versi protokol LDAP (default: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = ['input', 'Referensi LDAP (default: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Aktifkan dukungan grup LDAP, misalnya "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Aktifkan dukungan LDAP SASL'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Aktifkan dukungan beberapa server LDAP'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Aktifkan koneksi LDAP anonim'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Aktifkan pengikatan pengguna dinamis LDAP'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = ['input', 'Atribut LDAP untuk pengikatan pengguna dinamis, "uid" saat menggunakan ADS'];
+$LANG_CONF['ldap.ldap_use_group_restriction'] = ['checkbox', 'Batasi login ke grup Active Directory tertentu'];
+$LANG_CONF['ldap.ldap_group_allowed_groups'] = ['input', 'Daftar grup AD yang diizinkan dipisahkan koma (pencocokan parsial didukung)'];
+$LANG_CONF['ldap.ldap_group_auto_assign'] = ['checkbox', 'Otomatis tetapkan pengguna ke grup phpMyFAQ berdasarkan keanggotaan AD'];
+$LANG_CONF['ldap.ldap_group_mapping'] = ['input', 'Pemetaan JSON grup AD ke grup phpMyFAQ, misalnya {"Domain Admins": "Administrators"}'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Aktifkan sitemap XML'];
+$PMF_LANG['categoryImageLabel'] = 'Gambar kategori';
+$PMF_LANG["categoryShowHomeLabel"] = "Tampilkan di halaman awal";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'Lihat FAQ';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktifkan pembatasan kategori'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktifkan kirim ke teman'];
+$PMF_LANG['msgUserRemovalText'] = 'Anda dapat meminta penghapusan akun dan data pribadi Anda. Email akan dikirim ke tim admin. Tim akan menghapus akun, komentar, dan pertanyaan Anda. Karena ini adalah proses manual, dapat memakan waktu hingga 24 jam. Setelah ini Anda akan menerima konfirmasi penghapusan melalui email. ';
+$PMF_LANG["msgUserRemoval"] = "Permintaan penghapusan pengguna";
+$PMF_LANG["ad_menu_RequestRemove"] = "Permintaan penghapusan pengguna";
+$PMF_LANG["msgContactRemove"] = "Permintaan penghapusan dari tim admin";
+$PMF_LANG["msgContactPrivacyNote"] = "Silakan perhatikan";
+$PMF_LANG["msgPrivacyNote"] = "Pernyataan Privasi";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Pemeriksaan otomatis untuk versi baru'];
+$PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
+$PMF_LANG['ad_user_overwrite_passwd'] = 'Timpa kata sandi';
+$LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Izinkan pembuatan versi perubahan FAQ'];
+$PMF_LANG['permission::view_faqs'] = 'Lihat FAQ';
+$PMF_LANG['permission::view_categories'] = 'Lihat kategori';
+$PMF_LANG['permission::view_news'] = 'Lihat berita';
+$PMF_LANG['permission::administrate_groups'] = 'Kelola grup';
+$PMF_LANG['ad_group_rights'] = 'Izin grup';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['permission::viewadminlink'] = 'Lihat tautan admin';
+
+// added v3.0.0-beta.3 - 2019-09-22 by Thorsten
+$LANG_CONF['mail.remoteSMTPPort'] = ['input', 'Port server SMTP'];
+$PMF_LANG['msgQuestionAnswer'] = 'Pertanyaan dan jawaban';
+$PMF_LANG['msgPermissions'] = 'Izin';
+$PMF_LANG['loginPageMessage'] = 'Masuk ke ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['msgFAQMetaData'] = 'Metadata FAQ';
+
+// added v3.0.8 - 2021-01-22
+$LANG_CONF['main.privacyURL'] = ['input', 'URL untuk catatan Privasi'];
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['msgUserDataVisible'] = 'Nama pengguna harus terlihat';
+$PMF_LANG['ad_user_is_visible'] = 'Terlihat';
+$PMF_LANG['ad_categ_save_order'] = 'Pengurutan baru berhasil disimpan.';
+$PMF_LANG['ad_add_user_change_password'] = 'Pengguna harus mengubah kata sandi setelah login pertama';
+$LANG_CONF['api.enableAccess'] = ['checkbox', 'REST API diaktifkan'];
+$LANG_CONF['api.apiClientToken'] = ['input', 'Token Klien API'];
+$LANG_CONF['security.domainWhiteListForRegistrations'] = ['area', 'Host yang diizinkan untuk pendaftaran'];
+$LANG_CONF['security.loginWithEmailAddress'] = ['checkbox', 'Masuk hanya dengan alamat email'];
+
+// added v3.2.0-alpha - 2022-09-10 by Thorsten
+$PMF_LANG['msgSignInWithMicrosoft'] = 'Masuk dengan Microsoft';
+$LANG_CONF['security.enableSignInWithMicrosoft'] = ['checkbox', 'Aktifkan Masuk dengan Microsoft Entra ID'];
+$LANG_CONF['main.enableAskQuestions'] = ['checkbox', 'Aktifkan "Ajukan pertanyaan"'];
+$LANG_CONF['main.enableNotifications'] = ['checkbox', 'Aktifkan notifikasi'];
+$LANG_CONF['mail.sendTestEmail'] = ['button', 'Kirim email uji ke administrator melalui SMTP'];
+$PMF_LANG['mail.sendTestEmail'] = 'Kirim email uji ke administrator';
+$PMF_LANG['msgGoToCategory'] = 'Pergi ke kategori';
+$LANG_CONF['security.enableGoogleReCaptchaV2'] = ['checkbox', 'Aktifkan Google ReCAPTCHA v2 Invisible'];
+$LANG_CONF['security.googleReCaptchaV2SiteKey'] = ['input', 'Kunci situs Google ReCAPTCHA v2'];
+$LANG_CONF['security.googleReCaptchaV2SecretKey'] = ['input', 'Kunci rahasia Google ReCAPTCHA v2'];
+
+// added v3.2.0-alpha - 2023-03-11 by Jan
+$PMF_LANG['msgTwofactorEnabled'] = "Autentikasi Dua Faktor diaktifkan";
+$PMF_LANG['msgTwofactorConfig'] = "Konfigurasi Autentikasi Dua Faktor";
+$PMF_LANG['msgTwofactorConfigModelTitle'] = "Konfigurasi Autentikasi Dua Faktor";
+$PMF_LANG['qr_code_secret_alt'] = "Kode QR Kunci Rahasia";
+$PMF_LANG['msgTwofactorNewSecret'] = "Hapus Konfigurasi Dua Faktor saat ini";
+$PMF_LANG['msgTwofactorTokenModelTitle'] = "Autentikasi Dua Faktor - Masukkan token:";
+$PMF_LANG['msgEnterTwofactorToken'] = "Masukkan kode 6 digit dari aplikasi autentikator Anda.";
+$PMF_LANG['msgTwofactorCheck'] = "Periksa";
+$PMF_LANG['msgTwofactorErrorToken'] = "Anda memasukkan kode yang salah!";
+$PMF_LANG['ad_user_overwrite_twofactor'] = "Reset Autentikasi Dua Faktor";
+
+// added v3.2.0-alpha.2 - 2023-04-06 by Thorsten
+$PMF_LANG['msgRedirect'] = 'Anda akan dialihkan secara otomatis dalam 5 detik.';
+$PMF_LANG['msgCategoryMissingButTranslationAvailable'] = 'Tidak ada kategori yang ditemukan dalam bahasa yang dipilih, tetapi Anda dapat memilih bahasa berikut:';
+$PMF_LANG['msgCategoryDescription'] = 'Di sini Anda akan menemukan ikhtisar semua kategori dengan jumlah FAQ.';
+$PMF_LANG['msgSubCategoryContent'] = 'Pilih kategori utama.';
+$PMF_LANG['ad_open_question_deleted'] = 'Pertanyaan berhasil dihapus.';
+$LANG_CONF['mail.remoteSMTPDisableTLSPeerVerification'] = ['checkbox', 'Nonaktifkan verifikasi peer TLS SMTP (tidak disarankan)'];
+
+// added v3.2.0-beta.2 - 2023-05-03 by Jan
+$LANG_CONF['layout.contactInformationHTML'] = ['checkbox', 'Informasi kontak sebagai HTML?'];
+
+// added v3.2.0-RC - 2023-05-18 by Thorsten
+$PMF_LANG['msgAuthenticationSource'] = 'Layanan autentikasi';
+
+// added v3.2.0-RC - 2023-05-27 by Jan
+$LANG_CONF['spam.mailAddressInExport'] = ['checkbox', 'Tampilkan alamat email di ekspor'];
+$PMF_LANG['msgNewQuestionAdded'] = 'Pertanyaan baru telah ditambahkan. Anda dapat memeriksanya di sini atau di bagian admin:';
+
+// added v3.2.7 - 2024-04-15 by Jan
+$PMF_LANG['cookiePreferences'] = 'Preferensi Cookie';
+
+// added v4.0.0-alpha - 2023-07-02 by Thorsten
+$LANG_CONF['upgrade.onlineUpdateEnabled'] = ['checkbox', 'Update Online diaktifkan'];
+$LANG_CONF['upgrade.releaseEnvironment'] = ['select', 'Lingkungan Rilis'];
+$LANG_CONF['upgrade.dateLastChecked'] = ['print', 'Pemeriksaan terakhir untuk update'];
+$PMF_LANG['upgradeControlCenter'] = 'Update Online';
+
+// added v4.0.0-alpha - 2023-07-11 by Jan
+$PMF_LANG['headerCheckHealth'] = '1. Periksa Kesehatan Sistem';
+$PMF_LANG['headerCheckUpdates'] = '2. Periksa Update';
+$PMF_LANG['headerDownloadPackage'] = '3. Unduh phpMyFAQ';
+$PMF_LANG['headerExtractPackage'] = '4. Ekstrak paket yang diunduh';
+$PMF_LANG['headerInstallDownloadedPackage'] = '5. Instal paket yang diunduh';
+$PMF_LANG['msgHealthCheck'] = 'Ini memeriksa izin file dan struktur folder yang benar dari instalasi phpMyFAQ Anda.';
+$PMF_LANG['msgUpdateCheck'] = 'Anda dapat memeriksa versi baru phpMyFAQ, menginstal ulang atau memperbarui instalasi Anda.';
+$PMF_LANG['msgDownloadPackage'] = 'Unduh versi phpMyFAQ baru tergantung pada lingkungan rilis yang ditetapkan.';
+$PMF_LANG['msgExtractPackage'] = 'Ini mengekstrak paket yang diunduh ke sistem file Anda, ini mungkin memakan waktu.';
+$PMF_LANG['msgExtractToFileSystem'] = 'Ini mengekstrak paket yang diunduh ke sistem file Anda.';
+$PMF_LANG['msgInstallDownloadedPackage'] = 'Instal paket yang diunduh';
+$PMF_LANG['msgBackupCurrentInstallation'] = 'Cadangkan instalasi saat ini';
+$PMF_LANG['msgInstallationNewFiles'] = 'Instalasi file baru';
+$PMF_LANG['msgDatabaseUpdate'] = 'Perbarui basis data';
+$PMF_LANG['alertNightlyBuild'] = 'Anda menggunakan versi pengembangan phpMyFAQ. Anda dapat memperbarui ke nightly build terbaru.';
+$PMF_LANG['noteNightlyBuild'] = 'Harap dicatat bahwa build hari sebelumnya akan diunduh (disimpan di /content/upgrades). Karena setiap build baru tidak dibuat hingga pukul 2 pagi (UTC) oleh GitHub.';
+$PMF_LANG['buttonCheckHealth'] = 'Periksa kesehatan Sistem sekarang';
+$PMF_LANG['buttonCheckUpdates'] = 'Periksa Update sekarang';
+$PMF_LANG['buttonDownloadPackage'] = 'Unduh sekarang';
+$PMF_LANG['buttonExtractPackage'] = 'Ekstrak paket yang diunduh sekarang';
+$PMF_LANG['versionIsUpToDate'] = 'Versi yang Anda instal sudah terkini!';
+$PMF_LANG['healthCheckOkay'] = 'Versi yang Anda instal sehat!';
+$PMF_LANG['downloadSuccessful'] = 'Paket berhasil diunduh!';
+$PMF_LANG['extractSuccessful'] = 'Paket berhasil diekstrak!';
+$PMF_LANG['downloadFailure'] = 'Tidak dapat mengunduh paket.';
+$PMF_LANG['verificationFailure'] = 'Tidak dapat memverifikasi paket yang diunduh.';
+$PMF_LANG['extractFailure'] = 'Tidak dapat mengekstrak paket yang diunduh.';
+$PMF_LANG['msgCurrentVersion'] = 'Versi Saat Ini: ';
+$PMF_LANG['msgLastCheckDate'] = 'Pemeriksaan terakhir untuk update: ';
+$PMF_LANG['msgLastVersionAvailable'] = 'Versi terbaru yang tersedia: ';
+$PMF_LANG['msgReleaseEnvironment'] = 'Lingkungan-Rilis: ';
+$PMF_LANG['msgNoteManualUpdate'] = 'Anda masih dapat menggunakan <a href="../update">proses update manual</a> jika Anda mau.';
+
+// added v4.0.0-alpha - 2023-07-19 by Jan
+$PMF_LANG['msgAddBookmark'] = 'Tambah bookmark';
+$PMF_LANG['removeBookmark'] = 'Hapus bookmark';
+$PMF_LANG['msgBookmarks'] = 'Bookmark';
+$PMF_LANG['msgMyBookmarks'] = 'Bookmark Saya';
+$PMF_LANG['msgBookmarkAdded'] = 'Bookmark berhasil ditambahkan!';
+$PMF_LANG['msgBookmarkRemoved'] = 'Bookmark berhasil dihapus!';
+
+// added v4.0.0-alpha - 2023-09-20 by Jan
+$PMF_LANG['msgNoHashAllowed'] = "Tidak diizinkan menggunakan '#'.";
+
+// added v4.0.0-alpha - 2023-12-24 by Jan
+$LANG_CONF['main.botIgnoreList'] = ['area', 'Daftar abaikan-bot (Pisahkan dengan koma)'];
+
+// added v4.0.0-alpha - 2023-12-26 by Thorsten
+$PMF_LANG['msgGravatar'] = 'Gambar Gravatar';
+
+// added v4.0.0-alpha - 2023-12-27 by Jan
+$PMF_LANG['msgOrderStickyFaqsCustomDeactivated'] = 'Pengurutan kustom untuk rekaman tersemat dinonaktifkan dalam konfigurasi utama. Jika Anda ingin menggunakannya, silakan aktifkan di <a href="././configuration">konfigurasi utama</a> -> records.';
+$LANG_CONF['records.orderStickyFaqsCustom'] = ['checkbox', 'Pengurutan kustom rekaman tersemat'];
+$PMF_LANG['msgNoStickyFaqs'] = 'Anda belum memiliki rekaman tersemat. Anda dapat menandai rekaman sebagai tersemat di <a href="./faqs" class="alert-link">Ikhtisar FAQ</a>.';
+
+// added v4.0.0-alpha - 2023-12-29 by Thorsten
+$LANG_CONF['layout.enableCookieConsent'] = ['checkbox', 'Aktifkan Persetujuan Cookie'];
+$PMF_LANG['msgSessionExpired'] = 'Sesi Anda telah berakhir. Silakan login lagi.';
+
+// added v4.0.0-alpha - 2024-01-12 by Jan
+$PMF_LANG['msgLanguageCode'] = 'Kode bahasa';
+$PMF_LANG['msgSeparateWithCommas'] = '(pisahkan dengan koma)';
+$PMF_LANG['msgImportRecordsColumnStructure'] = 'File CSV yang akan diimpor harus berisi kolom berikut dalam urutan ini, tanpa header kolom. Setiap baris dimaksudkan untuk mendefinisikan entri FAQ. Semua sel di kolom yang ditandai dengan tanda bintang * harus berisi nilai.';
+$PMF_LANG['msgImportRecords'] = 'Impor FAQ';
+$PMF_LANG['msgImportCSVFile'] = 'Impor file CSV';
+$PMF_LANG['msgImportCSVFileBody'] = 'Anda dapat mengimpor file CSV dengan data rekaman Anda dan struktur yang diberikan (lihat di atas) di sini.';
+$PMF_LANG['msgImport'] = 'Impor';
+$PMF_LANG['msgColumnStructure'] = 'Struktur kolom';
+$PMF_LANG['msgImportSuccessful'] = 'Impor berhasil!';
+$PMF_LANG['msgCSVImportTrueOrFalse'] = '(true atau false)';
+$PMF_LANG['admin_mainmenu_imports_exports'] = 'Impor & Ekspor';
+$PMF_LANG['msgCSVFileNotValidated'] = 'Sepertinya file tidak memiliki struktur yang tepat. Silakan periksa struktur berdasarkan persyaratan yang diberikan lagi.';
+
+// added v4.0.0-alpha - 2024-01-13 by Jan
+$PMF_LANG['msgExportSessionsAsCSV'] = 'Ekspor Sesi sebagai file CSV';
+$PMF_LANG['msgExportSessions'] = 'Ekspor Sesi';
+$PMF_LANG['msgExportSessionsFrom'] = 'Dari';
+$PMF_LANG['msgExportSessionsTo'] = 'Ke';
+
+// added v4.0.0-alpha - 2024-03-21 by Jan
+$PMF_LANG['msgEditForms'] = 'Edit formulir';
+$PMF_LANG['msgEditFormsSuccessful'] = 'Modifikasi berhasil diubah.';
+$PMF_LANG['msgInputType'] = 'Tipe';
+$PMF_LANG['msgRequiredInputField'] = 'Input wajib';
+$PMF_LANG['permission::forms_edit'] = 'Edit formulir';
+$PMF_LANG['msgInputLabel'] = 'Label';
+$PMF_LANG['msgFormsEditTranslations'] = 'Sesuaikan terjemahan';
+$PMF_LANG['msgFormsEditTranslationSuccessful'] = 'Terjemahan berhasil disimpan.';
+$PMF_LANG['msgFormsDeleteTranslationSuccessful'] = 'Terjemahan berhasil dihapus.';
+$PMF_LANG['msgFormsAddTranslationSuccessful'] = 'Terjemahan baru berhasil disimpan.';
+$PMF_LANG['msgSelectLanguage'] = 'Pilih bahasa';
+$PMF_LANG['msgTranslationText'] = 'Teks terjemahan';
+$PMF_LANG['msgAddTranslation'] = 'Tambah terjemahan';
+$PMF_LANG['msgHintDeactivateForms'] = 'Formulir dapat dinonaktifkan sepenuhnya di <a class="alert-link" href="./configuration">administrasi</a>.';
+
+// added v4.0.0-alpha.2 - 2024-03-26 by Thorsten
+$PMF_LANG['msgOnlyInactiveFAQs'] = 'Hanya FAQ tidak aktif';
+$PMF_LANG['msgOnlyNewFAQs'] = 'Hanya FAQ baru';
+
+// added v4.0.0-alpha.2 - 2024-04-21 by Jan
+$PMF_LANG['msgDeleteNews'] = 'Hapus berita';
+$PMF_LANG['msgExportUsersAsCSV'] = 'Ekspor pengguna sebagai csv';
+$PMF_LANG['msgWarning'] = 'Peringatan';
+$PMF_LANG['msgUserList'] = 'Daftar pengguna';
+
+// added v4.0.0-alpha.2 - 2024-04-30 by Thorsten
+$PMF_LANG['msgNoQuestionAndAnswer'] = 'Tidak ada pertanyaan dan jawaban ditemukan.';
+$PMF_LANG['msgNotInMaintenanceMode'] = 'FAQ tidak dalam mode pemeliharaan.';
+
+// added v4.0.0-alpha.3 - 2024-06-03 by Jan
+$PMF_LANG['msgSeparateKeywordsWithCommas'] = 'Beberapa kata kunci harus dipisahkan dengan koma.';
+$PMF_LANG['msgFormDisabledDueToMissingCategories'] = 'Anda tidak dapat menggunakan formulir ini karena tidak ada kategori yang dikonfigurasi. Silakan hubungi <a class="alert-link" href="./contact.html">administrator</a>.';
+
+// added v4.0.0-alpha.3 - 2024-06-14 by Thorsten
+$LANG_CONF['mail.noReplySenderAddress'] = ['input', 'Alamat no-reply untuk email'];
+$PMF_LANG['msgSessionExpiringSoon'] = 'Sesi akan segera berakhir';
+$PMF_LANG['msgNoLogMeOut'] = 'Tidak, keluarkan saya';
+$PMF_LANG['msgYesKeepMeLoggedIn'] = 'Ya, tetap masuk';
+$PMF_LANG['msgTrendingFAQs'] = 'FAQ Trending';
+$PMF_LANG['msgGenerateApiClientToken'] = 'Buat Token Klien API';
+$PMF_LANG['msgSerp'] = 'SERP adalah singkatan dari Search Engine Result Page. Di sini Anda dapat menentukan judul dan deskripsi untuk SERP.';
+$PMF_LANG['msgSerpTitle'] = 'Judul SERP';
+$PMF_LANG['msgSerpDescription'] = 'Deskripsi SERP';
+$LANG_CONF['seo.title'] = ['input', 'Judul SERP'];
+$LANG_CONF['seo.description'] = ['area', 'Deskripsi SERP'];
+
+// added v4.0.0-alpha.3 - 2024-06-19 by Jan
+$LANG_CONF['records.allowedMediaHosts'] = ['area', 'Host eksternal yang diizinkan untuk konten media (pisahkan dengan koma)'];
+$PMF_LANG['msgConfirmTwofactorConfig'] = 'Apakah Anda yakin ingin menghapus konfigurasi Autentikasi Dua Faktor Anda saat ini?';
+$PMF_LANG['msgGravatarNotConnected'] = 'Gravatar saat ini tidak diaktifkan.';
+$PMF_LANG['msgRemoveTwofactorConfigSuccessful'] = 'Penghapusan konfigurasi 2-faktor saat ini berhasil.';
+$PMF_LANG['msgShareViaWhatsapp'] = 'Kirim ke teman melalui WhatsApp';
+$PMF_LANG['msgShareText'] = 'Saya menemukan artikel faq yang keren untuk Anda:';
+$PMF_LANG['msgError'] = 'Terjadi kesalahan.';
+$PMF_LANG['msgLinkToFAQ'] = 'Tautan ke FAQ';
+
+// added v4.0.0-alpha.3 - 2024-06-30 by Thorsten
+$LANG_CONF['layout.enablePrivacyLink'] = ['checkbox', 'Aktifkan tautan ke kebijakan privasi'];
+$PMF_LANG['msgAdminWarningDebugMode'] = 'phpMyFAQ saat ini berjalan dalam mode debug. Mode debug dapat mengekspos informasi sensitif dan ditujukan hanya untuk tujuan pengembangan. Kami sangat menyarankan untuk menonaktifkan mode debug demi alasan keamanan. Anda dapat menonaktifkan mode debug di file <code>.env</code>.';
+$PMF_LANG['msgAdminWarningDevelopmentVersion'] = 'phpMyFAQ saat ini dalam pengembangan (%s). Dan oleh karena itu belum siap untuk produksi. Silakan <a target="_blank" href="%s" class="alert-link">laporkan semua masalah di GitHub</a>. Terima kasih banyak!';
+$PMF_LANG['layoutControlCenter'] = 'Tata Letak';
+$LANG_CONF['layout.customCss'] = ['area', 'CSS Kustom', 'Silakan gunakan CSS saja.'];
+$PMF_LANG['msgSitemap'] = 'Peta Situs';
+$PMF_LANG['msgSitemapMetaDesc'] = 'Temukan FAQ yang Anda cari di ikhtisar semua entri | Peta Situs - %s';
+$PMF_LANG['msgGlossaryMetaDesc'] = 'Dalam glosarium %s Anda akan menemukan penjelasan semua istilah teknis penting tentang topik ini';
+$PMF_LANG['msgOverviewMetaDesc'] = 'Lihat ikhtisar semua topik penting | Ikhtisar FAQ %s';
+$PMF_LANG['msgCategoryMetaDesc'] = 'Ikhtisar semua kategori dan topik | Ikhtisar kategori %s';
+$PMF_LANG['msgQuestionMetaDesc'] = 'Tambahkan pertanyaan baru | %s';
+$PMF_LANG['msgOpenQuestionsMetaDesc'] = 'Pertanyaan terbuka yang masih menunggu jawaban | %s';
+$PMF_LANG['msgShareLinkVia'] = 'Bagikan dengan';
+$PMF_LANG['msgCopyLink'] = 'atau salin tautan';
+$LANG_CONF['seo.enableRichSnippets'] = ['checkbox', 'Aktifkan Rich Snippets'];
+
+// added v4.0.0-alpha.4 - 2024-07-29 by Jan
+$PMF_LANG['msgDeleteAllVotings'] = 'Statistik berhasil dihapus.';
+$PMF_LANG['msgDeleteAllVotingsError'] = 'Terjadi kesalahan saat menghapus statistik.';
+$PMF_LANG['msgPasswordTooShort'] = 'Kata sandi baru harus memiliki setidaknya 8 karakter.';
+$PMF_LANG['msgPasswordsMustBeEqual'] = 'Kedua kata sandi tidak cocok.';
+$PMF_LANG['msgPrivateNotesOfEditor'] = 'Ada catatan pribadi dari editor lain:';
+
+// added v4.0.0-beta - 2024-08-11 by Thorsten
+$PMF_LANG['msgAdminCleanupMissingAttachment'] = 'Bersihkan lampiran yang hilang';
+$PMF_LANG['msgAdminAttachmentRefreshed'] = 'Lampiran berhasil disegarkan';
+$PMF_LANG['msgRemoveAll'] = 'Hapus semua';
+$PMF_LANG['msgError404'] = 'Kesalahan 404';
+$PMF_LANG['msgError404Description'] = 'Halaman yang Anda cari telah dipindahkan, dihapus, atau mungkin tidak pernah ada.';
+$PMF_LANG['msgAlreadyHaveAccount'] = 'Sudah punya akun?';
+$PMF_LANG['msgSignInHere'] = 'Masuk di sini.';
+$PMF_LANG['msgRegistrationWithPasskeys'] = 'Saat mendaftar dengan Passkeys, pengguna hanya perlu memasukkan nama atau alamat email, sementara autentikasi dilakukan dengan aman menggunakan data biometrik atau kata sandi berbasis perangkat.';
+$PMF_LANG['msgContinue'] = 'Lanjutkan';
+$LANG_CONF['security.enableWebAuthnSupport'] = ['checkbox', 'Aktifkan dukungan WebAuthn (Eksperimental)'];
+$PMF_LANG['msgSignInWithPasskey'] = 'Masuk dengan Passkey';
+$PMF_LANG['msgPasskeyRegistrationSuccess'] = 'Pendaftaran berhasil. Anda sekarang dapat masuk dengan Passkey Anda.';
+$PMF_LANG['msgSupportUs'] = 'Dukung phpMyFAQ';
+$PMF_LANG['msgErrorEnterFullName'] = 'Silakan masukkan nama lengkap Anda!';
+$PMF_LANG['msgErrorEnterLoginName'] = 'Silakan masukkan nama login Anda!';
+$PMF_LANG['msgErrorEnterValidMail'] = 'Silakan berikan alamat email yang valid!';
+$PMF_LANG['msgErrorEnterMessage'] = 'Silakan masukkan pesan!';
+$PMF_LANG['msgLinkCopied'] = 'Tautan disalin ke clipboard';
+$PMF_LANG['msgDocumentation'] = 'Dokumentasi';
+
+// added v4.0.6 - 2025-02-22 by Thorsten
+$PMF_LANG['msgCategoryImageReset'] = 'Reset gambar kategori';
+
+// added v4.1.0-alpha - 2024-11-17 by Thorsten
+$LANG_CONF['seo.contentRobotsText'] = ['area', 'Konten untuk robots.txt', ''];
+$LANG_CONF['seo.contentLlmsText'] = ['area', 'Konten untuk llms.txt', ''];
+$PMF_LANG['msgActivateMaintenanceMode'] = 'Aktifkan mode pemeliharaan';
+$PMF_LANG['msgPlugins'] = 'Plugin';
+$PMF_LANG['msgPluginListing'] = 'Daftar plugin yang diinstal dan versinya';
+$PMF_LANG['msgPluginName'] = 'Nama plugin';
+$PMF_LANG['msgPluginVersion'] = 'Versi';
+$PMF_LANG['msgPluginAuthor'] = 'Penulis';
+$PMF_LANG['msgPluginDescription'] = 'Deskripsi';
+$PMF_LANG['msgPluginReason'] = 'Alasan';
+$PMF_LANG['msgIncompatiblePlugins'] = 'Plugin Tidak Kompatibel';
+$PMF_LANG['msgIncompatiblePluginsInfo'] = 'Plugin berikut tidak dapat dimuat karena masalah kompatibilitas.';
+
+// added v4.1.0-alpha.2 - 2025-02-23 by Thorsten
+$PMF_LANG['msgReportABug'] = 'Laporkan bug';
+$PMF_LANG['msgDashboard'] = 'Dasbor';
+$PMF_LANG['msgOrphanedFAQs'] = 'FAQ Yatim';
+$PMF_LANG['msgOrphanedFAQsDescription'] = 'FAQ ini tidak ditugaskan ke kategori manapun. Anda dapat menugaskannya ke kategori di sini.';
+$PMF_LANG['msgPreview'] = 'Pratinjau';
+$PMF_LANG['msgInsertImage'] = 'Sisipkan gambar';
+$PMF_LANG['msgImageUpload'] = 'Unggah gambar';
+$PMF_LANG['msgImageCouldNotBeUploaded'] = 'Gambar tidak dapat diunggah.';
+$PMF_LANG['msgImageTooLarge'] = 'Gambar terlalu besar.';
+$PMF_LANG['msgNoImagesForUpload'] = 'Tidak ada gambar untuk diunggah.';
+$PMF_LANG['msgFetchingHashes'] = 'Mengambil hash verifikasi dari api.phpmyfaq.de...';
+$PMF_LANG['msgCheckHashes'] = 'Memeriksa hash dengan file instalasi...';
+$PMF_LANG['msgAuthenticationAborted'] = 'Autentikasi dibatalkan oleh pengguna.';
+$LANG_CONF['security.enableAdminSessionTimeoutCounter'] = ['checkbox', 'Aktifkan penghitung timeout sesi admin', 'Default: diaktifkan'];
+$LANG_CONF['search.enableOpenSearch'] = ['checkbox', 'Aktifkan dukungan OpenSearch', 'Standar: dinonaktifkan'];
+$LANG_CONF['search.popularSearchTimeWindow'] = ['input', 'Jendela waktu untuk pencarian populer (hari)', 'Standar: 180 hari'];
+$PMF_LANG['msgAdminHeaderOpenSearch'] = 'Konfigurasi OpenSearch';
+$PMF_LANG['msgAdminOpenSearchCreateIndex'] = 'Buat Indeks Pencarian';
+$PMF_LANG['msgAdminOpenSearchDropIndex'] = 'Hapus Indeks Pencarian';
+$PMF_LANG['msgAdminOpenSearchImportIndex'] = 'Impor Lengkap';
+$PMF_LANG['msgAdminOpenSearchCreateIndex_success'] = 'Indeks pencarian OpenSearch berhasil dibuat.';
+$PMF_LANG['ad_os_create_import_success'] = 'Impor OpenSearch berhasil.';
+$PMF_LANG['msgAdminOpenSearchDropIndex_success'] = 'Indeks pencarian OpenSearch berhasil dihapus.';
+$PMF_LANG['permission::translate_faq'] = 'Terjemahkan FAQ';
+
+// added v4.1.0-alpha.3 - 2025-08-02 by Thorsten
+$PMF_LANG['msgTypeSearchCategories'] = 'Ketik untuk mencari kategori';
+$PMF_LANG['msgLoadingText'] = 'Memuat...';
+$PMF_LANG['msgNoResultsText'] = 'Tidak ada hasil ditemukan';
+$PMF_LANG['msgNoChoicesText'] = 'Tidak ada pilihan untuk dipilih';
+$PMF_LANG['msgItemSelectText'] = 'Tekan untuk memilih';
+$PMF_LANG['msgUniqueItemText'] = 'Hanya nilai unik yang dapat ditambahkan';
+$PMF_LANG['msgCustomAddItemText'] = 'Hanya nilai yang sesuai dengan kondisi tertentu yang dapat ditambahkan';
+$PMF_LANG['msgDownloadYourData'] = 'Unduh data Anda';
+$PMF_LANG['msgDataExportDescription'] = 'Unduh file ZIP yang berisi data pengguna Anda yang tersimpan.';
+$PMF_LANG['msgDownload'] = 'Unduh';
+$PMF_LANG['msgToggleTheme'] = 'Ganti tema';
+
+// added v4.1.0-beta - 2025-10-31 by Thorsten
+$PMF_LANG['msgBackupLast'] = 'Tanggal cadangan terakhir';
+$PMF_LANG['msgBackupNoneFound'] = 'Tidak ada cadangan ditemukan.';
+$PMF_LANG['msgBackupTooOld'] = 'Cadangan terakhir lebih dari 30 hari.';
+$PMF_LANG['msgBackupRecent'] = 'Cadangan saat ini masih baru.';
+$PMF_LANG['msgBackupGoTo'] = 'Pergi ke halaman Cadangan';
+$PMF_LANG['msgNewestUsers'] = 'Pengguna terbaru';
+$PMF_LANG['msgMemberSince'] = 'Anggota sejak';
+$PMF_LANG['msgNumberRegisteredUsers'] = 'Pengguna terdaftar';
+$PMF_LANG['msgConfirmDeleteFAQ'] = 'Apakah Anda benar-benar ingin menghapus FAQ ini? Tindakan ini tidak dapat dibatalkan.';
+
+// added v4.1.0-beta.2 - 2025-11-23 by Thorsten
+$PMF_LANG['msgTotalKeys'] = 'Jumlah total kunci terjemahan';
+$PMF_LANG['msgTranslatedKeys'] = 'Jumlah kunci yang diterjemahkan';
+$PMF_LANG['msgMissingKeys'] = 'Kunci terjemahan yang hilang';
+$PMF_LANG['msgCompletionPercentage'] = 'Persentase penyelesaian';
+$PMF_LANG['msgInstalledNewerThanAvailable'] = 'Versi yang diinstal lebih baru dari versi terbaru yang tersedia.';
+$PMF_LANG['ad_quick_sub_category'] = "Tambah subkategori baru";
+$PMF_LANG['msgError403'] = 'Kesalahan 403';
+$PMF_LANG['msgError403Description'] = 'Anda terautentikasi, tetapi Anda tidak memiliki izin untuk mengakses sumber daya ini.';
+$PMF_LANG['msgError403Hint'] = 'Jika Anda yakin ini adalah kesalahan, silakan hubungi administrator.';
+$PMF_LANG['msgCreateDate'] = 'Dibuat pada';
+$PMF_LANG['msgUpdateDate'] = 'Terakhir diperbarui pada';
 
 return $PMF_LANG;

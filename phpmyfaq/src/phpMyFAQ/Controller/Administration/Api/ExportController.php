@@ -40,7 +40,6 @@ use Symfony\Component\Routing\Annotation\Route;
 final class ExportController extends AbstractController
 {
     /**
-     * @throws Exception
      * @throws \Exception
      */
     #[Route(path: 'admin/api/export/file', name: 'admin.api.export.file', methods: ['GET'])]
@@ -48,10 +47,10 @@ final class ExportController extends AbstractController
     {
         $this->userHasPermission(PermissionType::EXPORT);
 
-        $categoryId = (int) Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT);
-        $downwards = Filter::filterVar($request->attributes->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
-        $inlineDisposition = Filter::filterVar($request->attributes->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $type = Filter::filterVar($request->attributes->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
+        $categoryId = (int) Filter::filterVar($request->request->get('categoryId'), FILTER_VALIDATE_INT);
+        $downwards = Filter::filterVar($request->request->get('downwards'), FILTER_VALIDATE_BOOLEAN, false);
+        $inlineDisposition = Filter::filterVar($request->request->get('disposition'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $type = Filter::filterVar($request->request->get('export-type'), FILTER_SANITIZE_SPECIAL_CHARS, 'none');
 
         $faq = $this->container->get(id: 'phpmyfaq.faq');
         $category = new Category($this->configuration, [], false);
@@ -63,18 +62,17 @@ final class ExportController extends AbstractController
 
             // Stream the file content
             $httpStreamer = new HttpStreamer($type, $content);
-            if ('inline' === $inlineDisposition) {
-                $httpStreamer->send(HeaderUtils::DISPOSITION_INLINE);
-            } else {
-                $httpStreamer->send(HeaderUtils::DISPOSITION_ATTACHMENT);
-            }
+            $disposition = 'inline' === $inlineDisposition
+                ? HeaderUtils::DISPOSITION_INLINE
+                : HeaderUtils::DISPOSITION_ATTACHMENT;
+            $httpStreamer->send($disposition);
         } catch (Exception|JsonException|CommonMarkException $e) {
             echo $e->getMessage();
         }
     }
 
     /**
-     * @throws Exception|\Exception
+     * @throws \Exception
      */
     #[Route(path: 'admin/api/export/report', name: 'admin.api.export.report', methods: ['POST'])]
     public function exportReport(Request $request): Response
@@ -143,18 +141,16 @@ final class ExportController extends AbstractController
         foreach ($report->getReportingData() as $reportData) {
             $i = $reportData['faq_id'];
             if (isset($data->category, $reportData['category_name'])) {
+                $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($reportData['category_parent']);
-                } else {
-                    $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
                 }
             }
 
             if (isset($data->sub_category)) {
-                if (0 != $reportData['category_parent']) {
+                $text[$i][] = 'n/a';
+                if (0 !== $reportData['category_parent']) {
                     $text[$i][] = Report::sanitize($report->convertEncoding($reportData['category_name']));
-                } else {
-                    $text[$i][] = 'n/a';
                 }
             }
 
@@ -186,10 +182,9 @@ final class ExportController extends AbstractController
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_org_author']));
             }
 
+            $text[$i][] = '';
             if (isset($data->last_modified_person, $reportData['faq_last_author'])) {
                 $text[$i][] = Report::sanitize($report->convertEncoding($reportData['faq_last_author']));
-            } else {
-                $text[$i][] = '';
             }
 
             if (isset($data->url)) {
@@ -207,9 +202,9 @@ final class ExportController extends AbstractController
             }
         }
 
-        $handle = fopen('php://temp', 'r+');
+        $handle = fopen('php://temp', mode: 'r+');
         foreach ($text as $row) {
-            fputcsv($handle, $row, ',', '"', '\\', PHP_EOL);
+            fputcsv($handle, fields: $row, separator: ',', enclosure: '"', escape: '\\', eol: PHP_EOL);
         }
 
         rewind($handle);
