@@ -34,7 +34,6 @@
     rewrite /show-categories.html /index.php?action=show
     rewrite /search.html /index.php?action=search
     rewrite /open-questions.html /index.php?action=open-questions
-    rewrite /contact.html /index.php?action=contact
     rewrite /glossary.html /index.php?action=glossary
     rewrite /overview.html /index.php?action=overview
     rewrite /login.html /index.php?action=login
@@ -164,7 +163,6 @@
     rewrite /show-categories.html /index.php?action=show
     rewrite /search.html /index.php?action=search
     rewrite /open-questions.html /index.php?action=open-questions
-    rewrite /contact.html /index.php?action=contact
     rewrite /glossary.html /index.php?action=glossary
     rewrite /overview.html /index.php?action=overview
     rewrite /login.html /index.php?action=login

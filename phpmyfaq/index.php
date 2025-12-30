@@ -51,6 +51,9 @@ use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 
 //
 // Define the named constant used as a check by any included PHP file
@@ -113,6 +116,41 @@ try {
 // Initializing a static string wrapper
 //
 Strings::init($faqLangCode);
+
+//
+// Try Symfony Router first
+//
+try {
+    // Load routes
+    $routes = require __DIR__ . '/src/public-routes.php';
+
+    // Create URL matcher
+    $context = new RequestContext();
+    $context->fromRequest($request);
+    $matcher = new UrlMatcher($routes, $context);
+
+    // Try to match the current route
+    $parameters = $matcher->match($request->getPathInfo());
+
+    // Extract controller and method
+    $controllerCallable = $parameters['_controller'];
+    unset($parameters['_controller'], $parameters['_route'], $parameters['_methods']);
+
+    // Instantiate controller and call method
+    if (is_array($controllerCallable)) {
+        [$controllerClass, $method] = $controllerCallable;
+        $controller = new $controllerClass();
+        $routeResponse = $controller->$method($request, ...$parameters);
+    } else {
+        $routeResponse = $controllerCallable($request, ...$parameters);
+    }
+
+    // Send response and exit
+    $routeResponse->send();
+    exit;
+} catch (ResourceNotFoundException $e) {
+    // No route matched - continue with legacy logic below
+}
 
 //
 // Set actual template set name
@@ -618,7 +656,7 @@ $templateVars = [
 ];
 
 //
-// Show login box or logged-in user information
+// Show the login box or logged-in user information
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if (

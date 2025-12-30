@@ -70,6 +70,50 @@ It is built using HTML5, CSS, TypeScript, and PHP and supports various databases
 - Use single quotes for strings.
 - Use arrow functions for callbacks.
 
+## Routing System
+
+The application uses Symfony Router for modern, controller-based routing while maintaining backward compatibility with legacy code.
+
+### Architecture
+
+1. **index.php**: Entry point that tries Symfony Router first, falls back to legacy logic
+2. **public-routes.php**: Route definitions using Symfony RouteCollection
+3. **Controllers**: Modern Controller classes extending AbstractController
+
+### Adding New Routes
+
+To add a new route:
+
+1. Create a Controller in `phpmyfaq/src/phpMyFAQ/Controller/`
+2. Add the route to `phpmyfaq/src/public-routes.php`
+3. The Controller should extend `AbstractController`
+
+Example:
+
+```php
+// MyController.php
+final class MyController extends AbstractController
+{
+    public function index(Request $request): Response
+    {
+        return $this->render('template.twig', ['data' => 'value']);
+    }
+}
+
+// public-routes.php
+'public.my_route' => [
+    'path' => '/my-page.html',
+    'controller' => [MyController::class, 'index'],
+    'methods' => 'GET'
+]
+```
+
+### Migration Strategy
+
+- New features should use Controllers
+- Legacy code continues to work via a fallback mechanism
+- Gradual migration from `?action=xyz` to route-based URLs
+
 ## UI guidelines
 
 - Application should have a modern and clean design.

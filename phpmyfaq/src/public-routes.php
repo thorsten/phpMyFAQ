@@ -17,19 +17,26 @@
 
 declare(strict_types=1);
 
+use phpMyFAQ\Controller\ContactController;
 use phpMyFAQ\Controller\FrontController;
-use phpMyFAQ\Controller\WebAuthnController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
 
 $routesConfig = [
-    'public.index' => [
-        'path' => '/',
-        'controller' => [FrontController::class, 'handle'],
-        'methods' => 'GET'
-    ]
+    // Specific routes should come first
+    'public.contact' => [
+        'path' => '/contact.html',
+        'controller' => [ContactController::class, 'index'],
+        'methods' => 'GET|POST'
+    ],
+    // Fallback route should be last
+    // 'public.index' => [
+    //     'path' => '/',
+    //     'controller' => [FrontController::class, 'handle'],
+    //     'methods' => 'GET'
+    // ],
 ];
 
 foreach ($routesConfig as $name => $config) {
