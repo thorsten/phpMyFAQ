@@ -102,9 +102,6 @@ $PMF_LANG["msgQuestion2"] = "Otázka";
 $PMF_LANG["msg2answer"] = "odpoveď";
 $PMF_LANG["msgQuestionText"] = "Tu môžete vidieť otázky od ostatných užívateľov. Keď otázku zodpoviete, odpoveď bude vložená do FAQ.";
 
-// Help
-$PMF_LANG["msgHelpText"] = "Štruktúra FAQ (Frequently Asked Questions) je jednoduchá. Ďalej môžete hľadať <a href=\"?action=show\">categories</a> alebo nechať <a href=\"?action=search\">vyhľadávať FAQ</a> kľúčové slová.";
-
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-mail webmasterovi";
 $PMF_LANG["msgMessage"] = "Vaša správa";
@@ -177,6 +174,7 @@ $PMF_LANG["ad_gen_no"] = "Nie";
 $PMF_LANG["ad_gen_top"] = "Na vrch stránky";
 $PMF_LANG["ad_gen_ncf"] = "Kategória nenájdená!";
 $PMF_LANG["ad_gen_delete"] = "Vymaž";
+$PMF_LANG['ad_gen_or'] = "or";
 
 // Benutzerverwaltung
 $PMF_LANG["ad_user"] = "Správa užívateľov";
@@ -470,21 +468,13 @@ $PMF_LANG["ad_passwdsuc"] = "Vaše heslo bolo zmenené.";
 
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["msgPDF"] = "Zobraziť ako PDF súbor";
-$PMF_LANG["ad_xml_head"] = "XML-záloha";
-$PMF_LANG["ad_xml_hint"] = "Uložiť všetky záznamy FAQ do jedného XML súboru.";
 $PMF_LANG["ad_xml_gen"] = "vytvoriť XML súbor";
 $PMF_LANG["msgLanguage"] = "Jazyk";
 $PMF_LANG["msgLanguageSubmit"] = "Zvoliť jazyk";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
-$PMF_LANG["ad_entry_preview"] = "Náhľad";
-$PMF_LANG["ad_attach_1"] = "Prosím v nastaveniach najprv vyberte priečinok pre prílohy.";
-$PMF_LANG["ad_attach_2"] = "Prosím v nastaveniach najprv zvoľte odkaz pre prílohy.";
-$PMF_LANG["ad_attach_3"] = "Súbor príloha.php nemôže byť otvorený bez správnej autentifikácie.";
 $PMF_LANG["ad_attach_4"] = "Priložený súbor musí mať menšiu veľkosť ako %s Bytov.";
 $PMF_LANG["ad_menu_export"] = "Exportovať Vašu FAQ";
-$PMF_LANG["ad_export_file"] = "Chyba: Súbor nemožno zapísať.";
-$PMF_LANG["ad_export_pdf"] = "PDF-Exportovať všetky záznamy";
 
 $PMF_LANG['permission::add_user'] = "pridať užívateľa";
 $PMF_LANG['permission::edit_user'] = "upraviť užívateľa";
@@ -522,10 +512,6 @@ $PMF_LANG["ad_export_generate_pdf"] = "generovať PDF súbor";
 $PMF_LANG["ad_export_full_faq"] = "Vaša FAQ ako PDF súbor: ";
 $PMF_LANG["err_bannedIP"] = "Vaša IP adresa bola odmietnutá.";
 $PMF_LANG["err_SaveQuestion"] = "Povinné polia sú Vaše meno, Váš e-mail, Vaša otázka a, na požiadanie, <a href=\"https://en.wikipedia.org/wiki/Captcha\" title=\"Viac čítajte na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code.  <a href=\"javascript:history.back();\">o jednu stránku späť</a>  ";
-
-// added v1.3.4 - 23.07.2003 - Thorsten
-$PMF_LANG["ad_entry_fontcolor"] = "Farba písma: ";
-$PMF_LANG["ad_entry_fontsize"] = "Veľkosť písma: ";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
 $LANG_CONF['main.language'] = array("select", "Language-File");
@@ -620,6 +606,7 @@ $PMF_LANG['ad_glossary_delete_error'] = 'Vyskytla sa chyba. Položka zo slovník
 $PMF_LANG['msgNewQuestionVisible'] = 'Otázka musí byť pred publikovaním preskúmaná.';
 $PMF_LANG['msgQuestionsWaiting'] = 'Čakajte na publikovanie administrátorom: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publikovať?';
+$PMF_LANG['ad_entry_not_visibility'] = "Nezverejnené";
 
 // added v2.0.0 - 2006-01-02 by Lars
 $PMF_LANG['ad_user_error_password'] = "Prosím zadajte heslo. ";
