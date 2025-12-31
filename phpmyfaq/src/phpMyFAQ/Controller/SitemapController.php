@@ -22,6 +22,7 @@ namespace phpMyFAQ\Controller;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Twig\TemplateException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class SitemapController extends AbstractController
 {
@@ -30,6 +31,7 @@ final class SitemapController extends AbstractController
     /**
      * @throws TemplateException|Exception|\Exception
      */
+    #[Route(path: '/sitemap.xml', name: 'public.sitemap.xml')]
     public function index(): Response
     {
         $response = new Response();

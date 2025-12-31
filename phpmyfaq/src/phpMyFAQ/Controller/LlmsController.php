@@ -19,13 +19,16 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class LlmsController extends AbstractController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
+    #[Route(path: '/llms.txt', name: 'public.llms.index')]
     public function index(): Response
     {
         $response = new Response();

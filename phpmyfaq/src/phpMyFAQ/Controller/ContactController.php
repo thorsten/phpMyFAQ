@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use Exception;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +28,9 @@ final class ContactController extends AbstractFrontController
 {
     /**
      * Handles both GET and POST requests for the contact form
-     *@throws \Exception
+     * @throws Exception
      */
+    #[Route(path: '/contact.html', name: 'public.contact')]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

@@ -19,17 +19,20 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Controller;
 
+use Exception;
 use phpMyFAQ\Enums\SessionActionType;
 use phpMyFAQ\Translation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class PageNotFoundController extends AbstractFrontController
 {
     /**
      * Handles the 404 Not Found page
-     * @throws \Exception
+     * @throws Exception
      */
+    #[Route(path: '/404.html', name: 'public.404')]
     public function index(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');

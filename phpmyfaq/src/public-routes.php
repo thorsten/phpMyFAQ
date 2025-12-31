@@ -18,14 +18,17 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Controller\ContactController;
+use phpMyFAQ\Controller\LlmsController;
 use phpMyFAQ\Controller\PageNotFoundController;
+use phpMyFAQ\Controller\RobotsController;
+use phpMyFAQ\Controller\SitemapController;
+use phpMyFAQ\Controller\WebAuthnController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 $routes = new RouteCollection();
 
 $routesConfig = [
-    // Specific routes should come first
     'public.contact' => [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
@@ -36,12 +39,26 @@ $routesConfig = [
         'controller' => [PageNotFoundController::class, 'index'],
         'methods' => 'GET'
     ],
-    // Fallback route should be last
-    // 'public.index' => [
-    //     'path' => '/',
-    //     'controller' => [FrontController::class, 'handle'],
-    //     'methods' => 'GET'
-    // ],
+    'public.llms.txt' => [
+        'path' => '/llms.txt',
+        'controller' => [LlmsController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'public.robots.txt' => [
+        'path' => '/robots.txt',
+        'controller' => [RobotsController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'public.sitemap.xml' => [
+        'path' => '/sitemap.xml',
+        'controller' => [SitemapController::class, 'index'],
+        'methods' => 'GET'
+    ],
+    'public.webauthn.index' => [
+        'path' => '/services/webauthn',
+        'controller' => [WebAuthnController::class, 'index'],
+        'methods' => 'GET'
+    ],
 ];
 
 foreach ($routesConfig as $name => $config) {

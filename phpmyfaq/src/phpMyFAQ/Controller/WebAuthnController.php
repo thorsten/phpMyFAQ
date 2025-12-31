@@ -27,7 +27,7 @@ use phpMyFAQ\Translation;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
 final class WebAuthnController extends AbstractController
@@ -35,7 +35,7 @@ final class WebAuthnController extends AbstractController
     /**
      * @throws Exception|LoaderError
      */
-    #[Route(path: '/', name: 'public.webauthn.index')]
+    #[Route(path: '/services/webauthn', name: 'public.webauthn.index')]
     public function index(Request $request): Response
     {
         $system = new System();
