@@ -198,7 +198,7 @@ class CategoryHelper extends AbstractHelper
             $link->setTitle(Strings::htmlentities($category));
             $link->text = Strings::htmlentities($category);
             $name = $link->toHtmlAnchor();
-            $html .= sprintf('<li><strong>%s</strong>: %s</li>', $language, $name);
+            $html .= sprintf('<li><strong>%s</strong>: %s</li>', LanguageCodes::get($language), $name);
         }
 
         return $html;
