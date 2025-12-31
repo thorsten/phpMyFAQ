@@ -23,6 +23,7 @@
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
+use phpMyFAQ\Controller\PageNotFoundController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
@@ -684,6 +685,16 @@ if ('twofactor' === $action) {
 }
 
 //
+// Handle 404 action with PageNotFoundController
+//
+if ('404' === $action) {
+    $pageNotFoundController = new \phpMyFAQ\Controller\PageNotFoundController();
+    $notFoundResponse = $pageNotFoundController->index($request);
+    $notFoundResponse->send();
+    exit;
+}
+
+//
 // Include requested PHP file
 //
 require $includePhp;
@@ -696,7 +707,7 @@ if (!isset($twigTemplate)) {
 //
 // Check for 404 HTTP status code
 //
-if ($response->getStatusCode() === Response::HTTP_NOT_FOUND || $action === '404') {
+if ($response->getStatusCode() === Response::HTTP_NOT_FOUND) {
     $response->setStatusCode(Response::HTTP_NOT_FOUND);
 }
 

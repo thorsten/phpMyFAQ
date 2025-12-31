@@ -18,7 +18,7 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Controller\ContactController;
-use phpMyFAQ\Controller\FrontController;
+use phpMyFAQ\Controller\PageNotFoundController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -30,6 +30,11 @@ $routesConfig = [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
         'methods' => 'GET|POST'
+    ],
+    'public.404' => [
+        'path' => '/404.html',
+        'controller' => [PageNotFoundController::class, 'index'],
+        'methods' => 'GET'
     ],
     // Fallback route should be last
     // 'public.index' => [

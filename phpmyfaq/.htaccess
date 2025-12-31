@@ -103,7 +103,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Exclude assets from being handled by Symfony Router
     RewriteRule ^(admin/assets)($|/) - [L]
     # Error pages
-    ErrorDocument 404 /index.php?action=404
+    ErrorDocument 404 /404.html
     # General pages
     RewriteRule ^add-faq.html$ index.php?action=add [L,QSA]
     RewriteRule ^add-question.html$ index.php?action=ask [L,QSA]
