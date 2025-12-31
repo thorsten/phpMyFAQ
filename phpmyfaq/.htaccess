@@ -129,19 +129,19 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # phpMyFAQ sitemap
     RewriteRule ^sitemap/([^/]+)/([a-z\-_]+)\.htm(l?)$ index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
     # phpMyFAQ Google sitemap
-    RewriteRule ^sitemap.xml$ sitemap.xml.php [L,QSA]
-    RewriteRule ^sitemap.gz$ sitemap.xml.php?gz=1 [L,QSA]
-    RewriteRule ^sitemap.xml.gz$ sitemap.xml.php?gz=1 [L,QSA]
+    RewriteRule ^sitemap.xml$ index.php [L,QSA]
+    RewriteRule ^sitemap.gz$ index.php [L,QSA]
+    RewriteRule ^sitemap.xml.gz$ index.php [L,QSA]
     # robots.txt
-    RewriteRule ^robots.txt$ robots.txt.php [L,QSA]
+    RewriteRule ^robots.txt$ index.php [L,QSA]
     # llms.txt
-    RewriteRule ^llms.txt$ llms.txt.php [L,QSA]
+    RewriteRule ^llms.txt$ index.php [L,QSA]
     # phpMyFAQ tags page with page count
     RewriteRule ^tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$ index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
     # phpMyFAQ tags page
     RewriteRule ^tags/([0-9]+)/([^/]+)\.htm(l?)$ index.php?action=search&tagging_id=$1 [L,QSA]
     # Authentication services
-    RewriteRule ^services/webauthn(.*) services/webauthn/index.php [L,QSA]
+    RewriteRule ^services/webauthn(.*) index.php [L,QSA]
     # User pages
     RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
     # Setup and update pages

@@ -55,7 +55,7 @@ $routesConfig = [
         'methods' => 'GET'
     ],
     'public.webauthn.index' => [
-        'path' => '/services/webauthn',
+        'path' => '/services/webauthn/',
         'controller' => [WebAuthnController::class, 'index'],
         'methods' => 'GET'
     ],
