@@ -292,8 +292,8 @@ class CategoryHelperTest extends TestCase
         $this->mockConfiguration->method('getDefaultUrl')->willReturn('http://localhost/');
 
         $availableTranslations = [
-            'German' => 'Deutsche Kategorie',
-            'French' => 'Catégorie française',
+            'de' => 'Deutsche Kategorie',
+            'fr' => 'Catégorie française',
         ];
 
         $result = $categoryHelper->buildAvailableCategoryTranslationsList($availableTranslations);
