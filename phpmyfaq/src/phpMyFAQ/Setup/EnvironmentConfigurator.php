@@ -73,7 +73,7 @@ readonly class EnvironmentConfigurator
      * This method ensures that URL routing works correctly and 404 errors are properly handled.
      *
      * - RewriteBase is set to the application's installation path (e.g., /faq/)
-     * - ErrorDocument 404 is configured to route errors to the application's error handler (e.g., /faq/index.php?action=404)
+     * - ErrorDocument 404 is configured to route errors to the application's error handler (e.g., /404.html)
      *
      * @return bool Returns true if the .htaccess file was successfully modified, false otherwise.
      * @throws Exception If the .htaccess file does not exist or contains syntax errors during parsing.
@@ -110,7 +110,7 @@ readonly class EnvironmentConfigurator
                 $errorDocument404->removeArgument($arg);
             }
             // Set new arguments: error code and path
-            $new404Path = rtrim($this->getServerPath(), '/') . '/index.php?action=404';
+            $new404Path = rtrim($this->getServerPath(), '/') . '/404.html';
             $errorDocument404->setArguments(['404', $new404Path]);
         }
 

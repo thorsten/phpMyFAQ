@@ -102,7 +102,7 @@ class EnvironmentConfiguratorTest extends TestCase
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /phpmyfaq-test/
-    ErrorDocument 404 /phpmyfaq-test/index.php?action=404
+    ErrorDocument 404 /404.html
 </IfModule>
 HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
@@ -115,7 +115,7 @@ HTACCESS;
 
         // Read the .htaccess file and verify ErrorDocument 404 is set correctly
         $htaccessContent = file_get_contents($htaccessPath);
-        $this->assertStringContainsString('ErrorDocument 404 /index.php?action=404', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 404 /404.html', $htaccessContent);
     }
 
     /**
@@ -130,7 +130,7 @@ HTACCESS;
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    ErrorDocument 404 /index.php?action=404
+    ErrorDocument 404 /404.html
 </IfModule>
 HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
@@ -143,6 +143,6 @@ HTACCESS;
 
         // Read the .htaccess file and verify ErrorDocument 404 is set correctly
         $htaccessContent = file_get_contents($htaccessPath);
-        $this->assertStringContainsString('ErrorDocument 404 /faq/index.php?action=404', $htaccessContent);
+        $this->assertStringContainsString('ErrorDocument 404 /faq/404.html', $htaccessContent);
     }
 }
