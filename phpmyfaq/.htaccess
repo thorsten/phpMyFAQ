@@ -144,19 +144,23 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^services/webauthn(.*) index.php [L,QSA]
     # User pages
     RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
-    # Setup and update pages
-    RewriteCond %{REQUEST_URI} ^(.*/)setup/
-    RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
-    RewriteRule ^update/(.*) update/index.php [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages
     RewriteRule ^admin/(.*) admin/index.php [L,QSA]
     # Private APIs
+    RewriteCond %{REQUEST_URI} !index\.php$
     RewriteRule ^api/(autocomplete|bookmark/delete|bookmark/create|user/data/update|user/password/update|user/request-removal|user/remove-twofactor|contact|voting|register|captcha|share|comment/create|faq/create|question/create|webauthn/prepare|webauthn/register|webauthn/prepare-login|webauthn/login|translations) api/index.php [L,QSA]
     # Setup APIs
+    RewriteCond %{REQUEST_URI} !index\.php$
     RewriteRule ^api/setup/(check|backup|update-database) api/index.php [L,QSA]
     # REST API v3.0 and v3.1
     # * http://[...]/api/v3.x/<ACTION>
+    RewriteCond %{REQUEST_URI} !index\.php$
     RewriteRule ^api/v3\.[01]/(.*) api/index.php [L,QSA]
+    # Setup and update pages
+    RewriteCond %{REQUEST_URI} ^(.*/)setup/
+    RewriteCond %{REQUEST_URI} !index\.php$
+    RewriteRule ^(.*/)?setup/(.*) $1setup/index.php [L,QSA]
+    RewriteRule ^update/(.*) update/index.php [L,QSA]
 </IfModule>

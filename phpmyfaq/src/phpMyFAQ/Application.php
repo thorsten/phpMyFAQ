@@ -165,6 +165,42 @@ class Application
                 )
                 : 'Bad Request';
             $response = new Response(content: $message, status: Response::HTTP_BAD_REQUEST);
+        } catch (Throwable $exception) {
+            // Log the error for debugging
+            error_log(sprintf(
+                'Unhandled exception in Application: %s at %s:%d',
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine(),
+            ));
+
+            $message = Environment::isDebugMode()
+                ? $this->formatExceptionMessage(
+                    template: 'Internal Server Error: :message at line :line at :file',
+                    exception: $exception,
+                )
+                : 'Internal Server Error';
+
+            // Return JSON response for API requests
+            if (str_contains(haystack: $urlMatcher->getContext()->getBaseUrl(), needle: '/api')) {
+                $content = Environment::isDebugMode()
+                    ? json_encode(value: [
+                        'error' => 'Internal Server Error',
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                    ])
+                    : json_encode(value: ['error' => 'Internal Server Error']);
+
+                $response = new Response(content: $content, status: Response::HTTP_INTERNAL_SERVER_ERROR, headers: [
+                    'Content-Type' => 'application/json',
+                ]);
+
+                $response->send();
+                return;
+            }
+
+            $response = new Response(content: $message, status: Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $response->send();

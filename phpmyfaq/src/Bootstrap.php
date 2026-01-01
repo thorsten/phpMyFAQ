@@ -91,10 +91,17 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 
 //
 // Check if config/database.php exist -> if not, redirect to the installer
+// Skip redirect if we're already in setup or API setup context
 //
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+$isSetupContext = str_contains($requestUri, '/setup/') || str_contains($requestUri, '/api/setup/');
+
 if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CONFIG_DIR . '/database.php')) {
-    $response = new RedirectResponse('./setup/');
-    $response->send();
+    if (!$isSetupContext) {
+        $response = new RedirectResponse('/setup/');
+        $response->send();
+        exit;
+    }
 } else {
     if (file_exists(PMF_CONFIG_DIR . '/database.php')) {
         $databaseFile = PMF_CONFIG_DIR . '/database.php';
