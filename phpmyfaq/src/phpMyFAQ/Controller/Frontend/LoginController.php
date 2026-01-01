@@ -71,4 +71,24 @@ final class LoginController extends AbstractFrontController
             'isWebAuthnEnabled' => $this->configuration->get('security.enableWebAuthnSupport'),
         ]);
     }
+
+    /**
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route(path: '/forgot-password', name: 'public.forgot-password')]
+    public function forgotPassword(Request $request): Response
+    {
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('forgot_password', 0);
+
+        return $this->render('password.twig', [
+            ...$this->getHeader($request),
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'username' => Translation::get(key: 'ad_auth_user'),
+            'password' => Translation::get(key: 'ad_auth_passwd'),
+        ]);
+    }
 }

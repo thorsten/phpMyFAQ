@@ -37,6 +37,11 @@ $routesConfig = [
         'controller' => [ContactController::class, 'index'],
         'methods' => 'GET|POST',
     ],
+    'public.forgot-password' => [
+        'path' => '/forgot-password',
+        'controller' => [LoginController::class, 'forgotPassword'],
+        'methods' => 'GET|POST',
+    ],
     'public.glossary' => [
         'path' => '/glossary.html',
         'controller' => [GlossaryController::class, 'index'],
