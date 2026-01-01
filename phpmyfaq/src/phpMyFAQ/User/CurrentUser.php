@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace phpMyFAQ\User;
 
 use phpMyFAQ\Auth\AuthDriverInterface;
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
@@ -119,7 +120,8 @@ class CurrentUser extends User
      *
      * @param string $login Login name
      * @param string $password Password
-     * @throws Exception
+     * @throws UserException
+     * @throws AuthException
      * @throws \Exception
      */
     public function login(string $login, #[SensitiveParameter] string $password): bool
@@ -139,7 +141,7 @@ class CurrentUser extends User
         // First check for brute force attack
         $this->getUserByLogin($login);
         if ($this->isFailedLastLoginAttempt()) {
-            throw new Exception(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
+            throw new UserException(parent::ERROR_USER_TOO_MANY_FAILED_LOGINS);
         }
 
         // Extract domain if LDAP is active and ldap_use_domain_prefix is true
@@ -212,11 +214,11 @@ class CurrentUser extends User
             $this->configuration->get(item: 'security.loginWithEmailAddress')
             && !Filter::filterVar($login, FILTER_VALIDATE_EMAIL)
         ) {
-            throw new Exception(parent::ERROR_USER_INCORRECT_LOGIN);
+            throw new UserException(parent::ERROR_USER_INCORRECT_LOGIN);
         }
 
         if (!$this->isFailedLastLoginAttempt()) {
-            throw new Exception(parent::ERROR_USER_INCORRECT_PASSWORD);
+            throw new UserException(parent::ERROR_USER_INCORRECT_PASSWORD);
         }
 
         return false;

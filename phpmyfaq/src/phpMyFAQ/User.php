@@ -265,7 +265,7 @@ class User
 
         $user = $this->configuration->getDb()->fetchArray($res);
 
-        // Don't ever log in via anonymous user
+        // Don't ever log in via an anonymous user
         if (-1 === $user['user_id']) {
             return false;
         }
@@ -300,7 +300,7 @@ class User
     }
 
     /**
-     * Checks if display name is already used. Returns true, if already in use.
+     * Checks if the display name is already used. Returns true, if already in use.
      */
     public function checkDisplayName(string $name): bool
     {
@@ -312,7 +312,7 @@ class User
     }
 
     /**
-     * Checks if email address is already used. Returns true, if already in use.
+     * Checks if the email address is already used. Returns true, if already in use.
      */
     public function checkMailAddress(string $name): bool
     {

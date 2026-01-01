@@ -44,7 +44,7 @@ use phpMyFAQ\Twig\TwigWrapper;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\User\TwoFactor;
 use phpMyFAQ\User\UserAuthentication;
-use phpMyFAQ\User\UserSession;
+use phpMyFAQ\User\UserException;use phpMyFAQ\User\UserSession;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -235,10 +235,11 @@ if ($faqusername !== '' && ($faqpassword !== '' || $faqConfig->get('security.sso
     try {
         $user = $userAuth->authenticate($faqusername, $faqpassword);
         $userId = $user->getUserId();
-    } catch (Exception $e) {
+    } catch (UserException $e) {
         $faqConfig->getLogger()->error('Failed login: ' . $e->getMessage());
-        $action = 'login';
-        $error = $e->getMessage();
+        $container->get('session')->getFlashBag()->add('error', $e->getMessage());
+        $redirect = new RedirectResponse($faqConfig->getDefaultUrl() . 'login');
+        $redirect->send();
     }
 } else {
     // Try to authenticate with cookie information

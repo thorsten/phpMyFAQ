@@ -8,7 +8,9 @@
   </p>
   {% endif %}
 
-  {{ loginMessage | raw }}
+  {% if errorMessage %}
+    <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+  {% endif %}
 
   <div id="phpmyfaq-login" class="mb-5">
     <div id="phpmyfaq-login-content">

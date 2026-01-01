@@ -37,25 +37,17 @@ final class LoginController extends AbstractFrontController
         $faqSession->setCurrentUser($this->currentUser);
         $faqSession->userTracking('login', 0);
 
-        // @todo Implement login message and action handling
-        // $loginMessage = '';
-        // if (!is_null($error)) {
-        //     $loginMessage = '<div class="alert alert-danger" role="alert">' . $error . '</div>';
-        // }
-        //
-        // $templateFile = './login.twig';
-        // if ($action == 'twofactor') {
-        //     $templateFile = './twofactor.twig';
-        // }
+        $session = $this->container->get('session');
+        $errorMessages = $session->getFlashBag()->get('error');
+        $errorMessage = !empty($errorMessages) ? $errorMessages[0] : null;
 
         return $this->render('login.twig', [
             ...$this->getHeader($request),
             'title' => sprintf('%s - %s', Translation::get(key: 'msgLoginUser'), $this->configuration->getTitle()),
             'loginHeader' => Translation::get(key: 'msgLoginUser'),
             'sendPassword' => Translation::get(key: 'lostPassword'),
-            'loginMessage' => '', //$loginMessage,
+            'errorMessage' => $errorMessage,
             'writeLoginPath' => $this->configuration->getDefaultUrl(),
-            'faqloginaction' => '', //$action,
             'login' => Translation::get(key: 'ad_auth_ok'),
             'username' => Translation::get(key: 'ad_auth_user'),
             'password' => Translation::get(key: 'ad_auth_passwd'),

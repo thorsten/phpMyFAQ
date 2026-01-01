@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Auth\AuthException;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Configuration;
@@ -65,9 +66,9 @@ class UserAuthentication
 
     /**
      * Authenticates a user with a given username and password against
-     * LDAP, SSO or local database.
+     * LDAP, SSO, or local database.
      *
-     * @throws UserException|Exception
+     * @throws UserException
      */
     public function authenticate(string $username, #[SensitiveParameter] string $password): CurrentUser
     {
@@ -78,20 +79,24 @@ class UserAuthentication
         $this->authenticateLdap();
         $this->authenticateSso();
 
-        if ($this->currentUser->login($username, $password)) {
-            if ($this->currentUser->getUserData('twofactor_enabled')) {
-                $this->setTwoFactorAuth(true);
-                $this->currentUser->setLoggedIn(false);
-            } elseif ($this->currentUser->getStatus() !== 'blocked') {
-                $this->currentUser->setLoggedIn(true);
+        try {
+            if ($this->currentUser->login($username, $password)) {
+                if ($this->currentUser->getUserData('twofactor_enabled')) {
+                    $this->setTwoFactorAuth(true);
+                    $this->currentUser->setLoggedIn(false);
+                } elseif ($this->currentUser->getStatus() !== 'blocked') {
+                    $this->currentUser->setLoggedIn(true);
+                } else {
+                    $this->currentUser->setLoggedIn(false);
+                    throw new UserException(
+                        (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
+                    );
+                }
             } else {
-                $this->currentUser->setLoggedIn(false);
-                throw new UserException(
-                    (Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed') . ' (' . $username . ')',
-                );
+                throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
             }
-        } else {
-            throw new UserException(Translation::get(key: 'ad_auth_fail') ?? 'Authentication failed');
+        } catch (AuthException $e) {
+            throw new UserException($e->getMessage());
         }
 
         return $this->currentUser;
