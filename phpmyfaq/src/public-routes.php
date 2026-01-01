@@ -18,7 +18,7 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
-use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\AttachmentController;use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;use phpMyFAQ\Controller\Frontend\LoginController;use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
@@ -32,6 +32,11 @@ use Symfony\Component\Routing\RouteCollection;
 $routes = new RouteCollection();
 
 $routesConfig = [
+    'public.attachment' => [
+        'path' => '/attachment/{attachmentId}',
+        'controller' => [AttachmentController::class, 'index'],
+        'methods' => 'GET',
+    ],
     'public.contact' => [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],

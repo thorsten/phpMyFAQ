@@ -150,11 +150,11 @@ abstract class AbstractAttachment
 
     public function buildUrl(): string
     {
-        return sprintf('index.php?action=attachment&id=%d', $this->id);
+        return sprintf('./attachment/%d', $this->id);
     }
 
     /**
-     * Set encryption key.
+     * Set the encryption key.
      *
      * @param string|null $key Encryption key
      * @param bool        $default if the key is default system-wide
