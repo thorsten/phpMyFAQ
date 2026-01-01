@@ -9,7 +9,7 @@
 # @package   phpMyFAQ
 # @author    Florian Anderiasch <florian@phpmyfaq.de>
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
-# @copyright 2012-2025 phpMyFAQ Team
+# @copyright 2012-2026 phpMyFAQ Team
 # @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      https://www.phpmyfaq.de
 # @since     2012-03-07
@@ -28,5 +28,5 @@ done
 
 # Loop through each extension and execute the perl command
 for ext in "${extensions[@]}"; do
-    find . \( ${prune_expr} -name "*.${ext}" \) -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}25#;' {} \;
+    find . \( ${prune_expr} -name "*.${ext}" \) -exec perl -pi -w -e 's#(copyright.*-20)([0-9]{2})#${1}26#;' {} \;
 done

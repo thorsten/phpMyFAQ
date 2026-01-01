@@ -13,7 +13,7 @@
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2025 phpMyFAQ Team
+ * @copyright 2003-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-12

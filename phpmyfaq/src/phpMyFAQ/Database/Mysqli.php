@@ -11,7 +11,7 @@
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2025 phpMyFAQ Team
+ * @copyright 2005-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-12-13

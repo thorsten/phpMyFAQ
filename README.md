@@ -200,4 +200,4 @@ We're happy to help you with your questions!
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-Copyright © 2001–2025 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001–2026 Thorsten Rinne and the phpMyFAQ Team

@@ -78,4 +78,4 @@ If you have any questions about this policy, contact us at security@phpmyfaq.de.
 
 Thank you for helping keep phpMyFAQ and its users safe.
 
-© 2001–2025 Thorsten Rinne and the phpMyFAQ Team
+Copyright © 2001–2026 Thorsten Rinne and the phpMyFAQ Team
