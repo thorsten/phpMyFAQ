@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
-class SitemapController extends AbstractFrontController
+final class SitemapController extends AbstractFrontController
 {
     /**
      * @throws Exception

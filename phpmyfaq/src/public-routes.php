@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\ContactController;
-use phpMyFAQ\Controller\Frontend\GlossaryController;use phpMyFAQ\Controller\Frontend\OverviewController;
+use phpMyFAQ\Controller\Frontend\GlossaryController;use phpMyFAQ\Controller\Frontend\LoginController;use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
@@ -41,6 +41,11 @@ $routesConfig = [
         'path' => '/glossary.html',
         'controller' => [GlossaryController::class, 'index'],
         'methods' => 'GET',
+    ],
+    'public.login' => [
+        'path' => '/login',
+        'controller' => [LoginController::class, 'index'],
+        'methods' => 'GET|POST',
     ],
     'public.overview' => [
         'path' => '/overview.html',

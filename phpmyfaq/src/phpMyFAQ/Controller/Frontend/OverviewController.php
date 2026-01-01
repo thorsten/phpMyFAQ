@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 use Twig\Extension\AttributeExtension;
 
-class OverviewController extends AbstractFrontController
+final class OverviewController extends AbstractFrontController
 {
     /**
      * @throws Exception
