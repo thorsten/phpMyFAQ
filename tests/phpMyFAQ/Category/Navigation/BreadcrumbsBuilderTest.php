@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Category\Navigation;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class BreadcrumbsBuilderTest extends TestCase
@@ -208,7 +208,7 @@ class BreadcrumbsBuilderTest extends TestCase
             $ids,
             'Home',
             'Welcome to FAQ',
-            'All categories'
+            'All categories',
         );
 
         $this->assertCount(2, $result); // startpage + all categories

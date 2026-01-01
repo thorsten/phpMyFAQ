@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class StartpageTest
@@ -23,7 +23,8 @@ class StartpageTest extends TestCase
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createMock(Configuration::class);
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getDb')
             ->willReturn($this->databaseMock);
 
@@ -78,19 +79,25 @@ class StartpageTest extends TestCase
         Database::setTablePrefix('test_');
 
         // Setup required properties
-        $this->startpage->setUser(1)->setGroups([1])->setLanguage('en');
+        $this->startpage
+            ->setUser(1)
+            ->setGroups([1])
+            ->setLanguage('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->with('en')
             ->willReturn('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('SELECT'))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->with('query_result')
             ->willReturn(false);
@@ -103,23 +110,29 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(42)->setGroups([1, 2])->setLanguage('de');
+        $this->startpage
+            ->setUser(42)
+            ->setGroups([1, 2])
+            ->setLanguage('de');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->with('de')
             ->willReturn('de');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains("fc.lang = 'de'"),
                 $this->stringContains('fu.user_id = 42'),
-                $this->stringContains('fg.group_id IN (1, 2)')
+                $this->stringContains('fg.group_id IN (1, 2)'),
             ))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->willReturn(false);
 
@@ -131,18 +144,22 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(1)->setGroups([1])->setLanguage('invalid123');
+        $this->startpage
+            ->setUser(1)
+            ->setGroups([1])
+            ->setLanguage('invalid123');
 
         // escape should not be called for invalid language
-        $this->databaseMock->expects($this->never())
-            ->method('escape');
+        $this->databaseMock->expects($this->never())->method('escape');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
-            ->with($this->logicalNot($this->stringContains("fc.lang =")))
+            ->with($this->logicalNot($this->stringContains('fc.lang =')))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->willReturn(false);
 
@@ -154,18 +171,24 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(10)->setGroups([5])->setLanguage('en');
+        $this->startpage
+            ->setUser(10)
+            ->setGroups([5])
+            ->setLanguage('en');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn('https://example.com/');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->with('en')
             ->willReturn('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
@@ -180,10 +203,11 @@ class StartpageTest extends TestCase
             'active' => 1,
             'image' => 'test-image.jpg',
             'show_home' => 1,
-            'position' => 1
+            'position' => 1,
         ];
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchArray')
             ->willReturnOnConsecutiveCalls($categoryData, false);
 
@@ -200,18 +224,24 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(1)->setGroups([1])->setLanguage('fr');
+        $this->startpage
+            ->setUser(1)
+            ->setGroups([1])
+            ->setLanguage('fr');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn('https://test.com/');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->with('fr')
             ->willReturn('fr');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
@@ -226,10 +256,11 @@ class StartpageTest extends TestCase
             'active' => 1,
             'image' => '', // Empty image
             'show_home' => 1,
-            'position' => 2
+            'position' => 2,
         ];
 
-        $this->databaseMock->expects($this->exactly(2))
+        $this->databaseMock
+            ->expects($this->exactly(2))
             ->method('fetchArray')
             ->willReturnOnConsecutiveCalls($categoryData, false);
 
@@ -244,17 +275,23 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(5)->setGroups([2, 3])->setLanguage('es');
+        $this->startpage
+            ->setUser(5)
+            ->setGroups([2, 3])
+            ->setLanguage('es');
 
-        $this->configurationMock->expects($this->any())
+        $this->configurationMock
+            ->expects($this->any())
             ->method('getDefaultUrl')
             ->willReturn('https://demo.com/');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->willReturn('es');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->willReturn('query_result');
 
@@ -269,7 +306,7 @@ class StartpageTest extends TestCase
             'active' => 1,
             'image' => 'cat1.jpg',
             'show_home' => 1,
-            'position' => 1
+            'position' => 1,
         ];
 
         $category2 = [
@@ -283,10 +320,11 @@ class StartpageTest extends TestCase
             'active' => 1,
             'image' => '',
             'show_home' => 1,
-            'position' => 2
+            'position' => 2,
         ];
 
-        $this->databaseMock->expects($this->exactly(3))
+        $this->databaseMock
+            ->expects($this->exactly(3))
             ->method('fetchArray')
             ->willReturnOnConsecutiveCalls($category1, $category2, false);
 
@@ -304,19 +342,25 @@ class StartpageTest extends TestCase
         Database::setTablePrefix('test_');
 
         // Test with language that has hyphen
-        $this->startpage->setUser(1)->setGroups([1])->setLanguage('zh-cn');
+        $this->startpage
+            ->setUser(1)
+            ->setGroups([1])
+            ->setLanguage('zh-cn');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->with('zh-cn')
             ->willReturn('zh-cn');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains("fc.lang = 'zh-cn'"))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->willReturn(false);
 
@@ -329,17 +373,21 @@ class StartpageTest extends TestCase
         Database::setTablePrefix('test_');
 
         // Single character language should not match regex
-        $this->startpage->setUser(1)->setGroups([1])->setLanguage('a');
+        $this->startpage
+            ->setUser(1)
+            ->setGroups([1])
+            ->setLanguage('a');
 
-        $this->databaseMock->expects($this->never())
-            ->method('escape');
+        $this->databaseMock->expects($this->never())->method('escape');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
-            ->with($this->logicalNot($this->stringContains("fc.lang =")))
+            ->with($this->logicalNot($this->stringContains('fc.lang =')))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->willReturn(false);
 
@@ -351,24 +399,30 @@ class StartpageTest extends TestCase
     {
         Database::setTablePrefix('test_');
 
-        $this->startpage->setUser(123)->setGroups([10, 20])->setLanguage('en');
+        $this->startpage
+            ->setUser(123)
+            ->setGroups([10, 20])
+            ->setLanguage('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('escape')
             ->willReturn('en');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('query')
             ->with($this->logicalAnd(
                 $this->stringContains('fc.active = 1'),
                 $this->stringContains('fc.show_home = 1'),
                 $this->stringContains('ORDER BY'),
                 $this->stringContains('fco.position'),
-                $this->stringContains('GROUP BY')
+                $this->stringContains('GROUP BY'),
             ))
             ->willReturn('query_result');
 
-        $this->databaseMock->expects($this->once())
+        $this->databaseMock
+            ->expects($this->once())
             ->method('fetchArray')
             ->willReturn(false);
 

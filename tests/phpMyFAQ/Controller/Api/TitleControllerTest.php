@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Controller\Api;
 
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TitleControllerTest extends TestCase

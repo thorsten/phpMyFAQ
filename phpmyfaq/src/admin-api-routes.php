@@ -53,560 +53,554 @@ $routesConfig = [
     'admin.api.content.attachments' => [
         'path' => '/content/attachments',
         'controller' => [AttachmentController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.content.attachments.refresh' => [
         'path' => '/content/attachments/refresh',
         'controller' => [AttachmentController::class, 'refresh'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.content.attachments.upload' => [
         'path' => '/content/attachments/upload',
         'controller' => [AttachmentController::class, 'upload'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Category API
     'admin.api.category.delete' => [
         'path' => '/category/delete',
         'controller' => [CategoryController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.category.permissions' => [
         'path' => '/category/permissions/{categories}',
         'controller' => [CategoryController::class, 'permissions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.category.update-order' => [
         'path' => '/category/update-order',
         'controller' => [CategoryController::class, 'updateOrder'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.category.translations' => [
         'path' => '/category/translations/{categoryId}',
         'controller' => [CategoryController::class, 'translations'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Comment API
     'admin.api.content.comments' => [
         'path' => '/content/comments',
         'controller' => [CommentController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     // Configuration API
     'admin.api.configuration.activate-maintenance-mode' => [
         'path' => '/configuration/activate-maintenance-mode',
         'controller' => [ConfigurationController::class, 'activateMaintenanceMode'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.configuration.faqs-sorting-key' => [
         'path' => '/configuration/faqs-sorting-key/{current}',
         'controller' => [ConfigurationTabController::class, 'faqsSortingKey'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.faqs-sorting-order' => [
         'path' => '/configuration/faqs-sorting-order/{current}',
         'controller' => [ConfigurationTabController::class, 'faqsSortingOrder'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.faqs-sorting-popular' => [
         'path' => '/configuration/faqs-sorting-popular/{current}',
         'controller' => [ConfigurationTabController::class, 'faqsSortingPopular'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.list' => [
         'path' => '/configuration/list/{mode}',
         'controller' => [ConfigurationTabController::class, 'list'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.permLevel' => [
         'path' => '/configuration/perm-level/{current}',
         'controller' => [ConfigurationTabController::class, 'permLevel'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.release-environment' => [
         'path' => '/configuration/release-environment/{current}',
         'controller' => [ConfigurationTabController::class, 'releaseEnvironment'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.save' => [
         'path' => '/configuration',
         'controller' => [ConfigurationTabController::class, 'save'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.configuration.search-relevance' => [
         'path' => '/configuration/search-relevance/{current}',
         'controller' => [ConfigurationTabController::class, 'searchRelevance'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.seo-metatags' => [
         'path' => '/configuration/seo-metatags/{current}',
         'controller' => [ConfigurationTabController::class, 'seoMetaTags'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.send-test-mail' => [
         'path' => '/configuration/send-test-mail',
         'controller' => [ConfigurationController::class, 'sendTestMail'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.configuration.translations' => [
         'path' => '/configuration/translations',
         'controller' => [ConfigurationTabController::class, 'translations'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.configuration.templates' => [
         'path' => '/configuration/templates',
         'controller' => [ConfigurationTabController::class, 'templates'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Glossary API
     'admin.api.glossary.create' => [
         'path' => '/glossary/create',
         'controller' => [GlossaryController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.glossary.delete' => [
         'path' => '/glossary/delete',
         'controller' => [GlossaryController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.glossary.update' => [
         'path' => '/glossary/update',
         'controller' => [GlossaryController::class, 'update'],
-        'methods' => 'PUT'
+        'methods' => 'PUT',
     ],
     'admin.api.glossary' => [
         'path' => '/glossary/{glossaryId}/{glossaryLanguage}',
         'controller' => [GlossaryController::class, 'fetch'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Image API
     'admin.api.content.images' => [
         'path' => '/content/images',
         'controller' => [ImageController::class, 'upload'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Instance API
     'admin.api.instance.add' => [
         'path' => '/instance/add',
         'controller' => [InstanceController::class, 'add'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.instance.delete' => [
         'path' => '/instance/delete',
         'controller' => [InstanceController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     // Markdown API
     'admin.api.content.markdown' => [
         'path' => '/content/markdown',
         'controller' => [MarkdownController::class, 'renderMarkdown'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
 
     'admin.api.media.browser' => [
         'path' => '/media-browser',
         'controller' => [MediaBrowserController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Dashboard API
     'admin.api.dashboard.topten' => [
         'path' => '/dashboard/topten',
         'controller' => [DashboardController::class, 'topTen'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.dashboard.verify' => [
         'path' => '/dashboard/verify',
         'controller' => [DashboardController::class, 'verify'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.dashboard.versions' => [
         'path' => '/dashboard/versions',
         'controller' => [DashboardController::class, 'versions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.dashboard.visits' => [
         'path' => '/dashboard/visits',
         'controller' => [DashboardController::class, 'visits'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Elasticsearch API
     'admin.api.elasticsearch.create' => [
         'path' => '/elasticsearch/create',
         'controller' => [ElasticsearchController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.elasticsearch.drop' => [
         'path' => '/elasticsearch/drop',
         'controller' => [ElasticsearchController::class, 'drop'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.elasticsearch.import' => [
         'path' => '/elasticsearch/import',
         'controller' => [ElasticsearchController::class, 'import'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.elasticsearch.statistics' => [
         'path' => '/elasticsearch/statistics',
         'controller' => [ElasticsearchController::class, 'statistics'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.elasticsearch.healthcheck' => [
         'path' => '/elasticsearch/healthcheck',
         'controller' => [ElasticsearchController::class, 'healthcheck'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // OpenSearch API
     'admin.api.opensearch.create' => [
         'path' => '/opensearch/create',
         'controller' => [OpenSearchController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.opensearch.drop' => [
         'path' => '/opensearch/drop',
         'controller' => [OpenSearchController::class, 'drop'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.opensearch.import' => [
         'path' => '/opensearch/import',
         'controller' => [OpenSearchController::class, 'import'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.opensearch.statistics' => [
         'path' => '/opensearch/statistics',
         'controller' => [OpenSearchController::class, 'statistics'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.opensearch.healthcheck' => [
         'path' => '/opensearch/healthcheck',
         'controller' => [OpenSearchController::class, 'healthcheck'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Export API
     'admin.api.export.file' => [
         'path' => '/export/file',
         'controller' => [ExportController::class, 'exportFile'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.export.report' => [
         'path' => '/export/report',
         'controller' => [ExportController::class, 'exportReport'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // FAQ API
     'admin.api.faq.activate' => [
         'path' => '/faq/activate',
         'controller' => [FaqController::class, 'activate'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.faq.create' => [
         'path' => '/faq/create',
         'controller' => [FaqController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.faq.delete' => [
         'path' => '/faq/delete',
         'controller' => [FaqController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.faq.update' => [
         'path' => '/faq/update',
         'controller' => [FaqController::class, 'update'],
-        'methods' => 'PUT'
+        'methods' => 'PUT',
     ],
     'admin.api.faq.permissions' => [
         'path' => '/faq/permissions/{faqId}',
         'controller' => [FaqController::class, 'listPermissions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.faq.search' => [
         'path' => '/faq/search',
         'controller' => [FaqController::class, 'search'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.faq.sticky' => [
         'path' => '/faq/sticky',
         'controller' => [FaqController::class, 'sticky'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.faqs.sticky.order' => [
         'path' => '/faqs/sticky/order',
         'controller' => [FaqController::class, 'saveOrderOfStickyFaqs'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.faqs' => [
         'path' => '/faqs/{categoryId}/{language}',
         'controller' => [FaqController::class, 'listByCategory'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.faq.import' => [
         'path' => '/faq/import',
         'controller' => [FaqController::class, 'import'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Group API
     'admin.api.group.groups' => [
         'path' => '/group/groups',
         'controller' => [GroupController::class, 'listGroups'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.group.members' => [
         'path' => '/group/members/{groupId}',
         'controller' => [GroupController::class, 'listMembers'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.group.permissions' => [
         'path' => '/group/permissions/{groupId}',
         'controller' => [GroupController::class, 'listPermissions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.group.users' => [
         'path' => '/group/users',
         'controller' => [GroupController::class, 'listUsers'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.group.data' => [
         'path' => '/group/data/{groupId}',
         'controller' => [GroupController::class, 'groupData'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Question API
     'admin.api.question.delete' => [
         'path' => '/question/delete',
         'controller' => [QuestionController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.question.toggle' => [
         'path' => '/question/visibility/toggle',
         'controller' => [QuestionController::class, 'toggle'],
-        'methods' => 'PUT'
+        'methods' => 'PUT',
     ],
     // Search API
     'admin.api.search.term' => [
         'path' => '/search/term',
         'controller' => [SearchController::class, 'deleteTerm'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     // Stop word API
     'admin.api.stopwords' => [
         'path' => '/stopwords',
         'controller' => [StopWordController::class, 'list'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.stopword.delete' => [
         'path' => '/stopword/delete',
         'controller' => [StopWordController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.stopword.save' => [
         'path' => '/stopword/save',
         'controller' => [StopWordController::class, 'save'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Tag API
     'admin.api.content.tag' => [
         'path' => '/content/tag',
         'controller' => [TagController::class, 'update'],
-        'methods' => 'PUT'
+        'methods' => 'PUT',
     ],
     'admin.api.content.tags' => [
         'path' => '/content/tags',
         'controller' => [TagController::class, 'search'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.content.tags.id' => [
         'path' => '/content/tags/{tagId}',
         'controller' => [TagController::class, 'delete'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     // Update API
     'admin.api.health-check' => [
         'path' => '/health-check',
         'controller' => [UpdateController::class, 'healthCheck'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.versions' => [
         'path' => '/versions',
         'controller' => [UpdateController::class, 'versions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.update-check' => [
         'path' => '/update-check',
         'controller' => [UpdateController::class, 'updateCheck'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.download-package' => [
         'path' => '/download-package/{versionNumber}',
         'controller' => [UpdateController::class, 'downloadPackage'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.extract-package' => [
         'path' => '/extract-package',
         'controller' => [UpdateController::class, 'extractPackage'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.create-temporary-backup' => [
         'path' => '/create-temporary-backup',
         'controller' => [UpdateController::class, 'createTemporaryBackup'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.install-package' => [
         'path' => '/install-package',
         'controller' => [UpdateController::class, 'installPackage'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.update-database' => [
         'path' => '/update-database',
         'controller' => [UpdateController::class, 'updateDatabase'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.cleanup' => [
         'path' => '/cleanup',
         'controller' => [UpdateController::class, 'cleanUp'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // User API
     'admin.api.user.users' => [
         'path' => '/user/users',
         'controller' => [UserController::class, 'list'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.user.users.csv' => [
         'path' => '/user/users/csv',
         'controller' => [UserController::class, 'csvExport'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.user.add' => [
         'path' => '/user/add',
         'controller' => [UserController::class, 'addUser'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.user.data' => [
         'path' => '/user/data/{userId}',
         'controller' => [UserController::class, 'userData'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.user.delete' => [
         'path' => '/user/delete',
         'controller' => [UserController::class, 'deleteUser'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.user.edit' => [
         'path' => '/user/edit',
         'controller' => [UserController::class, 'editUser'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.user.update-rights' => [
         'path' => '/user/update-rights',
         'controller' => [UserController::class, 'updateUserRights'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.user.permissions' => [
         'path' => '/user/permissions/{userId}',
         'controller' => [UserController::class, 'userPermissions'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.api.user.activate' => [
         'path' => '/user/activate',
         'controller' => [UserController::class, 'activate'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.user.overwrite-password' => [
         'path' => '/user/overwrite-password',
         'controller' => [UserController::class, 'overwritePassword'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Session API
     'admin.api.session.export' => [
         'path' => '/session/export',
         'controller' => [SessionController::class, 'export'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // Statistics API
     'admin.api.statistics.adminlog.delete' => [
         'path' => '/statistics/admin-log',
         'controller' => [StatisticsController::class, 'deleteAdminLog'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.statistics.ratings.clear' => [
         'path' => '/statistics/ratings/clear',
         'controller' => [StatisticsController::class, 'clearRatings'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.statistics.search-terms.truncate' => [
         'path' => '/statistics/search-terms',
         'controller' => [StatisticsController::class, 'truncateSearchTerms'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.statistics.sessions.truncate' => [
         'path' => '/statistics/sessions',
         'controller' => [StatisticsController::class, 'truncateSessions'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.statistics.visits.clear' => [
         'path' => '/statistics/visits/clear',
         'controller' => [StatisticsController::class, 'clearVisits'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     // Forms API
     'admin.api.forms.activate' => [
         'path' => '/forms/activate',
         'controller' => [FormController::class, 'activateInput'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.forms.required' => [
         'path' => '/forms/required',
         'controller' => [FormController::class, 'setInputAsRequired'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.forms.translation-edit' => [
         'path' => '/forms/translation-edit',
         'controller' => [FormController::class, 'editTranslation'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.forms.translation-delete' => [
         'path' => '/forms/translation-delete',
         'controller' => [FormController::class, 'deleteTranslation'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.forms.translation-add' => [
         'path' => '/forms/translation-add',
         'controller' => [FormController::class, 'addTranslation'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     // News API
     'admin.api.news.create' => [
         'path' => '/news/create',
         'controller' => [NewsController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.api.news.delete' => [
         'path' => '/news/delete',
         'controller' => [NewsController::class, 'delete'],
-        'methods' => 'DELETE'
+        'methods' => 'DELETE',
     ],
     'admin.api.news.update' => [
         'path' => '/news/update',
         'controller' => [NewsController::class, 'update'],
-        'methods' => 'PUT'
+        'methods' => 'PUT',
     ],
     'admin.api.news.activate' => [
         'path' => '/news/activate',
         'controller' => [NewsController::class, 'activate'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
 ];
 
 foreach ($routesConfig as $name => $config) {
-    $routes->add(
-        $name,
-        new Route(
-            $config['path'],
-            [
-                '_controller' => $config['controller'],
-                '_methods' => $config['methods']
-            ]
-        )
-    );
+    $routes->add($name, new Route($config['path'], [
+        '_controller' => $config['controller'],
+        '_methods' => $config['methods'],
+    ]));
 }
 
 return $routes;

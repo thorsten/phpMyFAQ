@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The Contact Controller
+ * Contact Controller
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -9,86 +9,61 @@
  *
  * @package   phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2024-2026 phpMyFAQ Team
+ * @copyright 2002-2025 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2024-03-09
+ * @since     2002-09-16
  */
 
 declare(strict_types=1);
 
 namespace phpMyFAQ\Controller\Frontend;
 
-use phpMyFAQ\Controller\AbstractController;
-use phpMyFAQ\Core\Exception;
-use phpMyFAQ\Filter;
+use Exception;
+use phpMyFAQ\Controller\Route;
 use phpMyFAQ\Translation;
-use phpMyFAQ\Utils;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Attribute\Route;
 
-final class ContactController extends AbstractController
+final class ContactController extends AbstractFrontController
 {
     /**
+     * Handles both GET and POST requests for the contact form
      * @throws Exception
-     * @throws \JsonException
-     * @throws \Exception
-     *
      */
-    #[Route(path: 'api/contact', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    #[Route(path: '/contact.html', name: 'public.contact')]
+    public function index(Request $request): Response
     {
-        $data = json_decode($request->getContent());
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('contact', 0);
 
-        $author = trim((string) Filter::filterVar($data->name, FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = Filter::filterVar($data->email, FILTER_VALIDATE_EMAIL);
-        $question = trim((string) Filter::filterVar($data->question, FILTER_SANITIZE_SPECIAL_CHARS));
+        $captcha = $this->container->get('phpmyfaq.captcha');
+        $captchaHelper = $this->container->get('phpmyfaq.captcha.helper.captcha_helper');
 
-        if (!$this->captchaCodeIsValid($request)) {
-            return $this->json(['error' => Translation::get(key: 'msgCaptcha')], Response::HTTP_BAD_REQUEST);
+        if ($this->configuration->get('layout.contactInformationHTML')) {
+            $contactText = html_entity_decode((string) $this->configuration->get('main.contactInformation'));
+        } else {
+            $contactText = nl2br((string) $this->configuration->get('main.contactInformation'));
         }
 
-        $stopWords = $this->container->get(id: 'phpmyfaq.stop-words');
-
-        if (
-            $author !== ''
-            && $author !== '0'
-            && $email !== ''
-            && $question !== ''
-            && $question !== '0'
-            && $stopWords->checkBannedWord($question)
-        ) {
-            $question = sprintf(
-                '%s: %s<br>%s: %s<br><br>%s',
-                Translation::get(key: 'msgNewContentName'),
-                $author,
-                Translation::get(key: 'msgNewContentMail'),
-                $email,
-                $question,
-            );
-
-            $mailer = $this->container->get(id: 'phpmyfaq.mail');
-            try {
-                $mailer->setReplyTo($email, $author);
-                $mailer->addTo($this->configuration->getAdminEmail());
-                $mailer->setReplyTo($this->configuration->getNoReplyEmail());
-                $mailer->subject = Utils::resolveMarkers(
-                    text: 'Feedback: %sitename%',
-                    configuration: $this->configuration,
-                );
-                $mailer->message = $question;
-                $mailer->send();
-                unset($mailer);
-
-                return $this->json(['success' => Translation::get(key: 'msgMailContact')], Response::HTTP_OK);
-            } catch (Exception|TransportExceptionInterface $e) {
-                return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        return $this->json(['error' => Translation::get(key: 'err_sendMail')], Response::HTTP_BAD_REQUEST);
+        return $this->render('contact.twig', [
+            ...$this->getHeader($request),
+            'title' => sprintf('%s - %s', Translation::get(key: 'msgContact'), $this->configuration->getTitle()),
+            'msgContactOwnText' => $contactText,
+            'privacyURL' => $this->configuration->get('main.privacyURL'),
+            'lang' => $this->configuration->getLanguage()->getLanguage(),
+            'defaultContentMail' => $this->currentUser->getUserId() > 0 ? $this->currentUser->getUserData('email') : '',
+            'defaultContentName' => $this->currentUser->getUserId() > 0
+                ? $this->currentUser->getUserData('display_name')
+                : '',
+            'version' => $this->configuration->getVersion(),
+            'captchaFieldset' => $captchaHelper->renderCaptcha(
+                $captcha,
+                'contact',
+                Translation::get(key: 'msgCaptcha'),
+                $this->currentUser->isLoggedIn(),
+            ),
+        ]);
     }
 }

@@ -2,14 +2,15 @@
 
 namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Controller\Frontend\Api\TranslationController;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TranslationControllerTest extends TestCase

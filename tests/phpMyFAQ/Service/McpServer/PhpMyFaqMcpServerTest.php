@@ -4,14 +4,14 @@ namespace phpMyFAQ\Service\McpServer;
 
 use Exception;
 use Monolog\Logger;
-use phpMyFAQ\Language;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
 use phpMyFAQ\Search;
-use Symfony\AI\McpSdk\Server\JsonRpcHandler;
-use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
+use Symfony\AI\McpSdk\Server\JsonRpcHandler;
 
 #[AllowMockObjectsWithoutExpectations]
 class PhpMyFaqMcpServerTest extends TestCase
@@ -34,18 +34,14 @@ class PhpMyFaqMcpServerTest extends TestCase
         $this->configMock->method('getDefaultUrl')->willReturn('https://example.com');
 
         // Mock the configuration values needed by Language::setLanguage()
-        $this->configMock->method('get')
+        $this->configMock
+            ->method('get')
             ->willReturnMap([
                 ['main.languageDetection', true],
-                ['main.language', 'en']
+                ['main.language',          'en'],
             ]);
 
-        $this->server = new PhpMyFaqMcpServer(
-            $this->configMock,
-            $languageMock,
-            $this->searchMock,
-            $this->faqMock
-        );
+        $this->server = new PhpMyFaqMcpServer($this->configMock, $languageMock, $this->searchMock, $this->faqMock);
     }
 
     public function testJsonRpcHandlerIsInitialized(): void
@@ -71,11 +67,7 @@ class PhpMyFaqMcpServerTest extends TestCase
      */
     public function testFaqSearchToolExecutorReturnsValidJsonFormat(): void
     {
-        $executor = new FaqSearchToolExecutor(
-            $this->configMock,
-            $this->searchMock,
-            $this->faqMock
-        );
+        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
 
         // Mock search results
         $searchResults = [
@@ -85,8 +77,8 @@ class PhpMyFaqMcpServerTest extends TestCase
                 'question' => 'Test question?',
                 'answer' => 'Test answer',
                 'category_id' => 1,
-                'score' => 0.95
-            ]
+                'score' => 0.95,
+            ],
         ];
 
         $this->searchMock->method('search')->willReturn($searchResults);
@@ -107,11 +99,7 @@ class PhpMyFaqMcpServerTest extends TestCase
 
     public function testFaqSearchToolExecutorHandlesEmptyQuery(): void
     {
-        $executor = new FaqSearchToolExecutor(
-            $this->configMock,
-            $this->searchMock,
-            $this->faqMock
-        );
+        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
 
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => '']);
         $result = $executor->call($toolCall);
@@ -122,11 +110,7 @@ class PhpMyFaqMcpServerTest extends TestCase
 
     public function testFaqSearchToolExecutorHandlesNoResults(): void
     {
-        $executor = new FaqSearchToolExecutor(
-            $this->configMock,
-            $this->searchMock,
-            $this->faqMock
-        );
+        $executor = new FaqSearchToolExecutor($this->configMock, $this->searchMock, $this->faqMock);
 
         $this->searchMock->method('search')->willReturn([]);
         $this->searchMock->expects($this->once())->method('setCategory');

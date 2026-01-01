@@ -2,9 +2,9 @@
 
 namespace phpMyFAQ\Plugin;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use ReflectionException;
 
 require 'MockPlugin.php';
@@ -28,7 +28,7 @@ class PluginManagerTest extends TestCase
 
     /**
      * @throws ReflectionException
-     */public function testLoadPlugins(): void
+     */ public function testLoadPlugins(): void
     {
         $mockPluginPath = __DIR__ . '/MockPlugin.php';
         file_put_contents($mockPluginPath, file_get_contents(__DIR__ . '/MockPlugin.php'));
@@ -39,7 +39,6 @@ class PluginManagerTest extends TestCase
 
         $this->assertEquals('phpMyFAQ\Plugin', $namespace);
     }
-
 
     /**
      * @throws ReflectionException
@@ -246,7 +245,7 @@ class PluginManagerTest extends TestCase
     public function testIncompatiblePluginIsTracked(): void
     {
         // Create a mock plugin class that is incompatible
-        $incompatiblePluginClass = new class () implements PluginInterface {
+        $incompatiblePluginClass = new class() implements PluginInterface {
             public function getName(): string
             {
                 return 'IncompatiblePlugin';

@@ -6,7 +6,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MockPlugin implements PluginInterface
 {
-
     public function getName(): string
     {
         return 'mockPlugin';
@@ -59,6 +58,6 @@ class MockPlugin implements PluginInterface
 
     public function onMockEvent($event): void
     {
-        $event->setOutput("MockPlugin: Event triggered.");
+        $event->setOutput('MockPlugin: Event triggered.');
     }
 }

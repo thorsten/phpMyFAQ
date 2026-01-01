@@ -6,8 +6,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\System;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class ChangelogTest extends TestCase
@@ -42,9 +42,9 @@ class ChangelogTest extends TestCase
         $this->assertTrue($result);
 
         $query = sprintf(
-            "SELECT COUNT(*) AS count FROM %sfaqchanges WHERE beitrag = %d",
+            'SELECT COUNT(*) AS count FROM %sfaqchanges WHERE beitrag = %d',
             Database::getTablePrefix(),
-            $id
+            $id,
         );
 
         $result = $this->configuration->getDb()->query($query);
@@ -72,9 +72,9 @@ class ChangelogTest extends TestCase
                     'user' => $userId,
                     'date' => $_SERVER['REQUEST_TIME'],
                     'changelog' => $text,
-                ]
+                ],
             ],
-            $result
+            $result,
         );
     }
 }

@@ -16,8 +16,8 @@
 
 namespace phpMyFAQ\Entity;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CommentTest
@@ -192,7 +192,7 @@ class CommentTest extends TestCase
             'test.email+tag@domain.co.uk',
             'user123@sub.domain.org',
             'test@localhost',
-            'long.email.address@very.long.domain.name.com'
+            'long.email.address@very.long.domain.name.com',
         ];
 
         foreach ($emails as $email) {
@@ -225,7 +225,7 @@ class CommentTest extends TestCase
             'user123',
             'test-user',
             'CamelCaseUser',
-            'user.with.dots'
+            'user.with.dots',
         ];
 
         foreach ($usernames as $username) {
@@ -273,7 +273,7 @@ class CommentTest extends TestCase
             '2025-08-09 15:30:00',
             '2025-12-31 23:59:59',
             '1970-01-01 00:00:00',
-            '2025-02-29 12:00:00' // Leap year date
+            '2025-02-29 12:00:00', // Leap year date
         ];
 
         foreach ($dates as $date) {
@@ -330,7 +330,7 @@ class CommentTest extends TestCase
             'email' => 'jane@example.com',
             'comment' => 'This FAQ was very helpful! Thank you for the detailed explanation.',
             'date' => '2025-08-09 16:45:30',
-            'helped' => true
+            'helped' => true,
         ];
 
         $this->comment

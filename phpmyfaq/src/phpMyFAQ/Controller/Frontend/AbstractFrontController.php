@@ -17,8 +17,9 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller;
+namespace phpMyFAQ\Controller\Frontend;
 
+use phpMyFAQ\Controller\AbstractController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\Environment;

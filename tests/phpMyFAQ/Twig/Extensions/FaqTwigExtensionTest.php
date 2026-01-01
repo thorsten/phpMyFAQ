@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for FaqTwigExtension
@@ -108,6 +108,7 @@ class FaqTwigExtensionTest extends TestCase
     {
         // Test parameter type enforcement
         $this->expectNotToPerformAssertions();
+
         // The method exists and accepts int parameters as verified in other tests
     }
 
@@ -170,7 +171,7 @@ class FaqTwigExtensionTest extends TestCase
             'use phpMyFAQ\Configuration;',
             'use phpMyFAQ\Faq;',
             'use Twig\Attribute\AsTwigFilter;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {

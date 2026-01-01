@@ -11,6 +11,7 @@ use phpMyFAQ\Controller\Administration\BackupController;
 use phpMyFAQ\Enums\BackupType;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\User\CurrentUser;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class BackupControllerTest extends TestCase

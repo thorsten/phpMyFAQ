@@ -10,8 +10,8 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Link\Strategy\StrategyInterface;
 use phpMyFAQ\Link\Strategy\StrategyRegistry;
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class LinkStrategyRegistryDiTest extends TestCase
@@ -65,4 +65,3 @@ class LinkStrategyRegistryDiTest extends TestCase
         $this->assertTrue($link->getStrategyRegistry()->has('custom'));
     }
 }
-

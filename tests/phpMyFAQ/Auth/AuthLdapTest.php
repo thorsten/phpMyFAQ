@@ -2,13 +2,13 @@
 
 namespace phpMyFAQ\Auth;
 
+use Monolog\Logger;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Enums\AuthenticationSourceType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Monolog\Logger;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class AuthLdapTest extends TestCase
@@ -27,18 +27,22 @@ class AuthLdapTest extends TestCase
 
     public function testConstructWithValidConfiguration(): void
     {
-        $this->configurationMock->method('getLdapServer')->willReturn([
-            0 => [
-                'ldap_server' => 'ldap.example.com',
-                'ldap_port' => 389,
-                'ldap_base' => 'dc=example,dc=com',
-                'ldap_user' => 'cn=admin,dc=example,dc=com',
-                'ldap_password' => 'password'
-            ]
-        ]);
-        $this->configurationMock->method('get')->willReturnMap([
-            ['ldap.ldap_use_multiple_servers', false]
-        ]);
+        $this->configurationMock
+            ->method('getLdapServer')
+            ->willReturn([
+                0 => [
+                    'ldap_server' => 'ldap.example.com',
+                    'ldap_port' => 389,
+                    'ldap_base' => 'dc=example,dc=com',
+                    'ldap_user' => 'cn=admin,dc=example,dc=com',
+                    'ldap_password' => 'password',
+                ],
+            ]);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['ldap.ldap_use_multiple_servers', false],
+            ]);
 
         // Test configuration validation without actually creating the AuthLdap instance
         // This avoids the LDAP connection attempt that causes warnings
@@ -63,13 +67,29 @@ class AuthLdapTest extends TestCase
 
     public function testConstructWithMultipleServersConfiguration(): void
     {
-        $this->configurationMock->method('get')->willReturnMap([
-            ['ldap.ldap_use_multiple_servers', true]
-        ]);
-        $this->configurationMock->method('getLdapServer')->willReturn([
-            0 => ['ldap_server' => 'ldap1.example.com', 'ldap_port' => 389, 'ldap_base' => 'dc=example,dc=com', 'ldap_user' => 'admin1', 'ldap_password' => 'pass1'],
-            1 => ['ldap_server' => 'ldap2.example.com', 'ldap_port' => 389, 'ldap_base' => 'dc=example,dc=com', 'ldap_user' => 'admin2', 'ldap_password' => 'pass2']
-        ]);
+        $this->configurationMock
+            ->method('get')
+            ->willReturnMap([
+                ['ldap.ldap_use_multiple_servers', true],
+            ]);
+        $this->configurationMock
+            ->method('getLdapServer')
+            ->willReturn([
+                0 => [
+                    'ldap_server' => 'ldap1.example.com',
+                    'ldap_port' => 389,
+                    'ldap_base' => 'dc=example,dc=com',
+                    'ldap_user' => 'admin1',
+                    'ldap_password' => 'pass1',
+                ],
+                1 => [
+                    'ldap_server' => 'ldap2.example.com',
+                    'ldap_port' => 389,
+                    'ldap_base' => 'dc=example,dc=com',
+                    'ldap_user' => 'admin2',
+                    'ldap_password' => 'pass2',
+                ],
+            ]);
 
         // Test multiple server configuration validation without creating AuthLdap instance
         // This avoids LDAP connection warnings
@@ -130,8 +150,8 @@ class AuthLdapTest extends TestCase
                 'ldap_port' => 389,
                 'ldap_base' => 'dc=example,dc=com',
                 'ldap_user' => 'cn=admin,dc=example,dc=com',
-                'ldap_password' => 'password'
-            ]
+                'ldap_password' => 'password',
+            ],
         ];
 
         $this->configurationMock->method('getLdapServer')->willReturn($serverConfig);
@@ -153,15 +173,15 @@ class AuthLdapTest extends TestCase
                 'ldap_port' => 389,
                 'ldap_base' => 'dc=example,dc=com',
                 'ldap_user' => 'admin1',
-                'ldap_password' => 'pass1'
+                'ldap_password' => 'pass1',
             ],
             1 => [
                 'ldap_server' => 'ldap2.example.com',
                 'ldap_port' => 389,
                 'ldap_base' => 'dc=example,dc=com',
                 'ldap_user' => 'admin2',
-                'ldap_password' => 'pass2'
-            ]
+                'ldap_password' => 'pass2',
+            ],
         ];
 
         $this->assertCount(2, $multiServerConfig);
@@ -183,8 +203,8 @@ class AuthLdapTest extends TestCase
             'auto_assign' => true,
             'group_mapping' => [
                 'AdminGroup' => 'Administrators',
-                'UserGroup' => 'Users'
-            ]
+                'UserGroup' => 'Users',
+            ],
         ];
 
         $this->assertIsArray($groupConfig);

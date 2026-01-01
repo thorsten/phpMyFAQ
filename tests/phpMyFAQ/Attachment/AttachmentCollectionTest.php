@@ -4,9 +4,9 @@ namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class AttachmentCollectionTest extends TestCase
@@ -52,7 +52,7 @@ class AttachmentCollectionTest extends TestCase
                 'filename' => 'file1.pdf',
                 'filesize' => 123456,
                 'mime_type' => 'application/pdf',
-                'thema' => 'General'
+                'thema' => 'General',
             ],
             [
                 'id' => 2,
@@ -61,15 +61,18 @@ class AttachmentCollectionTest extends TestCase
                 'filename' => 'file2.jpg',
                 'filesize' => 78910,
                 'mime_type' => 'image/jpeg',
-                'thema' => 'Media'
-            ]
+                'thema' => 'Media',
+            ],
         ];
 
         // Mock the query method to return a non-false result
         $this->mockDatabase->method('query')->willReturn('mock_result');
 
         // Mock fetchAll to return the expected result
-        $this->mockDatabase->method('fetchAll')->with('mock_result')->willReturn($expectedResult);
+        $this->mockDatabase
+            ->method('fetchAll')
+            ->with('mock_result')
+            ->willReturn($expectedResult);
 
         // Call the method being tested
         $result = $this->attachmentCollection->getBreadcrumbs();

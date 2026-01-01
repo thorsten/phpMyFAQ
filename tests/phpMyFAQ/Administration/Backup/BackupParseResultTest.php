@@ -21,7 +21,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: 'pmf_'
+            tablePrefix: 'pmf_',
         );
 
         $this->assertTrue($result->versionMatches);
@@ -39,7 +39,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf3.2',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: ''
+            tablePrefix: '',
         );
 
         $this->assertFalse($result->versionMatches);
@@ -56,7 +56,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: [],
-            tablePrefix: 'pmf_'
+            tablePrefix: 'pmf_',
         );
 
         $this->assertTrue($result->versionMatches);
@@ -72,7 +72,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: ''
+            tablePrefix: '',
         );
 
         $this->assertEquals('', $result->tablePrefix);
@@ -85,7 +85,7 @@ class BackupParseResultTest extends TestCase
             'DELETE FROM faqconfig',
             'DELETE FROM faqdata',
             'INSERT INTO faqconfig VALUES (1, "test")',
-            'INSERT INTO faqdata VALUES (2, "data")'
+            'INSERT INTO faqdata VALUES (2, "data")',
         ];
 
         $result = new BackupParseResult(
@@ -93,7 +93,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: 'pmf_'
+            tablePrefix: 'pmf_',
         );
 
         $this->assertCount(4, $result->queries);
@@ -108,7 +108,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: 'my_custom_prefix_'
+            tablePrefix: 'my_custom_prefix_',
         );
 
         $this->assertEquals('my_custom_prefix_', $result->tablePrefix);
@@ -122,7 +122,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: 'test_'
+            tablePrefix: 'test_',
         );
 
         // Verify all properties are accessible
@@ -140,7 +140,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.1',
             versionExpected: '-- pmf4.0',
             queries: [],
-            tablePrefix: ''
+            tablePrefix: '',
         );
 
         $this->assertFalse($result->versionMatches);
@@ -152,7 +152,7 @@ class BackupParseResultTest extends TestCase
         $queries = [
             'DELETE FROM faqconfig',
             'DELETE FROM faqdata',
-            'DELETE FROM faqcategories'
+            'DELETE FROM faqcategories',
         ];
 
         $result = new BackupParseResult(
@@ -160,7 +160,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: ''
+            tablePrefix: '',
         );
 
         foreach ($result->queries as $query) {
@@ -172,7 +172,7 @@ class BackupParseResultTest extends TestCase
     {
         $queries = [
             'INSERT INTO faqconfig (id, meta_key, meta_value) VALUES (1, "key", "value")',
-            'INSERT INTO faqdata (id, lang, thema) VALUES (1, "en", "Test")'
+            'INSERT INTO faqdata (id, lang, thema) VALUES (1, "en", "Test")',
         ];
 
         $result = new BackupParseResult(
@@ -180,7 +180,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: 'pmf_'
+            tablePrefix: 'pmf_',
         );
 
         foreach ($result->queries as $query) {
@@ -193,7 +193,7 @@ class BackupParseResultTest extends TestCase
         $queries = [
             'DELETE FROM faqconfig',
             'INSERT INTO faqconfig VALUES (1)',
-            'UPDATE faqconfig SET meta_value = "test" WHERE id = 1'
+            'UPDATE faqconfig SET meta_value = "test" WHERE id = 1',
         ];
 
         $result = new BackupParseResult(
@@ -201,7 +201,7 @@ class BackupParseResultTest extends TestCase
             versionFound: '-- pmf4.0',
             versionExpected: '-- pmf4.0',
             queries: $queries,
-            tablePrefix: ''
+            tablePrefix: '',
         );
 
         $this->assertCount(3, $result->queries);

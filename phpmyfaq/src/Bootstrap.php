@@ -25,8 +25,8 @@ use phpMyFAQ\Configuration\DatabaseConfiguration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
 use phpMyFAQ\Configuration\LdapConfiguration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
-use phpMyFAQ\Database;
 use phpMyFAQ\Core\Exception;
+use phpMyFAQ\Database;
 use phpMyFAQ\Environment;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,7 +40,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 $foundCurrPath = false;
 $includePaths = explode(PATH_SEPARATOR, ini_get('include_path'));
 $i = 0;
-while ((!$foundCurrPath) && ($i < count($includePaths))) {
+while (!$foundCurrPath && $i < count($includePaths)) {
     if ('.' == $includePaths[$i]) {
         $foundCurrPath = true;
     }
@@ -100,7 +100,7 @@ if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_LEGACY_CO
     if (!$isSetupContext) {
         $response = new RedirectResponse('/setup/');
         $response->send();
-        exit;
+        exit();
     }
 } else {
     if (file_exists(PMF_CONFIG_DIR . '/database.php')) {
@@ -152,7 +152,7 @@ try {
         $dbConfig->getUser(),
         $dbConfig->getPassword(),
         $dbConfig->getDatabase(),
-        $dbConfig->getPort()
+        $dbConfig->getPort(),
     );
 } catch (Exception $exception) {
     Database::errorPage($exception->getMessage());
@@ -210,7 +210,7 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR 
     // Optional: wait for Elasticsearch to be ready (HTTP health)
     try {
         $http = HttpClient::create(['verify_peer' => false]);
-        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        $deadline = time() + (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
         do {
             try {
                 $res = $http->request('GET', rtrim($esBaseUri, '/') . '/_cluster/health');
@@ -247,7 +247,7 @@ if ($faqConfig->get('search.enableOpenSearch') && file_exists(PMF_CONFIG_DIR . '
     // Optional: wait for OpenSearch to be ready (HTTP health)
     try {
         $http = HttpClient::create(['verify_peer' => false]);
-        $deadline = time() + (int)($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
+        $deadline = time() + (int) ($_ENV['SEARCH_WAIT_TIMEOUT'] ?? 15);
         do {
             try {
                 $res = $http->request('GET', rtrim($baseUri, '/') . '/_cluster/health');

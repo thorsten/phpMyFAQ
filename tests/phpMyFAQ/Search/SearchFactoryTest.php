@@ -8,8 +8,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class SearchFactoryTest
@@ -24,7 +24,7 @@ class SearchFactoryTest extends TestCase
      * Prepares the environment before running a test.
      *
      * @throws Exception
-*/
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,7 +39,7 @@ class SearchFactoryTest extends TestCase
             $dbConfig->getUser(),
             $dbConfig->getPassword(),
             $dbConfig->getDatabase(),
-            $dbConfig->getPort()
+            $dbConfig->getPort(),
         );
         $this->configuration = new Configuration($db);
     }

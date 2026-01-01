@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend;
+namespace phpMyFAQ\Controller\Frontend\Api;
 
 use Exception;
 use phpMyFAQ\Controller\AbstractController;

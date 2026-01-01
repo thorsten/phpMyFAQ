@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Configuration;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for LdapConfiguration

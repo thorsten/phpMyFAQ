@@ -4,8 +4,8 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Attachment\AbstractAttachment;
 use phpMyFAQ\Translation;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class AttachmentHelperTest extends TestCase

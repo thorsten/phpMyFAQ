@@ -9,9 +9,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\SeoType;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SeoRepositoryTest extends TestCase
@@ -27,9 +27,7 @@ class SeoRepositoryTest extends TestCase
         $this->configuration = $this->createStub(Configuration::class);
         $this->database = $this->createMock(DatabaseDriver::class);
 
-        $this->configuration
-            ->method('getDb')
-            ->willReturn($this->database);
+        $this->configuration->method('getDb')->willReturn($this->database);
 
         $this->repository = new SeoRepository($this->configuration);
     }
@@ -116,8 +114,7 @@ class SeoRepositoryTest extends TestCase
             ->setReferenceId(42)
             ->setReferenceLanguage('en');
 
-        $result = new class {
-        };
+        $result = new class {};
 
         $this->database
             ->expects($this->atLeastOnce())

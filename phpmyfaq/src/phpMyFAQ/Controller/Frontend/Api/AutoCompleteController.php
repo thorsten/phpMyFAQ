@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend;
+namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Controller\AbstractController;
@@ -27,7 +27,7 @@ use phpMyFAQ\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class AutoCompleteController extends AbstractController
 {

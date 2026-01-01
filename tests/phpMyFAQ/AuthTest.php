@@ -93,7 +93,7 @@ class AuthTest extends TestCase
 
     /**
      * @throws Exception
-     */public function testEncrypt(): void
+     */ public function testEncrypt(): void
     {
         $this->auth->getEncryptionContainer('bcrypt');
         $hash = $this->auth->encrypt('foobar');

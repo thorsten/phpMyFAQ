@@ -30,14 +30,16 @@ class LdapTest extends TestCase
         $this->configuration = $this->createStub(Configuration::class);
 
         // Mock der LDAP-Konfiguration
-        $this->configuration->method('getLdapConfig')->willReturn([
-            'ldap_mapping' => [
-                'username' => 'uid',
-                'mail' => 'mail',
-                'name' => 'cn',
-                'memberOf' => 'CN=TestGroup,DC=example,DC=com'
-            ]
-        ]);
+        $this->configuration
+            ->method('getLdapConfig')
+            ->willReturn([
+                'ldap_mapping' => [
+                    'username' => 'uid',
+                    'mail' => 'mail',
+                    'name' => 'cn',
+                    'memberOf' => 'CN=TestGroup,DC=example,DC=com',
+                ],
+            ]);
 
         $this->configuration->method('getLdapOptions')->willReturn([]);
 
@@ -66,12 +68,12 @@ class LdapTest extends TestCase
     public function testQuoteMethod(): void
     {
         $testCases = [
-            ['simple', 'simple'],
-            ['test*', 'test\\2a'],
-            ['test()', 'test\\28\\29'],
-            ['test space', 'test\\20space'],
+            ['simple',      'simple'],
+            ['test*',       'test\\2a'],
+            ['test()',      'test\\28\\29'],
+            ['test space',  'test\\20space'],
             ['test\\slash', 'test\\5cslash'],
-            ['complex*()', 'complex\\2a\\28\\29']
+            ['complex*()',  'complex\\2a\\28\\29'],
         ];
 
         foreach ($testCases as [$input, $expected]) {
@@ -139,7 +141,8 @@ class LdapTest extends TestCase
     public function testConnectionStateValidation(): void
     {
         // Create a partial mock that allows us to test the validation logic
-        $ldapMock = $this->getMockBuilder(Ldap::class)
+        $ldapMock = $this
+            ->getMockBuilder(Ldap::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods(['error'])
             ->getMock();
@@ -208,10 +211,12 @@ class LdapTest extends TestCase
 
         // Test connection failure scenarios safely without triggering warnings
         $this->configuration->method('getLdapOptions')->willReturn([]);
-        $this->configuration->method('get')->willReturnMap([
-            ['ldap.ldap_use_dynamic_login', false],
-            ['ldap.ldap_use_anonymous_login', false]
-        ]);
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['ldap.ldap_use_dynamic_login',   false],
+                ['ldap.ldap_use_anonymous_login', false],
+            ]);
 
         // Test with obviously invalid parameters to ensure graceful failure
         // Use empty strings which are validated before ldap_connect
@@ -228,7 +233,8 @@ class LdapTest extends TestCase
         // These tests expect the methods to check connection state before calling LDAP functions
 
         // Create a spy/partial mock that can track method calls
-        $ldapSpy = $this->getMockBuilder(Ldap::class)
+        $ldapSpy = $this
+            ->getMockBuilder(Ldap::class)
             ->setConstructorArgs([$this->configuration])
             ->onlyMethods([]) // Don't mock any methods, use real implementation
             ->getMock();
@@ -248,10 +254,10 @@ class LdapTest extends TestCase
     public function testQuoteMethodEdgeCases(): void
     {
         $testCases = [
-            ['', ''],
-            ['normal_text', 'normal_text'],
-            ['\\()* ', '\\5c\\28\\29\\2a\\20'],
-            ['a\\b(c)d*e f', 'a\\5cb\\28c\\29d\\2ae\\20f']
+            ['',             ''],
+            ['normal_text',  'normal_text'],
+            ['\\()* ',       '\\5c\\28\\29\\2a\\20'],
+            ['a\\b(c)d*e f', 'a\\5cb\\28c\\29d\\2ae\\20f'],
         ];
 
         foreach ($testCases as [$input, $expected]) {
@@ -306,13 +312,15 @@ class LdapTest extends TestCase
     public function testConfigurationInjection(): void
     {
         $mockConfig = $this->createStub(Configuration::class);
-        $mockConfig->method('getLdapConfig')->willReturn([
-            'ldap_mapping' => [
-                'username' => 'sAMAccountName',
-                'mail' => 'mail',
-                'name' => 'displayName'
-            ]
-        ]);
+        $mockConfig
+            ->method('getLdapConfig')
+            ->willReturn([
+                'ldap_mapping' => [
+                    'username' => 'sAMAccountName',
+                    'mail' => 'mail',
+                    'name' => 'displayName',
+                ],
+            ]);
 
         $ldap = new Ldap($mockConfig);
         $this->assertInstanceOf(Ldap::class, $ldap);
@@ -339,11 +347,7 @@ class LdapTest extends TestCase
 
         // Test memberOf filter construction
         $memberOfDN = 'CN=Admins,OU=Groups,DC=example,DC=com';
-        $complexFilter = sprintf(
-            '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))',
-            $basicFilter,
-            $memberOfDN
-        );
+        $complexFilter = sprintf('(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))', $basicFilter, $memberOfDN);
 
         $this->assertStringContainsString('(&', $complexFilter);
         $this->assertStringContainsString('memberOf:', $complexFilter);

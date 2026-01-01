@@ -16,11 +16,11 @@
 
 namespace phpMyFAQ\Tests\Captcha\Helper;
 
-use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Captcha\Helper\GoogleRecaptchaAbstractHelper;
 use phpMyFAQ\Captcha\CaptchaInterface;
+use phpMyFAQ\Captcha\Helper\GoogleRecaptchaAbstractHelper;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class GoogleRecaptchaAbstractHelperTest
@@ -57,16 +57,11 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', 'test-site-key-123']
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', 'test-site-key-123'],
             ]);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Google reCAPTCHA',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', false);
 
         // Assertions for HTML structure
         $this->assertStringContainsString('Google reCAPTCHA', $result);
@@ -91,12 +86,7 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
             ->with('spam.enableCaptchaCode')
             ->willReturn(false);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Google reCAPTCHA',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', false);
 
         $this->assertEmpty($result);
     }
@@ -111,12 +101,7 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
             ->with('spam.enableCaptchaCode')
             ->willReturn(true);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'refresh-captcha',
-            'Google reCAPTCHA',
-            true // User is authenticated
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'refresh-captcha', 'Google reCAPTCHA', true); // User is authenticated
 
         $this->assertEmpty($result);
     }
@@ -129,8 +114,8 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', '']
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', ''],
             ]);
 
         $result = $this->helper->renderCaptcha($this->captcha);
@@ -149,16 +134,11 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', $specialSiteKey]
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', $specialSiteKey],
             ]);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'test-action',
-            'Test Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'test-action', 'Test Label', false);
 
         $this->assertStringContainsString($specialSiteKey, $result);
         $this->assertStringContainsString('data-sitekey="' . $specialSiteKey . '"', $result);
@@ -172,16 +152,11 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', 'valid-site-key']
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', 'valid-site-key'],
             ]);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'test-action',
-            'Test Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'test-action', 'Test Label', false);
 
         // Test Bootstrap grid classes
         $this->assertStringContainsString('row mb-2', $result);
@@ -207,16 +182,11 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', $longSiteKey]
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', $longSiteKey],
             ]);
 
-        $result = $this->helper->renderCaptcha(
-            $this->captcha,
-            'test-action',
-            'Test Label',
-            false
-        );
+        $result = $this->helper->renderCaptcha($this->captcha, 'test-action', 'Test Label', false);
 
         $this->assertStringContainsString($longSiteKey, $result);
         $this->assertStringContainsString('g-recaptcha', $result);
@@ -230,8 +200,8 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', 'test-key']
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', 'test-key'],
             ]);
 
         $multilingualLabels = [
@@ -240,16 +210,11 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
             'Étiquette française',
             'Etiqueta española',
             '中文标签',
-            'Русская метка'
+            'Русская метка',
         ];
 
         foreach ($multilingualLabels as $label) {
-            $result = $this->helper->renderCaptcha(
-                $this->captcha,
-                'test-action',
-                $label,
-                false
-            );
+            $result = $this->helper->renderCaptcha($this->captcha, 'test-action', $label, false);
 
             $this->assertStringContainsString($label, $result);
             $this->assertStringContainsString('col-form-label', $result);
@@ -264,8 +229,8 @@ class GoogleRecaptchaAbstractHelperTest extends TestCase
         $this->configuration
             ->method('get')
             ->willReturnMap([
-                ['spam.enableCaptchaCode', true],
-                ['security.googleReCaptchaV2SiteKey', 'test-key']
+                ['spam.enableCaptchaCode',            true],
+                ['security.googleReCaptchaV2SiteKey', 'test-key'],
             ]);
 
         // Test that action parameter doesn't affect output for Google reCAPTCHA

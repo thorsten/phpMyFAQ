@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Twig\Extensions;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Twig\Extension\AbstractExtension;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test class for UserNameTwigExtension
@@ -201,7 +201,7 @@ class UserNameTwigExtensionTest extends TestCase
             'use phpMyFAQ\Core\Exception;',
             'use phpMyFAQ\User;',
             'use Twig\Attribute\AsTwigFilter;',
-            'use Twig\Extension\AbstractExtension;'
+            'use Twig\Extension\AbstractExtension;',
         ];
 
         foreach ($expectedImports as $import) {
@@ -310,7 +310,7 @@ class UserNameTwigExtensionTest extends TestCase
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
                 $arguments = array_values($attribute->getArguments());
-                $this->assertContains($arguments[0], ['userName','realName']);
+                $this->assertContains($arguments[0], ['userName', 'realName']);
             }
         }
 
@@ -320,7 +320,7 @@ class UserNameTwigExtensionTest extends TestCase
         foreach ($attributes as $attribute) {
             if ($attribute->getName() === 'Twig\\Attribute\\AsTwigFilter') {
                 $arguments = array_values($attribute->getArguments());
-                $this->assertContains($arguments[0], ['userName','realName']);
+                $this->assertContains($arguments[0], ['userName', 'realName']);
             }
         }
     }

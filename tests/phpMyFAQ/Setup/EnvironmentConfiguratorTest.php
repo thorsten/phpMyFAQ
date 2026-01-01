@@ -4,8 +4,8 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class EnvironmentConfiguratorTest extends TestCase
@@ -68,7 +68,7 @@ class EnvironmentConfiguratorTest extends TestCase
     public function testAdjustRewriteBaseHtaccessThrowsExceptionForMissingFile(): void
     {
         $configuration = $this->createStub(Configuration::class);
-        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2). '/path/to');
+        $configuration->method('getRootPath')->willReturn(dirname(__DIR__, 2) . '/path/to');
         $configuration->method('getDefaultUrl')->willReturn('https://localhost/path/to');
         $configurator = new EnvironmentConfigurator($configuration);
         $this->expectException(Exception::class);
@@ -99,12 +99,12 @@ class EnvironmentConfiguratorTest extends TestCase
         // Set up a proper .htaccess file with ErrorDocument directive
         $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
         $htaccessContent = <<<'HTACCESS'
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /phpmyfaq-test/
-    ErrorDocument 404 /404.html
-</IfModule>
-HTACCESS;
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteBase /phpmyfaq-test/
+            ErrorDocument 404 /404.html
+        </IfModule>
+        HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
 
         $configuration = $this->createStub(Configuration::class);
@@ -127,12 +127,12 @@ HTACCESS;
         // Set up a proper .htaccess file with ErrorDocument directive
         $htaccessPath = dirname(__DIR__, 2) . '/.htaccess';
         $htaccessContent = <<<'HTACCESS'
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    ErrorDocument 404 /404.html
-</IfModule>
-HTACCESS;
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteBase /
+            ErrorDocument 404 /404.html
+        </IfModule>
+        HTACCESS;
         file_put_contents($htaccessPath, $htaccessContent);
 
         $configuration = $this->createStub(Configuration::class);

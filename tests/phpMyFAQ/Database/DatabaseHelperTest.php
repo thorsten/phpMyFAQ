@@ -4,8 +4,8 @@ namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\System;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class DatabaseHelperTest
@@ -25,7 +25,7 @@ class DatabaseHelperTest extends TestCase
         $dbHandle = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $dbHandle->query(
-            'CREATE TABLE faqtest (name VARCHAR(255) NOT NULL, testvalue VARCHAR(255) DEFAULT NULL, PRIMARY KEY (name))'
+            'CREATE TABLE faqtest (name VARCHAR(255) NOT NULL, testvalue VARCHAR(255) DEFAULT NULL, PRIMARY KEY (name))',
         );
         $dbHandle->query("INSERT INTO faqtest (name,testvalue) VALUES ('foo','bar')");
         $dbHandle->query("INSERT INTO faqtest (name,testvalue) VALUES ('bar','baz')");
@@ -53,7 +53,7 @@ class DatabaseHelperTest extends TestCase
         $expected = [
             "\r\n-- Table: faqtest",
             "INSERT INTO faqtest (name,testvalue) VALUES ('foo','bar');",
-            "INSERT INTO faqtest (name,testvalue) VALUES ('bar','baz');"
+            "INSERT INTO faqtest (name,testvalue) VALUES ('bar','baz');",
         ];
 
         $this->assertEquals($expected, $queries);

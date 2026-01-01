@@ -17,12 +17,13 @@
 
 declare(strict_types=1);
 
-use phpMyFAQ\Controller\ContactController;
+use phpMyFAQ\Controller\Frontend\Api\SetupController;
+use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\PageNotFoundController;
+use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
-use phpMyFAQ\Controller\PageNotFoundController;
 use phpMyFAQ\Controller\RobotsController;
 use phpMyFAQ\Controller\SitemapController;
-use phpMyFAQ\Controller\WebAuthnController;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -32,46 +33,45 @@ $routesConfig = [
     'public.contact' => [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
-        'methods' => 'GET|POST'
+        'methods' => 'GET|POST',
     ],
     'public.404' => [
         'path' => '/404.html',
         'controller' => [PageNotFoundController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'public.llms.txt' => [
         'path' => '/llms.txt',
         'controller' => [LlmsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'public.robots.txt' => [
         'path' => '/robots.txt',
         'controller' => [RobotsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'public.sitemap.xml' => [
         'path' => '/sitemap.xml',
         'controller' => [SitemapController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'public.webauthn.index' => [
         'path' => '/services/webauthn/',
         'controller' => [WebAuthnController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
+    ],
+    'public.update.index' => [
+        'path' => '/update/',
+        'controller' => [SetupController::class, 'update'],
+        'methods' => 'POST',
     ],
 ];
 
 foreach ($routesConfig as $name => $config) {
-    $routes->add(
-        $name,
-        new Route(
-            $config['path'],
-            [
-                '_controller' => $config['controller'],
-                '_methods' => $config['methods']
-            ]
-        )
-    );
+    $routes->add($name, new Route($config['path'], [
+        '_controller' => $config['controller'],
+        '_methods' => $config['methods'],
+    ]));
 }
 
 return $routes;

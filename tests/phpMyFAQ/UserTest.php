@@ -5,10 +5,10 @@ namespace phpMyFAQ;
 use Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\User\UserData;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class UserTest extends TestCase
@@ -25,9 +25,11 @@ class UserTest extends TestCase
         $this->userData = $this->createMock(UserData::class);
 
         $this->configuration->method('getDb')->willReturn($this->database);
-        $this->configuration->method('get')->willReturnMap([
-            ['security.permLevel', 'basic'],
-        ]);
+        $this->configuration
+            ->method('get')
+            ->willReturnMap([
+                ['security.permLevel', 'basic'],
+            ]);
 
         $this->user = new User($this->configuration);
         $this->user->userdata = $this->userData;
@@ -97,13 +99,15 @@ class UserTest extends TestCase
         $this->database->method('escape')->willReturn('existinguser');
         $this->database->method('query')->willReturn(true);
         $this->database->method('numRows')->willReturn(1);
-        $this->database->method('fetchArray')->willReturn([
-            'user_id' => 1,
-            'login' => 'existinguser',
-            'account_status' => 'active',
-            'is_superadmin' => false,
-            'auth_source' => 'local'
-        ]);
+        $this->database
+            ->method('fetchArray')
+            ->willReturn([
+                'user_id' => 1,
+                'login' => 'existinguser',
+                'account_status' => 'active',
+                'is_superadmin' => false,
+                'auth_source' => 'local',
+            ]);
 
         $this->user->createUser('existinguser');
     }

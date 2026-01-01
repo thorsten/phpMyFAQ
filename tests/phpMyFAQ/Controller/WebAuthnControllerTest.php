@@ -17,14 +17,15 @@
 
 namespace phpMyFAQ\Controller;
 
+use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Translation;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class WebAuthnControllerTest

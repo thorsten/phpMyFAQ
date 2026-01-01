@@ -18,15 +18,15 @@ class StringBasicTest extends TestCase
     public function testStrlen(): void
     {
         // Test case 1: Check the length of a regular string
-        $result = $this->stringBasic->strlen("Hello, World!");
+        $result = $this->stringBasic->strlen('Hello, World!');
         $this->assertEquals(13, $result);
 
         // Test case 2: Check the length of an empty string
-        $result = $this->stringBasic->strlen("");
+        $result = $this->stringBasic->strlen('');
         $this->assertEquals(0, $result);
 
         // Test case 3: Check the length of a string with German umlauts
-        $result = $this->stringBasic->strlen("äöü");
+        $result = $this->stringBasic->strlen('äöü');
         $this->assertEquals(6, $result); // 3 characters, 6 bytes
     }
 
@@ -79,7 +79,7 @@ class StringBasicTest extends TestCase
             function ($matches) {
                 return strtoupper($matches[0]);
             },
-            'hello'
+            'hello',
         );
         $this->assertEquals('HELLO', $result);
     }

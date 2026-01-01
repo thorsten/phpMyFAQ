@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Language;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class PluralsTest extends TestCase
@@ -326,9 +326,21 @@ class PluralsTest extends TestCase
         $germanicLanguages = ['da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'it', 'nb', 'nl', 'hu', 'pt', 'sv'];
 
         foreach ($germanicLanguages as $lang) {
-            $this->assertEquals(1, $this->pluralMethod->invoke($this->plurals, $lang, 0), "Language $lang failed for 0");
-            $this->assertEquals(0, $this->pluralMethod->invoke($this->plurals, $lang, 1), "Language $lang failed for 1");
-            $this->assertEquals(1, $this->pluralMethod->invoke($this->plurals, $lang, 2), "Language $lang failed for 2");
+            $this->assertEquals(
+                1,
+                $this->pluralMethod->invoke($this->plurals, $lang, 0),
+                "Language $lang failed for 0",
+            );
+            $this->assertEquals(
+                0,
+                $this->pluralMethod->invoke($this->plurals, $lang, 1),
+                "Language $lang failed for 1",
+            );
+            $this->assertEquals(
+                1,
+                $this->pluralMethod->invoke($this->plurals, $lang, 2),
+                "Language $lang failed for 2",
+            );
         }
     }
 

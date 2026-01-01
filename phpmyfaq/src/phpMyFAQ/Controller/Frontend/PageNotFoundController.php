@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller;
+namespace phpMyFAQ\Controller\Frontend;
 
 use Exception;
 use phpMyFAQ\Enums\SessionActionType;

@@ -2,12 +2,12 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Category\Relation;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\Comment;
 use phpMyFAQ\Entity\CommentType;
-use phpMyFAQ\Category\Relation;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 

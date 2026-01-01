@@ -1,14 +1,13 @@
 <?php
 
-
 namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Date;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class LatestUsersTest extends TestCase
@@ -23,9 +22,7 @@ class LatestUsersTest extends TestCase
 
         $this->databaseMock = $this->createMock(DatabaseDriver::class);
         $this->configurationMock = $this->createStub(Configuration::class);
-        $this->configurationMock
-            ->method('getDb')
-            ->willReturn($this->databaseMock);
+        $this->configurationMock->method('getDb')->willReturn($this->databaseMock);
 
         $this->latestUsers = new LatestUsers($this->configurationMock);
     }
@@ -227,4 +224,3 @@ class LatestUsersTest extends TestCase
         $this->assertSame('', $result[0]['member_since_iso']);
     }
 }
-

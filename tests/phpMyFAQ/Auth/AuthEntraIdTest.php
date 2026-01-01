@@ -2,19 +2,21 @@
 
 namespace phpMyFAQ\Auth;
 
-use phpMyFAQ\Auth\EntraId\OAuth;
+use Monolog\Logger;
 use phpMyFAQ\Auth\EntraId\EntraIdSession;
+use phpMyFAQ\Auth\EntraId\OAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Monolog\Logger;
 use ReflectionClass;
 use TypeError;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 const AAD_OAUTH_TENANTID = 'test-tenant-id';
+
 const AAD_OAUTH_CLIENTID = 'test-client-id';
+
 const AAD_OAUTH_SCOPE = 'test-scope';
 
 #[AllowMockObjectsWithoutExpectations]
@@ -108,7 +110,8 @@ class AuthEntraIdTest extends TestCase
     {
         $login = 'test@example.com';
 
-        $this->oAuthMock->expects($this->once())
+        $this->oAuthMock
+            ->expects($this->once())
             ->method('getMail')
             ->willReturn('test@example.com');
 
@@ -120,7 +123,8 @@ class AuthEntraIdTest extends TestCase
     {
         $login = 'test@example.com';
 
-        $this->oAuthMock->expects($this->once())
+        $this->oAuthMock
+            ->expects($this->once())
             ->method('getMail')
             ->willReturn('different@example.com');
 
@@ -132,25 +136,22 @@ class AuthEntraIdTest extends TestCase
     {
         $defaultUrl = 'https://example.com/';
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn($defaultUrl);
 
-        $this->sessionMock->expects($this->once())
-            ->method('setCurrentSessionKey');
+        $this->sessionMock->expects($this->once())->method('setCurrentSessionKey');
 
-        $this->sessionMock->expects($this->once())
+        $this->sessionMock
+            ->expects($this->once())
             ->method('set')
             ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->isString());
 
-        $this->sessionMock->expects($this->once())
+        $this->sessionMock
+            ->expects($this->once())
             ->method('setCookie')
-            ->with(
-                EntraIdSession::ENTRA_ID_OAUTH_VERIFIER,
-                $this->isString(),
-                7200,
-                false
-            );
+            ->with(EntraIdSession::ENTRA_ID_OAUTH_VERIFIER, $this->isString(), 7200, false);
 
         // Capture output to prevent HTML output in test results
         ob_start();
@@ -210,7 +211,7 @@ class AuthEntraIdTest extends TestCase
         $expectedChallenge = str_replace(
             '=',
             '',
-            strtr(base64_encode(pack('H*', hash('sha256', $verifier))), '+/', '-_')
+            strtr(base64_encode(pack('H*', hash('sha256', $verifier))), '+/', '-_'),
         );
         $this->assertEquals($expectedChallenge, $challenge);
     }
@@ -274,7 +275,7 @@ class AuthEntraIdTest extends TestCase
         $this->assertEquals('S256', $reflection->getConstant('ENTRAID_CHALLENGE_METHOD'));
         $this->assertEquals(
             'https://login.microsoftonline.com/common/wsfederation?wa=wsignout1.0',
-            $reflection->getConstant('ENTRAID_LOGOUT_URL')
+            $reflection->getConstant('ENTRAID_LOGOUT_URL'),
         );
     }
 }

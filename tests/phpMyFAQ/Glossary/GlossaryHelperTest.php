@@ -19,8 +19,8 @@ declare(strict_types=1);
 
 namespace phpMyFAQ\Glossary;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class GlossaryHelperTest extends TestCase

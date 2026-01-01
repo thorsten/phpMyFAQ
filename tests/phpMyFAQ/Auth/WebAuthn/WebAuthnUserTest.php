@@ -2,8 +2,8 @@
 
 namespace phpMyFAQ\Auth\WebAuthn;
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class WebAuthnUserTest extends TestCase
@@ -45,5 +45,4 @@ class WebAuthnUserTest extends TestCase
 
         $this->assertInstanceOf(WebAuthnUser::class, $result);
     }
-
 }

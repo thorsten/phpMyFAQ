@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ\Database;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use ReflectionProperty;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class SqlsrvTest
@@ -369,15 +369,29 @@ class SqlsrvTest extends TestCase
     public function testDatabaseDriverInterfaceCompliance(): void
     {
         $requiredMethods = [
-            'connect', 'query', 'error', 'escape', 'fetchAll', 'fetchArray',
-            'fetchRow', 'fetchObject', 'numRows', 'log', 'getTableNames',
-            'getTableStatus', 'nextId', 'clientVersion', 'serverVersion', 'close', 'now'
+            'connect',
+            'query',
+            'error',
+            'escape',
+            'fetchAll',
+            'fetchArray',
+            'fetchRow',
+            'fetchObject',
+            'numRows',
+            'log',
+            'getTableNames',
+            'getTableStatus',
+            'nextId',
+            'clientVersion',
+            'serverVersion',
+            'close',
+            'now',
         ];
 
         foreach ($requiredMethods as $method) {
             $this->assertTrue(
                 method_exists($this->sqlsrv, $method),
-                "Required DatabaseDriver method '$method' does not exist"
+                "Required DatabaseDriver method '$method' does not exist",
             );
         }
     }

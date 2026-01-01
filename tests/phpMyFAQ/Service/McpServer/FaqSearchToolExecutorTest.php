@@ -3,13 +3,13 @@
 namespace phpMyFAQ\Service\McpServer;
 
 use Exception;
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Search;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Search;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use Symfony\AI\McpSdk\Capability\Tool\ToolCall;
 use Symfony\AI\McpSdk\Capability\Tool\ToolCallResult;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class FaqSearchToolExecutorTest extends TestCase
@@ -26,11 +26,7 @@ class FaqSearchToolExecutorTest extends TestCase
 
         $configMock->method('getDefaultUrl')->willReturn('https://example.com/');
 
-        $this->executor = new FaqSearchToolExecutor(
-            $configMock,
-            $this->searchMock,
-            $this->faqMock
-        );
+        $this->executor = new FaqSearchToolExecutor($configMock, $this->searchMock, $this->faqMock);
     }
 
     public function testGetName(): void
@@ -74,13 +70,13 @@ class FaqSearchToolExecutorTest extends TestCase
     public function testCallWithResults(): void
     {
         $toolCall = new ToolCall('test-id', 'faq_search', ['query' => 'test', 'limit' => 1]);
-        $searchResult = (object)[
+        $searchResult = (object) [
             'id' => 42,
             'lang' => 'en',
             'question' => 'What is phpMyFAQ?',
             'answer' => 'phpMyFAQ is an open source FAQ system.',
             'category_id' => 1,
-            'score' => 0.95
+            'score' => 0.95,
         ];
         $this->searchMock->method('search')->willReturn([$searchResult]);
         $this->faqMock->method('getFaqResult')->willReturn(['id' => 42]);
@@ -97,7 +93,7 @@ class FaqSearchToolExecutorTest extends TestCase
         $this->assertSame('What is phpMyFAQ?', $jsonData['results'][0]['question']);
         $this->assertStringContainsString(
             'https://example.com/index.php?action=faq&cat=0&id=42&artlang=en',
-            $jsonData['results'][0]['url']
+            $jsonData['results'][0]['url'],
         );
     }
 

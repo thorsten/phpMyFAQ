@@ -5,8 +5,8 @@ namespace phpMyFAQ\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class CaptchaTest extends TestCase
@@ -25,6 +25,7 @@ class CaptchaTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR . '/test.db', '', '');
         $this->configuration = new Configuration($dbHandle);
     }
+
     public function testGetInstanceWithGoogleRecaptchaEnabled(): void
     {
         $this->configuration->set('security.enableGoogleReCaptchaV2', true);

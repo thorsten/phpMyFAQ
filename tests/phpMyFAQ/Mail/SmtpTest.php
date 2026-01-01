@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\Mail;
 
+use phpMyFAQ\Mail\Smtp;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Mail\Smtp;
 use ReflectionClass;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -66,10 +66,12 @@ class SmtpTest extends TestCase
             ->expects($this->once())
             ->method('send')
             ->with($this->callback(function (Email $email): bool {
-                return $email->getSubject() === 'Test Subject' &&
-                    count($email->getTo()) === 1 &&
-                    $email->getTextBody() === 'This is a test email body.' &&
-                    $email->getHtmlBody() === 'This is a test email body.';
+                return (
+                    $email->getSubject() === 'Test Subject'
+                    && count($email->getTo()) === 1
+                    && $email->getTextBody() === 'This is a test email body.'
+                    && $email->getHtmlBody() === 'This is a test email body.'
+                );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);
@@ -115,11 +117,15 @@ class SmtpTest extends TestCase
             ->with($this->callback(function (Email $email): bool {
                 $cc = $email->getCc();
                 $bcc = $email->getBcc();
-                return $email->getSubject() === 'Test Subject' &&
-                    $email->getTextBody() === 'Test body' &&
-                    $email->getHtmlBody() === 'Test body' &&
-                    count($cc) === 1 && $cc[0]->getAddress() === 'cc@example.com' &&
-                    count($bcc) === 1 && $bcc[0]->getAddress() === 'bcc@example.com';
+                return (
+                    $email->getSubject() === 'Test Subject'
+                    && $email->getTextBody() === 'Test body'
+                    && $email->getHtmlBody() === 'Test body'
+                    && count($cc) === 1
+                    && $cc[0]->getAddress() === 'cc@example.com'
+                    && count($bcc) === 1
+                    && $bcc[0]->getAddress() === 'bcc@example.com'
+                );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);
@@ -170,13 +176,19 @@ class SmtpTest extends TestCase
                 $bcc = $email->getBcc();
                 $replyTo = $email->getReplyTo();
 
-                return $email->getSubject() === 'Complete Test' &&
-                    $email->getTextBody() === 'Complete test body' &&
-                    $email->getHtmlBody() === 'Complete test body' &&
-                    count($from) === 1 && $from[0]->getAddress() === 'bounce@example.com' &&
-                    count($cc) === 1 && $cc[0]->getAddress() === 'cc@example.com' &&
-                    count($bcc) === 1 && $bcc[0]->getAddress() === 'bcc@example.com' &&
-                    count($replyTo) === 1 && $replyTo[0]->getAddress() === 'reply@example.com';
+                return (
+                    $email->getSubject() === 'Complete Test'
+                    && $email->getTextBody() === 'Complete test body'
+                    && $email->getHtmlBody() === 'Complete test body'
+                    && count($from) === 1
+                    && $from[0]->getAddress() === 'bounce@example.com'
+                    && count($cc) === 1
+                    && $cc[0]->getAddress() === 'cc@example.com'
+                    && count($bcc) === 1
+                    && $bcc[0]->getAddress() === 'bcc@example.com'
+                    && count($replyTo) === 1
+                    && $replyTo[0]->getAddress() === 'reply@example.com'
+                );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);
@@ -276,8 +288,10 @@ class SmtpTest extends TestCase
             ->expects($this->once())
             ->method('send')
             ->with($this->callback(function (Email $email): bool {
-                return $email->getSubject() === 'Special Characters: äöü ßÄÖÜ €' &&
-                    $email->getTextBody() === 'Body with special characters: 中文 русский';
+                return (
+                    $email->getSubject() === 'Special Characters: äöü ßÄÖÜ €'
+                    && $email->getTextBody() === 'Body with special characters: 中文 русский'
+                );
             }));
 
         $result = $this->smtp->send($recipients, $headers, $body);

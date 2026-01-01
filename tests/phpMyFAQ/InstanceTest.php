@@ -4,13 +4,14 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\InstanceEntity;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class InstanceTest extends TestCase
 {
     private Instance $instance;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,10 +26,7 @@ class InstanceTest extends TestCase
     public function testCreate(): void
     {
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
 
         $this->assertEquals(2, $this->instance->create($instance));
         $this->instance->delete(2);
@@ -40,10 +38,7 @@ class InstanceTest extends TestCase
         $this->assertCount(1, $instances); // Only one instance is created by default
 
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
         $this->instance->create($instance);
 
         $this->assertCount(2, $this->instance->getAll());
@@ -53,10 +48,7 @@ class InstanceTest extends TestCase
     public function testGetById(): void
     {
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
         $id = $this->instance->create($instance);
 
         $instance = $this->instance->getById($id);
@@ -70,16 +62,10 @@ class InstanceTest extends TestCase
     public function testUpdate(): void
     {
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
         $id = $this->instance->create($instance);
 
-        $instance
-            ->setUrl('http://three.localhost')
-            ->setInstance('Third localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://three.localhost')->setInstance('Third localhost')->setComment('Test instance');
         $this->assertTrue($this->instance->update($id, $instance));
 
         $instance = $this->instance->getById($id);
@@ -93,10 +79,7 @@ class InstanceTest extends TestCase
     public function testAddConfig(): void
     {
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
         $id = $this->instance->create($instance);
 
         $this->instance->addConfig('foo', 'bar');
@@ -108,10 +91,7 @@ class InstanceTest extends TestCase
     public function testGetInstanceConfig(): void
     {
         $instance = new InstanceEntity();
-        $instance
-            ->setUrl('http://two.localhost')
-            ->setInstance('Second localhost')
-            ->setComment('Test instance');
+        $instance->setUrl('http://two.localhost')->setInstance('Second localhost')->setComment('Test instance');
         $id = $this->instance->create($instance);
 
         $this->instance->addConfig('foo', 'bar');

@@ -2,11 +2,11 @@
 
 namespace phpMyFAQ\Category;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Core\Exception;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ImageTest
@@ -45,9 +45,7 @@ class ImageTest extends TestCase
     public function testSetUploadedFileWithValidFile(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $result = $this->image->setUploadedFile($uploadedFileMock);
 
@@ -58,9 +56,7 @@ class ImageTest extends TestCase
     public function testSetUploadedFileWithInvalidFile(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(false);
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(false);
 
         $result = $this->image->setUploadedFile($uploadedFileMock);
 
@@ -79,12 +75,8 @@ class ImageTest extends TestCase
     public function testGetFileNameWithUploadJpeg(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getMimeType')
-            ->willReturn('image/jpeg');
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getMimeType')->willReturn('image/jpeg');
 
         $this->image->setUploadedFile($uploadedFileMock);
         $fileName = $this->image->getFileName(123, 'test-category');
@@ -95,12 +87,8 @@ class ImageTest extends TestCase
     public function testGetFileNameWithUploadPng(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getMimeType')
-            ->willReturn('image/png');
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getMimeType')->willReturn('image/png');
 
         $this->image->setUploadedFile($uploadedFileMock);
         $fileName = $this->image->getFileName(123, 'test-category');
@@ -111,12 +99,8 @@ class ImageTest extends TestCase
     public function testGetFileNameWithUploadGif(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getMimeType')
-            ->willReturn('image/gif');
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getMimeType')->willReturn('image/gif');
 
         $this->image->setUploadedFile($uploadedFileMock);
         $fileName = $this->image->getFileName(123, 'test-category');
@@ -127,12 +111,8 @@ class ImageTest extends TestCase
     public function testGetFileNameWithUploadWebp(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getMimeType')
-            ->willReturn('image/webp');
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getMimeType')->willReturn('image/webp');
 
         $this->image->setUploadedFile($uploadedFileMock);
         $fileName = $this->image->getFileName(123, 'test-category');
@@ -143,12 +123,8 @@ class ImageTest extends TestCase
     public function testGetFileNameWithUploadUnknownMimeType(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getMimeType')
-            ->willReturn('unknown/mime');
+        $uploadedFileMock->expects($this->once())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getMimeType')->willReturn('unknown/mime');
 
         $this->image->setUploadedFile($uploadedFileMock);
         $fileName = $this->image->getFileName(123, 'test-category');
@@ -169,20 +145,13 @@ class ImageTest extends TestCase
         file_put_contents($tempFile, 'fake image content');
 
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('getSize')
-            ->willReturn(1024); // 1 KB
-        $uploadedFileMock->expects($this->once())
-            ->method('getClientMimeType')
-            ->willReturn('image/jpeg');
-        $uploadedFileMock->expects($this->once())
-            ->method('move')
-            ->willReturnSelf(); // Return UploadedFile instance instead of bool
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('getSize')->willReturn(1024); // 1 KB
+        $uploadedFileMock->expects($this->once())->method('getClientMimeType')->willReturn('image/jpeg');
+        $uploadedFileMock->expects($this->once())->method('move')->willReturnSelf(); // Return UploadedFile instance instead of bool
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('records.maxAttachmentSize')
             ->willReturn(2048); // 2KB limit
@@ -203,9 +172,7 @@ class ImageTest extends TestCase
     public function testUploadWithInvalidFile(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('isValid')
-            ->willReturn(false);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(false);
 
         $this->image->setUploadedFile($uploadedFileMock);
 
@@ -218,14 +185,11 @@ class ImageTest extends TestCase
     public function testUploadWithFileTooLarge(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->once())
-            ->method('getSize')
-            ->willReturn(3072); // 3KB
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->once())->method('getSize')->willReturn(3072); // 3KB
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('records.maxAttachmentSize')
             ->willReturn(2048); // 2KB limit
@@ -241,14 +205,11 @@ class ImageTest extends TestCase
     public function testUploadWithUndetectableSize(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('getSize')
-            ->willReturn(false);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('getSize')->willReturn(false);
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('records.maxAttachmentSize')
             ->willReturn(2048);
@@ -264,17 +225,12 @@ class ImageTest extends TestCase
     public function testUploadWithInvalidMimeType(): void
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('isValid')
-            ->willReturn(true);
-        $uploadedFileMock->expects($this->atLeastOnce())
-            ->method('getSize')
-            ->willReturn(1024);
-        $uploadedFileMock->expects($this->once())
-            ->method('getClientMimeType')
-            ->willReturn('text/plain');
+        $uploadedFileMock->expects($this->atLeastOnce())->method('isValid')->willReturn(true);
+        $uploadedFileMock->expects($this->atLeastOnce())->method('getSize')->willReturn(1024);
+        $uploadedFileMock->expects($this->once())->method('getClientMimeType')->willReturn('text/plain');
 
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('get')
             ->with('records.maxAttachmentSize')
             ->willReturn(2048);

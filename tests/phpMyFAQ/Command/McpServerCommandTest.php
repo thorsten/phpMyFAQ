@@ -2,12 +2,12 @@
 
 namespace phpMyFAQ\Command;
 
-use PHPUnit\Framework\TestCase;
 use phpMyFAQ\Service\McpServer\PhpMyFaqMcpServer;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class McpServerCommandTest extends TestCase
@@ -35,13 +35,16 @@ class McpServerCommandTest extends TestCase
 
         $input->method('getOption')->with('info')->willReturn(true);
 
-        $this->serverMock->expects($this->once())->method('getServerInfo')->willReturn([
-            'name' => 'phpMyFAQ MCP Server',
-            'version' => '0.1.0-dev',
-            'description' => 'Test server',
-            'capabilities' => ['tools' => true],
-            'tools' => [['name' => 'faq_search', 'description' => 'Search tool']]
-        ]);
+        $this->serverMock
+            ->expects($this->once())
+            ->method('getServerInfo')
+            ->willReturn([
+                'name' => 'phpMyFAQ MCP Server',
+                'version' => '0.1.0-dev',
+                'description' => 'Test server',
+                'capabilities' => ['tools' => true],
+                'tools' => [['name' => 'faq_search', 'description' => 'Search tool']],
+            ]);
 
         $result = $this->callExecute($input, $output);
         $this->assertSame(0, $result);
@@ -54,7 +57,10 @@ class McpServerCommandTest extends TestCase
 
         $input->method('getOption')->with('info')->willReturn(false);
 
-        $this->serverMock->expects($this->once())->method('runConsole')->with($input, $output);
+        $this->serverMock
+            ->expects($this->once())
+            ->method('runConsole')
+            ->with($input, $output);
 
         $result = $this->callExecute($input, $output);
         $this->assertSame(0, $result);

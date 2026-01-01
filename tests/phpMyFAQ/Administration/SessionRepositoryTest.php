@@ -4,9 +4,9 @@ namespace phpMyFAQ\Administration;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SessionRepositoryTest extends TestCase
@@ -157,7 +157,8 @@ class SessionRepositoryTest extends TestCase
         $first = 1609459200;
         $last = 1609545600;
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -181,7 +182,8 @@ class SessionRepositoryTest extends TestCase
 
     public function testDeleteAllSessionsReturnsTrue(): void
     {
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
             ->with($this->stringContains('DELETE FROM'))
             ->willReturn(true);
@@ -212,8 +214,7 @@ class SessionRepositoryTest extends TestCase
         $resultMock2->time = 1609476000;
 
         $this->mockDb->method('query')->willReturn(true);
-        $this->mockDb->method('fetchObject')
-            ->willReturnOnConsecutiveCalls($resultMock1, $resultMock2, false);
+        $this->mockDb->method('fetchObject')->willReturnOnConsecutiveCalls($resultMock1, $resultMock2, false);
 
         $timestamps = $this->repository->getSessionTimestamps($startDate, $endDate);
 
@@ -239,9 +240,10 @@ class SessionRepositoryTest extends TestCase
     {
         $minTimestamp = 1609459200;
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 $this->assertStringContainsString('SELECT COUNT(DISTINCT user_id)', $query);
                 $this->assertStringContainsString('faqsessions', $query);
                 $this->assertStringContainsString('WHERE time >=', $query);
@@ -260,9 +262,10 @@ class SessionRepositoryTest extends TestCase
     {
         $minTimestamp = 1609459200;
 
-        $this->mockDb->expects($this->once())
+        $this->mockDb
+            ->expects($this->once())
             ->method('query')
-            ->willReturnCallback(function($query) {
+            ->willReturnCallback(function ($query) {
                 $this->assertStringContainsString('SELECT COUNT(*)', $query);
                 $this->assertStringContainsString('faquser', $query);
                 $this->assertStringContainsString('session_id IS NOT NULL', $query);

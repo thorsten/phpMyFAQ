@@ -6,9 +6,9 @@ namespace phpMyFAQ\Category\Language;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Language as PmfLanguage;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 final class CategoryLanguageServiceTest extends TestCase
@@ -22,7 +22,8 @@ final class CategoryLanguageServiceTest extends TestCase
     {
         parent::setUp();
         $this->configuration = $this->createStub(Configuration::class);
-        $this->language = $this->getMockBuilder(PmfLanguage::class)
+        $this->language = $this
+            ->getMockBuilder(PmfLanguage::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isLanguageAvailable'])
             ->getMock();
@@ -31,7 +32,10 @@ final class CategoryLanguageServiceTest extends TestCase
 
     public function testGetLanguagesInUseReturnsCodes(): void
     {
-        $this->language->method('isLanguageAvailable')->with(0, 'faqcategories')->willReturn(['en', 'de']);
+        $this->language
+            ->method('isLanguageAvailable')
+            ->with(0, 'faqcategories')
+            ->willReturn(['en', 'de']);
 
         $service = new CategoryLanguageService();
         $result = $service->getLanguagesInUse($this->configuration);
@@ -42,7 +46,10 @@ final class CategoryLanguageServiceTest extends TestCase
 
     public function testGetExistingTranslationsKeysMatchExisting(): void
     {
-        $this->language->method('isLanguageAvailable')->with(123, 'faqcategories')->willReturn(['en', 'de']);
+        $this->language
+            ->method('isLanguageAvailable')
+            ->with(123, 'faqcategories')
+            ->willReturn(['en', 'de']);
 
         $service = new CategoryLanguageService();
         $result = $service->getExistingTranslations($this->configuration, 123);
@@ -53,7 +60,10 @@ final class CategoryLanguageServiceTest extends TestCase
 
     public function testGetLanguagesToTranslateExcludesExisting(): void
     {
-        $this->language->method('isLanguageAvailable')->with(456, 'faqcategories')->willReturn(['en']);
+        $this->language
+            ->method('isLanguageAvailable')
+            ->with(456, 'faqcategories')
+            ->willReturn(['en']);
 
         $service = new CategoryLanguageService();
         $result = $service->getLanguagesToTranslate($this->configuration, 456);
@@ -62,4 +72,3 @@ final class CategoryLanguageServiceTest extends TestCase
         $this->assertIsArray($result);
     }
 }
-

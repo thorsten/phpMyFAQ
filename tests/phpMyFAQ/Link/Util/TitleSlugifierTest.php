@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace phpMyFAQ\Link\Util;
 
 use phpMyFAQ\Strings;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class TitleSlugifierTest extends TestCase
@@ -28,7 +28,7 @@ class TitleSlugifierTest extends TestCase
 
     public function testMultipleSpacesAndPunctuation(): void
     {
-        $this->assertSame('foo-bar', TitleSlugifier::slug(" Foo   , bar !! "));
+        $this->assertSame('foo-bar', TitleSlugifier::slug(' Foo   , bar !! '));
     }
 
     public function testKeepsSingleDash(): void
@@ -36,4 +36,3 @@ class TitleSlugifierTest extends TestCase
         $this->assertSame('foo-bar-baz', TitleSlugifier::slug('foo   bar---baz'));
     }
 }
-

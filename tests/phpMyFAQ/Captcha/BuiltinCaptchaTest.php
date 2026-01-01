@@ -6,9 +6,9 @@ use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Class CaptchaTest
@@ -51,8 +51,9 @@ class BuiltinCaptchaTest extends TestCase
 
     public function testRenderCaptchaImage(): void
     {
-        $expected = '<img id="captchaImage" class="rounded border" ' .
-            'src="./api/captcha" height="50" width="200" alt="Chuck Norris has counted to infinity. Twice.">';
+        $expected =
+            '<img id="captchaImage" class="rounded border" '
+            . 'src="./api/captcha" height="50" width="200" alt="Chuck Norris has counted to infinity. Twice.">';
         $this->assertEquals($expected, $this->captcha->renderCaptchaImage());
     }
 
@@ -178,9 +179,7 @@ class BuiltinCaptchaTest extends TestCase
      */
     public function testFluentInterface(): void
     {
-        $result = $this->captcha
-            ->setUserIsLoggedIn(true)
-            ->setUserIsLoggedIn(false);
+        $result = $this->captcha->setUserIsLoggedIn(true)->setUserIsLoggedIn(false);
 
         $this->assertInstanceOf(BuiltinCaptcha::class, $result);
         $this->assertFalse($this->captcha->isUserIsLoggedIn());
@@ -225,7 +224,7 @@ class BuiltinCaptchaTest extends TestCase
             'SELECT * FROM users',
             '../../etc/passwd',
             'javascript:alert(1)',
-            '<img src=x onerror=alert(1)>'
+            '<img src=x onerror=alert(1)>',
         ];
 
         foreach ($specialCodes as $code) {

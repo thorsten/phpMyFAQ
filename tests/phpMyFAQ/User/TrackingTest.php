@@ -4,13 +4,13 @@ namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database\DatabaseDriver;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TrackingTest extends TestCase
@@ -29,7 +29,7 @@ class TrackingTest extends TestCase
         $this->configurationMock = $this->createStub(Configuration::class);
         $this->requestMock = $this->createStub(Request::class);
         $this->requestMock->headers = new HeaderBag([
-            'X-Forwarded-For' => '192.168.1.1'
+            'X-Forwarded-For' => '192.168.1.1',
         ]);
         $this->requestMock->method('getClientIp')->willReturn('127.0.0.1');
         $this->userSessionMock = $this->createStub(UserSession::class);
@@ -46,7 +46,7 @@ class TrackingTest extends TestCase
     {
         $this->requestMock->query = new InputBag([
             UserSession::KEY_NAME_SESSION_ID => 123,
-            UserSession::COOKIE_NAME_SESSION_ID => 456
+            UserSession::COOKIE_NAME_SESSION_ID => 456,
         ]);
 
         $reflection = new ReflectionClass($this->tracking);
@@ -64,7 +64,7 @@ class TrackingTest extends TestCase
     {
         $this->requestMock->query = new InputBag([
             UserSession::KEY_NAME_SESSION_ID => 123,
-            UserSession::COOKIE_NAME_SESSION_ID => 456
+            UserSession::COOKIE_NAME_SESSION_ID => 456,
         ]);
 
         $reflection = new ReflectionClass($this->tracking);
@@ -79,9 +79,12 @@ class TrackingTest extends TestCase
      */
     public function testCountBots(): void
     {
-        $this->configurationMock->method('get')->with('main.botIgnoreList')->willReturn('bot1,bot2');
+        $this->configurationMock
+            ->method('get')
+            ->with('main.botIgnoreList')
+            ->willReturn('bot1,bot2');
         $this->requestMock->headers = new HeaderBag([
-            'user-agent' => 'bot1'
+            'user-agent' => 'bot1',
         ]);
 
         $reflection = new ReflectionClass($this->tracking);

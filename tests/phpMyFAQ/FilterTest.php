@@ -38,7 +38,7 @@ class FilterTest extends TestCase
                 INPUT_GET,
                 'special_test',
                 FILTER_SANITIZE_SPECIAL_CHARS,
-                'safe_default'
+                'safe_default',
             );
             $this->assertEquals('safe_default', $resultWithDefault);
         } else {
@@ -73,7 +73,7 @@ class FilterTest extends TestCase
         $testArray = [
             'name' => 'John Doe',
             'email' => 'john@example.com',
-            'age' => '25'
+            'age' => '25',
         ];
 
         $result = Filter::filterArray($testArray, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -86,7 +86,7 @@ class FilterTest extends TestCase
     {
         $testArray = [
             'name' => '<script>alert("xss")</script>John',
-            'comment' => 'Good product<script>steal()</script>'
+            'comment' => 'Good product<script>steal()</script>',
         ];
 
         $result = Filter::filterArray($testArray, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -202,19 +202,12 @@ class FilterTest extends TestCase
 
         $definition = [
             'name' => FILTER_FLAG_NO_ENCODE_QUOTES,
-            'email' => FILTER_VALIDATE_EMAIL
+            'email' => FILTER_VALIDATE_EMAIL,
         ];
 
         $result = Filter::filterInputArray(INPUT_POST, $definition);
 
-        $this->assertThat(
-            $result,
-            $this->logicalOr(
-                $this->isArray(),
-                $this->isBool(),
-                $this->isNull()
-            )
-        );
+        $this->assertThat($result, $this->logicalOr($this->isArray(), $this->isBool(), $this->isNull()));
     }
 
     public function testFilterWithDifferentTypes(): void

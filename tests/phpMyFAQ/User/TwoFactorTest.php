@@ -2,14 +2,14 @@
 
 namespace phpMyFAQ\User;
 
+use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Configuration;
 use ReflectionClass;
-use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\EndroidQrCodeProvider;
+use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class TwoFactorTest extends TestCase
@@ -38,7 +38,8 @@ class TwoFactorTest extends TestCase
 
     public function testSaveSecret(): void
     {
-        $this->currentUser->expects($this->once())
+        $this->currentUser
+            ->expects($this->once())
             ->method('setUserData')
             ->with(['secret' => 'testsecret'])
             ->willReturn(true);
@@ -55,7 +56,8 @@ class TwoFactorTest extends TestCase
 
     public function testGetSecret(): void
     {
-        $this->currentUser->method('getUserData')
+        $this->currentUser
+            ->method('getUserData')
             ->with('secret')
             ->willReturn('testsecret');
 
@@ -69,22 +71,23 @@ class TwoFactorTest extends TestCase
      */
     public function testValidateToken(): void
     {
-        $this->configuration->method('get')
+        $this->configuration
+            ->method('get')
             ->with('security.permLevel')
             ->willReturn('basic');
 
-        $this->currentUser->method('getUserData')
+        $this->currentUser
+            ->method('getUserData')
             ->with('secret')
             ->willReturn('testsecret');
 
-        $this->currentUser->method('getUserById')
+        $this->currentUser
+            ->method('getUserById')
             ->with(1)
             ->willReturn(true);
 
         $twoFactorAuth = $this->createStub(TwoFactorAuth::class);
-        $twoFactorAuth->method('verifyCode')
-            ->with('testsecret', '123456')
-            ->willReturn(true);
+        $twoFactorAuth->method('verifyCode')->with('testsecret', '123456')->willReturn(true);
 
         $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('twoFactorAuth');
@@ -102,19 +105,16 @@ class TwoFactorTest extends TestCase
 
     public function testGetQrCode(): void
     {
-        $this->configuration->method('getTitle')
-            ->willReturn('phpMyFAQ');
-        $this->currentUser->method('getUserData')
+        $this->configuration->method('getTitle')->willReturn('phpMyFAQ');
+        $this->currentUser
+            ->method('getUserData')
             ->with('email')
             ->willReturn('user@example.com');
-        $this->configuration->method('getDefaultUrl')
-            ->willReturn('https://example.com/');
+        $this->configuration->method('getDefaultUrl')->willReturn('https://example.com/');
 
         $qrCodeProvider = $this->createStub(EndroidQrCodeProvider::class);
-        $qrCodeProvider->method('getMimeType')
-            ->willReturn('image/png');
-        $qrCodeProvider->method('getQRCodeImage')
-            ->willReturn('fakeimage');
+        $qrCodeProvider->method('getMimeType')->willReturn('image/png');
+        $qrCodeProvider->method('getQRCodeImage')->willReturn('fakeimage');
 
         $reflection = new ReflectionClass($this->twoFactor);
         $property = $reflection->getProperty('endroidQrCodeProvider');

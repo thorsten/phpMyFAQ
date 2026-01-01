@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend;
+namespace phpMyFAQ\Controller\Frontend\Api;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Permission as CategoryPermission;

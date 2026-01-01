@@ -59,362 +59,355 @@ $routesConfig = [
     'admin.attachments' => [
         'path' => '/attachments',
         'controller' => [AttachmentsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.auth.authenticate' => [
         'path' => '/authenticate',
         'controller' => [AuthenticationController::class, 'authenticate'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.auth.check' => [
         'path' => '/check',
         'controller' => [AuthenticationController::class, 'check'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.auth.login' => [
         'path' => '/login',
         'controller' => [AuthenticationController::class, 'login'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.auth.logout' => [
         'path' => '/logout',
         'controller' => [AuthenticationController::class, 'logout'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.auth.token' => [
         'path' => '/token',
         'controller' => [AuthenticationController::class, 'token'],
         'methods' => 'GET',
-
     ],
     'admin.backup' => [
         'path' => '/backup',
         'controller' => [BackupController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.backup.export' => [
         'path' => '/backup/export/{type}',
         'controller' => [BackupController::class, 'export'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.backup.restore' => [
         'path' => '/backup/restore',
         'controller' => [BackupController::class, 'restore'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.category' => [
         'path' => '/category',
         'controller' => [CategoryController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.category.add' => [
         'path' => '/category/add',
         'controller' => [CategoryController::class, 'add'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.category.add.child' => [
         'path' => '/category/add/{parentId}/{language}',
         'controller' => [CategoryController::class, 'addChild'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.category.create' => [
         'path' => '/category/create',
         'controller' => [CategoryController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.category.edit' => [
         'path' => '/category/edit/{categoryId}',
         'controller' => [CategoryController::class, 'edit'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.category.hierarchy' => [
         'path' => '/category/hierarchy',
         'controller' => [CategoryController::class, 'hierarchy'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.category.translate' => [
         'path' => '/category/translate/{categoryId}',
         'controller' => [CategoryController::class, 'translate'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.category.update' => [
         'path' => '/category/update',
         'controller' => [CategoryController::class, 'update'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.content.orphaned-faqs' => [
         'path' => '/orphaned-faqs',
         'controller' => [OrphanedFaqsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.content.sticky-faqs' => [
         'path' => '/sticky-faqs',
         'controller' => [StickyFaqsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.comments' => [
         'path' => '/comments',
         'controller' => [CommentsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.configuration' => [
         'path' => '/configuration',
         'controller' => [ConfigurationController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.configuration.plugins' => [
         'path' => '/plugins',
         'controller' => [PluginController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.dashboard' => [
         'path' => '/',
         'controller' => [DashboardController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.add' => [
         'path' => '/faq/add',
         'controller' => [FaqController::class, 'add'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.add.category' => [
         'path' => '/faq/add/{categoryId}/{categoryLanguage}',
         'controller' => [FaqController::class, 'addInCategory'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.answer' => [
         'path' => '/faq/answer/{questionId}/{faqLanguage}',
         'controller' => [FaqController::class, 'answer'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.copy' => [
         'path' => '/faq/copy/{faqId}/{faqLanguage}',
         'controller' => [FaqController::class, 'copy'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.edit' => [
         'path' => '/faq/edit/{faqId}/{faqLanguage}',
         'controller' => [FaqController::class, 'edit'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faq.translate' => [
         'path' => '/faq/translate/{faqId}/{faqLanguage}',
         'controller' => [FaqController::class, 'translate'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.faqs' => [
         'path' => '/faqs',
         'controller' => [FaqController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.forms' => [
         'path' => '/forms',
         'controller' => [FormsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.forms.translate' => [
         'path' => '/forms/translate/{formId}/{inputId}',
         'controller' => [FormsController::class, 'translate'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.elasticsearch' => [
         'path' => '/elasticsearch',
         'controller' => [ElasticsearchController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.opensearch' => [
         'path' => '/opensearch',
         'controller' => [OpenSearchController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.export' => [
         'path' => '/export',
         'controller' => [ExportController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.glossary' => [
         'path' => '/glossary',
         'controller' => [GlossaryController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.group' => [
         'path' => '/group',
         'controller' => [GroupController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.group.add' => [
         'path' => '/group/add',
         'controller' => [GroupController::class, 'add'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.group.create' => [
         'path' => '/group/create',
         'controller' => [GroupController::class, 'create'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.group.confirm' => [
         'path' => '/group/confirm',
         'controller' => [GroupController::class, 'confirm'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.group.delete' => [
         'path' => '/group/delete',
         'controller' => [GroupController::class, 'delete'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.group.update' => [
         'path' => '/group/update',
         'controller' => [GroupController::class, 'update'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.group.update.members' => [
         'path' => '/group/update/members',
         'controller' => [GroupController::class, 'updateMembers'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.group.update.permissions' => [
         'path' => '/group/update/permissions',
         'controller' => [GroupController::class, 'updatePermissions'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.import' => [
         'path' => '/import',
         'controller' => [ImportController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.instance.edit' => [
         'path' => '/instance/edit/{id}',
         'controller' => [InstanceController::class, 'edit'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.instance.update' => [
         'path' => '/instance/update',
         'controller' => [InstanceController::class, 'update'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.instances' => [
         'path' => '/instances',
         'controller' => [InstanceController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.news' => [
         'path' => '/news',
         'controller' => [NewsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.news.add' => [
         'path' => '/news/add',
         'controller' => [NewsController::class, 'add'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.news.edit' => [
         'path' => '/news/edit/{newsId}',
         'controller' => [NewsController::class, 'edit'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.password.change' => [
         'path' => '/password/change',
         'controller' => [PasswordChangeController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.password.update' => [
         'path' => '/password/update',
         'controller' => [PasswordChangeController::class, 'update'],
-        'methods' => 'POST'
+        'methods' => 'POST',
     ],
     'admin.questions' => [
         'path' => '/questions',
         'controller' => [OpenQuestionsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.session.keepalive' => [
         'path' => '/session-keep-alive',
         'controller' => [SessionKeepAliveController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.admin-log' => [
         'path' => '/statistics/admin-log',
         'controller' => [AdminLogController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.ratings' => [
         'path' => '/statistics/ratings',
         'controller' => [RatingController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.report' => [
         'path' => '/statistics/report',
         'controller' => [ReportController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.search' => [
         'path' => '/statistics/search',
         'controller' => [StatisticsSearchController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.sessions' => [
         'path' => '/statistics/sessions',
         'controller' => [StatisticsSessionsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.statistics.sessions.day' => [
         'path' => '/statistics/sessions/{date}',
         'controller' => [StatisticsSessionsController::class, 'viewDay'],
-        'methods' => 'POST, GET'
+        'methods' => 'POST, GET',
     ],
     'admin.statistics.session.id' => [
         'path' => '/statistics/session/{sessionId}',
         'controller' => [StatisticsSessionsController::class, 'viewSession'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.stopwords' => [
         'path' => '/stopwords',
         'controller' => [StopwordsController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.system' => [
         'path' => '/system',
         'controller' => [SystemInformationController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.tags' => [
         'path' => '/tags',
         'controller' => [TagController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.update' => [
         'path' => '/update',
         'controller' => [UpdateController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.user' => [
         'path' => '/user',
         'controller' => [UserController::class, 'index'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.user.edit' => [
         'path' => '/user/edit/{userId}',
         'controller' => [UserController::class, 'edit'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
     'admin.user.list' => [
         'path' => '/user/list',
         'controller' => [UserController::class, 'list'],
-        'methods' => 'GET'
+        'methods' => 'GET',
     ],
 ];
 
 foreach ($routesConfig as $name => $config) {
-    $routes->add(
-        $name,
-        new Route(
-            $config['path'],
-            [
-                '_controller' => $config['controller'],
-                '_methods' => $config['methods']
-            ]
-        )
-    );
+    $routes->add($name, new Route($config['path'], [
+        '_controller' => $config['controller'],
+        '_methods' => $config['methods'],
+    ]));
 }
 
 return $routes;

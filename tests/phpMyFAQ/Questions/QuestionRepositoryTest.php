@@ -7,10 +7,10 @@ use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\QuestionEntity;
 use phpMyFAQ\Language;
 use phpMyFAQ\Question\QuestionRepository;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class QuestionRepositoryTest extends TestCase

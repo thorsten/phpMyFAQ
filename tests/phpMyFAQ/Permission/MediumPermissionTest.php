@@ -7,8 +7,8 @@ use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Enums\PermissionType;
 use phpMyFAQ\User\CurrentUser;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class MediumPermissionTest extends TestCase
@@ -244,14 +244,14 @@ class MediumPermissionTest extends TestCase
         $user = new CurrentUser($this->configuration);
         $user->getUserById(1);
 
-        $this->assertEquals(
-            '<option value="1" >TestGroup</option>',
-            $this->mediumPermission->getAllGroupsOptions([], $user)
-        );
-        $this->assertEquals(
-            '<option value="1" selected>TestGroup</option>',
-            $this->mediumPermission->getAllGroupsOptions([1], $user)
-        );
+        $this->assertEquals('<option value="1" >TestGroup</option>', $this->mediumPermission->getAllGroupsOptions(
+            [],
+            $user,
+        ));
+        $this->assertEquals('<option value="1" selected>TestGroup</option>', $this->mediumPermission->getAllGroupsOptions(
+            [1],
+            $user,
+        ));
 
         // Cleanup
         $this->mediumPermission->deleteGroup(1);
@@ -373,7 +373,7 @@ class MediumPermissionTest extends TestCase
                 'auto_join' => 1,
                 'group_id' => 1,
             ],
-            $this->mediumPermission->getGroupData(1)
+            $this->mediumPermission->getGroupData(1),
         );
 
         // Cleanup
@@ -439,21 +439,21 @@ class MediumPermissionTest extends TestCase
     {
         $groupName = 'TestADGroup';
         $description = 'Test AD Group Description';
-        
+
         // Test creating a new group
         $groupId = $this->mediumPermission->findOrCreateGroupByName($groupName, $description);
         $this->assertGreaterThan(0, $groupId);
-        
+
         // Test finding an existing group
         $existingGroupId = $this->mediumPermission->findOrCreateGroupByName($groupName, $description);
         $this->assertEquals($groupId, $existingGroupId);
-        
+
         // Test creating without description
         $groupName2 = 'TestADGroup2';
         $groupId2 = $this->mediumPermission->findOrCreateGroupByName($groupName2);
         $this->assertGreaterThan(0, $groupId2);
         $this->assertNotEquals($groupId, $groupId2);
-        
+
         // Cleanup
         $this->mediumPermission->deleteGroup($groupId);
         $this->mediumPermission->deleteGroup($groupId2);

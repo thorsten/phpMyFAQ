@@ -4,10 +4,10 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Entity\CategoryEntity;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class CategoryTest extends TestCase
@@ -31,6 +31,7 @@ class CategoryTest extends TestCase
 
         $this->category = new Category($configuration);
     }
+
     public function testGetGroups(): void
     {
         $groups = [1, 2, 3];
@@ -94,10 +95,10 @@ class CategoryTest extends TestCase
                     'active' => 1,
                     'show_home' => 1,
                     'image' => 'image.png',
-                    'level' => 0
-                ]
+                    'level' => 0,
+                ],
             ],
-            $this->category->getOrderedCategories(false)
+            $this->category->getOrderedCategories(false),
         );
 
         // Cleanup
@@ -133,10 +134,10 @@ class CategoryTest extends TestCase
                     'active' => 1,
                     'show_home' => 1,
                     'image' => 'image.png',
-                    'level' => 0
-                ]
+                    'level' => 0,
+                ],
             ],
-            $this->category->getAllCategories()
+            $this->category->getAllCategories(),
         );
 
         // Cleanup
@@ -168,17 +169,13 @@ class CategoryTest extends TestCase
 
         $categories = $this->category->getOrderedCategories(false);
 
-        $this->assertEquals(
-            [ 1 => [], 2 => [], 3 => []],
-            $this->category->buildAdminCategoryTree($categories)
-        );
+        $this->assertEquals([1 => [], 2 => [], 3 => []], $this->category->buildAdminCategoryTree($categories));
 
         // Cleanup
         $this->category->delete(1, 'en');
         $this->category->delete(2, 'en');
         $this->category->delete(3, 'en');
     }
-
 
     private function createCategory(int $id = 1): CategoryEntity
     {
@@ -203,10 +200,7 @@ class CategoryTest extends TestCase
         $category = $this->createCategory();
         $this->category->create($category);
 
-        $this->assertEquals(
-            $category,
-            $this->category->getCategoryData(1)
-        );
+        $this->assertEquals($category, $this->category->getCategoryData(1));
 
         // Cleanup
         $this->category->delete(1, 'en');
@@ -217,10 +211,7 @@ class CategoryTest extends TestCase
         $category = $this->createCategory();
         $this->category->create($category);
 
-        $this->assertEquals(
-            1,
-            $this->category->getCategoryIdFromName('Category 1')
-        );
+        $this->assertEquals(1, $this->category->getCategoryIdFromName('Category 1'));
 
         // Cleanup
         $this->category->delete(1, 'en');
@@ -252,10 +243,7 @@ class CategoryTest extends TestCase
 
         $this->category->update($category);
 
-        $this->assertEquals(
-            $category,
-            $this->category->getCategoryData(1)
-        );
+        $this->assertEquals($category, $this->category->getCategoryData(1));
 
         // Cleanup
         $this->category->delete(1, 'en');
@@ -270,10 +258,7 @@ class CategoryTest extends TestCase
 
         $category->setUserId(2);
 
-        $this->assertEquals(
-            $category,
-            $this->category->getCategoryData(1)
-        );
+        $this->assertEquals($category, $this->category->getCategoryData(1));
 
         // Cleanup
         $this->category->delete(1, 'en');
@@ -299,10 +284,7 @@ class CategoryTest extends TestCase
 
         $category->setParentId(2);
 
-        $this->assertEquals(
-            $category,
-            $this->category->getCategoryData(1)
-        );
+        $this->assertEquals($category, $this->category->getCategoryData(1));
 
         // Cleanup
         $this->category->delete(1, 'en');

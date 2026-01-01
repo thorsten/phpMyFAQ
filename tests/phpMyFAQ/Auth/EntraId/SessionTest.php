@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Auth\EntraId;
 
 use phpMyFAQ\Configuration;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SessionTest extends TestCase
@@ -30,7 +30,7 @@ class SessionTest extends TestCase
         // UUID v4 format check
         $this->assertMatchesRegularExpression(
             '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/',
-            $key
+            $key,
         );
     }
 
@@ -48,12 +48,10 @@ class SessionTest extends TestCase
      */
     public function testSetCurrentSessionKey(): void
     {
-        $this->sessionMock->expects($this->once())
+        $this->sessionMock
+            ->expects($this->once())
             ->method('set')
-            ->with(
-                EntraIdSession::ENTRA_ID_SESSION_KEY,
-                $this->isString()
-            );
+            ->with(EntraIdSession::ENTRA_ID_SESSION_KEY, $this->isString());
 
         $result = $this->session->setCurrentSessionKey();
         $this->assertInstanceOf(EntraIdSession::class, $result);
@@ -65,12 +63,10 @@ class SessionTest extends TestCase
      */
     public function testSetCurrentSessionKeyIsChainable(): void
     {
-        $this->sessionMock->expects($this->once())
+        $this->sessionMock
+            ->expects($this->once())
             ->method('set')
-            ->with(
-                EntraIdSession::ENTRA_ID_SESSION_KEY,
-                $this->isString()
-            );
+            ->with(EntraIdSession::ENTRA_ID_SESSION_KEY, $this->isString());
 
         $result = $this->session->setCurrentSessionKey();
         $this->assertSame($this->session, $result);
@@ -85,7 +81,8 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithDefaults(): void
     {
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn('https://example.com');
 
@@ -95,7 +92,8 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithCustomTimeout(): void
     {
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn('https://example.com');
 
@@ -105,7 +103,8 @@ class SessionTest extends TestCase
 
     public function testSetCookieWithNullSessionId(): void
     {
-        $this->configurationMock->expects($this->once())
+        $this->configurationMock
+            ->expects($this->once())
             ->method('getDefaultUrl')
             ->willReturn('https://example.com');
 

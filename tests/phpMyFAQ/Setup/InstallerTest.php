@@ -4,8 +4,8 @@ namespace phpMyFAQ\Setup;
 
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\System;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\TestCase;
 
 #[AllowMockObjectsWithoutExpectations]
 class InstallerTest extends TestCase
@@ -22,6 +22,7 @@ class InstallerTest extends TestCase
         $this->system = $this->createStub(System::class);
         $this->installer = new Installer($this->system);
     }
+
     public function testCheckBasicStuffThrowsExceptionForMissingDatabase(): void
     {
         $this->system->method('checkDatabase')->willReturn(false);

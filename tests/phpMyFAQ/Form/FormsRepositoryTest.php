@@ -20,10 +20,10 @@ namespace phpMyFAQ\Form;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Language;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
-use phpMyFAQ\Language;
 
 #[AllowMockObjectsWithoutExpectations]
 class FormsRepositoryTest extends TestCase
@@ -46,16 +46,20 @@ class FormsRepositoryTest extends TestCase
 
         // Seed minimal form row in default language if not exists (portable SQL)
         $prefix = Database::getTablePrefix();
-        $check = $this->configuration->getDb()->query(
-            "SELECT COUNT(*) AS cnt FROM {$prefix}faqforms WHERE form_id = 1 AND input_id = 1 AND input_lang = 'default'"
-        );
+        $check = $this->configuration
+            ->getDb()
+            ->query(
+                "SELECT COUNT(*) AS cnt FROM {$prefix}faqforms WHERE form_id = 1 AND input_id = 1 AND input_lang = 'default'",
+            );
         $countObj = $this->configuration->getDb()->fetchObject($check);
         $count = $countObj ? (int) $countObj->cnt : 0;
         if ($count === 0) {
-            $this->configuration->getDb()->query(
-                "INSERT INTO {$prefix}faqforms (form_id, input_id, input_type, input_label, input_lang, input_active, input_required)"
-                . " VALUES (1, 1, 'text', 'msgContactName', 'default', 1, 1)"
-            );
+            $this->configuration
+                ->getDb()
+                ->query(
+                    "INSERT INTO {$prefix}faqforms (form_id, input_id, input_type, input_label, input_lang, input_active, input_required)"
+                    . " VALUES (1, 1, 'text', 'msgContactName', 'default', 1, 1)",
+                );
         }
     }
 
@@ -68,7 +72,15 @@ class FormsRepositoryTest extends TestCase
         // Add a translation for 'en'
         $default = $this->repository->fetchDefaultInputData(1, 1);
         $this->assertNotNull($default);
-        $this->assertTrue($this->repository->insertTranslationRow(1, 1, $default->input_type, 'Name', (int) $default->input_active, (int) $default->input_required, 'en'));
+        $this->assertTrue($this->repository->insertTranslationRow(
+            1,
+            1,
+            $default->input_type,
+            'Name',
+            (int) $default->input_active,
+            (int) $default->input_required,
+            'en',
+        ));
 
         $translations = $this->repository->fetchTranslationsByFormAndInput(1, 1);
         $this->assertNotEmpty($translations);

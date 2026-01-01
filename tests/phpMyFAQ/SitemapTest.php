@@ -3,12 +3,13 @@
 namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration\DatabaseConfiguration;
-use phpMyFAQ\Database\PdoSqlite;use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\PdoSqlite;
+use phpMyFAQ\Database\Sqlite3;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\HttpFoundation\Session\Session;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 #[AllowMockObjectsWithoutExpectations]
 class SitemapTest extends TestCase
@@ -35,7 +36,7 @@ class SitemapTest extends TestCase
             $dbConfig->getUser(),
             $dbConfig->getPassword(),
             $dbConfig->getDatabase(),
-            $dbConfig->getPort()
+            $dbConfig->getPort(),
         );
         $configuration = new Configuration($this->db);
         $configuration->set('main.referenceURL', 'https://example.com/');
@@ -47,9 +48,9 @@ class SitemapTest extends TestCase
         $this->sitemap = new Sitemap($configuration);
 
         $this->db->query(
-            'INSERT INTO faqdata ' .
-            '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES ' .
-            '(1, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')'
+            'INSERT INTO faqdata '
+            . '(id, lang, solution_id, sticky, thema, content, keywords, active, author, email, updated) VALUES '
+            . '(1, \'en\', 1000, \'yes\', \'sample question\', \'sample answer\', \'sample keywords\', \'yes\', \'Author\', \'test@example.org\', \'date\')',
         );
         $this->db->query('INSERT INTO faqdata_group (record_id, group_id) VALUES (1,-1)');
         $this->db->query('INSERT INTO faqdata_user (record_id, user_id) VALUES (1,-1)');

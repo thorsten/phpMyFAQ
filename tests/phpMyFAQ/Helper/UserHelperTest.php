@@ -3,9 +3,9 @@
 namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\User;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test case for UserHelper class
@@ -57,7 +57,7 @@ class UserHelperTest extends TestCase
         $expected = [
             ['id' => 1, 'selected' => true, 'displayName' => 'User One', 'login' => 'user1'],
             ['id' => 2, 'selected' => false, 'displayName' => 'User Two', 'login' => 'user2'],
-            ['id' => 3, 'selected' => false, 'displayName' => 'User Three', 'login' => 'user3']
+            ['id' => 3, 'selected' => false, 'displayName' => 'User Three', 'login' => 'user3'],
         ];
 
         $this->assertEquals($expected, $result);
@@ -74,9 +74,7 @@ class UserHelperTest extends TestCase
             ->with(true, false)
             ->willReturn($userIds);
 
-        $this->userMock
-            ->expects($this->exactly(3))
-            ->method('getUserById');
+        $this->userMock->expects($this->exactly(3))->method('getUserById');
 
         $this->userMock
             ->expects($this->exactly(3))
@@ -105,9 +103,7 @@ class UserHelperTest extends TestCase
             ->with(true, true)
             ->willReturn($userIds);
 
-        $this->userMock
-            ->expects($this->exactly(2))
-            ->method('getUserById');
+        $this->userMock->expects($this->exactly(2))->method('getUserById');
 
         $this->userMock
             ->expects($this->exactly(2))

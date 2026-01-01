@@ -161,7 +161,7 @@ class VoteTest extends TestCase
             '10.0.0.1',
             '2001:db8::1',
             '::1',
-            'unknown'
+            'unknown',
         ];
 
         foreach ($ipAddresses as $ip) {
@@ -179,7 +179,7 @@ class VoteTest extends TestCase
             new DateTime('2025-01-01 00:00:00'),
             new DateTime('2025-12-31 23:59:59'),
             new DateTime(), // Current time
-            new DateTime('1970-01-01 00:00:00')
+            new DateTime('1970-01-01 00:00:00'),
         ];
 
         foreach ($dates as $date) {

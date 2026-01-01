@@ -23,7 +23,6 @@
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Relation;
-use phpMyFAQ\Controller\PageNotFoundController;
 use phpMyFAQ\Core\Exception;
 use phpMyFAQ\Entity\SeoEntity;
 use phpMyFAQ\Enums\PermissionType;
@@ -148,7 +147,7 @@ try {
 
     // Send response and exit
     $routeResponse->send();
-    exit;
+    exit();
 } catch (ResourceNotFoundException $e) {
     // No route matched - continue with legacy logic below
 }
@@ -585,10 +584,7 @@ $templateVars = [
     'msgSubmit' => Translation::get(key: 'msgNewContentSubmit'),
     'loginPageMessage' => Translation::get(key: 'loginPageMessage'),
     'msgAdvancedSearch' => Translation::get(key: 'msgAdvancedSearch'),
-    'currentYear' => date(
-        format: 'Y',
-        timestamp: time(),
-    ),
+    'currentYear' => date(format: 'Y', timestamp: time()),
     'cookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
 ];
 
@@ -650,10 +646,7 @@ $templateVars = [
     'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
     'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
     'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
-    'currentYear' => date(
-        format: 'Y',
-        timestamp: time(),
-    ),
+    'currentYear' => date(format: 'Y', timestamp: time()),
 ];
 
 //
@@ -661,8 +654,7 @@ $templateVars = [
 //
 if ($user->isLoggedIn() && $user->getUserId() > 0) {
     if (
-        $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value)
-        || $user->isSuperAdmin()
+        $user->perm->hasPermission($user->getUserId(), PermissionType::VIEW_ADMIN_LINK->value) || $user->isSuperAdmin()
     ) {
         $templateVars = [
             ...$templateVars,
@@ -688,10 +680,10 @@ if ('twofactor' === $action) {
 // Handle 404 action with PageNotFoundController
 //
 if ('404' === $action) {
-    $pageNotFoundController = new \phpMyFAQ\Controller\PageNotFoundController();
+    $pageNotFoundController = new \phpMyFAQ\Controller\Frontend\PageNotFoundController();
     $notFoundResponse = $pageNotFoundController->index($request);
     $notFoundResponse->send();
-    exit;
+    exit();
 }
 
 //

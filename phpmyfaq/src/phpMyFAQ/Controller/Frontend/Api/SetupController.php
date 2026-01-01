@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Controller\Frontend;
+namespace phpMyFAQ\Controller\Frontend\Api;
 
 use Elastic\Elasticsearch\Exception\AuthenticationException;
 use phpMyFAQ\Configuration;
@@ -31,7 +31,7 @@ use phpMyFAQ\Twig\TemplateException;
 use phpMyFAQ\Twig\TwigWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Error\LoaderError;
 
 final class SetupController
