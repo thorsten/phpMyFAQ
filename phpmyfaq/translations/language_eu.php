@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
  * @author    Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
- * @copyright 2005-2025 phpMyFAQ Team
+ * @copyright 2005-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-02-19

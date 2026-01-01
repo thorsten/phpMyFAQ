@@ -10,7 +10,7 @@
  * @package   phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2025 phpMyFAQ Team
+ * @copyright 2009-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-27

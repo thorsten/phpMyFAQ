@@ -11,7 +11,7 @@
  * @author Can Kirca <cankirca@gmail.com>
  * @author Zafer Gürsoy <zafergursoy@yahoo.com>
  * @author Evren Yurtesen <yurtesen@ispro.net.tr>
- * @copyright 2004-2025 phpMyFAQ Team
+ * @copyright 2004-2026 phpMyFAQ Team
  * @license https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-02-19

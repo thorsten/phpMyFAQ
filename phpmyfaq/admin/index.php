@@ -13,7 +13,7 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2025 phpMyFAQ Team
+ * @copyright 2002-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2002-09-16

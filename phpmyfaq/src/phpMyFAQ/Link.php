@@ -13,7 +13,7 @@
  * @package   phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2025 phpMyFAQ Team
+ * @copyright 2005-2026 phpMyFAQ Team
  * @license   https://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
