@@ -121,31 +121,27 @@ Strings::init($faqLangCode);
 // Try Symfony Router first
 //
 try {
-    // Load routes
     $routes = require __DIR__ . '/src/public-routes.php';
 
-    // Create URL matcher
     $context = new RequestContext();
     $context->fromRequest($request);
     $matcher = new UrlMatcher($routes, $context);
 
-    // Try to match the current route
     $parameters = $matcher->match($request->getPathInfo());
 
-    // Extract controller and method
     $controllerCallable = $parameters['_controller'];
     unset($parameters['_controller'], $parameters['_route'], $parameters['_methods']);
 
-    // Instantiate controller and call method
+    $request->attributes->add($matcher->match($request->getPathInfo()));
+
     if (is_array($controllerCallable)) {
         [$controllerClass, $method] = $controllerCallable;
         $controller = new $controllerClass();
-        $routeResponse = $controller->$method($request, ...$parameters);
+        $routeResponse = $controller->$method($request);
     } else {
-        $routeResponse = $controllerCallable($request, ...$parameters);
+        $routeResponse = $controllerCallable($request);
     }
 
-    // Send response and exit
     $routeResponse->send();
     exit();
 } catch (ResourceNotFoundException $e) {
