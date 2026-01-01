@@ -58,7 +58,7 @@ final class PasswordChangeController extends AbstractAdministrationController
     {
         $this->userHasPermission(PermissionType::PASSWORD_CHANGE);
 
-        $csrfToken = Filter::filterVar($request->attributes->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $csrfToken = Filter::filterVar($request->request->get('pmf-csrf-token'), FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!Token::getInstance($this->container->get(id: 'session'))->verifyToken('password', $csrfToken)) {
             throw new Exception('Invalid CSRF token');
@@ -73,10 +73,10 @@ final class PasswordChangeController extends AbstractAdministrationController
             $authSource->enableReadOnly();
         }
 
-        $oldPassword = Filter::filterVar($request->attributes->get('faqpassword_old'), FILTER_SANITIZE_SPECIAL_CHARS);
-        $newPassword = Filter::filterVar($request->attributes->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $oldPassword = Filter::filterVar($request->request->get('faqpassword_old'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = Filter::filterVar($request->request->get('faqpassword'), FILTER_SANITIZE_SPECIAL_CHARS);
         $retypedPassword = Filter::filterVar(
-            $request->attributes->get('faqpassword_confirm'),
+            $request->request->get('faqpassword_confirm'),
             FILTER_SANITIZE_SPECIAL_CHARS,
         );
 

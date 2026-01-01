@@ -170,7 +170,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             throw new AuthException(User::ERROR_USER_NOT_FOUND);
         }
 
-        // if login not unique, raise an error, but continue
+        // if login not unique, raise an error but continue
         if ($numRows > 1) {
             throw new AuthException(User::ERROR_USER_LOGIN_NOT_UNIQUE);
         }
