@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\ContactController;
-use phpMyFAQ\Controller\Frontend\PageNotFoundController;
+use phpMyFAQ\Controller\Frontend\OverviewController;use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
 use phpMyFAQ\Controller\RobotsController;
@@ -34,6 +34,11 @@ $routesConfig = [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
         'methods' => 'GET|POST',
+    ],
+    'public.overview' => [
+        'path' => '/overview.html',
+        'controller' => [OverviewController::class, 'index'],
+        'methods' => 'GET',
     ],
     'public.404' => [
         'path' => '/404.html',

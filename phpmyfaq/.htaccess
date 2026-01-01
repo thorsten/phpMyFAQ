@@ -110,6 +110,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^show-categories.html$ index.php?action=show [L,QSA]
     RewriteRule ^forgot-password$ index.php?action=password [L,QSA]
     RewriteRule ^(search|open-questions|glossary|overview|login|privacy|contact)\.html$ index.php?action=$1 [L,QSA]
+    RewriteRule ^404\.html$ index.php [L,QSA]
     RewriteRule ^(login) index.php?action=login [L,QSA]
     # start page
     RewriteRule ^index.html$ index.php [L,QSA]
@@ -143,7 +144,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Authentication services
     RewriteRule ^services/webauthn(.*) index.php [L,QSA]
     # User pages
-    RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register) index.php?action=$1 [L,QSA]
+    RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register)/?$ index.php?action=$1 [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages
