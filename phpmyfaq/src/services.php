@@ -188,6 +188,10 @@ return static function (ContainerConfigurator $container): void {
         service('phpmyfaq.configuration'),
     ]);
 
+    $services->set('phpmyfaq.category', \phpMyFAQ\Category::class)->args([
+        service('phpmyfaq.configuration'),
+    ]);
+
     $services->set('phpmyfaq.comment.comments-repository', CommentsRepository::class)->args([
         service('phpmyfaq.configuration'),
     ]);

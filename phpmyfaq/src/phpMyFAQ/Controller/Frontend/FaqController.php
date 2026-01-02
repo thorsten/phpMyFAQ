@@ -148,7 +148,13 @@ final class FaqController extends AbstractFrontController
 
         // Get parameters
         $cat = Filter::filterVar($request->attributes->get('categoryId'), FILTER_VALIDATE_INT, 0);
-        $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
+
+        // Get faqId from route attributes (new routes) or query parameters (legacy/backward compatibility)
+        $faqId = Filter::filterVar($request->attributes->get('faqId'), FILTER_VALIDATE_INT);
+        if (!$faqId) {
+            $faqId = Filter::filterVar($request->query->get('id'), FILTER_VALIDATE_INT, 0);
+        }
+
         $solutionId = Filter::filterVar($request->query->get('solution_id'), FILTER_VALIDATE_INT);
         $highlight = Filter::filterVar($request->query->get('highlight'), FILTER_SANITIZE_SPECIAL_CHARS);
         $bookmarkAction = Filter::filterVar($request->query->get('bookmark_action'), FILTER_SANITIZE_SPECIAL_CHARS);

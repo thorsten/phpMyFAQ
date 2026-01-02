@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
 use phpMyFAQ\Controller\Frontend\AttachmentController;
+use phpMyFAQ\Controller\Frontend\CategoryController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\FaqController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
@@ -48,6 +49,16 @@ $routesConfig = [
         'controller' => [AttachmentController::class, 'index'],
         'methods' => 'GET',
     ],
+    'public.category.show' => [
+        'path' => '/category/{categoryId}/{slug}.html',
+        'controller' => [CategoryController::class, 'show'],
+        'methods' => 'GET',
+    ],
+    'public.category.showAll' => [
+        'path' => '/show-categories.html',
+        'controller' => [CategoryController::class, 'index'],
+        'methods' => 'GET',
+    ],
     'public.contact' => [
         'path' => '/contact.html',
         'controller' => [ContactController::class, 'index'],
@@ -60,6 +71,11 @@ $routesConfig = [
     ],
     'public.faq.show' => [
         'path' => '/faq/{categoryId}/{faqId}/{slug}.html',
+        'controller' => [FaqController::class, 'show'],
+        'methods' => 'GET',
+    ],
+    'public.content.show' => [
+        'path' => '/content/{categoryId}/{faqId}/{language}/{slug}.html',
         'controller' => [FaqController::class, 'show'],
         'methods' => 'GET',
     ],
