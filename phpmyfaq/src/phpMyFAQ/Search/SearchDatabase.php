@@ -67,7 +67,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     protected array $conditions = [];
 
     /**
-     * Flag if database supports search relevance.
+     * Flag if a database supports search relevance.
      */
     protected bool $relevanceSupport = false;
 

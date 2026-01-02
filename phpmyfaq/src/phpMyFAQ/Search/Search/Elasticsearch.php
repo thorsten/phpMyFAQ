@@ -17,13 +17,15 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Search;
+namespace phpMyFAQ\Search\Search;
 
 use Elastic\Elasticsearch\Client;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\ElasticsearchConfiguration;
+use phpMyFAQ\Search\AbstractSearch;
+use phpMyFAQ\Search\SearchInterface;
 use stdClass;
 
 /**

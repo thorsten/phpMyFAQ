@@ -17,11 +17,13 @@
 
 declare(strict_types=1);
 
-namespace phpMyFAQ\Search;
+namespace phpMyFAQ\Search\Search;
 
 use OpenSearch\Client;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Configuration\OpenSearchConfiguration;
+use phpMyFAQ\Search\AbstractSearch;
+use phpMyFAQ\Search\SearchInterface;
 use stdClass;
 
 /**

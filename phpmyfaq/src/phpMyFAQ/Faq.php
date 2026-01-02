@@ -31,7 +31,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Entity\FaqEntity;
 use phpMyFAQ\Faq\QueryHelper;
 use phpMyFAQ\Helper\FaqHelper;
-use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Instance\Search\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 use stdClass;
 

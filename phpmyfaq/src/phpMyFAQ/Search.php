@@ -23,8 +23,8 @@ namespace phpMyFAQ;
 
 use DateTime;
 use Exception;
-use phpMyFAQ\Search\Elasticsearch;
-use phpMyFAQ\Search\OpenSearch;
+use phpMyFAQ\Search\Search\Elasticsearch;
+use phpMyFAQ\Search\Search\OpenSearch;
 use phpMyFAQ\Search\SearchFactory;
 use stdClass;
 
