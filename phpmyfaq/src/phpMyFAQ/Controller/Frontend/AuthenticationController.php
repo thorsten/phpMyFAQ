@@ -22,6 +22,9 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Session\Token;
 use phpMyFAQ\Translation;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\User\TwoFactor;
+use phpMyFAQ\User\UserAuthentication;
+use phpMyFAQ\User\UserException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,12 +37,20 @@ final class AuthenticationController extends AbstractFrontController
      * @throws Exception
      * @throws LoaderError
      * @throws \Exception
-     */ #[Route(path: '/login', name: 'public.login')]
+     */ #[Route(path: '/login', name: 'public.auth.login')]
     public function login(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
         $faqSession->setCurrentUser($this->currentUser);
         $faqSession->userTracking('login', 0);
+
+        // Redirect to authenticate if SSO is enabled and the user is already authenticated
+        if (
+            $this->configuration->get(item: 'security.ssoSupport')
+            && $request->server->get(key: 'REMOTE_USER') !== null
+        ) {
+            return new RedirectResponse(url: './authenticate');
+        }
 
         $session = $this->container->get('session');
         $errorMessages = $session->getFlashBag()->get('error');
@@ -73,7 +84,7 @@ final class AuthenticationController extends AbstractFrontController
      * @throws LoaderError
      * @throws \Exception
      */
-    #[Route(path: '/forgot-password', name: 'public.forgot-password')]
+    #[Route(path: '/forgot-password', name: 'public.auth.forgot-password')]
     public function forgotPassword(Request $request): Response
     {
         $faqSession = $this->container->get('phpmyfaq.user.session');
@@ -91,37 +102,165 @@ final class AuthenticationController extends AbstractFrontController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/logout', name: 'public.logout')]
+    #[Route(path: '/logout', name: 'public.auth.logout')]
     public function logout(Request $request): Response
     {
-        $user = CurrentUser::getCurrentUser($this->configuration);
+        $session = $this->container->get('session');
         $csrfToken = Filter::filterVar($request->query->get('csrf'), FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $redirectResponse = new RedirectResponse(url: $this->configuration->getDefaultUrl());
+
         if (!Token::getInstance($this->container->get('session'))->verifyToken('logout', $csrfToken)) {
-            return new RedirectResponse($this->configuration->getDefaultUrl());
+            $session->getFlashBag()->add('error', 'CSRF Problem detected: ' . $csrfToken);
+            return $redirectResponse->send();
         }
 
-        if (!$user->isLoggedIn()) {
-            return new RedirectResponse($this->configuration->getDefaultUrl());
+        if (!$this->currentUser->isLoggedIn()) {
+            return $redirectResponse->send();
         }
 
-        $user->deleteFromSession(true);
+        $this->currentUser->deleteFromSession(true);
 
         // Add a success message
-        $session = $this->container->get('session');
         $session->getFlashBag()->add('success', Translation::get('ad_logout'));
 
         // SSO Logout
         $ssoLogout = $this->configuration->get('security.ssoLogoutRedirect');
-        if ($this->configuration->get('security.ssoSupport') && !empty($ssoLogout)) {
-            return new RedirectResponse($ssoLogout);
+        if ($this->configuration->get('security.ssoSupport') && strlen($ssoLogout) > 0) {
+            $redirectResponse->isRedirect($ssoLogout);
+            $redirectResponse->send();
         }
 
         // Microsoft Azure Logout
-        if ($this->configuration->isSignInWithMicrosoftActive() && $user->getUserAuthSource() === 'azure') {
+        if (
+            $this->configuration->isSignInWithMicrosoftActive()
+            && $this->currentUser->getUserAuthSource() === 'azure'
+        ) {
             return new RedirectResponse($this->configuration->getDefaultUrl() . 'services/azure/logout.php');
         }
 
-        return new RedirectResponse($this->configuration->getDefaultUrl());
+        return $redirectResponse->send();
+    }
+
+    /**
+     * Handles user authentication (login form submission)
+     *
+     * @throws \Exception
+     */
+    #[Route(path: '/authenticate', name: 'public.auth.authenticate', methods: ['POST'])]
+    public function authenticate(Request $request): Response
+    {
+        if ($this->currentUser->isLoggedIn()) {
+            return new RedirectResponse(url: './');
+        }
+
+        $username = Filter::filterVar($request->request->get('faqusername'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = Filter::filterVar(
+            $request->request->get('faqpassword'),
+            FILTER_SANITIZE_SPECIAL_CHARS,
+            FILTER_FLAG_NO_ENCODE_QUOTES,
+        );
+        $rememberMe = Filter::filterVar($request->request->get('faqrememberme'), FILTER_VALIDATE_BOOLEAN);
+
+        // Set username via SSO
+        if (
+            $this->configuration->get(item: 'security.ssoSupport')
+            && $request->server->get(key: 'REMOTE_USER') !== null
+        ) {
+            $username = trim((string) $request->server->get(key: 'REMOTE_USER'));
+            $password = '';
+        }
+
+        // Login via local DB or LDAP or SSO
+        if ($username !== '' && ($password !== '' || $this->configuration->get('security.ssoSupport'))) {
+            $userAuth = new UserAuthentication($this->configuration, $this->currentUser);
+            $userAuth->setRememberMe($rememberMe ?? false);
+            try {
+                $this->currentUser = $userAuth->authenticate($username, $password);
+
+                // Check if two-factor authentication is enabled
+                if ($userAuth->hasTwoFactorAuthentication()) {
+                    return new RedirectResponse(url: './token?user-id=' . $this->currentUser->getUserId());
+                }
+
+                // Successful login without 2FA
+                $this->container->get('session')->getFlashBag()->add('success', Translation::get('ad_auth_sess'));
+                return new RedirectResponse('./');
+            } catch (UserException $e) {
+                $this->configuration->getLogger()->error('Login-error: ' . $e->getMessage());
+                $this->container->get('session')->getFlashBag()->add('error', $e->getMessage());
+                return new RedirectResponse('./login');
+            }
+        }
+
+        $this->container->get('session')->getFlashBag()->add('error', Translation::get('ad_auth_fail'));
+        return new RedirectResponse($this->configuration->getDefaultUrl() . 'login');
+    }
+
+    /**
+     * Displays the two-factor authentication page
+     *
+     * @throws Exception
+     * @throws LoaderError
+     * @throws \Exception
+     */
+    #[Route(path: '/token', name: 'public.auth.token')]
+    public function token(Request $request): Response
+    {
+        if ($this->currentUser->isLoggedIn()) {
+            return new RedirectResponse(url: './');
+        }
+
+        $faqSession = $this->container->get('phpmyfaq.user.session');
+        $faqSession->setCurrentUser($this->currentUser);
+        $faqSession->userTracking('twofactor', 0);
+
+        $userId = (int) Filter::filterVar($request->query->get(key: 'user-id'), FILTER_VALIDATE_INT);
+
+        return $this->render('twofactor.twig', [
+            ...$this->getHeader($request),
+            'title' => sprintf(
+                '%s - %s',
+                Translation::get(key: 'msgTwofactorEnabled'),
+                $this->configuration->getTitle(),
+            ),
+            'msgTwofactorEnabled' => Translation::get(key: 'msgTwofactorEnabled'),
+            'msgEnterTwofactorToken' => Translation::get(key: 'msgEnterTwofactorToken'),
+            'msgTwofactorCheck' => Translation::get(key: 'msgTwofactorCheck'),
+            'userId' => $userId,
+        ]);
+    }
+
+    /**
+     * Validates the two-factor authentication token
+     *
+     * @throws \Exception
+     */
+    #[Route(path: '/check', name: 'public.twofactor.check', methods: ['POST'])]
+    public function check(Request $request): Response
+    {
+        if ($this->currentUser->isLoggedIn()) {
+            return new RedirectResponse(url: './');
+        }
+
+        $token = Filter::filterVar($request->request->get(key: 'token'), FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
+
+        $session = $this->container->get(id: 'session');
+        $user = $this->container->get(id: 'phpmyfaq.user.current_user');
+        $user->getUserById($userId);
+
+        if (strlen((string) $token) === 6) {
+            $tfa = $this->container->get(id: 'phpmyfaq.user.two-factor');
+            $result = $tfa->validateToken($token, $userId);
+
+            if ($result) {
+                $user->twoFactorSuccess();
+                return new RedirectResponse(url: './');
+            }
+        }
+
+        $session->getFlashBag()->add('error', Translation::get('msgTwofactorErrorToken'));
+        return new RedirectResponse('./token?user-id=' . $userId);
     }
 }

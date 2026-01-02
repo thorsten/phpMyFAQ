@@ -112,6 +112,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     RewriteRule ^(search|open-questions|glossary|overview|login|privacy|contact)\.html$ index.php?action=$1 [L,QSA]
     RewriteRule ^404\.html$ index.php [L,QSA]
     RewriteRule ^(login) index.php?action=login [L,QSA]
+    RewriteRule ^(authenticate|check|logout|token) index.php [L,QSA]
     # start page
     RewriteRule ^index.html$ index.php [L,QSA]
     # a solution ID page
@@ -144,7 +145,7 @@ Header set Access-Control-Allow-Headers "Content-Type, Authorization"
     # Authentication services
     RewriteRule ^services/webauthn(.*) index.php [L,QSA]
     # User pages
-    RewriteRule ^user/(ucp|bookmarks|request-removal|logout|register)/?$ index.php?action=$1 [L,QSA]
+    RewriteRule ^user/(ucp|bookmarks|request-removal|register)/?$ index.php?action=$1 [L,QSA]
     # Administration API
     RewriteRule ^admin/api/(.*) admin/api/index.php [L,QSA]
     # Administration pages

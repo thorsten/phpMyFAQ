@@ -49,12 +49,12 @@ class Application
     /**
      * @throws Exception
      */
-    public function run(RouteCollection $routeCollection): void
+    public function run(RouteCollection $routeCollection, ?Request $request = null): void
     {
         $currentLanguage = $this->setLanguage();
         $this->initializeTranslation($currentLanguage);
         Strings::init($currentLanguage);
-        $request = Request::createFromGlobals();
+        $request = $request ?? Request::createFromGlobals();
         $requestContext = new RequestContext();
         $requestContext->fromRequest($request);
         $this->handleRequest($routeCollection, $request, $requestContext);

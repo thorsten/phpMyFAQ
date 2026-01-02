@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
   handleRegister();
   handleWebAuthn();
 
-  // Masonry on the startpage
+  // Masonry on the start page
   const masonryElement: HTMLElement | null = document.querySelector('.masonry-grid');
   if (masonryElement) {
     new Masonry(masonryElement, { columnWidth: 0 });

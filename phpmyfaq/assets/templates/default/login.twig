@@ -23,8 +23,7 @@
                   <h2 class="text-center font-weight-light my-4">phpMyFAQ Login</h2>
                 </div>
                 <div class="card-body">
-                  <form action="{{ writeLoginPath|raw }}" method="post" accept-charset="utf-8" role="form">
-                    <input type="hidden" name="redirect-action" value="{{ action }}" />
+                  <form action="./authenticate" method="post" accept-charset="utf-8" role="form">
                     <div class="form-floating mb-3">
                       <input
                         class="form-control"

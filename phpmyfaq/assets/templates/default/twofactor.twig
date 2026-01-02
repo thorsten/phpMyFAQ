@@ -2,7 +2,9 @@
 
 {% block content %}
   <div class="col-12">
-    {{ loginMessage }}
+    {% if errorMessage %}
+      <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
+    {% endif %}
     <div class="container py-5">
       <div class="row">
         <div class="col-lg-12">
@@ -13,8 +15,8 @@
                   <h3 class="mb-0">{{ msgTwofactorEnabled }}</h3>
                 </div>
                 <div class="card-body">
-                  <form action="{{ writeLoginPath }}" method="post" accept-charset="utf-8" role="form" class="form">
-                    <input type="hidden" id="userid" name="userid" value="{{ userid }}">
+                  <form action="./check" method="post" accept-charset="utf-8" role="form" class="form">
+                    <input type="hidden" id="user-id" name="user-id" value="{{ userId }}">
                     <div class="row mb-2">
                       <label for="token">{{ msgEnterTwofactorToken }}</label>
                       <div class="col-4 mx-auto my-2">

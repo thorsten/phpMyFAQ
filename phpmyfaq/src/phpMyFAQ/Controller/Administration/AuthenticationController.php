@@ -162,7 +162,7 @@ final class AuthenticationController extends AbstractAdministrationController
             return new RedirectResponse(url: './');
         }
 
-        $userId = (int) Filter::filterVar($request->request->get(key: 'user-id'), FILTER_VALIDATE_INT);
+        $userId = (int) Filter::filterVar($request->query->get(key: 'user-id'), FILTER_VALIDATE_INT);
 
         return $this->render(file: '@admin/user/twofactor.twig', context: [
             ...$this->getHeader($request),

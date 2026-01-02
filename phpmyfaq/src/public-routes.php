@@ -89,13 +89,28 @@ $routesConfig = [
         'controller' => [GlossaryController::class, 'index'],
         'methods' => 'GET',
     ],
-    'public.login' => [
+    'public.auth.login' => [
         'path' => '/login',
         'controller' => [AuthenticationController::class, 'login'],
-        'methods' => 'GET|POST',
+        'methods' => 'GET',
     ],
-    'public.logout' => [
-        'path' => '/user/logout',
+    'public.auth.authenticate' => [
+        'path' => '/authenticate',
+        'controller' => [AuthenticationController::class, 'authenticate'],
+        'methods' => 'POST',
+    ],
+    'public.auth.check' => [
+        'path' => '/check',
+        'controller' => [AuthenticationController::class, 'check'],
+        'methods' => 'POST',
+    ],
+    'public.auth.token' => [
+        'path' => '/token',
+        'controller' => [AuthenticationController::class, 'token'],
+        'methods' => 'POST',
+    ],
+    'public.auth.logout' => [
+        'path' => '/logout',
         'controller' => [AuthenticationController::class, 'logout'],
         'methods' => 'GET',
     ],
