@@ -88,7 +88,7 @@ class TagsTest extends TestCase
         $this->tags->create(1, $testData);
 
         $this->assertEquals(
-            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/tags/1/foo.html">Foo</a>',
+            '<a class="btn btn-outline-primary" title="Foo" href="http://example.com/./search.html?tagging_id=1">Foo</a>',
             $this->tags->getAllLinkTagsById(1),
         );
     }

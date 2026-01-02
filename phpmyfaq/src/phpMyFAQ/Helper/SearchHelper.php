@@ -79,9 +79,8 @@ class SearchHelper extends AbstractHelper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
+                    '%s?action=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
                     $this->configuration->getDefaultUrl() . 'index.php',
-                    $this->sessionId,
                     $result->category_id,
                     $result->id,
                     $result->lang,

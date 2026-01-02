@@ -8,12 +8,11 @@
     {% if isTagSearch == false %}
     <div class="jumbotron justify-content-center col-12 border rounded p-2 mb-2 bg-light-subtle" id="searchBox">
       <form action="{{ formActionUrl }}" method="get">
-        <input type="hidden" name="action" value="search" />
 
         <div class="row">
           <div class="col-6">
-            <label class="sr-only" for="searchfield">{{ msgSearch }}</label>
-            <input id="searchfield" type="search" name="search" maxlength="255" value="{{ searchString }}"
+            <label class="sr-only" for="pmf-main-search">{{ msgSearch }}</label>
+            <input id="pmf-main-search" type="search" name="search" maxlength="255" value="{{ searchString }}"
                    class="form-control form-control-lg mb-2" placeholder="{{ msgSearch }}">
           </div>
 
@@ -103,7 +102,7 @@
         <h4 class="fst-italic">{{ msgTags }}</h4>
         <div class="clearfix">
           {% for tagId, tagFrequency in tagList %}
-            <a class="btn btn-outline-primary m-1" href="?action=search&tagging_id={{ tagId }}">
+            <a class="btn btn-outline-primary m-1" href="./search.html?tagging_id={{ tagId }}">
               {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
             </a>
           {% endfor %}
@@ -123,7 +122,7 @@
         <h4 class="fst-italic">{{ msgMostPopularSearches }}</h4>
         <div class="clearfix">
           {% for popular in mostPopularSearches %}
-            <a class="btn btn-outline-primary m-1" href="?search={{ popular['searchterm'] }}&submit=Search&action=search">
+            <a class="btn btn-outline-primary m-1" href="?search={{ popular['searchterm'] }}">
               {{ popular['searchterm'] }} <span class="badge bg-info">{{ popular['number'] }}x</span>
             </a>
           {% endfor %}

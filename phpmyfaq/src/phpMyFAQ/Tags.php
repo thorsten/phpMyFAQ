@@ -79,11 +79,7 @@ class Tags
 
         foreach ($this->getAllTagsById($recordId) as $taggingId => $taggingName) {
             $title = Strings::htmlentities($taggingName);
-            $url = sprintf(
-                '%sindex.php?action=search&tagging_id=%d',
-                $this->configuration->getDefaultUrl(),
-                $taggingId,
-            );
+            $url = sprintf('%s./search.html?tagging_id=%d', $this->configuration->getDefaultUrl(), $taggingId);
             $oLink = new Link($url, $this->configuration);
             $oLink->setTitle($title);
             $oLink->text = $title;

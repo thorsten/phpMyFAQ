@@ -208,7 +208,7 @@
         </h5>
         <p class="card-text pmf-tag-cloud">
           {% for tagId, tagFrequency in tagsList %}
-            <a class="btn btn-outline-primary m-1" href="?action=search&tagging_id={{ tagId }}">
+            <a class="btn btn-outline-primary m-1" href="./search.html?tagging_id={{ tagId }}">
               {{ tagId | tagName }} <span class="badge bg-info">{{ tagFrequency }}</span>
             </a>
           {% endfor %}

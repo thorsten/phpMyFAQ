@@ -28,6 +28,7 @@ use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
 use phpMyFAQ\Controller\Frontend\PrivacyController;
+use phpMyFAQ\Controller\Frontend\SearchController;
 use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\StartpageController;
 use phpMyFAQ\Controller\Frontend\UserController;
@@ -94,6 +95,11 @@ $routesConfig = [
     'public.index' => [
         'path' => '/',
         'controller' => [StartpageController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.search' => [
+        'path' => '/search.html',
+        'controller' => [SearchController::class, 'index'],
         'methods' => 'GET',
     ],
     'public.user.register' => [
