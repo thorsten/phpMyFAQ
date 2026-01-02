@@ -22,6 +22,7 @@ use phpMyFAQ\Controller\Frontend\AttachmentController;
 use phpMyFAQ\Controller\Frontend\ContactController;
 use phpMyFAQ\Controller\Frontend\GlossaryController;
 use phpMyFAQ\Controller\Frontend\LoginController;
+use phpMyFAQ\Controller\Frontend\OpenQuestionsController;
 use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
 use phpMyFAQ\Controller\Frontend\PdfController;
@@ -62,6 +63,11 @@ $routesConfig = [
         'path' => '/login',
         'controller' => [LoginController::class, 'index'],
         'methods' => 'GET|POST',
+    ],
+    'public.open-questions' => [
+        'path' => '/open-questions.html',
+        'controller' => [OpenQuestionsController::class, 'index'],
+        'methods' => 'GET',
     ],
     'public.overview' => [
         'path' => '/overview.html',
