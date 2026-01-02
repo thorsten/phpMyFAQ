@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[AllowMockObjectsWithoutExpectations]
-class FaqServiceTest extends TestCase
+class FaqCreationServiceTest extends TestCase
 {
     private Configuration $configuration;
     private CurrentUser|MockObject $currentUser;
     private array $currentGroups;
-    private FaqService $faqService;
+    private FaqCreationService $faqService;
 
     /**
      * @throws Exception
@@ -59,7 +59,7 @@ class FaqServiceTest extends TestCase
 
         $this->currentGroups = [1];
 
-        $this->faqService = new FaqService($this->configuration, $this->currentUser, $this->currentGroups);
+        $this->faqService = new FaqCreationService($this->configuration, $this->currentUser, $this->currentGroups);
     }
 
     /**
@@ -67,8 +67,8 @@ class FaqServiceTest extends TestCase
      */
     public function testConstructor(): void
     {
-        $service = new FaqService($this->configuration, $this->currentUser, $this->currentGroups);
-        static::assertInstanceOf(FaqService::class, $service);
+        $service = new FaqCreationService($this->configuration, $this->currentUser, $this->currentGroups);
+        static::assertInstanceOf(FaqCreationService::class, $service);
     }
 
     /**
@@ -146,7 +146,7 @@ class FaqServiceTest extends TestCase
             ->method('getUserId')
             ->willReturn(-1);
 
-        $service = new FaqService($this->configuration, $guestUser, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
         static::assertTrue($service->canUserAddFaq());
     }
@@ -165,7 +165,7 @@ class FaqServiceTest extends TestCase
             ->method('getUserId')
             ->willReturn(-1);
 
-        $service = new FaqService($this->configuration, $guestUser, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
         static::assertFalse($service->canUserAddFaq());
     }
@@ -190,7 +190,7 @@ class FaqServiceTest extends TestCase
 
         $userWithPerm->perm = $permMock;
 
-        $service = new FaqService($this->configuration, $userWithPerm, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $userWithPerm, $this->currentGroups);
 
         static::assertTrue($service->canUserAddFaq());
     }
@@ -215,7 +215,7 @@ class FaqServiceTest extends TestCase
 
         $userWithoutPerm->perm = $permMock;
 
-        $service = new FaqService($this->configuration, $userWithoutPerm, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $userWithoutPerm, $this->currentGroups);
 
         static::assertFalse($service->canUserAddFaq());
     }
@@ -245,7 +245,7 @@ class FaqServiceTest extends TestCase
             ->method('getUserId')
             ->willReturn(-1);
 
-        $service = new FaqService($this->configuration, $guestUser, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
         $result = $service->getDefaultUserEmail();
 
@@ -277,7 +277,7 @@ class FaqServiceTest extends TestCase
             ->method('getUserId')
             ->willReturn(-1);
 
-        $service = new FaqService($this->configuration, $guestUser, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $guestUser, $this->currentGroups);
 
         $result = $service->getDefaultUserName();
 
@@ -346,7 +346,7 @@ class FaqServiceTest extends TestCase
 
         $userWithPerm->perm = $permMock;
 
-        $service = new FaqService($this->configuration, $userWithPerm, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $userWithPerm, $this->currentGroups);
 
         $result = $service->canUserAddFaq();
 
@@ -367,7 +367,7 @@ class FaqServiceTest extends TestCase
             ->with('email')
             ->willReturn('test@example.com');
 
-        $service = new FaqService($this->configuration, $userMock, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 
         $result = $service->getDefaultUserEmail();
 
@@ -388,7 +388,7 @@ class FaqServiceTest extends TestCase
             ->with('display_name')
             ->willReturn('John Doe');
 
-        $service = new FaqService($this->configuration, $userMock, $this->currentGroups);
+        $service = new FaqCreationService($this->configuration, $userMock, $this->currentGroups);
 
         $result = $service->getDefaultUserName();
 

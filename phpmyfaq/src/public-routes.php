@@ -58,6 +58,11 @@ $routesConfig = [
         'controller' => [FaqController::class, 'add'],
         'methods' => 'GET',
     ],
+    'public.faq.show' => [
+        'path' => '/faq/{categoryId}/{faqId}/{slug}.html',
+        'controller' => [FaqController::class, 'show'],
+        'methods' => 'GET',
+    ],
     'public.forgot-password' => [
         'path' => '/forgot-password',
         'controller' => [LoginController::class, 'forgotPassword'],

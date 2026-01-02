@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FAQ Service
+ * FAQ Creation Service
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -29,9 +29,9 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 /**
- * Service class for FAQ-related business logic.
+ * Service class for FAQ creation business logic.
  */
-final class FaqService
+final class FaqCreationService
 {
     private Category $category;
     private Question $questionObject;
