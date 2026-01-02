@@ -639,7 +639,6 @@ $templateVars = [
     'isOpenQuestionsEnabled' => $faqConfig->get('main.enableAskQuestions'),
     'footerNavigation' => $footerNavigation,
     'isPrivacyLinkEnabled' => $faqConfig->get('layout.enablePrivacyLink'),
-    'urlPrivacyLink' => $faqConfig->get('main.privacyURL'),
     'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
     'isCookieConsentEnabled' => $faqConfig->get('layout.enableCookieConsent'),
     'cookiePreferences' => Translation::get(key: 'cookiePreferences'),

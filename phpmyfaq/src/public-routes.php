@@ -18,10 +18,15 @@
 declare(strict_types=1);
 
 use phpMyFAQ\Controller\Frontend\Api\SetupController;
-use phpMyFAQ\Controller\Frontend\AttachmentController;use phpMyFAQ\Controller\Frontend\ContactController;
-use phpMyFAQ\Controller\Frontend\GlossaryController;use phpMyFAQ\Controller\Frontend\LoginController;use phpMyFAQ\Controller\Frontend\OverviewController;
+use phpMyFAQ\Controller\Frontend\AttachmentController;
+use phpMyFAQ\Controller\Frontend\ContactController;
+use phpMyFAQ\Controller\Frontend\GlossaryController;
+use phpMyFAQ\Controller\Frontend\LoginController;
+use phpMyFAQ\Controller\Frontend\OverviewController;
 use phpMyFAQ\Controller\Frontend\PageNotFoundController;
-use phpMyFAQ\Controller\Frontend\PdfController;use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
+use phpMyFAQ\Controller\Frontend\PdfController;
+use phpMyFAQ\Controller\Frontend\PrivacyController;
+use phpMyFAQ\Controller\Frontend\SitemapController as FrontendSitemapController;
 use phpMyFAQ\Controller\Frontend\WebAuthnController;
 use phpMyFAQ\Controller\LlmsController;
 use phpMyFAQ\Controller\RobotsController;
@@ -65,6 +70,11 @@ $routesConfig = [
     'public.pdf.faq' => [
         'path' => '/pdf/{categoryId}/{faqId}/{faqLanguage}',
         'controller' => [PdfController::class, 'index'],
+        'methods' => 'GET',
+    ],
+    'public.privacy' => [
+        'path' => '/privacy.html',
+        'controller' => [PrivacyController::class, 'index'],
         'methods' => 'GET',
     ],
     'public.sitemap' => [

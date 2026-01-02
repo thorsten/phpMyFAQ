@@ -101,7 +101,6 @@ abstract class AbstractFrontController extends AbstractController
             'isOpenQuestionsEnabled' => $this->configuration->get('main.enableAskQuestions'),
             'footerNavigation' => $this->getFooterNavigation($request),
             'isPrivacyLinkEnabled' => $this->configuration->get('layout.enablePrivacyLink'),
-            'urlPrivacyLink' => $this->configuration->get('main.privacyURL'),
             'msgPrivacyNote' => Translation::get(key: 'msgPrivacyNote'),
             'isCookieConsentEnabled' => $this->configuration->get('layout.enableCookieConsent'),
             'cookiePreferences' => Translation::get(key: 'cookiePreferences'),
